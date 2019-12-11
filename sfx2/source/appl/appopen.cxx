@@ -952,7 +952,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     // remove from Itemset, because it confuses the parameter transformation
     if (auto pParamLinkItem = rReq.GetArg<SfxLinkItem>(SID_DONELINK))
-        pLinkItem.reset( static_cast<SfxLinkItem*>( pParamLinkItem->Clone() ) );
+        pLinkItem.reset(pParamLinkItem->Clone());
 
     rReq.RemoveItem( SID_DONELINK );
 

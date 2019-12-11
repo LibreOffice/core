@@ -35,7 +35,7 @@ public:
     SvxForbiddenRuleItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxForbiddenRuleItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

@@ -1834,7 +1834,7 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
         if(!DoCopyIt)
         {
             aFindFrame = pCpyPara->rTabFrameArr[ nFndPos ];
-            aFrameSz.reset(static_cast<SwFormatFrameSize*>(aFindFrame.pNewFrameFormat->GetFrameSize().Clone()));
+            aFrameSz.reset(aFindFrame.pNewFrameFormat->GetFrameSize().Clone());
             DoCopyIt = aFrameSz->GetWidth() != static_cast<SwTwips>(nSize);
         }
 

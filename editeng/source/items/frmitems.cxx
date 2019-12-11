@@ -111,12 +111,10 @@ SfxPoolItem* SvxFormatBreakItem::CreateDefault() { return new  SvxFormatBreakIte
 SfxPoolItem* SvxFormatKeepItem::CreateDefault() { return new  SvxFormatKeepItem(false, 0);}
 SfxPoolItem* SvxLineItem::CreateDefault() { return new  SvxLineItem(0);}
 
-
-SfxPoolItem* SvxPaperBinItem::Clone( SfxItemPool* ) const
+SvxPaperBinItem* SvxPaperBinItem::Clone( SfxItemPool* ) const
 {
     return new SvxPaperBinItem( *this );
 }
-
 
 bool SvxPaperBinItem::GetPresentation
 (
@@ -249,12 +247,10 @@ bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
     return ( m_aSize == static_cast<const SvxSizeItem&>( rAttr ).GetSize() );
 }
 
-
-SfxPoolItem* SvxSizeItem::Clone( SfxItemPool* ) const
+SvxSizeItem* SvxSizeItem::Clone( SfxItemPool* ) const
 {
     return new SvxSizeItem( *this );
 }
-
 
 bool SvxSizeItem::GetPresentation
 (
@@ -503,12 +499,10 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         bExplicitZeroMarginValLeft == rOther.IsExplicitZeroMarginValLeft() );
 }
 
-
-SfxPoolItem* SvxLRSpaceItem::Clone( SfxItemPool* ) const
+SvxLRSpaceItem* SvxLRSpaceItem::Clone( SfxItemPool* ) const
 {
     return new SvxLRSpaceItem( *this );
 }
-
 
 bool SvxLRSpaceItem::GetPresentation
 (
@@ -779,12 +773,10 @@ bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
              nPropLower == rSpaceItem.nPropLower );
 }
 
-
-SfxPoolItem* SvxULSpaceItem::Clone( SfxItemPool* ) const
+SvxULSpaceItem* SvxULSpaceItem::Clone( SfxItemPool* ) const
 {
     return new SvxULSpaceItem( *this );
 }
-
 
 bool SvxULSpaceItem::GetPresentation
 (
@@ -896,12 +888,10 @@ boost::property_tree::ptree SvxULSpaceItem::dumpAsJSON() const
     return aTree;
 }
 
-
-SfxPoolItem* SvxPrintItem::Clone( SfxItemPool* ) const
+SvxPrintItem* SvxPrintItem::Clone( SfxItemPool* ) const
 {
     return new SvxPrintItem( *this );
 }
-
 
 bool SvxPrintItem::GetPresentation
 (
@@ -919,12 +909,10 @@ bool SvxPrintItem::GetPresentation
     return true;
 }
 
-
-SfxPoolItem* SvxOpaqueItem::Clone( SfxItemPool* ) const
+SvxOpaqueItem* SvxOpaqueItem::Clone( SfxItemPool* ) const
 {
     return new SvxOpaqueItem( *this );
 }
-
 
 bool SvxOpaqueItem::GetPresentation
 (
@@ -989,12 +977,10 @@ bool SvxProtectItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-SfxPoolItem* SvxProtectItem::Clone( SfxItemPool* ) const
+SvxProtectItem* SvxProtectItem::Clone( SfxItemPool* ) const
 {
     return new SvxProtectItem( *this );
 }
-
 
 bool SvxProtectItem::GetPresentation
 (
@@ -1155,12 +1141,10 @@ bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
              ( eLocation == rItem.GetLocation() ) );
 }
 
-
-SfxPoolItem* SvxShadowItem::Clone( SfxItemPool* ) const
+SvxShadowItem* SvxShadowItem::Clone( SfxItemPool* ) const
 {
     return new SvxShadowItem( *this );
 }
-
 
 sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
 {
@@ -1737,12 +1721,10 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-SfxPoolItem* SvxBoxItem::Clone( SfxItemPool* ) const
+SvxBoxItem* SvxBoxItem::Clone( SfxItemPool* ) const
 {
     return new SvxBoxItem( *this );
 }
-
 
 bool SvxBoxItem::GetPresentation
 (
@@ -2143,12 +2125,10 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLin
     }
 }
 
-
-SfxPoolItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
+SvxBoxInfoItem* SvxBoxInfoItem::Clone( SfxItemPool* ) const
 {
     return new SvxBoxInfoItem( *this );
 }
-
 
 bool SvxBoxInfoItem::GetPresentation
 (
@@ -2617,24 +2597,20 @@ bool SvxFormatBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-
-SfxPoolItem* SvxFormatBreakItem::Clone( SfxItemPool* ) const
+SvxFormatBreakItem* SvxFormatBreakItem::Clone( SfxItemPool* ) const
 {
     return new SvxFormatBreakItem( *this );
 }
-
 
 sal_uInt16 SvxFormatBreakItem::GetValueCount() const
 {
     return sal_uInt16(SvxBreak::End);   // SvxBreak::PageBoth + 1
 }
 
-
-SfxPoolItem* SvxFormatKeepItem::Clone( SfxItemPool* ) const
+SvxFormatKeepItem* SvxFormatKeepItem::Clone( SfxItemPool* ) const
 {
     return new SvxFormatKeepItem( *this );
 }
-
 
 bool SvxFormatKeepItem::GetPresentation
 (
@@ -2678,12 +2654,10 @@ bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
     return CmpBrdLn( pLine, static_cast<const SvxLineItem&>(rAttr).GetLine() );
 }
 
-
-SfxPoolItem* SvxLineItem::Clone( SfxItemPool* ) const
+SvxLineItem* SvxLineItem::Clone( SfxItemPool* ) const
 {
     return new SvxLineItem( *this );
 }
-
 
 bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
 {
@@ -3153,12 +3127,10 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     return bEqual;
 }
 
-
-SfxPoolItem* SvxBrushItem::Clone( SfxItemPool* ) const
+SvxBrushItem* SvxBrushItem::Clone( SfxItemPool* ) const
 {
     return new SvxBrushItem( *this );
 }
-
 
 const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {
@@ -3351,12 +3323,10 @@ SvxFrameDirectionItem::~SvxFrameDirectionItem()
 {
 }
 
-
-SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
+SvxFrameDirectionItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
 {
     return new SvxFrameDirectionItem( *this );
 }
-
 
 const char* getFrmDirResId(size_t nIndex)
 {

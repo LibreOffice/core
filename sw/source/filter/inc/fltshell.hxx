@@ -192,7 +192,7 @@ public:
 
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
+    virtual SwFltAnchor* Clone(SfxItemPool* = nullptr) const override;
     void SetFrameFormat(SwFrameFormat* _pFrameFormat);
     const SwFrameFormat* GetFrameFormat() const { return pFrameFormat; }
           SwFrameFormat* GetFrameFormat() { return pFrameFormat; }
@@ -224,7 +224,7 @@ public:
 
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
+    virtual SwFltRedline* Clone(SfxItemPool* = nullptr) const override;
 };
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
@@ -244,7 +244,7 @@ public:
 
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
+    virtual SwFltBookmark* Clone(SfxItemPool* = nullptr) const override;
 
     long GetHandle() const              { return mnHandle; }
     const OUString& GetName() const       { return maName; }
@@ -265,7 +265,7 @@ public:
     SwFltRDFMark();
 
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
+    virtual SwFltRDFMark* Clone(SfxItemPool* = nullptr) const override;
 
     void SetHandle(long nHandle);
     long GetHandle() const;
@@ -282,7 +282,7 @@ public:
     SwFltTOX(SwTOXBase* pBase);
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
+    virtual SwFltTOX* Clone(SfxItemPool* = nullptr) const override;
     const SwTOXBase& GetBase() const { return *m_xTOXBase; }
     void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }

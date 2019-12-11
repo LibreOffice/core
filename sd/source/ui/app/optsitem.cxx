@@ -309,7 +309,7 @@ SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameVi
     }
 }
 
-SfxPoolItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
+SdOptionsLayoutItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
 {
     return new SdOptionsLayoutItem( *this );
 }
@@ -680,7 +680,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView c
     }
 }
 
-SfxPoolItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
+SdOptionsMiscItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
 {
     return new SdOptionsMiscItem( *this );
 }
@@ -865,7 +865,7 @@ SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView c
     }
 }
 
-SfxPoolItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
+SdOptionsSnapItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
 {
     return new SdOptionsSnapItem( *this );
 }
@@ -1318,7 +1318,7 @@ SdOptionsPrintItem::SdOptionsPrintItem( SdOptions const * pOpts )
     maOptionsPrint.SetOutputQuality( pOpts->GetOutputQuality() );
 }
 
-SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
+SdOptionsPrintItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
 {
     return new SdOptionsPrintItem( *this );
 }

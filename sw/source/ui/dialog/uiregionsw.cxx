@@ -209,8 +209,8 @@ SectRepr::SectRepr( size_t nPos, SwSection& rSect )
         m_FootnoteNtAtEnd = pFormat->GetFootnoteAtTextEnd();
         m_EndNtAtEnd = pFormat->GetEndAtTextEnd();
         m_Balance.SetValue(pFormat->GetBalancedColumns().GetValue());
-        m_FrameDirItem.reset(static_cast<SvxFrameDirectionItem*>(pFormat->GetFrameDir().Clone()));
-        m_LRSpaceItem.reset(static_cast<SvxLRSpaceItem*>(pFormat->GetLRSpace().Clone()));
+        m_FrameDirItem.reset(pFormat->GetFrameDir().Clone());
+        m_LRSpaceItem.reset(pFormat->GetLRSpace().Clone());
     }
 }
 

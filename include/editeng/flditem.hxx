@@ -79,7 +79,7 @@ public:
             virtual ~SvxFieldItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxFieldItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const SvxFieldData*     GetField() const    { return mpField.get(); }
 };

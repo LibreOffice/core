@@ -107,7 +107,7 @@ bool SvxClipboardFormatItem::operator==( const SfxPoolItem& rComp ) const
     return nRet;
 }
 
-SfxPoolItem* SvxClipboardFormatItem::Clone( SfxItemPool * /*pPool*/ ) const
+SvxClipboardFormatItem* SvxClipboardFormatItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxClipboardFormatItem( *this );
 }

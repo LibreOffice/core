@@ -34,7 +34,7 @@ public:
                              SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=nullptr );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxObjectItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SfxShell*                GetShell() const
                              { return _pSh; }

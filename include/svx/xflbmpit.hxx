@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC XFillBmpPosItem final : public SfxEnumItem<RectPoint>
 public:
                             XFillBmpPosItem( RectPoint eRP = RectPoint::MM );
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    SVX_DLLPRIVATE virtual XFillBmpPosItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     SVX_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  MapUnit eCoreMetric,

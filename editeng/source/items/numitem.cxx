@@ -410,14 +410,10 @@ bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
 void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
                     const Size* pSize, const sal_Int16* pOrient)
 {
-    if(!pBrushItem)
-    {
+    if (!pBrushItem)
         pGraphicBrush.reset();
-    }
     else if ( !pGraphicBrush || (*pBrushItem != *pGraphicBrush) )
-    {
-        pGraphicBrush.reset( static_cast<SvxBrushItem*>(pBrushItem->Clone()) );
-   }
+        pGraphicBrush.reset(pBrushItem->Clone());
 
     if(pOrient)
         eVertOrient = *pOrient;
@@ -942,7 +938,7 @@ bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
         *pNumRule == *static_cast<const SvxNumBulletItem&>(rCopy).pNumRule;
 }
 
-SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
+SvxNumBulletItem* SvxNumBulletItem::Clone( SfxItemPool * ) const
 {
     return new SvxNumBulletItem(*this);
 }

@@ -57,7 +57,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, c
         pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
 }
 
-SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
+SvxHyperlinkItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
 {
     return new SvxHyperlinkItem( *this );
 }

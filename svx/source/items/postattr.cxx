@@ -62,8 +62,7 @@ bool SvxPostItAuthorItem::GetPresentation
     return false;
 }
 
-
-SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
+SvxPostItAuthorItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItAuthorItem( *this );
 }
@@ -103,7 +102,7 @@ bool SvxPostItDateItem::GetPresentation
 }
 
 
-SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
+SvxPostItDateItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
 }
@@ -140,18 +139,17 @@ bool SvxPostItTextItem::GetPresentation
     return false;
 }
 
-SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
+SvxPostItTextItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItTextItem( *this );
 }
-
 
 SvxPostItIdItem::SvxPostItIdItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );
 }
 
-SfxPoolItem* SvxPostItIdItem::Clone( SfxItemPool * ) const
+SvxPostItIdItem* SvxPostItIdItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItIdItem( *this );
 }

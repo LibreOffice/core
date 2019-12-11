@@ -111,7 +111,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxUInt16Item* pOldOutlineLv = static_cast<const SfxUInt16Item*>(GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL));
         if (pOldOutlineLv)
         {
-            std::unique_ptr<SfxUInt16Item> pOutlineLv(static_cast<SfxUInt16Item*>(pOldOutlineLv->Clone()));
+            std::unique_ptr<SfxUInt16Item> pOutlineLv(pOldOutlineLv->Clone());
             pOutlineLv->SetValue( aOutlineLv );
             rSet->Put(std::move(pOutlineLv));
             bModified = true;
@@ -126,7 +126,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
         if (pOldRule)
         {
-            std::unique_ptr<SfxStringItem> pRule(static_cast<SfxStringItem*>(pOldRule->Clone()));
+            std::unique_ptr<SfxStringItem> pRule(pOldRule->Clone());
             pRule->SetValue(aStyle);
             rSet->Put(std::move(pRule));
             bModified = true;

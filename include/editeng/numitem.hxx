@@ -300,7 +300,7 @@ public:
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem() override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxNumBulletItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     SvxNumRule*             GetNumRule() const {return pNumRule.get();}

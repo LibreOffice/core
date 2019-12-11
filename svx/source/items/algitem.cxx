@@ -120,24 +120,20 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-
 OUString SvxOrientationItem::GetValueText( SvxCellOrientation nVal )
 {
     return SvxResId(RID_SVXITEMS_ORI_STANDARD + static_cast<int>(nVal));
 }
 
-
-SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
+SvxOrientationItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 {
     return new SvxOrientationItem( *this );
 }
-
 
 sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
     return static_cast<sal_uInt16>(SvxCellOrientation::Stacked) + 1; // last enum value + 1
 }
-
 
 bool SvxOrientationItem::IsStacked() const
 {
@@ -241,12 +237,10 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
              ( nBottomMargin == static_cast<const SvxMarginItem&>(rItem).nBottomMargin ) );
 }
 
-
-SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
+SvxMarginItem* SvxMarginItem::Clone( SfxItemPool* ) const
 {
     return new SvxMarginItem(*this);
 }
-
 
 bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {

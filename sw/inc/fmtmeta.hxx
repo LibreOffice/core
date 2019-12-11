@@ -114,7 +114,7 @@ public:
 
     /// SfxPoolItem
     virtual bool             operator==( const SfxPoolItem & ) const override;
-    virtual SfxPoolItem *    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwFormatMeta*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTextNode(SwTextNode *const pTextNode);

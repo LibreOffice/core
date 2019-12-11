@@ -686,7 +686,7 @@ void SvxRuler::UpdateFrame(const SvxLongULSpaceItem *pItem) // new value
 void SvxRuler::Update( const SvxProtectItem* pItem )
 {
     if( pItem )
-        mxRulerImpl->aProtectItem.reset(static_cast<SvxProtectItem*>(pItem->Clone()));
+        mxRulerImpl->aProtectItem.reset(pItem->Clone());
 }
 
 void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)

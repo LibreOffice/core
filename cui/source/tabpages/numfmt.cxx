@@ -1728,7 +1728,7 @@ void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxNumberInfoItem* pNumberInfoItem = aSet.GetItem<SvxNumberInfoItem>(SID_ATTR_NUMBERFORMAT_INFO, false);
     if (pNumberInfoItem && !pNumItem)
-        pNumItem.reset( static_cast<SvxNumberInfoItem*>(pNumberInfoItem->Clone()) );
+        pNumItem.reset(pNumberInfoItem->Clone());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

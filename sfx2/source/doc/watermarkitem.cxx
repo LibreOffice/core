@@ -36,7 +36,7 @@ bool SfxWatermarkItem::operator==( const SfxPoolItem& rCmp ) const
              m_nColor == static_cast<const SfxWatermarkItem&>(rCmp).m_nColor );
 }
 
-SfxPoolItem* SfxWatermarkItem::Clone( SfxItemPool *) const
+SfxWatermarkItem* SfxWatermarkItem::Clone( SfxItemPool *) const
 {
     return new SfxWatermarkItem(*this);
 }

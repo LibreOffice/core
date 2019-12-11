@@ -43,7 +43,7 @@ public:
     SwPageFootnoteInfoItem & operator =(SwPageFootnoteInfoItem const &) = delete; // due to SfxPoolItem
     SwPageFootnoteInfoItem & operator =(SwPageFootnoteInfoItem &&) = delete; // due to SfxPoolItem
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwPageFootnoteInfoItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -65,7 +65,7 @@ class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 public:
     SwPtrItem( const sal_uInt16 nId, void* pPtr);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwPtrItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void*   GetValue() const        { return pMisc; }
@@ -80,7 +80,7 @@ public:
     SwUINumRuleItem( const SwUINumRuleItem& rItem );
     virtual ~SwUINumRuleItem() override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwUINumRuleItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -97,7 +97,7 @@ class SwPaMItem : public SfxPoolItem
 public:
     SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwPaMItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     SwPaM*   GetValue() const        { return m_pPaM; }

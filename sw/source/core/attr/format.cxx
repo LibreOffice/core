@@ -792,7 +792,7 @@ std::shared_ptr<SvxBrushItem> SwFormat::makeBackgroundBrushItem(bool bInP) const
         return getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bInP);
     }
 
-    return std::shared_ptr<SvxBrushItem>(static_cast<SvxBrushItem*>(m_aSet.GetBackground(bInP).Clone()));
+    return std::shared_ptr<SvxBrushItem>(m_aSet.GetBackground(bInP).Clone());
 }
 
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAttributesHelper() const

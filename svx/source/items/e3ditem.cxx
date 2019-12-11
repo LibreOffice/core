@@ -55,12 +55,10 @@ bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
     return static_cast<const SvxB3DVectorItem&>(rItem).aVal == aVal;
 }
 
-
-SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
+SvxB3DVectorItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
     return new SvxB3DVectorItem( *this );
 }
-
 
 bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {

@@ -726,7 +726,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 if ( i >= rTabStops.Count() )
                 {
                     // No DefTab
-                    std::shared_ptr<SvxTabStopItem> aTabStops(static_cast<SvxTabStopItem*>(rTabStops.Clone()));
+                    std::shared_ptr<SvxTabStopItem> aTabStops(rTabStops.Clone());
 
                     ::lcl_EraseDefTabs(*aTabStops);
 
@@ -1538,7 +1538,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 std::shared_ptr<SvxLRSpaceItem> aLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE));
                 if ( !IsTabColFromDoc() )
                 {
-                    aLR.reset(static_cast<SvxLRSpaceItem*>(aCoreSet.Get(RES_LR_SPACE).Clone()));
+                    aLR.reset(aCoreSet.Get(RES_LR_SPACE).Clone());
 
                     // #i23726#
                     if (m_pNumRuleNodeFromDoc)

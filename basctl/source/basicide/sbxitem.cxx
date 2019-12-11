@@ -53,7 +53,7 @@ SbxItem::SbxItem (
     m_eType(eType)
 { }
 
-SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
+SbxItem* SbxItem::Clone(SfxItemPool*) const
 {
     return new SbxItem(*this);
 }

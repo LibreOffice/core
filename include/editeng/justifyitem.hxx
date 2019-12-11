@@ -46,7 +46,7 @@ public:
 
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellHorJustify nVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxHorJustifyItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SvxHorJustifyItem(SvxHorJustifyItem const &) = default; // SfxPoolItem copy function dichotomy
 };
@@ -73,7 +73,7 @@ public:
 
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellVerJustify nVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxVerJustifyItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SvxVerJustifyItem(SvxVerJustifyItem const &) = default; // SfxPoolItem copy function dichotomy
 };
@@ -96,7 +96,7 @@ public:
 
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( SvxCellJustifyMethod nVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxJustifyMethodItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 #endif

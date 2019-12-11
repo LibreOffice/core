@@ -767,7 +767,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( pOldFormat->GetAnchor() );
 
                 // The new one should be changeable in its height.
-                std::unique_ptr<SwFormatFrameSize> aFrameSize(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
+                std::unique_ptr<SwFormatFrameSize> aFrameSize(pOldFormat->GetFrameSize().Clone());
                 aFrameSize->SetHeightSizeType( SwFrameSize::Minimum );
                 pNewSet->Put( std::move(aFrameSize) );
 
@@ -816,7 +816,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( SwFormatVertOrient( 0, eVert ) );
                 pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
-                aFrameSize.reset(static_cast<SwFormatFrameSize*>(pOldFormat->GetFrameSize().Clone()));
+                aFrameSize.reset(pOldFormat->GetFrameSize().Clone());
 
                 SwOLENode* pOleNode = rDoc.GetNodes()[nNdIdx + 1]->GetOLENode();
                 bool isMath = false;

@@ -37,7 +37,7 @@ class SVX_DLLPUBLIC SdrGrafModeItem : public SdrGrafModeItem_Base
 public:
                             SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SdrGrafModeItem_Base( eMode ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SdrGrafModeItem* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
     static OUString         GetValueTextByPos( sal_uInt16 nPos );

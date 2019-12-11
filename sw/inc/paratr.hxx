@@ -74,7 +74,7 @@ public:
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SwFormatDrop*   Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -115,7 +115,7 @@ public:
     inline SwRegisterItem( const bool bRegister = false );
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwRegisterItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -142,7 +142,7 @@ public:
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwNumRuleItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -162,7 +162,7 @@ public:
     inline SwParaConnectBorderItem( const bool bConnect = true );
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SwParaConnectBorderItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

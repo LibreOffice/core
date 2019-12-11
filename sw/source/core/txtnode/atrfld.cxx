@@ -208,7 +208,7 @@ bool SwFormatField::operator==( const SfxPoolItem& rAttr ) const
            ( !mpField && !static_cast<const SwFormatField&>(rAttr).mpField );
 }
 
-SfxPoolItem* SwFormatField::Clone( SfxItemPool* ) const
+SwFormatField* SwFormatField::Clone( SfxItemPool* ) const
 {
     return new SwFormatField( *this );
 }

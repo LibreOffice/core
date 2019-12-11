@@ -138,9 +138,8 @@ bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
             static_cast<const NameOrIndex&>(rItem).nPalIndex == nPalIndex );
 }
 
-SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
+NameOrIndex* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
 {
-
     return new NameOrIndex(*this);
 }
 
@@ -305,7 +304,7 @@ XColorItem::XColorItem(const XColorItem& rItem) :
 {
 }
 
-SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
+XColorItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XColorItem(*this);
 }
@@ -348,7 +347,7 @@ XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
 {
 }
 
-SfxPoolItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
+XLineStyleItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStyleItem( *this );
 }
@@ -598,7 +597,7 @@ XLineDashItem::XLineDashItem(const XDash& rTheDash)
 {
 }
 
-SfxPoolItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
+XLineDashItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineDashItem(*this);
 }
@@ -906,7 +905,7 @@ XLineWidthItem::XLineWidthItem(long nWidth) :
 {
 }
 
-SfxPoolItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
+XLineWidthItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineWidthItem(*this);
 }
@@ -958,7 +957,7 @@ XLineColorItem::XLineColorItem(const OUString& rName, const Color& rTheColor) :
 {
 }
 
-SfxPoolItem* XLineColorItem::Clone(SfxItemPool* /*pPool*/) const
+XLineColorItem* XLineColorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineColorItem(*this);
 }
@@ -1017,7 +1016,7 @@ XLineStartItem::XLineStartItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
 }
 
-SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
+XLineStartItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStartItem(*this);
 }
@@ -1314,7 +1313,7 @@ XLineEndItem::XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
 }
 
-SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
+XLineEndItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineEndItem(*this);
 }
@@ -1591,7 +1590,7 @@ XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
 {
 }
 
-SfxPoolItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
+XLineStartWidthItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStartWidthItem(*this);
 }
@@ -1629,7 +1628,7 @@ XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
 {
 }
 
-SfxPoolItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
+XLineEndWidthItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineEndWidthItem(*this);
 }
@@ -1667,7 +1666,7 @@ XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
 {
 }
 
-SfxPoolItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
+XLineStartCenterItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStartCenterItem(*this);
 }
@@ -1706,7 +1705,7 @@ XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
 {
 }
 
-SfxPoolItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
+XLineEndCenterItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineEndCenterItem(*this);
 }
@@ -1750,7 +1749,7 @@ XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
 {
 }
 
-SfxPoolItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
+XFillStyleItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillStyleItem( *this );
 }
@@ -1884,7 +1883,7 @@ XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
 {
 }
 
-SfxPoolItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
+XFillColorItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillColorItem(*this);
 }
@@ -1931,7 +1930,7 @@ XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Co
 {
 }
 
-SfxPoolItem* XSecondaryFillColorItem::Clone(SfxItemPool* /*pPool*/) const
+XSecondaryFillColorItem* XSecondaryFillColorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XSecondaryFillColorItem(*this);
 }
@@ -2125,7 +2124,7 @@ XFillGradientItem::XFillGradientItem( const XGradient& rTheGradient )
 {
 }
 
-SfxPoolItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
+XFillGradientItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillGradientItem(*this);
 }
@@ -2445,7 +2444,7 @@ bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
            ( bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).bEnabled );
 }
 
-SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
+XFillFloatTransparenceItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillFloatTransparenceItem( *this );
 }
@@ -2554,7 +2553,7 @@ XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
 {
 }
 
-SfxPoolItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
+XFillHatchItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillHatchItem(*this);
 }
@@ -2771,7 +2770,7 @@ XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
 {
 }
 
-SfxPoolItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextStyleItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextStyleItem( *this );
 }
@@ -2804,7 +2803,7 @@ XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
 {
 }
 
-SfxPoolItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextAdjustItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextAdjustItem( *this );
 }
@@ -2837,7 +2836,7 @@ XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
 {
 }
 
-SfxPoolItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextDistanceItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextDistanceItem(*this);
 }
@@ -2849,11 +2848,10 @@ XFormTextStartItem::XFormTextStartItem(long nStart) :
 {
 }
 
-SfxPoolItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextStartItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextStartItem(*this);
 }
-
 
 SfxPoolItem* XFormTextMirrorItem::CreateDefault() { return new XFormTextMirrorItem; }
 
@@ -2862,11 +2860,10 @@ XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
 {
 }
 
-SfxPoolItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextMirrorItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextMirrorItem(*this);
 }
-
 
 SfxPoolItem* XFormTextOutlineItem::CreateDefault() { return new XFormTextOutlineItem; }
 
@@ -2875,11 +2872,10 @@ XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
 {
 }
 
-SfxPoolItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextOutlineItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextOutlineItem(*this);
 }
-
 
 SfxPoolItem* XFormTextShadowItem::CreateDefault() { return new XFormTextShadowItem; }
 
@@ -2888,7 +2884,7 @@ XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
 {
 }
 
-SfxPoolItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextShadowItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowItem( *this );
 }
@@ -2922,7 +2918,7 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
 {
 }
 
-SfxPoolItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextShadowColorItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowColorItem(*this);
 }
@@ -2934,11 +2930,10 @@ XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
 {
 }
 
-SfxPoolItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextShadowXValItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowXValItem(*this);
 }
-
 
 SfxPoolItem* XFormTextShadowYValItem::CreateDefault() { return new XFormTextShadowYValItem; }
 
@@ -2947,11 +2942,10 @@ XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
 {
 }
 
-SfxPoolItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextShadowYValItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowYValItem(*this);
 }
-
 
 SfxPoolItem* XFormTextHideFormItem::CreateDefault() { return new XFormTextHideFormItem; }
 
@@ -2960,7 +2954,7 @@ XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
 {
 }
 
-SfxPoolItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
+XFormTextHideFormItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextHideFormItem(*this);
 }
@@ -2991,7 +2985,7 @@ XLineAttrSetItem::XLineAttrSetItem( const XLineAttrSetItem& rLineAttr,
 {
 }
 
-SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
+XLineAttrSetItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 {
     return new XLineAttrSetItem( *this, pPool );
 }
@@ -3019,7 +3013,7 @@ XFillAttrSetItem::XFillAttrSetItem( const XFillAttrSetItem& rFillAttr,
 {
 }
 
-SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
+XFillAttrSetItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
 {
     return new XFillAttrSetItem( *this, pPool );
 }

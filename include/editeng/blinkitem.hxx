@@ -38,7 +38,7 @@ public:
     SvxBlinkItem( const bool bBlink /*= false*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxBlinkItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

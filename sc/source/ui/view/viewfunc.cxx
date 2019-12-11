@@ -874,8 +874,8 @@ void ScViewFunc::GetSelectionFrame(
                                       GetViewData().GetCurY(),
                                       GetViewData().GetTabNo() );
 
-        rLineOuter.reset(static_cast<SvxBoxItem*>(pAttrs->GetItem(ATTR_BORDER).Clone()));
-        rLineInner.reset(static_cast<SvxBoxInfoItem*>(pAttrs->GetItem(ATTR_BORDER_INNER).Clone()));
+        rLineOuter.reset(pAttrs->GetItem(ATTR_BORDER).Clone());
+        rLineInner.reset(pAttrs->GetItem(ATTR_BORDER_INNER).Clone());
 
         rLineInner->SetTable(false);
         rLineInner->SetDist(true);

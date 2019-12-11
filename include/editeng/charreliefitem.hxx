@@ -39,7 +39,7 @@ public:
     SvxCharReliefItem( FontRelief eValue /*= FontRelief::NONE*/,
                        const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxCharReliefItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     static OUString         GetValueTextByPos( sal_uInt16 nPos );
     virtual sal_uInt16      GetValueCount() const override;

@@ -31,7 +31,6 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
     nMinLead = nMinTrail = 0;
 }
 
-
 bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -40,12 +39,10 @@ bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
              ( static_cast<const SfxHyphenRegionItem&>( rAttr ).nMinTrail == nMinTrail ) );
 }
 
-
-SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
+SfxHyphenRegionItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 {
     return new SfxHyphenRegionItem( *this );
 }
-
 
 bool SfxHyphenRegionItem::GetPresentation
 (

@@ -34,7 +34,7 @@ public:
     SfxStringItem(sal_uInt16 which, const OUString & rValue):
         CntUnencodedStringItem(which, rValue) {}
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
+    virtual SfxStringItem* Clone(SfxItemPool * = nullptr) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 

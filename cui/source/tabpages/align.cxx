@@ -216,7 +216,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxUInt16Item* pIndentItem = static_cast<const SfxUInt16Item*>(GetOldItem(
                                                 *rSet, SID_ATTR_ALIGN_INDENT));
         assert(pIndentItem);
-        std::unique_ptr<SfxUInt16Item> pNewIndentItem(static_cast<SfxUInt16Item*>(pIndentItem->Clone()));
+        std::unique_ptr<SfxUInt16Item> pNewIndentItem(pIndentItem->Clone());
         pNewIndentItem->SetValue(m_xEdIndent->get_value(FieldUnit::TWIP));
         rSet->Put(*pNewIndentItem);
         bChanged = true;
@@ -259,7 +259,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SdrAngleItem* pAngleItem = static_cast<const SdrAngleItem*>(GetOldItem(
                                             *rSet, SID_ATTR_ALIGN_DEGREES));
         assert(pAngleItem);
-        std::unique_ptr<SdrAngleItem> pNewAngleItem(static_cast<SdrAngleItem*>(pAngleItem->Clone()));
+        std::unique_ptr<SdrAngleItem> pNewAngleItem(pAngleItem->Clone());
         pNewAngleItem->SetValue(m_aCtrlDial.GetRotation());
         rSet->Put(*pNewAngleItem);
         bChanged = true;
@@ -296,7 +296,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxBoolItem* pStackItem = static_cast<const SfxBoolItem*>(GetOldItem(
                                             *rSet, SID_ATTR_ALIGN_STACKED));
         assert(pStackItem);
-        std::unique_ptr<SfxBoolItem> pNewStackItem(static_cast<SfxBoolItem*>(pStackItem->Clone()));
+        std::unique_ptr<SfxBoolItem> pNewStackItem(pStackItem->Clone());
         pNewStackItem->SetValue(m_xCbStacked->get_active());
         rSet->Put(*pNewStackItem);
         bChanged = true;
@@ -319,7 +319,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxBoolItem* pWrapItem = static_cast<const SfxBoolItem*>(GetOldItem(
                                             *rSet, SID_ATTR_ALIGN_LINEBREAK));
         assert(pWrapItem);
-        std::unique_ptr<SfxBoolItem> pNewWrapItem(static_cast<SfxBoolItem*>(pWrapItem->Clone()));
+        std::unique_ptr<SfxBoolItem> pNewWrapItem(pWrapItem->Clone());
         pNewWrapItem->SetValue(m_xBtnWrap->get_active());
         rSet->Put(*pNewWrapItem);
         bChanged = true;
@@ -333,7 +333,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxBoolItem* pHyphItem = static_cast<const SfxBoolItem*>(GetOldItem(
                                             *rSet, SID_ATTR_ALIGN_HYPHENATION));
         assert(pHyphItem);
-        std::unique_ptr<SfxBoolItem> pNewHyphItem(static_cast<SfxBoolItem*>(pHyphItem->Clone()));
+        std::unique_ptr<SfxBoolItem> pNewHyphItem(pHyphItem->Clone());
         pNewHyphItem->SetValue(m_xBtnHyphen->get_active());
         rSet->Put(*pNewHyphItem);
         bChanged = true;
@@ -347,7 +347,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         const SfxBoolItem* pShrinkItem = static_cast<const SfxBoolItem*>(GetOldItem(
                                             *rSet, SID_ATTR_ALIGN_SHRINKTOFIT));
         assert(pShrinkItem);
-        std::unique_ptr<SfxBoolItem> pNewShrinkItem(static_cast<SfxBoolItem*>(pShrinkItem->Clone()));
+        std::unique_ptr<SfxBoolItem> pNewShrinkItem(pShrinkItem->Clone());
         pNewShrinkItem->SetValue(m_xBtnShrink->get_active());
         rSet->Put(*pNewShrinkItem);
         bChanged = true;

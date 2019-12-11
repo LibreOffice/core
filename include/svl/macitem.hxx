@@ -118,7 +118,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxMacroItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
     void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }

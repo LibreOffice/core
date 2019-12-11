@@ -61,7 +61,7 @@ public:
     SvxBulletItem( const SvxBulletItem& );
     virtual ~SvxBulletItem() override;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SvxBulletItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     OUString            GetFullText() const;
 

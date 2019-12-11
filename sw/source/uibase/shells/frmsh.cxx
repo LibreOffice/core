@@ -1073,7 +1073,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
     if (pPoolBoxItem == &rBoxItem)
         bDefault = true;
 
-    std::shared_ptr<SvxBoxItem> aBoxItem(static_cast<SvxBoxItem*>(rBoxItem.Clone()));
+    std::shared_ptr<SvxBoxItem> aBoxItem(rBoxItem.Clone());
 
     SvxBorderLine aBorderLine;
     const SfxPoolItem *pItem = nullptr;

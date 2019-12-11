@@ -27,7 +27,7 @@
 class SdrMeasureFormatStringItem: public SfxStringItem {
 public:
     SdrMeasureFormatStringItem()                   : SfxStringItem() { SetWhich(SDRATTR_MEASUREFORMATSTRING); }
-    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    virtual SdrMeasureFormatStringItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureFormatStringItem(*this);
     }

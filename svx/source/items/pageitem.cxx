@@ -63,7 +63,7 @@ SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
 SvxPageItem::~SvxPageItem() {}
 
 // Clone
-SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
+SvxPageItem* SvxPageItem::Clone( SfxItemPool * ) const
 {
     return new SvxPageItem( *this );
 }
@@ -271,11 +271,10 @@ SvxSetItem::SvxSetItem( const sal_uInt16 nId, std::unique_ptr<SfxItemSet>&& _pSe
 {
 }
 
-SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
+SvxSetItem* SvxSetItem::Clone( SfxItemPool * ) const
 {
     return new SvxSetItem(*this);
 }
-
 
 bool SvxSetItem::GetPresentation
 (

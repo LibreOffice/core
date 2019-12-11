@@ -28,7 +28,7 @@ class SVX_DLLPUBLIC XFillBmpTileItem final : public SfxBoolItem
 public:
                             XFillBmpTileItem( bool bTile = true );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual XFillBmpTileItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

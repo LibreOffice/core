@@ -38,7 +38,7 @@ public:
     SfxLockBytesItem & operator =(SfxLockBytesItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual SfxLockBytesItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SvLockBytes*            GetValue() const { return _xVal.get(); }
 

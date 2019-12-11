@@ -382,7 +382,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     std::shared_ptr<SvxFrameDirectionItem> aFrameDirItem(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
     bool bSetBrush = pBrush!=nullptr, bSetBox = false, bSetFrameDir = false;
     if( pBrush )
-        aBrushItem.reset(static_cast<SvxBrushItem*>(pBrush->Clone()));
+        aBrushItem.reset(pBrush->Clone());
 
     if( pItemSet2 )
     {

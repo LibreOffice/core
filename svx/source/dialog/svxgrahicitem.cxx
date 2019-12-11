@@ -31,7 +31,7 @@ bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
     return SfxPoolItem::operator==(rItem) && static_cast<const SvxGraphicItem&>(rItem).aGraphic == aGraphic;
 }
 
-SfxPoolItem* SvxGraphicItem::Clone( SfxItemPool * ) const
+SvxGraphicItem* SvxGraphicItem::Clone( SfxItemPool * ) const
 {
     return new SvxGraphicItem( *this );
 }

@@ -36,7 +36,7 @@ public:
                                              sal_Int32 nRightCrop = 0, sal_Int32 nBottomCrop = 0 ) :
                                 SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, SDRATTR_GRAFCROP ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual SdrGrafCropItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 #endif // INCLUDED_SVX_SDGCPITM_HXX
