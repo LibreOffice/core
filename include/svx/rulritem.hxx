@@ -82,12 +82,12 @@ public:
     void SetLower(long lArgRight);
 };
 
-class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxPagePosSizeItem final : public SfxPoolItem
 {
     Point aPos;
     long lWidth;
     long lHeight;
-protected:
+
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

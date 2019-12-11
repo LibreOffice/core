@@ -44,7 +44,7 @@ namespace comphelper
     }
 }
 
-class ImpLBSelEng : public FunctionSet
+class ImpLBSelEng final : public FunctionSet
 {
     SvImpLBox*          pImp;
     VclPtr<SvTreeListBox>  pView;

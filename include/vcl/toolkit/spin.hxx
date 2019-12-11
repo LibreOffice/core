@@ -28,7 +28,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 
-class VCL_DLLPUBLIC SpinButton : public Control
+class VCL_DLLPUBLIC SpinButton final : public Control
 {
 private:
     AutoTimer       maRepeatTimer;

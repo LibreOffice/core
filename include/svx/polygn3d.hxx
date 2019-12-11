@@ -23,7 +23,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
+class SVX_DLLPUBLIC E3dPolygonObj final : public E3dCompoundObject
 {
     // parameters
     basegfx::B3DPolyPolygon aPolyPoly3D;
@@ -34,7 +34,6 @@ class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
     SVX_DLLPRIVATE void CreateDefaultNormals();
     SVX_DLLPRIVATE void CreateDefaultTexture();
 
-protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     // protected destructor

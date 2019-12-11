@@ -90,7 +90,7 @@ private:
 };
 
 template <typename FuncT>
-class GenericSolarThreadExecutor<FuncT, void> : public SolarThreadExecutor
+class GenericSolarThreadExecutor<FuncT, void> final : public SolarThreadExecutor
 {
 public:
     static void exec( FuncT const& func )
