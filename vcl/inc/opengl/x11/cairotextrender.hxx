@@ -12,7 +12,7 @@
 
 #include <unx/x11/x11cairotextrender.hxx>
 
-class OpenGLX11CairoTextRender : public X11CairoTextRender
+class OpenGLX11CairoTextRender final : public X11CairoTextRender
 {
 public:
     explicit OpenGLX11CairoTextRender(X11SalGraphics& rParent);
