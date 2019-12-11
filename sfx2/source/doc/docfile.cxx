@@ -935,6 +935,16 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
 }
 }
 
+// This function will be run if file is not in use by another application anymore
+static void fileNotInUse(bool bTest)
+{
+    // Create an alert dialog asking user to open the edit the file
+    // If the user responds to 'yes', reload the file
+    // Ignore following two lines of code
+    if( bTest == true )
+        bTest = false;
+}
+
 SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntry& aData,
                                                               bool bIsLoading, bool bOwnLock,
                                                               bool bHandleSysLocked)
@@ -1352,6 +1362,11 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     // if system lock is used the writeable stream should be available
                     bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImpl->xStream.is() && !pImpl->m_pOutStream );
 
+                    // TODO: Run this piece of code every minute using a thread
+                    if (!bHandleSysLocked)
+                    {
+                        fileNotInUse(true);
+                    }
                     // The file is attempted to get locked for the duration of lockfile creation on save
                     std::unique_ptr<osl::File> pFileLock;
                     if (!bLoading && bUseSystemLock && pImpl->pTempFile)
