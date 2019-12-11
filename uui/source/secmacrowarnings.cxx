@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
 IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
 {
     if (mxAlwaysTrustCB->get_active())
-    {   // insert path into trusted path list
+    {
         uno::Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
         xD->setParentWindow(m_xDialog->GetXWindow());
@@ -136,7 +136,7 @@ void MacroWarning::InitControls()
     if (mbShowSignatures)
     {
         mxViewSignsBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
-        mxViewSignsBtn->set_sensitive(false);   // default
+        mxViewSignsBtn->set_sensitive(false);
         mxAlwaysTrustCB->connect_clicked(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
 
         mnActSecLevel = SvtSecurityOptions().GetMacroSecurityLevel();

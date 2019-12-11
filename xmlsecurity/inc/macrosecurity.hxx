@@ -120,8 +120,9 @@ private:
     DECL_LINK(TrustCertLBSelectHdl, weld::TreeView&, void);
     DECL_LINK(TrustFileLocLBSelectHdl, weld::TreeView&, void);
 
-    void FillCertLB();
+    void FillCertLB(const bool bShowWarnings = false);
     void ImplCheckButtons();
+    void ShowBrokenCertificateError(const OUString& rData);
 
 public:
     MacroSecurityTrustedSourcesTP(weld::Container* pParent, MacroSecurity* pDlg);
