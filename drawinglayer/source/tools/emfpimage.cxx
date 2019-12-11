@@ -19,6 +19,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <sal/log.hxx>
 #include "emfpimage.hxx"
+#include "emfpenums.hxx"
 
 namespace emfplushelper
 {
