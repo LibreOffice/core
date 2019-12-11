@@ -41,6 +41,9 @@ ChartSidebarSelectionListener::~ChartSidebarSelectionListener()
 
 void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObject& rEvent)
 {
+    if (!mpParent)
+        return;
+
     bool bCorrectObjectSelected = false;
 
     css::uno::Reference<css::frame::XController> xController(rEvent.Source, css::uno::UNO_QUERY);
@@ -66,6 +69,10 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
 
 void ChartSidebarSelectionListener::disposing(const css::lang::EventObject& /*rEvent*/)
 {
+    if (!mpParent)
+        return;
+
+    mpParent = nullptr;
 }
 
 void ChartSidebarSelectionListener::setAcceptedTypes(const std::vector<ObjectType>& aTypes)
