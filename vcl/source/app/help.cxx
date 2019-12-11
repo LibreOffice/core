@@ -562,13 +562,20 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
 void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime)
 {
     VclPtr<HelpTextWindow> pHelpWin = rHelpData.mpHelpWin;
-    if ( pHelpWin )
+    if( pHelpWin )
     {
-        vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
-        // find out screen area covered by system help window
-        tools::Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
-        if( pHelpWin->IsVisible() )
-            pWindow->Invalidate( aInvRect );
+        vcl::Window * pParent = pHelpWin->GetParent();
+        if( pParent )
+        {
+            VclPtr<vcl::Window> pWindow( pParent->ImplGetFrameWindow() );
+            if( pWindow )
+            {
+                // find out screen area covered by system help window
+                tools::Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
+                if( pHelpWin->IsVisible() )
+                    pWindow->Invalidate( aInvRect );
+            }
+        }
         rHelpData.mpHelpWin = nullptr;
         rHelpData.mbKeyboardHelp = false;
         pHelpWin->Hide();
