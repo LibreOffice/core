@@ -143,7 +143,7 @@ out.pln/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
 	rm -rf out.pln/class/javamain
 	mkdir out.pln/class/javamain
 	javac -classpath \
-            $(URE_HOME)/program/classes/jurt.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/tester.jar \
+            $(URE_HOME)/program/classes/ridl.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javamain $<
 
 
@@ -153,13 +153,13 @@ out.pln/runner.jar: out.pln/class/runner/test/java/runner/Runner.class \
 
 out.pln/runner.mf: runner.mf.template | out.pln
 	sed -e \
-            's~^Class-Path:$$~& file://$(URE_HOME)/program/classes/unoloader.jar~' \
+            's~^Class-Path:$$~& file://$(URE_HOME)/program/classes/ridl.jar~' \
             -e 's~^UNO-Type-Path:$$~& ~' $< > $@
 
 out.pln/class/runner/test/java/runner/Runner.class: Runner.java | out.pln/class
 	rm -rf out.pln/class/runner
 	mkdir out.pln/class/runner
-	javac -classpath $(URE_HOME)/program/classes/unoloader.jar \
+	javac -classpath $(URE_HOME)/program/classes/ridl.jar \
             -sourcepath . -d out.pln/class/runner $<
 
 
@@ -194,7 +194,7 @@ out.pln/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
 	rm -rf out.pln/class/javatest
 	mkdir out.pln/class/javatest
 	javac -classpath \
-            $(URE_HOME)/program/classes/jurt.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/javatest $<
 
 
