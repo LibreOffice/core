@@ -1437,13 +1437,13 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                     {
                         if ( !bInHeader )
                         {
-                            m_pWrtShell->SetShowHeaderFooterSeparator( Footer, true );
-                            m_pWrtShell->SetShowHeaderFooterSeparator( Header, false );
+                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Footer, true );
+                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Header, false );
                         }
                         else
                         {
-                            m_pWrtShell->SetShowHeaderFooterSeparator( Header, true );
-                            m_pWrtShell->SetShowHeaderFooterSeparator( Footer, false );
+                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Header, true );
+                            m_pWrtShell->SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
                         }
 
                         // Force repaint

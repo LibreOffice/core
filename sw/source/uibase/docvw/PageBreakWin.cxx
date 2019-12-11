@@ -219,7 +219,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
 
 void SwPageBreakWin::Select()
 {
-    SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( PageBreak, GetFrame() );
+    SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( FrameControlType::PageBreak, GetFrame() );
 
     OString sIdent = GetCurItemIdent();
     if (sIdent == "edit")
