@@ -9,11 +9,13 @@
 
 $(eval $(call gb_JunitTest_JunitTest,jurt_bridgefactory))
 
-$(eval $(call gb_JunitTest_use_jars,jurt_bridgefactory,\
-    ridl \
+$(eval $(call gb_Jar_use_customtargets,jurt_bridgefactory, \
+    ridljar/javamaker \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,jurt_bridgefactory,jurt))
+$(eval $(call gb_JunitTest_use_jar_classset,jurt_bridgefactory,ridl))
+
+$(eval $(call gb_JunitTest_add_classpath,jurt_bridgefactory,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_bridgefactory,\
     jurt/test/com/sun/star/comp/bridgefactory/BridgeFactory_Test \

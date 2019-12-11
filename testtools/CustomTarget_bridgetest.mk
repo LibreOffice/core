@@ -39,7 +39,7 @@ $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
 
-testtools_MY_CLASSPATH := $(call gb_Jar_get_target,ridl)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,java_uno)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,jurt)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,juh)
+testtools_MY_CLASSPATH := $(call gb_Jar_get_target,ridl)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,java_uno)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,juh)
 
 $(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
