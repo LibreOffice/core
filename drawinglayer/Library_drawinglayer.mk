@@ -164,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/tools/converters \
     drawinglayer/source/tools/emfplushelper \
     drawinglayer/source/tools/emfphelperdata \
+    drawinglayer/source/tools/emfpenums \
     drawinglayer/source/tools/emfpbrush \
     drawinglayer/source/tools/emfppath \
     drawinglayer/source/tools/emfppen \
