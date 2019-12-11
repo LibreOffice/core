@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_ca5faf0c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-11T07:43:53Z",
+      "side": 1,
+      "message": "Sounds a bit weird, what do you think?",
+      "range": {
+        "startLine": 83,
+        "startChar": 152,
+        "endLine": 83,
+        "endChar": 178
+      },
+      "revId": "43fd2f238c07372d62ea5deb9b43338cd07bccdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
