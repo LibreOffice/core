@@ -360,7 +360,7 @@ public:
                         layout = true;
                         break;
                     }
-                    // Heuristic to recursivley check parent RecordDecl if given RecordDecl is
+                    // Heuristic to recursively check parent RecordDecl if given RecordDecl is
                     // unnamed and either an anonymous struct (or union, but which are already
                     // filtered out anyway), or defined in a non-static data member declaration
                     // (TODO: which is erroneously approximated here with getTypedefNameForAnonDecl
