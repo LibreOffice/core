@@ -22,7 +22,9 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <sal/log.hxx>
 #include "emfpbrush.hxx"
+#include "emfpimage.hxx"
 #include "emfppath.hxx"
+#include "emfpenums.hxx"
 
 namespace emfplushelper
 {
@@ -99,13 +101,19 @@ namespace emfplushelper
             }
             case BrushTypeTextureFill:
             {
+                s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: " << BrushDataFlagsToString(additionalFlags)
+                                                                          << std::hex << " (0x" << additionalFlags << ")" << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tWrap mode: " << WrapModeToString(wrapMode));
                 SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
                 break;
             }
             case BrushTypePathGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: 0x" << std::hex << additionalFlags << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: " << BrushDataFlagsToString(additionalFlags)
+                                                                          << std::hex << " (0x" << additionalFlags << ")" << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tWrap mode: " << WrapModeToString(wrapMode));
                 sal_uInt32 color;
                 s.ReadUInt32(color);
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
