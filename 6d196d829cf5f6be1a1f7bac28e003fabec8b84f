@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_8ae1b7d3",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf",
+        "patchSetId": 6
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-11T09:29:00Z",
+      "side": 1,
+      "message": "Yikes! :-)",
+      "range": {
+        "startLine": 707,
+        "startChar": 98,
+        "endLine": 707,
+        "endChar": 99
+      },
+      "revId": "6d196d829cf5f6be1a1f7bac28e003fabec8b84f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
