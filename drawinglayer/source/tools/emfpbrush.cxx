@@ -26,8 +26,9 @@
 
 namespace emfplushelper
 {
-    EMFPBrush::EMFPBrush()
+    EMFPBrush::EMFPBrush(sal_uInt32 datasize)
         : type(0)
+        , datasize(datasize)
         , additionalFlags(0)
         , wrapMode(0)
         , firstPointX(0.0)
@@ -84,7 +85,19 @@ namespace emfplushelper
             }
             case BrushTypeTextureFill:
             {
-                SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: " << std::hex << " (0x" << additionalFlags << ")" << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tWrap mode: " << wrapMode);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tEmfPlusImage read");
+
+                sal_uInt32 const imagesize = datasize - 8;
+                auto buffer = std::make_unique<char[]>(imagesize);
+                s.ReadBytes(buffer.get(), imagesize);
+                SvMemoryStream memstream(buffer.get(), imagesize, StreamMode::STD_READWRITE);
+                image.reset(new EMFPImage());
+                image->Read(memstream, imagesize, true);
+
+                SAL_WARN("drawinglayer", "EMF+\t\t\t\tTODO: implement BrushTypeTextureFill brush");
                 break;
             }
             case BrushTypePathGradient:
