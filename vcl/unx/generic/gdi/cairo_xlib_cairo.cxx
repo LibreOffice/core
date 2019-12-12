@@ -250,7 +250,7 @@ namespace cairo
 
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDrawable = mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable;
-        aSystemGraphicsData.pXRenderFormat = getRenderFormat();
+        aSystemGraphicsData.pXRenderFormat = maSysData.pRenderFormat;
 
         int width = cairo_xlib_surface_get_width(mpSurface.get());
         int height = cairo_xlib_surface_get_height(mpSurface.get());

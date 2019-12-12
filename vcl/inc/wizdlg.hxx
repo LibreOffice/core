@@ -92,12 +92,6 @@ namespace vcl
             only to be used during construction, before any layouting happened
         */
         void                SetLeftAlignedButtonCount( sal_Int16 _nCount );
-        /** declares the view area to have an empty margin
-
-            Normally, the view area has a certain margin to the top/left/bottom/right of the
-            dialog. By calling this method, you can reduce this margin to 0.
-        */
-        void                SetEmptyViewMargin();
 
         void                CalcAndSetSize();
 
@@ -137,12 +131,6 @@ namespace vcl
 
         void                AddButton( Button* pButton, long nOffset = 0 );
         void                RemoveButton( Button* pButton );
-
-        void                SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
-        void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
-
-        void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
-        void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
 
         void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
         const Size&         GetPageSizePixel() const { return maPageSize; }
@@ -191,11 +179,6 @@ namespace vcl
             @see activatePath
         */
         WizardTypes::WizardState determineNextState(WizardTypes::WizardState nCurrentState) const;
-
-        /** called when the finish button is pressed
-            <p>By default, only the base class' Finish method (which is not virtual) is called</p>
-        */
-        bool                onFinish();
 
         /// travel to the next state
         bool                travelNext();

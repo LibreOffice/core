@@ -98,7 +98,6 @@ private:
     DECL_LINK(ExpertConfigHdl_Impl, weld::Button&, void);
 
     void                    ClearJavaInfo();
-    void                    ClearJavaList();
     void                    LoadJREs();
     void                    AddJRE( JavaInfo const * _pInfo );
     void                    HandleCheckEntry(int nCheckedRow);

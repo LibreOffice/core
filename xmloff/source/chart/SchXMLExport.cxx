@@ -180,9 +180,6 @@ public:
     void AddAutoStyleAttribute(
         const std::vector< XMLPropertyState >& aStates );
 
-    SvXMLAutoStylePoolP& GetAutoStylePoolP()
-    { return mrAutoStylePool; }
-
     /// if bExportContent is false the auto-styles are collected
     void parseDocument( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
                         bool bExportContent,
@@ -3460,7 +3457,7 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
 void SchXMLExportHelper_Impl::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
 {
     if( !aStates.empty() )
-        maAutoStyleNameQueue.push( GetAutoStylePoolP().Add( XML_STYLE_FAMILY_SCH_CHART_ID, aStates ));
+        maAutoStyleNameQueue.push( mrAutoStylePool.Add( XML_STYLE_FAMILY_SCH_CHART_ID, aStates ));
 }
 
 void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )

@@ -206,7 +206,6 @@ class SvxIconChoiceCtrl_Impl
                         );
 
     void                ClearSelectedRectList();
-    void                ClearColumnList();
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;

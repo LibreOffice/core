@@ -97,11 +97,6 @@ namespace vcl
         mnLeftAlignCount = _nCount;
     }
 
-    void RoadmapWizard::SetEmptyViewMargin()
-    {
-        mbEmptyViewMargin = true;
-    }
-
     void RoadmapWizard::ImplCalcSize( Size& rSize )
     {
         // calculate ButtonBar height and width
@@ -391,7 +386,7 @@ namespace vcl
                 AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
             else
                 AddButton( m_pPrevPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-            SetPrevButton( m_pPrevPage );
+            mpPrevBtn = m_pPrevPage;
             m_pPrevPage->SetClickHdl( LINK( this, RoadmapWizard, OnPrevPage ) );
         }
 
@@ -406,7 +401,7 @@ namespace vcl
             m_pNextPage->set_id("next");
 
             AddButton( m_pNextPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-            SetNextButton( m_pNextPage );
+            mpNextBtn = m_pNextPage;
             m_pNextPage->SetClickHdl( LINK( this, RoadmapWizard, OnNextPage ) );
         }
 
@@ -730,11 +725,6 @@ namespace vcl
             m_pCancel->Enable(_bEnable);
     }
 
-    bool RoadmapWizard::onFinish()
-    {
-        return Finish( RET_OK );
-    }
-
     IMPL_LINK_NOARG(RoadmapWizard, OnFinish, Button*, void)
     {
         if ( isTravelingSuspended() )
@@ -744,7 +734,7 @@ namespace vcl
         {
             return;
         }
-        onFinish();
+        Finish( RET_OK );
     }
 
     bool RoadmapWizard::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )

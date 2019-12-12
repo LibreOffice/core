@@ -486,7 +486,7 @@ SwHTMLParser::~SwHTMLParser()
     m_pCSS1Parser.reset();
     m_pNumRuleInfo.reset();
     DeleteFormImpl();
-    DeleteFootEndNoteImpl();
+    m_pFootEndNoteImpl.reset();
 
     OSL_ENSURE(!m_xTable.get(), "It exists still an open table");
     m_pImageMaps.reset();

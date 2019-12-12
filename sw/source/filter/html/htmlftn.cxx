@@ -212,11 +212,6 @@ void SwHTMLParser::InsertFootEndNoteText()
         m_pFootEndNoteImpl->sContent += aToken;
 }
 
-void SwHTMLParser::DeleteFootEndNoteImpl()
-{
-    m_pFootEndNoteImpl.reset();
-}
-
 SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
 {
     SwNodeIndex *pStartNodeIdx = nullptr;

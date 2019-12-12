@@ -72,7 +72,6 @@ class CachedContentResultSet
 
         void remindMapped( sal_Int32 nRow );
         bool isRowMapped( sal_Int32 nRow );
-        void clearMappedReminder();
         css::uno::Sequence< sal_Bool >* getMappedReminder();
 
     public:

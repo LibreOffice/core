@@ -840,7 +840,6 @@ private:
     void FinishFootEndNote();
     void InsertFootEndNoteText();
     SwNodeIndex *GetFootEndNoteSection( const OUString& rName );
-    void DeleteFootEndNoteImpl();
 
     sal_Int32 StripTrailingLF();
 

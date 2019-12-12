@@ -311,12 +311,6 @@ void SvxJavaOptionsPage::ClearJavaInfo()
 #endif
 }
 
-void SvxJavaOptionsPage::ClearJavaList()
-{
-    m_xJavaList->clear();
-}
-
-
 void SvxJavaOptionsPage::LoadJREs()
 {
 #if HAVE_FEATURE_JAVA
@@ -561,7 +555,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     ClearJavaInfo();
-    ClearJavaList();
+    m_xJavaList->clear();
 
     SvtMiscOptions aMiscOpt;
 

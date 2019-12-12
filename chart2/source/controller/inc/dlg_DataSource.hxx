@@ -57,9 +57,6 @@ public:
     virtual void setValidPage( BuilderPage * pTabPage ) override;
 
 private:
-    void DisableTabToggling();
-    void EnableTabToggling();
-
     DECL_LINK(ActivatePageHdl, const OString&, void);
     DECL_LINK(DeactivatePageHdl, const OString&, bool);
 

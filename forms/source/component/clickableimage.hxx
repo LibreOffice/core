@@ -82,7 +82,6 @@ namespace frm
         void StartProduction();
         void SetURL(const OUString& rURL);
         void DataAvailable();
-        void DownloadDone();
 
         css::uno::Sequence< css::uno::Type> _getTypes() override;
         bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }

@@ -87,7 +87,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    static Sequence<OUString> getSupportedServiceNames_Static();
 
     // XNumberText implementation
     virtual OUString SAL_CALL getNumberText(const OUString& aText,
@@ -168,12 +167,7 @@ sal_Bool SAL_CALL NumberText_Impl::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
-{
-    return getSupportedServiceNames_Static();
-}
-
-Sequence<OUString> NumberText_Impl::getSupportedServiceNames_Static() { return { SERVICENAME }; }
+Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames() { return { SERVICENAME }; }
 
 /**
  * Function to create a new component instance; is needed by factory helper implementation.

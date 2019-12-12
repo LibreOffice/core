@@ -258,11 +258,6 @@ void SvxHpLinkDlg::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
-void SvxHpLinkDlg::Start()
-{
-    Start_Impl();
-}
-
 bool SvxHpLinkDlg::QueryClose()
 {
     bool bRet = true;
@@ -277,7 +272,7 @@ bool SvxHpLinkDlg::QueryClose()
     return bRet;
 }
 
-void SvxHpLinkDlg::Start_Impl()
+void SvxHpLinkDlg::Start()
 {
     SwitchPage(msCurrentPageId);
     ActivatePageImpl();

@@ -119,7 +119,6 @@ public:
 
     void            NotifyChange(const Color&  rColor);
     void            NotifyChange(const BitmapEx* pBitmap);
-    void            SetFillColor(const Color& rColor) { aColor = rColor; }
 
 protected:
     virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect ) override;
@@ -164,7 +163,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     if ( !bIsBmp )
     {
         const static Color aTranspCol(COL_TRANSPARENT);
-        SetFillColor(rColor == aTranspCol ? Application::GetSettings().GetStyleSettings().GetFieldColor() : rColor.GetRGBColor());
+        aColor = rColor == aTranspCol ? Application::GetSettings().GetStyleSettings().GetFieldColor() : rColor.GetRGBColor();
         Invalidate(aDrawRect);
     }
 }

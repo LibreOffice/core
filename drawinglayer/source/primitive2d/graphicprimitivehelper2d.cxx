@@ -331,7 +331,6 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransform);
 
             /// data read access
-            const Graphic& getGraphic() const { return maGraphic; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
 
             /// compare operator
@@ -406,7 +405,7 @@ namespace drawinglayer
             // use operator== of Graphic - if that is equal, the basic definition is equal
             return (nullptr != pCompare
                 && getTransform() == pCompare->getTransform()
-                && getGraphic() == pCompare->getGraphic());
+                && maGraphic == pCompare->maGraphic);
         }
 
         void AnimatedGraphicPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const

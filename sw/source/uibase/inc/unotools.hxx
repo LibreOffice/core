@@ -69,7 +69,6 @@ public:
     virtual ~SwOneExampleFrame() override;
 
     css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
-    css::uno::Reference< css::frame::XController > &  GetController() {return m_xController;}
     css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return m_xCursor;}
 
     void ClearDocument();
