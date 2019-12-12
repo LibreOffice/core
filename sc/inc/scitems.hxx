@@ -126,7 +126,7 @@ class SvxSizeItem;
 #define ATTR_VERTICAL_ASIAN     TypedWhichId<SfxBoolItem>(137)
 #define ATTR_WRITINGDIR         TypedWhichId<SvxFrameDirectionItem>(138)
 #define ATTR_LINEBREAK          TypedWhichId<ScLineBreakCell>(139)
-#define ATTR_SHRINKTOFIT        TypedWhichId<SfxBoolItem>(140)
+#define ATTR_SHRINKTOFIT        TypedWhichId<ScShrinkToFitCell>(140)
 #define ATTR_BORDER_TLBR        TypedWhichId<SvxLineItem>(141)
 #define ATTR_BORDER_BLTR        TypedWhichId<SvxLineItem>(142)
 #define ATTR_MARGIN             TypedWhichId<SvxMarginItem>(143)
