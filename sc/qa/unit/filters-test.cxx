@@ -77,6 +77,7 @@ public:
     void testSortWithSheetExternalReferencesODS();
     void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
+    void testSortWithFormattingXLS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
     CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
+    CPPUNIT_TEST(testSortWithFormattingXLS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -790,6 +792,37 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
             CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
         }
     }
+}
+
+void ScFiltersTest::testSortWithFormattingXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf129127.", FORMAT_XLS, true);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Set as an anonymous database range to sort.
+    std::unique_ptr<ScDBData> pDBData(
+        new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 9, false, false));
+    rDoc.SetAnonymousDBData(0, std::move(pDBData));
+
+    // Sort ascending by Row 1
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 4;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 9;
+    aSortData.bHasHeader = false;
+    aSortData.bByRow = false;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+
+    // Do the sorting.
+    ScDBDocFunc aFunc(*xDocSh);
+    // Without the fix, sort would crash.
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()

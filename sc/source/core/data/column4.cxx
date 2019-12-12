@@ -1107,6 +1107,8 @@ void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
             const ScPatternAttr* pPat2 = rOther.GetPattern(nRow);
             if (pPat1 != pPat2)
             {
+                if (pPat1->GetRefCount() == 1)
+                    pPat1 = &rOther.GetDoc()->GetPool()->Put(*pPat1);
                 SetPattern(nRow, *pPat2);
                 rOther.SetPattern(nRow, *pPat1);
             }
