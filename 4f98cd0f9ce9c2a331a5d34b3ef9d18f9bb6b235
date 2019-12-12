@@ -34,6 +34,24 @@
       "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_525915fc",
+        "filename": "sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-12T17:28:06Z",
+      "side": 1,
+      "message": "\u003e * what should we swap with what, and why?\n\nyeah, got you now; instead of moving maShapeRanges into aOldShapeRanges and then clearing the former, we can optimize a bit and swap maShapeRanges with empty aOldShapeRanges; can do that in a follow-up (unless you beat me to it)",
+      "parentUuid": "5f7c97a3_3247b920",
+      "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
