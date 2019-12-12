@@ -30,7 +30,7 @@
 
 /** makes it possible to receive events from the mouse in a certain window.
  *
- * @deprecated Use the following interfaces which allow to receive (and consume) mouse events
+ * Use the following interfaces which allow to receive (and consume) mouse events
  * even on windows which are not at the top:
  * <ul>
  *   <li>com::sun::star::awt::XMouseClickHandler</li>
