@@ -830,7 +830,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     // text orientation/rotation (BIFF2-BIFF7 sets mnOrient)
     sal_uInt8 nXclRot = (mnOrient == EXC_ORIENT_NONE) ? mnRotation : XclTools::GetXclRotFromOrient( mnOrient );
     bool bStacked = (nXclRot == EXC_ROT_STACKED);
-    ScfTools::PutItem( rItemSet, ScShrinkToFitCell( bStacked ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, ScVerticalStackCell( bStacked ), bSkipPoolDefs );
     // set an angle in the range from -90 to 90 degrees
     sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
     ScfTools::PutItem( rItemSet, ScRotateValueItem( nAngle ), bSkipPoolDefs );
