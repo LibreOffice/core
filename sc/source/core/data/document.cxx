@@ -1226,8 +1226,11 @@ struct BroadcastRecalcOnRefMoveHandler
         if (p)
             p->BroadcastRecalcOnRefMove();
     }
+};
 
-    explicit BroadcastRecalcOnRefMoveHandler( ScDocument* pDoc ) :
+struct BroadcastRecalcOnRefMoveGuard
+{
+    explicit BroadcastRecalcOnRefMoveGuard( ScDocument* pDoc ) :
         aSwitch( *pDoc, false),
         aBulk( pDoc->GetBASM(), SfxHintId::ScDataChanged)
     {
@@ -1339,7 +1342,10 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                     a->SetDirtyIfPostponed();
             }
 
-            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
+            {
+                BroadcastRecalcOnRefMoveGuard g(this);
+                std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+            }
         }
         bRet = true;
     }
@@ -1450,7 +1456,10 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                 a->SetDirtyIfPostponed();
         }
 
-        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
+        {
+            BroadcastRecalcOnRefMoveGuard g(this);
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+        }
     }
 
     if (pChartListenerCollection)
@@ -1552,7 +1561,10 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             std::for_each(maTabs.begin(), maTabs.end(), SetDirtyIfPostponedHandler());
             // Cells containing functions such as CELL, COLUMN or ROW may have
             // changed their values on relocation. Broadcast them.
-            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
+            {
+                BroadcastRecalcOnRefMoveGuard g(this);
+                std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+            }
         }
         bRet = true;
     }
@@ -1653,7 +1665,10 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
                 a->SetDirtyIfPostponed();
         }
 
-        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
+        {
+            BroadcastRecalcOnRefMoveGuard g(this);
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+        }
     }
 
     if (pChartListenerCollection)
