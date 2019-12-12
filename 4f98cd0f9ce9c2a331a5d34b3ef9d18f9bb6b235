@@ -16,6 +16,24 @@
       "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_3247b920",
+        "filename": "sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-12T17:20:15Z",
+      "side": 1,
+      "message": "* moved-from vector has indeterminate (but valid) state\n* what should we swap with what, and why?",
+      "parentUuid": "5f7c97a3_f2bb810b",
+      "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
