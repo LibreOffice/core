@@ -83,6 +83,7 @@ void VBATest::testMiscVBAFunctions()
         "datepart.vb",
         "day.vb",
         "error.vb",
+        "Err.Raise.vb",
         "exp.vb",
         "fix.vb",
         "hex.vb",
