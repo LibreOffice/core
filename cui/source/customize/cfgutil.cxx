@@ -519,8 +519,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                 OUString uiName = theChild->getName();
                 if ( bIsRootNode )
                 {
-                    if (  ! (theChild->getName() == user  || theChild->getName() == share ||
-                             theChild->getName() == currentDocTitle ) )
+                    if (  ! (uiName == user  || uiName == share ||
+                             uiName == currentDocTitle ) )
                     {
                         bDisplay=false;
                     }
