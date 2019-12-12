@@ -36,8 +36,6 @@ public:
     /** Constructs an unformatted string. */
     explicit            XclImpString( const OUString& rString );
 
-                        ~XclImpString();
-
     /** Reads a complete string from the passed stream. */
     void                Read( XclImpStream& rStrm, XclStrFlags nFlags = XclStrFlags::NONE );
 

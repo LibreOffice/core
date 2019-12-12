@@ -306,10 +306,6 @@ ScDPGroupItem::ScDPGroupItem( const ScDPItemData& rName ) :
 {
 }
 
-ScDPGroupItem::~ScDPGroupItem()
-{
-}
-
 void ScDPGroupItem::AddElement( const ScDPItemData& rName )
 {
     aElements.push_back( rName );

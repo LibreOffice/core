@@ -169,7 +169,6 @@ struct FontCollectionEntry
                             {
                                 ImplInit( rName );
                             };
-        ~FontCollectionEntry();
 
     private:
 

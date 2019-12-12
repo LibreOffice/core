@@ -31,10 +31,6 @@ PgBorder::PgBorder( ) :
 {
 }
 
-PgBorder::~PgBorder( )
-{
-}
-
 PageBordersHandler::PageBordersHandler( ) :
 LoggedProperties("PageBordersHandler"),
 m_eBorderApply(SectionPropertyMap::BorderApply::ToAllInSection),

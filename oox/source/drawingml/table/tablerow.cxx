@@ -37,9 +37,6 @@ TableRow::TableRow()
 : mnHeight( 0 )
 {
 }
-TableRow::~TableRow()
-{
-}
 
 } } }
 

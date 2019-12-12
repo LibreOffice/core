@@ -62,8 +62,6 @@ namespace canvas
         class SpriteInfo
         {
         public:
-            ~SpriteInfo() {}
-
             /** Create sprite info
 
                 @param rRef

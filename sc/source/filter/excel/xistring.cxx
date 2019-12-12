@@ -38,10 +38,6 @@ XclImpString::XclImpString( const OUString& rString ) :
 {
 }
 
-XclImpString::~XclImpString()
-{
-}
-
 void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
 {
     if( !( nFlags & XclStrFlags::SeparateFormats ) )

@@ -153,7 +153,6 @@ private:
         OString const m_sID;
         VclPtr<Menu> m_pMenu;
         MenuAndId(const OString &rId, Menu *pMenu);
-        ~MenuAndId();
     };
     std::vector<MenuAndId> m_aMenus;
 

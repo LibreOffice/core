@@ -30,7 +30,6 @@ class TableRow
 public:
 
     TableRow();
-    ~TableRow();
 
     void setHeight( sal_Int32 nHeight ){ mnHeight = nHeight; };
     sal_Int32 getHeight() const { return mnHeight; };

@@ -4643,6 +4643,4 @@ VclBuilder::MenuAndId::MenuAndId(const OString &rId, Menu *pMenu)
     , m_pMenu(pMenu)
 {}
 
-VclBuilder::MenuAndId::~MenuAndId() {}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

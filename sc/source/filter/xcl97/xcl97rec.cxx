@@ -1404,10 +1404,6 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     }
 }
 
-ExcEScenario::~ExcEScenario()
-{
-}
-
 bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt )
 {
     if( aCells.size() == EXC_SCEN_MAXCELL )

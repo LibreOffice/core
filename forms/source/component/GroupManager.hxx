@@ -138,7 +138,6 @@ class OGroup final
 
 public:
     explicit OGroup(const OUString& rGroupName);
-    ~OGroup();
 
     const OUString& GetGroupName() const { return m_aGroupName; }
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;

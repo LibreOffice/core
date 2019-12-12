@@ -45,7 +45,6 @@ class TableCell
 public:
 
     TableCell();
-    ~TableCell();
 
     sal_Int32   getRowSpan() const { return mnRowSpan; };
     void        setRowSpan( sal_Int32 nRowSpan ){ mnRowSpan = nRowSpan; };

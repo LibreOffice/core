@@ -42,7 +42,6 @@ public:
     bool m_bShadow;
 
     PgBorder( );
-    ~PgBorder( );
 };
 
 class PageBordersHandler : public LoggedProperties

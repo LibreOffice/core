@@ -70,7 +70,6 @@ private:
 
 public:
                                 ScaFuncData(const ScaFuncDataBase& rBaseData);
-                                ~ScaFuncData();
 
     const char*          GetUINameID() const     { return pUINameID; }
     const char**         GetDescrID() const      { return pDescrID; }

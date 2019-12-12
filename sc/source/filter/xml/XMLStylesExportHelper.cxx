@@ -57,10 +57,6 @@ ScMyValidation::ScMyValidation()
 {
 }
 
-ScMyValidation::~ScMyValidation()
-{
-}
-
 bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 {
     return aVal.bIgnoreBlanks == bIgnoreBlanks &&

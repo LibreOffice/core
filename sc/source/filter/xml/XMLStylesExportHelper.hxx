@@ -54,7 +54,6 @@ struct ScMyValidation
     bool                        bIgnoreBlanks;
 
                                 ScMyValidation();
-                                ~ScMyValidation();
 
     bool                        IsEqual(const ScMyValidation& aVal) const;
 };

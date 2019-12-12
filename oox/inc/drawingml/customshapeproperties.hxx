@@ -96,7 +96,6 @@ class CustomShapeProperties final
 {
 public:
     CustomShapeProperties();
-    ~CustomShapeProperties();
 
     void pushToPropSet( const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
                         const css::uno::Reference < css::drawing::XShape > & xShape,
