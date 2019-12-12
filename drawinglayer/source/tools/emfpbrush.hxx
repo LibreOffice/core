@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPBRUSH_HXX
 
 #include "emfphelperdata.hxx"
+#include "emfpimage.hxx"
 #include <tools/color.hxx>
 
 namespace emfplushelper
@@ -97,6 +98,7 @@ namespace emfplushelper
     {
         ::Color solidColor;
         sal_uInt32 type;
+        sal_uInt32 datasize;
         sal_uInt32 additionalFlags;
 
         /* linear gradient */
@@ -115,8 +117,9 @@ namespace emfplushelper
         std::unique_ptr<::Color[]> surroundColors;
         std::unique_ptr<EMFPPath> path;
         EmfPlusHatchStyle hatchStyle;
+        std::unique_ptr<EMFPImage> image;
 
-        EMFPBrush();
+        EMFPBrush(sal_uInt32 datasize);
         virtual ~EMFPBrush() override;
 
         sal_uInt32 GetType() const { return type; }
