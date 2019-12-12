@@ -1847,8 +1847,8 @@ void ScDrawLayer::MirrorRectRTL( tools::Rectangle& rRect )
 tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell )
 {
     tools::Rectangle aCellRect;
-    OSL_ENSURE( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ), "ScDrawLayer::GetCellRect - invalid cell address" );
-    if( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ) )
+    OSL_ENSURE( rDoc.ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ), "ScDrawLayer::GetCellRect - invalid cell address" );
+    if( rDoc.ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ) )
     {
         // find top left position of passed cell address
         Point aTopLeft;

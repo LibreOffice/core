@@ -2800,7 +2800,7 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     return aResult.GetMatrix().get();
 }
 
-bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
+bool ScFormulaCell::GetMatrixOrigin( const ScDocument* pDoc, ScAddress& rPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2815,7 +2815,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(aPos);
-                if (ValidAddress(aAbs))
+                if (pDoc->ValidAddress(aAbs))
                 {
                     rPos = aAbs;
                     return true;
@@ -2828,7 +2828,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
     return false;
 }
 
-sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
+sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument* pDoc, ScAddress& rOrgPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2838,7 +2838,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             static thread_local SCCOL nC;
             static thread_local SCROW nR;
             ScAddress aOrg;
-            if ( !GetMatrixOrigin( aOrg ) )
+            if ( !GetMatrixOrigin( pDoc, aOrg ) )
                 return sc::MatrixEdge::Nothing;
             if ( aOrg != rOrgPos )
             {   // First time or a different matrix than last time.
@@ -2866,7 +2866,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                         {
                             pCell = pDocument->GetFormulaCell(aAdr);
                             if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
-                                pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
+                                pCell->GetMatrixOrigin(pDocument, aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nC++;
                                 aAdr.IncCol();
@@ -2881,7 +2881,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                         {
                             pCell = pDocument->GetFormulaCell(aAdr);
                             if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
-                                pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
+                                pCell->GetMatrixOrigin(pDocument, aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nR++;
                                 aAdr.IncRow();
@@ -3182,7 +3182,7 @@ bool checkCompileColRowName(
             {
                 const ScSingleRefData& rRef = *t->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(aPos);
-                if (ValidAddress(aAbs))
+                if (rDoc.ValidAddress(aAbs))
                 {
                     if (rCxt.maRange.In(aAbs))
                         return true;

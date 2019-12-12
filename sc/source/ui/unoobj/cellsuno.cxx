@@ -3702,7 +3702,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
                     if (aIter.getType() != CELLTYPE_FORMULA)
                         continue;
 
-                    ScDetectiveRefIter aRefIter(aIter.getFormulaCell());
+                    ScDetectiveRefIter aRefIter(&rDoc, aIter.getFormulaCell());
                     ScRange aRefRange;
                     while ( aRefIter.GetNextRef( aRefRange) )
                     {
@@ -3751,7 +3751,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
                     continue;
 
                 bool bMark = false;
-                ScDetectiveRefIter aIter(aCellIter.getFormulaCell());
+                ScDetectiveRefIter aIter(&rDoc, aCellIter.getFormulaCell());
                 ScRange aRefRange;
                 while ( aIter.GetNextRef( aRefRange) && !bMark )
                 {
@@ -4857,7 +4857,7 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
         const ScFormulaCell* pFCell2 = aCell2.mpFormula;
         ScAddress aStart1;
         ScAddress aStart2;
-        if (pFCell1->GetMatrixOrigin(aStart1) && pFCell2->GetMatrixOrigin(aStart2))
+        if (pFCell1->GetMatrixOrigin(&rDoc, aStart1) && pFCell2->GetMatrixOrigin(&rDoc, aStart2))
         {
             if (aStart1 == aStart2)               // both the same matrix
                 pFCell1->GetFormula(aFormula);    // it doesn't matter from which cell
@@ -4921,7 +4921,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
         const ScFormulaCell* pFCell2 = aCell2.mpFormula;
         ScAddress aStart1;
         ScAddress aStart2;
-        if (pFCell1->GetMatrixOrigin(aStart1) && pFCell2->GetMatrixOrigin(aStart2))
+        if (pFCell1->GetMatrixOrigin(&rDoc, aStart1) && pFCell2->GetMatrixOrigin(&rDoc, aStart2))
         {
             if (aStart1 == aStart2)
             {

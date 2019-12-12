@@ -310,9 +310,9 @@ bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
 
 Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const
 {
-    OSL_ENSURE( ValidColRow( nCol, nRow ), "ScDetectiveFunc::GetDrawPos - invalid cell address" );
-    nCol = SanitizeCol( nCol );
-    nRow = SanitizeRow( nRow );
+    OSL_ENSURE( pDoc->ValidColRow( nCol, nRow ), "ScDetectiveFunc::GetDrawPos - invalid cell address" );
+    nCol = pDoc->SanitizeCol( nCol );
+    nRow = pDoc->SanitizeRow( nRow );
 
     Point aPos;
 
@@ -831,7 +831,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
 
     sal_uInt16 nResult = DET_INS_EMPTY;
 
-    ScDetectiveRefIter aIter(pFCell);
+    ScDetectiveRefIter aIter(pDoc, pFCell);
     ScRange aRef;
     while ( aIter.GetNextRef( aRef ) )
     {
@@ -925,7 +925,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
         DeleteArrowsAt( nCol, nRow, true );                 // arrows, that are pointing here
     }
 
-    ScDetectiveRefIter aIter(pFCell);
+    ScDetectiveRefIter aIter(pDoc, pFCell);
     ScRange aRef;
     while ( aIter.GetNextRef( aRef) )
     {
@@ -976,7 +976,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
 
     sal_uInt16 nResult = DET_INS_EMPTY;
 
-    ScDetectiveRefIter aIter(pFCell);
+    ScDetectiveRefIter aIter(pDoc, pFCell);
     ScRange aRef;
     ScAddress aErrorPos;
     bool bHasError = false;
@@ -1026,7 +1026,7 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
             pFCell->Interpret();                // can't be called after SetRunning
         pFCell->SetRunning(true);
 
-        ScDetectiveRefIter aIter(pFCell);
+        ScDetectiveRefIter aIter(pDoc, pFCell);
         ScRange aRef;
         while ( aIter.GetNextRef( aRef) )
         {
@@ -1114,7 +1114,7 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
             pFCell->Interpret();                // can't be called after SetRunning
         pFCell->SetRunning(true);
 
-        ScDetectiveRefIter aIter(pFCell);
+        ScDetectiveRefIter aIter(pDoc, pFCell);
         ScRange aRef;
         while ( aIter.GetNextRef( aRef) )
         {
@@ -1372,7 +1372,7 @@ void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             continue;
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
-        ScDetectiveRefIter aRefIter(pFCell);
+        ScDetectiveRefIter aRefIter(pDoc, pFCell);
         for (formula::FormulaToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
             ScTokenRef pRef(p->Clone());
@@ -1395,7 +1395,7 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             continue;
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
-        ScDetectiveRefIter aRefIter(pFCell);
+        ScDetectiveRefIter aRefIter(pDoc, pFCell);
         for (formula::FormulaToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
             const ScAddress& aPos = aIter.GetPos();

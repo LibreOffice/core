@@ -301,7 +301,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                             continue;
 
                         ScFormulaCell* pCell = aIter.getFormulaCell();
-                        ScDetectiveRefIter aRefIter(pCell);
+                        ScDetectiveRefIter aRefIter(&rDoc, pCell);
                         ScRange aRefRange;
                         while ( aRefIter.GetNextRef( aRefRange ) )
                         {

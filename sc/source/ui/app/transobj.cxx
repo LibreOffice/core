@@ -864,7 +864,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
         bool bOut = false;
-        ScDetectiveRefIter aRefIter( pFCell );
+        ScDetectiveRefIter aRefIter( pDoc, pFCell );
         while ( !bOut && aRefIter.GetNextRef( aRef ) )
         {
             if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
