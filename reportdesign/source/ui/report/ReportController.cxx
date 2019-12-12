@@ -2544,16 +2544,6 @@ sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGro
 }
 
 
-IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent&, _rEvent, void )
-{
-    if ( _rEvent.GetId() == VclEventId::WindowClose )
-    {
-        InvalidateFeature(SID_SORTINGANDGROUPING);
-        InvalidateFeature(SID_FM_ADD_FIELD);
-        InvalidateFeature(SID_RPT_SHOWREPORTEXPLORER);
-    }
-}
-
 void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)
 {
     const DlgEdHint* pDlgEdHint = dynamic_cast<const DlgEdHint*>(&_rHint);

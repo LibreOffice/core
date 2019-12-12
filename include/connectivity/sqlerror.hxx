@@ -58,25 +58,6 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS SQLError
     {
     public:
-
-        // - optional
-
-        /** convenience wrapper around o3tl::optional, allowing implicit construction
-        */
-        class ParamValue : public ::o3tl::optional< OUString >
-        {
-            typedef ::o3tl::optional< OUString >  base_type;
-
-        public:
-            ParamValue( ) : base_type( ) { }
-            ParamValue( OUString const& val ) : base_type( val ) { }
-            ParamValue( ParamValue const& rhs ) : base_type( static_cast<base_type const&>( rhs ) ) { }
-
-            bool    is() const { return bool(*this); }
-        };
-
-
-    public:
                         SQLError();
                         ~SQLError();
 

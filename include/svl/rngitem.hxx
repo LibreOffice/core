@@ -40,7 +40,6 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
     virtual SfxRangeItem*       Clone( SfxItemPool *pPool = nullptr ) const override;
-    sal_uInt16&          From() { return nFrom; }
 };
 
 

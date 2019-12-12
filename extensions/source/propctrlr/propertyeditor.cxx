@@ -170,19 +170,6 @@ namespace pcr
         return m_xTabControl->get_current_page_ident().toUInt32();
     }
 
-    void OPropertyEditor::Update(const std::function<void(OBrowserListBox *)>& _aUpdateFunction)
-    {
-        // forward this to all our pages
-        int nCount = m_xTabControl->get_n_pages();
-        for (int i = 0; i < nCount; ++i)
-        {
-            sal_uInt16 nID = m_xTabControl->get_page_ident(i).toUInt32();
-            OBrowserPage* pPage = getPage(nID);
-            if (pPage)
-                _aUpdateFunction(&pPage->getListBox());
-        }
-    }
-
     void OPropertyEditor::forEachPage( PageOperation _pOperation )
     {
         int nCount = m_xTabControl->get_n_pages();

@@ -1037,11 +1037,6 @@ sal_Int32 ListBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
     return nPos;
 }
 
-bool ListBox::IsEntrySelected(const OUString& rStr) const
-{
-    return IsEntryPosSelected( GetEntryPos( rStr ) );
-}
-
 bool ListBox::IsEntryPosSelected( sal_Int32 nPos ) const
 {
     return mpImplLB->GetEntryList()->IsEntryPosSelected( nPos + mpImplLB->GetEntryList()->GetMRUCount() );

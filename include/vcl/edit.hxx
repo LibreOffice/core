@@ -235,8 +235,6 @@ public:
     virtual Size        CalcSize(sal_Int32 nChars) const;
     sal_Int32           GetMaxVisChars() const;
 
-    sal_Int32           GetCharPos( const Point& rWindowPos ) const;
-
     // shows a warning box saying "text too long, truncated"
     static void         ShowTruncationWarning(weld::Widget* pParent);
 

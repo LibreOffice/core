@@ -202,7 +202,6 @@ public:
     FieldUnit               GetUnit() const { return meUnit; }
     void                    SetCustomUnitText( const OUString& rStr );
     const OUString&         GetCustomUnitText() const { return maCustomUnitText; }
-    const OUString&         GetCurUnitText() const { return maCurUnitText; }
 
     using NumericFormatter::SetMax;
     void                    SetMax( sal_Int64 nNewMax, FieldUnit eInUnit );
@@ -212,7 +211,6 @@ public:
     void                    SetMin( sal_Int64 nNewMin, FieldUnit eInUnit );
     using NumericFormatter::GetMin;
     sal_Int64               GetMin( FieldUnit eOutUnit ) const;
-    void                    SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit = FieldUnit::NONE );
     sal_Int64               GetBaseValue() const;
 
     virtual void            SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
@@ -223,8 +221,6 @@ public:
     sal_Int64               GetValue( FieldUnit eOutUnit ) const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
-
-    void                    SetCustomConvertHdl( const Link<MetricFormatter&,void>& rLink ) { maCustomConvertLink = rLink; }
 
     static FieldUnit        StringToMetric(const OUString &rMetricString);
     static bool             TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue, sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit);

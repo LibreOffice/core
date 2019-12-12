@@ -41,10 +41,8 @@ namespace pcr
         ~OBrowserPage();
 
         void SetPageTitle(const OUString& rPageTitle) { m_aPageTitle = rPageTitle; }
-        const OUString& GetPageTitle() const { return m_aPageTitle; }
 
         void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
-        OString GetHelpId() const { return m_xContainer->get_help_id(); }
 
         OBrowserListBox& getListBox() { return *m_xListBox; }
         const OBrowserListBox& getListBox() const { return *m_xListBox; }

@@ -104,7 +104,6 @@ namespace pcr
         Size                        get_preferred_size() const;
 
         weld::Container*            getWidget() const { return m_xTabControl.get(); }
-        weld::Container*            getControlHoldingParent() const { return m_xControlHoldingParent.get(); }
 
         void                        Show() { m_xTabControl->show(); }
         void                        Hide() { m_xTabControl->hide(); }
@@ -118,8 +117,6 @@ namespace pcr
 
         OBrowserPage* getPage( const OUString& _rPropertyName );
         const OBrowserPage* getPage( const OUString& _rPropertyName ) const;
-
-        void Update(const std::function<void(OBrowserListBox *)>& _aUpdateFunction);
 
         typedef void (OPropertyEditor::*PageOperation)( OBrowserPage&, const void* );
         void    forEachPage( PageOperation _pOperation );
