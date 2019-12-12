@@ -95,6 +95,11 @@
         selected="true|false|any"
         button-value="true|false|any"
         extra="{various}"
+
+    control specific:
+    <spinbox> attributes:
+        - orientation: stacked (default), edit-decrease-increase, decrease-edit-increase
+
     -->
 
     <pushbutton>
@@ -242,7 +247,7 @@
     </listbox>
 
     <spinbox>
-        <part value="Entire">
+        <part value="Entire" orientation="decrease-edit-increase">
             <state>
                 <rect stroke="#ffffff" fill="#ffffff" stroke-width="0" />
             </state>
