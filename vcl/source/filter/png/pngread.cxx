@@ -147,7 +147,6 @@ private:
                         mpScanlineAlpha;
 
     bool                ReadNextChunk();
-    void                ReadRemainingChunks();
 
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor & );
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, sal_uInt8 nPalIndex );
@@ -318,15 +317,10 @@ bool PNGReaderImpl::ReadNextChunk()
     return mnChunkType != PNGCHUNK_IEND;
 }
 
-// read the remaining chunks from mrPNGStream
-void PNGReaderImpl::ReadRemainingChunks()
-{
-    while( ReadNextChunk() ) ;
-}
-
 const std::vector< vcl::PNGReader::ChunkData >& PNGReaderImpl::GetAllChunks()
 {
-    ReadRemainingChunks();
+    // read the remaining chunks from mrPNGStream
+    while( ReadNextChunk() ) ;
     return maChunkSeq;
 }
 

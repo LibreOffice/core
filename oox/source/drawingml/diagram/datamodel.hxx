@@ -168,8 +168,6 @@ public:
         { return maConnections; }
     dgm::Points & getPoints()
         { return maPoints; }
-    ConnectionNameMap & getConnectionNameMap()
-        { return maConnectionNameMap; }
     StringMap & getPresOfNameMap()
         { return maPresOfNameMap; }
     PointNameMap & getPointNameMap()

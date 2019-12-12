@@ -446,7 +446,7 @@ void DiagramData::build()
                    << ";" << std::endl;
 #endif
 
-        const bool bInserted1 = getConnectionNameMap().insert(
+        const bool bInserted1 = maConnectionNameMap.insert(
             std::make_pair(connection.msModelId,&connection)).second;
 
         SAL_WARN_IF(!bInserted1, "oox.drawingml", "DiagramData::build(): non-unique connection model id");

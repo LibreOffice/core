@@ -154,8 +154,6 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
         std::unique_ptr<::accessibility::AccessibleTextHelper> mpAccessibleTextHelper;
 
         ::osl::Mutex maMutex;
-
-        void defunc();
 };
 
 }
@@ -166,11 +164,6 @@ SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( Sideba
 {
     mpAccessibleTextHelper.reset(new ::accessibility::AccessibleTextHelper( std::make_unique<SidebarTextEditSource>(rSidebarTextControl) ));
     mpAccessibleTextHelper->SetEventSource( rSidebarTextControl.GetWindowPeer() );
-}
-
-void SidebarTextControlAccessibleContext::defunc()
-{
-    mpAccessibleTextHelper.reset();
 }
 
 sal_Int32 SAL_CALL SidebarTextControlAccessibleContext::getAccessibleChildCount()
@@ -231,7 +224,7 @@ void SidebarTextControlAccessibleContext::ProcessWindowEvent( const VclWindowEve
         {
             case VclEventId::ObjectDying:
             {
-                defunc();
+                mpAccessibleTextHelper.reset();
             }
             break;
             case VclEventId::WindowGetFocus:

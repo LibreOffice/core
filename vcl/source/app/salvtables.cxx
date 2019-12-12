@@ -6264,11 +6264,6 @@ public:
     {
     }
 
-    VclBuilder& get_builder() const
-    {
-        return *m_xBuilder;
-    }
-
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString &id, bool bTakeOwnership) override
     {
         MessageDialog* pMessageDialog = m_xBuilder->get<MessageDialog>(id);
@@ -6585,7 +6580,7 @@ public:
 
     OString get_current_page_help_id() const
     {
-        TabControl *pCtrl = get_builder().get<TabControl>("tabcontrol");
+        TabControl *pCtrl = m_xBuilder->get<TabControl>("tabcontrol");
         TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
         vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
         pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;

@@ -608,8 +608,6 @@ public:
 
     void MakeParentContents();
 
-    bool GetIsParentHeader() const { return m_bIsParentHead; }
-
     bool HasToFly() const { return m_bHasToFly; }
 
     void SetTable( const SwStartNode *pStNd, std::unique_ptr<HTMLTableContext> pCntxt,
@@ -2508,7 +2506,7 @@ void HTMLTable::MakeParentContents()
     if( !GetContext() && !HasParentSection() )
     {
         SetParentContents(
-            m_pParser->InsertTableContents( GetIsParentHeader() ) );
+            m_pParser->InsertTableContents( m_bIsParentHead ) );
 
         SetHasParentSection( true );
     }

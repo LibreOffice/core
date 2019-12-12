@@ -52,9 +52,12 @@ IMPL_LINK( SwMultiTOXMarkDlg, SelectHdl, weld::TreeView&, rBox, void )
     }
 }
 
-void SwMultiTOXMarkDlg::Apply()
+short SwMultiTOXMarkDlg::run()
 {
-    m_rMgr.SetCurTOXMark(m_nPos);
+    short nRet = GenericDialogController::run();
+    if (nRet == RET_OK)
+        m_rMgr.SetCurTOXMark(m_nPos);
+    return nRet;
 }
 
 SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg()

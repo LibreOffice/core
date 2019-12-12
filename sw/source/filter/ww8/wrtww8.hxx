@@ -1048,7 +1048,6 @@ public:
 
     bool MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat);
 
-    SvxMSExportOLEObjects& GetOLEExp()      { return *m_pOLEExp; }
     SwMSConvertControls& GetOCXExp()        { return *m_pOCXExp; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 

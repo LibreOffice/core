@@ -181,11 +181,6 @@ void ORelationTableConnectionData::IsConnectionPossible()
         ChangeOrientation();
 }
 
-OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj()
-{
-    return new OConnectionLineData();
-}
-
 void ORelationTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     // retract to the (non-virtual) operator= like in the base class
@@ -385,7 +380,7 @@ bool ORelationTableConnectionData::Update()
             xColumns->getByName(*pIter) >>= xColumn;
             if ( xColumn.is() )
             {
-                OConnectionLineDataRef pNewData = CreateLineDataObj();
+                OConnectionLineDataRef pNewData = new OConnectionLineData();
 
                 xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
                 xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;

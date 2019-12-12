@@ -610,7 +610,7 @@ void XMLImport::HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList
             GetGenerator().closePageSpan();
 
         GetGenerator().openPageSpan(rPageLayout);
-        SetIsInPageSpan(true);
+        mbIsInPageSpan = true;
     }
 }
 

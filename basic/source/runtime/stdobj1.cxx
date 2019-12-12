@@ -205,7 +205,7 @@ void SbStdFont::PropName( SbxVariable* pVar, bool bWrite )
     }
     else
     {
-        pVar->PutString( GetFontName() );
+        pVar->PutString( aName );
     }
 }
 

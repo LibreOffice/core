@@ -42,8 +42,6 @@ public:
                         sal_uInt16 nPrfx,
                         const OUString& rLName );
 
-    const css::uno::Reference<css::xforms::XModel2>& getModel() const { return mxModel;}
-
     // implement SvXMLImportContext & TokenContext methods:
 
     virtual void EndElement() override;

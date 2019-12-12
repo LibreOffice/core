@@ -274,7 +274,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 |************************************************************************/
 void SvxHpLinkDlg::SetReadOnlyMode( bool bRdOnly )
 {
-    GetOKButton().set_sensitive(!bRdOnly);
+    m_xOKBtn->set_sensitive(!bRdOnly);
 }
 
 /*************************************************************************

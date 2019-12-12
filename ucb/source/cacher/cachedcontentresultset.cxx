@@ -135,7 +135,7 @@ void CachedContentResultSet::CCRS_Cache
     ::clear()
 {
     m_pResult.reset();
-    clearMappedReminder();
+    m_pMappedReminder.reset();
 }
 
 void CachedContentResultSet::CCRS_Cache
@@ -240,12 +240,6 @@ bool CachedContentResultSet::CCRS_Cache
     if( nDiff < m_pMappedReminder->getLength() )
         return (*m_pMappedReminder)[nDiff];
     return false;
-}
-
-void CachedContentResultSet::CCRS_Cache
-    ::clearMappedReminder()
-{
-    m_pMappedReminder.reset();
 }
 
 Sequence< sal_Bool >* CachedContentResultSet::CCRS_Cache

@@ -328,10 +328,6 @@ public: // TODO: is public really needed?
     void    addHints( bool bVerticalHints);
 
     // accessing other charstring specifics
-    bool    hasCharWidth() const { return (maCharWidth > 0);}
-    ValType getCharWidth() const { return maCharWidth;}
-    void    setNominalWidth( ValType aWidth) { mpCffLocal->maNominalWidth = aWidth;}
-    void    setDefaultWidth( ValType aWidth) { mpCffLocal->maDefaultWidth = aWidth;}
     void    updateWidth( bool bUseFirstVal);
 
 private:
@@ -382,7 +378,7 @@ inline int CffSubsetterContext::popInt()
 inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
 {
     // the first value is not a hint but the charwidth
-    if( hasCharWidth())
+    if( maCharWidth>0 )
         return;
 
     if( bUseFirstVal) {
@@ -463,8 +459,8 @@ void CffSubsetterContext::readDictOp()
             case  16: break;                                    // "nEncoding"
             case  17: mnCharStrBase = nInt; break;              // "nCharStrings"
             case  19: mpCffLocal->mnLocalSubrOffs = nInt; break;// "nSubrs"
-            case  20: setDefaultWidth( nVal ); break;           // "defaultWidthX"
-            case  21: setNominalWidth( nVal ); break;           // "nominalWidthX"
+            case  20: mpCffLocal->maDefaultWidth = nVal; break; // "defaultWidthX"
+            case  21: mpCffLocal->maNominalWidth = nVal; break; // "nominalWidthX"
             case 909: mpCffLocal->mfBlueScale = nVal; break;    // "BlueScale"
             case 910: mpCffLocal->mfBlueShift = nVal; break;    // "BlueShift"
             case 911: mpCffLocal->mfBlueFuzz = nVal; break;     // "BlueFuzz"
@@ -1986,7 +1982,7 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         rEmitter.emitAllCrypted();
         // provide individual glyphwidths if requested
         if( pGlyphWidths ) {
-            ValType aCharWidth = getCharWidth();
+            ValType aCharWidth = maCharWidth;
             if( maFontMatrix.size() >= 4)
                 aCharWidth *= 1000.0F * maFontMatrix[0];
             pGlyphWidths[i] = static_cast<sal_Int32>(aCharWidth);
