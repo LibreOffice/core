@@ -1359,7 +1359,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
 
         const SvxFrameDirectionItem& rDirection = rFrameFormat.GetFrameDir();
         if (rDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB)
-            m_pImpl->getBodyPrAttrList()->add(XML_vert, "vert");
+            m_pImpl->getBodyPrAttrList()->add(XML_vert, "eaVert");
         else if (rDirection.GetValue() == SvxFrameDirection::Vertical_LR_BT)
             m_pImpl->getBodyPrAttrList()->add(XML_vert, "vert270");
 
