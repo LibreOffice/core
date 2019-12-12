@@ -55,6 +55,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -580,7 +581,17 @@ struct ScShapeChild
         : mnRangeId(0)
     {
     }
+    ScShapeChild(ScShapeChild const &) = delete;
+    ScShapeChild(ScShapeChild &&) = default;
     ~ScShapeChild();
+    ScShapeChild & operator =(ScShapeChild const &) = delete;
+    ScShapeChild & operator =(ScShapeChild && other) {
+        std::swap(mpAccShape, other.mpAccShape);
+        mxShape = std::move(other.mxShape);
+        mnRangeId = other.mnRangeId;
+        return *this;
+    }
+
     mutable rtl::Reference< ::accessibility::AccessibleShape > mpAccShape;
     css::uno::Reference< css::drawing::XShape > mxShape;
     sal_Int32 mnRangeId;
@@ -617,6 +628,12 @@ namespace {
 
 struct ScShapeRange
 {
+    ScShapeRange() = default;
+    ScShapeRange(ScShapeRange const &) = delete;
+    ScShapeRange(ScShapeRange &&) = default;
+    ScShapeRange & operator =(ScShapeRange const &) = delete;
+    ScShapeRange & operator =(ScShapeRange &&) = default;
+
     ScShapeChildVec maBackShapes;
     ScShapeChildVec maForeShapes; // inclusive internal shapes
     ScShapeChildVec maControls;
@@ -747,7 +764,7 @@ void ScShapeChildren::FindChanged(ScShapeRange& rOld, ScShapeRange& rNew) const
 
 void ScShapeChildren::DataChanged()
 {
-    ScShapeRangeVec aOldShapeRanges(maShapeRanges);
+    ScShapeRangeVec aOldShapeRanges(std::move(maShapeRanges));
     maShapeRanges.clear();
     maShapeRanges.resize(SC_PREVIEW_MAXRANGES);
     Init();
@@ -1012,17 +1029,17 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
                         aShape.mnRangeId = nRangeId;
                         if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
                         {
-                            maShapeRanges[nRangeId].maForeShapes.push_back(aShape);
+                            maShapeRanges[nRangeId].maForeShapes.push_back(std::move(aShape));
                             bForeAdded = true;
                         }
                         else if (pObj->GetLayer() == SC_LAYER_BACK)
                         {
-                            maShapeRanges[nRangeId].maBackShapes.push_back(aShape);
+                            maShapeRanges[nRangeId].maBackShapes.push_back(std::move(aShape));
                             bBackAdded = true;
                         }
                         else if (pObj->GetLayer() == SC_LAYER_CONTROLS)
                         {
-                            maShapeRanges[nRangeId].maControls.push_back(aShape);
+                            maShapeRanges[nRangeId].maControls.push_back(std::move(aShape));
                             bControlAdded = true;
                         }
                         else
