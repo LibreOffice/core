@@ -14,7 +14,10 @@
 
 struct Base
 {
+    Base();
+    Base(Base const&);
     virtual ~Base();
+    Base& operator=(Base const&);
     virtual void f();
     void variadic(int, ...);
     void cv() const volatile;

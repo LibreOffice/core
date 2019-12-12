@@ -9,7 +9,7 @@
 
 bool f();
 
-struct S { ~S(); };
+struct S { S(); };
 
 int main() {
     f(), f(), f(); // expected-error {{comma operator hides code [loplugin:commaoperator]}}
