@@ -38,7 +38,11 @@
 namespace
 {
 // Create Skia Path from B2DPolygon
-// TODO - use this for all Polygon / PolyPolygon needs
+// Note that polygons generally have the complication that when used
+// for area (fill) operations they usually miss the right-most and
+// bottom-most line of pixels of the bounding rectangle (see
+// https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html).
+// So be careful with rectangle->polygon conversions (generally avoid them).
 void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath)
 {
     const sal_uInt32 nPointCount(rPolygon.count());
@@ -351,22 +355,24 @@ static SkRegion toSkRegion(const vcl::Region& region)
         return SkRegion();
     if (region.IsRectangle())
         return SkRegion(toSkIRect(region.GetBoundRect()));
-    if (region.HasPolyPolygonOrB2DPolyPolygon())
-    {
-        SkPath path;
-        addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
-        path.setFillType(SkPathFillType::kEvenOdd);
-        SkRegion skRegion;
-        skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
-        return skRegion;
-    }
-    else
+    // Prefer rectangles to polygons (simpler and also see the addPolygonToPath() comment).
+    if (region.getRegionBand())
     {
         SkRegion skRegion;
         RectangleVector rectangles;
         region.GetRegionRectangles(rectangles);
         for (const tools::Rectangle& rect : rectangles)
             skRegion.op(toSkIRect(rect), SkRegion::kUnion_Op);
+        return skRegion;
+    }
+    else
+    {
+        assert(region.HasPolyPolygonOrB2DPolyPolygon());
+        SkPath path;
+        addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
+        path.setFillType(SkPathFillType::kEvenOdd);
+        SkRegion skRegion;
+        skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
         return skRegion;
     }
 }
@@ -391,7 +397,21 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     // TODO
     // SkCanvas::clipRegion() is buggy with Vulkan, use SkCanvas::clipPath().
     // https://bugs.chromium.org/p/skia/issues/detail?id=9580
-    if (!region.IsEmpty() && !region.IsRectangle())
+    // This is further complicated by rectangle->polygon area conversions
+    // being problematic (see addPolygonToPath() comment), so handle rectangles
+    // first before resorting to polygons.
+    if (region.getRegionBand())
+    {
+        RectangleVector rectangles;
+        region.GetRegionRectangles(rectangles);
+        SkPath path;
+        for (const tools::Rectangle& rectangle : rectangles)
+            path.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(), rectangle.GetWidth(),
+                                          rectangle.GetHeight()));
+        path.setFillType(SkPathFillType::kEvenOdd);
+        canvas->clipPath(path);
+    }
+    else if (!region.IsEmpty() && !region.IsRectangle())
     {
         SkPath path;
         addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
