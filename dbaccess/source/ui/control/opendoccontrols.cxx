@@ -124,6 +124,10 @@ namespace dbaui
     OpenDocumentListBox::OpenDocumentListBox(std::unique_ptr<weld::ComboBox> xControl, const sal_Char* _pAsciiModuleName )
         : m_xControl(std::move(xControl))
     {
+        // we need to limit the max auto width feature of the filter box
+        int nWidth = m_xControl->get_approximate_digit_width() * 50;
+        m_xControl->set_size_request(nWidth, -1);
+
         impl_init( _pAsciiModuleName );
     }
 
