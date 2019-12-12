@@ -56,6 +56,7 @@ enum class FloatWinPopupEndFlags
     TearOff           = 0x02,
     DontCallHdl       = 0x04,
     CloseAll          = 0x08,
+    NoCloseChildren   = 0x10,
 };
 namespace o3tl
 {
