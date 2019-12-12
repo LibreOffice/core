@@ -615,7 +615,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     nSeenInIteration(0),
     nFormatType(SvNumFormatType::NUMBER),
     eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
-    pCode(new ScTokenArray),
+    pCode(new ScTokenArray(pDoc)),
     pDocument(pDoc),
     pPrevious(nullptr),
     pNext(nullptr),
@@ -658,7 +658,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
     if (!pCode)
         // We need to have a non-NULL token array instance at all times.
-        pCode = new ScTokenArray;
+        pCode = new ScTokenArray(pDoc);
 }
 
 ScFormulaCell::ScFormulaCell(
@@ -783,7 +783,7 @@ ScFormulaCell::ScFormulaCell(
     nSeenInIteration(0),
     nFormatType(xGroup->mnFormatType),
     eTempGrammar( eGrammar),
-    pCode(xGroup->mpCode ? xGroup->mpCode.get() : new ScTokenArray),
+    pCode(xGroup->mpCode ? xGroup->mpCode.get() : new ScTokenArray(pDoc)),
     pDocument( pDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
@@ -983,7 +983,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
             ScFormulaCell* pCell = nullptr;
             ScSingleRefData& rRef = *p->GetSingleRef();
             ScAddress aAbs = rRef.toAbs(aPos);
-            if (ValidAddress(aAbs))
+            if (pDocument->ValidAddress(aAbs))
                 pCell = pDocument->GetFormulaCell(aAbs);
 
             if (pCell)
@@ -1029,7 +1029,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
     OUStringBuffer aBuf;
     if (pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen())
     {
-        ScTokenArray aCode;
+        ScTokenArray aCode(pContext->mpDoc);
         aCode.AddToken( FormulaErrorToken( pCode->GetCodeError()));
         ScCompiler aComp(rCxt, aPos, aCode, false, false, pContext);
         aComp.CreateStringFromTokenArray(aBuf);
@@ -1049,7 +1049,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
             ScFormulaCell* pCell = nullptr;
             ScSingleRefData& rRef = *p->GetSingleRef();
             ScAddress aAbs = rRef.toAbs(aPos);
-            if (ValidAddress(aAbs))
+            if (pDocument->ValidAddress(aAbs))
                 pCell = pDocument->GetFormulaCell(aAbs);
 
             if (pCell)
@@ -3214,7 +3214,7 @@ void setOldCodeToUndo(
 
     ScFormulaCell* pFCell =
         new ScFormulaCell(
-            pUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(), eTempGrammar, cMatrixFlag);
+            pUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(pUndoDoc), eTempGrammar, cMatrixFlag);
 
     pFCell->SetResultToken(nullptr);  // to recognize it as changed later (Cut/Paste!)
     pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
@@ -3819,7 +3819,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         if (pUndoDoc)
         {
             ScFormulaCell* pFCell = new ScFormulaCell(
-                    pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(), eTempGrammar, cMatrixFlag);
+                    pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(pUndoDoc), eTempGrammar, cMatrixFlag);
 
             pFCell->aResult.SetToken( nullptr);  // to recognize it as changed later (Cut/Paste!)
             pUndoDoc->SetFormulaCell(aPos, pFCell);
@@ -5031,7 +5031,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
             xGroup->mpCode = std::move(mxGroup->mpCode); // temporarily transfer
         }
 
-        ScTokenArray aCode;
+        ScTokenArray aCode(pDocument);
         ScGroupTokenConverter aConverter(aCode, *pDocument, *this, xGroup->mpTopCell->aPos);
         // TODO avoid this extra compilation
         ScCompiler aComp( pDocument, xGroup->mpTopCell->aPos, *pCode, formula::FormulaGrammar::GRAM_UNSPECIFIED, true, cMatrixFlag != ScMatrixMode::NONE );
@@ -5113,7 +5113,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         // An invariant group should only have absolute row references, and no
         // external references are allowed.
 
-        ScTokenArray aCode;
+        ScTokenArray aCode(pDocument);
         FormulaTokenArrayPlainIterator aIter(*pCode);
         for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
         {
@@ -5490,7 +5490,7 @@ void ScFormulaCell::Dump() const
     }
 
     sc::TokenStringContext aCxt(pDocument, pDocument->GetGrammar());
-    cout << "  * code: " << pCode->CreateString(pDocument, aCxt, aPos) << endl;
+    cout << "  * code: " << pCode->CreateString(aCxt, aPos) << endl;
 
     FormulaError nErrCode = pCode->GetCodeError();
     cout << "  * code error: ";

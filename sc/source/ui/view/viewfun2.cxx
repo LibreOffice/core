@@ -271,7 +271,7 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
                     default        :
                         break;
                 }
-                if ( pCode->GetAdjacentExtendOfOuterFuncRefs( pDoc, nExtend,
+                if ( pCode->GetAdjacentExtendOfOuterFuncRefs( nExtend,
                         ScAddress( nCol, nRow, nTab ), eDir ) )
                     return val;
             }
@@ -787,7 +787,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
 {
     ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
-    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray);
+    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(pDoc));
 
     pArray->AddOpCode(bSubTotal ? ocSubTotal : eCode);
     pArray->AddOpCode(ocOpen);

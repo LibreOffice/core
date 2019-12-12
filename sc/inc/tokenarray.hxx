@@ -48,8 +48,9 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaT
 {
     friend class ScCompiler;
 
-    bool ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
+    bool ImplGetReference( const ScDocument* pDoc, ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
 
+    const ScDocument* mpDoc;
     size_t mnHashValue;
     ScFormulaVectorState meVectorState : 4; // Only 4 bits
     bool mbOpenCLEnabled : 1;
@@ -58,7 +59,7 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaT
     void CheckForThreading( const formula::FormulaToken& r );
 
 public:
-    ScTokenArray();
+    ScTokenArray(const ScDocument* pDoc);
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     ScTokenArray( const ScTokenArray& ) = default;
@@ -91,7 +92,6 @@ public:
                                 references. Only use with real functions, e.g.
                                 GetOuterFuncOpCode() == ocSum ! */
     bool                    GetAdjacentExtendOfOuterFuncRefs(
-                                const ScDocument* pDoc,
                                 SCCOLROW& nExtend,
                                 const ScAddress& rPos, ScDirection );
 
@@ -253,7 +253,7 @@ public:
      * Create a string representation of formula token array without modifying
      * the internal state of the token array.
      */
-    OUString CreateString( const ScDocument* pDoc, sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
+    OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
 
     void WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow );
     bool NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const;

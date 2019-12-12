@@ -1376,7 +1376,7 @@ void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         for (formula::FormulaToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
             ScTokenRef pRef(p->Clone());
-            ScRefTokenHelper::join(rRefTokens, pRef, aIter.GetPos());
+            ScRefTokenHelper::join(pDoc, rRefTokens, pRef, aIter.GetPos());
         }
     }
 }
@@ -1386,7 +1386,7 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 {
     vector<ScTokenRef> aSrcRange;
     aSrcRange.push_back(
-        ScRefTokenHelper::createRefToken(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)));
+        ScRefTokenHelper::createRefToken(pDoc, ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)));
 
     ScCellIterator aIter(pDoc, ScRange(0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab));
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
@@ -1403,8 +1403,8 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             if (ScRefTokenHelper::intersects(aSrcRange, pRef, aPos))
             {
                 // This address is absolute.
-                pRef = ScRefTokenHelper::createRefToken(aPos);
-                ScRefTokenHelper::join(rRefTokens, pRef, ScAddress());
+                pRef = ScRefTokenHelper::createRefToken(pDoc, aPos);
+                ScRefTokenHelper::join(pDoc, rRefTokens, pRef, ScAddress());
             }
         }
     }

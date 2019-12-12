@@ -409,7 +409,7 @@ void ScDocumentImport::setMatrixCells(
     aRefData.SetTabRel(true);
     aRefData.SetAddress(rBasePos, rBasePos);
 
-    ScTokenArray aArr; // consists only of one single reference token.
+    ScTokenArray aArr(&mpImpl->mrDoc); // consists only of one single reference token.
     formula::FormulaToken* t = aArr.AddMatrixSingleReference(aRefData);
 
     ScAddress aPos = rBasePos;

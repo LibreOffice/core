@@ -298,6 +298,9 @@ public:
      */
     void clearCacheTables(sal_uInt16 nFileId);
 
+    // Get the fake doc used to pass to methods that need an ScDocument in order to do row/col validation
+    const ScDocument* getFakeDoc() const { return mpFakeDoc; }
+
 private:
     struct RangeHash
     {
@@ -355,6 +358,7 @@ private:
 private:
     mutable osl::Mutex maMtxDocs;
     mutable DocDataType maDocs;
+    ScDocument* mpFakeDoc; // just to have something to pass to the methods that need to validate columns/rows
 };
 
 class SC_DLLPUBLIC ScExternalRefManager final : public formula::ExternalReferenceHelper, public SfxListener

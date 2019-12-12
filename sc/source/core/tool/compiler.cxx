@@ -4458,7 +4458,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
         SetGrammar( FormulaGrammar::GRAM_PODF );
 
-    ScTokenArray aArr;
+    ScTokenArray aArr(pDoc);
     pArr = &aArr;
     maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
     aFormula = comphelper::string::strip(rFormula, ' ');
@@ -4658,7 +4658,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                 ++pFunctionStack[ nFunction ].nSep;
             }
         }
-        FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( maRawToken.CreateToken());
+        FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( maRawToken.CreateToken(pDoc));
         if (!pNewToken && eOp == ocArrayClose && pArr->OpCodeBefore( pArr->GetLen()) == ocArrayClose)
         {
             // Nested inline array or non-value/non-string in array. The
@@ -4778,7 +4778,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         table::CellAddress aReferencePos;
         ScUnoConversion::FillApiAddress( aReferencePos, aPos );
         uno::Sequence< sheet::FormulaToken > aTokenSeq = xParser->parseFormula( rFormula, aReferencePos );
-        ScTokenArray aTokenArray;
+        ScTokenArray aTokenArray(pDoc);
         if( ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokenSeq ) )
         {
             // remember pArr, in case a subsequent CompileTokenArray() is executed.
@@ -4827,7 +4827,7 @@ bool ScCompiler::HandleRange()
             bool bAddPair = !(bBorder1 && bBorder2);
             if ( bAddPair )
             {
-                pNew = new ScTokenArray();
+                pNew = new ScTokenArray(pDoc);
                 pNew->AddOpCode( ocClose );
                 PushTokenArray( pNew, true );
             }
@@ -4850,7 +4850,7 @@ bool ScCompiler::HandleRange()
             maArrIterator.Reset();
             if ( bAddPair )
             {
-                pNew = new ScTokenArray();
+                pNew = new ScTokenArray(pDoc);
                 pNew->AddOpCode( ocOpen );
                 PushTokenArray( pNew, true );
             }
@@ -4861,7 +4861,7 @@ bool ScCompiler::HandleRange()
     {
         // No ScRangeData for an already compiled token can happen in BIFF .xls
         // import if the original range is not present in the document.
-        pNew = new ScTokenArray;
+        pNew = new ScTokenArray(pDoc);
         pNew->Add( new FormulaErrorToken( FormulaError::NoName));
         PushTokenArray( pNew, true );
         return GetToken();
@@ -5287,7 +5287,7 @@ sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eT
 
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 )
 {
-    return extendRangeReference( rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );
+    return extendRangeReference( pDoc, rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );
 }
 
 void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
@@ -5488,7 +5488,7 @@ bool ScCompiler::HandleColRowName()
             SetError(FormulaError::NoRef);
         else if (mbJumpCommandReorder)
         {
-            ScTokenArray* pNew = new ScTokenArray();
+            ScTokenArray* pNew = new ScTokenArray(pDoc);
             if ( bSingle )
             {
                 ScSingleRefData aRefData;
@@ -5519,7 +5519,7 @@ bool ScCompiler::HandleColRowName()
                     pNew->AddDoubleReference( aRefData );
                 else
                 {   // automagically
-                    pNew->Add( new ScDoubleRefToken( aRefData, ocColRowNameAuto ) );
+                    pNew->Add( new ScDoubleRefToken( pDoc, aRefData, ocColRowNameAuto ) );
                 }
             }
             PushTokenArray( pNew, true );
@@ -5544,7 +5544,7 @@ bool ScCompiler::HandleDbData()
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
         aRefData.SetRange(aRange, aPos);
-        ScTokenArray* pNew = new ScTokenArray();
+        ScTokenArray* pNew = new ScTokenArray(pDoc);
         pNew->AddDoubleReference( aRefData );
         PushTokenArray( pNew, true );
         return GetToken();
@@ -5745,7 +5745,7 @@ bool ScCompiler::HandleTableRef()
                 }
             } while (eState != sStop);
         }
-        ScTokenArray* pNew = new ScTokenArray();
+        ScTokenArray* pNew = new ScTokenArray(pDoc);
         if (nError == FormulaError::NONE || nError == FormulaError::NoValue)
         {
             bool bCol2Rel = false;
@@ -5808,7 +5808,7 @@ bool ScCompiler::HandleTableRef()
                     if (nError != FormulaError::NONE)
                     {
                         aRefData.SetAddress( aRange.aStart, aRange.aStart);
-                        pTR->SetAreaRefRPN( new ScSingleRefToken( aRefData));   // set reference at TableRef
+                        pTR->SetAreaRefRPN( new ScSingleRefToken(pDoc, aRefData));   // set reference at TableRef
                         pNew->Add( new FormulaErrorToken( nError));             // set error in RPN
                     }
                     else
@@ -5837,7 +5837,7 @@ bool ScCompiler::HandleTableRef()
                     if (nError != FormulaError::NONE)
                     {
                         aRefData.SetRange( aRange, aRange.aStart);
-                        pTR->SetAreaRefRPN( new ScDoubleRefToken( aRefData));   // set reference at TableRef
+                        pTR->SetAreaRefRPN( new ScDoubleRefToken(pDoc, aRefData));   // set reference at TableRef
                         pNew->Add( new FormulaErrorToken( nError));             // set error in RPN
                     }
                     else
@@ -6095,7 +6095,7 @@ void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
     aSingleRef.SetAddress(aAddr, aPos);
 
     // Replace the original doubleref token with computed singleref token
-    FormulaToken* pNewSingleRefTok = new ScSingleRefToken(aSingleRef);
+    FormulaToken* pNewSingleRefTok = new ScSingleRefToken(pDoc, aSingleRef);
     (*ppDoubleRefTok)->DecRef();
     *ppDoubleRefTok = pNewSingleRefTok;
     pNewSingleRefTok->IncRef();
@@ -6226,7 +6226,7 @@ void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
         return;
 
     // Replace sum-range token
-    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(rSumRange);
+    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(pDoc, rSumRange);
     (*ppSumRangeToken)->DecRef();
     *ppSumRangeToken = pNewSumRangeTok;
     pNewSumRangeTok->IncRef();
