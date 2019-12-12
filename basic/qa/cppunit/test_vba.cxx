@@ -82,6 +82,7 @@ void VBATest::testMiscVBAFunctions()
         "datediff.vb",
         "datepart.vb",
         "day.vb",
+        "enum.vb",
         "error.vb",
         "exp.vb",
         "fix.vb",
