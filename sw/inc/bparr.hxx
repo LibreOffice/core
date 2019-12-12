@@ -37,7 +37,7 @@ class BigPtrEntry
     sal_uInt16  m_nOffset;
 public:
     BigPtrEntry() : m_pBlock(nullptr), m_nOffset(0) {}
-    virtual ~BigPtrEntry() {}
+    virtual ~BigPtrEntry() = default;
 
     inline sal_uLong GetPos() const;
     inline BigPtrArray& GetArray() const;
