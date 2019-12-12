@@ -193,39 +193,20 @@ void SvFileStream::FlushData()
     }
 }
 
-bool SvFileStream::LockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
-{
-    bool bRetVal = false;
-    if( IsOpen() )
-    {
-        bRetVal = ::LockFile(pInstanceData->hFile,nByteOffset,0L,nBytes,0L );
-        if( !bRetVal )
-            SetError(::GetSvError(GetLastError()));
-    }
-    return bRetVal;
-}
-
-bool SvFileStream::UnlockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
-{
-    bool bRetVal = false;
-    if( IsOpen() )
-    {
-        bRetVal = ::UnlockFile(pInstanceData->hFile,nByteOffset,0L,nBytes,0L );
-        if( !bRetVal )
-            SetError(::GetSvError(GetLastError()));
-    }
-    return bRetVal;
-}
-
 bool SvFileStream::LockFile()
 {
     bool bRetVal = false;
     if( !nLockCounter )
     {
-        if( LockRange( 0L, LONG_MAX ) )
+        if( IsOpen() )
         {
-            nLockCounter = 1;
-            bRetVal = true;
+            bRetVal = ::LockFile(pInstanceData->hFile,0L,0L,LONG_MAX,0L );
+            if( bRetVal )
+            {
+                nLockCounter = 1;
+            }
+            else
+                SetError(::GetSvError(GetLastError()));
         }
     }
     else
@@ -242,9 +223,14 @@ void SvFileStream::UnlockFile()
     {
         if( nLockCounter == 1)
         {
-            if( UnlockRange( 0L, LONG_MAX ) )
+            if( IsOpen() )
             {
-                nLockCounter = 0;
+                if( ::UnlockFile(pInstanceData->hFile,0L,0L,LONG_MAX,0L ) )
+                {
+                    nLockCounter = 0;
+                }
+                else
+                    SetError(::GetSvError(GetLastError()));
             }
         }
         else

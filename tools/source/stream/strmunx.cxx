@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
 #include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
 
 #include <tools/stream.hxx>
-#include <vector>
+#include <map>
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -41,51 +40,9 @@ namespace {
 
 struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
 
-struct InternalStreamLock
-{
-    sal_uInt64         m_nStartPos;
-    sal_uInt64         m_nEndPos;
-    SvFileStream*      m_pStream;
-    osl::DirectoryItem m_aItem;
+struct Locks : public rtl::Static< std::map<SvFileStream const *, osl::DirectoryItem>, Locks > {};
 
-    InternalStreamLock( sal_uInt64, sal_uInt64, SvFileStream* );
-    ~InternalStreamLock();
-};
-
-struct LockList : public rtl::Static< std::vector<InternalStreamLock>, LockList > {};
-
-InternalStreamLock::InternalStreamLock(
-    sal_uInt64 const nStart,
-    sal_uInt64 const nEnd,
-    SvFileStream* pStream ) :
-        m_nStartPos( nStart ),
-        m_nEndPos( nEnd ),
-        m_pStream( pStream )
-{
-    (void)osl::DirectoryItem::get( m_pStream->GetFileName(), m_aItem );
-#if OSL_DEBUG_LEVEL > 1
-    OString aFileName(OUStringToOString(m_pStream->GetFileName(),
-                                                  osl_getThreadTextEncoding()));
-    fprintf( stderr, "locked %s", aFileName.getStr() );
-    if( m_nStartPos || m_nEndPos )
-        fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
-    fprintf( stderr, "\n" );
-#endif
-}
-
-InternalStreamLock::~InternalStreamLock()
-{
-#if OSL_DEBUG_LEVEL > 1
-    OString aFileName(OUStringToOString(m_pStream->GetFileName(),
-                                                  osl_getThreadTextEncoding()));
-    fprintf( stderr, "unlocked %s", aFileName.getStr() );
-    if( m_nStartPos || m_nEndPos )
-        fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
-    fprintf( stderr, "\n" );
-#endif
-}
-
-bool lockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream* pStream )
+bool lockFile( SvFileStream* pStream )
 {
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
@@ -104,12 +61,12 @@ bool lockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream* pSt
         return true;
 
     osl::MutexGuard aGuard( LockMutex::get() );
-    std::vector<InternalStreamLock> &rLockList = LockList::get();
-    for( const auto& rLock : rLockList )
+    auto &rLocks = Locks::get();
+    for( const auto& [rLockStream, rLockItem] : rLocks )
     {
-        if( aItem.isIdenticalTo( rLock.m_aItem ) )
+        if( aItem.isIdenticalTo( rLockItem ) )
         {
-            StreamMode nLockMode = rLock.m_pStream->GetStreamMode();
+            StreamMode nLockMode = rLockStream->GetStreamMode();
             StreamMode nNewMode = pStream->GetStreamMode();
             bool bDenyByOptions = (nLockMode & StreamMode::SHARE_DENYALL) ||
                 ( (nLockMode & StreamMode::SHARE_DENYWRITE) && (nNewMode & StreamMode::WRITE) ) ||
@@ -117,31 +74,19 @@ bool lockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream* pSt
 
             if( bDenyByOptions )
             {
-                if( rLock.m_nStartPos == 0 && rLock.m_nEndPos == 0 ) // whole file is already locked
-                    return false;
-                if( nStart == 0 && nEnd == 0) // cannot lock whole file
-                    return false;
-
-                if( ( nStart < rLock.m_nStartPos && nEnd > rLock.m_nStartPos ) ||
-                    ( nStart < rLock.m_nEndPos && nEnd > rLock.m_nEndPos ) )
-                    return false;
+                return false; // file is already locked
             }
         }
     }
-    rLockList.push_back( InternalStreamLock( nStart, nEnd, pStream ) );
+    rLocks[pStream] = aItem;
     return true;
 }
 
-void unlockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream const * pStream )
+void unlockFile( SvFileStream const * pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
-    std::vector<InternalStreamLock> &rLockList = LockList::get();
-    rLockList.erase(std::remove_if(rLockList.begin(), rLockList.end(),
-        [&pStream, &nStart, &nEnd](const InternalStreamLock& rLock) {
-            return rLock.m_pStream == pStream
-                && ((nStart == 0 && nEnd == 0)
-                    || (rLock.m_nStartPos == nStart && rLock.m_nEndPos == nEnd));
-        }), rLockList.end());
+    auto &rLocks = Locks::get();
+    rLocks.erase(pStream);
 }
 
 }
@@ -346,7 +291,7 @@ void SvFileStream::FlushData()
     // does not exist locally
 }
 
-bool SvFileStream::LockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
+bool SvFileStream::LockFile()
 {
     int nLockMode = 0;
 
@@ -383,11 +328,11 @@ bool SvFileStream::LockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
     if (!nLockMode)
         return true;
 
-    if( !lockFile( nByteOffset, nByteOffset+nBytes, this ) )
+    if( !lockFile( this ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
-                 OUStringToOString(aFilename, osl_getThreadTextEncoding()).getStr(), nByteOffset, nByteOffset+nBytes );
+        fprintf( stderr, "InternalLock on %s failed\n",
+                 OUStringToOString(aFilename, osl_getThreadTextEncoding()).getStr() );
 #endif
         return false;
     }
@@ -395,24 +340,12 @@ bool SvFileStream::LockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
     return true;
 }
 
-bool SvFileStream::UnlockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
-{
-    if ( ! IsOpen() )
-        return false;
-
-    unlockFile( nByteOffset, nByteOffset+nBytes, this );
-
-    return true;
-}
-
-bool SvFileStream::LockFile()
-{
-  return LockRange( 0UL, 0UL );
-}
-
 void SvFileStream::UnlockFile()
 {
-    UnlockRange( 0UL, 0UL );
+    if ( ! IsOpen() )
+        return;
+
+    unlockFile( this );
 }
 
 void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
