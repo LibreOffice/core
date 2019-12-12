@@ -818,9 +818,6 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
 void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId )
 {
-    if ( !mbInPopupMode )
-        return;
-
     ImplSVData* pSVData = ImplGetSVData();
 
     mbInCleanUp = true; // prevent killing this window due to focus change while working with it
@@ -832,6 +829,12 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     // delete window from the list
     pSVData->mpWinData->mpFirstFloat = mpNextFloat;
     mpNextFloat = nullptr;
+
+    if ( !mbInPopupMode )
+    {
+        mbInCleanUp = false;
+        return;
+    }
 
     FloatWinPopupFlags nPopupModeFlags = mnPopupModeFlags;
     mbPopupModeTearOff = nFlags & FloatWinPopupEndFlags::TearOff &&
