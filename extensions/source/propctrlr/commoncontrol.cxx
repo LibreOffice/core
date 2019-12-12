@@ -65,19 +65,6 @@ namespace pcr
         }
     }
 
-    void CommonBehaviourControlHelper::activateNextControl() const
-    {
-        try
-        {
-            if ( m_xContext.is() )
-                m_xContext->activateNextControl( &m_rAntiImpl );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-        }
-    }
-
     IMPL_LINK_NOARG( CommonBehaviourControlHelper, EditModifiedHdl, weld::Entry&, void )
     {
         setModified();

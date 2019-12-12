@@ -97,7 +97,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/ctrlbox \
     svtools/source/control/ctrltool \
     svtools/source/control/filectrl \
-    svtools/source/control/fileurlbox \
     svtools/source/control/indexentryres \
     svtools/source/control/inettbc \
     svtools/source/control/managedmenubutton \

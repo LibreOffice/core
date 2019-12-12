@@ -163,11 +163,6 @@ namespace pcr
         Show(false);
     }
 
-    bool OBrowserLine::IsVisible() const
-    {
-        return m_xFtTitle->get_visible();
-    }
-
     void OBrowserLine::SetTitle(const OUString& rNewTitle )
     {
         if ( GetTitle() == rNewTitle )

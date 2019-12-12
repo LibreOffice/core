@@ -115,7 +115,6 @@ public:
     virtual Size GetOptimalSize() const override;
 
     void                SetTabPageSizePixel( const Size& rSize );
-    Size                GetTabPageSizePixel() const;
 
     //  pixel offset for the tab items, default is (0,0)
     void                SetItemsOffset( const Point& rOffs );
@@ -124,7 +123,6 @@ public:
     void                InsertPage( sal_uInt16 nPageId, const OUString& rText,
                                     sal_uInt16 nPos = TAB_APPEND );
     void                RemovePage( sal_uInt16 nPageId );
-    void                Clear();
 
     void SetPageEnabled(sal_uInt16 nPageId, bool bEnable = true);
     void SetPageVisible(sal_uInt16 nPageId, bool bVisible = true);

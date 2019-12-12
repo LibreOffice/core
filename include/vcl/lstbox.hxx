@@ -170,7 +170,6 @@ public:
     OUString            GetSelectedEntry( sal_Int32  nSelIndex = 0 ) const;
     sal_Int32           GetSelectedEntryPos( sal_Int32  nSelIndex = 0 ) const;
 
-    bool                IsEntrySelected(const OUString& rStr) const;
     bool                IsEntryPosSelected( sal_Int32  nPos ) const;
     void                SetNoSelection();
 

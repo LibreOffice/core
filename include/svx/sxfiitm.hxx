@@ -34,7 +34,6 @@ public:
     virtual bool GetPresentation(SfxItemPresentation ePresentation, MapUnit eCoreMetric, MapUnit ePresentationMetric, OUString &rText, const IntlWrapper&) const override;
     virtual SdrFractionItem* Clone(SfxItemPool *pPool=nullptr) const override;
             const Fraction&  GetValue() const { return nValue; }
-            void             SetValue(const Fraction& rVal) { nValue = rVal; }
 };
 
 
