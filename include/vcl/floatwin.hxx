@@ -56,10 +56,11 @@ enum class FloatWinPopupEndFlags
     TearOff           = 0x02,
     DontCallHdl       = 0x04,
     CloseAll          = 0x08,
+    NoCloseChildren   = 0x10,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FloatWinPopupEndFlags> : is_typed_flags<FloatWinPopupEndFlags, 0x0f> {};
+    template<> struct typed_flags<FloatWinPopupEndFlags> : is_typed_flags<FloatWinPopupEndFlags, 0x1f> {};
 }
 
 enum class FloatWinTitleType
