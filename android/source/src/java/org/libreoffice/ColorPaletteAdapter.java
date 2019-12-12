@@ -100,9 +100,10 @@ public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapte
 
     }
 
-    public void setColorPalette(int[][] color_palette, int position1, int position2) {
+    public void setColorPalette(int[][] color_palette) {
         this.color_palette = color_palette;
-        setPosition(position1, position2);
+        this.upperSelectedBox = 0;
+        this.selectedBox = 0;
     }
 
     private void updateAdapter(){
