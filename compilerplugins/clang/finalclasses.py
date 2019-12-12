@@ -40,7 +40,7 @@ for clazz in sorted(definitionSet - inheritFromSet):
     # ignore test and external code
     if ("/qa/" in file): continue
     if (file.startswith("workdir/")): continue
-    # We are only realling interested in classes that are shared between linkage units, where the compiler
+    # We are only really interested in classes that are shared between linkage units, where the compiler
     # is not able to figure out for itself that classes are final.
     if not(file.startswith("include/") or file.startswith("sw/inc/") or file.startswith("sc/inc/") or file.startswith("vcl/inc/")): continue
     # Exclude URE
