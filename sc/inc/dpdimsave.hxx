@@ -50,6 +50,11 @@ public:
     ScDPSaveGroupItem( const OUString& rName );
     ~ScDPSaveGroupItem();
 
+    ScDPSaveGroupItem(ScDPSaveGroupItem const &) = default;
+    ScDPSaveGroupItem(ScDPSaveGroupItem &&) = default;
+    ScDPSaveGroupItem & operator =(ScDPSaveGroupItem const &) = default;
+    ScDPSaveGroupItem & operator =(ScDPSaveGroupItem &&) = default;
+
     void AddToData(ScDPGroupDimension& rDataDim) const;
 
     void    AddElement( const OUString& rName );

@@ -68,6 +68,11 @@ namespace drawinglayer
 
             ~BorderLine();
 
+            BorderLine(BorderLine const &) = default;
+            BorderLine(BorderLine &&) = default;
+            BorderLine & operator =(BorderLine const &) = default;
+            BorderLine & operator =(BorderLine &&) = default;
+
             const drawinglayer::attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             double getStartLeft() const { return mfStartLeft; }
             double getStartRight() const { return mfStartRight; }
