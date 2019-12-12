@@ -71,9 +71,6 @@ public:
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
 
-    void                            SetPlaceHolder( const OUString& sPlaceHolder )
-                                        { aPlaceHolder = sPlaceHolder; }
-    const OUString&                 GetPlaceHolder() const { return aPlaceHolder; }
     bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
                                         { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
 };

@@ -2698,11 +2698,6 @@ sal_Int32 Edit::GetMaxVisChars() const
     return nCharWidth ? nOutWidth/nCharWidth : 0;
 }
 
-sal_Int32 Edit::GetCharPos( const Point& rWindowPos ) const
-{
-    return ImplGetCharPos( rWindowPos );
-}
-
 void Edit::SetGetSpecialCharsFunction( FncGetSpecialChars fn )
 {
     pImplFncGetSpecialChars = fn;

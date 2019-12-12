@@ -323,7 +323,6 @@ namespace rptui
         OReportController(const OReportController&) = delete;
         OReportController& operator=(const OReportController&) = delete;
 
-        DECL_LINK( EventLstHdl, VclWindowEvent&, void );
         DECL_LINK( OnCreateHdl, OAddFieldWindow&, void);
 
         DECLARE_XINTERFACE( )

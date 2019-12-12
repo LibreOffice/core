@@ -1620,12 +1620,6 @@ void TabControl::SetTabPageSizePixel( const Size& rSize )
     Window::SetOutputSizePixel( aNewSize );
 }
 
-Size TabControl::GetTabPageSizePixel() const
-{
-    tools::Rectangle aRect = const_cast<TabControl*>(this)->ImplGetTabRect( TAB_PAGERECT );
-    return aRect.GetSize();
-}
-
 void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                              sal_uInt16 nPos )
 {
@@ -1720,23 +1714,6 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
 
         CallEventListeners( VclEventId::TabpageRemoved, reinterpret_cast<void*>(nPageId) );
     }
-}
-
-void TabControl::Clear()
-{
-    // clear item list
-    mpTabCtrlData->maItemList.clear();
-    mnCurPageId = 0;
-    if( mpTabCtrlData->mpListBox )
-        mpTabCtrlData->mpListBox->Clear();
-
-    ImplFreeLayoutData();
-
-    mbFormat = true;
-    if ( IsUpdateMode() )
-        Invalidate();
-
-    CallEventListeners( VclEventId::TabpageRemovedAll );
 }
 
 void TabControl::SetPageEnabled( sal_uInt16 i_nPageId, bool i_bEnable )

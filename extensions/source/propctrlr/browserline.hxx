@@ -95,7 +95,6 @@ namespace pcr
         int                 GetRowHeight() const { return m_xContainer->get_preferred_size().Height(); }
         void                Show(bool bFlag=true);
         void                Hide();
-        bool                IsVisible() const;
 
         bool                GrabFocus();
         void                ShowBrowseButton( const OUString& rImageURL, bool bPrimary );

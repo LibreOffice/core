@@ -116,10 +116,6 @@ namespace pcr
         void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
         void                        EnablePropertyLine( const OUString& _rEntryName, bool _bEnable );
 
-        sal_Int32                   GetMinimumWidth() const;
-        sal_Int32                   GetMinimumHeight();
-
-
         bool                        IsModified( ) const;
         void                        CommitModified( );
 
@@ -166,11 +162,6 @@ namespace pcr
                 found.
         */
         bool        impl_getBrowserLineForName( const OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const;
-
-        /** returns the preferred height (in pixels) of the help section, or 0 if we
-            currently don't have a help section
-        */
-        long        impl_getPrefererredHelpHeight();
     };
 
 

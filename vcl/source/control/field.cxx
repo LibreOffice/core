@@ -1540,12 +1540,6 @@ sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
 
-void MetricFormatter::SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit )
-{
-    mnBaseValue = MetricField::ConvertValue( nNewBase, mnBaseValue, GetDecimalDigits(),
-                                             eInUnit, meUnit );
-}
-
 sal_Int64 MetricFormatter::GetBaseValue() const
 {
     // convert to requested units

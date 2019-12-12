@@ -159,7 +159,6 @@ public:
     bool IsDescriptor() const {return bIsDescriptor;}
     void            ResetDescriptor();
     //copy text from a given source PaM
-    void            SetSelection(SwPaM& rCopySource);
     static SdrObject *GetOrCreateSdrObject(SwFlyFrameFormat &rFormat);
 };
 

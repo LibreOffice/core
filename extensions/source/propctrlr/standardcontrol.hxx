@@ -36,38 +36,6 @@ namespace pcr
 {
 
 
-    //= ListLikeControlWithModifyHandler
-
-    /** Very small helper class which adds a SetModifyHdl to a ListBox-derived class,
-        thus giving this class the same API (as far as the CommonBehaviourControl is concerned)
-        as all other windows.
-    */
-    template< class TListboxWindow >
-    class ListLikeControlWithModifyHandler : public TListboxWindow
-    {
-    public:
-        ListLikeControlWithModifyHandler( vcl::Window* pParent, WinBits _nStyle )
-            : TListboxWindow( pParent, _nStyle )
-        {
-            TListboxWindow::SetSelectHdl( LINK(this, ListLikeControlWithModifyHandler, OnSelect) );
-        }
-
-        void SetModifyHdl( const Link<TListboxWindow&,void>& _rLink ) { aModifyHdl = _rLink; }
-    private:
-        DECL_LINK(OnSelect, TListboxWindow&, void);
-        Link<TListboxWindow&,void> aModifyHdl;
-    };
-
-    template< class LISTBOX_WINDOW >
-    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::LinkStubOnSelect(void * instance, LISTBOX_WINDOW& data) {
-        return static_cast<ListLikeControlWithModifyHandler< LISTBOX_WINDOW > *>(instance)->OnSelect(data);
-    }
-    template< class LISTBOX_WINDOW >
-    void ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::OnSelect(LISTBOX_WINDOW& rListBox)
-    {
-        aModifyHdl.Call(rListBox);
-    }
-
     //= OTimeControl
     typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::TimeSpinButton> OTimeControl_Base;
     class OTimeControl : public OTimeControl_Base

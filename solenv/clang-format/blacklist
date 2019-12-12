@@ -6912,7 +6912,6 @@ include/svtools/embedhlp.hxx
 include/svtools/embedtransfer.hxx
 include/svtools/extcolorcfg.hxx
 include/svtools/filechangedchecker.hxx
-include/svtools/fileurlbox.hxx
 include/svtools/fontsubstconfig.hxx
 include/svtools/framestatuslistener.hxx
 include/svtools/generictoolboxcontroller.hxx
@@ -13664,7 +13663,6 @@ svtools/source/control/collatorres.cxx
 svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
 svtools/source/control/filectrl.cxx
-svtools/source/control/fileurlbox.cxx
 svtools/source/control/indexentryres.cxx
 svtools/source/control/inettbc.cxx
 svtools/source/control/managedmenubutton.cxx

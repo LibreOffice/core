@@ -40,8 +40,6 @@
 
 namespace pcr
 {
-    #define FRAME_OFFSET 4
-
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControlContext;
@@ -358,11 +356,6 @@ namespace pcr
         }
     }
 
-    long OBrowserListBox::impl_getPrefererredHelpHeight()
-    {
-        return HasHelpSection() ? m_xHelpWindow->GetOptimalHeightPixel() : 0;
-    }
-
     void OBrowserListBox::SetListener( IPropertyLineListener* _pListener )
     {
         m_pLineListener = _pListener;
@@ -502,24 +495,6 @@ namespace pcr
 
         m_nRowHeight = std::max(m_nRowHeight, pBrowserLine->GetRowHeight() + 6); // 6 is spacing of the "playground" in browserpage.ui
         m_xScrolledWindow->vadjustment_set_step_increment(m_nRowHeight);
-    }
-
-    sal_Int32 OBrowserListBox::GetMinimumWidth() const
-    {
-        return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 8;
-    }
-
-    sal_Int32 OBrowserListBox::GetMinimumHeight()
-    {
-        // assume that we want to display 5 rows, at least
-        sal_Int32 nMinHeight = m_nRowHeight * 5;
-
-        if ( HasHelpSection() )
-        {
-            nMinHeight += m_xHelpWindow->GetMinimalHeightPixel();
-        }
-
-        return nMinHeight;
     }
 
     void OBrowserListBox::ShowEntry(sal_uInt16 nPos)

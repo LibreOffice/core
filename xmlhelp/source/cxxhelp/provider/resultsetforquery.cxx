@@ -41,13 +41,11 @@
 
 #include <algorithm>
 #include <set>
-#include <qe/DocGenerator.hxx>
 #include "resultsetforquery.hxx"
 #include "databases.hxx"
 
 using namespace std;
 using namespace chelp;
-using namespace xmlsearch::qe;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::i18n;
