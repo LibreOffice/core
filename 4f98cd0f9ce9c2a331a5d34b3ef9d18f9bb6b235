@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_f2bb810b",
+        "filename": "sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-12T17:09:29Z",
+      "side": 1,
+      "message": "is it legal to treat a moved-from vector as an empty vector? If so, the clear is redundant, if not, we should be doing some kind of std::swap?",
+      "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
