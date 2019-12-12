@@ -2982,7 +2982,7 @@ void SdrObjCustomShape::AdjustToMaxRect(const tools::Rectangle& rMaxRect, bool b
 
     // Now use TRSetBaseGeometry to actually perform scale, shear, rotate and translate
     // on the shape. That considers gluepoints, interaction handles and text area, and includes
-    // setting rectangles dirty and broadcoast.
+    // setting rectangles dirty and broadcast.
     TRSetBaseGeometry(aMatrix, aPolyPolygon);
 }
 
