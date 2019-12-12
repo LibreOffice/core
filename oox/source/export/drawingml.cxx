@@ -2692,7 +2692,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
         if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL )
         {
-            sWritingMode = "vert";
+            sWritingMode = "eaVert";
             bVertical = true;
         }
     }

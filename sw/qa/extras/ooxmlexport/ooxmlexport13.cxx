@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -639,12 +640,10 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
 
     if (mbExported)
     {
-        // DML import: creates a TextBox.
+        // DML import: creates a TextBox, eaVert read back as TB_RL in TextWritingMode
 
-        comphelper::SequenceAsHashMap aGeometry(xTextFrame->getPropertyValue("CustomShapeGeometry"));
-        // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
-        // Actual: 0', i.e. the tblr writing mode was lost during DML export of a TextFrame.
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+        auto eMode = getProperty<text::WritingMode>(xTextFrame, "TextWritingMode");
+        CPPUNIT_ASSERT_EQUAL(text::WritingMode::WritingMode_TB_RL, eMode);
     }
     else
     {
@@ -991,6 +990,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127579, "tdf127579.odt")
         return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
+{
+    css::text::WritingMode eMode;
+    uno::Reference<beans::XPropertySet> xProps1(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
+
+    uno::Reference<beans::XPropertySet> xProps2(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
+
+    uno::Reference<beans::XPropertySet> xProps3(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
+
+    uno::Reference<beans::XPropertySet> xProps4(getShape(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

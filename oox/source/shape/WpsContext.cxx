@@ -18,6 +18,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <svx/svdtrans.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -57,7 +58,12 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
-                if (nVert != XML_horz)
+                if (nVert == XML_eaVert)
+                {
+                    xPropertySet->setPropertyValue("TextWritingMode",
+                                                   uno::makeAny(text::WritingMode_TB_RL));
+                }
+                else if (nVert != XML_horz)
                 {
                     // Get the existing rotation of the shape.
                     drawing::HomogenMatrix3 aMatrix;
