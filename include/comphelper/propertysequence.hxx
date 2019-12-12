@@ -11,6 +11,7 @@
 #define INCLUDED_COMPHELPER_PROPERTYSEQUENCE_HXX
 
 #include <utility>
+#include <algorithm>
 #include <initializer_list>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -23,15 +24,11 @@ namespace comphelper
         ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
     {
         css::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
-        size_t nCount{0};
-        for(const auto& aEntry : vInit)
-        {
-            vResult[nCount].Name = aEntry.first;
-            vResult[nCount].Handle = -1;
-            vResult[nCount].Value = aEntry.second;
-            // State is default-initialized to DIRECT_VALUE
-            ++nCount;
-        }
+        std::transform(vInit.begin(), vInit.end(), vResult.begin(),
+                       [](const std::pair<OUString, css::uno::Any>& rInit) {
+                           return css::beans::PropertyValue(rInit.first, -1, rInit.second,
+                                                            css::beans::PropertyState_DIRECT_VALUE);
+                       });
         return vResult;
     }
 
@@ -43,12 +40,12 @@ namespace comphelper
         ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
     {
         css::uno::Sequence<css::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
-        size_t nCount{0};
-        for(const auto& aEntry : vInit)
-        {
-            vResult[nCount] <<= css::beans::PropertyValue(aEntry.first, -1, aEntry.second, css::beans::PropertyState_DIRECT_VALUE);
-            ++nCount;
-        }
+        std::transform(vInit.begin(), vInit.end(), vResult.begin(),
+                       [](const std::pair<OUString, css::uno::Any>& rInit) {
+                           return css::uno::Any(
+                               css::beans::PropertyValue(rInit.first, -1, rInit.second,
+                                                         css::beans::PropertyState_DIRECT_VALUE));
+                       });
         return vResult;
     }
 }   // namespace comphelper
