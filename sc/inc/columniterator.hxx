@@ -32,7 +32,7 @@ class ScColumnTextWidthIterator
 public:
     ScColumnTextWidthIterator(const ScColumnTextWidthIterator&) = delete;
     const ScColumnTextWidthIterator& operator=(const ScColumnTextWidthIterator&) = delete;
-    ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);
+    ScColumnTextWidthIterator(const ScDocument& rDoc, ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);
 
     /**
      * @param rDoc document instance.
@@ -42,7 +42,7 @@ public:
      *                  validity.
      * @param nEndRow end row position.
      */
-    ScColumnTextWidthIterator(ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow);
+    ScColumnTextWidthIterator(const ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow);
 
     void next();
     bool hasCell() const;
@@ -51,7 +51,7 @@ public:
     void setValue(sal_uInt16 nVal);
 
 private:
-    void init(SCROW nStartRow, SCROW nEndRow);
+    void init(const ScDocument& rDoc, SCROW nStartRow, SCROW nEndRow);
     void getDataIterators(size_t nOffsetInBlock);
     void checkEndRow();
 };

@@ -345,7 +345,7 @@ static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 
     ScRefCellValue aCell(*pDoc, rRange.aEnd);
     ScAddress aPos;
-    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(aPos) && aPos == rRange.aStart);
+    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(pDoc, aPos) && aPos == rRange.aStart);
 }
 
 static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScViewData* pViewData )
