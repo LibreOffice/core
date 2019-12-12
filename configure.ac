@@ -6732,6 +6732,23 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+dnl Supported since GCC 9 and Clang 10 (which each also started to support -Wdeprecated-copy, but
+dnl which is included in -Wextra anyway):
+HAVE_WDEPRECATED_COPY_DTOR=
+if test "$GCC" = yes; then
+    AC_MSG_CHECKING([whether $CXX_BASE supports -Wdeprecated-copy-dtor])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -Werror -Wdeprecated-copy-dtor"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE()], [
+            HAVE_WDEPRECATED_COPY_DTOR=TRUE
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+fi
+AC_SUBST([HAVE_WDEPRECATED_COPY_DTOR])
+
 dnl At least GCC 8.2 with -O2 (i.e., --enable-optimized) causes a false-positive -Wmaybe-
 dnl uninitialized warning for code like
 dnl

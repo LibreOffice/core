@@ -85,6 +85,10 @@ gb_CXXFLAGS_COMMON := \
 	-fstack-protector-strong \
 	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
+ifeq ($(HAVE_WDEPRECATED_COPY_DTOR),TRUE)
+gb_CXXFLAGS_COMMON += -Wdeprecated-copy-dtor
+endif
+
 gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
 ifeq ($(HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED),TRUE)
