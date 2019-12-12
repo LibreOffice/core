@@ -313,8 +313,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     aRefData.SetTabRel( true );
     aRefData.SetAddress(aBasePos, aBasePos);
 
-    ScTokenArray aArr; // consists only of one single reference token.
-    formula::FormulaToken* t = aArr.AddMatrixSingleReference( aRefData);
+    ScTokenArray aArr(this); // consists only of one single reference token.
+    formula::FormulaToken* t = aArr.AddMatrixSingleReference(aRefData);
 
     for (const SCTAB& nTab : rMark)
     {

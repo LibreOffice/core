@@ -456,7 +456,9 @@ ScExternalRefCache::CellFormat::CellFormat() :
 {
 }
 
-ScExternalRefCache::ScExternalRefCache() {}
+ScExternalRefCache::ScExternalRefCache()
+ : mpFakeDoc(new ScDocument())
+{}
 
 ScExternalRefCache::~ScExternalRefCache() {}
 
@@ -685,7 +687,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
             ScMatrixToken aToken(xMat);
             if (!pArray)
-                pArray.reset(new ScTokenArray);
+                pArray.reset(new ScTokenArray(mpFakeDoc));
             pArray->AddToken(aToken);
 
             bFirstTab = false;
@@ -1534,7 +1536,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
 
     std::unique_ptr<ScRange> pUsedRange;
 
-    unique_ptr<ScTokenArray> pArray(new ScTokenArray);
+    unique_ptr<ScTokenArray> pArray(new ScTokenArray(pSrcDoc));
     bool bFirstTab = true;
     vector<ScExternalRefCache::SingleRangeData>::iterator
         itrCache = rCacheData.begin(), itrCacheEnd = rCacheData.end();
@@ -1609,14 +1611,14 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
     return pArray;
 }
 
-static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScRange& rRange)
+static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument* pDoc, const ScRange& rRange)
 {
     SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
     ScMatrixRef xMat = new ScMatrix(nC, nR);
 
     ScMatrixToken aToken(xMat);
-    unique_ptr<ScTokenArray> pArray(new ScTokenArray);
+    unique_ptr<ScTokenArray> pArray(new ScTokenArray(pDoc));
     pArray->AddToken(aToken);
     return pArray;
 }
@@ -1799,7 +1801,7 @@ void putRangeDataIntoCache(
     else
     {
         // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray = lcl_fillEmptyMatrix(rCacheRange);
+        pArray = lcl_fillEmptyMatrix(rRefCache.getFakeDoc(), rCacheRange);
 
         // Make sure to set this range 'cached', to prevent unnecessarily
         // accessing the src document time and time again.
@@ -2002,7 +2004,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     if (!pSrcDoc)
     {
         // Source document is not reachable.  Throw a reference error.
-        pArray.reset(new ScTokenArray);
+        pArray.reset(new ScTokenArray(pSrcDoc));
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2246,7 +2248,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     if (!pSrcDoc->GetTable(rTabName, nTab1))
     {
         // specified table name doesn't exist in the source document.
-        pArray.reset(new ScTokenArray);
+        pArray.reset(new ScTokenArray(pSrcDoc));
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2294,7 +2296,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     // register the source document with the link manager if it's a new
     // source.
 
-    ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray);
+    ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray(pSrcDoc));
 
     ScTokenArray aCode(*pRangeData->GetCode());
     FormulaTokenArrayPlainIterator aIter(aCode);

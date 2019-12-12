@@ -398,13 +398,13 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
     return ID_FAIL;
 }
 
-void LotusRangeList::Append( std::unique_ptr<LotusRange> pLR )
+void LotusRangeList::Append( const ScDocument* pDoc, std::unique_ptr<LotusRange> pLR )
 {
     assert( pLR );
     auto pLRTmp = pLR.get();
     maRanges.push_back(std::move(pLR));
 
-    ScTokenArray    aTokArray;
+    ScTokenArray    aTokArray(pDoc);
 
     ScSingleRefData*    pSingRef = &aComplRef.Ref1;
 
@@ -426,8 +426,8 @@ void LotusRangeList::Append( std::unique_ptr<LotusRange> pLR )
     nIdCnt++;
 }
 
-RangeNameBufferWK3::RangeNameBufferWK3()
-    : pScTokenArray( new ScTokenArray )
+RangeNameBufferWK3::RangeNameBufferWK3(const ScDocument* pDoc)
+    : pScTokenArray( new ScTokenArray(pDoc) )
 {
     nIntCount = 1;
 }

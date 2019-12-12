@@ -176,12 +176,12 @@ struct TokenTable
         return nRet;
     }
 
-    vector<ScTokenRef> getColRanges(SCCOL nCol) const;
-    vector<ScTokenRef> getRowRanges(SCROW nRow) const;
-    vector<ScTokenRef> getAllRanges() const;
+    vector<ScTokenRef> getColRanges(const ScDocument* pDoc, SCCOL nCol) const;
+    vector<ScTokenRef> getRowRanges(const ScDocument* pDoc, SCROW nRow) const;
+    vector<ScTokenRef> getAllRanges(const ScDocument* pDoc) const;
 };
 
-vector<ScTokenRef> TokenTable::getColRanges(SCCOL nCol) const
+vector<ScTokenRef> TokenTable::getColRanges(const ScDocument* pDoc, SCCOL nCol) const
 {
     if (nCol >= mnColCount)
         return vector<ScTokenRef>();
@@ -197,12 +197,12 @@ vector<ScTokenRef> TokenTable::getColRanges(SCCOL nCol) const
             continue;
 
         ScTokenRef pCopy(p->Clone());
-        ScRefTokenHelper::join(aTokens, pCopy, ScAddress());
+        ScRefTokenHelper::join(pDoc, aTokens, pCopy, ScAddress());
     }
     return aTokens;
 }
 
-vector<ScTokenRef> TokenTable::getRowRanges(SCROW nRow) const
+vector<ScTokenRef> TokenTable::getRowRanges(const ScDocument* pDoc, SCROW nRow) const
 {
     if (nRow >= mnRowCount)
         return vector<ScTokenRef>();
@@ -218,12 +218,12 @@ vector<ScTokenRef> TokenTable::getRowRanges(SCROW nRow) const
             continue;
 
         ScTokenRef p2(p->Clone());
-        ScRefTokenHelper::join(aTokens, p2, ScAddress());
+        ScRefTokenHelper::join(pDoc, aTokens, p2, ScAddress());
     }
     return aTokens;
 }
 
-vector<ScTokenRef> TokenTable::getAllRanges() const
+vector<ScTokenRef> TokenTable::getAllRanges(const ScDocument* pDoc) const
 {
     vector<ScTokenRef> aTokens;
     sal_uInt32 nStop = mnColCount*mnRowCount;
@@ -234,7 +234,7 @@ vector<ScTokenRef> TokenTable::getAllRanges() const
             continue;
 
         ScTokenRef p2(p->Clone());
-        ScRefTokenHelper::join(aTokens, p2, ScAddress());
+        ScRefTokenHelper::join(pDoc, aTokens, p2, ScAddress());
     }
     return aTokens;
 }
@@ -264,6 +264,7 @@ public:
     vector<ScTokenRef> getDataRowRanges(SCROW nRow) const;
 
 private:
+    const ScDocument* mpDoc;
     SCCOL mnDataColCount;
     SCROW mnDataRowCount;
 
@@ -276,6 +277,7 @@ private:
 Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                                      bool bFillRowHeader, bool bFillColumnHeader, FormulaTokenMapMap& rCols, ScDocument* pDoc)
 {
+    mpDoc = pDoc;
     // if bFillRowHeader is true, at least the first column serves as a row header.
     //  If more than one column is pure text all the first pure text columns are used as header.
     // Likewise, if bFillColumnHeader is true, at least the first row serves as a column header.
@@ -403,33 +405,33 @@ Chart2PositionMap::~Chart2PositionMap()
 
 vector<ScTokenRef> Chart2PositionMap::getLeftUpperCornerRanges() const
 {
-    return maLeftUpperCorner.getAllRanges();
+    return maLeftUpperCorner.getAllRanges(mpDoc);
 }
 vector<ScTokenRef> Chart2PositionMap::getAllColHeaderRanges() const
 {
-    return maColHeaders.getAllRanges();
+    return maColHeaders.getAllRanges(mpDoc);
 }
 vector<ScTokenRef> Chart2PositionMap::getAllRowHeaderRanges() const
 {
-    return maRowHeaders.getAllRanges();
+    return maRowHeaders.getAllRanges(mpDoc);
 }
 vector<ScTokenRef> Chart2PositionMap::getColHeaderRanges(SCCOL nCol) const
 {
-    return maColHeaders.getColRanges( nCol);
+    return maColHeaders.getColRanges(mpDoc, nCol);
 }
 vector<ScTokenRef> Chart2PositionMap::getRowHeaderRanges(SCROW nRow) const
 {
-    return maRowHeaders.getRowRanges( nRow);
+    return maRowHeaders.getRowRanges(mpDoc, nRow);
 }
 
 vector<ScTokenRef> Chart2PositionMap::getDataColRanges(SCCOL nCol) const
 {
-    return maData.getColRanges( nCol);
+    return maData.getColRanges(mpDoc, nCol);
 }
 
 vector<ScTokenRef> Chart2PositionMap::getDataRowRanges(SCROW nRow) const
 {
-    return maData.getRowRanges( nRow);
+    return maData.getRowRanges(mpDoc, nRow);
 }
 
 /**
@@ -760,7 +762,7 @@ void Chart2Positioner::createPositionMap()
                         if (bExternal)
                             rCol[ nInsRow ].reset(new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
                         else
-                            rCol[ nInsRow ].reset(new ScSingleRefToken(aCellData));
+                            rCol[ nInsRow ].reset(new ScSingleRefToken(mpDoc, aCellData));
                     }
                 }
             }
@@ -871,7 +873,7 @@ public:
             mpRangeStr->append(mcRangeSep);
 
         ScTokenRef aStart, aEnd;
-        bool bValidToken = splitRangeToken(rToken, aStart, aEnd);
+        bool bValidToken = splitRangeToken(mpDoc, rToken, aStart, aEnd);
         OSL_ENSURE(bValidToken, "invalid token");
         if (!bValidToken)
             return;
@@ -895,7 +897,7 @@ public:
     }
 
 private:
-    static bool splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd)
+    static bool splitRangeToken(const ScDocument* pDoc, const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd)
     {
         ScComplexRefData aData;
         bool bIsRefToken = ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken);
@@ -919,12 +921,12 @@ private:
         if (bExternal)
             rStart.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref1));
         else
-            rStart.reset(new ScSingleRefToken(aData.Ref1));
+            rStart.reset(new ScSingleRefToken(pDoc, aData.Ref1));
 
         if (bExternal)
             rEnd.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref2));
         else
-            rEnd.reset(new ScSingleRefToken(aData.Ref2));
+            rEnd.reset(new ScSingleRefToken(pDoc, aData.Ref2));
         return true;
     }
 
@@ -1049,7 +1051,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequen
  *
  * @return true if the corner was added, false otherwise.
  */
-bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
+bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, vector<ScTokenRef>& rRefTokens,
             SCROW nCornerRowCount, SCCOL nCornerColumnCount)
 {
     using ::std::max;
@@ -1286,12 +1288,12 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         {
             ScTokenRef pCorner(
                 new ScExternalSingleRefToken(nFileId, aExtTabName, aData));
-            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
+            ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
         else
         {
-            ScTokenRef pCorner(new ScSingleRefToken(aData));
-            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
+            ScTokenRef pCorner(new ScSingleRefToken(pDoc, aData));
+            ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
     }
     else
@@ -1306,12 +1308,12 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         {
             ScTokenRef pCorner(
                 new ScExternalDoubleRefToken(nFileId, aExtTabName, r));
-            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
+            ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
         else
         {
-            ScTokenRef pCorner(new ScDoubleRefToken(r));
-            ScRefTokenHelper::join(rRefTokens, pCorner, ScAddress());
+            ScTokenRef pCorner(new ScDoubleRefToken(pDoc, r));
+            ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
     }
 
@@ -1461,7 +1463,7 @@ ScChart2DataProvider::createDataSource(
         shrinkToDataRange(m_pDocument, aRefTokens);
 
     if (bLabel)
-        lcl_addUpperLeftCornerIfMissing(aRefTokens, 1, 1); //#i90669#
+        lcl_addUpperLeftCornerIfMissing(m_pDocument, aRefTokens, 1, 1); //#i90669#
 
     bool bColHeaders = (bOrientCol ? bLabel : bCategories );
     bool bRowHeaders = (bOrientCol ? bCategories : bLabel );
@@ -1776,9 +1778,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     aLabel.initRangeAnalyzer(aTokens);
                     for (const auto& rxToken : aTokens)
                     {
-                        ScRefTokenHelper::join(aAllTokens, rxToken, ScAddress());
+                        ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
                         if(!bThisIsCategories)
-                            ScRefTokenHelper::join(aAllSeriesLabelTokens, rxToken, ScAddress());
+                            ScRefTokenHelper::join(m_pDocument, aAllSeriesLabelTokens, rxToken, ScAddress());
                     }
                     if(bThisIsCategories)
                         bHasCategoriesLabels=true;
@@ -1794,9 +1796,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     aValues.initRangeAnalyzer(aTokens);
                     for (const auto& rxToken : aTokens)
                     {
-                        ScRefTokenHelper::join(aAllTokens, rxToken, ScAddress());
+                        ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
                         if(bThisIsCategories)
-                            ScRefTokenHelper::join(aAllCategoriesValuesTokens, rxToken, ScAddress());
+                            ScRefTokenHelper::join(m_pDocument, aAllCategoriesValuesTokens, rxToken, ScAddress());
                     }
                 }
                 //detect row source
@@ -1889,7 +1891,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
             aTop.initRangeAnalyzer(aAllCategoriesValuesTokens);
             aLeft.initRangeAnalyzer(aAllSeriesLabelTokens);
         }
-        lcl_addUpperLeftCornerIfMissing(aAllTokens, aTop.getRowCount(), aLeft.getColumnCount());//e.g. #i91212#
+        lcl_addUpperLeftCornerIfMissing(m_pDocument, aAllTokens, aTop.getRowCount(), aLeft.getColumnCount());//e.g. #i91212#
     }
 
     // Get range string.
@@ -2027,7 +2029,7 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
     if (!aTokens.hasElements())
         return false;
 
-    ScTokenArray aCode;
+    ScTokenArray aCode(m_pDocument);
     if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
         return false;
 
@@ -2085,7 +2087,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
     if (!aTokens.hasElements())
         return xResult;
 
-    ScTokenArray aCode;
+    ScTokenArray aCode(m_pDocument);
     if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
         return xResult;
 
@@ -2624,7 +2626,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
         ScTokenRef pToken;
         const ScRange & rRange = rRanges[i];
 
-        ScRefTokenHelper::getTokenFromRange(pToken, rRange);
+        ScRefTokenHelper::getTokenFromRange(m_pDocument, pToken, rRange);
         sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
         m_aTokens[nOrigPos] = pToken;
     }

@@ -2488,7 +2488,7 @@ void ScInterpreter::ScCellExternal()
     else if ( aInfoType == "ADDRESS" )
     {
         // ODF 1.2 says we need to always display address using the ODF A1 grammar.
-        ScTokenArray aArray;
+        ScTokenArray aArray(pDok);
         aArray.AddExternalSingleReference(nFileId, svl::SharedString( aTabName), aRef); // string not interned
         ScCompiler aComp(pDok, aPos, aArray, formula::FormulaGrammar::GRAM_ODFF_A1);
         OUString aStr;
@@ -4431,7 +4431,7 @@ void ScInterpreter::ScColumn()
                     OUString aTabName;
                     ScSingleRefData aRef;
                     PopExternalSingleRef( nFileId, aTabName, aRef );
-                    ScAddress aAbsRef = aRef.toAbs( aPos );
+                    ScAddress aAbsRef = aRef.toAbs(aPos);
                     nVal = static_cast<double>( aAbsRef.Col() + 1 );
                 }
                 break;
@@ -4455,7 +4455,7 @@ void ScInterpreter::ScColumn()
                         OUString aTabName;
                         ScComplexRefData aRef;
                         PopExternalDoubleRef( nFileId, aTabName, aRef );
-                        ScRange aAbs = aRef.toAbs( aPos );
+                        ScRange aAbs = aRef.toAbs(aPos);
                         nCol1 = aAbs.aStart.Col();
                         nCol2 = aAbs.aEnd.Col();
                     }
@@ -4535,7 +4535,7 @@ void ScInterpreter::ScRow()
                     OUString aTabName;
                     ScSingleRefData aRef;
                     PopExternalSingleRef( nFileId, aTabName, aRef );
-                    ScAddress aAbsRef = aRef.toAbs( aPos );
+                    ScAddress aAbsRef = aRef.toAbs(aPos);
                     nVal = static_cast<double>( aAbsRef.Row() + 1 );
                 }
                 break;
@@ -4558,7 +4558,7 @@ void ScInterpreter::ScRow()
                         OUString aTabName;
                         ScComplexRefData aRef;
                         PopExternalDoubleRef( nFileId, aTabName, aRef );
-                        ScRange aAbs = aRef.toAbs( aPos );
+                        ScRange aAbs = aRef.toAbs(aPos);
                         nRow1 = aAbs.aStart.Row();
                         nRow2 = aAbs.aEnd.Row();
                     }
@@ -7744,7 +7744,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
             SetError(nErr);
         }
 
-        if (!ValidCol(nField))
+        if (!pDok->ValidCol(nField))
             return nullptr;
 
         unique_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
@@ -8269,7 +8269,7 @@ void ScInterpreter::ScAddressFunc()
 
     --nCol;
     --nRow;
-    if (nGlobalError != FormulaError::NONE || !ValidCol( nCol) || !ValidRow( nRow))
+    if (nGlobalError != FormulaError::NONE || !pDok->ValidCol( nCol) || !pDok->ValidRow( nRow))
     {
         PushIllegalArgument();
         return;
@@ -8346,7 +8346,7 @@ void ScInterpreter::ScOffset()
             {
                 nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
-                if (!ValidCol(nCol1) || !ValidRow(nRow1))
+                if (!pDok->ValidCol(nCol1) || !pDok->ValidRow(nRow1))
                     PushIllegalArgument();
                 else
                     PushSingleRef(nCol1, nRow1, nTab1);
@@ -8361,8 +8361,8 @@ void ScInterpreter::ScOffset()
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
                 nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
                 nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
-                if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
-                    !ValidCol(nCol2) || !ValidRow(nRow2))
+                if (!pDok->ValidCol(nCol1) || !pDok->ValidRow(nRow1) ||
+                    !pDok->ValidCol(nCol2) || !pDok->ValidRow(nRow2))
                     PushIllegalArgument();
                 else
                     PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
@@ -8384,7 +8384,7 @@ void ScInterpreter::ScOffset()
             {
                 nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
                 nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
-                if (!ValidCol(nCol1) || !ValidRow(nRow1))
+                if (!pDok->ValidCol(nCol1) || !pDok->ValidRow(nRow1))
                     PushIllegalArgument();
                 else
                     PushExternalSingleRef(nFileId, aTabName, nCol1, nRow1, nTab1);
@@ -8400,8 +8400,8 @@ void ScInterpreter::ScOffset()
                 nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
                 nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
                 nTab2 = nTab1;
-                if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
-                    !ValidCol(nCol2) || !ValidRow(nRow2))
+                if (!pDok->ValidCol(nCol1) || !pDok->ValidRow(nRow1) ||
+                    !pDok->ValidCol(nCol2) || !pDok->ValidRow(nRow2))
                     PushIllegalArgument();
                 else
                     PushExternalDoubleRef(nFileId, aTabName, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -8419,8 +8419,8 @@ void ScInterpreter::ScOffset()
             nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
             nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
             nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
-            if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
-                !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
+            if (!pDok->ValidCol(nCol1) || !pDok->ValidRow(nRow1) ||
+                !pDok->ValidCol(nCol2) || !pDok->ValidRow(nRow2) || nTab1 != nTab2)
                 PushIllegalArgument();
             else
                 PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
@@ -8447,8 +8447,8 @@ void ScInterpreter::ScOffset()
             nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
             nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
             nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
-            if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
-                !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
+            if (!pDok->ValidCol(nCol1) || !pDok->ValidRow(nRow1) ||
+                !pDok->ValidCol(nCol2) || !pDok->ValidRow(nRow2) || nTab1 != nTab2)
                 PushIllegalArgument();
             else
                 PushExternalDoubleRef(nFileId, aTabName, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);

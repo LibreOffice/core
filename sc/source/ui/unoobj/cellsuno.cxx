@@ -1190,7 +1190,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         uno::Sequence< sheet::FormulaToken > aTokens;
                         if ( rElement >>= aTokens )
                         {
-                            ScTokenArray aTokenArray;
+                            ScTokenArray aTokenArray(&rDoc);
                             ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, aTokens );
                             rDoc.SetFormula(aPos, aTokenArray);
                         }
@@ -4949,7 +4949,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             }
 
             ScDocument& rDoc = pDocSh->GetDocument();
-            ScTokenArray aTokenArray;
+            ScTokenArray aTokenArray(&rDoc);
             (void)ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
 
             // Actually GRAM_API is a don't-care here because of the token
@@ -6348,7 +6348,7 @@ void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rT
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
-        ScTokenArray aTokenArray;
+        ScTokenArray aTokenArray(&rDoc);
         (void)ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
 
         ScFormulaCell* pNewCell = new ScFormulaCell(&rDoc, aCellPos, aTokenArray);
