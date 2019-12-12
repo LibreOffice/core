@@ -62,7 +62,7 @@ private:
 public:
 
     GlyphSet (sal_Int32 nFontID, bool bVertical);
-    ~GlyphSet ();
+    /* FIXME delete the glyphlist in ~GlyphSet ??? */
 
     sal_Int32       GetFontID () const { return mnFontID;}
     static OString

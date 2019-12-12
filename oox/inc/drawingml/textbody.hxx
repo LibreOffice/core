@@ -41,7 +41,6 @@ class TextBody
 public:
     TextBody();
     TextBody( const TextBodyPtr& pBody );
-    ~TextBody();
 
     const TextParagraphVector&          getParagraphs() const { return maParagraphs; }
     TextParagraph&                      addParagraph();

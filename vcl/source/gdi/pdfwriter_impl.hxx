@@ -128,7 +128,6 @@ public:
         sal_uInt32                  m_nTransTime;
 
         PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation );
-        ~PDFPage();
 
         void beginStream();
         void endStream();

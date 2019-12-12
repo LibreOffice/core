@@ -257,7 +257,6 @@ private:
 
     public:
         Key (ScriptDocument const&, OUString const& rLibName);
-        ~Key ();
     public:
         bool operator == (Key const&) const;
         struct Hash
@@ -276,7 +275,6 @@ public:
 
     public:
         Item (OUString const& rCurrentName, ItemType eCurrentType);
-        ~Item ();
         const OUString& GetCurrentName()        const { return m_aCurrentName; }
         ItemType        GetCurrentType()        const { return m_eCurrentType; }
     };

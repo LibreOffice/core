@@ -71,10 +71,6 @@ ScaFuncData::ScaFuncData(const ScaFuncDataBase& rBaseData) :
     aCompList.push_back(OUString::createFromAscii(rBaseData.pCompListID[1]));
 }
 
-ScaFuncData::~ScaFuncData()
-{
-}
-
 sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 {
     if( !bWithOpt )

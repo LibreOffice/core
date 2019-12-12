@@ -397,7 +397,6 @@ private:
 protected:
 public:
                                 ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
-    virtual                     ~ExcEScenario() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual std::size_t         GetLen() const override;

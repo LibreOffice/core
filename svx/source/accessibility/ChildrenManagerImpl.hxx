@@ -462,8 +462,6 @@ public:
     */
     explicit ChildDescriptor (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleShape);
 
-    ~ChildDescriptor();
-
     /** Dispose the accessible object of this descriptor.  If that object
         does not exist then do nothing.
         @param rParent

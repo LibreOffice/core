@@ -220,10 +220,6 @@ Customization::Customization( SwCTBWrapper* wrapper )
 {
 }
 
-Customization::~Customization()
-{
-}
-
 bool Customization::Read( SvStream &rS)
 {
     SAL_INFO("sw.ww8","Customization::Read() stream pos 0x" << std::hex << rS.Tell() );
@@ -485,10 +481,6 @@ bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const css::uno::Reference< css
 }
 
 SwTBC::SwTBC()
-{
-}
-
-SwTBC::~SwTBC()
 {
 }
 

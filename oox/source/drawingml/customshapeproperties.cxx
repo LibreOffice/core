@@ -50,9 +50,6 @@ CustomShapeProperties::CustomShapeProperties()
 , mnArcNum ( 0 )
 {
 }
-CustomShapeProperties::~CustomShapeProperties()
-{
-}
 
 uno::Sequence< sal_Int8 > const & CustomShapeProperties::getShapePresetTypeName() const
 {

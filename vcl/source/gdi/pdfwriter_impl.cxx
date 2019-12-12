@@ -737,10 +737,6 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, doub
     m_nPageObject = m_pWriter->createObject();
 }
 
-PDFWriterImpl::PDFPage::~PDFPage()
-{
-}
-
 void PDFWriterImpl::PDFPage::beginStream()
 {
     if (g_bDebugDisableCompression)

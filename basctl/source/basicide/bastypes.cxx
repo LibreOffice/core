@@ -682,9 +682,6 @@ LibInfo::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :
     m_aDocument(rDocument), m_aLibName(rLibName)
 { }
 
-LibInfo::Key::~Key ()
-{ }
-
 bool LibInfo::Key::operator == (Key const& rKey) const
 {
     return m_aDocument == rKey.m_aDocument && m_aLibName == rKey.m_aLibName;
@@ -704,9 +701,6 @@ LibInfo::Item::Item (
 ) :
     m_aCurrentName(rCurrentName),
     m_eCurrentType(eCurrentType)
-{ }
-
-LibInfo::Item::~Item ()
 { }
 
 static bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)

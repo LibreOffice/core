@@ -40,7 +40,6 @@ class ScDPGroupItem
 
 public:
                 ScDPGroupItem( const ScDPItemData& rName );
-                ~ScDPGroupItem();
 
     void        AddElement( const ScDPItemData& rName );
 

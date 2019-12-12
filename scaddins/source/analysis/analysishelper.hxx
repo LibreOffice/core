@@ -216,7 +216,6 @@ private:
 
 public:
                             FuncData(const FuncDataBase& rBaseData);
-                            ~FuncData();
 
     inline const char*      GetUINameID() const;
     inline const char**     GetDescrID() const;

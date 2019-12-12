@@ -187,10 +187,6 @@ SwSortTextElement::SwSortTextElement(const SwNodeIndex& rPos)
 {
 }
 
-SwSortTextElement::~SwSortTextElement()
-{
-}
-
 OUString SwSortTextElement::GetKey(sal_uInt16 nId) const
 {
     SwTextNode* pTextNd = aPos.GetNode().GetTextNode();
@@ -223,10 +219,6 @@ OUString SwSortTextElement::GetKey(sal_uInt16 nId) const
 /// SortingElement for Tables
 SwSortBoxElement::SwSortBoxElement( sal_uInt16 nRC )
     : nRow( nRC )
-{
-}
-
-SwSortBoxElement::~SwSortBoxElement()
 {
 }
 

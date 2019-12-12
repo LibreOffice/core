@@ -174,7 +174,6 @@ namespace fileaccess
                         const css::beans::PropertyState&  theState,
                         sal_Int16                         theAttributes );
 
-            ~MyProperty();
             inline const bool& IsNative() const;
             const OUString& getPropertyName() const { return PropertyName; }
             inline const sal_Int32& getHandle() const;

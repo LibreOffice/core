@@ -126,10 +126,6 @@ OGroup::OGroup( const OUString& rGroupName )
 {
 }
 
-OGroup::~OGroup()
-{
-}
-
 void OGroup::InsertComponent( const Reference<XPropertySet>& xSet )
 {
     OGroupComp aNewGroupComp( xSet, m_nInsertPos );

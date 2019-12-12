@@ -1330,10 +1330,6 @@ bool TextObj::HasExtendedBullets() const
     return mpImplTextObj->mbHasExtendedBullets;
 }
 
-FontCollectionEntry::~FontCollectionEntry()
-{
-}
-
 void FontCollectionEntry::ImplInit( const OUString& rName )
 {
     OUString aSubstName( GetSubsFontName( rName, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );

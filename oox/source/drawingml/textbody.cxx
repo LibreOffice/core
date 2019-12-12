@@ -43,10 +43,6 @@ TextBody::TextBody( const TextBodyPtr& pBody )
     }
 }
 
-TextBody::~TextBody()
-{
-}
-
 TextParagraph& TextBody::addParagraph()
 {
     std::shared_ptr< TextParagraph > xPara( new TextParagraph );

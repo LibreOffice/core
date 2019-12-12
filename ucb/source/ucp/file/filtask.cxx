@@ -112,11 +112,6 @@ TaskManager::MyProperty::MyProperty( bool                               theisNat
     // empty
 }
 
-TaskManager::MyProperty::~MyProperty()
-{
-    // empty for now
-}
-
 #include "filinl.hxx"
 
         // Default properties

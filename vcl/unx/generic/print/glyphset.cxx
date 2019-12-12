@@ -48,11 +48,6 @@ GlyphSet::GlyphSet (sal_Int32 nFontID, bool bVertical)
                                            RTL_TEXTENCODING_ASCII_US);
 }
 
-GlyphSet::~GlyphSet ()
-{
-    /* FIXME delete the glyphlist ??? */
-}
-
 void
 GlyphSet::GetGlyphID (
                       sal_GlyphId nGlyph,

@@ -1362,10 +1362,6 @@ FuncData::FuncData(const FuncDataBase& r) :
     aCompList[1] = OUString(r.pCompListID[1], strlen(r.pCompListID[1]), RTL_TEXTENCODING_UTF8);
 }
 
-FuncData::~FuncData()
-{
-}
-
 sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 {
     if( !bWithOpt )

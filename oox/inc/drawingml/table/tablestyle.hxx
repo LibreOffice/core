@@ -31,7 +31,6 @@ class TableStyle
 public:
 
     TableStyle();
-    ~TableStyle();
 
     OUString&  getStyleId(){ return maStyleId; }
     OUString&  getStyleName() { return maStyleName; }

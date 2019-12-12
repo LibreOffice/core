@@ -35,7 +35,6 @@ class SwTBC : public TBBase
 
 public:
     SwTBC();
-    virtual ~SwTBC() override;
     bool Read(SvStream &rS) override;
     bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
     OUString GetCustomText();
@@ -116,7 +115,6 @@ class Customization : public TBBase
 
 public:
     explicit Customization( SwCTBWrapper* rapper );
-    virtual ~Customization() override;
     bool Read(SvStream &rS) override;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenu( SwCTBWrapper&, CustomToolBarImportHelper& );
