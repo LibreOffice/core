@@ -351,6 +351,12 @@ class ScBulkBroadcast
 {
     ScBroadcastAreaSlotMachine* pBASM;
     SfxHintId const             mnHintId;
+
+    ScBulkBroadcast(ScBulkBroadcast const &) = delete;
+    ScBulkBroadcast(ScBulkBroadcast &&) = delete;
+    ScBulkBroadcast & operator =(ScBulkBroadcast const &) = delete;
+    ScBulkBroadcast & operator =(ScBulkBroadcast &&) = delete;
+
 public:
     explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p, SfxHintId nHintId ) :
         pBASM(p),

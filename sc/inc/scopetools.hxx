@@ -24,6 +24,12 @@ class SC_DLLPUBLIC AutoCalcSwitch
 {
     ScDocument& mrDoc;
     bool const mbOldValue;
+
+    AutoCalcSwitch(AutoCalcSwitch const &) = delete;
+    AutoCalcSwitch(AutoCalcSwitch &&) = delete;
+    AutoCalcSwitch & operator =(AutoCalcSwitch const &) = delete;
+    AutoCalcSwitch & operator =(AutoCalcSwitch &&) = delete;
+
 public:
     AutoCalcSwitch(ScDocument& rDoc, bool bAutoCalc);
     ~AutoCalcSwitch();
