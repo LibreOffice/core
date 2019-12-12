@@ -350,7 +350,7 @@ bool ScRawToken::IsValidReference(const ScDocument* pDoc) const
     return false;
 }
 
-FormulaToken* ScRawToken::CreateToken() const
+FormulaToken* ScRawToken::CreateToken(const ScDocument* pDoc) const
 {
 #define IF_NOT_OPCODE_ERROR(o,c) SAL_WARN_IF((eOp!=o), "sc.core", #c "::ctor: OpCode " << static_cast<int>(eOp) << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
     switch ( GetType() )
@@ -370,14 +370,14 @@ FormulaToken* ScRawToken::CreateToken() const
         }
         case svSingleRef :
             if (eOp == ocPush)
-                return new ScSingleRefToken( aRef.Ref1 );
+                return new ScSingleRefToken(pDoc, aRef.Ref1 );
             else
-                return new ScSingleRefToken( aRef.Ref1, eOp );
+                return new ScSingleRefToken(pDoc, aRef.Ref1, eOp );
         case svDoubleRef :
             if (eOp == ocPush)
-                return new ScDoubleRefToken( aRef );
+                return new ScDoubleRefToken(pDoc, aRef );
             else
-                return new ScDoubleRefToken( aRef, eOp );
+                return new ScDoubleRefToken(pDoc, aRef, eOp );
         case svMatrix :
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
@@ -499,7 +499,7 @@ void DumpToken(formula::FormulaToken const & rToken)
 }
 #endif
 
-FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
+FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
 
@@ -545,11 +545,11 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
         ScComplexRefData aRef;
         aRef.Ref1 = aRef.Ref2 = *rTok1.GetSingleRef();
         aRef.Ref2.SetFlag3D( false);
-        aRef.Extend( rRef2, rPos);
+        aRef.Extend(rRef2, rPos);
         if (bExternal)
             xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), rTok1.GetString(), aRef);
         else
-            xRes = new ScDoubleRefToken( aRef);
+            xRes = new ScDoubleRefToken(pDoc, aRef);
     }
     else
     {
@@ -575,7 +575,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                 return nullptr;
             if (bExternal)
                 return nullptr;    // external reference list not possible
-            xRes = new ScDoubleRefToken( (*pRefList)[0] );
+            xRes = new ScDoubleRefToken(pDoc, (*pRefList)[0] );
         }
         if (!xRes)
             return nullptr;    // shouldn't happen...
@@ -587,10 +587,10 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
             switch (sv[i])
             {
                 case svSingleRef:
-                    rRef.Extend( *pt[i]->GetSingleRef(), rPos);
+                    rRef.Extend(*pt[i]->GetSingleRef(), rPos);
                     break;
                 case svDoubleRef:
-                    rRef.Extend( *pt[i]->GetDoubleRef(), rPos);
+                    rRef.Extend(*pt[i]->GetDoubleRef(), rPos);
                     break;
                 case svRefList:
                     {
@@ -599,7 +599,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                             return nullptr;
                         for (const auto& rRefData : *p)
                         {
-                            rRef.Extend( rRefData, rPos);
+                            rRef.Extend(rRefData, rPos);
                         }
                     }
                     break;
@@ -607,13 +607,13 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
-                        rRef.Extend( *pt[i]->GetSingleRef(), rPos);
+                        rRef.Extend(*pt[i]->GetSingleRef(), rPos);
                     break;
                 case svExternalDoubleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
-                        rRef.Extend( *pt[i]->GetDoubleRef(), rPos);
+                        rRef.Extend(*pt[i]->GetDoubleRef(), rPos);
                     break;
                 default:
                     ;   // nothing, prevent compiler warning
@@ -1678,7 +1678,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     }
 }
 
-bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
+bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
 {
     bool bIs = false;
     if ( pCode && nLen == 1 )
@@ -1690,7 +1690,7 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, boo
             {
                 const ScSingleRefData& rRef = *static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
-                bIs = !bValidOnly || ValidAddress(rRange.aStart);
+                bIs = !bValidOnly || pDoc->ValidAddress(rRange.aStart);
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
@@ -1699,7 +1699,7 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, boo
                 const ScSingleRefData& rRef2 = rCompl.Ref2;
                 rRange.aStart = rRef1.toAbs(rPos);
                 rRange.aEnd   = rRef2.toAbs(rPos);
-                bIs = !bValidOnly || ValidRange(rRange);
+                bIs = !bValidOnly || pDoc->ValidRange(rRange);
             }
         }
     }
@@ -1852,16 +1852,17 @@ bool ScTokenArray::IsInvariant() const
 
 bool ScTokenArray::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference(rRange, rPos, false);
+    return ImplGetReference(mpDoc, rRange, rPos, false);
 }
 
 bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference(rRange, rPos, true);
+    return ImplGetReference(mpDoc, rRange, rPos, true);
 }
 
-ScTokenArray::ScTokenArray() :
+ScTokenArray::ScTokenArray(const ScDocument* pDoc) :
     FormulaTokenArray(),
+    mpDoc(pDoc),
     mnHashValue(0)
 {
     ResetVectorState();
@@ -1908,7 +1909,7 @@ void ScTokenArray::Clear()
 
 std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
 {
-    std::unique_ptr<ScTokenArray> p(new ScTokenArray());
+    std::unique_ptr<ScTokenArray> p(new ScTokenArray(mpDoc));
     p->nLen = nLen;
     p->nRPN = nRPN;
     p->nMode = nMode;
@@ -1966,7 +1967,7 @@ std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
 
 FormulaToken* ScTokenArray::AddRawToken( const ScRawToken& r )
 {
-    return Add( r.CreateToken() );
+    return Add( r.CreateToken(mpDoc) );
 }
 
 // Utility function to ensure that there is strict alternation of values and
@@ -2164,7 +2165,7 @@ void ScTokenArray::MergeRangeReference( const ScAddress & rPos )
             (((p2 = PeekPrev(nIdx)) != nullptr) && p2->GetOpCode() == ocRange) &&
             ((p1 = PeekPrev(nIdx)) != nullptr))
     {
-        FormulaTokenRef p = extendRangeReference( *p1, *p3, rPos, true);
+        FormulaTokenRef p = extendRangeReference( mpDoc, *p1, *p3, rPos, true);
         if (p)
         {
             p->IncRef();
@@ -2186,17 +2187,17 @@ FormulaToken* ScTokenArray::AddOpCode( OpCode e )
 
 FormulaToken* ScTokenArray::AddSingleReference( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken( rRef ) );
+    return Add( new ScSingleRefToken(mpDoc, rRef ) );
 }
 
 FormulaToken* ScTokenArray::AddMatrixSingleReference( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken( rRef, ocMatRef ) );
+    return Add( new ScSingleRefToken(mpDoc, rRef, ocMatRef ) );
 }
 
 FormulaToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
 {
-    return Add( new ScDoubleRefToken( rRef ) );
+    return Add( new ScDoubleRefToken(mpDoc, rRef ) );
 }
 
 FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
@@ -2233,7 +2234,7 @@ FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, cons
 
 FormulaToken* ScTokenArray::AddColRowName( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken( rRef, ocColRowName ) );
+    return Add( new ScSingleRefToken(mpDoc, rRef, ocColRowName ) );
 }
 
 void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rFormulaNmsp )
@@ -2249,7 +2250,7 @@ void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rForm
     Assign( nTokens, aTokens );
 }
 
-bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( const ScDocument* pDoc, SCCOLROW& nExtend,
+bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
         const ScAddress& rPos, ScDirection eDir )
 {
     SCCOL nCol = 0;
@@ -2257,13 +2258,13 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( const ScDocument* pDoc, SCC
     switch ( eDir )
     {
         case DIR_BOTTOM :
-            if ( rPos.Row() < pDoc->MaxRow() )
+            if ( rPos.Row() < mpDoc->MaxRow() )
                 nRow = (nExtend = rPos.Row()) + 1;
             else
                 return false;
         break;
         case DIR_RIGHT :
-            if ( rPos.Col() < pDoc->MaxCol() )
+            if ( rPos.Col() < mpDoc->MaxCol() )
                 nCol = static_cast<SCCOL>(nExtend = rPos.Col()) + 1;
             else
                 return false;
@@ -4512,6 +4513,7 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
 namespace {
 
 void checkBounds(
+    const ScDocument* pDoc,
     const ScAddress& rPos, SCROW nGroupLen, const ScRange& rCheckRange,
     const ScSingleRefData& rRef, std::vector<SCROW>& rBounds, const ScRange* pDeletedRange )
 {
@@ -4547,7 +4549,7 @@ void checkBounds(
         SCROW nOffset = pDeletedRange->aStart.Row() - aAbs.aStart.Row();
         SCROW nRow = rPos.Row() + nOffset;
         // Unlike for rCheckRange, for pDeletedRange nRow can be anywhere>=0.
-        if (ValidRow(nRow))
+        if (pDoc->ValidRow(nRow))
             rBounds.push_back(nRow);
     }
 
@@ -4572,7 +4574,7 @@ void checkBounds(
         SCROW nOffset = pDeletedRange->aEnd.Row() + 1 - aAbs.aStart.Row();
         SCROW nRow = rPos.Row() + nOffset;
         // Unlike for rCheckRange, for pDeletedRange nRow can be ~anywhere.
-        if (ValidRow(nRow))
+        if (pDoc->ValidRow(nRow))
             rBounds.push_back(nRow);
     }
 }
@@ -4610,7 +4612,7 @@ void checkBounds(
         pDeletedRange = &aDeletedRange;
     }
 
-    checkBounds(rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
+    checkBounds(&rCxt.mrDoc, rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
 }
 
 }
@@ -4669,14 +4671,14 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 case svSingleRef:
                     {
                         const ScSingleRefData& rRef = *p->GetSingleRef();
-                        checkBounds(rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
+                        checkBounds(mpDoc, rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
                     }
                     break;
                 case svDoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
-                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
-                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
+                        checkBounds(mpDoc, rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
+                        checkBounds(mpDoc, rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
                     }
                     break;
                 default:
@@ -5090,7 +5092,7 @@ void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OU
 
 }
 
-OUString ScTokenArray::CreateString( const ScDocument* pDoc, sc::TokenStringContext& rCxt, const ScAddress& rPos ) const
+OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const
 {
     if (!nLen)
         return OUString();
@@ -5113,7 +5115,7 @@ OUString ScTokenArray::CreateString( const ScDocument* pDoc, sc::TokenStringCont
         if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
             aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
 
-        appendTokenByType(pDoc, rCxt, aBuf, *pToken, rPos, IsFromRangeName());
+        appendTokenByType(mpDoc, rCxt, aBuf, *pToken, rPos, IsFromRangeName());
     }
 
     return aBuf.makeStringAndClear();

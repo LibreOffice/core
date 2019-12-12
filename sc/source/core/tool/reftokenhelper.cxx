@@ -166,7 +166,7 @@ void ScRefTokenHelper::getRangeListFromTokens(
     }
 }
 
-void ScRefTokenHelper::getTokenFromRange(ScTokenRef& pToken, const ScRange& rRange)
+void ScRefTokenHelper::getTokenFromRange(const ScDocument* pDoc, ScTokenRef& pToken, const ScRange& rRange)
 {
     ScComplexRefData aData;
     aData.InitRange(rRange);
@@ -176,10 +176,10 @@ void ScRefTokenHelper::getTokenFromRange(ScTokenRef& pToken, const ScRange& rRan
     // different sheets.
     aData.Ref2.SetFlag3D(rRange.aStart.Tab() != rRange.aEnd.Tab());
 
-    pToken.reset(new ScDoubleRefToken(aData));
+    pToken.reset(new ScDoubleRefToken(pDoc, aData));
 }
 
-void ScRefTokenHelper::getTokensFromRangeList(vector<ScTokenRef>& pTokens, const ScRangeList& rRanges)
+void ScRefTokenHelper::getTokensFromRangeList(const ScDocument* pDoc, vector<ScTokenRef>& pTokens, const ScRangeList& rRanges)
 {
     vector<ScTokenRef> aTokens;
     size_t nCount = rRanges.size();
@@ -188,7 +188,7 @@ void ScRefTokenHelper::getTokensFromRangeList(vector<ScTokenRef>& pTokens, const
     {
         const ScRange & rRange = rRanges[i];
         ScTokenRef pToken;
-        ScRefTokenHelper::getTokenFromRange(pToken, rRange);
+        ScRefTokenHelper::getTokenFromRange(pDoc, pToken, rRange);
         aTokens.push_back(pToken);
     }
     pTokens.swap(aTokens);
@@ -267,9 +267,9 @@ public:
      * @param rTokens existing list of reference tokens
      * @param rToken new token
      */
-    void operator() (vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+    void operator() (const ScDocument* pDoc, vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
     {
-        join(rTokens, pToken, rPos);
+        join(pDoc, rTokens, pToken, rPos);
     }
 
 private:
@@ -302,7 +302,7 @@ private:
         return true;
     }
 
-    void join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+    void join(const ScDocument* pDoc, vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
     {
         // Normalize the token to a double reference.
         ScComplexRefData aData;
@@ -389,7 +389,7 @@ private:
                 if (bExternal)
                     pOldToken.reset(new ScExternalDoubleRefToken(nFileId, aTabName, aNewData));
                 else
-                    pOldToken.reset(new ScDoubleRefToken(aNewData));
+                    pOldToken.reset(new ScDoubleRefToken(pDoc, aNewData));
 
                 bJoined = true;
                 break;
@@ -405,7 +405,7 @@ private:
             // Pop the last token from the list, and keep joining recursively.
             ScTokenRef p = rTokens.back();
             rTokens.pop_back();
-            join(rTokens, p, rPos);
+            join(pDoc, rTokens, p, rPos);
         }
         else
             rTokens.push_back(pToken);
@@ -414,10 +414,10 @@ private:
 
 }
 
-void ScRefTokenHelper::join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+void ScRefTokenHelper::join(const ScDocument* pDoc, vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
 {
     JoinRefTokenRanges join;
-    join(rTokens, pToken, rPos);
+    join(pDoc, rTokens, pToken, rPos);
 }
 
 bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken)
@@ -445,19 +445,19 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
     return true;
 }
 
-ScTokenRef ScRefTokenHelper::createRefToken(const ScAddress& rAddr)
+ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument* pDoc, const ScAddress& rAddr)
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress(rAddr);
-    ScTokenRef pRef(new ScSingleRefToken(aRefData));
+    ScTokenRef pRef(new ScSingleRefToken(pDoc, aRefData));
     return pRef;
 }
 
-ScTokenRef ScRefTokenHelper::createRefToken(const ScRange& rRange)
+ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument* pDoc, const ScRange& rRange)
 {
     ScComplexRefData aRefData;
     aRefData.InitRange(rRange);
-    ScTokenRef pRef(new ScDoubleRefToken(aRefData));
+    ScTokenRef pRef(new ScDoubleRefToken(pDoc, aRefData));
     return pRef;
 }
 

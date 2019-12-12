@@ -1367,7 +1367,7 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
             if (nEntries == 1)
             {
                 --sp;
-                PushTempTokenWithoutError( new ScDoubleRefToken( (*pv)[0] ));
+                PushTempTokenWithoutError( new ScDoubleRefToken( pDok, (*pv)[0] ));
             }
             else if (bMatrixFormula)
             {
@@ -1813,7 +1813,7 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
     {
         ScSingleRefData aRef;
         aRef.InitAddress(ScAddress(nCol,nRow,nTab));
-        PushTempTokenWithoutError( new ScSingleRefToken( aRef ) );
+        PushTempTokenWithoutError( new ScSingleRefToken( pDok, aRef ) );
     }
 }
 
@@ -1824,7 +1824,7 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     {
         ScComplexRefData aRef;
         aRef.InitRange(ScRange(nCol1,nRow1,nTab1,nCol2,nRow2,nTab2));
-        PushTempTokenWithoutError( new ScDoubleRefToken( aRef ) );
+        PushTempTokenWithoutError( new ScDoubleRefToken( pDok, aRef ) );
     }
 }
 
@@ -1859,7 +1859,7 @@ void ScInterpreter::PushSingleRef( const ScRefAddress& rRef )
     {
         ScSingleRefData aRef;
         aRef.InitFromRefAddress( rRef, aPos);
-        PushTempTokenWithoutError( new ScSingleRefToken( aRef ) );
+        PushTempTokenWithoutError( new ScSingleRefToken( pDok, aRef ) );
     }
 }
 
@@ -1869,7 +1869,7 @@ void ScInterpreter::PushDoubleRef( const ScRefAddress& rRef1, const ScRefAddress
     {
         ScComplexRefData aRef;
         aRef.InitFromRefAddresses( rRef1, rRef2, aPos);
-        PushTempTokenWithoutError( new ScDoubleRefToken( aRef ) );
+        PushTempTokenWithoutError( new ScDoubleRefToken( pDok, aRef ) );
     }
 }
 
@@ -3666,7 +3666,7 @@ void ScInterpreter::ScDBArea()
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
         aRefData.SetRange(aRange, aPos);
-        PushTempToken( new ScDoubleRefToken( aRefData ) );
+        PushTempToken( new ScDoubleRefToken( pDok, aRefData ) );
     }
     else
         PushError( FormulaError::NoName);
@@ -3750,7 +3750,7 @@ void ScInterpreter::ScColRowNameAuto()
         }
     }
     aRefData.SetRange(aAbs, aPos);
-    PushTempToken( new ScDoubleRefToken( aRefData ) );
+    PushTempToken( new ScDoubleRefToken( pDok, aRefData ) );
 }
 
 // --- internals ------------------------------------------------------------

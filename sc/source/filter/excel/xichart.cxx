@@ -904,7 +904,7 @@ void XclImpChSourceLink::FillSourceLink( ::std::vector< ScTokenRef >& rTokens ) 
         ScTokenRef pToken(p->Clone());
         if (ScRefTokenHelper::isRef(pToken))
             // This is a reference token.  Store it.
-            ScRefTokenHelper::join(rTokens, pToken, ScAddress());
+            ScRefTokenHelper::join(&GetRoot().GetDoc(), rTokens, pToken, ScAddress());
     }
 }
 

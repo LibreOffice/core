@@ -2792,7 +2792,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                     return false;
                 }
 
-                OUString aFormula = pFC->GetCode()->CreateString(&rDoc, aCxt, aPos);
+                OUString aFormula = pFC->GetCode()->CreateString(aCxt, aPos);
                 aExpected = "Coefficients!RC[-1]";
                 if (aFormula != aExpected)
                 {

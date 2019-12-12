@@ -113,7 +113,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
 {
     using namespace sc;
 
-    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+    if (!GetDoc()->ValidRow(nRow1) || !GetDoc()->ValidRow(nRow2) || nRow1 > nRow2)
         return MatrixEdge::Nothing;
 
     ScAddress aOrigin(ScAddress::INITIALIZE_INVALID);
@@ -1280,7 +1280,7 @@ class CopyAsLinkHandler
         aRef.InitAddress(ScAddress(mrSrcCol.GetCol(), nRow, mrSrcCol.GetTab())); // Absolute reference.
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr;
+        ScTokenArray aArr(mrDestCol.GetDoc());
         aArr.AddSingleReference(aRef);
         return new ScFormulaCell(mrDestCol.GetDoc(), ScAddress(mrDestCol.GetCol(), nRow, mrDestCol.GetTab()), aArr);
     }
@@ -1986,7 +1986,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // Split the formula grouping at the top and bottom boundaries.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
-    if (ValidRow(nEndRow+1))
+    if (GetDoc()->ValidRow(nEndRow+1))
     {
         aPos = maCells.position(aPos.first, nEndRow+1);
         sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
@@ -1995,7 +1995,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // Do the same with the destination column.
     aPos = rCol.maCells.position(nStartRow);
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
-    if (ValidRow(nEndRow+1))
+    if (GetDoc()->ValidRow(nEndRow+1))
     {
         aPos = rCol.maCells.position(aPos.first, nEndRow+1);
         sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
@@ -2013,7 +2013,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-    if (ValidRow(nEndRow+1))
+    if (GetDoc()->ValidRow(nEndRow+1))
     {
         aPos = rCol.maCells.position(aPos.first, nEndRow+1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -2474,15 +2474,15 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
         if (rCxt.mnRowDelta < 0)
         {
             nSplitPos = rCxt.maRange.aStart.Row() + rCxt.mnRowDelta;
-            if (ValidRow(nSplitPos))
+            if (GetDoc()->ValidRow(nSplitPos))
                 aBounds.push_back(nSplitPos);
         }
         nSplitPos = rCxt.maRange.aStart.Row();
-        if (ValidRow(nSplitPos))
+        if (GetDoc()->ValidRow(nSplitPos))
         {
             aBounds.push_back(nSplitPos);
             nSplitPos = rCxt.maRange.aEnd.Row() + 1;
-            if (ValidRow(nSplitPos))
+            if (GetDoc()->ValidRow(nSplitPos))
                 aBounds.push_back(nSplitPos);
         }
     }
@@ -3190,7 +3190,7 @@ void ScColumn::SetDirtyVar()
 
 bool ScColumn::IsFormulaDirty( SCROW nRow ) const
 {
-    if (!ValidRow(nRow))
+    if (!GetDoc()->ValidRow(nRow))
         return false;
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
