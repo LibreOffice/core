@@ -4598,13 +4598,11 @@ void DomainMapper_Impl::CloseFieldCommand()
         {
             uno::Reference< uno::XInterface > xFieldInterface;
 
-            std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
-                field(splitFieldCommand(pContext->GetCommand()));
-            OUString const sFirstParam(std::get<1>(field).empty()
-                    ? OUString() : std::get<1>(field).front());
+            const auto& [sType, vArguments, vSwitches]{ splitFieldCommand(pContext->GetCommand()) };
+            (void)vSwitches;
+            OUString const sFirstParam(vArguments.empty() ? OUString() : vArguments.front());
 
-            FieldConversionMap_t::const_iterator const aIt =
-                aFieldConversionMap.find(std::get<0>(field));
+            FieldConversionMap_t::const_iterator const aIt = aFieldConversionMap.find(sType);
             if (aIt != aFieldConversionMap.end()
                 && (!m_bForceGenericFields
                     // these need to convert ffData to properties...
@@ -4676,7 +4674,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         const FieldConversionMap_t& aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
                         FieldConversionMap_t::const_iterator aEnhancedIt =
-                            aEnhancedFieldConversionMap.find(std::get<0>(field));
+                            aEnhancedFieldConversionMap.find(sType);
                         if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
                             sServiceName += OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
                     }
@@ -5336,7 +5334,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                  */
                 OUString aCode( pContext->GetCommand().trim() );
                 // Don't waste resources on wrapping shapes inside a fieldmark.
-                if (std::get<0>(field) != "SHAPE" && m_xTextFactory.is() && !m_aTextAppendStack.empty())
+                if (sType != "SHAPE" && m_xTextFactory.is() && !m_aTextAppendStack.empty())
                 {
                     xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
 
