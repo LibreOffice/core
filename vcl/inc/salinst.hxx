@@ -198,7 +198,7 @@ public:
 
     /// Set the app's (somewhat) magic/main-thread to this one.
     virtual void            updateMainThread() {}
-    /// Disconnect that - good for detatching from the JavaVM on Android.
+    /// Disconnect that - good for detaching from the JavaVM on Android.
     virtual void            releaseMainThread() {}
 
     /// get information about underlying versions
