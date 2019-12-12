@@ -30,7 +30,7 @@
 
 /** makes it possible to receive keyboard events.
  *
- * @deprecated Use com::sun::star::awt::XKeyHandler which allows to receive (and consume) key events,
+ * @see com::sun::star::awt::XKeyHandler This interface allows you receive (and consume) key events,
  * even on windows which are not at the top.
  */
 published interface XKeyListener: com::sun::star::lang::XEventListener
