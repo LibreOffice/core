@@ -536,17 +536,17 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                         }
                     }
                 }
-                if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
+                if (theChild->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
                 {
 //                  We call acquire on the XBrowseNode so that it does not
 //                  get autodestructed and become invalid when accessed later.
                     theChild->acquire();
 
                     bool bChildOnDemand = false;
-                    if ( !bCheapChildrenOnDemand && children[n]->hasChildNodes() )
+                    if ( !bCheapChildrenOnDemand && theChild->hasChildNodes() )
                     {
                         Sequence< Reference< browse::XBrowseNode > > grandchildren =
-                            children[n]->getChildNodes();
+                            theChild->getChildNodes();
 
                         for ( sal_Int32 m = 0; m < grandchildren.getLength(); ++m )
                         {
