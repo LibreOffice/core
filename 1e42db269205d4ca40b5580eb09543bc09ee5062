@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_979f9fb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "Please change to simple Enum testcase: the .erations doesn\u0027t add any value here.",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_17386fd1",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "Why return the result string as the function result, when the \"result\" is global? Consider changing verify_testENUM into Sub",
+      "range": {
+        "startLine": 37,
+        "startChar": 26,
+        "endLine": 37,
+        "endChar": 36
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_b7341be0",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "Please remove the trailing spaces (here and below)",
+      "range": {
+        "startLine": 39,
+        "startChar": 17,
+        "endLine": 39,
+        "endChar": 18
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_f76853bb",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "For VBASupport, vbNewLine is available ;-)",
+      "range": {
+        "startLine": 42,
+        "startChar": 30,
+        "endLine": 42,
+        "endChar": 38
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_5774a799",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "With CountDown ... End With doesn\u0027t have its contents indented?",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 18
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_977a3f86",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "ONE?\n\nWhy parentheses here? It should be an error, since this sub call expects two arguments, no?",
+      "range": {
+        "startLine": 51,
+        "startChar": 21,
+        "endLine": 51,
+        "endChar": 25
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_d75f570c",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "Given that you define sum as long, it might not properly test the sum, trimming the fractional part - and iiuc, the point is to check that all enum members *are* in fact integrals, so it makes sense to dim sum as double, and check that it results in an integral value",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 19
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_173dcfba",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-12T11:03:59Z",
+      "side": 1,
+      "message": "This usage is not documented in our help ;-)",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 10
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
