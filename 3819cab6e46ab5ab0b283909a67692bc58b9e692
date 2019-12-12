@@ -68,6 +68,29 @@
       "revId": "3819cab6e46ab5ab0b283909a67692bc58b9e692",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_b7e5fb3a",
+        "filename": "sw/source/uibase/app/appopt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-12-12T11:25:33Z",
+      "side": 1,
+      "message": "Maybe the idea was to use RID_SW_TP_BACKGROUND as the argument for GetTabPageCreatorFunc here like RID_SW_TP_OPTTEST_PAGE GetTaPageCreatorFunc uses nId.",
+      "range": {
+        "startLine": 494,
+        "startChar": 12,
+        "endLine": 494,
+        "endChar": 91
+      },
+      "revId": "3819cab6e46ab5ab0b283909a67692bc58b9e692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
