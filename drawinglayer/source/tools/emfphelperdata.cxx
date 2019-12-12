@@ -231,14 +231,14 @@ namespace emfplushelper
         {
             case EmfPlusObjectTypeBrush:
             {
-                EMFPBrush *brush = new EMFPBrush();
+                EMFPBrush *brush = new EMFPBrush(dataSize);
                 maEMFPObjects[index].reset(brush);
                 brush->Read(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypePen:
             {
-                EMFPPen *pen = new EMFPPen();
+                EMFPPen *pen = new EMFPPen(dataSize);
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
                 break;
