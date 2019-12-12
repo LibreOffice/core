@@ -86,13 +86,6 @@ struct IndicatorInfo
             m_nValue     = 0;
         }
 
-        /** @short  Don't forget to free used references!
-         */
-        ~IndicatorInfo()
-        {
-            m_xIndicator.clear();
-        }
-
         /** @short  Used to locate an info struct inside a stl structure...
 
             @descr  The indicator object itself is used as key. Its values
