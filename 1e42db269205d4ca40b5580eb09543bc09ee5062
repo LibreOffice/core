@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_7783e357",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "Will do, just copied over an existing TestCase",
+      "parentUuid": "5f7c97a3_17386fd1",
+      "range": {
+        "startLine": 37,
+        "startChar": 26,
+        "endLine": 37,
+        "endChar": 36
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_b7341be0",
         "filename": "basic/qa/vba_tests/enum.vb",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2019-12-12T11:03:59Z",
       "side": 1,
       "message": "Please remove the trailing spaces (here and below)",
+      "range": {
+        "startLine": 39,
+        "startChar": 17,
+        "endLine": 39,
+        "endChar": 18
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_9788ff71",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "5f7c97a3_b7341be0",
       "range": {
         "startLine": 39,
         "startChar": 17,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_b7909b97",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "I would prefer to leave the TestCase to the bare required  minimum for Enum to function.\nI will",
+      "parentUuid": "5f7c97a3_f76853bb",
+      "range": {
+        "startLine": 42,
+        "startChar": 30,
+        "endLine": 42,
+        "endChar": 38
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_5774a799",
         "filename": "basic/qa/vba_tests/enum.vb",
         "patchSetId": 2
@@ -105,6 +177,30 @@
       "writtenOn": "2019-12-12T11:03:59Z",
       "side": 1,
       "message": "With CountDown ... End With doesn\u0027t have its contents indented?",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 18
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_d78d177c",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "indeed will do",
+      "parentUuid": "5f7c97a3_5774a799",
       "range": {
         "startLine": 49,
         "startChar": 4,
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_57f7c7f6",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "This is syntactically correct:\nCall foo((a),b,c) \u003d\u003d foo (a), b, c\noptional parenthesis add extra legibility in this case, although this is disputable.\n\nThink of a Python tuple:\ng_exportedScripts \u003d foo,\ng_exportedScripts \u003d (foo,)",
+      "parentUuid": "5f7c97a3_977a3f86",
+      "range": {
+        "startLine": 51,
+        "startChar": 21,
+        "endLine": 51,
+        "endChar": 25
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_d75f570c",
         "filename": "basic/qa/vba_tests/enum.vb",
         "patchSetId": 2
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_57d02751",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "enumerations trimming happens at compile level. Defining sum as Long is just for reading convenience, no conversion occurs at runtime.\ni\u0027ll add a type name check for sum",
+      "parentUuid": "5f7c97a3_d75f570c",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 19
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_173dcfba",
         "filename": "basic/qa/vba_tests/enum.vb",
         "patchSetId": 2
@@ -174,6 +318,30 @@
       "writtenOn": "2019-12-12T11:03:59Z",
       "side": 1,
       "message": "This usage is not documented in our help ;-)",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 10
+      },
+      "revId": "1e42db269205d4ca40b5580eb09543bc09ee5062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_d7bbd70b",
+        "filename": "basic/qa/vba_tests/enum.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-12T17:29:59Z",
+      "side": 1,
+      "message": "True, I would leave it though.\nThe whole subject or Error Handling deserves a tutorial.\n\nI\u0027ll add that to Macro team Basic bugs list.\n\nI documented ENUM while it still isn\u0027t part of a TestSuite. This is and \u0027egg \u0026 hen\u0027 catch!",
+      "parentUuid": "5f7c97a3_173dcfba",
       "range": {
         "startLine": 68,
         "startChar": 4,
