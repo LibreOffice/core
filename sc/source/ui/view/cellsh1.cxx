@@ -3074,7 +3074,7 @@ void ScCellShell::ExecuteFillSingleEdit()
             aInit = "=";
             const ScTokenArray* pCode = aCell.mpFormula->GetCode();
             sc::TokenStringContext aCxt(pDoc, pDoc->GetGrammar());
-            aInit += pCode->CreateString(pDoc, aCxt, aCurPos);
+            aInit += pCode->CreateString(aCxt, aCurPos);
         }
         else
             aInit = aCell.getString(pDoc);

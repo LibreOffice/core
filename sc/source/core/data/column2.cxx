@@ -1688,7 +1688,7 @@ struct ColumnStorageDumper
     void printFormula(const ScFormulaCell* pCell) const
     {
         sc::TokenStringContext aCxt(mpDoc, mpDoc->GetGrammar());
-        OUString aFormula = pCell->GetCode()->CreateString(mpDoc, aCxt, pCell->aPos);
+        OUString aFormula = pCell->GetCode()->CreateString(aCxt, pCell->aPos);
         cout << "      * formula: " << aFormula << endl;
     }
 

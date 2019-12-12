@@ -167,7 +167,7 @@ public:
      */
     bool IsValidReference(const ScDocument* pDoc) const;
 
-    formula::FormulaToken* CreateToken() const;   // create typified token
+    formula::FormulaToken* CreateToken(const ScDocument* pDoc) const;   // create typified token
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler

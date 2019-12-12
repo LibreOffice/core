@@ -54,14 +54,14 @@ void DumpToken(formula::FormulaToken const & rToken);
         A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
         rTok2 are not of sv(Single|Double)Ref
 */
-formula::FormulaTokenRef extendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
+formula::FormulaTokenRef extendRangeReference( const ScDocument* pDoc, formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
 class ScSingleRefToken final : public formula::FormulaToken
 {
 private:
-            ScSingleRefData       aSingleRef;
+    ScSingleRefData   aSingleRef;
 public:
-                                ScSingleRefToken( const ScSingleRefData& r, OpCode e = ocPush ) :
+                                ScSingleRefToken( const ScDocument* /*pDoc*/, const ScSingleRefData& r, OpCode e = ocPush ) :
                                     FormulaToken( formula::svSingleRef, e ), aSingleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
@@ -73,9 +73,9 @@ public:
 class ScDoubleRefToken final : public formula::FormulaToken
 {
 private:
-            ScComplexRefData        aDoubleRef;
+    ScComplexRefData  aDoubleRef;
 public:
-                                ScDoubleRefToken( const ScComplexRefData& r, OpCode e = ocPush  ) :
+                                ScDoubleRefToken( const ScDocument* /*pDoc*/, const ScComplexRefData& r, OpCode e = ocPush  ) :
                                     FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;

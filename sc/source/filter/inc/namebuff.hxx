@@ -97,7 +97,7 @@ private:
     std::vector<Entry> maEntries;
 
 public:
-    RangeNameBufferWK3();
+    RangeNameBufferWK3(const ScDocument* pDoc);
     ~RangeNameBufferWK3();
     void                    Add( const OUString& rName, const ScComplexRefData& rCRD );
     inline void             Add( const OUString& rName, const ScRange& aScRange );
