@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_376c8b07",
+        "filename": "xmlsecurity/source/dialogs/macrosecurity.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-12T15:03:04Z",
+      "side": 1,
+      "message": "maybe do a\n   TOOLS_WARN_EXCEPTION\nhere?",
+      "revId": "71598e3906cae17e64752dbe69e2cdc19ce53d3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_577107e0",
+        "filename": "xmlsecurity/source/dialogs/macrosecurity.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-12T15:03:04Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "71598e3906cae17e64752dbe69e2cdc19ce53d3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
