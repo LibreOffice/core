@@ -142,16 +142,6 @@ IMPL_LINK_NOARG(DataSourceDialog, DeactivatePageHdl, const OString&, bool)
     return m_bTogglingEnabled;
 }
 
-void DataSourceDialog::DisableTabToggling()
-{
-    m_bTogglingEnabled = false;
-}
-
-void DataSourceDialog::EnableTabToggling()
-{
-    m_bTogglingEnabled = true;
-}
-
 void DataSourceDialog::setInvalidPage(BuilderPage* pTabPage)
 {
     if (pTabPage == m_xRangeChooserTabPage.get())
@@ -169,7 +159,7 @@ void DataSourceDialog::setInvalidPage(BuilderPage* pTabPage)
             m_xTabControl->set_current_page(1);
         else if( m_bDataSourceTabIsValid )
             m_xTabControl->set_current_page(0);
-        DisableTabToggling();
+        m_bTogglingEnabled = false;
     }
 }
 
@@ -183,7 +173,7 @@ void DataSourceDialog::setValidPage(BuilderPage* pTabPage)
     if (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid)
     {
         m_xBtnOK->set_sensitive(true);
-        EnableTabToggling();
+        m_bTogglingEnabled = true;
     }
 }
 

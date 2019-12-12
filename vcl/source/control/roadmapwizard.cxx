@@ -147,7 +147,7 @@ namespace vcl
     void RoadmapWizard::impl_construct()
     {
         SetLeftAlignedButtonCount( 1 );
-        SetEmptyViewMargin();
+        mbEmptyViewMargin = true;
 
         m_xRoadmapImpl->pRoadmap.disposeAndReset( VclPtr<ORoadmap>::Create( this, WB_TABSTOP ) );
         m_xRoadmapImpl->pRoadmap->SetText( VclResId( STR_WIZDLG_ROADMAP_TITLE ) );
@@ -158,8 +158,8 @@ namespace vcl
         aRoadmapSize.setHeight( GetSizePixel().Height() );
         m_xRoadmapImpl->pRoadmap->SetSizePixel( aRoadmapSize );
 
-        SetViewWindow( m_xRoadmapImpl->pRoadmap );
-        SetViewAlign( WindowAlign::Left );
+        mpViewWindow = m_xRoadmapImpl->pRoadmap;
+        meViewAlign = WindowAlign::Left;
         m_xRoadmapImpl->pRoadmap->Show();
     }
 

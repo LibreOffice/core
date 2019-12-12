@@ -47,7 +47,6 @@ public:
     DECL_LINK(CloseHdl, weld::Button&, void);
 
     void SetReadOnly( bool bReadOnly );
-    bool ApplyChangesToModel();
 
 private:
     bool                           m_bReadOnly;

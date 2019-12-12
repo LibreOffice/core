@@ -34,17 +34,10 @@ class SwMultiTOXMarkDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xTextFT;
     std::unique_ptr<weld::TreeView> m_xTOXLB;
 
-    void                Apply();
 public:
     SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr);
     virtual ~SwMultiTOXMarkDlg() override;
-    virtual short run() override
-    {
-        short nRet = GenericDialogController::run();
-        if (nRet == RET_OK)
-            Apply();
-        return nRet;
-    }
+    virtual short run() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX

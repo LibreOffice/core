@@ -129,7 +129,7 @@ void XFormsModelContext::EndElement()
         xUpdate->update();
 
     GetImport().initXForms();
-    xforms_addXFormsModel( GetImport().GetModel(), getModel() );
+    xforms_addXFormsModel( GetImport().GetModel(), mxModel );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

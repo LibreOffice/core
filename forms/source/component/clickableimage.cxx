@@ -791,16 +791,10 @@ namespace frm
     }
 
 
-    void OClickableImageBaseModel::DownloadDone()
-    {
-        DataAvailable();
-    }
-
-
     IMPL_LINK_NOARG( OClickableImageBaseModel, DownloadDoneLink, void*, void )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DownloadDone();
+        DataAvailable();
     }
 
 

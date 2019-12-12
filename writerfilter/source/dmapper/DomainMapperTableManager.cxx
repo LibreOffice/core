@@ -404,11 +404,6 @@ sal_uInt32 DomainMapperTableManager::getCurrentGridAfter( )
     return m_aGridAfter.back( );
 }
 
-bool DomainMapperTableManager::hasCurrentSpans() const
-{
-    return !m_aGridSpans.empty();
-}
-
 DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurrentSpans( )
 {
     return m_aGridSpans.back( );
@@ -526,9 +521,9 @@ void DomainMapperTableManager::endOfCellAction()
     TagLogger::getInstance().element("endOFCellAction");
 #endif
 
-    if (!hasCurrentSpans())
+    if (m_aGridSpans.empty())
         throw std::out_of_range("empty spans");
-    getCurrentSpans()->push_back(m_nGridSpan);
+    m_aGridSpans.back()->push_back(m_nGridSpan);
     m_nGridSpan = 1;
     ++m_nCell.back( );
 }

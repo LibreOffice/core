@@ -134,7 +134,7 @@ bool SwOneExampleFrame::Command(const CommandEvent& rCEvt)
         case CommandEventId::ContextMenu:
         {
             //#125881# quickly clicking crashes because the control is not fully initialized
-            if (GetController().is())
+            if (m_xController.is())
                 return CreatePopup(rCEvt.GetMousePosPixel());
         }
         break;

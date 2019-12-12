@@ -90,7 +90,6 @@ private:
     DECL_LINK( ChosePageHdl_Impl, const OString&, void );
 
     IconChoicePageData*     GetPageData ( const OString& rId );
-    void                    Start_Impl();
 
     void                    SwitchPage( const OString& rId );
 
@@ -122,8 +121,6 @@ public:
     /// gives via map converted local slots if applicable
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
-
-    weld::Button&       GetOKButton() { return *m_xOKBtn; }
 
     void                Start();
     bool                QueryClose();

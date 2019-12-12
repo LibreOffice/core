@@ -149,9 +149,6 @@ public:
     // SvXMLImportContext
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
     virtual void SAL_CALL characters( const OUString &rChars ) override;
-
-    const OUString &    GetRightText() const    { return aRightText; }
-    const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }
 };
 
 }
@@ -260,7 +257,7 @@ void ConvDicXMLRightTextContext_Impl::endFastElement( sal_Int32 /*nElement*/ )
 {
     ConvDic *pDic = GetConvDicImport().GetDic();
     if (pDic)
-        pDic->AddEntry( GetLeftText(), GetRightText() );
+        pDic->AddEntry( rEntryContext.GetLeftText(), aRightText );
 }
 
 

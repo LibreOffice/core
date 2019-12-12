@@ -85,7 +85,6 @@ public:
     bool     IsUnderline() const { return bUnderline; }
     void     SetSize( sal_uInt16 nS ) { nSize = nS; }
     sal_uInt16 GetSize() const { return nSize; }
-    const OUString& GetFontName() const { return aName; }
 };
 
 class SbStdClipboard final : public SbxObject

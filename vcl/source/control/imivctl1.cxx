@@ -112,7 +112,7 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     pGridMap.reset();
     pDDBufDev.disposeAndClear();
     ClearSelectedRectList();
-    ClearColumnList();
+    m_pColumns.reset();
     aVerSBar.disposeAndClear();
     aHorSBar.disposeAndClear();
     aScrBarBox.disposeAndClear();
@@ -2865,11 +2865,6 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     }
 
     return true;
-}
-
-void SvxIconChoiceCtrl_Impl::ClearColumnList()
-{
-    m_pColumns.reset();
 }
 
 void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& rInfo)

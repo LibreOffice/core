@@ -139,14 +139,9 @@ void DataEditor::SetReadOnly( bool bReadOnly )
 
 IMPL_LINK_NOARG(DataEditor, CloseHdl, weld::Button&, void)
 {
-    bool bApplied = ApplyChangesToModel();
+    bool bApplied = m_xBrwData->EndEditing(); // apply changes to model
     if (bApplied)
         m_xDialog->response(RET_CLOSE);
-}
-
-bool DataEditor::ApplyChangesToModel()
-{
-    return m_xBrwData->EndEditing();
 }
 
 } // namespace chart
