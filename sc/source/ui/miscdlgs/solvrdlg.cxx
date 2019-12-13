@@ -31,17 +31,6 @@
 #include <sc.hrc>
 #include <solvrdlg.hxx>
 
-namespace
-{
-    void lclErrorDialog(weld::Window* pParent, const OUString& rString, const std::function<void(sal_Int32)>& func)
-    {
-        std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                                                  VclMessageType::Warning, VclButtonsType::Ok,
-                                                  rString));
-        xBox->runAsync(xBox, func);
-    }
-}
-
 ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                           ScDocument* pDocument,
                           const ScAddress& aCursorPos )
@@ -76,6 +65,9 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pP
 
 ScSolverDlg::~ScSolverDlg()
 {
+    if (m_xMessageBox)
+        m_xMessageBox->response(RET_CANCEL);
+    assert(!m_xMessageBox);
 }
 
 void ScSolverDlg::Init()
@@ -152,36 +144,31 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 void ScSolverDlg::RaiseError( ScSolverErr eError )
 {
-    switch ( eError )
+    OUString sMessage;
+
+    switch (eError)
     {
         case SOLVERR_NOFORMULA:
-            lclErrorDialog(m_xDialog.get(), errMsgNoFormula,
-                [this](sal_Int32 /*nResult*/) {
-                    m_xEdFormulaCell->GrabFocus();
-                });
+            sMessage = errMsgNoFormula;
             break;
-
         case SOLVERR_INVALID_FORMULA:
-            lclErrorDialog(m_xDialog.get(), errMsgInvalidForm,
-                [this](sal_Int32 /*nResult*/) {
-                    m_xEdFormulaCell->GrabFocus();
-                });
+            sMessage = errMsgInvalidForm;
             break;
-
         case SOLVERR_INVALID_VARIABLE:
-            lclErrorDialog(m_xDialog.get(), errMsgInvalidVar,
-                [this](sal_Int32 /*nResult*/) {
-                    m_xEdVariableCell->GrabFocus();
-                });
+            sMessage = errMsgInvalidVar;
             break;
-
         case SOLVERR_INVALID_TARGETVALUE:
-            lclErrorDialog(m_xDialog.get(), errMsgInvalidVal,
-                [this](sal_Int32 /*nResult*/) {
-                    m_xEdTargetVal->grab_focus();
-                });
+            sMessage = errMsgInvalidVal;
             break;
     }
+
+    m_xMessageBox.reset(Application::CreateMessageDialog(m_xDialog.get(),
+                                                         VclMessageType::Warning, VclButtonsType::Ok,
+                                                         sMessage));
+    m_xMessageBox->runAsync(m_xMessageBox, [this](sal_Int32 /*nResult*/) {
+        m_xEdTargetVal->grab_focus();
+        m_xMessageBox.reset();
+    });
 }
 
 bool ScSolverDlg::IsRefInputMode() const
