@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -20,6 +21,7 @@
 
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <tools/lineend.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -668,13 +670,31 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo77129, "fdo77129.docx")
 {
     // The problem was that text after TOC field was missing if footer reference  comes in field.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // Data was lost from this paragraph.
+        // tdf#129402: "Abstract" must be on page 3
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:t", "Abstract");
+    }
 
-    if (!pXmlDoc)
-       return;
+    // tdf#129402: ToC title must be "Contents", not "Content"; the index field must include
+    // pre-rendered elements, including last empty paragraph
 
-    // Data was lost from this paragraph.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t", "Abstract");
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aTocString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    // Check that all the pre-rendered entries are correct
+    CPPUNIT_ASSERT_EQUAL(OUString("Contents\n"
+                                  "How\t2\n"
+                                  ""), // ending with an empty paragraph
+                         aTocString);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")

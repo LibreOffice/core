@@ -547,6 +547,10 @@ private:
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
 
+    /// If there was a feld end mark in current paragraph defining a pre-rendered result of an index field
+    bool                            m_bIsDeferredPopFieldContext = false;
+    bool                            m_bIsInDeferredPopFieldContext = false;
+
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
 

@@ -1335,6 +1335,51 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     if (m_aTextAppendStack.empty())
         return;
+
+    // tdf#129353: Has an index been started, but no text portion appended yet? In that case, the
+    // relevant TextAppendContext hasn't been pushed to m_aTextAppendStack, and so the paragraph
+    // being finished would be in the wrong place. Push it here.
+    // See appendTextPortion
+    if (!m_bStartGenericField && (m_bStartTOC || m_bStartIndex || m_bStartBibliography))
+    {
+        if (!m_aTextAppendStack.top().xInsertPosition.is())
+        {
+            if (auto xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                xTextAppend.is() && hasTableManager() && !getTableManager().isIgnore())
+            {
+                if (!IsInHeaderFooter() || m_bStartTOCHeaderFooter)
+                {
+                    try
+                    {
+                        m_bStartedTOC = true;
+                        uno::Reference<text::XTextCursor> xTOCTextCursor
+                            = xTextAppend->getEnd()->getText()->createTextCursor();
+                        assert(xTOCTextCursor.is());
+                        xTOCTextCursor->gotoEnd(false);
+                        if (m_bStartIndex)
+                            xTOCTextCursor->goLeft(1, false);
+                        mxTOCTextCursor = xTOCTextCursor;
+                        m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
+                                             "DomainMapper_Impl::finishParagraph:");
+                    }
+                }
+            }
+        }
+    }
+
+    // tdf#129353: if an index field end was postponed, end it here
+    if (m_bIsDeferredPopFieldContext)
+    {
+        m_bIsInDeferredPopFieldContext = true;
+        PopFieldContext();
+        m_bIsInDeferredPopFieldContext = false;
+        m_bIsDeferredPopFieldContext = false;
+    }
+
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend > xTextAppend(rAppendContext.xTextAppend);
 #ifdef DBG_UTIL
@@ -1883,7 +1928,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                         assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
-                        if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
+                        if (m_bStartIndex || m_bStartGenericField)
                             xTOCTextCursor->goLeft(1, false);
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                         SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
@@ -4126,9 +4171,11 @@ OUString DomainMapper_Impl::extractTocTitle()
             xCursor->gotoEnd( true );
 
         //the paragraph after this new section is already inserted
-        xCursor->goLeft(1, true);
+        OUString sResult = convertLineEnd(xCursor->getString(), LineEnd::LINEEND_LF);
+        if (sResult.endsWith("\n"))
+            sResult = sResult.copy(0, sResult.getLength() - 1);
 
-        return xCursor->getString();
+        return sResult;
     }
     catch(const uno::Exception&)
     {
@@ -4255,47 +4302,36 @@ void DomainMapper_Impl::handleToc
     if( !bFromOutline && !bFromEntries && sTemplate.isEmpty()  )
         bFromOutline = true;
 
-    const OUString aTocTitle = extractTocTitle();
+    OUString aTocTitle = extractTocTitle();
 
     if (m_xTextFactory.is() && ! m_aTextAppendStack.empty())
     {
+        auto xTextAppend = GetTopTextAppend();
+        auto xTextRangeEndOfTocHeader = xTextAppend->getEnd();
         if (aTocTitle.isEmpty() || bTableOfFigures)
         {
-            // reset marker of the TOC title
-            m_xStdEntryStart = uno::Reference< text::XTextRange >();
+            xTOC = createSectionForRange(
+                xTextRangeEndOfTocHeader, xTextRangeEndOfTocHeader,
+                (bTableOfFigures ? "com.sun.star.text.IllustrationsIndex" : sTOCServiceName),
+                false);
+            // Check if there is a ToC heading in front of the field
+            css::uno::Reference< css::text::XParagraphCursor > xCursor(
+                xTextAppend->createTextCursorByRange(xTextRangeEndOfTocHeader), uno::UNO_QUERY_THROW);
+            xCursor->gotoStartOfParagraph(false);
+            m_xStdEntryStart.set(xCursor);
+            aTocTitle = extractTocTitle();
 
-            xTOC.set(
-                    m_xTextFactory->createInstance
-                    ( bTableOfFigures ?
-                      "com.sun.star.text.IllustrationsIndex"
-                      : sTOCServiceName),
-                    uno::UNO_QUERY_THROW);
-
-            OUString const sMarker("Y");
-            //insert index
-            uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
-            uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-            if (xTextAppend.is())
-            {
-                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-                uno::Reference< text::XText > xText = xTextAppend->getText();
-                if(xCrsr.is() && xText.is())
-                {
-                    xCrsr->gotoEnd(false);
-                    xText->insertString(xCrsr, sMarker, false);
-                    xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, false);
-                    xTOCMarkerCursor = xCrsr;
-                }
-            }
+            auto xTextCursor = xTextAppend->getText()->createTextCursor();
+            if (xTextCursor)
+                xTextCursor->gotoEnd(false);
+            xTOCMarkerCursor = xTextCursor;
         }
         else
         {
             // create TOC section
-            css::uno::Reference<css::text::XTextRange> xTextRangeEndOfTocHeader = GetTopTextAppend()->getEnd();
             xTOC = createSectionForRange(m_xStdEntryStart, xTextRangeEndOfTocHeader, sTOCServiceName, false);
 
             // init [xTOCMarkerCursor]
-            uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
             uno::Reference< text::XText > xText = xTextAppend->getText();
             uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
             xTOCMarkerCursor = xCrsr;
@@ -4447,10 +4483,13 @@ void DomainMapper_Impl::handleBibliography
     m_bStartTOC = true;
     m_bStartBibliography = true;
     if (m_xTextFactory.is())
-        xTOC.set(
-                m_xTextFactory->createInstance(
-                sTOCServiceName),
-                uno::UNO_QUERY_THROW);
+    {
+        auto xTextRange = GetTopTextAppend()->getEnd();
+        xTOC = createSectionForRange(
+            xTextRange, xTextRange,
+            sTOCServiceName,
+            false);
+    }
     if (xTOC.is())
         xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
 
@@ -5605,6 +5644,20 @@ void DomainMapper_Impl::PopFieldContext()
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
     {
+        if (!m_bIsInDeferredPopFieldContext && !m_bStartGenericField
+            && (m_bStartTOC || m_bStartIndex || m_bStartBibliography))
+        {
+            if (pContext->GetTOC())
+            {
+                // tdf#129353: When index field end mark occurs in a paragraph inside a pre-rendered
+                // result of an index field, the whole paragraph contents (including following runs)
+                // are still part of the field. And also keep this paragraph, even if empty.
+                m_bIsDeferredPopFieldContext = true;
+                m_bParaChanged = true;
+                return;
+            }
+        }
+
         if( !pContext->IsCommandCompleted() )
             CloseFieldCommand();
 
@@ -5628,27 +5681,14 @@ void DomainMapper_Impl::PopFieldContext()
                 uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
                 if( xToInsert.is() )
                 {
-                    if(xTOCMarkerCursor.is() || m_bStartIndex || m_bStartBibliography)
+                    if (m_bStartIndex)
                     {
-                        if (m_bStartIndex || m_bStartBibliography)
+                        if (mxTOCTextCursor.is())
                         {
-                            if (mxTOCTextCursor.is())
-                            {
-                                mxTOCTextCursor->goLeft(1,true);
-                                mxTOCTextCursor->setString(OUString());
-                            }
-                            xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
+                            mxTOCTextCursor->goLeft(1,true);
+                            mxTOCTextCursor->setString(OUString());
                         }
-                        else
-                        {
-                            if (!m_xStdEntryStart.is())
-                            {
-                                xTOCMarkerCursor->goLeft(1,true);
-                                xTOCMarkerCursor->setString(OUString());
-                                xTOCMarkerCursor->goLeft(1,true);
-                                xTOCMarkerCursor->setString(OUString());
-                            }
-                        }
+                        xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
                     }
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
