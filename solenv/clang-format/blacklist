@@ -17320,6 +17320,7 @@ vcl/inc/saltimer.hxx
 vcl/inc/salusereventlist.hxx
 vcl/inc/salvd.hxx
 vcl/inc/salwtype.hxx
+vcl/inc/scanlinewriter.hxx
 vcl/inc/schedulerimpl.hxx
 vcl/inc/scrptrun.h
 vcl/inc/scrwnd.hxx
