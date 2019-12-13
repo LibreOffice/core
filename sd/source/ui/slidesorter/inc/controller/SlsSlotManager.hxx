@@ -81,6 +81,7 @@ private:
     */
     void RenameSlide( const SfxRequest& rRequest );
     DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog&, bool);
+    DECL_STATIC_LINK(SlotManager, RenameSlideTooltipHdl, AbstractSvxNameDialog&, OUString);
     bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString& rName);
 
     /** Handle SID_INSERTPAGE slot calls.

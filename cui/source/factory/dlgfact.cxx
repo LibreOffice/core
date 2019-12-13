@@ -740,6 +740,15 @@ void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDial
         m_xDlg->SetCheckNameHdl( Link<SvxNameDialog&,bool>(), bCheckImmediately );
 }
 
+void AbstractSvxNameDialog_Impl::SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink)
+{
+    aCheckNameTooltipHdl = rLink;
+    if( rLink.IsSet() )
+        m_xDlg->SetCheckNameTooltipHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameTooltipHdl));
+    else
+        m_xDlg->SetCheckNameTooltipHdl( Link<SvxNameDialog&,OUString>());
+}
+
 void AbstractSvxNameDialog_Impl::SetEditHelpId(const OString& rHelpId)
 {
     m_xDlg->SetEditHelpId(rHelpId);
@@ -758,6 +767,11 @@ void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&, OUString)
+{
+    return aCheckNameTooltipHdl.Call(*this);
 }
 
 void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)

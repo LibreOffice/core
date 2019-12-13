@@ -233,6 +233,7 @@
 #define STR_STATUSBAR_MASTERPAGE                        NC_("STR_STATUSBAR_MASTERPAGE", "Slide Master name. Right-click for list and double-click for dialog.")
 #define STR_TITLE_RENAMESLIDE                           NC_("STR_TITLE_RENAMESLIDE", "Rename Slide")
 #define STR_TITLE_RENAMEPAGE                            NC_("STR_TITLE_RENAMEPAGE", "Rename Page")
+#define STR_TOOLTIP_RENAME                              NC_("STR_TOOLTIP_RENAME", "Duplicate or empty names are not possible")
 #define STR_DESC_RENAMESLIDE                            NC_("STR_DESC_RENAMESLIDE", "Name")
 #define STR_TITLE_RENAMEMASTER                          NC_("STR_TITLE_RENAMEMASTER", "Rename Master Slide")
 #define STR_PLACEHOLDER_DESCRIPTION_TITLE               NC_("STR_PLACEHOLDER_DESCRIPTION_TITLE", "Title Area for AutoLayouts" )
