@@ -11,10 +11,12 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <IDocumentSettingAccess.hxx>
+#include <tools/lineend.hxx>
 
 #include <editsh.hxx>
 
@@ -476,6 +478,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
     CPPUNIT_ASSERT(unVisitedStyleName.equalsIgnoreAsciiCase("Internet Link"));
     OUString visitedStyleName = getProperty<OUString>(xRun, "VisitedCharStyleName");
     CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+    getParagraph(2, "Bibliography");
+    getParagraph(4, "Christie, A. (1922). The Secret Adversary. ");
+    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(8)->getString());
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    // Check that all the pre-rendered entries are correct, including trailing spaces
+    CPPUNIT_ASSERT_EQUAL(OUString("\n" // starting with an empty paragraph
+                                  "Christie, A. (1922). The Secret Adversary. \n"
+                                  "\n"
+                                  "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. \n"
+                                  ""), // ending with an empty paragraph
+                         aIndexString);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
