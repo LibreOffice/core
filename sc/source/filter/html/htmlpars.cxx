@@ -431,7 +431,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
 
 void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 {
-    if ( ValidCol(pE->nCol) )
+    if ( mpDoc->ValidCol(pE->nCol) )
     {   // Or else this would create a wrong value at ScAddress (chance for an infinite loop)!
         bool bBadCol = false;
         bool bAgain;

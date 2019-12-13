@@ -205,6 +205,26 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
     return aAbs;
 }
 
+ScAddress ScSingleRefData::toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const
+{
+    SCCOL nRetCol = Flags.bColRel ? mnCol + rPos.Col() : mnCol;
+    SCROW nRetRow = Flags.bRowRel ? mnRow + rPos.Row() : mnRow;
+    SCTAB nRetTab = Flags.bTabRel ? mnTab + rPos.Tab() : mnTab;
+
+    ScAddress aAbs(ScAddress::INITIALIZE_INVALID);
+
+    if (pDoc->ValidCol(nRetCol))
+        aAbs.SetCol(nRetCol);
+
+    if (pDoc->ValidRow(nRetRow))
+        aAbs.SetRow(nRetRow);
+
+    if (ValidTab(nRetTab))
+        aAbs.SetTab(nRetTab);
+
+    return aAbs;
+}
+
 void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos )
 {
     if (Flags.bColRel)
@@ -221,6 +241,33 @@ void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos 
         mnRow = rAddr.Row();
 
     if (!ValidRow(rAddr.Row()))
+        SetRowDeleted(true);
+
+    if (Flags.bTabRel)
+        mnTab = rAddr.Tab() - rPos.Tab();
+    else
+        mnTab = rAddr.Tab();
+
+    if (!ValidTab( rAddr.Tab(), MAXTAB))
+        SetTabDeleted(true);
+}
+
+void ScSingleRefData::SetAddress( const ScDocument* pDoc, const ScAddress& rAddr, const ScAddress& rPos )
+{
+    if (Flags.bColRel)
+        mnCol = rAddr.Col() - rPos.Col();
+    else
+        mnCol = rAddr.Col();
+
+    if (!pDoc->ValidCol(rAddr.Col()))
+        SetColDeleted(true);
+
+    if (Flags.bRowRel)
+        mnRow = rAddr.Row() - rPos.Row();
+    else
+        mnRow = rAddr.Row();
+
+    if (!pDoc->ValidRow(rAddr.Row()))
         SetRowDeleted(true);
 
     if (Flags.bTabRel)
@@ -483,6 +530,11 @@ bool ScComplexRefData::ValidExternal(const ScDocument* pDoc) const
 ScRange ScComplexRefData::toAbs( const ScAddress& rPos ) const
 {
     return ScRange(Ref1.toAbs(rPos), Ref2.toAbs(rPos));
+}
+
+ScRange ScComplexRefData::toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const
+{
+    return ScRange(Ref1.toAbs(pDoc, rPos), Ref2.toAbs(pDoc, rPos));
 }
 
 void ScComplexRefData::SetRange( const ScRange& rRange, const ScAddress& rPos )

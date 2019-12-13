@@ -180,11 +180,11 @@ const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
     return pColTab[ nLotIndex ];
 }
 
-void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
+void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatternAttr& rAttr )
 {
     // Actually with the current implementation of MAXROWCOUNT>=64k and nRow
     // being read as sal_uInt16 there's no chance that nRow would be invalid...
-    SAL_WARN_IF( !ValidRow(nRow), "sc.filter", "*LotAttrCol::SetAttr(): ... and failed?!" );
+    SAL_WARN_IF( !pDoc->ValidRow(nRow), "sc.filter", "*LotAttrCol::SetAttr(): ... and failed?!" );
 
     std::vector<std::unique_ptr<ENTRY> >::reverse_iterator iterLast = aEntries.rbegin();
 
@@ -228,7 +228,7 @@ LotAttrTable::LotAttrTable(LotusContext& rContext):
 {
 }
 
-void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
+void LotAttrTable::SetAttr( LotusContext& rContext, const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
     // With the current implementation of MAXCOLCOUNT>=1024 and nColFirst and
@@ -238,7 +238,7 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
     SCCOL nColCnt;
 
     for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
-        pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
+        pCols[ nColCnt ].SetAttr( rContext.pDoc, nRow, rPattAttr );
 }
 
 void LotAttrTable::Apply(LotusContext& rContext, const SCTAB nTabNum)
