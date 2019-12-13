@@ -14,7 +14,9 @@
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
+#include <tools/lineend.hxx>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -185,6 +187,32 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r", 2);
     // Check that the break is in proper - last - position
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+    getParagraph(1, "(Verne, 1870)");
+    getParagraph(2, "Bibliography");
+    getParagraph(4, "Christie, A. (1922). The Secret Adversary. ");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    // Check that all the pre-rendered entries are correct, including trailing spaces
+    CPPUNIT_ASSERT_EQUAL(OUString("\n" // starting with an empty paragraph
+                                  "Christie, A. (1922). The Secret Adversary. \n"
+                                  "\n"
+                                  "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. \n"
+                                  ""), // ending with an empty paragraph
+                         aIndexString);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
