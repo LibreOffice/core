@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_8d9a2cc3",
+        "filename": "xmlsecurity/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-12-13T10:36:17Z",
+      "side": 1,
+      "message": "Naming is hard. OTOH if some user sees this message, there is quite probably some serious problem.",
+      "revId": "87c9aa33af334c1eeb9f2fdbd24fd720012ed25f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
