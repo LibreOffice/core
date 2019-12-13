@@ -852,7 +852,7 @@ void TextWindow::GetFocus()
     if ( !mbActivePopup )
     {
         bool bGotoCursor = !mpExtTextView->IsReadOnly();
-        if ( mbFocusSelectionHide && IsReallyVisible() && !mpExtTextView->IsReadOnly()
+        if ( mbFocusSelectionHide && IsReallyVisible()
                 && ( mbSelectOnTab &&
                     (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Focus ) )) )
         {
