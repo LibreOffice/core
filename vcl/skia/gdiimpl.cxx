@@ -343,40 +343,6 @@ void SkiaSalGraphicsImpl::checkSurface()
     }
 }
 
-static SkIRect toSkIRect(const tools::Rectangle& rectangle)
-{
-    return SkIRect::MakeXYWH(rectangle.Left(), rectangle.Top(), rectangle.GetWidth(),
-                             rectangle.GetHeight());
-}
-
-static SkRegion toSkRegion(const vcl::Region& region)
-{
-    if (region.IsEmpty())
-        return SkRegion();
-    if (region.IsRectangle())
-        return SkRegion(toSkIRect(region.GetBoundRect()));
-    // Prefer rectangles to polygons (simpler and also see the addPolygonToPath() comment).
-    if (region.getRegionBand())
-    {
-        SkRegion skRegion;
-        RectangleVector rectangles;
-        region.GetRegionRectangles(rectangles);
-        for (const tools::Rectangle& rect : rectangles)
-            skRegion.op(toSkIRect(rect), SkRegion::kUnion_Op);
-        return skRegion;
-    }
-    else
-    {
-        assert(region.HasPolyPolygonOrB2DPolyPolygon());
-        SkPath path;
-        addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
-        path.setFillType(SkPathFillType::kEvenOdd);
-        SkRegion skRegion;
-        skRegion.setPath(path, SkRegion(path.getBounds().roundOut()));
-        return skRegion;
-    }
-}
-
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 {
     if (mClipRegion == region)
@@ -393,34 +359,23 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     assert(canvas->getSaveCount() == 2); // = there is just one save()
     canvas->restore();
     canvas->save();
-#if 1
-    // TODO
-    // SkCanvas::clipRegion() is buggy with Vulkan, use SkCanvas::clipPath().
-    // https://bugs.chromium.org/p/skia/issues/detail?id=9580
-    // This is further complicated by rectangle->polygon area conversions
-    // being problematic (see addPolygonToPath() comment), so handle rectangles
-    // first before resorting to polygons.
+    SkPath path;
+    // Handle polygons last, since rectangle->polygon area conversions
+    // are problematic (see addPolygonToPath() comment).
     if (region.getRegionBand())
     {
         RectangleVector rectangles;
         region.GetRegionRectangles(rectangles);
-        SkPath path;
         for (const tools::Rectangle& rectangle : rectangles)
             path.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(), rectangle.GetWidth(),
                                           rectangle.GetHeight()));
-        path.setFillType(SkPathFillType::kEvenOdd);
-        canvas->clipPath(path);
     }
-    else if (!region.IsEmpty() && !region.IsRectangle())
+    else if (!region.IsEmpty())
     {
-        SkPath path;
         addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
-        path.setFillType(SkPathFillType::kEvenOdd);
-        canvas->clipPath(path);
     }
-    else
-#endif
-        canvas->clipRegion(toSkRegion(region));
+    path.setFillType(SkPathFillType::kEvenOdd);
+    canvas->clipPath(path);
     return true;
 }
 
