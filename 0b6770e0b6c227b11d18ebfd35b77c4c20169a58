@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_7260d133",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-13T06:14:46Z",
+      "side": 1,
+      "message": "If the offline help is installed it won\u0027t be used either with this link. That\u0027s why we redirect the \"ID\" that can be found as described in line 37. Some references are still to the external site though since documentation is behind the development and IDs are missing.",
+      "range": {
+        "startLine": 72,
+        "startChar": 145,
+        "endLine": 72,
+        "endChar": 204
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_92c6cd16",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-13T06:14:46Z",
+      "side": 1,
+      "message": "While reading it here I think about \"Want to have two columns for just a small portion of the document?...\"",
+      "range": {
+        "startLine": 121,
+        "startChar": 42,
+        "endLine": 121,
+        "endChar": 51
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_52d035ca",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-13T06:14:46Z",
+      "side": 1,
+      "message": "Again a hard-coded link to the online help.",
+      "range": {
+        "startLine": 153,
+        "startChar": 192,
+        "endLine": 153,
+        "endChar": 251
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_b2cbc91c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-13T06:14:46Z",
+      "side": 1,
+      "message": "As commented on BZ, this is not correct. You can hide unconditionally with the checkbox labelled \"Hide\". Or use a condition with a previously created variable.",
+      "range": {
+        "startLine": 153,
+        "startChar": 155,
+        "endLine": 153,
+        "endChar": 166
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
