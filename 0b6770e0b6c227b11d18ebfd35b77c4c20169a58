@@ -187,6 +187,29 @@
       "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_087daa1b",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-13T21:43:33Z",
+      "side": 1,
+      "message": "The point of condition is to have a variable that switch it on/off depending on its value. Apparently, if the variable doesn\u0027t exists you get a false as return and hide is switched off. I would phrase it \"Want to hide some text in a document? Select the text. Use Insert ▸ Section and check ‘Hide’ on the dialog.\"\nhttps://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/hidden_text.html#hd_id3148675 is not a proper link to the offline help. It would be something like \"modules/swriter/ui/autotext/AutoTextDialog\" (without http). Test it with any browser by replacing %PRODUCTVERSION with 6.3 and %LANGUAGENAME by en. I suggest you file an enhancement ticket for documentation.",
+      "range": {
+        "startLine": 153,
+        "startChar": 127,
+        "endLine": 153,
+        "endChar": 185
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
