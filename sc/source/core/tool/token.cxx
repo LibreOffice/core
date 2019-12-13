@@ -2838,8 +2838,8 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
             else
             {
                 // The reference range is truncated on the top.
-                SCCOL nOffset = rDeletedRange.aStart.Row() - rRefRange.aStart.Row();
-                SCCOL nDelta = rRefRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
+                SCROW nOffset = rDeletedRange.aStart.Row() - rRefRange.aStart.Row();
+                SCROW nDelta = rRefRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
                 rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta+nOffset);
                 rRefRange.aStart.IncRow(nOffset);
             }
@@ -2852,7 +2852,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
 
             // Reference is deleted in the middle. Move the last row
             // position upward.
-            SCCOL nDelta = rDeletedRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
+            SCROW nDelta = rDeletedRange.aStart.Row() - rDeletedRange.aEnd.Row() - 1;
             rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta);
         }
         else
@@ -2862,7 +2862,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
                 return STICKY;
 
             // The reference range is truncated on the bottom.
-            SCCOL nDelta = rDeletedRange.aStart.Row() - rRefRange.aEnd.Row() - 1;
+            SCROW nDelta = rDeletedRange.aStart.Row() - rRefRange.aEnd.Row() - 1;
             rRefRange.IncEndRowSticky(&rCxt.mrDoc, nDelta);
         }
         return SHRUNK;
