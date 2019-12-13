@@ -30,22 +30,23 @@
  * text:
    * escape backslash, ie. use \\ to show \
  * uri:
-   * leave uri empty to not show any link
-   * if uri starts with "http" it opens directly in the browser
-   * all other strings are converted for the offline help
-   * find the right uri for e.g. https://help.libreoffice.org/6.2/en-US/text/shared/optionen/01030300.html by
-   * grepping help2file.js after building --with-help=html (cui/ui/optsecuritypage/OptSecurityPage for the example)
+   * if uri is empty, do not show any link
+   * if uri starts with "http", show the link directly in the browser
+   * all other strings are interpreted for the offline help
+   * to find the right uri, grep in instdir/help/hid2file.js after building --with-help=html  
+   * for example, the uri for https://help.libreoffice.org/6.2/en-US/text/shared/optionen/01030300.html is 
+   * cui/ui/optsecuritypage/OptSecurityPage
  * image:
    * leave the image string empty for the default tipoftheday.png
-   * place new images at extra/source/tipoftheday and don't forget to add the files to vcl/Package_tipoftheday.mk
-   * don't exceed 100x120px too much - images don't get scaled
+   * place new images at extra/source/tipoftheday and do not forget to add the files to vcl/Package_tipoftheday.mk
+   * do not exceed 100x120px too much - images do not get scaled
 */
 
 const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 {
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to allow changes to parts of a read-only document in Writer? Insert frames or sections that can authorize changes."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_edit.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File > Print > Impress tab and select Notes under Document > Type."), "", "tipoftheday_i.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use  Help > Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
+     { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use Help > Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Writing a book? %PRODUCTNAME master document lets you manage large documents as a container for individual %PRODUCTNAME Writer files."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/globaldoc.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Explore the ten different functions in the status bar (at the bottom of the document window). Place the cursor over each field for an explanation. If not visible, use View > Status Bar."), "", "tipoftheday_w.png"},
@@ -125,7 +126,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME is developed by a friendly community, made up of hundreds of contributors around the world. Join us with your skills beyond coding."), "https://www.libreoffice.org/community/get-involved/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Left-handed? Enable Tools > Options > Language Settings > Languages > Asian and check Tools > Options > %PRODUCTNAME Writer > View > Ruler > Right-aligned, which displays the scrollbar to the left."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want your chapter titles to always begin a page? Edit Heading1 (paragraph style) > Text Flow > Breaks and check Insert > Page > Before."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Date/time value is just a number of days since a chosen day zero; in the number, integer part represents date, and fractional part is time (elapsed part of a day), with 0.5  representing noon."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Date/time value is just a number of days since a chosen day zero; in the number, integer part represents date, and fractional part is time (elapsed part of a day), with 0.5 representing noon."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Shift+Ctrl+Del deletes from cursor to the end of the current sentence."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use column or row labels in formulas. For example, if you have two columns, ‘Time’ and ‘KM’, use =Time/KM to get minutes per kilometer."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed by the 'marching ants' around cells in Calc? Press escape to stop them; the copied content will remain available for pasting."), "", "tipoftheday_c.png"},
@@ -133,7 +134,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Mix portrait and landscape orientations in a Calc spreadsheet by applying different page styles on sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click on the special character icon in the toolbar to get quick access to favorite and recent characters to insert."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Choose ‘Hierarchical View’ in the Styles sidebar to see the relation between styles."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can use styles to make the tables in your document consistent. Choose one from the predefined per Styles (F11) or  via Table > AutoFormat."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can use styles to make the tables in your document consistent. Choose one from the predefined per Styles (F11) or via Table > AutoFormat."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Configure use of the Ctrl key to open hyperlinks? Tools > Options > %PRODUCTNAME > Security > Options > ‘Ctrl+click required to open hyperlinks’."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You would like to view the calculation of individual elements of a formula, select the respective elements and press F9."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can protect cells with Format > Cells > Protection. To prevent insert, delete, rename, move/copy of sheets use Tools > Protect Sheet."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/guide/cell_protect.html", "tipoftheday_c.png"}, //local help missing
@@ -156,7 +157,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Play music throughout a slideshow by assigning the sound to the first slide transition without clicking the ‘Apply to All Slides’ button."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME doesn't calculate from left to right but respects the order Parentheses > Exponents > Multiplication > Division > Addition > Subtraction."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Get %PRODUCTNAME documentation and free user guide books at:"), "http://www.libreoffice.org/get-help/documentation", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Want to remove all <> at once and keep the text inside? Edit > Find & Replace:  Search = [<>], Replace = blank and check ‘Regular expressions’ under Other options."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/02100001.html", ""}, //local help missing
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to remove all <> at once and keep the text inside? Edit > Find & Replace: Search = [<>], Replace = blank and check ‘Regular expressions’ under Other options."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/02100001.html", ""}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to present a report written with Writer? File > Send > Outline to Presentation automatically creates a slideshow from the outline."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to manage the presentation of hyperlinks in a spreadsheet? Insert them with the HYPERLINK function."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/04060109.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Uncheck Tools > Options > %PRODUCTNAME Calc > View > Zoom: 'Synchronize sheets' so that each sheet in Calc has its own zoom factor."), "", "tipoftheday_c.png"},
@@ -209,7 +210,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Often create one document from another? Consider using a template."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Format > Conditional Formatting > Manage in Calc to find out which cells have been defined with conditional formatting."), "modules/scalc/ui/conditionalformatdialog/ConditionalFormatDialog", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/05120000.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Tools > Detective > Mark Invalid Data highlights all cells in the sheet that contain values outside the validation rules."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/06030800.html", "tipoftheday_c.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at  File > Properties > Font."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Use font embedding for greater interoperability with other office suites at File > Properties > Font."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "To convert a formula into static values you don’t need to copy/paste; use Data > Calculate > Formula to Value."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can reformat all comments in a document by clicking the down arrow in a comment and choose 'Format all Comments'."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want the same layout for the screen display and printing? Check Tools > Options > %PRODUCTNAME Calc > General > Use printer metrics for text formatting."), "", "tipoftheday_c.png"},
