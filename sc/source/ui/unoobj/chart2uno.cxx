@@ -316,7 +316,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                 if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
                     bExternal = true;//lllll todo correct?
                 ScTokenRef pSharedToken(rCell.second->Clone());
-                ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, ScAddress(), bExternal);
+                ScRefTokenHelper::getRangeFromToken(pDoc, aRange, pSharedToken, ScAddress(), bExternal);
                 SCCOL nCol1=0, nCol2=0;
                 SCROW nRow1=0, nRow2=0;
                 SCTAB nTab1=0, nTab2=0;
@@ -2414,7 +2414,7 @@ void ScChart2DataSequence::RefChanged()
             for (const auto& rxToken : m_aTokens)
             {
                 ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(aRange, rxToken, ScAddress()))
+                if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
                     continue;
 
                 m_pDocument->StartListeningArea(aRange, false, m_pValueListener.get());
@@ -2446,7 +2446,7 @@ void ScChart2DataSequence::BuildDataCache()
         else
         {
             ScRange aRange;
-            if (!ScRefTokenHelper::getRangeFromToken(aRange, rxToken, ScAddress()))
+            if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
                 continue;
 
             SCCOL nLastCol = -1;
@@ -2536,7 +2536,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 {
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
     ScRange aRange;
-    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken, ScAddress(), true))
+    if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, pToken, ScAddress(), true))
         return 0;
 
     sal_uInt16 nFileId = pToken->GetIndex();
@@ -2707,7 +2707,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             if (!ScRefTokenHelper::isExternalRef(*itr))
             {
                 ScRange aRange;
-                ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress());
+                ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, *itr, ScAddress());
                 aRanges.push_back(aRange);
                 sal_uInt32 nPos = distance(itrBeg, itr);
                 m_pRangeIndices->push_back(nPos);
@@ -2976,14 +2976,14 @@ namespace {
 class AccumulateRangeSize
 {
 public:
-    AccumulateRangeSize() :
-        mnCols(0), mnRows(0) {}
+    AccumulateRangeSize(const ScDocument* pDoc) :
+        mpDoc(pDoc), mnCols(0), mnRows(0) {}
 
     void operator() (const ScTokenRef& pToken)
     {
         ScRange r;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
-        ScRefTokenHelper::getRangeFromToken(r, pToken, ScAddress(), bExternal);
+        ScRefTokenHelper::getRangeFromToken(mpDoc, r, pToken, ScAddress(), bExternal);
         r.PutInOrder();
         mnCols += r.aEnd.Col() - r.aStart.Col() + 1;
         mnRows += r.aEnd.Row() - r.aStart.Row() + 1;
@@ -2992,6 +2992,7 @@ public:
     SCCOL getCols() const { return mnCols; }
     SCROW getRows() const { return mnRows; }
 private:
+    const ScDocument* mpDoc;
     SCCOL mnCols;
     SCROW mnRows;
 };
@@ -3003,7 +3004,8 @@ private:
 class GenerateLabelStrings
 {
 public:
-    GenerateLabelStrings(sal_Int32 nSize, chart2::data::LabelOrigin eOrigin, bool bColumn) :
+    GenerateLabelStrings(const ScDocument* pDoc, sal_Int32 nSize, chart2::data::LabelOrigin eOrigin, bool bColumn) :
+        mpDoc(pDoc),
         mpLabels(new Sequence<OUString>(nSize)),
         meOrigin(eOrigin),
         mnCount(0),
@@ -3013,7 +3015,7 @@ public:
     {
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         ScRange aRange;
-        ScRefTokenHelper::getRangeFromToken(aRange, pToken, ScAddress(), bExternal);
+        ScRefTokenHelper::getRangeFromToken(mpDoc, aRange, pToken, ScAddress(), bExternal);
         OUString* pArr = mpLabels->getArray();
         if (mbColumn)
         {
@@ -3052,6 +3054,7 @@ public:
     const Sequence<OUString>& getLabels() const { return *mpLabels; }
 
 private:
+    const ScDocument*                   mpDoc;
     shared_ptr< Sequence<OUString> >    mpLabels;
     chart2::data::LabelOrigin           meOrigin;
     sal_Int32                           mnCount;
@@ -3067,7 +3070,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
         throw uno::RuntimeException();
 
     // Determine the total size of all ranges.
-    AccumulateRangeSize func;
+    AccumulateRangeSize func(m_pDocument);
     func = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), func);
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
@@ -3091,7 +3094,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
 
     // Generate label strings based on the info so far.
     sal_Int32 nCount = bColumn ? nCols : nRows;
-    GenerateLabelStrings genLabels(nCount, eOrigin, bColumn);
+    GenerateLabelStrings genLabels(m_pDocument, nCount, eOrigin, bColumn);
     genLabels = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), genLabels);
     Sequence<OUString> aSeq = genLabels.getLabels();
 
@@ -3171,7 +3174,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
         return;
 
     ScRangeList aRanges;
-    ScRefTokenHelper::getRangeListFromTokens(aRanges, m_aTokens, ScAddress());
+    ScRefTokenHelper::getRangeListFromTokens(m_pDocument, aRanges, m_aTokens, ScAddress());
     m_aValueListeners.emplace_back( aListener );
 
     if ( m_aValueListeners.size() == 1 )
@@ -3188,7 +3191,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
             for (const auto& rxToken : m_aTokens)
             {
                 ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(aRange, rxToken, ScAddress()))
+                if (!ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, rxToken, ScAddress()))
                     continue;
 
                 m_pDocument->StartListeningArea( aRange, false, m_pValueListener.get() );

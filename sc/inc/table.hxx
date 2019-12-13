@@ -449,7 +449,7 @@ public:
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {
-                        if (!ValidColRow(rPos.Col(),rPos.Row()))
+                        if (!GetDoc().ValidColRow(rPos.Col(),rPos.Row()))
                             return CELLTYPE_NONE;
                         if (rPos.Col() >= aCol.size())
                             return CELLTYPE_NONE;

@@ -4263,7 +4263,7 @@ void ScInterpreter::ScColumns()
                 OUString aTabName;
                 ScComplexRefData aRef;
                 PopExternalDoubleRef( nFileId, aTabName, aRef);
-                ScRange aAbs = aRef.toAbs(aPos);
+                ScRange aAbs = aRef.toAbs(pDok, aPos);
                 nVal += static_cast<sal_uLong>(aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1) *
                     static_cast<sal_uLong>(aAbs.aEnd.Col() - aAbs.aStart.Col() + 1);
             }
@@ -4320,7 +4320,7 @@ void ScInterpreter::ScRows()
                 OUString aTabName;
                 ScComplexRefData aRef;
                 PopExternalDoubleRef( nFileId, aTabName, aRef);
-                ScRange aAbs = aRef.toAbs(aPos);
+                ScRange aAbs = aRef.toAbs(pDok, aPos);
                 nVal += static_cast<sal_uLong>(aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1) *
                     static_cast<sal_uLong>(aAbs.aEnd.Row() - aAbs.aStart.Row() + 1);
             }
@@ -4367,7 +4367,7 @@ void ScInterpreter::ScSheets()
                     OUString aTabName;
                     ScComplexRefData aRef;
                     PopExternalDoubleRef( nFileId, aTabName, aRef);
-                    ScRange aAbs = aRef.toAbs(aPos);
+                    ScRange aAbs = aRef.toAbs(pDok, aPos);
                     nVal += static_cast<sal_uLong>(aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1);
                 }
                 break;
@@ -4431,7 +4431,7 @@ void ScInterpreter::ScColumn()
                     OUString aTabName;
                     ScSingleRefData aRef;
                     PopExternalSingleRef( nFileId, aTabName, aRef );
-                    ScAddress aAbsRef = aRef.toAbs(aPos);
+                    ScAddress aAbsRef = aRef.toAbs(pDok, aPos);
                     nVal = static_cast<double>( aAbsRef.Col() + 1 );
                 }
                 break;
@@ -4455,7 +4455,7 @@ void ScInterpreter::ScColumn()
                         OUString aTabName;
                         ScComplexRefData aRef;
                         PopExternalDoubleRef( nFileId, aTabName, aRef );
-                        ScRange aAbs = aRef.toAbs(aPos);
+                        ScRange aAbs = aRef.toAbs(pDok, aPos);
                         nCol1 = aAbs.aStart.Col();
                         nCol2 = aAbs.aEnd.Col();
                     }
@@ -4535,7 +4535,7 @@ void ScInterpreter::ScRow()
                     OUString aTabName;
                     ScSingleRefData aRef;
                     PopExternalSingleRef( nFileId, aTabName, aRef );
-                    ScAddress aAbsRef = aRef.toAbs(aPos);
+                    ScAddress aAbsRef = aRef.toAbs(pDok, aPos);
                     nVal = static_cast<double>( aAbsRef.Row() + 1 );
                 }
                 break;
@@ -4558,7 +4558,7 @@ void ScInterpreter::ScRow()
                         OUString aTabName;
                         ScComplexRefData aRef;
                         PopExternalDoubleRef( nFileId, aTabName, aRef );
-                        ScRange aAbs = aRef.toAbs(aPos);
+                        ScRange aAbs = aRef.toAbs(pDok, aPos);
                         nRow1 = aAbs.aStart.Row();
                         nRow2 = aAbs.aEnd.Row();
                     }
@@ -8375,7 +8375,7 @@ void ScInterpreter::ScOffset()
             OUString aTabName;
             ScSingleRefData aRef;
             PopExternalSingleRef(nFileId, aTabName, aRef);
-            ScAddress aAbsRef = aRef.toAbs(aPos);
+            ScAddress aAbsRef = aRef.toAbs(pDok, aPos);
             nCol1 = aAbsRef.Col();
             nRow1 = aAbsRef.Row();
             nTab1 = aAbsRef.Tab();
@@ -8432,7 +8432,7 @@ void ScInterpreter::ScOffset()
             OUString aTabName;
             ScComplexRefData aRef;
             PopExternalDoubleRef(nFileId, aTabName, aRef);
-            ScRange aAbs = aRef.toAbs(aPos);
+            ScRange aAbs = aRef.toAbs(pDok, aPos);
             nCol1 = aAbs.aStart.Col();
             nRow1 = aAbs.aStart.Row();
             nTab1 = aAbs.aStart.Tab();

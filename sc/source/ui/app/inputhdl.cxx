@@ -2203,16 +2203,20 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 {
     bool bNewTable = false;
 
-    if (bModified || !ValidCol(aCursorPos.Col()))
+    if (bModified)
         return false;
 
     if (pActiveViewSh)
     {
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+
+        if (!rDoc.ValidCol(aCursorPos.Col()))
+            return false;
+
         ImplCreateEditEngine();
         UpdateActiveView();
         SyncViews();
 
-        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
 
         const ScMarkData& rMark = pActiveViewSh->GetViewData().GetMarkData();
         ScEditableTester aTester;

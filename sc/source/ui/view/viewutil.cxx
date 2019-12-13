@@ -263,7 +263,7 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc,
     OSL_ENSURE( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, pDoc->MaxRow(), nTab);
-    if (ValidRow(nLastRow))
+    if (pDoc->ValidRow(nLastRow))
         rRange.aEnd.SetRow(nLastRow);
     SCROW nCount = pDoc->CountNonFilteredRows(nStartRow, pDoc->MaxRow(), nTab);
     return static_cast<size_t>(nCount) == nRows && bOneTabOnly;

@@ -318,7 +318,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                         else
                             aSRD.SetColRel(true);
 
-                        aSRD.SetAddress(&GetDocImport().getDoc(), aAddr, aEingPos);
+                        aSRD.SetAddress(GetDocImport().getDoc().GetSheetLimits(), aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
 
@@ -332,7 +332,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                         ScAddress aAddr(static_cast<SCCOL>(nCol & 0xFF), static_cast<SCROW>(nRow), aEingPos.Tab());
                         aSRD.InitAddress(aAddr);
                         aSRD.SetColRel(true);
-                        aSRD.SetAddress(&GetDocImport().getDoc(), aAddr, aEingPos);
+                        aSRD.SetAddress(GetDocImport().getDoc().GetSheetLimits(), aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
 

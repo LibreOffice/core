@@ -1864,7 +1864,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
         rXclPos.mnRow = static_cast<sal_uInt32>(aAbs.Row()) & mnMaxRowMask;
 
         // Update the reference.
-        rRefData.SetAddress(&GetRoot().GetDoc(), aAbs, *mxData->mpScBasePos);
+        rRefData.SetAddress(GetRoot().GetDoc().GetSheetLimits(), aAbs, *mxData->mpScBasePos);
     }
     else
     {

@@ -463,7 +463,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
 void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
                                SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
-    ScRange aAbsRange = rRef.toAbs(rPos);
+    ScRange aAbsRange = rRef.toAbs(pDoc, rPos);
     if( rRef.Ref1.IsColRel() )
     {
         SCCOL nCol = aAbsRange.aStart.Col();
@@ -503,7 +503,7 @@ void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
     }
 
     aAbsRange.PutInOrder();
-    rRef.SetRange(aAbsRange, rPos);
+    rRef.SetRange(pDoc->GetSheetLimits(), aAbsRange, rPos);
 }
 
 void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,

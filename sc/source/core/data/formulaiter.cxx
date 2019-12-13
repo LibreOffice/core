@@ -36,13 +36,13 @@ ScDetectiveRefIter::ScDetectiveRefIter( const ScDocument* pDoc, ScFormulaCell* p
 static bool lcl_ScDetectiveRefIter_SkipRef( const ScDocument* pDoc, formula::FormulaToken* p, const ScAddress& rPos )
 {
     ScSingleRefData& rRef1 = *p->GetSingleRef();
-    ScAddress aAbs1 = rRef1.toAbs(rPos);
+    ScAddress aAbs1 = rRef1.toAbs(pDoc, rPos);
     if (!pDoc->ValidAddress(aAbs1))
         return true;
     if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
     {
         ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
-        ScAddress aAbs2 = rRef2.toAbs(rPos);
+        ScAddress aAbs2 = rRef2.toAbs(pDoc, rPos);
         if (!pDoc->ValidAddress(aAbs2))
             return true;
     }
@@ -56,8 +56,8 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
     if( p )
     {
         SingleDoubleRefProvider aProv( *p );
-        rRange.aStart = aProv.Ref1.toAbs(aPos);
-        rRange.aEnd = aProv.Ref2.toAbs(aPos);
+        rRange.aStart = aProv.Ref1.toAbs(mpDoc, aPos);
+        rRange.aEnd = aProv.Ref2.toAbs(mpDoc, aPos);
         bRet = true;
     }
 

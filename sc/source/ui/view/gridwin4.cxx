@@ -398,7 +398,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
 
-    OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw area too big" );
+    OSL_ENSURE( rDoc.ValidCol(nX2) && rDoc.ValidRow(nY2), "GridWin Draw area too big" );
 
     UpdateVisibleRange();
 

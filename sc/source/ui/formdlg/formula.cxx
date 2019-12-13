@@ -431,7 +431,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
             // position.
             ScTokenArray aArray(&rRefDoc);
             ScComplexRefData aRefData;
-            aRefData.InitRangeRel(rRef, m_CursorPos);
+            aRefData.InitRangeRel(&rRefDoc, rRef, m_CursorPos);
             bool bSingle = aRefData.Ref1 == aRefData.Ref2;
             if (m_CursorPos.Tab() != rRef.aStart.Tab())
             {

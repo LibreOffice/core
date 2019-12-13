@@ -88,13 +88,13 @@ const SCCOL SC_TABSTART_NONE  = SCCOL_MAX;
 
 const SCROW MAXROW_30         = 8191;
 
-[[nodiscard]] inline bool ValidCol( SCCOL nCol, SCCOL nMaxCol = MAXCOL )
+[[nodiscard]] inline bool ValidCol( SCCOL nCol, SCCOL nMaxCol )
 {
     assert(nMaxCol == MAXCOL); // temporary to debug jumbo sheets work
     return nCol >= 0 && nCol <= nMaxCol;
 }
 
-[[nodiscard]] inline bool ValidRow( SCROW nRow, SCROW nMaxRow = MAXROW)
+[[nodiscard]] inline bool ValidRow( SCROW nRow, SCROW nMaxRow)
 {
     assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return nRow >= 0 && nRow <= nMaxRow;
@@ -110,25 +110,25 @@ const SCROW MAXROW_30         = 8191;
     return nTab >= 0 && nTab <= nMaxTab;
 }
 
-[[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol, SCROW nMaxRow )
 {
     assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow);
 }
 
-[[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol, SCROW nMaxRow )
 {
     assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow) && ValidTab( nTab);
 }
 
-[[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol = MAXCOL )
+[[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol )
 {
     assert(nMaxCol == MAXCOL); // temporary to debug jumbo sheets work
     return nCol < 0 ? 0 : (nCol > nMaxCol ? nMaxCol : nCol);
 }
 
-[[nodiscard]] inline SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow )
 {
     assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return nRow < 0 ? 0 : (nRow > nMaxRow ? nMaxRow : nRow);

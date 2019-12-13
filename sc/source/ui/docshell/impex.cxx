@@ -911,7 +911,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 }
                 if (*p)
                     ++p;
-                if (ValidCol(nCol) && ValidRow(nRow) )
+                if (pDoc->ValidCol(nCol) && pDoc->ValidRow(nRow) )
                 {
                     if( bSingle )
                     {
@@ -923,9 +923,9 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 }
                 else                            // too many columns/rows
                 {
-                    if (!ValidRow(nRow))
+                    if (!pDoc->ValidRow(nRow))
                         bOverflowRow = true;    // display warning on import
-                    if (!ValidCol(nCol))
+                    if (!pDoc->ValidCol(nCol))
                         bOverflowCol = true;    // display warning on import
                 }
                 ++nCol;
@@ -965,7 +965,7 @@ static bool lcl_PutString(
 {
     ScDocument* pDoc = &rDocImport.getDoc();
     bool bMultiLine = false;
-    if ( nColFormat == SC_COL_SKIP || !ValidCol(nCol) || !ValidRow(nRow) )
+    if ( nColFormat == SC_COL_SKIP || !pDoc->ValidCol(nCol) || !pDoc->ValidRow(nRow) )
         return bMultiLine;
     if ( rStr.isEmpty() )
     {
