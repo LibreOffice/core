@@ -96,6 +96,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/lineend.hxx>
 #include <sal/log.hxx>
 
 
@@ -1335,6 +1336,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     if (m_aTextAppendStack.empty())
         return;
+
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend > xTextAppend(rAppendContext.xTextAppend);
 #ifdef DBG_UTIL
@@ -1800,6 +1802,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         SetIsPreviousParagraphFramed(false);
 
     m_bParaChanged = false;
+    m_bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) )
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
@@ -1883,7 +1886,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                         assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
-                        if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
+                        if (m_bStartIndex || m_bStartGenericField)
                             xTOCTextCursor->goLeft(1, false);
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                         SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
@@ -4101,40 +4104,81 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
     return aNewLevel;
 }
 
+static OUString getNodeText(const uno::Reference<text::XTextAppend>& xTextAppend,
+                            const css::uno::Reference<css::text::XTextRange>& xRangeInParagraph,
+                            const css::uno::Reference<css::text::XTextRange>& xRangeEnd = nullptr)
+{
+    OUString sResult;
+    if (!xTextAppend || !xRangeInParagraph)
+        return sResult;
+
+    try
+    {
+        uno::Reference<text::XParagraphCursor> xCursor(
+            xTextAppend->createTextCursorByRange(xRangeInParagraph), uno::UNO_QUERY_THROW);
+        if (!xCursor.is())
+            return sResult;
+
+        // the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
+        xCursor->gotoStartOfParagraph(false);
+        if (xRangeEnd)
+            xCursor->gotoRange(xRangeEnd, true);
+        else
+            xCursor->gotoEnd(true);
+
+        // Remove newline in case the paragraph after this new section is already inserted
+        sResult = convertLineEnd(xCursor->getString(), LineEnd::LINEEND_LF);
+        if (sResult.endsWith("\n"))
+            sResult = sResult.copy(0, sResult.getLength() - 1);
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "getParagraphText:");
+    }
+
+    return sResult;
+
+}
+
 /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
 OUString DomainMapper_Impl::extractTocTitle()
 {
-    if (!m_xStdEntryStart.is())
-        return OUString();
+    return getNodeText(m_aTextAppendStack.top().xTextAppend, m_xStdEntryStart,
+                       m_aTextAppendStack.top().xInsertPosition);
+}
 
-    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(!xTextAppend.is())
-        return OUString();
-
-    // try-catch was added in the same way as inside appendTextSectionAfter()
+css::uno::Reference<css::beans::XPropertySet>
+DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
+{
+    if (m_bParaChanged)
+    {
+        finishParagraph(GetTopContextOfType(CONTEXT_PARAGRAPH), false); // resets m_bParaChanged
+        PopProperties(CONTEXT_PARAGRAPH);
+        PushProperties(CONTEXT_PARAGRAPH);
+        SetIsFirstRun(true);
+        // The first paragraph of the index that is continuation of just finished one needs to be
+        // removed when finished (unless more content will arrive, which will set m_bParaChanged)
+        m_bRemoveThisParagraph = true;
+    }
+    auto xTextAppend = GetTopTextAppend();
+    auto xTextRange = xTextAppend->getEnd();
+    auto xRet = createSectionForRange(xTextRange, xTextRange, sServiceName, false);
     try
     {
-        uno::Reference< text::XParagraphCursor > xCursor( xTextAppend->createTextCursorByRange( m_xStdEntryStart ), uno::UNO_QUERY_THROW);
-        if (!xCursor.is())
-            return OUString();
-
-        //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
-        xCursor->gotoStartOfParagraph( false );
-        if (m_aTextAppendStack.top().xInsertPosition.is())
-            xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
-        else
-            xCursor->gotoEnd( true );
-
-        //the paragraph after this new section is already inserted
-        xCursor->goLeft(1, true);
-
-        return xCursor->getString();
+        m_bStartedTOC = true;
+        uno::Reference<text::XTextCursor> xTOCTextCursor
+            = xTextRange->getText()->createTextCursor();
+        assert(xTOCTextCursor.is());
+        xTOCTextCursor->gotoEnd(false);
+        mxTOCTextCursor = xTOCTextCursor;
+        m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
     }
-    catch(const uno::Exception&)
+    catch (const uno::Exception&)
     {
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
+            "DomainMapper_Impl::StartIndexSectionChecked:");
     }
-
-    return OUString();
+    return xRet;
 }
 
 void DomainMapper_Impl::handleToc
@@ -4259,34 +4303,19 @@ void DomainMapper_Impl::handleToc
 
     if (m_xTextFactory.is() && ! m_aTextAppendStack.empty())
     {
+        const auto& xTextAppend = GetTopTextAppend();
         if (aTocTitle.isEmpty() || bTableOfFigures)
         {
             // reset marker of the TOC title
-            m_xStdEntryStart = uno::Reference< text::XTextRange >();
+            m_xStdEntryStart.clear();
 
-            xTOC.set(
-                    m_xTextFactory->createInstance
-                    ( bTableOfFigures ?
-                      "com.sun.star.text.IllustrationsIndex"
-                      : sTOCServiceName),
-                    uno::UNO_QUERY_THROW);
+            xTOC = StartIndexSectionChecked(bTableOfFigures ? "com.sun.star.text.IllustrationsIndex"
+                                                            : sTOCServiceName);
 
-            OUString const sMarker("Y");
-            //insert index
-            uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
-            uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-            if (xTextAppend.is())
-            {
-                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-                uno::Reference< text::XText > xText = xTextAppend->getText();
-                if(xCrsr.is() && xText.is())
-                {
-                    xCrsr->gotoEnd(false);
-                    xText->insertString(xCrsr, sMarker, false);
-                    xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, false);
-                    xTOCMarkerCursor = xCrsr;
-                }
-            }
+            auto xTextCursor = xTextAppend->getText()->createTextCursor();
+            if (xTextCursor)
+                xTextCursor->gotoEnd(false);
+            xTOCMarkerCursor = xTextCursor;
         }
         else
         {
@@ -4295,7 +4324,6 @@ void DomainMapper_Impl::handleToc
             xTOC = createSectionForRange(m_xStdEntryStart, xTextRangeEndOfTocHeader, sTOCServiceName, false);
 
             // init [xTOCMarkerCursor]
-            uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
             uno::Reference< text::XText > xText = xTextAppend->getText();
             uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
             xTOCMarkerCursor = xCrsr;
@@ -4443,14 +4471,9 @@ void DomainMapper_Impl::handleBibliography
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
-    uno::Reference< beans::XPropertySet > xTOC;
     m_bStartTOC = true;
     m_bStartBibliography = true;
-    if (m_xTextFactory.is())
-        xTOC.set(
-                m_xTextFactory->createInstance(
-                sTOCServiceName),
-                uno::UNO_QUERY_THROW);
+    auto xTOC = StartIndexSectionChecked(sTOCServiceName);
     if (xTOC.is())
         xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
 
@@ -4465,18 +4488,12 @@ void DomainMapper_Impl::handleIndex
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
-    uno::Reference< beans::XPropertySet > xTOC;
     m_bStartTOC = true;
     m_bStartIndex = true;
     OUString sValue;
     OUString sIndexEntryType = "I"; // Default value for field flag '\f' is 'I'.
 
-
-    if (m_xTextFactory.is())
-        xTOC.set(
-                m_xTextFactory->createInstance(
-                sTOCServiceName),
-                uno::UNO_QUERY_THROW);
+    auto xTOC = StartIndexSectionChecked(sTOCServiceName);
     if (xTOC.is())
     {
         xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
@@ -5628,33 +5645,25 @@ void DomainMapper_Impl::PopFieldContext()
                 uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
                 if( xToInsert.is() )
                 {
-                    if(xTOCMarkerCursor.is() || m_bStartIndex || m_bStartBibliography)
-                    {
-                        if (m_bStartIndex || m_bStartBibliography)
-                        {
-                            if (mxTOCTextCursor.is())
-                            {
-                                mxTOCTextCursor->goLeft(1,true);
-                                mxTOCTextCursor->setString(OUString());
-                            }
-                            xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
-                        }
-                        else
-                        {
-                            if (!m_xStdEntryStart.is())
-                            {
-                                xTOCMarkerCursor->goLeft(1,true);
-                                xTOCMarkerCursor->setString(OUString());
-                                xTOCMarkerCursor->goLeft(1,true);
-                                xTOCMarkerCursor->setString(OUString());
-                            }
-                        }
-                    }
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
+                        if (!m_bParaChanged)
+                        {
+                            // End of index on a new paragraph - this paragraph should not be part
+                            // of index
+                            auto xCursor
+                                = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
+                            xCursor->gotoEnd(false);
+                            xCursor->goLeft(1, true);
+                            // delete
+                            xCursor->setString(OUString());
+                            // But a new paragraph should be started after the index instead
+                            xTextAppend->finishParagraph(css::beans::PropertyValues());
+                        }
                         m_bStartedTOC = false;
                         m_aTextAppendStack.pop();
                         m_bTextInserted = false;
+                        m_bParaChanged = true; // the paragraph must stay anyway
                     }
                     m_bStartTOC = false;
                     m_bStartIndex = false;

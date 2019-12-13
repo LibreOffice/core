@@ -282,9 +282,9 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_MultipleColumns,"alphabeticalInde
 
     // check for section breaks after and before the Index Section
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:type","val","continuous");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:type","val","continuous");
     // check for "w:space" attribute for the columns in Section Properties
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:cols/w:col[1]","space","720");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:cols/w:col[1]","space","720");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
@@ -353,15 +353,13 @@ DECLARE_OOXMLEXPORT_TEST(testGenericTextField, "Unsupportedtextfields.docx")
     xmlXPathFreeObject(pXmlObj);
 }
 
-DECLARE_OOXMLEXPORT_TEST(test_FieldType, "99_Fields.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_FieldType, "99_Fields.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // Checking for three field types (BIBLIOGRAPHY, BIDIOUTLINE, CITATION) in sequence
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:r[2]/w:instrText[1]",1);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[5]/w:r[2]/w:instrText[1]",1);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p/w:sdt/w:sdtContent/w:r[2]/w:instrText[1]",1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtContent/w:r[2]/w:instrText");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
