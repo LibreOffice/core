@@ -72,6 +72,8 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
 
+    std::shared_ptr<weld::MessageDialog> m_xMessageBox;
+
     void    Init();
     bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
