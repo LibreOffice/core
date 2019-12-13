@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LibreOffice Viewer</string>
+    <string name="app_name_settings">LibreOffice-Viewer-Einstellungen</string>
+
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="app_version">Version: %1$s\nBuild ID: %2$s</string>
+    <string name="app_description">LibreOffice Viewer ist ein Dokumentenbetrachter, der auf LibreOffice basiert.</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
+    <string name="app_vendor">Dieses Release wurde bereitgestellt durch $VENDOR.</string>
+    <string name="temp_file_saving_disabled">Diese Datei ist schreibgeschützt, Speichern ist deaktiviert.</string>
+
+    <string name="about_license">Lizenz anzeigen</string>
+    <string name="about_notice">Hinweise anzeigen</string>
+    <string name="about_moreinfo">Weitere Informationen</string>
+    <string name="back_again_to_quit">Zum Beenden noch einmal \'zurück\' drücken</string>
+
+    <string name="new_textdocument">Neues Textdokument</string>
+    <string name="new_presentation">Neue Präsentation</string>
+    <string name="new_spreadsheet">Neues Tabellendokument</string>
+    <string name="new_drawing">Neue Zeichnung</string>
+    <string name="default_document_name">unbenannt</string>
+
+    <string name="browser_app_name">LibreOffice Browser</string>
+    <string name="menu_search">Suchen</string>
+    <string name="list_view">Liste</string>
+    <string name="grid_view">Gitter</string>
+    <string name="filter">Filtern nach</string>
+    <string name="search_not_found">Suchbegriff nicht gefunden</string>
+    <string name="sort">Sortieren nach</string>
+    <string name="sort_smallest">Kleinste zuerst</string>
+    <string name="sort_largest">Größte zuerst</string>
+    <string name="sort_az">A-Z</string>
+    <string name="sort_za">Z-A</string>
+    <string name="sort_oldest">Älteste zuerst</string>
+    <string name="sort_newest">Neueste zuerst</string>
+    <string name="menu_sort_size">Nach Größe sortieren</string>
+    <string name="menu_sort_az">Von A bis Z sortieren</string>
+    <string name="menu_sort_modified">Nach Datum sortieren</string>
+    <string name="menu_preferences">Einstellungen</string>
+    <string name="file_icon_desc">Datei-Icon</string>
+    <string name="title_recents">Zuletzt verwendete Dateien</string>
+    <string name="title_browser">Alle Dateien</string>
+    <!-- Pref keys as resources ; Not currently used -->
+    <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
+    <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
+    <string name="pref_category_explorer">Dateimanager-Einstellungen</string>
+    <string name="pref_category_general">Allgemein</string>
+    <string name="pref_experimental_editing">Experimenteller Modus</string>
+    <string name="pref_experimental_editing_summary">Den experimentellen Editier-Modus aktivieren. Verwendung auf eigene Gefahr.</string>
+    <string name="pref_show_hidden_files">Versteckte Dateien/Ordner</string>
+    <string name="pref_show_hidden_files_summary">Anzeige versteckter Dateien/Ordner aktivieren</string>
+    <string name="pref_developer_mode">Entwickler-Modus</string>
+    <string name="pref_developer_mode_summary">Entwickler-Modus, in dem in der App UNO-Kommandos gesendet werden können. Verwendung auf eigene Gefahr.</string>
+
+    <string name="action_about">Info</string>
+    <string name="action_parts">Abschnitte</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="open">Öffnen</string>
+    <string name="share">Teilen</string>
+    <string name="share_via">Teilen via</string>
+
+    <!-- Document browser filters -->
+    <string name="filter_everything">Alles</string>
+    <string name="filter_documents">Dokumente</string>
+    <string name="filter_spreadsheets">Tabellendokumente</string>
+    <string name="filter_presentations">Präsentationen</string>
+    <string name="filter_drawings">Zeichnungen</string>
+
+    <!-- Document provider names -->
+    <string name="document_locations">Dokumentenorte</string>
+    <string name="close_document_locations">Dokumentenorte schließen</string>
+    <string name="local_documents">Dokumentenverzeichnis</string>
+    <string name="local_file_system">Lokales Dateisystem</string>
+    <string name="external_sd_file_system">Externe SD</string>
+    <string name="otg_file_system">OTG-Gerät (experimentell)</string>
+    <string name="owncloud">Entfernter Server</string>
+    <string name="usb_connected_configure">USB verbunden, richten Sie Ihr Gerät ein.</string>
+
+    <string name="owncloud_wrong_connection">Verbindung mit dem ownCloud-Server nicht möglich. Prüfen Sie die Einstellungen.</string>
+    <string name="owncloud_unauthorized">Anmeldung am ownCloud-Server nicht möglich. Prüfen Sie die Einstellungen.</string>
+    <string name="owncloud_unspecified_error">Nicht näher spezifizierter Fehler beim Verbindungsaufbau zum ownCloud-Server. Prüfen Sie die Einstellungen und/oder versuchen Sie es später.</string>
+
+    <string name="ext_document_provider_error">Ungültige Wurzel-Datei. Prüfen Sie die SD-Karten-Einstellungen.</string>
+    <string name="legacy_extsd_missing_error">Ungültige Wurzel-Datei. Prüfen Sie die externe SD-Karte und/oder die Einstellungen</string>
+    <string name="otg_missing_error">Ungültige Wurzel-Datei. Prüfen Sie Ihr OTG-Gerät und/oder die Einstellungen.</string>
+
+    <!-- Edit action names -->
+    <string name="action_bold">Fett</string>
+    <string name="action_underline">Unterstrichen</string>
+    <string name="action_italic">Kursiv</string>
+    <string name="action_strikeout">Durchgestrichen</string>
+    <string name="action_keyboard">Tastatur anzeigen</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_fromat">Format anwenden</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_UNO_commands">UNO-Kommando senden</string>
+
+    <!-- Feedback messages -->
+    <string name="message_saved">Speichern beendet</string>
+    <string name="message_saving">Dokument wird gespeichert…</string>
+    <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
+    <string name="create_new_file_success">"Neue Datei angelegt - "</string>
+    <string name="create_new_file_error">Neue Datei konnte nicht angelegt weden, bitte Prüfen Sie den eingegeben Dateinamen.</string>
+
+    <!-- Document provider settings -->
+    <string name="storage_provider_settings">Speicheranbieter-Einstellungen</string>
+    <string name="owncloud_settings">ownCloud-Einstellungen</string>
+    <string name="physical_storage_settings">Einstellungen für physikalischen Speicher</string>
+    <string name="external_sd_path">Pfad zur exernen SD-Karte</string>
+    <string name="otg_device_path">Pfad zum OTG-Gerät</string>
+    <string name="otg_warning">Experimentelles Feature: Nur verwenden, wenn OTG-Gerät beschreibbar ist..</string>
+    <string name="server_url">Server-URL</string>
+    <string name="server_url_and_port">URL und Port des ownCloud-Servers.</string>
+    <string name="user_name">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="action_undo">Rückgängig</string>
+    <string name="action_redo">Wiederherstellen</string>
+
+    <!-- Directory browser strings -->
+    <string name="up_description">Nach oben</string>
+    <string name="confirm_label">Bestätigen</string>
+    <string name="cancel_label">Abbrechen</string>
+    <string name="search_label">Los</string>
+    <string name="directory_browser_label">Verzeichnis auswählen</string>
+    <string name="bad_directory">Ungültiger Verzeichnispfad</string>
+    <string name="current_dir">Aktuelles Verzeichnis: %1$s</string>
+
+    <!-- Save Alert dialog strings -->
+    <string name="save_alert_dialog_title">Dokument vor dem Schließen speichern?</string>
+    <string name="save_document">SPEICHERN</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="no_save_document">NEIN</string>
+
+    <!-- Create New Document Dialog Strings -->
+    <string name="create_new_document_title">Dateiname eingeben</string>
+    <string name="action_create">ANLEGEN</string>
+
+    <!-- Presentation Mode Strings -->
+    <string name="action_presentation">Präsentation</string>
+    <string name="action_add_slide">Folie hinzufügen</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Ihr Android-Gerät unterstützt keine In-App-SVG-Präsentation. Wir haben den Link zur Präsentation in die Zwischenablage kopiert. Drücken Sie den Home-Button, öffnen Sie einen modernen Web-Browser, fügen Sie in die Adressleiste ein und los.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="slideshow_action_back">Zurück</string>
+
+    <!-- Calc Header Menu Strings -->
+    <string name="calc_insert_before">Einfügen</string>
+    <string name="calc_delete">Löschen</string>
+    <string name="calc_hide">Verstecken</string>
+    <string name="calc_show">Anzeigen</string>
+    <string name="calc_optimal_length">Optimale Länge</string>
+    <string name="calc_adjust_length">Länge Anpassen</string>
+    <string name="calc_adjust_height">Höhe Anpassen</string>
+    <string name="calc_adjust_width">Breit Anpassen</string>
+    <string name="calc_optimal_height">Optimale Höhe</string>
+    <string name="calc_optimal_width">Optimale Breite</string>
+    <string name="calc_optimal_length_confirm">OK</string>
+    <string name="calc_optimal_length_default_text">Geben Sie die zusätzliche Höhe in 100tel/mm ein</string>
+    <string name="calc_alert_double_click_optimal_length">Hinweis: Doppeltes Antippen auf eine Überschrift setzt die optimale Breite/Höhe.</string>
+    <string name="action_add_worksheet">Arbeitsblatt hinzufügen</string>
+
+    <!-- Password dialog strings -->
+    <string name="action_pwd_dialog_OK">OK</string>
+    <string name="action_pwd_dialog_cancel">Abbrechen</string>
+    <string name="action_pwd_dialog_title">Bitte Passwort eingeben</string>
+
+    <!-- Insert Image Strings -->
+    <string name="take_photo">Foto Machen</string>
+    <string name="select_photo">Foto Auswählen</string>
+    <string name="select_photo_title">Bild Auswählen</string>
+    <string name="no_camera_found">Keine Kamera gefunden</string>
+    <string name="compress_photo_smallest_size">Kleinste Größe</string>
+    <string name="compress_photo_medium_size">Mittlere Größe</string>
+    <string name="compress_photo_max_quality">Maximale Qualität</string>
+    <string name="compress_photo_no_compress">Nicht komprimieren</string>
+    <string name="compress_photo_title">Wollen Sie das Foto komprimieren?</string>
+
+    <!-- Clipboard Actions -->
+    <string name="action_copy">Kopieren</string>
+    <string name="action_paste">Einfügen</string>
+    <string name="action_cut">Ausschneiden</string>
+    <string name="action_back">Zurück</string>
+    <string name="action_text_copied">Text in die Zwischenlage kopiert</string>
+    <string name="insert_table">Tabelle einfügen</string>
+    <string name="select_insert_options">Einfügeoptionen auswählen:</string>
+    <string name="select_delete_options">Löschoptionen auswählen:</string>
+    <string name="action_rename_worksheet">Arbeitsblatt umbenennen</string>
+    <string name="action_delete_worksheet">Arbeitsblatt löschen</string>
+    <string name="action_delete_slide">Folie löschen</string>
+    <string name="name_already_used">Der angegebene Name wird bereits verwendet.</string>
+    <string name="part_name_changed">Der Name für den Abschnitt wurde geändert.</string>
+    <string name="part_deleted">Der Abschnitt wurde gelöscht.</string>
+    <string-array name="insertrowscolumns">
+        <item>Zeilen Davor Einfügen</item>
+        <item>Zeilen Dahinter Einfügen</item>
+        <item>Spalten Davor Einfügen</item>
+        <item>Spalten Danach Einfügen</item>
+        <item>Tabelle Einfügen</item>
+    </string-array>
+    <string-array name="deleterowcolumns">
+        <item>Zeilen Löschen</item>
+        <item>Spalten Löschen</item>
+        <item>Tabelle Löschen</item>
+    </string-array>
+
+    <!-- UNO cmd controller Strings -->
+    <string name="UNO_commands_string_hint">UNO-Kommando</string>
+    <string name="UNO_commands_string_type_hint">Typ</string>
+    <string name="UNO_commands_string_value_hint">Wert</string>
+    <string name="UNO_commands_string_parent_value_hint">Wert des Parents</string>
+    <string name="action_exportToPDF">Als PDF Exportieren</string>
+    <string name="action_print">Drucken</string>
+    <string name="tabhost_character">Zeichen</string>
+    <string name="tabhost_paragraph">Absatz</string>
+    <string name="tabhost_insert">Einfügen</string>
+    <string name="tabhost_style">Format</string>
+    <string name="alert_ok">OK</string>
+    <string name="alert_cancel">Abbrechen</string>
+    <string name="unable_to_go_further">Kann nicht weiter gehen.</string>
+    <string name="current_uno_command">Aktuelles UNO-Kommando</string>
+    <string name="pref_sort_summary">Sortiermodus für Dateien auswählen: A-Z, nach Größe oder nach Datum.</string>
+    <string name="pref_viewmode_summary">Datein als Gitter oder als Liste anzeigen.</string>
+    <string name="pref_file_explorer_title">Dateimanager-Layout</string>
+    <string name="pref_sort_title">Datei-Reihenfolge</string>
+    <string name="pref_filter_title">Standard-Dateifilter</string>
+    <string name="pref_filter_summary">Wählen Sie, welcher Dateifilter standardmäßig verwendet werden soll.</string>
+    <string name="display_language">Anzeigesprache</string>
+    <string name="display_language_summary">Wählen Sie die Standard-Anzeigesprache</string>
+    <string name="unable_to_export_pdf">PDF-Export nicht möglich</string>
+    <string name="pdf_exported_at">PDF exportiert nach</string>
+    <string name="printing_not_supported">Ihr Gerät unterstützt Drucken nicht</string>
+    <string name="error">Fehler</string>
+    <string name="enter_part_name">Name für Abschnitt eingeben</string>
+    <string name="bmp_null">Bmp ist null!</string>
+    <string name="directory_not_saved">Verzeichnis nicht gespeichert.</string>
+    <string name="page">Seite</string>
+    <string name="sheet">Arbeitsblatt</string>
+    <string name="slide">Folie</string>
+    <string name="part">Abschnitt</string>
+    <string name="highlight_color">Hervorhebungs-Farbe</string>
+    <string name="font_color">Schriftfarbe</string>
+    <string name="action_rename_slide">Folie umbenennen</string>
+</resources>
