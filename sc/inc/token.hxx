@@ -60,10 +60,11 @@ formula::FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, formula::
 class ScSingleRefToken final : public formula::FormulaToken
 {
 private:
+    ScSheetLimits&    mrSheetLimits; // don't use rtl::Reference to avoid ref-counting traffic
     ScSingleRefData   aSingleRef;
 public:
-                                ScSingleRefToken( ScSheetLimits& , const ScSingleRefData& r, OpCode e = ocPush ) :
-                                    FormulaToken( formula::svSingleRef, e ), aSingleRef( r ) {}
+                                ScSingleRefToken( ScSheetLimits& rLimits, const ScSingleRefData& r, OpCode e = ocPush ) :
+                                    FormulaToken( formula::svSingleRef, e ), mrSheetLimits(rLimits), aSingleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const override;
@@ -74,10 +75,11 @@ public:
 class ScDoubleRefToken final : public formula::FormulaToken
 {
 private:
+    ScSheetLimits&    mrSheetLimits; // don't use rtl::Reference to avoid ref-counting traffic
     ScComplexRefData  aDoubleRef;
 public:
-                                ScDoubleRefToken( ScSheetLimits&, const ScComplexRefData& r, OpCode e = ocPush  ) :
-                                    FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
+                                ScDoubleRefToken( ScSheetLimits& rLimits, const ScComplexRefData& r, OpCode e = ocPush  ) :
+                                    FormulaToken( formula::svDoubleRef, e ), mrSheetLimits(rLimits), aDoubleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
     virtual const ScComplexRefData* GetDoubleRef() const override;

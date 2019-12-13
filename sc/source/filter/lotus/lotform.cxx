@@ -25,6 +25,7 @@
 #include <root.hxx>
 #include <ftools.hxx>
 #include <tool.h>
+#include <document.hxx>
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
@@ -332,7 +333,7 @@ void LotusToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_uInt
     rSRD.SetTabRel( ( ( nRelBit & 0x04) != 0 ) || !b3D );
     rSRD.SetFlag3D( b3D );
 
-    rSRD.SetAddress(pDoc, ScAddress(nCol, nRow, nTab), aEingPos);
+    rSRD.SetAddress(pDoc->GetSheetLimits(), ScAddress(nCol, nRow, nTab), aEingPos);
 }
 
 void LotusToSc::IncToken( TokenId &rParam )

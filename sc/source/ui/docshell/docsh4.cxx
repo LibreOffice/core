@@ -204,7 +204,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 SCTAB nTab = static_cast<const SfxInt16Item*>(pTabItem)->GetValue() - 1;
 
                 SCTAB nTabCount = m_aDocument.GetTableCount();
-                if ( ValidCol(nCol) && ValidRow(nRow) && ValidTab(nTab,nTabCount) )
+                if ( m_aDocument.ValidCol(nCol) && m_aDocument.ValidRow(nRow) && ValidTab(nTab,nTabCount) )
                 {
                     if ( m_aDocument.IsBlockEditable( nTab, nCol,nRow, nCol, nRow ) )
                     {

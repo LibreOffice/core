@@ -121,6 +121,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
 }
 
 bool ScRefTokenHelper::getRangeFromToken(
+    const ScDocument* pDoc,
     ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal)
 {
     StackVar eType = pToken->GetType();
@@ -134,7 +135,7 @@ bool ScRefTokenHelper::getRangeFromToken(
                 return false;
 
             const ScSingleRefData& rRefData = *pToken->GetSingleRef();
-            rRange.aStart = rRefData.toAbs(rPos);
+            rRange.aStart = rRefData.toAbs(pDoc, rPos);
             rRange.aEnd = rRange.aStart;
             return true;
         }
@@ -146,7 +147,7 @@ bool ScRefTokenHelper::getRangeFromToken(
                 return false;
 
             const ScComplexRefData& rRefData = *pToken->GetDoubleRef();
-            rRange = rRefData.toAbs(rPos);
+            rRange = rRefData.toAbs(pDoc, rPos);
             return true;
         }
         default:
@@ -156,12 +157,12 @@ bool ScRefTokenHelper::getRangeFromToken(
 }
 
 void ScRefTokenHelper::getRangeListFromTokens(
-    ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens, const ScAddress& rPos)
+    const ScDocument* pDoc, ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens, const ScAddress& rPos)
 {
     for (const auto& rToken : rTokens)
     {
         ScRange aRange;
-        getRangeFromToken(aRange, rToken, rPos);
+        getRangeFromToken(pDoc, aRange, rToken, rPos);
         rRangeList.push_back(aRange);
     }
 }
@@ -223,6 +224,7 @@ bool ScRefTokenHelper::isExternalRef(const ScTokenRef& pToken)
 }
 
 bool ScRefTokenHelper::intersects(
+    const ScDocument* pDoc,
     const vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
 {
     if (!isRef(pToken))
@@ -232,7 +234,7 @@ bool ScRefTokenHelper::intersects(
     sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
 
     ScRange aRange;
-    getRangeFromToken(aRange, pToken, rPos, bExternal);
+    getRangeFromToken(pDoc, aRange, pToken, rPos, bExternal);
 
     for (const ScTokenRef& p : rTokens)
     {
@@ -243,7 +245,7 @@ bool ScRefTokenHelper::intersects(
             continue;
 
         ScRange aRange2;
-        getRangeFromToken(aRange2, p, rPos, bExternal);
+        getRangeFromToken(pDoc, aRange2, p, rPos, bExternal);
 
         if (bExternal && nFileId != p->GetIndex())
             // different external file
@@ -341,7 +343,7 @@ private:
             if (!ScRefTokenHelper::getDoubleRefDataFromToken(aOldData, pOldToken))
                 continue;
 
-            ScRange aOld = aOldData.toAbs(rPos), aNew = aData.toAbs(rPos);
+            ScRange aOld = aOldData.toAbs(pDoc, rPos), aNew = aData.toAbs(pDoc, rPos);
 
             if (aNew.aStart.Tab() != aOld.aStart.Tab() || aNew.aEnd.Tab() != aOld.aEnd.Tab())
                 // Sheet ranges differ.
@@ -366,7 +368,7 @@ private:
                 {
                     aNew.aStart.SetCol(nNewMin);
                     aNew.aEnd.SetCol(nNewMax);
-                    aNewData.SetRange(aNew, rPos);
+                    aNewData.SetRange(pDoc->GetSheetLimits(), aNew, rPos);
                 }
             }
             else if (bSameCols)
@@ -380,7 +382,7 @@ private:
                 {
                     aNew.aStart.SetRow(nNewMin);
                     aNew.aEnd.SetRow(nNewMax);
-                    aNewData.SetRange(aNew, rPos);
+                    aNewData.SetRange(pDoc->GetSheetLimits(), aNew, rPos);
                 }
             }
 

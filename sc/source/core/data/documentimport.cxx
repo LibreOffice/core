@@ -407,7 +407,7 @@ void ScDocumentImport::setMatrixCells(
     aRefData.SetColRel(true);
     aRefData.SetRowRel(true);
     aRefData.SetTabRel(true);
-    aRefData.SetAddress(rBasePos, rBasePos);
+    aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, rBasePos);
 
     ScTokenArray aArr(&mpImpl->mrDoc); // consists only of one single reference token.
     formula::FormulaToken* t = aArr.AddMatrixSingleReference(aRefData);
@@ -418,7 +418,7 @@ void ScDocumentImport::setMatrixCells(
         // Token array must be cloned so that each formula cell receives its own copy.
         aPos.SetRow(nRow);
         // Reference in each cell must point to the origin cell relative to the current cell.
-        aRefData.SetAddress(rBasePos, aPos);
+        aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, aPos);
         *t->GetSingleRef() = aRefData;
         std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
         pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
@@ -438,7 +438,7 @@ void ScDocumentImport::setMatrixCells(
         for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
         {
             aPos.SetRow(nRow);
-            aRefData.SetAddress(rBasePos, aPos);
+            aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, aPos);
             *t->GetSingleRef() = aRefData;
             std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
             pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
