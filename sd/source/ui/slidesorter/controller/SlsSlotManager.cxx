@@ -918,6 +918,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         aNameDlg->GetName( aOldName );
         aNameDlg->SetText( aTitle );
         aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
+        aNameDlg->SetCheckNameTooltipHdl( LINK( this, SlotManager, RenameSlideTooltipHdl ) );
         aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
         if( aNameDlg->Execute() == RET_OK )
@@ -957,6 +958,11 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
     return (pCurrentPage!=nullptr && aNewName == pCurrentPage->GetName())
         || (mrSlideSorter.GetViewShell()
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) );
+}
+
+IMPL_STATIC_LINK_NOARG(SlotManager, RenameSlideTooltipHdl, AbstractSvxNameDialog&, OUString)
+{
+    return SdResId(STR_TOOLTIP_RENAME);
 }
 
 bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString & rName  )
