@@ -70,6 +70,24 @@
       "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_92efad86",
+        "filename": "sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-13T06:18:44Z",
+      "side": 1,
+      "message": "yeah, not likely to have a performance impact. Assuming moved-from vector is in a valid but indeterminate state, then clear followed by resize is the right thing to do.",
+      "parentUuid": "5f7c97a3_127ddd1b",
+      "revId": "4f98cd0f9ce9c2a331a5d34b3ef9d18f9bb6b235",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
