@@ -242,35 +242,39 @@ void ScSolverOptionsDialog::EditOption()
 
     if (pStringItem->IsDouble())
     {
-        ScSolverValueDialog aValDialog(m_xDialog.get());
-        aValDialog.SetOptionName( pStringItem->GetText() );
-        aValDialog.SetValue( pStringItem->GetDoubleValue() );
-        if (aValDialog.run() == RET_OK)
-        {
-            pStringItem->SetDoubleValue( aValDialog.GetValue() );
+        auto xValDialog = std::make_shared<ScSolverValueDialog>(m_xDialog.get());
+        xValDialog->SetOptionName(pStringItem->GetText());
+        xValDialog->SetValue(pStringItem->GetDoubleValue());
+        weld::DialogController::runAsync(xValDialog, [xValDialog, nEntry, pStringItem, this](sal_Int32 nResult){
+            if (nResult == RET_OK)
+            {
+                pStringItem->SetDoubleValue(xValDialog->GetValue());
 
-            OUString sTxt(pStringItem->GetText() + ": ");
-            sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
-                rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
+                OUString sTxt(pStringItem->GetText() + ": ");
+                sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
+                    rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                    ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
 
-            m_xLbSettings->set_text(nEntry, sTxt, 1);
-        }
+                m_xLbSettings->set_text(nEntry, sTxt, 1);
+            }
+        });
     }
     else
     {
-        ScSolverIntegerDialog aIntDialog(m_xDialog.get());
-        aIntDialog.SetOptionName( pStringItem->GetText() );
-        aIntDialog.SetValue( pStringItem->GetIntValue() );
-        if (aIntDialog.run() == RET_OK)
-        {
-            pStringItem->SetIntValue(aIntDialog.GetValue());
+        auto xIntDialog = std::make_shared<ScSolverIntegerDialog>(m_xDialog.get());
+        xIntDialog->SetOptionName( pStringItem->GetText() );
+        xIntDialog->SetValue( pStringItem->GetIntValue() );
+        weld::DialogController::runAsync(xIntDialog, [xIntDialog, nEntry, pStringItem, this](sal_Int32 nResult){
+            if (nResult == RET_OK)
+            {
+                pStringItem->SetIntValue(xIntDialog->GetValue());
 
-            OUString sTxt(pStringItem->GetText() + ": ");
-            sTxt += OUString::number(pStringItem->GetIntValue());
+                OUString sTxt(pStringItem->GetText() + ": ");
+                sTxt += OUString::number(pStringItem->GetIntValue());
 
-            m_xLbSettings->set_text(nEntry, sTxt, 1);
-        }
+                m_xLbSettings->set_text(nEntry, sTxt, 1);
+            }
+        });
     }
 }
 
