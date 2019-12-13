@@ -148,7 +148,6 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 {
 }
 
-
 ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                ScDocShell* pDocSh, const ScAddress& aCursorPos)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/solverdlg.ui", "SolverDialog")
@@ -534,12 +533,14 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xBtnOpt.get())
     {
         //! move options dialog to UI lib?
-        ScSolverOptionsDialog aOptDlg(m_xDialog.get(), maImplNames, maDescriptions, maEngine, maProperties);
-        if (aOptDlg.run() == RET_OK)
-        {
-            maEngine = aOptDlg.GetEngine();
-            maProperties = aOptDlg.GetProperties();
-        }
+        auto xOptDlg = std::make_shared<ScSolverOptionsDialog>(m_xDialog.get(), maImplNames, maDescriptions, maEngine, maProperties);
+        weld::DialogController::runAsync(xOptDlg, [xOptDlg, this](sal_Int32 nResult){
+            if (nResult == RET_OK)
+            {
+                maEngine = xOptDlg->GetEngine();
+                maProperties = xOptDlg->GetProperties();
+            }
+        });
     }
 }
 
