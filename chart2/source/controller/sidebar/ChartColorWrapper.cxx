@@ -72,8 +72,19 @@ ChartColorWrapper::ChartColorWrapper(
 
 void ChartColorWrapper::operator()(const OUString& , const NamedColor& rColor)
 {
+    if (!mxModel.is())
+    {
+        SAL_WARN("chart2", "Invalid reference to mxModel");
+        return;
+    }
+
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
-    assert(xPropSet.is());
+
+    if (!xPropSet.is())
+    {
+        SAL_WARN("chart2", "Invalid reference to xPropSet");
+        return;
+    }
 
     xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.first));
 }
