@@ -8993,4 +8993,24 @@ void Test::testInsertColCellStoreEventSwap()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaAfterDeleteRows()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Fill A1:A70000 with 1.0
+    std::vector<double> aVals(70000, 1.0);
+    m_pDoc->SetValues(ScAddress(0, 0, 0), aVals);
+    // Set A70001 with formula "=SUM(A1:A70000)"
+    m_pDoc->SetString(0, 70000, 0, "=SUM(A1:A70000)");
+
+    // Delete rows 2:69998
+    m_pDoc->DeleteRow(ScRange(0, 1, 0, MAXCOL, 69996, 0));
+
+    const ScAddress aPos(0, 3, 0);  // A4
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "SUM(A1:A3)", "Wrong formula in A4.");
+
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong value at A4", 3.0, m_pDoc->GetValue(aPos));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
