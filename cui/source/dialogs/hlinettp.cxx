@@ -40,12 +40,21 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp(weld::Container* pParent,
     , m_xRbtLinktypInternet(xBuilder->weld_radio_button("linktyp_internet"))
     , m_xRbtLinktypFTP(xBuilder->weld_radio_button("linktyp_ftp"))
     , m_xCbbTarget(new SvxHyperURLBox(xBuilder->weld_combo_box("target")))
+    , m_xFtTarget(xBuilder->weld_label("target_label"))
     , m_xFtLogin(xBuilder->weld_label("login_label"))
     , m_xEdLogin(xBuilder->weld_entry("login"))
     , m_xFtPassword(xBuilder->weld_label("password_label"))
     , m_xEdPassword(xBuilder->weld_entry("password"))
     , m_xCbAnonymous(xBuilder->weld_check_button("anonymous"))
 {
+    // gtk_size_group_set_ignore_hidden, "Measuring the size of hidden widgets
+    // ...  they will report a size of 0 nowadays, and thus, their size will
+    // not affect the other size group members", which is unfortunate. So here
+    // before we hide the labels, take the size group width and set it as
+    // explicit preferred size on a label that won't be hidden
+    auto nLabelWidth = m_xFtTarget->get_preferred_size().Width();
+    m_xFtTarget->set_size_request(nLabelWidth, -1);
+
     m_xCbbTarget->SetSmartProtocol(INetProtocol::Http);
 
     InitStdControls();

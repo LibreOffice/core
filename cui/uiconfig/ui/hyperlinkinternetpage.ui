@@ -389,6 +389,9 @@
       <widget name="target_label"/>
       <widget name="login_label"/>
       <widget name="password_label"/>
+      <widget name="frame_label"/>
+      <widget name="indication_label"/>
+      <widget name="name_label"/>
     </widgets>
   </object>
 </interface>
