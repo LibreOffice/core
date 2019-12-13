@@ -50,7 +50,9 @@ PaneChildWindow::PaneChildWindow (
         pParentWindow,
         SdResId(pTitleBarResId)));
     SetAlignment(SfxChildAlignment::LEFT);
-    static_cast<SfxDockingWindow*>(GetWindow())->Initialize(pInfo);
+    SfxDockingWindow* pDockingWindow = static_cast<SfxDockingWindow*>(GetWindow());
+    pDockingWindow->EnableInput();
+    pDockingWindow->Initialize(pInfo);
     SetHideNotDelete(true);
 
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
