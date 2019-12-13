@@ -112,6 +112,12 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
 {
+    if (m_xIntDialog)
+        m_xIntDialog->response(RET_CANCEL);
+    assert(!m_xIntDialog);
+    if (m_xValDialog)
+        m_xValDialog->response(RET_CANCEL);
+    assert(!m_xValDialog);
 }
 
 const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
@@ -242,13 +248,13 @@ void ScSolverOptionsDialog::EditOption()
 
     if (pStringItem->IsDouble())
     {
-        auto xValDialog = std::make_shared<ScSolverValueDialog>(m_xDialog.get());
-        xValDialog->SetOptionName(pStringItem->GetText());
-        xValDialog->SetValue(pStringItem->GetDoubleValue());
-        weld::DialogController::runAsync(xValDialog, [xValDialog, nEntry, pStringItem, this](sal_Int32 nResult){
+        m_xValDialog = std::make_shared<ScSolverValueDialog>(m_xDialog.get());
+        m_xValDialog->SetOptionName(pStringItem->GetText());
+        m_xValDialog->SetValue(pStringItem->GetDoubleValue());
+        weld::DialogController::runAsync(m_xValDialog, [nEntry, pStringItem, this](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
-                pStringItem->SetDoubleValue(xValDialog->GetValue());
+                pStringItem->SetDoubleValue(m_xValDialog->GetValue());
 
                 OUString sTxt(pStringItem->GetText() + ": ");
                 sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
@@ -257,23 +263,25 @@ void ScSolverOptionsDialog::EditOption()
 
                 m_xLbSettings->set_text(nEntry, sTxt, 1);
             }
+            m_xValDialog.reset();
         });
     }
     else
     {
-        auto xIntDialog = std::make_shared<ScSolverIntegerDialog>(m_xDialog.get());
-        xIntDialog->SetOptionName( pStringItem->GetText() );
-        xIntDialog->SetValue( pStringItem->GetIntValue() );
-        weld::DialogController::runAsync(xIntDialog, [xIntDialog, nEntry, pStringItem, this](sal_Int32 nResult){
+        m_xIntDialog = std::make_shared<ScSolverIntegerDialog>(m_xDialog.get());
+        m_xIntDialog->SetOptionName( pStringItem->GetText() );
+        m_xIntDialog->SetValue( pStringItem->GetIntValue() );
+        weld::DialogController::runAsync(m_xIntDialog, [nEntry, pStringItem, this](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
-                pStringItem->SetIntValue(xIntDialog->GetValue());
+                pStringItem->SetIntValue(m_xIntDialog->GetValue());
 
                 OUString sTxt(pStringItem->GetText() + ": ");
                 sTxt += OUString::number(pStringItem->GetIntValue());
 
                 m_xLbSettings->set_text(nEntry, sTxt, 1);
             }
+            m_xIntDialog.reset();
         });
     }
 }
