@@ -559,6 +559,8 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
+    /// This is a continuation of already finished paragraph - e.g., first in an index section
+    bool                            m_bRemoveThisParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
@@ -663,6 +665,7 @@ public:
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_bParaChanged;}
+    bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -1065,6 +1068,8 @@ public:
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
+    // Start a new index section; if needed, finish current paragraph
+    css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
     /// Current paragraph had at least one field in it.
     bool m_bParaHadField;
