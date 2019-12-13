@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_0d97fc92",
+        "filename": "cui/source/dialogs/dlgname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-13T11:04:28Z",
+      "side": 1,
+      "message": "I\u0027m afraid this method is called from various places where the tip doesn\u0027t apply.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 82
+      },
+      "revId": "b5403f1bcdc780afbb3738a3175ca97cdfc9c0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
