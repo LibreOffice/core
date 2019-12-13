@@ -1335,6 +1335,49 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     if (m_aTextAppendStack.empty())
         return;
+
+    // Has an index been started, but no text portion appended yet? In that case, the relevant
+    // TextAppendContext hasn't been pushed to m_aTextAppendStack, and so the paragraph being
+    // finished would be in the wrong place. Push it here.
+    // See appendTextPortion
+    if (!m_bStartGenericField && (m_bStartTOC || m_bStartIndex || m_bStartBibliography))
+    {
+        if (!m_aTextAppendStack.top().xInsertPosition.is())
+        {
+            if (auto xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                xTextAppend.is() && hasTableManager() && !getTableManager().isIgnore())
+            {
+                if (!IsInHeaderFooter() || m_bStartTOCHeaderFooter)
+                {
+                    try
+                    {
+                        m_bStartedTOC = true;
+                        uno::Reference<text::XTextCursor> xTOCTextCursor
+                            = xTextAppend->getEnd()->getText()->createTextCursor();
+                        assert(xTOCTextCursor.is());
+                        xTOCTextCursor->gotoEnd(false);
+                        if (m_bStartIndex || m_bStartBibliography)
+                            xTOCTextCursor->goLeft(1, false);
+                        mxTOCTextCursor = xTOCTextCursor;
+                        m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
+                        throw lang::IllegalArgumentException();
+                    }
+                    catch (const lang::IllegalArgumentException&)
+                    {
+                        TOOLS_WARN_EXCEPTION(
+                            "writerfilter.dmapper",
+                            "IllegalArgumentException in DomainMapper_Impl::finishParagraph");
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        TOOLS_WARN_EXCEPTION("writerfilter.dmapper",
+                                             "Exception in DomainMapper_Impl::finishParagraph");
+                    }
+                }
+            }
+        }
+    }
+
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend > xTextAppend(rAppendContext.xTextAppend);
 #ifdef DBG_UTIL

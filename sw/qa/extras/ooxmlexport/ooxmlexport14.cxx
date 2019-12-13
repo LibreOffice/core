@@ -14,7 +14,9 @@
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
+#include <tools/lineend.hxx>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -178,6 +180,35 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
 {
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
+    assertXPath(pXml, "/w:document/w:body/w:p[1]/w:pPr/w:r", 0);
+    assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r", 2);
+    // Check that the break is in proper - last - position
+    assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
+{
+    getParagraph(1, "(Verne, 1870)");
+    getParagraph(2, "Bibliography");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xBibloigraphyIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xBibloigraphyIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aTocString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("\n" // starting with an empty paragraph
+                                  "Christie, A. (1922). The Secret Adversary. \n"
+                                  "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. "),
+                         aTocString);
+
     xmlDocPtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
