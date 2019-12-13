@@ -446,6 +446,7 @@ public:
     virtual short Execute() override;
     virtual void    GetName( OUString& rName ) override ;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) override ;
+    virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&, OUString>& rLink ) override ;
     virtual void    SetEditHelpId(const OString&) override ;
     //from class Window
     virtual void    SetHelpId( const OString& ) override ;
@@ -453,7 +454,9 @@ public:
 private:
     std::unique_ptr<SvxNameDialog> m_xDlg;
     Link<AbstractSvxNameDialog&,bool> aCheckNameHdl;
+    Link<AbstractSvxNameDialog&,OUString> aCheckNameTooltipHdl;
     DECL_LINK(CheckNameHdl, SvxNameDialog&, bool);
+    DECL_LINK(CheckNameTooltipHdl, SvxNameDialog&, OUString);
 };
 
 class SvxObjectNameDialog;

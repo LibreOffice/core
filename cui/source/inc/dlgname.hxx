@@ -30,6 +30,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOK;
 
     Link<SvxNameDialog&,bool> m_aCheckNameHdl;
+    Link<SvxNameDialog&,OUString> m_aCheckNameTooltipHdl;
 
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
@@ -58,6 +59,12 @@ public:
         m_aCheckNameHdl = rLink;
         if (bCheckImmediately)
             m_xBtnOK->set_sensitive(rLink.Call(*this));
+    }
+
+    void SetCheckNameTooltipHdl(const Link<SvxNameDialog&,OUString>& rLink)
+    {
+        m_aCheckNameTooltipHdl = rLink;
+        m_xBtnOK->set_tooltip_text(rLink.Call(*this));
     }
 
     void SetEditHelpId(const OString& aHelpId) { m_xEdtName->set_help_id(aHelpId);}
