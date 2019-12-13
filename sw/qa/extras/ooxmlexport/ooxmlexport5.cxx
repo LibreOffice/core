@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -674,6 +676,33 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77129, "fdo77129.docx")
 
     // Data was lost from this paragraph.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t", "Abstract");
+}
+
+// Test the same testdoc used for testFdo77129.
+DECLARE_OOXMLEXPORT_TEST(testTdf129402, "fdo77129.docx")
+{
+    // tdf#129402: ToC title must be "Contents", not "Content"; the index field must include
+    // pre-rendered element.
+
+    // Currently export drops empty paragraph after ToC, so skip getParagraphs test for now
+//    CPPUNIT_ASSERT_EQUAL(5, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("owners."), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Contents"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("How\t2"), getParagraph(3)->getString());
+//    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(4)->getString());
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aTocString(xTextCursor->getString());
+
+    // Check that the pre-rendered entry is inside the index
+    CPPUNIT_ASSERT_EQUAL(OUString("How\t2"), aTocString);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
