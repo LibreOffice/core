@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_DOCUMENT_HXX
 #define INCLUDED_SC_INC_DOCUMENT_HXX
 
+#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -280,6 +281,25 @@ const sal_uInt8 SC_DDE_ENGLISH       = 1;
 const sal_uInt8 SC_DDE_TEXT          = 2;
 const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
 
+// Because some stuff needs this info, and those objects lifetimes sometimes exceeds the lifetime
+// of the ScDocument.
+struct ScSheetLimits : public salhelper::SimpleReferenceObject
+{
+    const SCCOL mnMaxCol; /// Maximum addressable column
+    const SCROW mnMaxRow; /// Maximum addressable row
+
+    ScSheetLimits(SCCOL nMaxCol, SCROW nMaxRow) : mnMaxCol(nMaxCol), mnMaxRow(nMaxRow) {}
+
+    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mnMaxCol); }
+    [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mnMaxRow); }
+    [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const { return ::ValidColRow(nCol, nRow, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] bool ValidColRowTab(SCCOL nCol, SCROW nRow, SCTAB nTab) const { return ::ValidColRowTab(nCol, nRow, nTab, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] bool ValidRange(const ScRange& rRange) const { return ::ValidRange(rRange, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] bool ValidAddress(const ScAddress& rAddress) const { return ::ValidAddress(rAddress, mnMaxCol, mnMaxRow); }
+    [[nodiscard]] SCCOL SanitizeCol( SCCOL nCol ) const { return ::SanitizeCol(nCol, mnMaxCol); }
+    [[nodiscard]] SCROW SanitizeRow( SCROW nRow ) const { return ::SanitizeRow(nRow, mnMaxRow); }
+};
+
 // During threaded calculation fields being mutated are kept in this struct
 struct ScDocumentThreadSpecific
 {
@@ -371,8 +391,7 @@ private:
     std::unique_ptr<ScValidationDataList> pValidationList;              // validity
     SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
-    SCCOL mnMaxCol; /// Maximum addressable column
-    SCROW mnMaxRow; /// Maximum addressable row
+    rtl::Reference<ScSheetLimits> mxSheetLimits;
     std::vector<OUString> maTabNames;               // for undo document, we need the information tab name <-> index
     mutable std::unique_ptr<ScRangeName>    pRangeName;
     std::unique_ptr<ScDBCollection>         pDBCollection;
@@ -856,16 +875,17 @@ public:
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const OUString& rName );
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
-    SC_DLLPUBLIC SCCOL MaxCol() const { return mnMaxCol; }
-    SC_DLLPUBLIC SCROW MaxRow() const { return mnMaxRow; }
-    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mnMaxCol); }
-    [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mnMaxRow); }
-    [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const { return ::ValidColRow(nCol, nRow, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] bool ValidColRowTab(SCCOL nCol, SCROW nRow, SCTAB nTab) const { return ::ValidColRowTab(nCol, nRow, nTab, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] bool ValidRange(const ScRange& rRange) const { return ::ValidRange(rRange, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] bool ValidAddress(const ScAddress& rAddress) const { return ::ValidAddress(rAddress, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] SCCOL SanitizeCol( SCCOL nCol ) const { return ::SanitizeCol(nCol, mnMaxCol); }
-    [[nodiscard]] SCROW SanitizeRow( SCROW nRow ) const { return ::SanitizeRow(nRow, mnMaxRow); }
+    SC_DLLPUBLIC SCCOL MaxCol() const { return mxSheetLimits->mnMaxCol; }
+    SC_DLLPUBLIC SCROW MaxRow() const { return mxSheetLimits->mnMaxRow; }
+    ScSheetLimits& GetSheetLimits() const { return *mxSheetLimits; }
+    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mxSheetLimits->mnMaxCol); }
+    [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mxSheetLimits->mnMaxRow); }
+    [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const { return ::ValidColRow(nCol, nRow, MaxCol(), MaxRow()); }
+    [[nodiscard]] bool ValidColRowTab(SCCOL nCol, SCROW nRow, SCTAB nTab) const { return ::ValidColRowTab(nCol, nRow, nTab, MaxCol(), MaxRow()); }
+    [[nodiscard]] bool ValidRange(const ScRange& rRange) const { return ::ValidRange(rRange, MaxCol(), MaxRow()); }
+    [[nodiscard]] bool ValidAddress(const ScAddress& rAddress) const { return ::ValidAddress(rAddress, MaxCol(), MaxRow()); }
+    [[nodiscard]] SCCOL SanitizeCol( SCCOL nCol ) const { return ::SanitizeCol(nCol, MaxCol()); }
+    [[nodiscard]] SCROW SanitizeRow( SCROW nRow ) const { return ::SanitizeRow(nRow, MaxRow()); }
 
     SC_DLLPUBLIC std::vector<OUString> GetAllTableNames() const;
 

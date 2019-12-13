@@ -350,7 +350,7 @@ bool ScRawToken::IsValidReference(const ScDocument* pDoc) const
     return false;
 }
 
-FormulaToken* ScRawToken::CreateToken(const ScDocument* pDoc) const
+FormulaToken* ScRawToken::CreateToken(ScSheetLimits& rLimits) const
 {
 #define IF_NOT_OPCODE_ERROR(o,c) SAL_WARN_IF((eOp!=o), "sc.core", #c "::ctor: OpCode " << static_cast<int>(eOp) << " lost, converted to " #o "; maybe inherit from FormulaToken instead!")
     switch ( GetType() )
@@ -370,14 +370,14 @@ FormulaToken* ScRawToken::CreateToken(const ScDocument* pDoc) const
         }
         case svSingleRef :
             if (eOp == ocPush)
-                return new ScSingleRefToken(pDoc, aRef.Ref1 );
+                return new ScSingleRefToken(rLimits, aRef.Ref1 );
             else
-                return new ScSingleRefToken(pDoc, aRef.Ref1, eOp );
+                return new ScSingleRefToken(rLimits, aRef.Ref1, eOp );
         case svDoubleRef :
             if (eOp == ocPush)
-                return new ScDoubleRefToken(pDoc, aRef );
+                return new ScDoubleRefToken(rLimits, aRef );
             else
-                return new ScDoubleRefToken(pDoc, aRef, eOp );
+                return new ScDoubleRefToken(rLimits, aRef, eOp );
         case svMatrix :
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
@@ -499,7 +499,7 @@ void DumpToken(formula::FormulaToken const & rToken)
 }
 #endif
 
-FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTok1, FormulaToken & rTok2,
+FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
 
@@ -549,7 +549,7 @@ FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTo
         if (bExternal)
             xRes = new ScExternalDoubleRefToken( rTok1.GetIndex(), rTok1.GetString(), aRef);
         else
-            xRes = new ScDoubleRefToken(pDoc, aRef);
+            xRes = new ScDoubleRefToken(rLimits, aRef);
     }
     else
     {
@@ -575,7 +575,7 @@ FormulaTokenRef extendRangeReference( const ScDocument* pDoc, FormulaToken & rTo
                 return nullptr;
             if (bExternal)
                 return nullptr;    // external reference list not possible
-            xRes = new ScDoubleRefToken(pDoc, (*pRefList)[0] );
+            xRes = new ScDoubleRefToken(rLimits, (*pRefList)[0] );
         }
         if (!xRes)
             return nullptr;    // shouldn't happen...
@@ -1678,7 +1678,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     }
 }
 
-bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
+bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const
 {
     bool bIs = false;
     if ( pCode && nLen == 1 )
@@ -1690,7 +1690,7 @@ bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, co
             {
                 const ScSingleRefData& rRef = *static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
-                bIs = !bValidOnly || pDoc->ValidAddress(rRange.aStart);
+                bIs = !bValidOnly || mxSheetLimits->ValidAddress(rRange.aStart);
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
@@ -1699,7 +1699,7 @@ bool ScTokenArray::ImplGetReference( const ScDocument* pDoc, ScRange& rRange, co
                 const ScSingleRefData& rRef2 = rCompl.Ref2;
                 rRange.aStart = rRef1.toAbs(rPos);
                 rRange.aEnd   = rRef2.toAbs(rPos);
-                bIs = !bValidOnly || pDoc->ValidRange(rRange);
+                bIs = !bValidOnly || mxSheetLimits->ValidRange(rRange);
             }
         }
     }
@@ -1852,17 +1852,25 @@ bool ScTokenArray::IsInvariant() const
 
 bool ScTokenArray::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference(mpDoc, rRange, rPos, false);
+    return ImplGetReference(rRange, rPos, false);
 }
 
 bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) const
 {
-    return ImplGetReference(mpDoc, rRange, rPos, true);
+    return ImplGetReference(rRange, rPos, true);
 }
 
 ScTokenArray::ScTokenArray(const ScDocument* pDoc) :
     FormulaTokenArray(),
-    mpDoc(pDoc),
+    mxSheetLimits(&pDoc->GetSheetLimits()),
+    mnHashValue(0)
+{
+    ResetVectorState();
+}
+
+ScTokenArray::ScTokenArray(ScSheetLimits& rLimits) :
+    FormulaTokenArray(),
+    mxSheetLimits(&rLimits),
     mnHashValue(0)
 {
     ResetVectorState();
@@ -1909,7 +1917,7 @@ void ScTokenArray::Clear()
 
 std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
 {
-    std::unique_ptr<ScTokenArray> p(new ScTokenArray(mpDoc));
+    std::unique_ptr<ScTokenArray> p(new ScTokenArray(*mxSheetLimits));
     p->nLen = nLen;
     p->nRPN = nRPN;
     p->nMode = nMode;
@@ -1967,7 +1975,7 @@ std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
 
 FormulaToken* ScTokenArray::AddRawToken( const ScRawToken& r )
 {
-    return Add( r.CreateToken(mpDoc) );
+    return Add( r.CreateToken(*mxSheetLimits) );
 }
 
 // Utility function to ensure that there is strict alternation of values and
@@ -2165,7 +2173,7 @@ void ScTokenArray::MergeRangeReference( const ScAddress & rPos )
             (((p2 = PeekPrev(nIdx)) != nullptr) && p2->GetOpCode() == ocRange) &&
             ((p1 = PeekPrev(nIdx)) != nullptr))
     {
-        FormulaTokenRef p = extendRangeReference( mpDoc, *p1, *p3, rPos, true);
+        FormulaTokenRef p = extendRangeReference( *mxSheetLimits, *p1, *p3, rPos, true);
         if (p)
         {
             p->IncRef();
@@ -2187,17 +2195,17 @@ FormulaToken* ScTokenArray::AddOpCode( OpCode e )
 
 FormulaToken* ScTokenArray::AddSingleReference( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken(mpDoc, rRef ) );
+    return Add( new ScSingleRefToken( *mxSheetLimits, rRef ) );
 }
 
 FormulaToken* ScTokenArray::AddMatrixSingleReference( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken(mpDoc, rRef, ocMatRef ) );
+    return Add( new ScSingleRefToken(*mxSheetLimits, rRef, ocMatRef ) );
 }
 
 FormulaToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
 {
-    return Add( new ScDoubleRefToken(mpDoc, rRef ) );
+    return Add( new ScDoubleRefToken(*mxSheetLimits, rRef ) );
 }
 
 FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
@@ -2234,7 +2242,7 @@ FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, cons
 
 FormulaToken* ScTokenArray::AddColRowName( const ScSingleRefData& rRef )
 {
-    return Add( new ScSingleRefToken(mpDoc, rRef, ocColRowName ) );
+    return Add( new ScSingleRefToken(*mxSheetLimits, rRef, ocColRowName ) );
 }
 
 void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rFormulaNmsp )
@@ -2258,13 +2266,13 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     switch ( eDir )
     {
         case DIR_BOTTOM :
-            if ( rPos.Row() < mpDoc->MaxRow() )
+            if ( rPos.Row() < mxSheetLimits->mnMaxRow )
                 nRow = (nExtend = rPos.Row()) + 1;
             else
                 return false;
         break;
         case DIR_RIGHT :
-            if ( rPos.Col() < mpDoc->MaxCol() )
+            if ( rPos.Col() < mxSheetLimits->mnMaxCol )
                 nCol = static_cast<SCCOL>(nExtend = rPos.Col()) + 1;
             else
                 return false;
@@ -4513,7 +4521,7 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
 namespace {
 
 void checkBounds(
-    const ScDocument* pDoc,
+    ScSheetLimits& rLimits,
     const ScAddress& rPos, SCROW nGroupLen, const ScRange& rCheckRange,
     const ScSingleRefData& rRef, std::vector<SCROW>& rBounds, const ScRange* pDeletedRange )
 {
@@ -4549,7 +4557,7 @@ void checkBounds(
         SCROW nOffset = pDeletedRange->aStart.Row() - aAbs.aStart.Row();
         SCROW nRow = rPos.Row() + nOffset;
         // Unlike for rCheckRange, for pDeletedRange nRow can be anywhere>=0.
-        if (pDoc->ValidRow(nRow))
+        if (rLimits.ValidRow(nRow))
             rBounds.push_back(nRow);
     }
 
@@ -4574,7 +4582,7 @@ void checkBounds(
         SCROW nOffset = pDeletedRange->aEnd.Row() + 1 - aAbs.aStart.Row();
         SCROW nRow = rPos.Row() + nOffset;
         // Unlike for rCheckRange, for pDeletedRange nRow can be ~anywhere.
-        if (pDoc->ValidRow(nRow))
+        if (rLimits.ValidRow(nRow))
             rBounds.push_back(nRow);
     }
 }
@@ -4612,7 +4620,7 @@ void checkBounds(
         pDeletedRange = &aDeletedRange;
     }
 
-    checkBounds(&rCxt.mrDoc, rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
+    checkBounds(rCxt.mrDoc.GetSheetLimits(), rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
 }
 
 }
@@ -4671,14 +4679,14 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 case svSingleRef:
                     {
                         const ScSingleRefData& rRef = *p->GetSingleRef();
-                        checkBounds(mpDoc, rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
+                        checkBounds(*mxSheetLimits, rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
                     }
                     break;
                 case svDoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
-                        checkBounds(mpDoc, rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
-                        checkBounds(mpDoc, rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
+                        checkBounds(*mxSheetLimits, rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
+                        checkBounds(*mxSheetLimits, rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
                     }
                     break;
                 default:
@@ -4814,7 +4822,7 @@ void appendString( OUStringBuffer& rBuf, const OUString& rStr )
     rBuf.append('"');
 }
 
-void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken,
+void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken,
         const ScAddress& rPos, bool bFromRangeName )
 {
     if (rToken.IsExternalRef())
@@ -4845,7 +4853,7 @@ void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OU
                     return;
 
                 rCxt.mpRefConv->makeExternalRefStr(
-                        pDoc, rBuf, rPos, nFileId, aFileName, it->second, aTabName,
+                        rLimits, rBuf, rPos, nFileId, aFileName, it->second, aTabName,
                         *rToken.GetDoubleRef());
             }
             break;
@@ -4883,7 +4891,7 @@ void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OU
                 ScComplexRefData aRef;
                 aRef.Ref1 = rRef;
                 aRef.Ref2 = rRef;
-                rCxt.mpRefConv->makeRefStr(pDoc, rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, aRef, true,
+                rCxt.mpRefConv->makeRefStr(rLimits, rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, aRef, true,
                         bFromRangeName);
             }
             else
@@ -4895,7 +4903,7 @@ void appendTokenByType( const ScDocument* pDoc, sc::TokenStringContext& rCxt, OU
             if (rCxt.mpRefConv)
             {
                 const ScComplexRefData& rRef = *rToken.GetDoubleRef();
-                rCxt.mpRefConv->makeRefStr(pDoc, rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, rRef, false,
+                rCxt.mpRefConv->makeRefStr(rLimits, rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, rRef, false,
                         bFromRangeName);
             }
             else
@@ -5115,7 +5123,7 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
         if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
             aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
 
-        appendTokenByType(mpDoc, rCxt, aBuf, *pToken, rPos, IsFromRangeName());
+        appendTokenByType(*mxSheetLimits, rCxt, aBuf, *pToken, rPos, IsFromRangeName());
     }
 
     return aBuf.makeStringAndClear();

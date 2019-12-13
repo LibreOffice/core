@@ -762,7 +762,7 @@ void Chart2Positioner::createPositionMap()
                         if (bExternal)
                             rCol[ nInsRow ].reset(new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
                         else
-                            rCol[ nInsRow ].reset(new ScSingleRefToken(mpDoc, aCellData));
+                            rCol[ nInsRow ].reset(new ScSingleRefToken(mpDoc->GetSheetLimits(), aCellData));
                     }
                 }
             }
@@ -921,12 +921,12 @@ private:
         if (bExternal)
             rStart.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref1));
         else
-            rStart.reset(new ScSingleRefToken(pDoc, aData.Ref1));
+            rStart.reset(new ScSingleRefToken(pDoc->GetSheetLimits(), aData.Ref1));
 
         if (bExternal)
             rEnd.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref2));
         else
-            rEnd.reset(new ScSingleRefToken(pDoc, aData.Ref2));
+            rEnd.reset(new ScSingleRefToken(pDoc->GetSheetLimits(), aData.Ref2));
         return true;
     }
 
@@ -1292,7 +1292,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, vector<ScTokenRef>&
         }
         else
         {
-            ScTokenRef pCorner(new ScSingleRefToken(pDoc, aData));
+            ScTokenRef pCorner(new ScSingleRefToken(pDoc->GetSheetLimits(), aData));
             ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
     }
@@ -1312,7 +1312,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, vector<ScTokenRef>&
         }
         else
         {
-            ScTokenRef pCorner(new ScDoubleRefToken(pDoc, r));
+            ScTokenRef pCorner(new ScDoubleRefToken(pDoc->GetSheetLimits(), r));
             ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
     }

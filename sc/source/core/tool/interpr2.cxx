@@ -2494,9 +2494,9 @@ void ScInterpreter::ScIntersect()
         {
             const ScComplexRefData& rRef = (*pRefList)[0];
             if (rRef.Ref1 == rRef.Ref2)
-                PushTempToken( new ScSingleRefToken(pDok, rRef.Ref1));
+                PushTempToken( new ScSingleRefToken(pDok->GetSheetLimits(), rRef.Ref1));
             else
-                PushTempToken( new ScDoubleRefToken(pDok, rRef));
+                PushTempToken( new ScDoubleRefToken(pDok->GetSheetLimits(), rRef));
         }
         else
             PushTokenRef( xRes);
@@ -2568,7 +2568,7 @@ void ScInterpreter::ScRangeFunc()
     // We explicitly tell extendRangeReference() to not reuse the token,
     // casting const away spares two clones.
     FormulaTokenRef xRes = extendRangeReference(
-            pDok, const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
+            pDok->GetSheetLimits(), const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
     if (!xRes)
         PushIllegalArgument();
     else

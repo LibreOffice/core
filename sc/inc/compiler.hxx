@@ -39,6 +39,8 @@
 
 #include <formula/FormulaCompiler.hxx>
 
+struct ScSheetLimits;
+
 // constants and data types also for external modules (ScInterpreter et al)
 
 #define MAXSTRLEN    1024   /* maximum length of input string of one symbol */
@@ -167,7 +169,7 @@ public:
      */
     bool IsValidReference(const ScDocument* pDoc) const;
 
-    formula::FormulaToken* CreateToken(const ScDocument* pDoc) const;   // create typified token
+    formula::FormulaToken* CreateToken(ScSheetLimits& rLimits) const;   // create typified token
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
@@ -189,7 +191,7 @@ public:
         virtual ~Convention();
 
         virtual void makeRefStr(
-            const ScDocument* pDoc,
+            ScSheetLimits& rLimits,
             OUStringBuffer& rBuffer,
             formula::FormulaGrammar::Grammar eGram,
             const ScAddress& rPos,
@@ -220,7 +222,7 @@ public:
             const OUString& rTabName, const ScSingleRefData& rRef ) const = 0;
 
         virtual void makeExternalRefStr(
-            const ScDocument* pDoc,
+            ScSheetLimits& rLimits,
             OUStringBuffer& rBuffer, const ScAddress& rPos,
             sal_uInt16 nFileId, const OUString& rFileName, const std::vector<OUString>& rTabNames,
             const OUString& rTabName, const ScComplexRefData& rRef ) const = 0;

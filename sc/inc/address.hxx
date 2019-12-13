@@ -90,11 +90,13 @@ const SCROW MAXROW_30         = 8191;
 
 [[nodiscard]] inline bool ValidCol( SCCOL nCol, SCCOL nMaxCol = MAXCOL )
 {
+    assert(nMaxCol == MAXCOL); // temporary to debug jumbo sheets work
     return nCol >= 0 && nCol <= nMaxCol;
 }
 
 [[nodiscard]] inline bool ValidRow( SCROW nRow, SCROW nMaxRow = MAXROW)
 {
+    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return nRow >= 0 && nRow <= nMaxRow;
 }
 
@@ -110,21 +112,25 @@ const SCROW MAXROW_30         = 8191;
 
 [[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
+    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow);
 }
 
 [[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
+    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow) && ValidTab( nTab);
 }
 
 [[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol = MAXCOL )
 {
+    assert(nMaxCol == MAXCOL); // temporary to debug jumbo sheets work
     return nCol < 0 ? 0 : (nCol > nMaxCol ? nMaxCol : nCol);
 }
 
 [[nodiscard]] inline SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow = MAXROW )
 {
+    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
     return nRow < 0 ? 0 : (nRow > nMaxRow ? nMaxRow : nRow);
 }
 
