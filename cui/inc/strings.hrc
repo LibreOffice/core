@@ -395,6 +395,7 @@
 #define RID_SVXSTR_ABOUT_CREDITS                    NC_("aboutdialog|credits", "Cre~dits")
 
 #define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
+#define RID_SVXSTR_RENAMESLIDE                      NC_("RID_SVXSTR_RENAMESLIDE", "Duplicate or empty names are not possible")
 
 #endif
 

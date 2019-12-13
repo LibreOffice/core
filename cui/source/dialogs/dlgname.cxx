@@ -18,6 +18,8 @@
  */
 
 #include <dlgname.hxx>
+#include <strings.hrc>
+#include <dialmgr.hxx>
 
 /*************************************************************************
 |*
@@ -41,10 +43,14 @@ SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
 {
     // Do not allow empty names
+    bool bEnable;
     if (m_aCheckNameHdl.IsSet())
-        m_xBtnOK->set_sensitive(!m_xEdtName->get_text().isEmpty() && m_aCheckNameHdl.Call(*this));
+        bEnable = !m_xEdtName->get_text().isEmpty() && m_aCheckNameHdl.Call(*this);
     else
-        m_xBtnOK->set_sensitive(!m_xEdtName->get_text().isEmpty());
+        bEnable = !m_xEdtName->get_text().isEmpty();
+    m_xBtnOK->set_sensitive(bEnable);
+    m_xEdtName->set_message_type(bEnable ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
+    m_xEdtName->set_tooltip_text(bEnable ? "" : CuiResId(RID_SVXSTR_RENAMESLIDE));
 }
 
 // #i68101#
