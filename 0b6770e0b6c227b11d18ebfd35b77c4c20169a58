@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_68d0de51",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-13T17:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7c97a3_7260d133",
+      "range": {
+        "startLine": 72,
+        "startChar": 145,
+        "endLine": 72,
+        "endChar": 204
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_92c6cd16",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-13T06:14:46Z",
       "side": 1,
       "message": "While reading it here I think about \"Want to have two columns for just a small portion of the document?...\"",
+      "range": {
+        "startLine": 121,
+        "startChar": 42,
+        "endLine": 121,
+        "endChar": 51
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_08c5aa8e",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-13T17:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7c97a3_92c6cd16",
       "range": {
         "startLine": 121,
         "startChar": 42,
@@ -82,6 +130,54 @@
       "writtenOn": "2019-12-13T06:14:46Z",
       "side": 1,
       "message": "As commented on BZ, this is not correct. You can hide unconditionally with the checkbox labelled \"Hide\". Or use a condition with a previously created variable.",
+      "range": {
+        "startLine": 153,
+        "startChar": 155,
+        "endLine": 153,
+        "endChar": 166
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_286666ef",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-13T17:00:46Z",
+      "side": 1,
+      "message": "I believe I have found the correct uri in the hid2file.js",
+      "parentUuid": "5f7c97a3_52d035ca",
+      "range": {
+        "startLine": 153,
+        "startChar": 192,
+        "endLine": 153,
+        "endChar": 251
+      },
+      "revId": "0b6770e0b6c227b11d18ebfd35b77c4c20169a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_c86252d9",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-13T17:00:46Z",
+      "side": 1,
+      "message": "Ok.  Not a problem for me to drop this phrase.",
+      "parentUuid": "5f7c97a3_b2cbc91c",
       "range": {
         "startLine": 153,
         "startChar": 155,
