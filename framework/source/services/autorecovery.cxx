@@ -2382,7 +2382,10 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     // check if this document must be ignored for recovery !
     // Some use cases don't wish support for AutoSave/Recovery ... as e.g. OLE-Server / ActiveX Control etcpp.
-    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
+    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_NOAUTOSAVE(), false)
+        || lDescriptor.getValue(
+            utl::MediaDescriptor::PROP_ENCRYPTIONDATA()).hasValue();
     if (bNoAutoSave)
         return;
 
@@ -2800,7 +2803,10 @@ bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo const & rInf
         return true;
 
     utl::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
-    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_NOAUTOSAVE(), false);
+    bool bNoAutoSave = lDescriptor.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_NOAUTOSAVE(), false)
+        || lDescriptor.getValue(
+            utl::MediaDescriptor::PROP_ENCRYPTIONDATA()).hasValue();
 
     return bNoAutoSave;
 }
