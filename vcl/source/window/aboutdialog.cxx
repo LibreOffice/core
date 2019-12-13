@@ -29,6 +29,14 @@ AboutDialog::AboutDialog(vcl::Window* pParent, WinBits nStyle, Dialog::InitFlag 
     m_xBuilder->get(m_xCopyrightText, "copyright");
     m_xBuilder->get(m_xBuildIdLink, "buildIdLink");
 
+    // tdf#127148 so tabbing into the widget will auto select-all
+    AllSettings aSettings = m_xVersion->GetSettings();
+    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+    aStyleSettings.SetSelectionOptions(aStyleSettings.GetSelectionOptions()
+                                       | SelectionOptions::Focus);
+    aSettings.SetStyleSettings(aStyleSettings);
+    m_xVersion->SetSettings(aSettings, true);
+
 #ifndef MACOSX
     m_xVersion->RequestDoubleBuffering(true);
 #endif
