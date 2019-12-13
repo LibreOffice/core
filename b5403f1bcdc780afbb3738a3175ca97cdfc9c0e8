@@ -22,6 +22,30 @@
       "revId": "b5403f1bcdc780afbb3738a3175ca97cdfc9c0e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_adeda826",
+        "filename": "cui/source/dialogs/dlgname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2019-12-13T11:21:00Z",
+      "side": 1,
+      "message": "I don\u0027t have the context to know what the problem is. This is a fairly generic dialog. Perhaps what you need here to to add something like the existing m_aCheckNameHdl as m_aGetFailureReasonHdl and have that return this RENAMESLIDE text by the specific caller of this from draw/impress",
+      "parentUuid": "5f7c97a3_0d97fc92",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 82
+      },
+      "revId": "b5403f1bcdc780afbb3738a3175ca97cdfc9c0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
