@@ -116,7 +116,7 @@ void SelectionObserver::EndObservation()
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
     PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
     rSelector.DeselectAllPages();
-    if ( ! maInsertedPages.empty())
+    if (!maInsertedPages.empty())
     {
         // Select the inserted pages.
         for (const auto& rpPage : maInsertedPages)
@@ -124,6 +124,12 @@ void SelectionObserver::EndObservation()
             rSelector.SelectPage(rpPage);
         }
         maInsertedPages.clear();
+    }
+    else
+    {
+        // tdf#129346 nothing currently selected, select something, if possible
+        if (rSelector.GetPageCount())
+            rSelector.SelectPage(0);
     }
 
     aUpdateLock.Release();
