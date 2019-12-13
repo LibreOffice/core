@@ -35,6 +35,7 @@
 
 class ScJumpMatrix;
 class ScMatrix;
+struct ScSheetLimits;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
 
@@ -54,14 +55,14 @@ void DumpToken(formula::FormulaToken const & rToken);
         A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
         rTok2 are not of sv(Single|Double)Ref
 */
-formula::FormulaTokenRef extendRangeReference( const ScDocument* pDoc, formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
+formula::FormulaTokenRef extendRangeReference( ScSheetLimits& rLimits, formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
 class ScSingleRefToken final : public formula::FormulaToken
 {
 private:
     ScSingleRefData   aSingleRef;
 public:
-                                ScSingleRefToken( const ScDocument* /*pDoc*/, const ScSingleRefData& r, OpCode e = ocPush ) :
+                                ScSingleRefToken( ScSheetLimits& , const ScSingleRefData& r, OpCode e = ocPush ) :
                                     FormulaToken( formula::svSingleRef, e ), aSingleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;
@@ -75,7 +76,7 @@ class ScDoubleRefToken final : public formula::FormulaToken
 private:
     ScComplexRefData  aDoubleRef;
 public:
-                                ScDoubleRefToken( const ScDocument* /*pDoc*/, const ScComplexRefData& r, OpCode e = ocPush  ) :
+                                ScDoubleRefToken( ScSheetLimits&, const ScComplexRefData& r, OpCode e = ocPush  ) :
                                     FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
     virtual ScSingleRefData*      GetSingleRef() override;

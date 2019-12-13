@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_TOKENARRAY_HXX
 
 #include <formula/token.hxx>
+#include <rtl/ref.hxx>
 #include "scdllapi.h"
 #include "types.hxx"
 #include "calcmacros.hxx"
@@ -43,14 +44,16 @@ class ColRowReorderMapType;
 struct ScRawToken;
 struct ScSingleRefData;
 struct ScComplexRefData;
+struct ScSheetLimits;
 
 class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
 
-    bool ImplGetReference( const ScDocument* pDoc, ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
+    bool ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const;
 
-    const ScDocument* mpDoc;
+    // hold a reference to the limits because sometimes our lifetime exceeds the lifetime of the associated ScDocument
+    rtl::Reference<ScSheetLimits> mxSheetLimits;
     size_t mnHashValue;
     ScFormulaVectorState meVectorState : 4; // Only 4 bits
     bool mbOpenCLEnabled : 1;
@@ -60,6 +63,7 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaT
 
 public:
     ScTokenArray(const ScDocument* pDoc);
+    ScTokenArray(ScSheetLimits&);
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     ScTokenArray( const ScTokenArray& ) = default;

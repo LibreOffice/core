@@ -176,7 +176,7 @@ void ScRefTokenHelper::getTokenFromRange(const ScDocument* pDoc, ScTokenRef& pTo
     // different sheets.
     aData.Ref2.SetFlag3D(rRange.aStart.Tab() != rRange.aEnd.Tab());
 
-    pToken.reset(new ScDoubleRefToken(pDoc, aData));
+    pToken.reset(new ScDoubleRefToken(pDoc->GetSheetLimits(), aData));
 }
 
 void ScRefTokenHelper::getTokensFromRangeList(const ScDocument* pDoc, vector<ScTokenRef>& pTokens, const ScRangeList& rRanges)
@@ -389,7 +389,7 @@ private:
                 if (bExternal)
                     pOldToken.reset(new ScExternalDoubleRefToken(nFileId, aTabName, aNewData));
                 else
-                    pOldToken.reset(new ScDoubleRefToken(pDoc, aNewData));
+                    pOldToken.reset(new ScDoubleRefToken(pDoc->GetSheetLimits(), aNewData));
 
                 bJoined = true;
                 break;
@@ -449,7 +449,7 @@ ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument* pDoc, const ScAddr
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress(rAddr);
-    ScTokenRef pRef(new ScSingleRefToken(pDoc, aRefData));
+    ScTokenRef pRef(new ScSingleRefToken(pDoc->GetSheetLimits(), aRefData));
     return pRef;
 }
 
@@ -457,7 +457,7 @@ ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument* pDoc, const ScRang
 {
     ScComplexRefData aRefData;
     aRefData.InitRange(rRange);
-    ScTokenRef pRef(new ScDoubleRefToken(pDoc, aRefData));
+    ScTokenRef pRef(new ScDoubleRefToken(pDoc->GetSheetLimits(), aRefData));
     return pRef;
 }
 

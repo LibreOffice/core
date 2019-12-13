@@ -100,8 +100,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpPrinter( nullptr ),
         mpVirtualDevice_100th_mm( nullptr ),
         pFormatExchangeList( nullptr ),
-        mnMaxCol(MAXCOL),
-        mnMaxRow(MAXROW),
+        mxSheetLimits(new ScSheetLimits(MAXCOL, MAXROW)),
         pFormulaTree( nullptr ),
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),
@@ -173,10 +172,9 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
     if (rOpt.GetInitJumboSheets())
     {
-        mnMaxCol = 16384;
-        mnMaxRow = 16 * 1000 * 1000;
+        mxSheetLimits = new ScSheetLimits(16384, 16 * 1000 * 1000);
     }
-    maPreviewSelection = { mnMaxRow, mnMaxCol };
+    maPreviewSelection = { MaxRow(), MaxCol() };
     aCurTextWidthCalcPos = { MaxCol(), 0, 0 };
 
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
