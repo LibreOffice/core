@@ -68,7 +68,14 @@ public:
 #endif
 
 private:
-    void ResetCachedBitmap();
+    // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage().
+    void ResetSkImages();
+    // Call to ensure mBitmap or mBuffer have data (will convert from mImage
+    // if necessary).
+    void EnsureBitmapData();
+    void EnsureBitmapData() const { return const_cast<SkiaSalBitmap*>(this)->EnsureBitmapData(); }
+    // Allocate mBitmap or mBuffer (with uninitialized contents).
+    bool CreateBitmapData();
     SkBitmap GetAsSkBitmap() const;
 #ifdef DBG_UTIL
     void verify() const;
@@ -90,17 +97,25 @@ private:
                                               : "");
     }
 
-    // Bitmap pixels, if format is supported by Skia. If not, mBuffer is used.
-    SkBitmap mBitmap;
     BitmapPalette mPalette;
-    int mBitCount; // bpp
+    int mBitCount = 0; // bpp
     Size mSize;
+    // The contents of the bitmap may be stored in several different ways:
+    // As SkBitmap, if format is supported by Skia.
+    // As mBuffer buffer, if format is not supported by Skia.
+    // As SkImage, as cached GPU-backed data, but sometimes also a result of some operation.
+    // There is no "master" storage that the others would be derived from. The usual
+    // mode of operation is that mBitmap or mBuffer hold the data, mImage is created
+    // on demand as GPU-backed cached data by calling GetSkImage(), and the cached mImage
+    // is reset by ResetCachedImage(). But sometimes only mImage will be set and in that case
+    // mBitmap/mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
+    SkBitmap mBitmap;
+    sk_sp<SkImage> mImage; // possibly GPU-backed
     std::unique_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
-    sk_sp<SkImage> mImage; // cached contents, possibly GPU-backed
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
 #ifdef DBG_UTIL
-    int mWriteAccessCount; // number of write AcquireAccess() that have not been released
+    int mWriteAccessCount = 0; // number of write AcquireAccess() that have not been released
 #endif
 };
 
