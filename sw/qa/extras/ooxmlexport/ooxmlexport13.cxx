@@ -11,6 +11,7 @@
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -20,6 +21,7 @@
 #include <svx/xfillit0.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <tools/lineend.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <editsh.hxx>
@@ -325,6 +327,32 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
     CPPUNIT_ASSERT_EQUAL(OUString(u"őőőőőőőőőőőűűűű"), getProperty<OUString>(xPropertySet, "Label"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+    getParagraph(2, "Bibliography");
+    getParagraph(4, "Christie, A. (1922). The Secret Adversary. ");
+    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(8)->getString());
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    // Check that all the pre-rendered entries are correct, including trailing spaces
+    CPPUNIT_ASSERT_EQUAL(OUString("\n" // starting with an empty paragraph
+                                  "Christie, A. (1922). The Secret Adversary. \n"
+                                  "\n"
+                                  "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. \n"
+                                  ""), // ending with an empty paragraph
+                         aIndexString);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
