@@ -167,7 +167,7 @@ void ImportLotus::Userrange()
     Read( aScRange );
 
     LotusContext &rContext = aConv.getContext();
-    rContext.pRngNmBffWK3->Add( aName, aScRange );
+    rContext.pRngNmBffWK3->Add( rContext.pDoc, aName, aScRange );
 }
 
 void ImportLotus::Errcell()
@@ -368,10 +368,11 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
 
     bool            bCenter = false;
     SCCOL           nCenterStart = 0, nCenterEnd = 0;
+    LotusContext &rContext = aConv.getContext();
 
     sal_uInt16 nTmpRow(0);
     Read(nTmpRow);
-    SCROW nRow(SanitizeRow(static_cast<SCROW>(nTmpRow)));
+    SCROW nRow(rContext.pDoc->SanitizeRow(static_cast<SCROW>(nTmpRow)));
     sal_uInt16 nHeight(0);
     Read(nHeight);
 
@@ -383,7 +384,6 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
     if( nHeight )
         pD->SetRowHeight(nRow, nDestTab, nHeight);
 
-    LotusContext &rContext = aConv.getContext();
     while( nCntDwn )
     {
         Read( aAttr );
@@ -391,7 +391,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
 
         if( aAttr.HasStyles() )
             rContext.maAttrTable.SetAttr(
-                nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), nRow, aAttr );
+                rContext, nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), nRow, aAttr );
 
         // Do this here and NOT in class LotAttrTable, as we only add attributes if the other
         // attributes are set

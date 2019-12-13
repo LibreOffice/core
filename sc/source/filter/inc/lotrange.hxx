@@ -23,8 +23,6 @@
 #include <refdata.hxx>
 #include <types.hxx>
 
-struct LOTUS_ROOT;
-
 typedef sal_uInt16  LR_ID;
 
 #define ID_FAIL 0xFFFF

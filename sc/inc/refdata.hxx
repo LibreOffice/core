@@ -100,7 +100,9 @@ public:
     bool ValidExternal(const ScDocument* pDoc) const;
 
     ScAddress toAbs( const ScAddress& rPos ) const;
+    ScAddress toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const;
     void SetAddress( const ScAddress& rAddr, const ScAddress& rPos );
+    void SetAddress( const ScDocument* pDoc, const ScAddress& rAddr, const ScAddress& rPos );
     SCROW Row() const;
     SCCOL Col() const;
     SCTAB Tab() const;
@@ -166,6 +168,7 @@ struct ScComplexRefData
     }
 
     SC_DLLPUBLIC ScRange toAbs( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC ScRange toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const;
 
     /** Set a new range, assuming that the ordering of the range matches the
         ordering of the reference data flags already set. */

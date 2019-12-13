@@ -75,8 +75,8 @@ private:
     bool                bWK3;       // alternative Code translation for < WK1
     bool                bWK123;     // alternative for 123
 
-    void                ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nFlags );
-    inline void         ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nFlags );
+    void                ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_uInt8 nFlags );
+    inline void         ReadCRD( const ScDocument* pDoc, ScComplexRefData& rCRD, sal_uInt8 nFlags );
     void                IncToken( TokenId &rParam );
                         // Attention: here the Token-chain is extended in Pool
                         // with '(<rParam>)+1' and finished with Store() !
@@ -98,13 +98,13 @@ private:
     using               LotusConverterBase::Reset;
 };
 
-inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
+inline void LotusToSc::ReadCRD( const ScDocument* pDoc, ScComplexRefData& rCRD, sal_uInt8 nRelBit )
 {
     // 1st part
-    ReadSRD( rCRD.Ref1, nRelBit );
+    ReadSRD( pDoc, rCRD.Ref1, nRelBit );
 
     // 2nd part
-    ReadSRD( rCRD.Ref2, nRelBit >> 3 );
+    ReadSRD( pDoc, rCRD.Ref2, nRelBit >> 3 );
 }
 
 inline void LotusToSc::SetWK3()

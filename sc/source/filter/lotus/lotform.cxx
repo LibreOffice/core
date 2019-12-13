@@ -316,7 +316,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
         rSRD.SetAbsRow(static_cast<SCROW>(nRow));
 }
 
-void LotusToSc::ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nRelBit )
+void LotusToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_uInt8 nRelBit )
 {
     sal_uInt8           nTab, nCol;
     sal_uInt16          nRow;
@@ -332,7 +332,7 @@ void LotusToSc::ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nRelBit )
     rSRD.SetTabRel( ( ( nRelBit & 0x04) != 0 ) || !b3D );
     rSRD.SetFlag3D( b3D );
 
-    rSRD.SetAddress(ScAddress(nCol, nRow, nTab), aEingPos);
+    rSRD.SetAddress(pDoc, ScAddress(nCol, nRow, nTab), aEingPos);
 }
 
 void LotusToSc::IncToken( TokenId &rParam )
@@ -551,12 +551,12 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             // for > WK3
             case FT_Cref:
                 Read( nRelBits );
-                ReadSRD( rR, nRelBits );
+                ReadSRD( m_rContext.pDoc, rR, nRelBits );
                 aStack << aPool.Store( rR );
                 break;
             case FT_Rref:
                 Read( nRelBits );
-                ReadCRD( aCRD, nRelBits );
+                ReadCRD( m_rContext.pDoc, aCRD, nRelBits );
                 aStack << aPool.Store( aCRD );
                 break;
             case FT_Nrref:
@@ -654,7 +654,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
         }
     }
 
-    rpErg = aPool.GetTokenArray(m_rContext.pDoc, aStack.Get());
+    rpErg = aPool.GetTokenArray( m_rContext.pDoc, aStack.Get());
 
     SAL_WARN_IF( nBytesLeft < 0, "sc.filter", "*LotusToSc::Convert(): processed too much!");
     SAL_WARN_IF( nBytesLeft > 0, "sc.filter", "*LotusToSc::Convert(): what happens with the rest?" );
