@@ -425,6 +425,9 @@ void ScOptSolverDlg::EnableButtons()
 
 void ScOptSolverDlg::Close()
 {
+    if (m_xOptDlg)
+        m_xOptDlg->response(RET_CANCEL);
+    assert(!m_xOptDlg);
     DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
 }
 
@@ -533,13 +536,14 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xBtnOpt.get())
     {
         //! move options dialog to UI lib?
-        auto xOptDlg = std::make_shared<ScSolverOptionsDialog>(m_xDialog.get(), maImplNames, maDescriptions, maEngine, maProperties);
-        weld::DialogController::runAsync(xOptDlg, [xOptDlg, this](sal_Int32 nResult){
+        m_xOptDlg = std::make_shared<ScSolverOptionsDialog>(m_xDialog.get(), maImplNames, maDescriptions, maEngine, maProperties);
+        weld::DialogController::runAsync(m_xOptDlg, [this](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
-                maEngine = xOptDlg->GetEngine();
-                maProperties = xOptDlg->GetProperties();
+                maEngine = m_xOptDlg->GetEngine();
+                maProperties = m_xOptDlg->GetProperties();
             }
+            m_xOptDlg.reset();
         });
     }
 }

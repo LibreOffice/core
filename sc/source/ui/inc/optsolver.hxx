@@ -86,6 +86,8 @@ public:
                                             { return maProperties; }
 };
 
+class ScSolverOptionsDialog;
+
 class ScOptSolverDlg : public ScAnyRefDlgController
 {
 public:
@@ -178,6 +180,8 @@ private:
 
     std::unique_ptr<weld::Label> m_xResultFT;
     std::unique_ptr<weld::Widget> m_xContents;
+
+    std::shared_ptr<ScSolverOptionsDialog> m_xOptDlg;
 
     void    Init(const ScAddress& rCursorPos);
     bool    CallSolver();

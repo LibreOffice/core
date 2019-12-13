@@ -52,6 +52,9 @@ public:
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 };
 
+class ScSolverIntegerDialog;
+class ScSolverValueDialog;
+
 class ScSolverOptionsDialog : public weld::GenericDialogController
 {
     css::uno::Sequence<OUString> maImplNames;
@@ -64,6 +67,9 @@ class ScSolverOptionsDialog : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_xLbEngine;
     std::unique_ptr<weld::TreeView> m_xLbSettings;
     std::unique_ptr<weld::Button> m_xBtnEdit;
+
+    std::shared_ptr<ScSolverIntegerDialog> m_xIntDialog;
+    std::shared_ptr<ScSolverValueDialog> m_xValDialog;
 
     DECL_LINK( EngineSelectHdl, weld::ComboBox&, void );
     DECL_LINK( SettingsSelHdl, weld::TreeView&, void );
