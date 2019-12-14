@@ -708,7 +708,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                     try
                                     {
                                         CreateOleComponentAndLoad_Impl();
-                                        m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+                                        m_aClassID = m_pOleComponent->GetCLSID(); // was not set during construction
                                     }
                                     catch( const uno::Exception& )
                                     {
@@ -1332,7 +1332,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             // the object should be initialized from clipboard
             // impossibility to initialize the object means error here
             CreateOleComponentFromClipboard_Impl();
-            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during construction
             m_pOleComponent->RunObject();
             m_nObjectState = embed::EmbedStates::RUNNING;
         }
@@ -1344,7 +1344,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             try
             {
                 CreateOleComponentAndLoad_Impl();
-                m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+                m_aClassID = m_pOleComponent->GetCLSID(); // was not set during construction
             }
             catch( const uno::Exception& )
             {
@@ -1407,7 +1407,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 m_pOleComponent->CreateLinkFromFile( aURL );
 
             m_pOleComponent->RunObject();
-            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during construction
 
             m_nObjectState = embed::EmbedStates::RUNNING;
         }
