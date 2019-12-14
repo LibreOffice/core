@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_08b12a90",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-14T13:11:32Z",
+      "side": 1,
+      "message": "I\u0027ll remove this",
+      "parentUuid": "5f7c97a3_a8cb561c",
+      "range": {
+        "startLine": 29,
+        "startChar": 10,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "06a3b26ddeea10fe4116a687e21da09a89113a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_c84ed2c0",
         "filename": "basic/qa/vba_tests/Err.Raise.vb",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2019-12-14T09:48:44Z",
       "side": 1,
       "message": "_SOURC\"y\"E",
+      "revId": "06a3b26ddeea10fe4116a687e21da09a89113a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_88c69a16",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-14T13:11:32Z",
+      "side": 1,
+      "message": "1st pass intent is to fail as:\n\n Test Results\n \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n Failed: case 10: (Error\u003d1789)\n Failed: case 11: (Source: )\n Failed: case 12: (Err.Description: French Revolution)\n Failed: ERROR: (# 12 in \u0027ERR.Raise_TestCases\u0027 at line 49 - _SOURCyE)\n Failed: case 20: (Error\u003d0)\n Failed: case 21: (Source: )\n Failed: case 22: (Err.Description: )\n Tests passed: 0\n Tests failed: 7",
+      "parentUuid": "5f7c97a3_c84ed2c0",
       "revId": "06a3b26ddeea10fe4116a687e21da09a89113a66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
