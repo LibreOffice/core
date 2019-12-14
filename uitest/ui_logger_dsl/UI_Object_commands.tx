@@ -43,7 +43,7 @@ ListBoxUIObject:
    'Select element with position ' POS=INT 'in' list_id=STRING ('from' parent_id=ID)?
 ;
 //=============================================================
-//hellper grammar for EditUIObject
+//helper grammar for EditUIObject
 action_on_UIObject:
     Type_action | SELECT | Clear
 ;
