@@ -124,6 +124,7 @@ namespace emfplushelper
 
         sal_uInt32 GetType() const { return type; }
         const ::Color& GetColor() const { return solidColor; }
+        ::basegfx::B2DHomMatrix GetTextureTransformation(::basegfx::B2DHomMatrix const& rMapTransform);
 
         void Read(SvStream& s, EmfPlusHelperData const & rR);
     };

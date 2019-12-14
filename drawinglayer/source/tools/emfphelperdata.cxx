@@ -736,17 +736,7 @@ namespace emfplushelper
                 {
                     SAL_WARN("drawinglayer", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
                 }
-                ::basegfx::B2DHomMatrix aTextureTransformation;
-
-                if (brush->hasTransformation) {
-                   aTextureTransformation = brush->brush_transformation;
-
-                   // adjust aTextureTransformation for our world space:
-                   // -> revert the mapping -> apply the transformation -> map back
-                   basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
-                   aInvertedMapTrasform.invert();
-                   aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
-                }
+                ::basegfx::B2DHomMatrix aTextureTransformation(brush->GetTextureTransformation(maMapTransform));
 
                 // select the stored colors
                 const basegfx::BColor aStartColor = brush->solidColor.getBColor();

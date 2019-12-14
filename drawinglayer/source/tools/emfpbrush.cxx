@@ -48,6 +48,24 @@ namespace emfplushelper
     {
     }
 
+    ::basegfx::B2DHomMatrix EMFPBrush::GetTextureTransformation(::basegfx::B2DHomMatrix const& rMapTransform)
+    {
+        ::basegfx::B2DHomMatrix aTextureTransformation;
+
+        if (hasTransformation)
+        {
+           aTextureTransformation = brush_transformation;
+
+           // adjust aTextureTransformation for our world space:
+           // -> revert the mapping -> apply the transformation -> map back
+           basegfx::B2DHomMatrix aInvertedMapTrasform(rMapTransform);
+           aInvertedMapTrasform.invert();
+           aTextureTransformation =  rMapTransform * aTextureTransformation * aInvertedMapTrasform;
+        }
+
+        return aTextureTransformation;
+    }
+
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
         sal_uInt32 header;
