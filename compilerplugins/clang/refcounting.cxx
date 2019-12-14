@@ -252,6 +252,9 @@ bool containsSalhelperReferenceObjectSubclass(const clang::Type* pType0) {
         pRecordDecl = pRecordDecl->getCanonicalDecl();
     }
     if (pRecordDecl) {
+        // for performance reasons we sometimes allocate temporaries on the stack
+        if (loplugin::DeclCheck(pRecordDecl).Struct("ScSheetLimits").GlobalNamespace())
+            return false;
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
             auto const dc = loplugin::DeclCheck(pTemplate);

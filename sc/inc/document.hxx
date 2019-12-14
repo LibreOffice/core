@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_INC_DOCUMENT_HXX
 #define INCLUDED_SC_INC_DOCUMENT_HXX
 
-#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -37,6 +36,7 @@
 #include "typedstrdata.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
+#include "sheetlimits.hxx"
 #include <o3tl/deleter.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <svl/hint.hxx>
@@ -198,6 +198,7 @@ class BitmapEx;
 class ScColumnsRange;
 struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
+struct ScSheetLimits;
 
 namespace sc {
 
@@ -280,25 +281,6 @@ const sal_uInt8 SC_DDE_DEFAULT       = 0;
 const sal_uInt8 SC_DDE_ENGLISH       = 1;
 const sal_uInt8 SC_DDE_TEXT          = 2;
 const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
-
-// Because some stuff needs this info, and those objects lifetimes sometimes exceeds the lifetime
-// of the ScDocument.
-struct ScSheetLimits : public salhelper::SimpleReferenceObject
-{
-    const SCCOL mnMaxCol; /// Maximum addressable column
-    const SCROW mnMaxRow; /// Maximum addressable row
-
-    ScSheetLimits(SCCOL nMaxCol, SCROW nMaxRow) : mnMaxCol(nMaxCol), mnMaxRow(nMaxRow) {}
-
-    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mnMaxCol); }
-    [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mnMaxRow); }
-    [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const { return ::ValidColRow(nCol, nRow, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] bool ValidColRowTab(SCCOL nCol, SCROW nRow, SCTAB nTab) const { return ::ValidColRowTab(nCol, nRow, nTab, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] bool ValidRange(const ScRange& rRange) const { return ::ValidRange(rRange, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] bool ValidAddress(const ScAddress& rAddress) const { return ::ValidAddress(rAddress, mnMaxCol, mnMaxRow); }
-    [[nodiscard]] SCCOL SanitizeCol( SCCOL nCol ) const { return ::SanitizeCol(nCol, mnMaxCol); }
-    [[nodiscard]] SCROW SanitizeRow( SCROW nRow ) const { return ::SanitizeRow(nRow, mnMaxRow); }
-};
 
 // During threaded calculation fields being mutated are kept in this struct
 struct ScDocumentThreadSpecific

@@ -260,7 +260,8 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
 
     for ( const auto& rAreaTestData : rMarksData.aMarks )
     {
-        aMultiSel.SetMarkArea( rAreaTestData.aRange.aStart.Col(), rAreaTestData.aRange.aEnd.Col(),
+        aMultiSel.SetMarkArea( ScSheetLimits(MAXCOL, MAXROW),
+                               rAreaTestData.aRange.aStart.Col(), rAreaTestData.aRange.aEnd.Col(),
                                rAreaTestData.aRange.aStart.Row(), rAreaTestData.aRange.aEnd.Row(),
                                rAreaTestData.bMark );
         aMark.SetMultiMarkArea( rAreaTestData.aRange, rAreaTestData.bMark );

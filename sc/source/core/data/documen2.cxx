@@ -172,7 +172,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
     if (rOpt.GetInitJumboSheets())
     {
-        mxSheetLimits = new ScSheetLimits(16384, 16 * 1000 * 1000);
+        mxSheetLimits = new ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
     }
     maPreviewSelection = { MaxRow(), MaxCol() };
     aCurTextWidthCalcPos = { MaxCol(), 0, 0 };

@@ -70,6 +70,8 @@ const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
+const SCROW       MAXROW_JUMBO   = 16 * 1000 * 1000;
+const SCCOL       MAXCOL_JUMBO   = 16384;
 // Maximum tiled rendering values
 const SCROW       MAXTILEDROW    = 500000;
 // Limit the initial tab count to prevent users to set the count too high,
@@ -90,13 +92,13 @@ const SCROW MAXROW_30         = 8191;
 
 [[nodiscard]] inline bool ValidCol( SCCOL nCol, SCCOL nMaxCol )
 {
-    assert(nMaxCol == MAXCOL); // temporary to debug jumbo sheets work
+    assert(nMaxCol == MAXCOL || nMaxCol == MAXCOL_JUMBO); // temporary to debug jumbo sheets work
     return nCol >= 0 && nCol <= nMaxCol;
 }
 
 [[nodiscard]] inline bool ValidRow( SCROW nRow, SCROW nMaxRow)
 {
-    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
+    assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return nRow >= 0 && nRow <= nMaxRow;
 }
 
@@ -112,25 +114,25 @@ const SCROW MAXROW_30         = 8191;
 
 [[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol, SCROW nMaxRow )
 {
-    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
+    assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow);
 }
 
 [[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol, SCROW nMaxRow )
 {
-    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
+    assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow) && ValidTab( nTab);
 }
 
 [[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol )
 {
-    assert(nMaxCol == MAXCOL); // temporary to debug jumbo sheets work
+    assert(nMaxCol == MAXCOL || nMaxCol == MAXCOL_JUMBO); // temporary to debug jumbo sheets work
     return nCol < 0 ? 0 : (nCol > nMaxCol ? nMaxCol : nCol);
 }
 
 [[nodiscard]] inline SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow )
 {
-    assert(nMaxRow == MAXROW); // temporary to debug jumbo sheets work
+    assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return nRow < 0 ? 0 : (nRow > nMaxRow ? nMaxRow : nRow);
 }
 
