@@ -698,12 +698,6 @@ void Cell::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 }
 
 
-const SfxItemSet& Cell::GetItemSet() const
-{
-    return mpProperties->GetObjectItemSet();
-}
-
-
 void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
 {
     if( mpProperties )
