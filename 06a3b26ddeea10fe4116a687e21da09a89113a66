@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f7c97a3_a8cb561c",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-14T09:52:29Z",
+      "side": 1,
+      "message": "Please no politics in the codebase, even historical",
+      "range": {
+        "startLine": 29,
+        "startChar": 10,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "06a3b26ddeea10fe4116a687e21da09a89113a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_c84ed2c0",
         "filename": "basic/qa/vba_tests/Err.Raise.vb",
         "patchSetId": 2
