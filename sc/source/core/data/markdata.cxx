@@ -23,6 +23,8 @@
 #include <markmulti.hxx>
 #include <rangelst.hxx>
 #include <segmenttree.hxx>
+#include <sheetlimits.hxx>
+#include <document.hxx>
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 #include <unordered_map>
@@ -104,7 +106,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark, bool bSetu
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartCol, nEndCol );
 
-    aMultiSel.SetMarkArea( nStartCol, nEndCol, nStartRow, nEndRow, bMark );
+    aMultiSel.SetMarkArea( ScSheetLimits(mnMaxCol, mnMaxRow), nStartCol, nEndCol, nStartRow, nEndRow, bMark );
 
     if ( bMultiMarked )                 // Update aMultiRange
     {
@@ -336,7 +338,7 @@ ScMarkData::ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList)
     bMultiMarked = true;
     aMultiRange = rList.Combine();
 
-    aMultiSel.Set( rList );
+    aMultiSel.Set( ScSheetLimits(mnMaxCol, mnMaxRow), rList );
 }
 
 
@@ -612,7 +614,7 @@ void ScMarkData::ShiftCols(const ScDocument* pDoc, SCCOL nStartCol, long nColOff
     }
     else if (bMultiMarked)
     {
-        aMultiSel.ShiftCols(nStartCol, nColOffset);
+        aMultiSel.ShiftCols(pDoc->GetSheetLimits(), nStartCol, nColOffset);
         aMultiRange.IncColIfNotLessThan(pDoc, nStartCol, nColOffset);
     }
 }

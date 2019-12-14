@@ -26,6 +26,7 @@
 #include <vector>
 
 class ScRangeList;
+struct ScSheetLimits;
 
 class ScMultiSel
 {
@@ -54,16 +55,16 @@ public:
     bool IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
     bool HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const;
     SCROW GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
-    void SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark );
-    void Set( ScRangeList const & );
+    void SetMarkArea( const ScSheetLimits& rLimits, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark );
+    void Set( const ScSheetLimits& rLimits, ScRangeList const & );
     bool IsRowMarked( SCROW nRow ) const;
     bool IsRowRangeMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool IsEmpty() const { return ( aMultiSelContainer.empty() && !aRowSel.HasMarks() ); }
     ScMarkArray GetMarkArray( SCCOL nCol ) const;
     void Clear();
-    void MarkAllCols( SCROW nStartRow, SCROW nEndRow );
+    void MarkAllCols( const ScSheetLimits& rLimits, SCROW nStartRow, SCROW nEndRow );
     bool HasAnyMarks() const;
-    void ShiftCols(SCCOL nStartCol, long nColOffset);
+    void ShiftCols(const ScSheetLimits& rLimits, SCCOL nStartCol, long nColOffset);
     void ShiftRows(SCROW nStartRow, long nRowOffset);
 
     // For faster access from within ScMarkData, instead of creating

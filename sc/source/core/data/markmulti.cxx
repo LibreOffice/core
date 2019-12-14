@@ -21,6 +21,7 @@
 #include <markarr.hxx>
 #include <rangelst.hxx>
 #include <segmenttree.hxx>
+#include <sheetlimits.hxx>
 #include <sal/log.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -162,18 +163,18 @@ SCROW ScMultiSel::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
     return ( bUp ? nRow2 : nRow1 );
 }
 
-void ScMultiSel::MarkAllCols( SCROW nStartRow, SCROW nEndRow )
+void ScMultiSel::MarkAllCols( const ScSheetLimits& rLimits, SCROW nStartRow, SCROW nEndRow )
 {
-    aMultiSelContainer.resize(MAXCOL+1, ScMarkArray(mnMaxRow));
-    for ( SCCOL nCol = MAXCOL; nCol >= 0; --nCol )
+    aMultiSelContainer.resize(rLimits.mnMaxCol+1, ScMarkArray(mnMaxRow));
+    for ( SCCOL nCol = rLimits.mnMaxCol; nCol >= 0; --nCol )
     {
         aMultiSelContainer[nCol].SetMarkArea( nStartRow, nEndRow, true );
     }
 }
 
-void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark )
+void ScMultiSel::SetMarkArea( const ScSheetLimits& rLimits, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark )
 {
-    if ( nStartCol == 0 && nEndCol == MAXCOL )
+    if ( nStartCol == 0 && nEndCol == rLimits.mnMaxCol )
     {
         aRowSel.SetMarkArea( nStartRow, nEndRow, bMark );
         if ( !bMark )
@@ -199,23 +200,23 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
         else
         {
             nBeg = aRowSel.GetNextMarked( nStartRow, false );
-            if ( nBeg != MAXROWCOUNT )
+            if ( nBeg != rLimits.GetMaxRowCount() )
                 nLast = aRowSel.GetMarkEnd( nBeg, false );
         }
 
-        if ( nBeg != MAXROWCOUNT && nLast >= nEndRow )
-            MarkAllCols( nBeg, nEndRow );
+        if ( nBeg != rLimits.GetMaxRowCount() && nLast >= nEndRow )
+            MarkAllCols( rLimits, nBeg, nEndRow );
         else
         {
-            while ( nBeg != MAXROWCOUNT && nLast < nEndRow )
+            while ( nBeg != rLimits.GetMaxRowCount() && nLast < nEndRow )
             {
-                MarkAllCols( nBeg, nLast );
+                MarkAllCols( rLimits, nBeg, nLast );
                 nBeg = aRowSel.GetNextMarked( nLast + 1, false );
-                if ( nBeg != MAXROWCOUNT )
+                if ( nBeg != rLimits.GetMaxRowCount() )
                     nLast = aRowSel.GetMarkEnd( nBeg, false );
             }
-            if ( nBeg != MAXROWCOUNT && nLast >= nEndRow )
-                MarkAllCols( nBeg, nEndRow );
+            if ( nBeg != rLimits.GetMaxRowCount() && nLast >= nEndRow )
+                MarkAllCols( rLimits, nBeg, nEndRow );
         }
 
         aRowSel.SetMarkArea( nStartRow, nEndRow, false );
@@ -231,7 +232,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
   optimised init-from-range-list. Specifically this is optimised for cases
   where we have very large data columns with lots and lots of ranges.
 */
-void ScMultiSel::Set( ScRangeList const & rList )
+void ScMultiSel::Set( const ScSheetLimits& rLimits, ScRangeList const & rList )
 {
     Clear();
     if (rList.size() == 0)
@@ -245,7 +246,7 @@ void ScMultiSel::Set( ScRangeList const & rList )
             return lhs.aStart.Row() < rhs.aStart.Row();
         });
 
-    std::vector<std::vector<ScMarkEntry>> aMarkEntriesPerCol(MAXCOL+1);
+    std::vector<std::vector<ScMarkEntry>> aMarkEntriesPerCol(rLimits.mnMaxCol+1);
 
     SCCOL nMaxCol = -1;
     int i = 0;
@@ -257,7 +258,7 @@ void ScMultiSel::Set( ScRangeList const & rList )
         SCROW nEndRow = rRange.aEnd.Row();
         assert( nEndRow >= nStartRow && "this method assumes the input data has ranges with endrow>=startrow");
         assert( nEndCol >= nStartCol && "this method assumes the input data has ranges with endcol>=startcol");
-        if ( nStartCol == 0 && nEndCol == MAXCOL )
+        if ( nStartCol == 0 && nEndCol == rLimits.mnMaxCol )
             aRowSel.SetMarkArea( nStartRow, nEndRow, /*bMark*/true );
         else
         {
@@ -326,9 +327,9 @@ bool ScMultiSel::HasAnyMarks() const
     return false;
 }
 
-void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
+void ScMultiSel::ShiftCols(const ScSheetLimits& rLimits, SCCOL nStartCol, long nColOffset)
 {
-    if (nStartCol > MAXCOL)
+    if (nStartCol > rLimits.mnMaxCol)
         return;
 
     ScMultiSel aNewMultiSel(*this);
@@ -351,8 +352,8 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
             nDestCol += nColOffset;
             if (nDestCol < 0)
                 nDestCol = 0;
-            else if (nDestCol > MAXCOL)
-                nDestCol = MAXCOL;
+            else if (nDestCol > rLimits.mnMaxCol)
+                nDestCol = rLimits.mnMaxCol;
         }
         if (nDestCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
             aMultiSelContainer.resize(nDestCol, ScMarkArray(mnMaxRow));
