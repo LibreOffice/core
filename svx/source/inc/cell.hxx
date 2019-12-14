@@ -76,7 +76,6 @@ public:
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const override;
     SVX_DLLPRIVATE void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const;
 
-    SVX_DLLPRIVATE virtual const SfxItemSet& GetItemSet() const override;
     SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems);
     void SetMergedItem(const SfxPoolItem& rItem);
 
