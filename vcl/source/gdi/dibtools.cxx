@@ -36,105 +36,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <memory>
 
-#define DIBCOREHEADERSIZE       ( 12UL )
-#define DIBINFOHEADERSIZE       ( sizeof(DIBInfoHeader) )
-#define DIBV5HEADERSIZE         ( sizeof(DIBV5Header) )
-
-// - DIBInfoHeader and DIBV5Header
-
-typedef sal_Int32 FXPT2DOT30;
-
-namespace
-{
-
-struct CIEXYZ
-{
-    FXPT2DOT30      aXyzX;
-    FXPT2DOT30      aXyzY;
-    FXPT2DOT30      aXyzZ;
-
-    CIEXYZ()
-    :   aXyzX(0),
-        aXyzY(0),
-        aXyzZ(0)
-    {}
-};
-
-struct CIEXYZTriple
-{
-    CIEXYZ          aXyzRed;
-    CIEXYZ          aXyzGreen;
-    CIEXYZ          aXyzBlue;
-
-    CIEXYZTriple()
-    :   aXyzRed(),
-        aXyzGreen(),
-        aXyzBlue()
-    {}
-};
-
-struct DIBInfoHeader
-{
-    sal_uInt32      nSize;
-    sal_Int32       nWidth;
-    sal_Int32       nHeight;
-    sal_uInt16      nPlanes;
-    sal_uInt16      nBitCount;
-    sal_uInt32      nCompression;
-    sal_uInt32      nSizeImage;
-    sal_Int32       nXPelsPerMeter;
-    sal_Int32       nYPelsPerMeter;
-    sal_uInt32      nColsUsed;
-    sal_uInt32      nColsImportant;
-
-    DIBInfoHeader()
-    :   nSize(0),
-        nWidth(0),
-        nHeight(0),
-        nPlanes(0),
-        nBitCount(0),
-        nCompression(0),
-        nSizeImage(0),
-        nXPelsPerMeter(0),
-        nYPelsPerMeter(0),
-        nColsUsed(0),
-        nColsImportant(0)
-    {}
-};
-
-struct DIBV5Header : public DIBInfoHeader
-{
-    sal_uInt32      nV5RedMask;
-    sal_uInt32      nV5GreenMask;
-    sal_uInt32      nV5BlueMask;
-    sal_uInt32      nV5AlphaMask;
-    sal_uInt32      nV5CSType;
-    CIEXYZTriple    aV5Endpoints;
-    sal_uInt32      nV5GammaRed;
-    sal_uInt32      nV5GammaGreen;
-    sal_uInt32      nV5GammaBlue;
-    sal_uInt32      nV5Intent;
-    sal_uInt32      nV5ProfileData;
-    sal_uInt32      nV5ProfileSize;
-    sal_uInt32      nV5Reserved;
-
-    DIBV5Header()
-    :   DIBInfoHeader(),
-        nV5RedMask(0),
-        nV5GreenMask(0),
-        nV5BlueMask(0),
-        nV5AlphaMask(0),
-        nV5CSType(0),
-        aV5Endpoints(),
-        nV5GammaRed(0),
-        nV5GammaGreen(0),
-        nV5GammaBlue(0),
-        nV5Intent(0),
-        nV5ProfileData(0),
-        nV5ProfileSize(0),
-        nV5Reserved(0)
-    {}
-};
+namespace {
 
 sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
 {
@@ -782,28 +684,38 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     return rIStm.GetError() == ERRCODE_NONE;
 }
 
-bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uLong nOffset, bool bIsMask, bool bMSOFormat)
+bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uLong nOffset, bool bIsMask, bool bMSOFormat, DIBV5Header* pHeader=nullptr)
 {
     DIBV5Header aHeader;
     const sal_uLong nStmPos = rIStm.Tell();
     bool bTopDown(false);
 
-    if (!ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat))
+    if (!pHeader && !ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat))
         return false;
 
-    //BI_BITCOUNT_0 jpeg/png is unsupported
+    if (pHeader)
+    {
+        SAL_INFO("vcl", "Using injected v5 DIB header");
+        aHeader = *pHeader;
+    }
+
     if (aHeader.nBitCount == 0)
+    {
+        SAL_WARN("vcl", "BI_BITCOUNT_0 jpeg/png is unsupported");
         return false;
+    }
 
     if (aHeader.nWidth <= 0 || aHeader.nHeight <= 0)
+    {
+        SAL_WARN("vcl", "Invalid bitmap size: " << aHeader.nWidth << " x " << aHeader.nHeight);
         return false;
+    }
 
     // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
     // this method, nOffset is 0, that's OK.
     if (nOffset && aHeader.nSize > nOffset)
     {
-        // Header size claims to extend into the image data.
-        // Looks like an error.
+        SAL_WARN("vcl", "Header size claims to extend into the image data. Looks like an error.");
         return false;
     }
 
@@ -814,7 +726,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
 
     if (aHeader.nBitCount <= 8)
     {
-        if(aHeader.nColsUsed)
+        if (aHeader.nColsUsed)
         {
             nColors = static_cast<sal_uInt16>(aHeader.nColsUsed);
         }
@@ -824,7 +736,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
         }
     }
 
-    if (ZCOMPRESS == aHeader.nCompression)
+    if (aHeader.nCompression == ZCOMPRESS)
     {
         sal_uInt32 nCodedSize(0);
         sal_uInt32  nUncodedSize(0);
@@ -906,8 +818,12 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
         ImplReadDIBPalette(*pIStm, aPalette, aHeader.nSize != DIBCOREHEADERSIZE);
     }
 
-    if (pIStm->GetError())
+    ErrCode aError = pIStm->GetError();
+    if (aError.IsError())
+    {
+        SAL_WARN("vcl", "Error reading bitmap: " << aError.toHexString());
         return false;
+    }
 
     if (nOffset)
     {
@@ -916,7 +832,11 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
 
     const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
     if (nBitsPerLine > SAL_MAX_UINT32)
+    {
+        SAL_WARN("vcl", "Too many bits per line, we are using 0x" << std::hex << nBitsPerLine << std::dec);
         return false;
+    }
+
     const sal_uInt64 nAlignedWidth(AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine)));
 
     switch (aHeader.nCompression)
@@ -1012,15 +932,25 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     Bitmap aNewBmp(aSizePixel, nBitCount, pPal);
     BitmapScopedWriteAccess pAcc(aNewBmp);
     if (!pAcc)
+    {
+        SAL_WARN("vcl", "Cannot write to aNewBmp");
         return false;
+    }
+
     if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
     {
+        SAL_WARN_IF(pAcc->Width() != aHeader.nWidth, "vcl", "Width not what was expected - pAcc->Width() = " << pAcc->Width()
+                                                                << "aHeader.nWidth = " << aHeader.nWidth);
+        SAL_WARN_IF(pAcc->Height() != aHeader.nHeight, "vcl", "Height not what was expected - pAcc->Height() = " << pAcc->Height()
+                                                                << "aHeader.nHeight= " << aHeader.nHeight);
         return false;
     }
 
     // read bits
     bool bAlphaUsed(false);
     bool bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, aPalette, pAccAlpha.get(), bTopDown, bAlphaUsed, nAlignedWidth, bForceToMonoWhileReading);
+
+    SAL_WARN_IF(!bRet, "vcl", "Unable to read DIB data");
 
     if (bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
     {
@@ -1641,7 +1571,8 @@ bool ImplReadDIB(
     SvStream& rIStm,
     bool bFileHeader,
     bool bIsMask=false,
-    bool bMSOFormat=false)
+    bool bMSOFormat=false,
+    DIBV5Header* pHeader=nullptr)
 {
     const SvStreamEndian nOldFormat(rIStm.GetEndian());
     const sal_uLong nOldPos(rIStm.Tell());
@@ -1659,7 +1590,8 @@ bool ImplReadDIB(
     }
     else
     {
-        bRet = ImplReadDIBBody(rIStm, rTarget, nullptr, nOffset, bIsMask, bMSOFormat);
+        if (!pHeader)
+            bRet = ImplReadDIBBody(rIStm, rTarget, nullptr, nOffset, bIsMask, bMSOFormat);
     }
 
     if(!bRet)
@@ -1830,9 +1762,13 @@ bool ReadDIBBitmapEx(
 bool ReadDIBV5(
     Bitmap& rTarget,
     AlphaMask& rTargetAlpha,
-    SvStream& rIStm)
+    SvStream& rIStm,
+    DIBV5Header *pHeader)
 {
-    return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
+    if (!pHeader)
+        return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
+    else
+        return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true, pHeader);
 }
 
 bool ReadRawDIB(
