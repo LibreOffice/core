@@ -309,42 +309,76 @@ namespace emfplushelper
 
     bool PixelFormatUsesPalette(sal_uInt32 format)
     {
-        return (format << 15);
+        return (format & 0x00008000) >> 15;
     }
 
     bool PixelFormatGDISupported(sal_uInt32 format)
     {
-        return (format<< 1) >> 15;
+        return (format & 0x00004000) >> 14;
     }
 
     bool PixelFormatIncludesAlpha(sal_uInt32 format)
     {
-        return (format << 2) >> 15;
+        return (format & 0x00002000) >> 13;
     }
 
     bool PixelFormatIsPremultiplied(sal_uInt32 format)
     {
-        return (format << 3) >> 15;
+        return (format & 0x00001000) >> 12;
     }
 
     bool PixelFormatSupportsExtendedColors(sal_uInt32 format)
     {
-        return (format << 4) >> 15;
+        return (format & 0x00000800) >> 11;
     }
 
     bool PixelFormatIsCanonical(sal_uInt32 format)
     {
-        return (format << 5) >> 15;
+        return (format & 0x00000400) >> 10;
     }
 
     sal_uInt32 PixelFormatBitsPerPixel(sal_uInt32 format)
     {
-        return (format & 0x00FF0000) >> 16;
+        switch(format)
+        {
+            case PixelFormat1bppIndexed:
+                return 1;
+
+            case PixelFormat4bppIndexed:
+                return 4;
+
+            case PixelFormat8bppIndexed:
+                return 8;
+
+            case PixelFormat16bppGrayScale:
+            case PixelFormat16bppRGB555:
+            case PixelFormat16bppRGB565:
+            case PixelFormat16bppARGB1555:
+                return 16;
+
+            case PixelFormat24bppRGB:
+                return 24;
+
+            case PixelFormatUndefined:
+            case PixelFormat32bppRGB:
+            case PixelFormat32bppARGB:
+            case PixelFormat32bppPARGB:
+                return 32;
+
+            case PixelFormat48bppRGB:
+                return 48;
+
+            case PixelFormat64bppARGB:
+            case PixelFormat64bppPARGB:
+                return 64;
+        }
+
+        return 32;
     }
 
     sal_uInt32 PixelFormatEnumerationIndex(sal_uInt32 format)
     {
-        return (format >> 24);
+        return (format & 0xFF000000) >> 24;
     }
 
     OUString BitmapDataTypeToString(sal_uInt32 type)
