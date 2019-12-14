@@ -20,6 +20,7 @@
 #include "emfpcustomlinecap.hxx"
 #include "emfphelperdata.hxx"
 #include "emfpbrush.hxx"
+#include "emfpimage.hxx"
 #include "emfppen.hxx"
 #include "emfppath.hxx"
 #include "emfpregion.hxx"
@@ -39,6 +40,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -46,6 +48,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/canvastools.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace emfplushelper
@@ -406,6 +409,37 @@ namespace emfplushelper
             rState.setClipPolyPolygon( state.getClipPolyPolygon() );
             mappingChanged();
             SAL_INFO("drawinglayer", "stack index: " << index << " found, maWorldTransform: " << maWorldTransform);
+        }
+    }
+
+    void EmfPlusHelperData::EMFPPlusDrawImage(::basegfx::B2DRectangle const& rect,
+                                              EMFPImage const& image, basegfx::B2DHomMatrix const& rTransformMatrix)
+    {
+        tools::Rectangle aSource(vcl::unotools::rectangleFromB2DRectangle(rect));
+
+        if (image.type == ImageDataTypeBitmap)
+        {
+            BitmapEx aBmp(image.graphic.GetBitmapEx());
+            aBmp.Crop(aSource);
+            Size aSize(aBmp.GetSizePixel());
+            SAL_INFO("drawinglayer", "EMF+\t bitmap size: " << aSize.Width() << "x" << aSize.Height());
+            if (aSize.Width() > 0 && aSize.Height() > 0)
+            {
+                mrTargetHolders.Current().append(
+                    std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, rTransformMatrix));
+            }
+            else
+            {
+                SAL_WARN("drawinglayer", "EMF+\t warning: empty bitmap");
+                return;
+            }
+        }
+        else if (image.type == ImageDataTypeMetafile)
+        {
+            GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+            aGDI.Clip(aSource);
+            mrTargetHolders.Current().append(
+                    std::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(rTransformMatrix, aGDI));
         }
     }
 
@@ -1365,30 +1399,7 @@ namespace emfplushelper
                                         /* Row 1, Column 1 */ aDstSize.getY(),
                                         /* Row 1, Column 2 */ aDstPoint.getY());
 
-                            if (image.type == ImageDataTypeBitmap)
-                            {
-                                BitmapEx aBmp(image.graphic.GetBitmapEx());
-                                aBmp.Crop(aSource);
-                                Size aSize(aBmp.GetSizePixel());
-                                SAL_INFO("drawinglayer", "EMF+\t bitmap size: " << aSize.Width() << "x" << aSize.Height());
-                                if (aSize.Width() > 0 && aSize.Height() > 0)
-                                {
-                                    mrTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, aTransformMatrix));
-                                }
-                                else
-                                {
-                                    SAL_WARN("drawinglayer", "EMF+\t warning: empty bitmap");
-                                    break;
-                                }
-                            }
-                            else if (image.type == ImageDataTypeMetafile)
-                            {
-                                GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
-                                aGDI.Clip(aSource);
-                                mrTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
-                            }
+                            EMFPPlusDrawImage(vcl::unotools::b2DRectangleFromRectangle(aSource), image, aTransformMatrix);
                         }
                         else
                         {
