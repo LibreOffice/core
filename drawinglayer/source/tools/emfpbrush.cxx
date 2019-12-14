@@ -28,8 +28,9 @@
 
 namespace emfplushelper
 {
-    EMFPBrush::EMFPBrush()
+    EMFPBrush::EMFPBrush(sal_uInt32 datasize)
         : type(0)
+        , datasize(datasize)
         , additionalFlags(0)
         , wrapMode(0)
         , firstPointX(0.0)
@@ -49,17 +50,22 @@ namespace emfplushelper
     {
     }
 
-    static OUString BrushTypeToString(sal_uInt32 type)
+    ::basegfx::B2DHomMatrix EMFPBrush::GetTextureTransformation(::basegfx::B2DHomMatrix const& rMapTransform)
     {
-        switch (type)
+        ::basegfx::B2DHomMatrix aTextureTransformation;
+
+        if (hasTransformation)
         {
-            case BrushTypeSolidColor: return "BrushTypeSolidColor";
-            case BrushTypeHatchFill: return "BrushTypeHatchFill";
-            case BrushTypeTextureFill: return "BrushTypeTextureFill";
-            case BrushTypePathGradient: return "BrushTypePathGradient";
-            case BrushTypeLinearGradient: return "BrushTypeLinearGradient";
+           aTextureTransformation = brush_transformation;
+
+           // adjust aTextureTransformation for our world space:
+           // -> revert the mapping -> apply the transformation -> map back
+           basegfx::B2DHomMatrix aInvertedMapTrasform(rMapTransform);
+           aInvertedMapTrasform.invert();
+           aTextureTransformation =  rMapTransform * aTextureTransformation * aInvertedMapTrasform;
         }
-        return "";
+
+        return aTextureTransformation;
     }
 
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
@@ -334,7 +340,7 @@ namespace emfplushelper
             }
             default:
             {
-                SAL_WARN("drawinglayer", "EMF+\tunhandled brush type: " << std::hex << type << std::dec);
+                SAL_WARN("drawinglayer", "EMF+\t\t\tunhandled brush type: " << std::hex << type << std::dec);
             }
         }
     }

@@ -168,6 +168,19 @@ namespace emfplushelper
         return (!((flags >> 15) & 0x0001));
     }
 
+    OUString BrushTypeToString(sal_uInt32 type)
+    {
+        switch (type)
+        {
+            case BrushTypeSolidColor: return "BrushTypeSolidColor";
+            case BrushTypeHatchFill: return "BrushTypeHatchFill";
+            case BrushTypeTextureFill: return "BrushTypeTextureFill";
+            case BrushTypePathGradient: return "BrushTypePathGradient";
+            case BrushTypeLinearGradient: return "BrushTypeLinearGradient";
+        }
+        return "";
+    }
+
     OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid)
     {
         OUString sBrushId;

@@ -30,7 +30,8 @@ namespace emfplushelper
     OUString SmoothingModeToString(sal_uInt16 nSmoothMode);
     OUString TextRenderingHintToString(sal_uInt16 nHint);
     OUString InterpolationModeToString(sal_uInt16 nMode);
-    OUString UnitTypeToString(sal_uInt16 nType);
+    OUString UnitTypeToString(sal_uInt16 type);
+    OUString BrushTypeToString(sal_uInt32 type);
     bool IsBrush(sal_uInt16 flags);
     OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid);
     OUString BrushDataFlagsToString(sal_uInt32 brush);

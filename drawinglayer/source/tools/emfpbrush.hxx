@@ -33,6 +33,7 @@ namespace emfplushelper
     {
         ::Color solidColor;
         sal_uInt32 type;
+        sal_uInt32 datasize;
         sal_uInt32 additionalFlags;
 
         /* linear gradient */
@@ -52,11 +53,12 @@ namespace emfplushelper
         std::unique_ptr<EMFPPath> path;
         EmfPlusHatchStyle hatchStyle;
 
-        EMFPBrush();
+        EMFPBrush(sal_uInt32 datasize);
         virtual ~EMFPBrush() override;
 
         sal_uInt32 GetType() const { return type; }
         const ::Color& GetColor() const { return solidColor; }
+        ::basegfx::B2DHomMatrix GetTextureTransformation(::basegfx::B2DHomMatrix const& rMapTransform);
 
         void Read(SvStream& s, EmfPlusHelperData const & rR);
     };

@@ -100,14 +100,14 @@ namespace emfplushelper
         {
             case EmfPlusObjectTypeBrush:
             {
-                EMFPBrush *brush = new EMFPBrush();
+                EMFPBrush *brush = new EMFPBrush(dataSize);
                 maEMFPObjects[index].reset(brush);
                 brush->Read(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypePen:
             {
-                EMFPPen *pen = new EMFPPen();
+                EMFPPen *pen = new EMFPPen(dataSize);
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
                 break;
@@ -622,17 +622,7 @@ namespace emfplushelper
                 {
                     SAL_WARN("drawinglayer", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
                 }
-                ::basegfx::B2DHomMatrix aTextureTransformation;
-
-                if (brush->hasTransformation) {
-                   aTextureTransformation = brush->brush_transformation;
-
-                   // adjust aTextureTransformation for our world space:
-                   // -> revert the mapping -> apply the transformation -> map back
-                   basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
-                   aInvertedMapTrasform.invert();
-                   aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
-                }
+                ::basegfx::B2DHomMatrix aTextureTransformation(brush->GetTextureTransformation(maMapTransform));
 
                 // select the stored colors
                 const basegfx::BColor aStartColor = brush->solidColor.getBColor();
