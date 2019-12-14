@@ -928,10 +928,10 @@
           <label>Password</label>
         </info>
       </prop>
-      <prop oor:name="IsSMPTAfterPOP" oor:type="xs:boolean">
+      <prop oor:name="IsSMTPAfterPOP" oor:type="xs:boolean">
         <info>
           <desc>SMTP server requires authentication at the POP or IMAP server</desc>
-          <label>SMPT after POP</label>
+          <label>SMTP after POP</label>
         </info>
       </prop>
       <prop oor:name="InServerName" oor:type="xs:string">
