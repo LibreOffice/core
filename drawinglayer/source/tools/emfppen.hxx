@@ -116,7 +116,7 @@ namespace emfplushelper
         sal_Int32 customEndCapLen;
         std::unique_ptr<EMFPCustomLineCap> customEndCap;
 
-        EMFPPen();
+        EMFPPen(sal_uInt32 datasize);
 
         virtual ~EMFPPen() override;
 
