@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #ifdef IOS
 #include <sys/mman.h>
@@ -100,6 +101,9 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -5787,6 +5791,66 @@ bool unoComponentCall(unoComFunc eFunc, va_list *pParam)
 
     switch (eFunc)
     {
+        case SaveTemplate:
+        {
+            MediaDescriptor aLoadMedia;
+
+            const sal_Char* pTemplate = va_arg(*pParam, sal_Char const*);
+            sal_uInt32 nLen1 = va_arg(*pParam, sal_Int32);
+            const sal_Char* pSaveAs = va_arg(*pParam, sal_Char const*);
+            sal_uInt32 nLen2 = va_arg(*pParam, sal_Int32);
+
+            OUString aTemplate(pTemplate, nLen1, RTL_TEXTENCODING_UTF8);
+            OUString aSaveAs(pSaveAs, nLen2, RTL_TEXTENCODING_UTF8);
+
+            SfxApplication* pApp = SfxApplication::Get();
+
+            std::shared_ptr<const SfxFilter> pFilter;
+            {
+                SfxMedium aMedium(aTemplate,(StreamMode::READ | StreamMode::SHARE_DENYNONE));
+
+                ErrCode nErr = pApp->GetFilterMatcher().GuessFilter( aMedium, pFilter, SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
+                if (nErr != ERRCODE_NONE)
+                {
+                    throw uno::RuntimeException("No Template");
+                }
+
+                if (!pFilter || !pFilter->IsAllowedAsTemplate())
+                {
+                    throw uno::RuntimeException("Not allowed template");
+                }
+            }
+
+            SfxMedium* pLoad = new SfxMedium(aTemplate, StreamMode::STD_READ, pFilter);
+            {
+#ifndef NDEBUG
+                // Silence DBG_TESTSOLARMUTEX checks
+                // Loading and saving files are unique jail child path
+                SolarMutexGuard aGuard;
+#endif
+                SfxObjectShell* pDoc = SfxObjectShell::CreateObject(pFilter->GetServiceName());
+                if (pDoc)
+                {
+                    if (pDoc->DoLoad(pLoad))
+                    {
+                        SfxMedium aSave(aSaveAs, StreamMode::STD_WRITE);
+                        if (pDoc->DoSaveAs(aSave))
+                        {
+                            bSuccess = true;
+                        }
+                    }
+
+                    // the memory pLoad and pDoc is released when DoClose is invoked
+                    pDoc->DoClose();
+                }
+                else
+                {
+                    throw uno::RuntimeException("Failed create document object");
+                }
+            }
+        }
+        break;
+
         case None:
         default:
             assert(false);

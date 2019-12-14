@@ -19,8 +19,8 @@ extern "C"
 
 typedef enum
 {
-    None
-
+    None,
+    SaveTemplate
 } unoComFunc;
 
 #if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
