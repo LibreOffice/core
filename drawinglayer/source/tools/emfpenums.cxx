@@ -283,6 +283,79 @@ namespace emfplushelper
 
         return "";
     }
+
+    OUString PixelFormatToString(sal_uInt32 format)
+    {
+        switch (format)
+        {
+            case PixelFormatUndefined: return "PixelFormatUndefined";
+            case PixelFormat1bppIndexed: return "PixelFormat1bppIndexed";
+            case PixelFormat4bppIndexed: return "PixelFormat4bppIndexed";
+            case PixelFormat8bppIndexed: return "PixelFormat8bppIndexed";
+            case PixelFormat16bppGrayScale: return "PixelFormat16bppGrayScale";
+            case PixelFormat16bppRGB555: return "PixelFormat16bppRGB555";
+            case PixelFormat16bppRGB565: return "PixelFormat16bppRGB565";
+            case PixelFormat16bppARGB1555: return "PixelFormat16bppARGB1555";
+            case PixelFormat24bppRGB: return "PixelFormat24bppRGB";
+            case PixelFormat32bppRGB: return "PixelFormat32bppRGB";
+            case PixelFormat32bppARGB: return "PixelFormat32bppARGB";
+            case PixelFormat32bppPARGB: return "PixelFormat32bppPARGB";
+            case PixelFormat48bppRGB: return "PixelFormat48bppRGB";
+            case PixelFormat64bppARGB: return "PixelFormat64bppARGB";
+            case PixelFormat64bppPARGB: return "PixelFormat64bppPARGB";
+        }
+        return "";
+    }
+
+    bool PixelFormatUsesPalette(sal_uInt32 format)
+    {
+        return (format << 15);
+    }
+
+    bool PixelFormatGDISupported(sal_uInt32 format)
+    {
+        return (format<< 1) >> 15;
+    }
+
+    bool PixelFormatIncludesAlpha(sal_uInt32 format)
+    {
+        return (format << 2) >> 15;
+    }
+
+    bool PixelFormatIsPremultiplied(sal_uInt32 format)
+    {
+        return (format << 3) >> 15;
+    }
+
+    bool PixelFormatSupportsExtendedColors(sal_uInt32 format)
+    {
+        return (format << 4) >> 15;
+    }
+
+    bool PixelFormatIsCanonical(sal_uInt32 format)
+    {
+        return (format << 5) >> 15;
+    }
+
+    sal_uInt32 PixelFormatBitsPerPixel(sal_uInt32 format)
+    {
+        return (format & 0x00FF0000) >> 16;
+    }
+
+    sal_uInt32 PixelFormatEnumerationIndex(sal_uInt32 format)
+    {
+        return (format >> 24);
+    }
+
+    OUString BitmapDataTypeToString(sal_uInt32 type)
+    {
+        switch (type)
+        {
+            case BitmapDataTypePixel: return "BitmapDataTypePixel";
+            case BitmapDataTypeCompressed: return "BitmapDataTypeCompressed";
+        }
+        return "";
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

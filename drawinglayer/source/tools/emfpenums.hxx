@@ -36,6 +36,17 @@ namespace emfplushelper
     OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid);
     OUString BrushDataFlagsToString(sal_uInt32 brush);
     OUString WrapModeToString(sal_uInt32 mode);
+    OUString ImageDataTypeToString(sal_uInt32 type);
+    OUString PixelFormatToString(sal_uInt32 format);
+    bool PixelFormatUsesPalette(sal_uInt32 format);
+    bool PixelFormatGDISupported(sal_uInt32 format);
+    bool PixelFormatIncludesAlpha(sal_uInt32 format);
+    bool PixelFormatIsPremultiplied(sal_uInt32 format);
+    bool PixelFormatSupportsExtendedColors(sal_uInt32 format);
+    bool PixelFormatIsCanonical(sal_uInt32 format);
+    sal_uInt32 PixelFormatBitsPerPixel(sal_uInt32 format);
+    sal_uInt32 PixelFormatEnumerationIndex(sal_uInt32 format);
+    OUString BitmapDataTypeToString(sal_uInt32 type);
 
     // EMF+ commands
     #define EmfPlusRecordTypeHeader 0x4001
@@ -259,6 +270,31 @@ namespace emfplushelper
         ImageDataTypeUnknown = 0x00000000,
         ImageDataTypeBitmap = 0x00000001,
         ImageDataTypeMetafile = 0x00000002
+    };
+
+    enum PixelFormat
+    {
+        PixelFormatUndefined = 0x00000000,
+        PixelFormat1bppIndexed = 0x00030101,
+        PixelFormat4bppIndexed = 0x00030402,
+        PixelFormat8bppIndexed = 0x00030803,
+        PixelFormat16bppGrayScale = 0x00101004,
+        PixelFormat16bppRGB555 = 0x00021005,
+        PixelFormat16bppRGB565 = 0x00021006,
+        PixelFormat16bppARGB1555 = 0x00061007,
+        PixelFormat24bppRGB = 0x00021808,
+        PixelFormat32bppRGB = 0x00022009,
+        PixelFormat32bppARGB = 0x0026200A,
+        PixelFormat32bppPARGB = 0x000E200B,
+        PixelFormat48bppRGB = 0x0010300C,
+        PixelFormat64bppARGB = 0x0034400D,
+        PixelFormat64bppPARGB = 0x001A400E
+    };
+
+    enum BitmapDataType
+    {
+        BitmapDataTypePixel = 0x00000000,
+        BitmapDataTypeCompressed = 0x00000001
     };
 }
 
