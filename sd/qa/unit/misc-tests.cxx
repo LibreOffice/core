@@ -485,7 +485,7 @@ void SdMiscTest::testTdf120527()
 // not exist. The user option WriteLayerStateAsConfigItem can be set to 'true' to
 // write these config items in addition to the ODF attributes for to produce
 // documents for older LO versions or Apache OpenOffice. With value 'false' no
-// config items are written. The 'testTdf101242_xyz' tests combinate source
+// config items are written. The 'testTdf101242_xyz' tests combine source
 // files with and without config items with option values 'true' and 'false'.
 
 void SdMiscTest::testTdf101242_ODF_add_settings()
