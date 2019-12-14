@@ -585,7 +585,8 @@ static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeMo
     rPropSet.setProperty(PROP_Surround, static_cast<sal_Int32>(nSurround));
 }
 
-static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
+static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel,
+                             const GraphicHelper& rGraphicHelper)
 {
     if ( rTypeModel.maPosition == "absolute" )
     {
@@ -638,7 +639,8 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
     }
 
     if ( rTypeModel.maPositionHorizontalRelative == "page" )
-        rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
+            rPropSet.setAnyProperty(PROP_HoriOrientRelation,
+                                    makeAny(text::RelOrientation::PAGE_FRAME));
     else if ( rTypeModel.maPositionVerticalRelative == "margin" )
         rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
     else if ( rTypeModel.maPositionVerticalRelative == "text" )
@@ -861,7 +863,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny(comphelper::containerToSequence(aPropVec)));
     }
 
-    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper );
+    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper);
 
     return xShape;
 }

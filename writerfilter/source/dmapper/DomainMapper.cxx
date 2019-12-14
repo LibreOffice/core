@@ -3023,6 +3023,21 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
         m_pImpl->PushPendingShape(xShape);
 
     m_pImpl->SetIsFirstParagraphInShape(true);
+
+    //tdf#87569: Fix table layout with correcting anchoring
+    //If anchored object is in table, Word calculates its position from cell border
+    //instead of page (what is set in the sample document)
+    if (m_pImpl->m_nTableDepth > 0) //if we had a table
+    {
+        uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+        sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
+        xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
+        //and the correction:
+        if (nCurrentHorOriRel == text::RelOrientation::PAGE_FRAME)
+            xShapePropSet->setPropertyValue("HoriOrientRelation",
+                                            uno::makeAny(text::RelOrientation::FRAME));
+    }
+
 }
 
 void DomainMapper::lcl_endShape( )

@@ -15,6 +15,7 @@
 #include <editsh.hxx>
 #include <frmatr.hxx>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -185,6 +186,26 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r", 2);
     // Check that the break is in proper - last - position
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
+{
+    //the original tdf87569 sample has vml shapes...
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_vml: The Shape is not in the table!",
+                                 text::RelOrientation::FRAME, nValue);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
+{
+    //if the original tdf87569 sample is upgraded it will have drawingml shapes...
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
+                                 text::RelOrientation::FRAME, nValue);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
