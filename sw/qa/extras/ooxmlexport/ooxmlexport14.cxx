@@ -15,6 +15,7 @@
 #include <editsh.hxx>
 #include <frmatr.hxx>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -31,6 +32,25 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
+{
+    //the original tdf87569 sample has vml shapes...
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_vml: The Shape is not in the table!",
+                                 text::RelOrientation::FRAME, nValue);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
+{
+    //if the original tdf87569 sample is upgraded it will have drawingml shapes...
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
+                                 text::RelOrientation::FRAME, nValue);
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
 {
@@ -186,6 +206,34 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
     // Check that the break is in proper - last - position
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
 }
+
+
+192  DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
+193  {
+194      CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+195      getParagraph(1, "(Verne, 1870)");
+196      getParagraph(2, "Bibliography");
+197      getParagraph(4, "Christie, A. (1922). The Secret Adversary. ");
+198      CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(8)->getString());
+19
+200      uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+201      uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+202      uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+203      uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+204      uno::Reference<text::XText> xText = xTextRange->getText();
+205      uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+206      xTextCursor->gotoRange(xTextRange->getStart(), false);
+207      xTextCursor->gotoRange(xTextRange->getEnd(), true);
+208      OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+2
+210      // Check that all the pre-rendered entries are correct, including trailing spaces
+211      CPPUNIT_ASSERT_EQUAL(OUString("\n" // starting with an empty paragraph
+212                                    "Christie, A. (1922). The Secret Adversary. \n"
+213                                    "\n"
+214                                    "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. \n"
+215                                    ""), // ending with an empty paragraph
+216                           aIndexString);
+217  }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
