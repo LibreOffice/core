@@ -28,8 +28,9 @@
 
 namespace emfplushelper
 {
-    EMFPBrush::EMFPBrush()
+    EMFPBrush::EMFPBrush(sal_uInt32 size)
         : type(0)
+        , datasize(size)
         , additionalFlags(0)
         , wrapMode(0)
         , firstPointX(0.0)
@@ -47,6 +48,24 @@ namespace emfplushelper
 
     EMFPBrush::~EMFPBrush()
     {
+    }
+
+    ::basegfx::B2DHomMatrix EMFPBrush::GetTextureTransformation(::basegfx::B2DHomMatrix const& rMapTransform)
+    {
+        ::basegfx::B2DHomMatrix aTextureTransformation;
+
+        if (hasTransformation)
+        {
+           aTextureTransformation = brush_transformation;
+
+           // adjust aTextureTransformation for our world space:
+           // -> revert the mapping -> apply the transformation -> map back
+           basegfx::B2DHomMatrix aInvertedMapTrasform(rMapTransform);
+           aInvertedMapTrasform.invert();
+           aTextureTransformation =  rMapTransform * aTextureTransformation * aInvertedMapTrasform;
+        }
+
+        return aTextureTransformation;
     }
 
     void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
@@ -321,7 +340,7 @@ namespace emfplushelper
             }
             default:
             {
-                SAL_WARN("drawinglayer", "EMF+\tunhandled brush type: " << std::hex << type << std::dec);
+                SAL_WARN("drawinglayer", "EMF+\t\t\tunhandled brush type: " << std::hex << type << std::dec);
             }
         }
     }
