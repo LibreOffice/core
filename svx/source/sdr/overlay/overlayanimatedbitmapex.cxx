@@ -34,10 +34,10 @@ namespace sdr
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
                     new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                        getBitmapEx1(),
+                        maBitmapEx1,
                         getBasePosition(),
-                        getCenterX1(),
-                        getCenterY1(),
+                        mnCenterX1,
+                        mnCenterY1,
                         getShearX(),
                         getRotation()));
 
@@ -47,10 +47,10 @@ namespace sdr
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
                     new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                        getBitmapEx2(),
+                        maBitmapEx2,
                         getBasePosition(),
-                        getCenterX2(),
-                        getCenterY2(),
+                        mnCenterX2,
+                        mnCenterY2,
                         getShearX(),
                         getRotation()));
 

@@ -1145,7 +1145,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
             m_xObjSh->DoClose();
         SfxObjectShellRef xDyingObjSh = m_xObjSh;
         m_xObjSh.clear();
-        if( GetHasTitle() && m_pImpl->nDocViewNo )
+        if( GetFrame().GetHasTitle() && m_pImpl->nDocViewNo )
             xDyingObjSh->GetNoSet_Impl().ReleaseIndex(m_pImpl->nDocViewNo-1);
         if ( m_pImpl->bObjLocked )
         {

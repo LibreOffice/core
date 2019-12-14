@@ -276,7 +276,7 @@ void OAddFieldWindow::fillDescriptor(const weld::TreeIter& rSelected, svx::OData
 
         rDescriptor[ svx::DataAccessDescriptorProperty::Command ]            <<= GetCommand();
         rDescriptor[ svx::DataAccessDescriptorProperty::CommandType ]        <<= GetCommandType();
-        rDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= GetEscapeProcessing();
+        rDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= m_bEscapeProcessing;
         rDescriptor[ svx::DataAccessDescriptorProperty::Connection ]         <<= getConnection();
 
         ColumnInfo* pInfo = reinterpret_cast<ColumnInfo*>(m_xListBox->get_id(rSelected).toInt64());

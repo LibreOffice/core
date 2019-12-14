@@ -81,7 +81,6 @@ private:
     std::unique_ptr< SfxFrame_Impl >     pImpl;
     VclPtr<vcl::Window> pWindow;
 
-    void                Close();
     virtual             ~SfxFrame();
 
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow );

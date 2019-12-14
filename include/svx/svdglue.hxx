@@ -121,7 +121,6 @@ public:
     SdrGluePointList() {};
     SdrGluePointList(const SdrGluePointList& rSrcList) { *this=rSrcList; }
 
-    void                Clear();
     SdrGluePointList&   operator=(const SdrGluePointList& rSrcList);
     sal_uInt16          GetCount() const                                    { return sal_uInt16(aList.size()); }
     // At insert, the object (GluePoint) automatically gets an ID assigned.

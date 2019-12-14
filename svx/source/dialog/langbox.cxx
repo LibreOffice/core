@@ -186,11 +186,6 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
     }
 }
 
-void SvxLanguageBox::ImplClear()
-{
-    m_xControl->clear();
-}
-
 void SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
         bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
@@ -200,7 +195,7 @@ void SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
 
     if (SvxLanguageListFlags::EMPTY == nLangList)
     {
-        ImplClear();
+        m_xControl->clear();
         return;
     }
 

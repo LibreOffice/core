@@ -233,7 +233,7 @@ void SdrPaintWindow::impCreateOverlayManager()
 {
     // not yet one created?
     if(!mxOverlayManager.is())
-        mxOverlayManager = GetPaintView().CreateOverlayManager(GetOutputDevice());
+        mxOverlayManager = mrPaintView.CreateOverlayManager(GetOutputDevice());
 }
 
 SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow)
@@ -280,7 +280,7 @@ void SdrPaintWindow::PreparePreRenderDevice()
     const bool bPrepareBufferedOutput(
         mrPaintView.IsBufferedOutputAllowed()
         && !OutputToPrinter()
-        && !OutputIsVirtualDevice()
+        && !mpOutputDevice->IsVirtual()
         && !OutputToRecordingMetaFile());
 
     if(bPrepareBufferedOutput)

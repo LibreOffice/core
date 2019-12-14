@@ -328,15 +328,15 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 
 void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
 {
-    setAuthor(i_rAuthor);
+    m_Author = i_rAuthor;
     DateTime now( DateTime::SYSTEM );
     m_CreationDate = now.GetUNODateTime();
-    setModifiedBy(OUString());
-    setPrintedBy(OUString());
+    m_ModifiedBy = OUString();
+    m_PrintedBy = OUString();
     m_ModificationDate = util::DateTime();
     m_PrintDate = util::DateTime();
-    setEditingDuration(0);
-    setEditingCycles(1);
+    m_EditingDuration = 0;
+    m_EditingCycles = 1;
 }
 
 
@@ -472,7 +472,7 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             bValue = IsUseThumbnailSave();
             break;
         case MID_DOCINFO_DELETEUSERDATA:
-            bValue = IsDeleteUserData();
+            bValue = m_bDeleteUserData;
             break;
         case MID_DOCINFO_AUTOLOADENABLED:
             bValue = isAutoloadEnabled();
@@ -547,22 +547,22 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
         case MID_DOCINFO_AUTOLOADENABLED:
             bRet = (rVal >>= bValue);
             if ( bRet )
-                setAutoloadEnabled(bValue);
+                m_isAutoloadEnabled = bValue;
             break;
         case MID_DOCINFO_AUTOLOADSECS:
             bRet = (rVal >>= nValue);
             if ( bRet )
-                setAutoloadDelay(nValue);
+                m_AutoloadDelay = nValue;
             break;
         case MID_DOCINFO_AUTOLOADURL:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                setAutoloadURL(aValue);
+                m_AutoloadURL = aValue;
             break;
         case MID_DOCINFO_DEFAULTTARGET:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                setDefaultTarget(aValue);
+                m_DefaultTarget = aValue;
             break;
         case MID_DOCINFO_DESCRIPTION:
             bRet = (rVal >>= aValue);

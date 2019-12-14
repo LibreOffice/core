@@ -32,12 +32,12 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DReference aReference(
                 new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                    getBitmapEx(),
+                    maBitmapEx,
                     getBasePosition(),
-                    getCenterX(),
-                    getCenterY(),
-                    getShearX(),
-                    getRotation()));
+                    mnCenterX,
+                    mnCenterY,
+                    mfShearX,
+                    mfRotation));
 
             if(basegfx::fTools::more(mfAlpha, 0.0))
             {

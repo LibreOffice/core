@@ -44,8 +44,6 @@ namespace rptxml
         sal_Int32                   m_nNumberFormat;
         ORptFilter&                 m_rImport;
 
-        ORptFilter& GetOwnImport() const { return m_rImport;}
-
         OControlStyleContext(const OControlStyleContext&) = delete;
         void operator =(const OControlStyleContext&) = delete;
     protected:

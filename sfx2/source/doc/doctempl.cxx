@@ -126,9 +126,6 @@ class DocTempl_EntryData_Impl
     OUString            maOwnURL;
     OUString            maTargetURL;
 
-private:
-    RegionData_Impl*    GetParent() const { return mpParent; }
-
 public:
                         DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                         const OUString& rTitle );
@@ -162,7 +159,6 @@ class RegionData_Impl
 private:
     size_t                      GetEntryPos( const OUString& rTitle,
                                              bool& rFound ) const;
-    const SfxDocTemplate_Impl*  GetParent() const { return mpParent; }
 
 public:
                         RegionData_Impl( const SfxDocTemplate_Impl* pParent,
@@ -1282,7 +1278,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
 {
     if ( maOwnURL.isEmpty() )
     {
-        INetURLObject aTemplateObj( GetParent()->GetHierarchyURL() );
+        INetURLObject aTemplateObj( mpParent->GetHierarchyURL() );
 
         aTemplateObj.insertName( GetTitle(), false,
                      INetURLObject::LAST_SEGMENT,
@@ -1387,7 +1383,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
 {
     if ( maOwnURL.isEmpty() )
     {
-        INetURLObject aRegionObj( GetParent()->GetRootURL() );
+        INetURLObject aRegionObj( mpParent->GetRootURL() );
 
         aRegionObj.insertName( GetTitle(), false,
                      INetURLObject::LAST_SEGMENT,

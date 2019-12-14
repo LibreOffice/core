@@ -354,11 +354,6 @@ SystemWindow* SfxFrame::GetTopWindow_Impl() const
 }
 
 
-void SfxFrame::Close()
-{
-    delete this;
-}
-
 void SfxFrame::LockResize_Impl( bool bLock )
 {
     pImpl->bLockResize = bLock;

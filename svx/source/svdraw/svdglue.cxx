@@ -277,14 +277,9 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
 }
 
 
-void SdrGluePointList::Clear()
-{
-    aList.clear();
-}
-
 SdrGluePointList& SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 {
-    if (GetCount()!=0) Clear();
+    if (GetCount()!=0) aList.clear();
     sal_uInt16 nCount=rSrcList.GetCount();
     for (sal_uInt16 i=0; i<nCount; i++) {
         Insert(rSrcList[i]);

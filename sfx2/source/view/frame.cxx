@@ -162,7 +162,7 @@ void SfxFrame::DoClose_Impl()
     if ( pImpl->bOwnsBindings )
         DELETEZ( pBindings );
 
-    Close();
+    delete this;
 }
 
 bool SfxFrame::DocIsModified_Impl()

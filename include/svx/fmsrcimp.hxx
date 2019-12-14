@@ -317,7 +317,6 @@ private:
     // start a thread-search (or call SearchNextImpl directly, depending on the search mode)
     void ImplStartNextSearch();
 
-    SVX_DLLPRIVATE void clearControlTexts();
     SVX_DLLPRIVATE void fillControlTexts(const InterfaceArray& arrFields);
 
     // three methods implementing a complete search loop (null/not null, wildcard, SearchText)
