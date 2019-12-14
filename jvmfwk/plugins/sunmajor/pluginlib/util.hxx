@@ -23,8 +23,6 @@
 #include <vector>
 #include <vendorbase.hxx>
 
-namespace rtl { class Bootstrap; }
-
 namespace jfw_plugin
 {
 
@@ -111,7 +109,6 @@ bool getJavaProps(
 
 void bubbleSortVersion(std::vector<rtl::Reference<VendorBase> >& vec);
 
-rtl::Bootstrap* getBootstrap();
 }
 
 #endif

@@ -26,9 +26,7 @@
 #include <osl/module.hxx>
 #include <osl/diagnose.h>
 #include <osl/getglobalmutex.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
@@ -150,47 +148,6 @@ bool getAndAddJREInfoByPath(
     }
 }
 
-    OUString getLibraryLocation()
-    {
-        OUString libraryFileUrl;
-        OSL_VERIFY(osl::Module::getUrlFromAddress(reinterpret_cast<void *>(getLibraryLocation), libraryFileUrl));
-        return getDirFromFile(libraryFileUrl);
-    }
-
-    struct InitBootstrap
-    {
-        rtl::Bootstrap * operator()(const OUString& sIni)
-        {
-            static rtl::Bootstrap aInstance(sIni);
-            return & aInstance;
-
-        }
-   };
-
-   struct InitBootstrapData
-   {
-       OUString const & operator()()
-       {
-            static OUString sIni;
-            OUStringBuffer buf( 255);
-            buf.append( getLibraryLocation());
-#ifdef MACOSX
-            buf.append( "/../" LIBO_ETC_FOLDER );
-#endif
-            buf.append( SAL_CONFIGFILE("/sunjavaplugin") );
-            sIni = buf.makeStringAndClear();
-            JFW_TRACE2("Using configuration file " << sIni);
-            return sIni;
-        }
-   };
-}
-
-rtl::Bootstrap * getBootstrap()
-{
-    return rtl_Instance< rtl::Bootstrap, InitBootstrap,
-        ::osl::MutexGuard, ::osl::GetGlobalMutex,
-        OUString, InitBootstrapData >::create(
-            InitBootstrap(), ::osl::GetGlobalMutex(), InitBootstrapData());
 }
 
 namespace {
@@ -389,13 +346,6 @@ void AsynchReader::execute()
     }
 }
 
-static bool isEnvVarSetToOne(const OUString &aVar)
-{
-    OUString aValue;
-    getBootstrap()->getFrom(aVar, aValue);
-    return aValue == "1";
-}
-
 bool getJavaProps(const OUString & exePath,
 #ifdef JVM_ONE_PATH_CHECK
                   const OUString & homePath,
@@ -436,13 +386,9 @@ bool getJavaProps(const OUString & exePath,
 
 #ifdef UNX
     // Java is no longer required for a11y - we use atk directly.
-    bool bNoAccessibility = !isEnvVarSetToOne("JFW_PLUGIN_FORCE_ACCESSIBILITY");
+    bool bNoAccessibility = true;
 #else
-    //check if we shall examine a Java for accessibility support
-    //If the bootstrap variable is "1" then we pass the argument
-    //"noaccessibility" to JREProperties.class. This will prevent
-    //that it calls   java.awt.Toolkit.getDefaultToolkit();
-    bool bNoAccessibility = isEnvVarSetToOne("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY");
+    bool bNoAccessibility = false;
 #endif
 
     //prepare the arguments

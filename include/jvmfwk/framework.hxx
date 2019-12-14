@@ -157,21 +157,6 @@
     <p>
     All settings made by this API are done for the current user if not
     mentioned differently.</p>
-
-    <h2>Other bootstrap variables</h2>
-    <dl>
-    <dt>JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY</dt>
-    <dd>This is an unofficial variable which was introduced to workaround external issues.
-    It may be removed in the future. By setting it to 1, the framework will not try to
-    find out if the system is configured to use accessibility tools or if a JRE has an
-    accessible bridge installed</dd>
-    <dt>JFW_PLUGIN_FORCE_ACCESSIBILITY</dt>
-    <dd>This is an unofficial variable which was introduced to workaround external issues.
-    It may be removed in the future. By setting it to 1, the framework will override a
-    platform's desire not to probe each java backend to determine if it has an accessibility
-    bridge installed. If the JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY is set this variable has
-    no effect, and is Unix specific.</dd>
-    </dl>
 */
 
 /** indicates that a JRE has an accessibility bridge installed.

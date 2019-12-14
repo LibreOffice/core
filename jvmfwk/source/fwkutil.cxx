@@ -28,7 +28,6 @@
 
 #include <osl/module.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
@@ -44,11 +43,6 @@ namespace jfw
 
 bool isAccessibilitySupportDesired()
 {
-    OUString sValue;
-    if (::rtl::Bootstrap::get( "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY", sValue) &&
-        sValue == "1" )
-        return false;
-
 #ifdef _WIN32
     bool retVal = false;
     HKEY    hKey = nullptr;
@@ -89,7 +83,7 @@ bool isAccessibilitySupportDesired()
     }
 #elif defined UNX
     // Java is no longer required for a11y - we use atk directly.
-    bool retVal = ::rtl::Bootstrap::get( "JFW_PLUGIN_FORCE_ACCESSIBILITY", sValue) && sValue == "1";
+    bool retVal = false;
 #endif
 
     return retVal;
