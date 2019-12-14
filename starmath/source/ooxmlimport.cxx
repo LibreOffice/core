@@ -170,6 +170,7 @@ OUString SmOoxmlImport::handleAcc()
     {
         case MS_BAR:
         case MS_COMBBAR:
+        case MS_COMBOVERLINE:
             acc = "bar";
             break;
         case MS_CHECK:
