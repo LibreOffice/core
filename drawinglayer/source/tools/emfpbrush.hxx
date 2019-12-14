@@ -22,6 +22,7 @@
 
 #include "emfphelperdata.hxx"
 #include "emfpenums.hxx"
+#include "emfpimage.hxx"
 
 #include <tools/color.hxx>
 
@@ -52,6 +53,7 @@ namespace emfplushelper
         std::unique_ptr<::Color[]> surroundColors;
         std::unique_ptr<EMFPPath> path;
         EmfPlusHatchStyle hatchStyle;
+        std::unique_ptr<EMFPImage> image;
 
         EMFPBrush(sal_uInt32 datasize);
         virtual ~EMFPBrush() override;
