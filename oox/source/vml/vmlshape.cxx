@@ -585,7 +585,8 @@ static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeMo
     rPropSet.setProperty(PROP_Surround, static_cast<sal_Int32>(nSurround));
 }
 
-static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
+static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel,
+                             const GraphicHelper& rGraphicHelper, const bool bIsEmbed)
 {
     if ( rTypeModel.maPosition == "absolute" )
     {
@@ -638,7 +639,12 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
     }
 
     if ( rTypeModel.maPositionHorizontalRelative == "page" )
-        rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
+        if (bIsEmbed)
+            rPropSet.setAnyProperty(PROP_HoriOrientRelation,
+                                    makeAny(text::RelOrientation::FRAME));
+        else
+            rPropSet.setAnyProperty(PROP_HoriOrientRelation,
+                                    makeAny(text::RelOrientation::PAGE_FRAME));
     else if ( rTypeModel.maPositionVerticalRelative == "margin" )
         rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
     else if ( rTypeModel.maPositionVerticalRelative == "text" )
@@ -861,7 +867,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny(comphelper::containerToSequence(aPropVec)));
     }
 
-    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper );
+    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper, true); //tdf#87569:fix frame aligment if its true
 
     return xShape;
 }
@@ -869,12 +875,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 Reference< XShape > SimpleShape::createEmbeddedPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const
 {
     Reference<XGraphic> xGraphic = mrDrawing.getFilter().getGraphicHelper().importEmbeddedGraphic(rGraphicPath);
-    return SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
+    return SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic, true);
 }
 
 Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >& rxShapes,
                                                      const awt::Rectangle& rShapeRect,
-                                                     uno::Reference<graphic::XGraphic> const & rxGraphic) const
+                                                     uno::Reference<graphic::XGraphic> const & rxGraphic,
+                                                     const bool b_IsEmbed) const
 {
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
     if( xShape.is() )
@@ -897,7 +904,7 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
             aPropSet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation)));
 
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-        lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
+        lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper, b_IsEmbed);
 
         if (maTypeModel.moCropBottom.has() || maTypeModel.moCropLeft.has() || maTypeModel.moCropRight.has() || maTypeModel.moCropTop.has())
         {
@@ -1231,7 +1238,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 if (pControlInfo->mbTextContentShape)
                 {
                     PropertySet aPropertySet(xShape);
-                    lcl_SetAnchorType(aPropertySet, maTypeModel, mrDrawing.getFilter().getGraphicHelper());
+                    lcl_SetAnchorType(aPropertySet, maTypeModel, mrDrawing.getFilter().getGraphicHelper(), true);
                 }
                 // on error, proceed and try to create picture from replacement image
                 if( xShape.is() )
@@ -1305,7 +1312,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         if (xGraphic.is())
         {
             // If available, use the signed image from the signature
-            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
+            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic, false);
         }
         else
         {
@@ -1429,7 +1436,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper);
+    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper, true);
     if (!maTypeModel.maRotation.isEmpty())
         aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation)));
     return xGroupShape;

@@ -309,7 +309,8 @@ protected:
     css::uno::Reference<css::drawing::XShape>createPictureObject(
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
             const css::awt::Rectangle& rShapeRect,
-            css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) const;
+            css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+            const bool b_IsEmbed) const;
 
 private:
     OUString     maService;          ///< Name of the UNO shape service.

@@ -866,6 +866,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if (nRotation)
                                 xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
                         }
+
+                        //tdf#109411 Fix moon signs and text in table are misplaced
+                        //If anchored object is in table, Word calculates its position from cell border
+                        //instead of page (what is set in the sample document)
+                        if (m_pImpl->rDomainMapper.IsInTable() &&
+                            m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && IsGraphic())
+                        {
+                            m_pImpl->nHoriRelation = text::RelOrientation::FRAME;
+                        }
+
                         m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
                         xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
