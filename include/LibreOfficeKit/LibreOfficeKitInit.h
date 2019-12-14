@@ -247,11 +247,40 @@ typedef LibreOfficeKit *(LokHookFunction)( const char *install_path);
 
 typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char *user_profile_url );
 
+typedef UnoKit *(UnoHookFunction)( const char *install_path, const char *user_profile_url );
+
 typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
 #if defined(IOS) || defined(ANDROID)
 LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
+
+static LOK_TOLERATE_UNUSED
+UnoKit *uno_bootstrap( const char *install_path,  const char *user_profile_url )
+{
+    void *dlhandle;
+    char *imp_lib;
+    UnoHookFunction *pSym;
+
+    dlhandle = lok_dlopen(install_path, &imp_lib);
+    if (!dlhandle)
+        return NULL;
+
+    pSym = (UnoHookFunction *) lok_dlsym(dlhandle, "unokit_hook");
+    if (!pSym)
+    {
+        fprintf( stderr, "failed to find unokit_hook hook in library '%s'\n", imp_lib );
+        lok_dlclose( dlhandle );
+        free( imp_lib );
+        return NULL;
+    }
+
+    free( imp_lib );
+
+    // dlhandle is "leaked"
+    // coverity[leaked_storage]
+    return pSym( install_path, user_profile_url );
+}
 
 static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
 {

@@ -144,6 +144,13 @@ namespace desktop {
         std::mutex m_mutex;
     };
 
+    struct DESKTOP_DLLPUBLIC LibUno_Impl : public _UnoKit
+    {
+        std::shared_ptr< UnoKitClass > m_pUnoClass;
+        LibUno_Impl();
+        ~LibUno_Impl();
+    };
+
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;

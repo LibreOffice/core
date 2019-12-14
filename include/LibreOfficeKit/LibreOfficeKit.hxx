@@ -961,6 +961,35 @@ public:
     }
 };
 
+/// The lok::Uno (Universal Network Objects) class represents the interface based component model.
+class Uno
+{
+private:
+    UnoKit* m_pThis;
+
+public:
+    /// A lok::Uno is typically created by the unokit_hook() function.
+    Uno(UnoKit* pThis) :
+        m_pThis(pThis)
+    {}
+
+    ~Uno()
+    {}
+
+    /*
+     * The interface based component model calls, UNO (Universal Network Objects)
+     * @param ... variadic arguments according to the API call
+    */
+    bool unoComCall (int nFunc /*unoComFunc*/, ...)
+    {
+        va_list aParams;
+        va_start(aParams, nFunc);
+        return m_pThis->pClass->unoComCall(m_pThis, nFunc, &aParams);
+        va_end(aParams);
+    }
+};
+
+
 /// Factory method to create a lok::Office instance.
 inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {

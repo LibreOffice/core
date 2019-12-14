@@ -11,6 +11,7 @@
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
 
 #include <stddef.h>
+#include <stdarg.h>
 
 // the unstable API needs C99's bool
 // TODO remove the C99 types from the API before making stable
@@ -28,6 +29,9 @@ extern "C"
 {
 #endif
 
+typedef struct _UnoKit UnoKit;
+typedef struct _UnoKitClass UnoKitClass;
+
 typedef struct _LibreOfficeKit LibreOfficeKit;
 typedef struct _LibreOfficeKitClass LibreOfficeKitClass;
 
@@ -40,9 +44,23 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
+struct _UnoKit
+{
+    UnoKitClass* pClass;
+};
+
+struct _UnoKitClass
+{
+    /// @see lok::Uno::unoComCall().
+    bool (*unoComCall) (UnoKit* pThis,
+                     int nFunc /*unoComFunc*/,
+                     va_list* pParam);
+};
+
 struct _LibreOfficeKit
 {
     LibreOfficeKitClass* pClass;
+    UnoKitClass* pUnoClass;
 };
 
 struct _LibreOfficeKitClass

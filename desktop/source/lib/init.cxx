@@ -167,7 +167,9 @@ using namespace vcl;
 using namespace desktop;
 using namespace utl;
 
+static LibUno_Impl *gUnoImpl = nullptr;
 static LibLibreOffice_Impl *gImpl = nullptr;
+static std::weak_ptr< UnoKitClass > gUnoClass;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
@@ -1768,6 +1770,10 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
     delete pDocument;
 }
 
+static bool uno_unoComCall (UnoKit* pThis,
+    int nFunc /*unoComFunc*/,
+    va_list* pParam);
+
 static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
@@ -1798,6 +1804,25 @@ static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
                        void* pData);
+
+
+LibUno_Impl::LibUno_Impl()
+    : m_pUnoClass( gUnoClass.lock() )
+{
+    if(!m_pUnoClass)
+    {
+        m_pUnoClass.reset(new UnoKitClass);
+        m_pUnoClass->unoComCall = uno_unoComCall;
+
+        gUnoClass = m_pUnoClass;
+    }
+
+    pClass = m_pUnoClass.get();
+}
+
+LibUno_Impl::~LibUno_Impl()
+{
+}
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -5752,6 +5777,79 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 #endif
 
     return bInitialized;
+}
+
+namespace {
+
+bool unoComponentCall(unoComFunc eFunc, va_list *pParam)
+{
+    bool bSuccess = false;
+
+    switch (eFunc)
+    {
+        case None:
+        default:
+            assert(false);
+    }
+
+    return bSuccess;
+}
+}
+
+static bool uno_unoComCall (UnoKit* /*pThis*/,
+    int nFunc /*unoComFunc*/,
+    va_list *pParam)
+{
+    try
+    {
+        return unoComponentCall(static_cast<unoComFunc>(nFunc), pParam);
+    }
+    catch (uno::Exception& exc)
+    {
+        SAL_WARN("lok", exc.Message);
+    }
+    return false;
+}
+
+SAL_DLLPUBLIC_EXPORT
+UnoKit *unokit_hook(const char* pInstDir, const char* pUserDir)
+{
+    SAL_INFO("lok", "Create Unokit object");
+    OUString aAppURL;
+    OUString aAppPath(pInstDir, strlen(pInstDir), RTL_TEXTENCODING_UTF8);
+    OUString aUserUrl(pUserDir, strlen(pUserDir), RTL_TEXTENCODING_UTF8);
+
+    if (aUserUrl.isEmpty())
+        return nullptr;
+
+    if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
+        return nullptr;
+
+    if (!gUnoImpl)
+    {
+        try
+        {
+            rtl::Bootstrap::set("UserInstallation", aUserUrl);
+            rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
+
+            if (!initialize_uno(aAppURL))
+                return nullptr;
+
+            force_c_locale();
+            InitVCL();
+            SfxApplication::GetOrCreate();
+            Application::ReleaseSolarMutex();
+        }
+        catch (uno::Exception& exc)
+        {
+            SAL_WARN("lok", "Uno Bootstrapping exception " << exc.Message);
+            return nullptr;
+        }
+
+        gUnoImpl = new LibUno_Impl();
+    }
+
+    return static_cast<UnoKit*>(gUnoImpl);
 }
 
 SAL_JNI_EXPORT
