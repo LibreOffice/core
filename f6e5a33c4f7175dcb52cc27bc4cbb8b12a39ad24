@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_e3bbb10b",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-14T21:06:50Z",
+      "side": 1,
+      "message": "This change would break compatibility.  I suggest to leave the misspelled name alone.",
+      "range": {
+        "startLine": 931,
+        "startChar": 22,
+        "endLine": 931,
+        "endChar": 36
+      },
+      "revId": "f6e5a33c4f7175dcb52cc27bc4cbb8b12a39ad24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
