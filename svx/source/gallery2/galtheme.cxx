@@ -1304,7 +1304,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     const long      nReservePos = rOStm.Tell();
     std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 2 ));
 
-    rOStm.WriteUInt32( GetId() ).WriteBool( IsThemeNameFromResource() ); // From version 2 and up
+    rOStm.WriteUInt32( GetId() ).WriteBool( pThm->IsNameFromResource() ); // From version 2 and up
 
     pCompat.reset();
 
@@ -1466,7 +1466,6 @@ const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL();
 const INetURLObject& GalleryTheme::GetStrURL() const { return pThm->GetStrURL(); }
 sal_uInt32 GalleryTheme::GetId() const { return pThm->GetId(); }
 void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
-bool GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
 bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 

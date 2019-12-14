@@ -64,7 +64,6 @@ class SVX_DLLPUBLIC SdrHelpLineList {
 public:
     SdrHelpLineList() {}
     SdrHelpLineList(const SdrHelpLineList& rSrcList) { *this=rSrcList; }
-    void               Clear();
     SdrHelpLineList&   operator=(const SdrHelpLineList& rSrcList);
     bool operator==(const SdrHelpLineList& rCmp) const;
     bool operator!=(const SdrHelpLineList& rCmp) const                 { return !operator==(rCmp); }

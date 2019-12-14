@@ -90,8 +90,6 @@ private:
     // was done
     SdrPageWindow* mpPreparedPageWindow;
 
-    // interface to SdrPageWindow
-    void ClearPageWindows();
 public:
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }
     SdrPageWindow* FindPageWindow( SdrPaintWindow& rPaintWindow ) const;

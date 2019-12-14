@@ -95,11 +95,6 @@ SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
     return maPageWindows[nIndex].get();
 }
 
-void SdrPageView::ClearPageWindows()
-{
-    maPageWindows.clear();
-}
-
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 :   mrView(rNewView),
     // col_auto color lets the view takes the default SvxColorConfig entry
@@ -197,7 +192,7 @@ void SdrPageView::Hide()
             InvalidateAllWin();
         }
         mbVisible = false;
-        ClearPageWindows();
+        maPageWindows.clear();
     }
 }
 

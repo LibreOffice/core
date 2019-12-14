@@ -131,8 +131,6 @@ public:
     SfxViewFrame*           GetTopViewFrame() const;
 
     bool                    DoClose();
-    bool                    GetHasTitle() const
-                            { return GetFrame().GetHasTitle(); }
     static void             GetTargetList( TargetList& rList )
                             { SfxFrame::GetDefaultTargetList( rList ); }
 

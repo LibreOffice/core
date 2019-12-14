@@ -43,9 +43,6 @@ public:
     virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual bool Close() override;
 
-    void SetReadyToDrag( bool bStartDrag ) { mbIsReadyToDrag = bStartDrag; }
-    bool IsReadyToDrag() const { return mbIsReadyToDrag; }
-
     void NotifyResize();
 
     using SfxDockingWindow::Close;

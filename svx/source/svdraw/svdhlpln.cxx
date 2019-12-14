@@ -74,14 +74,9 @@ tools::Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
     return aRet;
 }
 
-void SdrHelpLineList::Clear()
-{
-    aList.clear();
-}
-
 SdrHelpLineList& SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 {
-    Clear();
+    aList.clear();
     sal_uInt16 nCount=rSrcList.GetCount();
     for (sal_uInt16 i=0; i<nCount; i++) {
         Insert(rSrcList[i]);

@@ -37,8 +37,8 @@ namespace sdr
             basegfx::B2DPolygon aPolygon;
 
             aPolygon.append(getBasePosition());
-            aPolygon.append(getSecondPosition());
-            aPolygon.append(getThirdPosition());
+            aPolygon.append(maSecondPosition);
+            aPolygon.append(maThirdPosition);
             aPolygon.setClosed(true);
 
             const drawinglayer::primitive2d::Primitive2DReference aReference(

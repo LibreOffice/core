@@ -96,32 +96,23 @@ public:
     bool        isCmisDocument() const { return m_aCmisProperties.hasElements();}
 
     bool        isAutoloadEnabled() const { return m_isAutoloadEnabled; }
-    void        setAutoloadEnabled(bool i_val) { m_isAutoloadEnabled = i_val; }
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
-    void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
     const OUString& getAutoloadURL() const { return m_AutoloadURL; }
-    void        setAutoloadURL(const OUString& i_val) { m_AutoloadURL = i_val; }
     const OUString& getDefaultTarget() const { return m_DefaultTarget; }
-    void        setDefaultTarget(const OUString& i_val) { m_DefaultTarget = i_val; }
     const OUString& getTemplateName() const { return m_TemplateName; }
     const OUString& getAuthor() const { return m_Author; }
-    void        setAuthor(const OUString& i_val) { m_Author = i_val; }
 
     const css::util::DateTime&
                 getCreationDate() const { return m_CreationDate; }
     const OUString& getModifiedBy() const { return m_ModifiedBy; }
-    void        setModifiedBy(const OUString& i_val) { m_ModifiedBy = i_val; }
 
     const css::util::DateTime&
                 getModificationDate() const { return m_ModificationDate; }
     const OUString& getPrintedBy() const { return m_PrintedBy; }
-    void        setPrintedBy(const OUString& i_val) { m_PrintedBy = i_val; }
     const css::util::DateTime&
                 getPrintDate() const { return m_PrintDate; }
     sal_Int16   getEditingCycles() const { return m_EditingCycles; }
-    void        setEditingCycles(sal_Int16 i_val) { m_EditingCycles = i_val; }
     sal_Int32   getEditingDuration() const { return m_EditingDuration; }
-    void        setEditingDuration(sal_Int32 i_val) { m_EditingDuration = i_val; }
     const OUString& getDescription() const { return m_Description; }
     void        setDescription(const OUString& i_val) { m_Description = i_val; }
     const OUString& getKeywords() const { return m_Keywords; }
@@ -139,7 +130,6 @@ public:
     void        SetDeleteUserData( bool bSet );
     void        SetUseUserData( bool bSet );
     void        SetUseThumbnailSave( bool bSet );
-    bool        IsDeleteUserData() const { return m_bDeleteUserData;}
     bool        IsUseUserData() const { return m_bUseUserData;}
     bool        IsUseThumbnailSave() const { return m_bUseThumbnailSave;}
 

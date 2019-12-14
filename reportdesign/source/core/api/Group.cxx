@@ -300,7 +300,7 @@ void OGroup::setSection(     const OUString& _sProperty
 
         // create section if needed
         if ( _bOn && !_member.is() )
-            _member = OSection::createOSection(this, getContext());
+            _member = OSection::createOSection(this, m_xContext);
         else if ( !_bOn )
             ::comphelper::disposeComponent(_member);
 

@@ -54,15 +54,6 @@ namespace sdr
                 double fShearX = 0.0,
                 double fRotation = 0.0);
             virtual ~OverlayBitmapEx() override;
-
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
-
-            sal_uInt16 getCenterX() const { return mnCenterX; }
-            sal_uInt16 getCenterY() const { return mnCenterY; }
-
-            // get shearX and rotation
-            double getShearX() const { return mfShearX; }
-            double getRotation() const { return mfRotation; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

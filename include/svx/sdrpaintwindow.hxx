@@ -97,7 +97,6 @@ public:
     ~SdrPaintWindow();
 
     // data read accesses
-    SdrPaintView& GetPaintView() const { return mrPaintView; }
     OutputDevice& GetOutputDevice() const { return *mpOutputDevice; }
     vcl::Window* GetWindow() const { return mpWindow; }
 
@@ -117,9 +116,6 @@ public:
     bool OutputToWindow() const { return mbOutputToWindow; }
 
     void SetOutputToWindow(bool bOutputToWindow) { mbOutputToWindow = bOutputToWindow; }
-
-    // Is OutDev a VirtualDevice?
-    bool OutputIsVirtualDevice() const { return mpOutputDevice->IsVirtual(); }
 
     // Is OutDev a recording MetaFile?
     bool OutputToRecordingMetaFile() const;

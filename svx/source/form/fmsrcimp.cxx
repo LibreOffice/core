@@ -605,15 +605,9 @@ bool FmSearchEngine::GetCaseSensitive() const
 }
 
 
-void FmSearchEngine::clearControlTexts()
-{
-    m_aControlTexts.clear();
-}
-
-
 void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
-    clearControlTexts();
+    m_aControlTexts.clear();
     Reference< XInterface >  xCurrent;
     for (const auto & rField : arrFields)
     {

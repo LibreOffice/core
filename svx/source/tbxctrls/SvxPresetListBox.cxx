@@ -60,7 +60,7 @@ bool SvxPresetListBox::Command(const CommandEvent& rEvent)
 
 void SvxPresetListBox::DrawLayout()
 {
-    SetColCount(getColumnCount());
+    SetColCount(nColCount);
     SetLineCount(5);
 }
 

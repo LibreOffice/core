@@ -72,7 +72,6 @@ private:
     SVX_DLLPRIVATE void InsertLanguage(const LanguageType nLangType, sal_Int16 nType);
 
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
-    SVX_DLLPRIVATE void ImplClear();
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 public:
     SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl);

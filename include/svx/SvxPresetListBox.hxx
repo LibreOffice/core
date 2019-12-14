@@ -42,7 +42,6 @@ public:
 
     virtual void Resize() override;
     virtual bool Command(const CommandEvent& rEvent) override;
-    static sal_uInt32 getColumnCount() { return nColCount; }
     Size const & GetIconSize() const { return aIconSize; }
 
     void SetRenameHdl( const Link<SvxPresetListBox*,void>& rLink )

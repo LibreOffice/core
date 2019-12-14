@@ -151,8 +151,6 @@ public:
     SAL_DLLPRIVATE void         SetDragPos(sal_uInt32 nPos) { nDragPos = nPos; }
     SAL_DLLPRIVATE sal_uInt32   GetDragPos() const { return nDragPos; }
 
-    SAL_DLLPRIVATE bool         IsThemeNameFromResource() const;
-
     bool                        IsReadOnly() const;
     bool                        IsDefault() const;
 

@@ -42,12 +42,6 @@ namespace sdr
                 const basegfx::B2DPoint& rThirdPos,
                 Color aTriangleColor);
             virtual ~OverlayTriangle() override;
-
-            // get second position
-            const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-
-            // get third position
-            const basegfx::B2DPoint& getThirdPosition() const { return maThirdPosition; }
         };
     } // end of namespace overlay
 } // end of namespace sdr
