@@ -16,8 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vcl/graphicfilter.hxx>
+
 #include <sal/log.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/dibtools.hxx>
+
 #include "emfpimage.hxx"
 #include "emfpenums.hxx"
 
@@ -32,61 +35,181 @@ namespace emfplushelper
 
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
-        sal_uInt32 header, bitmapType;
-        s.ReadUInt32(header).ReadUInt32(type);
-        SAL_INFO("drawinglayer", "EMF+\t\t\tHeader: 0x" << std::hex << header);
+        sal_uInt32 version, imageType;
+        s.ReadUInt32(version).ReadUInt32(imageType);
+        SAL_INFO("drawinglayer", "EMF+\t\t\tGraphics version: " << GraphicsVersionToString(version));
         SAL_INFO("drawinglayer", "EMF+\t\t\tType: " << ImageDataTypeToString(type) << " (0x" << type << ")" << std::dec);
 
-        if (ImageDataTypeBitmap == type)
+        if (imageType == ImageDataTypeBitmap)
         {
             // bitmap
-            s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadUInt32(pixelFormat).ReadUInt32(bitmapType);
-            SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap width: " << width);
-            SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap height: " << height);
-            SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap stride: " << stride);
-            SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap pixelFormat: " << PixelFormatToString(pixelFormat) << " (0x" << std::hex << pixelFormat << ")");
+            sal_uInt32 bitmapDataType;
+            s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadUInt32(pixelFormat).ReadUInt32(bitmapDataType);
 
-            if (PixelFormatIsCanonical(pixelFormat))
+            if (bitmapDataType != BitmapDataTypeCompressed)
             {
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tCanonical pixel format - 32 bits per pixel, 24-bits for color components, 8-bit alpha channel");
-            }
-            else
-            {
-                if (PixelFormatSupportsExtendedColors(pixelFormat))
-                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format supports extended colors in 16-bits per channel");
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap width: " << width);
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap height: " << height);
+                SAL_WARN_IF(width == 0 || height == 0, "drawinglayer", "Image width or height is 0");
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap stride: " << stride);
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap pixelFormat: " << PixelFormatToString(pixelFormat) << " (0x" << std::hex << pixelFormat << ")");
 
-                if (PixelFormatIsPremultiplied(pixelFormat))
-                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format uses premultiplied alpha");
-
-                if (PixelFormatIncludesAlpha(pixelFormat))
-                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format uses alpha transparency compoent");
-
-                if (PixelFormatGDISupported(pixelFormat))
-                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format supported in Windows GDI");
+                if (PixelFormatIsCanonical(pixelFormat))
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tCanonical pixel format - 32 bits per pixel, 24-bits for color components, 8-bit alpha channel");
+                }
                 else
-                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format not supported in Windows GDI");
+                {
+                    if (PixelFormatSupportsExtendedColors(pixelFormat))
+                        SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format supports extended colors in 16-bits per channel");
 
-                if (PixelFormatUsesPalette(pixelFormat))
-                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel values are indexes into a palette");
+                    if (PixelFormatIsPremultiplied(pixelFormat))
+                        SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format uses premultiplied alpha");
+
+                    if (PixelFormatIncludesAlpha(pixelFormat))
+                        SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format uses alpha transparency compoent");
+
+                    if (PixelFormatGDISupported(pixelFormat))
+                        SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format supported in Windows GDI");
+                    else
+                        SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel format not supported in Windows GDI");
+
+                    if (PixelFormatUsesPalette(pixelFormat))
+                        SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel values are indexes into a palette");
+                }
             }
 
-            SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap type: " << " bitmapType: " << BitmapDataTypeToString(bitmapType) << " (0x" << bitmapType << ")" << std::dec);
+            SAL_INFO("drawinglayer", "EMF+\t\t\tBits per pixel: " << PixelFormatBitsPerPixel(pixelFormat));
+            SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap type: " << BitmapDataTypeToString(imageType) << " (0x" << imageType << ")" << std::dec);
 
-            SAL_WARN_IF(width == 0 || height == 0, "drawinglayer", "Image width or height is 0");
-
-            if (bitmapType == BitmapDataTypeCompressed)
+            if (bitmapDataType == BitmapDataTypeCompressed)
             {
+                SAL_INFO("drawinglayer", "EMF+\t\t\tReading compressed bitmap data");
                 GraphicFilter filter;
                 filter.ImportGraphic(graphic, OUString(), s);
                 SAL_INFO("drawinglayer", "EMF+\t\t\tgraphic width: " << graphic.GetSizePixel().Width() << ", height: " << graphic.GetSizePixel().Height());
             }
-            else if (bitmapType == BitmapDataTypePixel)
+            else if (bitmapDataType == BitmapDataTypePixel)
             {
+                SAL_INFO("drawinglayer", "EMF+\t\t\tReading pixel-based bitmap data");
+
+                // we need to read in the palette, then go back to the original stream position
+                sal_uInt64 pos = s.Tell();
+
                 EMFPPalette palette;
                 if (PixelFormatUsesPalette(pixelFormat))
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tUses palette");
                     palette.Read(s);
+                }
+                else
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tDoes not use palette");
+                }
 
-                SAL_WARN("drawinglayer", "EMF+\t\t\tTODO: Pixel based (uncompressed) bitmaps not yet supported");
+                sal_uInt64 palettesize = s.Tell() - pos;
+
+                std::unique_ptr<DIBV5Header> v5header(new DIBV5Header);
+                v5header->nWidth = width;
+                v5header->nHeight = height;
+                v5header->nPlanes = 1;
+                v5header->nCompression = false;
+                v5header->nSizeImage = ((v5header->nWidth * v5header->nBitCount + 31) & ~31) / 8 * v5header->nHeight;
+                v5header->nXPelsPerMeter = 72 * 39.3701;
+                v5header->nYPelsPerMeter = 72 * 39.3701;
+                v5header->nColsUsed = (PixelFormatUsesPalette(pixelFormat) ? palette.entries.GetEntryCount() : 0);
+                v5header->nColsImportant = 0;
+                v5header->nBitCount = PixelFormatBitsPerPixel(pixelFormat);
+                v5header->nCompression = COMPRESS_NONE;
+
+                sal_uInt64 imagesize = s.remainingSize();
+
+                // read in the palette into a seperate image stream
+                auto buffer = std::make_unique<char[]>(imagesize);
+                s.ReadBytes(buffer.get(), palettesize);
+                SvMemoryStream imagestream(buffer.get(), imagesize, StreamMode::STD_READWRITE);
+
+                // we are going to have to convert the image data
+                if (PixelFormatBitsPerPixel(pixelFormat) == 16)
+                {
+                    switch (pixelFormat)
+                    {
+                        case PixelFormat16bppRGB555:
+                        case PixelFormat16bppGrayScale:
+                        {
+                            for (sal_uInt64 i=0; i < s.remainingSize(); i+=2)
+                            {
+                                sal_uInt16 pixel;
+                                s.ReadUInt16(pixel);
+                                sal_uInt8 nRed = pixel & 0x001F;
+                                sal_uInt8 nGreen = (pixel & 0x03E0) >> 5;
+                                sal_uInt8 nBlue = (pixel & 0x7C00) >> 10;
+
+                                imagestream.WriteUInt8(nRed).WriteUInt8(nGreen).WriteUInt8(nBlue);
+                            }
+
+                            v5header->nColsUsed = 0;
+                            v5header->nBitCount = 24;
+                            break;
+                        }
+
+                        case PixelFormat16bppRGB565:
+                        {
+                            for (sal_uInt64 i=0; i < s.remainingSize(); i+=2)
+                            {
+                                sal_uInt16 pixel;
+                                s.ReadUInt16(pixel);
+                                sal_uInt8 nRed = pixel & 0x001F;
+                                sal_uInt8 nGreen = (pixel & 0x07E0) >> 5;
+                                sal_uInt8 nBlue = (pixel & 0xF800) >> 10;
+
+                                imagestream.WriteUInt8(nRed).WriteUInt8(nGreen).WriteUInt8(nBlue);
+                            }
+
+                            v5header->nColsUsed = 0;
+                            v5header->nBitCount = 24;
+                            break;
+                        }
+
+                        case PixelFormat16bppARGB1555:
+                        {
+                            for (sal_uInt64 i=0; i < s.remainingSize(); i+=2)
+                            {
+                                sal_uInt16 pixel;
+                                s.ReadUInt16(pixel);
+                                sal_uInt8 nAlpha = pixel & 1;
+                                sal_uInt8 nRed = (pixel & 0x003E) >> 1;
+                                sal_uInt8 nGreen = (pixel & 0x07C0) >> 6;
+                                sal_uInt8 nBlue = (pixel & 0xF800) >> 11;
+
+                                imagestream.WriteUInt8(nAlpha).WriteUInt8(nRed).WriteUInt8(nGreen).WriteUInt8(nBlue);
+                            }
+
+                            v5header->nColsUsed = 0;
+                            v5header->nBitCount = 32;
+                            break;
+                        }
+
+                        default:
+                            SAL_WARN("drawinglayer", "Unknown 16 bit pixel format");
+                    }
+                }
+
+                Bitmap aBrushBmp(Size(width, height), v5header->nBitCount);
+                AlphaMask aMask;
+
+                if (!ReadDIBV5(aBrushBmp, aMask, imagestream, v5header.get()))
+                    SAL_WARN("drawinglayer", "EMF+\t\t\tCannot read bitmap data");
+
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap size: " << aBrushBmp.GetSizePixel());
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap bit count: " << aBrushBmp.GetBitCount());
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap colors: " << aBrushBmp.GetColorCount());
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap byte size: " << aBrushBmp.GetSizeBytes());
+
+                BitmapEx aBrushBmpEx(aBrushBmp, aMask);
+
+                Graphic gfx(aBrushBmpEx);
+                graphic = gfx;
             }
             else
             {
@@ -125,6 +248,7 @@ namespace emfplushelper
             file.Close();
 #endif
         }
+
     }
 
     void EMFPPalette::Read(SvMemoryStream &s)
@@ -135,13 +259,6 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\t\t\tPalette entries: " << std::dec << count);
 
         entries.SetEntryCount(count);
-
-        for (sal_uInt32 i=0; i < count; i++)
-        {
-            EMFPARGB entry;
-            entry.Read(s);
-            entries[i] = entry.color;
-        }
     }
 
     void EMFPARGB::Read(SvMemoryStream &s)
