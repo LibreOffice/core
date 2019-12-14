@@ -91,19 +91,6 @@ namespace emfplushelper
         return "";
     }
 
-    OUString BrushTypeToString(sal_uInt32 type)
-    {
-        switch (type)
-        {
-            case BrushTypeSolidColor: return "BrushTypeSolidColor";
-            case BrushTypeHatchFill: return "BrushTypeHatchFill";
-            case BrushTypeTextureFill: return "BrushTypeTextureFill";
-            case BrushTypePathGradient: return "BrushTypePathGradient";
-            case BrushTypeLinearGradient: return "BrushTypeLinearGradient";
-        }
-        return "";
-    }
-
     OUString PixelOffsetModeToString(sal_uInt16 nPixelOffset)
     {
         switch (nPixelOffset)
@@ -241,6 +228,19 @@ namespace emfplushelper
     bool IsBrush(sal_uInt16 flags)
     {
         return (!((flags >> 15) & 0x0001));
+    }
+
+    OUString BrushTypeToString(sal_uInt32 type)
+    {
+        switch (type)
+        {
+            case BrushTypeSolidColor: return "BrushTypeSolidColor";
+            case BrushTypeHatchFill: return "BrushTypeHatchFill";
+            case BrushTypeTextureFill: return "BrushTypeTextureFill";
+            case BrushTypePathGradient: return "BrushTypePathGradient";
+            case BrushTypeLinearGradient: return "BrushTypeLinearGradient";
+        }
+        return "";
     }
 
     OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid)
