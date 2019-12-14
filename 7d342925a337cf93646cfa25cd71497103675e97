@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_083e0a29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-14T07:44:43Z",
+      "side": 1,
+      "message": "Please remove this. These strings don\u0027t make sense in commit message (the description of what the patch is for and what it does); the message must tell something useful to someone who is going to read it in 6 months or in 2 years. Things that are only relevant to the process of preparing the patch should go to gerrit comments, not to commit message. Thanks!",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 18
+      },
+      "revId": "7d342925a337cf93646cfa25cd71497103675e97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
