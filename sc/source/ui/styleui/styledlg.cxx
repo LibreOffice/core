@@ -54,7 +54,7 @@ ScStyleDlg::ScStyleDlg(weld::Window* pParent,
     {
         AddTabPage("page", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ) );
         AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ) );
         AddTabPage("header", &ScHeaderPage::Create,      &ScHeaderPage::GetRanges );
         AddTabPage("footer", &ScFooterPage::Create,      &ScFooterPage::GetRanges );
         AddTabPage("sheet", &ScTablePage::Create,     &ScTablePage::GetRanges );
@@ -73,7 +73,7 @@ ScStyleDlg::ScStyleDlg(weld::Window* pParent,
         else
             RemoveTabPage("asiantypo");
         AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
         AddTabPage("protection", &ScTabPageProtection::Create,    &ScTabPageProtection::GetRanges);
     }
 }
