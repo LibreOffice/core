@@ -20,8 +20,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGE_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGE_HXX
 
-#include "emfphelperdata.hxx"
 #include <vcl/graph.hxx>
+#include <vcl/BitmapPalette.hxx>
+
+#include "emfphelperdata.hxx"
 
 namespace emfplushelper
 {
@@ -35,6 +37,21 @@ namespace emfplushelper
         Graphic graphic;
 
         void Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream);
+    };
+
+    struct EMFPPalette : public EMFPObject
+    {
+        sal_uInt32 flags;
+        BitmapPalette entries;
+
+        void Read(SvMemoryStream &s);
+    };
+
+    struct EMFPARGB : public EMFPObject
+    {
+        BitmapColor color;
+
+        void Read(SvMemoryStream &s);
     };
 }
 
