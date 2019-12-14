@@ -16,8 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vcl/graphicfilter.hxx>
+
 #include <sal/log.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/dibtools.hxx>
+
 #include "emfpimage.hxx"
 #include "emfpenums.hxx"
 
@@ -30,6 +33,8 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\t\t\tHeader: 0x" << std::hex << header);
         SAL_INFO("drawinglayer", "EMF+\t\t\tType: " << ImageDataTypeToString(type) << " (0x" << type << ")" << std::dec);
 
+        sal_uInt64 imagesize = dataSize - 8;
+
         if (ImageDataTypeBitmap == type)
         {
             // bitmap
@@ -38,6 +43,8 @@ namespace emfplushelper
             SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap height: " << height);
             SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap stride: " << stride);
             SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap pixelFormat: " << PixelFormatToString(pixelFormat) << " (0x" << std::hex << pixelFormat << ")");
+
+            imagesize -= 20;
 
             if (PixelFormatIsCanonical(pixelFormat))
             {
@@ -63,23 +70,74 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tPixel values are indexes into a palette");
             }
 
+            SAL_INFO("drawinglayer", "EMF+\t\t\tBits per pixel: " << PixelFormatBitsPerPixel(pixelFormat));
             SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap type: " << " bitmapType: " << BitmapDataTypeToString(bitmapType) << " (0x" << bitmapType << ")" << std::dec);
 
             SAL_WARN_IF(width == 0 || height == 0, "drawinglayer", "Image width or height is 0");
 
             if (bitmapType == BitmapDataTypeCompressed)
             {
+                SAL_INFO("drawinglayer", "EMF+\t\t\tReading compressed bitmap data");
                 GraphicFilter filter;
                 filter.ImportGraphic(graphic, OUString(), s);
                 SAL_INFO("drawinglayer", "EMF+\t\t\tgraphic width: " << graphic.GetSizePixel().Width() << ", height: " << graphic.GetSizePixel().Height());
             }
             else if (bitmapType == BitmapDataTypePixel)
             {
+                SAL_INFO("drawinglayer", "EMF+\t\t\tReading pixel-based bitmap data");
+
+                // we need to read in the palette, then go back to the original stream position
+                sal_uInt64 pos = s.Tell();
+
                 EMFPPalette palette;
                 if (PixelFormatUsesPalette(pixelFormat))
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tUses palette");
                     palette.Read(s);
+                }
+                else
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tDoes not use palette");
+                }
 
-                SAL_WARN("drawinglayer", "EMF+\t\t\tTODO: Pixel based (uncompressed) bitmaps not yet supported");
+                s.Seek(pos);
+
+                std::unique_ptr<DIBV5Header> v5header(new DIBV5Header);
+                v5header->nWidth = width;
+                v5header->nHeight = height;
+                v5header->nPlanes = 1;
+                v5header->nCompression = false;
+                v5header->nSizeImage = ((v5header->nWidth * v5header->nBitCount + 31) & ~31) / 8 * v5header->nHeight;
+                v5header->nXPelsPerMeter = 72 * 39.3701;
+                v5header->nYPelsPerMeter = 72 * 39.3701;
+                v5header->nColsUsed = (PixelFormatUsesPalette(pixelFormat) ? palette.entries.GetEntryCount() : 0);
+                v5header->nColsImportant = 0;
+                v5header->nBitCount = PixelFormatBitsPerPixel(pixelFormat);
+                v5header->nCompression = COMPRESS_NONE;
+
+                if (v5header->nBitCount == 0 || v5header->nBitCount == 1 || v5header->nBitCount == 4 ||
+                    v5header->nBitCount == 8 || v5header->nBitCount == 24 || v5header->nBitCount == 32)
+                {
+                    Bitmap aBrushBmp(Size(width, height), v5header->nBitCount);
+                    AlphaMask aMask;
+
+                    if (!ReadDIBV5(aBrushBmp, aMask, s, v5header.get()))
+                        SAL_WARN("drawinglayer", "EMF+\t\t\tCannot read bitmap data");
+
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap size: " << aBrushBmp.GetSizePixel());
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap bit count: " << aBrushBmp.GetBitCount());
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap colors: " << aBrushBmp.GetColorCount());
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap byte size: " << aBrushBmp.GetSizeBytes());
+                }
+                else
+                {
+                    SAL_WARN("drawinglayer", "EMF+\t\t\tBitcount of " << v5header->nBitCount << " cannot be processed");
+                }
+
+                BitmapEx aBrushBmpEx(aBrushBmp, aMask);
+
+                Graphic gfx(aBrushBmpEx);
+                graphic = gfx;
             }
             else
             {
@@ -118,6 +176,7 @@ namespace emfplushelper
             file.Close();
 #endif
         }
+
     }
 
     void EMFPPalette::Read(SvMemoryStream &s)
@@ -128,13 +187,6 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\t\t\tPalette entries: " << std::dec << count);
 
         entries.SetEntryCount(count);
-
-        for (sal_uInt32 i=0; i < count; i++)
-        {
-            EMFPARGB entry;
-            entry.Read(s);
-            entries[i] = entry.color;
-        }
     }
 
     void EMFPARGB::Read(SvMemoryStream &s)
