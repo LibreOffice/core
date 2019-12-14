@@ -49,8 +49,8 @@ namespace emfplushelper
 
     }
 
-    EMFPPen::EMFPPen()
-        : EMFPBrush()
+    EMFPPen::EMFPPen(sal_uInt32 datasize)
+        : EMFPBrush(datasize)
         , penDataFlags(0)
         , penUnit(0)
         , penWidth(0.0)
