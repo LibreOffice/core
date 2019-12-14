@@ -102,6 +102,9 @@ namespace emfplushelper
 
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
+        if (dataSize == 0)
+            dataSize = rObjectStream.remainingSize();
+
         sal_uInt16 objecttype = GetObjectType(flags);
         sal_uInt16 index = flags & 0xff;
         SAL_INFO("drawinglayer", "EMF+ Object: " << ObjectTypeToString(objecttype) << " (0x" << std::hex << objecttype << ")");
@@ -1278,7 +1281,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeFillPolygon:
                     {
-                        const sal_uInt16 index = flags & 0xff;
+                        const sal_uInt8 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor;
                         sal_Int32 points;
 
