@@ -6717,7 +6717,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
-AC_MSG_CHECKING([whether $CXX_BASE has GCC bug 87150])
+AC_MSG_CHECKING([whether $CXX_BASE implements C++ DR P1155R3])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6726,7 +6726,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
         struct S2: S1 {};
         S1 f(S2 s) { return s; }
     ])], [
-        AC_DEFINE([HAVE_GCC_BUG_87150],[1])
+        AC_DEFINE([HAVE_P1155R3],[1])
         AC_MSG_RESULT([yes])
     ], [AC_MSG_RESULT([no])])
 CXXFLAGS=$save_CXXFLAGS

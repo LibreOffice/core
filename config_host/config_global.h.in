@@ -32,8 +32,20 @@ Any change in this header will cause a rebuild of almost everything.
 // Useable C++2a <span>:
 #define HAVE_CPP_SPAN 0
 
-/* GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return
-   stmt (derived vs. base)": */
-#define HAVE_GCC_BUG_87150 0
+/* "CWG motion 23: P1825R0 'Merged wording for P0527R1 and P1155R3' (DR)" in
+   <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/n4829.html> "N4829 Editors' Report --
+   Programming Languages -- C++" marks
+   <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1155r3.html> "More implicit moves" as a
+   DR.  Some versions of GCC already implemented it prior to the fix for
+   <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return stmt
+   (derived vs. base)"; MSVC++ 14.24 started to implement it, see <https://
+   developercommunity.visualstudio.com/content/problem/852827/
+   msvc-1424-started-to-chose-move-ctor-in-return-der.html> "MSVC++ 14.24 started to chose move ctor
+   in return derived vs. base".  At least Clang 9, which does not implement it, emits
+   -Werror,-Wreturn-std-move when it therefore considers a std::move to be missing.  On the other
+   hand, at least some versions of GCC would emit -Werror=redundant-move in places where such a
+   std::move would be added unconditionally, see c00948d9bd35dfb15a331c2163f32e9ee24644fd "Silence
+   bogus -Werror=redundant-move (GCC 9)". */
+#define HAVE_P1155R3 0
 
 #endif

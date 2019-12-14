@@ -2637,7 +2637,7 @@ vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScri
 {
     SvxFont aFont;
     CreateFont( aFont, rItemSet, true, nScriptType );
-#if HAVE_GCC_BUG_87150
+#if HAVE_P1155R3
     return aFont;
 #else
     return std::move(aFont);
