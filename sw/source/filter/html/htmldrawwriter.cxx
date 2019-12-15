@@ -19,8 +19,6 @@
 
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/sdtacitm.hxx>
@@ -31,27 +29,16 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <svx/svdpool.hxx>
 
 #include <rtl/strbuf.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
-#include <charatr.hxx>
 #include <frmfmt.hxx>
-#include <fmtanchr.hxx>
-#include <fmtsrnd.hxx>
-#include <ndtxt.hxx>
 #include <doc.hxx>
 #include <dcontact.hxx>
-#include <poolfmt.hxx>
 
 #include "wrthtml.hxx"
 

@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/languageoptions.hxx>
 #include <rtl/tencinfo.h>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
@@ -37,8 +38,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -54,7 +53,6 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
-#include <ndgrf.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
 #include <fltini.hxx>

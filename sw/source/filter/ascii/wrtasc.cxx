@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <osl/endian.h>
 #include <tools/stream.hxx>
 #include <pam.hxx>

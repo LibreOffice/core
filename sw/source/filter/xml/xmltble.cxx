@@ -26,16 +26,13 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/numehelp.hxx>
-#include <svl/zforlist.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <fmtrowsplt.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <list>
 #include <swtable.hxx>
 #include <doc.hxx>
-#include <pam.hxx>
 #include <frmfmt.hxx>
 #include <wrtswtbl.hxx>
 #include <fmtfsize.hxx>
@@ -43,7 +40,6 @@
 #include <cellatr.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
-#include <ndole.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotbl.hxx>

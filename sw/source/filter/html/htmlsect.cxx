@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <rtl/uri.hxx>
 
 #include <svl/urihelper.hxx>
@@ -30,15 +32,11 @@
 #include <osl/diagnose.h>
 
 #include <hintids.hxx>
-#include <fmtornt.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
-#include <fmtfsize.hxx>
 #include <fmtclds.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
-#include <fmtsrnd.hxx>
-#include <fmtflcnt.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -48,7 +46,6 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
-#include <viewsh.hxx>
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 

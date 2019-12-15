@@ -22,14 +22,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <o3tl/any.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <sax/tools/converter.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
@@ -42,8 +39,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xformsexport.hxx>
 #include <drawdoc.hxx>
-#include <pam.hxx>
-#include <unofreg.hxx>
 #include <doc.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
@@ -55,14 +50,10 @@
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
 #include "xmlexpit.hxx"
-#include <sfx2/viewsh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docary.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>

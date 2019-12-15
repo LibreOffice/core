@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
@@ -34,7 +33,6 @@
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtpdsc.hxx>
-#include <swtypes.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -60,7 +58,6 @@
 #include <ndtxt.hxx>
 #include <redline.hxx>
 #include <swerror.h>
-#include <paratr.hxx>
 #include <pausethreadstarting.hxx>
 
 using namespace ::com::sun::star;

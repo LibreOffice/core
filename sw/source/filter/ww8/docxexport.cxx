@@ -43,7 +43,6 @@
 #include <oox/export/shapes.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/relationship.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/olehelper.hxx>
 
@@ -57,7 +56,6 @@
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include "wrtww8.hxx"
-#include <fltini.hxx>
 #include <fmtline.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
@@ -73,22 +71,16 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 
-#include <docary.hxx>
-#include <numrule.hxx>
-#include <charfmt.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 
-#include "ww8par.hxx"
 #include "ww8scan.hxx"
 #include <oox/token/properties.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <o3tl/any.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <vcl/font.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/diagnose_ex.h>
 

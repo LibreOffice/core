@@ -26,7 +26,6 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/urihelper.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -42,7 +41,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/fmglob.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -74,7 +72,6 @@
 #include <viewsh.hxx>
 #include <unodraw.hxx>
 #include <unotextrange.hxx>
-#include <dcontact.hxx>
 
 #include "swcss1.hxx"
 #include "swhtml.hxx"

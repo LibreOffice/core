@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
-#include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <utility>
@@ -51,7 +50,6 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 
-#include <fmtlsplt.hxx>
 #include "xmlithlp.hxx"
 
 #include <fmtrowsplt.hxx>

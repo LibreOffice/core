@@ -21,22 +21,17 @@
 
 #include <tools/stream.hxx>
 #include <hintids.hxx>
-#include <rtl/tencinfo.h>
 #include <sfx2/printer.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <editeng/scripttypeitem.hxx>
+#include <svl/languageoptions.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <swtypes.hxx>
-#include <ndtxt.hxx>
 #include <pam.hxx>
-#include <frmatr.hxx>
-#include <fltini.hxx>
-#include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <swerror.h>
 #include <strings.hrc>

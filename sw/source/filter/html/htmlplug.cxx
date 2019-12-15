@@ -35,6 +35,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <tools/diagnose_ex.h>
+#include <IDocumentContentOperations.hxx>
 #include <SwAppletImpl.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -48,10 +49,8 @@
 #include <unotools/streamwrap.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
-#include <ndtxt.hxx>
 #include <swerror.h>
 #include <ndole.hxx>
-#include <swtable.hxx>
 #include <docsh.hxx>
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
@@ -65,7 +64,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/XEmbedPersist2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 

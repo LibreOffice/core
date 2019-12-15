@@ -36,17 +36,13 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/blinkitem.hxx>
-#include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/kernitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fchrfmt.hxx>
@@ -75,7 +71,6 @@
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include <numrule.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
 #include <osl/diagnose.h>
 #include <deque>

@@ -27,7 +27,6 @@
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
 #include <node.hxx>
-#include <format.hxx>
 
 Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {

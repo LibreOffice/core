@@ -19,9 +19,6 @@
 
 #include <wwstyles.hxx>
 
-#include <functional>
-#include <algorithm>
-#include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 
 namespace
