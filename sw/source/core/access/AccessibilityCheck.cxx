@@ -19,6 +19,8 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <unoparagraph.hxx>
 #include <tools/urlobj.hxx>
+#include <editeng/langitem.hxx>
+#include <charatr.hxx>
 
 namespace sw
 {
@@ -29,18 +31,30 @@ OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
 OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
 OUString sFakeNumbering("Fake numbering '%NUMBERING%'");
 OUString sHyperlinkTextIsLink("Hyperlink text is the same as the link address '%LINK%'");
+OUString sDocumentDefaultLanguage("Document default language is not set");
+OUString sStyleNoLanguage("Style '%STYLE_NAME%' has no language set");
 
-class NodeCheck
+class BaseCheck
 {
 protected:
     std::vector<svx::AccessibilityIssue>& m_rIssueCollection;
 
 public:
-    NodeCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    BaseCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
         : m_rIssueCollection(rIssueCollection)
     {
     }
-    virtual ~NodeCheck() {}
+    virtual ~BaseCheck() {}
+};
+
+class NodeCheck : public BaseCheck
+{
+public:
+    NodeCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : BaseCheck(rIssueCollection)
+    {
+    }
+
     virtual void check(SwNode* pCurrent) = 0;
 };
 
@@ -243,6 +257,54 @@ public:
     }
 };
 
+class DocumentCheck : public BaseCheck
+{
+public:
+    DocumentCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : BaseCheck(rIssueCollection)
+    {
+    }
+
+    virtual void check(SwDoc* pDoc) = 0;
+};
+
+// Check default language
+class DocumentDefaultLanguageCheck : public DocumentCheck
+{
+public:
+    DocumentDefaultLanguageCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : DocumentCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwDoc* pDoc) override
+    {
+        // TODO maybe - also check RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE if CJK or CTL are enabled
+        const SvxLanguageItem& rLang = pDoc->GetDefault(RES_CHRATR_LANGUAGE);
+        LanguageType eLanguage = rLang.GetLanguage();
+        if (eLanguage == LANGUAGE_NONE)
+        {
+            svx::AccessibilityIssue aIssue;
+            aIssue.m_aIssueText = sDocumentDefaultLanguage;
+            m_rIssueCollection.push_back(aIssue);
+        }
+        else
+        {
+            for (SwTextFormatColl* pTextFormatCollection : *pDoc->GetTextFormatColls())
+            {
+                const SwAttrSet& rAttrSet = pTextFormatCollection->GetAttrSet();
+                if (rAttrSet.GetLanguage(false).GetLanguage() == LANGUAGE_NONE)
+                {
+                    svx::AccessibilityIssue aIssue;
+                    OUString sName = pTextFormatCollection->GetName();
+                    aIssue.m_aIssueText = sStyleNoLanguage.replaceAll("%STYLE_NAME%", sName);
+                    m_rIssueCollection.push_back(aIssue);
+                }
+            }
+        }
+    }
+};
+
 } // end anonymous namespace
 
 // Check Shapes, TextBox
@@ -268,6 +330,14 @@ void AccessibilityCheck::check()
 {
     if (m_pDoc == nullptr)
         return;
+
+    std::vector<std::unique_ptr<DocumentCheck>> aDocumentChecks;
+    aDocumentChecks.push_back(std::make_unique<DocumentDefaultLanguageCheck>(m_aIssueCollection));
+
+    for (std::unique_ptr<DocumentCheck>& rpDocumentCheck : aDocumentChecks)
+    {
+        rpDocumentCheck->check(m_pDoc);
+    }
 
     std::vector<std::unique_ptr<NodeCheck>> aNodeChecks;
     aNodeChecks.push_back(std::make_unique<NoTextNodeAltTextCheck>(m_aIssueCollection));
