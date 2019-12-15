@@ -12,11 +12,13 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
+#include <docsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <swtable.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <unoparagraph.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
@@ -33,6 +35,7 @@ OUString sFakeNumbering("Fake numbering '%NUMBERING%'");
 OUString sHyperlinkTextIsLink("Hyperlink text is the same as the link address '%LINK%'");
 OUString sDocumentDefaultLanguage("Document default language is not set");
 OUString sStyleNoLanguage("Style '%STYLE_NAME%' has no language set");
+OUString sDocumentTitle("Document title is not set");
 
 class BaseCheck
 {
@@ -305,6 +308,34 @@ public:
     }
 };
 
+class DocumentTitleCheck : public DocumentCheck
+{
+public:
+    DocumentTitleCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : DocumentCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwDoc* pDoc) override
+    {
+        SwDocShell* pShell = pDoc->GetDocShell();
+        if (pShell)
+        {
+            const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pShell->GetModel(),
+                                                                             uno::UNO_QUERY_THROW);
+            const uno::Reference<document::XDocumentProperties> xDocumentProperties(
+                xDPS->getDocumentProperties());
+            OUString sTitle = xDocumentProperties->getTitle();
+            if (sTitle.isEmpty())
+            {
+                svx::AccessibilityIssue aIssue;
+                aIssue.m_aIssueText = sDocumentTitle;
+                m_rIssueCollection.push_back(aIssue);
+            }
+        }
+    }
+};
+
 } // end anonymous namespace
 
 // Check Shapes, TextBox
@@ -333,6 +364,7 @@ void AccessibilityCheck::check()
 
     std::vector<std::unique_ptr<DocumentCheck>> aDocumentChecks;
     aDocumentChecks.push_back(std::make_unique<DocumentDefaultLanguageCheck>(m_aIssueCollection));
+    aDocumentChecks.push_back(std::make_unique<DocumentTitleCheck>(m_aIssueCollection));
 
     for (std::unique_ptr<DocumentCheck>& rpDocumentCheck : aDocumentChecks)
     {
