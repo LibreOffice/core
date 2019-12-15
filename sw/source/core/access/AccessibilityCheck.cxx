@@ -25,6 +25,8 @@
 #include <charatr.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
 
 namespace sw
 {
@@ -40,6 +42,8 @@ OUString sStyleNoLanguage("Style '%STYLE_NAME%' has no language set");
 OUString sDocumentTitle("Document title is not set");
 OUString sTextContrast("Text contrast is too low.");
 OUString sTextBlinking("Blinking text.");
+OUString sAvoidFootnotes("Avoid footnotes.");
+OUString sAvoidEndnotes("Avoid endnotes.");
 }
 
 class BaseCheck
@@ -529,6 +533,35 @@ public:
     }
 };
 
+class FootnoteEndnoteCheck : public DocumentCheck
+{
+public:
+    FootnoteEndnoteCheck(std::vector<svx::AccessibilityCheckResult>& rResultCollection)
+        : DocumentCheck(rResultCollection)
+    {
+    }
+
+    void check(SwDoc* pDoc) override
+    {
+        for (SwTextFootnote const* pTextFootnote : pDoc->GetFootnoteIdxs())
+        {
+            SwFormatFootnote const& rFootnote = pTextFootnote->GetFootnote();
+            if (rFootnote.IsEndNote())
+            {
+                svx::AccessibilityCheckResult aResult;
+                aResult.m_aIssueText = sAvoidEndnotes;
+                m_rResultCollection.push_back(aResult);
+            }
+            else
+            {
+                svx::AccessibilityCheckResult aResult;
+                aResult.m_aIssueText = sAvoidFootnotes;
+                m_rResultCollection.push_back(aResult);
+            }
+        }
+    }
+};
+
 // Check Shapes, TextBox
 void AccessibilityCheck::checkObject(SdrObject* pObject)
 {
@@ -556,6 +589,7 @@ void AccessibilityCheck::check()
     std::vector<std::unique_ptr<DocumentCheck>> aDocumentChecks;
     aDocumentChecks.push_back(std::make_unique<DocumentDefaultLanguageCheck>(m_aResultCollection));
     aDocumentChecks.push_back(std::make_unique<DocumentTitleCheck>(m_aResultCollection));
+    aDocumentChecks.push_back(std::make_unique<FootnoteEndnoteCheck>(m_aResultCollection));
 
     for (std::unique_ptr<DocumentCheck>& rpDocumentCheck : aDocumentChecks)
     {
