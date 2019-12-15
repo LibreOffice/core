@@ -401,7 +401,15 @@ public:
         pData = rtl_uString_alloc( l );
         if (l != 0)
         {
+#if defined __GNUC__ && __GNUC__ == 10 && !defined __clang__
+            // Avoid some bogus GCC 10 trunk -Werror=stringop-overflow (see
+            // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92893> "Unhelpful -Wstringop-overflow
+            // warning"):
+            struct Hack { sal_Unicode c; sal_Unicode a[]; };
+            sal_Unicode* end = c.addData( reinterpret_cast<Hack *>(pData->buffer - 1)->a );
+#else
             sal_Unicode* end = c.addData( pData->buffer );
+#endif
             pData->length = l;
             *end = '\0';
             // TODO realloc in case pData->length is noticeably smaller than l?
@@ -630,7 +638,15 @@ public:
             return *this;
         l += pData->length;
         rtl_uString_ensureCapacity( &pData, l );
+#if defined __GNUC__ && __GNUC__ == 10 && !defined __clang__
+        // Avoid some bogus GCC 10 trunk -Werror=stringop-overflow (see
+        // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92893> "Unhelpful -Wstringop-overflow
+        // warning"):
+        struct Hack { sal_Unicode c; sal_Unicode a[]; };
+        sal_Unicode* end = c.addData( reinterpret_cast<Hack *>(pData->buffer - 1)->a + pData->length );
+#else
         sal_Unicode* end = c.addData( pData->buffer + pData->length );
+#endif
         *end = '\0';
         pData->length = l;
         return *this;
