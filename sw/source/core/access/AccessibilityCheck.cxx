@@ -24,6 +24,7 @@ namespace
 // TODO move these to string file and look for a better name.
 OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
 OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
+OUString sFakeNumbering("Fake numbering '%NUMBERING%'");
 
 class NodeCheck
 {
@@ -143,6 +144,46 @@ public:
     }
 };
 
+class NumberingCheck : public NodeCheck
+{
+private:
+    SwTextNode* pPreviousTextNode;
+
+    const std::vector<std::pair<OUString, OUString>> constNumberingCombinations{
+        { "1.", "2." }, { "(1)", "(2)" }, { "1)", "2)" },   { "a.", "b." }, { "(a)", "(b)" },
+        { "a)", "b)" }, { "A.", "B." },   { "(A)", "(B)" }, { "A)", "B)" }
+    };
+
+public:
+    NumberingCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+        , pPreviousTextNode(nullptr)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->IsTextNode())
+        {
+            if (pPreviousTextNode)
+            {
+                for (auto& rPair : constNumberingCombinations)
+                {
+                    if (pCurrent->GetTextNode()->GetText().startsWith(rPair.second)
+                        && pPreviousTextNode->GetText().startsWith(rPair.first))
+                    {
+                        svx::AccessibilityIssue aIssue;
+                        OUString sNumbering = rPair.first + " " + rPair.second + "...";
+                        aIssue.m_aIssueText = sFakeNumbering.replaceAll("%NUMBERING%", sNumbering);
+                        m_rIssueCollection.push_back(aIssue);
+                    }
+                }
+            }
+            pPreviousTextNode = pCurrent->GetTextNode();
+        }
+    }
+};
+
 } // end anonymous namespace
 
 // Check Shapes, TextBox
@@ -172,6 +213,7 @@ void AccessibilityCheck::check()
     std::vector<std::unique_ptr<NodeCheck>> aNodeChecks;
     aNodeChecks.push_back(std::make_unique<NoTextNodeAltTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TableNodeMergeSplitCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<NumberingCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
