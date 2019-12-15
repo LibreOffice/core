@@ -41,7 +41,7 @@ SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
     AddTabPage("RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
     AddTabPage("RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
     AddTabPage("RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
-    AddTabPage("RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage("RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
 }
 
 void SdCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
@@ -60,7 +60,7 @@ void SdCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, SVX_ENABLE_CHAR_TRANSPARENCY));
         rPage.PageCreated(aSet);
     }
-    else if (rId == "RID_SVXPAGE_BACKGROUND")
+    else if (rId == "RID_SVXPAGE_BKG")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);

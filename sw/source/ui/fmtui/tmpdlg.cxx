@@ -320,7 +320,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
         static_cast<SwColumnPage&>(rPage).SetFormatUsed( true );
     }
     // do not remove; many other style dialog combinations still use the SfxTabPage
-    // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
+    // for the SvxBrushItem (see RID_SVXPAGE_BKG)
     else if (rId == "background" || rId == "highlighting")
     {
         SvxBackgroundTabFlags nFlagType = SvxBackgroundTabFlags::NONE;
