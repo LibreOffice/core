@@ -273,7 +273,15 @@ public:
         pData = rtl_string_alloc( l );
         if (l != 0)
         {
+#if defined __GNUC__ && __GNUC__ == 10 && !defined __clang__
+            // Avoid some bogus GCC 10 trunk -Werror=stringop-overflow (see
+            // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92893> "Unhelpful -Wstringop-overflow
+            // warning"):
+            struct Hack { char c; char a[]; };
+            char* end = c.addData( &reinterpret_cast<Hack *>(pData->buffer)->c );
+#else
             char* end = c.addData( pData->buffer );
+#endif
             pData->length = l;
             *end = '\0';
         }
@@ -381,7 +389,15 @@ public:
             return *this;
         l += pData->length;
         rtl_string_ensureCapacity( &pData, l );
+#if defined __GNUC__ && __GNUC__ == 10 && !defined __clang__
+        // Avoid some bogus GCC 10 trunk -Werror=stringop-overflow (see
+        // <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92893> "Unhelpful -Wstringop-overflow
+        // warning"):
+        struct Hack { char c; char a[]; };
+        char* end = c.addData( &reinterpret_cast<Hack *>(pData->buffer)->c + pData->length );
+#else
         char* end = c.addData( pData->buffer + pData->length );
+#endif
         *end = '\0';
         pData->length = l;
         return *this;
