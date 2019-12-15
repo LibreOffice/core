@@ -19,7 +19,6 @@
 
 #include <mtftools.hxx>
 
-#include <cassert>
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -29,9 +28,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -41,8 +38,6 @@
 #include <officecfg/Office/Linguistic.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/wincodepage.hxx>
-#include <tools/helpers.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x

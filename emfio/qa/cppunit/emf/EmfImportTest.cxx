@@ -17,8 +17,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <com/sun/star/graphic/EmfTools.hpp>
-#include <com/sun/star/graphic/Primitive2DTools.hpp>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>

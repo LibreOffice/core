@@ -26,7 +26,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdevstate.hxx>
-#include <vcl/FilterConfigItem.hxx>
 
 #include "emfiodllapi.h"
 

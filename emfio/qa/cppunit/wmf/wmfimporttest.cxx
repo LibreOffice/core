@@ -18,10 +18,9 @@
  */
 
 #include <test/xmltesttools.hxx>
-#include <test/setupvcl.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
-#include <vcl/metaact.hxx>
 #include <mtftools.hxx>
 
 using namespace css;

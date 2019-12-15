@@ -18,10 +18,8 @@
  */
 
 #include <emfreader.hxx>
-#include <osl/endian.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
