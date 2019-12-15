@@ -5244,7 +5244,7 @@
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom40">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="toolbar_style">both-horiz</property>
                             <property name="show_arrow">False</property>
                             <child>
@@ -7241,7 +7241,7 @@
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="SectionBottom44">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="toolbar_style">both-horiz</property>
                             <property name="show_arrow">False</property>
                             <child>
