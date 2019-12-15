@@ -17,10 +17,24 @@
 
 namespace svx
 {
+enum class AccessibilityIssueID
+{
+    UNSPECIFIED, // TODO: remove - temporary
+    DOCUMENT_TITLE,
+    DOCUMENT_LANGUAGE,
+    STYLE_LANGUAGE
+};
+
 class SVX_DLLPUBLIC AccessibilityCheckResult final
 {
 public:
+    AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;
+
+    AccessibilityCheckResult(AccessibilityIssueID eIssueID = AccessibilityIssueID::UNSPECIFIED)
+        : m_eIssueID(eIssueID)
+    {
+    }
 };
 
 class SVX_DLLPUBLIC AccessibilityCheck
