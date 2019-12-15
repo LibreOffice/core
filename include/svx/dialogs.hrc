@@ -37,7 +37,6 @@
 #define RID_SVXPAGE_NUMBERFORMAT            (RID_SVX_START +  41)
 #define RID_SVXPAGE_ALIGNMENT               (RID_SVX_START +  90)
 #define RID_SVXPAGE_BORDER                  (RID_SVX_START +   5)
-#define RID_SVXPAGE_BACKGROUND              (RID_SVX_START +   1)
 #define RID_SVXPAGE_PAGE                    (RID_SVX_START +  25)
 #define RID_SVXPAGE_LINE                    (RID_SVX_START +  51)
 #define RID_SVXPAGE_AREA                    (RID_SVX_START +  56)

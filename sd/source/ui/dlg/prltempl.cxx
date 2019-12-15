@@ -139,7 +139,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     AddTabPage( "RID_SVXPAGE_TABULATOR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), nullptr );
     AddTabPage( "RID_SVXPAGE_PARA_ASIAN", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), nullptr );
     AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
-    AddTabPage( "RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
+    AddTabPage( "RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
 
     SvtCJKOptions aCJKOptions;
     if( !aCJKOptions.IsAsianTypographyEnabled() )
@@ -162,7 +162,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
         RemoveTabPage( "RID_SVXPAGE_TABULATOR");
         RemoveTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH");
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
-        RemoveTabPage( "RID_SVXPAGE_BACKGROUND" );
+        RemoveTabPage( "RID_SVXPAGE_BKG" );
     }
 
     // set title and add corresponding pages to dialog
@@ -262,7 +262,7 @@ void SdPresLayoutTemplateDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aSet.Put(CntUInt16Item(SID_SVXTEXTATTRPAGE_OBJKIND, OBJ_TEXT));
         rPage.PageCreated(aSet);
     }
-    else if (rId == "RID_SVXPAGE_BACKGROUND")
+    else if (rId == "RID_SVXPAGE_BKG")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
