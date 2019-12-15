@@ -23,6 +23,8 @@
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
 #include <charatr.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 
 namespace sw
 {
@@ -36,6 +38,7 @@ OUString sHyperlinkTextIsLink("Hyperlink text is the same as the link address '%
 OUString sDocumentDefaultLanguage("Document default language is not set");
 OUString sStyleNoLanguage("Style '%STYLE_NAME%' has no language set");
 OUString sDocumentTitle("Document title is not set");
+OUString sTextContrast("Text contrast is too low.");
 
 class BaseCheck
 {
@@ -260,6 +263,136 @@ public:
     }
 };
 
+// Based on https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
+double calculateRelativeLuminance(Color const& rColor)
+{
+    // Convert to BColor which has R, G, B colors components
+    // represented by a floating point number from [0.0, 1.0]
+    const basegfx::BColor aBColor = rColor.getBColor();
+
+    double r = aBColor.getRed();
+    double g = aBColor.getGreen();
+    double b = aBColor.getBlue();
+
+    // Calculate the values according to the described algorithm
+    r = (r <= 0.03928) ? r / 12.92 : std::pow((r + 0.055) / 1.055, 2.4);
+    g = (g <= 0.03928) ? g / 12.92 : std::pow((g + 0.055) / 1.055, 2.4);
+    b = (b <= 0.03928) ? b / 12.92 : std::pow((b + 0.055) / 1.055, 2.4);
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+// TODO move to common color tools (BColorTools maybe)
+// Based on https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
+double calculateContrastRatio(Color const& rColor1, Color const& rColor2)
+{
+    const double fLuminance1 = calculateRelativeLuminance(rColor1);
+    const double fLuminance2 = calculateRelativeLuminance(rColor2);
+    const std::pair<const double, const double> aMinMax = std::minmax(fLuminance1, fLuminance2);
+
+    // (L1 + 0.05) / (L2 + 0.05)
+    // L1 is the lighter color (greater luminance value)
+    // L2 is the darker color (smaller luminance value)
+    return (aMinMax.second + 0.05) / (aMinMax.first + 0.05);
+}
+
+class TextContrastCheck : public NodeCheck
+{
+private:
+    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange,
+                        uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode)
+    {
+        sal_Int32 nParaBackColor;
+        uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
+        xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor;
+
+        uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
+        if (xProperties.is())
+        {
+            // Forground color
+            sal_Int32 nCharColor;
+            xProperties->getPropertyValue("CharColor") >>= nCharColor;
+            Color aForegroundColor(nCharColor);
+            if (aForegroundColor == COL_AUTO)
+                return;
+
+            const SwPageDesc* pPageDescription = pTextNode->FindPageDesc();
+            const SwFrameFormat& rPageFormat = pPageDescription->GetMaster();
+            const SwAttrSet& rPageSet = rPageFormat.GetAttrSet();
+
+            const XFillStyleItem* pXFillStyleItem(
+                rPageSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
+            Color aPageBackground;
+
+            if (pXFillStyleItem->GetValue() == css::drawing::FillStyle_SOLID)
+            {
+                const XFillColorItem* rXFillColorItem
+                    = rPageSet.GetItem<XFillColorItem>(XATTR_FILLCOLOR, false);
+                aPageBackground = rXFillColorItem->GetColorValue();
+            }
+
+            sal_Int32 nCharBackColor;
+            sal_Int16 eRelief;
+
+            xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor;
+            xProperties->getPropertyValue("CharRelief") >>= eRelief;
+
+            // Determine the background color
+            // Try Character background (highlight)
+            Color aBackgroundColor(nCharBackColor);
+
+            // If not character background color, try paragraph background color
+            if (aBackgroundColor == COL_AUTO)
+                aBackgroundColor = Color(nParaBackColor);
+
+            // If not paragraph background color, try page color
+            if (aBackgroundColor == COL_AUTO)
+                aBackgroundColor = aPageBackground;
+
+            // If not page color, assume white background color
+            if (aBackgroundColor == COL_AUTO)
+                aBackgroundColor = COL_WHITE;
+
+            double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
+            if (fContrastRatio < 4.5)
+            {
+                svx::AccessibilityIssue aIssue;
+                aIssue.m_aIssueText = sTextContrast;
+                m_rIssueCollection.push_back(aIssue);
+            }
+        }
+    }
+
+public:
+    TextContrastCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->IsTextNode())
+        {
+            SwTextNode* pTextNode = pCurrent->GetTextNode();
+            uno::Reference<text::XTextContent> xParagraph;
+            xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+            if (xParagraph.is())
+            {
+                uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph,
+                                                                             uno::UNO_QUERY);
+                uno::Reference<container::XEnumeration> xRunEnum
+                    = xRunEnumAccess->createEnumeration();
+                while (xRunEnum->hasMoreElements())
+                {
+                    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+                    if (xRun.is())
+                        checkTextRange(xRun, xParagraph, pTextNode);
+                }
+            }
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -376,6 +509,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<TableNodeMergeSplitCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NumberingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HyperlinkCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<TextContrastCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
