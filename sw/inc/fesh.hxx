@@ -206,6 +206,10 @@ private:
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
     comphelper::OInterfaceContainerHelper2 m_aPasteListeners;
+    /// insert table rows or columns instead of overwriting the existing table cells
+    SwTable::SearchType m_eTableInsertMode;
+    /// table copied to the clipboard by the last private copy
+    bool m_bTableCopied;
 
     SAL_DLLPRIVATE SwFlyFrame *FindFlyFrame( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
 
@@ -639,14 +643,11 @@ public:
     void DeleteTable();
     bool DeleteRow(bool bCompleteTable = false);
 
-    /// insert table rows or columns instead of overwriting the existing table cells
-    SwTable::SearchType m_eTableInsertMode;
     SwTable::SearchType GetTableInsertMode() const         { return m_eTableInsertMode; }
     void SetTableInsertMode( SwTable::SearchType eFlag )  { m_eTableInsertMode = eFlag; }
-    /// table copied to the clipboard by the last private copy
-    bool bTableCopied;
-    bool GetTableCopied()  { return bTableCopied; }
-    void SetTableCopied( bool bCopied )  { bTableCopied = bCopied; }
+
+    bool GetTableCopied()  { return m_bTableCopied; }
+    void SetTableCopied( bool bCopied )  { m_bTableCopied = bCopied; }
 
     bool DeleteTableSel();        ///< Current selection, may be whole table.
 
