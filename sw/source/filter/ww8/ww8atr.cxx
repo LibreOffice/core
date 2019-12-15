@@ -103,7 +103,6 @@
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <pagedesc.hxx>
-#include <flddat.hxx>
 #include <ndtxt.hxx>
 #include <swrect.hxx>
 #include <redline.hxx>
@@ -111,7 +110,6 @@
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
 #include <section.hxx>
-#include <lineinfo.hxx>
 #include <fmtline.hxx>
 #include <tox.hxx>
 #include <fmtftntx.hxx>
@@ -120,7 +118,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/unobrushitemhelper.hxx>
-#include <svx/xenum.hxx>
 #include <tgrditem.hxx>
 #include <flddropdown.hxx>
 #include <chpfld.hxx>
@@ -137,10 +134,8 @@
 #include "ww8par.hxx"
 #include "ww8attributeoutput.hxx"
 #include "fields.hxx"
-#include <vcl/outdev.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <o3tl/enumrange.hxx>
 
 
 using ::editeng::SvxBorderLine;

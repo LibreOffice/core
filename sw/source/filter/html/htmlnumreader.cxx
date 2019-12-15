@@ -18,11 +18,9 @@
  */
 
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <hintids.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <svtools/htmlout.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -39,8 +37,6 @@
 #include "htmlnum.hxx"
 #include "swcss1.hxx"
 #include "swhtml.hxx"
-
-#include <SwNodeNum.hxx>
 
 using namespace css;
 

@@ -19,17 +19,15 @@
 
 #include <memory>
 #include "docxexportfilter.hxx"
-#include "rtfexportfilter.hxx"
 #include "docxexport.hxx"
 
 #include <docsh.hxx>
-#include <editsh.hxx>
 #include <pam.hxx>
 #include <PostItMgr.hxx>
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <viewsh.hxx>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 using namespace ::comphelper;

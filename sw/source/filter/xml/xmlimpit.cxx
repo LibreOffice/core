@@ -25,9 +25,7 @@
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/memberids.h>
 #include <osl/diagnose.h>
@@ -47,13 +45,11 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 
-#include <fmtlsplt.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
-#include <sal/log.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

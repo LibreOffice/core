@@ -23,9 +23,7 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <algorithm>
 #include <cstddef>
-#include <functional>
 #include <osl/endian.h>
 #include <sot/storage.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -37,22 +35,14 @@
 #include <sal/log.hxx>
 
 #include <sot/exchange.hxx>
-#include <swtypes.hxx>
 #include <fmtanchr.hxx>
-#include <fmtcntnt.hxx>
-#include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <pam.hxx>
-#include <ndgrf.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>
-#include <redline.hxx>
 #include <fltshell.hxx>
-#include <unodraw.hxx>
 #include <shellio.hxx>
-#include <ndole.hxx>
 
-#include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/gdimtf.hxx>
 

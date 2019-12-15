@@ -21,16 +21,8 @@
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
-#include <fmturl.hxx>
-#include <fmtfsize.hxx>
-#include <fmtclds.hxx>
-#include <fmtcntnt.hxx>
-#include <fmtsrnd.hxx>
-#include <fmtinfmt.hxx>
 #include <flypos.hxx>
-#include <docary.hxx>
 
-#include <doc.hxx>
 #include <frmfmt.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>

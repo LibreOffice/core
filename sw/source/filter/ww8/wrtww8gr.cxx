@@ -21,25 +21,17 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/wmf.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/urihelper.hxx>
 
 #include <svtools/embedhlp.hxx>
-
-#include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
 
@@ -66,9 +58,6 @@
 #include "ww8attributeoutput.hxx"
 #include <fmturl.hxx>
 
-#include <docsh.hxx>
-#include <cstdio>
-#include <o3tl/enumrange.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 

@@ -26,21 +26,13 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlexpit.hxx"
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmltabe.hxx>
 #include "xmlbrshe.hxx"
-#include <editeng/tstpitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <tools/fldunit.hxx>
-#include <swmodule.hxx>
-#include <doc.hxx>
 #include <fmtornt.hxx>
 #include <unomid.h>
 #include <frmfmt.hxx>
-#include <fmtfsize.hxx>
-#include <swrect.hxx>
 #include "xmlexp.hxx"
 #include <editeng/memberids.h>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

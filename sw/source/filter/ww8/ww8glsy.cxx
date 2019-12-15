@@ -20,8 +20,6 @@
 #include <memory>
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
-#include <rtl/tencinfo.h>
-#include <swerror.h>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <poolfmt.hxx>
@@ -34,7 +32,6 @@
 #include <docary.hxx>
 #include "ww8glsy.hxx"
 #include "ww8par.hxx"
-#include "ww8par2.hxx"
 
 WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg)
     : rStrm(refStrm)

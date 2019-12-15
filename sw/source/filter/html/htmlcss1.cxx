@@ -19,11 +19,10 @@
 
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/whiter.hxx>
 #include <svl/urihelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/docfile.hxx>
-#include <vcl/svapp.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -45,13 +44,11 @@
 #include <frmatr.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>
-#include <svx/svxids.hrc>
 #include <osl/diagnose.h>
 
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>
 #include <paratr.hxx>

@@ -19,7 +19,6 @@
 
 #include "WW8FFData.hxx"
 #include <tools/stream.hxx>
-#include <doc.hxx>
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
 

@@ -19,17 +19,13 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
-#include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -37,7 +33,6 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <fmtornt.hxx>
 #include <fmtfld.hxx>
 
 #include <doc.hxx>

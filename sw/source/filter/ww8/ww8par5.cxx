@@ -24,13 +24,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
-#include <sot/storinfo.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <svl/cintitem.hxx>
 #include <svl/lngmisc.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
@@ -42,7 +42,6 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <hintids.hxx>
 #include <editeng/fontitem.hxx>
@@ -55,35 +54,26 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentState.hxx>
-#include <charatr.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>
 #include <reffld.hxx>
 #include <IMark.hxx>
 #include <expfld.hxx>
 #include <dbfld.hxx>
-#include <usrfld.hxx>
 #include <tox.hxx>
 #include <section.hxx>
 #include <ndtxt.hxx>
 #include <fmtinfmt.hxx>
 #include <chpfld.hxx>
-#include <ftnidx.hxx>
-#include <txtftn.hxx>
-#include <viewsh.hxx>
-#include <shellres.hxx>
 #include <fmtruby.hxx>
 #include <charfmt.hxx>
-#include <txtatr.hxx>
 #include <breakit.hxx>
 #include <fmtclds.hxx>
-#include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
-#include "ww8par2.hxx"
 #include "writerhelper.hxx"
 #include "fields.hxx"
 #include <o3tl/safeint.hxx>

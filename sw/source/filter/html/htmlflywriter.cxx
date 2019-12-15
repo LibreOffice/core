@@ -21,7 +21,6 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <tools/fract.hxx>
 #include <svl/urihelper.hxx>
@@ -54,7 +53,6 @@
 #include <frmatr.hxx>
 #include <grfatr.hxx>
 #include <flypos.hxx>
-#include <docary.hxx>
 #include <ndgrf.hxx>
 
 #include <doc.hxx>
@@ -63,7 +61,6 @@
 #include <swerror.h>
 #include <frmfmt.hxx>
 #include "wrthtml.hxx"
-#include "css1kywd.hxx"
 #include "htmlatr.hxx"
 #include "htmlfly.hxx"
 #include "htmlreqifreader.hxx"

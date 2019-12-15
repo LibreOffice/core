@@ -17,28 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/style/NumberingType.hpp>
-#include <hintids.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
-#include <svl/urihelper.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <doc.hxx>
-#include <docary.hxx>
-#include <poolfmt.hxx>
 #include <ndtxt.hxx>
-#include <paratr.hxx>
 #include <pam.hxx>
 
 #include "htmlnum.hxx"
 #include "wrthtml.hxx"
 
-#include <SwNodeNum.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
 using namespace css;

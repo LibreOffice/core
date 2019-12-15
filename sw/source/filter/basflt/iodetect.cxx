@@ -21,7 +21,6 @@
 #include <memory>
 #include <osl/endian.h>
 #include <sot/storage.hxx>
-#include <svtools/parhtml.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/docfilt.hxx>

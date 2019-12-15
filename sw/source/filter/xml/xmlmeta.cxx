@@ -17,19 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <osl/diagnose.h>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
-#include <xmloff/xmlmetae.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <editeng/langitem.hxx>
 #include <o3tl/safeint.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <docstat.hxx>
-#include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentStatistics.hxx>
 #include "xmlimp.hxx"
