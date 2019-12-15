@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

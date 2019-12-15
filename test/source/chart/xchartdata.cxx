@@ -17,7 +17,7 @@
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 

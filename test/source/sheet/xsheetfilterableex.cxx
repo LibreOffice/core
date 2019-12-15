@@ -15,12 +15,10 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
 #include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/XSheetFilterableEx.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/XCellCursor.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

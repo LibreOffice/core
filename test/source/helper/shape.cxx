@@ -9,7 +9,6 @@
 
 #include <test/helper/shape.hxx>
 #include <sal/types.h>
-#include <rtl/string.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

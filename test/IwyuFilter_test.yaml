@@ -1,0 +1,79 @@
+---
+assumeFilename: test/source/unoapi_test.cxx
+blacklist:
+    test/source/vclbootstrapprotector.cxx:
+    # Used in Coverity-specific #ifdef
+    - sal/log.hxx
+    test/source/container/xchild.cxx:
+    # Actually used
+    - com/sun/star/uno/XInterface.hpp
+    test/source/container/xnamereplace.cxx:
+    # Actually used
+    - com/sun/star/uno/Any.hxx
+    test/source/drawing/xshape.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/drawing/captionshape.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/helper/shape.cxx:
+    # Actually used
+    - com/sun/star/lang/XComponent.hpp
+    test/source/sheet/databaserange.cxx:
+    # Actually used
+    - com/sun/star/sheet/XDatabaseRange.hpp
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/sheetcell.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/sheetcellrange.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/sheetfilterdescriptor.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xarealink.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xcalculatable.cxx:
+    # Actually used
+    - com/sun/star/table/XCell.hpp
+    test/source/sheet/xcelladdressable.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xcellrangereferrer.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xconsolidationdescriptor.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xdocumentauditing.cxx:
+    # Actually used
+    - com/sun/star/awt/Point.hpp
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/frame/XFrame.hpp
+    test/source/sheet/xformulaquery.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xlabelrange.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xnamedrange.cxx:
+    # Actually used
+    - com/sun/star/sheet/XNamedRange.hpp
+    test/source/sheet/xscenarioenhanced.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xsheetannotationanchor.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/sheet/xsheetcellrangecontainer.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/table/xtablechart.cxx:
+    # Needed for template
+    - test/cppunitasserthelper.hxx
+    test/source/text/textcontent.cxx:
+    # Actually used
+    - com/sun/star/text/TextContentAnchorType.hpp

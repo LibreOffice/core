@@ -9,23 +9,11 @@
 
 #include <test/sheet/xnamedrange.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/sheet/Border.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #include <rtl/ustring.hxx>
 
 using namespace css;

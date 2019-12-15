@@ -9,14 +9,10 @@
 
 #include <test/sheet/xdatabaserange.hxx>
 
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -24,7 +20,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #include <iostream>
 
 using namespace css;

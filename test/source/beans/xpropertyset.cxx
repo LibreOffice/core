@@ -14,7 +14,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -26,9 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <set>
-
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

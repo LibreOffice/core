@@ -19,7 +19,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

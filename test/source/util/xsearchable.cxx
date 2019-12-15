@@ -10,7 +10,7 @@
 #include <com/sun/star/util/XSearchable.hpp>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 #include <test/util/xsearchable.hxx>
 

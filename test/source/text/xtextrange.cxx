@@ -8,12 +8,11 @@
  */
 
 #include <test/text/xtextrange.hxx>
-#include <rtl/string.hxx>
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 

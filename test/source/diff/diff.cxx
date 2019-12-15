@@ -13,17 +13,14 @@
 
 #include <libxml/xpath.h>
 #include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xmlmemory.h>
 
 #include <set>
-#include <cstring>
 #include <sstream>
-#include <cmath>
 #include <cassert>
+#include <vector>
 
 #if USE_CPPUNIT
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #endif
 
 #include <rtl/math.hxx>

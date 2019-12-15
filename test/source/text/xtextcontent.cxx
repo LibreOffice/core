@@ -11,7 +11,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

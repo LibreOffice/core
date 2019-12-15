@@ -14,8 +14,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
-
 using namespace css;
 
 namespace apitest

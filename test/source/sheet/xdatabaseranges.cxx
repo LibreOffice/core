@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <random>
-
 #include <test/sheet/xdatabaseranges.hxx>
 
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
@@ -16,7 +14,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

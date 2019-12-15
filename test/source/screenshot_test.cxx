@@ -13,7 +13,6 @@
 
 #include <test/screenshot_test.hxx>
 
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/abstdlg.hxx>
@@ -21,7 +20,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
-#include <unotools/configmgr.hxx>
 #include <tools/stream.hxx>
 
 

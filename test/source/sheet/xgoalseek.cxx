@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/GoalResult.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

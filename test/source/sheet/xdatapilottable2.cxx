@@ -9,7 +9,6 @@
 
 #include <test/sheet/xdatapilottable2.hxx>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
-#include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/DataPilotTableResultData.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -21,7 +20,7 @@
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #include <numeric>
 
 using namespace css;

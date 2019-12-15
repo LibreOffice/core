@@ -21,7 +21,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XDocumentAuditing.hpp>
 #include <com/sun/star/sheet/XSheetAuditing.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -34,7 +33,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
