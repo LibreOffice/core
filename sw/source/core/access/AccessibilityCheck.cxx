@@ -287,7 +287,7 @@ public:
         LanguageType eLanguage = rLang.GetLanguage();
         if (eLanguage == LANGUAGE_NONE)
         {
-            svx::AccessibilityIssue aIssue;
+            svx::AccessibilityIssue aIssue(svx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
             aIssue.m_aIssueText = sDocumentDefaultLanguage;
             m_rIssueCollection.push_back(aIssue);
         }
@@ -298,7 +298,7 @@ public:
                 const SwAttrSet& rAttrSet = pTextFormatCollection->GetAttrSet();
                 if (rAttrSet.GetLanguage(false).GetLanguage() == LANGUAGE_NONE)
                 {
-                    svx::AccessibilityIssue aIssue;
+                    svx::AccessibilityIssue aIssue(svx::AccessibilityIssueID::STYLE_LANGUAGE);
                     OUString sName = pTextFormatCollection->GetName();
                     aIssue.m_aIssueText = sStyleNoLanguage.replaceAll("%STYLE_NAME%", sName);
                     m_rIssueCollection.push_back(aIssue);
@@ -328,7 +328,7 @@ public:
             OUString sTitle = xDocumentProperties->getTitle();
             if (sTitle.isEmpty())
             {
-                svx::AccessibilityIssue aIssue;
+                svx::AccessibilityIssue aIssue(svx::AccessibilityIssueID::DOCUMENT_TITLE);
                 aIssue.m_aIssueText = sDocumentTitle;
                 m_rIssueCollection.push_back(aIssue);
             }
