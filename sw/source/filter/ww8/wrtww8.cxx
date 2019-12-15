@@ -25,7 +25,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <algorithm>
 #include <map>
-#include <set>
 #include <hintids.hxx>
 #include <string.h>
 #include <osl/endian.h>
@@ -35,13 +34,10 @@
 
 #include <unotools/fltrcfg.hxx>
 #include <sot/storage.hxx>
-#include <svl/zformat.hxx>
 #include <sfx2/docinf.hxx>
 #include <editeng/tstpitem.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/hyphenzoneitem.hxx>
-#include <editeng/langitem.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <editeng/lrspitem.hxx>
@@ -51,7 +47,6 @@
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <swtblfmt.hxx>
-#include <txatbase.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
@@ -76,17 +71,13 @@
 #include <swtable.hxx>
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
-#include <fltini.hxx>
 #include <swmodule.hxx>
 #include <section.hxx>
-#include <swfltopt.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <fmturl.hxx>
-#include <fesh.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
-#include <tools/urlobj.hxx>
 #include <mdiexp.hxx>
 #include <strings.hrc>
 #include <fmtline.hxx>
@@ -97,13 +88,11 @@
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8attributeoutput.hxx"
-#include <IDocumentMarkAccess.hxx>
 #include <xmloff/odffields.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <dbgoutsw.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>

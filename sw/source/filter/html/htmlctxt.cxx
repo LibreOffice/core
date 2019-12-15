@@ -32,11 +32,9 @@
 
 #include <doc.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>
 #include <shellio.hxx>
 #include <paratr.hxx>
 #include "htmlnum.hxx"
-#include "css1kywd.hxx"
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 

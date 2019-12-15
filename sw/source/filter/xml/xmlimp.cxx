@@ -25,20 +25,14 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <o3tl/any.hxx>
-#include <o3tl/safeint.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLTextShapeImportHelper.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -49,11 +43,9 @@
 #include <IDocumentListsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <unofreg.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
-#include <unocrsr.hxx>
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <editsh.hxx>
@@ -66,19 +58,13 @@
 #include <swdll.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
-#include <editeng/unolingu.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/frame.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/helpers.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
 #include <unotxdoc.hxx>

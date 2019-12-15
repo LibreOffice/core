@@ -19,16 +19,11 @@
 
 #include <hintids.hxx>
 #include <vcl/font.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/langitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <numrule.hxx>
-#include <paratr.hxx>
 #include <charfmt.hxx>
-#include <ndtxt.hxx>
-#include <unotools/fontcfg.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include "sprmids.hxx"
@@ -39,7 +34,6 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 
-#include <mutex>
 #include <numeric>
 
 using namespace ::com::sun::star;

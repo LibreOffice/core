@@ -32,13 +32,9 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
 
-#include <svx/svdobj.hxx>
-#include <doc.hxx>
 #include <ndole.hxx>
 #include <fmtcntnt.hxx>
-#include <unostyle.hxx>
 #include <unoframe.hxx>
-#include <ndgrf.hxx>
 #include "xmlexp.hxx"
 #include "xmltexte.hxx"
 #include <SwAppletImpl.hxx>
@@ -47,7 +43,6 @@
 #include <sot/exchange.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
-#include <SwStyleNameMapper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

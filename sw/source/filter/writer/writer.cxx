@@ -22,12 +22,9 @@
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
-#include <svl/urihelper.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <tools/diagnose_ex.h>
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <shellio.hxx>
 #include <doc.hxx>

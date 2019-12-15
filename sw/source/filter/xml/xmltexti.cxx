@@ -36,13 +36,11 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmlimppr.hxx>
-#include <unocrsr.hxx>
 #include <TextCursorHelper.hxx>
 #include <unoframe.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <unocoll.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>

@@ -21,10 +21,7 @@
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
-#include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <doc.hxx>
@@ -32,14 +29,10 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
-#include <svl/urihelper.hxx>
 #include <swerror.h>
-#include <tools/ref.hxx>
-#include <unotxdoc.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #define AUTOTEXT_GALLERY "autoTxt"

@@ -49,9 +49,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <svl/urihelper.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <charfmt.hxx>
@@ -78,11 +76,9 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <swerror.h>
-#include <charatr.hxx>
 #include <paratr.hxx>
 #include <frmatr.hxx>
 #include <poolfmt.hxx>
-#include <fltini.hxx>
 #include "css1kywd.hxx"
 #include "wrthtml.hxx"
 #include "htmlnum.hxx"

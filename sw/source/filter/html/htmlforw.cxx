@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/script/XEventAttacher.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -34,12 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <svl/macitem.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/fmglob.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -56,13 +52,10 @@
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <ndtxt.hxx>
-#include <flypos.hxx>
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "htmlform.hxx"
 #include <frmfmt.hxx>
-#include <rtl/strbuf.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

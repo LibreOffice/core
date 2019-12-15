@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/style.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
@@ -28,22 +27,18 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/errinf.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/stritem.hxx>
-#include <unotools/streamwrap.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
@@ -51,7 +46,6 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -67,7 +61,6 @@
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <unotextrange.hxx>
-#include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 
 #include <SwStyleNameMapper.hxx>
@@ -76,7 +69,6 @@
 #include <paratr.hxx>
 #include <fmtrowsplt.hxx>
 
-#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>

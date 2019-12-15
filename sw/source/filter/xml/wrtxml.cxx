@@ -27,16 +27,12 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 
-#include <officecfg/Office/Common.hxx>
-
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/errinf.hxx>
-#include <o3tl/any.hxx>
 #include <sal/log.hxx>
-#include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <unotools/saveopt.hxx>

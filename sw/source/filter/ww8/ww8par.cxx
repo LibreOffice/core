@@ -36,8 +36,8 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <sfx2/docinf.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 
@@ -96,14 +96,11 @@
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
-#include <viewopt.hxx>
 #include <shellres.hxx>
-#include <mdiexp.hxx>
 #include <swerror.h>
 #include <swtable.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
-#include <unocrsr.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include "sprmids.hxx"
 
@@ -113,7 +110,6 @@
 
 #include <ndgrf.hxx>
 #include <editeng/editids.hrc>
-#include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txatbase.hxx>
 
@@ -140,7 +136,6 @@
 #include <dbgoutsw.hxx>
 #endif
 
-#include <svx/hlnkitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <swdll.hxx>
 #include "WW8Sttbf.hxx"
@@ -153,7 +148,7 @@ using namespace sw::util;
 using namespace sw::types;
 using namespace nsHdFtFlags;
 
-#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>

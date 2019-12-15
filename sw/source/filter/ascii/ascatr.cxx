@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/string.hxx>
-#include <editeng/fontitem.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
@@ -28,11 +27,8 @@
 #include <redline.hxx>
 #include "wrtasc.hxx"
 #include <txatbase.hxx>
-#include <fchrfmt.hxx>
 #include <txtfld.hxx>
-#include <txtatr.hxx>
 #include <fmtftn.hxx>
-#include <charfmt.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>
 #include <ftninfo.hxx>

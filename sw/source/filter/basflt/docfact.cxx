@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <shellio.hxx>
 #include <doc.hxx>
-#include <node.hxx>
-
-#include <cmdid.h>
+#include <docfac.hxx>
 
 
 SwDocFac::SwDocFac( SwDoc *pDc )

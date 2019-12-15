@@ -36,9 +36,7 @@
 #include <unoredline.hxx>
 #include <DocumentRedlineManager.hxx>
 #include "xmlimp.hxx"
-#include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
-#include <unotools/configmgr.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
 

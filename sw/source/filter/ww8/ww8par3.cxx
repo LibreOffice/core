@@ -24,7 +24,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/unohelp.hxx>
-#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>

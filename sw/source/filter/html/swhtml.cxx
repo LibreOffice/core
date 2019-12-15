@@ -46,7 +46,6 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <svtools/htmlcfg.hxx>
@@ -74,7 +73,6 @@
 #include <charatr.hxx>
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
-#include <txtfld.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
@@ -84,7 +82,6 @@
 #include <fmtfollowtextflow.hxx>
 #include <fmtornt.hxx>
 #include <docary.hxx>
-#include <docstat.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -98,7 +95,6 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
-#include <expfld.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
@@ -114,13 +110,13 @@
 #include <breakit.hxx>
 #include <SwAppletImpl.hxx>
 #include <swdll.hxx>
+#include <txatbase.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdobj.hxx>
 #include <officecfg/Office/Writer.hxx>
 
 #include <swerror.h>
-#include <hints.hxx>
 #include <ndole.hxx>
 #include <unoframe.hxx>
 #include "css1atr.hxx"

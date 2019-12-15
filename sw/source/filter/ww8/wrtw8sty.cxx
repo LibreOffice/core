@@ -18,22 +18,17 @@
  */
 
 #include <algorithm>
-#include <functional>
 
 #include <memory>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <rtl/tencinfo.h>
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/fmglob.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <doc.hxx>
 #include "wrtww8.hxx"
 #include <docary.hxx>
@@ -70,7 +65,6 @@
 #include "ww8attributeoutput.hxx"
 #include "docxattributeoutput.hxx"
 #include "rtfattributeoutput.hxx"
-#include <IDocumentSettingAccess.hxx>
 
 #include <unordered_set>
 

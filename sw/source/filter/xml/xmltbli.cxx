@@ -52,7 +52,6 @@
 #include <pam.hxx>
 #include <unotbl.hxx>
 #include <unotextrange.hxx>
-#include <unocrsr.hxx>
 #include <cellatr.hxx>
 #include <swddetbl.hxx>
 #include <ddefld.hxx>

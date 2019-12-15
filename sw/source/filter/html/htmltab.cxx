@@ -60,7 +60,6 @@
 #include "htmlnum.hxx"
 #include "swhtml.hxx"
 #include "swcss1.hxx"
-#include <numrule.hxx>
 #include <txtftn.hxx>
 #include <itabenum.hxx>
 #include <tblafmt.hxx>

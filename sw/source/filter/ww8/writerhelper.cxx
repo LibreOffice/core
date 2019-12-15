@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
 #include "writerhelper.hxx"
@@ -32,9 +31,7 @@
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/fmglob.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <editeng/tstpitem.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <fmtcntnt.hxx>
@@ -42,7 +39,6 @@
 #include <frmfmt.hxx>
 #include <flypos.hxx>
 #include <fmtanchr.hxx>
-#include <ndgrf.hxx>
 #include <fmtfsize.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
@@ -50,7 +46,6 @@
 #include <fchrfmt.hxx>
 #include <redline.hxx>
 #include "types.hxx"
-#include <unotools/streamwrap.hxx>
 #include <svtools/embedhlp.hxx>
 #include <numrule.hxx>
 #include <vcl/svapp.hxx>

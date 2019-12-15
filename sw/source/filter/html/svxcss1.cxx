@@ -51,7 +51,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/orphitem.hxx>
 #include <svtools/svparser.hxx>
-#include <swtypes.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

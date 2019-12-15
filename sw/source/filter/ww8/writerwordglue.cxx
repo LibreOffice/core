@@ -33,8 +33,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
-#include <unotools/fontcvt.hxx>
-#include <editeng/paperinf.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -49,7 +47,6 @@
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <breakit.hxx>
-#include <i18nlangtag/mslangid.hxx>
 
 using namespace css;
 

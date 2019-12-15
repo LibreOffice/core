@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <editeng/fontitem.hxx>
-#include <unotext.hxx>
 #include <doc.hxx>
 #include "xmlexp.hxx"
 #include "xmlimp.hxx"

@@ -53,11 +53,7 @@
 #include <editeng/autokernitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/emphasismarkitem.hxx>
-#include <editeng/forbiddenruleitem.hxx>
 #include <editeng/twolinesitem.hxx>
-#include <editeng/scriptspaceitem.hxx>
-#include <editeng/hngpnctitem.hxx>
-#include <editeng/pbinitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charreliefitem.hxx>
@@ -72,7 +68,6 @@
 #include <svx/xflclit.hxx>
 #include "sortedarray.hxx"
 #include "sprmids.hxx"
-#include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -91,7 +86,6 @@
 #include <fmtline.hxx>
 #include <txatbase.hxx>
 #include <fmtflcnt.hxx>
-#include <fmtclbl.hxx>
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <swtable.hxx>

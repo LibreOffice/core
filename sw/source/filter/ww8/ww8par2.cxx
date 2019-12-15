@@ -22,7 +22,6 @@
 
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
-#include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <hintids.hxx>
 #include <editeng/colritem.hxx>
@@ -31,12 +30,9 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/charrotateitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <msfilter.hxx>
 #include <pam.hxx>
@@ -49,15 +45,12 @@
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <mdiexp.hxx>
-#include <fmtpdsc.hxx>
 #include <txtftn.hxx>
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
 #include <fmtlsplt.hxx>
 #include <charfmt.hxx>
-#include <SwStyleNameMapper.hxx>
-#include <fltshell.hxx>
 #include <fmtanchr.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtfollowtextflow.hxx>

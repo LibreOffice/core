@@ -35,7 +35,6 @@
 #include <redline.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
-#include <unodraw.hxx>
 #include <textboxhelper.hxx>
 #include <rdfhelper.hxx>
 #include "wrtww8.hxx"
@@ -91,7 +90,6 @@
 #include <editeng/keepitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -116,19 +114,14 @@
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
-#include <poolfmt.hxx>
-#include <charatr.hxx>
 #include <swmodule.hxx>
 #include <swtable.hxx>
 #include <txtftn.hxx>
-#include <txtinet.hxx>
 #include <fmtautofmt.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <fmtclbl.hxx>
-#include <fmthdft.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <grfatr.hxx>
 #include <frmatr.hxx>
@@ -137,14 +130,12 @@
 #include <osl/file.hxx>
 #include <utility>
 #include <vcl/embeddedfontshelper.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <algorithm>

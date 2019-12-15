@@ -9,8 +9,6 @@
 
 #include "ww8toolbar.hxx"
 #include "ww8scan.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <stdarg.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -24,7 +22,6 @@
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
-#include <vcl/graph.hxx>
 #include <map>
 #include <sal/log.hxx>
 

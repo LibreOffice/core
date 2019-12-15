@@ -33,12 +33,10 @@
 #include <sal/log.hxx>
 
 #include <swerror.h>
-#include <swtypes.hxx>
 
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
-#include <editeng/unolingu.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 

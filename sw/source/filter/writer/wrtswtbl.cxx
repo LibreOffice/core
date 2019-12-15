@@ -30,7 +30,6 @@
 #include <frmfmt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
-#include <frmatr.hxx>
 #include <htmltbl.hxx>
 
 using ::editeng::SvxBorderLine;

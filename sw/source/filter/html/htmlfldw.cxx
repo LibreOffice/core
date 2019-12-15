@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/string.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/htmltokn.h>
 #include <osl/diagnose.h>
 #include <fmtfld.hxx>
 #include <doc.hxx>

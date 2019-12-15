@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-#include <limits.h>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
-#include <vcl/svapp.hxx>
+#include <tools/solar.h>
 #include <svtools/htmltokn.h>
 #include <comphelper/string.hxx>
-#include "css1kywd.hxx"
 #include "parcss1.hxx"
 
 // Loop-Check: Used to avoid infinite loops, is checked after every

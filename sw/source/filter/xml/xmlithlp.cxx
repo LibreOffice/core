@@ -17,25 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xmlithlp.hxx"
-#include <hintids.hxx>
-#include <unomid.h>
-#include <sax/tools/converter.hxx>
-#include <svx/unomid.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/shaditem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <editeng/keepitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <fmtpdsc.hxx>
-#include <fmtornt.hxx>
-#include <fmtfsize.hxx>
+#include <limits.h>
 
-#include <fmtlsplt.hxx>
+#include "xmlithlp.hxx"
+#include <sax/tools/converter.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/brushitem.hxx>
+
 #include <xmloff/xmluconv.hxx>
 #include <osl/diagnose.h>
+
+#include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::xmloff::token;

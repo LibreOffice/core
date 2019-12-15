@@ -18,19 +18,15 @@
  */
 
 #include <vector>
-#include <list>
 #include <utility>
 #include <algorithm>
 #include <iostream>
 
-#include <oox/core/filterbase.hxx>
 #include "docxexport.hxx"
-#include "docxexportfilter.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxfont.hxx>
@@ -47,10 +43,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
 #include <fmtpdsc.hxx>
-#include <fmtfsize.hxx>
-#include <fmtornt.hxx>
 #include <fmtlsplt.hxx>
-#include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
@@ -75,14 +68,11 @@
 #include <swrect.hxx>
 #include <reffld.hxx>
 #include <redline.hxx>
-#include <wrtswtbl.hxx>
-#include <htmltbl.hxx>
 #include <txttxmrk.hxx>
 #include <fmtline.hxx>
 #include <fmtruby.hxx>
 #include <breakit.hxx>
 #include <txtatr.hxx>
-#include <fmtsrnd.hxx>
 #include <fmtrowsplt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -90,7 +80,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <oox/export/vmlexport.hxx>
-#include <sfx2/docfile.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
 

@@ -18,7 +18,6 @@
  */
 
 #include <iostream>
-#include <set>
 #include <stdio.h>
 #include "WW8TableInfo.hxx"
 #include <fmtfsize.hxx>
@@ -26,7 +25,6 @@
 #include <swtable.hxx>
 #include <frmfmt.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>
 #include <dbgoutsw.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

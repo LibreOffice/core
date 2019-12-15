@@ -26,53 +26,25 @@
 
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <vcl/graphicfilter.hxx>
 
-#include <vcl/graph.hxx>
-#include <svl/urihelper.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/cmapitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/crossedoutitem.hxx>
+#include <svl/cintitem.hxx>
 #include <svl/stritem.hxx>
-#include <unotools/charclass.hxx>
-#include <txtftn.hxx>
-#include <fmtpdsc.hxx>
-#include <fmtftn.hxx>
 #include <fmtanchr.hxx>
-#include <fmtrfmrk.hxx>
-#include <fmtclds.hxx>
 #include <fmtfld.hxx>
-#include <fmtfsize.hxx>
-#include <fmthdft.hxx>
-#include <fmtcntnt.hxx>
 #include <redline.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
-#include <frmatr.hxx>
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <txtfld.hxx>
-#include <charatr.hxx>
-#include <swtable.hxx>
 #include <tox.hxx>
 #include <expfld.hxx>
-#include <section.hxx>
-#include <tblsel.hxx>
-#include <pagedesc.hxx>
-#include <docsh.hxx>
 #include <fltshell.hxx>
-#include <viewsh.hxx>
-#include <shellres.hxx>
 #include <rdfhelper.hxx>
 
 using namespace com::sun::star;

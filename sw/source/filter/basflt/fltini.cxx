@@ -17,40 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <hintids.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <tools/svlibrary.h>
-#include <svtools/parhtml.hxx>
 #include <sot/storage.hxx>
-#include <comphelper/classids.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/docfile.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/tstpitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <pam.hxx>
 #include <shellio.hxx>
-#include <docsh.hxx>
-#include <wdocsh.hxx>
 #include <fltini.hxx>
-#include <hints.hxx>
 #include <init.hxx>
-#include <frmatr.hxx>
 #include <fmtfsize.hxx>
 #include <swtable.hxx>
 #include <fmtcntnt.hxx>
 #include <editeng/boxitem.hxx>
-#include <frmfmt.hxx>
-#include <numrule.hxx>
 #include <ndtxt.hxx>
 #include <swfltopt.hxx>
-#include <swerror.h>
 #include <swdll.hxx>
 #include <iodetect.hxx>
 #include <osl/module.hxx>

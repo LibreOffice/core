@@ -17,16 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <editeng/memberids.h>
+#include <vcl/graph.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include <vcl/GraphicObject.hxx>
-#include <svx/unomid.hxx>
 #include <editeng/brushitem.hxx>
 #include <xmloff/xmluconv.hxx>
 

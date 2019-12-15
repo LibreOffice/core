@@ -546,3 +546,53 @@ blacklist:
     # Actually used
     - com/sun/star/text/TextMarkupDescriptor.hpp
     - com/sun/star/text/XTextRange.hpp
+    sw/source/filter/basflt/iodetect.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    sw/source/filter/html/SwAppletImpl.cxx:
+    # Needed for direct member access
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sw/source/filter/html/htmlgrin.cxx:
+    # Needed for TypedWhichId macro to work
+    - fmtflcnt.hxx
+    sw/source/filter/html/wrthtml.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sw/source/filter/html/swhtml.cxx:
+    # Actually used
+    - com/sun/star/document/XDocumentProperties.hpp
+    sw/source/filter/ww8/docxtablestyleexport.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    sw/source/filter/ww8/docxexport.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/awt/XControlModel.hpp
+    sw/source/filter/ww8/wrtw8nds.cxx:
+    # Actually used
+    - com/sun/star/i18n/BreakIterator.hpp
+    sw/source/filter/ww8/ww8graf.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    # Needed for implicit dtor
+    - ww8par2.hxx
+    sw/source/filter/ww8/ww8par4.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    sw/source/filter/ww8/wrtww8.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
+    sw/source/filter/xml/xmlitemm.cxx:
+    # Needed for TypedWhichId macro to work
+    - fmtfsize.hxx
+    sw/source/filter/xml/xmlitemi.cxx:
+    # Needed for TypedWhichId macro to work
+    - editeng/ulspitem.hxx
+    - fmtfsize.hxx
+    sw/source/filter/xml/wrtxml.cxx:
+    # Actually used
+    - com/sun/star/task/XStatusIndicator.hpp
+    sw/source/filter/xml/xmlimp.cxx:
+    # Actually used
+    - com/sun/star/text/XTextRange.hpp

@@ -22,26 +22,19 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 
-#include <svl/style.hxx>
-
-#include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <editeng/boxitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/tstpitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/memberids.h>
+#include <editeng/ulspitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 
-#include <svx/unomid.hxx>
-
+#include <fmtfsize.hxx>
 #include <hintids.hxx>
-#include <paratr.hxx>
-#include <doc.hxx>
 #include <unomid.h>
 #include "xmlbrshi.hxx"
 #include "xmlimp.hxx"
