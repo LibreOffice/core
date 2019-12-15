@@ -507,176 +507,299 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="AddDirectD">
+      <object class="GtkMenuItem" id="MenuFile-AddDirect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AddDirect</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="RecentFileListD">
+      <object class="GtkMenuItem" id="MenuFile-OpenFromCalc">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OpenFromCalc</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-OpenRemote">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OpenRemote</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-RecentFileList">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:RecentFileList</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="CloseDocD">
+      <object class="GtkMenuItem" id="MenuFile-CloseDoc">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CloseDoc</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator39">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SaveD">
+      <object class="GtkMenuItem" id="MenuFile-AutoPilotMenu">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AutoPilotMenu</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-OpenTemplate">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OpenTemplate</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-SaveAsTemplate">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SaveAsTemplate</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-NewDoc">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:NewDoc</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-Reload">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Reload</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-VersionDialog">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:VersionDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-Save">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Save</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SaveAsD">
+      <object class="GtkMenuItem" id="MenuFile-SaveAs">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveAs</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SaveAsRemoteD">
+      <object class="GtkMenuItem" id="MenuFile-SaveAsRemote">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveAsRemote</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="NewGlobalDocD">
-        <property name="visible">True</property>
+      <object class="GtkMenuItem" id="MenuFile-SaveACopy">
+        <property name="visible">False</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:NewGlobalDoc</property>
+        <property name="action_name">.uno:SaveACopy</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator61">
+      <object class="GtkMenuItem" id="MenuFile-SaveAll">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SaveAll</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExportToD">
+      <object class="GtkMenuItem" id="MenuFile-CheckOut">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:CheckOut</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-CancelCheckOut">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:CancelCheckOut</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-CheckIn">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:CheckIn</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-ExportTo">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExportTo</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExportToPDFD">
+      <object class="GtkMenuItem" id="MenuFile-ExportToPDF">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExportToPDF</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExportToEPUBD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExportToEPUB</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator44">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SendMailD">
+      <object class="GtkMenuItem" id="MenuFile-SendMail">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendMail</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SendMailDocAsPDFD">
+      <object class="GtkMenuItem" id="MenuFile-SendMailDocAsOOo">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SendMailDocAsOOo</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-SendMailDocAsMS">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SendMailDocAsMS</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-SendMailDocAsPDF">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendMailDocAsPDF</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SendViaBluetoothD">
+      <object class="GtkMenuItem" id="MenuFile-SendViaBluetooth">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendViaBluetooth</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator48">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PrintPreviewD">
+      <object class="GtkMenuItem" id="MenuFile-WebHtml">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:WebHtml</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-PrintPreview">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintPreview</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PrintDefaultD">
+      <object class="GtkMenuItem" id="MenuFile-PrintDefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintDefault</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PrinterSetupD">
+      <object class="GtkMenuItem" id="MenuFile-Print">
+        <property name="visible">False</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Print</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuFile-PrinterSetup">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrinterSetup</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator50">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator8">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SignatureD">
+      <object class="GtkMenuItem" id="MenuFile-Signature">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Signature</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SignPDFD">
+      <object class="GtkMenuItem" id="MenuFile-SignPDF">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SignPDF</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SetDocumentPropertiesD">
+      <object class="GtkMenuItem" id="MenuFile-SetDocumentProperties">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetDocumentProperties</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator43">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-Separator9">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="QuitD">
+      <object class="GtkMenuItem" id="MenuFile-Quit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Quit</property>
