@@ -9,13 +9,12 @@
 
 #include <test/view/xformlayeraccess.hxx>
 
-#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 

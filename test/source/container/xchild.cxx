@@ -7,16 +7,14 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#include <test/cppunitasserthelper.hxx>
 #include <test/container/xchild.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

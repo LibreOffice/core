@@ -10,14 +10,11 @@
 #include <sal/config.h>
 
 #include <cppunit/Protector.h>
-#include <cppunittester/protectorfactory.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <test/setupvcl.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/threadpool.hxx>
-
-#include "isheadless.hxx"
 
 namespace {
 

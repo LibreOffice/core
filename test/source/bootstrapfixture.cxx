@@ -12,29 +12,20 @@
 #include <test/bootstrapfixture.hxx>
 #include <test/setupvcl.hxx>
 #include <vcl/errinf.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
-#include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/resmgr.hxx>
 #include <tools/link.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <unotools/syslocaleoptions.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <unotools/tempfile.hxx>
 #include <vcl/scheduler.hxx>
-
-#include "isheadless.hxx"
 
 #include <memory>
 #include <cstring>

@@ -14,7 +14,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

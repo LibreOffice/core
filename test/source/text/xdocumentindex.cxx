@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -15,7 +15,6 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <test/unoapi_property_testers.hxx>
 #include <test/text/xdocumentindex.hxx>
 
 namespace apitest

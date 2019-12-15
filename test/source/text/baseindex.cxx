@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -15,14 +15,12 @@
 #include <com/sun/star/text/XTextSection.hpp>
 
 #include <vcl/BitmapTools.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/pngwrite.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 
 #include <test/unoapi_property_testers.hxx>
 #include <test/text/baseindex.hxx>
-#include <test/testdllapi.hxx>
 
 namespace
 {

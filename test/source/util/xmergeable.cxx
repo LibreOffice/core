@@ -7,14 +7,13 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#include <test/cppunitasserthelper.hxx>
 #include <test/util/xmergeable.hxx>
 
 #include <com/sun/star/util/XMergeable.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

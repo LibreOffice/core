@@ -14,7 +14,7 @@
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #include <rtl/ustring.hxx>
 
 using namespace css;

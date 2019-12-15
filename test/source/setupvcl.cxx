@@ -13,11 +13,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <comphelper/processfactory.hxx>
-#include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <test/setupvcl.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>

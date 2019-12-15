@@ -9,14 +9,11 @@
 
 #include <test/sheet/xsheetconditionalentries.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

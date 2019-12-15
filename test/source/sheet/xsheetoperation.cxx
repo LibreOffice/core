@@ -14,7 +14,7 @@
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

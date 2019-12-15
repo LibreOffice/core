@@ -13,9 +13,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sheet/FunctionArgument.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

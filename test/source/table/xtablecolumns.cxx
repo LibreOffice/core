@@ -9,7 +9,6 @@
 
 #include <test/table/xtablecolumns.hxx>
 
-#include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
@@ -17,7 +16,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 

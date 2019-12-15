@@ -10,14 +10,13 @@
 #include <test/sheet/xscenarioenhanced.hxx>
 #include <test/cppunitasserthelper.hxx>
 
-#include <com/sun/star/sheet/XScenarios.hpp>
 #include <com/sun/star/sheet/XScenarioEnhanced.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

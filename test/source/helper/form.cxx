@@ -8,7 +8,6 @@
  */
 
 #include <test/helper/form.hxx>
-#include <rtl/string.hxx>
 #include <sal/types.h>
 
 #include <com/sun/star/awt/Point.hpp>

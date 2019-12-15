@@ -11,7 +11,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 #include <rtl/ustring.hxx>
 
 using namespace css;

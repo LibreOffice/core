@@ -12,7 +12,7 @@
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 #include <iostream>
 

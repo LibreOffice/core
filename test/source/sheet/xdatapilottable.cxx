@@ -8,17 +8,8 @@
  */
 
 #include <test/sheet/xdatapilottable.hxx>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
-#include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <rtl/ustring.hxx>
 
 using namespace css;
 using namespace css::uno;

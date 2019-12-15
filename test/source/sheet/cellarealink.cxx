@@ -8,13 +8,11 @@
  */
 
 #include <test/sheet/cellarealink.hxx>
-#include <sfx2/app.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 

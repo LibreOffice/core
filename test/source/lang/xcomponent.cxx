@@ -10,11 +10,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <test/lang/xcomponent.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

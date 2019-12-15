@@ -9,11 +9,8 @@
 
 #include <test/table/tablerow.hxx>
 #include <test/unoapi_property_testers.hxx>
-#include <rtl/ustring.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 

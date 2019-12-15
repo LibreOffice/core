@@ -9,12 +9,11 @@
 
 #include <test/sheet/xconsolidatable.hxx>
 
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XConsolidatable.hpp>
 #include <com/sun/star/sheet/XConsolidationDescriptor.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;
