@@ -21,15 +21,10 @@
 
 #include <com/sun/star/graphic/XEmfParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -40,12 +35,6 @@
 
 #include <wmfreader.hxx>
 #include <emfreader.hxx>
-
-//#include <com/sun/star/xml/sax/XParser.hpp>
-//#include <com/sun/star/xml/sax/Parser.hpp>
-//#include <com/sun/star/xml/sax/InputSource.hpp>
-//#include <drawinglayer/geometry/viewinformation2d.hxx>
-//#include <svgdocumenthandler.hxx>
 
 #include "xemfparser.hxx"
 
