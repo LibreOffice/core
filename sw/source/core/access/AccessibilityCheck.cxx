@@ -39,6 +39,7 @@ OUString sDocumentDefaultLanguage("Document default language is not set");
 OUString sStyleNoLanguage("Style '%STYLE_NAME%' has no language set");
 OUString sDocumentTitle("Document title is not set");
 OUString sTextContrast("Text contrast is too low.");
+OUString sTextBlinking("Blinking text.");
 
 class BaseCheck
 {
@@ -393,6 +394,56 @@ public:
     }
 };
 
+class BlinkingTextCheck : public NodeCheck
+{
+private:
+    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
+        if (xProperties.is() && xProperties->getPropertySetInfo()->hasPropertyByName("CharFlash"))
+        {
+            bool bBlinking = false;
+            xProperties->getPropertyValue("CharFlash") >>= bBlinking;
+
+            if (bBlinking)
+            {
+                svx::AccessibilityIssue aIssue;
+                aIssue.m_aIssueText = sTextBlinking;
+                m_rIssueCollection.push_back(aIssue);
+            }
+        }
+    }
+
+public:
+    BlinkingTextCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->IsTextNode())
+        {
+            SwTextNode* pTextNode = pCurrent->GetTextNode();
+            uno::Reference<text::XTextContent> xParagraph;
+            xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+            if (xParagraph.is())
+            {
+                uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph,
+                                                                             uno::UNO_QUERY);
+                uno::Reference<container::XEnumeration> xRunEnum
+                    = xRunEnumAccess->createEnumeration();
+                while (xRunEnum->hasMoreElements())
+                {
+                    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+                    if (xRun.is())
+                        checkTextRange(xRun);
+                }
+            }
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -510,6 +561,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<NumberingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HyperlinkCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextContrastCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<BlinkingTextCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
