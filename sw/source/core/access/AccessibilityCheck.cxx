@@ -16,6 +16,9 @@
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <swtable.hxx>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <unoparagraph.hxx>
+#include <tools/urlobj.hxx>
 
 namespace sw
 {
@@ -25,6 +28,7 @@ namespace
 OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
 OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
 OUString sFakeNumbering("Fake numbering '%NUMBERING%'");
+OUString sHyperlinkTextIsLink("Hyperlink text is the same as the link address '%LINK%'");
 }
 
 class NodeCheck
@@ -186,6 +190,61 @@ public:
     }
 };
 
+class HyperlinkCheck : public NodeCheck
+{
+private:
+    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
+        if (xProperties->getPropertySetInfo()->hasPropertyByName("HyperLinkURL"))
+        {
+            OUString sHyperlink;
+            xProperties->getPropertyValue("HyperLinkURL") >>= sHyperlink;
+            if (!sHyperlink.isEmpty())
+            {
+                OUString sText = xTextRange->getString();
+                if (INetURLObject(sText) == INetURLObject(sHyperlink))
+                {
+                    svx::AccessibilityCheckResult aResult;
+                    aResult.m_aIssueText = sHyperlinkTextIsLink.replaceFirst("%LINK%", sHyperlink);
+                    m_rResultCollection.push_back(aResult);
+                }
+            }
+        }
+    }
+
+public:
+    HyperlinkCheck(std::vector<svx::AccessibilityCheckResult>& rAccessibilityCheckResultCollection)
+        : NodeCheck(rAccessibilityCheckResultCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->IsTextNode())
+        {
+            SwTextNode* pTextNode = pCurrent->GetTextNode();
+            uno::Reference<text::XTextContent> xParagraph
+                = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+            if (xParagraph.is())
+            {
+                uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph,
+                                                                             uno::UNO_QUERY);
+                uno::Reference<container::XEnumeration> xRunEnum
+                    = xRunEnumAccess->createEnumeration();
+                while (xRunEnum->hasMoreElements())
+                {
+                    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+                    if (xRun.is())
+                    {
+                        checkTextRange(xRun);
+                    }
+                }
+            }
+        }
+    }
+};
+
 // Check Shapes, TextBox
 void AccessibilityCheck::checkObject(SdrObject* pObject)
 {
@@ -214,6 +273,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<NoTextNodeAltTextCheck>(m_aResultCollection));
     aNodeChecks.push_back(std::make_unique<TableNodeMergeSplitCheck>(m_aResultCollection));
     aNodeChecks.push_back(std::make_unique<NumberingCheck>(m_aResultCollection));
+    aNodeChecks.push_back(std::make_unique<HyperlinkCheck>(m_aResultCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
