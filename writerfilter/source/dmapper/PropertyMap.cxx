@@ -1359,12 +1359,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             }
             catch ( const uno::Exception& )
             {
-                OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup" );
+                DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper", "Exception in SectionPropertyMap::CloseSectionGroup");
             }
         }
     }
 
-    if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) )
+    if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous)
+        && !rDM_Impl.IsInComments())
     {
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
@@ -1384,7 +1385,36 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
             uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
             if ( m_bIsFirstSection && !aName.isEmpty() && xRangeProperties.is() )
+            {
                 xRangeProperties->setPropertyValue( getPropertyName( PROP_PAGE_DESC_NAME ), uno::makeAny( aName ) );
+            }
+            else if (auto xTextAppend = rDM_Impl.GetCurrentXText())
+            {   // find a node in the section that has a page break and change
+                // it to apply the page style; see "nightmare scenario" in
+                // wwSectionManager::InsertSegments()
+                uno::Reference<container::XEnumerationAccess> const xCursor(
+                    xTextAppend->createTextCursorByRange(
+                        uno::Reference<text::XTextContent>(xSection, uno::UNO_QUERY_THROW)->getAnchor()),
+                    uno::UNO_QUERY_THROW);
+                uno::Reference<container::XEnumeration> const xEnum(
+                        xCursor->createEnumeration());
+                while (xEnum->hasMoreElements())
+                {
+                    uno::Reference<beans::XPropertySet> xElem;
+                    xEnum->nextElement() >>= xElem;
+                    if (xElem->getPropertySetInfo()->hasPropertyByName("BreakType"))
+                    {
+                        style::BreakType bt;
+                        if ((xElem->getPropertyValue("BreakType") >>= bt)
+                            && bt == style::BreakType_PAGE_BEFORE)
+                        {
+                            xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
+                                    uno::makeAny(aName));
+                            break;
+                        }
+                    }
+                }
+            }
         }
         catch ( const uno::Exception& )
         {
@@ -1394,7 +1424,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // If the section is of type "New column" (0x01), then simply insert a column break.
     // But only if there actually are columns on the page, otherwise a column break
     // seems to be handled like a page break by MSO.
-    else if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn) && m_nColumnCount > 0 )
+    else if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn)
+            && 0 < m_nColumnCount && !rDM_Impl.IsInComments())
     {
         try
         {
@@ -1413,7 +1444,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         catch ( const uno::Exception& ) {}
     }
-    else
+    else if (!rDM_Impl.IsInComments())
     {
         uno::Reference< beans::XPropertySet > xSection;
         ApplyProtectionProperties( xSection, rDM_Impl );
@@ -1524,7 +1555,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         catch ( const uno::Exception& )
         {
-            OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup" );
+            DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper", "Exception in SectionPropertyMap::CloseSectionGroup");
         }
 
         Insert( PROP_GRID_BASE_HEIGHT, uno::makeAny( nGridLinePitch ) );
@@ -1599,11 +1630,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 // Avoid setting page style in case of autotext: so inserting the autotext at the
                 // end of the document does not introduce an unwanted page break.
-                if (!rDM_Impl.IsReadGlossaries())
+                if (!rDM_Impl.IsReadGlossaries() && !rDM_Impl.IsInFootOrEndnote())
+                {
                     xRangeProperties->setPropertyValue(
                         getPropertyName( PROP_PAGE_DESC_NAME ),
                         uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
                             : m_sFollowPageStyleName ) );
+                }
 
                 if (0 <= m_nPageNumber)
                 {
