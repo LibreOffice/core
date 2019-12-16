@@ -82,7 +82,7 @@ SfxPoolItem* MediaItem::CreateDefault()
 }
 
 
-SfxPoolItem* MediaItem::Clone( SfxItemPool*) const
+MediaItem* MediaItem::Clone( SfxItemPool*) const
 {
   return nullptr;
 }
