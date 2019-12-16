@@ -932,6 +932,11 @@ public:
     void SetIsOutsideAParagraph(bool bval) { m_bIsOutsideAParagraph = bval;}
 
     void ApplySettingsTable();
+
+    css::uno::Reference<css::text::XTextAppend> GetCurrentXText() {
+        return m_aTextAppendStack.empty() ? nullptr : m_aTextAppendStack.top().xTextAppend;
+    }
+
     SectionPropertyMap * GetSectionContext();
     /// If the current paragraph has a numbering style associated, this method returns its character style (part of the numbering rules)
     css::uno::Reference<css::beans::XPropertySet> GetCurrentNumberingCharStyle();

@@ -2211,6 +2211,12 @@ SwXText::copyText(
 {
     SolarMutexGuard aGuard;
 
+    uno::Reference<lang::XUnoTunnel> const xSourceTunnel(xSource,
+        uno::UNO_QUERY);
+    SwXText const*const pSource( xSourceTunnel.is()
+        ? ::sw::UnoTunnelGetImplementation<SwXText>(xSourceTunnel)
+        : nullptr);
+
     uno::Reference< text::XText > const xText(xSource, uno::UNO_QUERY_THROW);
     uno::Reference< text::XTextCursor > const xCursor =
         xText->createTextCursor();
@@ -2228,7 +2234,35 @@ SwXText::copyText(
 
     SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
     SwPosition rPos( rNdIndex );
-    m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange( *pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
+    // tdf#112202 need SwXText because cursor cannot select table at the start
+    if (pSource)
+    {
+        SwTextNode * pFirstNode;
+        {
+            SwPaM temp(*pSource->GetStartNode(), *pSource->GetStartNode()->EndOfSectionNode(), +1, -1);
+            pFirstNode = temp.GetMark()->nNode.GetNode().GetTextNode();
+            if (pFirstNode)
+            {
+                pFirstNode->MakeStartIndex(&temp.GetMark()->nContent);
+            }
+            if (SwTextNode *const pNode = temp.GetPoint()->nNode.GetNode().GetTextNode())
+            {
+                pNode->MakeEndIndex(&temp.GetPoint()->nContent);
+            }
+            m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, /*bCopyAll=*/false, /*bCheckPos=*/true);
+        }
+        if (!pFirstNode)
+        {   // the node at rPos was split; get rid of the first empty one so
+            // that the pasted table is first
+            auto pDelCursor(m_pImpl->m_pDoc->CreateUnoCursor(SwPosition(SwNodeIndex(*GetStartNode(), 1))));
+            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pDelCursor);
+        }
+    }
+    else
+    {
+        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true);
+    }
+
 }
 
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)
