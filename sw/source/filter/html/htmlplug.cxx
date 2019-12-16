@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <config_features.h>
 
 #include "hintids.hxx"
@@ -556,7 +558,11 @@ bool SwHTMLParser::InsertEmbed()
                                      StreamMode::READ);
             uno::Reference<io::XInputStream> xInStream;
             SvMemoryStream aMemoryStream;
-            if (aType == "text/rtf")
+
+            // Allow any MIME type that starts with magic, unless a set of allowed types are
+            // specified.
+            auto it = std::find(m_aAllowedRTFOLEMimeTypes.begin(), m_aAllowedRTFOLEMimeTypes.end(), aType);
+            if (m_aAllowedRTFOLEMimeTypes.empty() || it != m_aAllowedRTFOLEMimeTypes.end())
             {
                 OString aMagic("{\\object");
                 OString aHeader(read_uInt8s_ToOString(aFileStream, aMagic.getLength()));
