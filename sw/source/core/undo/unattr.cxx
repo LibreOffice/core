@@ -706,6 +706,8 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
 
 void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
+    static bool bLocked = false;
+
     SwDoc *const pDoc = & rContext.GetDoc();
 
     RemoveIdx( *pDoc );
@@ -738,8 +740,17 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     m_pHistory->TmpRollback( pDoc, 0, !bToLast );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
-    // set cursor onto Undo area
-    AddUndoRedoPaM(rContext);
+    // hack for tdf#127706 Clearing direct formatting breaks undo
+    if (!bLocked)
+    {
+        bLocked = true;
+        RedoImpl(rContext);
+        UndoImpl(rContext);
+        bLocked = false;
+
+        // set cursor onto Undo area
+        AddUndoRedoPaM(rContext);
+    }
 }
 
 void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
