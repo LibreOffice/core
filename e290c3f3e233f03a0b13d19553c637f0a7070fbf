@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_83719ce3",
+        "filename": "chart2/source/controller/sidebar/ChartColorWrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-16T12:22:15Z",
+      "side": 1,
+      "message": "what\u0027s the rationale to also add a dubious return-early for !mxModel?",
+      "revId": "e290c3f3e233f03a0b13d19553c637f0a7070fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
