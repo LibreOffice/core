@@ -257,7 +257,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
 SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCnt )
-    : nSavContent( nCnt )
+    : mnSaveContent( nCnt )
 {
     SwNode& rNd = rInsIdx.GetNode();
     SwDoc* pDest = rNd.GetDoc();
@@ -272,9 +272,9 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
               && *( pEnd = ( pRedl = pDest->getIDocumentRedlineAccess().GetRedlineTable()[ nFndPos ] )->End() ) == aSrcPos
               && *pRedl->Start() < aSrcPos )
         {
-            if( !pSavIdx )
+            if( !mpSaveIndex )
             {
-                pSavIdx.reset(new SwNodeIndex( rInsIdx, -1 ));
+                mpSaveIndex.reset(new SwNodeIndex( rInsIdx, -1 ));
             }
             mvSavArr.push_back( const_cast<SwPosition*>(pEnd) );
         }
@@ -283,20 +283,20 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
 
 SaveRedlEndPosForRestore::~SaveRedlEndPosForRestore()
 {
-    pSavIdx.reset();
+    mpSaveIndex.reset();
 }
 
 void SaveRedlEndPosForRestore::Restore()
 {
     if (mvSavArr.empty())
         return;
-    ++(*pSavIdx);
-    SwContentNode* pNode = pSavIdx->GetNode().GetContentNode();
+    ++(*mpSaveIndex);
+    SwContentNode* pNode = mpSaveIndex->GetNode().GetContentNode();
     // If there's no content node at the remembered position, we will not restore the old position
     // This may happen if a table (or section?) will be inserted.
     if( pNode )
     {
-        SwPosition aPos( *pSavIdx, SwIndex( pNode, nSavContent ));
+        SwPosition aPos( *mpSaveIndex, SwIndex( pNode, mnSaveContent ));
         for( auto n = mvSavArr.size(); n; )
             *mvSavArr[ --n ] = aPos;
     }

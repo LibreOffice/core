@@ -185,8 +185,8 @@ public:
 class SaveRedlEndPosForRestore
 {
     std::vector<SwPosition*> mvSavArr;
-    std::unique_ptr<SwNodeIndex> pSavIdx;
-    sal_Int32 const nSavContent;
+    std::unique_ptr<SwNodeIndex> mpSaveIndex;
+    sal_Int32 const mnSaveContent;
 
 public:
     SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nContent );
