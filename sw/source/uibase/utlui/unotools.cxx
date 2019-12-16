@@ -344,6 +344,33 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
               }
             }
             while(pSh->Right(sal_uInt16(1), sal_uInt16(1), true));
+
+            TOXTypes eTypes[] = { TOX_INDEX, TOX_USER, TOX_CONTENT };
+            for (auto eType : eTypes)
+            {
+                const SwTOXType* pTOXType = pDoc->GetTOXType(eType, 0);
+                SwTOXMarks aMarks;
+                SwTOXMark::InsertTOXMarks(aMarks, *pTOXType);
+                for (auto pMark : aMarks)
+                {
+                    if (pMark->GetAlternativeText() == "Chapter")
+                        pMark->SetAlternativeText(SwResId(STR_IDXEXAMPLE_IDXMARK_CHAPTER));
+                    else if (pMark->GetAlternativeText() == "Keyword")
+                        pMark->SetAlternativeText(SwResId(STR_IDXEXAMPLE_IDXMARK_KEYWORD));
+                    else if (pMark->GetAlternativeText() == "this")
+                        pMark->SetAlternativeText(SwResId(STR_IDXEXAMPLE_IDXMARK_THIS));
+                    else if (pMark->GetAlternativeText() == "User Directory Entry")
+                        pMark->SetAlternativeText(SwResId(STR_IDXEXAMPLE_IDXMARK_USER_DIR_ENTRY));
+                    else if (pMark->GetAlternativeText() == "Entry")
+                        pMark->SetAlternativeText(SwResId(STR_IDXEXAMPLE_IDXMARK_ENTRY));
+
+                    if (pMark->GetPrimaryKey() == "Primary key")
+                        pMark->SetPrimaryKey(SwResId(STR_IDXEXAMPLE_IDXMARK_PRIMARY_KEY));
+
+                    if (pMark->GetSecondaryKey() == "Secondary key")
+                        pMark->SetSecondaryKey(SwResId(STR_IDXEXAMPLE_IDXMARK_SECONDARY_KEY));
+                }
+            }
         }
 
         uno::Reference< beans::XPropertySet >  xCursorProp(m_xCursor, uno::UNO_QUERY);
