@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_23cbe853",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 11
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2019-12-16T10:15:38Z",
+      "side": 1,
+      "message": "IMHO as a non-native speaker, this sounds as imperative form.\n\nI want another native speaker\u0027s opinion.",
+      "revId": "377fd2bb3c0256d23ae0f2271980250f8703e467",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
