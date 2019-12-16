@@ -79,6 +79,21 @@ void TipOfTheDayDialog::UpdateTip()
 
     // text
     OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
+    //replace MOD1 & MOD2 shortcuts depending on platform
+    #ifdef MACOSX
+    const OUString aMOD1 = CuiResId(STR_CMD);
+    const OUString aMOD2 = CuiResId(STR_Option);
+    #else
+    const OUString aMOD1 = CuiResId(STR_CTRL);
+    const OUString aMOD2 = CuiResId(STR_Alt);
+    #endif
+    sal_Int32 aPos;
+    aPos = aText.indexOf("%MOD1");
+    if (aPos != -1)
+        aText = aText.replaceAt(aPos, 5, aMOD1);
+    aPos = aText.indexOf("%MOD2");
+    if (aPos != -1)
+        aText = aText.replaceAt(aPos, 5, aMOD2);
     m_pText->set_label(aText);
 
     // hyperlink
@@ -91,7 +106,7 @@ void TipOfTheDayDialog::UpdateTip()
     {
         // Links may have some %PRODUCTVERSION which need to be expanded
         aText = Translate::ExpandVariables(aLink);
-        sal_Int32 aPos = aText.indexOf("%LANGUAGENAME");
+        aPos = aText.indexOf("%LANGUAGENAME");
         if (aPos != -1)
         {
             OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
