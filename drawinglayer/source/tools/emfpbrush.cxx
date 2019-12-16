@@ -108,15 +108,20 @@ namespace emfplushelper
             case BrushTypeTextureFill:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: " << BrushDataFlagsToString(additionalFlags)
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tBrush data flags: " << BrushDataFlagsToString(additionalFlags)
                                                                           << std::hex << " (0x" << additionalFlags << ")" << std::dec);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tWrap mode: " << WrapModeToString(wrapMode));
-                s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: " << std::hex << " (0x" << additionalFlags << ")" << std::dec);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tWrap mode: " << wrapMode);
+
+                if (additionalFlags == BrushDataTransform)
+                {
+                    EmfPlusHelperData::readXForm(s, brush_transformation);
+                    hasTransformation = true;
+                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse brush transformation: " << brush_transformation);
+                }
+
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tEmfPlusImage read");
 
-                sal_uInt32 const imagesize = datasize - 8;
+                sal_uInt32 const imagesize = s.remainingSize();
                 auto buffer = std::make_unique<char[]>(imagesize);
                 s.ReadBytes(buffer.get(), imagesize);
                 SvMemoryStream memstream(buffer.get(), imagesize, StreamMode::STD_READWRITE);
