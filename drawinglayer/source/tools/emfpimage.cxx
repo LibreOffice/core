@@ -100,7 +100,7 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\t\t\tDoes not use palette");
                 }
 
-                s.Seek(pos);
+                sal_uInt64 palettesize = s.Tell() - pos;
 
                 std::unique_ptr<DIBV5Header> v5header(new DIBV5Header);
                 v5header->nWidth = width;
@@ -115,24 +115,87 @@ namespace emfplushelper
                 v5header->nBitCount = PixelFormatBitsPerPixel(pixelFormat);
                 v5header->nCompression = COMPRESS_NONE;
 
-                if (v5header->nBitCount == 0 || v5header->nBitCount == 1 || v5header->nBitCount == 4 ||
-                    v5header->nBitCount == 8 || v5header->nBitCount == 24 || v5header->nBitCount == 32)
-                {
-                    Bitmap aBrushBmp(Size(width, height), v5header->nBitCount);
-                    AlphaMask aMask;
+                // read in the palette into a seperate image stream
+                auto buffer = std::make_unique<char[]>(imagesize);
+                s.ReadBytes(buffer.get(), palettesize);
+                SvMemoryStream imagestream(buffer.get(), imagesize, StreamMode::STD_READWRITE);
 
-                    if (!ReadDIBV5(aBrushBmp, aMask, s, v5header.get()))
-                        SAL_WARN("drawinglayer", "EMF+\t\t\tCannot read bitmap data");
-
-                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap size: " << aBrushBmp.GetSizePixel());
-                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap bit count: " << aBrushBmp.GetBitCount());
-                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap colors: " << aBrushBmp.GetColorCount());
-                    SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap byte size: " << aBrushBmp.GetSizeBytes());
-                }
-                else
+                // we are going to have to convert the image data
+                if (PixelFormatBitsPerPixel(pixelFormat) == 16)
                 {
-                    SAL_WARN("drawinglayer", "EMF+\t\t\tBitcount of " << v5header->nBitCount << " cannot be processed");
+                    switch (pixelFormat)
+                    {
+                        case PixelFormat16bppRGB555:
+                        case PixelFormat16bppGrayScale:
+                        {
+                            for (sal_uInt64 i=0; i < s.remainingSize(); i+=2)
+                            {
+                                sal_uInt16 pixel;
+                                s.ReadUInt16(pixel);
+                                sal_uInt8 nRed = pixel & 0x001F;
+                                sal_uInt8 nGreen = (pixel & 0x03E0) >> 5;
+                                sal_uInt8 nBlue = (pixel & 0x7C00) >> 10;
+
+                                imagestream.WriteUInt8(nRed).WriteUInt8(nGreen).WriteUInt8(nBlue);
+                            }
+
+                            v5header->nColsUsed = 0;
+                            v5header->nBitCount = 24;
+                            break;
+                        }
+
+                        case PixelFormat16bppRGB565:
+                        {
+                            for (sal_uInt64 i=0; i < s.remainingSize(); i+=2)
+                            {
+                                sal_uInt16 pixel;
+                                s.ReadUInt16(pixel);
+                                sal_uInt8 nRed = pixel & 0x001F;
+                                sal_uInt8 nGreen = (pixel & 0x07E0) >> 5;
+                                sal_uInt8 nBlue = (pixel & 0xF800) >> 10;
+
+                                imagestream.WriteUInt8(nRed).WriteUInt8(nGreen).WriteUInt8(nBlue);
+                            }
+
+                            v5header->nColsUsed = 0;
+                            v5header->nBitCount = 24;
+                            break;
+                        }
+
+                        case PixelFormat16bppARGB1555:
+                        {
+                            for (sal_uInt64 i=0; i < s.remainingSize(); i+=2)
+                            {
+                                sal_uInt16 pixel;
+                                s.ReadUInt16(pixel);
+                                sal_uInt8 nAlpha = pixel & 1;
+                                sal_uInt8 nRed = (pixel & 0x003E) >> 1;
+                                sal_uInt8 nGreen = (pixel & 0x07C0) >> 6;
+                                sal_uInt8 nBlue = (pixel & 0xF800) >> 11;
+
+                                imagestream.WriteUInt8(nAlpha).WriteUInt8(nRed).WriteUInt8(nGreen).WriteUInt8(nBlue);
+                            }
+
+                            v5header->nColsUsed = 0;
+                            v5header->nBitCount = 32;
+                            break;
+                        }
+
+                        default:
+                            SAL_WARN("drawinglayer", "Unknown 16 bit pixel format");
+                    }
                 }
+
+                Bitmap aBrushBmp(Size(width, height), v5header->nBitCount);
+                AlphaMask aMask;
+
+                if (!ReadDIBV5(aBrushBmp, aMask, imagestream, v5header.get()))
+                    SAL_WARN("drawinglayer", "EMF+\t\t\tCannot read bitmap data");
+
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap size: " << aBrushBmp.GetSizePixel());
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap bit count: " << aBrushBmp.GetBitCount());
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap colors: " << aBrushBmp.GetColorCount());
+                SAL_INFO("drawinglayer", "EMF+\t\t\tBitmap byte size: " << aBrushBmp.GetSizeBytes());
             }
             else
             {
