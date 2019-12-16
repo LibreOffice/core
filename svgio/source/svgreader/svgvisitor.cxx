@@ -9,9 +9,7 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
-#include <svgdocumenthandler.hxx>
 #include <svgrectnode.hxx>
 #include <svgsvgnode.hxx>
 #include <svggnode.hxx>
@@ -19,7 +17,6 @@
 #include <svggradientnode.hxx>
 
 #include <svgvisitor.hxx>
-#include <tools/color.hxx>
 
 namespace svgio
 {

@@ -22,6 +22,7 @@
 
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 namespace svgio

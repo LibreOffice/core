@@ -22,9 +22,8 @@
 
 #include "svgtools.hxx"
 #include "svgtoken.hxx"
-#include "svgpaint.hxx"
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <memory>
 #include <vector>
 #include <o3tl/optional.hxx>
