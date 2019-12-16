@@ -2004,7 +2004,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     if (!pSrcDoc)
     {
         // Source document is not reachable.  Throw a reference error.
-        pArray.reset(new ScTokenArray(pSrcDoc));
+        pArray.reset(new ScTokenArray(maRefCache.getFakeDoc()));
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
