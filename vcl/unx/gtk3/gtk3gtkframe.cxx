@@ -856,12 +856,7 @@ void GtkSalFrame::InitCommon()
     GtkWidget *pEventWidget = getMouseEventWidget();
 
     gtk_widget_set_app_paintable(GTK_WIDGET(m_pFixedContainer), true);
-    /*non-X11 displays won't show anything at all without double-buffering
-      enabled*/
-    if (DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay()))
-        gtk_widget_set_double_buffered(GTK_WIDGET(m_pFixedContainer), false);
     gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pFixedContainer), false);
-
 
     // connect signals
     g_signal_connect( G_OBJECT(m_pWindow), "style-updated", G_CALLBACK(signalStyleUpdated), this );
