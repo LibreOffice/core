@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_869d2a5b",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T15:14:02Z",
+      "side": 1,
+      "message": "This still does not reliably test this. E.g., imagine a bug when first Raise sets an internal error number, but it is not reset, and then the same number is reused when second Raise is issued. In this case, there would be two cases of -1789 (by the way, no negative -1789 in select cases in catch); both would be handled identically. You need to test the results in the main flow, where specific expected value is known. Or you need to set some function-local variable prior to Raise, so that catch knows what is the expected value right now.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_26a2169c",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T15:14:02Z",
+      "side": 1,
+      "message": "No need in extra labels - they only distract from the real task. Additionally, it\u0027s enough to use a single common Resume after the end of the Select.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_a6dce618",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T15:14:02Z",
+      "side": 1,
+      "message": "TestId in the TestLog_ASSERT is meant to have some value that helps to identify which test is failing. E.g., one could set TestId to \"Positive custom error\", and then perform several assertions with the same TestId, but different test comments. So when failed, it would look like:\n\n    Failed: Positive custom error: (Error\u003d-15)\n    Failed: Positive custom error: (Source: ABC)\n\nHaving random TestId is unhelpful.",
+      "range": {
+        "startLine": 61,
+        "startChar": 40,
+        "endLine": 61,
+        "endChar": 45
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_469f1250",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T15:14:02Z",
+      "side": 1,
+      "message": "Why?",
+      "range": {
+        "startLine": 61,
+        "startChar": 21,
+        "endLine": 61,
+        "endChar": 37
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
