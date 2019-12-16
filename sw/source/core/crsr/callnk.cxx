@@ -75,6 +75,15 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShe
         return;
 
     const SwTableLine* pLine = pRow->GetTabLine( );
+
+    if (rShell.IsTableMode())
+    {
+        // If we have a table selection, then avoid the notification: it's not necessary (the text
+        // cursor needs no updating) and the notification may kill the selection overlay, leading to
+        // flicker.
+        return;
+    }
+
     SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
     pRow->ModifyNotification(nullptr, &aSize);
 }
