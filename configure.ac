@@ -3385,6 +3385,11 @@ find_msvc()
     vswhere=$formatted_path
     for ver in $vsversions; do
         vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+        # Fall back to all MS products (this includes VC++ Build Tools)
+        if ! test -n "$vswhereoutput"; then
+            AC_MSG_CHECKING([VC++ Build Tools and similar])
+            vswhereoutput=`$vswhere -products \* -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+        fi
         if test -n "$vswhereoutput"; then
             PathFormat "$vswhereoutput"
             vctest=$formatted_path
@@ -3510,7 +3515,7 @@ if test "$_os" = "WINNT"; then
     # MSVC 2017 devenv does not start properly from a DOS 8.3 path
     DEVENV=$(cygpath -lm "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe")
     if test ! -e "$DEVENV"; then
-        AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
+        AC_MSG_WARN([No devenv.exe found - this is expected for VC++ Build Tools])
     fi
 
     dnl ===========================================================
