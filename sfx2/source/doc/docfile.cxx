@@ -328,6 +328,8 @@ public:
 
     util::DateTime m_aDateTime;
 
+    uno::Sequence<beans::PropertyValue> m_aArgs;
+
     explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
     SfxMedium_Impl(const SfxMedium_Impl&) = delete;
@@ -3240,6 +3242,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pImpl->m_pSet.reset( pParams );
     TransformParameters( SID_OPENDOC, aArgs, *pParams );
+    pImpl->m_aArgs = aArgs;
 
     OUString aFilterProvider, aFilterName;
     {
@@ -3301,6 +3304,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     Init_Impl();
 }
 
+uno::Sequence<beans::PropertyValue> SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const std::shared_ptr<SfxItemSet>& p ) :
     pImpl(new SfxMedium_Impl)

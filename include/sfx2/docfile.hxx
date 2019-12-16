@@ -108,6 +108,7 @@ public:
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
+    css::uno::Sequence<css::beans::PropertyValue> GetArgs() const;
     void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
     void                ReOpen();

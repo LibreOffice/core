@@ -35,6 +35,7 @@
 #include <vector>
 #include <deque>
 #include <stack>
+#include <set>
 
 class SfxMedium;
 class SfxViewFrame;
@@ -469,6 +470,8 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
      * <object> XHTML elements.
      */
     std::stack<SwOLENode*> m_aEmbeds;
+
+    std::set<OUString> m_aAllowedRTFOLEMimeTypes;
 
     void DeleteFormImpl();
 

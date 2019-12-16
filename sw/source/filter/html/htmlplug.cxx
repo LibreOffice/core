@@ -554,7 +554,11 @@ bool SwHTMLParser::InsertEmbed()
                                      StreamMode::READ);
             uno::Reference<io::XInputStream> xInStream;
             SvMemoryStream aMemoryStream;
-            if (aType == "text/rtf")
+
+            // Allow any MIME type that starts with magic, unless a set of allowed types are
+            // specified.
+            auto it = m_aAllowedRTFOLEMimeTypes.find(aType);
+            if (m_aAllowedRTFOLEMimeTypes.empty() || it != m_aAllowedRTFOLEMimeTypes.end())
             {
                 OString aMagic("{\\object");
                 OString aHeader(read_uInt8s_ToOString(aFileStream, aMagic.getLength()));
