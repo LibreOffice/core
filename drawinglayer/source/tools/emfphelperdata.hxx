@@ -27,12 +27,18 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <map>
 
-// predefines
 class SvStream;
-namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx
+{
+    class B2DRange;
+    typedef B2DRange B2DRectangle;
+    class B2DPolyPolygon;
+}
 
 namespace emfplushelper
 {
+    struct EMFPImage;
+
     const char* emfTypeToName(sal_uInt16 type);
     struct EMFPObject
     {
@@ -96,6 +102,7 @@ namespace emfplushelper
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
         void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, const bool isColor, const sal_uInt32 brushIndexOrColor);
+        void EMFPPlusDrawImage(const ::basegfx::B2DRectangle& rect, EMFPImage const& image, basegfx::B2DHomMatrix const& rTransformationMatrix);
 
         // helper functions
         Color EMFPGetBrushColorOrARGBColor(const sal_uInt16 flags, const sal_uInt32 brushIndexOrColor) const;
