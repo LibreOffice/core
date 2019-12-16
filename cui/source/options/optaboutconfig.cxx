@@ -217,6 +217,8 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
 
 void CuiAboutConfigTabPage::Reset()
 {
+    weld::WaitObject aWait(m_xDialog.get());
+
     m_xPrefBox->clear();
     m_vectorOfModified.clear();
     if (m_bSorted)
@@ -786,6 +788,8 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl, weld::Button&, void)
 {
+    weld::WaitObject aWait(m_xDialog.get());
+
     m_xPrefBox->clear();
     m_xPrefBox->freeze();
 
