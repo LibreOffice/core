@@ -97,7 +97,6 @@ enum ColorSelectionMode { CSM_INDEXED = 0, CSM_DIRECT = 1 };
 enum ColorModel         { CM_RGB = 0, CM_CMYK = 1 };
 
 enum CharacterCodingA   { CCA_BASIC_7 = 0, CCA_BASIC_8 = 1, CCA_EXT_7 = 2, CCA_EXT_8 = 3 };
-enum CharSetType        { CST_CBYTE_94 = 0, CST_CBYTE_96 = 1, CST_MULT94 = 2, CST_MULT96 = 3, CST_CCOMPLETE = 4 };
 enum TextPrecision      { TPR_STRING = 0, TPR_CHARACTER = 1, TPR_STROKE = 2, TPR_UNDEFINED = 0xffff };
 enum TextPath           { TPR_RIGHT = 0, TPR_LEFT = 1, TPR_UP = 2, TPR_DOWN = 3 };
 enum TextAlignmentH     { TAH_NORMAL = 0, TAH_LEFT = 1, TAH_CENTER = 2, TAH_RIGHT = 3, TAH_CONT = 4 };

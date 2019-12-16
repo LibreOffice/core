@@ -143,7 +143,6 @@ class FontEntry
 public:
     std::unique_ptr<sal_Int8[]>
                         pFontName;
-    CharSetType         eCharSetType;
     std::unique_ptr<sal_Int8[]>
                         pCharSetValue;
     sal_uInt32          nFontType;          // bit 0 = 1 -> Italic,
@@ -169,7 +168,7 @@ public:
 
     FontEntry*      GetFontEntry( sal_uInt32 );
     void            InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize );
-    void            InsertCharSet( CharSetType, sal_uInt8 const * pSource, sal_uInt32 nSize );
+    void            InsertCharSet( sal_uInt8 const * pSource, sal_uInt32 nSize );
     CGMFList&       operator=( const CGMFList& rFontList );
 };
 
