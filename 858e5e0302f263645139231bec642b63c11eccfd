@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_237d281c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T09:14:00Z",
+      "side": 1,
+      "message": "Looks like DefaultMenuCommand element needs to be used instead; see e.g. how .uno:FontDialog was set to TextPropertyPanel in lines 340-342.",
+      "range": {
+        "startLine": 1566,
+        "startChar": 44,
+        "endLine": 1566,
+        "endChar": 63
+      },
+      "revId": "858e5e0302f263645139231bec642b63c11eccfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
