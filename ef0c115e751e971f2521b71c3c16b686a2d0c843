@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_86452a1a",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-12-16T13:31:58Z",
+      "side": 1,
+      "message": "I suppose sfxsids.hrc is visible/included here, otherwise this wouldn\u0027t compile (luckily so, otherwise there wouldn\u0027t be a clean way to define SID_SVX_FIRSTFREE in this case).",
+      "revId": "ef0c115e751e971f2521b71c3c16b686a2d0c843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
