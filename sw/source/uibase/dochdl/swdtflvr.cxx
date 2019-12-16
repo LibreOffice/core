@@ -1365,7 +1365,7 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
     return bIsPaste;
 }
 
-bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, bool bNestedTable)
+bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable)
 {
     SwPasteContext aPasteContext(rSh);
 
@@ -1437,15 +1437,19 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 nLevel++;
             } while (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr);
             if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, bNestedTable ))
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable) )
             {
                 pDispatch->Execute(FN_CHAR_LEFT, SfxCallMode::SYNCHRON);
                 pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
                 pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
                 for(sal_uInt32 a = 0; a < 1 + (nLevel * 2); a++)
                     pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
-                if (bNestedTable)
+                if (ePasteTable == PasteTableType::PASTE_TABLE)
                     pDispatch->Execute(FN_PASTE_NESTED_TABLE, SfxCallMode::SYNCHRON);
+                else if (ePasteTable == PasteTableType::PASTE_ROW)
+                    pDispatch->Execute(FN_TABLE_PASTE_ROW_BEFORE, SfxCallMode::SYNCHRON);
+                else if (ePasteTable == PasteTableType::PASTE_COLUMN)
+                    pDispatch->Execute(FN_TABLE_PASTE_COL_BEFORE, SfxCallMode::SYNCHRON);
                 else
                     pDispatch->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
                 return true;
@@ -1456,22 +1460,24 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
         }
     }
     // insert clipboard content as new table rows/columns before the actual row/column instead of overwriting it
-    else if ( rSh.GetTableInsertMode() != SwTable::SEARCH_NONE &&
+    else if ( (rSh.GetTableInsertMode() != SwTable::SEARCH_NONE || ePasteTable == PasteTableType::PASTE_ROW || ePasteTable == PasteTableType::PASTE_COLUMN) &&
         rData.HasFormat( SotClipboardFormatId::HTML ) &&
         rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr )
     {
         OUString aExpand;
         sal_Int32 nIdx;
-        bool bRowMode = rSh.GetTableInsertMode() == SwTable::SEARCH_ROW;
+        bool bRowMode = rSh.GetTableInsertMode() == SwTable::SEARCH_ROW || ePasteTable == PasteTableType::PASTE_ROW;
         if( rData.GetString( SotClipboardFormatId::HTML, aExpand ) && (nIdx = aExpand.indexOf("<table")) > -1 )
         {
+            // table rows with span use also tbody
+            bool bShifted = aExpand.indexOf("<tbody>") > -1;
             // calculate count of selected rows or columns
             sal_Int32 nSelectedRowsOrCols = 0;
             const OUString sSearchRowOrCol = bRowMode ? OUString("</tr>") : OUString("<col ");
             while((nIdx = aExpand.indexOf(sSearchRowOrCol, nIdx)) > -1)
             {
                 // skip rows/columns of nested tables, based on HTML indentation
-                if (nIdx > 1 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' ))
+                if (nIdx > 2 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' || (bShifted && aExpand[nIdx-3] != '\t')))
                     ++nSelectedRowsOrCols;
                 ++nIdx;
             }
@@ -1488,7 +1494,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 pDispatch->Execute(FN_START_OF_DOCUMENT, SfxCallMode::SYNCHRON);
 
             // store cursor position in row mode
-            ::sw::mark::IMark* pMark = !bRowMode ? nullptr : rSh.SetBookmark(
+            ::sw::mark::IMark* pMark = (!bRowMode || nSelectedRowsOrCols == 0) ? nullptr : rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
@@ -1510,7 +1516,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
             // paste rows
             bool bResult = SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, bNestedTable );
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext );
 
             // restore cursor position
             if (pMark != nullptr)
@@ -1542,7 +1548,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, bNestedTable );
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable);
 }
 
 bool SwTransferable::PasteData( TransferableDataHelper& rData,
@@ -1554,7 +1560,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             bool bPasteSelection, RndStdIds nAnchorType,
                             bool bIgnoreComments,
                             SwPasteContext* pContext,
-                            bool bNestedTable )
+                            PasteTableType ePasteTable )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
     std::unique_ptr<SwTrnsfrActionAndUndo, o3tl::default_delete<SwTrnsfrActionAndUndo>> pAction;
@@ -1660,7 +1666,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             EXCHG_OUT_ACTION_INSERT_PRIVATE == nAction )
     {
         // then internal paste
-        bRet = pTunneledTrans->PrivatePaste(rSh, pContext, bNestedTable);
+        bRet = pTunneledTrans->PrivatePaste(rSh, pContext, ePasteTable);
     }
     else if( EXCHG_INOUT_ACTION_NONE != nAction )
     {
@@ -3635,7 +3641,7 @@ bool lcl_checkClassification(SwDoc* pSourceDoc, SwDoc* pDestinationDoc)
 
 }
 
-bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, bool bNestedTable)
+bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, PasteTableType ePasteTable)
 {
     // first, ask for the SelectionType, then action-bracketing !!!!
     // (otherwise it's not pasted into a TableSelection!!!)
@@ -3697,7 +3703,7 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     bool bRet = true;
     // m_pWrtShell is nullptr when the source document is closed already.
     if (!m_pWrtShell || lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
-        bRet = rShell.Paste(m_pClpDocFac->GetDoc(), bNestedTable);
+        bRet = rShell.Paste(m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
 
     if( bKillPaMs )
         rShell.KillPams();
