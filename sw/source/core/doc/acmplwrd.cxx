@@ -38,10 +38,10 @@
 
 class SwAutoCompleteClient : public SwClient
 {
-    SwAutoCompleteWord* pAutoCompleteWord;
-    SwDoc*              pDoc;
+    SwAutoCompleteWord* m_pAutoCompleteWord;
+    SwDoc*              m_pDoc;
 #if OSL_DEBUG_LEVEL > 0
-    static sal_uLong nSwAutoCompleteClientCount;
+    static sal_uLong s_nSwAutoCompleteClientCount;
 #endif
 public:
     SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc);
@@ -50,9 +50,9 @@ public:
 
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
-    const SwDoc& GetDoc() const {return *pDoc;}
+    const SwDoc& GetDoc() const {return *m_pDoc;}
 #if OSL_DEBUG_LEVEL > 0
-    static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
+    static sal_uLong GetElementCount() {return s_nSwAutoCompleteClientCount;}
 #endif
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -62,11 +62,11 @@ typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
 
 class SwAutoCompleteWord_Impl
 {
-    SwAutoCompleteClientVector  aClientVector;
-    SwAutoCompleteWord&         rAutoCompleteWord;
+    SwAutoCompleteClientVector  m_aClientVector;
+    SwAutoCompleteWord&         m_rAutoCompleteWord;
 public:
     explicit SwAutoCompleteWord_Impl(SwAutoCompleteWord& rParent) :
-        rAutoCompleteWord(rParent){}
+        m_rAutoCompleteWord(rParent){}
     void AddDocument(SwDoc& rDoc);
     void RemoveDocument(const SwDoc& rDoc);
 };
@@ -76,9 +76,9 @@ class SwAutoCompleteString
     : public editeng::IAutoCompleteString
 {
 #if OSL_DEBUG_LEVEL > 0
-    static sal_uLong nSwAutoCompleteStringCount;
+    static sal_uLong s_nSwAutoCompleteStringCount;
 #endif
-    SwDocPtrVector aSourceDocs;
+    SwDocPtrVector m_aSourceDocs;
     public:
         SwAutoCompleteString(const OUString& rStr, sal_Int32 nLen);
 
@@ -87,39 +87,39 @@ class SwAutoCompleteString
         //returns true if last document reference has been removed
         bool        RemoveDocument(const SwDoc& rDoc);
 #if OSL_DEBUG_LEVEL > 0
-    static sal_uLong GetElementCount() {return nSwAutoCompleteStringCount;}
+    static sal_uLong GetElementCount() {return s_nSwAutoCompleteStringCount;}
 #endif
 };
 #if OSL_DEBUG_LEVEL > 0
-    sal_uLong SwAutoCompleteClient::nSwAutoCompleteClientCount = 0;
-    sal_uLong SwAutoCompleteString::nSwAutoCompleteStringCount = 0;
+    sal_uLong SwAutoCompleteClient::s_nSwAutoCompleteClientCount = 0;
+    sal_uLong SwAutoCompleteString::s_nSwAutoCompleteStringCount = 0;
 #endif
 
 SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc) :
-        pAutoCompleteWord(&rToTell),
-        pDoc(&rSwDoc)
+        m_pAutoCompleteWord(&rToTell),
+        m_pDoc(&rSwDoc)
 {
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 #if OSL_DEBUG_LEVEL > 0
-    ++nSwAutoCompleteClientCount;
+    ++s_nSwAutoCompleteClientCount;
 #endif
 }
 
 SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
     SwClient(),
-    pAutoCompleteWord(rClient.pAutoCompleteWord),
-    pDoc(rClient.pDoc)
+    m_pAutoCompleteWord(rClient.m_pAutoCompleteWord),
+    m_pDoc(rClient.m_pDoc)
 {
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 #if OSL_DEBUG_LEVEL > 0
-    ++nSwAutoCompleteClientCount;
+    ++s_nSwAutoCompleteClientCount;
 #endif
 }
 
 SwAutoCompleteClient::~SwAutoCompleteClient()
 {
 #if OSL_DEBUG_LEVEL > 0
-    --nSwAutoCompleteClientCount;
+    --s_nSwAutoCompleteClientCount;
 #else
     (void) this;
 #endif
@@ -127,8 +127,8 @@ SwAutoCompleteClient::~SwAutoCompleteClient()
 
 SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient& rClient)
 {
-    pAutoCompleteWord = rClient.pAutoCompleteWord;
-    pDoc = rClient.pDoc;
+    m_pAutoCompleteWord = rClient.m_pAutoCompleteWord;
+    m_pDoc = rClient.m_pDoc;
     StartListeningToSameModifyAs(rClient);
     return *this;
 }
@@ -141,25 +141,25 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
     case RES_OBJECTDYING:
         if( static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
             EndListeningAll();
-        pAutoCompleteWord->DocumentDying(*pDoc);
+        m_pAutoCompleteWord->DocumentDying(*m_pDoc);
         break;
     }
 }
 
 void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 {
-    if (std::any_of(aClientVector.begin(), aClientVector.end(),
+    if (std::any_of(m_aClientVector.begin(), m_aClientVector.end(),
             [&rDoc](SwAutoCompleteClient& rClient) { return &rClient.GetDoc() == &rDoc; }))
         return;
-    aClientVector.emplace_back(rAutoCompleteWord, rDoc);
+    m_aClientVector.emplace_back(m_rAutoCompleteWord, rDoc);
 }
 
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 {
-    auto aIt = std::find_if(aClientVector.begin(), aClientVector.end(),
+    auto aIt = std::find_if(m_aClientVector.begin(), m_aClientVector.end(),
         [&rDoc](SwAutoCompleteClient& rClient) { return &rClient.GetDoc() == &rDoc; });
-    if (aIt != aClientVector.end())
-        aClientVector.erase(aIt);
+    if (aIt != m_aClientVector.end())
+        m_aClientVector.erase(aIt);
 }
 
 SwAutoCompleteString::SwAutoCompleteString(
@@ -167,14 +167,14 @@ SwAutoCompleteString::SwAutoCompleteString(
     : editeng::IAutoCompleteString(rStr.copy(0, nLen))
 {
 #if OSL_DEBUG_LEVEL > 0
-    ++nSwAutoCompleteStringCount;
+    ++s_nSwAutoCompleteStringCount;
 #endif
 }
 
 SwAutoCompleteString::~SwAutoCompleteString()
 {
 #if OSL_DEBUG_LEVEL > 0
-    --nSwAutoCompleteStringCount;
+    --s_nSwAutoCompleteStringCount;
 #else
     (void) this;
 #endif
@@ -182,19 +182,19 @@ SwAutoCompleteString::~SwAutoCompleteString()
 
 void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 {
-    auto aIt = std::find(aSourceDocs.begin(), aSourceDocs.end(), &rDoc);
-    if (aIt != aSourceDocs.end())
+    auto aIt = std::find(m_aSourceDocs.begin(), m_aSourceDocs.end(), &rDoc);
+    if (aIt != m_aSourceDocs.end())
         return;
-    aSourceDocs.push_back(&rDoc);
+    m_aSourceDocs.push_back(&rDoc);
 }
 
 bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 {
-    auto aIt = std::find(aSourceDocs.begin(), aSourceDocs.end(), &rDoc);
-    if (aIt != aSourceDocs.end())
+    auto aIt = std::find(m_aSourceDocs.begin(), m_aSourceDocs.end(), &rDoc);
+    if (aIt != m_aSourceDocs.end())
     {
-        aSourceDocs.erase(aIt);
-        return aSourceDocs.empty();
+        m_aSourceDocs.erase(aIt);
+        return m_aSourceDocs.empty();
     }
     return false;
 }
