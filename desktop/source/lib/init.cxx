@@ -3307,12 +3307,12 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     }
     else if (aMap.find("id") != aMap.end())
     {
-        const OUString sClickAction("CLICK");
-        const OUString sSelectAction("SELECT");
-        const OUString sClearAction("CLEAR");
-        const OUString sTypeAction("TYPE");
-        const OUString sUpAction("UP");
-        const OUString sDownAction("DOWN");
+        static const OUString sClickAction("CLICK");
+        static const OUString sSelectAction("SELECT");
+        static const OUString sClearAction("CLEAR");
+        static const OUString sTypeAction("TYPE");
+        static const OUString sUpAction("UP");
+        static const OUString sDownAction("DOWN");
 
         try
         {

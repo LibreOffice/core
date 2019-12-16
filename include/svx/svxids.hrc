@@ -986,8 +986,11 @@ class SfxStringItem;
 
 #define SID_TOGGLE_RESOLVED_NOTES                       ( SID_SVX_START + 1189 )
 
+// #define SID_SHOW_SIDEBAR                                ( SID_SVX_START + 1190 ) -> sfxsids.hrc
+// #define SID_HIDE_SIDEBAR                                ( SID_SVX_START + 1191 ) -> sfxsids.hrc
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_TOGGLE_RESOLVED_NOTES + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_HIDE_SIDEBAR + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
