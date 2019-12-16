@@ -1217,7 +1217,7 @@ void SidebarController::RequestCloseDeck()
             // Mobile.
             std::stringstream aStream;
             boost::property_tree::ptree aTree;
-            aTree.put("id", mpParentWindow->get_id()); // TODO could be missing - sort out
+            aTree.put("id", mpCurrentDeck->GetLOKWindowId());
             aTree.put("type", "dockingwindow");
             aTree.put("text", mpParentWindow->GetText());
             aTree.put("enabled", false);

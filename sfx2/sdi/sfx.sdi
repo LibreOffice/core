@@ -2577,6 +2577,42 @@ SfxBoolItem Sidebar SID_SIDEBAR
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem SidebarShow SID_SHOW_SIDEBAR
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
+SfxBoolItem SidebarHide SID_HIDE_SIDEBAR
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxBoolItem Menubar SID_MENUBAR
 [
     AutoUpdate = TRUE,
