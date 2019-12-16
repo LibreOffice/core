@@ -287,6 +287,15 @@ public:
     virtual void completeFunction(int /*nIndex*/)
     {
     }
+
+    /**
+     * It can happen that the underlying implementation is being disposed, but
+     * somebedy is trying to access the data...
+     */
+    virtual bool isDisposed() const
+    {
+        return false;
+    }
 };
 } // namespace vcl
 

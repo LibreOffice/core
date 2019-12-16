@@ -269,6 +269,11 @@ public:
     virtual void moveSelectedParts(int nPosition, bool bDuplicate) override;
     /// @see vcl::ITiledRenderable::getPartInfo().
     virtual OUString getPartInfo(int nPart) override;
+    /// @see vcl::ITiledRenderable::isDisposed().
+    virtual bool isDisposed() const override
+    {
+        return mbDisposed;
+    }
 
     // XComponent
 
