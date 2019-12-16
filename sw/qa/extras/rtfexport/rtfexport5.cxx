@@ -1139,6 +1139,31 @@ DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf128320, "tdf128320.odt")
+{
+    // Shape does exist in RTF output
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT(xShape.is());
+
+    // Let's see what is inside output RTF file
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
+
+    // There are some RTF tokens for shape props
+    // They are much more inside, but let's use \shpwr2 as an inducator
+    sal_Int32 nPos = aRtfContent.indexOf("\\shpwr2", 0);
+    CPPUNIT_ASSERT(nPos > 0);
+
+    // It goes AFTER shape instruction (sadly here we do not check if it is contaned inside)
+    sal_Int32 nPosShp = aRtfContent.indexOf("\\shpinst", 0);
+    CPPUNIT_ASSERT(nPosShp > 0);
+
+    // But there are no more shape properties!
+    nPos = aRtfContent.indexOf("\\shpwr2", nPos + 1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nPos);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

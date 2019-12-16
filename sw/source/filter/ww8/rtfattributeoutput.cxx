@@ -1977,7 +1977,12 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         }
         break;
         case ww8::Frame::eGraphic:
-            if (!rFrame.IsInline())
+            if (pGrfNode)
+            {
+                m_aRunText.append(dynamic_cast<const SwFlyFrameFormat*>(&rFrame.GetFrameFormat()),
+                                  pGrfNode);
+            }
+            else if (!rFrame.IsInline())
             {
                 m_rExport.m_pParentFrame = &rFrame;
                 m_rExport.SetRTFFlySyntax(true);
@@ -1987,12 +1992,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                 m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
                 m_aRunText->append('}');
                 m_rExport.m_pParentFrame = nullptr;
-            }
-
-            if (pGrfNode)
-            {
-                m_aRunText.append(dynamic_cast<const SwFlyFrameFormat*>(&rFrame.GetFrameFormat()),
-                                  pGrfNode);
             }
             break;
         case ww8::Frame::eDrawing:
