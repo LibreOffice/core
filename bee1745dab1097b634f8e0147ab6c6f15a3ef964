@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_63ffa067",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2019-12-16T10:41:35Z",
+      "side": 1,
+      "message": "If the objects are ref-counted, wouldn\u0027t it be simpler to temporarily increase the ref-count, which would prevent the reallocation?",
+      "range": {
+        "startLine": 1112,
+        "startChar": 40,
+        "endLine": 1112,
+        "endChar": 51
+      },
+      "revId": "bee1745dab1097b634f8e0147ab6c6f15a3ef964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
