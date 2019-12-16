@@ -16,7 +16,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
-#include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

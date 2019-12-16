@@ -22,7 +22,6 @@
 
 #include "svgcharacternode.hxx"
 #include "svgstyleattributes.hxx"
-#include "svgtools.hxx"
 
 namespace svgio
 {

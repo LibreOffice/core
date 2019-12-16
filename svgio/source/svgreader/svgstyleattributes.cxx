@@ -37,7 +37,6 @@
 #include <svgmasknode.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svgmarkernode.hxx>
-#include <basegfx/curve/b2dcubicbezier.hxx>
 #include <svgpatternnode.hxx>
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

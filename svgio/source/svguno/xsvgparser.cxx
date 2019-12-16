@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -29,7 +28,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svgdocumenthandler.hxx>
 #include <tools/diagnose_ex.h>
 

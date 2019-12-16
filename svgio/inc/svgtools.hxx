@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVGIO_INC_SVGTOOLS_HXX
 #define INCLUDED_SVGIO_INC_SVGTOOLS_HXX
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2ivector.hxx>
 #include "svgpaint.hxx"
 #include <vector>
 

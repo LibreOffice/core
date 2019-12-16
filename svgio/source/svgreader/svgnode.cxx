@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svgdocument.hxx>
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>

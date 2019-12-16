@@ -22,7 +22,6 @@
 
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
-#include "svgpathnode.hxx"
 
 namespace svgio
 {

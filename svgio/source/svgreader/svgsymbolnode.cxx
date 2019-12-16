@@ -18,8 +18,6 @@
  */
 
 #include <svgsymbolnode.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 namespace svgio
 {

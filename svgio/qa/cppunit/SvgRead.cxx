@@ -14,32 +14,14 @@
 #include <memory>
 
 #include <comphelper/seqstream.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
-#include <com/sun/star/graphic/Primitive2DTools.hpp>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
-
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-
 #include <com/sun/star/graphic/XSvgParser.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/supportsservice.hxx>
-
-#include <svgdocumenthandler.hxx>
-#include <svgrectnode.hxx>
-#include <svgsvgnode.hxx>
-#include <svggnode.hxx>
 
 #include <basegfx/DrawCommands.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 namespace
 {
