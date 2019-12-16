@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_4385c4ac",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T12:17:31Z",
+      "side": 1,
+      "message": "This is a copy-paste error",
+      "range": {
+        "startLine": 42,
+        "startChar": 23,
+        "endLine": 42,
+        "endChar": 29
+      },
+      "revId": "74d7bb0e7b5e3bc0f2960104bb9e3f86049d6cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_43ae242f",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T12:17:31Z",
+      "side": 1,
+      "message": "this would be unnecessary if you Resume in handler - see below",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 23
+      },
+      "revId": "74d7bb0e7b5e3bc0f2960104bb9e3f86049d6cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_a3629815",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T12:17:31Z",
+      "side": 1,
+      "message": "Why Error$ here, when you write \"Err.Description: \" in the message? If you assert that Error is set to Err.Description, that should be explicit.",
+      "range": {
+        "startLine": 52,
+        "startChar": 19,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "74d7bb0e7b5e3bc0f2960104bb9e3f86049d6cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_43d704c1",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-16T12:17:31Z",
+      "side": 1,
+      "message": "Why a colon here, when it\u0027s absent below?\n\nIsn\u0027t Resume Next work for all the cases, without the need to explicitly specify the line where to return? A simple unconditional addition of caught value to result string, storing all relevant info to local variables, and resuming seems enough here, so that you tTestLog_ASSERT on that local variable value, not on Err.Number in the body after resuming?\n\n    Type TErrVal\n      Number As Long\n      Source As String\n      Description As String\n    End Type\n    \n    Sub TestErr\n      Dim errVal As TErrVal\n      On Error GoTo Catch\n      Err.Raise(1234, \"\", \"\", \"\", \"\")\n      print errVal.Number\n    catch:\n      errVal.Number \u003d Err.Number\n      errVal.Source \u003d Err.Source\n      errVal.Description \u003d Err.Description\n      Resume Next\n    End Sub\n\nI am not actually sure that the way you do it is correct. You start an error handler, but never mark the error handled: GoTo a gust continues executing *the handler* with not-yet-handled error active; then you raise a nested error at b. Possibly that\u0027s where the crash happens in the clang tests - needs investigating by someone with clang build (sberg?).",
+      "range": {
+        "startLine": 61,
+        "startChar": 25,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "74d7bb0e7b5e3bc0f2960104bb9e3f86049d6cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
