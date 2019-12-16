@@ -27,7 +27,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <map>
 
-// predefines
 class SvStream;
 namespace basegfx
 {
@@ -101,6 +100,7 @@ namespace emfplushelper
 
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
+        void EMFPPlusDrawImage(const ::basegfx::B2DRectangle& rect, EMFPImage const& image, basegfx::B2DHomMatrix const& rTransformationMatrix);
         void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, const bool isColor, const sal_uInt32 brushIndexOrColor);
         void EMFPPlusFillPolygonSolidColor(const ::basegfx::B2DPolyPolygon& polygon, Color const& color);
 
