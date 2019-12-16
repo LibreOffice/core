@@ -44,34 +44,7 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
-
-class DeckNotifyIdle : public Idle
-{
-    Deck &mrDeck;
-public:
-    DeckNotifyIdle(Deck &rDeck) :
-        Idle("Deck notify"),
-        mrDeck(rDeck)
-    {
-        SetPriority(TaskPriority::POST_PAINT);
-    }
-    void Invoke() override
-    {
-        auto pNotifier = mrDeck.GetLOKNotifier();
-        try
-        {
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, mrDeck.DumpAsPropertyTree());
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aStream.str().c_str());
-        }
-        catch(boost::property_tree::json_parser::json_parser_error& rError)
-        {
-            SAL_WARN("sfx.sidebar", rError.message());
-        }
-    }
-};
 
 Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
            const std::function<void()>& rCloserAction)
@@ -80,7 +53,6 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
     , mnMinimalWidth(0)
     , mnMinimalHeight(0)
     , maPanels()
-    , mpIdleNotify(new DeckNotifyIdle(*this))
     , mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction))
     , mpScrollClipWindow(VclPtr<vcl::Window>::Create(this))
     , mpScrollContainer(VclPtr<ScrollContainerWindow>::Create(mpScrollClipWindow.get()))
@@ -210,11 +182,21 @@ void Deck::Resize()
 {
     Window::Resize();
 
+    const vcl::ILibreOfficeKitNotifier *pNotifier;
     if (comphelper::LibreOfficeKit::isActive() &&
         comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) &&
-        GetLOKNotifier())
+        (pNotifier = GetLOKNotifier()))
     {
-        mpIdleNotify->Start();
+        try
+        {
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, DumpAsPropertyTree());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aStream.str().c_str());
+        }
+        catch(boost::property_tree::json_parser::json_parser_error& rError)
+        {
+            SAL_WARN("sfx.sidebar", rError.message());
+        }
     }
 }
 
