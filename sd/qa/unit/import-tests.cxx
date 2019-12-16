@@ -11,7 +11,9 @@
 
 #include <config_features.h>
 #include <config_poppler.h>
+#include <memory>
 #include <ostream>
+#include <utility>
 #include <sdpage.hxx>
 
 #include "sdmodeltestbase.hxx"
@@ -26,6 +28,8 @@
 #include <editeng/colritem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/unoprnms.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/style.hxx>
 
 #include <svx/svdotext.hxx>
@@ -1290,7 +1294,7 @@ void SdImportTest::testPDFImport()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "no exactly two shapes", static_cast<sal_Int32>(2), xPage->getCount() );
 
     uno::Reference< beans::XPropertySet > xShape( getShape( 0, xPage ) );
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
 
     xDocShRef->DoClose();
@@ -1298,10 +1302,10 @@ void SdImportTest::testPDFImport()
 
 void SdImportTest::testPDFImportSkipImages()
 {
-    SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+    auto pParams = std::make_unique<SfxAllItemSet>( SfxGetpApp()->GetPool() );
     pParams->Put( SfxStringItem ( SID_FILE_FILTEROPTIONS, "SkipImages" ) );
 
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, std::move(pParams));
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -1309,7 +1313,7 @@ void SdImportTest::testPDFImportSkipImages()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "no exactly one shape", static_cast<sal_Int32>(1), xPage->getCount() );
 
     uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
 
     xDocShRef->DoClose();
