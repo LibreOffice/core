@@ -118,6 +118,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdobj.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <swerror.h>
 #include <hints.hxx>
@@ -433,6 +435,23 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         if (rNamespace == "reqif-xhtml")
             m_bReqIF = true;
     }
+
+    // Extract load parameters which are specific to this filter.
+    if (!pMed)
+    {
+        return;
+    }
+
+    comphelper::SequenceAsHashMap aLoadMap(pMed->GetArgs());
+    auto it = aLoadMap.find("AllowedRTFOLEMimeTypes");
+    if (it == aLoadMap.end())
+    {
+        return;
+    }
+
+    uno::Sequence<OUString> aTypes;
+    it->second >>= aTypes;
+    m_aAllowedRTFOLEMimeTypes = comphelper::sequenceToContainer<std::set<OUString>>(aTypes);
 }
 
 SwHTMLParser::~SwHTMLParser()

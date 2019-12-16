@@ -13,8 +13,11 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/embed/XInplaceObject.hpp>
 #include <tools/datetime.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <editsh.hxx>
@@ -367,6 +370,38 @@ DECLARE_HTMLIMPORT_TEST(testReqIfPageStyle, "reqif-page-style.xhtml")
     // 'Expected: Standard, Actual  : HTML'.
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
                          getProperty<OUString>(getParagraph(1), "PageStyleName"));
+}
+
+/// HTML import to the sw doc model tests.
+class SwHtmlOptionsImportTest : public SwModelTestBase
+{
+};
+
+char const DATA_DIRECTORY[] = "/sw/qa/extras/htmlimport/data/";
+
+CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
+{
+    uno::Sequence<OUString> aTypes = { OUString("test/rtf") };
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("AllowedRTFOLEMimeTypes", aTypes),
+    };
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "allowed-rtf-ole-mime-types.xhtml";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
+                                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xObject.is());
+    uno::Reference<embed::XInplaceObject> xEmbeddedObject(
+        xObject->getExtendedControlOverEmbeddedObject(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed, because the returned
+    // embedded object was a dummy one, which does not support in-place editing.
+    CPPUNIT_ASSERT(xEmbeddedObject.is());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
