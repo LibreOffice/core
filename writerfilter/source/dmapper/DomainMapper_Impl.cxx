@@ -670,7 +670,10 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
 
     if ( eId == CONTEXT_SECTION )
     {
-        m_pLastSectionContext = m_aPropertyStacks[eId].top( );
+        if (m_aPropertyStacks[eId].size() == 1) // tdf#112202 only top level !!!
+        {
+            m_pLastSectionContext = m_aPropertyStacks[eId].top();
+        }
     }
     else if (eId == CONTEXT_CHARACTER)
     {
