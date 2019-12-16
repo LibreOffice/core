@@ -22,6 +22,11 @@
 #include "RegressionCurveCalculator.hxx"
 #include <vector>
 
+namespace RegressionCalculationHelper
+{
+    typedef std::pair< std::vector< double >, std::vector< double > > tDoubleVectorPair;
+}
+
 namespace chart
 {
 
@@ -43,6 +48,11 @@ private:
     virtual void SAL_CALL recalculateRegression(
         const css::uno::Sequence<double>& aXValues,
         const css::uno::Sequence<double>& aYValues ) override;
+
+    void computeCorrelationCoefficient(
+        RegressionCalculationHelper::tDoubleVectorPair& rValues,
+        const sal_Int32 aNoValues,
+        double yAverage );
 
     std::vector<double> mCoefficients;
 };
