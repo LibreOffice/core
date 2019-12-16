@@ -310,7 +310,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OStri
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
-    if (!pDoc || !comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
+    if (!pDoc || pDoc->isDisposed() || !comphelper::LibreOfficeKit::isActive() || DisableCallbacks::disabled())
         return;
 
     if (bInvalidateAll)
