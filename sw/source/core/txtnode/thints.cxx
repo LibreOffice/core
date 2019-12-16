@@ -2488,7 +2488,8 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
     // 3. Clear items from the node
     std::vector<sal_uInt16> aClearedIds;
     lcl_FillWhichIds(i_rAttrSet, aClearedIds);
-    ClearItemsFromAttrSet(aClearedIds);
+    // ResetAttr to broadcast the change and record necessary undo information
+    ResetAttr(aClearedIds);
 }
 
 void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
