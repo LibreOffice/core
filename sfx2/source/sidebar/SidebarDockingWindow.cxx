@@ -69,7 +69,9 @@ public:
             {
                 // Mobile.
                 std::stringstream aStream;
-                boost::property_tree::write_json(aStream, m_rSidebarDockingWin.DumpAsPropertyTree());
+                boost::property_tree::ptree aTree = m_rSidebarDockingWin.DumpAsPropertyTree();
+                aTree.put("id", m_rSidebarDockingWin.GetLOKWindowId());
+                boost::property_tree::write_json(aStream, aTree);
                 const std::string message = aStream.str();
                 if (message != m_LastNotificationMessage)
                 {

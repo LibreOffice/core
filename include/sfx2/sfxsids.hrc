@@ -575,6 +575,8 @@ class SvxSearchItem;
 #define SID_TABLE_BORDER_TYPE               (SID_SVX_START + 1065)
 #define SID_TABLE_BORDER_INDEX              (SID_SVX_START + 1066)
 #define SID_TABLE_BORDER_OFFSET             (SID_SVX_START + 1067)
+#define SID_SHOW_SIDEBAR                    (SID_SVX_START + 1200)
+#define SID_HIDE_SIDEBAR                    (SID_SVX_START + 1201)
 
 #define FID_SVX_START                       (SID_LIB_START + 500)
 #define FID_SEARCH_NOW                      (FID_SVX_START + 2)
