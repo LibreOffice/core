@@ -100,11 +100,6 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
     mpVerticalScrollBar->SetLineSize(10);
     mpVerticalScrollBar->SetPageSize(100);
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SetLOKNotifier(SfxViewShell::Current());
-    }
-
 #ifdef DEBUG
     SetText(OUString("Deck"));
     mpScrollClipWindow->SetText(OUString("ScrollClipWindow"));
