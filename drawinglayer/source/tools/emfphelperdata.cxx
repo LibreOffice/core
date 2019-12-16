@@ -557,7 +557,7 @@ namespace emfplushelper
 
         if (isColor) // use Color
         {
-            SAL_INFO("drawinglayer", "EMF+\t\t Fill polygon, ARGB color: 0x" << std::hex << brushIndexOrColor << std::dec);
+            SAL_INFO("drawinglayer", "EMF+\t\tFill polygon, ARGB color: 0x" << std::hex << brushIndexOrColor << std::dec);
 
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
@@ -593,7 +593,7 @@ namespace emfplushelper
         else // use Brush
         {
             EMFPBrush* brush = static_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
-            SAL_INFO("drawinglayer", "EMF+\t\t Fill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
+            SAL_INFO("drawinglayer", "EMF+\t\tFill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
 
             // give up in case something wrong happened
             if( !brush )
@@ -647,7 +647,33 @@ namespace emfplushelper
             }
             else if (brush->type == BrushTypeTextureFill)
             {
-                SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                SAL_INFO("drawinglayer", "EMF+\t\t\tDrawing brush texture: " << (brush->image->graphic.GetType() == GraphicType::Bitmap ? "bitmap" : "other"));
+                ::basegfx::B2DHomMatrix aTextureTransformation(brush->GetTextureTransformation(maMapTransform));
+
+                if (brush->image->graphic.GetType() == GraphicType::Bitmap)
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tDrawing bitmap");
+
+                    BitmapEx const& rBrushBmp = brush->image->graphic.GetBitmapExRef();
+                    mrTargetHolders.Current().append(
+                        std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
+                            rBrushBmp,
+                            aTextureTransformation));
+                }
+                else if (brush->image->graphic.GetType() == GraphicType::GdiMetafile)
+                {
+                    SAL_INFO("drawinglayer", "EMF+\t\t\tDrawing metafile");
+
+                    GDIMetaFile const& rMetafile= brush->image->graphic.GetGDIMetaFile();
+                    mrTargetHolders.Current().append(
+                        std::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(
+                            aTextureTransformation,
+                            rMetafile));
+                }
+                else
+                {
+                    SAL_WARN("drawinglayer", "EMF+\t\t\tImage format not known");
+                }
             }
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
 
