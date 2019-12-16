@@ -16,6 +16,24 @@
       "revId": "e290c3f3e233f03a0b13d19553c637f0a7070fbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_6656ce09",
+        "filename": "chart2/source/controller/sidebar/ChartColorWrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-16T12:57:56Z",
+      "side": 1,
+      "message": "If we don\u0027t have a valid ref to the model, the rest is doomed to fail. Too defensive? Useless? Or what do you think? I appreciate comments. :)",
+      "parentUuid": "5f7c97a3_83719ce3",
+      "revId": "e290c3f3e233f03a0b13d19553c637f0a7070fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
