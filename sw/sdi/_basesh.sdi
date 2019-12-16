@@ -122,6 +122,20 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_PASTE_TABLE_ROW  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    FN_PASTE_TABLE_COLUMN  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_REPAGINATE  // status(final|play)
     [
         ExecMethod = Execute ;
