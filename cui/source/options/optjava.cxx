@@ -294,7 +294,10 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ExpertConfigHdl_Impl, weld::Button&, void)
 {
     CuiAboutConfigTabPage aExpertConfigDlg(GetFrameWeld());
-    aExpertConfigDlg.Reset();//initialize and reset function
+    {
+        weld::WaitObject aWait(GetFrameWeld());
+        aExpertConfigDlg.Reset();//initialize and reset function
+    }
 
     if (RET_OK == aExpertConfigDlg.run())
     {
