@@ -31,13 +31,6 @@ chdir ($build_path);
 # old path from the environment, not cwd.
 $ENV{PWD} = $build_path;
 
-sub clean()
-{
-    system ("rm -Rf autom4te.cache");
-    system ("rm -f missing install-sh mkinstalldirs libtool ltmain.sh");
-    print "Cleaned the build tree\n";
-}
-
 my $aclocal;
 my $autoconf;
 
@@ -202,7 +195,6 @@ die "Failed to generate the configure script" if (! -f "configure");
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
         print STDOUT "autogen.sh - libreoffice configuration helper\n";
-        print STDOUT "   --clean        forcibly re-generate configuration\n";
         print STDOUT "   --with-distro  use a config from distro-configs/\n";
         print STDOUT "                  the name needs to be passed without extension\n";
         print STDOUT "   --best-effort  don't fail on un-known configure with/enable options\n";
@@ -256,9 +248,7 @@ if (-f $default_config) {
     push @args, read_args ($default_config);
 }
 for my $arg (@cmdline_args) {
-    if ($arg eq '--clean') {
-        clean();
-    } elsif ($arg =~ m/--with-distro=(.*)$/) {
+    if ($arg =~ m/--with-distro=(.*)$/) {
         my $config = "$src_path/distro-configs/$1.conf";
         if (! -f $config) {
             invalid_distro ($config, $1);
