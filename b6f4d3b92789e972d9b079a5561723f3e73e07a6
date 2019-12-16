@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_09604bce",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-16T18:13:20Z",
+      "side": 1,
+      "message": "Each of these vars is used exactly once in the code.  Do these static vars have a clear performance benefit over the original code, or over the improved code of (implicitly) generating each OUString where necessary (by changing\n\n  pUIWindow-\u003eexecute(sSelectAction, aMap);\n\nto\n\n  pUIWindow-\u003eexecute(\"SELECT\", aMap);\n\netc. in the below code)?",
+      "revId": "b6f4d3b92789e972d9b079a5561723f3e73e07a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
