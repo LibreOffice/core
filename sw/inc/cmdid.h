@@ -281,6 +281,11 @@
 // MSO content controls
 #define FN_INSERT_DATE_FORMFIELD        (FN_INSERT2 + 25)
 
+// clipboard table content
+#define FN_PASTE_NESTED_TABLE       (FN_INSERT2 + 30)  /* instead of the cell-by-cell copy between source and target tables */
+#define FN_TABLE_PASTE_ROW_BEFORE   (FN_INSERT2 + 31)  /* paste table as new table rows */
+#define FN_TABLE_PASTE_COL_BEFORE   (FN_INSERT2 + 32)  /* paste table as new table columns */
+
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */
 #define FN_AUTOFORMAT_AUTO      (FN_FORMAT + 2 ) /* apply autoformat during user input */
@@ -343,7 +348,6 @@
 #define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* */
 #define FN_TABLE_INSERT_COL_AFTER   (FN_FORMAT + 116)  /* */
 #define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* protect table cells */
-#define FN_PASTE_NESTED_TABLE       (FN_FORMAT + 118)  /* instead of the cell-by-cell copy between source and target tables */
 #define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* undo table cell protection */
 #define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* also used in SwXTextTable*/
 #define FN_TABLE_ADJUST_CELLS       (FN_FORMAT + 121)  /* */
