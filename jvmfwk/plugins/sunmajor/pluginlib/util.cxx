@@ -25,7 +25,6 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <osl/diagnose.h>
-#include <osl/getglobalmutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
