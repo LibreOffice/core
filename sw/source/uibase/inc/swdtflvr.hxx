@@ -62,6 +62,14 @@ enum class TransferBufferType : sal_uInt16
 namespace o3tl {
     template<> struct typed_flags<TransferBufferType> : is_typed_flags<TransferBufferType, 0x00ef> {};
 }
+// paste table into a table
+enum class PasteTableType
+{
+        PASTE_DEFAULT, // paste table by overwriting table cells
+        PASTE_ROW,     // paste table as rows above
+        PASTE_COLUMN,  // paste table as columns before
+        PASTE_TABLE    // paste table as nested table
+};
 
 class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
@@ -138,7 +146,8 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
                         bool bIsXSelection );
-    bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr, bool bNestedTable = false );
+
+    bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
 
@@ -180,7 +189,8 @@ public:
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA, bool bIgnoreComments = false, bool bTableInCell = false );
+    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
+                          bool bIgnoreComments = false, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
                           SotClipboardFormatId nFormat,
@@ -190,7 +200,7 @@ public:
                           bool bPasteSelection = false, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
                           bool bIgnoreComments = false,
                           SwPasteContext* pContext = nullptr,
-                          bool bNestedTable = false );
+                          PasteTableType nPaste = PasteTableType::PASTE_DEFAULT );
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
