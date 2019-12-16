@@ -258,7 +258,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     sal_uInt16 nId = rReq.GetSlot();
     bool bIgnore = false;
-    bool bPasteNestedTable = false;
+    SwTransferable::PasteTable ePasteTable = SwTransferable::PASTE_NONE;
+
     switch( nId )
     {
         case SID_CUT:
@@ -282,7 +283,22 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             return;
 
         case FN_PASTE_NESTED_TABLE:
-            bPasteNestedTable = true;
+        case FN_PASTE_TABLE_ROW:
+        case FN_PASTE_TABLE_COLUMN:
+            switch ( nId )
+            {
+                case FN_PASTE_NESTED_TABLE:
+                     ePasteTable = SwTransferable::PASTE_TABLE;
+                     break;
+                case FN_PASTE_TABLE_ROW:
+                     ePasteTable = SwTransferable::PASTE_ROW;
+                     break;
+                case FN_PASTE_TABLE_COLUMN:
+                     ePasteTable = SwTransferable::PASTE_COLUMN;
+                     break;
+                default:
+                    ;
+            }
             [[fallthrough]];
         case SID_PASTE:
             {
@@ -303,7 +319,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
-                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, bPasteNestedTable);
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable);
 
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
@@ -471,6 +487,8 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
             break;
 
         case FN_PASTE_NESTED_TABLE:
+        case FN_PASTE_TABLE_ROW:
+        case FN_PASTE_TABLE_COLUMN:
             if( !rSh.IsCursorInTable()
                 || !GetView().IsPasteSpecialAllowed()
                 || rSh.CursorInsideInputField()

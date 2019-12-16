@@ -14,6 +14,8 @@
   <menu:menu menu:id=".uno:PasteSpecialMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:PasteNestedTable"/>
+      <menu:menuitem menu:id=".uno:PasteTableRow"/>
+      <menu:menuitem menu:id=".uno:PasteTableColumn"/>
       <menu:menuitem menu:id=".uno:PasteUnformatted"/>
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
     </menu:menupopup>
