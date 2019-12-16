@@ -29,7 +29,6 @@ void Bundle::SetColor( sal_uInt32 nColor )
 }
 
 FontEntry::FontEntry() :
-    eCharSetType    ( CST_CCOMPLETE ),
     nFontType       ( 0 )
 {
 }
@@ -74,7 +73,6 @@ CGMFList& CGMFList::operator=( const CGMFList& rSource )
                 pCFontEntry->pCharSetValue.reset( new sal_Int8[ nSize ] );
                 memcpy( pCFontEntry->pCharSetValue.get(), pPtr->pCharSetValue.get(), nSize );
             }
-            pCFontEntry->eCharSetType = pPtr->eCharSetType;
             pCFontEntry->nFontType = pPtr->nFontType;
             aFontEntryList.push_back( std::move(pCFontEntry) );
         }
@@ -169,7 +167,7 @@ void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
 }
 
 
-void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8 const * pSource, sal_uInt32 nSize )
+void CGMFList::InsertCharSet( sal_uInt8 const * pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
     if ( nFontsAvailable == nCharSetCount )
@@ -183,7 +181,6 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8 const * pSourc
         pFontEntry = aFontEntryList[ nCharSetCount ].get();
     }
     nCharSetCount++;
-    pFontEntry->eCharSetType = eCharSetType;
     pFontEntry->pCharSetValue.reset( new sal_Int8[ nSize + 1 ] );
     pFontEntry->pCharSetValue[ nSize ] = 0;
     memcpy( pFontEntry->pCharSetValue.get(), pSource, nSize );
