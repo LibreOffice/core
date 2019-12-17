@@ -209,7 +209,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
 
-        // is cursor at a mispelled word ?
+        // is cursor at a misspelled word ?
         bool bIsWrong = false;
         if (pView)
         {
