@@ -24,8 +24,6 @@
 #include <exception>
 #include <typeinfo>
 
-#include <cxxabi.h>
-
 #include <bridge.hxx>
 #include <types.hxx>
 #include <unointerfaceproxy.hxx>
@@ -190,7 +188,7 @@ void call(
         }
     } catch (css::uno::Exception &) {
         abi_aarch64::mapException(
-            reinterpret_cast<abi_aarch64::__cxa_eh_globals *>(
+            reinterpret_cast<__cxxabiv1::__cxa_eh_globals *>(
                 __cxxabiv1::__cxa_get_globals())->caughtExceptions,
             __cxxabiv1::__cxa_current_exception_type(), *exception,
             proxy->getBridge()->getCpp2Uno());
