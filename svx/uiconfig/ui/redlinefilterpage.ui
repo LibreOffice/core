@@ -270,7 +270,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="redlinefilterpage|and">a_nd</property>
                 <property name="use_underline">True</property>
-                <property name="ellipsize">end</property>
                 <property name="xalign">1</property>
               </object>
               <packing>
