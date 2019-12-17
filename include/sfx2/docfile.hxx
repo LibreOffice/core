@@ -107,6 +107,9 @@ public:
     const std::shared_ptr<const SfxFilter>& GetFilter() const;
     const OUString&     GetOrigURL() const;
 
+    void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    css::uno::Sequence<css::beans::PropertyValue> GetArgs() const;
+
     SfxItemSet  *       GetItemSet() const;
     void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
