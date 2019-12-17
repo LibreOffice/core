@@ -22,9 +22,7 @@
 #include <algorithm>
 #include <string.h>
 
-#include <rtl/instance.hxx>
 #include <rtl/crc.h>
-#include <osl/getglobalmutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
@@ -273,15 +271,6 @@ bool INetURLHistory_Impl::queryUrl (const OUString &rUrl) const
     return (k < capacity()) && (m_pHash[k] == h);
 }
 
-/*
- * INetURLHistory::StaticInstance implementation.
- */
-INetURLHistory * INetURLHistory::StaticInstance::operator ()()
-{
-    static INetURLHistory g_aInstance;
-    return &g_aInstance;
-}
-
 INetURLHistory::INetURLHistory() : m_pImpl (new INetURLHistory_Impl())
 {
 }
@@ -295,10 +284,8 @@ INetURLHistory::~INetURLHistory()
  */
 INetURLHistory* INetURLHistory::GetOrCreate()
 {
-    return rtl_Instance<
-        INetURLHistory, StaticInstance,
-        osl::MutexGuard, osl::GetGlobalMutex >::create (
-            StaticInstance(), osl::GetGlobalMutex());
+    static INetURLHistory instance;
+    return &instance;
 }
 
 void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
