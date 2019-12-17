@@ -54,6 +54,7 @@
 #include <paintfrm.hxx>
 #include <PostItMgr.hxx>
 #include <SwGrammarMarkUp.hxx>
+#include <docsh.hxx>
 
 #include <cellfrm.hxx>
 #include <wrtsh.hxx>
@@ -106,6 +107,23 @@ void SwVisibleCursor::Hide()
         if( m_aTextCursor.IsVisible() )      // Shouldn't the flags be in effect?
             m_aTextCursor.Hide();
     }
+}
+
+namespace
+{
+
+// Build JSON message to be sent to Online
+OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("text", sText);
+    aTree.put("link", sLink);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false);
+
+    return OString(aStream.str().c_str()).trim();
+}
+
 }
 
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
@@ -241,15 +259,29 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
         OString sHyperlink;
         SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
+        bool bIsSelection = m_pCursorShell->IsSelection();
+
         if (const_cast<SwCursorShell*>(m_pCursorShell)->GetContentAtPos(aRect.Pos(), aContentAtPos))
         {
             const SwFormatINetFormat* pItem = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
-            boost::property_tree::ptree aTree;
-            aTree.put("text", aContentAtPos.sStr);
-            aTree.put("link", pItem->GetValue());
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree, false);
-            sHyperlink = OString(aStream.str().c_str()).trim();
+            sHyperlink = buildHyperlinkJSON(aContentAtPos.sStr, pItem->GetValue());
+        }
+        else if (bIsSelection)
+        {
+            SwWrtShell* pShell = m_pCursorShell->GetDoc()->GetDocShell()->GetWrtShell();
+
+            if (pShell)
+            {
+                SfxItemSet aSet(m_pCursorShell->GetSfxViewShell()->GetPool(),
+                    svl::Items<RES_TXTATR_INETFMT,
+                    RES_TXTATR_INETFMT>{});
+                pShell->GetCurAttr(aSet);
+                if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
+                {
+                    sHyperlink = buildHyperlinkJSON(m_pCursorShell->GetSelText(),
+                                                    aSet.GetItem(RES_TXTATR_INETFMT)->GetValue());
+                }
+            }
         }
 
         if (pViewShell)
