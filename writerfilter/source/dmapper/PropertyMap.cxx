@@ -1405,6 +1405,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     uno::UNO_QUERY_THROW);
                 uno::Reference<container::XEnumeration> const xEnum(
                         xCursor->createEnumeration());
+                bool isFound = false;
                 while (xEnum->hasMoreElements())
                 {
                     uno::Reference<beans::XPropertySet> xElem;
@@ -1418,8 +1419,22 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                             // tdf#112201: do *not* use m_sFirstPageStyleName here!
                             xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
                                     uno::makeAny(m_sFollowPageStyleName));
+                            isFound = true;
                             break;
                         }
+                    }
+                }
+                if (!isFound)
+                {   // HACK: try the last paragraph of the previous section
+                    uno::Reference<text::XParagraphCursor> const xPCursor(xCursor, uno::UNO_QUERY_THROW);
+                    xPCursor->gotoPreviousParagraph(false);
+                    uno::Reference<beans::XPropertySet> const xPSCursor(xCursor, uno::UNO_QUERY_THROW);
+                    style::BreakType bt;
+                    if ((xPSCursor->getPropertyValue("BreakType") >>= bt)
+                        && bt == style::BreakType_PAGE_BEFORE)
+                    {
+                        xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
+                                uno::makeAny(m_sFollowPageStyleName));
                     }
                 }
             }
