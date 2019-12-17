@@ -1386,7 +1386,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     paragraph indent to be relative to the new paragraph indent
                 */
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(pDoc, aRegion, false))
+                if (rEntry.MakeRegion(pDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr.get()) );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
@@ -1452,7 +1452,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(pDoc, aRegion, false))
+                if (rEntry.MakeRegion(pDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SwFrameFormat *pFrame;
                     // If we have just one single inline graphic then

@@ -66,6 +66,7 @@
 #include <swtable.hxx>
 #include <tox.hxx>
 #include <expfld.hxx>
+#include <bookmrk.hxx>
 #include <section.hxx>
 #include <tblsel.hxx>
 #include <pagedesc.hxx>
@@ -131,7 +132,7 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     m_aPtPos.SetPos(rEndPos);
 }
 
-bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
+bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, RegionMode const eCheck,
     const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd,
     sal_uInt16 nWhich)
 {
@@ -180,16 +181,22 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
                              rRegion.End()->nNode, true ),
              "attribute or similar crosses section-boundaries" );
-    if( bCheck )
-        return CheckNodesRange( rRegion.Start()->nNode,
-                                rRegion.End()->nNode, true );
-    else
-        return true;
+    bool bRet = true;
+    if (eCheck & RegionMode::CheckNodes)
+    {
+        bRet &= CheckNodesRange(rRegion.Start()->nNode,
+                                rRegion.End()->nNode, true);
+    }
+    if (eCheck & RegionMode::CheckFieldmark)
+    {
+        bRet &= !sw::mark::IsFieldmarkOverlap(rRegion);
+    }
+    return bRet;
 }
 
-bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const
+bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, RegionMode eCheck) const
 {
-    return MakeRegion(pDoc, rRegion, bCheck, m_aMkPos, m_aPtPos, bIsParaEnd,
+    return MakeRegion(pDoc, rRegion, eCheck, m_aMkPos, m_aPtPos, bIsParaEnd,
         pAttr->Which());
 }
 
@@ -489,7 +496,7 @@ static bool MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
 static bool MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
                     SwPaM& rRegion )
 {
-    if (rEntry.MakeRegion(pDoc, rRegion, true/*bCheck*/ ))
+    if (rEntry.MakeRegion(pDoc, rRegion, SwFltStackEntry::RegionMode::CheckNodes))
     {
         if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()
               != rRegion.GetMark()->nNode.GetNode().FindTableBoxStartNode())
@@ -591,7 +598,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwNumRule* pNumRule = pDoc->FindNumRulePtr( rNumNm );
             if( pNumRule )
             {
-                if( rEntry.MakeRegion(pDoc, aRegion, true))
+                if (rEntry.MakeRegion(pDoc, aRegion, SwFltStackEntry::RegionMode::CheckNodes))
                 {
                     SwNodeIndex aTmpStart( aRegion.Start()->nNode );
                     SwNodeIndex aTmpEnd( aTmpStart );
@@ -757,7 +764,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_REDLINE:
         {
-            if (rEntry.MakeRegion(pDoc, aRegion, true))
+            if (rEntry.MakeRegion(pDoc, aRegion,
+                    SwFltStackEntry::RegionMode::CheckNodes|SwFltStackEntry::RegionMode::CheckFieldmark))
             {
                 pDoc->getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::On
                                               | RedlineFlags::ShowInsert
@@ -791,7 +799,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             {
                 rEntry.SetIsParaEnd( IsParaEndInCPs(nStart,nEnd,bHasSdOD) );
             }
-            if (rEntry.MakeRegion(pDoc, aRegion, false))
+            if (rEntry.MakeRegion(pDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
             {
                 if (rEntry.IsParaEnd())
                 {
