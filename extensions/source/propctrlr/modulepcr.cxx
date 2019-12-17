@@ -19,38 +19,27 @@
 
 #include "modulepcr.hxx"
 
-#include <rtl/instance.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 namespace pcr
 {
-    struct CreateModuleClass
-    {
-        PcrModule* operator()()
-        {
-            static PcrModule* pModule = new PcrModule;
-            return pModule;
-            /*  yes, in theory, this is a resource leak, since the PcrModule
-                will never be cleaned up. However, using a non-heap instance of PcrModule
-                would not work: It would be cleaned up when the module is unloaded.
-                This might happen (and is likely to happen) *after* the tools-library
-                has been unloaded. However, the module's dtor is where we would delete
-                our resource manager (in case not all our clients de-registered) - which
-                would call into the already-unloaded tools-library. */
-        }
-    };
-
     PcrModule::PcrModule()
     {
     }
 
     PcrModule& PcrModule::getInstance()
     {
-        return *rtl_Instance< PcrModule, CreateModuleClass, ::osl::MutexGuard, ::osl::GetGlobalMutex >::
-            create( CreateModuleClass(), ::osl::GetGlobalMutex() );
+        static PcrModule* pModule = new PcrModule;
+        return *pModule;
+        /*  yes, in theory, this is a resource leak, since the PcrModule
+            will never be cleaned up. However, using a non-heap instance of PcrModule
+            would not work: It would be cleaned up when the module is unloaded.
+            This might happen (and is likely to happen) *after* the tools-library
+            has been unloaded. However, the module's dtor is where we would delete
+            our resource manager (in case not all our clients de-registered) - which
+            would call into the already-unloaded tools-library. */
     }
 
     OUString PcrRes(const char* pId)
