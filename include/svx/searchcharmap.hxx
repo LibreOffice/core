@@ -32,9 +32,6 @@ namespace svx { struct SvxShowCharSetItem; }
 namespace tools { class Rectangle; }
 namespace weld { class ScrolledWindow; }
 
-#define COLUMN_COUNT    16
-#define ROW_COUNT        8
-
 class Subset;
 
 class SVX_DLLPUBLIC SvxSearchCharSet final : public SvxShowCharSet
