@@ -79,13 +79,6 @@ struct ClassMapData {
     ClassMap map;
 };
 
-struct ClassMapDataInit {
-    ClassMapData * operator()() {
-        static ClassMapData instance;
-        return &instance;
-    }
-};
-
 template < typename T >
 bool getLocalFromWeakRef( jweak& _weak, LocalRef< T >& _inout_local )
 {
@@ -133,17 +126,14 @@ bool loadClass(
     OSL_ASSERT(classLoaderPtr != nullptr);
     // For any jweak entries still present in the map upon destruction,
     // DeleteWeakGlobalRef is not called (which is a leak):
-    ClassMapData * d =
-        rtl_Instance< ClassMapData, ClassMapDataInit, osl::MutexGuard,
-        osl::GetGlobalMutex >::create(
-            ClassMapDataInit(), osl::GetGlobalMutex());
-    osl::MutexGuard g(d->mutex);
-    ClassMap::iterator i(d->map.begin());
+    static ClassMapData classMapData;
+    osl::MutexGuard g(classMapData.mutex);
+    ClassMap::iterator i(classMapData.map.begin());
     LocalRef< jobject > cloader(environment);
     LocalRef< jclass > cl(environment);
     // Prune dangling weak references from the list while searching for a match,
     // so that the list cannot grow unbounded:
-    for (; i != d->map.end();)
+    for (; i != classMapData.map.end();)
     {
         LocalRef< jobject > classLoader( environment );
         if ( !getLocalFromWeakRef( i->classLoader, classLoader ) )
@@ -155,7 +145,7 @@ bool loadClass(
 
         if ( !classLoader.is() && !classObject.is() )
         {
-            i = d->map.erase(i);
+            i = classMapData.map.erase(i);
         }
         else if ( i->classPath == classPath && i->className == name )
         {
@@ -170,7 +160,7 @@ bool loadClass(
     }
     if ( !cloader.is() || !cl.is() )
     {
-        if ( i == d->map.end() )
+        if ( i == classMapData.map.end() )
         {
             // Push a new ClassMapEntry (which can potentially fail) before
             // loading the class, so that it never happens that a class is
@@ -178,8 +168,8 @@ bool loadClass(
             // JVM that are not easily undone).  If the pushed ClassMapEntry is
             // not used after all (return false, etc.) it will be pruned on next
             // call because its classLoader/classObject are null:
-            d->map.push_back( ClassMapEntry( classPath, name ) );
-            i = std::prev(d->map.end());
+            classMapData.map.push_back( ClassMapEntry( classPath, name ) );
+            i = std::prev(classMapData.map.end());
         }
 
         LocalRef< jclass > clClass( environment );
