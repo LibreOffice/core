@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_ccd7c123",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T10:37:25Z",
+      "side": 1,
+      "message": "Maybe we changed the menu, don\u0027t remember. But actually it\u0027s nonsense to have one toggle option (Vertical) that depends on another (Rulers) in the menu. It should be solved with independent options [x] Horizontal Ruler and [ ] Vertical ruler. There might be a ticket on this.",
+      "parentUuid": "5f7c97a3_8c74699b",
+      "range": {
+        "startLine": 129,
+        "startChar": 121,
+        "endLine": 129,
+        "endChar": 189
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_89121bb1",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 6
@@ -201,6 +225,30 @@
       "side": 1,
       "message": "The decision was to follow the appearance of the dialog box, but I am not opposed to changing it back.   (Also, this one is another case where User Data and First/last name are not menu items, but dialog box -- but I have not changed it, because it should be clear enough.)",
       "parentUuid": "5f7c97a3_89121bb1",
+      "range": {
+        "startLine": 151,
+        "startChar": 231,
+        "endLine": 151,
+        "endChar": 232
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_6cdc6d46",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T10:37:25Z",
+      "side": 1,
+      "message": "I\u0027m fine with any reasoning. And to follow the dialog title makes sense.",
+      "parentUuid": "5f7c97a3_8ca9c9e0",
       "range": {
         "startLine": 151,
         "startChar": 231,
