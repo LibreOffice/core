@@ -23,9 +23,6 @@
 #include <vtablefactory.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <osl/getglobalmutex.hxx>
-#include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 #include <typelib/typedescription.h>
 
 #include <cstddef>
@@ -51,23 +48,6 @@ void dso_exit() {
         delete pInstance;
         pInstance = nullptr;
     }
-}
-
-namespace {
-
-struct InitVtableFactory {
-    bridges::cpp_uno::shared::VtableFactory * operator()() {
-        return pInstance;
-    }
-};
-
-bridges::cpp_uno::shared::VtableFactory * getVtableFactory() {
-    return rtl_Instance<
-        bridges::cpp_uno::shared::VtableFactory, InitVtableFactory,
-        osl::MutexGuard, osl::GetGlobalMutex >::create(
-            InitVtableFactory(), osl::GetGlobalMutex());
-}
-
 }
 
 namespace bridges { namespace cpp_uno { namespace shared {
@@ -101,7 +81,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
     typelib_typedescription_complete(
         reinterpret_cast< typelib_TypeDescription ** >(&pTypeDescr));
     const bridges::cpp_uno::shared::VtableFactory::Vtables& rVtables(
-        getVtableFactory()->getVtables(pTypeDescr));
+        pInstance->getVtables(pTypeDescr));
     std::unique_ptr< char[] > pMemory(
         new char[
             sizeof (CppInterfaceProxy)
