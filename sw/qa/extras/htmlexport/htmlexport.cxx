@@ -22,6 +22,7 @@
 #include <test/htmltesttools.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/rtfkeywd.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -106,6 +107,8 @@ private:
 class SwHtmlDomExportTest : public SwModelTestBase, public HtmlTestTools
 {
 };
+
+char const DATA_DIRECTORY[] = "/sw/qa/extras/htmlexport/data/";
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo81276, "fdo81276.html")
 {
@@ -724,6 +727,38 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
     // - Actual  : 0
     // i.e. <blackquote> had character (direct) children, which is invalid xhtml.
     assertXPath(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:blockquote/reqif-xhtml:p", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
+{
+    // Import a document with an embedded object.
+    OUString aType("test/rtf");
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-ole-data.xhtml";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+
+    // Export it.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("RTFOLEMimeType", aType),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: test/rtf
+    // - Actual  : text/rtf
+    // i.e. the MIME type was always text/rtf, not taking the store parameter into account.
+    assertXPath(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "type",
+                aType);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
