@@ -3424,10 +3424,8 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
         SwFltPosition aPtPos(*m_pPaM->GetPoint());
 
         SwFrameFormat *pFlyFormat = nullptr;
-        if (
-             SwFltStackEntry::MakeRegion(&m_rDoc,aRegion,false,aMkPos,aPtPos) &&
-             nullptr != (pFlyFormat = ContainsSingleInlineGraphic(aRegion))
-           )
+        if (SwFltStackEntry::MakeRegion(&m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck, aMkPos, aPtPos)
+            && nullptr != (pFlyFormat = ContainsSingleInlineGraphic(aRegion)))
         {
             m_xCtrlStck->DeleteAndDestroy(nPos);
             pFlyFormat->SetFormatAttr(SwFormatVertOrient(0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::CHAR));
