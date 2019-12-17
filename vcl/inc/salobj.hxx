@@ -55,6 +55,8 @@ public:
 
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
+    virtual Size GetOptimalSize() const { return Size(); }
+
     void                            SetCallback( SystemChildWindow* pInst, SALOBJECTPROC pProc )
                                         { m_pInst = pInst; m_pCallback = pProc; }
     void                            CallCallback( SalObjEvent nEvent )
