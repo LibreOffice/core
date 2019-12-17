@@ -19,11 +19,6 @@
 #ifndef INCLUDED_SVX_UNOMID_HXX
 #define INCLUDED_SVX_UNOMID_HXX
 
-//AdjustItem
-#define MID_PARA_ADJUST         0
-#define MID_LAST_LINE_ADJUST    1
-#define MID_EXPAND_SINGLE       2
-
 //SvxPageItem
 #define MID_PAGE_NUMTYPE        0
 #define MID_PAGE_ORIENTATION    1
@@ -49,10 +44,6 @@
 
 // XFillBitmapItem (is also a NameOrIndex)
 #define MID_BITMAP              8
-
-// SvxHorJustifyItem
-#define MID_HORJUST_HORJUST     0
-#define MID_HORJUST_ADJUST      1
 
 // SvxObjectItem
 #define MID_START_X             1
