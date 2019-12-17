@@ -103,7 +103,7 @@ namespace basic
             @precond
                 our mutex is locked
         */
-        std::unique_ptr<BasicManager>&
+        BasicManagerStore::iterator
                 impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel );
 
         /** tests if there is a location set at which the BasicManager for the given model
@@ -127,7 +127,7 @@ namespace basic
                 the model whose BasicManager will be created. Must not be <NULL/>.
         */
         bool impl_createManagerForModel(
-                    std::unique_ptr<BasicManager>& _out_rpBasicManager,
+                    BasicManagerStore::iterator location,
                     const Reference< XModel >& _rxDocumentModel );
 
         /** creates the application-wide BasicManager
@@ -234,11 +234,11 @@ namespace basic
             thus a recursive call of this function will find and return it
             without creating another instance.
          */
-        std::unique_ptr<BasicManager>& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
-        if (pBasicManager != nullptr)
-            return pBasicManager.get();
-        if (impl_createManagerForModel(pBasicManager, _rxDocumentModel))
-            return pBasicManager.get();
+        auto const loc = impl_getLocationForModel( _rxDocumentModel );
+        if (loc->second != nullptr)
+            return loc->second.get();
+        if (impl_createManagerForModel(loc, _rxDocumentModel))
+            return loc->second.get();
         return nullptr;
     }
 
@@ -366,13 +366,12 @@ namespace basic
         return pAppBasic;
     }
 
-    std::unique_ptr<BasicManager>& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
+    BasicManagerStore::iterator ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        std::unique_ptr<BasicManager>& location = m_aStore[ xNormalized ];
-        return location;
+        return m_aStore.try_emplace(xNormalized).first;
     }
 
     bool ImplRepository::impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel ) const
@@ -408,22 +407,28 @@ namespace basic
         }
     }
 
-    bool ImplRepository::impl_createManagerForModel( std::unique_ptr<BasicManager>& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
+    bool ImplRepository::impl_createManagerForModel( BasicManagerStore::iterator location, const Reference< XModel >& _rxDocumentModel )
     {
+        auto & _out_rpBasicManager = location->second;
+
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
 
         _out_rpBasicManager = nullptr;
         Reference< XStorage > xStorage;
         if ( !impl_getDocumentStorage_nothrow( _rxDocumentModel, xStorage ) )
         {
+            m_aStore.erase(location);
             // the document is not able to provide the storage it is based on.
             return false;
         }
         Reference< XPersistentLibraryContainer > xBasicLibs;
         Reference< XPersistentLibraryContainer > xDialogLibs;
         if ( !impl_getDocumentLibraryContainers_nothrow( _rxDocumentModel, xBasicLibs, xDialogLibs ) )
+        {
+            m_aStore.erase(location);
             // the document does not have BasicLibraries and DialogLibraries
             return false;
+        }
 
         if ( xStorage.is() )
         {
