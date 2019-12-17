@@ -458,7 +458,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
         GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                            static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
-        GdkWindow* gdkWindow = widget_get_window(mpFrame->getMouseEventWidget());
+        GdkWindow* gdkWindow = gtk_widget_get_window(mpFrame->getMouseEventWidget());
         gtk_menu_popup_at_rect(GTK_MENU(pWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
     }
     else

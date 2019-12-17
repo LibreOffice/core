@@ -40,24 +40,9 @@ namespace com { namespace sun { namespace star { namespace accessibility { class
 class GtkSalDisplay;
 class DocumentFocusListener;
 
-inline GdkWindow * widget_get_window(GtkWidget *widget)
-{
-    return gtk_widget_get_window(widget);
-}
-
 inline ::Window widget_get_xid(GtkWidget *widget)
 {
     return GDK_WINDOW_XID(gtk_widget_get_window(widget));
-}
-
-inline void widget_set_can_focus(GtkWidget *widget, gboolean can_focus)
-{
-    return gtk_widget_set_can_focus(widget, can_focus);
-}
-
-inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
-{
-    return gtk_widget_set_can_default(widget, can_default);
 }
 
 class GtkSalTimer final : public SalTimer
