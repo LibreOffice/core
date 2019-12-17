@@ -28,12 +28,6 @@
 class INetURLHistory_Impl;
 class SVL_DLLPUBLIC INetURLHistory final : public SfxBroadcaster
 {
-    struct SAL_DLLPRIVATE StaticInstance
-    {
-        INetURLHistory * operator()();
-    };
-    friend INetURLHistory * StaticInstance::operator()();
-
     /** Representation.
     */
     std::unique_ptr<INetURLHistory_Impl> m_pImpl;
