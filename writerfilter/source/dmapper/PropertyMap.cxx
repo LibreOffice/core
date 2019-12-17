@@ -1406,8 +1406,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                         if ((xElem->getPropertyValue("BreakType") >>= bt)
                             && bt == style::BreakType_PAGE_BEFORE)
                         {
+                            // tdf#112201: do *not* use m_sFirstPageStyleName here!
                             xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
-                                    uno::makeAny(aName));
+                                    uno::makeAny(m_sFollowPageStyleName));
                             break;
                         }
                     }
