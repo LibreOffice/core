@@ -1033,6 +1033,19 @@ DECLARE_OOXMLEXPORT_TEST(testInsideBorders, "tdf129242_InsideBorders.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBottomBorder, "tdf129450_BottomBorder.docx")
+{
+    // tdf#129450: Missing bottom border in one row table.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // If there is no bottom border, it is shown in tcBorders.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
+}
+
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

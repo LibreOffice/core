@@ -826,6 +826,11 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     rInfo.pTableBorders->Erase(META_PROP_HORIZONTAL_BORDER);
                     rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
                 }
+                // Do not apply horizontal borders to a one row table.
+                else if (m_aCellProperties.size() == 1 && aRowOfCellsIterator->size() > 1)
+                {
+                    rInfo.pTableBorders->Erase(META_PROP_HORIZONTAL_BORDER);
+                }
 
                 lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
 
