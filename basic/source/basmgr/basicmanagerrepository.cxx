@@ -38,8 +38,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
-#include <osl/getglobalmutex.hxx>
-#include <rtl/instance.hxx>
 #include <sot/storage.hxx>
 
 #include <map>
@@ -198,19 +196,6 @@ namespace basic
         StarBASIC* impl_getDefaultAppBasicLibrary();
     };
 
-    namespace {
-
-    struct CreateImplRepository
-    {
-        ImplRepository* operator()()
-        {
-            static ImplRepository repository;
-            return &repository;
-        }
-    };
-
-    }
-
     ImplRepository::ImplRepository()
     {
     }
@@ -218,8 +203,8 @@ namespace basic
 
     ImplRepository& ImplRepository::Instance()
     {
-        return *rtl_Instance< ImplRepository, CreateImplRepository, ::osl::MutexGuard, ::osl::GetGlobalMutex >::
-            create( CreateImplRepository(), ::osl::GetGlobalMutex() );
+        static ImplRepository repository;
+        return repository;
     }
 
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
