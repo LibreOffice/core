@@ -134,7 +134,6 @@ namespace pcr
         bool        m_bSuspendingPropertyHandlers;
         bool        m_bConstructed;
         bool        m_bBindingIntrospectee;
-        bool        m_bInterimBuilder;
 
     protected:
         DECLARE_XINTERFACE()

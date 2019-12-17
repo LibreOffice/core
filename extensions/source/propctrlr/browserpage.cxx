@@ -22,13 +22,11 @@
 
 namespace pcr
 {
-    OBrowserPage::OBrowserPage(weld::Container* pParent, weld::Container* pInitialControlContainer, bool bInterimBuilder)
+    OBrowserPage::OBrowserPage(weld::Container* pParent, weld::Container* pInitialControlContainer)
         : m_pParent(pParent)
-        , m_xBuilder(bInterimBuilder
-                     ? Application::CreateInterimBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui")
-                     : Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui"))
+        , m_xBuilder(Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui"))
         , m_xContainer(m_xBuilder->weld_container("BrowserPage"))
-        , m_xListBox(std::make_unique<OBrowserListBox>(*m_xBuilder, pInitialControlContainer, bInterimBuilder))
+        , m_xListBox(std::make_unique<OBrowserListBox>(*m_xBuilder, pInitialControlContainer))
     {
     }
 

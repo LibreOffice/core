@@ -6611,13 +6611,6 @@ weld::Builder* SalInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
     return new SalInstanceBuilder(pParent, rUIRoot, rUIFile);
 }
 
-weld::Builder* Application::CreateInterimBuilder(weld::Widget* pParent, const OUString &rUIFile)
-{
-    SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
-    vcl::Window* pParentWidget = pParentInstance ? pParentInstance->getWidget() : nullptr;
-    return Application::CreateInterimBuilder(pParentWidget, rUIFile);
-}
-
 void SalInstanceWindow::help()
 {
     //show help for widget with keyboard focus

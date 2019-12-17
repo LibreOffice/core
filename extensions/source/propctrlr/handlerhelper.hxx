@@ -215,7 +215,7 @@ namespace pcr
 
         static std::unique_ptr<weld::Builder> makeBuilder(const OUString& rUIFile, const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
-        static void setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent, bool bInterim);
+        static void setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent);
 
         static void clearBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext);
 

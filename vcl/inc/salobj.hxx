@@ -48,6 +48,7 @@ public:
     virtual void                    Show( bool bVisible ) = 0;
     virtual void                    Enable( bool /* nEnable */ ) {} // overridden by WinSalObject
     virtual void                    GrabFocus() {}
+    virtual void                    Reparent(SalFrame* /*pFrame*/) {}
 
     virtual void                    SetForwardKey( bool /* bEnable */ ) {}
 

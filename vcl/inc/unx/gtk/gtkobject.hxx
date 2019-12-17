@@ -25,36 +25,82 @@
 #include <salobj.hxx>
 #include <unx/gtk/gtkframe.hxx>
 
-class GtkSalObject final : public SalObject
+class GtkSalObjectBase : public SalObject
 {
-    SystemEnvData     m_aSystemData;
+protected:
+    SystemEnvData       m_aSystemData;
     GtkWidget*          m_pSocket;
     GtkSalFrame*        m_pParent;
     cairo_region_t*     m_pRegion;
 
-    // signals
-    static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
-    static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-    static void         signalDestroy( GtkWidget*, gpointer );
-public:
-    GtkSalObject( GtkSalFrame* pParent, bool bShow );
-    virtual ~GtkSalObject() override;
+    void Init();
 
-    // override all pure virtual methods
-    virtual void                    ResetClipRegion() override;
+public:
+    GtkSalObjectBase(GtkSalFrame* pParent);
+    virtual ~GtkSalObjectBase() override;
+
     virtual void                    BeginSetClipRegion( sal_uInt32 nRects ) override;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void                    EndSetClipRegion() override;
-
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void                    Show( bool bVisible ) override;
 
     virtual void                    SetForwardKey( bool bEnable ) override;
 
     virtual const SystemEnvData*    GetSystemData() const override;
 
     virtual Size                    GetOptimalSize() const override;
+
+private:
+    // signals
+    static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
+    static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
 };
+
+// this attempts to clip the hosted native window using gdk_window_shape_combine_region
+class GtkSalObject final : public GtkSalObjectBase
+{
+    // signals
+    static void         signalDestroy( GtkWidget*, gpointer );
+
+public:
+    GtkSalObject(GtkSalFrame* pParent, bool bShow);
+    virtual ~GtkSalObject() override;
+
+    // override all pure virtual methods
+    virtual void                    ResetClipRegion() override;
+    virtual void                    EndSetClipRegion() override;
+
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    Show( bool bVisible ) override;
+    virtual void                    Reparent(SalFrame* pFrame) override;
+};
+
+// this attempts to clip the hosted native GtkWidget by using a GtkScrolledWindow as a viewport
+// only a rectangular area is going to work
+class GtkSalObjectWidgetClip final : public GtkSalObjectBase
+{
+    tools::Rectangle m_aRect;
+    tools::Rectangle m_aClipRect;
+    GtkWidget* m_pScrolledWindow;
+
+    // signals
+    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
+    static void         signalDestroy( GtkWidget*, gpointer );
+
+    bool signal_scroll(GtkWidget* pScrolledWindow, GdkEvent* pEvent);
+
+    void ApplyClipRegion();
+public:
+    GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow);
+    virtual ~GtkSalObjectWidgetClip() override;
+
+    // override all pure virtual methods
+    virtual void                    ResetClipRegion() override;
+    virtual void                    EndSetClipRegion() override;
+
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    Show( bool bVisible ) override;
+    virtual void                    Reparent(SalFrame* pFrame) override;
+};
+
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKOBJECT_HXX
 

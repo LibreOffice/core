@@ -70,7 +70,7 @@ namespace pcr
 
     public:
         OBrowserLine(const OUString& rEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
-                     weld::Container* pInitialControlParent, bool bInterimBuilder);
+                     weld::Container* pInitialControlParent);
         ~OBrowserLine();
 
         void setControl( const css::uno::Reference< css::inspection::XPropertyControl >& rxControl );

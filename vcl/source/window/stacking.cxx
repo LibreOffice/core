@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 
 #include <salframe.hxx>
+#include <salobj.hxx>
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>
@@ -63,8 +64,13 @@ void Window::ImplInsertWindow( vcl::Window* pParent )
     {
         // search frame window and set window frame data
         vcl::Window* pFrameParent = pParent->mpWindowImpl->mpFrameWindow;
-        mpWindowImpl->mpFrameData     = pFrameParent->mpWindowImpl->mpFrameData;
-        mpWindowImpl->mpFrame         = pFrameParent->mpWindowImpl->mpFrame;
+        mpWindowImpl->mpFrameData = pFrameParent->mpWindowImpl->mpFrameData;
+        if (mpWindowImpl->mpFrame != pFrameParent->mpWindowImpl->mpFrame)
+        {
+            mpWindowImpl->mpFrame = pFrameParent->mpWindowImpl->mpFrame;
+            if (mpWindowImpl->mpSysObj)
+                mpWindowImpl->mpSysObj->Reparent(mpWindowImpl->mpFrame);
+        }
         mpWindowImpl->mpFrameWindow   = pFrameParent;
         mpWindowImpl->mbFrame         = false;
 
@@ -751,7 +757,12 @@ void Window::ImplUpdateWindowPtr( vcl::Window* pWindow )
     }
 
     mpWindowImpl->mpFrameData     = pWindow->mpWindowImpl->mpFrameData;
-    mpWindowImpl->mpFrame         = pWindow->mpWindowImpl->mpFrame;
+    if (mpWindowImpl->mpFrame != pWindow->mpWindowImpl->mpFrame)
+    {
+        mpWindowImpl->mpFrame = pWindow->mpWindowImpl->mpFrame;
+        if (mpWindowImpl->mpSysObj)
+            mpWindowImpl->mpSysObj->Reparent(mpWindowImpl->mpFrame);
+    }
     mpWindowImpl->mpFrameWindow   = pWindow->mpWindowImpl->mpFrameWindow;
     if ( pWindow->ImplIsOverlapWindow() )
         mpWindowImpl->mpOverlapWindow = pWindow;

@@ -90,7 +90,6 @@ namespace pcr
             ,m_bSuspendingPropertyHandlers( false )
             ,m_bConstructed( false )
             ,m_bBindingIntrospectee( false )
-            ,m_bInterimBuilder( false )
     {
     }
 
@@ -360,7 +359,6 @@ namespace pcr
         if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xContainerWindow.get()))
         {
             xBuilder.reset(Application::CreateBuilder(pTunnel->getWidget(), sUIFile));
-            m_bInterimBuilder = false;
         }
         else
         {
@@ -369,7 +367,6 @@ namespace pcr
             if (!pParentWin)
                 throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
             xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile));
-            m_bInterimBuilder = true;
         }
 
         Construct(xContainerWindow, std::move(xBuilder));
@@ -658,7 +655,7 @@ namespace pcr
 
         m_xBuilder = std::move(xBuilder);
 
-        m_xPropView.reset(new OPropertyBrowserView(m_xContext, *m_xBuilder, m_bInterimBuilder));
+        m_xPropView.reset(new OPropertyBrowserView(m_xContext, *m_xBuilder));
         m_xPropView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
 
         // add as dispose listener for our view. The view is disposed by the frame we're plugged into,
