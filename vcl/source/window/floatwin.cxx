@@ -818,23 +818,29 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
 void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId )
 {
+    if ( !mbInPopupMode )
+        return;
+
     ImplSVData* pSVData = ImplGetSVData();
 
     mbInCleanUp = true; // prevent killing this window due to focus change while working with it
 
-    // stop the PopupMode also for all following PopupMode windows
-    while (pSVData->mpWinData->mpFirstFloat && pSVData->mpWinData->mpFirstFloat.get() != this)
-        pSVData->mpWinData->mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
+    if (!(nFlags & FloatWinPopupEndFlags::NoCloseChildren))
+    {
+        // stop the PopupMode also for all PopupMode windows created after us
+        std::vector<VclPtr<FloatingWindow>> aCancelFloats;
+        // stop the PopupMode also for all following PopupMode windows
+        for (auto pFloat = pSVData->mpWinData->mpFirstFloat;
+             pFloat != nullptr && pFloat != this;
+             pFloat = pFloat->mpNextFloat)
+            aCancelFloats.push_back(pFloat);
+        for (auto it : aCancelFloats)
+            it->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::NoCloseChildren);
+    }
 
     // delete window from the list
     pSVData->mpWinData->mpFirstFloat = mpNextFloat;
     mpNextFloat = nullptr;
-
-    if ( !mbInPopupMode )
-    {
-        mbInCleanUp = false;
-        return;
-    }
 
     FloatWinPopupFlags nPopupModeFlags = mnPopupModeFlags;
     mbPopupModeTearOff = nFlags & FloatWinPopupEndFlags::TearOff &&
