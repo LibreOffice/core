@@ -899,8 +899,9 @@ void GtkSalFrame::InitCommon()
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pLongPress), GTK_PHASE_TARGET);
     g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
 
-    g_signal_connect( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
+    g_signal_connect_after( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
+    g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this );
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap-event", G_CALLBACK(signalUnmap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
@@ -3035,9 +3036,19 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
     // in the meantime do not propagate focus get/lose if floats are open
     if( m_nFloats == 0 )
-        pThis->CallCallbackExc( pEvent->in ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr );
+    {
+        bool bHasFocus = gtk_widget_has_focus(GTK_WIDGET(pThis->m_pFixedContainer));
+        pThis->CallCallbackExc(bHasFocus ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
+    }
 
     return false;
+}
+
+void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
+{
+    // change of focus between native widgets within the toplevel
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->CallCallbackExc(pWidget == GTK_WIDGET(pThis->m_pFixedContainer) ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
 }
 
 gboolean GtkSalFrame::signalMap(GtkWidget *, GdkEvent*, gpointer frame)
