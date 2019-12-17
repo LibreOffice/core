@@ -1879,8 +1879,8 @@ class SaveRunState
 {
 private:
     RtfAttributeOutput& m_rRtf;
-    RtfStringBuffer const m_Run;
-    RtfStringBuffer const m_RunText;
+    RtfStringBuffer m_Run;
+    RtfStringBuffer m_RunText;
     bool const m_bSingleEmptyRun;
     bool const m_bInRun;
 

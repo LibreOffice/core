@@ -2081,7 +2081,7 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
     m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_pPr, pParaProps);
     m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_rPr, pCharProps);
 
-    writerfilter::Reference<Properties>::Pointer_t const pProps(new RTFReferenceProperties(
+    writerfilter::Reference<Properties>::Pointer_t pProps(new RTFReferenceProperties(
         m_aStates.top().getTableAttributes(), m_aStates.top().getTableSprms()));
     return pProps;
 }
