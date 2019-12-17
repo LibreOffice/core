@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_b7c09252",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-17T16:40:24Z",
+      "side": 1,
+      "message": "I see your point. Let me object that one tests a series of failing conditions differently than successful conditions.\n\nReasons for coding this way here are:\no Resume Next resets Err object properties\no Resume Next resets Basic runtime Erl,Err,Error values\no I did not want to code a testlog_ASSERT_ERROR routine which is clearer but deviates from existing TestCases writing style.\n\nAs for the reliability of test cases. Consider that 4 builds FAIL as intended and please observe the next running conditions to make up your mind.",
+      "parentUuid": "5f7c97a3_869d2a5b",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_26a2169c",
         "filename": "basic/qa/vba_tests/Err.Raise.vb",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-16T15:14:02Z",
       "side": 1,
       "message": "No need in extra labels - they only distract from the real task. Additionally, it\u0027s enough to use a single common Resume after the end of the Select.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_f79a8a6c",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-17T16:40:24Z",
+      "side": 1,
+      "message": "I wanted ti highlight that Erl results are WEIRD. As this distracts Err.Raisetest cases, I\u0027ll remove Erl materiel as not justified in here.",
+      "parentUuid": "5f7c97a3_26a2169c",
       "range": {
         "startLine": 59,
         "startChar": 0,
@@ -87,6 +135,30 @@
         "startChar": 21,
         "endLine": 61,
         "endChar": 37
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_9789d627",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2019-12-17T16:40:24Z",
+      "side": 1,
+      "message": "see above\n\n**crossing fingers fot next patch**",
+      "parentUuid": "5f7c97a3_a6dce618",
+      "range": {
+        "startLine": 61,
+        "startChar": 40,
+        "endLine": 61,
+        "endChar": 45
       },
       "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
