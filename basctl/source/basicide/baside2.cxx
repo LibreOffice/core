@@ -834,7 +834,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     // nLinepPage is not correct if there's a line break
     sal_Int32 nLinespPage = aPaperSz.Height()/nLineHeight;
-    long nXTextWidth = pPrinter->approximate_char_width();
+    long nXTextWidth = pPrinter->approximate_digit_width();
 
     sal_Int32 nCharspLine = aPaperSz.Width() / std::max<long>(nXTextWidth, 1);
     const sal_uInt32 nParas = GetEditEngine()->GetParagraphCount();
