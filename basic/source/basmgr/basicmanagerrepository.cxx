@@ -204,8 +204,8 @@ namespace basic
     {
         ImplRepository* operator()()
         {
-            static ImplRepository* pRepository = new ImplRepository;
-            return pRepository;
+            static ImplRepository repository;
+            return &repository;
         }
     };
 
