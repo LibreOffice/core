@@ -170,7 +170,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="bibliographyentry|label1">Entry</property>
+                <property name="label" translatable="yes" context="bibliographyentry|label1">Bibliography Source</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -294,7 +294,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="bibliographyentry|label4">Layout</property>
+                <property name="label" translatable="yes" context="bibliographyentry|label4">Entry</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
