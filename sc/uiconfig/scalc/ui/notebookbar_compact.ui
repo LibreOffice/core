@@ -5086,7 +5086,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ManagedMenuButton" id="Insert-FieldButton:MenuField">
+                          <object class="svtlo-ManagedMenuButton" id="Insert-FieldButton:Menu Field">
                             <property name="label" translatable="yes" context="notebookbar_compact|FieldMenuButton">Fiel_d</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
