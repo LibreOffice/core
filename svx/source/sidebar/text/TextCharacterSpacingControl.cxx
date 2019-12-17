@@ -81,7 +81,7 @@ void TextCharacterSpacingControl::dispose()
     {
         SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
         css::uno::Sequence<css::beans::NamedValue> aSeq
-            { { "Spacing", css::uno::makeAny(OUString::number(GetLastCustomValue())) } };
+            { { "Spacing", css::uno::makeAny(OUString::number(mnCustomKern)) } };
         aWinOpt.SetUserData(aSeq);
     }
 

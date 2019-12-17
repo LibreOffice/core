@@ -76,8 +76,6 @@ public:
 
     // data access
     const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-    bool isTextAnimationAllowed() const { return mbTextAnimationAllowed; }
-    bool isGraphicAnimationAllowed() const { return mbGraphicAnimationAllowed; }
 };
 
 AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
@@ -103,8 +101,8 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
         {
             const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D& rSwitchPrimitive = static_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D& >(rCandidate);
 
-            if((rSwitchPrimitive.isTextAnimation() && isTextAnimationAllowed())
-                || (rSwitchPrimitive.isGraphicAnimation() && isGraphicAnimationAllowed()))
+            if((rSwitchPrimitive.isTextAnimation() && mbTextAnimationAllowed)
+                || (rSwitchPrimitive.isGraphicAnimation() && mbGraphicAnimationAllowed))
             {
                 const drawinglayer::primitive2d::Primitive2DReference xReference(const_cast< drawinglayer::primitive2d::BasePrimitive2D* >(&rCandidate));
                 maPrimitive2DSequence.push_back(xReference);

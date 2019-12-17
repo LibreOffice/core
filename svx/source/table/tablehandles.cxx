@@ -290,7 +290,6 @@ void TableBorderHdl::CreateB2dIAObject()
                     // this handle is also used when text edit *is* active for it. This
                     // interferes too much concerning repaint stuff (at least as long as
                     // text edit is not yet on the overlay)
-                    const bool bAnimate = getAnimate();
 
                     OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
                     float fScaleFactor = rOutDev.GetDPIScaleFactor();
@@ -299,7 +298,7 @@ void TableBorderHdl::CreateB2dIAObject()
                     std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
                         new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
                                                            aHilightColor, fTransparence,
-                                                           fWidth, 0.0, 0.0, bAnimate));
+                                                           fWidth, 0.0, 0.0, mbAnimate));
 
                     // OVERLAYMANAGER
                     insertNewlyCreatedOverlayObjectForSdrHdl(

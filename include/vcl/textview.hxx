@@ -59,7 +59,6 @@ private:
 public:
     explicit TETextDataObject( const OUString& rText );
 
-    OUString&        GetText() { return maText; }
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
     // css::uno::XInterface

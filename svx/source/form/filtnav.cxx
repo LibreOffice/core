@@ -1441,7 +1441,7 @@ SvTreeListEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 
 void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 {
-    const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
+    const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : m_pModel.get();
 
     // insert the item
     SvTreeListEntry* pParentEntry = FindEntry( pParent );

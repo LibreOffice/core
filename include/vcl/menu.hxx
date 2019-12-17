@@ -183,7 +183,6 @@ protected:
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() { return mpSalMenu.get(); }
-    SAL_DLLPRIVATE void ImplClearSalMenu();
     SAL_DLLPRIVATE OUString ImplGetHelpText( sal_uInt16 nItemId ) const;
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight

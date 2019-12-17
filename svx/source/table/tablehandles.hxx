@@ -74,7 +74,6 @@ public:
         bool bAnimate);
 
     virtual PointerStyle GetPointer() const override;
-    bool getAnimate() const { return mbAnimate; }
 
 protected:
     // create marker for this kind

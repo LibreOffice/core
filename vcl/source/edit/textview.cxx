@@ -80,7 +80,7 @@ css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFl
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SotClipboardFormatId::STRING )
     {
-        aAny <<= GetText();
+        aAny <<= maText;
     }
     else if ( nT == SotClipboardFormatId::HTML )
     {

@@ -124,7 +124,7 @@ namespace basegfx
             return false;
         }
 
-        return getBColor() == pCompare->getBColor() && getValue() == pCompare->getValue();
+        return maBColor == pCompare->maBColor && mfValue == pCompare->mfValue;
     }
 
     ::basegfx::BColor BColorModifier_interpolate::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
@@ -148,7 +148,7 @@ namespace basegfx
             return false;
         }
 
-        return getValue() == pCompare->getValue();
+        return mfValue == pCompare->mfValue;
     }
 
     ::basegfx::BColor BColorModifier_black_and_white::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
@@ -194,7 +194,7 @@ namespace basegfx
         }
 
         // getValue is sufficient, mfInvValue and mbUseIt are only helper values
-        return getValue() == pCompare->getValue();
+        return mfValue == pCompare->mfValue;
     }
 
     ::basegfx::BColor BColorModifier_gamma::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
@@ -274,11 +274,11 @@ namespace basegfx
         }
 
         // no need to compare other values, these are just helpers
-        return getRed() == pCompare->getRed()
-            && getGreen() == pCompare->getGreen()
-            && getBlue() == pCompare->getBlue()
-            && getLuminance() == pCompare->getLuminance()
-            && getContrast() == pCompare->getContrast();
+        return mfRed == pCompare->mfRed
+            && mfGreen == pCompare->mfGreen
+            && mfBlue == pCompare->mfBlue
+            && mfLuminance == pCompare->mfLuminance
+            && mfContrast == pCompare->mfContrast;
     }
 
     ::basegfx::BColor BColorModifier_RGBLuminanceContrast::getModifiedColor(const ::basegfx::BColor& aSourceColor) const

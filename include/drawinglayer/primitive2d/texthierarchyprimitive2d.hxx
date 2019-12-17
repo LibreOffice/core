@@ -175,7 +175,6 @@ namespace drawinglayer
 
             /// data read access
             FieldType getType() const { return meType; }
-            const std::vector< std::pair< OUString, OUString>>& getNameValue() const { return meNameValue; }
             OUString getValue(const OUString& rName) const;
 
             /// compare operator

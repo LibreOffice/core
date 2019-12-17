@@ -88,8 +88,6 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     void                Connect() { GetRealObject(); }
-
-    const OUString& getReferer() const { return rGrafObj.aReferer; }
 };
 
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
@@ -110,7 +108,7 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
         sfx2::LinkManager::GetDisplayNames( this, nullptr, &rGrafObj.aFileName, nullptr, &rGrafObj.aFilterName );
 
         Graphic aGraphic;
-        if (sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, getReferer(), aGraphic, nullptr))
+        if (sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, rGrafObj.aReferer, aGraphic, nullptr))
         {
             rGrafObj.ImpSetLinkedGraphic(aGraphic);
         }

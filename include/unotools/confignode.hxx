@@ -134,11 +134,6 @@ namespace utl
         css::uno::Sequence< OUString >
                             getNodeNames() const throw();
 
-        /** get the flag specifying the current escape behaviour
-            @see setEscape
-        */
-        bool    getEscape() const { return m_bEscapeNames; }
-
         /// invalidate the object
         virtual void clear() throw();
 

@@ -141,7 +141,7 @@ namespace drawinglayer
                 const TextHierarchyFieldPrimitive2D& rCompare = static_cast<const TextHierarchyFieldPrimitive2D&>(rPrimitive);
 
                 return (getType() == rCompare.getType()
-                    && getNameValue() == rCompare.getNameValue());
+                    && meNameValue == rCompare.meNameValue);
             }
 
             return false;
