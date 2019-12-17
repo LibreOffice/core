@@ -646,6 +646,33 @@ namespace emfplushelper
         }
     }
 
+    void EmfPlusHelperData::EMFPPlusFillPolygonSolidColor(const ::basegfx::B2DPolyPolygon& polygon, Color const& color)
+    {
+        if (color.GetTransparency() < 255)
+        {
+            if (color.GetTransparency() == 0)
+            {
+                // not transparent
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                polygon,
+                                color.getBColor()));
+            }
+            else
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                polygon,
+                                color.getBColor()));
+
+                mrTargetHolders.Current().append(
+                            std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
+                                color.GetTransparency() / 255.0));
+            }
+        }
+    }
+
     void EmfPlusHelperData::EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, const bool isColor, const sal_uInt32 brushIndexOrColor)
     {
         if (!polygon.count())
@@ -658,29 +685,7 @@ namespace emfplushelper
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
             const Color color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
-            if (color.GetTransparency() < 255)
-            {
-                if (color.GetTransparency() == 0)
-                {
-                    // not transparent
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
-                                    polygon,
-                                    color.getBColor()));
-                }
-                else
-                {
-                    const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                    polygon,
-                                    color.getBColor()));
-
-                    mrTargetHolders.Current().append(
-                                std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
-                                    drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                                    color.GetTransparency() / 255.0));
-                }
-            }
+            EMFPPlusFillPolygonSolidColor(polygon, color);
 
             mrPropertyHolders.Current().setFillColor(color.getBColor());
             mrPropertyHolders.Current().setFillColorActive(true);
@@ -698,7 +703,12 @@ namespace emfplushelper
             mrPropertyHolders.Current().setFillColorActive(false);
             mrPropertyHolders.Current().setLineColorActive(false);
 
-            if (brush->type == BrushTypeHatchFill)
+            if (brush->type == BrushTypeSolidColor)
+            {
+                Color fillColor = brush->solidColor;
+                EMFPPlusFillPolygonSolidColor(polygon, fillColor);
+            }
+            else if (brush->type == BrushTypeHatchFill)
             {
                 // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
                 // for the others the hatch "background" color (secondColor in brush) is used.
