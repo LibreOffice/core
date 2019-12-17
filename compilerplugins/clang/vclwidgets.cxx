@@ -690,6 +690,11 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
     if (pImplicitCastExpr->getCastKind() != CK_UserDefinedConversion) {
         return true;
     }
+    if (!loplugin::TypeCheck(pImplicitCastExpr->getSubExprAsWritten()->getType()).Class("VclPtr")
+        .GlobalNamespace())
+    {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning,
         "calling delete on instance of VclPtr, must rather call disposeAndClear()",

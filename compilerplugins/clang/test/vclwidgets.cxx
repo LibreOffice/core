@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <atomic>
+
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 
@@ -82,7 +84,15 @@ void bar3()
     p = get<Widget>();
 }
 
-
-
+void bar4() {
+    VclPtr<Widget> p1;
+    //TODO: one error should be enough here?
+    // expected-error@+2 {{calling delete on instance of VclReferenceBase subclass, must rather call disposeAndClear() [loplugin:vclwidgets]}}
+    // expected-error@+1 {{calling delete on instance of VclPtr, must rather call disposeAndClear() [loplugin:vclwidgets]}}
+    delete p1;
+    std::atomic<int *> p2;
+    // No false positive here:
+    delete p2;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
