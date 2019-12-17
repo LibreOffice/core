@@ -72,6 +72,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <unordered_map>
 
 #include <rdfhelper.hxx>
 #include <hints.hxx>
@@ -2662,7 +2663,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     bool bRet = false;
     typedef std::multimap< int, std::pair<SwTextAttr*, bool> > PortionMap;
     PortionMap aPortionMap;
-    std::map<int, bool> RsidOnlyAutoFormatFlagMap;
+    std::unordered_map<int, bool> RsidOnlyAutoFormatFlagMap;
     sal_Int32 nLastPorStart = COMPLETE_STRING;
     int nKey = 0;
 
@@ -2792,43 +2793,45 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                     // in the RSID, which should have no effect on text layout
                     if (RES_TXTATR_AUTOFMT == p1->Which())
                     {
-                        SfxItemSet set1(*p1->GetAutoFormat().GetStyleHandle());
-                        SfxItemSet set2(*p2->GetAutoFormat().GetStyleHandle());
-
-                        set1.ClearItem(RES_CHRATR_RSID);
-                        set2.ClearItem(RES_CHRATR_RSID);
+                        const SfxItemSet& rSet1 = *p1->GetAutoFormat().GetStyleHandle();
+                        const SfxItemSet& rSet2 = *p2->GetAutoFormat().GetStyleHandle();
 
                         // sadly SfxItemSet::operator== does not seem to work?
-                        SfxItemIter iter1(set1);
-                        SfxItemIter iter2(set2);
-                        if (set1.Count() == set2.Count())
+                        SfxItemIter iter1(rSet1);
+                        SfxItemIter iter2(rSet2);
+                        for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
+                                              * pItem2 = iter2.GetCurItem();
+                             pItem1 && pItem2;
+                             pItem1 = iter1.NextItem(),
+                             pItem2 = iter2.NextItem())
                         {
-                            for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
-                                                  * pItem2 = iter2.GetCurItem();
-                                 pItem1 && pItem2;
-                                 pItem1 = iter1.NextItem(),
-                                 pItem2 = iter2.NextItem())
+                            if (pItem1->Which() == RES_CHRATR_RSID)
+                                pItem1 = iter1.NextItem();
+                            if (pItem2->Which() == RES_CHRATR_RSID)
+                                pItem2 = iter2.NextItem();
+                            if (!pItem1 && !pItem2)
+                                break;
+                            if (!pItem1 || !pItem2)
                             {
-                                if (pItem1 != pItem2) // all are poolable
-                                {
-                                    assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
-                                    eMerge = DIFFER;
-                                    break;
-                                }
-                                if (iter1.IsAtEnd())
-                                {
-                                    assert(iter2.IsAtEnd());
-                                    eMerge = DIFFER_ONLY_RSID;
-                                }
+                                eMerge = DIFFER;
+                                break;
                             }
-                            if (DIFFER == eMerge)
-                                break; // outer loop too
+                            if (pItem1 != pItem2) // all are poolable
+                            {
+                                assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
+                                eMerge = DIFFER;
+                                break;
+                            }
+                            if (iter1.IsAtEnd() || iter2.IsAtEnd())
+                            {
+                                eMerge = DIFFER;
+                                break;
+                            }
                         }
+                        if (DIFFER == eMerge)
+                            break; // outer loop too
                         else
-                        {
-                            eMerge = DIFFER;
-                            break;
-                        }
+                            eMerge = DIFFER_ONLY_RSID;
                     }
                     else
                     {
