@@ -1771,40 +1771,13 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
 
 namespace {
 
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(new framework::Desktop(context))
-    {
-        instance->constructorInit();
-    }
-
-    rtl::Reference<framework::Desktop> instance;
-};
-
-struct InstanceInit {
-    Instance * operator() (css::uno::Reference<css::uno::XComponentContext> const& xContext) {
-        static Instance instance(xContext);
-        return &instance;
-    }
-};
-
-struct GetSolarMutex {
-    comphelper::SolarMutex * operator() ()
-    {
-        return &Application::GetSolarMutex();
-    }
-};
-
-Instance & getInstance(css::uno::Reference<css::uno::XComponentContext> const& xContext)
+rtl::Reference<framework::Desktop> createDesktop(
+    css::uno::Reference<css::uno::XComponentContext> const & context)
 {
-    // tdf#114025 init with SolarMutex to avoid deadlock
-    return *rtl_Instance<Instance,
-                         InstanceInit,
-                         osl::Guard<comphelper::SolarMutex>,
-                         GetSolarMutex,
-                         css::uno::Reference<css::uno::XComponentContext> const>
-                ::create(InstanceInit(), GetSolarMutex(), xContext);
+    SolarMutexGuard g; // tdf#114025 init with SolarMutex to avoid deadlock
+    rtl::Reference<framework::Desktop> desktop(new framework::Desktop(context));
+    desktop->constructorInit();
+    return desktop;
 }
 
 }
@@ -1814,7 +1787,8 @@ com_sun_star_comp_framework_Desktop_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(getInstance(context).instance.get());
+    static auto const instance = createDesktop(context);
+    return cppu::acquire(instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
