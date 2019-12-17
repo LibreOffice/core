@@ -850,6 +850,7 @@ void GtkSalFrame::InitCommon()
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), nullptr ));
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), 1, 1);
     gtk_container_add( GTK_CONTAINER(m_pEventBox), GTK_WIDGET(m_pFixedContainer) );
 
@@ -1926,7 +1927,9 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
     if( m_pWindow )
     {
         if( isChild( false ) )
-            gtk_widget_grab_focus( m_pWindow );
+        {
+            gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
+        }
         else if( IS_WIDGET_MAPPED( m_pWindow ) )
         {
             if (!(nFlags & SalFrameToTop::GrabFocusOnly))
@@ -2470,7 +2473,7 @@ namespace
     }
 }
 
-gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
 {
     UpdateLastInputEventTime(pEvent->time);
 
@@ -2478,14 +2481,20 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     GtkWidget* pEventWidget = pThis->getMouseEventWidget();
     bool bDifferentEventWindow = pEvent->window != widget_get_window(pEventWidget);
 
-    // tdf#120764 It isn't allowed under wayland to have two visible popups that share
-    // the same top level parent. The problem is that since gtk 3.24 tooltips are also
-    // implemented as popups, which means that we cannot show any popup if there is a
-    // visible tooltip. In fact, gtk will hide the tooltip by itself after this handler,
-    // in case of a button press event. But if we intend to show a popup on button press
-    // it will be too late, so just do it here:
     if (pEvent->type == GDK_BUTTON_PRESS)
+    {
+        // tdf#120764 It isn't allowed under wayland to have two visible popups that share
+        // the same top level parent. The problem is that since gtk 3.24 tooltips are also
+        // implemented as popups, which means that we cannot show any popup if there is a
+        // visible tooltip. In fact, gtk will hide the tooltip by itself after this handler,
+        // in case of a button press event. But if we intend to show a popup on button press
+        // it will be too late, so just do it here:
         pThis->HideTooltip();
+
+        // focus on click
+        if (!bDifferentEventWindow)
+            gtk_widget_grab_focus(GTK_WIDGET(pThis->m_pFixedContainer));
+    }
 
     SalMouseEvent aEvent;
     SalEvent nEventType = SalEvent::NONE;
@@ -3064,6 +3073,22 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
     UpdateLastInputEventTime(pEvent->time);
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    if (GTK_IS_WINDOW(pThis->m_pWindow))
+    {
+        GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
+        if (pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer))
+        {
+            gpointer pClass = g_type_class_ref(GTK_TYPE_WINDOW);
+            GtkWidgetClass* pWindowClass = GTK_WIDGET_CLASS(pClass);
+            // if the focus is not in our main widget, see if there is a handler
+            // for this key stroke in GtkWindow first
+            bool bHandled = pWindowClass->key_press_event(pThis->m_pWindow, pEvent);
+            g_type_class_unref(pClass);
+            if (bHandled)
+                return true;
+        }
+    }
 
     if (pThis->isFloatGrabWindow())
         return signalKey(pWidget, pEvent, pThis->m_pParent);
