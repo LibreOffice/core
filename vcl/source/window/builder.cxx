@@ -154,7 +154,7 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile)
 {
-    return SalInstance::CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,

@@ -13272,6 +13272,27 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile);
 }
 
+weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+{
+    // This will cause a GtkSalFrame to be created. With WB_SYSTEMCHILDWINDOW set it
+    // will create a toplevel GtkEventBox window
+//    auto xEmbedWindow = VclPtr<ChildFrame>::Create(pParent, WB_SYSTEMCHILDWINDOW | WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
+
+    SystemWindowData winData = {};
+    auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0, &winData, true);
+    xEmbedWindow->Show();
+
+    const SystemEnvData* pEnvData = xEmbedWindow->GetSystemData();
+    if (!pEnvData)
+        return nullptr;
+
+    GtkWidget *pWindow = static_cast<GtkWidget*>(pEnvData->pWidget);
+    gtk_widget_show_all(pWindow);
+
+    // build the widget tree as a child of the GtkEventBox GtkGrid parent
+    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile);
+}
+
 weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
 {
     GtkInstanceWidget* pParentInstance = dynamic_cast<GtkInstanceWidget*>(pParent);

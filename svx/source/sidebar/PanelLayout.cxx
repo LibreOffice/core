@@ -30,11 +30,18 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
 
     // VclBuilder will trigger resize and start Idle
     if (!bInterimBuilder)
+    {
         m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
+        if (GetSettings().GetStyleSettings().GetAutoMnemonic())
+           Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
+    }
     else
-        m_xBuilder.reset(Application::CreateInterimBuilder(this, rUIXMLDescription));
-    if (GetSettings().GetStyleSettings().GetAutoMnemonic())
-       Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
+    {
+        m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+        m_xVclContentArea->Show();
+        m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+        m_xContainer = m_xBuilder->weld_container(rID);
+    }
 }
 
 PanelLayout::~PanelLayout()
@@ -47,6 +54,7 @@ void PanelLayout::dispose()
     m_bInClose = true;
     m_aPanelLayoutIdle.Stop();
     m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
     disposeBuilder();
     Control::dispose();
 }
