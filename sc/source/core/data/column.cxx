@@ -2157,6 +2157,7 @@ class UpdateRefOnNonCopy
         // Run this before the position gets updated.
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnShift(*mpCxt, aOldPos);
 
+        bool bGroupShifted = false;
         if (pTop->UpdatePosOnShift(*mpCxt))
         {
             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -2172,6 +2173,15 @@ class UpdateRefOnNonCopy
 
             if (pCode->IsRecalcModeOnRefMove())
                 aRes.mbValueChanged = true;
+
+            // FormulaGroupAreaListener (contrary to ScBroadcastArea) is not
+            // updated but needs to be re-setup, else at least its mpColumn
+            // would indicate the old column to collect cells from. tdf#129396
+            /* TODO: investigate if that could be short-cut to avoid all the
+             * EndListeningTo() / StartListeningTo() overhead and is really
+             * only necessary when shifting the column, not also when shifting
+             * rows. */
+            bGroupShifted = true;
         }
         else if (aRes.mbReferenceModified && pCode->IsRecalcModeOnRefMove())
         {
@@ -2183,7 +2193,7 @@ class UpdateRefOnNonCopy
         if (aRes.mbNameModified)
             recompileTokenArray(*pTop);
 
-        if (aRes.mbReferenceModified || aRes.mbNameModified)
+        if (aRes.mbReferenceModified || aRes.mbNameModified || bGroupShifted)
         {
             sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
             aEndCxt.setPositionDelta(
