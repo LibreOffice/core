@@ -404,6 +404,8 @@ public:
     /// Tracks which text portion attributes are currently open: a which id -> open count map.
     std::map<sal_uInt16, int> maStartedAttributes;
 
+    OUString m_aRTFOLEMimeType;
+
     /// Construct an instance of SwHTMLWriter and optionally give it
     /// the filter options directly, which can also be set via SetupFilterOptions().
     explicit SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions = "" );

@@ -316,6 +316,8 @@ public:
 
     util::DateTime m_aDateTime;
 
+    uno::Sequence<beans::PropertyValue> m_aArgs;
+
     explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
     SfxMedium_Impl(const SfxMedium_Impl&) = delete;
@@ -3281,6 +3283,12 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     Init_Impl();
 }
 
+void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
+{
+    pImpl->m_aArgs = rArgs;
+}
+
+uno::Sequence<beans::PropertyValue> SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const SfxItemSet* p ) :
     pImpl(new SfxMedium_Impl)
