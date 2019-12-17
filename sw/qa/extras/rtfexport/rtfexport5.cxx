@@ -1151,11 +1151,11 @@ DECLARE_RTFEXPORT_TEST(testTdf128320, "tdf128320.odt")
     OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
 
     // There are some RTF tokens for shape props
-    // They are much more inside, but let's use \shpwr2 as an inducator
+    // They are much more inside, but let's use \shpwr2 as an indicator
     sal_Int32 nPos = aRtfContent.indexOf("\\shpwr2", 0);
     CPPUNIT_ASSERT(nPos > 0);
 
-    // It goes AFTER shape instruction (sadly here we do not check if it is contaned inside)
+    // It goes AFTER shape instruction (sadly here we do not check if it is contained inside)
     sal_Int32 nPosShp = aRtfContent.indexOf("\\shpinst", 0);
     CPPUNIT_ASSERT(nPosShp > 0);
 
