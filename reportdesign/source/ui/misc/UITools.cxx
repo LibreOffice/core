@@ -68,6 +68,7 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/memberids.h>
 #include <svx/xgrscit.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xtable.hxx>
