@@ -100,10 +100,11 @@ public:
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, std::unique_ptr<SfxPoolItem> pHt );
     SW_DLLPUBLIC ~SwFltStackEntry();
 
+    enum class RegionMode { NoCheck = 0, CheckNodes = 1<<0, CheckFieldmark = 1<<1 };
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const;
+    SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, RegionMode eCheck) const;
     SW_DLLPUBLIC static bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion,
-        bool bCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd=false,
+        RegionMode eCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd=false,
         sal_uInt16 nWhich=0);
 
     void SetStartCP(sal_Int32 nCP) {mnStartCP = nCP;}
@@ -113,6 +114,8 @@ public:
     bool IsParaEnd() const { return bIsParaEnd;}
     void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
 };
+
+template<> struct o3tl::typed_flags<SwFltStackEntry::RegionMode>: o3tl::is_typed_flags<SwFltStackEntry::RegionMode, 0x03> {};
 
 class SW_DLLPUBLIC SwFltControlStack
 {
