@@ -619,6 +619,8 @@ void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
     xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testProtectionKeyODS_UTF8SHA1()
@@ -640,6 +642,8 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA1()
     xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
@@ -661,6 +665,8 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
     xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
@@ -682,6 +688,8 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
     xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testProtectionKeyODS_XL_SHA1()
@@ -703,6 +711,8 @@ void ScExportTest::testProtectionKeyODS_XL_SHA1()
     xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='OX3WkEe79fv1PE+FUmfOLdwVoqI=' and @table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/legacy-hash-excel' and @loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='OX3WkEe79fv1PE+FUmfOLdwVoqI=' and @table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/legacy-hash-excel' and @loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testColorScaleExportODS()
@@ -801,6 +811,8 @@ void ScExportTest::testCommentExportXLSX()
     //tdf#117274 fix MSO interoperability with the secret VML shape type id
     assertXPath(pVmlDrawing, "/xml/v:shapetype", "id", "_x0000_t202");
     assertXPath(pVmlDrawing, "/xml/v:shape", "type", "#_x0000_t202");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testCommentExportXLSX_2_XLSX()
@@ -833,6 +845,8 @@ void ScExportTest::testCommentExportXLSX_2_XLSX()
     CPPUNIT_ASSERT(pVmlDrawing);
 
     assertXPath(pVmlDrawing, "/xml/v:shape/x:ClientData/x:Visible", 0);
+
+    xShell->DoClose();
 }
 
 #if HAVE_MORE_FONTS
@@ -906,6 +920,8 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "collapsed", "false");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customFormat", "false");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customHeight", "false");
+
+    xShell->DoClose();
 }
 #endif
 
@@ -931,6 +947,8 @@ void ScExportTest::testXfDefaultValuesXLSX()
 
     // We expected that exactly 15 cellXfs:xf Nodes will be produced
     assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf", 14);
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testColumnWidthResaveXLSX()
@@ -965,6 +983,8 @@ void ScExportTest::testColumnWidthResaveXLSX()
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col[5]", "customWidth", "true");
 
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 5);
+
+    xShell->DoClose();
 }
 
 #if HAVE_MORE_FONTS
@@ -1178,6 +1198,8 @@ void ScExportTest::testOutlineExportXLSX()
 
     // We expected that exactly 29 Row Nodes will be produced
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 29);
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testAllRowsHiddenXLSX()
@@ -1190,6 +1212,8 @@ void ScExportTest::testAllRowsHiddenXLSX()
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr", "zeroHeight", "true" );
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 0);
+
+    xOrigDocSh->DoClose();
 }
 
 void ScExportTest::testHiddenEmptyRowsXLSX()
@@ -1207,6 +1231,8 @@ void ScExportTest::testHiddenEmptyRowsXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "hidden", "false");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testLandscapeOrientationXLSX()
@@ -1222,6 +1248,8 @@ void ScExportTest::testLandscapeOrientationXLSX()
     // the usePrinterDefaults cannot be saved to allow opening sheets in Landscape mode via MS Excel
     assertXPathNoAttribute(pSheet, "/x:worksheet/x:pageSetup", "usePrinterDefaults");
     assertXPath(pSheet, "/x:worksheet/x:pageSetup", "orientation", "landscape");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testDataBarExportXLSX()
@@ -3055,6 +3083,8 @@ void ScExportTest::testCeilingFloorODSToXLSX()
 
     // there shouldn't be any defined names during export of FLOOR and CEILING functions to .xlsx
     assertXPath(pSheet, "/x:workbook/x:definedNames", 0);
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testCeilingFloorXLS()
@@ -3085,6 +3115,8 @@ void ScExportTest::testCustomXml()
 
     std::shared_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
+
+    xShell->DoClose();
 }
 
 #ifdef _WIN32
@@ -3122,6 +3154,8 @@ void ScExportTest::testRelativePathsODS()
 #endif
     // make sure that the URL is relative
     CPPUNIT_ASSERT(aURL.startsWith(".."));
+
+    xDocSh->DoClose();
 }
 
 namespace {
@@ -3397,6 +3431,8 @@ void ScExportTest::testAbsNamedRangeHTML()
     ScSingleRefData* pRef = pRangeData->GetCode()->FirstToken()->GetSingleRef();
     // see tdf#119141 for the reason why this isn't Sheet1.HTML_1
     CPPUNIT_ASSERT_MESSAGE("HTML_1 is an absolute reference",!pRef->IsTabRel());
+
+    xDocSh2->DoClose();
 }
 
 void ScExportTest::testSheetLocalRangeNameXLS()
@@ -3478,6 +3514,8 @@ void ScExportTest::testFontSizeXLSX()
                 "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "sz");
     // make sure that the font size is 18
     CPPUNIT_ASSERT_EQUAL(OUString("1800"), fontSize);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testSheetCharacterKerningSpaceXLSX()
@@ -3540,6 +3578,8 @@ void ScExportTest::testTextUnderlineColorXLSX()
     // It mean that color is automatic, should be the same color as the text.
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill", 0);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFillTx", 1);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testSheetRunParagraphPropertyXLSX()
@@ -3635,6 +3675,8 @@ void ScExportTest::testShapeAutofitXLSX()
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp/xdr:txBody/a:bodyPr/a:spAutoFit", 1);
     // TextAutoGrowHeight --> "Fit height to text" / "Resize shape to fit text" --> false
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp/xdr:txBody/a:bodyPr/a:noAutofit", 1);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testHyperlinkXLSX()
@@ -3645,6 +3687,8 @@ void ScExportTest::testHyperlinkXLSX()
     xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testMoveCellAnchoredShapesODS()
@@ -3949,6 +3993,8 @@ void ScExportTest::testTextDirectionXLSX()
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf88657ODS()
@@ -3960,6 +4006,8 @@ void ScExportTest::testTdf88657ODS()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//number:fraction", "min-denominator-digits", "3");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testConditionalFormatRangeListXLSX()
@@ -3971,6 +4019,8 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testConditionalFormatContainsTextXLSX()
@@ -3982,6 +4032,8 @@ void ScExportTest::testConditionalFormatContainsTextXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula", "NOT(ISERROR(SEARCH(\"test\",A1)))");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testConditionalFormatPriorityCheckXLSX()
@@ -4026,6 +4078,8 @@ void ScExportTest::testConditionalFormatPriorityCheckXLSX()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A1", bHighPriorityExtensionA1, nA1ExtPriority < nA1NormalPriority);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong priorities for A3", bHighPriorityExtensionA3, nA3ExtPriority < nA3NormalPriority);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testConditionalFormatOriginXLSX()
@@ -4039,6 +4093,8 @@ void ScExportTest::testConditionalFormatOriginXLSX()
     // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
     OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong origin address in formula", OUString("NOT(ISERROR(SEARCH(\"BAC\",B1)))"), aFormula);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testEscapeCharInNumberFormatXLSX()
@@ -4188,6 +4244,8 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     OUString aTargetFrameExport = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testOpenDocumentAsReadOnly()
@@ -4211,6 +4269,8 @@ void ScExportTest::testKeepSettingsOfBlankRows()
 
     // saved blank row with not default setting in A2
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf118990()
@@ -4251,6 +4311,8 @@ void ScExportTest::testTdf121612()
     ScDPCollection* pDPColl = rDoc.GetDPCollection();
     CPPUNIT_ASSERT(pDPColl);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testXltxExport()
@@ -4307,6 +4369,8 @@ void ScExportTest::testTdf114969XLSX()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "location", "'1.1.1.1'!C1");
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", "'1.1.1.1'!C2");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf115192XLSX()
@@ -4319,6 +4383,8 @@ void ScExportTest::testTdf115192XLSX()
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
     assertXPathNoAttribute(pDoc, "/r:Relationships/r:Relationship[@Id='rId2']", "TargetMode");
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode", "External");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf91634XLSX()
@@ -4335,6 +4401,8 @@ void ScExportTest::testTdf91634XLSX()
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "https://www.google.com/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf115159()
@@ -4429,6 +4497,8 @@ void ScExportTest::testTdf123645XLSX()
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "file:///C:/TEMP/test.xlsx");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "Target", "#Sheet2!A1");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId5']", "Target", "https://bugs.documentfoundation.org/show_bug.cgi?id=123645");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf125173XLSX()
@@ -4445,6 +4515,8 @@ void ScExportTest::testTdf125173XLSX()
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "http://www.google.com/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf79972XLSX()
@@ -4461,6 +4533,8 @@ void ScExportTest::testTdf79972XLSX()
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target", "https://bugs.documentfoundation.org/show_bug.cgi?id=79972");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf126024XLSX()
@@ -4477,6 +4551,8 @@ void ScExportTest::testTdf126024XLSX()
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target", "https://bugs.documentfoundation.org/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf126177XLSX()
@@ -4494,6 +4570,8 @@ void ScExportTest::testTdf126177XLSX()
     OUString aTarget = getXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target");
     CPPUNIT_ASSERT(aTarget.endsWith("test.xlsx"));
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testCommentTextVAlignment()
@@ -4510,6 +4588,8 @@ void ScExportTest::testCommentTextVAlignment()
     CPPUNIT_ASSERT(pVmlDrawing);
 
     assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextVAlign", "Center");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testCommentTextHAlignment()
@@ -4526,6 +4606,8 @@ void ScExportTest::testCommentTextHAlignment()
     CPPUNIT_ASSERT(pVmlDrawing);
 
     assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextHAlign", "Center");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testRotatedImageODS()
