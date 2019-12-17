@@ -698,7 +698,15 @@ namespace emfplushelper
             mrPropertyHolders.Current().setFillColorActive(false);
             mrPropertyHolders.Current().setLineColorActive(false);
 
-            if (brush->type == BrushTypeHatchFill)
+            if (brush->type == BrushTypeSolidColor)
+            {
+                Color fillColor = brush->solidColor;
+                mrTargetHolders.Current().append(
+                    std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                        polygon,
+                        fillColor.getBColor()));
+            }
+            else if (brush->type == BrushTypeHatchFill)
             {
                 // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
                 // for the others the hatch "background" color (secondColor in brush) is used.
