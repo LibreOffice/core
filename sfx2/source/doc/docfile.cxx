@@ -306,7 +306,6 @@ public:
     uno::Sequence < util::RevisionTag > aVersions;
 
     std::unique_ptr<::utl::TempFile> pTempFile;
-
     uno::Reference<embed::XStorage> xStorage;
     uno::Reference<embed::XStorage> m_xZipStorage;
     uno::Reference<io::XInputStream> m_xInputStreamToLoadFrom;
@@ -327,6 +326,8 @@ public:
     bool m_bHasEmbeddedObjects = false;
 
     util::DateTime m_aDateTime;
+
+    uno::Sequence<beans::PropertyValue> m_aArgs;
 
     explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
@@ -3301,6 +3302,12 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     Init_Impl();
 }
 
+void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
+{
+    pImpl->m_aArgs = rArgs;
+}
+
+uno::Sequence<beans::PropertyValue> SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const std::shared_ptr<SfxItemSet>& p ) :
     pImpl(new SfxMedium_Impl)
