@@ -43,6 +43,7 @@ namespace http_dav_ucp
 
 // struct ResultListEntry.
 
+namespace {
 
 struct ResultListEntry
 {
@@ -55,6 +56,7 @@ struct ResultListEntry
     explicit ResultListEntry( std::unique_ptr<ContentProperties> && pEntry ) : pData( std::move(pEntry) ) {}
 };
 
+}
 
 // ResultList.
 

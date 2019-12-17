@@ -109,10 +109,6 @@ void SerfUri::init( const apr_uri_t * pUri )
     }
 }
 
-SerfUri::~SerfUri( )
-{
-}
-
 void SerfUri::calculateURI ()
 {
     OUStringBuffer aBuf( mScheme );
@@ -183,7 +179,7 @@ OUString SerfUri::GetPathBaseName () const
         return aTemp;
     }
     else
-        return OUString("/");
+        return "/";
 }
 
 bool SerfUri::operator== ( const SerfUri & rOther ) const
