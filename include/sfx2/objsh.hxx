@@ -721,9 +721,15 @@ public:
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
     SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet );
     SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet );
-    SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName, SfxItemSet const & rItemSet);
-    SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet);
-    SAL_DLLPRIVATE bool CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet);
+    SAL_DLLPRIVATE bool
+    PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName,
+                     SfxItemSet const& rItemSet,
+                     const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet,
+                                       const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    SAL_DLLPRIVATE bool
+    CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet,
+                      const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
     SAL_DLLPRIVATE bool GeneralInit_Impl(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     bool bTypeMustBeSetAlready );

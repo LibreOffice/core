@@ -3304,6 +3304,11 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     Init_Impl();
 }
 
+void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
+{
+    pImpl->m_aArgs = rArgs;
+}
+
 uno::Sequence<beans::PropertyValue> SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const std::shared_ptr<SfxItemSet>& p ) :
