@@ -7714,18 +7714,13 @@ _ACEOF
                 ;;
         esac
         if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
-            JAVA_HOME_OK="NO"
+            AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
+            AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
+            AC_MSG_WARN([in case JAVA_HOME is incorrectly set, some projects will not be built correctly])
+            add_warning "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script"
+            add_warning "attempted to find JAVA_HOME automatically, but apparently it failed"
+            add_warning "in case JAVA_HOME is incorrectly set, some projects will not be built correctly"
         fi
-    elif test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" = "x"; then
-        JAVA_HOME_OK="NO"
-    fi
-    if test "$JAVA_HOME_OK" = "NO"; then
-        AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
-        AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
-        AC_MSG_WARN([in case JAVA_HOME is incorrectly set, some projects will not be built correctly])
-        add_warning "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script"
-        add_warning "attempted to find JAVA_HOME automatically, but apparently it failed"
-        add_warning "in case JAVA_HOME is incorrectly set, some projects will not be built correctly"
     fi
     PathFormat "$JAVA_HOME"
     JAVA_HOME="$formatted_path"
