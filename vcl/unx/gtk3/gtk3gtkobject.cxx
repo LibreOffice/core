@@ -107,7 +107,7 @@ GtkSalObject::~GtkSalObject()
 void GtkSalObject::ResetClipRegion()
 {
     if( m_pSocket )
-        gdk_window_shape_combine_region( widget_get_window(m_pSocket), nullptr, 0, 0 );
+        gdk_window_shape_combine_region( gtk_widget_get_window(m_pSocket), nullptr, 0, 0 );
 }
 
 void GtkSalObject::BeginSetClipRegion( sal_uInt32 )
@@ -131,7 +131,7 @@ void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
 void GtkSalObject::EndSetClipRegion()
 {
     if( m_pSocket )
-        gdk_window_shape_combine_region( widget_get_window(m_pSocket), m_pRegion, 0, 0 );
+        gdk_window_shape_combine_region( gtk_widget_get_window(m_pSocket), m_pRegion, 0, 0 );
 }
 
 void GtkSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
