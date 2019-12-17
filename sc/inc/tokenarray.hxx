@@ -22,6 +22,7 @@
 
 #include <formula/token.hxx>
 #include <rtl/ref.hxx>
+#include "document.hxx"
 #include "scdllapi.h"
 #include "types.hxx"
 #include "calcmacros.hxx"
@@ -44,7 +45,6 @@ class ColRowReorderMapType;
 struct ScRawToken;
 struct ScSingleRefData;
 struct ScComplexRefData;
-struct ScSheetLimits;
 
 class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaTokenArray
 {
