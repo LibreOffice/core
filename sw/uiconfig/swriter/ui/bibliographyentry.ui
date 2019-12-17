@@ -132,7 +132,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="frombibliography">
-                        <property name="label" translatable="yes" context="bibliographyentry|frombibliography">From bibliography database</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|frombibliography">Bibliography Database</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -148,7 +148,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="fromdocument">
-                        <property name="label" translatable="yes" context="bibliographyentry|fromdocument">From document content</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|fromdocument">Document Content</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -170,7 +170,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="bibliographyentry|label1">Entry</property>
+                <property name="label" translatable="yes" context="bibliographyentry|label1">Bibliography Source</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -294,7 +294,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="bibliographyentry|label4">Layout</property>
+                <property name="label" translatable="yes" context="bibliographyentry|label4">Entry</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
