@@ -162,6 +162,8 @@ class GtkSalFrame final : public SalFrame
     };
     friend struct IMHandler;
 
+    friend class GtkSalObjectWidgetClip;
+
     SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
     GtkHeaderBar*                   m_pHeaderBar;
