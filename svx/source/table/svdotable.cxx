@@ -410,6 +410,9 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         mxTable.clear();
     }
 
+    // tdf#127481: reset active cell reference
+    mxActiveCell.clear();
+
     // copy TableStyle (short internal data)
     maTableStyle = rSource.maTableStyle;
 
