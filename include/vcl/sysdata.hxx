@@ -181,6 +181,7 @@ struct SystemWindowData
     // Nothing
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used
+    bool            bClipUsingNativeWidget; // default is false, true will attempt to clip the childwindow with a native widget
 #endif
 };
 
