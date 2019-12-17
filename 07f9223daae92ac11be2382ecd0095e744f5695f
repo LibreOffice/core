@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_69e9bf7e",
+        "filename": "sw/source/uibase/inc/conttree.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-12-17T07:54:02Z",
+      "side": 0,
+      "message": "I think it should say \"idled\" as it stops the idle handler.\n\nThis comment should be moved inside the method as it describes its implementation.",
+      "range": {
+        "startLine": 219,
+        "startChar": 36,
+        "endLine": 219,
+        "endChar": 43
+      },
+      "revId": "07f9223daae92ac11be2382ecd0095e744f5695f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
