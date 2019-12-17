@@ -409,6 +409,8 @@ public:
     /// Tracks which text portion attributes are currently open: a which id -> open count map.
     std::map<sal_uInt16, int> maStartedAttributes;
 
+    OUString m_aRTFOLEMimeType;
+
     explicit SwHTMLWriter( const OUString& rBaseURL );
     virtual ~SwHTMLWriter() override;
 

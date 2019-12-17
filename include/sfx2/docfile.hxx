@@ -123,6 +123,7 @@ public:
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
+    void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
     css::uno::Sequence<css::beans::PropertyValue> GetArgs() const;
     void                Close();
     void                CloseAndRelease();

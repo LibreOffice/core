@@ -259,7 +259,8 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_PRINTOUT, bPrinting ) );
 }
 
-bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet)
+bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet,
+                                    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     bool bOk = false;
 
@@ -304,7 +305,7 @@ bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItem
             if ( pDocTitleItem )
                 getDocProperties()->setTitle( pDocTitleItem->GetValue() );
 
-            bOk = CommonSaveAs_Impl(INetURLObject(aFileName), aFilterName, rItemSet);
+            bOk = CommonSaveAs_Impl(INetURLObject(aFileName), aFilterName, rItemSet, rArgs);
         }
     }
 

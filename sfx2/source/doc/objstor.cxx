@@ -2577,7 +2577,9 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     return bSaved;
 }
 
-bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet)
+bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName,
+                                       SfxItemSet& rItemSet,
+                                       const uno::Sequence<beans::PropertyValue>& rArgs)
 {
     if( aURL.HasError() )
     {
@@ -2652,7 +2654,8 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     if ( IsDocShared() )
         aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName, rItemSet))
+    if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName,
+                         rItemSet, rArgs))
     {
         // Update Data on media
         SfxItemSet *pSet = GetMedium()->GetItemSet();
@@ -2716,7 +2719,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         return false;
 }
 
-bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName, SfxItemSet& rItemSet)
+bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName, SfxItemSet& rItemSet, const uno::Sequence<beans::PropertyValue>& rArgs)
 {
     // copy all items stored in the itemset of the current medium
     SfxAllItemSet* pMergedParams = new SfxAllItemSet( *pMedium->GetItemSet() );
@@ -2752,6 +2755,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
     // create a medium for the target URL
     SfxMedium *pNewFile = new SfxMedium( rFileName, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, nullptr, pMergedParams );
+    pNewFile->SetArgs(rArgs);
 
     const SfxBoolItem* pNoFileSync = pMergedParams->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
     if (pNoFileSync && pNoFileSync->GetValue())

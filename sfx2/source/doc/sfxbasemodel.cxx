@@ -3008,7 +3008,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_xDocumentProperties = xNewDocProps;
         }
 
-        bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl(sURL, *pItemSet);
+        bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl(sURL, *pItemSet, seqArguments);
 
         if ( bCopyTo )
         {
