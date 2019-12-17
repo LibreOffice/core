@@ -231,7 +231,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bCreationDate )
             {
-                    propertyNames.push_back( DAVProperties::CREATIONDATE );
+                propertyNames.push_back( DAVProperties::CREATIONDATE );
                 bCreationDate = true;
             }
         }
@@ -240,7 +240,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bLastModified )
             {
-                    propertyNames.push_back(
+                propertyNames.push_back(
                     DAVProperties::GETLASTMODIFIED );
                 bLastModified = true;
             }
@@ -250,7 +250,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bContentType )
             {
-                    propertyNames.push_back(
+                propertyNames.push_back(
                         DAVProperties::GETCONTENTTYPE );
                 bContentType = true;
             }
@@ -260,7 +260,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bContentLength )
             {
-                    propertyNames.push_back(
+                propertyNames.push_back(
                     DAVProperties::GETCONTENTLENGTH );
                 bContentLength = true;
             }
@@ -272,7 +272,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bResourceType )
             {
-                    propertyNames.push_back( DAVProperties::RESOURCETYPE );
+                propertyNames.push_back( DAVProperties::RESOURCETYPE );
                 bResourceType = true;
             }
         }

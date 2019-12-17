@@ -46,7 +46,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         SerfUri aURI( inUri );
 
         std::unique_ptr< DAVSession > xElement(
-            new SerfSession( this, inUri, *m_xProxyDecider.get() ) );
+            new SerfSession( this, inUri, *m_xProxyDecider ) );
 
         aIt = m_aMap.emplace(  inUri, xElement.get() ).first;
         aIt->second->m_aContainerIt = aIt;
@@ -69,7 +69,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // call a little:
         SerfUri aURI( inUri );
 
-        aIt->second = new SerfSession( this, inUri, *m_xProxyDecider.get() );
+        aIt->second = new SerfSession( this, inUri, *m_xProxyDecider );
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }

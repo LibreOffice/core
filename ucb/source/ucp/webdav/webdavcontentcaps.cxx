@@ -275,10 +275,10 @@ uno::Sequence< beans::Property > Content::getProperties(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         bTransient = m_bTransient;
-        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
         if ( m_xCachedProps.get() )
             xCachedProps.reset(
-                new ContentProperties( *m_xCachedProps.get() ) );
+                new ContentProperties( *m_xCachedProps ) );
         xProvider.set( m_pProvider );
     }
 

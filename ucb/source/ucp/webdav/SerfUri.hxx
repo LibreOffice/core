@@ -54,7 +54,6 @@ class SerfUri
         explicit SerfUri( const OUString & inUri );
         /// @throws DAVException
         explicit SerfUri( const apr_uri_t * inUri );
-        ~SerfUri( );
 
         bool operator== ( const SerfUri & rOther ) const;
         bool operator!= ( const SerfUri & rOther ) const

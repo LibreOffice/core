@@ -110,7 +110,7 @@ private:
     bool
     exchangeIdentity( const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
 
-    const OUString
+    OUString
     getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess );
 
     /// @throws css::uno::Exception
