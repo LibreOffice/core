@@ -216,7 +216,7 @@ void Menu::dispose()
     mpLayoutData.reset();
 
     // Native-support: destroy SalMenu
-    ImplClearSalMenu();
+    mpSalMenu.reset();
 
     pStartedFrom.clear();
     pWindow.clear();
@@ -2296,11 +2296,6 @@ OUString Menu::GetAccessibleName( sal_uInt16 nItemId ) const
         return pData->aAccessibleName;
 
     return OUString();
-}
-
-void Menu::ImplClearSalMenu()
-{
-    mpSalMenu.reset();
 }
 
 void Menu::GetSystemMenuData( SystemMenuData* pData ) const

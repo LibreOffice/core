@@ -38,8 +38,6 @@ public:
     virtual ~TextCharacterSpacingControl() override;
     virtual void dispose() override;
 
-    long  GetLastCustomValue() const { return mnCustomKern;}
-
 private:
     VclPtr<MetricField> maEditKerning;
 

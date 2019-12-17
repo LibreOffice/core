@@ -200,10 +200,6 @@ namespace basegfx
 
         virtual ~BColorModifier_interpolate() override;
 
-        // data access
-        const ::basegfx::BColor& getBColor() const { return maBColor; }
-        double getValue() const { return mfValue; }
-
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;
 
@@ -229,9 +225,6 @@ namespace basegfx
         }
 
         virtual ~BColorModifier_black_and_white() override;
-
-        // data access
-        double getValue() const { return mfValue; }
 
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -259,9 +252,6 @@ namespace basegfx
         BColorModifier_gamma(double fValue);
 
         virtual ~BColorModifier_gamma() override;
-
-        // data access
-        double getValue() const { return mfValue; }
 
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -298,13 +288,6 @@ namespace basegfx
         BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast);
 
         virtual ~BColorModifier_RGBLuminanceContrast() override;
-
-        // data access
-        double getRed() const { return mfRed; }
-        double getGreen() const { return mfGreen; }
-        double getBlue() const { return mfBlue; }
-        double getLuminance() const { return mfLuminance; }
-        double getContrast() const { return mfContrast; }
 
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;

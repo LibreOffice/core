@@ -161,7 +161,7 @@ namespace utl
     OUString OConfigurationNode::normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const
     {
         OUString sName(_rName);
-        if (getEscape())
+        if (m_bEscapeNames)
         {
             Reference< XStringEscape > xEscaper(m_xDirectAccess, UNO_QUERY);
             if (xEscaper.is() && !sName.isEmpty())

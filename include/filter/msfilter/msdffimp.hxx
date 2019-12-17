@@ -289,7 +289,6 @@ public:
     virtual ~SvxMSDffImportData() override;
     bool empty() const { return m_Records.empty(); }
     void insert(std::unique_ptr<SvxMSDffImportRec> pImpRec);
-    void unmap(const SdrObject* pObj) { m_ObjToRecMap.erase(pObj); }
     size_t size() const { return m_Records.size(); }
     SvxMSDffImportRec* find(const SdrObject* pObj);
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }

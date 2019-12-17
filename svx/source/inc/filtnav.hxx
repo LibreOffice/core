@@ -247,7 +247,6 @@ public:
             const css::uno::Reference< css::container::XIndexAccess > & xControllers,
             const css::uno::Reference< css::form::runtime::XFormController > & xCurrent
         );
-    const FmFilterModel* GetFilterModel() const {return m_pModel.get();}
 
 private:
 

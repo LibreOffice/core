@@ -435,7 +435,6 @@ public:
     // data read access
     const sdr::overlay::OverlaySelection* getOverlaySelection() const { return mpOverlaySelection; }
     const OutlinerView& getOutlinerView() const { return mrOutlinerView; }
-    bool getVisualizeSurroundingFrame() const { return mbVisualizeSurroundingFrame; }
 
     /// override to check conditions for last createOverlayObjectPrimitive2DSequence
     virtual drawinglayer::primitive2d::Primitive2DContainer
@@ -453,7 +452,7 @@ TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
     drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
     /// outer frame visualization
-    if (getVisualizeSurroundingFrame())
+    if (mbVisualizeSurroundingFrame)
     {
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
         const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);

@@ -5161,7 +5161,7 @@ void SvxMSDffImportData::NotifyFreeObj(SdrObject* pObj)
 {
     if (SvxMSDffImportRec* pRecord = find(pObj))
     {
-        unmap(pObj);
+        m_ObjToRecMap.erase(pObj);
         pRecord->pObj = nullptr;
     }
 }
