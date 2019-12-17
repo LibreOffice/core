@@ -201,9 +201,6 @@ namespace o3tl
 #define HEADERBAR_ITEM_NOTFOUND     (sal_uInt16(0xFFFF))
 #define HEADERBAR_FULLSIZE          (long(1000000000))
 
-#define HEADERBAR_TEXTOFF           2
-
-
 class VCL_DLLPUBLIC HeaderBar : public vcl::Window
 {
 private:
