@@ -1102,7 +1102,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             }
             else
             {
-                // is cursor at a mispelled word ?
+                // is cursor at a misspelled word ?
                 Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
 
