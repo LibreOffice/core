@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_72f768f7",
+        "filename": "scaddins/inc/pricing.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-17T23:55:58Z",
+      "side": 1,
+      "message": "In other functions\u0027 parameter names we do not use underscores anymore to \"separate\" words, see sc/inc/scfuncs.hrc\n\nI suggest to eliminate them here as well when already touching the file anyway.",
+      "range": {
+        "startLine": 35,
+        "startChar": 40,
+        "endLine": 35,
+        "endChar": 52
+      },
+      "revId": "3040df42d387578ccd29657549b4cf0a3316ee0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
