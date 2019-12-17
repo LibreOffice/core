@@ -1152,9 +1152,9 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
     {
         m_pWindow = gtk_plug_new_for_display( getGdkDisplay(), pSysData->aWindow );
-        widget_set_can_default( m_pWindow, true );
-        widget_set_can_focus( m_pWindow, true );
-        gtk_widget_set_sensitive( m_pWindow, true );
+        gtk_widget_set_can_default(m_pWindow, true);
+        gtk_widget_set_can_focus(m_pWindow, true);
+        gtk_widget_set_sensitive(m_pWindow, true);
     }
     else
     {
