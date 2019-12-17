@@ -11,10 +11,10 @@
 BLACK_LIST="python.exe"
 
 # List files here where it's ok for this script to find more than one
-# occurence in the build tree. Files _not_ included here will generate
+# occurrence in the build tree. Files _not_ included here will generate
 # an error, if duplicates are found.
 #
-# Same format as for BLACK_LIST above above
+# Same format as for BLACK_LIST above
 MOREPDBS_OKLIST="libcurl.dll"
 
 
