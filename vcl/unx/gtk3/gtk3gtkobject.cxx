@@ -156,6 +156,22 @@ void GtkSalObject::Show( bool bVisible )
     }
 }
 
+Size GtkSalObject::GetOptimalSize() const
+{
+    if (m_pSocket)
+    {
+        bool bVisible = gtk_widget_get_visible(m_pSocket);
+        if (!bVisible)
+            gtk_widget_set_visible(m_pSocket, true);
+        GtkRequisition size;
+        gtk_widget_get_preferred_size(m_pSocket, nullptr, &size);
+        if (!bVisible)
+            gtk_widget_set_visible(m_pSocket, false);
+        return Size(size.width, size.height);
+    }
+    return Size();
+}
+
 const SystemEnvData* GtkSalObject::GetSystemData() const
 {
     return &m_aSystemData;
