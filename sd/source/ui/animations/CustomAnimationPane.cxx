@@ -161,10 +161,10 @@ void CustomAnimationPane::initialize()
     mpLBAnimation->SetSelectHdl(LINK(this, CustomAnimationPane, AnimationSelectHdl));
     get(mpCustomAnimationList, "custom_animation_list");
     mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
-    mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_char_width() * 16);
+    mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_digit_width() * 15);
     mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 8);
 
-    mpLBAnimation->set_width_request(mpLBAnimation->approximate_char_width() * 16);
+    mpLBAnimation->set_width_request(mpLBAnimation->approximate_digit_width() * 15);
     mpLBAnimation->set_height_request(mpLBAnimation->GetTextHeight() * 8);
 
     get(mpPBMoveUp, "move_up");

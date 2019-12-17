@@ -605,7 +605,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
 
     std::vector<int> aWidths;
     aWidths.push_back(0);
-    int nPadding = m_xHeaderTree->get_approximate_digit_width() * 2;
+    int nPadding = m_xHeaderTree->approximate_digit_width() * 2;
     for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
     {
         OUString sTitle(m_xHeaderTree->get_column_title(i + 1));
@@ -3650,8 +3650,8 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 {
     std::vector<long> aWidths;
 
-    long nStandardColMinWidth = approximate_char_width() * 16;
-    long nYesNoWidth = approximate_char_width() * 5;
+    long nStandardColMinWidth = approximate_digit_width() * 15;
+    long nYesNoWidth = approximate_digit_width() * 5;
     nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sYes));
     nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sNo));
     for (sal_uInt16 i = 1; i < 6; i++)
