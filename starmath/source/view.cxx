@@ -923,7 +923,7 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 Size SmViewShell::GetTextLineSize(OutputDevice const & rDevice, const OUString& rLine)
 {
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
-    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_char_width() * 8;
+    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
 
     if (nTabPos)
     {
@@ -1005,7 +1005,7 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
 void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
 {
     Point aPoint(rPosition);
-    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_char_width() * 8;
+    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
 
     if (nTabPos)
     {

@@ -1140,7 +1140,6 @@ public:
         See also GetTextBoundRect() for more explanation + code examples.
     */
     long                        GetTextHeight() const;
-    float                       approximate_char_width() const;
     float                       approximate_digit_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
@@ -1177,6 +1176,7 @@ protected:
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
     static
     SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE float        approximate_char_width() const;
 private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
