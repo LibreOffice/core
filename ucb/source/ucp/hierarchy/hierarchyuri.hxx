@@ -25,10 +25,6 @@
 namespace hierarchy_ucp {
 
 
-#define HIERARCHY_URL_SCHEME          "vnd.sun.star.hier"
-#define HIERARCHY_URL_SCHEME_LENGTH   17
-
-
 class HierarchyUri
 {
     mutable OUString m_aUri;
