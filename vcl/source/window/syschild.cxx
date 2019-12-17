@@ -140,6 +140,13 @@ void SystemChildWindow::EnableEraseBackground( bool bEnable )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
 }
 
+Size SystemChildWindow::GetOptimalSize() const
+{
+    if (mpWindowImpl->mpSysObj)
+        return mpWindowImpl->mpSysObj->GetOptimalSize();
+    return vcl::Window::GetOptimalSize();
+}
+
 void SystemChildWindow::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs)
 {
     if (mpWindowImpl->mpSysObj)
