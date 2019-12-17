@@ -1011,6 +1011,18 @@ DECLARE_OOXMLEXPORT_TEST(testSingleCellTableBorders, "tdf124399_SingleCellTableB
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRightBorder, "tdf129442_RightBorder.docx")
+{
+    // tdf#129442: Right border of a one column table was missing.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // If the right border is missing like in the bug, then there is a <w:right w:val="nil" /> tag in tcBorders.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:tcPr/w:tcBorders/w:end [@w:val = 'nil']", 0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
