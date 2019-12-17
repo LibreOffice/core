@@ -65,7 +65,6 @@
 #define SV_PRINT_NOCOLLATE_BMP                       "vcl/res/ncollate.png"
 
 #define MAINAPP_48_8                                 "res/mainapp_48_8.png"
-#define MAINAPP_48_8                                 "res/mainapp_48_8.png"
 #define ODT_48_8                                     "res/odt_48_8.png"
 #define OTT_48_8                                     "res/ott_48_8.png"
 #define ODS_48_8                                     "res/ods_48_8.png"
@@ -75,9 +74,7 @@
 #define ODM_48_8                                     "res/odm_48_8.png"
 #define ODB_48_8                                     "res/odb_48_8.png"
 #define ODF_48_8                                     "res/odf_48_8.png"
-#define MAINAPP_48_8                                 "res/mainapp_48_8.png"
 
-#define MAINAPP_32_8                                 "res/mainapp_32_8.png"
 #define MAINAPP_32_8                                 "res/mainapp_32_8.png"
 #define ODT_32_8                                     "res/odt_32_8.png"
 #define OTT_32_8                                     "res/ott_32_8.png"
@@ -88,9 +85,7 @@
 #define ODM_32_8                                     "res/odm_32_8.png"
 #define ODB_32_8                                     "res/odb_32_8.png"
 #define ODF_32_8                                     "res/odf_32_8.png"
-#define MAINAPP_32_8                                 "res/mainapp_32_8.png"
 
-#define MAINAPP_16_8                                 "res/mainapp_16_8.png"
 #define MAINAPP_16_8                                 "res/mainapp_16_8.png"
 #define ODT_16_8                                     "res/odt_16_8.png"
 #define OTT_16_8                                     "res/ott_16_8.png"
@@ -101,7 +96,6 @@
 #define ODM_16_8                                     "res/odm_16_8.png"
 #define ODB_16_8                                     "res/odb_16_8.png"
 #define ODF_16_8                                     "res/odf_16_8.png"
-#define MAINAPP_16_8                                 "res/mainapp_16_8.png"
 
 //start, Throbber::getDefaultImageURLs
 #define SPINNER_16_01                                "vcl/res/spinner-16-01.png"
