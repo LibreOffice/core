@@ -1049,9 +1049,9 @@ static void lcl_AddRangeAndStyle(
 
 
 //define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
-#define DEFAULT_FRAME_MIN_WIDTH 0
-#define DEFAULT_FRAME_MIN_HEIGHT 0
-#define DEFAULT_VALUE 0
+static constexpr sal_Int32 DEFAULT_FRAME_MIN_WIDTH = 0;
+static constexpr sal_Int32 DEFAULT_FRAME_MIN_HEIGHT = 0;
+static constexpr sal_Int32 DEFAULT_VALUE = 0;
 
 void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
@@ -4006,8 +4006,8 @@ void DomainMapper_Impl::handleAuthor
     if (rFirstParam.isEmpty())
         return;
 
-    #define SET_ARABIC      0x01
-    #define SET_DATE        0x04
+    constexpr sal_uInt8 SET_ARABIC = 0x01;
+    constexpr sal_uInt8 SET_DATE = 0x04;
     struct DocPropertyMap
     {
         const sal_Char* pDocPropertyName;
@@ -4089,10 +4089,6 @@ void DomainMapper_Impl::handleAuthor
             SetNumberFormat( pContext->GetCommand(), xFieldProperties );
         }
     }
-
-
-#undef SET_ARABIC
-#undef SET_DATE
 }
 
 static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
