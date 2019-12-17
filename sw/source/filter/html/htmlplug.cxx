@@ -1513,6 +1513,12 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
     SwDocShell* pDocSh = rHTMLWrt.m_pDoc->GetDocShell();
     bool bObjectOpened = false;
+    OUString aRTFType = "text/rtf";
+    if (!rHTMLWrt.m_aRTFOLEMimeType.isEmpty())
+    {
+        aRTFType = rHTMLWrt.m_aRTFOLEMimeType;
+    }
+
     if (rHTMLWrt.mbXHTML && pDocSh)
     {
         // Map native data to an outer <object> element.
@@ -1543,7 +1549,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 if (SwReqIfReader::WrapOleInRtf(*pStream, aOutStream, *pOLENd))
                 {
                     // Data always wrapped in RTF.
-                    aFileType = "text/rtf";
+                    aFileType = aRTFType;
                 }
             }
         }
@@ -1562,7 +1568,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             if (SwReqIfReader::WrapOleInRtf(aMemory, aOutStream, *pOLENd))
             {
                 // Data always wrapped in RTF.
-                aFileType = "text/rtf";
+                aFileType = aRTFType;
             }
         }
         else
@@ -1589,6 +1595,10 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             uno::Reference<beans::XPropertySet> xOutStreamProps(xInStream, uno::UNO_QUERY);
             if (xOutStreamProps.is())
                 xOutStreamProps->getPropertyValue("MediaType") >>= aFileType;
+            if (!aRTFType.isEmpty())
+            {
+                aFileType = aRTFType;
+            }
         }
         aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
 
