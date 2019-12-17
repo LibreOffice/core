@@ -121,16 +121,16 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     // #TODO need to manually adjust nEndPos ( and nEndPara ) to cater for any paragraphs
     sal_Int32 nLastParaLoc = -1;
     sal_Int32 nSearchIndex = maText.indexOf( '\n' );
-    sal_Int32 nParaOccurence = 0;
+    sal_Int32 nParaOccurrence = 0;
     while ( nSearchIndex != -1 )
     {
         nLastParaLoc = nSearchIndex;
-        ++nParaOccurence;
+        ++nParaOccurrence;
         rSelection.nEndPos = 0;
         nSearchIndex = maText.indexOf( '\n', nSearchIndex + 1);
     }
 
-    rSelection.nEndPara += nParaOccurence;
+    rSelection.nEndPara += nParaOccurrence;
     if ( nLastParaLoc != -1 )
     {
         rSelection.nEndPos = maText.getLength() - 1 - nLastParaLoc;
