@@ -24,7 +24,6 @@
 #include <cstring>
 #include <typeinfo>
 
-#include <cxxabi.h>
 #include <dlfcn.h>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -135,8 +134,8 @@ std::type_info * getRtti(typelib_TypeDescription const & type) {
 }
 
 extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
-    abi_aarch64::__cxa_exception * header =
-        static_cast<abi_aarch64::__cxa_exception *>(exception) - 1;
+    __cxxabiv1::__cxa_exception * header =
+        static_cast<__cxxabiv1::__cxa_exception *>(exception) - 1;
     OUString unoName(toUnoName(header->exceptionType->name()));
     typelib_TypeDescription * td = 0;
     typelib_typedescription_getByName(&td, unoName.pData);
@@ -224,7 +223,7 @@ StructKind getStructKind(typelib_CompoundTypeDescription const * type) {
 namespace abi_aarch64 {
 
 void mapException(
-    __cxa_exception * exception, std::type_info const * type, uno_Any * any, uno_Mapping * mapping)
+    __cxxabiv1::__cxa_exception * exception, std::type_info const * type, uno_Any * any, uno_Mapping * mapping)
 {
     assert(exception != 0);
     assert(type != nullptr);
