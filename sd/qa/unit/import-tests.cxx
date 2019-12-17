@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <config_features.h>
 #include <config_poppler.h>
 #include <ostream>
 #include <sdpage.hxx>
@@ -142,7 +145,9 @@ public:
     void testBnc862510_6();
     void testBnc862510_7();
 #if ENABLE_PDFIMPORT
+#if HAVE_FEATURE_PDFIUM
     void testPDFImportShared();
+#endif
 #if defined(IMPORT_PDF_ELEMENTS)
     void testPDFImport();
     void testPDFImportSkipImages();
@@ -237,7 +242,9 @@ public:
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
 #if ENABLE_PDFIMPORT
+#if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testPDFImportShared);
+#endif
 #if defined(IMPORT_PDF_ELEMENTS)
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
