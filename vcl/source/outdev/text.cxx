@@ -48,6 +48,7 @@
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
 #include <impglyphitem.hxx>
+#include <boost/optional.hpp>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
@@ -1189,7 +1190,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         const sal_Unicode* pBase = rStr.getStr();
         const sal_Unicode* pStr = pBase + nMinIndex;
         const sal_Unicode* pEnd = pBase + nEndIndex;
-        OUStringBuffer sTmpStr(rStr);
+        boost::optional<OUStringBuffer> xTmpStr;
         for( ; pStr < pEnd; ++pStr )
         {
             // TODO: are there non-digit localizations?
@@ -1198,11 +1199,16 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                 // translate characters to local preference
                 sal_UCS4 cChar = GetLocalizedChar( *pStr, meTextLanguage );
                 if( cChar != *pStr )
+                {
+                    if (!xTmpStr)
+                        xTmpStr = OUStringBuffer(rStr);
                     // TODO: are the localized digit surrogates?
-                    sTmpStr[pStr - pBase] = cChar;
+                    (*xTmpStr)[pStr - pBase] = cChar;
+                }
             }
         }
-        rStr = sTmpStr.makeStringAndClear();
+        if (xTmpStr)
+            rStr = (*xTmpStr).makeStringAndClear();
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
