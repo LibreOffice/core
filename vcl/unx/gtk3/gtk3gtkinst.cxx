@@ -241,11 +241,13 @@ SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, SalFrame
     return new GtkSalFrame( pParentData );
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* /*pWindowData*/, bool bShow )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
 {
     EnsureInit();
     //FIXME: Missing CreateObject functionality ...
-    return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
+    if (pWindowData && pWindowData->bClipUsingNativeWidget)
+        return new GtkSalObjectWidgetClip(static_cast<GtkSalFrame*>(pParent), bShow);
+    return new GtkSalObject(static_cast<GtkSalFrame*>(pParent), bShow);
 }
 
 extern "C"
@@ -13275,6 +13277,27 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile);
+}
+
+weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+{
+    // Create a foreign window which we know is a GtkGrid and make the native widgets a child of that, so we can
+    // support GtkWidgets within a vcl::Window
+    SystemWindowData winData = {};
+    winData.bClipUsingNativeWidget = true;
+    auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0, &winData, true);
+    xEmbedWindow->Show();
+    xEmbedWindow->set_expand(true);
+
+    const SystemEnvData* pEnvData = xEmbedWindow->GetSystemData();
+    if (!pEnvData)
+        return nullptr;
+
+    GtkWidget *pWindow = static_cast<GtkWidget*>(pEnvData->pWidget);
+    gtk_widget_show_all(pWindow);
+
+    // build the widget tree as a child of the GtkEventBox GtkGrid parent
+    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile);
 }
 
 weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)

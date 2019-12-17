@@ -296,23 +296,14 @@ namespace pcr
 
     std::unique_ptr<weld::Builder> PropertyHandlerHelper::makeBuilder(const OUString& rUIFile, const Reference<XComponentContext>& rContext)
     {
-        bool bInterimBuilder(true);
-        Any aReturn = rContext->getValueByName("InterimBuilder");
-        aReturn >>= bInterimBuilder;
-
         Reference<XWindow> xWindow(rContext->getValueByName("BuilderParent"), UNO_QUERY_THROW);
         weld::TransportAsXWindow& rTunnel = dynamic_cast<weld::TransportAsXWindow&>(*xWindow);
-
-        // bInterimBuilder for the hosted in sidebar in basic IDE case
-        if (!bInterimBuilder)
-            return std::unique_ptr<weld::Builder>(Application::CreateBuilder(rTunnel.getWidget(), rUIFile));
-        return std::unique_ptr<weld::Builder>(Application::CreateInterimBuilder(rTunnel.getWidget(), rUIFile));
+        return std::unique_ptr<weld::Builder>(Application::CreateBuilder(rTunnel.getWidget(), rUIFile));
     }
 
-    void PropertyHandlerHelper::setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent, bool bInterimBuilder)
+    void PropertyHandlerHelper::setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
-        xName->insertByName("InterimBuilder", makeAny(bInterimBuilder));
         Reference<XWindow> xWindow(new weld::TransportAsXWindow(pParent));
         xName->insertByName("BuilderParent", makeAny(xWindow));
     }
@@ -320,7 +311,6 @@ namespace pcr
     void PropertyHandlerHelper::clearBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
-        xName->removeByName("InterimBuilder");
         xName->removeByName("BuilderParent");
     }
 

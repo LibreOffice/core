@@ -59,7 +59,6 @@ namespace pcr
         sal_uInt16                  m_nNextId;
         Link<LinkParamNone*,void>   m_aPageActivationHandler;
         bool                        m_bHasHelpSection;
-        bool                        m_bInterimBuilder;
         sal_Int32                   m_nMinHelpLines;
         sal_Int32                   m_nMaxHelpLines;
 
@@ -68,7 +67,7 @@ namespace pcr
         std::map<sal_uInt16, PropertyPage> m_aHiddenPages;
 
     public:
-        explicit OPropertyEditor(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder, bool bInterimBuilder);
+        explicit OPropertyEditor(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyEditor();
 
         void                        SetLineListener( IPropertyLineListener* );

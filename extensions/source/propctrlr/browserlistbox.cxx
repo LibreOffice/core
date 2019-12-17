@@ -298,7 +298,7 @@ namespace pcr
         }
     }
 
-    OBrowserListBox::OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer, bool bInterimBuilder)
+    OBrowserListBox::OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer)
         : m_xScrolledWindow(rBuilder.weld_scrolled_window("scrolledwindow"))
         , m_xLinesPlayground(rBuilder.weld_container("playground"))
         , m_xSizeGroup(rBuilder.create_size_group())
@@ -308,7 +308,6 @@ namespace pcr
         , m_pControlObserver( nullptr )
         , m_nTheNameSize(0)
         , m_nRowHeight(0)
-        , m_bInterimBuilder(bInterimBuilder)
         , m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
         m_xScrolledWindow->set_size_request(-1, m_xScrolledWindow->get_text_height() * 20);
@@ -465,8 +464,7 @@ namespace pcr
     {
         // create a new line
         BrowserLinePointer pBrowserLine(new OBrowserLine(rPropertyData.sName, m_xLinesPlayground.get(),
-                                                         m_xSizeGroup.get(), m_pInitialControlParent,
-                                                         m_bInterimBuilder));
+                                                         m_xSizeGroup.get(), m_pInitialControlParent));
 
         // check that the name is unique
         for (auto const& line : m_aLines)

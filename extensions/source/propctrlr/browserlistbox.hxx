@@ -84,7 +84,6 @@ namespace pcr
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
         int                         m_nRowHeight;
-        bool                        m_bInterimBuilder;
         ::rtl::Reference< PropertyControlContext_Impl >
                                     m_pControlContextImpl;
 
@@ -92,7 +91,7 @@ namespace pcr
         void    ShowEntry(sal_uInt16 nPos);
 
     public:
-        explicit OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer, bool bInterimBuilder);
+        explicit OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer);
         ~OBrowserListBox();
 
         void                        SetListener( IPropertyLineListener* _pListener );

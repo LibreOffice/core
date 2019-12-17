@@ -31,7 +31,7 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
 
-    OPropertyEditor::OPropertyEditor(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder, bool bInterimBuilder)
+    OPropertyEditor::OPropertyEditor(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder)
         : m_xContainer(rBuilder.weld_container("box"))
         , m_xTabControl(rBuilder.weld_notebook("tabcontrol"))
         , m_xControlHoldingParent(rBuilder.weld_container("controlparent")) // controls initially have this parent before they are moved
@@ -40,11 +40,10 @@ namespace pcr
         , m_pObserver(nullptr)
         , m_nNextId(1)
         , m_bHasHelpSection(false)
-        , m_bInterimBuilder(bInterimBuilder)
         , m_nMinHelpLines(0)
         , m_nMaxHelpLines(0)
     {
-        PropertyHandlerHelper::setBuilderParent(rContext, m_xControlHoldingParent.get(), bInterimBuilder);
+        PropertyHandlerHelper::setBuilderParent(rContext, m_xControlHoldingParent.get());
 
         m_xTabControl->connect_leave_page(LINK(this, OPropertyEditor, OnPageDeactivate));
         m_xTabControl->connect_enter_page(LINK(this, OPropertyEditor, OnPageActivate));
@@ -127,7 +126,7 @@ namespace pcr
         m_xTabControl->append_page(sIdent, rText);
 
         // create a new page
-        auto xPage = std::make_unique<OBrowserPage>(m_xTabControl->get_page(sIdent), m_xControlHoldingParent.get(), m_bInterimBuilder);
+        auto xPage = std::make_unique<OBrowserPage>(m_xTabControl->get_page(sIdent), m_xControlHoldingParent.get());
         xPage->SetPageTitle(rText);
         // some knittings
         xPage->getListBox().SetListener(m_pListener);

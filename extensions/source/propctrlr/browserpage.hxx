@@ -36,8 +36,8 @@ namespace pcr
         OUString m_aPageTitle;
 
     public:
-        // if bInterimBuilder wasn't needed this could inherit from BuilderPage
-        explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer, bool bInterimBuilder);
+        // TODO inherit from BuilderPage
+        explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
         ~OBrowserPage();
 
         void SetPageTitle(const OUString& rPageTitle) { m_aPageTitle = rPageTitle; }

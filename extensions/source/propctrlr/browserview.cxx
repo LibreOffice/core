@@ -29,8 +29,8 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    OPropertyBrowserView::OPropertyBrowserView(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder, bool bInterimBuilder)
-        : m_xPropBox(new OPropertyEditor(rContext, rBuilder, bInterimBuilder))
+    OPropertyBrowserView::OPropertyBrowserView(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder)
+        : m_xPropBox(new OPropertyEditor(rContext, rBuilder))
         , m_nActivePage(0)
     {
         m_xPropBox->SetHelpId(HID_FM_PROPDLG_TABCTR);
