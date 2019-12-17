@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_ca46cf50",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1002273
+      },
+      "writtenOn": "2019-12-17T07:15:27Z",
+      "side": 1,
+      "message": "Looks like this is a gcc-only method, any ideas what to use to make this cross-platform compatible?",
+      "revId": "385f3b72efb4982bc3045dcce461443486a0f0a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
