@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_495c034b",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-17T10:17:39Z",
+      "side": 1,
+      "message": "I agree.  Have attempted to follow the same approach as other tips with a dialog box.  (and a cool tip)",
+      "parentUuid": "5f7c97a3_e9470fbc",
+      "range": {
+        "startLine": 95,
+        "startChar": 158,
+        "endLine": 95,
+        "endChar": 161
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_0945abb3",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-17T07:07:10Z",
       "side": 1,
       "message": "At some point we should try to shorten those long breadcrumbs by dropping \"More Fields\" or everything until Image.",
+      "range": {
+        "startLine": 103,
+        "startChar": 92,
+        "endLine": 103,
+        "endChar": 155
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_8c0d4939",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-17T10:17:39Z",
+      "side": 1,
+      "message": "The problem (and solution) is similar to the previous one -- where dialog box choices were presented as \"menu items\".  \n\nHave also modified the beginning of the tip to make it more clear why it is interesting.  And dropped the last part about clicking on the image (in part because it should be obvious and in part because of the principle about not having work flow).  This technique also works with regular documents.",
+      "parentUuid": "5f7c97a3_0945abb3",
       "range": {
         "startLine": 103,
         "startChar": 92,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_8c74699b",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-17T10:17:39Z",
+      "side": 1,
+      "message": "I think there is a mistake in this one.  I could not see \"Ruler\", only \"Vertical Ruler\"  and \"Horizontal Ruler\" under Tools \u003e Options \u003e (x)Writer \u003e View  -- and could not find Right-aligned.  Can you see how to repair?  Seems like a good intention for a tip, but not good to give wrong information. Advice?",
+      "parentUuid": "5f7c97a3_690d3f8f",
+      "range": {
+        "startLine": 129,
+        "startChar": 121,
+        "endLine": 129,
+        "endChar": 189
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_89121bb1",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 6
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_8ca9c9e0",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-17T10:17:39Z",
+      "side": 1,
+      "message": "The decision was to follow the appearance of the dialog box, but I am not opposed to changing it back.   (Also, this one is another case where User Data and First/last name are not menu items, but dialog box -- but I have not changed it, because it should be clear enough.)",
+      "parentUuid": "5f7c97a3_89121bb1",
+      "range": {
+        "startLine": 151,
+        "startChar": 231,
+        "endLine": 151,
+        "endChar": 232
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_29274715",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 6
@@ -128,6 +224,30 @@
       "writtenOn": "2019-12-17T07:07:10Z",
       "side": 1,
       "message": "This is a sequence not a breadcrumb. We could use dashes.",
+      "range": {
+        "startLine": 161,
+        "startChar": 109,
+        "endLine": 161,
+        "endChar": 185
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_4cc2d187",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2019-12-17T10:17:39Z",
+      "side": 1,
+      "message": "Have added \"Calc\" (because of our experience that people do not always notice the icon) and used en-dash (U+2013).  (I could not see that this is mentioned in the online help -- maybe it should also be in help -- and not just a tip!)",
+      "parentUuid": "5f7c97a3_29274715",
       "range": {
         "startLine": 161,
         "startChar": 109,
