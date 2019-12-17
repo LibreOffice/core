@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_e9470fbc",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T07:07:10Z",
+      "side": 1,
+      "message": "This one is questionable. Maybe ...select the style, and use Find All to finally read the number...",
+      "range": {
+        "startLine": 95,
+        "startChar": 158,
+        "endLine": 95,
+        "endChar": 161
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_0945abb3",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T07:07:10Z",
+      "side": 1,
+      "message": "At some point we should try to shorten those long breadcrumbs by dropping \"More Fields\" or everything until Image.",
+      "range": {
+        "startLine": 103,
+        "startChar": 92,
+        "endLine": 103,
+        "endChar": 155
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_690d3f8f",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T07:07:10Z",
+      "side": 1,
+      "message": "one more",
+      "range": {
+        "startLine": 129,
+        "startChar": 121,
+        "endLine": 129,
+        "endChar": 189
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_c91813d5",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T07:07:10Z",
+      "side": 1,
+      "message": "Another long breadcrumb",
+      "range": {
+        "startLine": 129,
+        "startChar": 55,
+        "endLine": 129,
+        "endChar": 110
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_89121bb1",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T07:07:10Z",
+      "side": 1,
+      "message": "Would have kept this uppercase",
+      "range": {
+        "startLine": 151,
+        "startChar": 231,
+        "endLine": 151,
+        "endChar": 232
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_29274715",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-12-17T07:07:10Z",
+      "side": 1,
+      "message": "This is a sequence not a breadcrumb. We could use dashes.",
+      "range": {
+        "startLine": 161,
+        "startChar": 109,
+        "endLine": 161,
+        "endChar": 185
+      },
+      "revId": "4db2cc7f19458c30a0652a4f7ff1e3cef407818e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
