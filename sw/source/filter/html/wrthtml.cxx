@@ -81,6 +81,7 @@
 #include <osl/file.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/tempfile.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -187,6 +188,15 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 
     const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
     SetupFilterOptions(sFilterOptions);
+
+    comphelper::SequenceAsHashMap aStoreMap(rMedium.GetArgs());
+    auto it = aStoreMap.find("RTFOLEMimeType");
+    if (it == aStoreMap.end())
+    {
+        return;
+    }
+
+    it->second >>= m_aRTFOLEMimeType;
 }
 
 void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
