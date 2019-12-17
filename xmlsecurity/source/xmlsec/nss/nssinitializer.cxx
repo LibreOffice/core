@@ -25,7 +25,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/types.h>
-#include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
@@ -157,35 +156,6 @@ salhelper::SingletonRef<InitNSSPrivate>* getInitNSSPrivate()
 }
 
 bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init );
-
-struct InitNSSInitialize
-{
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
-    explicit InitNSSInitialize(const css::uno::Reference<css::uno::XComponentContext> &rxContext)
-        : m_xContext(rxContext)
-    {
-    }
-
-    bool * operator()()
-        {
-            static bool bInitialized = false;
-            bool bNSSInit = false;
-            bInitialized = nsscrypto_initialize( m_xContext, bNSSInit );
-            if (bNSSInit)
-                atexit(nsscrypto_finalize );
-            return & bInitialized;
-        }
-};
-
-struct GetNSSInitStaticMutex
-{
-    ::osl::Mutex* operator()()
-    {
-        static ::osl::Mutex aNSSInitMutex;
-        return &aNSSInitMutex;
-    }
-};
 
 #ifdef XMLSEC_CRYPTO_NSS
 
@@ -504,8 +474,15 @@ ONSSInitializer::~ONSSInitializer()
 
 bool ONSSInitializer::initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
-    return *rtl_Instance< bool, InitNSSInitialize, ::osl::MutexGuard, GetNSSInitStaticMutex >
-                ::create( InitNSSInitialize( rxContext ), GetNSSInitStaticMutex() );
+    static bool gbInitialized = [&rxContext]()
+        {
+            bool bNSSInit = false;
+            bool bInitialized = nsscrypto_initialize( rxContext, bNSSInit );
+            if (bNSSInit)
+                atexit(nsscrypto_finalize);
+            return bInitialized;
+        }();
+    return gbInitialized;
 }
 
 css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer::getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams )
