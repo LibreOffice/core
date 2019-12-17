@@ -587,6 +587,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(defaultFileName);
+        input.requestFocus();
+        input.selectAll();
         builder.setView(input);
 
         builder.setPositiveButton(R.string.action_create, new DialogInterface.OnClickListener() {
