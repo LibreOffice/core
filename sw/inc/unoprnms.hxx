@@ -388,7 +388,6 @@
 #define UNO_NAME_HEADER_HEIGHT "HeaderHeight"
 #define UNO_NAME_HEADER_IS_ON "HeaderIsOn"
 #define UNO_NAME_FOOTER_BACK_COLOR "FooterBackColor"
-#define UNO_NAME_FOOTER_GRAPHIC "FooterBackGraphic"
 #define UNO_NAME_FOOTER_BACK_TRANSPARENT "FooterBackTransparent"
 #define UNO_NAME_FOOTER_LEFT_BORDER "FooterLeftBorder"
 #define UNO_NAME_FOOTER_RIGHT_BORDER "FooterRightBorder"
