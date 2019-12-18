@@ -1565,8 +1565,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         m_xDoc->getIDocumentState().ResetModified();
 }
 
-ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
-                    SwgReaderOption const & rOpt, bool bUnoCall )
+ErrCode SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall)
 {
     ErrCode nErr = ERRCODE_NONE;
 
@@ -1575,6 +1574,8 @@ ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
 
     // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, StreamMode::STD_READ );
+    if (rURL == "private:stream")
+        aMed.setStreamToLoadFrom(rOpt.GetInputStream(), true);
     std::shared_ptr<const SfxFilter> pFlt;
     aMatcher.DetectFilter( aMed, pFlt );
     if(!pFlt)
