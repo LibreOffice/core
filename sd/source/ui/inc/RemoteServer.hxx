@@ -27,8 +27,6 @@ namespace com { namespace sun { namespace star { namespace uno { template <class
 */
 #define PORT 1599
 
-#define CHARSET RTL_TEXTENCODING_UTF8
-
 namespace sd
 {
     class Communicator;

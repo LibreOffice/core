@@ -13,7 +13,6 @@
 #include <osl/socket_decl.hxx>
 #include <vector>
 
-#define CHARSET RTL_TEXTENCODING_UTF8
 #define MAX_LINE_LENGTH 20000
 
 namespace sd
