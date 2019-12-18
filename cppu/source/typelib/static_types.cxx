@@ -273,7 +273,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
 
 void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
+    typelib_TypeClass eTypeClass, const char * pTypeName )
     SAL_THROW_EXTERN_C()
 {
     if (! *ppRef)
@@ -326,7 +326,7 @@ namespace {
 
 void init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
+    typelib_TypeClass eTypeClass, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
     sal_Bool const * pParameterizedTypes)
@@ -408,7 +408,7 @@ void init(
 
 void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
+    typelib_TypeClass eTypeClass, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
@@ -417,7 +417,7 @@ void SAL_CALL typelib_static_compound_type_init(
 }
 
 void SAL_CALL typelib_static_struct_type_init(
-    typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference ** ppRef, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
     sal_Bool const * pParameterizedTypes )
@@ -430,7 +430,7 @@ void SAL_CALL typelib_static_struct_type_init(
 
 void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
+    const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
     SAL_THROW_EXTERN_C()
 {
@@ -441,7 +441,7 @@ void SAL_CALL typelib_static_interface_type_init(
 
 void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
+    const char * pTypeName,
     sal_Int32 nBaseTypes,
     typelib_TypeDescriptionReference ** ppBaseTypes )
     SAL_THROW_EXTERN_C()
@@ -505,7 +505,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
 
 void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
+    const char * pTypeName,
     sal_Int32 nDefaultValue )
     SAL_THROW_EXTERN_C()
 {

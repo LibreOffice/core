@@ -34,9 +34,9 @@ typedef std::unordered_map< OUString, std::pair< OUString, OUString > > EventsHa
 
 struct EventDisplayName
 {
-    const sal_Char* pAsciiEventName;
+    const char* pAsciiEventName;
     const char*     pEventResourceID;
-    EventDisplayName(const sal_Char* pAsciiName, const char* pResId)
+    EventDisplayName(const char* pAsciiName, const char* pResId)
         : pAsciiEventName(pAsciiName)
         , pEventResourceID(pResId)
     {

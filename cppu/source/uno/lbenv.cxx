@@ -626,7 +626,7 @@ uno_DefaultEnvironment::~uno_DefaultEnvironment()
 
 
 void writeLine(
-    void * stream, const sal_Char * pLine, const sal_Char * pFilter )
+    void * stream, const char * pLine, const char * pFilter )
 {
     if (pFilter && *pFilter)
     {
@@ -670,7 +670,7 @@ void writeLine(
 
 
 void writeLine(
-    void * stream, const OUString & rLine, const sal_Char * pFilter )
+    void * stream, const OUString & rLine, const char * pFilter )
 {
     OString aLine( OUStringToOString(
                               rLine, RTL_TEXTENCODING_ASCII_US ) );
@@ -680,7 +680,7 @@ void writeLine(
 }
 
 extern "C" void SAL_CALL uno_dumpEnvironment(
-    void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
+    void * stream, uno_Environment * pEnv, const char * pFilter )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( pEnv, "### null ptr!" );
@@ -762,7 +762,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
 
 extern "C" void SAL_CALL uno_dumpEnvironmentByName(
-    void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
+    void * stream, rtl_uString * pEnvDcp, const char * pFilter )
     SAL_THROW_EXTERN_C()
 {
     uno_Environment * pEnv = nullptr;

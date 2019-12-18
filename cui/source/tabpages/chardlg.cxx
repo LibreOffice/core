@@ -537,7 +537,7 @@ void SvxCharNamePage::FillStyleBox_Impl(const weld::Widget& rNameBox)
         // additional entries for the search:
         // "not bold" and "not italic"
         OUString aEntry = m_pImpl->m_aNoStyleText;
-        const sal_Char sS[] = "%1";
+        const char sS[] = "%1";
         aEntry = aEntry.replaceFirst( sS, pFontList->GetBoldStr() );
         m_pImpl->m_nExtraEntryPos = pStyleBox->get_count();
         pStyleBox->append_text( aEntry );

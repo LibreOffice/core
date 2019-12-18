@@ -2002,7 +2002,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
 extern "C" void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
-    const sal_Char * pTypeName )
+    const char * pTypeName )
     SAL_THROW_EXTERN_C()
 {
     OUString aTypeName( OUString::createFromAscii( pTypeName ) );

@@ -41,8 +41,8 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 
-const sal_Char cIsKernAsianPunctuation[] = "IsKernAsianPunctuation";
-const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";
+const char cIsKernAsianPunctuation[] = "IsKernAsianPunctuation";
+const char cCharacterCompressionType[] = "CharacterCompressionType";
 
 namespace {
 

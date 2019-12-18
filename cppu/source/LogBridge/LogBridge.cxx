@@ -139,7 +139,7 @@ bool LogBridge::v_isValid(OUString * pReason)
                SAL_INFO("cppu.log", "" << *static_cast<sal_Int8*>(pArg));
                 break;
             case typelib_TypeClass_CHAR:
-               SAL_INFO("cppu.log", "" << *static_cast<sal_Char*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<char*>(pArg));
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:

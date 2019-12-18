@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, weld::Button&, void)
     DisableClose( false );
     if( ExecutableDialogResults::OK == nResult )
     {
-        sal_Char const  sSlash[] = "/";
+        char const  sSlash[] = "/";
 
         INetURLObject   aURL( aStrURL, INetProtocol::File );
         OUString        aStrName;

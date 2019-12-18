@@ -25,8 +25,8 @@
 #include <hldoctp.hxx>
 #include <hlmarkwn_def.hxx>
 
-sal_Char const sHash[]          = "#";
-sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
+char const sHash[]          = "#";
+char const sFileScheme[]    = INET_FILE_SCHEME;
 
 /*************************************************************************
 |*
