@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_b2c0a052",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-18T06:13:26Z",
+      "side": 1,
+      "message": "Don\u0027t check Err.Number to decide what to check: you need to choose testing values (including Err.Number) depending on an independent variable set before Raise! Like\n\n    Sub TestErrRaise(TestName As String, CurErrNo As Long, CurErrSource As String, CurErrDescription As String)\n      result \u003d result \u0026 TestName \u0026 vbNewLine\n      Dim origPassCount As Integer, origFailCount As Integer\n      origPassCount \u003d passCount\n      origFailCount \u003d failCount\n      On Error Goto catch\n      Err.Raise(CurErrNo, CurErrSource, CurErrDescription, \"\", \"\")\n      result \u003d result \u0026 \"Testing after error handler\" \u0026 vbNewLine\n      TestLog_ASSERT (passCount + failCount) \u003e (origPassCount + origFailCount), TestName, \"error handler did not execute!\"\n      TestLog_ASSERT Erl \u003d 0, TestName, \"Erl \u003d \" \u0026 Erl\n      TestLog_ASSERT Err \u003d 0, TestName, \"Err \u003d \" \u0026 Err\n      TestLog_ASSERT Error \u003d \"\", TestName, \"Error \u003d \" \u0026 Error\n      TestLog_ASSERT Err.Description \u003d \"\", TestName, \"Err.Description \u003d \"\u0026 Err.Description\n      TestLog_ASSERT Err.Number \u003d 0, TestName, \"Err.Number \u003d \" \u0026 Err.Number\n      TestLog_ASSERT Err.Source \u003d \"\", TestName, \"Err.Source \u003d \" \u0026 Err.Source\n\n    catch:\n      result \u003d result \u0026 \"Testing in error handler\" \u0026 vbNewLine\n      TestLog_ASSERT Err.Number \u003d CurErrNo, TestName, \"Err.Number \u003d \" \u0026 Err.Number\n      TestLog_ASSERT Err.Source \u003d CurErrSource, TestName, \"Err.Source \u003d \" \u0026 Err.Source\n      TestLog_ASSERT Err.Description \u003d CurErrDescription, TestName, \"Err.Description \u003d \" \u0026 Err.Description\n      REM Also test Erl, Err, Error here - it\u0027s useful!\n\n      Resume Next \u0027 Err object properties reset from here …\n    End Sub\n\n    Sub ERR_TestCases()\n      \u0027\u0027\u0027 Raise a User-Defined Errors as Int32 \u0027\u0027\u0027\n      passCount \u003d 0\n      failCount \u003d 0\n\n      result \u003d \"Test Results\" \u0026 vbNewLine \u0026 \"\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\" \u0026 vbNewLine\n\n      TestErrRaise(\"Positive custom error test\", 1789, \"\", \"User-Defined Error Number\")\n      TestErrRaise(\"Negative custom error test\", -1793, \"ERR.Raise_TestCases\", \"Negative User-Defined Error Number\")\n    End Sub",
+      "range": {
+        "startLine": 53,
+        "startChar": 16,
+        "endLine": 53,
+        "endChar": 26
+      },
+      "revId": "61a35135ae808d92179067ed73d2bc8a4ad6a434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_72ba08df",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-18T06:13:26Z",
+      "side": 1,
+      "message": "This test didn\u0027t make sense in your code: you only test it in \"Select Case Err.Number : Case 1789\", which implies that this test always passes - which confirms my idea that you should not switch on the Err.Number, because it makes the test not fully robust.",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 40
+      },
+      "revId": "61a35135ae808d92179067ed73d2bc8a4ad6a434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_92bb24e4",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-18T06:13:26Z",
+      "side": 1,
+      "message": "There is *no* need to have own Resume Next for every case in Select: you can have one single Resume Next after the End Select.",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 61
+      },
+      "revId": "61a35135ae808d92179067ed73d2bc8a4ad6a434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
