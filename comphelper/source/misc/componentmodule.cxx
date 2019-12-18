@@ -71,7 +71,7 @@ namespace comphelper
         registerImplementation( aComponent );
     }
 
-    void* OModule::getComponentFactory( const sal_Char* _pImplementationName )
+    void* OModule::getComponentFactory( const char* _pImplementationName )
     {
         Reference< XInterface > xFactory( getComponentFactory(
             OUString::createFromAscii( _pImplementationName ) ) );

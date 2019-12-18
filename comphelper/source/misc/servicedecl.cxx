@@ -99,7 +99,7 @@ ServiceDecl::Factory::createInstanceWithArgumentsAndContext(
         m_rServiceDecl, args, xContext );
 }
 
-void * ServiceDecl::getFactory( sal_Char const* pImplName ) const
+void * ServiceDecl::getFactory( char const* pImplName ) const
 {
     if (rtl_str_compare(m_pImplName, pImplName) == 0) {
         lang::XSingleComponentFactory * const pFac( new Factory(*this) );
@@ -143,7 +143,7 @@ OUString ServiceDecl::getImplementationName() const
     return OUString::createFromAscii(m_pImplName);
 }
 
-void* component_getFactoryHelper( const sal_Char* pImplName,
+void* component_getFactoryHelper( const char* pImplName,
                                   std::initializer_list<ServiceDecl const *> args )
 {
     for (auto const i: args) {

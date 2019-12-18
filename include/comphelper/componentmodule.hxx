@@ -120,7 +120,7 @@ namespace comphelper
 
         /** version of getComponentFactory which directly takes the char argument you got in your component_getFactory call
         */
-        void* getComponentFactory( const sal_Char* _pImplementationName );
+        void* getComponentFactory( const char* _pImplementationName );
 
     private:
         OModule( const OModule& ) = delete;

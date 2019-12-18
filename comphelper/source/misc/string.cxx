@@ -63,9 +63,9 @@ namespace
     }
 }
 
-OString stripStart(const OString &rIn, sal_Char c)
+OString stripStart(const OString &rIn, char c)
 {
-    return tmpl_stripStart<OString, sal_Char>(rIn, c);
+    return tmpl_stripStart<OString, char>(rIn, c);
 }
 
 OUString stripStart(const OUString &rIn, sal_Unicode c)
@@ -94,9 +94,9 @@ namespace
     }
 }
 
-OString stripEnd(const OString &rIn, sal_Char c)
+OString stripEnd(const OString &rIn, char c)
 {
-    return tmpl_stripEnd<OString, sal_Char>(rIn, c);
+    return tmpl_stripEnd<OString, char>(rIn, c);
 }
 
 OUString stripEnd(const OUString &rIn, sal_Unicode c)
@@ -104,7 +104,7 @@ OUString stripEnd(const OUString &rIn, sal_Unicode c)
     return tmpl_stripEnd<OUString, sal_Unicode>(rIn, c);
 }
 
-OString strip(const OString &rIn, sal_Char c)
+OString strip(const OString &rIn, char c)
 {
     return stripEnd(stripStart(rIn, c), c);
 }
@@ -133,9 +133,9 @@ namespace
     }
 }
 
-sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok)
+sal_Int32 getTokenCount(const OString &rIn, char cTok)
 {
-    return tmpl_getTokenCount<OString, sal_Char>(rIn, cTok);
+    return tmpl_getTokenCount<OString, char>(rIn, cTok);
 }
 
 sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok)

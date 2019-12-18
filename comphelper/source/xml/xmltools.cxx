@@ -89,7 +89,7 @@ namespace comphelper
 
             encodeChaff(aChaff);
 
-            return OString(reinterpret_cast<const sal_Char*>(aChaff.data()), nLength);
+            return OString(reinterpret_cast<const char*>(aChaff.data()), nLength);
         }
 
         OString generateGUIDString()

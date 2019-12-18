@@ -81,7 +81,7 @@ inline OUStringBuffer& remove(OUStringBuffer &rIn,
     @return         The resulting OString
  */
 COMPHELPER_DLLPUBLIC OString stripStart(const OString &rIn,
-    sal_Char c);
+    char c);
 
 /** Strips occurrences of a character from the start of the source string
 
@@ -101,7 +101,7 @@ COMPHELPER_DLLPUBLIC OUString stripStart(const OUString &rIn,
     @return         The resulting OString
  */
 COMPHELPER_DLLPUBLIC OString stripEnd(const OString &rIn,
-    sal_Char c);
+    char c);
 
 /** Strips occurrences of a character from the end of the source string
 
@@ -121,7 +121,7 @@ COMPHELPER_DLLPUBLIC OUString stripEnd(const OUString &rIn,
     @return         The resulting OString
  */
 COMPHELPER_DLLPUBLIC OString strip(const OString &rIn,
-    sal_Char c);
+    char c);
 
 /** Strips occurrences of a character from the start and end of the source string
 
@@ -139,7 +139,7 @@ COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
   @param    cTok    the character which separate the tokens.
   @return   the number of tokens
 */
-COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok);
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, char cTok);
 
 /** Returns number of tokens in an OUString
 
@@ -223,7 +223,7 @@ namespace detail
  */
 inline OStringBuffer& padToLength(
     OStringBuffer& rBuffer, sal_Int32 nLength,
-    sal_Char cFill = '\0')
+    char cFill = '\0')
 {
     return detail::padToLength(rBuffer, nLength, cFill);
 }

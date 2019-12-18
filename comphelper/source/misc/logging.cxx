@@ -64,7 +64,7 @@ namespace comphelper
         }
     }
 
-    EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pAsciiLoggerName )
+    EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const char* _pAsciiLoggerName )
         :m_pImpl( new EventLogger_Impl( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
     {
     }
@@ -107,7 +107,7 @@ namespace comphelper
 
 
     void EventLogger::impl_log( const sal_Int32 _nLogLevel,
-        const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage,
+        const char* _pSourceClass, const char* _pSourceMethod, const OUString& _rMessage,
         const OptionalString& _rArgument1, const OptionalString& _rArgument2,
         const OptionalString& _rArgument3, const OptionalString& _rArgument4,
         const OptionalString& _rArgument5, const OptionalString& _rArgument6 ) const

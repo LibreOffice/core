@@ -146,7 +146,7 @@ namespace comphelper
                 _out_rValue.
         */
         template < typename VALUE_TYPE >
-        bool get_ensureType( const sal_Char* _pAsciiValueName, VALUE_TYPE& _out_rValue ) const
+        bool get_ensureType( const char* _pAsciiValueName, VALUE_TYPE& _out_rValue ) const
         {
             return get_ensureType( OUString::createFromAscii( _pAsciiValueName ), &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
@@ -161,7 +161,7 @@ namespace comphelper
             in the collection
         */
         template < typename VALUE_TYPE >
-        VALUE_TYPE  getOrDefault( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rDefault ) const
+        VALUE_TYPE  getOrDefault( const char* _pAsciiValueName, const VALUE_TYPE& _rDefault ) const
         {
             return getOrDefault( OUString::createFromAscii( _pAsciiValueName ), _rDefault );
         }
@@ -179,7 +179,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        const css::uno::Any& get( const sal_Char* _pAsciiValueName ) const
+        const css::uno::Any& get( const char* _pAsciiValueName ) const
         {
             return get( OUString::createFromAscii( _pAsciiValueName ) );
         }
@@ -195,7 +195,7 @@ namespace comphelper
         }
 
         /// determines whether a value with a given name is present in the collection
-        bool has( const sal_Char* _pAsciiValueName ) const
+        bool has( const char* _pAsciiValueName ) const
         {
             return impl_has( OUString::createFromAscii( _pAsciiValueName ) );
         }
@@ -212,7 +212,7 @@ namespace comphelper
                 which case it has been overwritten.
         */
         template < typename VALUE_TYPE >
-        bool put( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rValue )
+        bool put( const char* _pAsciiValueName, const VALUE_TYPE& _rValue )
         {
             return impl_put( OUString::createFromAscii( _pAsciiValueName ), css::uno::makeAny( _rValue ) );
         }
@@ -228,7 +228,7 @@ namespace comphelper
             return impl_put( _rValueName, css::uno::makeAny( _rValue ) );
         }
 
-        bool put( const sal_Char* _pAsciiValueName, const css::uno::Any& _rValue )
+        bool put( const char* _pAsciiValueName, const css::uno::Any& _rValue )
         {
             return impl_put( OUString::createFromAscii( _pAsciiValueName ), _rValue );
         }
@@ -242,7 +242,7 @@ namespace comphelper
 
             @return true if and only if a value with the given name existed in the collection.
         */
-        bool remove( const sal_Char* _pAsciiValueName )
+        bool remove( const char* _pAsciiValueName )
         {
             return impl_remove( OUString::createFromAscii( _pAsciiValueName ) );
         }

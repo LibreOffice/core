@@ -114,7 +114,7 @@ public:
           m_pServiceNames(pSupportedServiceNames) {}
 
     /// @internal gets called by component_getFactoryHelper()
-    void * getFactory( sal_Char const* pImplName ) const;
+    void * getFactory( char const* pImplName ) const;
 
     /// @return supported service names
     css::uno::Sequence< OUString> getSupportedServiceNames() const;
@@ -325,7 +325,7 @@ struct inheritingClass_ : public serviceimpl_base< detail::InheritingServiceImpl
 };
 
 COMPHELPER_DLLPUBLIC
-void* component_getFactoryHelper( const sal_Char* pImplName,
+void* component_getFactoryHelper( const char* pImplName,
                                   std::initializer_list<ServiceDecl const *> args );
 
 } // namespace service_decl

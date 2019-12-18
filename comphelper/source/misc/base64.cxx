@@ -28,7 +28,7 @@ using namespace com::sun::star;
 namespace comphelper {
 
 const
-  sal_Char aBase64EncodeTable[] =
+  char aBase64EncodeTable[] =
     { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -56,7 +56,7 @@ const
 //    p   q   r   s   t   u   v   w   x   y   z
 
 
-static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, sal_Char* aCharBuffer)
+static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, char* aCharBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)
@@ -115,7 +115,7 @@ void Base64::encode(OStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aP
     const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
-        sal_Char aCharBuffer[4];
+        char aCharBuffer[4];
         ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
         aStrBuffer.append(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
         i += 3;
@@ -129,7 +129,7 @@ void Base64::encode(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& a
     const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
-        sal_Char aCharBuffer[4];
+        char aCharBuffer[4];
         ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
         aStrBuffer.appendAscii(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
         i += 3;
