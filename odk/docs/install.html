@@ -207,8 +207,8 @@
                         </tr>
                         <tr valign="middle">
                           <td colspan="2">
-                            <p>The SDK provides an implicit configuration
-                              mechanism, which configures the SDK build
+                            <p>The SDK provides a
+                              mechanism which configures the SDK build
                               environment to your personal needs the first time
                               you use the SDK environment. This configuration
                               step creates a new setsdkenv_XXX script in the
@@ -219,11 +219,22 @@
                               <li><b>C:\Documents and Settings\&lt;username&gt;\Application Data\%OO_SDK_NAME%\setsdkenv_windows.bat</b>&nbsp;&nbsp;-&gt;
                                 for Windows</li>
                             </ul>
-                            <p>The automatically started configure script (Unix-like systems
-                              and Windows) requests relevant information
+                            <p>To start the configure script, change into the SDK root directory and
+                              run:</p>
+                            <ul>
+                              <li><b>./setsdkenv_unix</b>&nbsp;&nbsp;-&gt;
+                                for Unix-like systems</li>
+                              <li><b>setsdkenv_windows.bat</b>&nbsp;&nbsp;-&gt;
+                                for Windows</li>
+                            </ul>
+                            <p>The configure script
+                              requests relevant information
                               and directories (SDK, LibreOffice, GNU make, Java,
                               C++), in order to prepare a working SDK
-                              environment. After completing the configure script
+                              environment. (On Unix-like systems, the configure script recursively
+                              starts a new interactive shell with the relevent environment variables
+                              set; this is not needed on Windows.)
+                              After completing the configure script
                               once, the newly created script is always used to
                               set the necessary environment variables for using
                               the SDK and the required tools.</p>
