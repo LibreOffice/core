@@ -151,6 +151,7 @@ public:
     void testTdf121991();
     void testTdf123206CustomLabelField();
     void testTdf125444PercentageCustomLabel();
+    void testDeletedLegendEntries();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -251,6 +252,8 @@ public:
     CPPUNIT_TEST(testTdf121991);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
+    CPPUNIT_TEST(testDeletedLegendEntries);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2334,7 +2337,28 @@ void Chart2ImportTest::testTdf125444PercentageCustomLabel()
     // to assert the latter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aLabelFields.getLength());
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType_PERCENTAGE, aLabelFields[2]->getFieldType());
+}
 
+void Chart2ImportTest::testDeletedLegendEntries()
+{
+    load("/chart2/qa/extras/data/xlsx/", "deleted_legend_entry2.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+    bool bShowLegendEntry = true;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("ShowLegendEntry") >>= bShowLegendEntry);
+    CPPUNIT_ASSERT(!bShowLegendEntry);
+
+    Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(1, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries2(getDataSeriesFromDoc(xChartDoc2, 0));
+    CPPUNIT_ASSERT(xDataSeries2.is());
+    Reference<beans::XPropertySet> xPropertySet2(xDataSeries2, uno::UNO_QUERY_THROW);
+    Sequence<sal_Int32> deletedLegendEntriesSeq;
+    CPPUNIT_ASSERT(xPropertySet2->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
+    CPPUNIT_ASSERT(deletedLegendEntriesSeq[0] == 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
