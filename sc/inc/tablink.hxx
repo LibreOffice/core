@@ -82,10 +82,11 @@ private:
     SfxMedium*          pMedium;
 
 public:
-                        ScDocumentLoader( const OUString& rFileName,
-                                          OUString& rFilterName, OUString& rOptions,
-                                          sal_uInt32 nRekCnt = 0, weld::Window* pInteractionParent = nullptr );
-                        ~ScDocumentLoader();
+    ScDocumentLoader(const OUString& rFileName, OUString& rFilterName, OUString& rOptions,
+                     sal_uInt32 nRekCnt = 0, weld::Window* pInteractionParent = nullptr,
+                     css::uno::Reference<css::io::XInputStream> xInputStream
+                     = css::uno::Reference<css::io::XInputStream>());
+    ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
     bool                IsError() const;
