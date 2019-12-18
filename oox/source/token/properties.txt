@@ -132,6 +132,7 @@ DefaultSpinValue
 DefaultState
 DefaultText
 DefaultValue
+DeletedLegendEntries
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
