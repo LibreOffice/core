@@ -61,8 +61,6 @@
 #include <cxxabi.h>
 #endif
 
-#ifndef NDEBUG
-
 namespace {
 
 struct DebugData
@@ -96,8 +94,6 @@ void DbgTestSolarMutex()
     if ( aDebugData.pDbgTestSolarMutex )
         aDebugData.pDbgTestSolarMutex();
 }
-
-#endif
 
 static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any & caught)
 {
