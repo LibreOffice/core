@@ -55,7 +55,6 @@ struct SwPending;
 class SvxCSS1PropertyInfo;
 struct ImplSVEvent;
 
-#define HTML_PARSPACE (MM50)
 #define HTML_CJK_PARSPACE (MM50/2)
 #define HTML_CTL_PARSPACE (MM50/2)
 
