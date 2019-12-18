@@ -62,16 +62,9 @@ namespace basic
 
     typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
-    namespace {
-
-    struct CreateImplRepository;
-
-    }
-
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
     {
     private:
-        friend CreateImplRepository;
         ImplRepository();
 
     private:
