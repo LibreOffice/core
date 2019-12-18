@@ -1584,28 +1584,26 @@ ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
     }
     // --> OD #i117339# - trigger import only for own formats
     bool bImport( false );
+    if ( aMed.IsStorage() )
     {
-        if ( aMed.IsStorage() )
+        // As <SfxMedium.GetFilter().IsOwnFormat() resp. IsOwnTemplateFormat()
+        // does not work correct (e.g., MS Word 2007 XML Template),
+        // use workaround provided by MAV.
+        uno::Reference< embed::XStorage > xStorage = aMed.GetStorage();
+        if ( xStorage.is() )
         {
-            // As <SfxMedium.GetFilter().IsOwnFormat() resp. IsOwnTemplateFormat()
-            // does not work correct (e.g., MS Word 2007 XML Template),
-            // use workaround provided by MAV.
-            uno::Reference< embed::XStorage > xStorage = aMed.GetStorage();
-            if ( xStorage.is() )
+            // use <try-catch> on retrieving <MediaType> in order to check,
+            // if the storage is one of our own ones.
+            try
             {
-                // use <try-catch> on retrieving <MediaType> in order to check,
-                // if the storage is one of our own ones.
-                try
-                {
-                    uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
-                    const OUString aMediaTypePropName( "MediaType" );
-                    xProps->getPropertyValue( aMediaTypePropName );
-                    bImport = true;
-                }
-                catch (const uno::Exception&)
-                {
-                    bImport = false;
-                }
+                uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
+                const OUString aMediaTypePropName( "MediaType" );
+                xProps->getPropertyValue( aMediaTypePropName );
+                bImport = true;
+            }
+            catch (const uno::Exception&)
+            {
+                bImport = false;
             }
         }
     }
