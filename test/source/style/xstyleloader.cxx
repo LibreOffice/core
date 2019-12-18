@@ -11,16 +11,21 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleLoader2.hpp>
 
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <cppunit/TestAssert.h>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 
+using namespace comphelper;
 using namespace css;
 using namespace css::uno;
 
@@ -49,6 +54,31 @@ void XStyleLoader::testLoadStylesFromDocument()
 
     uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
     xStyleLoader->loadStylesFromDocument(xSrcComponent, aOptions);
+
+    uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xDoc, UNO_QUERY_THROW);
+    checkStyleProperties(xFamilySupplier);
+}
+
+void XStyleLoader::testLoadStylesFromStream()
+{
+    uno::Reference<style::XStyleLoader2> xStyleLoader(init(), uno::UNO_QUERY_THROW);
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_SET_THROW);
+    const OUString aFileURL = getTestURL();
+    const uno::Reference<io::XInputStream> xInputStream
+        = OStorageHelper::GetInputStreamFromURL(aFileURL, getProcessComponentContext());
+
+    uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
+    auto nLength = aOptions.getLength();
+    aOptions.realloc(nLength + 1);
+    beans::PropertyValue aInputStream;
+    aInputStream.Name = "InputStream";
+    uno::Any aTmp;
+    aTmp <<= xInputStream;
+    aInputStream.Value = aTmp;
+    aOptions[nLength] = aInputStream;
+
+    xStyleLoader->loadStylesFromURL("private:stream", aOptions);
 
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xDoc, UNO_QUERY_THROW);
     checkStyleProperties(xFamilySupplier);
