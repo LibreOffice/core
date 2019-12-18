@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f7c97a3_fd8ee9ce",
+        "filename": "slideshow/source/engine/effectrewinder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-12-18T14:16:35Z",
+      "side": 1,
+      "message": "you can access the property directly by using something like\n\nofficecfg::Office::Canvas::ForceSafeServiceImpl::get()",
+      "range": {
+        "startLine": 355,
+        "startChar": 4,
+        "endLine": 379,
+        "endChar": 28
+      },
+      "revId": "0c149265a136e2496f195b03c288438fea33a54e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_7d39793f",
         "filename": "slideshow/source/engine/effectrewinder.cxx",
         "patchSetId": 1
