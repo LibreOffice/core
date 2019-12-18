@@ -180,6 +180,13 @@ service DataSeries
         @since LibreOffice 6.3
       */
     [optional, property] boolean                    ShowLegendEntry;
+
+    /** A sequence of indexes denoting which data points shouldn't be
+        shown in the legend.
+
+        @since LibreOffice 6.5
+     */
+    [optional, property] sequence<long>             DeletedLegendEntries;
 };
 
 } ; // chart2
