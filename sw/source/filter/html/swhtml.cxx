@@ -106,6 +106,7 @@
 #include <htmltbl.hxx>
 #include "htmlnum.hxx"
 #include "swhtml.hxx"
+#include "wrthtml.hxx"
 #include <linkenum.hxx>
 #include <breakit.hxx>
 #include <SwAppletImpl.hxx>
