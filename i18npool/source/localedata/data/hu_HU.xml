@@ -54,6 +54,11 @@
   <LC_FORMAT>
     <DateAcceptancePattern>M-D</DateAcceptancePattern>
     <DateAcceptancePattern>M.D</DateAcceptancePattern>
+    <DateAcceptancePattern>M.D.</DateAcceptancePattern>
+    <DateAcceptancePattern>M. D.</DateAcceptancePattern>
+    <DateAcceptancePattern>Y-M-D</DateAcceptancePattern>
+    <DateAcceptancePattern>Y.M.D.</DateAcceptancePattern>
+    <DateAcceptancePattern>Y. M. D.</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>Standard</FormatCode>
     </FormatElement>
