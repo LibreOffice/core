@@ -20,6 +20,7 @@
 
 #include <comphelper/fileformat.h>
 #include <formula/grammar.hxx>
+#include "scqahelperdllapi.h"
 
 #include <string>
 #include <sstream>
@@ -29,12 +30,6 @@
 #include <memory>
 
 namespace utl { class TempFile; }
-
-#if defined(SCQAHELPER_DLLIMPLEMENTATION)
-#define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
-#else
-#define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
-#endif
 
 #define ODS_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PASSWORDTOMODIFY)
 #define XLS_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PASSWORDTOMODIFY | SfxFilterFlags::PREFERED)
