@@ -62,7 +62,7 @@ namespace unoexe
 
 static bool s_quiet = false;
 
-static void out( const sal_Char * pText )
+static void out( const char * pText )
 {
     if (! s_quiet)
         fprintf( stderr, "%s", pText );
@@ -86,7 +86,7 @@ static const char arUsingText[] =
 "    [-- Argument1 Argument2 ...]\n";
 
 /// @throws RuntimeException
-static bool readOption( OUString * pValue, const sal_Char * pOpt,
+static bool readOption( OUString * pValue, const char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
 {
     const OUString dash("-");
@@ -123,7 +123,7 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
     return false;
 }
 
-static bool readOption( bool * pbOpt, const sal_Char * pOpt,
+static bool readOption( bool * pbOpt, const char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
 {
     OUString aOpt = OUString::createFromAscii(pOpt);

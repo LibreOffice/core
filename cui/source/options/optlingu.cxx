@@ -64,10 +64,10 @@ using namespace css::uno;
 using namespace css::linguistic2;
 using namespace css::beans;
 
-static const sal_Char cSpell[]   = SN_SPELLCHECKER;
-static const sal_Char cGrammar[] = SN_GRAMMARCHECKER;
-static const sal_Char cHyph[]    = SN_HYPHENATOR;
-static const sal_Char cThes[]    = SN_THESAURUS;
+static const char cSpell[]   = SN_SPELLCHECKER;
+static const char cGrammar[] = SN_GRAMMARCHECKER;
+static const char cHyph[]    = SN_HYPHENATOR;
+static const char cThes[]    = SN_THESAURUS;
 
 // static ----------------------------------------------------------------
 

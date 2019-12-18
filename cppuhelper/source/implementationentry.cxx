@@ -61,7 +61,7 @@ sal_Bool component_writeInfoHelper(
 
 
 void * component_getFactoryHelper(
-    sal_Char const * pImplName, SAL_UNUSED_PARAMETER void *,
+    char const * pImplName, SAL_UNUSED_PARAMETER void *,
     SAL_UNUSED_PARAMETER void *, const struct ImplementationEntry entries[])
 {
 
