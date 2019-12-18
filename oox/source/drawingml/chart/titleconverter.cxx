@@ -268,9 +268,13 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
         return;
 
     sal_Int32 nIndex = 0;
-    for (const auto& rCooSysSequence : xCooSysSequence)
+    for (const auto& rCooSys : xCooSysSequence)
     {
-        Reference<XChartTypeContainer> xChartTypeContainer(rCooSysSequence, UNO_QUERY_THROW);
+        PropertySet aCooSysProp(rCooSys);
+        bool bSwapXAndY = false;
+        aCooSysProp.getProperty(bSwapXAndY, PROP_SwapXAndYAxis);
+
+        Reference<XChartTypeContainer> xChartTypeContainer(rCooSys, UNO_QUERY_THROW);
         const Sequence<Reference<XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
         if (!xChartTypeSequence.hasElements())
             continue;
@@ -282,19 +286,69 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
                 continue;
 
             const Sequence<Reference<XDataSeries>> aDataSeriesSeq = xDSCont->getDataSeries();
+            if (bSwapXAndY)
+                nIndex += aDataSeriesSeq.getLength() - 1;
             for (const auto& rDataSeries : aDataSeriesSeq)
             {
                 PropertySet aSeriesProp(rDataSeries);
-                for (const auto& rLegendEntry : mrModel.maLegendEntries)
+                bool bVaryColorsByPoint = false;
+                aSeriesProp.getProperty(bVaryColorsByPoint, PROP_VaryColorsByPoint);
+
+                if (bVaryColorsByPoint)
                 {
-                    if (nIndex == rLegendEntry->mnLegendEntryIdx)
+                    Reference<XDataSource> xDSrc(rDataSeries, UNO_QUERY);
+                    if (!xDSrc.is())
+                        continue;
+
+                    const Sequence<Reference<XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+                    std::vector<sal_Int32> deletedLegendEntries;
+                    sal_Int32 j = 0;
+                    for (const auto& rDataSeq : aDataSeqs)
                     {
-                        aSeriesProp.setProperty(PROP_ShowLegendEntry, !rLegendEntry->mbLabelDeleted);
-                        break;
+                        Reference<XDataSequence> xValues = rDataSeq->getValues();
+                        if (!xValues.is())
+                            continue;
+
+                        sal_Int32 nDataSeqSize = xValues->getData().getLength();
+                        for (sal_Int32 i = 0; i < nDataSeqSize; ++i)
+                        {
+                            for (const auto& rLegendEntry : mrModel.maLegendEntries)
+                            {
+                                if (nIndex == rLegendEntry->mnLegendEntryIdx && rLegendEntry->mbLabelDeleted)
+                                {
+                                    deletedLegendEntries.push_back(j + i);
+                                    break;
+                                }
+                            }
+                            nIndex++;
+                        }
+                        j += nDataSeqSize;
+                    }
+                    if ((j = deletedLegendEntries.size()) > 0)
+                    {
+                        Sequence<sal_Int32> deletedLegendEntriesSeq(j);
+                        for (sal_Int32 i = 0; i < j; ++i)
+                        {
+                            deletedLegendEntriesSeq[i] = deletedLegendEntries[i];
+                        }
+                        aSeriesProp.setProperty(PROP_DeletedLegendEntries, deletedLegendEntriesSeq);
                     }
                 }
-                nIndex++;
+                else
+                {
+                    for (const auto& rLegendEntry : mrModel.maLegendEntries)
+                    {
+                        if (nIndex == rLegendEntry->mnLegendEntryIdx)
+                        {
+                            aSeriesProp.setProperty(PROP_ShowLegendEntry, !rLegendEntry->mbLabelDeleted);
+                            break;
+                        }
+                    }
+                    bSwapXAndY ? nIndex-- : nIndex++;
+                }
             }
+            if (bSwapXAndY)
+                nIndex += aDataSeriesSeq.getLength() + 1;
         }
     }
 }
