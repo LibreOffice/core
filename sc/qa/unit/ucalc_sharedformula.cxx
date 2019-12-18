@@ -2688,4 +2688,70 @@ void Test::testSharedFormulaCutCopyMoveWithinRun()
     m_pDoc->DeleteTab(0);
 }
 
+// tdf#129396
+void Test::testSharedFormulaInsertShift()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in A1:C2
+    const std::vector<std::vector<const char*>> aData = {
+        { "1", "2", "=SUM(A1:B1)" },
+        { "4", "8", "=SUM(A2:B2)" }
+    };
+    const ScAddress aOrgPos(0,0,0);
+    insertRangeData( m_pDoc, aOrgPos, aData);
+
+    {
+        // Check that C1:C2 is a formula group.
+        const ScAddress aFormulaPos(2,0,0);
+        const ScFormulaCell* pFC = m_pDoc->GetFormulaCell( aFormulaPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula top row.", aFormulaPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+    }
+
+    {
+        // Check results in C1:C2
+        ScAddress aPos( aOrgPos);
+        aPos.SetCol(2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "C1", 3.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "C2", 12.0, m_pDoc->GetValue(aPos));
+    }
+
+    const bool bSuccess = m_pDoc->InsertCol( 0, 0, 1, 0, 2, 1);
+    CPPUNIT_ASSERT_MESSAGE( "InsertCol", bSuccess);
+
+    {
+        // Check that D1:D2 is a formula group.
+        const ScAddress aFormulaPos(3,0,0);
+        const ScFormulaCell* pFC = m_pDoc->GetFormulaCell( aFormulaPos);
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula top row.", aFormulaPos.Row(), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shared formula length.", static_cast<SCROW>(2), pFC->GetSharedLength());
+    }
+
+    {
+        // Modify values in B1:B2
+        ScAddress aPos( aOrgPos);
+        aPos.SetCol(1);
+        m_pDoc->SetValue(aPos, 16.0);
+        aPos.IncRow();
+        m_pDoc->SetValue(aPos, 32.0);
+    }
+
+    {
+        // Check results in D1:D2
+        ScAddress aPos( aOrgPos);
+        aPos.SetCol(3);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "D1", 17.0, m_pDoc->GetValue(aPos));
+        aPos.IncRow();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "D2", 36.0, m_pDoc->GetValue(aPos));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
