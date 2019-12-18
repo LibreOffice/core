@@ -160,7 +160,7 @@ namespace emfplushelper
         return "";
     }
 
-    static OUString UnitTypeToString(sal_uInt16 nType)
+    OUString UnitTypeToString(sal_uInt16 nType)
     {
         switch (nType)
         {

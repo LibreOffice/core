@@ -166,6 +166,8 @@ namespace emfplushelper
     };
 
     const char* emfTypeToName(sal_uInt16 type);
+    OUString UnitTypeToString(sal_uInt16 nType);
+
     struct EMFPObject
     {
         virtual ~EMFPObject();
