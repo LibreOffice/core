@@ -56,8 +56,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
-#define PROGRESS_BAR_STEP 20
-
 
 class ODBExport : public SvXMLExport
 {
