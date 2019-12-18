@@ -529,7 +529,27 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
 
     OUString aFilter;     // empty - detect
     OUString aFiltOpt;
-    ScDocumentLoader aLoader( aURL, aFilter, aFiltOpt );
+    uno::Reference<io::XInputStream> xInputStream;
+    if (aURL == "private:stream")
+    {
+        for (const auto& rProp : aOptions)
+        {
+            if (rProp.Name == "InputStream")
+            {
+                rProp.Value >>= xInputStream;
+                if (!xInputStream.is())
+                {
+                    throw lang::IllegalArgumentException(
+                        "Parameter 'InputStream' could not be converted "
+                        "to type 'com::sun::star::io::XInputStream'",
+                        nullptr, 0);
+                }
+                break;
+            }
+        }
+    }
+
+    ScDocumentLoader aLoader( aURL, aFilter, aFiltOpt, 0, nullptr, xInputStream );
 
     ScDocShell* pSource = aLoader.GetDocShell();
 
