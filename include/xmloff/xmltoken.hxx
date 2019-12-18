@@ -551,6 +551,7 @@ namespace xmloff { namespace token {
         XML_DATA_BAR,
         XML_DATA_BAR_ENTRY,
         XML_DATA_CELL_RANGE_ADDRESS,
+        XML_DATA_LABEL,
         XML_DATA_LABEL_NUMBER,
         XML_DATA_LABEL_SYMBOL,
         XML_DATA_LABEL_TEXT,
