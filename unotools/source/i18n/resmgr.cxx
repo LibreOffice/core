@@ -51,6 +51,10 @@
 #include <unordered_map>
 #include <memory>
 
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
+
 #if defined(_WIN32) && defined(DBG_UTIL)
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <prewin.h>
@@ -123,11 +127,15 @@ namespace Translate
         boost::locale::generator gen;
         gen.characters(boost::locale::char_facet);
         gen.categories(boost::locale::message_facet | boost::locale::information_facet);
+#if defined(ANDROID)
+        OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
+#else
         OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
         rtl::Bootstrap::expandMacros(uri);
         OUString path;
         osl::File::getSystemPathFromFileURL(uri, path);
         OString sPath(OUStringToOString(path, osl_getThreadTextEncoding()));
+#endif
         gen.add_messages_path(sPath.getStr());
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
