@@ -3071,7 +3071,15 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
         return;
     }
 
-    pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
+    try
+    {
+        pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
+    }
+    catch (const uno::Exception& exception)
+    {
+        SetLastExceptionMsg(exception.Message);
+        SAL_INFO("lok", "Failed to postKeyEvent " << exception.Message);
+    }
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
@@ -3546,8 +3554,15 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
         SetLastExceptionMsg("Document doesn't support tiled rendering");
         return;
     }
-
-    pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
+    try
+    {
+        pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
+    }
+    catch (const uno::Exception& exception)
+    {
+        SetLastExceptionMsg(exception.Message);
+        SAL_INFO("lok", "Failed to postMouseEvent " << exception.Message);
+    }
 }
 
 static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
