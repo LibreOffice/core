@@ -57,8 +57,6 @@ using namespace css::io;
 using namespace css::xml::sax;
 
 
-#define PROGRESS_BAR_STEP 20
-
 class ORptExport : public SvXMLExport
 {
 public:
