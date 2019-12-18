@@ -1092,6 +1092,85 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
             pFS->singleElement(FSNS(XML_c, XML_legendPos), XML_val, strPos);
         }
 
+        // legendEntry
+        Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(mxNewDiagram, UNO_QUERY_THROW);
+        const Sequence<Reference<chart2::XCoordinateSystem>> xCooSysSequence(xCooSysContainer->getCoordinateSystems());
+        if (!xCooSysSequence.hasElements())
+            return;
+
+        sal_Int32 nIndex = 0;
+        bool bShowLegendEntry;
+        for (const auto& rCooSys : xCooSysSequence)
+        {
+            PropertySet aCooSysProp(rCooSys);
+            bool bSwapXAndY = false;
+            aCooSysProp.getProperty(bSwapXAndY, PROP_SwapXAndYAxis);
+
+            Reference<chart2::XChartTypeContainer> xChartTypeContainer(rCooSys, UNO_QUERY_THROW);
+            const Sequence<Reference<chart2::XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
+            if (!xChartTypeSequence.hasElements())
+                continue;
+
+            for (const auto& rCT : xChartTypeSequence)
+            {
+                Reference<chart2::XDataSeriesContainer> xDSCont(rCT, UNO_QUERY);
+                if (!xDSCont.is())
+                    continue;
+
+                const Sequence<Reference<chart2::XDataSeries>> aDataSeriesSeq = xDSCont->getDataSeries();
+                if (bSwapXAndY)
+                    nIndex += aDataSeriesSeq.getLength() - 1;
+                for (const auto& rDataSeries : aDataSeriesSeq)
+                {
+                    PropertySet aSeriesProp(rDataSeries);
+                    bool bVaryColorsByPoint = false;
+                    aSeriesProp.getProperty(bVaryColorsByPoint, PROP_VaryColorsByPoint);
+                    if (bVaryColorsByPoint)
+                    {
+                        Sequence<sal_Int32> deletedLegendEntriesSeq;
+                        aSeriesProp.getProperty(deletedLegendEntriesSeq, PROP_DeletedLegendEntries);
+                        for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+                        {
+                            pFS->startElement(FSNS(XML_c, XML_legendEntry));
+                            pFS->singleElement(FSNS(XML_c, XML_idx), XML_val,
+                                               OString::number(nIndex + deletedLegendEntry));
+                            pFS->singleElement(FSNS(XML_c, XML_delete), XML_val, "1");
+                            pFS->endElement(FSNS(XML_c, XML_legendEntry));
+                        }
+                        Reference<chart2::data::XDataSource> xDSrc(rDataSeries, UNO_QUERY);
+                        if (!xDSrc.is())
+                            continue;
+
+                        const Sequence<Reference<chart2::data::XLabeledDataSequence>> aDataSeqs = xDSrc->getDataSequences();
+                        for (const auto& rDataSeq : aDataSeqs)
+                        {
+                            Reference<chart2::data::XDataSequence> xValues = rDataSeq->getValues();
+                            if (!xValues.is())
+                                continue;
+
+                            sal_Int32 nDataSeqSize = xValues->getData().getLength();
+                            nIndex += nDataSeqSize;
+                        }
+                    }
+                    else
+                    {
+                        aSeriesProp.getProperty(bShowLegendEntry, PROP_ShowLegendEntry);
+                        if (!bShowLegendEntry)
+                        {
+                            pFS->startElement(FSNS(XML_c, XML_legendEntry));
+                            pFS->singleElement(FSNS(XML_c, XML_idx), XML_val,
+                                               OString::number(nIndex));
+                            pFS->singleElement(FSNS(XML_c, XML_delete), XML_val, "1");
+                            pFS->endElement(FSNS(XML_c, XML_legendEntry));
+                        }
+                        bSwapXAndY ? nIndex-- : nIndex++;
+                    }
+                }
+                if (bSwapXAndY)
+                    nIndex += aDataSeriesSeq.getLength() + 1;
+            }
+        }
+
         uno::Any aRelativePos = xProp->getPropertyValue("RelativePosition");
         if (aRelativePos.hasValue())
         {
@@ -1138,8 +1217,6 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         // draw-chart:txPr text properties
         exportTextProps( xProp );
     }
-
-    // legendEntry
 
     pFS->endElement( FSNS( XML_c, XML_legend ) );
 }
