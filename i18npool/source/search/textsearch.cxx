@@ -322,7 +322,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             : in_str.getLength();
 
         sal_Int32 nExtraOffset = 0;
-        if (pRegexMatcher && startPos > 0)
+        if (pRegexMatcher && aSrchPara.searchString.startsWith("^") && startPos > 0)
         {
             // avoid matching ^ here - in_str omits a prefix of the searchStr
             // this is a really lame way to do it, but ICU only offers
