@@ -155,7 +155,7 @@
 #define SID_STATUS_PAGE                     (SID_SD_START+86)
 #define SID_STATUS_LAYOUT                   (SID_SD_START+87)
 #define SID_STATUS_SELMODE                  (SID_SD_START+88)
-#define SID_MODIFIED                        TypedWhichId<SfxBoolItem>(SID_SD_START+89)
+// In sfxsids.hrc: SID_MODIFIED              TypedWhichId<SfxBoolItem>(SID_SD_START+89)
 #define SID_OBJECT_CROOK_ROTATE             (SID_SD_START+90)
 #define SID_OBJECT_CROOK_SLANT              (SID_SD_START+91)
 #define SID_OBJECT_CROOK_STRETCH            (SID_SD_START+92)
@@ -165,7 +165,7 @@
 // In svxids.hrc:  SID_ENTER_GROUP              (SID_SD_START+96)
 // In svxids.hrc:  SID_LEAVE_GROUP              (SID_SD_START+97)
 // In svxids.hrc:  SID_SIZE_PAGE_WIDTH          (SID_SD_START+98)
-#define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
+// In sfxsids.hrc: SID_SIZE_OPTIMAL             (SID_SD_START+99)
 #define SID_OBJECT_TRANSPARENCE             (SID_SD_START+100)
 #define SID_OBJECT_GRADIENT                 (SID_SD_START+101)
     // FREE
