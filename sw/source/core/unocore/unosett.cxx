@@ -107,6 +107,16 @@ namespace
 #define WID_END_NOTICE                  9
 #define WID_BEGIN_NOTICE                10
 #define WID_ANCHOR_CHARACTER_STYLE      11
+#define WID_NUM_ON                      12
+#define WID_SEPARATOR_INTERVAL          13
+#define WID_NUMBER_POSITION             14
+#define WID_DISTANCE                    15
+#define WID_INTERVAL                    16
+#define WID_SEPARATOR_TEXT              17
+#define WID_COUNT_EMPTY_LINES           18
+#define WID_COUNT_LINES_IN_FRAMES       19
+#define WID_RESTART_AT_EACH_PAGE        20
+
 
 static const SfxItemPropertySet* GetFootnoteSet()
 {
@@ -163,17 +173,6 @@ static const SfxItemPropertySet* GetNumberingRulesSet()
     static const SfxItemPropertySet  aNumberingRulesSet_Impl( aNumberingRulesMap_Impl );
     return &aNumberingRulesSet_Impl;
 }
-
-#define WID_NUM_ON                      0
-#define WID_SEPARATOR_INTERVAL          1
-#define WID_NUMBERING_TYPE              2
-#define WID_NUMBER_POSITION             3
-#define WID_DISTANCE                    4
-#define WID_INTERVAL                    5
-#define WID_SEPARATOR_TEXT              6
-#define WID_COUNT_EMPTY_LINES           8
-#define WID_COUNT_LINES_IN_FRAMES       9
-#define WID_RESTART_AT_EACH_PAGE        10
 
 static const SfxItemPropertySet* GetLineNumberingSet()
 {
