@@ -310,8 +310,18 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     if ( xTranslit.is() )
     {
         // apply normal transliteration (1<->1, 1<->0)
-        css::uno::Sequence<sal_Int32> offset(endPos - startPos);
-        in_str = xTranslit->transliterate( searchStr, startPos, endPos - startPos, offset );
+
+        sal_Int32 nInStartPos = startPos;
+        if (pRegexMatcher && startPos > 0)
+        {
+            // tdf#89665, tdf#75806: An optimization to avoid transliterating the whole string, yet
+            // transliterate enough of the leading text to allow sensible use of preconditions.
+            // 100 is chosen arbitrarily in the hope that preconditions would largely fit.
+            nInStartPos -= std::min(sal_Int32(100), startPos);
+        }
+
+        css::uno::Sequence<sal_Int32> offset(endPos - nInStartPos);
+        in_str = xTranslit->transliterate( searchStr, nInStartPos, endPos - nInStartPos, offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 newStartPos =
@@ -320,19 +330,6 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         sal_Int32 newEndPos = (endPos < searchStr.getLength())
             ? FindPosInSeq_Impl( offset, endPos )
             : in_str.getLength();
-
-        sal_Int32 nExtraOffset = 0;
-        if (pRegexMatcher && startPos > 0)
-        {
-            // avoid matching ^ here - in_str omits a prefix of the searchStr
-            // this is a really lame way to do it, but ICU only offers
-            // useAnchoringBounds() to disable *both* bounds but what is needed
-            // here is to disable only one bound and respect the other
-            in_str = "X" + in_str;
-            nExtraOffset = 1;
-            newStartPos += nExtraOffset;
-            newEndPos += nExtraOffset;
-        }
 
         sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
 
@@ -345,7 +342,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             const sal_Int32 nGroups = sres.startOffset.getLength();
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
-                const sal_Int32 nStart = sres.startOffset[k] - nExtraOffset;
+                const sal_Int32 nStart = sres.startOffset[k];
                 // Result offsets are negative (-1) if a group expression was
                 // not matched.
                 if (nStart >= 0)
@@ -354,7 +351,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
-                const sal_Int32 nStop = sres.endOffset[k] - nExtraOffset;
+                const sal_Int32 nStop = sres.endOffset[k];
                 if (nStop >= 0)
                 {
                     if (nStop > 0)
