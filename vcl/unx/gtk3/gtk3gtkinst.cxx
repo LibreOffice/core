@@ -2892,9 +2892,15 @@ namespace
 
 namespace
 {
-    GdkPixbuf* load_icon_from_stream(SvMemoryStream& rStream)
+    GdkPixbuf* load_icon_from_stream(SvMemoryStream& rStream, const char* image_type)
     {
-        GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+        // if we know the image type, it's a little faster to hand the type over and skip the type
+        // detection.
+        GdkPixbufLoader *pixbuf_loader;
+        if (image_type != nullptr)
+            pixbuf_loader = gdk_pixbuf_loader_new_with_type(image_type, nullptr);
+        else
+            pixbuf_loader = gdk_pixbuf_loader_new();
         gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(rStream.GetData()),
                                 rStream.TellEnd(), nullptr);
         gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
@@ -2910,7 +2916,8 @@ namespace
         auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
         if (!xMemStm)
             return nullptr;
-        return load_icon_from_stream(*xMemStm);
+        OUString sImageType = rIconName.copy(rIconName.lastIndexOf('.')+1).toAsciiLowerCase();
+        return load_icon_from_stream(*xMemStm, sImageType.toUtf8().getStr());
     }
 }
 
@@ -2941,7 +2948,7 @@ namespace
         vcl::PNGWriter aWriter(aImage.GetBitmapEx(), &aFilterData);
         aWriter.Write(*xMemStm);
 
-        return load_icon_from_stream(*xMemStm);
+        return load_icon_from_stream(*xMemStm, nullptr);
     }
 
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
