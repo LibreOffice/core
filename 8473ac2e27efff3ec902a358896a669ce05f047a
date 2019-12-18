@@ -22,6 +22,30 @@
       "revId": "8473ac2e27efff3ec902a358896a669ce05f047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_52ffcc66",
+        "filename": "bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-18T07:28:00Z",
+      "side": 1,
+      "message": "called from\nbridges/source/cpp_uno/msvc_win32_intel/dllinit.cxx",
+      "parentUuid": "5f7c97a3_52e6ecea",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 17
+      },
+      "revId": "8473ac2e27efff3ec902a358896a669ce05f047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
