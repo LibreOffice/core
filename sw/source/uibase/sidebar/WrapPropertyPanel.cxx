@@ -36,6 +36,7 @@
 #include <hintids.hxx>
 #include <uitool.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <comphelper/lok.hxx>
 
 const char UNO_WRAPOFF[] = ".uno:WrapOff";
 const char UNO_WRAPLEFT[] = ".uno:WrapLeft";
@@ -148,6 +149,13 @@ void WrapPropertyPanel::Initialize()
 
     Link<Button*,void> EditContourLink = LINK(this, WrapPropertyPanel, EditContourHdl);
     mpEditContour->SetClickHdl(EditContourLink);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Disable Edit Contour button for LOK purposes.
+        mpEditContour->Hide();
+    }
+
     Link<Button*, void> EnableContourLink = LINK(this,WrapPropertyPanel, EnableContourHdl);
     mpEnableContour->SetClickHdl(EnableContourLink);
     mpSpacingLB->SetSelectHdl(LINK(this, WrapPropertyPanel, SpacingLBHdl));
