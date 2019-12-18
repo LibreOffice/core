@@ -126,7 +126,6 @@ sw/uiconfig/swriter/ui/optformataidspage.ui:GtkBox[@id='OptFormatAidsPage']/GtkG
 sw/uiconfig/swriter/ui/optformataidspage.ui:GtkBox[@id='OptFormatAidsPage']/GtkGrid[@id='grid1']/GtkBox[@id='box2']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkGrid[@id='grid2']/GtkLabel orphan-label
 sw/uiconfig/swriter/ui/optformataidspage.ui:GtkBox[@id='OptFormatAidsPage']/GtkGrid[@id='grid1']/GtkBox[@id='box2']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkGrid[@id='grid2']/GtkLabel orphan-label
 sw/uiconfig/swriter/ui/optformataidspage.ui:GtkBox[@id='OptFormatAidsPage']/GtkGrid[@id='grid1']/GtkBox[@id='box2']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkGrid[@id='grid2']/GtkLabel orphan-label
-sw/uiconfig/swriter/ui/optformataidspage.ui://GtkLabel[@id='fillmode'] orphan-label
 sw/uiconfig/swriter/ui/opttablepage.ui://GtkLabel[@id='label10'] orphan-label
 sw/uiconfig/swriter/ui/opttablepage.ui://GtkLabel[@id='label11'] orphan-label
 sw/uiconfig/swriter/ui/opttablepage.ui://GtkLabel[@id='label12'] orphan-label
