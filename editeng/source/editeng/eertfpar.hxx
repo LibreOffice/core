@@ -22,7 +22,6 @@
 #include <editeng/svxrtf.hxx>
 
 #include <editdoc.hxx>
-#include "impedit.hxx"
 
 class EditEngine;
 

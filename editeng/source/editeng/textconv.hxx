@@ -19,12 +19,11 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_TEXTCONV_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_TEXTCONV_HXX
 
-#include <editeng/splwrap.hxx>
-#include <editeng/svxacorr.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/svxenum.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <editeng/hangulhanja.hxx>
-#include <vcl/vclptr.hxx>
 
 class EditView;
 

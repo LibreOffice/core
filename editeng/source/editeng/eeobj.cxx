@@ -23,9 +23,6 @@
 #include "eeobj.hxx"
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <editeng/editeng.hxx>
-#include <svl/itempool.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 using namespace ::com::sun::star;
 

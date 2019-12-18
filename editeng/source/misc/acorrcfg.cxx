@@ -25,7 +25,6 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <svl/urihelper.hxx>
 
 #include <editeng/svxacorr.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

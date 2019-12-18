@@ -18,7 +18,6 @@
  */
 
 
-#include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -34,30 +33,18 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/nhypitem.hxx>
-#include <editeng/blinkitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
-#include <editeng/pbinitem.hxx>
-#include <editeng/sizeitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/prntitem.hxx>
-#include <editeng/opaqitem.hxx>
-#include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
-#include <editeng/lineitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/orphitem.hxx>
-#include <editeng/widwitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/pmdlitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/charscaleitem.hxx>
@@ -78,6 +65,8 @@
 
 #include <editeng/svxrtf.hxx>
 #include <editeng/editids.hrc>
+
+#include <limits.h>
 
 #define BRACELEFT   '{'
 #define BRACERIGHT  '}'

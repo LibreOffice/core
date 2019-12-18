@@ -21,13 +21,12 @@
 // Global header
 
 
-#include <limits.h>
 #include <utility>
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
+#include <svl/itemset.hxx>
 #include <tools/debug.hxx>
 
 
@@ -35,11 +34,8 @@
 
 
 #include <editeng/unoedprx.hxx>
-#include <editeng/unotext.hxx>
-#include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/AccessibleStringWrap.hxx>
 #include <editeng/outliner.hxx>
 

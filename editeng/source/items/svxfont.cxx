@@ -23,7 +23,6 @@
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>

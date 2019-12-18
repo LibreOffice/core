@@ -9,7 +9,6 @@
 
 #include "SvXMLAutoCorrectTokenHandler.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <com/sun/star/xml/sax/FastToken.hpp>
 #if defined __clang__
 #if __has_warning("-Wdeprecated-register")
 #pragma GCC diagnostic push

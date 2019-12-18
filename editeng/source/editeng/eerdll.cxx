@@ -20,11 +20,9 @@
 
 #include <unotools/resmgr.hxx>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
 
-#include <svl/solar.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/eerdll.hxx>
 #include <eerdll2.hxx>
@@ -37,7 +35,6 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
-#include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
 #include <svl/grabbagitem.hxx>
 #include <vcl/svapp.hxx>

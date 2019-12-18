@@ -20,31 +20,18 @@
 
 #include <memory>
 #include <editeng/unolingu.hxx>
-#include <unotools/pathoptions.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
-#include <unotools/ucbhelper.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <ucbhelper/commandenvironment.hxx>
-#include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <linguistic/misc.hxx>

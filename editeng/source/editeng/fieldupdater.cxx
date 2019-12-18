@@ -10,7 +10,6 @@
 #include <memory>
 #include <editeng/fieldupdater.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/edtdlg.hxx>
 #include "editobj2.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>

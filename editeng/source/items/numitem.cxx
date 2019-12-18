@@ -23,24 +23,19 @@
 
 #include <editeng/numitem.hxx>
 
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/brushitem.hxx>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/numdef.hxx>
-#include <editeng/eeitem.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/window.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/fileformat.h>

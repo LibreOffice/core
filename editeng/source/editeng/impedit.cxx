@@ -28,8 +28,6 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <comphelper/lok.hxx>
 #include <editeng/flditem.hxx>
@@ -40,7 +38,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
 

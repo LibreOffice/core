@@ -31,11 +31,11 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/memberids.h>
 #include <svl/itempool.hxx>
+#include <vcl/font.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/gen.hxx>
 
 #include <editeng/unofdesc.hxx>
-#include <editeng/svxfont.hxx>
 
 using namespace ::com::sun::star;
 

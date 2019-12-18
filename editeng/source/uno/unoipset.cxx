@@ -18,14 +18,11 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svl/eitem.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/helpers.hxx>
-#include <tools/debug.hxx>
 #include <editeng/unoipset.hxx>
-#include <editeng/editids.hrc>
-#include <editeng/editeng.hxx>
 #include <svl/itempool.hxx>
+#include <svl/solar.hrc>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

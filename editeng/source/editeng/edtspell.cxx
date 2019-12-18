@@ -25,12 +25,9 @@
 #include <editeng/editeng.hxx>
 #include <edtspell.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/fontitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/unolingu.hxx>
-#include <linguistic/lngprops.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 
 using namespace com::sun::star::uno;

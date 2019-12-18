@@ -26,6 +26,7 @@
 #include <memory>
 #include <vector>
 
+#include <editeng/outliner.hxx>
 #include <tools/link.hxx>
 
 class Paragraph;

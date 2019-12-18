@@ -28,8 +28,6 @@
 #include <tools/debug.hxx>
 #include <libxml/xmlwriter.h>
 
-#include <iterator>
-
 ParagraphData::ParagraphData()
 : nDepth( -1 )
 , mnNumberingStartValue( -1 )

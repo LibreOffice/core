@@ -19,11 +19,15 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
@@ -34,8 +38,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/unotext.hxx>
 #include <editeng/unofdesc.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>

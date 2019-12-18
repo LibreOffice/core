@@ -20,10 +20,6 @@
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdir.hxx>
 #include <editeng/eerdll.hxx>
-#include <editeng/editrids.hrc>
-#include <osl/diagnose.h>
-
-#include <climits>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

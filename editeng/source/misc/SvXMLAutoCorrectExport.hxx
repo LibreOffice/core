@@ -19,10 +19,7 @@
 #ifndef INCLUDED_EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTEXPORT_HXX
 #define INCLUDED_EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTEXPORT_HXX
 
-#include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <editeng/svxacorr.hxx>
 
 class SvXMLAutoCorrectExport : public SvXMLExport

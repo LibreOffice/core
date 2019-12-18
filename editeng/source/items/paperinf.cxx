@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
 #include <vcl/print.hxx>
-#include <vcl/svapp.hxx>
 #include <editeng/paperinf.hxx>
 
 /*--------------------------------------------------------------------

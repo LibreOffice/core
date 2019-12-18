@@ -31,7 +31,6 @@
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
@@ -39,7 +38,6 @@
 #include <tools/debug.hxx>
 
 #include <editeng/edtdlg.hxx>
-#include <editeng/unolingu.hxx>
 
 #define HHC HangulHanjaConversion
 

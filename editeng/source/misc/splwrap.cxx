@@ -21,12 +21,10 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 #include <svtools/langtab.hxx>
 
 #include <vcl/errinf.hxx>
 #include <editeng/unolingu.hxx>
-#include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -39,7 +37,6 @@
 #include <editeng/edtdlg.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
-#include <editeng/editids.hrc>
 #include <editeng/editerr.hxx>
 
 #include <map>

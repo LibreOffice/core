@@ -17,21 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/io/Pipe.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sot/storage.hxx>
 #include <svl/itemprop.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>

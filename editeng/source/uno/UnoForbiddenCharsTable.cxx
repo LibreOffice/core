@@ -24,7 +24,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/unolingu.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

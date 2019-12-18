@@ -23,17 +23,14 @@
 #include <editdoc.hxx>
 #include "editsel.hxx"
 #include "editundo.hxx"
-#include "editobj2.hxx"
 #include "editstt2.hxx"
 #include <editeng/editdata.hxx>
-#include <editeng/svxacorr.hxx>
 #include <editeng/SpellPortions.hxx>
-#include <editeng/eedata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <svtools/colorcfg.hxx>
+#include <editeng/outliner.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/fract.hxx>
@@ -48,7 +45,6 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -56,8 +52,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <i18nlangtag/lang.h>
-#include <rtl/ref.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

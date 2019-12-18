@@ -24,35 +24,26 @@
 #include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
-#include "editdbg.hxx"
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <edtspell.hxx>
 #include "eeobj.hxx"
 #include <editeng/txtrange.hxx>
-#include <svl/urlbmk.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <editeng/acorrcfg.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/udlnitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/justifyitem.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -73,7 +64,6 @@
 #include <algorithm>
 #include <memory>
 
-#include <iostream>
 #include <fstream>
 
 using namespace ::com::sun::star;

@@ -21,9 +21,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/localedatawrapper.hxx>
-#include <editeng/unolingu.hxx>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 SvxForbiddenCharactersTable::SvxForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)

@@ -24,7 +24,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/fhgtitem.hxx>
 
 #include <math.h>
 #include <svl/style.hxx>
@@ -35,17 +34,12 @@
 #include "outlundo.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/itemset.hxx>
-#include <svl/whiter.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/window.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <editeng/svxfont.hxx>
@@ -55,9 +49,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-// calculate if it's RTL or not
-#include <unicode/ubidi.h>
-#include <cassert>
 #include <memory>
 using std::advance;
 

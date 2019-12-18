@@ -20,10 +20,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
-#include <vcl/bitmapex.hxx>
-#include <tools/stream.hxx>
 #include <math.h>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <unotools/fontdefs.hxx>
@@ -31,39 +28,22 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unohelp.hxx>
-#include <editeng/eeitem.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
-#include <vcl/vclenum.hxx>
-#include <tools/tenccvt.hxx>
 #include <tools/mapunit.hxx>
 
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/itemset.hxx>
 
-#include <comphelper/fileformat.h>
 #include <svtools/langtab.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <com/sun/star/awt/SimpleFontMetric.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/CharSet.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
-#include <com/sun/star/awt/XFont.hpp>
-#include <com/sun/star/awt/FontType.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
-#include <com/sun/star/awt/FontFamily.hpp>
-#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/rsiditem.hxx>
 #include <editeng/memberids.h>
 #include <editeng/flstitem.hxx>

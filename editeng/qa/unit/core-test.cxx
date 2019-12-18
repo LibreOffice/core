@@ -11,10 +11,8 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <eerdll2.hxx>
 #include <editdoc.hxx>
 
 #include <sfx2/app.hxx>
