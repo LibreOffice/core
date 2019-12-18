@@ -26,6 +26,8 @@ chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
 chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
 chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
+chart2/res/netlinepoint_52x60.png chart2/res/net_52x60.png
+chart2/res/netlinepointstack_52x60.png chart2/res/netstack_52x60.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 cmd/32/charttitlemenu.png cmd/32/toggletitle.png
