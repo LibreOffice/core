@@ -1929,6 +1929,7 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
     {
         if( isChild( false ) )
         {
+            gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
             gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
         }
         else if( IS_WIDGET_MAPPED( m_pWindow ) )
@@ -2494,7 +2495,10 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
 
         // focus on click
         if (!bDifferentEventWindow)
+        {
+            gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), true);
             gtk_widget_grab_focus(GTK_WIDGET(pThis->m_pFixedContainer));
+        }
     }
 
     SalMouseEvent aEvent;
@@ -3048,7 +3052,9 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 {
     // change of focus between native widgets within the toplevel
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->CallCallbackExc(pWidget == GTK_WIDGET(pThis->m_pFixedContainer) ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
+    bool bGainFocus = pWidget == GTK_WIDGET(pThis->m_pFixedContainer);
+    pThis->CallCallbackExc(bGainFocus ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
+    gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), bGainFocus);
 }
 
 gboolean GtkSalFrame::signalMap(GtkWidget *, GdkEvent*, gpointer frame)
