@@ -30,6 +30,9 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+
+#include <officecfg/Office/Canvas.hxx>
+
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
@@ -346,7 +349,9 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 {
     Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
 
-    if(xNode.is() && hasBlockedAnimation(xNode) )
+    if( xNode.is() &&
+        !officecfg::Office::Canvas::ForceSafeServiceImpl::get() &&
+        hasBlockedAnimation(xNode) )
         skipSingleMainSequenceEffects();
 
     // This notification is only relevant for us when the rpNode belongs to
