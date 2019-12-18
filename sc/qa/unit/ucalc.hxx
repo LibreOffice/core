@@ -414,6 +414,7 @@ public:
     void testSharedFormulaCutCopyMoveIntoRef();
     void testSharedFormulaCutCopyMoveWithRef();
     void testSharedFormulaCutCopyMoveWithinRun();
+    void testSharedFormulaInsertShift();
     void testFormulaPosition();
     void testFormulaWizardSubformula();
 
@@ -771,6 +772,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaCutCopyMoveIntoRef);
     CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithRef);
     CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithinRun);
+    CPPUNIT_TEST(testSharedFormulaInsertShift);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
