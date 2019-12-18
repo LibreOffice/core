@@ -101,7 +101,7 @@ public:
 }
 #endif
 
-#if !HAVE_CXXABI_H_CXA_EH_GLOBALS
+#if !HAVE_CXXABI_H_CXA_EXCEPTION
 // <https://mentorembedded.github.io/cxx-abi/abi-eh.html>,
 // libcxxabi/src/cxa_exception.hpp:
 namespace __cxxabiv1 {

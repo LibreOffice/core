@@ -60,7 +60,7 @@ public:
 }
 #endif
 
-#if !HAVE_CXXABI_H_CXA_EH_GLOBALS
+#if !HAVE_CXXABI_H_CXA_EXCEPTION
 namespace __cxxabiv1 {
     struct __cxa_exception
     {

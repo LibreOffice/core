@@ -6312,14 +6312,14 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX_BASE defines __cxa_exceptions in cxxabi.h])
+    AC_MSG_CHECKING([whether $CXX_BASE defines __cxa_exception in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #include <cstddef>
             #include <cxxabi.h>
-            std::size_t f() { return sizeof(__cxxabiv1::__cxa_exceptions); }
+            std::size_t f() { return sizeof(__cxxabiv1::__cxa_exception); }
         ])], [
-            AC_DEFINE([HAVE_CXXABI_H_CXA_EXCEPTIONS],[1])
+            AC_DEFINE([HAVE_CXXABI_H_CXA_EXCEPTION],[1])
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
