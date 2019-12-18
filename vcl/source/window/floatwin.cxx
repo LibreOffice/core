@@ -671,9 +671,11 @@ void FloatingWindow::StateChanged( StateChangedType nType )
         }
         else if (!IsVisible() && nType == StateChangedType::Visible)
         {
-            assert(GetLOKNotifier());
-            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "close");
-            ReleaseLOKNotifier();
+            if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+            {
+                pNotifier->notifyWindow(GetLOKWindowId(), "close");
+                ReleaseLOKNotifier();
+            }
         }
     }
 
