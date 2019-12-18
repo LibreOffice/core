@@ -63,6 +63,12 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "DeletedLegendEntries",
+                  PROP_DATASERIES_DELETED_LEGEND_ENTRIES,
+                  cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
 }
