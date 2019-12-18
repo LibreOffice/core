@@ -169,13 +169,8 @@
 #define RID_STR_FUNCTIONS                   NC_("RID_STR_FUNCTIONS", "Functions")
 #define RID_STR_GROUPS                      NC_("RID_STR_GROUPS", "Groups")
 
-#define RID_STR_DETAIL                      NC_("RID_STR_DETAIL", "Detail")
-#define RID_STR_PAGE_HEADER                 NC_("RID_STR_PAGE_HEADER", "Page Header")
-#define RID_STR_PAGE_FOOTER                 NC_("RID_STR_PAGE_FOOTER", "Page Footer")
 #define RID_STR_GROUP_HEADER                NC_("RID_STR_GROUP_HEADER", "Group Header")
 #define RID_STR_GROUP_FOOTER                NC_("RID_STR_GROUP_FOOTER", "Group Footer")
-#define RID_STR_REPORT_HEADER               NC_("RID_STR_REPORT_HEADER", "Report Header")
-#define RID_STR_REPORT_FOOTER               NC_("RID_STR_REPORT_FOOTER", "Report Footer")
 #define RID_STR_ERROR_WRONG_ARGUMENT        NC_("RID_STR_ERROR_WRONG_ARGUMENT", "You tried to set an illegal argument. Please have a look at '#1' for valid arguments.")
 #define RID_STR_ARGUMENT_IS_NULL            NC_("RID_STR_ARGUMENT_IS_NULL", "The element is invalid.")
 #define RID_STR_FIXEDTEXT                   NC_("RID_STR_FIXEDTEXT", "Label field")
