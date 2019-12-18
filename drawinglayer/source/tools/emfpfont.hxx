@@ -24,12 +24,6 @@
 
 namespace emfplushelper
 {
-    const sal_uInt32 FontStyleBold = 0x00000001;
-    const sal_uInt32 FontStyleItalic = 0x00000002;
-    const sal_uInt32 FontStyleUnderline = 0x00000004;
-    const sal_uInt32 FontStyleStrikeout = 0x00000008;
-
-
     struct EMFPFont : public EMFPObject
     {
         float emSize;
@@ -39,10 +33,10 @@ namespace emfplushelper
 
         void Read(SvMemoryStream &s);
 
-        bool Bold()      const { return fontFlags & FontStyleBold; }
-        bool Italic()    const { return fontFlags & FontStyleItalic; }
-        bool Underline() const { return fontFlags & FontStyleUnderline; }
-        bool Strikeout() const { return fontFlags & FontStyleStrikeout; }
+        bool Bold()      const { return fontFlags & 0x1; }
+        bool Italic()    const { return fontFlags & 0x2; }
+        bool Underline() const { return fontFlags & 0x4; }
+        bool Strikeout() const { return fontFlags & 0x8; }
     };
 }
 
