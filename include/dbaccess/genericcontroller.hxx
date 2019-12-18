@@ -299,7 +299,7 @@ namespace dbaui
                 by the user, see also <type scope="css::frame">CommandGroup</type>.
         */
         void    implDescribeSupportedFeature(
-                    const sal_Char* _pAsciiCommandURL,
+                    const char* _pAsciiCommandURL,
                     sal_uInt16 _nFeatureId,
                     sal_Int16 _nCommandGroup = css::frame::CommandGroup::INTERNAL
                 );

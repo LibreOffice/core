@@ -47,7 +47,7 @@ static void createRegistryInfo_dbaxml()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* dbaxml_component_getFactory(
-                    const sal_Char* pImplementationName,
+                    const char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {

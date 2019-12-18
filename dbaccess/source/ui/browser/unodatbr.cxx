@@ -1241,7 +1241,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
     {
         if ( m_aExternalFeatures.empty() )
         {
-            const sal_Char* pURLs[] = {
+            const char* pURLs[] = {
                 ".uno:DataSourceBrowser/DocumentDataSource",
                 ".uno:DataSourceBrowser/FormLetter",
                 ".uno:DataSourceBrowser/InsertColumns",

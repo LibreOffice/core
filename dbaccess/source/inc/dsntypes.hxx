@@ -126,7 +126,7 @@ public:
     OUString getPrefix(const OUString& _sURL) const;
 
     /// determines whether there is a driver for the given URL prefix/pattern
-    bool    hasDriver( const sal_Char* _pAsciiPattern ) const;
+    bool    hasDriver( const char* _pAsciiPattern ) const;
 
     /// on a given string, return the Java Driver Class
     OUString getJavaDriverClass(const OUString& _sURL) const;

@@ -52,8 +52,8 @@ namespace dbaui
     struct FeatureMapping
     {
         /// one of the items from dsitems.hxx
-        ItemID          nItemID;
-        const sal_Char* pAsciiFeatureName;
+        ItemID      nItemID;
+        const char* pAsciiFeatureName;
     };
 
     }

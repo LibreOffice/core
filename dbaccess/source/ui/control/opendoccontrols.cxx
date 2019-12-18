@@ -57,7 +57,7 @@ namespace dbaui
         using ::com::sun::star::ui::XImageManager;
         using ::com::sun::star::graphic::XGraphic;
 
-        Reference< XGraphic> GetCommandIcon( const sal_Char* _pCommandURL, const OUString& _rModuleName )
+        Reference< XGraphic> GetCommandIcon( const char* _pCommandURL, const OUString& _rModuleName )
         {
             if ( !_pCommandURL || !*_pCommandURL )
                 return nullptr;
@@ -99,13 +99,13 @@ namespace dbaui
 
     // OpenButton
 
-    OpenDocumentButton::OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const sal_Char* _pAsciiModuleName)
+    OpenDocumentButton::OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const char* _pAsciiModuleName)
         : m_xControl(std::move(xControl))
     {
         impl_init( _pAsciiModuleName );
     }
 
-    void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
+    void OpenDocumentButton::impl_init( const char* _pAsciiModuleName )
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
         m_sModule = OUString::createFromAscii( _pAsciiModuleName );
@@ -121,7 +121,7 @@ namespace dbaui
 
     // OpenDocumentListBox
 
-    OpenDocumentListBox::OpenDocumentListBox(std::unique_ptr<weld::ComboBox> xControl, const sal_Char* _pAsciiModuleName )
+    OpenDocumentListBox::OpenDocumentListBox(std::unique_ptr<weld::ComboBox> xControl, const char* _pAsciiModuleName )
         : m_xControl(std::move(xControl))
     {
         // we need to limit the max auto width feature of the filter box
@@ -131,7 +131,7 @@ namespace dbaui
         impl_init( _pAsciiModuleName );
     }
 
-    void OpenDocumentListBox::impl_init( const sal_Char* _pAsciiModuleName )
+    void OpenDocumentListBox::impl_init( const char* _pAsciiModuleName )
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
 

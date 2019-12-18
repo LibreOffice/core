@@ -72,10 +72,10 @@ public:
     void        getDatasourceNames(std::set<OUString>& _rNames);
 
 private:
-    oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
+    oslGenericFunction  loadSymbol(const char* _pFunctionName);
 
     /// load the lib
-    bool        load(const sal_Char* _pLibPath);
+    bool        load(const char* _pLibPath);
     /// unload the lib
     void        unload();
     /// ensure that an ODBC environment is allocated

@@ -83,7 +83,7 @@ struct AsciiPropertyValue
     // this crashes on unxlngi6.pro, since there's a bug which somehow results in
     // getDefaultDataSourceSettings returning corrupted Any instances then.
     css::uno::Any          DefaultValue;
-    const sal_Char*        AsciiName;
+    const char*            AsciiName;
     const css::uno::Type&  ValueType;
 
     AsciiPropertyValue()
@@ -93,7 +93,7 @@ struct AsciiPropertyValue
     {
     }
 
-    AsciiPropertyValue( const sal_Char* _pAsciiName, const css::uno::Any& _rDefaultValue )
+    AsciiPropertyValue( const char* _pAsciiName, const css::uno::Any& _rDefaultValue )
         :DefaultValue( _rDefaultValue )
         ,AsciiName( _pAsciiName )
         ,ValueType( _rDefaultValue.getValueType() )
@@ -101,7 +101,7 @@ struct AsciiPropertyValue
         OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
     }
-    AsciiPropertyValue( const sal_Char* _pAsciiName, const css::uno::Type& _rValeType )
+    AsciiPropertyValue( const char* _pAsciiName, const css::uno::Type& _rValeType )
         :DefaultValue()
         ,AsciiName( _pAsciiName )
         ,ValueType( _rValeType )
