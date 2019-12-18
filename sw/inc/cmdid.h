@@ -21,24 +21,25 @@
 #define INCLUDED_SW_INC_CMDID_H
 
 #include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 #include <svl/solar.hrc>
 
 #define FN_FILE                 SID_SW_START
-#define FN_EDIT                 (SID_SW_START +  100)
+//#define FN_EDIT                 (SID_SW_START +  100) defined in svxids.hrc
 #define FN_VIEW                 (SID_SW_START +  200)
-#define FN_INSERT               (SID_SW_START +  300)
-#define FN_FORMAT               (SID_SW_START +  400)
-#define FN_EXTRA                (SID_SW_START +  600)
-#define FN_SELECTION            (SID_SW_START +  900)
+//#define FN_INSERT               (SID_SW_START +  300) defined in svxids.hrc
+//#define FN_FORMAT               (SID_SW_START +  400) defined in svxids.hrc
+//#define FN_EXTRA                (SID_SW_START +  600) defined in svxids.hrc
+//#define FN_SELECTION            (SID_SW_START +  900) defined in svxids.hrc
 #define FN_QUERY                (SID_SW_START + 1000)
 #define FN_ENVELP               (SID_SW_START + 1050)
 #define FN_PARAM                (SID_SW_START + 1100)
 #define FN_STAT                 (SID_SW_START + 1180)
-#define FN_PGPREVIEW            (SID_SW_START + 1250)
+//#define FN_PGPREVIEW            (SID_SW_START + 1250) defined in svxids.hrc
 #define FN_FRAME                (SID_SW_START + 1300)
 #define FN_INSERT2              (SID_SW_START + 1400)
 #define FN_FORMAT2              (SID_SW_START + 1600)
-#define FN_EDIT2                (SID_SW_START + 1800)
+//#define FN_EDIT2                (SID_SW_START + 1800) defined in svxids.hrc
 #define FN_QUERY2               (SID_SW_START + 2000)
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
