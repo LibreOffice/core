@@ -24,12 +24,20 @@
 #include <mouseeventhandler.hxx>
 #include <basecontainernode.hxx>
 #include <delayevent.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <comphelper/sequence.hxx>
+#include <com/sun/star/container/XNameAccess.hpp>
+
+
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
@@ -342,11 +350,40 @@ bool EffectRewinder::hasBlockedAnimation( const css::uno::Reference<css::animati
     return false;
 }
 
+bool EffectRewinder::isHardwareAccelerationEnabled()
+{
+    Reference<lang::XMultiServiceFactory> xConfigProvider(
+            configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext()));
+
+    uno::Sequence<uno::Any> aArgs1(comphelper::InitAnyPropertySequence(
+    {
+        {"nodepath", uno::Any(OUString("/org.openoffice.Office.Canvas"))}
+    }));
+
+    Reference<container::XNameAccess> mxForceFlagNameAccess;
+
+    mxForceFlagNameAccess.set(
+        xConfigProvider->createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationUpdateAccess",
+            aArgs1 ),
+           uno::UNO_QUERY_THROW);
+
+    bool bForceLastEntry(false);
+    if( !mxForceFlagNameAccess.is() )
+        return true;
+
+    if( !(mxForceFlagNameAccess->getByName("ForceSafeServiceImpl") >>= bForceLastEntry) )
+        return true;
+
+    return !bForceLastEntry;
+}
+
 bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 {
     Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
 
-    if(xNode.is() && hasBlockedAnimation(xNode) )
+    if(isHardwareAccelerationEnabled() && xNode.is() && hasBlockedAnimation(xNode) )
         skipSingleMainSequenceEffects();
 
     // This notification is only relevant for us when the rpNode belongs to

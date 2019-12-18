@@ -99,6 +99,7 @@ public:
 
     //FIXME: That is an opengl issue(it doesn't allow to animate somea animations), remove that function when opengl fixed.
     static bool hasBlockedAnimation( const css::uno::Reference<css::animations::XAnimationNode>& xNode);
+    static bool isHardwareAccelerationEnabled();
 
 private:
     EventMultiplexer& mrEventMultiplexer;
