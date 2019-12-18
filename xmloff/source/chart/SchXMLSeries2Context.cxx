@@ -688,7 +688,7 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
             break;
 
         case XML_TOK_SERIES_DATA_POINT:
-            pContext = new SchXMLDataPointContext( GetImport(), rLocalName,
+            pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName,
                                                    mrStyleVector, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
         case XML_TOK_SERIES_PROPERTY_MAPPING:
@@ -1090,14 +1090,18 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );
                 }
 
-                if(!seriesStyle.msCustomLabelField.isEmpty())
+                // Custom labels might be passed as property
+                if(auto nLabelCount = seriesStyle.mCustomLabels.size(); nLabelCount > 0)
                 {
-                    Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(1);
+                    Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(nLabelCount);
                     Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                    Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
-                    xLabels[0] = xCustomLabel;
-                    xCustomLabel->setString(seriesStyle.msCustomLabelField);
-                    xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+                    for( auto j = 0; j< xLabels.getLength(); ++j )
+                    {
+                        Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
+                        xLabels[j] = xCustomLabel;
+                        xCustomLabel->setString(seriesStyle.mCustomLabels[j]);
+                        xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+                    }
                     xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
                 }
             }
