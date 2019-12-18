@@ -391,7 +391,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             default: break;
         }
 
-        // no further adjustement for LibreOfficeKit
+        // no further adjustment for LibreOfficeKit
         if (bLOKActive)
             break;
 
