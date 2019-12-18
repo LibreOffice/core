@@ -6,9 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef INCLUDED_CUI_SOURCE_OPTIONS_CERTPATH_HXX
-#define INCLUDED_CUI_SOURCE_OPTIONS_CERTPATH_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -36,7 +34,5 @@ public:
 
     OUString getDirectory() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
