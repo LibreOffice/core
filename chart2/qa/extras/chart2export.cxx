@@ -150,6 +150,7 @@ public:
     void testTdf122031();
     void testTdf115012();
     void testTdf123206_customLabelText();
+    void testDeletedLegendEntries();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -263,6 +264,7 @@ public:
     CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
+    CPPUNIT_TEST(testDeletedLegendEntries);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2401,6 +2403,44 @@ void Chart2ExportTest::testTdf123206_customLabelText()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r/a:t", "kiscica");
+}
+
+void Chart2ExportTest::testDeletedLegendEntries()
+{
+    load("/chart2/qa/extras/data/xlsx/", "deleted_legend_entry.xlsx");
+    {
+        reload("Calc Office Open XML");
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+        bool bShowLegendEntry = true;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("ShowLegendEntry") >>= bShowLegendEntry);
+        CPPUNIT_ASSERT(!bShowLegendEntry);
+    }
+
+    load("/chart2/qa/extras/data/xlsx/", "deleted_legend_entry2.xlsx");
+    {
+        reload("Calc Office Open XML");
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+        bool bShowLegendEntry = true;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("ShowLegendEntry") >>= bShowLegendEntry);
+        CPPUNIT_ASSERT(!bShowLegendEntry);
+
+        Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(1, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries2(getDataSeriesFromDoc(xChartDoc2, 0));
+        CPPUNIT_ASSERT(xDataSeries2.is());
+        Reference<beans::XPropertySet> xPropertySet2(xDataSeries2, uno::UNO_QUERY_THROW);
+        Sequence<sal_Int32> deletedLegendEntriesSeq;
+        CPPUNIT_ASSERT(xPropertySet2->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
