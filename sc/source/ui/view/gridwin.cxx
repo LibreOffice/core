@@ -5930,7 +5930,10 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     }
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aBoundingBox.toString().getStr());
+    OString sBoundingBoxString = "EMPTY";
+    if (!aBoundingBox.IsEmpty())
+        sBoundingBoxString = aBoundingBox.toString();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, rectanglesToString(aLogicRects).getStr());
 
     for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
@@ -5980,7 +5983,11 @@ void ScGridWindow::updateOtherKitSelections() const
         OString aRectsString = rectanglesToString(aOtherLogicRects);
         if (it == pViewShell)
         {
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aBoundingBox.toString().getStr());
+            OString sBoundingBoxString = "EMPTY";
+            if (!aBoundingBox.IsEmpty())
+                sBoundingBoxString = aBoundingBox.toString();
+
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString.getStr());
         }
         else
@@ -6000,13 +6007,18 @@ void updateLibreOfficeKitAutoFill(const ScViewData* pViewData, tools::Rectangle 
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
 
-    // selection start handle
-    tools::Rectangle aLogicRectangle(
-            rRectangle.Left()  / nPPTX, rRectangle.Top() / nPPTY,
-            rRectangle.Right() / nPPTX, rRectangle.Bottom() / nPPTY);
+    OString sRectangleString = "EMPTY";
+    if (!rRectangle.IsEmpty())
+    {
+        // selection start handle
+        tools::Rectangle aLogicRectangle(
+                rRectangle.Left()  / nPPTX, rRectangle.Top() / nPPTY,
+                rRectangle.Right() / nPPTX, rRectangle.Bottom() / nPPTY);
+        sRectangleString = aLogicRectangle.toString();
+    }
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, aLogicRectangle.toString().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString.getStr());
 }
 
 } //end anonymous namespace
