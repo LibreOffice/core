@@ -315,7 +315,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS bool getBooleanDataSourceSetting(
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const sal_Char* _pAsciiSettingName
+            const char* _pAsciiSettingName
         );
 
     /** check if a specific property is enabled in the info sequence
@@ -345,7 +345,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool    getDataSourceSetting(
         const css::uno::Reference< css::uno::XInterface >& _rxDataSource,
-        const sal_Char* _pAsciiSettingsName,
+        const char* _pAsciiSettingsName,
         css::uno::Any& /* [out] */ _rSettingsValue
     );
     OOO_DLLPUBLIC_DBTOOLS

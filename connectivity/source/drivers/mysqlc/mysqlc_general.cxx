@@ -87,7 +87,7 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
     }
 }
 
-void throwFeatureNotImplementedException(const sal_Char* _pAsciiFeatureName,
+void throwFeatureNotImplementedException(const char* _pAsciiFeatureName,
                                          const css::uno::Reference<XInterface>& _rxContext)
 {
     const OUString sMessage
@@ -95,7 +95,7 @@ void throwFeatureNotImplementedException(const sal_Char* _pAsciiFeatureName,
     throw SQLException(sMessage, _rxContext, "HYC00", 0, Any());
 }
 
-void throwInvalidArgumentException(const sal_Char* _pAsciiFeatureName,
+void throwInvalidArgumentException(const char* _pAsciiFeatureName,
                                    const css::uno::Reference<XInterface>& _rxContext)
 {
     const OUString sMessage

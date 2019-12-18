@@ -85,7 +85,7 @@ bool MacabImplModule::isMacOSPresent()
 namespace
 {
     template< typename FUNCTION >
-    void lcl_getFunctionFromModuleOrUnload( oslModule& _rModule, const sal_Char* _pAsciiSymbolName, FUNCTION& _rFunction )
+    void lcl_getFunctionFromModuleOrUnload( oslModule& _rModule, const char* _pAsciiSymbolName, FUNCTION& _rFunction )
     {
         _rFunction = nullptr;
         if ( _rModule )

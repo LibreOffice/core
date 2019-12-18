@@ -59,7 +59,7 @@
 # pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 
-inline connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
+inline connectivity::OSQLInternalNode* newNode(const char* pNewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
@@ -4278,7 +4278,7 @@ using namespace ::dbtools;
 
 connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
 
-connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
+connectivity::OSQLInternalNode* newNode(const char* pNewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID)
 {
@@ -4786,7 +4786,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank)
 }
 
 
-void OSQLParser::error(const sal_Char *fmt)
+void OSQLParser::error(const char *fmt)
 {
 	if(m_sErrorMessage.isEmpty())
 	{

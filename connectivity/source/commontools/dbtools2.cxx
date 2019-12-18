@@ -572,7 +572,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
 }
 
 
-bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const sal_Char* _pAsciiSettingName )
+bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const char* _pAsciiSettingName )
 {
     bool bValue( false );
     try
@@ -620,7 +620,7 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUStrin
     return bIsPresent;
 }
 
-bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
+bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const char* _pAsciiSettingsName,
     Any& /* [out] */ _rSettingsValue )
 {
     OUString sAsciiSettingsName = OUString::createFromAscii(_pAsciiSettingsName);

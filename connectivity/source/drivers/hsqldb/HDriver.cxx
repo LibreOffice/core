@@ -667,9 +667,9 @@ namespace connectivity
     namespace
     {
 
-        const sal_Char* lcl_getCollationForLocale( const OUString& _rLocaleString, bool _bAcceptCountryMismatch = false )
+        const char* lcl_getCollationForLocale( const OUString& _rLocaleString, bool _bAcceptCountryMismatch = false )
         {
-            static const sal_Char* pTranslations[] =
+            static const char* pTranslations[] =
             {
                 "af-ZA", "Afrikaans",
                 "am-ET", "Amharic",
@@ -768,7 +768,7 @@ namespace connectivity
             };
 
             OUString sLocaleString( _rLocaleString );
-            sal_Char nCompareTermination = 0;
+            char nCompareTermination = 0;
 
             if ( _bAcceptCountryMismatch )
             {
@@ -782,7 +782,7 @@ namespace connectivity
                 nCompareTermination = '-';
             }
 
-            const sal_Char** pLookup = pTranslations;
+            const char** pLookup = pTranslations;
             for ( ; *pLookup; pLookup +=2 )
             {
                 sal_Int32 nCompareUntil = 0;

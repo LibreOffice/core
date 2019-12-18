@@ -43,7 +43,7 @@ struct ProviderRequest
     Reference<XMultiServiceFactory> const xServiceManager;
     OUString const sImplementationName;
 
-    ProviderRequest(void* pServiceManager, sal_Char const* pImplementationName)
+    ProviderRequest(void* pServiceManager, char const* pImplementationName)
         : xServiceManager(static_cast<XMultiServiceFactory*>(pServiceManager))
         , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
@@ -69,7 +69,7 @@ struct ProviderRequest
 };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* component_getFactory(const sal_Char* pImplementationName,
+extern "C" SAL_DLLPUBLIC_EXPORT void* component_getFactory(const char* pImplementationName,
                                                            void* pServiceManager,
                                                            void* /* pRegistryKey */)
 {

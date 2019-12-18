@@ -483,7 +483,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Se
             "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
-//     buf.append( (const sal_Char *)escapedString, len -1 );
+//     buf.append( (const char *)escapedString, len -1 );
 
     m_updateableField[columnIndex-1].value <<=
         OUString( reinterpret_cast<char*>(escapedString), len, RTL_TEXTENCODING_ASCII_US );

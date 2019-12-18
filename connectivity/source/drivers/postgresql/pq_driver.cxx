@@ -278,7 +278,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * postgresql_sdbc_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * )
+    const char * pImplName, void * pServiceManager, void * )
 {
     // need to extract the defaultcontext, because the way, sdbc
     // bypasses the servicemanager, does not allow to use the

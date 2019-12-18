@@ -1991,7 +1991,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
     if ( _pReplaceToken1 )
     {
         bool bTwoTokens = ( _pReplaceToken2 != nullptr );
-        const sal_Char* pPlaceHolder1 = bTwoTokens ? "#1" : "#";
+        const char* pPlaceHolder1 = bTwoTokens ? "#1" : "#";
         const OUString sPlaceHolder1 = OUString::createFromAscii( pPlaceHolder1 );
 
         sErrorMessage = sErrorMessage.replaceFirst( sPlaceHolder1, *_pReplaceToken1 );

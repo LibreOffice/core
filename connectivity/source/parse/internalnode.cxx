@@ -25,7 +25,7 @@
 using namespace connectivity;
 
 
-OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
+OSQLInternalNode::OSQLInternalNode(const char* pNewValue,
                                    SQLNodeType eNodeType,
                                    sal_uInt32 nNodeID)
                  : OSQLParseNode(pNewValue,eNodeType,nNodeID)

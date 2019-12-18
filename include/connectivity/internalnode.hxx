@@ -32,7 +32,7 @@ namespace connectivity
     class OSQLInternalNode final : public OSQLParseNode
     {
     public:
-        OSQLInternalNode(const sal_Char* pNewValue,
+        OSQLInternalNode(const char* pNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
         OSQLInternalNode(const OString& _rNewValue,

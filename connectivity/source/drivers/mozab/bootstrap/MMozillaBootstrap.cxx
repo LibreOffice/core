@@ -152,7 +152,7 @@ static Reference< XInterface > createInstance( const Reference< XMultiServiceFac
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* mozbootstrap_component_getFactory(
-                                        const sal_Char* pImplementationName,
+                                        const char* pImplementationName,
                                         void* pServiceManager,
                                         void* /*pRegistryKey*/)
 {

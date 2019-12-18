@@ -112,7 +112,7 @@ namespace dbtools
         }
 
 
-        bool lcl_getDriverSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        bool lcl_getDriverSetting( const char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             lcl_checkConnected( _metaData );
             const ::comphelper::NamedValueCollection& rDriverMetaData = _metaData.aDriverConfig.getMetaData( _metaData.xConnectionMetaData->getURL() );
@@ -123,7 +123,7 @@ namespace dbtools
         }
 
 
-        bool lcl_getConnectionSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        bool lcl_getConnectionSetting( const char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
             {

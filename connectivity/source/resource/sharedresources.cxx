@@ -104,7 +104,7 @@ namespace connectivity
     namespace
     {
         size_t lcl_substitute( OUString& _inout_rString,
-            const sal_Char* _pAsciiPattern, const OUString& _rReplace )
+            const char* _pAsciiPattern, const OUString& _rReplace )
         {
             size_t nOccurrences = 0;
 
@@ -139,7 +139,7 @@ namespace connectivity
 
 
     OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
-                const sal_Char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
+                const char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         if ( !lcl_substitute( sString, _pAsciiPatternToReplace, _rStringToSubstitute ) )
@@ -149,8 +149,8 @@ namespace connectivity
 
 
     OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
-                const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
+                const char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
+                const char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         if( !lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) )
@@ -162,9 +162,9 @@ namespace connectivity
 
 
     OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
-                const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
-                const sal_Char* _pAsciiPatternToReplace3, const OUString& _rStringToSubstitute3 ) const
+                const char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
+                const char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
+                const char* _pAsciiPatternToReplace3, const OUString& _rStringToSubstitute3 ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         if( !lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) )
@@ -177,7 +177,7 @@ namespace connectivity
     }
 
     OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
-                    const std::vector< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const
+                    const std::vector< std::pair<const char* , OUString > >& _rStringToSubstitutes) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         for(const auto& [rPattern, rReplace] : _rStringToSubstitutes)

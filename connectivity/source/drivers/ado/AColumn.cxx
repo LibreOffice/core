@@ -103,7 +103,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
 {
     if(m_aColumn.IsValid())
     {
-        const sal_Char* pAdoPropertyName = nullptr;
+        const char* pAdoPropertyName = nullptr;
 
         switch(nHandle)
         {

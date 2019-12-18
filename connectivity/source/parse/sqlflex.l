@@ -72,8 +72,8 @@ using namespace connectivity;
 // Pages generally are created from the Lexer
 
 static sal_Int32    gatherString(int delim, sal_Int32 nTyp);
-static sal_Int32    gatherName(const sal_Char*);
-static sal_Int32    gatherNamePre(const sal_Char* );
+static sal_Int32    gatherName(const char*);
+static sal_Int32    gatherNamePre(const char* );
 // has to be set before the parser starts
 OSQLScanner* xxx_pGLOBAL_SQLSCAN = nullptr;
 
@@ -550,7 +550,7 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
             }
             else
             {
-                sBuffer.append(static_cast<sal_Char>(ch));
+                sBuffer.append(static_cast<char>(ch));
             }
 
         }
@@ -558,7 +558,7 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
             break;
         else
         {
-            sBuffer.append(static_cast<sal_Char>(ch));
+            sBuffer.append(static_cast<char>(ch));
         }
     }
     YY_FATAL_ERROR("Unterminated name string");
@@ -604,7 +604,7 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
  * Valid Names or international keywords:
  *  As we have international keywords, we test first on them
  */
-sal_Int32 gatherName(const sal_Char* text)
+sal_Int32 gatherName(const char* text)
 {
     sal_Int32 nToken;
     OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
@@ -648,7 +648,7 @@ sal_Int32 gatherName(const sal_Char* text)
  Valid Names or international keywords:
  As we have international keywords, we test first on them
 */
-sal_Int32 gatherNamePre(const sal_Char* text)
+sal_Int32 gatherNamePre(const char* text)
 {
     sal_Int32 nToken;
     OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
@@ -784,7 +784,7 @@ sal_Int32 OSQLScanner::SQLyygetc(void)
 }
 
 //------------------------------------------------------------------------------
-IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
+IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const char* sToken) const
 {
     OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");
     return (m_bInternational) ? m_pContext->getIntlKeyCode(OString(sToken) ) : IParseContext::InternationalKeyCode::None;

@@ -91,7 +91,7 @@ namespace connectivity
 
         /** substitutes a given placeholder in the given message with the given value
         */
-        void lcl_substitutePlaceholder(OUString& _rMessage, const sal_Char* _pPlaceholder, const o3tl::optional<OUString>& rParamValue)
+        void lcl_substitutePlaceholder(OUString& _rMessage, const char* _pPlaceholder, const o3tl::optional<OUString>& rParamValue)
         {
             size_t nPlaceholderLen( strlen( _pPlaceholder ) );
             sal_Int32 nIndex = _rMessage.indexOfAsciiL( _pPlaceholder, nPlaceholderLen );

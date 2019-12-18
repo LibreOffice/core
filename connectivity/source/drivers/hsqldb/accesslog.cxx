@@ -38,7 +38,7 @@ namespace connectivity { namespace hsqldb
     }
 
 
-    LogFile::LogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
+    LogFile::LogFile( JNIEnv* env, jstring streamName, const char* _pAsciiSuffix )
         : m_sFileName(StorageContainer::jstring2ustring(env,streamName) +
                  "." + OUString::createFromAscii( _pAsciiSuffix ) )
     {
@@ -57,7 +57,7 @@ namespace connectivity { namespace hsqldb
     }
 
 
-    void LogFile::writeString( const sal_Char* _pString, bool _bEndLine )
+    void LogFile::writeString( const char* _pString, bool _bEndLine )
     {
         FILE* pLogFile = getLogFile();
         fwrite( _pString, sizeof( *_pString ), strlen( _pString ), pLogFile );
