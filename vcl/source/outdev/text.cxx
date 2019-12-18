@@ -48,7 +48,7 @@
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
 #include <impglyphitem.hxx>
-#include <boost/optional.hpp>
+#include <o3tl/optional.hxx>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
@@ -1191,7 +1191,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         const sal_Unicode* pBase = rStr.getStr();
         const sal_Unicode* pStr = pBase + nMinIndex;
         const sal_Unicode* pEnd = pBase + nEndIndex;
-        boost::optional<OUStringBuffer> xTmpStr;
+        o3tl::optional<OUStringBuffer> xTmpStr;
         for( ; pStr < pEnd; ++pStr )
         {
             // TODO: are there non-digit localizations?
