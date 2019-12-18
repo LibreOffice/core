@@ -133,7 +133,7 @@ namespace basctl
 
         struct EventEntry
         {
-            const sal_Char* pEventName;
+            const char* pEventName;
             void (DocumentEventListener::*listenerMethod)( const ScriptDocument& _rDocument );
         };
         static EventEntry const aEvents[] = {

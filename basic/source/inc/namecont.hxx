@@ -308,10 +308,10 @@ protected:
     void init( const OUString& rInitialDocumentURL,
                const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
 
-    virtual const sal_Char*    getInfoFileName() const = 0;
-    virtual const sal_Char*    getOldInfoFileName() const = 0;
-    virtual const sal_Char*    getLibElementFileExtension() const = 0;
-    virtual const sal_Char*    getLibrariesDir() const = 0;
+    virtual const char*    getInfoFileName() const = 0;
+    virtual const char*    getOldInfoFileName() const = 0;
+    virtual const char*    getLibElementFileExtension() const = 0;
+    virtual const char*    getLibrariesDir() const = 0;
 
     // Handle maLibInfoFileURL and maStorageURL correctly
     void checkStorageURL

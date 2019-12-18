@@ -416,7 +416,7 @@ namespace basegfx
             return aRetval;
         }
 
-        B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char nNumber, bool bLitSegments)
+        B2DPolyPolygon createSevenSegmentPolyPolygon(char nNumber, bool bLitSegments)
         {
             // config here
             // {

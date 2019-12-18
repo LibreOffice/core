@@ -62,10 +62,10 @@ using com::sun::star::uno::Reference;
 
 // Implementation class SfxDialogLibraryContainer
 
-const sal_Char* SfxDialogLibraryContainer::getInfoFileName() const { return "dialog"; }
-const sal_Char* SfxDialogLibraryContainer::getOldInfoFileName() const { return "dialogs"; }
-const sal_Char* SfxDialogLibraryContainer::getLibElementFileExtension() const { return "xdl"; }
-const sal_Char* SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
+const char* SfxDialogLibraryContainer::getInfoFileName() const { return "dialog"; }
+const char* SfxDialogLibraryContainer::getOldInfoFileName() const { return "dialogs"; }
+const char* SfxDialogLibraryContainer::getLibElementFileExtension() const { return "xdl"; }
+const char* SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
 
 // Ctor for service
 SfxDialogLibraryContainer::SfxDialogLibraryContainer()

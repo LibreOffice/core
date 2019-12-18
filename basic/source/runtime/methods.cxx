@@ -324,7 +324,7 @@ static void implChr( SbxArray& rPar, bool bChrW )
         OUString aStr;
         if( !bChrW && SbiRuntime::isVBAEnabled() )
         {
-            sal_Char c = static_cast<sal_Char>(pArg->GetByte());
+            char c = static_cast<char>(pArg->GetByte());
             aStr = OUString(&c, 1, osl_getThreadTextEncoding());
         }
         else
@@ -2527,10 +2527,10 @@ void SbRtl_IsMissing(StarBASIC *, SbxArray & rPar, bool)
 // Function looks for wildcards, removes them and always returns the pure path
 static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLData)
 {
-    static const sal_Char cDelim1 = '/';
-    static const sal_Char cDelim2 = '\\';
-    static const sal_Char cWild1 = '*';
-    static const sal_Char cWild2 = '?';
+    static const char cDelim1 = '/';
+    static const char cDelim2 = '\\';
+    static const char cWild1 = '*';
+    static const char cWild2 = '?';
 
     rRTLData.pWildCard.reset();
     rRTLData.sFullNameToBeChecked.clear();
@@ -4178,10 +4178,10 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         // convert the string to byte string, preserving unicode (2 bytes per character)
         sal_Int32 nSize = aNewStr.getLength()*2;
         const sal_Unicode* pSrc = aNewStr.getStr();
-        std::unique_ptr<sal_Char[]> pChar(new sal_Char[nSize+1]);
+        std::unique_ptr<char[]> pChar(new char[nSize+1]);
         for( sal_Int32 i=0; i < nSize; i++ )
         {
-            pChar[i] = static_cast< sal_Char >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+            pChar[i] = static_cast< char >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
             if( i%2 )
             {
                 pSrc++;
@@ -4199,7 +4199,7 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
     {
         // there is no concept about default codepage in unix. so it is incorrectly in unix
         OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
-        const sal_Char* pChar = aOStr.getStr();
+        const char* pChar = aOStr.getStr();
         sal_Int32 nArraySize = aOStr.getLength();
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
         bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );

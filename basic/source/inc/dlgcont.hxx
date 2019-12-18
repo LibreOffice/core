@@ -61,10 +61,10 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
 
     virtual void onNewRootStorage() override;
 
-    virtual const sal_Char*    getInfoFileName() const override;
-    virtual const sal_Char*    getOldInfoFileName() const override;
-    virtual const sal_Char*    getLibElementFileExtension() const override;
-    virtual const sal_Char*    getLibrariesDir() const override;
+    virtual const char*    getInfoFileName() const override;
+    virtual const char*    getOldInfoFileName() const override;
+    virtual const char*    getLibElementFileExtension() const override;
+    virtual const char*    getLibrariesDir() const override;
 
 public:
     SfxDialogLibraryContainer();

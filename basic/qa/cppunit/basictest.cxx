@@ -57,7 +57,7 @@ void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
             {
                 if(size == size_read)
                 {
-                    OUString sCode(static_cast<sal_Char*>(buffer), size, RTL_TEXTENCODING_UTF8);
+                    OUString sCode(static_cast<char*>(buffer), size, RTL_TEXTENCODING_UTF8);
                     sSource = sCode;
                 }
             }
