@@ -1838,12 +1838,24 @@ static bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const
 
     for(int i = 0; i < nCount; ++i )
     {
-        OUString aStrDefName = bToApi ? SvxResId(pSourceResIds[i]) : OUString::createFromAscii(pSourceResIds[i]);
-        if( sStr == aStrDefName )
+        if (bToApi)
         {
-            OUString aReplace = bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]);
-            rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
-            return true;
+            OUString aStrDefName = SvxResId(pSourceResIds[i]);
+            if( sStr == aStrDefName )
+            {
+                OUString aReplace = OUString::createFromAscii(pDestResIds[i]);
+                rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
+                return true;
+            }
+        }
+        else
+        {
+            if( sStr.equalsAscii(pSourceResIds[i]) )
+            {
+                OUString aReplace = SvxResId(pDestResIds[i]);
+                rString = rString.replaceAt( 0, strlen(pSourceResIds[i]), aReplace );
+                return true;
+            }
         }
     }
 
