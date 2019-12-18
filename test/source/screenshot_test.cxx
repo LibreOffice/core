@@ -218,14 +218,7 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
                               rUIXMLDescription == "modules/dbreport/ui/conditionwin.ui";
         if (bNonConforming) // skip these broken ones
             return;
-        bool bLegacy = rUIXMLDescription == "fps/ui/explorerfiledialog.ui" ||
-                       rUIXMLDescription == "fps/ui/remotefilesdialog.ui" ||
-                       rUIXMLDescription == "sfx/ui/floatingrecord.ui";
-        std::unique_ptr<weld::Builder> xBuilder;
-        if (bLegacy)
-            xBuilder.reset(Application::CreateInterimBuilder(mxParentWidget.get(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
-        else
-            xBuilder.reset(Application::CreateBuilder(mxParentWidget.get(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxParentWidget.get(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
         dumpDialogToPath(*xBuilder);
     }
 }
