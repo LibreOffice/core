@@ -22,9 +22,7 @@
 #include <math.h>
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
-#include <tools/solar.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <vector>

@@ -18,7 +18,6 @@
  */
 
 
-#include <vcl/window.hxx>
 #include "eehtml.hxx"
 #include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>

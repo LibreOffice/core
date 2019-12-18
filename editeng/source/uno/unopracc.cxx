@@ -21,9 +21,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <editeng/unopracc.hxx>
 #include <editeng/unoedsrc.hxx>
 

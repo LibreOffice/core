@@ -18,14 +18,8 @@
  */
 
 
-#include <svl/intitem.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/fhgtitem.hxx>
-
 #include <editeng/outliner.hxx>
+#include <tools/debug.hxx>
 #include "outlundo.hxx"
 
 

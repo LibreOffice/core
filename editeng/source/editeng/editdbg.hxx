@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITDBG_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EDITDBG_HXX
 
-#include <svl/solar.hrc>
+#include <rtl/string.hxx>
 #include <stdio.h>
 
 class EditEngine;

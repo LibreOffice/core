@@ -23,7 +23,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -33,9 +32,6 @@
 // Project-local header
 
 
-#include <editeng/unoedhlp.hxx>
-#include <editeng/unopracc.hxx>
-#include <editeng/unoedsrc.hxx>
 #include <editeng/AccessibleParaManager.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 

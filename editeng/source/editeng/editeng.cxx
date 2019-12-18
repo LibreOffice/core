@@ -25,7 +25,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svtools/ctrltool.hxx>
 #include <tools/stream.hxx>
 
 #include <editeng/svxfont.hxx>
@@ -34,15 +33,11 @@
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
 #include "editdbg.hxx"
-#include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
-#include <editeng.hxx>
-#include <editeng/acorrcfg.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
 #include <editeng/cmapitem.hxx>
-#include <vcl/graph.hxx>
 
 #include <editeng/autokernitem.hxx>
 #include <editeng/contouritem.hxx>
@@ -58,7 +53,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charscaleitem.hxx>
@@ -68,17 +62,10 @@
 #include <sot/formats.hxx>
 
 #include <editeng/numitem.hxx>
-#include <editeng/bulletitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <linguistic/lngprops.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-
-#include <svl/srchdefs.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <editeng/frmdiritem.hxx>

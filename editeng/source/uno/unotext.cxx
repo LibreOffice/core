@@ -18,7 +18,6 @@
  */
 
 #include <vcl/svapp.hxx>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/TextRangeSelection.hpp>
@@ -28,9 +27,9 @@
 
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <rtl/instance.hxx>
+#include <tools/debug.hxx>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>

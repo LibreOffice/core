@@ -25,7 +25,6 @@
 #include <editeng/outliner.hxx>
 #include <editdoc.hxx>
 
-#include <unotools/fontcvt.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/languageoptions.hxx>
 

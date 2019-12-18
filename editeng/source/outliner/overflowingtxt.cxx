@@ -23,13 +23,11 @@
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editdata.hxx>
 
-#include "outleeng.hxx"
 #include <editdoc.hxx>
-
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 
 std::unique_ptr<OutlinerParaObject> TextChainingUtils::JuxtaposeParaObject(

@@ -18,13 +18,11 @@
  */
 
 
-#include <svl/intitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
+#include <editeng/editund2.hxx>
 
-#include <editeng/lrspitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>
 #include <vcl/mapmod.hxx>
 
@@ -32,10 +30,7 @@
 
 #include <editeng/outliner.hxx>
 #include "paralist.hxx"
-#include <editeng/outlobj.hxx>
 #include "outleeng.hxx"
-#include "outlundo.hxx"
-#include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 
 

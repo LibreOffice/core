@@ -20,13 +20,10 @@
 #ifndef INCLUDED_EDITENG_INC_EDTSPELL_HXX
 #define INCLUDED_EDITENG_INC_EDTSPELL_HXX
 
-#include <editeng/editengdllapi.h>
 #include <editeng/splwrap.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/misspellrange.hxx>
-#include <tools/link.hxx>
-#include <vcl/outdev.hxx>
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;

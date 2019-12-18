@@ -17,14 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/stream.hxx>
 #include <vcl/outdev.hxx>
 
 #include <editeng/bulletitem.hxx>
-
-#include <tools/tenccvt.hxx>
-#include <tools/debug.hxx>
-#include <vcl/dibtools.hxx>
 
 SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich )
     : SfxPoolItem(_nWhich)

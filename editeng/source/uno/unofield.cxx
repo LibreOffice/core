@@ -19,13 +19,10 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <svl/itemprop.hxx>
 
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
 #include <editeng/measfld.hxx>

@@ -21,11 +21,10 @@
 // Global header
 
 
-#include <limits.h>
-#include <vector>
 #include <algorithm>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <editeng/flditem.hxx>
@@ -34,7 +33,6 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -58,7 +56,6 @@
 #include <editeng/outliner.hxx>
 #include <editeng/unoedprx.hxx>
 #include <editeng/unoedsrc.hxx>
-#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 
 
@@ -67,7 +64,6 @@
 
 #include <com/sun/star/beans/PropertyState.hpp>
 
-#include <editeng/unolingu.hxx>
 #include <editeng/unopracc.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include "AccessibleHyperlink.hxx"

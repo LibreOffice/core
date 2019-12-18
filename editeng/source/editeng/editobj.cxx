@@ -18,10 +18,7 @@
  */
 
 #include <memory>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-
-#include <tools/stream.hxx>
 
 #include <editeng/fieldupdater.hxx>
 #include <editeng/macros.hxx>
@@ -30,19 +27,9 @@
 #include <editeng/editdata.hxx>
 #include <editattr.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/tstpitem.hxx>
-#include <editeng/bulletitem.hxx>
-#include <editeng/numitem.hxx>
-#include <editeng/brushitem.hxx>
 
-#include <vcl/graph.hxx>
-#include <svl/intitem.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <unotools/fontcvt.hxx>
-#include <tools/tenccvt.hxx>
 
 #include <libxml/xmlwriter.h>
 #include <algorithm>

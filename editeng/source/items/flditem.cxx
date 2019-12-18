@@ -27,7 +27,6 @@
 #include <editeng/measfld.hxx>
 #include <editeng/unonames.hxx>
 
-#include <tools/tenccvt.hxx>
 #include <tools/debug.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

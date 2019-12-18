@@ -30,17 +30,13 @@
 
 #include <comphelper/string.hxx>
 
-#include <com/sun/star/lang/Locale.hpp>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/colritem.hxx>
 #include <editeng/svxrtf.hxx>
 #include <editeng/editids.hrc>
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
-#include <com/sun/star/document/XDocumentProperties.hpp>
 
 
 using namespace ::com::sun::star;

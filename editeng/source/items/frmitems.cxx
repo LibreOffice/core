@@ -21,24 +21,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/CellContentType.hpp>
-#include <com/sun/star/table/TableOrientation.hpp>
-#include <com/sun/star/util/SortField.hpp>
-#include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
-#include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Selection.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
@@ -50,20 +38,15 @@
 #include <sal/log.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <limits.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
-#include <comphelper/fileformat.h>
 #include <svl/memberid.h>
-#include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/pbinitem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -82,15 +65,13 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
-#include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>
-#include <editeng/editerr.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/GraphicLoader.hxx>
 
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;

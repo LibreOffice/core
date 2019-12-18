@@ -25,7 +25,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/transliteration.hxx>
@@ -33,20 +32,15 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <sot/storinfo.hxx>
 #include <svl/fstathelper.hxx>
-#include <svtools/helpopt.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -62,9 +56,7 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
-#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <unotools/streamwrap.hxx>
 #include "SvXMLAutoCorrectImport.hxx"
@@ -77,8 +69,6 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <tools/diagnose_ex.h>
 #include <xmloff/xmltoken.hxx>
-#include <vcl/help.hxx>
-#include <set>
 #include <unordered_map>
 #include <rtl/character.hxx>
 

@@ -33,7 +33,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graphicfilter.hxx>
 
 #include <svl/srchitem.hxx>
 
@@ -56,11 +55,8 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/fontitem.hxx>
 #include <unotools/lingucfg.hxx>
-#include <osl/file.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <linguistic/lngprops.hxx>
@@ -69,6 +65,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

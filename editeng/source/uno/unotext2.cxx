@@ -24,9 +24,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 
-#include <editeng/eeitem.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

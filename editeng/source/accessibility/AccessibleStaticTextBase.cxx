@@ -21,12 +21,10 @@
 // Global header
 
 
-#include <limits.h>
 #include <utility>
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <functional>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -42,7 +40,6 @@
 
 
 #include <editeng/editdata.hxx>
-#include <editeng/unopracc.hxx>
 #include <editeng/unoedprx.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <libxml/xmlwriter.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/extract.hxx>
 #include <osl/diagnose.h>
 #include <unotools/localedatawrapper.hxx>
@@ -47,12 +46,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <editeng/memberids.h>
-#include <editeng/editids.hrc>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
-#include <editeng/paperinf.hxx>
-#include <vcl/svapp.hxx>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 

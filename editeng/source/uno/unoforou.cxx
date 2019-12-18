@@ -18,7 +18,6 @@
  */
 
 
-#include <algorithm>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <svl/style.hxx>
@@ -30,10 +29,8 @@
 #include <editeng/outliner.hxx>
 #include <editeng/unoedhlp.hxx>
 #include <svl/poolitem.hxx>
-#include <editeng/eeitem.hxx>
 
 #include <editeng/unoforou.hxx>
-#include <editeng/unofored.hxx>
 #include <editeng/outlobj.hxx>
 #include "unofored_internal.hxx"
 

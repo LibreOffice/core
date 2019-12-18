@@ -19,8 +19,6 @@
 
 #include <editeng/AccessibleContextBase.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>

@@ -23,7 +23,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/settings.hxx>
 
-#include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/flditem.hxx>
@@ -35,7 +34,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/kernitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -45,7 +43,6 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/justifyitem.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
@@ -55,9 +52,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <unotools/localedatawrapper.hxx>
-
-#include <editeng/unolingu.hxx>
 
 #include <set>
 #include <math.h>
@@ -65,7 +59,6 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/InputSequenceChecker.hpp>
-#include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <i18nlangtag/mslangid.hxx>
 

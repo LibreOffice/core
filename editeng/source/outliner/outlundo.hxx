@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLUNDO_HXX
 
 #include <editeng/outliner.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editund2.hxx>
 
 class OutlinerUndoBase : public EditUndo

@@ -23,6 +23,7 @@
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
+#include <editeng/editobj.hxx>
 #include <vector>
 #include <memory>
 

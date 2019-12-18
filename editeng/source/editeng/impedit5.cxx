@@ -20,9 +20,7 @@
 #include <memory>
 #include "impedit.hxx"
 #include <editeng/editeng.hxx>
-#include "editdbg.hxx"
 #include <svl/hint.hxx>
-#include <editeng/lrspitem.hxx>
 #include <sfx2/app.hxx>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )

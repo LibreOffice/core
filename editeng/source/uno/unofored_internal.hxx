@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX
 #define INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX
 
+#include <editeng/editeng.hxx>
 
 SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
 

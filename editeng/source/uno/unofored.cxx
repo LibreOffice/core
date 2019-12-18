@@ -18,7 +18,6 @@
  */
 
 
-#include <algorithm>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <editeng/eeitem.hxx>
@@ -26,7 +25,6 @@
 
 #include <svl/itemset.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>

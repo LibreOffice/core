@@ -60,9 +60,7 @@
 #include <svtools/rtfout.hxx>
 #include <tools/stream.hxx>
 #include <edtspell.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
-#include <linguistic/lngprops.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

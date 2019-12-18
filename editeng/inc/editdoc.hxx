@@ -20,8 +20,6 @@
 #ifndef INCLUDED_EDITENG_INC_EDITDOC_HXX
 #define INCLUDED_EDITENG_INC_EDITDOC_HXX
 
-#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-
 #include "editattr.hxx"
 #include "edtspell.hxx"
 #include "eerdll2.hxx"

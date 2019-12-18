@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_UNOMODEL_HXX
 #define INCLUDED_EDITENG_UNOMODEL_HXX
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

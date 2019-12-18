@@ -20,13 +20,10 @@
 #include <memory>
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/fhgtitem.hxx>
 
 #include <svl/style.hxx>
 #include <svl/languageoptions.hxx>
@@ -48,6 +45,7 @@
 #include <editeng/editstat.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 

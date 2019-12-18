@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/intitem.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/fhgtitem.hxx>
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
-#include "outleeng.hxx"
 #include <editeng/editobj.hxx>
-#include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

@@ -19,13 +19,7 @@
 
 #include <editeng/AccessibleComponentBase.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <tools/color.hxx>
 
