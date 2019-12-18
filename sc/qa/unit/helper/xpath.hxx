@@ -14,6 +14,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include "scqahelperdllapi.h"
 
 #include <memory>
 
@@ -22,12 +23,6 @@ namespace com { namespace sun { namespace star { namespace lang { class XMultiSe
 namespace utl { class TempFile; }
 class ScDocShell;
 class SvStream;
-
-#if defined(SCQAHELPER_DLLIMPLEMENTATION)
-#define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
-#else
-#define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
-#endif
 
 using namespace com::sun::star;
 
