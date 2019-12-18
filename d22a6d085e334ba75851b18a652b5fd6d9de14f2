@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_9236c4b4",
+        "filename": "svx/source/stbctrls/selctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-18T00:53:52Z",
+      "side": 1,
+      "message": "Do not use UNO_QUERY_THROW here (or otherwise you\u0027ll have to try/catch things). Instead, use css::uno::UNO_QUERY and then ask if XServiceInfo was available, i.e.\n\n    css::uno::Reference\u003c css::lang::XServiceInfo \u003e xServices( xModel, css::uno::UNO_QUERY );\n    if (xServices.is() \u0026\u0026 xServices-\u003esupportsService(\"com.sun.star.sheet.SpreadsheetDocument\"))",
+      "revId": "d22a6d085e334ba75851b18a652b5fd6d9de14f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
