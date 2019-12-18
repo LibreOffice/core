@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5f7c97a3_f2ecd8f4",
+        "filename": "basic/qa/vba_tests/Err.Raise.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-18T06:13:26Z",
+      "side": 1,
+      "message": "You are talking about testing Err.Number - it means API-visible number, I\u0027m talking about some hypothetical C++-internal variable that is invisible to Basic, but which could be used when executing Raise. Which could still exhibit what I\u0027m describing.\n\nAgain: you should not use Select Case Err.Number; you should switch on some independent variable set in main code before Raise.",
+      "parentUuid": "5f7c97a3_b7c09252",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "51bb0c56c08a2b32c46f6592c9d3dbf343f4df87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_26a2169c",
         "filename": "basic/qa/vba_tests/Err.Raise.vb",
         "patchSetId": 8
