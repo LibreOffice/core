@@ -32,7 +32,7 @@ static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Referenc
     return uno::Reference< uno::XInterface >( *new ::avmedia::win::Manager( rxFact ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* avmediawin_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* )
+extern "C" SAL_DLLPUBLIC_EXPORT void* avmediawin_component_getFactory( const char* pImplName, void* pServiceManager, void* )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = nullptr;

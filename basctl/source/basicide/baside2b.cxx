@@ -110,7 +110,7 @@ OUString getTextEngineText (ExtTextEngine& rEngine)
     aMemStream.SetLineDelimiter( LINEEND_LF );
     rEngine.Write( aMemStream );
     std::size_t nSize = aMemStream.Tell();
-    OUString aText( static_cast<const sal_Char*>(aMemStream.GetData()),
+    OUString aText( static_cast<const char*>(aMemStream.GetData()),
         nSize, RTL_TEXTENCODING_UTF8 );
     return aText;
 }

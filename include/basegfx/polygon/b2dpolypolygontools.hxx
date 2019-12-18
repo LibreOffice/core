@@ -264,7 +264,7 @@ namespace basegfx
             are 'lit' for the given number. Return un-lit segments
             otherwise.
          */
-        B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char cNumber, bool bLitSegments);
+        B2DPolyPolygon createSevenSegmentPolyPolygon(char cNumber, bool bLitSegments);
 
         /** snap some polygon coordinates to discrete coordinates
 

@@ -28,7 +28,7 @@ static uno::Reference< uno::XInterface > create_MediaPlayer( const uno::Referenc
     return uno::Reference< uno::XInterface >( *new ::avmedia::macavf::Manager( rxFact ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* avmediaMacAVF_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* avmediaMacAVF_component_getFactory( const char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = nullptr;
