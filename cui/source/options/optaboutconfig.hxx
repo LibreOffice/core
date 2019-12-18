@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTABOUTCONFIG_HXX
-#define INCLUDED_CUI_SOURCE_OPTIONS_OPTABOUTCONFIG_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -92,7 +91,5 @@ public:
         return m_xEDValue->get_text();
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
