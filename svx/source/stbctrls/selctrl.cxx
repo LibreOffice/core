@@ -31,6 +31,8 @@
 #include <bitmaps.hlst>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
@@ -48,6 +50,7 @@ public:
     OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->GetItemText(state_to_id(nState)); }
     sal_uInt16 GetState() const { return id_to_state(m_xMenu->GetCurItemIdent()); }
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
+    void HideSelectionType(const OString& rIdent) { m_xMenu->HideItem(m_xMenu->GetItemId(rIdent)); }
 };
 
 }
@@ -111,6 +114,16 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     SelectionTypePopup aPop(mnState);
     StatusBar& rStatusbar = GetStatusBar();
+
+    // Check if Calc is opened; if true, hide block selection mode tdf#122280
+    const css::uno::Reference < css::frame::XModel > xModel = m_xFrame->getController()->getModel();
+    css::uno::Reference< css::lang::XServiceInfo > xServices( xModel, css::uno::UNO_QUERY );
+    if ( xServices.is() )
+    {
+        bool bSpecModeCalc = xServices->supportsService("com.sun.star.sheet.SpreadsheetDocument");
+        if (bSpecModeCalc)
+            aPop.HideSelectionType("block");
+    }
 
     if (rEvt.IsMiddle() && aPop.Execute(&rStatusbar, rEvt.GetPosPixel()))
     {
