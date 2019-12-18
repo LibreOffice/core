@@ -148,7 +148,6 @@ public:
     void testXaxisValues();
     void testTdf123504();
     void testTdf122765();
-    void testTdf121991();
     void testTdf125444PercentageCustomLabel();
     void testTdf123206CustomLabelField();
 
@@ -248,7 +247,6 @@ public:
     CPPUNIT_TEST(testXaxisValues);
     CPPUNIT_TEST(testTdf123504);
     CPPUNIT_TEST(testTdf122765);
-    CPPUNIT_TEST(testTdf121991);
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
     CPPUNIT_TEST_SUITE_END();
@@ -2284,19 +2282,6 @@ void Chart2ImportTest::testTdf122765()
     // Wrong position was around 5856.
     awt::Point aSlicePosition = xSlice->getPosition();
     CPPUNIT_ASSERT_GREATER(sal_Int32(7000), aSlicePosition.X);
-}
-
-void Chart2ImportTest::testTdf121991()
-{
-    load("/chart2/qa/extras/data/xlsx/", "deleted_legend_entry.xlsx");
-    Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
-    CPPUNIT_ASSERT(xChartDoc.is());
-    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
-    CPPUNIT_ASSERT(xDataSeries.is());
-    Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
-    bool bShowLegendEntry = true;
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("ShowLegendEntry") >>= bShowLegendEntry);
-    CPPUNIT_ASSERT(!bShowLegendEntry);
 }
 
 void Chart2ImportTest::testTdf125444PercentageCustomLabel()
