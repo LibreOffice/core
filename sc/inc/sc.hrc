@@ -25,11 +25,15 @@
 
 // areas
 
+#ifndef SC_VIEW_START // duplicated in sfx2/sfxsids.hrc
 #define SC_VIEW_START           (SID_SC_START)
+#endif
 //      SC_VIEW_END             (SID_SC_START + 99)
 #define SC_MESSAGE_START        (SID_SC_START + 100)
 //      SC_MESSAGE_END          (SID_SC_START + 199)
+#ifndef SC_FUNCTION_START // duplicated in sfx2/sfxsids.hrc
 #define SC_FUNCTION_START       (SID_SC_START + 200)
+#endif
 //      SC_FUNCTION_END         (SID_SC_START + 299)
 #define SC_PARAM_START          (SID_SC_START + 300)
 //      SC_PARAM_END            (SID_SC_START + 399)
@@ -243,9 +247,13 @@
 
 #define SID_OPEN_CALC                   (SC_FUNCTION_START + 4)
 #define SID_CONVERT_FORMULA_TO_VALUE    (SC_FUNCTION_START + 5)
+#ifndef FILE_MENU_END // duplicated in sfx2/sfxsids.hrc
 #define FILE_MENU_END                   (SC_FUNCTION_START + 20)
+#endif
 
+#ifndef EDIT_MENU_START // duplicated in sfx2/sfxsids.hrc
 #define EDIT_MENU_START         (FILE_MENU_END)
+#endif
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)
 #define FID_DELETE_TABLE        (EDIT_MENU_START + 3)
 #define FID_FILL_TO_BOTTOM      (EDIT_MENU_START + 4)
@@ -458,22 +466,9 @@
 #define SID_PREVIEW_END         (SID_PREVIEW_START+20)
 
 //from sfx: #define SID_KEYFUNC_START       (SID_PREVIEW_END+5)
-#define SID_CURSORDOWN_SEL      (SID_KEYFUNC_START + 0)
-#define SID_CURSORUP_SEL        (SID_KEYFUNC_START + 1)
-#define SID_CURSORLEFT_SEL      (SID_KEYFUNC_START + 2)
-#define SID_CURSORRIGHT_SEL     (SID_KEYFUNC_START + 3)
-#define SID_CURSORPAGEDOWN_SEL  (SID_KEYFUNC_START + 4)
-#define SID_CURSORPAGEUP_SEL    (SID_KEYFUNC_START + 5)
-
+// from SID_KEYFUNC_START + 0 to SID_KEYFUNC_START + 13 are defined in include/sfx2/sfxsids.hrc
 #define SID_CURSORPAGELEFT_     (SID_KEYFUNC_START + 6)
-#define SID_CURSORPAGELEFT_SEL  (SID_KEYFUNC_START + 7)
 #define SID_CURSORPAGERIGHT_    (SID_KEYFUNC_START + 8)
-#define SID_CURSORPAGERIGHT_SEL (SID_KEYFUNC_START + 9)
-
-#define SID_CURSORTOPOFFILE_SEL (SID_KEYFUNC_START + 10)
-#define SID_CURSORENDOFFILE_SEL (SID_KEYFUNC_START + 11)
-#define SID_CURSORHOME_SEL      (SID_KEYFUNC_START + 12)
-#define SID_CURSOREND_SEL       (SID_KEYFUNC_START + 13)
 #define SID_CURSORBLKUP         (SID_KEYFUNC_START + 14)
 #define SID_CURSORBLKDOWN       (SID_KEYFUNC_START + 15)
 #define SID_CURSORBLKLEFT       (SID_KEYFUNC_START + 16)
