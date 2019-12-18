@@ -2657,9 +2657,28 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             Sequence< OUString > aCategoryNames;
             if( m_pExplicitCategoriesProvider )
                 aCategoryNames = m_pExplicitCategoriesProvider->getSimpleCategories();
-
+            Sequence<sal_Int32> deletedLegendEntries;
+            try
+            {
+                rSeries.getPropertiesOfSeries()->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntries;
+            }
+            catch (const uno::Exception&)
+            {
+            }
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {
+                bool deletedLegendEntry = false;
+                for (auto& deletedLegendEntryIdx : deletedLegendEntries)
+                {
+                    if (nIdx == deletedLegendEntryIdx)
+                    {
+                        deletedLegendEntry = true;
+                        break;
+                    }
+                }
+                if (deletedLegendEntry)
+                    continue;
+
                 // symbol
                 uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
 
