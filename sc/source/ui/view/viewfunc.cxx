@@ -275,10 +275,6 @@ bool ScViewFunc::SelectionEditable( bool* pOnlyNotBecauseOfMatrix /* = NULL */ )
     return bRet;
 }
 
-#ifndef LRU_MAX
-#define LRU_MAX 10
-#endif
-
 static bool lcl_FunctionKnown( sal_uInt16 nOpCode )
 {
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();

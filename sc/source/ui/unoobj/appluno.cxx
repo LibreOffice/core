@@ -42,10 +42,6 @@
 
 using namespace com::sun::star;
 
-//  Number of last used functions, which are saved
-//! Combine define with funcpage.hxx and dwfunctr.hxx !!!
-#define LRU_MAX 10
-
 //  Special value for zoom
 //! somewhere central
 #define SC_ZOOMVAL_OPTIMAL      (-1)

@@ -87,6 +87,7 @@
 #include <dragdata.hxx>
 #include <markdata.hxx>
 #include <transobj.hxx>
+#include <funcdesc.hxx>
 
 #define ShellClass_ScModule
 #include <scslots.hxx>
@@ -682,10 +683,6 @@ const ScDocOptions& ScModule::GetDocOptions()
 
     return *m_pDocCfg;
 }
-
-#ifndef LRU_MAX
-#define LRU_MAX 10
-#endif
 
 void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
 {
