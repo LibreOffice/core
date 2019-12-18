@@ -65,7 +65,7 @@ namespace cairocanvas
 
 // The C shared lib entry points
 extern "C"
-SAL_DLLPUBLIC_EXPORT void* cairocanvas_component_getFactory( sal_Char const* pImplName,
+SAL_DLLPUBLIC_EXPORT void* cairocanvas_component_getFactory( char const* pImplName,
                                          void*, void* )
 {
     return sdecl::component_getFactoryHelper( pImplName, {&cairocanvas::cairoCanvasDecl, &cairocanvas::cairoSpriteCanvasDecl} );

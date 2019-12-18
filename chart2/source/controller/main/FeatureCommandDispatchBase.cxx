@@ -78,7 +78,7 @@ void FeatureCommandDispatchBase::dispatch( const util::URL& URL,
     }
 }
 
-void FeatureCommandDispatchBase::implDescribeSupportedFeature( const sal_Char* pAsciiCommandURL,
+void FeatureCommandDispatchBase::implDescribeSupportedFeature( const char* pAsciiCommandURL,
     sal_uInt16 nId, sal_Int16 nGroup )
 {
     ControllerFeature aFeature;

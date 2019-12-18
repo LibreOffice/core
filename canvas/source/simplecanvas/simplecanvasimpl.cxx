@@ -373,7 +373,7 @@ namespace
 }
 
 // The C shared lib entry points
-extern "C" SAL_DLLPUBLIC_EXPORT void* simplecanvas_component_getFactory( sal_Char const* pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void* simplecanvas_component_getFactory( char const* pImplName,
                                          void*, void* )
 {
     return sdecl::component_getFactoryHelper( pImplName, {&simpleCanvasDecl} );

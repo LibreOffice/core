@@ -75,7 +75,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
                 * pDouble,
                 rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, // use maximum decimal places available
-                sal_Char( '.' ), // decimal separator
+                char( '.' ), // decimal separator
                 true // remove trailing zeros
                 );
         }
@@ -118,7 +118,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString
             fNumber,
             rtl_math_StringFormat_Automatic,
             rtl_math_DecimalPlaces_Max, // use maximum decimal places available
-            static_cast< sal_Char >( '.' ),
+            static_cast< char >( '.' ),
             true
             );
     }

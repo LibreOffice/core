@@ -40,7 +40,7 @@ std::vector< OUString > lcl_getStringsFromByteSequence(
 {
     std::vector< OUString > aResult;
     const sal_Int32 nLength = aByteSequence.getLength();
-    const sal_Char * pBytes( reinterpret_cast< const sal_Char* >( aByteSequence.getConstArray()));
+    const char * pBytes( reinterpret_cast< const char* >( aByteSequence.getConstArray()));
     sal_Int32 nStartPos = 0;
     for( sal_Int32 nPos=0; nPos<nLength; ++nPos )
     {
