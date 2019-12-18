@@ -79,7 +79,7 @@ bridge_exception_objects := cpp2uno except uno2cpp
 bridge_noncallexception_objects := callvirtualmethod
 else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
-bridge_exception_objects := cpp2uno dllinit uno2cpp
+bridge_exception_objects := cpp2uno uno2cpp
 bridge_noopt_objects := except
 endif
 
@@ -174,7 +174,7 @@ bridge_exception_objects := abi call cpp2uno except uno2cpp
 bridge_noncallexception_noopt_objects := callvirtualmethod
 else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_x86-64
-bridge_exception_objects := cpp2uno dllinit uno2cpp
+bridge_exception_objects := cpp2uno uno2cpp
 bridge_noopt_objects := except
 bridge_asm_objects := call
 endif

@@ -36,11 +36,6 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
 } } } }
 
-#if !defined __GNUG__
-void dso_init();
-void dso_exit();
-#endif
-
 namespace bridges { namespace cpp_uno { namespace shared {
 
 class Bridge;
