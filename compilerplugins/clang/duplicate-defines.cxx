@@ -73,11 +73,20 @@ void DuplicateDefines::MacroDefined(const Token& rMacroNameTok, const MacroDirec
         return;
     if (aMacroName == "rtl")
         return;
-    // we replicate this macro in all the .hrc files
-    if (aMacroName == "NC_")
+    // we replicate these macros in all the .hrc files
+    if (aMacroName == "NC_" || aMacroName == "NNC_")
         return;
     // TODO no obvious fix for these
     if (aMacroName == "FID_SEARCH_NOW" || aMacroName == "FID_SVX_START" || aMacroName == "FN_PARAM")
+        return;
+    // ignore for now, requires adding too many includes to sw/
+    if (aMacroName == "MM50")
+        return;
+
+    // ignore for now, we have the same define in svx and sw, but I can't remove one of them because
+    // they reference strings in different resource bundles
+    if (aMacroName == "STR_UNDO_COL_DELETE" || aMacroName == "STR_UNDO_ROW_DELETE"
+        || aMacroName == "STR_TABLE_NUMFORMAT" || aMacroName == "STR_DELETE")
         return;
 
     if (!m_aDefMap.emplace(aMacroName, Entry{ aLoc }).second)
@@ -99,7 +108,7 @@ void DuplicateDefines::MacroUndefined(const Token& rMacroNameTok, const MacroDef
     m_aDefMap.erase(aMacroName);
 }
 
-loplugin::Plugin::Registration<DuplicateDefines> X("duplicatedefines", false);
+loplugin::Plugin::Registration<DuplicateDefines> X("duplicatedefines", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
