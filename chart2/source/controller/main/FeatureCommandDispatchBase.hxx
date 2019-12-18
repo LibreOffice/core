@@ -85,7 +85,7 @@ protected:
             the command group of the feature. This is important for configuring the controller UI
             by the user, see also <type scope="css::frame">CommandGroup</type>.
     */
-    void implDescribeSupportedFeature( const sal_Char* pAsciiCommandURL, sal_uInt16 nId,
+    void implDescribeSupportedFeature( const char* pAsciiCommandURL, sal_uInt16 nId,
         sal_Int16 nGroup );
 
     mutable SupportedFeatures m_aSupportedFeatures;
