@@ -44,8 +44,6 @@ class ListBox;
 class ToolBox;
 class FloatingWindow;
 
-#define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE "PopupPanel_LineWidth"
-
 namespace sfx2 { namespace sidebar {
 
 class SidebarToolBox;

@@ -174,7 +174,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
     m_bVSFocus = true;
     m_xVSWidth->SetSelItem(0);
     m_eMapUnit = eMapUnit;
-    SvtViewOptions aWinOpt( EViewType::Window, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
+    SvtViewOptions aWinOpt( EViewType::Window, "PopupPanel_LineWidth" );
     if (aWinOpt.Exists())
     {
         css::uno::Sequence <css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
