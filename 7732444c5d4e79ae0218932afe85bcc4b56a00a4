@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_52aa6c85",
+        "filename": "drawinglayer/source/tools/emfpfont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-18T06:45:32Z",
+      "side": 1,
+      "message": "I\u0027m totally lost how could this possibly succeed in the build when this function is statin in another unit?",
+      "range": {
+        "startLine": 54,
+        "startChar": 51,
+        "endLine": 54,
+        "endChar": 67
+      },
+      "revId": "7732444c5d4e79ae0218932afe85bcc4b56a00a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
