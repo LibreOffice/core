@@ -18,7 +18,6 @@ namespace com { namespace sun { namespace star { namespace uno { template <typen
 namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
 namespace sd { struct IBluetoothSocket; }
 
-#define CHARSET RTL_TEXTENCODING_UTF8
 namespace sd
 {
 

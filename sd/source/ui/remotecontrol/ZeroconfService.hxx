@@ -19,8 +19,6 @@
 
 #define kREG_TYPE "_impressremote._tcp"
 
-#define CHARSET RTL_TEXTENCODING_UTF8
-
 struct sockaddr_in;
 
 typedef unsigned int uint;
