@@ -77,8 +77,10 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <istyleaccess.hxx>
 #include <GetMetricVal.hxx>
 #include <fmtfsize.hxx>
@@ -111,6 +113,11 @@
 #include <memory>
 #include <set>
 #include <limits>
+
+using namespace css;
+using namespace css::io;
+using namespace css::lang;
+using namespace css::uno;
 
 namespace {
 
@@ -552,9 +559,10 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     aOpt.SetMerge(false);
     for(const auto& rProperty: aOptions)
     {
-        if(rProperty.Value.getValueType() != cppu::UnoType<bool>::get())
-            continue;
-        const bool bValue = rProperty.Value.get<bool>();
+        bool bValue;
+        if(rProperty.Value.getValueType() == cppu::UnoType<bool>::get())
+            bValue = rProperty.Value.get<bool>();
+
         if(rProperty.Name == UNO_NAME_OVERWRITE_STYLES)
             aOpt.SetMerge(!bValue);
         else if(rProperty.Name == UNO_NAME_LOAD_NUMBERING_STYLES)
@@ -565,6 +573,16 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
             aOpt.SetFrameFormats(bValue);
         else if(rProperty.Name == UNO_NAME_LOAD_TEXT_STYLES)
             aOpt.SetTextFormats(bValue);
+        else if(rProperty.Name == "InputStream")
+        {
+            Reference<XInputStream> xInputStream;
+            if (rProperty.Value >>= xInputStream)
+                aOpt.SetInputStream(xInputStream);
+            else
+                throw IllegalArgumentException(
+                    "Parameter 'InputStream' could not be converted to type 'com::sun::star::io::XInputStream'",
+                    nullptr, 0);
+        }
     }
     const ErrCode nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
     if(nErr)

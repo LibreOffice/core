@@ -38,8 +38,10 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
         defined in this document are loaded.</p>
          @param URL
              The directory and the filename from document with the styles
+             You can also load from stream. Use "private:stream" as the URL and the InputStream parameter below.
          @param aOptions
              Specifies which of the Style families the method should load.
+
          The <code>sequence<PropertyValue></code> has the following, optional items:
          <ul>
         <li> boolean LoadCellStyles </li>
@@ -48,6 +50,7 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
         <li> boolean LoadPageStyles </li>
         <li> boolean LoadNumberingStyles </li>
         <li> boolean OverwriteStyles</li>
+        <li> com::sun::star::io::XInputStream InputStream (since LibreOffice 6.5)</li>
         </ul>
      <p>As the default, all supported style families are loaded and existing styles are overwritten.</p>
      */

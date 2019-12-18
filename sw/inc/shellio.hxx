@@ -112,6 +112,7 @@ class SwgReaderOption
     bool m_bTextFormats;
     bool m_bNumRules;
     bool m_bMerge;
+    css::uno::Reference<css::io::XInputStream> m_xInputStream;
 public:
     void ResetAllFormatsOnly() { m_bFrameFormats = m_bPageDescs = m_bTextFormats = m_bNumRules = m_bMerge = false; }
     bool IsFormatsOnly() const { return m_bFrameFormats || m_bPageDescs || m_bTextFormats || m_bNumRules || m_bMerge; }
@@ -134,6 +135,12 @@ public:
     const SwAsciiOptions& GetASCIIOpts() const { return aASCIIOpts; }
     void SetASCIIOpts( const SwAsciiOptions& rOpts ) { aASCIIOpts = rOpts; }
     void ResetASCIIOpts() { aASCIIOpts.Reset(); }
+
+    css::uno::Reference<css::io::XInputStream>& GetInputStream() { return m_xInputStream; }
+    void SetInputStream(css::uno::Reference<css::io::XInputStream>& xInputStream)
+    {
+        m_xInputStream = xInputStream;
+    }
 
     SwgReaderOption()
         { ResetAllFormatsOnly(); aASCIIOpts.Reset(); }
