@@ -95,9 +95,9 @@ namespace emfplushelper
     {
         sal_uInt16 objecttype = flags & 0x7f00;
         sal_uInt16 index = flags & 0xff;
-        SAL_INFO("drawinglayer", "EMF+ Object: " << emfObjectToName(objecttype) << " (0x" << objecttype << ")");
-        SAL_INFO("drawinglayer", "EMF+\tObject slot: " << index);
-        SAL_INFO("drawinglayer", "EMF+\tFlags: " << (flags & 0xff00));
+        SAL_INFO("drawinglayer", "EMF+ Object: " << emfObjectToName(objecttype) << " (0x" << std::hex << objecttype << ")");
+        SAL_INFO("drawinglayer", "EMF+\tObject slot: " << std::dec << index);
+        SAL_INFO("drawinglayer", "EMF+\tFlags: " << std::hex << flags);
 
         switch (objecttype)
         {
@@ -589,6 +589,8 @@ namespace emfplushelper
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
             const Color color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
+
+            SAL_INFO("drawinglayer", "EMF+\t\t\tColor is " << color);
             EMFPPlusFillPolygonSolidColor(polygon, color);
 
             mrPropertyHolders.Current().setFillColor(color.getBColor());
@@ -1192,7 +1194,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeFillPolygon:
                     {
-                        const sal_uInt8 index = flags & 0xff;
+                        const sal_uInt16 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor;
                         sal_Int32 points;
 
@@ -1553,7 +1555,7 @@ namespace emfplushelper
                             "drawinglayer", "EMF+\t Gamma value is not with bounds 1000 to 2200, value is " << mnTextContrast);
                         mnTextContrast = std::min(mnTextContrast, UPPERGAMMA);
                         mnTextContrast = std::max(mnTextContrast, LOWERGAMMA);
-                        SAL_INFO("drawinglayer", "EMF+\t Text contrast: " << (mnTextContrast / 1000) << " gamma");
+                        SAL_INFO("drawinglayer", "EMF+\t Text contrast: " << (mnTextContrast / 1000.0) << " gamma");
                         break;
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:
