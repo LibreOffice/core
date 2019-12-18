@@ -514,7 +514,8 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
 
 ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
                                    OUString& rFilterName, OUString& rOptions,
-                                   sal_uInt32 nRekCnt, weld::Window* pInteractionParent)
+                                   sal_uInt32 nRekCnt, weld::Window* pInteractionParent,
+                                   css::uno::Reference<css::io::XInputStream> xInputStream)
     : pDocShell(nullptr)
     , pMedium(nullptr)
 {
@@ -524,6 +525,8 @@ ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
     std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
     pMedium = CreateMedium(rFileName, pFilter, rOptions, pInteractionParent);
+    if (xInputStream.is())
+        pMedium->setStreamToLoadFrom(xInputStream, true);
     if ( pMedium->GetError() != ERRCODE_NONE )
         return ;
 

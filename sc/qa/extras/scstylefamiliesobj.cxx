@@ -70,6 +70,7 @@ public:
 
     // XStyleLoader
     CPPUNIT_TEST(testLoadStylesFromDocument);
+    CPPUNIT_TEST(testLoadStylesFromStream);
     CPPUNIT_TEST(testLoadStylesFromURL);
 
     CPPUNIT_TEST_SUITE_END();

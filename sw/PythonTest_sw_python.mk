@@ -41,6 +41,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	xscriptprovider \
 	xtextfieldssupplier \
 	xcontrolshape \
+	xstyleloader \
 	xtextcontent \
 	xtextrange \
 	xtext \

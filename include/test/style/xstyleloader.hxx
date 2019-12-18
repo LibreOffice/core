@@ -32,6 +32,7 @@ public:
 
     // XStyleLoader
     void testLoadStylesFromURL();
+    void testLoadStylesFromStream();
     // XStyleLoader2
     void testLoadStylesFromDocument();
 
