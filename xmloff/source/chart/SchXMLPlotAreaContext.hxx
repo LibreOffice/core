@@ -137,16 +137,51 @@ private:
     css::awt::Size const maChartSize;
 };
 
+class SchXMLDataLabelSpanContext: public SvXMLImportContext
+{
+private:
+    ::std::vector<OUString>& mrLabels;
+public:
+    SchXMLDataLabelSpanContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
+    virtual void Characters( const OUString& rChars ) override;
+};
+
+class SchXMLDataLabelParaContext: public SvXMLImportContext
+{
+private:
+    ::std::vector<OUString>& mrLabels;
+public:
+    SchXMLDataLabelParaContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+};
+
+class SchXMLDataLabelContext: public SvXMLImportContext
+{
+private:
+    ::std::vector<OUString>& mrLabels;
+public:
+    SchXMLDataLabelContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+};
+
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
+    SchXMLImportHelper& mrImportHelper;
     ::std::vector< DataRowPointStyle >& mrStyleVector;
-    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
+    bool mbHasLabelParagraph = false;
     sal_Int32& mrIndex;
-    bool const mbSymbolSizeForSeriesIsMissingInFile;
+    DataRowPointStyle mDataPoint;
 
 public:
-    SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
+    SchXMLDataPointContext(  SchXMLImportHelper& rImportHelper,
+                             SvXMLImport& rImport, const OUString& rLocalName,
                              ::std::vector< DataRowPointStyle >& rStyleVector,
                              const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                              sal_Int32& rIndex,
@@ -154,6 +189,12 @@ public:
     virtual ~SchXMLDataPointContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void EndElement() override;
 };
 
 class SchXMLCoordinateRegionContext : public SvXMLImportContext
