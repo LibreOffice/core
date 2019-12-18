@@ -29,27 +29,6 @@
 #include <memory>
 #include <new>
 
-
-static bridges::cpp_uno::shared::VtableFactory * pInstance;
-
-#if defined(__GNUG__)
-extern "C" void dso_init() __attribute__((constructor));
-extern "C" void dso_exit() __attribute__((destructor));
-#endif
-
-void dso_init() {
-    if (!pInstance)
-        pInstance = new bridges::cpp_uno::shared::VtableFactory();
-}
-
-void dso_exit() {
-    if (pInstance)
-    {
-        delete pInstance;
-        pInstance = nullptr;
-    }
-}
-
 namespace bridges { namespace cpp_uno { namespace shared {
 
 void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
@@ -80,8 +59,9 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
 {
     typelib_typedescription_complete(
         reinterpret_cast< typelib_TypeDescription ** >(&pTypeDescr));
+    static bridges::cpp_uno::shared::VtableFactory factory;
     const bridges::cpp_uno::shared::VtableFactory::Vtables& rVtables(
-        pInstance->getVtables(pTypeDescr));
+        factory.getVtables(pTypeDescr));
     std::unique_ptr< char[] > pMemory(
         new char[
             sizeof (CppInterfaceProxy)
