@@ -621,7 +621,6 @@
 
 // data pilot descriptor
 #define SC_UNO_DP_IGNORE_EMPTYROWS     "IgnoreEmptyRows"
-#define SC_UNO_DP_REPEATEMPTY          "RepeatIfEmpty"
 #define SC_UNO_DP_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_DP_SHOWFILTER           "ShowFilterButton"
 #define SC_UNO_DP_IMPORTDESC           "ImportDescriptor"
@@ -677,7 +676,6 @@
 #define SC_UNONAME_ROLE                 "Role"
 #define SC_UNONAME_HIDDENVALUES         "HiddenValues"
 #define SC_UNONAME_INCLUDEHIDDENCELLS   "IncludeHiddenCells"
-#define SC_UNONAME_HIDDENVALUES     "HiddenValues"
 #define SC_UNONAME_USE_INTERNAL_DATA_PROVIDER "UseInternalDataProvider"
 #define SC_UNONAME_HAS_STRING_LABEL "HasStringLabel"
 #define SC_UNONAME_TIME_BASED       "TimeBased"
