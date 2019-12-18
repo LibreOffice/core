@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_7d39793f",
+        "filename": "slideshow/source/engine/effectrewinder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2019-12-18T12:59:46Z",
+      "side": 1,
+      "message": "nitpick: very slight optim, better to check the quickest first, so I\u0027d put xNode.is() \u0026\u0026 ...",
+      "range": {
+        "startLine": 386,
+        "startChar": 7,
+        "endLine": 386,
+        "endChar": 52
+      },
+      "revId": "0c149265a136e2496f195b03c288438fea33a54e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
