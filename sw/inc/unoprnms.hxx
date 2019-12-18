@@ -375,7 +375,6 @@
 #define UNO_NAME_FOOTER_TEXT_LEFT "FooterTextLeft"
 #define UNO_NAME_FOOTER_TEXT_RIGHT "FooterTextRight"
 #define UNO_NAME_HEADER_BACK_COLOR "HeaderBackColor"
-#define UNO_NAME_HEADER_GRAPHIC "HeaderBackGraphic"
 #define UNO_NAME_HEADER_BACK_TRANSPARENT "HeaderBackTransparent"
 #define UNO_NAME_HEADER_LEFT_BORDER "HeaderLeftBorder"
 #define UNO_NAME_HEADER_RIGHT_BORDER "HeaderRightBorder"
