@@ -1247,6 +1247,7 @@ SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 void SwRedlineAcceptPanel::dispose()
 {
     mpImplDlg.reset();
+    mxContentArea.reset();
     PanelLayout::dispose();
 }
 
