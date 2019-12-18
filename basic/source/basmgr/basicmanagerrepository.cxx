@@ -38,8 +38,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
-#include <osl/getglobalmutex.hxx>
-#include <rtl/instance.hxx>
 #include <sot/storage.hxx>
 
 #include <map>
@@ -64,16 +62,9 @@ namespace basic
 
     typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
-    namespace {
-
-    struct CreateImplRepository;
-
-    }
-
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
     {
     private:
-        friend CreateImplRepository;
         ImplRepository();
 
     private:
@@ -198,19 +189,6 @@ namespace basic
         StarBASIC* impl_getDefaultAppBasicLibrary();
     };
 
-    namespace {
-
-    struct CreateImplRepository
-    {
-        ImplRepository* operator()()
-        {
-            static ImplRepository repository;
-            return &repository;
-        }
-    };
-
-    }
-
     ImplRepository::ImplRepository()
     {
     }
@@ -218,8 +196,8 @@ namespace basic
 
     ImplRepository& ImplRepository::Instance()
     {
-        return *rtl_Instance< ImplRepository, CreateImplRepository, ::osl::MutexGuard, ::osl::GetGlobalMutex >::
-            create( CreateImplRepository(), ::osl::GetGlobalMutex() );
+        static ImplRepository instance;
+        return instance;
     }
 
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
