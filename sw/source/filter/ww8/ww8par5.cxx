@@ -715,6 +715,8 @@ static bool AcceptableNestedField(sal_uInt16 nFieldCode)
         // Accept AutoTextList field as nested field.
         // Thus, the field result is imported as plain text.
         case ww::eAUTOTEXTLIST:
+        // tdf#129247 CONTROL contains a nested SHAPE field in the result
+        case ww::eCONTROL:
             return true;
         default:
             return false;
