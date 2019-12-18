@@ -166,7 +166,7 @@ namespace
         if (nLength > nRemainingSize)
             return false;
 
-        std::vector<sal_Char> aTarget(nLength);
+        std::vector<char> aTarget(nLength);
         sal_uInt64 nBaseRead(0);
 
         // read rTarget

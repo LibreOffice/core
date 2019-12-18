@@ -68,7 +68,7 @@ OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Seq
 }
 
 
-static sal_uInt8 GetDigit_Impl( sal_Char aChar )
+static sal_uInt8 GetDigit_Impl( char aChar )
 {
     if ( aChar >= '0' && aChar <= '9' )
         return aChar - '0';

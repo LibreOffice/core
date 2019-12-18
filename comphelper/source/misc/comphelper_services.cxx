@@ -52,7 +52,7 @@ namespace comphelper { namespace module
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* comphelp_component_getFactory(
-    const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,
+    const char* pImplementationName, SAL_UNUSED_PARAMETER void*,
     SAL_UNUSED_PARAMETER void* )
 {
     ::comphelper::module::initializeModule();
