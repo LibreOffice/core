@@ -77,6 +77,7 @@
 #include <editeng/unotext.hxx>
 #include <o3tl/temporary.hxx>
 #include <oox/mathml/import.hxx>
+#include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
 #include "GraphicHelpers.hxx"
 #include <dmapper/GraphicZOrderHelper.hxx>
@@ -5395,9 +5396,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                     uno::Reference<text::XFormField> const xFormField(xFieldInterface, uno::UNO_QUERY);
                     InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
                             pContext->GetFieldId());
-                    xFormField->setFieldType(aCode);
+                    xFormField->setFieldType(ODF_UNHANDLED);
                     m_bStartGenericField = true;
                     pContext->SetFormField( xFormField );
+                    uno::Reference<container::XNameContainer> const xNameCont(xFormField->getParameters());
+                    // note: setting the code to empty string is *required* in
+                    // m_bForceGenericFields mode, or the export will write
+                    // the ODF_UNHANDLED string!
+                    assert(!m_bForceGenericFields || aCode.isEmpty());
+                    xNameCont->insertByName(ODF_CODE_PARAM, uno::makeAny(aCode));
+                    if (std::get<0>(field) == "CONTROL")
+                    { // tdf#129247 HACK probably this should be imported as something else, like in ww8?
+                        xNameCont->insertByName(ODF_ID_PARAM, uno::makeAny(OUString::number(87))); // ww8::eCONTROL
+                    }
                 }
                 else
                     m_bParaHadField = false;
