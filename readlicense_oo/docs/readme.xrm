@@ -17,7 +17,7 @@
 	<body>
 		<div id="Intro">
 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
-			<p id="LatestUpdates" xml:lang="en-US">For the latest updates to this readme file, see <a href="https://www.libreoffice.org/welcome/readme.html">https://www.libreoffice.org/welcome/readme.html</a></p>
+			<p id="LatestUpdates" xml:lang="en-US">For the latest updates to this readme file, see <a href="https://git.libreoffice.org/core/tree/master/README.md">https://git.libreoffice.org/core/tree/master/README.md</a></p>
 			<p id="A6" xml:lang="en-US">This file contains important information about the ${PRODUCTNAME} software. You are recommended to read this information very carefully before starting installation.</p>
 			<p id="A7" xml:lang="en-US">The ${PRODUCTNAME} community is responsible for the development of this product, and invites you to consider participating as a community member. If you are a new user, you can visit the ${PRODUCTNAME} site, where you will find lots of information about the ${PRODUCTNAME} project and the communities that exist around it. Go to <a href="https://www.libreoffice.org/">https://www.libreoffice.org/</a>.</p>
 			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} Really Free for Any User?</h3>
