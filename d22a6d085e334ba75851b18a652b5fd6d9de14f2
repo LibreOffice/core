@@ -16,6 +16,24 @@
       "revId": "d22a6d085e334ba75851b18a652b5fd6d9de14f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_58984b69",
+        "filename": "svx/source/stbctrls/selctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2019-12-18T17:34:18Z",
+      "side": 1,
+      "message": "Done, hope you don\u0027t mind I stick with having an if block and your second suggested condition inside it..",
+      "parentUuid": "5f7c97a3_9236c4b4",
+      "revId": "d22a6d085e334ba75851b18a652b5fd6d9de14f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
