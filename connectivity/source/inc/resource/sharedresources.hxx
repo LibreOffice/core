@@ -67,7 +67,7 @@ namespace connectivity
         OUString
             getResourceStringWithSubstitution(
                 const char* pResId,
-                const sal_Char* _pAsciiPatternToReplace,
+                const char* _pAsciiPatternToReplace,
                 const OUString& _rStringToSubstitute
             ) const;
 
@@ -91,9 +91,9 @@ namespace connectivity
         OUString
             getResourceStringWithSubstitution(
                 const char* pResId,
-                const sal_Char* _pAsciiPatternToReplace1,
+                const char* _pAsciiPatternToReplace1,
                 const OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2,
+                const char* _pAsciiPatternToReplace2,
                 const OUString& _rStringToSubstitute2
             ) const;
 
@@ -121,11 +121,11 @@ namespace connectivity
         OUString
             getResourceStringWithSubstitution(
                 const char* pResId,
-                const sal_Char* _pAsciiPatternToReplace1,
+                const char* _pAsciiPatternToReplace1,
                 const OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2,
+                const char* _pAsciiPatternToReplace2,
                 const OUString& _rStringToSubstitute2,
-                const sal_Char* _pAsciiPatternToReplace3,
+                const char* _pAsciiPatternToReplace3,
                 const OUString& _rStringToSubstitute3
             ) const;
 
@@ -140,7 +140,7 @@ namespace connectivity
                 the string from the resource file, with applied string substitution
         */
         OUString getResourceStringWithSubstitution( const char* pResId,
-                    const std::vector< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const;
+                    const std::vector< std::pair<const char* , OUString > >& _rStringToSubstitutes) const;
     };
 
 

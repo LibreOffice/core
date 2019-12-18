@@ -232,7 +232,7 @@ namespace connectivity
         };
 
         // must be ascii encoding for the value
-        OSQLParseNode(const sal_Char* _pValueStr,
+        OSQLParseNode(const char* _pValueStr,
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 

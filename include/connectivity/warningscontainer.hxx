@@ -63,7 +63,7 @@ namespace dbtools
         */
         void appendWarning(
             const OUString& _rWarning,
-            const sal_Char* _pAsciiSQLState,
+            const char* _pAsciiSQLState,
             const css::uno::Reference< css::uno::XInterface >& _rxContext );
 
         void appendWarning(const css::sdbc::SQLException& _rWarning);

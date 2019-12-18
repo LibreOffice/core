@@ -69,7 +69,7 @@ ORowSetValue OOp_Char::operate(const std::vector<ORowSetValue>& lhs) const
     {
         if ( !aIter->isNull() )
         {
-            sal_Char c = static_cast<sal_Char>(static_cast<sal_Int32>(*aIter));
+            char c = static_cast<char>(static_cast<sal_Int32>(*aIter));
 
             sRet.appendAscii(&c, 1);
         }
@@ -150,7 +150,7 @@ ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    const sal_Char c = ' ';
+    const char c = ' ';
     OUStringBuffer sRet;
     sal_Int32 nCount = lhs;
     for (sal_Int32 i=0; i < nCount; ++i)

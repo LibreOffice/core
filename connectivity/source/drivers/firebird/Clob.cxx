@@ -60,7 +60,7 @@ sal_Int64 SAL_CALL Clob::length()
     {
         uno::Sequence < sal_Int8 > aSegmentBytes;
         bLastSegmRead = m_aBlob->readOneSegment( aSegmentBytes );
-        OUString sSegment ( reinterpret_cast< sal_Char *>( aSegmentBytes.getArray() ),
+        OUString sSegment ( reinterpret_cast< char *>( aSegmentBytes.getArray() ),
                             aSegmentBytes.getLength(),
                             RTL_TEXTENCODING_UTF8 );
 
@@ -92,7 +92,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
         if( bLastRead )
             throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
 
-        OUString sSegment ( reinterpret_cast< sal_Char *>( aSegmentBytes.getArray() ),
+        OUString sSegment ( reinterpret_cast< char *>( aSegmentBytes.getArray() ),
                             aSegmentBytes.getLength(),
                             RTL_TEXTENCODING_UTF8 );
         sal_Int32 nStrLen = sSegment.getLength();
@@ -114,7 +114,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
         uno::Sequence < sal_Int8 > aSegmentBytes;
         bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
 
-        OUString sSegment ( reinterpret_cast< sal_Char *>( aSegmentBytes.getArray() ),
+        OUString sSegment ( reinterpret_cast< char *>( aSegmentBytes.getArray() ),
                             aSegmentBytes.getLength(),
                             RTL_TEXTENCODING_UTF8 );
         sal_Int32 nStrLen = sSegment.getLength();

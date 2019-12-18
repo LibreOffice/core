@@ -893,7 +893,7 @@ extern "C"
 {
 
 
-SAL_DLLPUBLIC_EXPORT void* dbtools_component_getFactory(const sal_Char* implName, void* serviceManager, void* registryKey)
+SAL_DLLPUBLIC_EXPORT void* dbtools_component_getFactory(const char* implName, void* serviceManager, void* registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }

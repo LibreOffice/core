@@ -34,10 +34,10 @@ namespace connectivity { namespace hsqldb
         OUString     m_sFileName;
 
     public:
-        LogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix );
+        LogFile( JNIEnv* env, jstring streamName, const char* _pAsciiSuffix );
 
     public:
-                void    writeString( const sal_Char* _pString, bool _bEndLine = true );
+                void    writeString( const char* _pString, bool _bEndLine = true );
                 void    create() { getLogFile(); }
         virtual void    close();
 
@@ -48,17 +48,17 @@ namespace connectivity { namespace hsqldb
     class OperationLogFile : public LogFile
     {
     public:
-        OperationLogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
+        OperationLogFile( JNIEnv* env, jstring streamName, const char* _pAsciiSuffix )
             :LogFile( env, streamName, ( OString( _pAsciiSuffix ) += ".op" ).getStr() )
         {
         }
 
-        void logOperation( const sal_Char* _pOp )
+        void logOperation( const char* _pOp )
         {
             writeString( _pOp, true );
         }
 
-        void logOperation( const sal_Char* _pOp, jlong _nLongArg )
+        void logOperation( const char* _pOp, jlong _nLongArg )
         {
             OString sLine( _pOp );
             sLine += "( ";
@@ -92,7 +92,7 @@ namespace connectivity { namespace hsqldb
     class DataLogFile : public LogFile
     {
     public:
-        DataLogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
+        DataLogFile( JNIEnv* env, jstring streamName, const char* _pAsciiSuffix )
             :LogFile( env, streamName, _pAsciiSuffix )
         {
         }

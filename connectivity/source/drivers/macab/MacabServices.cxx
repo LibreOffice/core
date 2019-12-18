@@ -47,7 +47,7 @@ struct ProviderRequest
 
     ProviderRequest(
         void* pServiceManager,
-        sal_Char const* pImplementationName
+        char const* pImplementationName
     )
     : xServiceManager(static_cast<XMultiServiceFactory*>(pServiceManager))
     , sImplementationName(OUString::createFromAscii(pImplementationName))
@@ -78,7 +78,7 @@ struct ProviderRequest
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* macab_component_getFactory(
-                    const sal_Char* pImplementationName,
+                    const char* pImplementationName,
                     void* pServiceManager,
                     void*)
 {

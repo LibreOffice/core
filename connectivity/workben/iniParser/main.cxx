@@ -90,7 +90,7 @@ public:
                     break;
                 if (osl_File_E_None != osl_readLine(handle , (sal_Sequence **) &seq))
                     break;
-                OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+                OString line( (const char *) seq.getConstArray(), seq.getLength() );
                 sal_Int32 nIndex = line.indexOf('=');
                 if (nIndex >= 1)
                 {

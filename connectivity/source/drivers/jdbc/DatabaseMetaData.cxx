@@ -538,7 +538,7 @@ bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethodName
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
     bool out( java_lang_Object::callBooleanMethod(_pMethodName,_inout_MethodID) );
-    m_aLogger.log< const sal_Char*, bool>( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
+    m_aLogger.log< const char*, bool>( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
 
@@ -581,7 +581,7 @@ bool java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg( const char* _p
 
     bool out( callBooleanMethodWithIntArg(_pMethodName,_inout_MethodID,_nArgument) );
 
-    m_aLogger.log< const sal_Char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
+    m_aLogger.log< const char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
 
@@ -1001,7 +1001,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
 
-    m_aLogger.log< const sal_Char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
+    m_aLogger.log< const char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
     return out;
 }
 
@@ -1343,7 +1343,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
 
-    m_aLogger.log< const sal_Char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
+    m_aLogger.log< const char*, bool >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
     return out;
 }
 

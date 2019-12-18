@@ -1588,7 +1588,7 @@ OSQLParseNode* OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral)
 }
 
 
-OSQLParseNode::OSQLParseNode(const sal_Char * pNewValue,
+OSQLParseNode::OSQLParseNode(const char * pNewValue,
                              SQLNodeType eNewNodeType,
                              sal_uInt32 nNewNodeID)
         :m_pParent(nullptr)

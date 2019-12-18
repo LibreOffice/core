@@ -36,7 +36,7 @@ using namespace ::com::sun::star::container;
 
 OColumnAlias::OColumnAlias( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB )
 {
-    static const sal_Char* s_pProgrammaticNames[] =
+    static const char* s_pProgrammaticNames[] =
     {
         "FirstName",
         "LastName",

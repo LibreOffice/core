@@ -38,7 +38,7 @@ private:
     OUString const sImplementationName;
 
 public:
-    ProviderRequest(void* pServiceManager, sal_Char const* pImplementationName)
+    ProviderRequest(void* pServiceManager, char const* pImplementationName)
         : xServiceManager(static_cast<lang::XMultiServiceFactory*>(pServiceManager))
         , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
@@ -65,7 +65,7 @@ public:
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
-connectivity_writer_component_getFactory(const sal_Char* pImplementationName, void* pServiceManager,
+connectivity_writer_component_getFactory(const char* pImplementationName, void* pServiceManager,
                                          void* /*pRegistryKey*/)
 {
     void* pRet = nullptr;

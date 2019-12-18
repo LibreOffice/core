@@ -55,10 +55,10 @@ namespace {
 
 struct DefColumnMetaData
 {
-    const sal_Char * columnName;
-    const sal_Char * tableName;
-    const sal_Char * schemaTableName;
-    const sal_Char * typeName;
+    const char * columnName;
+    const char * tableName;
+    const char * schemaTableName;
+    const char * typeName;
     sal_Int32 type;
     sal_Int32 precision;
     sal_Int32 scale;

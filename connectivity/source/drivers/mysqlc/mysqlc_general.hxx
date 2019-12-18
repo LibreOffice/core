@@ -93,10 +93,9 @@ void resetSqlVar(void** target, T* pValue, enum_field_types type, sal_Int32 nSiz
 void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize = 0);
 
 void throwFeatureNotImplementedException(
-    const sal_Char* _pAsciiFeatureName,
-    const css::uno::Reference<css::uno::XInterface>& _rxContext);
+    const char* _pAsciiFeatureName, const css::uno::Reference<css::uno::XInterface>& _rxContext);
 
-void throwInvalidArgumentException(const sal_Char* _pAsciiFeatureName,
+void throwInvalidArgumentException(const char* _pAsciiFeatureName,
                                    const css::uno::Reference<css::uno::XInterface>& _rxContext);
 
 void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,

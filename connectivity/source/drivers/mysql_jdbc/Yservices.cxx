@@ -33,7 +33,7 @@ typedef Reference<XSingleServiceFactory> (*createFactoryFunc)(
     rtl_ModuleCount*);
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
-mysql_jdbc_component_getFactory(const sal_Char* pImplementationName, void* pServiceManager,
+mysql_jdbc_component_getFactory(const char* pImplementationName, void* pServiceManager,
                                 void* /*pRegistryKey*/)
 {
     if (!pServiceManager)

@@ -42,7 +42,7 @@ namespace connectivity
                     ,columnPosition( 0 )
                 {
                 }
-                AliasEntry( const sal_Char* _programmaticAsciiName, size_t _columnPosition )
+                AliasEntry( const char* _programmaticAsciiName, size_t _columnPosition )
                     :programmaticAsciiName( _programmaticAsciiName )
                     ,columnPosition( _columnPosition )
                 {
