@@ -1082,7 +1082,7 @@ SfxViewShell::SfxViewShell
     if (comphelper::LibreOfficeKit::isActive())
     {
         vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
-        if (pFrameWin)
+        if (pFrameWin && !pFrameWin->GetLOKNotifier())
             pFrameWin->SetLOKNotifier(this, true);
     }
 }
