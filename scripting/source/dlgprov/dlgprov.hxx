@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX
-#define INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX
+#pragma once
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
@@ -155,8 +154,5 @@ OUString _getImplementationName();
 css::uno::Sequence< OUString > _getSupportedServiceNames();
 
 } // namespace comp_DialogModelProvider
-
-
-#endif // INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
