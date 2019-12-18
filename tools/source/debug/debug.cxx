@@ -72,8 +72,6 @@
 #include <cxxabi.h>
 #endif
 
-#ifndef NDEBUG
-
 struct DebugData
 {
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
@@ -103,8 +101,6 @@ void DbgTestSolarMutex()
     if ( aDebugData.pDbgTestSolarMutex )
         aDebugData.pDbgTestSolarMutex();
 }
-
-#endif
 
 OString exceptionToString(const css::uno::Any & caught)
 {
