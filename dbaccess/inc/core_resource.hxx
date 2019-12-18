@@ -53,7 +53,7 @@ namespace dbaccess
         */
         static OUString  loadString(
                 const char* pResId,
-                const sal_Char* _pPlaceholderAscii,
+                const char* _pPlaceholderAscii,
                 const OUString&  _rReplace
         );
 
@@ -72,9 +72,9 @@ namespace dbaccess
         */
         static OUString  loadString(
                 const char* pResId,
-                const sal_Char* _pPlaceholderAscii1,
+                const char* _pPlaceholderAscii1,
                 const OUString& _rReplace1,
-                const sal_Char* _pPlaceholderAscii2,
+                const char* _pPlaceholderAscii2,
                 const OUString& _rReplace2
         );
     };

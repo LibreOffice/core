@@ -1563,8 +1563,8 @@ Reference< XNameAccess > SAL_CALL ODatabaseDocument::getReportDocuments(  )
     return impl_getDocumentContainer_throw( ODatabaseModelImpl::E_REPORT );
 }
 
-void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xComponent, const sal_Char* pStreamName,
-    const sal_Char* pServiceName, const Sequence< Any >& _rArguments, const Sequence< PropertyValue >& rMediaDesc,
+void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xComponent, const char* pStreamName,
+    const char* pServiceName, const Sequence< Any >& _rArguments, const Sequence< PropertyValue >& rMediaDesc,
     const Reference<XStorage>& _xStorageToSaveTo ) const
 {
     OSL_ENSURE( pStreamName, "Need stream name!" );
@@ -1594,7 +1594,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
 }
 
 void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >& xOutputStream,
-    const Reference< XComponent >& xComponent, const sal_Char* pServiceName, const Sequence< Any >& _rArguments,
+    const Reference< XComponent >& xComponent, const char* pServiceName, const Sequence< Any >& _rArguments,
     const Sequence< PropertyValue >& rMediaDesc ) const
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );

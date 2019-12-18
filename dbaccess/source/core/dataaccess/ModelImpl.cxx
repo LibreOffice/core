@@ -469,7 +469,7 @@ namespace
 {
     OUString lcl_getContainerStorageName_throw( ODatabaseModelImpl::ObjectType _eType )
     {
-        const sal_Char* pAsciiName( nullptr );
+        const char* pAsciiName( nullptr );
         switch ( _eType )
         {
         case ODatabaseModelImpl::E_FORM:   pAsciiName = "forms"; break;

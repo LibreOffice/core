@@ -58,12 +58,12 @@ namespace dbaccess
 
     namespace {
 
-    // helper
-    struct DocumentEventData
-    {
-        const sal_Char* pAsciiEventName;
-        bool            bNeedsSyncNotify;
-    };
+        // helper
+        struct DocumentEventData
+        {
+            const char* pAsciiEventName;
+            bool        bNeedsSyncNotify;
+        };
 
         const DocumentEventData* lcl_getDocumentEventData()
         {

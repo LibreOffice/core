@@ -779,7 +779,7 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent)
         m_aCurrentFrame.frameAction( aEvent.Action );
 }
 
-void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsciiCommandURL,
+void OGenericUnoController::implDescribeSupportedFeature( const char* _pAsciiCommandURL,
         sal_uInt16 _nFeatureId, sal_Int16 _nCommandGroup )
 {
 #ifdef DBG_UTIL

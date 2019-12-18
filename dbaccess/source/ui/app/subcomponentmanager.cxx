@@ -311,7 +311,7 @@ namespace dbaui
             return bSuccess;
         }
 
-        void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const sal_Char* _pAsciiEventName,
+        void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const char* _pAsciiEventName,
                 const SubComponentDescriptor& _rComponent )
         {
             try

@@ -40,14 +40,14 @@ namespace dbaui
 
         std::unique_ptr<weld::Button> m_xControl;
     public:
-        OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const sal_Char* _pAsciiModuleName);
+        OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const char* _pAsciiModuleName);
 
         void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
         bool get_sensitive() const { return m_xControl->get_sensitive(); }
         void connect_clicked(const Link<weld::Button&, void>& rLink) { m_xControl->connect_clicked(rLink); }
 
     private:
-        void    impl_init( const sal_Char* _pAsciiModuleName );
+        void    impl_init( const char* _pAsciiModuleName );
     };
 
     // OpenDocumentListBox
@@ -61,7 +61,7 @@ namespace dbaui
         std::unique_ptr<weld::ComboBox> m_xControl;
 
     public:
-        OpenDocumentListBox(std::unique_ptr<weld::ComboBox> xControl, const sal_Char* _pAsciiModuleName);
+        OpenDocumentListBox(std::unique_ptr<weld::ComboBox> xControl, const char* _pAsciiModuleName);
 
         OUString  GetSelectedDocumentURL() const;
 
@@ -75,7 +75,7 @@ namespace dbaui
     private:
         StringPair  impl_getDocumentAtIndex( sal_uInt16 _nListIndex ) const;
 
-        void    impl_init( const sal_Char* _pAsciiModuleName );
+        void    impl_init( const char* _pAsciiModuleName );
     };
 
 } // namespace dbaui

@@ -96,7 +96,7 @@ namespace dbaccess
                 ->onDocumentInitialized has been called
         */
         void    notifyDocumentEvent(
-                    const sal_Char* _pAsciiEventName,
+                    const char* _pAsciiEventName,
                     const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
                     const css::uno::Any& _rSupplement = css::uno::Any()
                 )
@@ -112,7 +112,7 @@ namespace dbaccess
                 the mutex is locked
         */
         void    notifyDocumentEventAsync(
-                    const sal_Char* _pAsciiEventName,
+                    const char* _pAsciiEventName,
                     const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
                     const css::uno::Any& _rSupplement = css::uno::Any()
                 )

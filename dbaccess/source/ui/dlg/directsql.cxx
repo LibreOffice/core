@@ -240,7 +240,7 @@ namespace dbaui
     }
 
 #ifdef DBG_UTIL
-    const sal_Char* DirectSQLDialog::impl_CheckInvariants() const
+    const char* DirectSQLDialog::impl_CheckInvariants() const
     {
         if (m_aStatementHistory.size() != m_aNormalizedHistory.size())
             return "statement history is inconsistent!";

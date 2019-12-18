@@ -70,7 +70,7 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 
 // OOdbcLibWrapper
 
-bool OOdbcEnumeration::load(const sal_Char* _pLibPath)
+bool OOdbcEnumeration::load(const char* _pLibPath)
 {
     m_sLibPath = OUString::createFromAscii(_pLibPath);
 #if defined(HAVE_ODBC_SUPPORT) && !defined(DISABLE_DYNLOADING)
@@ -93,7 +93,7 @@ void OOdbcEnumeration::unload()
 #endif
 }
 
-oslGenericFunction OOdbcEnumeration::loadSymbol(const sal_Char* _pFunctionName)
+oslGenericFunction OOdbcEnumeration::loadSymbol(const char* _pFunctionName)
 {
     return osl_getFunctionSymbol(m_pOdbcLib, OUString::createFromAscii(_pFunctionName).pData);
 }

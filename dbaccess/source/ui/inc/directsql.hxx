@@ -122,14 +122,14 @@ namespace dbaui
         void display(const css::uno::Reference< css::sdbc::XResultSet >& xRS);
 
 #ifdef DBG_UTIL
-        const sal_Char* impl_CheckInvariants() const;
+        const char* impl_CheckInvariants() const;
 #endif
     };
 
 #ifdef DBG_UTIL
 #define CHECK_INVARIANTS(methodname)    \
     {   \
-        const sal_Char* pError = impl_CheckInvariants();    \
+        const char* pError = impl_CheckInvariants();    \
         if (pError) \
             SAL_WARN("dbaccess.ui", methodname ": " << pError);   \
     }

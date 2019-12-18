@@ -24,7 +24,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* sdbt_component_getFactory(
-                    const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*, SAL_UNUSED_PARAMETER void*)
+                    const char* pImplementationName, SAL_UNUSED_PARAMETER void*, SAL_UNUSED_PARAMETER void*)
 {
     Reference< XInterface > xRet;
 

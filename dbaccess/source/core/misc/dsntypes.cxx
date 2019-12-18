@@ -126,7 +126,7 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
     return sRet;
 }
 
-bool ODsnTypeCollection::hasDriver( const sal_Char* _pAsciiPattern ) const
+bool ODsnTypeCollection::hasDriver( const char* _pAsciiPattern ) const
 {
     OUString sPrefix( getPrefix( OUString::createFromAscii( _pAsciiPattern ) ) );
     return !sPrefix.isEmpty();
