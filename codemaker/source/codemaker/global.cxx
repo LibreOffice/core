@@ -100,7 +100,7 @@ OString createFileNameFromType( const OString& destination,
 
     OString fileName(fileNameBuf.makeStringAndClear());
 
-    sal_Char token;
+    char token;
 #ifdef SAL_UNX
     fileName = fileName.replace('\\', '/');
     token = '/';
@@ -164,15 +164,15 @@ static bool checkFileContent(const OString& targetFileName, const OString& tmpFi
 
     if (target != nullptr && tmp != nullptr)
     {
-        sal_Char    buffer1[1024+1];
-        sal_Char    buffer2[1024+1];
+        char        buffer1[1024+1];
+        char        buffer2[1024+1];
         sal_Int32   n1 = 0;
         sal_Int32   n2 = 0;
 
         while ( !bFindChanges && !feof(target) && !feof(tmp))
         {
-            n1 = fread(buffer1, sizeof(sal_Char), 1024, target);
-            n2 = fread(buffer2, sizeof(sal_Char), 1024, tmp);
+            n1 = fread(buffer1, sizeof(char), 1024, target);
+            n2 = fread(buffer2, sizeof(char), 1024, tmp);
 
             if ( n1 != n2 )
                 bFindChanges = true;
@@ -325,7 +325,7 @@ bool FileStream::write(void const * buffer, sal_uInt64 size) {
 FileStream &operator<<(FileStream& o, sal_uInt32 i) {
     sal_uInt64 writtenBytes;
     OString s = OString::number(static_cast<sal_Int32>(i));
-    osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(char), &writtenBytes);
     return o;
 }
 FileStream &operator<<(FileStream& o, char const * s) {
@@ -335,24 +335,24 @@ FileStream &operator<<(FileStream& o, char const * s) {
 }
 FileStream &operator<<(FileStream& o, OString const * s) {
     sal_uInt64 writtenBytes;
-    osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(char), &writtenBytes);
     return o;
 }
 FileStream &operator<<(FileStream& o, const OString& s) {
     sal_uInt64 writtenBytes;
-    osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(char), &writtenBytes);
     return o;
 
 }
 FileStream &operator<<(FileStream& o, OStringBuffer const * s) {
     sal_uInt64 writtenBytes;
-    osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(sal_Char), &writtenBytes);
+    osl_writeFile(o.m_file, s->getStr(), s->getLength() * sizeof(char), &writtenBytes);
     return o;
 }
 FileStream &operator<<(FileStream& o, const OStringBuffer& s) {
     sal_uInt64 writtenBytes;
     osl_writeFile(
-        o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
+        o.m_file, s.getStr(), s.getLength() * sizeof(char), &writtenBytes);
     return o;
 }
 
