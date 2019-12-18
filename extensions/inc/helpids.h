@@ -158,7 +158,6 @@
 #define HID_PROP_SPIN                                   "EXTENSIONS_HID_PROP_SPIN"
 #define HID_PROP_STRICTFORMAT                           "EXTENSIONS_HID_PROP_STRICTFORMAT"
 #define HID_PROP_SHOWTHOUSANDSEP                        "EXTENSIONS_HID_PROP_SHOWTHOUSANDSEP"
-#define HID_PROP_VERTICAL_ALIGN                         "EXTENSIONS_HID_PROP_VERTICAL_ALIGN"
 #define HID_PROP_PRINTABLE                              "EXTENSIONS_HID_PROP_PRINTABLE"
 #define HID_PROP_TARGET_URL                             "EXTENSIONS_HID_PROP_TARGET_URL"
 #define HID_PROP_TARGET_FRAME                           "EXTENSIONS_HID_PROP_TARGET_FRAME"
