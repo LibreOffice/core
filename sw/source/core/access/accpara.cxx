@@ -72,6 +72,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <wrong.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/unoprnms.hxx>
 #include <swatrset.hxx>
 #include <unosett.hxx>
 #include <unomap.hxx>
