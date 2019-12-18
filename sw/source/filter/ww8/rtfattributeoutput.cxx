@@ -2323,7 +2323,8 @@ void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
 
 void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 {
-    short nEsc = rEscapement.GetEsc(), nProp = rEscapement.GetProportionalHeight();
+    short nEsc = rEscapement.GetEsc();
+    short nProp = rEscapement.GetProportionalHeight();
     sal_Int32 nProp100 = nProp * 100;
     if (DFLT_ESC_PROP == nProp || nProp < 1 || nProp > 100)
     {
@@ -2333,7 +2334,7 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUPER);
         return;
     }
-    else if (DFLT_ESC_AUTO_SUPER == nEsc)
+    if (DFLT_ESC_AUTO_SUPER == nEsc)
     {
         nEsc = .8 * (100 - nProp);
         ++nProp100; // A 1 afterwards means 'automatic' according to editeng/rtf/rtfitem.cxx
