@@ -20,6 +20,10 @@
 #include <com/sun/star/ui/XDeck.hpp>
 #include <com/sun/star/ui/XPanel.hpp>
 #include <com/sun/star/frame/XController2.hpp>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
 #include "SlideBackground.hxx"
 #include <sdresid.hxx>
 #include <ViewShellBase.hxx>
@@ -1159,17 +1163,22 @@ IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, weld::ComboBox&, void)
     SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
     if (!pDoc)
         return;
-    sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
+
+    auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
+    if (pSSVS == nullptr)
+        return;
+
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    auto& rPageSelector = rSSController.GetPageSelector();
+
     for( sal_uInt16 nPage = 0; nPage < pDoc->GetSdPageCount(PageKind::Standard); nPage++ )
     {
-        if (pDoc->GetSdPage(nPage,PageKind::Standard)->IsSelected())
+        if (rPageSelector.IsPageSelected(nPage))
         {
-            nSelectedPage = nPage;
-            break;
+            OUString aLayoutName(mxMasterSlide->get_active_text());
+            pDoc->SetMasterPage(nPage, aLayoutName, pDoc, false, false);
         }
     }
-    OUString aLayoutName(mxMasterSlide->get_active_text());
-    pDoc->SetMasterPage(nSelectedPage, aLayoutName, pDoc, false, false);
 }
 
 IMPL_LINK_NOARG(SlideBackground, EditMasterHdl, weld::Button&, void)
