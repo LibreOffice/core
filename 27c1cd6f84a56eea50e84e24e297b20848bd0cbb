@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_5d459d6f",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-18T14:30:12Z",
+      "side": 1,
+      "message": "there\u0027s no guarantee here that the resulting position is at the start of a unicode code point, it could be in the middle of a surrogate pair; i don\u0027t know how robust transilterate is against that... for 100 it might not be a problem but maybe for the 1 case we could get an incorrect classification of the truncated code point?",
+      "revId": "27c1cd6f84a56eea50e84e24e297b20848bd0cbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
