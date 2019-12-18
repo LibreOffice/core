@@ -3790,6 +3790,67 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     if( rSrcSh.IsTableMode() )
     {
         bTableSel = true;
+        const SelectionType nSelection = rSrcSh.GetSelectionType();
+        // at enhanced table row/column selection or wholly selected tables,
+        // paste rows above or columns before, and in the case of moving, remove the selection
+        // (limit only to the single document case temporarily)
+        if( rSrcSh.GetDoc() == rSh.GetDoc() &&
+                ( (( SelectionType::TableRow | SelectionType::TableCol) & nSelection ) || rSrcSh.HasWholeTabSelection() ) )
+        {
+            bool bTableCol(SelectionType::TableCol & nSelection);
+
+            SwUndoId eUndoId = bMove ? SwUndoId::UI_DRAG_AND_MOVE : SwUndoId::UI_DRAG_AND_COPY;
+
+            SwRewriter aRewriter;
+
+            aRewriter.AddRule(UndoArg1, rSrcSh.GetSelDescr());
+
+            if(rSrcSh.GetDoc() != rSh.GetDoc())
+                rSrcSh.StartUndo( eUndoId, &aRewriter );
+            rSh.StartUndo( eUndoId, &aRewriter );
+
+            rSh.StartAction();
+            rSrcSh.StartAction();
+
+            SfxDispatcher* pDispatch = rSrcSh.GetView().GetViewFrame()->GetDispatcher();
+            pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
+
+            rSrcSh.Push(); // save selection for later restoration
+            rSh.EnterStdMode();
+            rSh.SwCursorShell::SetCursor(rDragPt, false);
+
+            // store cursor
+            ::sw::mark::IMark* pMark = rSh.SetBookmark(
+                                    vcl::KeyCode(),
+                                    OUString(),
+                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+
+            rSrcSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore selection...
+
+            // delete source rows/columns
+            if (bMove)
+                pDispatch->Execute(bTableCol ? FN_TABLE_DELETE_COL : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+
+            // restore cursor position
+            if (pMark != nullptr)
+            {
+                rSh.GotoMark( pMark );
+                rSh.getIDocumentMarkAccess()->deleteMark( pMark );
+            }
+
+            // paste rows above/columns before
+            pDispatch->Execute(bTableCol ? FN_TABLE_PASTE_COL_BEFORE : FN_TABLE_PASTE_ROW_BEFORE, SfxCallMode::SYNCHRON);
+
+            if( rSrcSh.GetDoc() != rSh.GetDoc() )
+                rSrcSh.EndUndo();
+
+            rSh.DestroyCursor();
+            rSh.EndUndo();
+            rSh.EndAction();
+            rSh.EndAction();
+            return true;
+        }
+
         if ( bMove && rSrcSh.HasWholeTabSelection() )
             bTableMove = true;
     }
