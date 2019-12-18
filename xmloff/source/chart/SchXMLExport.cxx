@@ -113,11 +113,13 @@ using ::std::vector;
 
 namespace
 {
+    using CustomLabelSeq = Sequence<Reference<chart2::XDataPointCustomLabelField>>;
+
     struct SchXMLDataPointStruct
     {
         OUString   maStyleName;
         sal_Int32  mnRepeat;
-        OUString   msCustomLabelText;
+        CustomLabelSeq   mCustomLabelText;
 
         SchXMLDataPointStruct() : mnRepeat( 1 ) {}
     };
@@ -229,6 +231,8 @@ public:
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bExportContent );
 
+    void exportCustomLabel(const CustomLabelSeq & xCustomLabel);
+
     void exportRegressionCurve(
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
         const css::awt::Size& rPageSize,
@@ -277,31 +281,26 @@ public:
 namespace
 {
 
-OUString lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
+CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
         const uno::Reference< chart2::XDataSeries >& rSeries)
 {
     if( !rSeries.is() )
-        return OUString{};
+        return CustomLabelSeq();
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
-        return OUString{};
+        return CustomLabelSeq();
 
-    // export custom label text
     if(Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
     {
         if(Any aAny = xLabels->getPropertyValue("CustomLabelFields"); aAny.hasValue())
         {
             Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aCustomLabels;
             aAny >>= aCustomLabels;
-            OUString sLabel;
-            // TODO export formatted string instead of simple characters
-            for(auto& aLabel : aCustomLabels)
-                sLabel += aLabel->getString();
-            return sLabel;
+            return aCustomLabels;
         }
     }
-    return OUString{};
+    return CustomLabelSeq();
 }
 
 class lcl_MatchesRole
@@ -3266,7 +3265,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         SchXMLDataPointStruct aPoint;
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
                         if(bExportNumFmt)
-                            aPoint.msCustomLabelText = lcl_getCustomLabelField(nElement, xSeries);
+                            aPoint.mCustomLabelText = lcl_getCustomLabelField(nElement, xSeries);
                         maAutoStyleNameQueue.pop();
                         aDataPointVector.push_back( aPoint );
                     }
@@ -3294,7 +3293,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 SchXMLDataPointStruct aPoint;
                 aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
-                aPoint.msCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
+                aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
                 aDataPointVector.push_back( aPoint );
             }
 
@@ -3327,7 +3326,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         SAL_WARN_IF( maAutoStyleNameQueue.empty(), "xmloff.chart", "Autostyle queue empty!" );
                         SchXMLDataPointStruct aPoint;
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
-                        aPoint.msCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
+                        aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
                         maAutoStyleNameQueue.pop();
 
                         aDataPointVector.push_back( aPoint );
@@ -3343,7 +3342,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
             // if we get here the property states are empty
             SchXMLDataPointStruct aPoint;
-            aPoint.msCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
+            aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
             aDataPointVector.push_back( aPoint );
 
             nLastIndex = nCurrIndex;
@@ -3373,13 +3372,10 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     {
         aPoint = rPoint;
 
-        if( aPoint.maStyleName == aLastPoint.maStyleName && aPoint.msCustomLabelText.isEmpty() )
+        if( aPoint.maStyleName == aLastPoint.maStyleName && aLastPoint.mCustomLabelText.getLength() < 1 )
             aPoint.mnRepeat += aLastPoint.mnRepeat;
         else if( aLastPoint.mnRepeat > 0 )
         {
-            // export custom label text
-            if(!aLastPoint.msCustomLabelText.isEmpty())
-                mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_CUSTOM_LABEL_FIELD, aLastPoint.msCustomLabelText);
             // write last element
             if( !aLastPoint.maStyleName.isEmpty() )
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
@@ -3389,16 +3385,13 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                                     OUString::number( ( aLastPoint.mnRepeat ) ));
 
             SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
+            exportCustomLabel(aLastPoint.mCustomLabelText);
         }
         aLastPoint = aPoint;
     }
     // write last element if it hasn't been written in last iteration
     if( aPoint.maStyleName == aLastPoint.maStyleName )
     {
-        // export custom label text
-        if(!aLastPoint.msCustomLabelText.isEmpty())
-            mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_CUSTOM_LABEL_FIELD, aLastPoint.msCustomLabelText);
-
         if( !aLastPoint.maStyleName.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, aLastPoint.maStyleName );
 
@@ -3407,6 +3400,22 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                                 OUString::number( ( aLastPoint.mnRepeat ) ));
 
         SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
+        exportCustomLabel(aLastPoint.mCustomLabelText);
+    }
+}
+
+void SchXMLExportHelper_Impl::exportCustomLabel( const CustomLabelSeq & xCustomLabel )
+{
+    if( xCustomLabel.getLength() < 1 )
+        return; // nothing to export
+
+    SvXMLElementExport aLabelElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_LABEL, true, true);
+    SvXMLElementExport aPara( mrExport, XML_NAMESPACE_TEXT, XML_P, true, false );
+    for( const Reference<chart2::XDataPointCustomLabelField>& label : xCustomLabel )
+    {
+        // TODO add style
+        SvXMLElementExport aSpan( mrExport, XML_NAMESPACE_TEXT, XML_SPAN, true, false);
+        mrExport.GetDocHandler()->characters(label->getString());
     }
 }
 
