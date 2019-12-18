@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_52e6ecea",
+        "filename": "bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-18T07:16:24Z",
+      "side": 1,
+      "message": "I\u0027m really confused how this gets called e.g. for Windows, or otherwise when !defined(__GNUG__)\n\nOr is this code only specific for #if defined(__GNUG__) case? shouldn\u0027t it then static_assert(false) otherwise?",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 17
+      },
+      "revId": "8473ac2e27efff3ec902a358896a669ce05f047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
