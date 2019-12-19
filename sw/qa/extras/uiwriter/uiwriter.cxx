@@ -2254,6 +2254,36 @@ void SwUiWriterTest::testTextSearch()
     //Now performing search again for BOLD words, count should be 3 due to replacement
     uno::Reference<container::XIndexAccess> xIndex2(xReplace->findAll(xSearchDes));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndex2->getCount());
+    // regex tests
+    xReplaceDes->setPropertyValue("SearchRegularExpression", uno::makeAny(true));
+    // regex: test correct match of paragraph start
+    xReplaceDes->setSearchString("^."); // should only match first character of the paragraph
+    xReplaceDes->setReplaceString("C");
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ReplaceCount);
+    // regex: test correct match of word start
+    xReplaceDes->setSearchString("\\b\\w"); // should match all words' first characters
+    xReplaceDes->setReplaceString("x&");
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), ReplaceCount);
+    // regex: test negative look-behind assertion
+    xReplaceDes->setSearchString("(?<!xCelly xW)o"); // only "o" in "xCello", not in "xWorld"
+    xReplaceDes->setReplaceString("y");
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ReplaceCount);
+    // regex: test positive look-behind assertion
+    xReplaceDes->setSearchString("(?<=xCelly xWorld xTh)i"); // only "i" in "xThis", not in "xis"
+    xReplaceDes->setReplaceString("z");
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ReplaceCount);
+    // regex: use capturing group to test reference
+    xReplaceDes->setSearchString("\\b(\\w\\w\\w\\w)\\w");
+    xReplaceDes->setReplaceString("$1q"); // only fifth characters in words should change
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ReplaceCount);
+    // check of the end result
+    CPPUNIT_ASSERT_EQUAL(OUString("xCelqy xWorqd xThzq xis xa xtasq"),
+                         pCursor->GetNode().GetTextNode()->GetText());
 }
 
 void SwUiWriterTest::testTdf69282()
