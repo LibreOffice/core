@@ -1108,10 +1108,6 @@ SfxViewShell::~SfxViewShell()
         pImpl->m_pController->ReleaseShell_Impl();
         pImpl->m_pController.clear();
     }
-
-    vcl::Window* pFrameWin = GetViewFrame()->GetWindow().GetFrameWindow();
-    if (pFrameWin && pFrameWin->GetLOKNotifier())
-        pFrameWin->ReleaseLOKNotifier();
 }
 
 bool SfxViewShell::PrepareClose
@@ -1119,9 +1115,6 @@ bool SfxViewShell::PrepareClose
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
-    if (GetViewFrame()->GetWindow().GetLOKNotifier())
-        GetViewFrame()->GetWindow().ReleaseLOKNotifier();
-
     SfxPrinter *pPrinter = GetPrinter();
     if ( pPrinter && pPrinter->IsPrinting() )
     {

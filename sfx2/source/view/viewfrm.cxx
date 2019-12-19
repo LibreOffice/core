@@ -1500,6 +1500,10 @@ SfxViewFrame::~SfxViewFrame()
 {
     m_pImpl->bIsDowning = true;
 
+    vcl::Window* pFrameWin = GetWindow().GetFrameWindow();
+    if (pFrameWin && pFrameWin->GetLOKNotifier())
+        pFrameWin->ReleaseLOKNotifier();
+
     if ( SfxViewFrame::Current() == this )
         SfxViewFrame::SetViewFrame( nullptr );
 

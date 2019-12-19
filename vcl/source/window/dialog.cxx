@@ -642,15 +642,6 @@ void Dialog::dispose()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogClosed");
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        {
-            pNotifier->notifyWindow(GetLOKWindowId(), "close");
-            ReleaseLOKNotifier();
-        }
-    }
-
     SystemWindow::dispose();
 }
 
@@ -1203,6 +1194,15 @@ void Dialog::EndDialog( long nResult )
         mpDialogImpl->mnResult = -1;
     }
     mbInExecute = false;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
+    }
 
     if ( mpDialogImpl )
     {
