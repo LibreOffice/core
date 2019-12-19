@@ -1110,7 +1110,7 @@ SfxViewShell::~SfxViewShell()
     }
 
     vcl::Window* pFrameWin = GetViewFrame()->GetWindow().GetFrameWindow();
-    if (pFrameWin && pFrameWin->GetLOKNotifier())
+    if (pFrameWin && pFrameWin->GetLOKNotifier() == this)
         pFrameWin->ReleaseLOKNotifier();
 }
 
@@ -1119,9 +1119,6 @@ bool SfxViewShell::PrepareClose
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
-    if (GetViewFrame()->GetWindow().GetLOKNotifier())
-        GetViewFrame()->GetWindow().ReleaseLOKNotifier();
-
     SfxPrinter *pPrinter = GetPrinter();
     if ( pPrinter && pPrinter->IsPrinting() )
     {
@@ -1443,6 +1440,12 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                 }
             }
         }
+    }
+    else if ( rHint.GetId() == SfxHintId::Deinitializing)
+    {
+        vcl::Window* pFrameWin = GetViewFrame()->GetWindow().GetFrameWindow();
+        if (pFrameWin && pFrameWin->GetLOKNotifier() == this)
+            pFrameWin->ReleaseLOKNotifier();
     }
 }
 

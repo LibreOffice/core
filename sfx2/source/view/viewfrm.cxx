@@ -1376,10 +1376,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
             case SfxHintId::Deinitializing:
             {
-                vcl::Window* pFrameWin = GetWindow().GetFrameWindow();
-                if (pFrameWin && pFrameWin->GetLOKNotifier())
-                    pFrameWin->ReleaseLOKNotifier();
-
                 GetFrame().DoClose();
                 break;
             }
