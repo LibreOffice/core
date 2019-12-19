@@ -36,6 +36,19 @@ SameContentListBox::SameContentListBox(vcl::Window* pParent)
     SelectEntryPos(0);
 }
 
+void SameContentListBox::Fill(weld::ComboBox& rComboBox)
+{
+    rComboBox.clear();
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_SAMECONTENT); ++i)
+    {
+        OUString aStr = SvxResId(RID_SVXSTRARY_SAMECONTENT[i].first);
+        sal_uInt32 nData = RID_SVXSTRARY_SAMECONTENT[i].second;
+        rComboBox.append(OUString::number(nData), aStr);
+    }
+    rComboBox.set_active(0);
+    rComboBox.set_size_request(150, -1);
+}
+
 VCL_BUILDER_FACTORY(SameContentListBox);
 
 Size SameContentListBox::GetOptimalSize() const

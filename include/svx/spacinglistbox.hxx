@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 enum class SpacingType { SPACING_INCH, MARGINS_INCH, SPACING_CM, MARGINS_CM };
 
@@ -31,6 +32,7 @@ class SVX_DLLPUBLIC SpacingListBox final : public ListBox
 public:
     SpacingListBox( vcl::Window* pParent );
     void Init(SpacingType eType);
+    static void Fill(SpacingType eType, weld::ComboBox&);
     Size GetOptimalSize() const override;
 };
 
