@@ -132,7 +132,7 @@ namespace abp
     /// creates and inserts a data source, and sets its URL property to the string given
     static ODataSource lcl_implCreateAndSetURL(
         const Reference< XComponentContext >& _rxORB, const OUString& _rName,
-        const sal_Char* _pInitialAsciiURL )
+        const char* _pInitialAsciiURL )
     {
         ODataSource aReturn( _rxORB );
         try

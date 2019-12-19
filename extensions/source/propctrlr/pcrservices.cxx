@@ -59,7 +59,7 @@ static void pcr_initializeModule()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* pcr_component_getFactory(
-                    const sal_Char* pImplementationName,
+                    const char* pImplementationName,
                     void* pServiceManager,
                     SAL_UNUSED_PARAMETER void* /*pRegistryKey*/)
 {

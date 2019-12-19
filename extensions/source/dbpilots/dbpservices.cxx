@@ -42,7 +42,7 @@ static void dbp_initializeModule()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* dbp_component_getFactory(
-                    const sal_Char* pImplementationName,
+                    const char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {

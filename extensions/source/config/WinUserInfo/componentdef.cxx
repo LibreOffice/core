@@ -25,7 +25,7 @@ static const cppu::ImplementationEntry kImplementations_entries[]
         { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
-WinUserInfoBe_component_getFactory(const sal_Char* aImplementationName, void* aServiceManager,
+WinUserInfoBe_component_getFactory(const char* aImplementationName, void* aServiceManager,
                                    void* aRegistryKey)
 {
     return cppu::component_getFactoryHelper(aImplementationName, aServiceManager, aRegistryKey,

@@ -133,8 +133,8 @@ namespace pcr
     namespace PropertyAttribute = css::beans::PropertyAttribute;
     namespace FormComponentType = css::form::FormComponentType;
 
-    EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
-            const sal_Char* _pListenerMethodAsciiName, const char* pDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
+    EventDescription::EventDescription( EventId _nId, const char* _pListenerNamespaceAscii, const char* _pListenerClassAsciiName,
+            const char* _pListenerMethodAsciiName, const char* pDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
         :sDisplayName(PcrRes( pDisplayNameResId ))
         ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
         ,sHelpId( _sHelpId )

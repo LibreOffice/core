@@ -274,7 +274,7 @@ namespace abp
             // already a valid table selected
             return;
 
-        const sal_Char* pGuess = nullptr;
+        const char* pGuess = nullptr;
         switch ( getSettings().eType )
         {
             case AST_MORK               :
