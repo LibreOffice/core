@@ -27,6 +27,7 @@
 #include "formulabase.hxx"
 
 struct ScDataBarFormatData;
+class ScDocument;
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
@@ -293,6 +294,9 @@ public:
 
     void setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
+
+    ScDocument& getScDocument();
+
 
 private:
     WorksheetGlobals&   mrSheetGlob;
