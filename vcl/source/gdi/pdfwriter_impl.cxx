@@ -1307,6 +1307,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nAccessPermissions(0),
         m_bIsPDF_A1( false ),
         m_bIsPDF_A2( false ),
+        m_bIsPDF_UA( false ),
         m_rOuterFace( i_rOuterFace )
 {
     m_aStructure.emplace_back( );
@@ -5225,7 +5226,7 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
 // emits the document metadata
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
-    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 )
+    if (!m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_UA)
         return 0;
 
     //get the object number for all the destinations
@@ -5239,6 +5240,8 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             aMetadata.mnPDF_A = 1;
         else if (m_bIsPDF_A2)
             aMetadata.mnPDF_A = 2;
+
+        aMetadata.mbPDF_UA = m_bIsPDF_UA;
 
         if (!m_aContext.DocumentInfo.Title.isEmpty())
         {
