@@ -34,6 +34,8 @@
 #include <addressconverter.hxx>
 #include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
 
 namespace oox {
 namespace xls {
@@ -221,7 +223,12 @@ CommentRef CommentsBuffer::createComment()
 
 void CommentsBuffer::finalizeImport()
 {
+    // keep the model locked to avoid repeated reformatting in the model
+    auto pModel = getScDocument().GetDrawLayer();
+    bool bWasLocked = pModel->isLocked();
+    pModel->setLock(true);
     maComments.forEachMem( &Comment::finalizeImport );
+    pModel->setLock(bWasLocked);
 }
 
 } // namespace xls
