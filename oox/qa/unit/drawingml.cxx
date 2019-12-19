@@ -12,15 +12,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 
