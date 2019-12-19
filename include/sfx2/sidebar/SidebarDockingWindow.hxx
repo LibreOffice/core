@@ -35,7 +35,7 @@ class SidebarController;
 
 class SidebarNotifyIdle;
 
-class SidebarDockingWindow : public SfxDockingWindow
+class SFX2_DLLPUBLIC SidebarDockingWindow : public SfxDockingWindow
 {
 public:
     SidebarDockingWindow(SfxBindings* pBindings, SidebarChildWindow& rChildWindow,
@@ -47,6 +47,9 @@ public:
 
     void SetReadyToDrag( bool bStartDrag ) { mbIsReadyToDrag = bStartDrag; }
     bool IsReadyToDrag() const { return mbIsReadyToDrag; }
+
+    /// Force generation of all panels by completion.
+    void SyncUpdate();
 
     void NotifyResize();
 
