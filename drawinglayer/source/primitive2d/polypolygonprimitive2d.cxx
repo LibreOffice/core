@@ -429,12 +429,12 @@ namespace drawinglayer
                         if(aOutRange != getDefinitionRange())
                         {
                             // we want to paint (tiled) content which is defined relative to DefinitionRange
-                            // with the same tiling and offset(s) in the traget range of the geometry (the
+                            // with the same tiling and offset(s) in the target range of the geometry (the
                             // polygon). The range given in the local FillGraphicAttribute defines the position
                             // of the graphic in unit coordinates relative to the DefinitionRange. Transform
                             // this using DefinitionRange to get to the global definition and then with the
                             // inverse transformation from the target range to go to unit coordinates relative
-                            // to that traget coordinate system.
+                            // to that target coordinate system.
                             basegfx::B2DRange aAdaptedRange(getFillGraphic().getGraphicRange());
 
                             const basegfx::B2DHomMatrix aFromDefinitionRangeToGlobal(
