@@ -86,7 +86,7 @@
  *
  *****************************************************************************/
 
-static oslFileError osl_psz_getVolumeInformation(const sal_Char* , oslVolumeInfo* pInfo, sal_uInt32 uFieldMask);
+static oslFileError osl_psz_getVolumeInformation(const char* , oslVolumeInfo* pInfo, sal_uInt32 uFieldMask);
 
 /****************************************************************************/
 /*  osl_getVolumeInformation */
@@ -194,7 +194,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #endif /* HAVE_STATFS_H */
 
 static oslFileError osl_psz_getVolumeInformation (
-    const sal_Char* pszDirectory, oslVolumeInfo* pInfo, sal_uInt32 uFieldMask)
+    const char* pszDirectory, oslVolumeInfo* pInfo, sal_uInt32 uFieldMask)
 {
     if (!pInfo)
         return osl_File_E_INVAL;

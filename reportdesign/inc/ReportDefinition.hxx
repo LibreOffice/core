@@ -131,8 +131,8 @@ namespace reportdesign
         bool WriteThroughComponent(
             /// the component we export
             const css::uno::Reference< css::lang::XComponent> & xComponent,
-            const sal_Char* pStreamName,        /// the stream name
-            const sal_Char* pServiceName,       /// service name of the component
+            const char* pStreamName,        /// the stream name
+            const char* pServiceName,       /// service name of the component
             /// the argument (XInitialization)
             const css::uno::Sequence< css::uno::Any> & rArguments,
             /// output descriptor
@@ -144,7 +144,7 @@ namespace reportdesign
         bool WriteThroughComponent(
             const css::uno::Reference< css::io::XOutputStream> & xOutputStream,
             const css::uno::Reference< css::lang::XComponent> & xComponent,
-            const sal_Char* pServiceName,
+            const char* pServiceName,
             const css::uno::Sequence< css::uno::Any> & rArguments,
             const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc);
 

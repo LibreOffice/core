@@ -266,7 +266,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
     return osl_File_E_None;
 }
 
-static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_uInt64 uAttributes )
+static oslFileError osl_psz_setFileAttributes( const char* pszFilePath, sal_uInt64 uAttributes )
 {
     oslFileError osl_error = osl_File_E_None;
     mode_t       nNewMode  = 0;
@@ -327,7 +327,7 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt6
 }
 
 static oslFileError osl_psz_setFileTime (
-    const sal_Char* pszFilePath,
+    const char* pszFilePath,
     const TimeValue* pLastAccessTime,
     const TimeValue* pLastWriteTime )
 {

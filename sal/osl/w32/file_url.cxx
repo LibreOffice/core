@@ -524,17 +524,17 @@ DWORD GetCaseCorrectPathName(
 
 static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
 {
-    sal_Char        *pBuffer;
-    const sal_Char  *pSrcEnd;
-    const sal_Char  *pSrc;
-    sal_Char        *pDest;
+    char        *pBuffer;
+    const char  *pSrcEnd;
+    const char  *pSrc;
+    char        *pDest;
     sal_Int32       nSrcLen;
     bool        bValidEncoded = true;   /* Assume success */
 
     /* The resulting decoded string length is shorter or equal to the source length */
 
     nSrcLen = rtl_string_getLength(strUTF8);
-    pBuffer = static_cast<sal_Char*>(malloc((nSrcLen + 1) * sizeof(sal_Char)));
+    pBuffer = static_cast<char*>(malloc((nSrcLen + 1) * sizeof(char)));
 
     pDest = pBuffer;
     pSrc = rtl_string_getStr(strUTF8);
@@ -547,15 +547,15 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
         {
         case '%':
             {
-                sal_Char    aToken[3];
-                sal_Char    aChar;
+                char    aToken[3];
+                char    aChar;
 
                 pSrc++;
                 aToken[0] = *pSrc++;
                 aToken[1] = *pSrc++;
                 aToken[2] = 0;
 
-                aChar = static_cast<sal_Char>(strtoul( aToken, nullptr, 16 ));
+                aChar = static_cast<char>(strtoul( aToken, nullptr, 16 ));
 
                 /* The chars are path delimiters and must not be encoded */
 
@@ -594,15 +594,15 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
     /* Encode non ascii characters within the URL */
 
     rtl_String      *strUTF8 = nullptr;
-    sal_Char        *pszEncodedURL;
-    const sal_Char  *pURLScan;
-    sal_Char        *pURLDest;
+    char           *pszEncodedURL;
+    const char     *pURLScan;
+    char           *pURLDest;
     sal_Int32       nURLScanLen;
     sal_Int32       nURLScanCount;
 
     rtl_uString2String( &strUTF8, rtl_uString_getStr( strURL ), rtl_uString_getLength( strURL ), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
 
-    pszEncodedURL = static_cast<sal_Char*>(malloc( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(sal_Char) ));
+    pszEncodedURL = static_cast<char*>(malloc( (rtl_string_getLength( strUTF8 ) * 3 + 1)  * sizeof(char) ));
     assert(pszEncodedURL); // Don't handle OOM conditions
     pURLDest = pszEncodedURL;
     pURLScan = rtl_string_getStr( strUTF8 );
@@ -611,7 +611,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
 
     while ( nURLScanCount < nURLScanLen )
     {
-        sal_Char cCurrent = *pURLScan;
+        char cCurrent = *pURLScan;
         switch ( cCurrent )
         {
         default:

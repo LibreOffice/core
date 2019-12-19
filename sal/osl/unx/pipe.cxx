@@ -38,7 +38,7 @@
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
 
-static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
+static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
 static struct
 {
@@ -114,7 +114,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
                            rtl_uString_getLength(ustrPipeName),
                            osl_getThreadTextEncoding(),
                            OUSTRING_TO_OSTRING_CVTFLAGS);
-        sal_Char* pszPipeName = rtl_string_getStr(strPipeName);
+        char* pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
 
         if (strPipeName)
@@ -137,7 +137,7 @@ getBootstrapSocketPath()
     return "";
 }
 
-static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
+static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Options,
                                     oslSecurity Security)
 {
     int Flags;
@@ -159,7 +159,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
 
     if (Security)
     {
-        sal_Char Ident[256];
+        char Ident[256];
 
         Ident[0] = '\0';
 
@@ -489,7 +489,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n
 
         BytesToSend -= RetVal;
         BytesSend += RetVal;
-        pBuffer= static_cast< sal_Char const* >(pBuffer) + RetVal;
+        pBuffer= static_cast< char const* >(pBuffer) + RetVal;
     }
 
     return BytesSend;
@@ -513,7 +513,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 
         BytesToRead -= RetVal;
         BytesRead += RetVal;
-        pBuffer= static_cast< sal_Char* >(pBuffer) + RetVal;
+        pBuffer= static_cast< char* >(pBuffer) + RetVal;
     }
 
     return BytesRead;

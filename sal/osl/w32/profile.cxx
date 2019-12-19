@@ -84,9 +84,9 @@ enum osl_TLockMode
 struct osl_TFile
 {
     HANDLE  m_Handle;
-    sal_Char*   m_pReadPtr;
-    sal_Char    m_ReadBuf[512];
-    sal_Char*   m_pWriteBuf;
+    char*       m_pReadPtr;
+    char        m_ReadBuf[512];
+    char*       m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
 };
@@ -120,7 +120,7 @@ struct osl_TProfileImpl
     sal_uInt32  m_MaxLines;
     sal_uInt32  m_NoSections;
     sal_uInt32  m_MaxSections;
-    sal_Char**  m_Lines;
+    char**      m_Lines;
     rtl_uString *m_strFileName;
     osl_TProfileSection* m_Sections;
 };
@@ -133,22 +133,22 @@ static bool                 lockFile(const osl_TFile* pFile, osl_TLockMode eMode
 static bool                 rewindFile(osl_TFile* pFile, bool bTruncate);
 static osl_TStamp           getFileStamp(osl_TFile* pFile);
 
-static bool                 getLine(osl_TFile* pFile, sal_Char *pszLine, int MaxLen);
-static bool                 putLine(osl_TFile* pFile, const sal_Char *pszLine);
-static const sal_Char*      stripBlanks(const sal_Char* String, sal_uInt32* pLen);
-static const sal_Char*      addLine(osl_TProfileImpl* pProfile, const sal_Char* Line);
-static const sal_Char*      insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sal_uInt32 LineNo);
+static bool                 getLine(osl_TFile* pFile, char *pszLine, int MaxLen);
+static bool                 putLine(osl_TFile* pFile, const char *pszLine);
+static const char*          stripBlanks(const char* String, sal_uInt32* pLen);
+static const char*          addLine(osl_TProfileImpl* pProfile, const char* Line);
+static const char*          insertLine(osl_TProfileImpl* pProfile, const char* Line, sal_uInt32 LineNo);
 static void                 removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo);
 static void                 setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
                                      sal_uInt32 NoEntry, sal_uInt32 Line,
-                                     const sal_Char* Entry, sal_uInt32 Len);
+                                     const char* Entry, sal_uInt32 Len);
 static bool                 addEntry(osl_TProfileImpl* pProfile, osl_TProfileSection *pSection,
-                                     int Line, const sal_Char* Entry, sal_uInt32 Len);
+                                     int Line, const char* Entry, sal_uInt32 Len);
 static void                 removeEntry(osl_TProfileSection *pSection, sal_uInt32 NoEntry);
-static bool                 addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char* Section, sal_uInt32 Len);
+static bool                 addSection(osl_TProfileImpl* pProfile, int Line, const char* Section, sal_uInt32 Len);
 static void                 removeSection(osl_TProfileImpl* pProfile, osl_TProfileSection *pSection);
-static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char* Section,
-                                      const sal_Char* Entry, sal_uInt32 *pNoEntry);
+static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const char* Section,
+                                      const char* Entry, sal_uInt32 *pNoEntry);
 static bool                 loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile);
 static bool                 storeProfile(osl_TProfileImpl* pProfile, bool bCleanup);
 static osl_TProfileImpl*    acquireProfile(oslProfile Profile, bool bWriteable);
@@ -367,9 +367,9 @@ static bool writeProfileImpl(osl_TFile* pFile)
 namespace {
 // Use Unicode version of GetPrivateProfileString, to work with Multi-language paths
 DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
-    const sal_Char* pszSection, const sal_Char* pszEntry,
-    sal_Char* pszString, sal_uInt32 MaxLen,
-    const sal_Char* pszDefault)
+    const char* pszSection, const char* pszEntry,
+    char* pszString, sal_uInt32 MaxLen,
+    const char* pszDefault)
 {
     OSL_ASSERT(pProfile && (!MaxLen || pszString));
 
@@ -409,8 +409,8 @@ DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
 
 // Use Unicode version of WritePrivateProfileString, to work with Multi-language paths
 bool WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
-    const sal_Char* pszSection, const sal_Char* pszEntry,
-    const sal_Char* pszString)
+    const char* pszSection, const char* pszEntry,
+    const char* pszString)
 {
     OSL_ASSERT(pProfile && pszSection);
     rtl_uString *pSection, *pEntry = nullptr, *pString = nullptr;
@@ -444,12 +444,12 @@ bool WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
 }
 
 sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_Char* pszString, sal_uInt32 MaxLen,
-                              const sal_Char* pszDefault)
+                              const char* pszSection, const char* pszEntry,
+                              char* pszString, sal_uInt32 MaxLen,
+                              const char* pszDefault)
 {
     sal_uInt32    NoEntry;
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
     osl_TProfileImpl*    pProfile = nullptr;
 
     pProfile = acquireProfile(Profile, false);
@@ -496,10 +496,10 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 }
 
 sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
-                            const sal_Char* pszSection, const sal_Char* pszEntry,
+                            const char* pszSection, const char* pszEntry,
                             sal_Bool Default)
 {
-    sal_Char Line[32];
+    char Line[32];
 
     if (osl_readProfileString(Profile, pszSection, pszEntry, Line, sizeof(Line), ""))
     {
@@ -518,12 +518,12 @@ sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
 }
 
 sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_uInt32 FirstId, const sal_Char* Strings[],
+                              const char* pszSection, const char* pszEntry,
+                              sal_uInt32 FirstId, const char* Strings[],
                               sal_uInt32 Default)
 {
     sal_uInt32    i;
-    sal_Char        Line[256];
+    char        Line[256];
 
     if (osl_readProfileString(Profile, pszSection, pszEntry, Line, sizeof(Line), ""))
     {
@@ -543,14 +543,14 @@ sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
 }
 
 sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
-                               const sal_Char* pszSection, const sal_Char* pszEntry,
-                               const sal_Char* pszString)
+                               const char* pszSection, const char* pszEntry,
+                               const char* pszString)
 {
     sal_uInt32    i;
     bool bRet = false;
     sal_uInt32    NoEntry;
-    const sal_Char* pStr;
-    sal_Char        Line[4096];
+    const char* pStr;
+    char        Line[4096];
     osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = nullptr;
 
@@ -625,7 +625,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
 }
 
 sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
-                             const sal_Char* pszSection, const sal_Char* pszEntry,
+                             const char* pszSection, const char* pszEntry,
                              sal_Bool Value)
 {
     bool bRet = false;
@@ -639,8 +639,8 @@ sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
 }
 
 sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_uInt32 FirstId, const sal_Char* Strings[],
+                              const char* pszSection, const char* pszEntry,
+                              sal_uInt32 FirstId, const char* Strings[],
                               sal_uInt32 Value)
 {
     int i, n;
@@ -657,7 +657,7 @@ sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
 }
 
 sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
-                               const sal_Char *pszSection, const sal_Char *pszEntry)
+                               const char *pszSection, const char *pszEntry)
 {
     sal_uInt32    NoEntry;
     osl_TProfileImpl*    pProfile = nullptr;
@@ -699,8 +699,8 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     return bRet;
 }
 
-sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_Char *pszSection,
-                                       sal_Char* pszBuffer, sal_uInt32 MaxLen)
+sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const char *pszSection,
+                                       char* pszBuffer, sal_uInt32 MaxLen)
 {
     sal_uInt32 i, n = 0;
     sal_uInt32 NoEntry;
@@ -976,7 +976,7 @@ bool osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString*
     return nError == osl_File_E_None;
 }
 
-sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen)
+sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, char* pszBuffer, sal_uInt32 MaxLen)
 {
     sal_uInt32    i, n = 0;
     osl_TProfileImpl*    pProfile = acquireProfile(Profile, false);
@@ -1167,12 +1167,12 @@ static bool rewindFile(osl_TFile* pFile, bool bTruncate)
     return true;
 }
 
-static bool getLine(osl_TFile* pFile, sal_Char *pszLine, int MaxLen)
+static bool getLine(osl_TFile* pFile, char *pszLine, int MaxLen)
 {
     DWORD Max;
     size_t Free;
-    sal_Char* pChr;
-    sal_Char* pLine = pszLine;
+    char* pChr;
+    char* pLine = pszLine;
 
     if (pFile->m_Handle == INVALID_HANDLE_VALUE)
         return false;
@@ -1246,7 +1246,7 @@ static bool getLine(osl_TFile* pFile, sal_Char *pszLine, int MaxLen)
     return true;
 }
 
-static bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
+static bool putLine(osl_TFile* pFile, const char *pszLine)
 {
     unsigned int Len = strlen(pszLine);
 
@@ -1257,7 +1257,7 @@ static bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
     if ( pFile->m_pWriteBuf == nullptr )
     {
-        pFile->m_pWriteBuf = static_cast<sal_Char*>(malloc(Len+3));
+        pFile->m_pWriteBuf = static_cast<char*>(malloc(Len+3));
         pFile->m_nWriteBufLen = Len+3;
         pFile->m_nWriteBufFree = Len+3;
     }
@@ -1265,9 +1265,9 @@ static bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
     {
         if ( pFile->m_nWriteBufFree <= Len + 3 )
         {
-            sal_Char* pTmp;
+            char* pTmp;
 
-            pTmp=static_cast<sal_Char*>(realloc(pFile->m_pWriteBuf,( ( pFile->m_nWriteBufLen + Len ) * 2) ));
+            pTmp=static_cast<char*>(realloc(pFile->m_pWriteBuf,( ( pFile->m_nWriteBufLen + Len ) * 2) ));
             if ( pTmp == nullptr )
             {
                 return false;
@@ -1292,7 +1292,7 @@ static bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
 /* platform specific end */
 
-static const sal_Char* stripBlanks(const sal_Char* String, sal_uInt32* pLen)
+static const char* stripBlanks(const char* String, sal_uInt32* pLen)
 {
     if ( (pLen != nullptr) && ( *pLen != 0 ) )
     {
@@ -1312,14 +1312,14 @@ static const sal_Char* stripBlanks(const sal_Char* String, sal_uInt32* pLen)
     return String;
 }
 
-static const sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
+static const char* addLine(osl_TProfileImpl* pProfile, const char* Line)
 {
     if (pProfile->m_NoLines >= pProfile->m_MaxLines)
     {
         if (pProfile->m_Lines == nullptr)
         {
             pProfile->m_MaxLines = LINES_INI;
-            pProfile->m_Lines = static_cast<sal_Char **>(calloc(pProfile->m_MaxLines, sizeof(sal_Char *)));
+            pProfile->m_Lines = static_cast<char **>(calloc(pProfile->m_MaxLines, sizeof(char *)));
         }
         else
         {
@@ -1327,7 +1327,7 @@ static const sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
             unsigned int oldmax=pProfile->m_MaxLines;
 
             pProfile->m_MaxLines += LINES_ADD;
-            if (auto p = static_cast<sal_Char **>(realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(sal_Char *))))
+            if (auto p = static_cast<char **>(realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(char *))))
             {
                 pProfile->m_Lines = p;
 
@@ -1361,25 +1361,25 @@ static const sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
     return pProfile->m_Lines[pProfile->m_NoLines - 1];
 }
 
-static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sal_uInt32 LineNo)
+static const char* insertLine(osl_TProfileImpl* pProfile, const char* Line, sal_uInt32 LineNo)
 {
     if (pProfile->m_NoLines >= pProfile->m_MaxLines)
     {
         if (pProfile->m_Lines == nullptr)
         {
             pProfile->m_MaxLines = LINES_INI;
-            pProfile->m_Lines = static_cast<sal_Char **>(calloc(pProfile->m_MaxLines, sizeof(sal_Char *)));
+            pProfile->m_Lines = static_cast<char **>(calloc(pProfile->m_MaxLines, sizeof(char *)));
         }
         else
         {
             pProfile->m_MaxLines += LINES_ADD;
-            if (auto p = static_cast<sal_Char**>(
-                    realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(sal_Char*))))
+            if (auto p = static_cast<char**>(
+                    realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(char*))))
             {
                 pProfile->m_Lines = p;
 
                 memset(&pProfile->m_Lines[pProfile->m_NoLines], 0,
-                       (pProfile->m_MaxLines - pProfile->m_NoLines - 1) * sizeof(sal_Char*));
+                       (pProfile->m_MaxLines - pProfile->m_NoLines - 1) * sizeof(char*));
             }
             else
             {
@@ -1403,7 +1403,7 @@ static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Li
         sal_uInt32 i, n;
 
         memmove(&pProfile->m_Lines[LineNo + 1], &pProfile->m_Lines[LineNo],
-                (pProfile->m_NoLines - LineNo) * sizeof(sal_Char *));
+                (pProfile->m_NoLines - LineNo) * sizeof(char *));
 
         /* adjust line references */
         for (i = 0; i < pProfile->m_NoSections; i++)
@@ -1437,11 +1437,11 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
             sal_uInt32 i, n;
 
             memmove(&pProfile->m_Lines[LineNo], &pProfile->m_Lines[LineNo + 1],
-                    (pProfile->m_NoLines - LineNo - 1) * sizeof(sal_Char *));
+                    (pProfile->m_NoLines - LineNo - 1) * sizeof(char *));
 
             memset(&pProfile->m_Lines[pProfile->m_NoLines - 1],
                 0,
-                (pProfile->m_MaxLines - pProfile->m_NoLines) * sizeof(sal_Char*));
+                (pProfile->m_MaxLines - pProfile->m_NoLines) * sizeof(char*));
 
             /* adjust line references */
             for (i = 0; i < pProfile->m_NoSections; i++)
@@ -1469,7 +1469,7 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
 
 static void setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
                      sal_uInt32 NoEntry, sal_uInt32 Line,
-                     const sal_Char* Entry, sal_uInt32 Len)
+                     const char* Entry, sal_uInt32 Len)
 {
     Entry = stripBlanks(Entry, &Len);
     pSection->m_Entries[NoEntry].m_Line   = Line;
@@ -1480,7 +1480,7 @@ static void setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
 }
 
 static bool addEntry(osl_TProfileImpl* pProfile, osl_TProfileSection *pSection,
-                        int Line, const sal_Char* Entry, sal_uInt32 Len)
+                        int Line, const char* Entry, sal_uInt32 Len)
 {
     if (pSection != nullptr)
     {
@@ -1545,7 +1545,7 @@ static void removeEntry(osl_TProfileSection *pSection, sal_uInt32 NoEntry)
     return;
 }
 
-static bool addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char* Section, sal_uInt32 Len)
+static bool addSection(osl_TProfileImpl* pProfile, int Line, const char* Section, sal_uInt32 Len)
 {
     if (pProfile->m_NoSections >= pProfile->m_MaxSections)
     {
@@ -1631,8 +1631,8 @@ static void removeSection(osl_TProfileImpl* pProfile, osl_TProfileSection *pSect
     return;
 }
 
-static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char* Section,
-                                      const sal_Char* Entry, sal_uInt32 *pNoEntry)
+static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const char* Section,
+                                      const char* Entry, sal_uInt32 *pNoEntry)
 {
     static  sal_uInt32    Sect = 0;
     sal_uInt32    i, n;
@@ -1666,7 +1666,7 @@ static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char
 
         for (i = 0; i < pSec->m_NoEntries; i++)
         {
-            const sal_Char* pStr = &pProfile->m_Lines[pSec->m_Entries[i].m_Line]
+            const char* pStr = &pProfile->m_Lines[pSec->m_Entries[i].m_Line]
                                      [pSec->m_Entries[i].m_Offset];
             if ((Len == pSec->m_Entries[i].m_Len) &&
                 (strnicmp(Entry, pStr, pSec->m_Entries[i].m_Len)
@@ -1686,9 +1686,9 @@ static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char
 static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 {
     sal_uInt32    i;
-    sal_Char const * pStr;
-    sal_Char const * pChar;
-    sal_Char        Line[4096];
+    char const * pStr;
+    char const * pChar;
+    char        Line[4096];
 
     pProfile->m_NoLines    = 0;
     pProfile->m_NoSections = 0;
@@ -1996,9 +1996,9 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
 
 static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile, sal_Unicode *strProfile)
 {
-    sal_Char *pChr;
-    sal_Char Buffer[4096] = "";
-    sal_Char Product[132] = "";
+    char *pChr;
+    char Buffer[4096] = "";
+    char Product[132] = "";
 
     ::osl::LongPathBuffer< sal_Unicode > aPath( MAX_LONG_PATH );
     aPath[0] = 0;
@@ -2034,7 +2034,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
             rtl_uString * strSVFallback = nullptr;
             rtl_uString * strSVLocation = nullptr;
             rtl_uString * strSVName     = nullptr;
-            ::osl::LongPathBuffer< sal_Char > aDir( MAX_LONG_PATH );
+            ::osl::LongPathBuffer< char > aDir( MAX_LONG_PATH );
             oslProfile hProfile;
 
             rtl_uString_newFromAscii(&strSVFallback, SVERSION_FALLBACK);
@@ -2183,7 +2183,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
     }
 
     {
-        ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
+        ::osl::LongPathBuffer< char > aTmpPath( MAX_LONG_PATH );
 
         WideCharToMultiByte(CP_ACP,0, o3tl::toW(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
 
@@ -2192,10 +2192,10 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
 
         if (((access(aTmpPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
         {
-            static const sal_Char *SubDirs[] = SVERSION_DIRS;
+            static const char *SubDirs[] = SVERSION_DIRS;
 
             unsigned i = 0;
-            sal_Char *pStr = aTmpPath + nPos;
+            char *pStr = aTmpPath + nPos;
 
             for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
                 if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
@@ -2232,7 +2232,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
     copy_ustr_n(aPath + dwPathLen, strFile, rtl_ustr_getLength(strFile)+1);
 
     {
-        ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
+        ::osl::LongPathBuffer< char > aTmpPath( MAX_LONG_PATH );
 
         WideCharToMultiByte(CP_ACP,0, o3tl::toW(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
 
@@ -2300,7 +2300,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                         }
                         else
                         {
-                            ::osl::LongPathBuffer< sal_Char > aTmpPath2( MAX_LONG_PATH );
+                            ::osl::LongPathBuffer< char > aTmpPath2( MAX_LONG_PATH );
                             int n;
 
                             if ((n = WideCharToMultiByte(

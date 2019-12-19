@@ -50,7 +50,7 @@
 #include <libxml/parser.h>
 
 // Inverse of libxml's BAD_CAST.
-#define XML_CAST( str ) reinterpret_cast< const sal_Char* >( str )
+#define XML_CAST( str ) reinterpret_cast< const char* >( str )
 
 using namespace std;
 using namespace ::osl;
@@ -547,7 +547,7 @@ Event& Entity::getEvent( CallbackType aType )
 
 OUString lclGetErrorMessage( xmlParserCtxtPtr ctxt, const OUString& sSystemId, sal_Int32 nLine )
 {
-    const sal_Char* pMessage;
+    const char* pMessage;
     xmlErrorPtr error = xmlCtxtGetLastError( ctxt );
     if( error && error->message )
         pMessage = error->message;

@@ -315,13 +315,13 @@ namespace sax_fastparser {
                 mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
             Sequence<sal_Int8> const name(
                 mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
-            return OString(reinterpret_cast<sal_Char const*>(ns.getConstArray()), ns.getLength())
+            return OString(reinterpret_cast<char const*>(ns.getConstArray()), ns.getLength())
                  + OString(sColon, N_CHARS(sColon))
-                 + OString(reinterpret_cast<sal_Char const*>(name.getConstArray()), name.getLength());
+                 + OString(reinterpret_cast<char const*>(name.getConstArray()), name.getLength());
         } else {
             Sequence<sal_Int8> const name(
                 mxFastTokenHandler->getUTF8Identifier(nElement));
-            return OString(reinterpret_cast<sal_Char const*>(name.getConstArray()), name.getLength());
+            return OString(reinterpret_cast<char const*>(name.getConstArray()), name.getLength());
         }
     }
 #endif

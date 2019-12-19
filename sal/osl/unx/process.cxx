@@ -79,12 +79,12 @@ struct oslProcessImpl {
 
 struct ProcessData
 {
-    const sal_Char*  m_pszArgs[MAX_ARGS + 1];
-    const sal_Char*  m_pszDir;
-    sal_Char*        m_pszEnv[MAX_ENVS + 1];
+    const char*      m_pszArgs[MAX_ARGS + 1];
+    const char*      m_pszDir;
+    char*            m_pszEnv[MAX_ENVS + 1];
     uid_t            m_uid;
     gid_t            m_gid;
-    sal_Char*        m_name;
+    char*            m_name;
     oslCondition     m_started;
     oslProcessImpl*  m_pProcImpl;
     oslFileHandle    *m_pInputWrite;
@@ -97,12 +97,12 @@ static oslMutex        ChildListMutex;
 
 } //Anonymous namespace
 
-static oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
-                                                sal_Char *pszArguments[],
+static oslProcessError osl_psz_executeProcess(char *pszImageName,
+                                                char *pszArguments[],
                                                 oslProcessOption Options,
                                                 oslSecurity Security,
-                                                sal_Char *pszDirectory,
-                                                sal_Char *pszEnvironments[],
+                                                char *pszDirectory,
+                                                char *pszEnvironments[],
                                                 oslProcess *pProcess,
                                                 oslFileHandle *pInputWrite,
                                                 oslFileHandle *pOutputRead,
@@ -426,9 +426,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     }
 
     oslProcessError Error;
-    sal_Char* pszWorkDir=nullptr;
-    sal_Char** pArguments=nullptr;
-    sal_Char** pEnvironment=nullptr;
+    char* pszWorkDir=nullptr;
+    char** pArguments=nullptr;
+    char** pEnvironment=nullptr;
     unsigned int idx;
 
     char szImagePath[PATH_MAX] = "";
@@ -460,7 +460,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ( pArguments == nullptr && nArguments > 0 )
     {
-        pArguments = static_cast<sal_Char**>(malloc( ( nArguments + 2 ) * sizeof(sal_Char*) ));
+        pArguments = static_cast<char**>(malloc( ( nArguments + 2 ) * sizeof(char*) ));
     }
 
     for ( idx = 0 ; idx < nArguments ; ++idx )
@@ -484,7 +484,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
         if ( pEnvironment == nullptr )
         {
-            pEnvironment = static_cast<sal_Char**>(malloc( ( nEnvironmentVars + 2 ) * sizeof(sal_Char*) ));
+            pEnvironment = static_cast<char**>(malloc( ( nEnvironmentVars + 2 ) * sizeof(char*) ));
         }
 
         rtl_uString2String( &strEnv,
@@ -565,12 +565,12 @@ oslProcessError SAL_CALL osl_executeProcess(
         );
 }
 
-oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
-                                                sal_Char *pszArguments[],
+oslProcessError osl_psz_executeProcess(char *pszImageName,
+                                                char *pszArguments[],
                                                 oslProcessOption Options,
                                                 oslSecurity Security,
-                                                sal_Char *pszDirectory,
-                                                sal_Char *pszEnvironments[],
+                                                char *pszDirectory,
+                                                char *pszEnvironments[],
                                                 oslProcess *pProcess,
                                                 oslFileHandle   *pInputWrite,
                                                 oslFileHandle   *pOutputRead,
@@ -1009,7 +1009,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 #if defined(__sun)
 
         int  fd;
-        sal_Char name[PATH_MAX + 1];
+        char name[PATH_MAX + 1];
 
         snprintf(name, sizeof(name), "/proc/%ld", (long)pid);
 

@@ -299,7 +299,7 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
             nSrcSize = 2;
         }
 
-        sal_Char aDst[32]; // FIXME  random value
+        char aDst[32]; // FIXME  random value
         sal_uInt32 nInfo;
         sal_Size nConverted;
         sal_Size nDstSize = rtl_convertUnicodeToText(

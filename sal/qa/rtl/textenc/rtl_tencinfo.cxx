@@ -34,7 +34,7 @@ namespace
     public:
         void check(rtl_TextEncoding eIn, rtl_TextEncoding eOut)
         {
-            const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding(eIn);
+            const char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding(eIn);
             rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromMimeCharset(pCharSet);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getBestMimeCharsetFromTextEncoding && rtl_getTextEncodingFromMimeCharset differdiffer", eOut, eTextEnc );
         }
@@ -482,7 +482,7 @@ namespace
     public:
         void check(rtl_TextEncoding eIn, rtl_TextEncoding eOut)
         {
-            const sal_Char *pCharSet = rtl_getBestUnixCharsetFromTextEncoding(eIn);
+            const char *pCharSet = rtl_getBestUnixCharsetFromTextEncoding(eIn);
             rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromUnixCharset(pCharSet);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getBestUnixCharsetFromTextEncoding && rtl_getTextEncodingFromUnixCharset", eOut, eTextEnc );
         }

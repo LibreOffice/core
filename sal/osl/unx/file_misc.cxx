@@ -144,7 +144,7 @@ oslFileType DirectoryItem_Impl::getFileType() const
 
 static oslFileError osl_psz_createDirectory(
     char const * pszPath, sal_uInt32 flags);
-static oslFileError osl_psz_removeDirectory(const sal_Char* pszPath);
+static oslFileError osl_psz_removeDirectory(const char* pszPath);
 
 oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
 {
@@ -476,7 +476,7 @@ oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
     return osl_File_E_None;
 }
 
-static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
+static oslFileError osl_psz_removeDirectory( const char* pszPath )
 {
     int nRet = rmdir(pszPath);
 
@@ -578,15 +578,15 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
 }
 
-static oslFileError osl_unlinkFile(const sal_Char* pszPath);
-static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath, bool preserveMetadata);
-static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
+static oslFileError osl_unlinkFile(const char* pszPath);
+static oslFileError osl_psz_copyFile(const char* pszPath, const char* pszDestPath, bool preserveMetadata);
+static oslFileError osl_psz_moveFile(const char* pszPath, const char* pszDestPath);
 
-static oslFileError  oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, bool DestFileExists);
-static void attemptChangeMetadata(const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID);
-static int           oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName);
-static int           oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode);
-static oslFileError  oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
+static oslFileError  oslDoCopy(const char* pszSourceFileName, const char* pszDestFileName, mode_t nMode, size_t nSourceSize, bool DestFileExists);
+static void attemptChangeMetadata(const char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID);
+static int           oslDoCopyLink(const char* pszSourceFileName, const char* pszDestFileName);
+static int           oslDoCopyFile(const char* pszSourceFileName, const char* pszDestFileName, size_t nSourceSize, mode_t mode);
+static oslFileError  oslDoMoveFile(const char* pszPath, const char* pszDestPath);
 
 oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
 {
@@ -699,7 +699,7 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* ustrFileURL)
     return osl_unlinkFile(path);
 }
 
-static oslFileError oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDestPath)
+static oslFileError oslDoMoveFile(const char* pszPath, const char* pszDestPath)
 {
     oslFileError tErr = osl_psz_moveFile(pszPath,pszDestPath);
     if (tErr == osl_File_E_None)
@@ -721,7 +721,7 @@ static oslFileError oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDe
     return tErr;
 }
 
-static oslFileError osl_unlinkFile(const sal_Char* pszPath)
+static oslFileError osl_unlinkFile(const char* pszPath)
 {
     int nRet=0;
     struct stat aStat;
@@ -749,7 +749,7 @@ static oslFileError osl_unlinkFile(const sal_Char* pszPath)
     return osl_File_E_None;
 }
 
-static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath)
+static oslFileError osl_psz_moveFile(const char* pszPath, const char* pszDestPath)
 {
     int nRet = rename(pszPath,pszDestPath);
 
@@ -765,7 +765,7 @@ static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* ps
     return osl_File_E_None;
 }
 
-static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* pszDestPath, bool preserveMetadata )
+static oslFileError osl_psz_copyFile( const char* pszPath, const char* pszDestPath, bool preserveMetadata )
 {
     time_t nAcTime=0;
     time_t nModTime=0;
@@ -832,7 +832,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     return tErr;
 }
 
-static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, bool DestFileExists)
+static oslFileError oslDoCopy(const char* pszSourceFileName, const char* pszDestFileName, mode_t nMode, size_t nSourceSize, bool DestFileExists)
 {
     int      nRet=0;
 
@@ -913,7 +913,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     return osl_File_E_None;
 }
 
-void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID)
+void attemptChangeMetadata( const char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID)
 {
     struct utimbuf aTimeBuffer;
 
@@ -954,13 +954,13 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
         SAL_INFO("sal.file", "lchown(" << pszFileName << "): OK");
 }
 
-static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName)
+static int oslDoCopyLink(const char* pszSourceFileName, const char* pszDestFileName)
 {
     int nRet=0;
 
     /* mfe: if dest file is symbolic link remove the link and place the file instead (hro says so) */
     /* mfe: if source is a link copy the link and not the file it points to (hro says so) */
-    sal_Char pszLinkContent[PATH_MAX+1];
+    char pszLinkContent[PATH_MAX+1];
 
     pszLinkContent[0] = '\0';
 
@@ -985,7 +985,7 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
     return 0;
 }
 
-static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode)
+static int oslDoCopyFile(const char* pszSourceFileName, const char* pszDestFileName, size_t nSourceSize, mode_t mode)
 {
     oslFileHandle SourceFileFH=nullptr;
     int DestFileFD=0;

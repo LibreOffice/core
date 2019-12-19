@@ -440,7 +440,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 
 
         BytesToSend -= RetVal;
         BytesSend += RetVal;
-        pBuffer= static_cast< sal_Char const* >(pBuffer) + RetVal;
+        pBuffer= static_cast< char const* >(pBuffer) + RetVal;
     }
 
     return BytesSend;
@@ -464,7 +464,7 @@ sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
 
         BytesToRead -= RetVal;
         BytesRead += RetVal;
-        pBuffer= static_cast< sal_Char* >(pBuffer) + RetVal;
+        pBuffer= static_cast< char* >(pBuffer) + RetVal;
     }
     return BytesRead;
 }
