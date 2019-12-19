@@ -2182,6 +2182,10 @@ public:
         , m_nDragDropReceivedSignalId(0)
         , m_nDragLeaveSignalId(0)
     {
+        if (!bTakeOwnership)
+            g_object_ref(m_pWidget);
+
+        localizeDecimalSeparator();
     }
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
@@ -2771,6 +2775,8 @@ public:
 
         if (m_bTakeOwnership)
             gtk_widget_destroy(m_pWidget);
+        else
+            g_object_unref(m_pWidget);
     }
 
     virtual void disable_notify_events()
@@ -6083,7 +6089,16 @@ public:
         g_signal_handler_disconnect(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
         gtk_widget_destroy(GTK_WIDGET(m_pOverFlowNotebook));
         if (m_pOverFlowBox)
+        {
+            // put it back to how we found it initially
+            GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pOverFlowBox));
+            g_object_ref(m_pNotebook);
+            gtk_container_remove(GTK_CONTAINER(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
+            gtk_container_add(GTK_CONTAINER(pParent), GTK_WIDGET(m_pNotebook));
+            g_object_unref(m_pNotebook);
+
             gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
+        }
     }
 };
 
@@ -10512,7 +10527,6 @@ public:
         , m_bBlockOutput(false)
         , m_bBlank(false)
     {
-        localizeDecimalSeparator();
     }
 
     virtual int get_value() const override
