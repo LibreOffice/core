@@ -488,7 +488,7 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             nEat = nMaxEat;
 
         // OD 10.04.2003 #108719# - Notify fly frame, if header frame
-        // grows. Consider, that 'normal' grow of layout frame already notifys
+        // grows. Consider, that 'normal' grow of layout frame already notifies
         // the fly frames.
         bool bNotifyFlys = false;
         if (nEat > 0)
@@ -579,7 +579,7 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             nRest = nDist;
 
         // OD 10.04.2003 #108719# - Notify fly frame, if header/footer frame
-        // shrinks. Consider, that 'normal' shrink of layout frame already notifys
+        // shrinks. Consider, that 'normal' shrink of layout frame already notifies
         // the fly frames.
         bool bNotifyFlys = false;
         if (nRest > 0)
