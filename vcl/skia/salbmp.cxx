@@ -320,15 +320,48 @@ bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
     return false;
 }
 
-bool SkiaSalBitmap::ScalingSupported() const { return false; }
+bool SkiaSalBitmap::ScalingSupported() const { return true; }
 
-bool SkiaSalBitmap::Scale(const double&, const double&, BmpScaleFlag)
+bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)
 {
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    // TODO?
-    return false;
+    Size newSize(FRound(mSize.Width() * rScaleX), FRound(mSize.Height() * rScaleY));
+    if (mSize == newSize)
+        return true;
+
+    SAL_INFO("vcl.skia", "scale(" << this << "): " << mSize << "->" << newSize << ":"
+                                  << static_cast<int>(nScaleFlag));
+
+    SkPaint paint;
+    switch (nScaleFlag)
+    {
+        case BmpScaleFlag::Fast:
+            paint.setFilterQuality(kNone_SkFilterQuality);
+            break;
+        case BmpScaleFlag::Default:
+            paint.setFilterQuality(kMedium_SkFilterQuality);
+            break;
+        case BmpScaleFlag::BestQuality:
+            paint.setFilterQuality(kHigh_SkFilterQuality);
+            break;
+        default:
+            return false;
+    }
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(newSize);
+    assert(surface);
+    paint.setBlendMode(SkBlendMode::kSrc); // draw as is, including alpha
+    surface->getCanvas()->drawImageRect(
+        GetSkImage(), SkRect::MakeXYWH(0, 0, mSize.Width(), mSize.Height()),
+        SkRect::MakeXYWH(0, 0, newSize.Width(), newSize.Height()), &paint);
+    // This will get generated from mImage if needed.
+    mBitmap.reset();
+    mBuffer.reset();
+    ResetSkImages();
+    mImage = surface->makeImageSnapshot();
+    mSize = newSize;
+    return true;
 }
 
 bool SkiaSalBitmap::Replace(const Color&, const Color&, sal_uInt8)
