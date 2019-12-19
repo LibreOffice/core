@@ -56,13 +56,14 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
 
 FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
                                       sax_fastparser::FastTokenHandlerBase *pTokenHandler)
-: mxTokenHandler( xTokenHandler ),
+: maAttributeValues(1),
+  mxTokenHandler( xTokenHandler ),
   mpTokenHandler( pTokenHandler )
 {
     // random initial size of buffer to store attribute values
     mnChunkLength = 58;
     mpChunk = static_cast<sal_Char *>(malloc( mnChunkLength ));
-    maAttributeValues.push_back( 0 );
+    maAttributeValues[0] = 0;
 }
 
 FastAttributeList::~FastAttributeList()
