@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_4227f513",
+        "filename": "sw/qa/python/xstyleloader.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-12-19T16:40:54Z",
+      "side": 1,
+      "message": "does it work if you call it on xDoc.getStyleFamilies() ?",
+      "revId": "6015634de5ada0f9dda9bb4354b2939d8f015a27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
