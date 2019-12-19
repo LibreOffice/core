@@ -462,11 +462,10 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     bDockingAllowed(true),
     bInternalDockingAllowed(true),
     bAllChildrenVisible(true),
-#if HAVE_FEATURE_DESKTOP
     bIsFullScreen( false ),
+#if HAVE_FEATURE_DESKTOP
     bShowStatusBar( true ),
 #else
-    bIsFullScreen( sal_True ),
     bShowStatusBar( sal_False ),
 #endif
     m_nLock( 0 ),
