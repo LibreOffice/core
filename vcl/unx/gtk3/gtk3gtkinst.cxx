@@ -12541,6 +12541,8 @@ private:
     std::vector<GtkButton*> m_aMnemonicButtons;
     std::vector<GtkLabel*> m_aMnemonicLabels;
 
+    VclPtr<SystemChildWindow> m_xInterimGlue;
+
     void postprocess_widget(GtkWidget* pWidget)
     {
         const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
@@ -12722,12 +12724,13 @@ private:
         pThis->postprocess_widget(GTK_WIDGET(pObject));
     }
 public:
-    GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+    GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile, SystemChildWindow* pInterimGlue)
         : weld::Builder(rUIFile)
         , m_pStringReplace(Translate::GetReadStringHook())
         , m_sHelpRoot(rUIFile)
         , m_pParentWidget(pParent)
         , m_nNotifySignalId(0)
+        , m_xInterimGlue(pInterimGlue)
     {
         ensure_intercept_drawing_area_accessibility();
 
@@ -12811,6 +12814,7 @@ public:
     {
         g_slist_free(m_pObjectList);
         g_object_unref(m_pBuilder);
+        m_xInterimGlue.disposeAndClear();
     }
 
     //ideally we would have/use weld::Container add and explicitly
@@ -13276,7 +13280,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     if (pParent && !pParentWidget) //remove when complete
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
-    return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile);
+    return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr);
 }
 
 weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
@@ -13297,7 +13301,7 @@ weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
     gtk_widget_show_all(pWindow);
 
     // build the widget tree as a child of the GtkEventBox GtkGrid parent
-    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile);
+    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile, xEmbedWindow.get());
 }
 
 weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
