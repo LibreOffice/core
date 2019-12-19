@@ -214,7 +214,7 @@ static OUString exportBackground(FlashExporter &aFlashExporter, const Reference<
 }
 
 template <typename TYPE>
-static TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const sal_Char* name, TYPE def)
+static TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const char* name, TYPE def)
 {
     TYPE temp = TYPE();
 

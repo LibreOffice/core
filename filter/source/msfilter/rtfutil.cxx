@@ -21,17 +21,17 @@ namespace rtfutil
 {
 OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
 {
-    sal_Char aNToABuf[] = "0000000000000000";
+    char aNToABuf[] = "0000000000000000";
 
     OSL_ENSURE(nLen < sizeof(aNToABuf), "nLen is too big");
     if (nLen >= sizeof(aNToABuf))
         nLen = (sizeof(aNToABuf) - 1);
 
     // Set pointer to the buffer end
-    sal_Char* pStr = aNToABuf + (sizeof(aNToABuf) - 1);
+    char* pStr = aNToABuf + (sizeof(aNToABuf) - 1);
     for (sal_uInt8 n = 0; n < nLen; ++n)
     {
-        *(--pStr) = static_cast<sal_Char>(nHex & 0xf) + 48;
+        *(--pStr) = static_cast<char>(nHex & 0xf) + 48;
         if (*pStr > '9')
             *pStr += 39;
         nHex >>= 4;
@@ -56,7 +56,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
     if (pSuccess)
         *pSuccess = true;
     OStringBuffer aBuf;
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
     // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
     switch (c)
     {
@@ -71,7 +71,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
         case '}':
         case '{':
             aBuf.append('\\');
-            aBuf.append(static_cast<sal_Char>(c));
+            aBuf.append(static_cast<char>(c));
             break;
         case 0xa0:
             // non-breaking space
@@ -87,7 +87,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
             break;
         default:
             if (c >= ' ' && c <= '~')
-                aBuf.append(static_cast<sal_Char>(c));
+                aBuf.append(static_cast<char>(c));
             else
             {
                 OUString sBuf(&c, 1);
@@ -168,7 +168,7 @@ static bool TryOutString(const OUString& rStr, rtl_TextEncoding eDestEnc)
     return true;
 }
 
-OString OutStringUpr(const sal_Char* pToken, const OUString& rStr, rtl_TextEncoding eDestEnc)
+OString OutStringUpr(const char* pToken, const OUString& rStr, rtl_TextEncoding eDestEnc)
 {
     if (TryOutString(rStr, eDestEnc))
         return OStringLiteral("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";

@@ -44,7 +44,7 @@ print ( GPERF "%null-strings\n" );
 print ( GPERF "%struct-type\n" );
 print ( GPERF "struct xmltoken\n" );
 print ( GPERF "{\n" );
-print ( GPERF "  const sal_Char *name; sal_Int32 nToken; \n" );
+print ( GPERF "  const char *name; sal_Int32 nToken; \n" );
 print ( GPERF "};\n" );
 print ( GPERF "%%\n" );
 

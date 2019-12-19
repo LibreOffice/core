@@ -33,7 +33,7 @@ using namespace T602ImportFilter;
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * t602filter_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
+    const char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = nullptr;
 

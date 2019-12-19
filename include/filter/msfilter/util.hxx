@@ -83,7 +83,7 @@ public:
  *
  * Example: SEQ "Figure" \someoption -> "Figure"
  */
-MSFILTER_DLLPUBLIC OUString findQuotedText( const OUString& rCommand, const sal_Char* cStartQuote, const sal_Unicode uEndQuote );
+MSFILTER_DLLPUBLIC OUString findQuotedText( const OUString& rCommand, const char* cStartQuote, const sal_Unicode uEndQuote );
 
 class MSFILTER_DLLPUBLIC WW8ReadFieldParams
 {

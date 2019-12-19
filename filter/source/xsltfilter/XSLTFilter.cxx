@@ -542,7 +542,7 @@ using namespace XSLT;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * xsltfilter_component_getFactory(const sal_Char * pImplName,
+    SAL_DLLPUBLIC_EXPORT void * xsltfilter_component_getFactory(const char * pImplName,
             void * pServiceManager, void * /* pRegistryKey */)
     {
         void * pRet = nullptr;
