@@ -102,13 +102,13 @@ void VclComplexTextTest::testArabic()
     tools::Rectangle aInput;
     tools::Rectangle aRect = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
-    // now rotate 270 degress
+    // now rotate 270 degrees
     vcl::Font aRotated( aFont );
     aRotated.SetOrientation( 2700 );
     pOutDev->SetFont( aRotated );
     tools::Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
-    // Check that we did do the rotation ...
+    // Check that we did do the rotation...
     fprintf( stderr, "%ld %ld %ld %ld\n",
              aRect.GetWidth(), aRect.GetHeight(),
              aRectRot.GetWidth(), aRectRot.GetHeight() );
