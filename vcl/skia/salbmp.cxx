@@ -23,7 +23,9 @@
 #include <tools/helpers.hxx>
 
 #include <salgdi.hxx>
+#include <salinst.hxx>
 #include <scanlinewriter.hxx>
+#include <svdata.hxx>
 
 #include <SkCanvas.h>
 #include <SkImage.h>
@@ -108,16 +110,15 @@ bool SkiaSalBitmap::CreateBitmapData()
     }
     if (colorType != kUnknown_SkColorType)
     {
-        // TODO
-        // As long as vcl::BackendCapabilities::mbSupportsBitmap32 is not set, we must use
-        // unpremultiplied alpha. This is because without mbSupportsBitmap32 set VCL uses
-        // an extra bitmap for the alpha channel and then merges the channels together
-        // into colors. kPremul_SkAlphaType would provide better performance, but
-        // without mbSupportsBitmap32 BitmapReadAccess::ImplSetAccessPointers() would use
-        // functions that merely read RGB without A, so the premultiplied values would
-        // not be converted back to unpremultiplied values.
+        // If vcl::BackendCapabilities::mbSupportsBitmap32 is set,
+        // BitmapReadAccess::ImplSetAccessPointers() uses functions that use premultiplied
+        // alpha. If not set, it would use functions that would read just RGB, so using
+        // premultiplied alpha here would change those values.
+        // Using kPremul_SkAlphaType should be better for performance, so ensure
+        // the flag is set.
+        assert(ImplGetSVData()->mpDefInst->GetBackendCapabilities()->mbSupportsBitmap32);
         if (!mBitmap.tryAllocPixels(
-                SkImageInfo::Make(mSize.Width(), mSize.Height(), colorType, kUnpremul_SkAlphaType)))
+                SkImageInfo::Make(mSize.Width(), mSize.Height(), colorType, kPremul_SkAlphaType)))
         {
             return false;
         }
