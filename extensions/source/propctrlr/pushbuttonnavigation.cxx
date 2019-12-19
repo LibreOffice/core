@@ -39,7 +39,7 @@ namespace pcr
     {
         static const sal_Int32 s_nFirstVirtualButtonType = 1 + sal_Int32(FormButtonType_URL);
 
-        static const sal_Char* pNavigationURLs[] =
+        static const char* pNavigationURLs[] =
         {
             ".uno:FormController/moveToFirst",
             ".uno:FormController/moveToPrev",
@@ -55,7 +55,7 @@ namespace pcr
 
         sal_Int32 lcl_getNavigationURLIndex( const OUString& _rNavURL )
         {
-            const sal_Char** pLookup = pNavigationURLs;
+            const char** pLookup = pNavigationURLs;
             while ( *pLookup )
             {
                 if ( _rNavURL.equalsAscii( *pLookup ) )
@@ -65,9 +65,9 @@ namespace pcr
             return -1;
         }
 
-        const sal_Char* lcl_getNavigationURL( sal_Int32 _nButtonTypeIndex )
+        const char* lcl_getNavigationURL( sal_Int32 _nButtonTypeIndex )
         {
-            const sal_Char** pLookup = pNavigationURLs;
+            const char** pLookup = pNavigationURLs;
             while ( _nButtonTypeIndex-- && *pLookup++ )
                 ;
             OSL_ENSURE( *pLookup, "lcl_getNavigationURL: invalid index!" );
@@ -151,7 +151,7 @@ namespace pcr
             bool bIsVirtualButtonType = nButtonType >= s_nFirstVirtualButtonType;
             if ( bIsVirtualButtonType )
             {
-                const sal_Char* pURL = lcl_getNavigationURL( nButtonType - s_nFirstVirtualButtonType );
+                const char* pURL = lcl_getNavigationURL( nButtonType - s_nFirstVirtualButtonType );
                 sTargetURL = OUString::createFromAscii( pURL );
 
                 nButtonType = sal_Int32(FormButtonType_URL);

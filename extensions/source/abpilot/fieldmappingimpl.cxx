@@ -125,7 +125,7 @@ namespace abp
                 //    For this, the driver uses programmatic names, too, but they differ from the programmatic names the
                 //    template documents have.
                 // So what we need first is a mapping from programmatic names (1) to programmatic names (2)
-                const sal_Char* pMappingProgrammatics[] =
+                const char* pMappingProgrammatics[] =
                 {
                     "FirstName",            "FirstName",
                     "LastName",             "LastName",
@@ -169,7 +169,7 @@ namespace abp
                 // number of pairs
                 sal_Int32 const nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
 
-                const sal_Char** pProgrammatic = pMappingProgrammatics;
+                const char** pProgrammatic = pMappingProgrammatics;
                 OUString sAddressProgrammatic;
                 OUString sDriverProgrammatic;
                 OUString sDriverUI;

@@ -43,7 +43,7 @@ public:
 
     ~NamedValueByNameAccess();
 
-    css::uno::Any getValue(const sal_Char * pName);
+    css::uno::Any getValue(const char * pName);
 };
 
 
@@ -65,7 +65,7 @@ public:
 
 private:
 
-    OUString getStringValue(const sal_Char *) const;
+    OUString getStringValue(const char *) const;
 
     NamedValueByNameAccess& m_aNameAccess;
 };
@@ -184,7 +184,7 @@ private:
 
 /// @throws css::uno::RuntimeException
 template <typename T>
-T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, const sal_Char * pszName )
+T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, const char * pszName )
 {
     for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
     {

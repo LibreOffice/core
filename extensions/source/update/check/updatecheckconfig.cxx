@@ -59,7 +59,7 @@ namespace uno = com::sun::star::uno ;
 
 #define PROPERTY_VERSION        "Version"
 
-static const sal_Char * const aUpdateEntryProperties[] = {
+static const char * const aUpdateEntryProperties[] = {
     UPDATE_VERSION,
     UPDATE_BUILDID,
     UPDATE_DESCRIPTION,
@@ -79,7 +79,7 @@ NamedValueByNameAccess::~NamedValueByNameAccess()
 {
 }
 
-css::uno::Any NamedValueByNameAccess::getValue(const sal_Char * pName)
+css::uno::Any NamedValueByNameAccess::getValue(const char * pName)
 {
     const sal_Int32 nLen = m_rValues.getLength();
     for( sal_Int32 n=0; n < nLen; ++n )
@@ -103,7 +103,7 @@ UpdateCheckROModel::isDownloadPaused() const
 }
 
 OUString
-UpdateCheckROModel::getStringValue(const sal_Char * pStr) const
+UpdateCheckROModel::getStringValue(const char * pStr) const
 {
     uno::Any aAny( m_aNameAccess.getValue(pStr) );
     OUString aRet;

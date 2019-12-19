@@ -192,7 +192,7 @@ Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static() throw
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * bib_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+        const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         void * pRet = nullptr;
         if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )

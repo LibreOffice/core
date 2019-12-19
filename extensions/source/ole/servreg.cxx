@@ -50,7 +50,7 @@ Reference<XInterface> OleServer_CreateInstance( const Reference<XMultiServiceFac
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * oleautobridge_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
 

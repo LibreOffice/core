@@ -154,8 +154,8 @@ namespace logging
                 const Reference<XComponentContext>& _rContext,
                 const Reference< XLogger >& _rxLogger,
                 const Reference< XNameAccess >& _rxLoggerSettings,
-                const sal_Char* _pServiceNameAsciiNodeName,
-                const sal_Char* _pServiceSettingsAsciiNodeName,
+                const char* _pServiceNameAsciiNodeName,
+                const char* _pServiceSettingsAsciiNodeName,
                 SettingTranslation _pSettingTranslation = nullptr
             )
         {

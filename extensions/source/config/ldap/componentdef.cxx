@@ -44,7 +44,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * ldapbe2_component_getFactory(const sal_Char *aImplementationName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * ldapbe2_component_getFactory(const char *aImplementationName,
                                       void *aServiceManager,
                                       void *aRegistryKey) {
     return cppu::component_getFactoryHelper(aImplementationName,

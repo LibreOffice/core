@@ -148,14 +148,14 @@ OUString getImageFromFileName(const OUString& aFile)
             {
                 if( 0 == aInfo.Code )
                 {
-                    sal_Char   szBuffer[4096];
+                    char       szBuffer[4096];
                     sal_uInt64 nBytesRead = 0;
                     const sal_uInt64 nBytesToRead = sizeof(szBuffer) - 1;
 
                     OUString aImageName;
                     while( osl_File_E_None == osl_readFile(hOut, szBuffer, nBytesToRead, &nBytesRead) )
                     {
-                        sal_Char *pc = szBuffer + nBytesRead;
+                        char *pc = szBuffer + nBytesRead;
                         do
                         {
                             *pc = '\0'; --pc;

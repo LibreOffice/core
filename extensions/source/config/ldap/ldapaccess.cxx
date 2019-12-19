@@ -61,7 +61,7 @@ void LdapConnection::disconnect()
 }
 
 
-static void checkLdapReturnCode(const sal_Char *aOperation,
+static void checkLdapReturnCode(const char *aOperation,
                                 LdapErrCode aRetCode)
 {
     if (aRetCode == LDAP_SUCCESS) { return ; }
@@ -75,7 +75,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
     message += OUString::createFromAscii(ldap_err2string(aRetCode)) + " (" ;
 
 #ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
-    sal_Char* stub = nullptr;
+    char* stub = nullptr;
     ldap_get_lderrno(aConnection, NULL, &stub) ;
     if (stub != nullptr)
     {
@@ -251,7 +251,7 @@ void LdapConnection::initConnection()
                                       LDAP_SCOPE_SUBTREE,
                                       const_cast<PWSTR>(o3tl::toW(filter.getStr())), attributes, 0, &result.msg) ;
 #else
-    sal_Char * attributes [2] = { const_cast<sal_Char *>(LDAP_NO_ATTRS), nullptr };
+    char * attributes [2] = { const_cast<char *>(LDAP_NO_ATTRS), nullptr };
     LdapErrCode retCode = ldap_search_s(mConnection,
                                       OUStringToOString( mLdapDefinition.mBaseDN, RTL_TEXTENCODING_UTF8 ).getStr(),
                                       LDAP_SCOPE_SUBTREE,
@@ -269,7 +269,7 @@ void LdapConnection::initConnection()
         userDn = OUString( o3tl::toU( charsDn ) );
         ldap_memfreeW(charsDn) ;
 #else
-        sal_Char *charsDn = ldap_get_dn(mConnection, entry) ;
+        char *charsDn = ldap_get_dn(mConnection, entry) ;
 
         userDn = OStringToOUString( charsDn, RTL_TEXTENCODING_UTF8 );
         ldap_memfree(charsDn) ;

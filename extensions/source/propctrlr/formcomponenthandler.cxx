@@ -2098,7 +2098,7 @@ namespace pcr
                 // it's a control model, and can tell about it's supported services
                 m_nClassId = FormComponentType::CONTROL;
 
-                const sal_Char* aControlModelServiceNames[] =
+                const char* aControlModelServiceNames[] =
                 {
                     "UnoControlButtonModel",
                     "UnoControlCheckBoxModel",
