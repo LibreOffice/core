@@ -26,6 +26,7 @@ constexpr const char* constPadding = "                                        "
 XmpMetadata::XmpMetadata()
     : mbWritten(false)
     , mnPDF_A(0)
+    , mbPDF_UA(false)
 {
 }
 
@@ -104,6 +105,21 @@ void XmpMetadata::write()
                 aXmlWriter.endElement();
                 aXmlWriter.endElement();
             }
+            aXmlWriter.endElement();
+        }
+
+        // PDF/UA
+        if (mbPDF_UA)
+        {
+            OString sPdfUaVersion = OString::number(1);
+            aXmlWriter.startElement("rdf:Description");
+            aXmlWriter.attribute("rdf:about", OString(""));
+            aXmlWriter.attribute("xmlns:pdfuaid", OString("http://www.aiim.org/pdfua/ns/id/"));
+
+            aXmlWriter.startElement("pdfuaid:part");
+            aXmlWriter.content(sPdfUaVersion);
+            aXmlWriter.endElement();
+
             aXmlWriter.endElement();
         }
 
