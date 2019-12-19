@@ -221,7 +221,7 @@ namespace drawinglayer
             {
                 // mnNextFrameToPrepare is the target frame to create next (which implies that
                 // mnNextFrameToPrepare-1 *is* currently in the VirtualDevice when
-                // 0 != mnNextFrameToPrepare. nTarget is the traget frame.
+                // 0 != mnNextFrameToPrepare. nTarget is the target frame.
                 if (isValidData())
                 {
                     if (mnNextFrameToPrepare > nTarget)
