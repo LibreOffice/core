@@ -464,7 +464,11 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     bIsFullScreen( false ),
     bShowStatusBar( true ),
 #else
+#if defined(ANDROID)
+    bIsFullScreen( false ),
+#else
     bIsFullScreen( sal_True ),
+#endif
     bShowStatusBar( sal_False ),
 #endif
     m_nLock( 0 ),
