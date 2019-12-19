@@ -47,7 +47,7 @@ struct oslSocketAddrImpl
 
 struct oslPipeImpl {
     int  m_Socket;
-    sal_Char m_Name[sizeof sockaddr_un::sun_path];
+    char m_Name[sizeof sockaddr_un::sun_path];
     oslInterlockedCount m_nRefCount;
     bool m_bClosed;
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)

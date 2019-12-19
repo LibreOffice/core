@@ -177,7 +177,7 @@ namespace rptui
 
         const struct
         {
-            const sal_Char* programmaticName;
+            const char* programmaticName;
             const char* uiNameResId;
             OString const helpId;
         } aCategories[] = {

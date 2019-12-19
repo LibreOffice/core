@@ -609,7 +609,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
     static auto const init = []() -> std::pair<oslSocketResult, OUString> {
             sal_Unicode LocalHostname[256] = {0};
 
-            sal_Char Host[256]= "";
+            char Host[256]= "";
             if (gethostname(Host, sizeof(Host)) == 0)
             {
                 /* check if we have an FQDN; if not, try to determine it via dns first: */
@@ -1101,7 +1101,7 @@ sal_Int32 SAL_CALL osl_receiveSocket (
         return osl_Socket_Error;
 
     return recv(pSocket->m_Socket,
-                static_cast<sal_Char*>(pBuffer),
+                static_cast<char*>(pBuffer),
                 BytesToRead,
                 MSG_FLAG_TO_NATIVE(Flag));
 }
@@ -1125,7 +1125,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket (
         return osl_Socket_Error;
 
     return recvfrom(pSocket->m_Socket,
-                     static_cast<sal_Char*>(pBuffer),
+                     static_cast<char*>(pBuffer),
                      BufferSize,
                      MSG_FLAG_TO_NATIVE(Flag),
                      pSystemSockAddr,
@@ -1142,7 +1142,7 @@ sal_Int32 SAL_CALL osl_sendSocket (
         return osl_Socket_Error;
 
     return send(pSocket->m_Socket,
-                static_cast<sal_Char const *>(pBuffer),
+                static_cast<char const *>(pBuffer),
                 BytesToSend,
                 MSG_FLAG_TO_NATIVE(Flag));
 }
@@ -1165,7 +1165,7 @@ sal_Int32 SAL_CALL osl_sendToSocket (
         pSystemSockAddr = &(ReceiverAddr->m_sockaddr);
 
     return sendto(pSocket->m_Socket,
-                  static_cast<sal_Char const *>(pBuffer),
+                  static_cast<char const *>(pBuffer),
                   BytesToSend,
                   MSG_FLAG_TO_NATIVE(Flag),
                   pSystemSockAddr,
@@ -1358,7 +1358,7 @@ sal_Bool SAL_CALL osl_setSocketOption (
     return(setsockopt(pSocket->m_Socket,
                       OPTION_LEVEL_TO_NATIVE(Level),
                       OPTION_TO_NATIVE(Option),
-                      static_cast<sal_Char*>(pBuffer),
+                      static_cast<char*>(pBuffer),
                       BufferLen) == 0);
 }
 

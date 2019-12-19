@@ -27,7 +27,7 @@
  *  rtl_stringbuffer_newFromStr_WithLength
  */
 void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
-                                                      const sal_Char * value,
+                                                      const char * value,
                                                       sal_Int32 count )
 {
     assert(newStr);
@@ -106,7 +106,7 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity
 void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
                                        sal_Int32 * capacity,
                                        sal_Int32 offset,
-                                       const sal_Char * str,
+                                       const char * str,
                                        sal_Int32 len )
 {
     assert(This);
@@ -114,7 +114,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
     assert(offset >= 0 && offset <= (**This).length);
     assert(len >= 0);
     sal_Int32 nOldLen;
-    sal_Char * pBuf;
+    char * pBuf;
     sal_Int32 n;
     if( len != 0 )
     {
@@ -130,7 +130,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
             /* optimized for 1 character */
             pBuf[offset + len] = pBuf[offset];
         else if( n > 1 )
-            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Char) );
+            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(char) );
 
         /* insert the new characters */
         if( str != nullptr )
@@ -139,7 +139,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
                             /* optimized for 1 character */
                 pBuf[offset] = *str;
             else
-                memcpy( pBuf + offset, str, len * sizeof(sal_Char) );
+                memcpy( pBuf + offset, str, len * sizeof(char) );
         }
         (*This)->length = nOldLen + len;
         pBuf[ nOldLen + len ] = 0;
@@ -157,7 +157,7 @@ void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
     assert(start >= 0 && start <= (**This).length);
     assert(len >= 0);
     sal_Int32 nTailLen;
-    sal_Char * pBuf;
+    char * pBuf;
 
     if (len > (*This)->length - start)
         len = (*This)->length - start;
@@ -172,7 +172,7 @@ void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
     if (nTailLen)
     {
         /* move the tail */
-        memmove(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Char));
+        memmove(pBuf + start, pBuf + start + len, nTailLen * sizeof(char));
     }
 
     (*This)->length-=len;

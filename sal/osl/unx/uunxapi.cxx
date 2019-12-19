@@ -145,7 +145,7 @@ typedef void accessFilePathState;
  */
 static OString macxp_resolveAliasAndConvert(OString const & p)
 {
-    sal_Char path[PATH_MAX];
+    char path[PATH_MAX];
     if (p.getLength() < PATH_MAX)
     {
         strcpy(path, p.getStr());
@@ -240,7 +240,7 @@ template<typename T> bool realpath_(const T& pstrFileName, T& ppstrResolvedName)
 
     if (bRet)
     {
-        ppstrResolvedName = fromOString<T>(OString(static_cast<sal_Char*>(rp)));
+        ppstrResolvedName = fromOString<T>(OString(rp));
     }
 
     errno = saved_errno;

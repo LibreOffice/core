@@ -1457,8 +1457,8 @@ void SAL_CALL OReportDefinition::removeStorageChangeListener( const uno::Referen
 
 bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<lang::XComponent> & xComponent,
-    const sal_Char* pStreamName,
-    const sal_Char* pServiceName,
+    const char* pStreamName,
+    const char* pServiceName,
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Sequence<beans::PropertyValue> & rMediaDesc,
     const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
@@ -1504,7 +1504,7 @@ bool OReportDefinition::WriteThroughComponent(
 bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<lang::XComponent> & xComponent,
-    const sal_Char* pServiceName,
+    const char* pServiceName,
     const uno::Sequence<uno::Any> & rArguments,
     const uno::Sequence<beans::PropertyValue> & rMediaDesc)
 {

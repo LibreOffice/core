@@ -86,7 +86,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     return ret;
 }
 
-oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 )
+oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 )
 {
     HMODULE h;
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
@@ -170,7 +170,7 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
 }
 
 oslGenericFunction SAL_CALL
-osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
+osl_getAsciiFunctionSymbol( oslModule Module, const char *pSymbol )
 {
     oslGenericFunction fncAddr = nullptr;
 

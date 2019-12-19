@@ -92,8 +92,8 @@ void Test::testStartsWithIgnoreAsciiCase() {
 void Test::testCompareTo()
 {
     // test that embedded NUL does not stop the compare
-    sal_Char str1[2] = { '\0', 'x' };
-    sal_Char str2[2] = { '\0', 'y' };
+    char str1[2] = { '\0', 'x' };
+    char str2[2] = { '\0', 'y' };
 
     OString s1(str1, 2);
     OString s2(str2, 2);

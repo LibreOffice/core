@@ -810,8 +810,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT32];
-    sal_Char*   pBuf = aBuf;
+    char    aBuf[RTL_STR_MAX_VALUEOFINT32];
+    char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
     sal_uInt32  nValue;
 
@@ -833,7 +833,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = static_cast<sal_Char>(nValue % nRadix);
+        char nDigit = static_cast<char>(nValue % nRadix);
         nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
@@ -866,8 +866,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT64];
-    sal_Char*   pBuf = aBuf;
+    char    aBuf[RTL_STR_MAX_VALUEOFINT64];
+    char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
     sal_uInt64  nValue;
 
@@ -889,7 +889,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = static_cast<sal_Char>(nValue % nRadix);
+        char nDigit = static_cast<char>(nValue % nRadix);
         nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
@@ -922,8 +922,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    sal_Char    aBuf[RTL_STR_MAX_VALUEOFUINT64];
-    sal_Char*   pBuf = aBuf;
+    char    aBuf[RTL_STR_MAX_VALUEOFUINT64];
+    char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
     sal_uInt64  nValue;
 
@@ -936,7 +936,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfUInt64 )( IMPL_RTL_STRCODE* pStr,
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = static_cast<sal_Char>(nValue % nRadix);
+        char nDigit = static_cast<char>(nValue % nRadix);
         nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
@@ -1399,7 +1399,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppT
 
 // Used when creating from string literals.
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThis,
-                                                     const sal_Char* pCharStr,
+                                                     const char* pCharStr,
                                                      sal_Int32 nLen,
                                                      sal_Int32 allocExtra )
     SAL_THROW_EXTERN_C()

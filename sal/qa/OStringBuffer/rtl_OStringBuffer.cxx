@@ -41,7 +41,7 @@ namespace rtl_OStringBuffer
         void ctor_001()
         {
             OStringBuffer aStrBuf;
-            const sal_Char* pStr = aStrBuf.getStr();
+            const char* pStr = aStrBuf.getStr();
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -95,8 +95,8 @@ namespace rtl_OStringBuffer
             OStringBuffer aStrBuf1(kTestStr2Len);
             OStringBuffer aStrBuf2(0);
 
-            const sal_Char* pStr1 = aStrBuf1.getStr();
-            const sal_Char* pStr2 = aStrBuf2.getStr();
+            const char* pStr1 = aStrBuf1.getStr();
+            const char* pStr2 = aStrBuf2.getStr();
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -1361,12 +1361,12 @@ namespace rtl_OStringBuffer
     {
         void csuc_001()
         {
-            const sal_Char*        expVal = kTestStr1;
+            const char*        expVal = kTestStr1;
             OStringBuffer   aStrBuf( kTestStr1 );
             sal_Int32              cmpLen = kTestStr1Len;
 
-            // LLA: wrong access! const sal_Char* pstr = *&aStrBuf;
-            const sal_Char* pstr = aStrBuf.getStr();
+            // LLA: wrong access! const char* pstr = *&aStrBuf;
+            const char* pstr = aStrBuf.getStr();
             int nEqual = strncmp(pstr, expVal, cmpLen);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -1382,8 +1382,8 @@ namespace rtl_OStringBuffer
         {
             OStringBuffer   aStrBuf;
 
-            // LLA: wrong access! const sal_Char* pstr = *&aStrBuf;
-            const sal_Char* pstr = aStrBuf.getStr();
+            // LLA: wrong access! const char* pstr = *&aStrBuf;
+            const char* pstr = aStrBuf.getStr();
             sal_Int32 nLen = strlen(pstr);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -1405,11 +1405,11 @@ namespace rtl_OStringBuffer
     {
         void getStr_001()
         {
-            const sal_Char*        expVal = kTestStr1;
+            const char*        expVal = kTestStr1;
             OStringBuffer   aStrBuf( kTestStr1 );
             sal_Int32              cmpLen = kTestStr1Len;
 
-            const sal_Char* pstr = aStrBuf.getStr();
+            const char* pstr = aStrBuf.getStr();
             int nEqual = strncmp(pstr, expVal, cmpLen);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -1423,7 +1423,7 @@ namespace rtl_OStringBuffer
         void getStr_002()
         {
             OStringBuffer   aStrBuf;
-            const sal_Char* pstr = aStrBuf.getStr();
+            const char* pstr = aStrBuf.getStr();
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test empty string",
@@ -1859,7 +1859,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input = kTestStr8;
+            const char*        input = kTestStr8;
 
             aStrBuf.append( input );
 
@@ -1875,7 +1875,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input = kTestStr36;
+            const char*        input = kTestStr36;
 
             aStrBuf.append( input );
 
@@ -1891,7 +1891,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr37 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input = kTestStr23;
+            const char*        input = kTestStr23;
 
             aStrBuf.append( input );
 
@@ -1907,7 +1907,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input = kTestStr25;
+            const char*        input = kTestStr25;
 
             aStrBuf.append( input );
 
@@ -1923,7 +1923,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input = kTestStr7;
+            const char*        input = kTestStr7;
 
             aStrBuf.append( input );
 
@@ -1939,7 +1939,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input = kTestStr2;
+            const char*        input = kTestStr2;
 
             aStrBuf.append( input );
 
@@ -1955,7 +1955,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input = kTestStr1;
+            const char*        input = kTestStr1;
 
             aStrBuf.append( input );
 
@@ -1971,7 +1971,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input = kTestStr25;
+            const char*        input = kTestStr25;
 
             aStrBuf.append( input );
 
@@ -1987,7 +1987,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input = kTestStr7;
+            const char*        input = kTestStr7;
 
             aStrBuf.append( input );
 
@@ -2003,7 +2003,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input = kTestStr2;
+            const char*        input = kTestStr2;
 
             aStrBuf.append( input );
 
@@ -2019,7 +2019,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input = kTestStr1;
+            const char*        input = kTestStr1;
 
             aStrBuf.append( input );
 
@@ -2035,7 +2035,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input = kTestStr25;
+            const char*        input = kTestStr25;
 
             aStrBuf.append( input );
 
@@ -2051,7 +2051,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input = kTestStr7;
+            const char*        input = kTestStr7;
 
             aStrBuf.append( input );
 
@@ -2067,7 +2067,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input = kTestStr2;
+            const char*        input = kTestStr2;
 
             aStrBuf.append( input );
 
@@ -2083,7 +2083,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input = kTestStr1;
+            const char*        input = kTestStr1;
 
             aStrBuf.append( input );
 
@@ -2099,7 +2099,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input = kTestStr25;
+            const char*        input = kTestStr25;
 
             aStrBuf.append( input );
 
@@ -2115,7 +2115,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr29 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input = kTestStr38;
+            const char*        input = kTestStr38;
 
             aStrBuf.append( input );
 
@@ -2131,7 +2131,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr39 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input = kTestStr17;
+            const char*        input = kTestStr17;
 
             aStrBuf.append( input );
 
@@ -2147,7 +2147,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr40 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input = kTestStr31;
+            const char*        input = kTestStr31;
 
             aStrBuf.append( input );
 
@@ -2163,7 +2163,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr28 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input = kTestStr25;
+            const char*        input = kTestStr25;
 
             aStrBuf.append( input );
 
@@ -2180,7 +2180,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( kSInt32Max );
-            const sal_Char*        input = kTestStr25;
+            const char*        input = kTestStr25;
 
             aStrBuf.append( input );
 
@@ -2239,7 +2239,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input1 = kTestStr36;
+            const char*        input1 = kTestStr36;
             sal_Int32              input2 = 12;
 
             aStrBuf.append( input1, input2 );
@@ -2256,7 +2256,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input1 = kTestStr36;
+            const char*        input1 = kTestStr36;
             sal_Int32              input2 = 28;
 
             aStrBuf.append( input1, input2 );
@@ -2273,7 +2273,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr37 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input1 = kTestStr23;
+            const char*        input1 = kTestStr23;
             sal_Int32              input2 = 16;
 
             aStrBuf.append( input1, input2 );
@@ -2290,7 +2290,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
             aStrBuf.append( input1, input2 );
@@ -2307,7 +2307,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 4;
 
             aStrBuf.append( input1, input2 );
@@ -2324,7 +2324,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 32;
 
             aStrBuf.append( input1, input2 );
@@ -2341,7 +2341,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 16;
 
             aStrBuf.append( input1, input2 );
@@ -2358,7 +2358,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[1] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
             aStrBuf.append( input1, input2 );
@@ -2375,7 +2375,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 4;
 
             aStrBuf.append( input1, input2 );
@@ -2392,7 +2392,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 32;
 
             aStrBuf.append( input1, input2 );
@@ -2409,7 +2409,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 16;
 
             aStrBuf.append( input1, input2 );
@@ -2426,7 +2426,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[2] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
             aStrBuf.append( input1, input2 );
@@ -2443,7 +2443,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr7 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 4;
 
             aStrBuf.append( input1, input2 );
@@ -2460,7 +2460,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr2 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 32;
 
             aStrBuf.append( input1, input2 );
@@ -2477,7 +2477,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr1 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 16;
 
             aStrBuf.append( input1, input2 );
@@ -2494,7 +2494,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal;
             OStringBuffer   aStrBuf( arrOUS[3] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
             aStrBuf.append( input1, input2 );
@@ -2511,7 +2511,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr29 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input1 = kTestStr38;
+            const char*        input1 = kTestStr38;
             sal_Int32              input2 = 7;
 
             aStrBuf.append( input1, input2 );
@@ -2528,7 +2528,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr39 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input1 = kTestStr17;
+            const char*        input1 = kTestStr17;
             sal_Int32              input2 = 22;
 
             aStrBuf.append( input1, input2 );
@@ -2545,7 +2545,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr40 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input1 = kTestStr31;
+            const char*        input1 = kTestStr31;
             sal_Int32              input2 = 16;
 
             aStrBuf.append( input1, input2 );
@@ -2562,7 +2562,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr28 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            const sal_Char*        input1 = kTestStr2;
+            const char*        input1 = kTestStr2;
             sal_Int32              input2 = 0;
 
             aStrBuf.append( input1, input2 );
@@ -2826,7 +2826,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// testing the method append(sal_Char c)
+// testing the method append(char c)
 
     class  append_005 : public CppUnit::TestFixture
     {
@@ -2847,13 +2847,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr51 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            sal_Char               input = 'M';
+            char               input = 'M';
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(M) to the string buffer arrOUS[0]",
+                "Appends the char(M) to the string buffer arrOUS[0]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2863,7 +2863,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr143 );
             OStringBuffer   aStrBuf( arrOUS[0] );
-            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
+            char               input = static_cast<char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
@@ -2879,13 +2879,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr27 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            sal_Char               input = 's';
+            char               input = 's';
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(s) to the string buffer arrOUS[1]",
+                "Appends the char(s) to the string buffer arrOUS[1]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2895,13 +2895,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             OStringBuffer   aStrBuf( arrOUS[1] );
-            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
+            char               input = static_cast<char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(kSInt8Max) to the string buffer arrOUS[1]",
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[1]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2911,13 +2911,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr27 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            sal_Char               input = 's';
+            char               input = 's';
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(s) to the string buffer arrOUS[2]",
+                "Appends the char(s) to the string buffer arrOUS[2]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2927,13 +2927,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             OStringBuffer   aStrBuf( arrOUS[2] );
-            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
+            char               input = static_cast<char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(kSInt8Max) to the string buffer arrOUS[2]",
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[2]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2943,13 +2943,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr27 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            sal_Char               input = 's';
+            char               input = 's';
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(s) to the string buffer arrOUS[3]",
+                "Appends the char(s) to the string buffer arrOUS[3]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2959,13 +2959,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             OStringBuffer   aStrBuf( arrOUS[3] );
-            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
+            char               input = static_cast<char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(kSInt8Max) to the string buffer arrOUS[3]",
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[3]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2975,13 +2975,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr56 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            sal_Char               input = 's';
+            char               input = 's';
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(s) to the string buffer arrOUS[4]",
+                "Appends the char(s) to the string buffer arrOUS[4]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -2991,13 +2991,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr145 );
             OStringBuffer   aStrBuf( arrOUS[4] );
-            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
+            char               input = static_cast<char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(kSInt8Max) to the string buffer arrOUS[4]",
+                "Appends the char(kSInt8Max) to the string buffer arrOUS[4]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -3008,13 +3008,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr27 );
             OStringBuffer   aStrBuf( kSInt32Max );
-            sal_Char               input = 's';
+            char               input = 's';
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(s) to the string buffer(with INT_MAX)",
+                "Appends the char(s) to the string buffer(with INT_MAX)",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 
@@ -3024,13 +3024,13 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             OStringBuffer   aStrBuf( kSInt32Max );
-            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
+            char               input = static_cast<char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "Appends the sal_Char(kSInt8Max) to the string buffer with INT_MAX)",
+                "Appends the char(kSInt8Max) to the string buffer with INT_MAX)",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
 

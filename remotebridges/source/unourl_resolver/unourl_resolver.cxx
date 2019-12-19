@@ -153,7 +153,7 @@ static const struct ImplementationEntry g_entries[] =
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * uuresolver_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }

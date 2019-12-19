@@ -39,7 +39,7 @@ using namespace osl;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-static void printUString( const OUString & str, const sal_Char * msg )
+static void printUString( const OUString & str, const char * msg )
 {
     if ( msg != nullptr )
     {
@@ -162,7 +162,7 @@ static void printUuid( const sal_uInt8 *pNode )
 /**************************************************************************
  *  output UUID to a string
  **************************************************************************/
-static void printUuidtoBuffer( const sal_uInt8 *pNode, sal_Char * pBuffer )
+static void printUuidtoBuffer( const sal_uInt8 *pNode, char * pBuffer )
 {
     sal_Int8 nPtr = 0;
     for( sal_Int32 i1 = 0 ; i1 < 16 ; i1++ )
@@ -201,7 +201,7 @@ public:
         sal_uInt8 pTargetUUID1[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
         printUuid( pTargetUUID1 );
-        sal_Char pUUID1[32];
+        char pUUID1[32];
         printUuidtoBuffer( pTargetUUID1, pUUID1 );
         printf("# UUID to String is %s\n", pUUID1);
 
@@ -231,7 +231,7 @@ public:
         //we could get return value only after the process terminated
         osl_joinProcess(hProcess);
 
-        sal_Char pUUID2[33] {};
+        char pUUID2[33] {};
         sal_uInt64 nRead = 0;
         osl_readFile( *pChildOutputRead, pUUID2, 32, &nRead );
         printf("read buffer is %s, nRead is %" SAL_PRIdINT64 "\n", pUUID2, nRead );

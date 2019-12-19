@@ -470,7 +470,7 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
 
     // Test added for mib. Tests if errors during conversions occurs
     r->ignorableWhitespace( OUString() );
-    sal_Char array[256];
+    char array[256];
     for( sal_Int32 n = 32 ; n < 254 ; n ++ ) {
         array[n-32] = n;
     }

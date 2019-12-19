@@ -193,7 +193,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
 sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
 {
     bool     bRet = false;
-    sal_Char pszIdent[1024];
+    char pszIdent[1024];
 
     pszIdent[0] = '\0';
 
@@ -205,9 +205,9 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     return bRet;
 }
 
-bool osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
+bool osl_psz_getUserIdent(oslSecurity Security, char *pszIdent, sal_uInt32 nMax)
 {
-    sal_Char  buffer[32];
+    char  buffer[32];
     sal_Int32 nChr;
 
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
@@ -227,7 +227,7 @@ bool osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 n
 sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     bool     bRet = false;
-    sal_Char * pszName;
+    char * pszName;
     sal_Int32 len;
 
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
@@ -285,7 +285,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
 
 #ifdef HAIKU
     dev_t volume = dev_for_path("/boot");
-    sal_Char homeDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
+    char homeDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
     status_t result = find_directory(B_USER_DIRECTORY, volume, false, homeDir,
                                      sizeof(homeDir));
     if (result == B_OK) {
@@ -330,7 +330,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
     /* if current user, check also environment for HOME */
     if (getuid() == pSecImpl->m_pPasswd.pw_uid)
     {
-        sal_Char *pStr = nullptr;
+        char *pStr = nullptr;
 #ifdef __sun
         char    buffer[8192];
 
@@ -398,7 +398,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
     assert(pszDirectory != nullptr);
     (void) Security;
     dev_t volume = dev_for_path("/boot");
-    sal_Char configDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
+    char configDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
     status_t result = find_directory(B_USER_SETTINGS_DIRECTORY, volume, false,
                                      configDir, sizeof(configDir));
     if (result == B_OK) {
@@ -417,7 +417,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 {
     assert(pszDirectory != nullptr);
 
-    sal_Char *pStr = getenv("XDG_CONFIG_HOME");
+    char *pStr = getenv("XDG_CONFIG_HOME");
 
     if (pStr == nullptr || pStr[0] == '\0' || access(pStr, 0) != 0)
     {

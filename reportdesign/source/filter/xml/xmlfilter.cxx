@@ -184,8 +184,8 @@ static ErrCode ReadThroughComponent(
 static ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
-    const sal_Char* pStreamName,
-    const sal_Char* pCompatibilityStreamName,
+    const char* pStreamName,
+    const char* pCompatibilityStreamName,
     const uno::Reference<XComponentContext> & rxContext,
     const Reference<document::XGraphicStorageHandler> & rxGraphicStorageHandler,
     const Reference<document::XEmbeddedObjectResolver>& _xEmbeddedObjectResolver,
