@@ -174,24 +174,16 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
     if (nNewBitCount == src.GetBitCount())
     {
-        mBitmap = src.mBitmap; // TODO unshare?
-        mImage = src.mImage; // TODO unshare?
-        mAlphaImage = src.mAlphaImage; // TODO unshare?
+        mBitmap = src.mBitmap;
+        // SkBitmap shares pixels on copy.
+        assert(mBitmap.getPixels() == src.mBitmap.getPixels());
+        mImage = src.mImage;
+        mAlphaImage = src.mAlphaImage;
+        mBuffer = src.mBuffer;
         mPalette = src.mPalette;
         mBitCount = src.mBitCount;
         mSize = src.mSize;
-        if (src.mBuffer != nullptr)
-        {
-            sal_uInt32 allocate = src.mScanlineSize * src.mSize.Height();
-#ifdef DBG_UTIL
-            assert(memcmp(src.mBuffer.get() + allocate, CANARY, sizeof(CANARY)) == 0);
-            allocate += sizeof(CANARY);
-#endif
-            sal_uInt8* newBuffer = new sal_uInt8[allocate];
-            memcpy(newBuffer, src.mBuffer.get(), allocate);
-            mBuffer.reset(newBuffer);
-            mScanlineSize = src.mScanlineSize;
-        }
+        mScanlineSize = src.mScanlineSize;
 #ifdef DBG_UTIL
         mWriteAccessCount = 0;
 #endif
@@ -228,11 +220,18 @@ sal_uInt16 SkiaSalBitmap::GetBitCount() const { return mBitCount; }
 
 BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 {
-#ifndef DBG_UTIL
-    (void)nMode; // TODO
-#endif
-    EnsureBitmapData();
-    if (mBitmap.drawsNothing() && !mBuffer)
+    switch (nMode)
+    {
+        case BitmapAccessMode::Write:
+            EnsureBitmapUniqueData();
+            break;
+        case BitmapAccessMode::Read:
+            EnsureBitmapData();
+            break;
+        default:
+            break;
+    }
+    if (mBitmap.isNull() && !mBuffer)
         return nullptr;
 #ifdef DBG_UTIL
     // BitmapWriteAccess stores also a copy of the palette and it can
@@ -358,7 +357,7 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
     assert(mWriteAccessCount == 0);
 #endif
     EnsureBitmapData();
-    if (!mBitmap.drawsNothing())
+    if (!mBitmap.isNull())
         return mBitmap;
     SkBitmap bitmap;
     if (mBuffer)
@@ -495,7 +494,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 
 void SkiaSalBitmap::EnsureBitmapData()
 {
-    if (!mBitmap.drawsNothing() || mBuffer)
+    if (!mBitmap.isNull() || mBuffer)
         return;
     if (!mImage)
         return;
@@ -556,6 +555,33 @@ void SkiaSalBitmap::EnsureBitmapData()
         }
         verify();
         SAL_INFO("vcl.skia", "ensurebitmapdata2(" << this << ")");
+    }
+}
+
+void SkiaSalBitmap::EnsureBitmapUniqueData()
+{
+    EnsureBitmapData();
+    // TODO threads?
+    if (mBitmap.pixelRef() && !mBitmap.pixelRef()->unique())
+    {
+        // SkBitmap copies share pixels, so make a deep copy.
+        SkBitmap newBitmap;
+        if (!newBitmap.tryAllocPixels(mBitmap.info()))
+            abort();
+        newBitmap.writePixels(mBitmap.pixmap());
+        assert(newBitmap.getPixels() != mBitmap.getPixels());
+        mBitmap = newBitmap;
+    }
+    if (mBuffer.use_count() > 1)
+    {
+        sal_uInt32 allocate = mScanlineSize * mSize.Height();
+#ifdef DBG_UTIL
+        assert(memcmp(mBuffer.get() + allocate, CANARY, sizeof(CANARY)) == 0);
+        allocate += sizeof(CANARY);
+#endif
+        sal_uInt8* newBuffer = new sal_uInt8[allocate];
+        memcpy(newBuffer, mBuffer.get(), allocate);
+        mBuffer.reset(newBuffer);
     }
 }
 
