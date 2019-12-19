@@ -23,7 +23,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/msgpool.hxx>
 #include <statcach.hxx>
 #include <sfx2/viewfrm.hxx>
 

@@ -22,27 +22,20 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
-#include <basic/sbx.hxx>
-
 #include <svl/eitem.hxx>
-#include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
 
 #include <appdata.hxx>
-#include <sfx2/request.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
-#include <sfx2/msg.hxx>
-#include <sfxslots.hxx>
 #include <sfxbasecontroller_internal.hxx>
 #include <time.h>
 

@@ -24,7 +24,6 @@
 #include <deque>
 #include <vector>
 
-#include <stdarg.h>
 #include <stdlib.h>
 
 #include <boost/property_tree/json_parser.hpp>
@@ -40,13 +39,11 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/hintpost.hxx>
 #include <sfx2/ipclient.hxx>
@@ -55,24 +52,17 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
-#include <svl/undo.hxx>
-#include <svl/whiter.hxx>
-#include <svtools/helpopt.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/wrkwin.hxx>
+#include <tools/debug.hxx>
 #include <vcl/idle.hxx>
 
-#include <appdata.hxx>
 #include <sfxtypes.hxx>
 #include <slotserv.hxx>
 #include <workwin.hxx>

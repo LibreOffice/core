@@ -22,8 +22,6 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/itemset.hxx>
-#include <itemdel.hxx>
 #include <svl/visitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
@@ -32,7 +30,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 

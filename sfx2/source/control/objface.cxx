@@ -22,15 +22,11 @@
 
 #include <sal/log.hxx>
 
-#include <tools/stream.hxx>
-
 #include <sfx2/module.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/objsh.hxx>
-#include <rtl/strbuf.hxx>
 
 extern "C" {
 

@@ -19,11 +19,7 @@
 
 #include <tools/stream.hxx>
 
-#include <sot/storage.hxx>
-#include <sot/formats.hxx>
-
 #include <sfx2/mieclip.hxx>
-#include <sfx2/sfxuno.hxx>
 
 MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
 {

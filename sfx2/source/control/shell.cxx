@@ -19,7 +19,6 @@
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
-#include <basic/sbstar.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -28,10 +27,8 @@
 #include <svl/undo.hxx>
 #include <itemdel.hxx>
 #include <svtools/asynclink.hxx>
-#include <basic/sbx.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -39,11 +36,9 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <statcach.hxx>
-#include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <tools/debug.hxx>

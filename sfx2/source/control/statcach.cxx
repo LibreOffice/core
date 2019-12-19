@@ -22,8 +22,6 @@
 #include <ctime>
 #endif
 
-#include <string>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <framework/dispatchhelper.hxx>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -38,7 +36,6 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>

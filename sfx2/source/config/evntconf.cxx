@@ -20,24 +20,13 @@
 
 #include <memory>
 
-#include <svl/lstner.hxx>
-#include <basic/basmgr.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbx.hxx>
-#include <sot/storage.hxx>
-#include <unotools/securityoptions.hxx>
-
-#include <rtl/ustring.h>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
 #include <svl/macitem.hxx>
 
-#include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/dispatch.hxx>
 #include <eventsupplier.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -33,66 +32,39 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <sot/exchange.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/basmgr.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sbxobj.hxx>
-#include <basic/sbxmeth.hxx>
-#include <basic/sbxcore.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/lckbitem.hxx>
-#include <svl/inettype.hxx>
-#include <svl/rectitem.hxx>
 
-#include <sot/storage.hxx>
-#include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
 
 #include <rtl/instance.hxx>
 
-#include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 
-#include <sfx2/sfxhelp.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfxtypes.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/progress.hxx>
-#include <openflag.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/doctempl.hxx>
-#include <sfx2/frame.hxx>
-#include <sfx2/dispatch.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/viewfrm.hxx>
-#include <helper.hxx>
 #include "fltlst.hxx"
-#include <sfx2/request.hxx>
 #include <arrdecl.hxx>
 
 #include <vector>
 #include <memory>
-#include <functional>
 
 #if defined(DBG_UTIL)
 unsigned SfxStack::nLevel = 0;

@@ -19,35 +19,20 @@
 
 
 #include <helper.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#include <com/sun/star/ucb/TransferInfo.hpp>
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <unotools/localedatawrapper.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/datetime.hxx>
-#include <vcl/svapp.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/file.hxx>
-#include <vector>
 
 using namespace com::sun::star;
 using namespace comphelper;

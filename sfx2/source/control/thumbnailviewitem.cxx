@@ -23,8 +23,6 @@
 #include "thumbnailviewacc.hxx"
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
@@ -33,11 +31,8 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <vcl/button.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
-#include <vcl/textdata.hxx>
 
 using namespace basegfx;
 using namespace basegfx::utils;

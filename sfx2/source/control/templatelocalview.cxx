@@ -16,7 +16,6 @@
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/docfac.hxx>
-#include <svl/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/help.hxx>
@@ -24,12 +23,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
