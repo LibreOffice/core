@@ -117,7 +117,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
     * Connection is checked by retrieving and comparing of row numbers
     * of connected set and its source set. <p>
     * Has <b>OK</b> status if row numbers are equal and they are
-    * greater then 0 (because JAR file contains at least one entry).
+    * greater than 0 (because JAR file contains at least one entry).
     */
     public void _connectToCache() throws Exception {
         boolean result = true ;
