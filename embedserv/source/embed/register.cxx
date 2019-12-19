@@ -50,7 +50,7 @@ static uno::Sequence< OUString > EmbedServer_getSupportedServiceNames() throw()
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * emser_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void * emser_component_getFactory( const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
 

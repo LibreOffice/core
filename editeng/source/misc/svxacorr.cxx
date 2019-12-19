@@ -105,11 +105,11 @@ namespace o3tl {
 }
 static const sal_Unicode cNonBreakingSpace = 0xA0;
 
-static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
-static const sal_Char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
-static const sal_Char pXMLImplAutocorr_ListStr[]   = "DocumentList.xml";
+static const char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
+static const char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
+static const char pXMLImplAutocorr_ListStr[]   = "DocumentList.xml";
 
-static const sal_Char
+static const char
     /* also at these beginnings - Brackets and all kinds of begin characters */
     sImplSttSkipChars[] = "\"\'([{\x83\x84\x89\x91\x92\x93\x94",
     /* also at these ends - Brackets and all kinds of begin characters */
@@ -180,7 +180,7 @@ static bool lcl_IsSymbolChar( CharClass const & rCC, const OUString& rTxt,
     return false;
 }
 
-static bool lcl_IsInAsciiArr( const sal_Char* pArr, const sal_Unicode c )
+static bool lcl_IsInAsciiArr( const char* pArr, const sal_Unicode c )
 {
     bool bRet = false;
     for( ; *pArr; ++pArr )
@@ -2024,7 +2024,7 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
 
 void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                                         std::unique_ptr<SvStringsISortDtor>& rpLst,
-                                        const sal_Char* pStrmName,
+                                        const char* pStrmName,
                                         tools::SvRef<SotStorage>& rStg)
 {
     if( rpLst )
@@ -2094,7 +2094,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
-                            const sal_Char* pStrmName,
+                            const char* pStrmName,
                             tools::SvRef<SotStorage> const &rStg,
                             bool bConvert )
 {
