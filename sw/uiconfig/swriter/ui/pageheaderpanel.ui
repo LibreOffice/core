@@ -98,7 +98,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SpacingListBox" id="headermarginpreset">
+          <object class="GtkComboBoxText" id="headermarginpreset">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -109,7 +109,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SpacingListBox" id="spacingpreset">
+          <object class="GtkComboBoxText" id="spacingpreset">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -120,7 +120,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SameContentListBox" id="samecontentLB">
+          <object class="GtkComboBoxText" id="samecontentLB">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
