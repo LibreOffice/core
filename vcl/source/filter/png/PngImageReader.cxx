@@ -35,7 +35,7 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
         png_error(pPng, "Error reading");
 }
 
-bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
+bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32, bool bPreferBitmap32)
 {
     enum
     {
@@ -138,11 +138,13 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         {
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
-            Bitmap aBitmap(Size(width, height), 24);
+            Bitmap aBitmap(Size(width, height), bPreferBitmap32 ? 32 : 24);
             {
                 BitmapScopedWriteAccess pWriteAccess(aBitmap);
                 ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-                if (eFormat == ScanlineFormat::N24BitTcBgr)
+                if (eFormat == ScanlineFormat::N24BitTcBgr
+                    || eFormat == ScanlineFormat::N32BitTcAbgr
+                    || eFormat == ScanlineFormat::N32BitTcBgra)
                     png_set_bgr(pPng);
 
                 std::vector<std::vector<png_byte>> aRows(height);
@@ -157,11 +159,24 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         png_bytep pRow = aRows[y].data();
                         png_read_row(pPng, pRow, nullptr);
                         size_t iColor = 0;
-                        for (size_t i = 0; i < aRowSizeBytes; i += 3)
+                        if (bPreferBitmap32)
                         {
-                            pScanline[iColor++] = pRow[i + 0];
-                            pScanline[iColor++] = pRow[i + 1];
-                            pScanline[iColor++] = pRow[i + 2];
+                            for (size_t i = 0; i < aRowSizeBytes; i += 3)
+                            {
+                                pScanline[iColor++] = pRow[i + 0];
+                                pScanline[iColor++] = pRow[i + 1];
+                                pScanline[iColor++] = pRow[i + 2];
+                                pScanline[iColor++] = 0xFF;
+                            }
+                        }
+                        else
+                        {
+                            for (size_t i = 0; i < aRowSizeBytes; i += 3)
+                            {
+                                pScanline[iColor++] = pRow[i + 0];
+                                pScanline[iColor++] = pRow[i + 1];
+                                pScanline[iColor++] = pRow[i + 2];
+                            }
                         }
                     }
                 }
@@ -270,8 +285,9 @@ bool PngImageReader::read(BitmapEx& rBitmapEx)
 {
     auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
     bool bSupportsBitmap32 = pBackendCapabilities->mbSupportsBitmap32;
+    bool bPrefersBitmap32 = pBackendCapabilities->mbPrefersBitmap32;
 
-    return reader(mrStream, rBitmapEx, bSupportsBitmap32);
+    return reader(mrStream, rBitmapEx, bSupportsBitmap32, bPrefersBitmap32);
 }
 
 } // namespace vcl

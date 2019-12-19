@@ -518,7 +518,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             {
                 case 16 :           // we have to reduce the bitmap
                 case 8 :
-                    mnTargetDepth = 24;
+                    mnTargetDepth = (ImplGetSVData()->mpDefInst->GetBackendCapabilities()->mbPrefersBitmap32) ? 32 : 24;
                     break;
                 default :
                     return false;
@@ -1630,6 +1630,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
         {
             // ScanlineFormat::N24BitTcRgb
             // only use DirectScanline when we have no preview shifting stuff and access to content
+            const bool bUseBitmap32 = mxAcc->GetBitCount() == 32;
             const bool bDoDirectScanline(
                 !nXStart && 1 == nXAdd && !mnPreviewShift);
             const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
@@ -1637,10 +1638,20 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             if(bDoDirectScanline && !mpScanline)
             {
                 // allocate scanlines on demand, reused for next line
+                if(bUseBitmap32)
+                {
 #if OSL_DEBUG_LEVEL > 0
-                mnAllocSizeScanline = maOrigSize.Width() * 3;
+                    mnAllocSizeScanline = maOrigSize.Width() * 4;
 #endif
-                mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 3] );
+                    mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 4] );
+                }
+                else
+                {
+#if OSL_DEBUG_LEVEL > 0
+                    mnAllocSizeScanline = maOrigSize.Width() * 3;
+#endif
+                    mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 3] );
+                }
             }
 
             if ( mnPngDepth == 8 )   // maybe the source has 16 bit per sample
@@ -1649,20 +1660,47 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     OSL_ENSURE(mpScanline, "No Scanline allocated (!)");
 #if OSL_DEBUG_LEVEL > 0
-                    OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
+                    if(bUseBitmap32)
+                        OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 4, "Allocated Scanline too small (!)");
+                    else
+                        OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
 #endif
                     sal_uInt8* pScanline(mpScanline.get());
 
-                    for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
+                    if(bUseBitmap32 && bCustomColorTable)
                     {
-                        // prepare content line as BGR by reordering when copying
-                        if(bCustomColorTable)
+                        for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
                         {
+                            // prepare content line as BGR by reordering when copying
+                            *pScanline++ = mpColorTable[pTmp[2]];
+                            *pScanline++ = mpColorTable[pTmp[1]];
+                            *pScanline++ = mpColorTable[pTmp[0]];
+                            *pScanline++ = 0xFF;
+                        }
+                    }
+                    else if(bUseBitmap32)
+                    {
+                        for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
+                        {
+                            *pScanline++ = pTmp[2];
+                            *pScanline++ = pTmp[1];
+                            *pScanline++ = pTmp[0];
+                            *pScanline++ = 0xFF;
+                        }
+                    }
+                    else if(bCustomColorTable)
+                    {
+                        for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
+                        {
+                            // prepare content line as BGR by reordering when copying
                             *pScanline++ = mpColorTable[pTmp[2]];
                             *pScanline++ = mpColorTable[pTmp[1]];
                             *pScanline++ = mpColorTable[pTmp[0]];
                         }
-                        else
+                    }
+                    else
+                    {
+                        for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
                         {
                             *pScanline++ = pTmp[2];
                             *pScanline++ = pTmp[1];
@@ -1672,7 +1710,10 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanline directly to bitmap for content; use the format which is able to
                     // copy directly to BitmapBuffer
-                    mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
+                    if(bUseBitmap32)
+                        mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N32BitTcBgra, maOrigSize.Width() * 4);
+                    else
+                        mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
                 }
                 else
                 {
