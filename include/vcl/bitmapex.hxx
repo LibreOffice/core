@@ -421,7 +421,7 @@ public:
         @param fMaximumArea
         A limitation for the maximum size of pixels to use for the result
 
-        The traget size of the result bitmap is defined by transforming the given
+        The target size of the result bitmap is defined by transforming the given
         rTargetRange with the given rTransformation; the area of the result is
         linearly scaled to not exceed the given fMaximumArea
 
