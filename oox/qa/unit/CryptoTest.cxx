@@ -160,7 +160,7 @@ void CryptoTest::testStandard2007()
         aBinaryOutputStream.close();
         aBinaryInputStream.close();
 
-        const sal_Char* pData = static_cast<const sal_Char*>(aUnencryptedOutput.GetData());
+        const char* pData = static_cast<const char*>(aUnencryptedOutput.GetData());
         sal_uInt64 nSize = aUnencryptedOutput.GetSize();
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(18), nSize);
@@ -411,7 +411,7 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
         // Check decrypted output
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(19), aUnencryptedOutput.GetSize());
 
-        OString aString(static_cast<const sal_Char*>(aUnencryptedOutput.GetData()));
+        OString aString(static_cast<const char*>(aUnencryptedOutput.GetData()));
         CPPUNIT_ASSERT_EQUAL(aTestString, aString);
 
         // Check data integrity

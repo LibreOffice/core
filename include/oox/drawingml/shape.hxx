@@ -102,12 +102,12 @@ class OOX_DLLPUBLIC Shape
 {
 public:
 
-    explicit Shape( const sal_Char* pServiceType = nullptr, bool bDefaultHeight = true );
+    explicit Shape( const char* pServiceType = nullptr, bool bDefaultHeight = true );
     explicit Shape( const ShapePtr& pSourceShape );
     virtual ~Shape();
 
     OUString&                  getServiceName(){ return msServiceName; }
-    void                            setServiceName( const sal_Char* pServiceName );
+    void                            setServiceName( const char* pServiceName );
 
     PropertyMap&                    getShapeProperties(){ return maShapeProperties; }
 

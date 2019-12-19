@@ -68,7 +68,7 @@ public:
                                  sal_uInt32 len);
 
     RegError    setStringListValue(const OUString& valueName,
-                                   sal_Char** pValueList,
+                                   char** pValueList,
                                   sal_uInt32 len);
 
     RegError    setUnicodeListValue(const OUString& valueName,
@@ -82,7 +82,7 @@ public:
                                  sal_uInt32* pLen) const;
 
     RegError    getStringListValue(const OUString& valueName,
-                                    sal_Char*** pValueList,
+                                    char*** pValueList,
                                    sal_uInt32* pLen) const;
 
     RegError    getUnicodeListValue(const OUString& valueName,

@@ -36,18 +36,18 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-const sal_Char* lclFindCharacter( const sal_Char* pcBeg, const sal_Char* pcEnd, sal_Char cChar )
+const char* lclFindCharacter( const char* pcBeg, const char* pcEnd, char cChar )
 {
     sal_Int32 nIndex = rtl_str_indexOfChar_WithLength( pcBeg, static_cast< sal_Int32 >( pcEnd - pcBeg ), cChar );
     return (nIndex < 0) ? pcEnd : (pcBeg + nIndex);
 }
 
-bool lclIsWhiteSpace( sal_Char cChar )
+bool lclIsWhiteSpace( char cChar )
 {
     return cChar <= 32;
 }
 
-const sal_Char* lclFindWhiteSpace( const sal_Char* pcBeg, const sal_Char* pcEnd )
+const char* lclFindWhiteSpace( const char* pcBeg, const char* pcEnd )
 {
     for( ; pcBeg < pcEnd; ++pcBeg )
         if( lclIsWhiteSpace( *pcBeg ) )
@@ -55,7 +55,7 @@ const sal_Char* lclFindWhiteSpace( const sal_Char* pcBeg, const sal_Char* pcEnd 
     return pcEnd;
 }
 
-const sal_Char* lclFindNonWhiteSpace( const sal_Char* pcBeg, const sal_Char* pcEnd )
+const char* lclFindNonWhiteSpace( const char* pcBeg, const char* pcEnd )
 {
     for( ; pcBeg < pcEnd; ++pcBeg )
         if( !lclIsWhiteSpace( *pcBeg ) )
@@ -63,52 +63,52 @@ const sal_Char* lclFindNonWhiteSpace( const sal_Char* pcBeg, const sal_Char* pcE
     return pcEnd;
 }
 
-const sal_Char* lclTrimWhiteSpaceFromEnd( const sal_Char* pcBeg, const sal_Char* pcEnd )
+const char* lclTrimWhiteSpaceFromEnd( const char* pcBeg, const char* pcEnd )
 {
     while( (pcBeg < pcEnd) && lclIsWhiteSpace( pcEnd[ -1 ] ) )
         --pcEnd;
     return pcEnd;
 }
 
-void lclAppendToBuffer( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
+void lclAppendToBuffer( OStringBuffer& rBuffer, const char* pcBeg, const char* pcEnd )
 {
     rBuffer.append( pcBeg, static_cast< sal_Int32 >( pcEnd - pcBeg ) );
 }
 
-void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
+void lclProcessAttribs( OStringBuffer& rBuffer, const char* pcBeg, const char* pcEnd )
 {
     /*  Map attribute names to char-pointer of all attributes. This map is used
         to find multiple occurrences of attributes with the same name. The
         mapped pointers are used as map key in the next map below. */
-    typedef ::std::map< OString, const sal_Char* > AttributeNameMap;
+    typedef ::std::map< OString, const char* > AttributeNameMap;
     AttributeNameMap aAttributeNames;
 
     /*  Map the char-pointers of all attributes to the full attribute definition
         string. This preserves the original order of the used attributes. */
-    typedef ::std::map< const sal_Char*, OString > AttributeDataMap;
+    typedef ::std::map< const char*, OString > AttributeDataMap;
     AttributeDataMap aAttributes;
 
     bool bOk = true;
-    const sal_Char* pcNameBeg = pcBeg;
+    const char* pcNameBeg = pcBeg;
     while( bOk && (pcNameBeg < pcEnd) )
     {
         // pcNameBeg points to begin of attribute name, find equality sign
-        const sal_Char* pcEqualSign = lclFindCharacter( pcNameBeg, pcEnd, '=' );
+        const char* pcEqualSign = lclFindCharacter( pcNameBeg, pcEnd, '=' );
         bOk = (pcEqualSign < pcEnd);
         if (bOk)
         {
             // find end of attribute name (ignore whitespace between name and equality sign)
-            const sal_Char* pcNameEnd = lclTrimWhiteSpaceFromEnd( pcNameBeg, pcEqualSign );
+            const char* pcNameEnd = lclTrimWhiteSpaceFromEnd( pcNameBeg, pcEqualSign );
             bOk = (pcNameBeg < pcNameEnd);
             if( bOk )
             {
                 // find begin of attribute value (must be single or double quote)
-                const sal_Char* pcValueBeg = lclFindNonWhiteSpace( pcEqualSign + 1, pcEnd );
+                const char* pcValueBeg = lclFindNonWhiteSpace( pcEqualSign + 1, pcEnd );
                 bOk = (pcValueBeg < pcEnd) && ((*pcValueBeg == '\'') || (*pcValueBeg == '"'));
                 if( bOk )
                 {
                     // find end of attribute value (matching quote character)
-                    const sal_Char* pcValueEnd = lclFindCharacter( pcValueBeg + 1, pcEnd, *pcValueBeg );
+                    const char* pcValueEnd = lclFindCharacter( pcValueBeg + 1, pcEnd, *pcValueBeg );
                     bOk = (pcValueEnd < pcEnd);
                     if( bOk )
                     {
@@ -153,8 +153,8 @@ void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
     if( nElementLen == 0 )
         return;
 
-    const sal_Char* pcOpen = rElement.getStr();
-    const sal_Char* pcClose = pcOpen + nElementLen - 1;
+    const char* pcOpen = rElement.getStr();
+    const char* pcClose = pcOpen + nElementLen - 1;
 
     // no complete element found
     if( (pcOpen >= pcClose) || (*pcOpen != '<') || (*pcClose != '>') )
@@ -185,14 +185,14 @@ void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
     else if( pcOpen[ 1 ] != '/' )
     {
         // find positions of text content inside brackets, exclude '/' in '<simpleelement/>'
-        const sal_Char* pcContentBeg = pcOpen + 1;
+        const char* pcContentBeg = pcOpen + 1;
         bool bIsEmptyElement = pcClose[ -1 ] == '/';
-        const sal_Char* pcContentEnd = bIsEmptyElement ? (pcClose - 1) : pcClose;
+        const char* pcContentEnd = bIsEmptyElement ? (pcClose - 1) : pcClose;
         // append opening bracket and element name to buffer
-        const sal_Char* pcWhiteSpace = lclFindWhiteSpace( pcContentBeg, pcContentEnd );
+        const char* pcWhiteSpace = lclFindWhiteSpace( pcContentBeg, pcContentEnd );
         lclAppendToBuffer( rBuffer, pcOpen, pcWhiteSpace );
         // find begin of attributes, and process all attributes
-        const sal_Char* pcAttribBeg = lclFindNonWhiteSpace( pcWhiteSpace, pcContentEnd );
+        const char* pcAttribBeg = lclFindNonWhiteSpace( pcWhiteSpace, pcContentEnd );
         if( pcAttribBeg < pcContentEnd )
             lclProcessAttribs( rBuffer, pcAttribBeg, pcContentEnd );
         // close the element
@@ -244,16 +244,16 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
      */
 
     // passed string ends with the leading opening bracket of an XML element
-    const sal_Char* pcBeg = rChars.getStr();
-    const sal_Char* pcEnd = pcBeg + rChars.getLength();
+    const char* pcBeg = rChars.getStr();
+    const char* pcEnd = pcBeg + rChars.getLength();
     bool bHasBracket = (pcBeg < pcEnd) && (pcEnd[ -1 ] == '<');
     if( bHasBracket ) --pcEnd;
 
     // skip leading whitespace
-    const sal_Char* pcContentsBeg = lclFindNonWhiteSpace( pcBeg, pcEnd );
+    const char* pcContentsBeg = lclFindNonWhiteSpace( pcBeg, pcEnd );
     while( pcContentsBeg < pcEnd )
     {
-        const sal_Char* pcWhitespaceBeg = lclFindWhiteSpace( pcContentsBeg + 1, pcEnd );
+        const char* pcWhitespaceBeg = lclFindWhiteSpace( pcContentsBeg + 1, pcEnd );
         lclAppendToBuffer( rBuffer, pcContentsBeg, pcWhitespaceBeg );
         if( pcWhitespaceBeg < pcEnd )
             rBuffer.append( ' ' );

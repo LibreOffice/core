@@ -55,7 +55,7 @@ bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_In
 
 void DffStreamObject::implWriteExtHeader()
 {
-    const sal_Char* pcListName = "DFF-RECORD-INST";
+    const char* pcListName = "DFF-RECORD-INST";
     switch( getRecId() )
     {
         case DFF_ID_BSE:                pcListName = "DFFBSE-RECORD-INST";          break;  // BLIP type

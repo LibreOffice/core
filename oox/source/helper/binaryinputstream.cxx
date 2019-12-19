@@ -66,7 +66,7 @@ OString BinaryInputStream::readCharArray( sal_Int32 nChars )
     // NUL characters are replaced by question marks.
     ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
 
-    return OString(reinterpret_cast<sal_Char*>(aBuffer.data()), nCharsRead);
+    return OString(reinterpret_cast<char*>(aBuffer.data()), nCharsRead);
 }
 
 OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc )

@@ -55,16 +55,16 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 // chart type service names
-const sal_Char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
-const sal_Char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
-const sal_Char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
-const sal_Char SERVICE_CHART2_LINE[]      = "com.sun.star.chart2.LineChartType";
-const sal_Char SERVICE_CHART2_NET[]       = "com.sun.star.chart2.NetChartType";
-const sal_Char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartType";
-const sal_Char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
-const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
-const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
-const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
+const char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
+const char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
+const char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
+const char SERVICE_CHART2_LINE[]      = "com.sun.star.chart2.LineChartType";
+const char SERVICE_CHART2_NET[]       = "com.sun.star.chart2.NetChartType";
+const char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartType";
+const char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
+const char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
+const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
+const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 
 namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 

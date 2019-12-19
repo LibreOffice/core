@@ -1338,7 +1338,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
         return RegError::INVALID_VALUE;
     }
 
-    const sal_Char* indent = sIndent.getStr();
+    const char* indent = sIndent.getStr();
     switch (valueType)
     {
         case RegValueType::NOT_DEFINED:
@@ -1359,7 +1359,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case RegValueType::STRING:
             {
-                sal_Char* value = static_cast<sal_Char*>(std::malloc(valueSize));
+                char* value = static_cast<char*>(std::malloc(valueSize));
                 readUtf8(aBuffer.data(), value, valueSize);
                 fprintf(stdout, "%sValue: Type = RegValueType::STRING\n", indent);
                 fprintf(
@@ -1452,7 +1452,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                     offset += 4; // 4 bytes (sal_uInt32) for the string size
 
-                    sal_Char *pValue = static_cast<sal_Char*>(std::malloc(sLen));
+                    char *pValue = static_cast<char*>(std::malloc(sLen));
                     readUtf8(aBuffer.data() + offset, pValue, sLen);
 
                     if (offset > 8)

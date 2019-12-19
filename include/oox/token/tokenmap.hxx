@@ -66,7 +66,7 @@ public:
         // 50% of OOXML tokens are primarily 1 lower-case character, a-z
         if( nLength == 1)
         {
-            sal_Char c = pToken[0];
+            char c = pToken[0];
             if (c >= 'a' && c <= 'z')
                 return mnAlphaTokens[ c - 'a' ];
         }

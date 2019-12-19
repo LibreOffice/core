@@ -77,7 +77,7 @@ struct TypeGroupInfo
 {
     TypeId              meTypeId;               /// Unique chart type identifier.
     TypeCategory        meTypeCategory;         /// Category this chart type belongs to.
-    const sal_Char*     mpcServiceName;         /// Service name of the type.
+    const char*         mpcServiceName;         /// Service name of the type.
     VarPointMode        meVarPointMode;         /// Mode for varying point colors.
     sal_Int32           mnDefLabelPos;          /// Default data label position (API constant).
     bool                mbPolarCoordSystem;     /// True = polar, false = cartesian.

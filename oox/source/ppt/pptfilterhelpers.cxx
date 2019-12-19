@@ -146,8 +146,8 @@ namespace oox { namespace ppt {
     {
         bool bRet = false;
 
-        const sal_Char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", nullptr };
-        const sal_Char* pDest[] = { "x", "y", "width", "height", nullptr };
+        const char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", nullptr };
+        const char* pDest[] = { "x", "y", "width", "height", nullptr };
 
         /* here we want to substitute all occurrences of
          * [#]ppt_[xyhw] with
@@ -155,8 +155,8 @@ namespace oox { namespace ppt {
          */
         sal_Int32 nIndex = 0;
 
-        const sal_Char** ps = pSource;
-        const sal_Char** pd = pDest;
+        const char** ps = pSource;
+        const char** pd = pDest;
 
         while (*ps)
         {

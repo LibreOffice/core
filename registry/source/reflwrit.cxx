@@ -177,7 +177,7 @@ struct CPInfo
 {
     union
     {
-        const sal_Char*     aUtf8;
+        const char*         aUtf8;
         RTUik*              aUik;
         RTConstValueUnion   aConst;
     } m_value;
