@@ -21,16 +21,11 @@
 #define INCLUDED_SVX_SAMECONTENTLISTBOXHELPER_HXX
 
 #include <svx/svxdllapi.h>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
-/// Custom Widget ListBox to hold entries for SameContent setting of Header/Footer
-class SVX_DLLPUBLIC SameContentListBox final : public ListBox
+namespace SameContentListBox
 {
-public:
-    SameContentListBox( vcl::Window* pParent );
-    static void Fill(weld::ComboBox& rComboBox);
-    Size GetOptimalSize() const override;
+    void SVX_DLLPUBLIC Fill(weld::ComboBox& rComboBox);
 };
 
 #endif
