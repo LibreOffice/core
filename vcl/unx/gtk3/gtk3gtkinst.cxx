@@ -9244,10 +9244,11 @@ private:
         }
     }
 
-    static void signalEntryFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    static gboolean signalEntryFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         pThis->signal_entry_focus_in();
+        return false;
     }
 
     void signal_entry_focus_in()
@@ -9255,10 +9256,11 @@ private:
         signal_focus_in();
     }
 
-    static void signalEntryFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
+    static gboolean signalEntryFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         pThis->signal_entry_focus_out();
+        return false;
     }
 
     void signal_entry_focus_out()
