@@ -453,7 +453,7 @@ sal_Bool SAL_CALL SpellChecker_writeInfo(
 }
 
 
-void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
+void * SAL_CALL SpellChecker_getFactory( const char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;

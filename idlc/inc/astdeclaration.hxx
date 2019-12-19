@@ -70,7 +70,7 @@ public:
         { return m_scopedName; }
     const OString&   getFullName() const
         { return m_fullName; }
-    virtual const sal_Char* getRelativName() const
+    virtual const char* getRelativName() const
         { return m_fullName.getStr()+1; }
     AstScope* getScope()
         { return m_pScope; }

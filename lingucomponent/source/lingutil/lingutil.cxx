@@ -272,7 +272,7 @@ void MergeNewStyleDicsAndOldStyleDics(
     }
 }
 
-rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
+rtl_TextEncoding getTextEncodingFromCharset(const char* pCharset)
 {
     // default result: used to indicate that we failed to get the proper encoding
     rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;

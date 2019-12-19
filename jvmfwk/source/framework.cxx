@@ -246,7 +246,7 @@ javaFrameworkError jfw_startVM(
         //add the options set by options dialog
         for (auto const & vmParam : vmParams)
         {
-            arOpt[index].optionString = const_cast<sal_Char*>(vmParam.getStr());
+            arOpt[index].optionString = const_cast<char*>(vmParam.getStr());
             arOpt[index].extraInfo = nullptr;
             index ++;
         }

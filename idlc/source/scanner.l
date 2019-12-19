@@ -146,7 +146,7 @@ static int asciiToInteger(char const * s, sal_Int64  * sval, sal_uInt64 * uval) 
     }
 }
 
-static double asciiToFloat(const sal_Char *s)
+static double asciiToFloat(const char *s)
 {
     double      d = 0.0;
     double      e, k;
@@ -201,21 +201,21 @@ static double asciiToFloat(const sal_Char *s)
     return d;
 }
 
-static void idlParsePragma(sal_Char* pPragma)
+static void idlParsePragma(char* pPragma)
 {
     OString pragma(pPragma);
     sal_Int32 index = pragma.indexOf("include");
-    sal_Char* begin = pPragma + index + 8;
-    sal_Char* offset = begin;
+    char* begin = pPragma + index + 8;
+    char* offset = begin;
     while (*offset != ',') offset++;
     //OString include = pragma.copy(index + 8, offset - begin);
     //unused// idlc()->insertInclude(pragma.copy(index + 8, (sal_Int32)(offset - begin)));
 }   
 
-static void parseLineAndFile(sal_Char* pBuf)
+static void parseLineAndFile(char* pBuf)
 {
-    sal_Char    *r = pBuf;
-    sal_Char    *h;
+    char    *r = pBuf;
+    char    *h;
     bool    bIsInMain = false;
 
     /* Skip initial '#' */

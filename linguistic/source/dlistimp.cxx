@@ -688,7 +688,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
     return { "com.sun.star.linguistic2.DictionaryList" };
 }
 
-void * DicList_getFactory( const sal_Char * pImplName,
+void * DicList_getFactory( const char * pImplName,
         XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;

@@ -50,7 +50,7 @@ void MergeNewStyleDicsAndOldStyleDics( std::vector< SvtLinguConfigDictionaryEntr
 //rtl_getTextEncodingFromUnixCharset with the addition of
 //ISCII-DEVANAGARI. On failure will return final fallback of
 //RTL_TEXTENCODING_ISO_8859_1
-rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset);
+rtl_TextEncoding getTextEncodingFromCharset(const char* pCharset);
 
 #endif
 

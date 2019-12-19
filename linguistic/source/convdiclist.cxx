@@ -548,7 +548,7 @@ static uno::Reference< uno::XInterface > ConvDicList_CreateInstance(
 }
 
 void * ConvDicList_getFactory(
-        const sal_Char * pImplName,
+        const char * pImplName,
         XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;

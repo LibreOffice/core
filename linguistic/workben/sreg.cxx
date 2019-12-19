@@ -31,7 +31,7 @@ extern sal_Bool SAL_CALL SpellChecker_writeInfo(
     void * /*pServiceManager*/, XRegistryKey * pRegistryKey );
 
 extern void * SAL_CALL SpellChecker_getFactory(
-    const sal_Char * pImplName,
+    const char * pImplName,
     XMultiServiceFactory * pServiceManager,
     void * /*pRegistryKey*/ );
 
@@ -47,7 +47,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = SpellChecker_getFactory(
             pImplName,

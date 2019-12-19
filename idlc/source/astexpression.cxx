@@ -1277,7 +1277,7 @@ OString AstExpression::toString()
 }
 
 // Convert the type of an AST_Expression to a char *
-const sal_Char* exprTypeToString(ExprType t)
+const char* exprTypeToString(ExprType t)
 {
     switch (t)
     {

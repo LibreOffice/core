@@ -67,7 +67,7 @@ int main (int argc, char **argv)
         exit(1);
     }
 
-    sal_Char szBuf[1024];
+    char szBuf[1024];
     OString sTestName;
 
     try

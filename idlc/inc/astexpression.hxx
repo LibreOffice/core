@@ -85,7 +85,7 @@ struct AstExprValue
     ExprType et;
 };
 
-const sal_Char* exprTypeToString(ExprType t);
+const char* exprTypeToString(ExprType t);
 
 class AstExpression final
 {

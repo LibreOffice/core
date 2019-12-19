@@ -1186,7 +1186,7 @@ static uno::Reference< uno::XInterface > GrammarCheckingIterator_createInstance(
 
 
 void * GrammarCheckingIterator_getFactory(
-    const sal_Char *pImplName,
+    const char *pImplName,
     lang::XMultiServiceFactory *pServiceManager )
 {
     void * pRet = nullptr;

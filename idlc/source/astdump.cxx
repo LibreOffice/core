@@ -404,7 +404,7 @@ void AstAttribute::dumpExceptions(
     }
 }
 
-const sal_Char* AstSequence::getRelativName() const
+const char* AstSequence::getRelativName() const
 {
     if ( !m_xRelativName )
     {

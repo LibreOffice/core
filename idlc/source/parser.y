@@ -213,7 +213,7 @@ static bool includes(AstDeclaration const * type1, AstDeclaration const * type2)
     FeInheritanceHeader*    ihval;      /* inheritance header value */
     OString*     sval;       /* OString value */
     std::vector< OString > * svals;
-    sal_Char*           strval; /* sal_Char* value */
+    char*               strval; /* char* value */
     bool                bval;       /* sal_Boolean* value */
     sal_Int64               ival;       /* sal_Int64 value */
     sal_uInt64 uval; /* sal_uInt64 value */
