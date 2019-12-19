@@ -64,7 +64,7 @@ interface XMutableTreeNode : XTreeNode
             the index of the node to be removed from this instance.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <var>Index</var> is less than 0 or greater then XTreeNode::getChildCount().
+            if <var>Index</var> is less than 0 or greater than XTreeNode::getChildCount().
      */
     void removeChildByIndex( [in] long Index )
             raises( com::sun::star::lang::IndexOutOfBoundsException );
