@@ -25,6 +25,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sberrors.hxx>
 #include <tools/svlibrary.h>
 
 #include <svl/svdde.hxx>
@@ -523,6 +524,7 @@ ErrCode SfxApplication::CallBasic( const OUString& rCode, BasicManager* pMgr, Sb
     (void) pRet;
     return ERRCODE_BASIC_CANNOT_LOAD;
 #else
+    (void) ERRCODE_BASIC_CANNOT_LOAD; // So that the !HAVE_FEATURE_SCRIPTING case isn't broken again by IWYU
     return pMgr->ExecuteMacro( rCode, pArgs, pRet);
 #endif
 }
