@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editview.hxx>
@@ -172,7 +173,11 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     ScInputHandler* pHdl        = pScMod->GetInputHdl( rViewData.GetViewShell() );
 
     bool bSelectFirst = false;
-    if ( !pScMod->IsEditMode() )
+    bool bIsEditMode = pScMod->IsEditMode();
+    int nSelInd = 1;
+    OUString sSeltext(GetSelectionText());
+
+    if ( !bIsEditMode )
     {
         if ( !SelectionEditable() )
         {
@@ -189,12 +194,24 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     EditView*       pTableView  = pHdl->GetTableView();
     OSL_ENSURE( pTopView || pTableView, "No EditView" );
 
+    // Check if user selected a whole cell by single click,
+    // cell has content, and user didn't change the name/text
+    // of the link something different than the content via the hyperlink dialog.
+    // If true, assign the given hyperlink to the whole content
+    // instead of inserting a duplicate, or appending the url.
+    if (comphelper::LibreOfficeKit::isActive() && !bIsEditMode && !bSelectFirst
+            && pTableView && !sSeltext.isEmpty() && sSeltext == rName)
+    {
+        nSelInd = sSeltext.getLength();
+        bSelectFirst = true;
+    }
+
     if ( bSelectFirst )
     {
         if ( pTopView )
             pTopView->SetSelection( ESelection(0,0,0,1) );
         if ( pTableView )
-            pTableView->SetSelection( ESelection(0,0,0,1) );
+            pTableView->SetSelection( ESelection(0,0,0,nSelInd) );
     }
 
     pHdl->DataChanging();
