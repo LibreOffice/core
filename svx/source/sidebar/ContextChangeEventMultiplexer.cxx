@@ -39,13 +39,6 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 {
     if (rxController.is() && rxController->getFrame().is())
     {
-        // notify the LOK too
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            if (SfxViewShell* pViewShell = SfxViewShell::Get(rxController))
-                SfxLokHelper::notifyContextChange(pViewShell, GetModuleName(rxController->getFrame()), vcl::EnumContext::GetContextName(eContext));
-        }
-
         const css::ui::ContextChangeEventObject aEvent(
             rxController,
             GetModuleName(rxController->getFrame()),
@@ -56,6 +49,13 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
                 ::comphelper::getProcessComponentContext()));
         if (xMultiplexer.is())
             xMultiplexer->broadcastContextChangeEvent(aEvent, rxController);
+
+        // notify the LOK too after all the change have taken effect.
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (SfxViewShell* pViewShell = SfxViewShell::Get(rxController))
+                SfxLokHelper::notifyContextChange(pViewShell, GetModuleName(rxController->getFrame()), vcl::EnumContext::GetContextName(eContext));
+        }
     }
 }
 
