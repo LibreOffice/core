@@ -5405,7 +5405,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // the ODF_UNHANDLED string!
                     assert(!m_bForceGenericFields || aCode.isEmpty());
                     xNameCont->insertByName(ODF_CODE_PARAM, uno::makeAny(aCode));
-                    if (std::get<0>(field) == "CONTROL")
+                    if (sType == "CONTROL")
                     { // tdf#129247 HACK probably this should be imported as something else, like in ww8?
                         xNameCont->insertByName(ODF_ID_PARAM, uno::makeAny(OUString::number(87))); // ww8::eCONTROL
                     }
