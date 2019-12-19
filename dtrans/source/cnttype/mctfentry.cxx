@@ -50,7 +50,7 @@ extern "C"
 // component_getFactory
 // returns a factory to create XFilePicker-Services
 
-SAL_DLLPUBLIC_EXPORT void* mcnttype_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* mcnttype_component_getFactory( const char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
 

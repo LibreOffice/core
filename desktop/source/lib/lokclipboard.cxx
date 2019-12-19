@@ -144,7 +144,7 @@ LOKTransferable::LOKTransferable(const OUString& sMimeType,
     uno::Any aContent;
     if (m_aFlavors[0].DataType == cppu::UnoType<OUString>::get())
     {
-        auto pText = reinterpret_cast<const sal_Char*>(aSequence.getConstArray());
+        auto pText = reinterpret_cast<const char*>(aSequence.getConstArray());
         aContent <<= OUString(pText, aSequence.getLength(), RTL_TEXTENCODING_UTF8);
     }
     else

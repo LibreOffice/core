@@ -34,8 +34,8 @@
 
 namespace dp_misc {
 
-const sal_Char CR = 0x0d;
-const sal_Char LF = 0x0a;
+const char CR = 0x0d;
+const char LF = 0x0a;
 
 
 class MutexHolder

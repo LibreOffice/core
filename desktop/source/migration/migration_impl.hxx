@@ -174,7 +174,7 @@ private:
     // helpers
     strings_vr getAllFiles(const OUString& baseURL) const;
     static strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns);
-    static css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, bool rw=false);
+    static css::uno::Reference< css::container::XNameAccess > getConfigAccess(const char* path, bool rw=false);
 
     std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
     void compareOldAndNewConfig(const OUString& sParentNodeName,

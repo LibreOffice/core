@@ -593,7 +593,7 @@ bool Desktop::QueryExit()
     {
     }
 
-    const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
+    const char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);

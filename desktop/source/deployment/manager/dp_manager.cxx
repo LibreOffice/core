@@ -260,7 +260,7 @@ void PackageManagerImpl::initActivationLayer(
                             ucbhelper::Content remFileContent(
                                 url + "removed", Reference<XCommandEnvironment>(), m_xComponentContext);
                             std::vector<sal_Int8> data = dp_misc::readFile(remFileContent);
-                            OString osData(reinterpret_cast<const sal_Char*>(data.data()),
+                            OString osData(reinterpret_cast<const char*>(data.data()),
                                                   data.size());
                             OUString sData = OStringToOUString(
                                 osData, RTL_TEXTENCODING_UTF8);

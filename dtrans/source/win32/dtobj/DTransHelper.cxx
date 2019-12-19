@@ -179,7 +179,7 @@ sal_uInt32 CStgTransferHelper::memSize( CLIPFORMAT cf ) const
 
         if ( CF_TEXT == cf || RegisterClipboardFormatW( L"HTML Format" ) == cf )
         {
-            sal_Char* pText = static_cast< sal_Char* >( GlobalLock( hGlob ) );
+            char* pText = static_cast< char* >( GlobalLock( hGlob ) );
             if ( pText )
             {
                 dwSize = strlen(pText) + 1; // strlen + trailing '\0'

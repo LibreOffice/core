@@ -3758,13 +3758,13 @@ static bool getFromTransferrable(
         if (bConvert)
             aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
         else
-            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
+            aRet = OString(reinterpret_cast<const char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
     }
     else
     {
         uno::Sequence<sal_Int8> aSequence;
         aAny >>= aSequence;
-        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
+        aRet = OString(reinterpret_cast<char*>(aSequence.getArray()), aSequence.getLength());
     }
 
     return true;

@@ -596,7 +596,7 @@ OUString replaceOrigin(
     std::vector<sal_Int8> filtered( bytes.size() * 2 );
     bool use_filtered = false;
     OString origin;
-    sal_Char const * pBytes = reinterpret_cast<sal_Char const *>(
+    char const * pBytes = reinterpret_cast<char const *>(
         bytes.data());
     std::size_t nBytes = bytes.size();
     size_t write_pos = 0;
@@ -621,7 +621,7 @@ OUString replaceOrigin(
         // consume %:
         ++pBytes;
         --nBytes;
-        sal_Char const * pAdd = "%";
+        char const * pAdd = "%";
         sal_Int32 nAdd = 1;
         if (nBytes > 1 && pBytes[ 0 ] == '%')
         {
