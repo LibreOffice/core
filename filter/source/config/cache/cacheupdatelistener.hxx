@@ -50,7 +50,7 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
         /** @short  every instance of this update listener listen on
                     a special sub set of the filter configuration.
                     So it should know, which type of configuration entry
-                    it must put into the filter cache, if the configuration notifys changes ... */
+                    it must put into the filter cache, if the configuration notifies changes ... */
         FilterCache::EItemType m_eConfigType;
 
 
