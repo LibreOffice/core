@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_RUNTIME_COMENUMWRAPPER_HXX
-#define INCLUDED_BASIC_SOURCE_RUNTIME_COMENUMWRAPPER_HXX
+#pragma once
 
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -41,7 +40,5 @@ public:
     virtual sal_Bool SAL_CALL hasMoreElements() override;
     virtual css::uno::Any SAL_CALL nextElement() override;
 };
-
-#endif // INCLUDED_BASIC_SOURCE_RUNTIME_COMENUMWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
