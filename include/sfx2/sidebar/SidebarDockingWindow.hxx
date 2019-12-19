@@ -35,7 +35,7 @@ class SidebarController;
 
 class SidebarNotifyIdle;
 
-class SidebarDockingWindow final : public SfxDockingWindow
+class SFX2_DLLPUBLIC SidebarDockingWindow final : public SfxDockingWindow
 {
 public:
     SidebarDockingWindow(SfxBindings* pBindings, SidebarChildWindow& rChildWindow,
@@ -44,6 +44,9 @@ public:
     virtual void dispose() override;
     virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual bool Close() override;
+
+    /// Force generation of all panels by completion.
+    void SyncUpdate();
 
     void NotifyResize();
 
