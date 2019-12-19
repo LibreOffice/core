@@ -63,8 +63,8 @@ VclPtr<vcl::Window> PageFormatPanel::Create(
 
 void PageFormatPanel::SetMarginFieldUnit()
 {
-    auto nSelected = mpMarginSelectBox->GetSelectedEntryPos();
-    mpMarginSelectBox->Clear();
+    auto nSelected = mxMarginSelectBox->get_active();
+    mxMarginSelectBox->clear();
 
     const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
     if (IsInch(meFUnit))
@@ -73,7 +73,7 @@ void PageFormatPanel::SetMarginFieldUnit()
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
         {
             OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_INCH[i].second, 2, true, false) + sSuffix;
-            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sStr));
+            mxMarginSelectBox->append_text(SwResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sStr));
         }
     }
     else
@@ -82,18 +82,24 @@ void PageFormatPanel::SetMarginFieldUnit()
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
         {
             OUString sStr = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_CM[i].second, 2, true, false) + " " + sSuffix;
-            mpMarginSelectBox->InsertEntry(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sStr));
+            mxMarginSelectBox->append_text(SwResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sStr));
         }
     }
-    mpMarginSelectBox->SelectEntryPos(nSelected);
+    mxMarginSelectBox->set_active(nSelected);
 }
 
 PageFormatPanel::PageFormatPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings) :
-    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame),
+    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame, true),
     mpBindings( pBindings ),
+    mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("papersize"))),
+    mxPaperWidth(new RelativeField(m_xBuilder->weld_metric_spin_button("paperwidth", FieldUnit::CM))),
+    mxPaperHeight(new RelativeField(m_xBuilder->weld_metric_spin_button("paperheight", FieldUnit::CM))),
+    mxPaperOrientation(m_xBuilder->weld_combo_box("paperorientation")),
+    mxMarginSelectBox(m_xBuilder->weld_combo_box("marginLB")),
+    mxCustomEntry(m_xBuilder->weld_label("customlabel")),
     maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),
@@ -106,12 +112,6 @@ PageFormatPanel::PageFormatPanel(
     meUnit(),
     aCustomEntry()
 {
-    get(mpPaperSizeBox, "papersize");
-    get(mpPaperWidth, "paperwidth");
-    get(mpPaperHeight, "paperheight");
-    get(mpPaperOrientation, "paperorientation");
-    get(mpMarginSelectBox, "marginLB");
-    get(mpCustomEntry, "customlabel");
     Initialize();
 }
 
@@ -122,12 +122,12 @@ PageFormatPanel::~PageFormatPanel()
 
 void PageFormatPanel::dispose()
 {
-    mpPaperSizeBox.disposeAndClear();
-    mpPaperWidth.disposeAndClear();
-    mpPaperHeight.disposeAndClear();
-    mpPaperOrientation.disposeAndClear();
-    mpMarginSelectBox.disposeAndClear();
-    mpCustomEntry.clear();
+    mxPaperSizeBox.reset();
+    mxPaperWidth.reset();
+    mxPaperHeight.reset();
+    mxPaperOrientation.reset();
+    mxMarginSelectBox.reset();
+    mxCustomEntry.reset();
 
     maMetricController.dispose();
     maPaperOrientationController.dispose();
@@ -143,25 +143,22 @@ void PageFormatPanel::dispose()
 
 void PageFormatPanel::Initialize()
 {
-    mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Std );
-    mpPaperSizeBox->SetDropDownLineCount(6);
+    mxPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Std );
     meUnit = maPaperSizeController.GetCoreMetric();
-    SetFieldUnit( *mpPaperWidth, meFUnit );
-    SetFieldUnit( *mpPaperHeight, meFUnit );
+    mxPaperWidth->SetFieldUnit(meFUnit);
+    mxPaperHeight->SetFieldUnit(meFUnit);
     SetMarginFieldUnit();
-    aCustomEntry = mpCustomEntry->GetText();
+    aCustomEntry = mxCustomEntry->get_label();
 
     const SvtOptionsDrawinglayer aDrawinglayerOpt;
-    mpPaperWidth->SetMax(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
-    mpPaperWidth->SetLast(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
-    mpPaperHeight->SetMax(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
-    mpPaperHeight->SetLast(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
+    mxPaperWidth->set_max(mxPaperWidth->normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
+    mxPaperHeight->set_max(mxPaperHeight->normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
 
-    mpPaperSizeBox->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
-    mpPaperOrientation->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
-    mpPaperHeight->SetModifyHdl( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
-    mpPaperWidth->SetModifyHdl( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
-    mpMarginSelectBox->SetSelectHdl( LINK(this, PageFormatPanel, PaperModifyMarginHdl));
+    mxPaperSizeBox->connect_changed( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
+    mxPaperOrientation->connect_changed( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
+    mxPaperHeight->connect_value_changed( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
+    mxPaperWidth->connect_value_changed( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
+    mxMarginSelectBox->connect_changed( LINK(this, PageFormatPanel, PaperModifyMarginHdl));
 
     mpBindings->Update(SID_ATTR_METRIC);
     mpBindings->Update(SID_ATTR_PAGE);
@@ -188,14 +185,14 @@ void PageFormatPanel::NotifyItemUpdate(
             {
                 Size aPaperSize = pSizeItem->GetSize();
 
-                mpPaperWidth->SetValue( mpPaperWidth->Normalize( aPaperSize.Width() ), FieldUnit::TWIP );
-                mpPaperHeight->SetValue( mpPaperHeight->Normalize( aPaperSize.Height() ), FieldUnit::TWIP );
+                mxPaperWidth->set_value(mxPaperWidth->normalize(aPaperSize.Width()), FieldUnit::TWIP);
+                mxPaperHeight->set_value(mxPaperHeight->normalize(aPaperSize.Height()), FieldUnit::TWIP);
 
-                if(mpPaperOrientation->GetSelectedEntryPos() == 1)
+                if(mxPaperOrientation->get_active() == 1)
                    Swap(aPaperSize);
 
                 Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit);
-                mpPaperSizeBox->SetSelection( ePaper );
+                mxPaperSizeBox->SetSelection( ePaper );
             }
         }
         break;
@@ -206,8 +203,8 @@ void PageFormatPanel::NotifyItemUpdate(
             if (eFUnit != meFUnit)
             {
                 meFUnit = eFUnit;
-                SetFieldUnit( *mpPaperHeight, meFUnit );
-                SetFieldUnit( *mpPaperWidth, meFUnit );
+                mxPaperHeight->SetFieldUnit(meFUnit);
+                mxPaperWidth->SetFieldUnit(meFUnit);
                 SetMarginFieldUnit();
                 UpdateMarginBox();
             }
@@ -220,9 +217,9 @@ void PageFormatPanel::NotifyItemUpdate(
             {
                 mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
                 if ( mpPageItem->IsLandscape() )
-                    mpPaperOrientation->SelectEntryPos(1);
+                    mxPaperOrientation->set_active(1);
                 else
-                    mpPaperOrientation->SelectEntryPos(0);
+                    mxPaperOrientation->set_active(0);
             }
         }
         break;
@@ -251,36 +248,36 @@ void PageFormatPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
+IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, weld::ComboBox&, void)
 {
-    Paper ePaper = mpPaperSizeBox->GetSelection();
+    Paper ePaper = mxPaperSizeBox->GetSelection();
     Size  aSize;
 
     if(ePaper!=PAPER_USER)
        aSize = SvxPaperInfo::GetPaperSize(ePaper, meUnit);
     else
-       aSize = Size(GetCoreValue( *mpPaperWidth, meUnit ), GetCoreValue( *mpPaperHeight, meUnit));
+       aSize = Size(mxPaperWidth->GetCoreValue(meUnit), mxPaperHeight->GetCoreValue(meUnit));
 
-    if(mpPaperOrientation->GetSelectedEntryPos() == 1 || ePaper==PAPER_USER)
+    if (mxPaperOrientation->get_active() == 1 || ePaper==PAPER_USER)
         Swap(aSize);
 
-    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectedEntryPos() == 1);
+    mpPageItem->SetLandscape(mxPaperOrientation->get_active() == 1);
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG(PageFormatPanel, PaperSizeModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(PageFormatPanel, PaperSizeModifyHdl, weld::MetricSpinButton&, void)
 {
-    Size aSize( GetCoreValue( *mpPaperWidth, meUnit ), GetCoreValue( *mpPaperHeight, meUnit));
+    Size aSize(mxPaperWidth->GetCoreValue(meUnit), mxPaperHeight->GetCoreValue(meUnit));
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
 }
 
-IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
+IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, weld::ComboBox&, void)
 {
     bool bMirrored = false;
     bool bApplyNewPageMargins = true;
-    switch ( mpMarginSelectBox->GetSelectedEntryPos() )
+    switch (mxMarginSelectBox->get_active())
     {
         case 0:
             SetNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
@@ -376,52 +373,62 @@ void PageFormatPanel::UpdateMarginBox()
     mnPageTopMargin = mpPageULMarginItem->GetUpper();
     mnPageBottomMargin = mpPageULMarginItem->GetLower();
 
+    int nCustomEntry = mxMarginSelectBox->find_text(aCustomEntry);
+
     bool bMirrored = (mpPageItem->GetPageUsage() == SvxPageUsage::Mirror);
     if( IsNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(0);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(0);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(1);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(1);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(2);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(2);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(3);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(3);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(4);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(4);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(5);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(5);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(6);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(6);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else if( IsMirrored(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
-        mpMarginSelectBox->SelectEntryPos(7);
-        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+        mxMarginSelectBox->set_active(7);
+        if (nCustomEntry != -1)
+            mxMarginSelectBox->remove(nCustomEntry);
     }
     else
     {
-        if(mpMarginSelectBox->GetEntryPos(aCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
-            mpMarginSelectBox->InsertEntry(aCustomEntry);
-        mpMarginSelectBox->SelectEntry(aCustomEntry);
+        if (nCustomEntry == -1)
+            mxMarginSelectBox->append_text(aCustomEntry);
+        mxMarginSelectBox->set_active_text(aCustomEntry);
     }
 }
 
