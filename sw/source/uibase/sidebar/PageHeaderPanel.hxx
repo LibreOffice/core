@@ -28,9 +28,6 @@
 
 #include <svx/rulritem.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>

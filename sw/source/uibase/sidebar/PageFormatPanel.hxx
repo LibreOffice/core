@@ -29,8 +29,6 @@
 #include <svx/rulritem.hxx>
 #include <svx/papersizelistbox.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/relfld.hxx>

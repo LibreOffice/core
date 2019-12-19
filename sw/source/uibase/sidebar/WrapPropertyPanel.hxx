@@ -20,12 +20,9 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_WRAPPROPERTYPANEL_HXX
 
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <vcl/lstbox.hxx>
-#include <svx/spacinglistbox.hxx>
+#include <vcl/weld.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -56,17 +53,6 @@ namespace sw { namespace sidebar {
         css::uno::Reference< css::frame::XFrame > mxFrame;
         SfxBindings* mpBindings;
 
-        VclPtr<RadioButton> mpRBNoWrap;
-        VclPtr<RadioButton> mpRBWrapLeft;
-        VclPtr<RadioButton> mpRBWrapRight;
-        VclPtr<RadioButton> mpRBWrapParallel;
-        VclPtr<RadioButton> mpRBWrapThrough;
-        VclPtr<RadioButton> mpRBIdealWrap;
-        VclPtr<Button>      mpEditContour;
-        VclPtr<CheckBox> mpEnableContour;
-        VclPtr<SpacingListBox>  mpSpacingLB;
-        VclPtr<FixedText> mpCustomEntry;
-
         //Spacing
         sal_uInt16 nTop;
         sal_uInt16 nBottom;
@@ -87,14 +73,25 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;
         ::sfx2::sidebar::ControllerItem maSwULSpacingControl;
 
+        std::unique_ptr<weld::RadioButton> mxRBNoWrap;
+        std::unique_ptr<weld::RadioButton> mxRBWrapLeft;
+        std::unique_ptr<weld::RadioButton> mxRBWrapRight;
+        std::unique_ptr<weld::RadioButton> mxRBWrapParallel;
+        std::unique_ptr<weld::RadioButton> mxRBWrapThrough;
+        std::unique_ptr<weld::RadioButton> mxRBIdealWrap;
+        std::unique_ptr<weld::Button> mxEditContour;
+        std::unique_ptr<weld::CheckButton> mxEnableContour;
+        std::unique_ptr<weld::ComboBox> mxSpacingLB;
+        std::unique_ptr<weld::Label> mxCustomEntry;
+
         void Initialize();
         void UpdateEditContour();
         void UpdateSpacingLB();
 
-        DECL_LINK(WrapTypeHdl, Button*, void);
-        DECL_LINK(EnableContourHdl, Button*, void);
-        DECL_LINK(EditContourHdl, Button*, void);
-        DECL_LINK(SpacingLBHdl, ListBox&, void);
+        DECL_LINK(WrapTypeHdl, weld::ToggleButton&, void);
+        DECL_LINK(EnableContourHdl, weld::ToggleButton&, void);
+        DECL_LINK(EditContourHdl, weld::Button&, void);
+        DECL_LINK(SpacingLBHdl, weld::ComboBox&, void);
     };
 
 } } // end of namespace ::sw::sidebar
