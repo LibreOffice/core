@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f7c97a3_2f4502b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-19T10:21:37Z",
+      "side": 1,
+      "message": "A proper word would be \"predefined\".",
+      "range": {
+        "startLine": 12,
+        "startChar": 17,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "61a35135ae808d92179067ed73d2bc8a4ad6a434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_b2c0a052",
         "filename": "basic/qa/vba_tests/Err.Raise.vb",
         "patchSetId": 9
