@@ -67,12 +67,12 @@ private:
 
     SfxBindings* mpBindings;
 
-    VclPtr<PaperSizeListBox> mpPaperSizeBox;
-    VclPtr<SvxRelativeField> mpPaperWidth;
-    VclPtr<SvxRelativeField> mpPaperHeight;
-    VclPtr<ListBox> mpPaperOrientation;
-    VclPtr<ListBox> mpMarginSelectBox;
-    VclPtr<FixedText> mpCustomEntry;
+    std::unique_ptr<SvxPaperSizeListBox> mxPaperSizeBox;
+    std::unique_ptr<RelativeField> mxPaperWidth;
+    std::unique_ptr<RelativeField> mxPaperHeight;
+    std::unique_ptr<weld::ComboBox> mxPaperOrientation;
+    std::unique_ptr<weld::ComboBox> mxMarginSelectBox;
+    std::unique_ptr<weld::Label> mxCustomEntry;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
@@ -98,9 +98,9 @@ private:
     void UpdateMarginBox();
     void ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin );
     void ExecuteMarginULChange( const long nPageTopMargin, const long  nPageBottomMargin);
-    DECL_LINK(PaperFormatModifyHdl, ListBox&, void);
-    DECL_LINK(PaperSizeModifyHdl, Edit&, void);
-    DECL_LINK(PaperModifyMarginHdl, ListBox&, void );
+    DECL_LINK(PaperFormatModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(PaperSizeModifyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(PaperModifyMarginHdl, weld::ComboBox&, void );
 };
 
 } } //end of namespace sw::sidebar
