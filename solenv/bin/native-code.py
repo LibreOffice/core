@@ -499,7 +499,6 @@ custom_widgets = [
     'SearchResultsBox',
     'SidebarDialControl',
     'SidebarToolBox',
-    'SpacingListBox',
     'Svx3DPreviewControl',
     'SvxCharViewControl',
     'SvxColorListBox',

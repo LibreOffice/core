@@ -21,20 +21,15 @@
 #define INCLUDED_SVX_SPACINGLISTBOXHELPER_HXX
 
 #include <svx/svxdllapi.h>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
 enum class SpacingType { SPACING_INCH, MARGINS_INCH, SPACING_CM, MARGINS_CM };
 
 /// Custom Widget ListBox to hold entries for Spacing & Margin settings of Header/Footer
-class SVX_DLLPUBLIC SpacingListBox final : public ListBox
+namespace SpacingListBox
 {
-public:
-    SpacingListBox( vcl::Window* pParent );
-    void Init(SpacingType eType);
-    static void Fill(SpacingType eType, weld::ComboBox&);
-    Size GetOptimalSize() const override;
-};
+    void SVX_DLLPUBLIC Fill(SpacingType eType, weld::ComboBox&);
+}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
