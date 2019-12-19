@@ -1,5 +1,5 @@
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
-index c2b26b4254..ef84f7902a 100644
+index c2b26b4254..e8ddbcc886 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp
 +++ b/tools/sk_app/VulkanWindowContext.cpp
 @@ -24,8 +24,10 @@
@@ -271,7 +271,7 @@ index c2b26b4254..ef84f7902a 100644
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -411,41 +429,55 @@ VulkanWindowContext::~VulkanWindowContext() {
+@@ -411,41 +429,59 @@ VulkanWindowContext::~VulkanWindowContext() {
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -299,18 +299,22 @@ index c2b26b4254..ef84f7902a 100644
 +
 +    checkDestroyShared();
 +}
- 
--    if (VK_NULL_HANDLE != fDevice) {
--        fDestroyDevice(fDevice, nullptr);
--        fDevice = VK_NULL_HANDLE;
++
 +void VulkanWindowContext::checkDestroyShared()
 +{
 +    if(!fGlobalShared || !fGlobalShared->unique()) // TODO mutex?
 +        return;
++#ifndef SK_TRACE_VK_RESOURCES
++    if(!fGlobalShared->fContext->unique())
++        return;
++#endif
 +    SkASSERT(fGlobalShared->fContext->unique());
 +    fGlobalShared->fContext.reset();
 +    fGlobalShared->fInterface.reset();
-+
+ 
+-    if (VK_NULL_HANDLE != fDevice) {
+-        fDestroyDevice(fDevice, nullptr);
+-        fDevice = VK_NULL_HANDLE;
 +    if (VK_NULL_HANDLE != fGlobalShared->fDevice) {
 +        fGlobalShared->fDestroyDevice(fGlobalShared->fDevice, nullptr);
 +        fGlobalShared->fDevice = VK_NULL_HANDLE;
@@ -340,7 +344,7 @@ index c2b26b4254..ef84f7902a 100644
  }
  
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
-@@ -471,35 +503,35 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
+@@ -471,35 +507,35 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
      semaphoreInfo.pNext = nullptr;
      semaphoreInfo.flags = 0;
      VkSemaphore semaphore;
@@ -382,7 +386,7 @@ index c2b26b4254..ef84f7902a 100644
              return nullptr;
          }
      }
-@@ -543,4 +575,6 @@ void VulkanWindowContext::swapBuffers() {
+@@ -543,4 +579,6 @@ void VulkanWindowContext::swapBuffers() {
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
  
