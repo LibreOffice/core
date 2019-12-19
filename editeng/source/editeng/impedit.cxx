@@ -867,6 +867,23 @@ void ImpEditView::CalcAnchorPoint()
     }
 }
 
+namespace
+{
+
+// Build JSON message to be sent to Online
+OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("text", sText);
+    aTree.put("link", sLink);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree, false);
+
+    return OString(aStream.str().c_str()).trim();
+}
+
+} // End of anon namespace
+
 void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 {
     // No ShowCursor in an empty View ...
@@ -1121,21 +1138,34 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             }
             else
             {
+
                 // is cursor at a mispelled word ?
                 Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
-
                 OString sHyperlink;
+
                 if (const SvxFieldItem* pFld = GetField(aPos, nullptr, nullptr))
                 {
                     if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
                     {
-                        boost::property_tree::ptree aTree;
-                        aTree.put("text", pUrlField->GetRepresentation());
-                        aTree.put("link", pUrlField->GetURL());
-                        std::stringstream aStream;
-                        boost::property_tree::write_json(aStream, aTree, false);
-                        sHyperlink = OString(aStream.str().c_str()).trim();
+                        sHyperlink = buildHyperlinkJSON(pUrlField->GetRepresentation(), pUrlField->GetURL());
+                    }
+                }
+                else if (GetEditSelection().HasRange())
+                {
+                    EditView* pActiveView = GetEditViewPtr();
+
+                    if (pActiveView)
+                    {
+                        const SvxFieldItem* pFieldItem = pActiveView->GetFieldAtSelection();
+                        if (pFieldItem)
+                        {
+                            const SvxFieldData* pField = pFieldItem->GetField();
+                            if ( auto pUrlField = dynamic_cast<const SvxURLField*>( pField) )
+                            {
+                                sHyperlink = buildHyperlinkJSON(pUrlField->GetRepresentation(), pUrlField->GetURL());
+                            }
+                        }
                     }
                 }
 
