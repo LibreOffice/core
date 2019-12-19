@@ -31,6 +31,7 @@ public:
     OString msProducer;
     OString msKeywords;
     sal_Int32 mnPDF_A;
+    bool mbPDF_UA;
 
 public:
     XmpMetadata();

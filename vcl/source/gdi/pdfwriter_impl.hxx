@@ -982,6 +982,10 @@ i12626
     bool            m_bIsPDF_A1;
     /* true if PDF/A-2a is output */
     bool            m_bIsPDF_A2;
+
+    /* PDF/UA support enabled */
+    bool m_bIsPDF_UA;
+
     PDFWriter&      m_rOuterFace;
 
     /*
