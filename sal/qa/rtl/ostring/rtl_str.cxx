@@ -496,7 +496,7 @@ namespace rtl_str
                 OString aStr1 = "replace char.";
                 OString aShouldStr1 = "ruplacu char.";
 
-                sal_Char* pStr = (sal_Char*) malloc(aStr1.getLength() + 1);
+                char* pStr = (char*) malloc(aStr1.getLength() + 1);
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
@@ -534,7 +534,7 @@ namespace rtl_str
                 OString aStr1 = "replace char.";
                 OString aShouldStr1 = "ruplace char.";
 
-                sal_Char* pStr = (sal_Char*) malloc(aStr1.getLength() + 1);
+                char* pStr = (char*) malloc(aStr1.getLength() + 1);
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
@@ -569,7 +569,7 @@ namespace rtl_str
                 OString aStr1 = "CHANGE THIS TO ASCII LOWER CASE.";
                 OString aShouldStr1 = "change this to ascii lower case.";
 
-                sal_Char* pStr = (sal_Char*) malloc(aStr1.getLength() + 1);
+                char* pStr = (char*) malloc(aStr1.getLength() + 1);
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
@@ -603,7 +603,7 @@ namespace rtl_str
                 OString aStr1 = "CHANGE THIS TO ASCII LOWER CASE.";
                 OString aShouldStr1 = "change thiS TO ASCII LOWER CASE.";
 
-                sal_Char* pStr = (sal_Char*) malloc(aStr1.getLength() + 1);
+                char* pStr = (char*) malloc(aStr1.getLength() + 1);
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
@@ -638,7 +638,7 @@ namespace rtl_str
                 OString aStr1 = "change this to ascii upper case.";
                 OString aShouldStr1 = "CHANGE THIS TO ASCII UPPER CASE.";
 
-                sal_Char* pStr = (sal_Char*) malloc(aStr1.getLength() + 1);
+                char* pStr = (char*) malloc(aStr1.getLength() + 1);
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
@@ -672,7 +672,7 @@ namespace rtl_str
                 OString aStr1 = "change this to ascii lower case.";
                 OString aShouldStr1 = "CHANGE THIs to ascii lower case.";
 
-                sal_Char* pStr = (sal_Char*) malloc(aStr1.getLength() + 1);
+                char* pStr = (char*) malloc(aStr1.getLength() + 1);
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
 
                 strcpy(pStr, aStr1.getStr());
@@ -711,7 +711,7 @@ namespace rtl_str
         void trim_WithLength_001()
         {
             char const *pStr = "  trim this";
-            sal_Char *pStr2 = strdup(pStr);
+            char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, 2 );
@@ -724,7 +724,7 @@ namespace rtl_str
         void trim_WithLength_002()
         {
             char const *pStr = "trim this";
-            sal_Char *pStr2 = strdup(pStr);
+            char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, 5 );
@@ -737,7 +737,7 @@ namespace rtl_str
         void trim_WithLength_003()
         {
             char const *pStr = "     trim   this";
-            sal_Char *pStr2 = strdup(pStr);
+            char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
@@ -751,7 +751,7 @@ namespace rtl_str
         void trim_WithLength_004()
         {
             char const *pStr = "\r\n\t \n\r    trim  \n this";
-            sal_Char *pStr2 = strdup(pStr);
+            char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, 17 );
@@ -764,7 +764,7 @@ namespace rtl_str
         void trim_WithLength_005()
         {
             char const *pStr = "\r\n\t \n\r    trim \t this \n\r\t\t     ";
-            sal_Char *pStr2 = strdup(pStr);
+            char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, strlen(pStr2) );
@@ -799,7 +799,7 @@ namespace rtl_str
             }
         void valueOfChar_001()
             {
-                sal_Char *pStr = (sal_Char*)malloc(RTL_STR_MAX_VALUEOFCHAR);
+                char *pStr = (char*)malloc(RTL_STR_MAX_VALUEOFCHAR);
                 if (pStr)
                 {
                     rtl_str_valueOfChar(pStr, 'A');

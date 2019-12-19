@@ -42,11 +42,11 @@ using namespace ::com::sun::star::i18n;
 
 namespace sax {
 
-static const sal_Char* const gpsMM = "mm";
-static const sal_Char* const gpsCM = "cm";
-static const sal_Char* const gpsPT = "pt";
-static const sal_Char* const gpsINCH = "in";
-static const sal_Char* const gpsPC = "pc";
+static const char* const gpsMM = "mm";
+static const char* const gpsCM = "cm";
+static const char* const gpsPT = "pt";
+static const char* const gpsINCH = "in";
+static const char* const gpsPC = "pc";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
@@ -125,8 +125,8 @@ bool Converter::convertMeasure( sal_Int32& rValue,
             OSL_ENSURE( MeasureUnit::TWIP == nTargetUnit || MeasureUnit::POINT == nTargetUnit ||
                         MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit ||
                         MeasureUnit::PIXEL == nTargetUnit, "unit is not supported");
-            const sal_Char *aCmpsL[3] = { nullptr, nullptr, nullptr };
-            const sal_Char *aCmpsU[3] = { nullptr, nullptr, nullptr };
+            const char *aCmpsL[3] = { nullptr, nullptr, nullptr };
+            const char *aCmpsU[3] = { nullptr, nullptr, nullptr };
             double aScales[3] = { 1., 1., 1. };
 
             if( MeasureUnit::TWIP == nTargetUnit )
@@ -219,10 +219,10 @@ bool Converter::convertMeasure( sal_Int32& rValue,
             for( sal_uInt16 i= 0; i < 3; i++ )
             {
                 sal_Int32 nTmp = nPos; // come back to the initial position before each iteration
-                const sal_Char *pL = aCmpsL[i];
+                const char *pL = aCmpsL[i];
                 if( pL )
                 {
-                    const sal_Char *pU = aCmpsU[i];
+                    const char *pU = aCmpsU[i];
                     while( nTmp < nLen && *pL )
                     {
                         sal_Unicode c = rString[nTmp];
@@ -291,7 +291,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     long nMul = 1000;
     long nDiv = 1;
     long nFac = 100;
-    const sal_Char* psUnit = nullptr;
+    const char* psUnit = nullptr;
     switch( nSourceUnit )
     {
     case MeasureUnit::TWIP:
@@ -492,7 +492,7 @@ bool Converter::convertColor( sal_Int32& rColor, const OUString& rValue )
     return true;
 }
 
-static const sal_Char aHexTab[] = "0123456789abcdef";
+static const char aHexTab[] = "0123456789abcdef";
 
 /** convert color to string */
 void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )
@@ -1883,7 +1883,7 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
 
     if(nSourceUnit != nTargetUnit)
     {
-        const sal_Char* psUnit = nullptr;
+        const char* psUnit = nullptr;
 
         switch(nSourceUnit)
         {

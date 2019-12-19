@@ -257,13 +257,13 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
     sal_Unicode cHighSurrogate = m_cHighSurrogate;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
-    sal_Char* pDestBufPtr = pDestBuf;
-    sal_Char* pDestBufEnd = pDestBuf + nDestBytes;
+    char* pDestBufPtr = pDestBuf;
+    char* pDestBufEnd = pDestBuf + nDestBytes;
     for (; nConverted < nSrcChars; ++nConverted)
     {
         bool bUndefined = true;
         sal_uInt32 c = *pSrcBuf++;
-        sal_Char cSpecialChar = 0;
+        char cSpecialChar = 0;
         if (cHighSurrogate == 0)
         {
             if (ImplIsHighSurrogate(c))
@@ -383,7 +383,7 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
                 {
                     goto no_output;
                 }
-                *pDestBufPtr++ = static_cast< sal_Char >(
+                *pDestBufPtr++ = static_cast< char >(
                     ranges[i].byte + (c - ranges[i].unicode));
                 m_cPrevChar = c;
                 goto done;

@@ -127,7 +127,7 @@ namespace {
         }
 
         sal_Size convert(
-            sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
+            sal_Unicode const * pSrcBuf, sal_Size nSrcChars, char * pDstBuf, sal_Size nDstBytes,
             sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
         {
             OSL_ASSERT(m_converter != nullptr);
@@ -885,7 +885,7 @@ namespace
         }
 
         sal_Size convert(
-            sal_Char const * pSrcBuf, sal_Size nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
+            char const * pSrcBuf, sal_Size nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
             sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
         {
             OSL_ASSERT(m_converter != nullptr);

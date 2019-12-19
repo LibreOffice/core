@@ -376,7 +376,7 @@ static bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
 
 /** construct error message
 */
-static OString outputError(const OString & returnVal, const OString & rightVal, const sal_Char * msg = "")
+static OString outputError(const OString & returnVal, const OString & rightVal, const char * msg = "")
 {
     if (returnVal == rightVal)
         return OString();
@@ -2202,7 +2202,7 @@ namespace osl_File
         void ctors_002()
         {
             File testFile(aTmpName5);
-            sal_Char buffer[30] = "Test for File constructor";
+            char buffer[30] = "Test for File constructor";
             sal_uInt64 nCount;
 
             osl::FileBase::RC nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
@@ -2313,8 +2313,8 @@ namespace osl_File
         void open_006()
         {
             File testFile(aCanURL1);
-            sal_Char buffer_write[30] = "Test for File open";
-            sal_Char buffer_read[30];
+            char buffer_write[30] = "Test for File open";
+            char buffer_read[30];
             sal_uInt64 nCount_write, nCount_read;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
@@ -2459,7 +2459,7 @@ namespace osl_File
         void setPos_001()
         {
             File testFile(aTmpName4);
-            sal_Char buffer_read[2];
+            char buffer_read[2];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2477,7 +2477,7 @@ namespace osl_File
         void setPos_002()
         {
             File testFile(aTmpName4);
-            sal_Char buffer_read[2];
+            char buffer_read[2];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2497,7 +2497,7 @@ namespace osl_File
         void setPos_003()
         {
             File testFile(aTmpName4);
-            sal_Char buffer_read[2];
+            char buffer_read[2];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2836,7 +2836,7 @@ namespace osl_File
         {
             File testFile(aTmpName4);
             sal_uInt64 nFilePointer;
-            sal_Char buffer_read[10];
+            char buffer_read[10];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2859,7 +2859,7 @@ namespace osl_File
         {
             File testFile(aTmpName4);
             sal_uInt64 nFilePointer;
-            sal_Char buffer_read[26];
+            char buffer_read[26];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2922,7 +2922,7 @@ namespace osl_File
         {
             File testFile(aTmpName6);
             sal_uInt64 nFilePointer;
-            sal_Char buffer_read[10];
+            char buffer_read[10];
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
@@ -2978,7 +2978,7 @@ namespace osl_File
 
             // write some strings into the file.
             File testFile(aTmpName6);
-            sal_Char ppStrSeq[3][27]  =  { "abcde\n",
+            char ppStrSeq[3][27]  =  { "abcde\n",
                                         "1234567890\n",
                                         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                       };

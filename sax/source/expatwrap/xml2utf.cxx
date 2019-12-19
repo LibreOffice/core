@@ -476,7 +476,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
     sal_Int32 nSeqSize =  nSourceSize * 3;
 
     Sequence<sal_Int8>  seqText( nSeqSize );
-    sal_Char *pTarget = reinterpret_cast<char *>(seqText.getArray());
+    char *pTarget = reinterpret_cast<char *>(seqText.getArray());
     while( true ) {
 
         nTargetCount += rtl_convertUnicodeToText(

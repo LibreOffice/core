@@ -61,7 +61,7 @@ FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::
 {
     // random initial size of buffer to store attribute values
     mnChunkLength = 58;
-    mpChunk = static_cast<sal_Char *>(malloc( mnChunkLength ));
+    mpChunk = static_cast<char *>(malloc( mnChunkLength ));
     maAttributeValues.push_back( 0 );
 }
 
@@ -78,7 +78,7 @@ void FastAttributeList::clear()
     maUnknownAttributes.clear();
 }
 
-void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength )
+void FastAttributeList::add( sal_Int32 nToken, const char* pValue, size_t nValueLength )
 {
     assert(nToken != -1);
     maAttributeTokens.push_back( nToken );
@@ -87,7 +87,7 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nV
     if (maAttributeValues.back() > mnChunkLength)
     {
         const sal_Int32 newLen = std::max(mnChunkLength * 2, maAttributeValues.back());
-        if (auto p = static_cast<sal_Char*>(realloc(mpChunk, newLen)))
+        if (auto p = static_cast<char*>(realloc(mpChunk, newLen)))
         {
             mnChunkLength = newLen;
             mpChunk = p;
@@ -99,7 +99,7 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nV
     mpChunk[nWritePosition + nValueLength] = '\0';
 }
 
-void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue )
+void FastAttributeList::add( sal_Int32 nToken, const char* pValue )
 {
     add( nToken, pValue, strlen( pValue ));
 }

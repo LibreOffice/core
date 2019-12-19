@@ -28,7 +28,7 @@ namespace rptui
     // = ConditionalExpression
 
 
-    ConditionalExpression::ConditionalExpression( const sal_Char* _pAsciiPattern )
+    ConditionalExpression::ConditionalExpression( const char* _pAsciiPattern )
         :m_sPattern( OUString::createFromAscii( _pAsciiPattern ) )
     {
     }

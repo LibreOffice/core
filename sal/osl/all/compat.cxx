@@ -150,7 +150,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
     std::abort();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_logfile_trace( const sal_Char*, ... ) {
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_logfile_trace( const char*, ... ) {
     std::abort();
 }
 

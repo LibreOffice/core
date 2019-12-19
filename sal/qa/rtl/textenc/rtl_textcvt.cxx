@@ -45,12 +45,12 @@ struct SingleByteCharSet {
 };
 
 void testSingleByteCharSet(SingleByteCharSet const & rSet) {
-    sal_Char aText[256];
+    char aText[256];
     sal_Unicode aUnicode[256];
     sal_Size nNumber = 0;
     for (int i = 0; i < 256; ++i) {
         if (rSet.m_aMap[i] != 0xFFFF) {
-            aText[nNumber++] = static_cast< sal_Char >(i);
+            aText[nNumber++] = static_cast< char >(i);
         }
     }
     {
@@ -126,7 +126,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
         int j = 0;
         for (int i = 0; i < 256; ++i) {
             if (rSet.m_aMap[i] != 0xFFFF
-                && aText[j] != static_cast< sal_Char >(i))
+                && aText[j] != static_cast< char >(i))
             {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(OUString("rSet.m_aMap[" + OUString::number(i) + "] == " +
                                                                   OUString::number(rSet.m_aMap[i], 16)),
@@ -135,7 +135,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(OUString("aText[" + OUString::number(j) + "] == " +
                                                                   OUString::number(i, 16)),
                                                          RTL_TEXTENCODING_UTF8).getStr(),
-                                       static_cast< sal_Char >(i), aText[j]);
+                                       static_cast< char >(i), aText[j]);
             }
             if (rSet.m_aMap[i] != 0xFFFF)
                 j++;
@@ -143,7 +143,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
     }
     for (int i = 0; i < 256; ++i) {
         if (rSet.m_aMap[i] == 0xFFFF) {
-            aText[0] = static_cast< sal_Char >(i);
+            aText[0] = static_cast< char >(i);
             rtl_TextToUnicodeConverter aConverter
                 = rtl_createTextToUnicodeConverter(rSet.m_nEncoding);
             CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + ") failed"),
@@ -205,7 +205,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         sal_Size nConverted;
         nSize = rtl_convertTextToUnicode(
             aConverter, aContext,
-            reinterpret_cast< sal_Char const * >(rTest.m_pText),
+            reinterpret_cast< char const * >(rTest.m_pText),
             rTest.m_nTextSize, aUnicode, TEST_STRING_SIZE,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -260,7 +260,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                 sal_Size nConverted;
                 sal_Size nSize = rtl_convertTextToUnicode(
                     aConverter, aContext,
-                    reinterpret_cast< sal_Char const * >(rTest.m_pText + nInput),
+                    reinterpret_cast< char const * >(rTest.m_pText + nInput),
                     nSrcBytes, aUnicode + nOutput, TEST_STRING_SIZE - nOutput,
                     nFlags, &nInfo, &nConverted);
                 nOutput += nSize;
@@ -295,7 +295,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
             if (i == rTest.m_nTextSize) {
                 goto done;
             }
-            sal_Char c1 = rTest.m_pText[i++];
+            char c1 = rTest.m_pText[i++];
             sal_Unicode aUC[2];
             sal_uInt32 nInfo = 0;
             sal_Size nCvtBytes;
@@ -308,7 +308,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                     RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0)),
                 &nInfo, &nCvtBytes);
             if ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0) {
-                sal_Char sBuffer[10];
+                char sBuffer[10];
                 sBuffer[0] = c1;
                 sal_uInt16 nLen = 1;
                 while ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0
@@ -366,7 +366,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         }
     }
     if (rTest.m_bReverse) {
-        sal_Char aText[TEST_STRING_SIZE];
+        char aText[TEST_STRING_SIZE];
         rtl_UnicodeToTextConverter aConverter
             = rtl_createUnicodeToTextConverter(rTest.m_nEncoding);
         CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rTest.m_nEncoding)) + ") failed"),
@@ -419,7 +419,7 @@ void doComplexCharSetCutTest(ComplexCharSetTest const & rTest) {
         sal_uInt32 nInfo;
         sal_Size nConverted;
         nSize = rtl_convertTextToUnicode(
-            aConverter, nullptr, reinterpret_cast< sal_Char const * >(rTest.m_pText),
+            aConverter, nullptr, reinterpret_cast< char const * >(rTest.m_pText),
             rTest.m_nTextSize, aUnicode, TEST_STRING_SIZE,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR

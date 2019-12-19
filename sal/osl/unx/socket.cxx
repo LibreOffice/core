@@ -263,25 +263,25 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
 
 static oslSocketAddr osl_psz_createInetSocketAddr (
-    const sal_Char* pszDottedAddr, sal_Int32 Port);
+    const char* pszDottedAddr, sal_Int32 Port);
 
 static oslHostAddr osl_psz_createHostAddr (
-    const sal_Char *pszHostname, const oslSocketAddr Addr);
+    const char *pszHostname, const oslSocketAddr Addr);
 
 static oslHostAddr osl_psz_createHostAddrByName (
-    const sal_Char *pszHostname);
+    const char *pszHostname);
 
-static const sal_Char* osl_psz_getHostnameOfHostAddr (
+static const char* osl_psz_getHostnameOfHostAddr (
     const oslHostAddr Addr);
 
 static oslSocketAddr osl_psz_resolveHostname (
-    const sal_Char* pszHostname);
+    const char* pszHostname);
 
 static sal_Int32 osl_psz_getServicePort (
-    const sal_Char* pszServicename, const sal_Char* pszProtocol);
+    const char* pszServicename, const char* pszProtocol);
 
 static void osl_psz_getLastSocketErrorDescription (
-    oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize);
+    oslSocket Socket, char* pBuffer, sal_uInt32 BufferSize);
 
 static oslSocket createSocketImpl(int Socket)
 {
@@ -478,7 +478,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 {
     rtl_String* strDottedAddr=nullptr;
     oslSocketAddr Addr;
-    sal_Char* pszDottedAddr=nullptr;
+    char* pszDottedAddr=nullptr;
 
     if ( ustrDottedAddr != nullptr )
     {
@@ -501,7 +501,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 }
 
 oslSocketAddr osl_psz_createInetSocketAddr (
-    const sal_Char* pszDottedAddr,
+    const char* pszDottedAddr,
     sal_Int32       Port)
 {
     oslSocketAddr pAddr = nullptr;
@@ -590,7 +590,7 @@ struct oslAddrInfo
 };
 
 }
-static bool isFullQualifiedDomainName (const sal_Char *pHostName)
+static bool isFullQualifiedDomainName (const char *pHostName)
 {
     /* a FQDN (aka 'hostname.domain.top_level_domain' )
      * is a name which contains a dot '.' in it ( would
@@ -599,9 +599,9 @@ static bool isFullQualifiedDomainName (const sal_Char *pHostName)
     return strchr( pHostName, int('.') ) != nullptr;
 }
 
-static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
+static char* getFullQualifiedDomainName (const char *pHostName)
 {
-    sal_Char  *pFullQualifiedName = nullptr;
+    char  *pFullQualifiedName = nullptr;
 
     if (isFullQualifiedDomainName(pHostName))
     {
@@ -619,7 +619,7 @@ static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
 
 struct oslHostAddrImpl
 {
-    sal_Char        *pHostName;
+    char        *pHostName;
     oslSocketAddr   pSockAddr;
 };
 
@@ -628,7 +628,7 @@ static oslHostAddr addrinfoToHostAddr (const addrinfo* ai)
     if (!ai || !ai->ai_canonname || !ai->ai_addr)
         return nullptr;
 
-    sal_Char* cn = getFullQualifiedDomainName(ai->ai_canonname);
+    char* cn = getFullQualifiedDomainName(ai->ai_canonname);
     SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
     if (cn == nullptr)
         return nullptr;
@@ -681,7 +681,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 {
     oslHostAddr HostAddr;
     rtl_String* strHostname=nullptr;
-    sal_Char* pszHostName=nullptr;
+    char* pszHostName=nullptr;
 
     if ( ustrHostname != nullptr )
     {
@@ -704,11 +704,11 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 }
 
 oslHostAddr osl_psz_createHostAddr (
-    const sal_Char     *pszHostname,
+    const char     *pszHostname,
     const oslSocketAddr pAddr)
 {
     oslHostAddr pHostAddr;
-    sal_Char            *cn;
+    char            *cn;
 
     SAL_WARN_IF( !pszHostname, "sal.osl", "undefined hostname" );
     SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
@@ -738,7 +738,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 {
     oslHostAddr HostAddr;
     rtl_String* strHostname=nullptr;
-    sal_Char* pszHostName=nullptr;
+    char* pszHostName=nullptr;
 
     if ( ustrHostname != nullptr )
     {
@@ -760,7 +760,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
     return HostAddr;
 }
 
-oslHostAddr osl_psz_createHostAddrByName (const sal_Char *pszHostname)
+oslHostAddr osl_psz_createHostAddrByName (const char *pszHostname)
 {
     oslAddrInfo aAddrInfo(pszHostname, /* isInet */ true);
 
@@ -786,7 +786,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         if (res != 0)
             return nullptr;
 
-        sal_Char *cn = getFullQualifiedDomainName(host);
+        char *cn = getFullQualifiedDomainName(host);
         SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
         if (cn == nullptr)
             return nullptr;
@@ -832,12 +832,12 @@ void SAL_CALL osl_getHostnameOfHostAddr (
     const oslHostAddr   Addr,
     rtl_uString       **ustrHostname)
 {
-    const sal_Char* pHostname = osl_psz_getHostnameOfHostAddr(Addr);
+    const char* pHostname = osl_psz_getHostnameOfHostAddr(Addr);
 
     rtl_uString_newFromAscii (ustrHostname, pHostname);
 }
 
-const sal_Char* osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
+const char* osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
 {
     if (pAddr)
         return pAddr->pHostName;
@@ -868,7 +868,7 @@ void SAL_CALL osl_destroyHostAddr (oslHostAddr pAddr)
 oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
 {
     static auto const init = []() -> std::pair<oslSocketResult, OUString> {
-            sal_Char LocalHostname[256] = "";
+            char LocalHostname[256] = "";
 
 #ifdef SYSV
             struct utsname uts;
@@ -894,7 +894,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
                 /* no, determine it via dns */
                 Addr = osl_psz_createHostAddrByName(LocalHostname);
 
-                const sal_Char *pStr;
+                const char *pStr;
                 if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != nullptr)
                 {
                     strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
@@ -920,7 +920,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
 {
     oslSocketAddr Addr;
     rtl_String* strHostname=nullptr;
-    sal_Char* pszHostName=nullptr;
+    char* pszHostName=nullptr;
 
     if ( ustrHostname != nullptr )
     {
@@ -942,7 +942,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
     return Addr;
 }
 
-oslSocketAddr osl_psz_resolveHostname(const sal_Char* pszHostname)
+oslSocketAddr osl_psz_resolveHostname(const char* pszHostname)
 {
     struct oslHostAddrImpl *pAddr = osl_psz_createHostAddrByName(pszHostname);
 
@@ -963,8 +963,8 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString 
     sal_Int32 nPort;
     rtl_String* strServicename=nullptr;
     rtl_String* strProtocol=nullptr;
-    sal_Char* pszServiceName=nullptr;
-    sal_Char* pszProtocol=nullptr;
+    char* pszServiceName=nullptr;
+    char* pszProtocol=nullptr;
 
     if ( ustrServicename != nullptr )
     {
@@ -1001,8 +1001,8 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString 
     return nPort;
 }
 
-sal_Int32 osl_psz_getServicePort(const sal_Char* pszServicename,
-                        const sal_Char* pszProtocol)
+sal_Int32 osl_psz_getServicePort(const char* pszServicename,
+                        const char* pszProtocol)
 {
     struct servent* ps;
 
@@ -2075,7 +2075,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
 
 void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **ustrError)
 {
-    sal_Char pszError[1024];
+    char pszError[1024];
 
     pszError[0] = '\0';
 
@@ -2084,7 +2084,7 @@ void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **
     rtl_uString_newFromAscii(ustrError,pszError);
 }
 
-void osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char* pBuffer, sal_uInt32 BufferSize)
+void osl_psz_getLastSocketErrorDescription(oslSocket pSocket, char* pBuffer, sal_uInt32 BufferSize)
 {
     /* make sure pBuffer will be a zero-terminated string even when strncpy has to cut */
     pBuffer[BufferSize-1]= '\0';

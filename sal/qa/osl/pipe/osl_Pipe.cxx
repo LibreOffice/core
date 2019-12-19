@@ -749,7 +749,7 @@ namespace osl_StreamPipe
     class Pipe_DataSink_Thread : public Thread
     {
     public:
-        sal_Char buf[256];
+        char buf[256];
         Pipe_DataSink_Thread( ) { }
 
     protected:
@@ -787,7 +787,7 @@ namespace osl_StreamPipe
     class Pipe_DataSource_Thread : public Thread
     {
     public:
-        sal_Char buf[256];
+        char buf[256];
         ::osl::Pipe aListenPipe;
         ::osl::StreamPipe aConnectionPipe;
         Pipe_DataSource_Thread( )

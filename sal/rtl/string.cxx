@@ -43,7 +43,7 @@ static rtl_String const aImplEmpty_rtl_String =
     SAL_STRING_STATIC_FLAG|1,
             /* sal_Int32    refCount;   */
     0,      /* sal_Int32    length;     */
-    { 0 }   /* sal_Char     buffer[1];  */
+    { 0 }   /* char     buffer[1];  */
 };
 
 /* ======================================================================= */
@@ -54,7 +54,7 @@ static rtl_String const aImplEmpty_rtl_String =
 
 #define IMPL_RTL_IS_USTRING         0
 
-#define IMPL_RTL_STRCODE            sal_Char
+#define IMPL_RTL_STRCODE            char
 #define IMPL_RTL_USTRCODE( c )      (static_cast<unsigned char>(c))
 #define IMPL_RTL_STRNAME( n )       rtl_str_ ## n
 
@@ -81,7 +81,7 @@ static rtl_String const aImplEmpty_rtl_String =
 #undef IMPL_RTL_USTRCODE
 #undef RTL_LOG_STRING_BITS
 
-sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
+sal_Int32 SAL_CALL rtl_str_valueOfFloat(char * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
@@ -93,12 +93,12 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
         true);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
-    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
+    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(char));
     rtl_string_release(pResult);
     return nLen;
 }
 
-sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
+sal_Int32 SAL_CALL rtl_str_valueOfDouble(char * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
     assert(pStr);
@@ -110,19 +110,19 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
         0, true);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
-    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
+    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(char));
     rtl_string_release(pResult);
     return nLen;
 }
 
-float SAL_CALL rtl_str_toFloat(sal_Char const * pStr) SAL_THROW_EXTERN_C()
+float SAL_CALL rtl_str_toFloat(char const * pStr) SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     return static_cast<float>(rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
                                            '.', 0, nullptr, nullptr));
 }
 
-double SAL_CALL rtl_str_toDouble(sal_Char const * pStr) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_str_toDouble(char const * pStr) SAL_THROW_EXTERN_C()
 {
     assert(pStr);
     return rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr), '.', 0,
@@ -219,7 +219,7 @@ static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                the buffer faster */
             if ( nNewLen == static_cast<sal_Size>(nLength) )
             {
-                sal_Char* pBuffer;
+                char* pBuffer;
                 if ( *pTarget )
                     rtl_string_release( *pTarget );
                 *pTarget = rtl_string_ImplAlloc( nLength );
@@ -231,7 +231,7 @@ static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                     OSL_ENSURE( *pSource <= 127,
                                 "rtl_uString2String() - UTF8 test is encoding is wrong" );
 
-                    *pBuffer = static_cast<sal_Char>(static_cast<unsigned char>(*pSource));
+                    *pBuffer = static_cast<char>(static_cast<unsigned char>(*pSource));
                     pBuffer++;
                     pSource++;
                     nLength--;

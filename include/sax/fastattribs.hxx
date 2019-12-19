@@ -83,8 +83,8 @@ public:
         maAttributeValues.reserve(nNumTokens+1);
         maAttributeTokens.reserve(nNumTokens);
     }
-    void add( sal_Int32 nToken, const sal_Char* pValue );
-    void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength );
+    void add( sal_Int32 nToken, const char* pValue );
+    void add( sal_Int32 nToken, const char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
     // note: rQName is *namespace-prefixed*
@@ -200,7 +200,7 @@ public:
     FastAttributeIter find( sal_Int32 nToken ) const;
 
 private:
-    sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings
+    char     *mpChunk; ///< buffer to store all attribute values - null terminated strings
     sal_Int32 mnChunkLength; ///< size of allocated memory for mpChunk
     // maAttributeValues stores pointers, relative to mpChunk, for each attribute value string
     // length of the string is maAttributeValues[n+1] - maAttributeValues[n] - 1

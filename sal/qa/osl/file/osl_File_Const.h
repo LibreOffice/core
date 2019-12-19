@@ -56,9 +56,9 @@ extern "C"
 // so, a common test data repository will be better since it can be
 // shared among all test code
 
-const sal_Char pBuffer_Char[]   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const sal_Char pBuffer_Number[] = "1234567890";
-const sal_Char pBuffer_Blank[]  = "";
+const char pBuffer_Char[]   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const char pBuffer_Number[] = "1234567890";
+const char pBuffer_Blank[]  = "";
 
 // OS dependent/independent definitions/includes
 // we use FILE_PREFIX for URL prefix,

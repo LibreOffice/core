@@ -87,7 +87,7 @@ struct StringTraits
     typedef rtl_String String;
 
     static void createString(rtl_String ** pString,
-                                    sal_Char const * pChars, sal_Int32 nLen)
+                                    char const * pChars, sal_Int32 nLen)
     {
         rtl_string_newFromStr_WithLength(pString, pChars, nLen);
     }
@@ -99,7 +99,7 @@ struct StringTraits
     }
 
     static void appendChars(rtl_String ** pBuffer, sal_Int32 * pCapacity,
-                                   sal_Int32 * pOffset, sal_Char const * pChars,
+                                   sal_Int32 * pOffset, char const * pChars,
                                    sal_Int32 nLen)
     {
         assert(pChars);
@@ -108,7 +108,7 @@ struct StringTraits
     }
 
     static void appendAscii(rtl_String ** pBuffer, sal_Int32 * pCapacity,
-                                   sal_Int32 * pOffset, sal_Char const * pStr,
+                                   sal_Int32 * pOffset, char const * pStr,
                                    sal_Int32 nLen)
     {
         assert(pStr);
@@ -146,7 +146,7 @@ struct UStringTraits
 
     static void appendAscii(rtl_uString ** pBuffer,
                                    sal_Int32 * pCapacity, sal_Int32 * pOffset,
-                                   sal_Char const * pStr, sal_Int32 nLen)
+                                   char const * pStr, sal_Int32 nLen)
     {
         rtl_uStringbuffer_insert_ascii(pBuffer, pCapacity, *pOffset, pStr,
                                        nLen);
@@ -727,9 +727,9 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
                                       sal_Int32 nResultOffset, double fValue,
                                       rtl_math_StringFormat eFormat,
                                       sal_Int32 nDecPlaces,
-                                      sal_Char cDecSeparator,
+                                      char cDecSeparator,
                                       sal_Int32 const * pGroups,
-                                      sal_Char cGroupSeparator,
+                                      char cGroupSeparator,
                                       sal_Bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C()
 {
@@ -1060,12 +1060,12 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
 
 }
 
-double SAL_CALL rtl_math_stringToDouble(sal_Char const * pBegin,
-                                        sal_Char const * pEnd,
-                                        sal_Char cDecSeparator,
-                                        sal_Char cGroupSeparator,
+double SAL_CALL rtl_math_stringToDouble(char const * pBegin,
+                                        char const * pEnd,
+                                        char cDecSeparator,
+                                        char cGroupSeparator,
                                         rtl_math_ConversionStatus * pStatus,
-                                        sal_Char const ** pParsedEnd)
+                                        char const ** pParsedEnd)
     SAL_THROW_EXTERN_C()
 {
     return stringToDouble(

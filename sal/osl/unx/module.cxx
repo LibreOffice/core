@@ -139,7 +139,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 /* osl_loadModuleAscii */
 /*****************************************************************************/
 
-oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode)
+oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode)
 {
     SAL_WARN_IF(
         ((nRtldMode & SAL_LOADMODULE_LAZY) != 0
@@ -277,7 +277,7 @@ osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 /* osl_getAsciiFunctionSymbol */
 /*****************************************************************************/
 oslGenericFunction SAL_CALL
-osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
+osl_getAsciiFunctionSymbol(oslModule Module, const char *pSymbol)
 {
     return reinterpret_cast<oslGenericFunction>(getSymbol(Module, pSymbol));
         // requires conditionally-supported conversion from void * to function
