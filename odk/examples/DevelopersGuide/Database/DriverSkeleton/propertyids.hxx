@@ -65,11 +65,11 @@ namespace skeleton
     };
 
 
-        typedef const sal_Char* (*PVFN)();
+        typedef const char* (*PVFN)();
 
         struct UStringDescription
         {
-            const sal_Char* pZeroTerminatedName;
+            const char* pZeroTerminatedName;
             sal_Int32 nLength;
 
             UStringDescription(PVFN _fCharFkt);

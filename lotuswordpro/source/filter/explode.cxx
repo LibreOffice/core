@@ -334,7 +334,7 @@ sal_Int32 Decompression::explode()
  * @descr   bits to string
  * @return
  */
-void Decompression::ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen)
+void Decompression::ToString(sal_uInt32 nBits, char *pChar, sal_uInt32 nLen)
 {
     sal_uInt32 nBit;
     for (sal_uInt32 i=nLen; i > 0; i--)
@@ -364,7 +364,7 @@ sal_uInt32 Decompression::Decode(HuffmanTreeNode * pRoot)
 
         nReadAlready  = (nReadAlready << 1) | (nRead & 0x01);
 
-        sal_Char sCode[16];
+        char sCode[16];
         ToString(nReadAlready, sCode, i);
         nRet = pRoot->QueryValue(sCode);
         if (nRet != 0xffffffff)
@@ -456,13 +456,13 @@ HuffmanTreeNode::~HuffmanTreeNode()
 {
 }
 
-HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char * pInCode)
+HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const char * pInCode)
 {
     HuffmanTreeNode *pNew = new HuffmanTreeNode(nValue);
     std::string aCode(pInCode);
 
     // query its parents
-    const sal_Char cLast = aCode.back();
+    const char cLast = aCode.back();
     aCode.pop_back();
     HuffmanTreeNode * pParent = QueryNode(aCode.c_str());
     if (!pParent)
@@ -477,14 +477,14 @@ HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char 
     return pNew;
 }
 
-HuffmanTreeNode * HuffmanTreeNode::QueryNode(const sal_Char * pCode)
+HuffmanTreeNode * HuffmanTreeNode::QueryNode(const char * pCode)
 {
     sal_uInt32 nLen = strlen(pCode);
 
     HuffmanTreeNode * pNode = this; // this is the root
     for(sal_uInt32 i=0; i<nLen && pNode; i++)
     {
-        sal_Char cChar= pCode[i];
+        char cChar= pCode[i];
         if (cChar == '0')
         {
             pNode = pNode->left.get();
@@ -497,7 +497,7 @@ HuffmanTreeNode * HuffmanTreeNode::QueryNode(const sal_Char * pCode)
     return pNode;
 }
 
-sal_uInt32 HuffmanTreeNode::QueryValue(const sal_Char * pCode)
+sal_uInt32 HuffmanTreeNode::QueryValue(const char * pCode)
 {
     HuffmanTreeNode * pNode =QueryNode(pCode);
     if (pNode)

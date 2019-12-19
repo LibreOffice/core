@@ -61,7 +61,7 @@
 #include <memory>
 #include "xfbase64.hxx"
 
-const  sal_Char aBase64EncodeTable[] =
+const  char aBase64EncodeTable[] =
 { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -72,7 +72,7 @@ const  sal_Char aBase64EncodeTable[] =
  * @descr   Encode 3 byte to 4 byte.
  *          Please refer to RFC to get the base64 algorithm.
  */
-static void Encode_(const sal_uInt8 *src, sal_Char* dest)
+static void Encode_(const sal_uInt8 *src, char* dest)
 {
     sal_Int32 nBinaer = (src[ 0] << 16) +
         (src[1] <<  8) +
@@ -96,7 +96,7 @@ static void Encode_(const sal_uInt8 *src, sal_Char* dest)
  */
 OUString XFBase64::Encode(sal_uInt8 const *buf, sal_Int32 len)
 {
-    std::unique_ptr<sal_Char[]> buffer;
+    std::unique_ptr<char[]> buffer;
     sal_Int32   nNeeded;
     sal_Int32   cycles = len/3;
     sal_Int32   remain = len%3;
@@ -105,7 +105,7 @@ OUString XFBase64::Encode(sal_uInt8 const *buf, sal_Int32 len)
         nNeeded = cycles*4;
     else
         nNeeded = (cycles+1)*4;
-    buffer.reset(new sal_Char[nNeeded+1]);
+    buffer.reset(new char[nNeeded+1]);
 
     memset(buffer.get(), 0, nNeeded+1);
 

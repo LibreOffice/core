@@ -97,7 +97,7 @@ void    XFTextContent::ToXml(IXFStream *pStrm)
                 pStrm->Characters(sSubString.copy(0,nIndex));
             for (j=nIndex+1;j<nSize-i;j++)
             {
-                if (sSubString[j] != sal_Char(' '))
+                if (sSubString[j] != ' ')
                     break;
             }
             IXFAttrList *pAttrList = pStrm->GetAttrList();

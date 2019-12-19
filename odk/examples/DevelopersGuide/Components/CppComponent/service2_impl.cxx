@@ -196,7 +196,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
+    char const * implName, lang::XMultiServiceFactory * xMgr,
     registry::XRegistryKey * xRegistry )
 {
     return ::cppu::component_getFactoryHelper(
