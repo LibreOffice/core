@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_6238f1d2",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3366,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2019-12-19T12:50:27Z",
+      "side": 1,
+      "message": "This will make it harder to special case anything else. I suppose we should add a different command for sidebar refresh. This will do for now.",
+      "revId": "69d626c9df1ad8094ba57063e3b9c4bb2a428f12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
