@@ -74,6 +74,7 @@
 #include <textlineinfo.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <impglyphitem.hxx>
+#include <pdf/XmpMetadata.hxx>
 
 #include "pdfwriter_impl.hxx"
 
@@ -5232,131 +5233,43 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
     if( updateObject( nObject ) )
     {
-        // the following string are written in UTF-8 unicode
-        OStringBuffer aMetadataStream( 8192 );
+        pdf::XmpMetadata aMetadata;
 
-        aMetadataStream.append( "<?xpacket begin=\"" );
-        // these lines write Unicode "zero width non-breaking space character" (U+FEFF)
-        // (aka byte-order mark ) used as a byte-order marker.
-        aMetadataStream.append( OUStringToOString( OUString( u'\xFEFF' ), RTL_TEXTENCODING_UTF8 ) );
-        aMetadataStream.append( "\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n" );
-        aMetadataStream.append( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" );
-        aMetadataStream.append( " <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" );
-        //PDF/A part ( ISO 19005-1:2005 - 6.7.11 )
-        aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
-        aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">\n" );
-        if( m_bIsPDF_A2 )
-        {
-            aMetadataStream.append( "   <pdfaid:part>2</pdfaid:part>\n" );
-            aMetadataStream.append( "   <pdfaid:conformance>B</pdfaid:conformance>\n" );
-        }
-        else
-        {
-            aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
-            aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
-        }
-        aMetadataStream.append( "  </rdf:Description>\n" );
-        //... Dublin Core properties go here
-        if( !m_aContext.DocumentInfo.Title.isEmpty() ||
-            !m_aContext.DocumentInfo.Author.isEmpty() ||
-            !m_aContext.DocumentInfo.Subject.isEmpty() )
-        {
-            aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
-            aMetadataStream.append( "      xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n" );
-            if( !m_aContext.DocumentInfo.Title.isEmpty() )
-            {
-                // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
-                aMetadataStream.append( "   <dc:title>\n" );
-                aMetadataStream.append( "    <rdf:Alt>\n" );
-                aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
-                OUString aTitle;
-                escapeStringXML( m_aContext.DocumentInfo.Title, aTitle );
-                aMetadataStream.append( OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 )  );
-                aMetadataStream.append( "</rdf:li>\n" );
-                aMetadataStream.append( "    </rdf:Alt>\n" );
-                aMetadataStream.append( "   </dc:title>\n" );
-            }
-            if( !m_aContext.DocumentInfo.Author.isEmpty() )
-            {
-                aMetadataStream.append( "   <dc:creator>\n" );
-                aMetadataStream.append( "    <rdf:Seq>\n" );
-                aMetadataStream.append( "     <rdf:li>" );
-                OUString aAuthor;
-                escapeStringXML( m_aContext.DocumentInfo.Author, aAuthor );
-                aMetadataStream.append( OUStringToOString( aAuthor , RTL_TEXTENCODING_UTF8 )  );
-                aMetadataStream.append( "</rdf:li>\n" );
-                aMetadataStream.append( "    </rdf:Seq>\n" );
-                aMetadataStream.append( "   </dc:creator>\n" );
-            }
-            if( !m_aContext.DocumentInfo.Subject.isEmpty() )
-            {
-                // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
-                aMetadataStream.append( "   <dc:description>\n" );
-                aMetadataStream.append( "    <rdf:Alt>\n" );
-                aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
-                OUString aSubject;
-                escapeStringXML( m_aContext.DocumentInfo.Subject, aSubject );
-                aMetadataStream.append( OUStringToOString( aSubject , RTL_TEXTENCODING_UTF8 )  );
-                aMetadataStream.append( "</rdf:li>\n" );
-                aMetadataStream.append( "    </rdf:Alt>\n" );
-                aMetadataStream.append( "   </dc:description>\n" );
-            }
-            aMetadataStream.append( "  </rdf:Description>\n" );
-        }
+        if (m_bIsPDF_A1)
+            aMetadata.mnPDF_A = 1;
+        else if (m_bIsPDF_A2)
+            aMetadata.mnPDF_A = 2;
 
-        //... PDF properties go here
-        if( !m_aContext.DocumentInfo.Producer.isEmpty() ||
-            !m_aContext.DocumentInfo.Keywords.isEmpty() )
+        if (!m_aContext.DocumentInfo.Title.isEmpty())
         {
-            aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
-            aMetadataStream.append( "     xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\">\n" );
-            if( !m_aContext.DocumentInfo.Producer.isEmpty() )
-            {
-                aMetadataStream.append( "   <pdf:Producer>" );
-                OUString aProducer;
-                escapeStringXML( m_aContext.DocumentInfo.Producer, aProducer );
-                aMetadataStream.append( OUStringToOString( aProducer , RTL_TEXTENCODING_UTF8 )  );
-                aMetadataStream.append( "</pdf:Producer>\n" );
-            }
-            if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
-            {
-                aMetadataStream.append( "   <pdf:Keywords>" );
-                OUString aKeywords;
-                escapeStringXML( m_aContext.DocumentInfo.Keywords, aKeywords );
-                aMetadataStream.append( OUStringToOString( aKeywords , RTL_TEXTENCODING_UTF8 )  );
-                aMetadataStream.append( "</pdf:Keywords>\n" );
-            }
-            aMetadataStream.append( "  </rdf:Description>\n" );
+            OUString aTempString;
+            escapeStringXML(m_aContext.DocumentInfo.Title, aTempString);
+            aMetadata.msTitle = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
         }
-
-        aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
-        aMetadataStream.append( "    xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\">\n" );
-        if( !m_aContext.DocumentInfo.Creator.isEmpty() )
+        if (!m_aContext.DocumentInfo.Author.isEmpty())
         {
-            aMetadataStream.append( "   <xmp:CreatorTool>" );
-            OUString aCreator;
-            escapeStringXML( m_aContext.DocumentInfo.Creator, aCreator );
-            aMetadataStream.append( OUStringToOString( aCreator , RTL_TEXTENCODING_UTF8 )  );
-            aMetadataStream.append( "</xmp:CreatorTool>\n" );
+            OUString aTempString;
+            escapeStringXML(m_aContext.DocumentInfo.Author, aTempString);
+            aMetadata.msAuthor = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
         }
-        //creation date
-        aMetadataStream.append( "   <xmp:CreateDate>" );
-        aMetadataStream.append( m_aCreationMetaDateString );
-        aMetadataStream.append( "</xmp:CreateDate>\n" );
-
-        aMetadataStream.append( "  </rdf:Description>\n" );
-        aMetadataStream.append( " </rdf:RDF>\n" );
-        aMetadataStream.append( "</x:xmpmeta>\n" );
-
-        //add the padding
-        for( sal_Int32 nSpaces = 1; nSpaces <= 2100; nSpaces++ )
+        if (!m_aContext.DocumentInfo.Subject.isEmpty())
         {
-            aMetadataStream.append( " " );
-            if( nSpaces % 100 == 0 )
-                aMetadataStream.append( "\n" );
+            OUString aTempString;
+            escapeStringXML(m_aContext.DocumentInfo.Subject, aTempString);
+            aMetadata.msSubject = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
         }
-
-        aMetadataStream.append( "<?xpacket end=\"w\"?>\n" );
+        if (!m_aContext.DocumentInfo.Producer.isEmpty())
+        {
+            OUString aTempString;
+            escapeStringXML(m_aContext.DocumentInfo.Producer, aTempString);
+            aMetadata.msProducer = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
+        }
+        if (!m_aContext.DocumentInfo.Keywords.isEmpty())
+        {
+            OUString aTempString;
+            escapeStringXML(m_aContext.DocumentInfo.Keywords, aTempString);
+            aMetadata.msKeywords = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
+        }
 
         OStringBuffer aMetadataObj( 1024 );
 
@@ -5365,12 +5278,12 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
         aMetadataObj.append( "<</Type/Metadata/Subtype/XML/Length " );
 
-        aMetadataObj.append( aMetadataStream.getLength() );
+        aMetadataObj.append( sal_Int32(aMetadata.getSize()) );
         aMetadataObj.append( ">>\nstream\n" );
         if ( !writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) )
             return 0;
         //emit the stream
-        if ( !writeBuffer( aMetadataStream.getStr(), aMetadataStream.getLength() ) )
+        if ( !writeBuffer( aMetadata.getData(), aMetadata.getSize() ) )
             return 0;
 
         aMetadataObj.setLength( 0 );
