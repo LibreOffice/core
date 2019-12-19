@@ -1734,7 +1734,7 @@ namespace emfio
                             {
                                 if ( nLen <= static_cast<sal_Int32>( mnEndPos - mpInputStream->Tell() ) )
                                 {
-                                    std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nLen ]);
+                                    std::unique_ptr<char[]> pBuf(new char[ nLen ]);
                                     mpInputStream->ReadBytes(pBuf.get(), nLen);
                                     aText = OUString(pBuf.get(), nLen, GetCharSet());
                                 }

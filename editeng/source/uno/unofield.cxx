@@ -499,7 +499,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const throw()
         else
             aContent = mpImpl->msString2;
 
-        sal_Int32 nPos = aContent.lastIndexOf( sal_Char(' '), 0 );
+        sal_Int32 nPos = aContent.lastIndexOf( ' ', 0 );
         if( nPos > 0 )
         {
             aFirstName = aContent.copy( 0, nPos );
