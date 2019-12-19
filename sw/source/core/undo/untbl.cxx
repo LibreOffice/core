@@ -1437,7 +1437,7 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
         m_TableStyleName = temp;
     }
     SaveTable* pOrig = new SaveTable( table );
-    // than go also over the ContentNodes of the EndBoxes and collect
+    // then go also over the ContentNodes of the EndBoxes and collect
     // all paragraph attributes
     if( bSaveContentAttr )
         pOrig->SaveContentAttrs( &rDoc );
