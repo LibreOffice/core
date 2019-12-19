@@ -1387,12 +1387,12 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
     }
 }
 
-Config::Config( const sal_Char* pcEnvVar, const FilterBase& rFilter )
+Config::Config( const char* pcEnvVar, const FilterBase& rFilter )
 {
     construct( pcEnvVar, rFilter );
 }
 
-Config::Config( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
+Config::Config( const char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
 {
     construct( pcEnvVar, rxContext, rxRootStrg, rSysFileName );
 }
@@ -1401,16 +1401,16 @@ Config::~Config()
 {
 }
 
-void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
+void Config::construct( const char* pcEnvVar, const FilterBase& rFilter )
 {
     if( !rFilter.getFileUrl().isEmpty() )
         construct( pcEnvVar, rFilter.getComponentContext(), rFilter.getStorage(), rFilter.getFileUrl() );
 }
 
-void Config::construct( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
+void Config::construct( const char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
 {
     if( pcEnvVar && rxRootStrg.get() && !rSysFileName.isEmpty() )
-        if( const sal_Char* pcFileName = ::getenv( pcEnvVar ) )
+        if( const char* pcFileName = ::getenv( pcEnvVar ) )
             mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName ) );
 }
 
@@ -1627,7 +1627,7 @@ void Output::writeChar( sal_Unicode cChar, sal_Int32 nCount )
     StringHelper::appendEncChar( maLine, cChar, nCount );
 }
 
-void Output::writeAscii( const sal_Char* pcStr )
+void Output::writeAscii( const char* pcStr )
 {
     if( pcStr )
         maLine.appendAscii( pcStr );
@@ -2150,7 +2150,7 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
     OUString aString;
     if( nDumpSize > 0 )
     {
-        ::std::vector< sal_Char > aBuffer( static_cast< std::size_t >( nLen ) + 1 );
+        ::std::vector< char > aBuffer( static_cast< std::size_t >( nLen ) + 1 );
         sal_Int32 nCharsRead = mxStrm->readMemory(aBuffer.data(), nLen);
         aBuffer[ nCharsRead ] = 0;
         aString = OStringToOUString(OString(aBuffer.data()), eTextEnc);

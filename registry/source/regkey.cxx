@@ -278,7 +278,7 @@ RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
 
 RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
                                                    rtl_uString* keyName,
-                                                   sal_Char** pValueList,
+                                                   char** pValueList,
                                                    sal_uInt32 len)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
@@ -490,7 +490,7 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
 
 RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
                                               rtl_uString* keyName,
-                                              sal_Char*** pValueList,
+                                              char*** pValueList,
                                               sal_uInt32* pLen)
 {
     OSL_PRECOND((pValueList != nullptr) && (pLen != nullptr), "registry::getStringListValue(): invalid parameter");
@@ -579,7 +579,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
             break;
         case RegValueType::STRINGLIST:
             {
-                sal_Char** pVList = static_cast<sal_Char**>(pValueList);
+                char** pVList = static_cast<char**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)
                 {
                     std::free(pVList[i]);

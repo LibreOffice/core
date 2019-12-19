@@ -377,11 +377,11 @@ class String : public OUString
 public:
                  String() {}
     /*implicit*/ String( const OUString& rStr ) : OUString( rStr ) {}
-    /*implicit*/ String( const sal_Char* pcStr ) : OUString( OUString::createFromAscii( pcStr ? pcStr : "" ) ) {}
+    /*implicit*/ String( const char* pcStr ) : OUString( OUString::createFromAscii( pcStr ? pcStr : "" ) ) {}
     /*implicit*/ String( sal_Unicode cChar ) : OUString( cChar ) {}
 
     bool         has() const { return getLength() > 0; }
-    OUString operator()( const sal_Char* pcDefault ) const { if( has() ) return *this; return String( pcDefault ); }
+    OUString operator()( const char* pcDefault ) const { if( has() ) return *this; return String( pcDefault ); }
 };
 
 static const String EMPTY_STRING;
@@ -722,7 +722,7 @@ class NameListWrapper
 public:
                  NameListWrapper() {}
     /*implicit*/ NameListWrapper( const OUString& rListName ) : maName( rListName ) {}
-    /*implicit*/ NameListWrapper( const sal_Char* pcListName ) : maName( pcListName ) {}
+    /*implicit*/ NameListWrapper( const char* pcListName ) : maName( pcListName ) {}
     /*implicit*/ NameListWrapper( const NameListRef& rxList ) : mxList( rxList ) {}
 
     bool         isEmpty() const { return !mxList && !maName.has(); }
@@ -833,10 +833,10 @@ class Config : public Base
 {
 public:
     explicit            Config(
-                            const sal_Char* pcEnvVar,
+                            const char* pcEnvVar,
                             const ::oox::core::FilterBase& rFilter );
     explicit            Config(
-                            const sal_Char* pcEnvVar,
+                            const char* pcEnvVar,
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
@@ -875,10 +875,10 @@ public:
 protected:
                         Config() {}
     void                construct(
-                            const sal_Char* pcEnvVar,
+                            const char* pcEnvVar,
                             const ::oox::core::FilterBase& rFilter );
     void                construct(
-                            const sal_Char* pcEnvVar,
+                            const char* pcEnvVar,
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
@@ -954,7 +954,7 @@ public:
     void                endMultiItems();
 
     void                writeChar( sal_Unicode cChar, sal_Int32 nCount = 1 );
-    void                writeAscii( const sal_Char* pcStr );
+    void                writeAscii( const char* pcStr );
     void                writeString( const OUString& rStr );
     void                writeArray( const sal_uInt8* pnData, std::size_t nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     void                writeBool( bool bData );

@@ -313,7 +313,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
             writeINT32(pBuffer.get()+VALUE_HEADEROFFSET, *static_cast<sal_Int32*>(value));
             break;
         case RegValueType::STRING:
-            writeUtf8(pBuffer.get()+VALUE_HEADEROFFSET, static_cast<const sal_Char*>(value));
+            writeUtf8(pBuffer.get()+VALUE_HEADEROFFSET, static_cast<const char*>(value));
             break;
         case RegValueType::UNICODE:
             writeString(pBuffer.get()+VALUE_HEADEROFFSET, static_cast<const sal_Unicode*>(value));
@@ -398,7 +398,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
 
 //  setStringListValue
 
-RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValueList, sal_uInt32 len)
+RegError ORegKey::setStringListValue(const OUString& valueName, char** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -589,7 +589,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
             readINT32(pBuffer.get(), *static_cast<sal_Int32*>(value));
             break;
         case RegValueType::STRING:
-            readUtf8(pBuffer.get(), static_cast<sal_Char*>(value), valueSize);
+            readUtf8(pBuffer.get(), static_cast<char*>(value), valueSize);
             break;
         case RegValueType::UNICODE:
             readString(pBuffer.get(), static_cast<sal_Unicode*>(value), valueSize);
@@ -714,7 +714,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
 //  getStringListValue
 
-RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pValueList, sal_uInt32* pLen) const
+RegError ORegKey::getStringListValue(const OUString& valueName, char*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -785,19 +785,19 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     readUINT32(pBuffer.get(), len);
 
     *pLen = len;
-    sal_Char** pVList = static_cast<sal_Char**>(rtl_allocateZeroMemory(len * sizeof(sal_Char*)));
+    char** pVList = static_cast<char**>(rtl_allocateZeroMemory(len * sizeof(char*)));
 
     sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
-    sal_Char *pValue;
+    char *pValue;
     for (sal_uInt32 i=0; i < len; i++)
     {
         readUINT32(pBuffer.get()+offset, sLen);
 
         offset += 4;
 
-        pValue = static_cast<sal_Char*>(std::malloc(sLen));
+        pValue = static_cast<char*>(std::malloc(sLen));
         readUtf8(pBuffer.get()+offset, pValue, sLen);
         pVList[i] = pValue;
 

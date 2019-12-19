@@ -191,7 +191,7 @@ inline sal_uInt32 writeUINT64(sal_uInt8* buffer, sal_uInt64 v)
     return sizeof(sal_uInt64);
 }
 
-inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const sal_Char* v)
+inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const char* v)
 {
     sal_uInt32 size = strlen(v) + 1;
 
@@ -200,7 +200,7 @@ inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const sal_Char* v)
     return size;
 }
 
-inline sal_uInt32 readUtf8(const sal_uInt8* buffer, sal_Char* v, sal_uInt32 maxSize)
+inline sal_uInt32 readUtf8(const sal_uInt8* buffer, char* v, sal_uInt32 maxSize)
 {
     sal_uInt32 size = strlen(reinterpret_cast<const char*>(buffer)) + 1;
     if(size > maxSize)

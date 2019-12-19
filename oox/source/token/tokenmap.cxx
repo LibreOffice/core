@@ -48,14 +48,14 @@ const css::uno::Sequence< sal_Int8 > TokenMap::EMPTY_BYTE_SEQ;
 TokenMap::TokenMap() :
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
-    static const sal_Char* sppcTokenNames[] =
+    static const char* sppcTokenNames[] =
     {
 // include auto-generated C array with token names as C strings
 #include <tokennames.inc>
         ""
     };
 
-    const sal_Char* const* ppcTokenName = sppcTokenNames;
+    const char* const* ppcTokenName = sppcTokenNames;
     for (auto & tokenName : maTokenNames)
     {
         OString aUtf8Token( *ppcTokenName );

@@ -37,7 +37,7 @@ sal_Int32 lValue1   = 123456789;
 sal_Int32 lValue2   = 54321;
 sal_Int32 lValue3   = 111333111;
 sal_Int32 lValue4   = 333111333;
-sal_Char* sValue    = (sal_Char*)"string Value";
+char* sValue        = (char*)"string Value";
 OUString wValue("unicode Value");
 
 
@@ -302,7 +302,7 @@ void test_merge()
     REG_ENSURE(valueType == RegValueType::STRING && valueSize == strlen(sValue)+1, "testMerge error 76");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey1/MK1SubKey2/KeyWithStringValue"), (RegValue)Value), "testMerge error 76.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 76.b)");
+    REG_ENSURE(strcmp((const char*)Value, sValue) == 0, "testMerge error 76.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey1/MK1SubKey3/KeyWithUnicodeValue"), &valueType, &valueSize), "testMerge error 77");
@@ -316,14 +316,14 @@ void test_merge()
     REG_ENSURE(valueType == RegValueType::BINARY && valueSize == 27, "testMerge error 80");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey1/MK1SubKey4/KeyWithBinaryValue"), (RegValue)Value), "testMerge error 80.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, "abcdefghijklmnopqrstuvwxyz") == 0, "testMerge error 80.b)");
+    REG_ENSURE(strcmp((const char*)Value, "abcdefghijklmnopqrstuvwxyz") == 0, "testMerge error 80.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey2/MK2SubKey1/KeyWithBinaryValue"), &valueType, &valueSize), "testMerge error 81");
     REG_ENSURE(valueType == RegValueType::BINARY && valueSize == 11, "testMerge error 82");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey2/MK2SubKey1/KeyWithBinaryValue"), (RegValue)Value), "testMerge error 82.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, "1234567890") == 0, "testMerge error 82.b)");
+    REG_ENSURE(strcmp((const char*)Value, "1234567890") == 0, "testMerge error 82.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey2/MK2SubKey2/KeyWithUnicodeValue"), &valueType, &valueSize), "testMerge error 83");
@@ -337,7 +337,7 @@ void test_merge()
     REG_ENSURE(valueType == RegValueType::STRING && valueSize == strlen(sValue)+1, "testMerge error 86");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey2/MK2SubKey3/KeyWithStringValue"), (RegValue)Value), "testMerge error 86.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 86.b)");
+    REG_ENSURE(strcmp((const char*)Value, sValue) == 0, "testMerge error 86.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey2/MK2SubKey4/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 87");
@@ -354,7 +354,7 @@ void test_merge()
     REG_ENSURE(valueType == RegValueType::STRING && valueSize == strlen(sValue)+1, "testMerge error 92");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey1u2/MK1SubKey12/KeyWithStringValue"), (RegValue)Value), "testMerge error 92.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 92.b)");
+    REG_ENSURE(strcmp((const char*)Value, sValue) == 0, "testMerge error 92.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey1u2/MK1SubKey13/KeyWithUnicodeValue"), &valueType, &valueSize), "testMerge error 93");
@@ -368,7 +368,7 @@ void test_merge()
     REG_ENSURE(valueType == RegValueType::BINARY && valueSize == 19, "testMerge error 96");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey1u2/MK2SubKey21/KeyWithBinaryValue"), (RegValue)Value), "testMerge error 96.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, "a1b2c3d4e5f6g7h8i9") == 0, "testMerge error 96.b)");
+    REG_ENSURE(strcmp((const char*)Value, "a1b2c3d4e5f6g7h8i9") == 0, "testMerge error 96.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey1u2/MK2SubKey22/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 97");
@@ -380,7 +380,7 @@ void test_merge()
     REG_ENSURE(valueType == RegValueType::STRING && valueSize == strlen(sValue)+1, "testMerge error 100");
     Value = new sal_uInt8[valueSize];
     REG_ENSURE(!key1.getValue(OUString("/MergeKey1u2/MK2SubKey23/KeyWithStringValue"), (RegValue)Value), "testMerge error 100.a)");
-    REG_ENSURE(strcmp((const sal_Char*)Value, sValue) == 0, "testMerge error 100.b)");
+    REG_ENSURE(strcmp((const char*)Value, sValue) == 0, "testMerge error 100.b)");
     delete [] Value;
 
     REG_ENSURE(!key1.getValueInfo(OUString("/MergeKey1u2/MK12SubKey1u2/KeyWithLongValue"), &valueType, &valueSize), "testMerge error 101");
