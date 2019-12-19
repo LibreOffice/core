@@ -41,7 +41,7 @@ namespace formula
 {
     using namespace ::com::sun::star;
 
-    static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
+    static const char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 namespace {
 

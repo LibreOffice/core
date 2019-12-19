@@ -343,12 +343,12 @@ static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 
 struct LocaleDataLookupTableItem
 {
-    const sal_Char* dllName;
+    const char* dllName;
     osl::Module *module;
-    const sal_Char* localeName;
+    const char* localeName;
     css::lang::Locale aLocale;
 
-    LocaleDataLookupTableItem(const sal_Char *name, osl::Module* m, const sal_Char* lname) : dllName(name), module(m), localeName(lname)
+    LocaleDataLookupTableItem(const char *name, osl::Module* m, const char* lname) : dllName(name), module(m), localeName(lname)
     {
     }
     bool equals(const css::lang::Locale& rLocale)
@@ -485,7 +485,7 @@ public:
     ~lcl_LookupTableHelper();
 
     oslGenericFunction getFunctionSymbolByName(
-            const OUString& localeName, const sal_Char* pFunction,
+            const OUString& localeName, const char* pFunction,
             std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem );
 
 private:
@@ -513,7 +513,7 @@ lcl_LookupTableHelper::~lcl_LookupTableHelper()
 }
 
 oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
-        const OUString& localeName, const sal_Char* pFunction,
+        const OUString& localeName, const char* pFunction,
         std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem )
 {
     OUString aFallback;
@@ -1427,7 +1427,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
 
 // helper functions
 
-oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
+oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, const char* pFunction )
 {
     lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 

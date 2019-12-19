@@ -157,7 +157,7 @@ TextToChuyin_zh_TW::TextToChuyin_zh_TW() :
 
 extern "C" { static void thisModule() {} }
 
-TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
+TextToPronounce_zh::TextToPronounce_zh(const char* func_name)
 {
 #ifdef SAL_DLLPREFIX
     OUString lib(SAL_DLLPREFIX"index_data" SAL_DLLEXTENSION);

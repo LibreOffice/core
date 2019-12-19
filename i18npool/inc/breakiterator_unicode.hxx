@@ -71,7 +71,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    const sal_Char *cBreakIterator, *lineRule;
+    const char *cBreakIterator, *lineRule;
 
     /** Used as map value. */
     struct BI_ValueData
@@ -98,7 +98,7 @@ protected:
 
     /// @throws css::uno::RuntimeException
     void loadICUBreakIterator(const css::lang::Locale& rLocale,
-        sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const OUString& rText);
+        sal_Int16 rBreakType, sal_Int16 rWordType, const char* name, const OUString& rText);
 
 public:
     typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData > > BIMap;

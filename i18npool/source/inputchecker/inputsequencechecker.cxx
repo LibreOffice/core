@@ -52,7 +52,7 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
     if (inputCheckMode == InputSequenceCheckMode::PASSTHROUGH)
         return true;
 
-    sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
+    char* language = getLanguageByScripType(Text[nStartPos], inputChar);
 
     if (language)
         return getInputSequenceChecker(language)->checkInputSequence(Text, nStartPos, inputChar, inputCheckMode);
@@ -65,7 +65,7 @@ InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartP
         sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {
     if (inputCheckMode != InputSequenceCheckMode::PASSTHROUGH) {
-        sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
+        char* language = getLanguageByScripType(Text[nStartPos], inputChar);
 
         if (language)
             return getInputSequenceChecker(language)->correctInputSequence(Text, nStartPos, inputChar, inputCheckMode);
@@ -83,7 +83,7 @@ static ScriptTypeList const typeList[] = {
     { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   sal_Int16(UnicodeScript_kScriptCount) }    // 88
 };
 
-sal_Char*
+char*
 InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar)
 {
     css::i18n::UnicodeScript type = static_cast<css::i18n::UnicodeScript>(unicode::getUnicodeScriptType( cChar, typeList, sal_Int16(UnicodeScript_kScriptCount) ));
@@ -91,10 +91,10 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
     if (type != UnicodeScript_kScriptCount &&
             type == static_cast<css::i18n::UnicodeScript>(unicode::getUnicodeScriptType( nChar, typeList, sal_Int16(UnicodeScript_kScriptCount) ))) {
         switch(type) {
-            case UnicodeScript_kThai:           return const_cast<sal_Char*>("th");
-                                                //case UnicodeScript_kArabic:       return (sal_Char*)"ar";
-                                                //case UnicodeScript_kHebrew:       return (sal_Char*)"he";
-            case UnicodeScript_kDevanagari:   return const_cast<sal_Char*>("hi");
+            case UnicodeScript_kThai:           return const_cast<char*>("th");
+                                                //case UnicodeScript_kArabic:       return (char*)"ar";
+                                                //case UnicodeScript_kHebrew:       return (char*)"he";
+            case UnicodeScript_kDevanagari:   return const_cast<char*>("hi");
             default: break;
         }
     }
@@ -102,7 +102,7 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
 }
 
 Reference< XExtendedInputSequenceChecker >&
-InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char const * rLanguage)
+InputSequenceCheckerImpl::getInputSequenceChecker(char const * rLanguage)
 {
     if (cachedItem && cachedItem->aLanguage == rLanguage) {
         return cachedItem->xISC;

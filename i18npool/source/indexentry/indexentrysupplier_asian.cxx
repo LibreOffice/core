@@ -165,7 +165,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
     sal_uInt16 **(*func)(sal_Int16*)=nullptr;
 #ifndef DISABLE_DYNLOADING
     if (hModule) {
-        const sal_Char *func_name=nullptr;
+        const char *func_name=nullptr;
         if ( rLocale.Language == "zh" )
             func_name=(OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
         else if ( rLocale.Language == "ko" )

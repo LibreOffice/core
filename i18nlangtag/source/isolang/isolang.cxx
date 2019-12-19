@@ -58,8 +58,8 @@ LanguageType getOverrideLang( LanguageType nLang, LanguageType nOverride )
 struct IsoLanguageCountryEntry
 {
     LanguageType  mnLang;
-    sal_Char      maLanguage[4];
-    sal_Char      maCountry[3];
+    char          maLanguage[4];
+    char          maCountry[3];
     LanguageType  mnOverride;
 
     /** Obtain a language tag string with '-' separator. */
@@ -72,8 +72,8 @@ struct IsoLanguageCountryEntry
 struct IsoLanguageScriptCountryEntry
 {
     LanguageType  mnLang;
-    sal_Char      maLanguageScript[9];      ///< "ll-Ssss" or "lll-Ssss"
-    sal_Char      maCountry[3];
+    char          maLanguageScript[9];      ///< "ll-Ssss" or "lll-Ssss"
+    char          maCountry[3];
     LanguageType  mnOverride;
 
     /** Obtain a language tag string with '-' separator. */
@@ -92,9 +92,9 @@ struct IsoLanguageScriptCountryEntry
 struct Bcp47CountryEntry
 {
     LanguageType    mnLang;
-    const sal_Char* mpBcp47;
-    sal_Char        maCountry[3];
-    const sal_Char* mpFallback;
+    const char*     mpBcp47;
+    char            maCountry[3];
+    const char*     mpFallback;
     LanguageType    mnOverride;
 
     /** Obtain a language tag string with '-' separator. */
@@ -108,21 +108,21 @@ namespace {
 
 struct IsoLangEngEntry
 {
-    LanguageType        mnLang;
-    sal_Char            maCountry[3];
+    LanguageType    mnLang;
+    char            maCountry[3];
 };
 
 struct IsoLangNoneStdEntry
 {
-    LanguageType        mnLang;
-    sal_Char            maLanguage[4];
-    sal_Char            maCountry[9];
+    LanguageType    mnLang;
+    char            maLanguage[4];
+    char            maCountry[9];
 };
 
 struct IsoLangOtherEntry
 {
-    LanguageType        mnLang;
-    const sal_Char*     mpLanguage;
+    LanguageType    mnLang;
+    const char*     mpLanguage;
 };
 
 }
@@ -1421,9 +1421,9 @@ namespace {
 struct IsoLangGLIBCModifiersEntry
 {
     LanguageType  mnLang;
-    sal_Char      maLanguage[4];
-    sal_Char      maCountry[3];
-    sal_Char      maAtString[9];
+    char          maLanguage[4];
+    char          maCountry[3];
+    char          maAtString[9];
 };
 
 }
@@ -1486,11 +1486,11 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         for (const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
                 pGLIBCModifiersEntry->mnLang != LANGUAGE_DONTKNOW; ++pGLIBCModifiersEntry)
         {                         // avoid embedded \0 warning
-            if (aLowerLang == static_cast< const char* >( pGLIBCModifiersEntry->maLanguage ) &&
-                aAtString == static_cast< const char* >( pGLIBCModifiersEntry->maAtString ))
+            if (aLowerLang == pGLIBCModifiersEntry->maLanguage &&
+                aAtString == pGLIBCModifiersEntry->maAtString )
             {
                 if (aUpperCountry.isEmpty() ||
-                    aUpperCountry == static_cast< const char* >( pGLIBCModifiersEntry->maCountry ))
+                    aUpperCountry == pGLIBCModifiersEntry->maCountry )
                 {
                     return pGLIBCModifiersEntry->mnLang;
                 }

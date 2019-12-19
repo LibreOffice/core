@@ -35,7 +35,7 @@ protected:
 
 public:
 #ifndef DISABLE_DYNLOADING
-        TextToPronounce_zh(const sal_Char* func_name);
+        TextToPronounce_zh(const char* func_name);
 #else
         TextToPronounce_zh(sal_uInt16 ** (*function)());
 #endif

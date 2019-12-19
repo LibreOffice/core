@@ -315,8 +315,8 @@ static OUString toRoman( sal_Int32 n )
 
 //              i, ii, iii, iv, v, vi, vii, vii, viii, ix
 //                                                      (Dummy),1000,500,100,50,10,5,1
-    static const sal_Char coRomanArr[] = "MDCLXVI--";       // +2 Dummy entries !!
-    const sal_Char* cRomanStr = coRomanArr;
+    static const char coRomanArr[] = "MDCLXVI--";       // +2 Dummy entries !!
+    const char* cRomanStr = coRomanArr;
     sal_uInt16 nMask = 1000;
     sal_uInt32 nOver1000 = n / nMask;
     n -= ( nOver1000 * nMask );
@@ -942,9 +942,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
 struct Supported_NumberingType
 {
-        sal_Int16               nType;
-        const sal_Char* cSymbol;
-        sal_Int16               langOption;
+        sal_Int16    nType;
+        const char*  cSymbol;
+        sal_Int16    langOption;
 };
 static const Supported_NumberingType aSupportedTypes[] =
 {

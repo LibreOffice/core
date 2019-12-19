@@ -66,11 +66,11 @@ public:
     css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 private:
-    const sal_Char* implementationName;
+    const char* implementationName;
 protected:
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;
-    oslGenericFunction getFunctionBySymbol(const sal_Char* func);
+    oslGenericFunction getFunctionBySymbol(const char* func);
 #endif
 };
 

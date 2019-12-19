@@ -78,7 +78,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    const sal_Char *   implementationName;
+    const char *       implementationName;
     bool               usePhonetic;
     rtl::Reference<CollatorImpl>
                        collator;

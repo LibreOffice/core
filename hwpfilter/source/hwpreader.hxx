@@ -288,7 +288,7 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames()
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * hwp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
+    SAL_DLLPUBLIC_EXPORT void * hwp_component_getFactory( const char * pImplName, void * pServiceManager, void *  )
     {
         void * pRet = nullptr;
 

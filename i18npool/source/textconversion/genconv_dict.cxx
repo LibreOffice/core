@@ -93,7 +93,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     // generate main dict. data array
     fprintf(cfp, "\nstatic const sal_Unicode Hangul2HanjaData[] = {");
 
-    sal_Char Cstr[1024];
+    char Cstr[1024];
     count = 0;
     address = 0;
     while (fgets(Cstr, 1024, sfp)) {
@@ -182,7 +182,7 @@ void make_stc_char(FILE *sfp, FILE *cfp)
         TChinese2SChineseData[i] = 0;
     }
 
-    sal_Char Cstr[1024];
+    char Cstr[1024];
     while (fgets(Cstr, 1024, sfp)) {
         // input file is in UTF-8 encoding (SChinese:TChinese)
         // don't convert last new line character to Ostr.
@@ -349,7 +349,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     std::vector<Index> STC_WordEntry_T2S(0x10000);
     sal_Int32 count_S2T = 0, count_T2S = 0;
     sal_Int32 line = 0, char_total = 0;
-    sal_Char Cstr[1024];
+    char Cstr[1024];
 
     while (fgets(Cstr, 1024, sfp)) {
         // input file is in UTF-8 encoding (SChinese:TChinese)

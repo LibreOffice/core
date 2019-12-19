@@ -85,7 +85,7 @@ class OOoRuleBasedBreakIterator : public icu::RuleBasedBreakIterator
 
 // loading ICU breakiterator on demand.
 void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocale,
-        sal_Int16 rBreakType, sal_Int16 nWordType, const sal_Char *rule, const OUString& rText)
+        sal_Int16 rBreakType, sal_Int16 nWordType, const char *rule, const OUString& rText)
 {
     bool bNewBreak = false;
     UErrorCode status = U_ZERO_ERROR;
@@ -130,8 +130,8 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
     aKeyBuf.append( aLangtagStr).append(';');
     if (rule)
         aKeyBuf.append(rule);
-    aKeyBuf.append(';').append( static_cast<sal_Char>('0'+breakType)).append(';').
-        append( static_cast<sal_Char>('0'+rBreakType)).append(';').append( static_cast<sal_Char>('0'+nWordType));
+    aKeyBuf.append(';').append( static_cast<char>('0'+breakType)).append(';').
+        append( static_cast<char>('0'+rBreakType)).append(';').append( static_cast<char>('0'+nWordType));
     // langtag;rule;breakType;rBreakType;nWordType
     const OString aBIMapGlobalKey( aKeyBuf.makeStringAndClear());
 

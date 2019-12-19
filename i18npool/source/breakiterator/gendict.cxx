@@ -112,7 +112,7 @@ static void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt3
 #else
     dataAreaOffset = ftell(source_fp);
 #endif
-    sal_Char str[1024];
+    char str[1024];
     sal_uInt32 lenArrayCurr = 0;
     sal_Unicode current = 0;
 

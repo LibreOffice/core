@@ -95,8 +95,8 @@ protected:
         foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) = 0;
 
         css::lang::Locale   aLocale;
-        const sal_Char* transliterationName;
-        const sal_Char* implementationName;
+        const char*         transliterationName;
+        const char*         implementationName;
 };
 
 }

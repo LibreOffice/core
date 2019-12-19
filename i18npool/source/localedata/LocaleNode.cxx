@@ -70,7 +70,7 @@ const LocaleNode* LocaleNode::getRoot() const
     return pRoot;
 }
 
-const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
+const LocaleNode * LocaleNode::findNode ( const char *name) const {
     if (aName.equalsAscii(name))
         return this;
     for (size_t i = 0; i< children.size(); i++)  {
@@ -1464,7 +1464,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
 
 
 static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode* currNode,
-        const sal_Char* elementTag, sal_Int16 i, sal_Int16 j )
+        const char* elementTag, sal_Int16 i, sal_Int16 j )
 {
     OUString aAbbrName = currNode->getChildAt(1)->getValue();
     OUString aFullName = currNode->getChildAt(2)->getValue();
@@ -1483,7 +1483,7 @@ static void lcl_writeAbbrFullNarrNames( const OFileWriter & of, const LocaleNode
     of.writeParameter( elementTag, "DefaultNarrowName", aNarrName, i, j);
 }
 
-static void lcl_writeTabTagString( const OFileWriter & of, const sal_Char* pTag, const sal_Char* pStr )
+static void lcl_writeTabTagString( const OFileWriter & of, const char* pTag, const char* pStr )
 {
     of.writeAsciiString("\t");
     of.writeAsciiString( pTag);
@@ -1491,14 +1491,14 @@ static void lcl_writeTabTagString( const OFileWriter & of, const sal_Char* pTag,
 }
 
 static void lcl_writeTabTagStringNums( const OFileWriter & of,
-        const sal_Char* pTag, const sal_Char* pStr, sal_Int16 i, sal_Int16 j )
+        const char* pTag, const char* pStr, sal_Int16 i, sal_Int16 j )
 {
     lcl_writeTabTagString( of, pTag, pStr);
     of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
 }
 
 static void lcl_writeAbbrFullNarrArrays( const OFileWriter & of, sal_Int16 nCount,
-        const sal_Char* elementTag, sal_Int16 i, bool bNarrow )
+        const char* elementTag, sal_Int16 i, bool bNarrow )
 {
     if (nCount == 0)
     {
@@ -1553,7 +1553,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         sal_Int16 nChild = 0;
 
         // Generate Days of Week
-        const sal_Char *elementTag;
+        const char *elementTag;
         LocaleNode * daysNode = nullptr;
         OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         ref_name = ref_name.replace( '-', '_');
@@ -1969,8 +1969,8 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
 namespace {
 
 struct NameValuePair {
-    const sal_Char *name;
-    const sal_Char *value;
+    const char *name;
+    const char *value;
 };
 
 }
@@ -2305,7 +2305,7 @@ Attr::Attr (const Reference< XAttributeList > & attr) {
     }
 }
 
-OUString Attr::getValueByName (const sal_Char *str) const {
+OUString Attr::getValueByName (const char *str) const {
     auto pName = std::find_if(std::cbegin(name), std::cend(name),
         [&str](const OUString& rName) { return rName.equalsAscii(str); });
     if (pName != std::cend(name))

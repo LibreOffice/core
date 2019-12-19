@@ -59,7 +59,7 @@ static void* nullFunc()
 }
 
 oslGenericFunction
-TextConversionService::getFunctionBySymbol(const sal_Char* func)
+TextConversionService::getFunctionBySymbol(const char* func)
 {
     if (hModule)
         return osl_getFunctionSymbol(hModule, OUString::createFromAscii(func).pData);

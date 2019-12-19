@@ -53,7 +53,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     result.append(sep);
     sal_Int32 max=0;
 
-    sal_Char str[1024];
+    char str[1024];
     while (fgets(str, 1024, fp)) {
         // don't convert last new line character to Ostr.
         sal_Int32 len = strlen(str) - 1;
