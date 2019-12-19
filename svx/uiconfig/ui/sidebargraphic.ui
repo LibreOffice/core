@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="0to100adjustment">
@@ -15,6 +15,30 @@
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="plusminus100adjustment">
+    <property name="lower">-100</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="plusminus100adjustment1">
+    <property name="lower">-100</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="plusminus100adjustment2">
+    <property name="lower">-100</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="plusminus100adjustment3">
+    <property name="lower">-100</property>
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="plusminus100adjustment4">
     <property name="lower">-100</property>
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -45,7 +69,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="sidebargraphic|brightnesslabel">_Brightness:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">setbrightness:%</property>
+                <property name="mnemonic_widget">setbrightness</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -54,17 +78,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="setbrightness:%">
+              <object class="GtkSpinButton" id="setbrightness">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setbrightness|tooltip_text">Specify the luminance of the graphic.</property>
                 <property name="adjustment">plusminus100adjustment</property>
-                <accessibility>
-                  <relation type="labelled-by" target="brightnesslabel"/>
-                </accessibility>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="setbrightness:%-atkobject">
+                  <object class="AtkObject" id="setbrightness-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setbrightness-atkobject">Brightness</property>
                   </object>
                 </child>
@@ -80,7 +101,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="sidebargraphic|contrastlabel">_Contrast:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">setcontrast:%</property>
+                <property name="mnemonic_widget">setcontrast</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -89,17 +110,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="setcontrast:%">
+              <object class="GtkSpinButton" id="setcontrast">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setcontrast|tooltip_text">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
-                <property name="adjustment">plusminus100adjustment</property>
-                <accessibility>
-                  <relation type="labelled-by" target="contrastlabel"/>
-                </accessibility>
+                <property name="adjustment">plusminus100adjustment1</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="setcontrast:%-atkobject">
+                  <object class="AtkObject" id="setcontrast-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setcontrast-atkobject">Contrast</property>
                   </object>
                 </child>
@@ -127,9 +145,6 @@
               <object class="GtkComboBoxText" id="setcolormode">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <accessibility>
-                  <relation type="labelled-by" target="colorlmodelabel"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setcolormode-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setcolormode-atkobject">Color mode</property>
@@ -147,7 +162,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="sidebargraphic|transparencylabel">_Transparency:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">setgraphtransparency:%</property>
+                <property name="mnemonic_widget">setgraphtransparency</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -156,17 +171,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="setgraphtransparency:%">
+              <object class="GtkSpinButton" id="setgraphtransparency">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgraphtransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="adjustment">0to100adjustment</property>
-                <accessibility>
-                  <relation type="labelled-by" target="transparencylabel"/>
-                </accessibility>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="setgraphtransparency:%-atkobject">
+                  <object class="AtkObject" id="setgraphtransparency-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgraphtransparency-atkobject">Transparency</property>
                   </object>
                 </child>
@@ -187,7 +199,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/AdjustColorRed_16x16.png</property>
+                    <property name="icon_name">svx/res/symphony/AdjustColorRed_16x16.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -196,14 +208,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="setred:%">
+                  <object class="GtkSpinButton" id="setred">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setred|tooltip_text">Red</property>
-                    <property name="adjustment">plusminus100adjustment</property>
+                    <property name="adjustment">plusminus100adjustment2</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="setred:%-atkobject">
+                      <object class="AtkObject" id="setred-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setred-atkobject">Red</property>
                       </object>
                     </child>
@@ -231,7 +243,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/AdjustColorGreen_16x16.png</property>
+                    <property name="icon_name">svx/res/symphony/AdjustColorGreen_16x16.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -240,14 +252,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="setgreen:%">
+                  <object class="GtkSpinButton" id="setgreen">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgreen|tooltip_text">Green</property>
-                    <property name="adjustment">plusminus100adjustment</property>
+                    <property name="adjustment">plusminus100adjustment3</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="setgreen:%-atkobject">
+                      <object class="AtkObject" id="setgreen-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgreen-atkobject">Green</property>
                       </object>
                     </child>
@@ -276,7 +288,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/AdjustColorBlue_16x16.png</property>
+                    <property name="icon_name">svx/res/symphony/AdjustColorBlue_16x16.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -285,14 +297,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="setblue:%">
+                  <object class="GtkSpinButton" id="setblue">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setblue|tooltip_text">Blue</property>
-                    <property name="adjustment">plusminus100adjustment</property>
+                    <property name="adjustment">plusminus100adjustment4</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="setblue:%-atkobject">
+                      <object class="AtkObject" id="setblue-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setblue-atkobject">Blue</property>
                       </object>
                     </child>
@@ -320,7 +332,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/AdjustColorGamma_16x16.png</property>
+                    <property name="icon_name">svx/res/symphony/AdjustColorGamma_16x16.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -329,18 +341,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="setgamma:0">
+                  <object class="GtkSpinButton" id="setgamma">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgamma|tooltip_text">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="adjustment">gammaadjustment</property>
                     <property name="digits">2</property>
-                    <accessibility>
-                        <relation target="image4"/>
-                    </accessibility>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="setgamma:0-atkobject">
+                      <object class="AtkObject" id="setgamma-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgamma-atkobject">Gamma value</property>
                       </object>
                     </child>
