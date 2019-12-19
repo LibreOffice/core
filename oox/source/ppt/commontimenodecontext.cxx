@@ -293,7 +293,7 @@ const preset_mapping* preset_mapping::getList()
 
 OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType )
 {
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
 
     if( (nPresetClass == EffectPresetClass::ENTRANCE) || (nPresetClass == EffectPresetClass::EXIT) )
     {

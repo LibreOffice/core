@@ -322,7 +322,7 @@ protected:
     sal_uInt8    dumpImageSizeModeProperty() { return dumpDecProperty< sal_uInt8 >( 0, "AX-IMAGESIZEMODE" ); }
     sal_uInt8    dumpImageAlignProperty() { return dumpDecProperty< sal_uInt8 >( 2, "AX-IMAGEALIGN" ); }
 
-    sal_uInt32          dumpFlagsProperty( sal_uInt32 nDefault, const sal_Char* pcNameList = "AX-FLAGS" );
+    sal_uInt32          dumpFlagsProperty( sal_uInt32 nDefault, const char* pcNameList = "AX-FLAGS" );
     sal_uInt32          dumpColorProperty( sal_uInt32 nDefault );
     sal_Unicode         dumpUnicodeProperty();
     void                dumpUnknownProperty();

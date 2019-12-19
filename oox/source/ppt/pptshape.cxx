@@ -46,7 +46,7 @@ using namespace ::com::sun::star::drawing;
 
 namespace oox { namespace ppt {
 
-PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const sal_Char* pServiceName )
+PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const char* pServiceName )
 : Shape( pServiceName )
 , meShapeLocation( eShapeLocation )
 , mbReferenced( false )

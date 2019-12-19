@@ -115,7 +115,7 @@ using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
 
-Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
+Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 : mpLinePropertiesPtr( new LineProperties )
 , mpShapeRefLinePropPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
@@ -253,7 +253,7 @@ void Shape::setTableType()
     mnSubType = 0;
 }
 
-void Shape::setServiceName( const sal_Char* pServiceName )
+void Shape::setServiceName( const char* pServiceName )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );

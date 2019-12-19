@@ -491,15 +491,15 @@ void test_registry_CppApi()
     REG_ENSURE(!key8.closeKey(),  "test_registry_CppApi error 8d");
 
 
-    sal_Char* Value=(sal_Char*)"My first value";
+    char* Value=(char*)"My first value";
     REG_ENSURE(!rootKey.setValue(OUString("mySecondKey"), RegValueType::STRING, Value, 18), "test_registry_CppApi error 9");
 
     RegValueType    valueType;
     sal_uInt32          valueSize;
-    sal_Char*           readValue;
+    char*           readValue;
     REG_ENSURE(!rootKey.getValueInfo(OUString("mySecondKey"), &valueType, &valueSize), "test_registry_CppApi error 9a");
 
-    readValue = (sal_Char*)std::malloc(valueSize);
+    readValue = (char*)std::malloc(valueSize);
     REG_ENSURE(!key2.getValue(OUString(), readValue), "test_registry_CppApi error 10");
 
     REG_ENSURE(valueType == RegValueType::STRING, "test_registry_CppApi error 11");
@@ -507,18 +507,18 @@ void test_registry_CppApi()
     REG_ENSURE(strcmp(readValue, Value) == 0, "test_registry_CppApi error 13");
     std::free(readValue);
 
-    const sal_Char* pList[3];
-    const sal_Char* n1= "Hello";
-    const sal_Char* n2= "now I";
-    const sal_Char* n3= "come";
+    const char* pList[3];
+    const char* n1= "Hello";
+    const char* n2= "now I";
+    const char* n3= "come";
 
     pList[0]=n1;
     pList[1]=n2;
     pList[2]=n3;
 
-    REG_ENSURE(!rootKey.setStringListValue(OUString("myFourthKey"), (sal_Char**)pList, 3), "test_registry_CppApi error 13a");
+    REG_ENSURE(!rootKey.setStringListValue(OUString("myFourthKey"), (char**)pList, 3), "test_registry_CppApi error 13a");
 
-    RegistryValueList<sal_Char*> valueList;
+    RegistryValueList<char*> valueList;
     REG_ENSURE(!rootKey.getStringListValue(OUString("myFourthKey"), valueList), "test_registry_CppApi error 13b");
 
     REG_ENSURE(strcmp(n1, valueList.getElement(0)) == 0, "test_registry_CppApi error 13c");

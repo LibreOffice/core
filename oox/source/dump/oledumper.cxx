@@ -918,7 +918,7 @@ OUString AxPropertyObjectBase::getPropertyName() const
     return cfg().getName( mxPropNames, mnCurrProp );
 }
 
-sal_uInt32 AxPropertyObjectBase::dumpFlagsProperty( sal_uInt32 nDefault, const sal_Char* pcNameList )
+sal_uInt32 AxPropertyObjectBase::dumpFlagsProperty( sal_uInt32 nDefault, const char* pcNameList )
 {
     if( startNextProperty() )
     {

@@ -275,8 +275,8 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                                         for ( int nLevel = 1; nLevel < 5; nLevel++ )
                                         {
                                             {
-                                                sal_Char pOutline[ 9 ] = "outline1";
-                                                pOutline[ 7 ] = static_cast< sal_Char >( '0' + nLevel );
+                                                char pOutline[ 9 ] = "outline1";
+                                                pOutline[ 7 ] = static_cast< char >( '0' + nLevel );
                                                 OUString sOutlineStyle( OUString::createFromAscii( pOutline ) );
                                                 if ( xFamilies->hasByName( sOutlineStyle ) )
                                                 {

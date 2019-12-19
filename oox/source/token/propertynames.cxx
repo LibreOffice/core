@@ -23,7 +23,7 @@ namespace oox {
 
 PropertyNameVector::PropertyNameVector()
 {
-    static const sal_Char* sppcPropertyNames[] =
+    static const char* sppcPropertyNames[] =
     {
         // include auto-generated C array with property names as C strings
 #include <propertynames.inc>

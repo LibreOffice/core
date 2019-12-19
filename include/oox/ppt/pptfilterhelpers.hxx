@@ -52,7 +52,7 @@ namespace oox { namespace ppt {
 
     struct OOX_DLLPUBLIC transition
     {
-        const sal_Char* mpName;
+        const char* mpName;
         sal_Int16 const mnType;
         sal_Int16 const mnSubType;
         bool const mbDirection; // true: default geometric direction
@@ -64,7 +64,7 @@ namespace oox { namespace ppt {
     struct OOX_DLLPUBLIC convert_subtype
     {
         sal_Int32 const mnID;
-        const sal_Char* mpStrSubType;
+        const char* mpStrSubType;
 
         static const convert_subtype* getList();
     };
@@ -73,7 +73,7 @@ namespace oox { namespace ppt {
     {
         sal_Int32   mnPresetClass;
         sal_Int32   mnPresetId;
-        const sal_Char* mpStrPresetId;
+        const char* mpStrPresetId;
 
         static const preset_mapping* getList();
     };
