@@ -74,11 +74,6 @@ private:
 
     FieldUnit meFUnit;
 
-    VclPtr<CheckBox>           mpHeaderToggle;
-    VclPtr<SpacingListBox>     mpHeaderSpacingLB;
-    VclPtr<SpacingListBox>     mpHeaderMarginPresetLB;
-    VclPtr<SameContentListBox> mpHeaderLayoutLB;
-    VclPtr<FixedText>          mpCustomEntry;
     OUString aCustomEntry;
 
     void Initialize();
@@ -93,12 +88,18 @@ private:
     ::std::unique_ptr<SvxLongULSpaceItem> mpHeaderSpacingItem;
     ::std::unique_ptr<SfxInt16Item>       mpHeaderLayoutItem;
 
+    std::unique_ptr<weld::CheckButton> mxHeaderToggle;
+    std::unique_ptr<weld::ComboBox> mxHeaderSpacingLB;
+    std::unique_ptr<weld::ComboBox> mxHeaderMarginPresetLB;
+    std::unique_ptr<weld::ComboBox> mxHeaderLayoutLB;
+    std::unique_ptr<weld::Label> mxCustomEntry;
+
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
-    DECL_LINK( HeaderToggleHdl, Button*, void );
-    DECL_LINK( HeaderLRMarginHdl, ListBox&, void);
-    DECL_LINK( HeaderSpacingHdl, ListBox&, void);
-    DECL_LINK( HeaderLayoutHdl, ListBox&, void);
+    DECL_LINK( HeaderToggleHdl, weld::ToggleButton&, void );
+    DECL_LINK( HeaderLRMarginHdl, weld::ComboBox&, void);
+    DECL_LINK( HeaderSpacingHdl, weld::ComboBox&, void);
+    DECL_LINK( HeaderLayoutHdl, weld::ComboBox&, void);
 };
 
 } } //end of namespace sw::sidebar
