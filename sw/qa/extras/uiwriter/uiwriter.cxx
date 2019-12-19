@@ -2284,6 +2284,19 @@ void SwUiWriterTest::testTextSearch()
     // check of the end result
     CPPUNIT_ASSERT_EQUAL(OUString("xCelqy xWorqd xThzq xis xa xtasq"),
                          pCursor->GetNode().GetTextNode()->GetText());
+    // regex: use positive look-ahead assertion
+    xReplaceDes->setSearchString("Wor(?=qd xThzq xis xa xtasq)");
+    xReplaceDes->setReplaceString("&p"); // testing & reference
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ReplaceCount);
+    // regex: use negative look-ahead assertion
+    xReplaceDes->setSearchString("x(?!Worpqd xThzq xis xa xtasq)");
+    xReplaceDes->setReplaceString("m");
+    ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ReplaceCount); // one of the 6 "x" must not be replaced
+    // check of the end result
+    CPPUNIT_ASSERT_EQUAL(OUString("mCelqy xWorpqd mThzq mis ma mtasq"),
+                         pCursor->GetNode().GetTextNode()->GetText());
 }
 
 void SwUiWriterTest::testTdf69282()

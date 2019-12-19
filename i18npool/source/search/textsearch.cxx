@@ -323,9 +323,16 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             const sal_Int32 nMaxLeadingLen = aSrchPara.searchString.startsWith("(?") ? 100 : 3;
             nInStartPos -= std::min(nMaxLeadingLen, startPos);
         }
+        sal_Int32 nInEndPos = endPos;
+        if (pRegexMatcher && endPos < searchStr.getLength())
+        {
+            // tdf#65038: ditto for look-ahead assertions
+            const sal_Int32 nMaxTrailingLen = aSrchPara.searchString.endsWith(")") ? 100 : 3;
+            nInEndPos += std::min(nMaxTrailingLen, searchStr.getLength() - endPos);
+        }
 
-        css::uno::Sequence<sal_Int32> offset(endPos - nInStartPos);
-        in_str = xTranslit->transliterate( searchStr, nInStartPos, endPos - nInStartPos, offset );
+        css::uno::Sequence<sal_Int32> offset(nInEndPos - nInStartPos);
+        in_str = xTranslit->transliterate(searchStr, nInStartPos, nInEndPos - nInStartPos, offset);
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 newStartPos =
@@ -907,7 +914,8 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr( reinterpret_cast<const UChar*>(searchStr.getStr()), endPos);
+    const IcuUniString aSearchTargetStr(reinterpret_cast<const UChar*>(searchStr.getStr()),
+                                        searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
     // search until there is a valid match
     for(;;)
