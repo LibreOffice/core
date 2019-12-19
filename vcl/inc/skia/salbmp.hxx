@@ -74,6 +74,9 @@ private:
     // if necessary).
     void EnsureBitmapData();
     void EnsureBitmapData() const { return const_cast<SkiaSalBitmap*>(this)->EnsureBitmapData(); }
+    // Like EnsureBitmapData(), but will also make any shared data unique.
+    // Call before changing the data.
+    void EnsureBitmapUniqueData();
     // Allocate mBitmap or mBuffer (with uninitialized contents).
     bool CreateBitmapData();
     SkBitmap GetAsSkBitmap() const;
@@ -90,7 +93,7 @@ private:
         // B - has SkBitmap, D - has data buffer, I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
         return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
-                      << bitmap->mBitCount << (!bitmap->mBitmap.drawsNothing() ? "B" : "")
+                      << bitmap->mBitCount << (!bitmap->mBitmap.isNull() ? "B" : "")
                       << (bitmap->mBuffer.get() ? "D" : "")
                       << (bitmap->mImage ? (bitmap->mImage->isTextureBacked() ? "I" : "i") : "")
                       << (bitmap->mAlphaImage ? (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a")
@@ -111,7 +114,7 @@ private:
     // mBitmap/mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
     SkBitmap mBitmap;
     sk_sp<SkImage> mImage; // possibly GPU-backed
-    std::unique_ptr<sal_uInt8[]> mBuffer;
+    std::shared_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
 #ifdef DBG_UTIL
