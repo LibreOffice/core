@@ -1893,6 +1893,14 @@ protected:
         return AllSettings::GetLayoutRTL();
     }
 
+    void localizeDecimalSeparator()
+    {
+        // tdf#128867 if localize decimal separator is active we will always
+        // need to be able to change the output of the decimal key press
+        if (!m_nKeyPressSignalId && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+            m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
+    }
+
 private:
     bool m_bTakeOwnership;
     bool m_bFrozen;
@@ -2172,10 +2180,6 @@ public:
         , m_nDragDropReceivedSignalId(0)
         , m_nDragLeaveSignalId(0)
     {
-        // tdf#128867 if localize decimal separator is active we will always
-        // need to be able to change the output of the decimal key press
-        if (Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
-            m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
     }
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
@@ -10506,6 +10510,7 @@ public:
         , m_bBlockOutput(false)
         , m_bBlank(false)
     {
+        localizeDecimalSeparator();
     }
 
     virtual int get_value() const override
