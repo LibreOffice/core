@@ -305,12 +305,12 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         {
             double aValue = mCoefficients[i];
             if ( aValue == 0.0 )
-            { // do not count coeffitient if it is 0
+            { // do not count coefficient if it is 0
                 nCoefficients --;
                 continue;
             }
             if ( rtl::math::approxEqual( fabs( aValue ) , 1.0 ) )
-            { // do not count coeffitient if it is 1
+            { // do not count coefficient if it is 1
                 nCoefficients --;
                 if ( i == 0 ) // intercept = 1
                     nCharMin ++;
