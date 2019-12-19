@@ -34,42 +34,13 @@
 using namespace css;
 using namespace css::uno;
 
-namespace {
-
-sal_uInt32 ParseText(OUString const & sTmp)
-{
-    if (sTmp.isEmpty())
-        return 0;
-    sal_Unicode nChar = sTmp[0];
-    if( nChar == '-' )
-    {
-        if (sTmp.getLength() < 2)
-            return 0;
-        nChar = sTmp[1];
-    }
-
-    if( (nChar < '0') || (nChar > '9') )
-        return 0;
-
-    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-
-    rtl_math_ConversionStatus eStatus;
-    double fTmp = rLocaleWrapper.stringToDouble( sTmp, false, &eStatus, nullptr);
-    if (eStatus != rtl_math_ConversionStatus_Ok)
-        return 0;
-
-    return fTmp;
-}
-
-}
-
 namespace svx { namespace sidebar {
 
 ShadowPropertyPanel::ShadowPropertyPanel(
     vcl::Window* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame),
+:   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame, true),
     maShadowController(SID_ATTR_FILL_SHADOW, *pBindings, *this),
     maShadowTransController(SID_ATTR_SHADOW_TRANSPARENCE, *pBindings, *this),
     maShadowColorController(SID_ATTR_SHADOW_COLOR, *pBindings, *this),
@@ -78,19 +49,18 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     mpBindings(pBindings),
     nX(0),
     nY(0),
-    nXY(0)
+    nXY(0),
+    mxShowShadow(m_xBuilder->weld_check_button("SHOW_SHADOW")),
+    mxShadowDistance(m_xBuilder->weld_metric_spin_button("LB_DISTANCE", FieldUnit::POINT)),
+    mxLBShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), GetFrameWeld())),
+    mxShadowAngle(m_xBuilder->weld_combo_box("LB_ANGLE")),
+    mxFTAngle(m_xBuilder->weld_label("angle")),
+    mxFTDistance(m_xBuilder->weld_label("distance")),
+    mxFTTransparency(m_xBuilder->weld_label("transparency_label")),
+    mxFTColor(m_xBuilder->weld_label("color")),
+    mxShadowTransSlider(m_xBuilder->weld_scale("transparency_slider")),
+    mxShadowTransMetric(m_xBuilder->weld_metric_spin_button("FIELD_TRANSPARENCY", FieldUnit::PERCENT))
 {
-    get(mpShowShadow,"SHOW_SHADOW");
-    get(mpFTAngle,"angle");
-    get(mpShadowAngle,"LB_ANGLE");
-    get(mpFTDistance,"distance");
-    get(mpShadowDistance,"LB_DISTANCE");
-    get(mpFTTransparency,"transparency_label");
-    get(mpShadowTransSlider,"transparency_slider");
-    get(mpShadowTransMetric,"FIELD_TRANSPARENCY");
-    get(mpFTColor,"color");
-    get(mpLBShadowColor,"LB_SHADOW_COLOR");
-
     Initialize();
 }
 
@@ -101,16 +71,16 @@ ShadowPropertyPanel::~ShadowPropertyPanel()
 
 void ShadowPropertyPanel::dispose()
 {
-    mpShowShadow.clear();
-    mpFTAngle.clear();
-    mpShadowAngle.clear();
-    mpFTDistance.clear();
-    mpShadowDistance.clear();
-    mpFTTransparency.clear();
-    mpShadowTransSlider.clear();
-    mpShadowTransMetric.clear();
-    mpFTColor.clear();
-    mpLBShadowColor.clear();
+    mxShowShadow.reset();
+    mxFTAngle.reset();
+    mxShadowAngle.reset();
+    mxFTDistance.reset();
+    mxShadowDistance.reset();
+    mxFTTransparency.reset();
+    mxShadowTransSlider.reset();
+    mxShadowTransMetric.reset();
+    mxFTColor.reset();
+    mxLBShadowColor.reset();
 
     maShadowController.dispose();
     maShadowTransController.dispose();
@@ -122,23 +92,20 @@ void ShadowPropertyPanel::dispose()
 
 void ShadowPropertyPanel::Initialize()
 {
-    mpShowShadow->SetState( TRISTATE_FALSE );
-    mpShowShadow->SetClickHdl( LINK(this, ShadowPropertyPanel, ClickShadowHdl ) );
-    mpShadowTransMetric->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
-    mpLBShadowColor->SetSelectHdl( LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl ) );
-    mpShadowAngle->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
-    mpShadowDistance->SetModifyHdl( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
-    mpShadowTransSlider->SetRange(Range(0,100));
-    mpShadowTransSlider->SetUpdateMode(true);
-    mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
-    for(sal_uInt16 i = 0; i <= 20 ; i++)
-        mpShadowDistance->InsertValue(i*2,FieldUnit::POINT);
+    mxShowShadow->set_state( TRISTATE_FALSE );
+    mxShowShadow->connect_toggled( LINK(this, ShadowPropertyPanel, ClickShadowHdl ) );
+    mxShadowTransMetric->connect_value_changed( LINK(this, ShadowPropertyPanel, ModifyShadowTransMetricHdl) );
+    mxLBShadowColor->SetSelectHdl( LINK( this, ShadowPropertyPanel, ModifyShadowColorHdl ) );
+    mxShadowAngle->connect_changed( LINK(this, ShadowPropertyPanel, ModifyShadowAngleHdl) );
+    mxShadowDistance->connect_value_changed( LINK(this, ShadowPropertyPanel, ModifyShadowDistanceHdl) );
+    mxShadowTransSlider->set_range(0, 100);
+    mxShadowTransSlider->connect_value_changed( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
     InsertAngleValues();
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::ToggleButton&, void)
 {
-    if( mpShowShadow->GetState() == TRISTATE_FALSE )
+    if( mxShowShadow->get_state() == TRISTATE_FALSE )
     {
         SdrOnOffItem aItem(makeSdrShadowItem(false));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
@@ -152,36 +119,46 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl, SvxColorListBox&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl, ColorListBox&, void)
 {
-    XColorItem aItem(makeSdrShadowColorItem(mpLBShadowColor->GetSelectEntryColor()));
+    XColorItem aItem(makeSdrShadowColorItem(mxLBShadowColor->GetSelectEntryColor()));
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_COLOR,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, Edit&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, weld::MetricSpinButton&, void)
 {
-    sal_uInt16 nVal = mpShadowTransMetric->GetValue();
+    sal_uInt16 nVal = mxShadowTransMetric->get_value(FieldUnit::PERCENT);
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, weld::Scale&, void)
 {
-    sal_uInt16 nVal = mpShadowTransSlider->GetThumbPos();
+    sal_uInt16 nVal = mxShadowTransSlider->get_value();
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowAngleHdl, weld::ComboBox&, void)
 {
-    OUString sAngle = mpShadowAngle->GetText();
-    nXY = mpShadowDistance->GetValue(FieldUnit::MM_100TH);
-    switch(ParseText(sAngle))
+    ModifyShadowDistance();
+}
+
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl, weld::MetricSpinButton&, void)
+{
+    ModifyShadowDistance();
+}
+
+void ShadowPropertyPanel::ModifyShadowDistance()
+{
+    auto nAngle = mxShadowAngle->get_active_id().toInt32();
+    nXY = mxShadowDistance->get_value(FieldUnit::MM_100TH);
+    switch (nAngle)
     {
         case 0: nX = nXY; nY = 0;             break;
         case 45: nX = nXY; nY = -nXY;         break;
@@ -202,48 +179,48 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
 
 void ShadowPropertyPanel::UpdateControls()
 {
-    if(mpShowShadow->GetState() == TRISTATE_FALSE)
+    if (mxShowShadow->get_state() == TRISTATE_FALSE)
     {
-        mpShadowDistance->Disable();
-        mpLBShadowColor->Disable();
-        mpShadowAngle->Disable();
-        mpFTAngle->Disable();
-        mpFTDistance->Disable();
-        mpFTTransparency->Disable();
-        mpFTColor->Disable();
-        mpShadowTransSlider->Disable();
-        mpShadowTransMetric->Disable();
+        mxShadowDistance->set_sensitive(false);
+        mxLBShadowColor->set_sensitive(false);
+        mxShadowAngle->set_sensitive(false);
+        mxFTAngle->set_sensitive(false);
+        mxFTDistance->set_sensitive(false);
+        mxFTTransparency->set_sensitive(false);
+        mxFTColor->set_sensitive(false);
+        mxShadowTransSlider->set_sensitive(false);
+        mxShadowTransMetric->set_sensitive(false);
         return;
     }
     else
     {
-        mpShadowDistance->Enable();
-        mpLBShadowColor->Enable();
-        mpShadowAngle->Enable();
-        mpFTAngle->Enable();
-        mpFTDistance->Enable();
-        mpFTTransparency->Enable();
-        mpFTColor->Enable();
-        mpShadowTransSlider->Enable();
-        mpShadowTransMetric->Enable();
+        mxShadowDistance->set_sensitive(true);
+        mxLBShadowColor->set_sensitive(true);
+        mxShadowAngle->set_sensitive(true);
+        mxFTAngle->set_sensitive(true);
+        mxFTDistance->set_sensitive(true);
+        mxFTTransparency->set_sensitive(true);
+        mxFTColor->set_sensitive(true);
+        mxShadowTransSlider->set_sensitive(true);
+        mxShadowTransMetric->set_sensitive(true);
     }
 
-    if(nX > 0 && nY == 0) { mpShadowAngle->SelectEntryPos(0); nXY = nX; }
-    else if( nX > 0 && nY < 0 ) { mpShadowAngle->SelectEntryPos(1); nXY = nX; }
-    else if( nX == 0 && nY < 0 ) { mpShadowAngle->SelectEntryPos(2); nXY = -nY; }
-    else if( nX < 0 && nY < 0 ) { mpShadowAngle->SelectEntryPos(3); nXY = -nY; }
-    else if( nX < 0 && nY == 0 ) { mpShadowAngle->SelectEntryPos(4); nXY = -nX; }
-    else if( nX < 0 && nY > 0 ) { mpShadowAngle->SelectEntryPos(5); nXY = nY; }
-    else if( nX == 0 && nY > 0 ) { mpShadowAngle->SelectEntryPos(6); nXY = nY; }
-    else if( nX > 0 && nY > 0 ) { mpShadowAngle->SelectEntryPos(7); nXY = nX; }
+    if(nX > 0 && nY == 0) { mxShadowAngle->set_active(0); nXY = nX; }
+    else if( nX > 0 && nY < 0 ) { mxShadowAngle->set_active(1); nXY = nX; }
+    else if( nX == 0 && nY < 0 ) { mxShadowAngle->set_active(2); nXY = -nY; }
+    else if( nX < 0 && nY < 0 ) { mxShadowAngle->set_active(3); nXY = -nY; }
+    else if( nX < 0 && nY == 0 ) { mxShadowAngle->set_active(4); nXY = -nX; }
+    else if( nX < 0 && nY > 0 ) { mxShadowAngle->set_active(5); nXY = nY; }
+    else if( nX == 0 && nY > 0 ) { mxShadowAngle->set_active(6); nXY = nY; }
+    else if( nX > 0 && nY > 0 ) { mxShadowAngle->set_active(7); nXY = nX; }
     else { nXY = 0; }
-    mpShadowDistance->SetValue(nXY, FieldUnit::MM_100TH);
+    mxShadowDistance->set_value(nXY, FieldUnit::MM_100TH);
 }
 
 void ShadowPropertyPanel::SetTransparencyValue(long nVal)
 {
-    mpShadowTransSlider->SetThumbPos(nVal);
-    mpShadowTransMetric->SetValue(nVal);
+    mxShadowTransSlider->set_value(nVal);
+    mxShadowTransMetric->set_value(nVal, FieldUnit::PERCENT);
 }
 
 void ShadowPropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
@@ -252,14 +229,18 @@ void ShadowPropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
 
 void ShadowPropertyPanel::InsertAngleValues()
 {
-    mpShadowAngle->InsertValue(0, FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(45, FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(90, FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(135, FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(180, FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(225,FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(270, FieldUnit::CUSTOM);
-    mpShadowAngle->InsertValue(315,FieldUnit::CUSTOM);
+    OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::DEGREE);
+
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+
+    mxShadowAngle->append(OUString::number(0), rLocaleData.getNum(0, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(45), rLocaleData.getNum(45, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(90), rLocaleData.getNum(90, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(135), rLocaleData.getNum(135, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(180), rLocaleData.getNum(180, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(225), rLocaleData.getNum(225, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(270), rLocaleData.getNum(270, 0, true, true) + sSuffix);
+    mxShadowAngle->append(OUString::number(315), rLocaleData.getNum(315, 0, true, true) + sSuffix);
 }
 
 void ShadowPropertyPanel::NotifyItemUpdate(
@@ -276,13 +257,13 @@ void ShadowPropertyPanel::NotifyItemUpdate(
                 const SdrOnOffItem* pItem = dynamic_cast< const SdrOnOffItem* >(pState);
                 if(pItem)
                 {
-                    if(pItem->GetValue())
-                        mpShowShadow->SetState( TRISTATE_TRUE );
+                    if (pItem->GetValue())
+                        mxShowShadow->set_state(TRISTATE_TRUE);
                     else
-                        mpShowShadow->SetState( TRISTATE_FALSE );
+                        mxShowShadow->set_state(TRISTATE_FALSE);
                 }
                 else
-                    mpShowShadow.reset();
+                    mxShowShadow.reset();
             }
         }
         break;
@@ -310,7 +291,7 @@ void ShadowPropertyPanel::NotifyItemUpdate(
                 const XColorItem* pColorItem = dynamic_cast< const XColorItem* >(pState);
                 if(pColorItem)
                 {
-                   mpLBShadowColor->SelectEntry(pColorItem->GetColorValue());
+                   mxLBShadowColor->SelectEntry(pColorItem->GetColorValue());
                 }
             }
         }

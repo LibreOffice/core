@@ -9,21 +9,16 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_SHADOWPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_SHADOWPROPERTYPANEL_HXX
 
-#include <vcl/slider.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/vclptr.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/field.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <sfx2/request.hxx>
 #include <svx/dlgctrl.hxx>
 
-class SvxColorListBox;
+class ColorListBox;
 
 namespace svx { namespace sidebar {
 
@@ -58,17 +53,6 @@ public:
         SfxBindings* pBindings);
 
 private:
-    VclPtr<CheckBox>      mpShowShadow;
-    VclPtr<MetricBox>     mpShadowDistance;
-    VclPtr<SvxColorListBox> mpLBShadowColor;
-    VclPtr<MetricBox>     mpShadowAngle;
-    VclPtr<FixedText>     mpFTAngle;
-    VclPtr<FixedText>     mpFTDistance;
-    VclPtr<FixedText>     mpFTTransparency;
-    VclPtr<FixedText>     mpFTColor;
-    VclPtr<Slider>        mpShadowTransSlider;
-    VclPtr<MetricField>   mpShadowTransMetric;
-
     ::sfx2::sidebar::ControllerItem maShadowController;
     ::sfx2::sidebar::ControllerItem maShadowTransController;
     ::sfx2::sidebar::ControllerItem maShadowColorController;
@@ -78,14 +62,28 @@ private:
     SfxBindings* const mpBindings;
     long nX,nY,nXY;
 
+    std::unique_ptr<weld::CheckButton> mxShowShadow;
+    std::unique_ptr<weld::MetricSpinButton> mxShadowDistance;
+    std::unique_ptr<ColorListBox> mxLBShadowColor;
+    std::unique_ptr<weld::ComboBox> mxShadowAngle;
+    std::unique_ptr<weld::Label> mxFTAngle;
+    std::unique_ptr<weld::Label> mxFTDistance;
+    std::unique_ptr<weld::Label> mxFTTransparency;
+    std::unique_ptr<weld::Label> mxFTColor;
+    std::unique_ptr<weld::Scale> mxShadowTransSlider;
+    std::unique_ptr<weld::MetricSpinButton> mxShadowTransMetric;
+
     void InsertAngleValues();
     void SetTransparencyValue(long);
     void UpdateControls();
-    DECL_LINK(ClickShadowHdl, Button*, void);
-    DECL_LINK(ModifyShadowColorHdl, SvxColorListBox&, void);
-    DECL_LINK(ModifyShadowTransMetricHdl, Edit&, void);
-    DECL_LINK(ModifyShadowDistanceHdl, Edit&, void);
-    DECL_LINK(ModifyShadowTransSliderHdl, Slider*, void);
+    void ModifyShadowDistance();
+
+    DECL_LINK(ClickShadowHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyShadowColorHdl, ColorListBox&, void);
+    DECL_LINK(ModifyShadowTransMetricHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyShadowAngleHdl, weld::ComboBox&, void);
+    DECL_LINK(ModifyShadowDistanceHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyShadowTransSliderHdl, weld::Scale&, void);
 };
 }
 }
