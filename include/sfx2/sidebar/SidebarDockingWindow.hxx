@@ -30,10 +30,9 @@ namespace svt { class AcceleratorExecute; }
 namespace sfx2 { namespace sidebar {
 
 class SidebarChildWindow;
-
 class SidebarController;
 
-class SidebarDockingWindow final : public SfxDockingWindow
+class SFX2_DLLPUBLIC SidebarDockingWindow final : public SfxDockingWindow
 {
 public:
     SidebarDockingWindow(SfxBindings* pBindings, SidebarChildWindow& rChildWindow,
@@ -45,6 +44,9 @@ public:
 
     void SetReadyToDrag( bool bStartDrag ) { mbIsReadyToDrag = bStartDrag; }
     bool IsReadyToDrag() const { return mbIsReadyToDrag; }
+
+    /// Force generation of all panels by completion.
+    void SyncUpdate();
 
     void NotifyResize();
 

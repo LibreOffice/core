@@ -169,6 +169,8 @@ public:
 
     void saveDeckState();
 
+    void SyncUpdate();
+
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 
