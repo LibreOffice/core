@@ -36,7 +36,7 @@ namespace internal {
     {
         // oval:
         ::basegfx::B2DPolygon poly (
-            ::basegfx::utils::createPolygonFromEllipse( rCenter, fRadius*2, fRadius ) ); //Horizontal Ellipse is rotated by 90 degress
+            ::basegfx::utils::createPolygonFromEllipse( rCenter, fRadius*2, fRadius ) ); //Horizontal Ellipse is rotated by 90 degrees
         return ::basegfx::B2DPolyPolygon( poly );
     }
     else
