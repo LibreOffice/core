@@ -845,7 +845,7 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 extern "C" SAL_DLLPUBLIC_EXPORT void* svgfilter_component_getFactory(
-    sal_Char const* pImplName, void*, void*)
+    char const* pImplName, void*, void*)
 {
     if ( rtl_str_compare (pImplName, SVG_FILTER_IMPL_NAME) == 0 )
     {

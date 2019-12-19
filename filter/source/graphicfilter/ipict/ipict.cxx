@@ -695,7 +695,7 @@ sal_uLong PictReader::ReadAndDrawText()
 {
     char        nByteLen;
     sal_uInt32  nLen, nDataLen;
-    sal_Char    sText[256];
+    char        sText[256];
 
     pPict->ReadChar( nByteLen ); nLen=static_cast<sal_uLong>(nByteLen)&0x000000ff;
     nDataLen = nLen + 1;
@@ -1151,7 +1151,7 @@ void PictReader::ReadHeader()
 {
     short y1,x1,y2,x2;
 
-    sal_Char    sBuf[ 2 ];
+    char        sBuf[ 2 ];
     // previous code considers pPict->Tell() as the normal starting position,
     // can we have nStartPos != 0 ?
     sal_uLong   nStartPos = pPict->Tell();

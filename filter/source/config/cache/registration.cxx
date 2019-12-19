@@ -34,7 +34,7 @@ namespace filter{
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
-    filterconfig1_component_getFactory( const sal_Char* pImplementationName,
+    filterconfig1_component_getFactory( const char* pImplementationName,
                                         void* pServiceManager,
                                         void* /* pRegistryKey */ )
 {

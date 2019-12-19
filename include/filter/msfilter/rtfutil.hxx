@@ -52,7 +52,7 @@ MSFILTER_DLLPUBLIC OString OutString(const OUString& rStr, rtl_TextEncoding eDes
  * @param rStr the text to export
  * @param eDestEnc the legacy encoding to use
  */
-MSFILTER_DLLPUBLIC OString OutStringUpr(const sal_Char* pToken, const OUString& rStr,
+MSFILTER_DLLPUBLIC OString OutStringUpr(const char* pToken, const OUString& rStr,
                                         rtl_TextEncoding eDestEnc);
 
 /**

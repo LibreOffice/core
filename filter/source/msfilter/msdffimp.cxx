@@ -6605,7 +6605,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
                     sal_Int32 nDbgLen = nLength - nSkip;
                     if ( nDbgLen )
                     {
-                        std::vector<sal_Char> aData(nDbgLen);
+                        std::vector<char> aData(nDbgLen);
                         pGrStream->ReadBytes(aData.data(), nDbgLen);
                         pDbgOut->WriteBytes(aData.data(), nDbgLen);
                         pGrStream->SeekRel(-nDbgLen);
@@ -6790,9 +6790,9 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
 namespace {
 
 struct ClsIDs {
-    sal_uInt32      nId;
-    const sal_Char* pSvrName;
-    const sal_Char* pDspName;
+    sal_uInt32  nId;
+    const char* pSvrName;
+    const char* pDspName;
 };
 
 }
@@ -6930,7 +6930,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         {
             if( 0x10000L > nStrLen )
             {
-                std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nStrLen ]);
+                std::unique_ptr<char[]> pBuf(new char[ nStrLen ]);
                 rStm.ReadBytes(pBuf.get(), nStrLen);
                 aSvrName = OUString( pBuf.get(), static_cast<sal_uInt16>(nStrLen)-1, osl_getThreadTextEncoding() );
             }

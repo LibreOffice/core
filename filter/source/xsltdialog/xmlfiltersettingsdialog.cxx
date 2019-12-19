@@ -1129,7 +1129,7 @@ void XMLFilterSettingsDialog::initFilterList()
     }
 }
 
-application_info_impl::application_info_impl( const sal_Char * pDocumentService, const OUString& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
+application_info_impl::application_info_impl( const char * pDocumentService, const OUString& rUINameRes, const char * mpXMLImporter, const char * mpXMLExporter )
 :   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
     maDocumentUIName(Translate::ExpandVariables(rUINameRes)),
     maXMLImporter( mpXMLImporter, strlen( mpXMLImporter ), RTL_TEXTENCODING_ASCII_US ),

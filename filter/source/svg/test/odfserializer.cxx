@@ -97,7 +97,7 @@ void SAL_CALL ODFSerializer::characters( const OUString& aChars )
     const OString aStr = OUStringToOString(aChars, RTL_TEXTENCODING_UTF8);
     const sal_Int32 nLen( aStr.getLength() );
     m_aBuf.realloc( nLen );
-    const sal_Char* pStr = aStr.getStr();
+    const char* pStr = aStr.getStr();
     std::copy(pStr,pStr+nLen,m_aBuf.getArray());
 
     m_xOutStream->writeBytes(m_aBuf);

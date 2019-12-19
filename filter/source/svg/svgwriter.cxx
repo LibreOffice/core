@@ -1794,7 +1794,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                      .append(aComma)
                      .append(OUString::number( aPolyPoint.Y() ));
 
-            sal_Char nCurrentMode = 0;
+            char nCurrentMode = 0;
             const bool bClose(!bLine || rPoly[0] == rPoly[nSize - 1]);
             while( n < nSize )
             {

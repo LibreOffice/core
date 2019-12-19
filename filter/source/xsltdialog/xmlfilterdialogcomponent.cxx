@@ -316,7 +316,7 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * xsltdlg_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
+    const char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = nullptr;
 

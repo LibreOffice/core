@@ -5231,13 +5231,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     }
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )
     {
-        std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nMaxLen + 1 ]);
+        std::unique_ptr<char[]> pBuf(new char[ nMaxLen + 1 ]);
         pBuf[ nMaxLen ] = 0;
         rIn.ReadBytes(pBuf.get(), nMaxLen);
-        sal_Char* pPtr = pBuf.get();
+        char* pPtr = pBuf.get();
         for (;;)
         {
-            sal_Char cLo = *pPtr;
+            char cLo = *pPtr;
             if ( cLo == 0 )
                 break;
             if ( cLo == 0xd )

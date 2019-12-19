@@ -30,7 +30,7 @@ const comphelper::service_decl::ServiceDecl graphicExportFilter(
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* graphicfilter_component_getFactory(
-    sal_Char const* pImplementationName, void*, void*)
+    char const* pImplementationName, void*, void*)
 {
     if ( rtl_str_compare (pImplementationName, GRAPHIC_EXPORT_FILTER_SERVICE) == 0 )
     {

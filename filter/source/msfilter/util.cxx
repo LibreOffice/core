@@ -264,7 +264,7 @@ const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSO
 }
 
 OUString findQuotedText( const OUString& rCommand,
-                const sal_Char* cStartQuote, const sal_Unicode uEndQuote )
+                const char* cStartQuote, const sal_Unicode uEndQuote )
 {
     OUString sRet;
     OUString sStartQuote( OUString::createFromAscii(cStartQuote) );

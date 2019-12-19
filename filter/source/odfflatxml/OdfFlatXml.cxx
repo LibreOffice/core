@@ -219,7 +219,7 @@ Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
-odfflatxml_component_getFactory( const sal_Char* pImplementationName,
+odfflatxml_component_getFactory( const char* pImplementationName,
                       void* pServiceManager,
                       void* /* pRegistryKey */ )
 {

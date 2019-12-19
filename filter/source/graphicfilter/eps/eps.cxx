@@ -201,7 +201,7 @@ private:
     void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
     void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
-    void                ImplWriteCharacter( sal_Char );
+    void                ImplWriteCharacter( char );
     void                ImplWriteString( const OString&, VirtualDevice const & rVDev, const long* pDXArry, bool bStretch );
     void                ImplDefineFont( const char*, const char* );
 
@@ -1953,7 +1953,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
     }
 }
 
-void PSWriter::ImplWriteCharacter( sal_Char nChar )
+void PSWriter::ImplWriteCharacter( char nChar )
 {
     switch( nChar )
     {

@@ -29,7 +29,7 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * xmlfa_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
+    const char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = nullptr;
     OUString implName = OUString::createFromAscii( pImplName );
