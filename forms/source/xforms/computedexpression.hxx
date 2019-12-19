@@ -62,7 +62,7 @@ protected:
 
 
     /// implementation of isSimpleExpression
-    bool _checkExpression( const sal_Char* pExpression ) const;
+    bool _checkExpression( const char* pExpression ) const;
 
     /// allow manipulation of the expression before it is evaluated
     // the default implementation is to do nothing...

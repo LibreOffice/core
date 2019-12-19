@@ -135,7 +135,7 @@ namespace frm
     }
 
 
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const sal_Char* _pAsciiURL )
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const char* _pAsciiURL )
     {
         return queryDispatch( m_pUrlTransformer->getStrictURLFromAscii( _pAsciiURL ) );
     }

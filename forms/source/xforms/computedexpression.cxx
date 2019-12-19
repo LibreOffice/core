@@ -69,7 +69,7 @@ void ComputedExpression::setExpression( const OUString& rExpression )
 }
 
 
-bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
+bool ComputedExpression::_checkExpression( const char* pExpression ) const
 {
     assert(pExpression && "no expression?");
 

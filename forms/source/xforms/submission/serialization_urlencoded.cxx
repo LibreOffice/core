@@ -51,7 +51,7 @@ CSerializationURLEncoded::CSerializationURLEncoded()
  mark        = "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
  unreserved = alphanum | mark
 */
-bool CSerializationURLEncoded::is_unreserved(sal_Char c)
+bool CSerializationURLEncoded::is_unreserved(char c)
 {
     if (rtl::isAsciiAlphanumeric(static_cast<unsigned char>(c)))
         return true;
@@ -73,7 +73,7 @@ void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStri
 {
     OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
     const sal_uInt8 *pString = reinterpret_cast< const sal_uInt8 * >( utf8String.getStr() );
-    sal_Char tmpChar[4];
+    char tmpChar[4];
 
     while( *pString != 0)
     {

@@ -98,7 +98,7 @@ class JobURL
     private:
 
         static bool implst_split( const OUString& sPart           ,
-                                      const sal_Char*        pPartIdentifier ,
+                                      const char*        pPartIdentifier ,
                                             sal_Int32        nPartLength     ,
                                             OUString& rPartValue      ,
                                             OUString& rPartArguments  );

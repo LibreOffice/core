@@ -582,7 +582,7 @@ UICommandDescription::~UICommandDescription()
     m_aUICommandsHashMap.clear();
     m_xGenericUICommands.clear();
 }
-void UICommandDescription::impl_fillElements(const sal_Char* _pName)
+void UICommandDescription::impl_fillElements(const char* _pName)
 {
     m_xModuleManager.set( ModuleManager::create( m_xContext ) );
     Sequence< OUString > aElementNames = m_xModuleManager->getElementNames();

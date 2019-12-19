@@ -80,7 +80,7 @@ public:
 
     protected:
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext>& rxContext, bool  );
-        void impl_fillElements(const sal_Char* _pName);
+        void impl_fillElements(const char* _pName);
 
         OUString                                                  m_aPrivateResourceURL;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;

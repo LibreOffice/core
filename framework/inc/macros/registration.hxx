@@ -51,7 +51,7 @@ ________________________________________________________________________________
 //  define method to instantiate new services
 
 #define COMPONENTGETFACTORY( LIB, IFFACTORIES )                                                                                         \
-    extern "C" SAL_DLLPUBLIC_EXPORT void* LIB##_component_getFactory( const sal_Char* pImplementationName,                      \
+    extern "C" SAL_DLLPUBLIC_EXPORT void* LIB##_component_getFactory( const char* pImplementationName,                      \
                                                             void*       pServiceManager     ,                                           \
                                                             void*     /*pRegistryKey*/      )                                           \
     {                                                                                                                                   \

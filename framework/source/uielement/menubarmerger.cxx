@@ -64,7 +64,7 @@ void MenuBarMerger::RetrieveReferencePath(
     const OUString& rReferencePathString,
     ::std::vector< OUString >& rReferencePath )
 {
-    const sal_Char aDelimiter = '\\';
+    const char aDelimiter = '\\';
 
     rReferencePath.clear();
     sal_Int32 nIndex( 0 );

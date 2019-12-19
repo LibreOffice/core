@@ -262,7 +262,7 @@ namespace
     /** retrieves the value of an environment variable
         @return <TRUE/> if and only if the retrieved string value is not empty
     */
-    bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, OUString& _rValue )
+    bool getEnvironmentValue( const char* _pAsciiEnvName, OUString& _rValue )
     {
         _rValue.clear();
         OUString sEnvName = OUString::createFromAscii( _pAsciiEnvName );

@@ -63,7 +63,7 @@ namespace frm
 
         OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
         {
-            const sal_Char* pAsciiCommandName = nullptr;
+            const char* pAsciiCommandName = nullptr;
             switch ( _nFormFeature )
             {
                 case FormFeature::MoveAbsolute          : pAsciiCommandName = "AbsoluteRecord";     break;

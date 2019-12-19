@@ -53,7 +53,7 @@ namespace svt
 
         struct ControlDescription
         {
-            const sal_Char* pControlName;
+            const char*     pControlName;
             sal_Int16       nControlId;
             PropFlags       nPropertyFlags;
         };
@@ -114,7 +114,7 @@ namespace svt
 
         struct ControlProperty
         {
-            const sal_Char* pPropertyName;
+            const char*     pPropertyName;
             PropFlags       nPropertyId;
         };
 
