@@ -54,7 +54,7 @@ namespace {
 struct TMList {
   TransliterationModules        tm;
   TransliterationModulesNew     tmn;
-  const sal_Char               *implName;
+  const char                   *implName;
 };
 
 }

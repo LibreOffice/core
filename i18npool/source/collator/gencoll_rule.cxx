@@ -92,7 +92,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     int fileSize = ftell(fp);
     rewind(fp);
 
-    sal_Char str[1024];
+    char str[1024];
     OUStringBuffer Obuf(fileSize);
     while (fgets(str, 1024, fp)) {
         // don't convert last new line character to Ostr.

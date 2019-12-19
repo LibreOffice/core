@@ -131,7 +131,7 @@ private:
     OUString ref_name;
 
     /// @throws css::uno::RuntimeException
-    oslGenericFunction getFunctionSymbol( const css::lang::Locale& rLocale, const sal_Char* pFunction );
+    oslGenericFunction getFunctionSymbol( const css::lang::Locale& rLocale, const char* pFunction );
     sal_Unicode ** getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
     sal_Unicode ** getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, const OUString& rAlgorithm);
     /// @throws css::uno::RuntimeException

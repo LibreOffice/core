@@ -63,7 +63,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
     return result;
 }
 
-static const sal_Char first[] = "ja_phonetic (alphanumeric first)";
+static const char first[] = "ja_phonetic (alphanumeric first)";
 sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable::loadAlgorithm(
     const css::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions )
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant
     return collator->loadCollatorAlgorithm(first, rLocale, collatorOptions) == 0;
 }
 
-static const sal_Char last[] = "ja_phonetic (alphanumeric last)";
+static const char last[] = "ja_phonetic (alphanumeric last)";
 sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable::loadAlgorithm(
     const css::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions )

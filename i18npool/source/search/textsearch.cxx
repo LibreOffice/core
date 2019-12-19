@@ -1523,7 +1523,7 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
 }
 
 
-static const sal_Char cSearchImpl[] = "com.sun.star.util.TextSearch_i18n";
+static const char cSearchImpl[] = "com.sun.star.util.TextSearch_i18n";
 
 static uno::Sequence< OUString > getServiceName_Static()
 {
@@ -1570,7 +1570,7 @@ TextSearch_CreateInstance(
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void*
-i18nsearch_component_getFactory( const sal_Char* sImplementationName,
+i18nsearch_component_getFactory( const char* sImplementationName,
                                  void* _pServiceManager,
                                  SAL_UNUSED_PARAMETER void* )
 {

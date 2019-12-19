@@ -893,7 +893,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         // The "#100211# - checked" comments serve for detection of "use of
         // sprintf is safe here" conditions. An sprintf encountered without
         // having that comment triggers alarm ;-)
-        sal_Char aStr[10];
+        char aStr[10];
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
                 value += 1;     // month is zero based

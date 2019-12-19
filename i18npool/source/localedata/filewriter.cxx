@@ -121,47 +121,47 @@ void OFileWriter::writeRefFunction3(const char *func, const OUString& useLocale)
     fprintf(m_f, "\treturn %s%s(nStyles, nLevels, nAttributes);\n}\n", func, locale);
 }
 
-void OFileWriter::writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const
+void OFileWriter::writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const
 {
     fprintf(m_f, "static const sal_Unicode %s%d[] = {%d};\n", pAsciiStr, count, val);
 }
 
-bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str, sal_Int16 count) const
+bool OFileWriter::writeDefaultParameter(const char* pAsciiStr, const OUString& str, sal_Int16 count) const
 {
     bool bBool = str == "true";
     fprintf(m_f,"static const sal_Unicode default%s%d[] = {%d};\n", pAsciiStr, count, bBool);
     return bBool;
 }
 
-void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const OUString& aChars) const
+void OFileWriter::writeParameter(const char* pAsciiStr, const OUString& aChars) const
 {
     fprintf(m_f, "static const sal_Unicode %s[] = {", pAsciiStr);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count) const
+void OFileWriter::writeParameter(const char* pAsciiStr, const OUString& aChars, sal_Int16 count) const
 {
     fprintf(m_f, "static const sal_Unicode %s%d[] = {", pAsciiStr, count);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
+void OFileWriter::writeParameter(const char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
 {
     fprintf(m_f, "static const sal_Unicode %s%d%d[] = {", pAsciiStr, count0, count1);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const
+void OFileWriter::writeParameter(const char* pTagStr, const char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const
 {
     fprintf(m_f, "static const sal_Unicode %s%s%d[] = {", pTagStr, pAsciiStr, count);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
+void OFileWriter::writeParameter(const char* pTagStr, const char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
 {
     fprintf(m_f, "static const sal_Unicode %s%s%d%d[] = {", pTagStr, pAsciiStr, count0, count1);
     writeStringCharacters(aChars);

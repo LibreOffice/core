@@ -250,8 +250,8 @@ IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
 namespace {
 
 struct InstancesArray {
-        const sal_Char* pServiceNm;
-        const sal_Char* pImplementationNm;
+        const char* pServiceNm;
+        const char* pImplementationNm;
         FN_CreateInstance pFn;
 };
 
@@ -567,7 +567,7 @@ static const InstancesArray aInstances[] = {
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* i18npool_component_getFactory( const char* sImplementationName, void* _pServiceManager, SAL_UNUSED_PARAMETER void* /*_pRegistryKey*/ )
 {
     void* pRet = nullptr;
 

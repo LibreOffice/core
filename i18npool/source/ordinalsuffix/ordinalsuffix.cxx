@@ -134,7 +134,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
     return comphelper::containerToSequence(retVec);
 }
 
-const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
+const char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 
 OUString SAL_CALL OrdinalSuffixService::getImplementationName()
 {

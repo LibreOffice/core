@@ -134,7 +134,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     }
 
     //3. create new paragraph content
-    OUString strLine( reinterpret_cast<const sal_Char*>(codeSnippet),
+    OUString strLine( reinterpret_cast<const char*>(codeSnippet),
                                 strlen(reinterpret_cast<const char*>(codeSnippet)),
                                 RTL_TEXTENCODING_UTF8 );
     std::vector<HighlightPortion> portions;

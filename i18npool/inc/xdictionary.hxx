@@ -60,13 +60,13 @@ class xdictionary
 {
 private:
     xdictionarydata data;
-    void initDictionaryData(const sal_Char *lang);
+    void initDictionaryData(const char *lang);
 
     css::i18n::Boundary boundary;
     bool japaneseWordBreak;
 
 public:
-    xdictionary(const sal_Char *lang);
+    xdictionary(const char *lang);
     ~xdictionary();
     css::i18n::Boundary nextWord( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
     css::i18n::Boundary previousWord( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType);

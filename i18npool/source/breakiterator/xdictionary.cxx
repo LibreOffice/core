@@ -61,7 +61,7 @@ sal_Unicode* getDataArea_zh();
 
 #endif
 
-xdictionary::xdictionary(const sal_Char *lang) :
+xdictionary::xdictionary(const char *lang) :
     boundary(),
     japaneseWordBreak( false )
 {
@@ -145,7 +145,7 @@ namespace {
 
 #if !defined(DICT_JA_ZH_IN_DATAFILE) && !defined(DISABLE_DYNLOADING)
 
-void xdictionary::initDictionaryData(const sal_Char *pLang)
+void xdictionary::initDictionaryData(const char *pLang)
 {
     // Global cache, never released for performance
     static std::vector< datacache > aLoadedCache;

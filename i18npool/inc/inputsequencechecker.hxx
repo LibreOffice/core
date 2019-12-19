@@ -55,12 +55,12 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    const sal_Char *serviceName;
+    const char *serviceName;
 
     struct lookupTableItem {
-        lookupTableItem(const sal_Char* rLanguage, const css::uno::Reference < css::i18n::XExtendedInputSequenceChecker >& rxISC) :
+        lookupTableItem(const char* rLanguage, const css::uno::Reference < css::i18n::XExtendedInputSequenceChecker >& rxISC) :
             aLanguage(rLanguage), xISC(rxISC) {}
-        const sal_Char* aLanguage;
+        const char* aLanguage;
         css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
     };
     std::vector<std::unique_ptr<lookupTableItem>> lookupTable;
@@ -69,8 +69,8 @@ private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& getInputSequenceChecker(sal_Char const * rLanguage);
-    static sal_Char* getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
+    css::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& getInputSequenceChecker(char const * rLanguage);
+    static char* getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
 
 }

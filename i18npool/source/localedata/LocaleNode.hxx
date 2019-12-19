@@ -48,13 +48,13 @@ public:
     void  writeRefFunction2(const char *func, const OUString& useLocale) const;
     void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
     void  writeRefFunction3(const char *func, const OUString& useLocale) const;
-    void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
-    bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str, sal_Int16 count) const;
-    void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars) const;
-    void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count) const;
-    void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
-    void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const;
-    void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    void  writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
+    bool  writeDefaultParameter(const char* pAsciiStr, const OUString& str, sal_Int16 count) const;
+    void  writeParameter(const char* pAsciiStr, const OUString& aChars) const;
+    void  writeParameter(const char* pAsciiStr, const OUString& aChars, sal_Int16 count) const;
+    void  writeParameter(const char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    void  writeParameter(const char* pTagStr, const char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const;
+    void  writeParameter(const char* pTagStr, const char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
     void  closeOutput() const;
     /// Return the locale string, something like en_US or de_DE
     const char * getLocale() const { return theLocale.c_str(); }
@@ -69,7 +69,7 @@ class Attr {
 
 public:
     explicit Attr (const Reference< XAttributeList > & attr);
-    OUString getValueByName (const sal_Char *str) const;
+    OUString getValueByName (const char *str) const;
     const OUString& getValueByIndex (sal_Int32 idx) const ;
 };
 
@@ -92,7 +92,7 @@ public:
     const Attr& getAttr() const { return aAttribs; };
     sal_Int32 getNumberOfChildren () const { return sal_Int32(children.size()); };
     LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx].get(); };
-    const LocaleNode * findNode ( const sal_Char *name) const;
+    const LocaleNode * findNode ( const char *name) const;
     virtual ~LocaleNode();
     void addChild (  LocaleNode * node);
     const LocaleNode* getRoot() const;
