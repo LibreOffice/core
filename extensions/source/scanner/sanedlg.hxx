@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EXTENSIONS_SOURCE_SCANNER_SANEDLG_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_SCANNER_SANEDLG_HXX
+#pragma once
 
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
@@ -107,8 +106,5 @@ public:
     void UpdateScanArea( bool );
     bool getDoScan() const { return doScan;}
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
