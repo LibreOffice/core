@@ -21,6 +21,7 @@
 
 #include <cmdid.h>
 #include <swtypes.hxx>
+#include <svx/spacinglistbox.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdtrans.hxx>
 #include <sfx2/bindings.hxx>
@@ -29,7 +30,6 @@
 #include <svl/eitem.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -69,7 +69,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
-    : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)
+    : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame, true)
     , mxFrame( rxFrame )
     , mpBindings(pBindings)
     // spacing
@@ -89,19 +89,19 @@ WrapPropertyPanel::WrapPropertyPanel(
     , maSwEnableContourControl(FN_FRAME_WRAP_CONTOUR, *pBindings, *this)
     , maSwLRSpacingControl(SID_ATTR_LRSPACE, *pBindings, *this)
     , maSwULSpacingControl(SID_ATTR_ULSPACE, *pBindings, *this)
+    , mxRBNoWrap(m_xBuilder->weld_radio_button("buttonnone"))
+    , mxRBWrapLeft(m_xBuilder->weld_radio_button("buttonbefore"))
+    , mxRBWrapRight(m_xBuilder->weld_radio_button("buttonafter"))
+    , mxRBWrapParallel(m_xBuilder->weld_radio_button("buttonparallel"))
+    , mxRBWrapThrough(m_xBuilder->weld_radio_button("buttonthrough"))
+    , mxRBIdealWrap(m_xBuilder->weld_radio_button("buttonoptimal"))
+    , mxEditContour(m_xBuilder->weld_button("editcontour"))
+    , mxEnableContour(m_xBuilder->weld_check_button("enablecontour"))
+    , mxSpacingLB(m_xBuilder->weld_combo_box("spacingLB"))
+    , mxCustomEntry(m_xBuilder->weld_label("customlabel"))
 {
-    get(mpRBNoWrap, "buttonnone");
-    get(mpRBWrapLeft, "buttonbefore");
-    get(mpRBWrapRight, "buttonafter");
-    get(mpRBWrapParallel, "buttonparallel");
-    get(mpRBWrapThrough, "buttonthrough");
-    get(mpRBIdealWrap, "buttonoptimal");
-    get(mpEnableContour, "enablecontour");
-    get(mpEditContour, "editcontour");
-    get(mpSpacingLB, "spacingLB");
     FieldUnit eMetric = ::GetDfltMetric(false);
-    mpSpacingLB->Init(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM);
-    get(mpCustomEntry, "customlabel");
+    SpacingListBox::Fill(IsInch(eMetric) ? SpacingType::SPACING_INCH : SpacingType::SPACING_CM, *mxSpacingLB);
 
     Initialize();
 }
@@ -113,16 +113,16 @@ WrapPropertyPanel::~WrapPropertyPanel()
 
 void WrapPropertyPanel::dispose()
 {
-    mpRBNoWrap.clear();
-    mpRBWrapLeft.clear();
-    mpRBWrapRight.clear();
-    mpRBWrapParallel.clear();
-    mpRBWrapThrough.clear();
-    mpRBIdealWrap.clear();
-    mpEnableContour.clear();
-    mpEditContour.clear();
-    mpSpacingLB.clear();
-    mpCustomEntry.clear();
+    mxRBNoWrap.reset();
+    mxRBWrapLeft.reset();
+    mxRBWrapRight.reset();
+    mxRBWrapParallel.reset();
+    mxRBWrapThrough.reset();
+    mxRBIdealWrap.reset();
+    mxEnableContour.reset();
+    mxEditContour.reset();
+    mxSpacingLB.reset();
+    mxCustomEntry.reset();
 
     maSwNoWrapControl.dispose();
     maSwWrapLeftControl.dispose();
@@ -139,43 +139,43 @@ void WrapPropertyPanel::dispose()
 
 void WrapPropertyPanel::Initialize()
 {
-    Link<Button*,void> aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
-    mpRBNoWrap->SetClickHdl(aLink);
-    mpRBWrapLeft->SetClickHdl(aLink);
-    mpRBWrapRight->SetClickHdl(aLink);
-    mpRBWrapParallel->SetClickHdl(aLink);
-    mpRBWrapThrough->SetClickHdl(aLink);
-    mpRBIdealWrap->SetClickHdl(aLink);
+    Link<weld::ToggleButton&,void> aLink = LINK(this, WrapPropertyPanel, WrapTypeHdl);
+    mxRBNoWrap->connect_toggled(aLink);
+    mxRBWrapLeft->connect_toggled(aLink);
+    mxRBWrapRight->connect_toggled(aLink);
+    mxRBWrapParallel->connect_toggled(aLink);
+    mxRBWrapThrough->connect_toggled(aLink);
+    mxRBIdealWrap->connect_toggled(aLink);
 
-    Link<Button*,void> EditContourLink = LINK(this, WrapPropertyPanel, EditContourHdl);
-    mpEditContour->SetClickHdl(EditContourLink);
+    Link<weld::Button&,void> EditContourLink = LINK(this, WrapPropertyPanel, EditContourHdl);
+    mxEditContour->connect_clicked(EditContourLink);
 
     if (comphelper::LibreOfficeKit::isActive())
     {
         // Disable Edit Contour button for LOK purposes.
-        mpEditContour->Hide();
+        mxEditContour->hide();
     }
 
-    Link<Button*, void> EnableContourLink = LINK(this,WrapPropertyPanel, EnableContourHdl);
-    mpEnableContour->SetClickHdl(EnableContourLink);
-    mpSpacingLB->SetSelectHdl(LINK(this, WrapPropertyPanel, SpacingLBHdl));
+    Link<weld::ToggleButton&, void> EnableContourLink = LINK(this,WrapPropertyPanel, EnableContourHdl);
+    mxEnableContour->connect_toggled(EnableContourLink);
+    mxSpacingLB->connect_changed(LINK(this, WrapPropertyPanel, SpacingLBHdl));
 
-    mpRBNoWrap->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPOFF, mxFrame));
+    mxRBNoWrap->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPOFF, mxFrame));
     if ( AllSettings::GetLayoutRTL() )
     {
-        mpRBWrapLeft->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPRIGHT, mxFrame));
-        mpRBWrapRight->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPLEFT, mxFrame));
+        mxRBWrapLeft->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPRIGHT, mxFrame));
+        mxRBWrapRight->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPLEFT, mxFrame));
     }
     else
     {
-        mpRBWrapLeft->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPLEFT, mxFrame));
-        mpRBWrapRight->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPRIGHT, mxFrame));
+        mxRBWrapLeft->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPLEFT, mxFrame));
+        mxRBWrapRight->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPRIGHT, mxFrame));
     }
-    mpRBWrapParallel->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPON, mxFrame));
-    mpRBWrapThrough->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPTHROUGH, mxFrame));
-    mpRBIdealWrap->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPIDEAL, mxFrame));
+    mxRBWrapParallel->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPON, mxFrame));
+    mxRBWrapThrough->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPTHROUGH, mxFrame));
+    mxRBIdealWrap->set_image(vcl::CommandInfoProvider::GetXGraphicForCommand(UNO_WRAPIDEAL, mxFrame));
 
-    aCustomEntry = mpCustomEntry->GetText();
+    aCustomEntry = mxCustomEntry->get_label();
 
     mpBindings->Update( FN_FRAME_NOWRAP );
     mpBindings->Update( FN_FRAME_WRAP );
@@ -193,40 +193,43 @@ void WrapPropertyPanel::UpdateSpacingLB()
 {
     if( (nLeft == nRight) && (nTop == nBottom) && (nLeft == nTop) )
     {
-        for(sal_Int32 i = 0; i < mpSpacingLB->GetEntryCount(); i++)
+        sal_Int32 nCount = mxSpacingLB->get_count();
+        for (sal_Int32 i = 0; i < nCount; i++)
         {
-            if(reinterpret_cast<sal_uLong>(mpSpacingLB->GetEntryData(i)) == nLeft )
+            if (mxSpacingLB->get_id(i).toUInt32() == nLeft)
             {
-                mpSpacingLB->SelectEntryPos(i);
-                mpSpacingLB->RemoveEntry(aCustomEntry);
+                mxSpacingLB->set_active(i);
+                int nCustomEntry = mxSpacingLB->find_text(aCustomEntry);
+                if (nCustomEntry != -1)
+                    mxSpacingLB->remove(nCustomEntry);
                 return;
             }
         }
     }
 
-    if(mpSpacingLB->GetEntryPos(aCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
-        mpSpacingLB->InsertEntry(aCustomEntry);
-    mpSpacingLB->SelectEntry(aCustomEntry);
+    if (mxSpacingLB->find_text(aCustomEntry) == -1)
+        mxSpacingLB->append_text(aCustomEntry);
+    mxSpacingLB->set_active_text(aCustomEntry);
 }
 
-IMPL_LINK_NOARG(WrapPropertyPanel, EditContourHdl, Button*, void)
+IMPL_LINK_NOARG(WrapPropertyPanel, EditContourHdl, weld::Button&, void)
 {
     SfxBoolItem aItem(SID_CONTOUR_DLG, true);
     mpBindings->GetDispatcher()->ExecuteList(SID_CONTOUR_DLG,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(WrapPropertyPanel, EnableContourHdl, Button*, void)
+IMPL_LINK_NOARG(WrapPropertyPanel, EnableContourHdl, weld::ToggleButton&, void)
 {
-    bool IsContour = mpEnableContour->IsChecked();
+    bool IsContour = mxEnableContour->get_active();
     SfxBoolItem aItem(FN_FRAME_WRAP_CONTOUR, IsContour);
     mpBindings->GetDispatcher()->ExecuteList(FN_FRAME_WRAP_CONTOUR,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
+IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, weld::ComboBox&, rBox, void)
 {
-    sal_uInt16 nVal = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(rBox.GetSelectedEntryData()));
+    sal_uInt16 nVal = rBox.get_active_id().toUInt32();
 
     SvxLRSpaceItem aLRItem(nVal, nVal, 0, 0, RES_LR_SPACE);
     SvxULSpaceItem aULItem(nVal, nVal, RES_UL_SPACE);
@@ -238,26 +241,26 @@ IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
             SfxCallMode::RECORD, { &aULItem });
 }
 
-IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl, Button*, void)
+IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl, weld::ToggleButton&, void)
 {
     sal_uInt16 nSlot = 0;
-    if ( mpRBWrapLeft->IsChecked() )
+    if ( mxRBWrapLeft->get_active() )
     {
         nSlot = FN_FRAME_WRAP_LEFT;
     }
-    else if( mpRBWrapRight->IsChecked() )
+    else if( mxRBWrapRight->get_active() )
     {
         nSlot = FN_FRAME_WRAP_RIGHT;
     }
-    else if ( mpRBWrapParallel->IsChecked() )
+    else if ( mxRBWrapParallel->get_active() )
     {
         nSlot = FN_FRAME_WRAP;
     }
-    else if( mpRBWrapThrough->IsChecked() )
+    else if( mxRBWrapThrough->get_active() )
     {
         nSlot = FN_FRAME_WRAPTHRU;
     }
-    else if( mpRBIdealWrap->IsChecked() )
+    else if( mxRBIdealWrap->get_active() )
     {
         nSlot = FN_FRAME_WRAP_IDEAL;
     }
@@ -273,14 +276,14 @@ IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl, Button*, void)
 
 void WrapPropertyPanel::UpdateEditContour()
 {
-    if(mpRBNoWrap->IsChecked() || mpRBWrapThrough->IsChecked())
+    if (mxRBNoWrap->get_active() || mxRBWrapThrough->get_active())
     {
-        mpEnableContour->Check( false );
-        mpEnableContour->Disable();
+        mxEnableContour->set_active(false);
+        mxEnableContour->set_sensitive(false);
     }
     else
     {
-        mpEnableContour->Enable();
+        mxEnableContour->set_sensitive(true);
     }
 
 }
@@ -294,37 +297,37 @@ void WrapPropertyPanel::NotifyItemUpdate(
         dynamic_cast< const SfxBoolItem *>( pState ) !=  nullptr )
     {
         //Set Radio Button enable
-        mpRBNoWrap->Enable();
-        mpRBWrapLeft->Enable();
-        mpRBWrapRight->Enable();
-        mpRBWrapParallel->Enable();
-        mpRBWrapThrough->Enable();
-        mpRBIdealWrap->Enable();
-        mpEnableContour->Enable();
+        mxRBNoWrap->set_sensitive(true);
+        mxRBWrapLeft->set_sensitive(true);
+        mxRBWrapRight->set_sensitive(true);
+        mxRBWrapParallel->set_sensitive(true);
+        mxRBWrapThrough->set_sensitive(true);
+        mxRBIdealWrap->set_sensitive(true);
+        mxEnableContour->set_sensitive(true);
 
         const SfxBoolItem* pBoolItem = static_cast< const SfxBoolItem* >( pState );
         switch( nSId )
         {
         case FN_FRAME_WRAP_RIGHT:
-            mpRBWrapRight->Check( pBoolItem->GetValue() );
+            mxRBWrapRight->set_active( pBoolItem->GetValue() );
             break;
         case FN_FRAME_WRAP_LEFT:
-            mpRBWrapLeft->Check( pBoolItem->GetValue() );
+            mxRBWrapLeft->set_active( pBoolItem->GetValue() );
             break;
         case FN_FRAME_WRAPTHRU:
-            mpRBWrapThrough->Check( pBoolItem->GetValue() );
+            mxRBWrapThrough->set_active( pBoolItem->GetValue() );
             break;
         case FN_FRAME_WRAP_IDEAL:
-            mpRBIdealWrap->Check( pBoolItem->GetValue() );
+            mxRBIdealWrap->set_active( pBoolItem->GetValue() );
             break;
         case FN_FRAME_WRAP:
-            mpRBWrapParallel->Check( pBoolItem->GetValue() );
+            mxRBWrapParallel->set_active( pBoolItem->GetValue() );
             break;
         case FN_FRAME_WRAP_CONTOUR:
-            mpEnableContour->Check( pBoolItem->GetValue() );
+            mxEnableContour->set_active( pBoolItem->GetValue() );
             break;
         case FN_FRAME_NOWRAP:
-            mpRBNoWrap->Check( pBoolItem->GetValue() );
+            mxRBNoWrap->set_active( pBoolItem->GetValue() );
             break;
         }
         UpdateEditContour();
