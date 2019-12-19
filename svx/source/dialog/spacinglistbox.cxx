@@ -78,6 +78,52 @@ void SpacingListBox::Init(SpacingType eType)
     SelectEntryPos(nSelected);
 }
 
+void SpacingListBox::Fill(SpacingType eType, weld::ComboBox& rComboBox)
+{
+    auto nSelected = rComboBox.get_active();
+    if (nSelected == -1)
+        nSelected = 0;
+    rComboBox.clear();
+
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+    OUString sSuffix;
+
+    const measurement* pResources;
+    switch (eType)
+    {
+        case SpacingType::SPACING_INCH:
+            pResources = RID_SVXSTRARY_SPACING_INCH;
+            sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::INCH);
+            break;
+        case SpacingType::MARGINS_INCH:
+            pResources = RID_SVXSTRARY_MARGINS_INCH;
+            sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::INCH);
+            break;
+        case SpacingType::SPACING_CM:
+            pResources = RID_SVXSTRARY_SPACING_CM;
+            sSuffix = " " + weld::MetricSpinButton::MetricToString(FieldUnit::CM);
+            break;
+        default:
+        case SpacingType::MARGINS_CM:
+            sSuffix = " " + weld::MetricSpinButton::MetricToString(FieldUnit::CM);
+            pResources = RID_SVXSTRARY_MARGINS_CM;
+            break;
+    }
+
+    while (pResources->key)
+    {
+        OUString sMeasurement = rLocaleData.getNum(pResources->human, 2, true, false) + sSuffix;
+        OUString aStr = SvxResId(pResources->key).replaceFirst("%1", sMeasurement);
+        sal_uInt32 nData = pResources->twips;
+        rComboBox.append(OUString::number(nData), aStr);
+        ++pResources;
+    }
+
+    rComboBox.set_active(nSelected);
+
+    rComboBox.set_size_request(150, -1);
+}
+
 VCL_BUILDER_FACTORY(SpacingListBox);
 
 Size SpacingListBox::GetOptimalSize() const

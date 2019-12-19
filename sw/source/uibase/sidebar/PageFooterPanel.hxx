@@ -74,11 +74,6 @@ private:
 
     FieldUnit meFUnit;
 
-    VclPtr<CheckBox>           mpFooterToggle;
-    VclPtr<SpacingListBox>     mpFooterSpacingLB;
-    VclPtr<SpacingListBox>     mpFooterMarginPresetLB;
-    VclPtr<SameContentListBox> mpFooterLayoutLB;
-    VclPtr<FixedText>          mpCustomEntry;
     OUString aCustomEntry;
 
     void Initialize();
@@ -93,12 +88,18 @@ private:
     ::std::unique_ptr<SvxLongULSpaceItem> mpFooterSpacingItem;
     ::std::unique_ptr<SfxInt16Item>       mpFooterLayoutItem;
 
+    std::unique_ptr<weld::CheckButton> mxFooterToggle;
+    std::unique_ptr<weld::ComboBox> mxFooterSpacingLB;
+    std::unique_ptr<weld::ComboBox> mxFooterMarginPresetLB;
+    std::unique_ptr<weld::ComboBox> mxFooterLayoutLB;
+    std::unique_ptr<weld::Label> mxCustomEntry;
+
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 
-    DECL_LINK( FooterToggleHdl, Button*, void );
-    DECL_LINK( FooterLRMarginHdl, ListBox&, void);
-    DECL_LINK( FooterSpacingHdl, ListBox&, void);
-    DECL_LINK( FooterLayoutHdl, ListBox&, void);
+    DECL_LINK( FooterToggleHdl, weld::ToggleButton&, void );
+    DECL_LINK( FooterLRMarginHdl, weld::ComboBox&, void);
+    DECL_LINK( FooterSpacingHdl, weld::ComboBox&, void);
+    DECL_LINK( FooterLayoutHdl, weld::ComboBox&, void);
 };
 
 } } //end of namespace sw::sidebar
