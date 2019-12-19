@@ -124,6 +124,7 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartFrameLoader_get_implementation",
     "com_sun_star_comp_chart2_WizardDialog_get_implementation",
+    "org_libreoffice_comp_chart2_sidebar_ChartPanelFactory",
 # comphelper/util/comphelp.component
     "com_sun_star_comp_MemoryStream",
     "com_sun_star_comp_task_OfficeRestartManager",
@@ -387,6 +388,8 @@ calc_factory_list = [
 calc_constructor_list = [
 # avmedia/util/avmedia.component
     "com_sun_star_comp_framework_SoundHandler_get_implementation",
+# sc/util/sc.component
+    "ScPanelFactory_get_implementation",
 # sc/util/scd.component
     "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
     "com_sun_star_comp_calc_FormatDetector_get_implementation",
