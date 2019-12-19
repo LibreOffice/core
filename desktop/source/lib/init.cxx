@@ -108,6 +108,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokcharthelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
@@ -142,6 +144,7 @@
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <svl/eitem.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -857,6 +860,57 @@ void ExecuteOrientationChange()
 
     if ( mxUndoManager.is() )
         mxUndoManager->leaveUndoContext();
+}
+
+void setupSidebar(bool bShow)
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+    if (pViewFrame)
+    {
+        if (bShow && !pViewFrame->GetChildWindow(SID_SIDEBAR))
+            pViewFrame->SetChildWindow(SID_SIDEBAR, false /* create it */, true /* focus */);
+
+        pViewFrame->ShowChildWindow(SID_SIDEBAR, bShow);
+
+        if (!bShow)
+            return;
+
+        // Force synchronous population of panels
+        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
+        if (!pChild)
+            return;
+
+        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pChild->GetWindow());
+        if (!pDockingWin)
+            return;
+        pDockingWin->SyncUpdate();
+    }
+    else
+        SetLastExceptionMsg("No view shell or sidebar");
+}
+
+VclPtr<Window> getSidebarWindow()
+{
+    VclPtr<Window> xRet;
+
+    setupSidebar(true);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+    if (!pViewFrame)
+        return xRet;
+
+    // really a SidebarChildWindow
+    SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
+    if (!pChild)
+        return xRet;
+
+    // really a SidebarDockingWindow
+    vcl::Window *pWin = pChild->GetWindow();
+    if (!pWin)
+        return xRet;
+    xRet = pWin;
+    return xRet;
 }
 
 }  // end anonymous namespace
@@ -3454,7 +3508,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
 
-}
+} // anonymous namespace
 
 static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
 {
@@ -3462,6 +3516,10 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 
     StringMap aMap(jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
+
+    if (!pWindow && nWindowId >= 1000000000 /* why unsigned? */)
+        pWindow = getSidebarWindow();
+
     if (!pWindow)
     {
         SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
@@ -3671,6 +3729,16 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
             return;
         }
+    }
+    else if (gImpl && aCommand == ".uno:SidebarShow")
+    {
+        setupSidebar(true);
+        return;
+    }
+    else if (gImpl && aCommand == ".uno:SidebarHide")
+    {
+        setupSidebar(false);
+        return;
     }
 
     bool bResult = false;
