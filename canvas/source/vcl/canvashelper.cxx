@@ -770,7 +770,7 @@ namespace vclcanvas
                     // GraphicObject flip the bitmap
 
                     // The angle has to be mapped from radian to tenths of
-                    // degress with the orientation reversed: [0,2Pi) ->
+                    // degrees with the orientation reversed: [0,2Pi) ->
                     // (3600,0].  Note that the original angle may have
                     // values outside the [0,2Pi) interval.
                     const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
