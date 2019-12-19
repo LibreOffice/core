@@ -19,10 +19,10 @@
 
 //#define VCL_NEED_BASETSD
 
+#include <sal/log.hxx>
 #include "cgm.hxx"
 #include "elements.hxx"
 #include "outact.hxx"
-
 
 void CGM::ImplDoClass5()
 {
@@ -199,8 +199,16 @@ void CGM::ImplDoClass5()
         break;
         case 0x12 : /*Text Alignment*/
         {
-            pElement->eTextAlignmentH = static_cast<TextAlignmentH>(ImplGetUI16());
-            pElement->eTextAlignmentV = static_cast<TextAlignmentV>(ImplGetUI16());
+            auto nTextAlign = ImplGetUI16();
+            if (nTextAlign > TextAlignmentH::TAH_CONT)
+                SAL_WARN("filter.icgm", "TextAlign out of range");
+            else
+                pElement->eTextAlignmentH = static_cast<TextAlignmentH>(nTextAlign);
+            nTextAlign = ImplGetUI16();
+            if (nTextAlign > TextAlignmentV::TAV_CONT)
+                SAL_WARN("filter.icgm", "TextAlign out of range");
+            else
+                pElement->eTextAlignmentV = static_cast<TextAlignmentV>(nTextAlign);
             pElement->nTextAlignmentHCont = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             pElement->nTextAlignmentVCont = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
         }
