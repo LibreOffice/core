@@ -51,7 +51,7 @@ namespace
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* ftransl_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* ftransl_component_getFactory( const char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
 

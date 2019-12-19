@@ -736,7 +736,7 @@ next:
     }
 }
 
-uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPath, bool bUpdate)
+uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const char* pPath, bool bUpdate)
 {
     uno::Reference< XNameAccess > xNameAccess;
     try {

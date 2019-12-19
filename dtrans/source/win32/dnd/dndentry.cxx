@@ -46,7 +46,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void*
-dnd_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
+dnd_component_getFactory( const char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
     Reference< XSingleServiceFactory > xFactory;

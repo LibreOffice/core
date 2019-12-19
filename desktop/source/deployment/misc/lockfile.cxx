@@ -61,7 +61,7 @@ static OString impl_getHostname()
         aHost = OString("UNKNOWN");
 #else
     /* Don't do dns lookup on Linux either */
-    sal_Char pHostName[1024];
+    char pHostName[1024];
 
     if ( gethostname( pHostName, sizeof( pHostName ) - 1 ) == 0 )
     {

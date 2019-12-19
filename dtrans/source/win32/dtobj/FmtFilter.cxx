@@ -251,8 +251,8 @@ Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
     size_t lHtmlFormatHeader = dummyHtmlHeader.length();
 
     std::string textHtml(
-        reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()),
-        reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()) + aTextHtml.getLength());
+        reinterpret_cast<const char*>(aTextHtml.getConstArray()),
+        reinterpret_cast<const char*>(aTextHtml.getConstArray()) + aTextHtml.getLength());
 
     std::string::size_type nStartHtml = textHtml.find(TAG_HTML) + lHtmlFormatHeader - 1; // we start one before '<HTML>' Word 2000 does also so
     std::string::size_type nEndHtml = textHtml.find(TAG_END_HTML) + lHtmlFormatHeader + TAG_END_HTML.length() + 1; // our SOffice 5.2 wants 2 behind </HTML>?

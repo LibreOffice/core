@@ -51,7 +51,7 @@ extern "C"
 
 
 SAL_DLLPUBLIC_EXPORT void * migrationoo2_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, oo2_entries );

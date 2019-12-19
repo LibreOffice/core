@@ -549,7 +549,7 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
         ::ucbhelper::Content descContent(
             licenseUrl, xCmdEnv, getMyBackend()->getComponentContext());
         std::vector<sal_Int8> seq = dp_misc::readFile(descContent);
-        return OUString( reinterpret_cast<sal_Char const *>(
+        return OUString( reinterpret_cast<char const *>(
             seq.data()), seq.size(), RTL_TEXTENCODING_UTF8);
     }
     catch (const css::uno::Exception&)
@@ -1470,7 +1470,7 @@ void BackendImpl::PackageImpl::scanBundle(
             OUStringBuffer buf;
             if ( !bytes.empty() )
             {
-                buf.append( OUString( reinterpret_cast<sal_Char const *>(
+                buf.append( OUString( reinterpret_cast<char const *>(
                                           bytes.data() ),
                                       bytes.size(), RTL_TEXTENCODING_UTF8 ) );
             }

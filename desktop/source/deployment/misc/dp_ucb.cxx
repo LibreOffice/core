@@ -205,7 +205,7 @@ bool readLine( OUString * res, OUString const & startingWith,
 {
     // read whole file:
     std::vector<sal_Int8> bytes( readFile( ucb_content ) );
-    OUString file( reinterpret_cast<sal_Char const *>(bytes.data()),
+    OUString file( reinterpret_cast<char const *>(bytes.data()),
                    bytes.size(), textenc );
     sal_Int32 pos = 0;
     for (;;)
@@ -261,7 +261,7 @@ bool readProperties( std::vector< std::pair< OUString, OUString> > & out_result,
 {
     // read whole file:
     std::vector<sal_Int8> bytes( readFile( ucb_content ) );
-    OUString file( reinterpret_cast<sal_Char const *>(bytes.data()),
+    OUString file( reinterpret_cast<char const *>(bytes.data()),
                    bytes.size(), RTL_TEXTENCODING_UTF8);
     sal_Int32 pos = 0;
 

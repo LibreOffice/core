@@ -66,7 +66,7 @@ PersistentMap::~PersistentMap()
 // replace "%" with "%%"
 static OString encodeString( const OString& rStr)
 {
-    const sal_Char* pChar = rStr.getStr();
+    const char* pChar = rStr.getStr();
     const sal_Int32 nLen = rStr.getLength();
     sal_Int32 i = nLen;
     // short circuit for the simple non-encoded case
@@ -101,7 +101,7 @@ static OString encodeString( const OString& rStr)
 
 // replace "%0".."%F" with 0x00..0x0F
 // replace "%%" with "%"
-static OString decodeString( const sal_Char* pEncChars, int nLen)
+static OString decodeString( const char* pEncChars, int nLen)
 {
     const char* pChar = pEncChars;
     sal_Int32 i = nLen;
@@ -117,7 +117,7 @@ static OString decodeString( const sal_Char* pEncChars, int nLen)
     pChar = pEncChars;
     for( i = nLen; --i >= 0;)
     {
-        sal_Char c = *(pChar++);
+        char c = *(pChar++);
         // handle escaped character
         if( c == '%')
         {
