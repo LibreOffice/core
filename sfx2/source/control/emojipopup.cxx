@@ -18,7 +18,6 @@
  */
 #include <sfx2/emojipopup.hxx>
 #include <sfx2/emojicontrol.hxx>
-#include <unotools/viewoptions.hxx>
 #include <vcl/toolbox.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL(EmojiPopup, SfxVoidItem);

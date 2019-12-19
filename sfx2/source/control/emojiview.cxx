@@ -9,21 +9,18 @@
 
 #include <sfx2/emojiview.hxx>
 #include <sfx2/emojiviewitem.hxx>
-#include <sfx2/templatelocalview.hxx>
-#include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <config_folders.h>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/event.hxx>
 
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
 #include <string>
 #include <fstream>
-#include <streambuf>
 
 #include <vcl/builderfactory.hxx>
 using namespace ::com::sun::star;

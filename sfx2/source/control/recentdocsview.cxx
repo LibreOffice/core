@@ -19,11 +19,8 @@
 
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
-#include <sax/tools/converter.hxx>
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/recentdocsviewitem.hxx>
-#include <sfx2/templatelocalview.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/historyoptions.hxx>
@@ -34,14 +31,11 @@
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/virdev.hxx>

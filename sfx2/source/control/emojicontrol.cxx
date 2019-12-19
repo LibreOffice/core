@@ -18,8 +18,8 @@
  */
 
 #include <sfx2/emojiview.hxx>
-#include <sfx2/emojiviewitem.hxx>
 #include <sfx2/emojicontrol.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/tabpage.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>

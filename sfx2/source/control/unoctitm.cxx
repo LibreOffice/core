@@ -18,11 +18,9 @@
  */
 
 #include <config_java.h>
-#include <config_folders.h>
 
 #include <tools/debug.hxx>
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/visitem.hxx>
@@ -60,18 +58,15 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
-#include <statcach.hxx>
-#include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
+#include <slotserv.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/time.h>
 #include <sfx2/lokhelper.hxx>
 
-#include <iostream>
 #include <map>
 #include <memory>
 

@@ -25,21 +25,16 @@
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/visitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <itemdel.hxx>
 
 //Includes below due to nInReschedule
-#include <appdata.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/msg.hxx>
 #include <statcach.hxx>
@@ -48,11 +43,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/objface.hxx>
-#include <sfxtypes.hxx>
 #include <workwin.hxx>
 #include <sfx2/unoctitm.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>

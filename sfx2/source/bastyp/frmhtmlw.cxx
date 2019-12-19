@@ -22,9 +22,7 @@
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 
-#include <unotools/configmgr.hxx>
 #include <svl/urihelper.hxx>
-#include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
@@ -32,12 +30,6 @@
 
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/frmhtmlw.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/frame.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/objsh.hxx>
 #include <strings.hxx>
 
 #include <comphelper/processfactory.hxx>

@@ -15,18 +15,10 @@
 #include "thumbnailviewacc.hxx"
 
 #include <basegfx/color/bcolortools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/processfactory.hxx>
-#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <rtl/ustring.hxx>
@@ -34,17 +26,14 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/pngread.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

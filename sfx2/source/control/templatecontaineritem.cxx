@@ -8,7 +8,6 @@
  */
 
 #include <sfx2/templatecontaineritem.hxx>
-#include <sfx2/templateviewitem.hxx>
 
 TemplateContainerItem::TemplateContainerItem (sal_uInt16 nId)
     : mnId(nId)

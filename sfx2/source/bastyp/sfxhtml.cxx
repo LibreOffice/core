@@ -21,7 +21,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
 #include <openflag.hxx>
@@ -34,12 +33,9 @@
 #include <vcl/imappoly.hxx>
 #include <vcl/imaprect.hxx>
 #include <svl/zforlist.hxx>
-#include <rtl/tencinfo.h>
-#include <tools/tenccvt.hxx>
 
 #include <sfx2/sfxhtml.hxx>
 
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <comphelper/string.hxx>
 
 #include <vector>

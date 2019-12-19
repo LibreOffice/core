@@ -20,9 +20,9 @@
 #include <sal/config.h>
 
 #include <itemdel.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/idle.hxx>
 
-#include <svl/itempool.hxx>
 #include <tools/debug.hxx>
 
 class SfxItemDisruptor_Impl
