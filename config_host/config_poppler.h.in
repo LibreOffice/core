@@ -1,5 +1,5 @@
 /*
-Settings for poppler header file dection
+Settings for poppler header file detection
 */
 
 #ifndef CONFIG_POPPLER_H

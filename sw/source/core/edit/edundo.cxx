@@ -120,7 +120,7 @@ void SwEditShell::Undo(sal_uInt16 const nCount)
                                        || SwUndoId::SETDEFTATTR == nLastUndoId );
         Push();
 
-        // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
+        // Destroy stored TableBoxPtr. A detection is only permitted for the new "Box"!
         ClearTableBoxContent();
 
         const RedlineFlags eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
@@ -173,7 +173,7 @@ void SwEditShell::Redo(sal_uInt16 const nCount)
         const bool bRestoreCursor = nCount == 1 && SwUndoId::SETDEFTATTR == nFirstRedoId;
         Push();
 
-        // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
+        // Destroy stored TableBoxPtr. A detection is only permitted for the new "Box"!
         ClearTableBoxContent();
 
         RedlineFlags eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
