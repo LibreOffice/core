@@ -89,7 +89,7 @@ void LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
     if( !IsUnicodePacked(pObjStrm, strlen) )
     {
         sal_uInt16 len = 0;
-        sal_Char buf[1024];
+        char buf[1024];
 
         while(strlen)
         {
@@ -104,7 +104,7 @@ void LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
     }
     else
     {
-        sal_Char buf[1024];
+        char buf[1024];
         sal_Unicode unibuf[1024];
         sal_uInt8 readbyte;
         sal_uInt16 readword;

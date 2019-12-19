@@ -151,7 +151,7 @@ Reference< XInterface > SAL_CALL MyCounterImpl_create(
  * @param pRegistryKey    the registry key for this component, need for persistent data
  * @return a component factory
  */
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const char * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     void * pRet = 0;
 

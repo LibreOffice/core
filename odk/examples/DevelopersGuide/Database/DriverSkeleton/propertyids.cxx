@@ -38,64 +38,64 @@ namespace connectivity
 {
 namespace skeleton
 {
-        const sal_Char* getPROPERTY_QUERYTIMEOUT()          { return    "QueryTimeOut"; }
-        const sal_Char* getPROPERTY_MAXFIELDSIZE()          { return    "MaxFieldSize"; }
-        const sal_Char* getPROPERTY_MAXROWS()               { return    "MaxRows"; }
-        const sal_Char* getPROPERTY_CURSORNAME()            { return    "CursorName"; }
-        const sal_Char* getPROPERTY_RESULTSETCONCURRENCY()  { return    "ResultSetConcurrency"; }
-        const sal_Char* getPROPERTY_RESULTSETTYPE()         { return    "ResultSetType"; }
-        const sal_Char* getPROPERTY_FETCHDIRECTION()        { return    "FetchDirection"; }
-        const sal_Char* getPROPERTY_FETCHSIZE()             { return    "FetchSize"; }
-        const sal_Char* getPROPERTY_ESCAPEPROCESSING()      { return    "EscapeProcessing"; }
-        const sal_Char* getPROPERTY_USEBOOKMARKS()          { return    "UseBookmarks"; }
+        const char* getPROPERTY_QUERYTIMEOUT()          { return    "QueryTimeOut"; }
+        const char* getPROPERTY_MAXFIELDSIZE()          { return    "MaxFieldSize"; }
+        const char* getPROPERTY_MAXROWS()               { return    "MaxRows"; }
+        const char* getPROPERTY_CURSORNAME()            { return    "CursorName"; }
+        const char* getPROPERTY_RESULTSETCONCURRENCY()  { return    "ResultSetConcurrency"; }
+        const char* getPROPERTY_RESULTSETTYPE()         { return    "ResultSetType"; }
+        const char* getPROPERTY_FETCHDIRECTION()        { return    "FetchDirection"; }
+        const char* getPROPERTY_FETCHSIZE()             { return    "FetchSize"; }
+        const char* getPROPERTY_ESCAPEPROCESSING()      { return    "EscapeProcessing"; }
+        const char* getPROPERTY_USEBOOKMARKS()          { return    "UseBookmarks"; }
 
-        const sal_Char* getPROPERTY_NAME()                  { return    "Name"; }
-        const sal_Char* getPROPERTY_TYPE()                  { return    "Type"; }
-        const sal_Char* getPROPERTY_TYPENAME()              { return    "TypeName"; }
-        const sal_Char* getPROPERTY_PRECISION()             { return    "Precision"; }
-        const sal_Char* getPROPERTY_SCALE()                 { return    "Scale"; }
-        const sal_Char* getPROPERTY_ISNULLABLE()            { return    "IsNullable"; }
-        const sal_Char* getPROPERTY_ISAUTOINCREMENT()       { return    "IsAutoIncrement"; }
-        const sal_Char* getPROPERTY_ISROWVERSION()          { return    "IsRowVersion"; }
-        const sal_Char* getPROPERTY_DESCRIPTION()           { return    "Description"; }
-        const sal_Char* getPROPERTY_DEFAULTVALUE()          { return    "DefaultValue"; }
+        const char* getPROPERTY_NAME()                  { return    "Name"; }
+        const char* getPROPERTY_TYPE()                  { return    "Type"; }
+        const char* getPROPERTY_TYPENAME()              { return    "TypeName"; }
+        const char* getPROPERTY_PRECISION()             { return    "Precision"; }
+        const char* getPROPERTY_SCALE()                 { return    "Scale"; }
+        const char* getPROPERTY_ISNULLABLE()            { return    "IsNullable"; }
+        const char* getPROPERTY_ISAUTOINCREMENT()       { return    "IsAutoIncrement"; }
+        const char* getPROPERTY_ISROWVERSION()          { return    "IsRowVersion"; }
+        const char* getPROPERTY_DESCRIPTION()           { return    "Description"; }
+        const char* getPROPERTY_DEFAULTVALUE()          { return    "DefaultValue"; }
 
-        const sal_Char* getPROPERTY_REFERENCEDTABLE()       { return    "ReferencedTable"; }
-        const sal_Char* getPROPERTY_UPDATERULE()            { return    "UpdateRule"; }
-        const sal_Char* getPROPERTY_DELETERULE()            { return    "DeleteRule"; }
-        const sal_Char* getPROPERTY_CATALOG()               { return    "Catalog"; }
-        const sal_Char* getPROPERTY_ISUNIQUE()              { return    "IsUnique"; }
-        const sal_Char* getPROPERTY_ISPRIMARYKEYINDEX()     { return    "IsPrimaryKeyIndex"; }
-        const sal_Char* getPROPERTY_ISCLUSTERED()           { return    "IsClustered"; }
-        const sal_Char* getPROPERTY_ISASCENDING()           { return    "IsAscending"; }
-        const sal_Char* getPROPERTY_SCHEMANAME()            { return    "SchemaName"; }
-        const sal_Char* getPROPERTY_CATALOGNAME()           { return    "CatalogName"; }
-        const sal_Char* getPROPERTY_COMMAND()               { return    "Command"; }
-        const sal_Char* getPROPERTY_CHECKOPTION()           { return    "CheckOption"; }
-        const sal_Char* getPROPERTY_PASSWORD()              { return    "Password"; }
-        const sal_Char* getPROPERTY_RELATEDCOLUMN()         { return    "RelatedColumn"; }
+        const char* getPROPERTY_REFERENCEDTABLE()       { return    "ReferencedTable"; }
+        const char* getPROPERTY_UPDATERULE()            { return    "UpdateRule"; }
+        const char* getPROPERTY_DELETERULE()            { return    "DeleteRule"; }
+        const char* getPROPERTY_CATALOG()               { return    "Catalog"; }
+        const char* getPROPERTY_ISUNIQUE()              { return    "IsUnique"; }
+        const char* getPROPERTY_ISPRIMARYKEYINDEX()     { return    "IsPrimaryKeyIndex"; }
+        const char* getPROPERTY_ISCLUSTERED()           { return    "IsClustered"; }
+        const char* getPROPERTY_ISASCENDING()           { return    "IsAscending"; }
+        const char* getPROPERTY_SCHEMANAME()            { return    "SchemaName"; }
+        const char* getPROPERTY_CATALOGNAME()           { return    "CatalogName"; }
+        const char* getPROPERTY_COMMAND()               { return    "Command"; }
+        const char* getPROPERTY_CHECKOPTION()           { return    "CheckOption"; }
+        const char* getPROPERTY_PASSWORD()              { return    "Password"; }
+        const char* getPROPERTY_RELATEDCOLUMN()         { return    "RelatedColumn"; }
 
-        const sal_Char* getSTAT_INVALID_INDEX()             { return    "Invalid descriptor index"; }
+        const char* getSTAT_INVALID_INDEX()             { return    "Invalid descriptor index"; }
 
-        const sal_Char* getPROPERTY_FUNCTION()              { return    "Function"; }
-        const sal_Char* getPROPERTY_TABLENAME()             { return    "TableName"; }
-        const sal_Char* getPROPERTY_REALNAME()              { return    "RealName"; }
-        const sal_Char* getPROPERTY_DBASEPRECISIONCHANGED() { return    "DbasePrecisionChanged"; }
-        const sal_Char* getPROPERTY_ISCURRENCY()            { return    "IsCurrency"; }
-        const sal_Char* getPROPERTY_ISBOOKMARKABLE()        { return    "IsBookmarkable"; }
+        const char* getPROPERTY_FUNCTION()              { return    "Function"; }
+        const char* getPROPERTY_TABLENAME()             { return    "TableName"; }
+        const char* getPROPERTY_REALNAME()              { return    "RealName"; }
+        const char* getPROPERTY_DBASEPRECISIONCHANGED() { return    "DbasePrecisionChanged"; }
+        const char* getPROPERTY_ISCURRENCY()            { return    "IsCurrency"; }
+        const char* getPROPERTY_ISBOOKMARKABLE()        { return    "IsBookmarkable"; }
 
-        const sal_Char* getPROPERTY_FORMATKEY()             { return    "FormatKey"; }
-        const sal_Char* getPROPERTY_LOCALE()                { return    "Locale"; }
+        const char* getPROPERTY_FORMATKEY()             { return    "FormatKey"; }
+        const char* getPROPERTY_LOCALE()                { return    "Locale"; }
 
-        const sal_Char* getPROPERTY_AUTOINCREMENTCREATION() { return    "AutoIncrementCreation"; }
-        const sal_Char* getPROPERTY_PRIVILEGES()            { return    "Privileges"; }
+        const char* getPROPERTY_AUTOINCREMENTCREATION() { return    "AutoIncrementCreation"; }
+        const char* getPROPERTY_PRIVILEGES()            { return    "Privileges"; }
 
     //= error messages
 
-        const sal_Char* getERRORMSG_SEQUENCE()              { return    "Function sequence error"; }
-        const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
-        const sal_Char* getSQLSTATE_GENERAL()               { return    "HY0000"; }
-        const sal_Char* getSTR_DELIMITER()                  { return    "/"; }
+        const char* getERRORMSG_SEQUENCE()              { return    "Function sequence error"; }
+        const char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
+        const char* getSQLSTATE_GENERAL()               { return    "HY0000"; }
+        const char* getSTR_DELIMITER()                  { return    "/"; }
 
         OPropertyMap::~OPropertyMap()
         {

@@ -69,9 +69,9 @@ class HuffmanTreeNode
 public:
     explicit HuffmanTreeNode(sal_uInt32 value = 0xffffffff) ;
     ~HuffmanTreeNode() ;
-    HuffmanTreeNode * InsertNode(sal_uInt32 nValue, const sal_Char * pInCode);
-    HuffmanTreeNode * QueryNode(const sal_Char *pCode);
-    sal_uInt32 QueryValue(const sal_Char *pCode);
+    HuffmanTreeNode * InsertNode(sal_uInt32 nValue, const char * pInCode);
+    HuffmanTreeNode * QueryNode(const char *pCode);
+    sal_uInt32 QueryValue(const char *pCode);
 };
 
 /**
@@ -116,7 +116,7 @@ public:
     void ConstructTree1();
     void ConstructTree2();
     void fillArray();
-    static void ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen);
+    static void ToString(sal_uInt32 nBits, char *pChar, sal_uInt32 nLen);
 };
 #endif
 

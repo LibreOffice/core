@@ -136,7 +136,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 
     long bytestRead = xInStream->readBytes(aHeadData, nHeadSize);
 
-    OString aHead = OString((const sal_Char *)aHeadData.getConstArray(), bytestRead).toAsciiLowerCase();
+    OString aHead = OString((const char *)aHeadData.getConstArray(), bytestRead).toAsciiLowerCase();
 
     // check for document element of flatxml format
     if (aHead.indexOf(aDocToken) >= 0)
