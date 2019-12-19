@@ -49,12 +49,12 @@ namespace frm
         /** returns a URL object for the given URL ASCII string
         */
         css::util::URL
-            getStrictURLFromAscii( const sal_Char* _pAsciiURL ) const;
+            getStrictURLFromAscii( const char* _pAsciiURL ) const;
 
         /** parses a given URL smartly, with a protocol given by ASCII string
         */
         void
-            parseSmartWithAsciiProtocol( css::util::URL& _rURL, const sal_Char* _pAsciiURL ) const;
+            parseSmartWithAsciiProtocol( css::util::URL& _rURL, const char* _pAsciiURL ) const;
 
     private:
         /** ensures that we have a URLTransformer instance in <member>m_xTransformer</member>

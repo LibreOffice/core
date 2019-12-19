@@ -264,7 +264,7 @@ namespace frm
     }
 
 
-    void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamAsciiName,
+    void OFormNavigationHelper::dispatchWithArgument( sal_Int16 _nFeatureId, const char* _pParamAsciiName,
         const Any& _rParamValue ) const
     {
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
@@ -377,9 +377,9 @@ namespace frm
         struct FeatureURL
         {
             const sal_Int16 nFormFeature;
-            const sal_Char* pAsciiURL;
+            const char*     pAsciiURL;
 
-            FeatureURL( const sal_Int16 _nFormFeature, const sal_Char* _pAsciiURL )
+            FeatureURL( const sal_Int16 _nFormFeature, const char* _pAsciiURL )
                 :nFormFeature( _nFormFeature )
                 ,pAsciiURL( _pAsciiURL )
             {

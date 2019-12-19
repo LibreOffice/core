@@ -53,7 +53,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void* fps_win32_component_getFactory(
-    const sal_Char* pImplName, void* pSrvManager, void* )
+    const char* pImplName, void* pSrvManager, void* )
 {
     void* pRet = nullptr;
 

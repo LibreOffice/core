@@ -80,9 +80,9 @@ namespace frm
 
     struct FormatEntry
     {
-        const sal_Char* pDescription;
-        sal_Int32       nKey;
-        LocaleType      eLocale;
+        const char*  pDescription;
+        sal_Int32    nKey;
+        LocaleType   eLocale;
     };
 
     }

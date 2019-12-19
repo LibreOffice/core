@@ -213,7 +213,7 @@ bool JobURL::getService( /*OUT*/ OUString& sService ) const
                 <FALSE/> otherwise.
 */
 bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
-                               /*IN*/  const sal_Char*        pPartIdentifier ,
+                               /*IN*/  const char*        pPartIdentifier ,
                                /*IN*/        sal_Int32        nPartLength     ,
                                /*OUT*/       OUString& rPartValue      ,
                                /*OUT*/       OUString& rPartArguments  )

@@ -224,9 +224,9 @@ namespace frm
                     bool bLoad = KEY_F11 == nCode;
                     static struct
                     {
-                        const sal_Char* pDescription;
-                        const sal_Char* pExtension;
-                        EETextFormat    eFormat;
+                        const char*   pDescription;
+                        const char*   pExtension;
+                        EETextFormat  eFormat;
                     } const aExportFormats[] =
                     {
                         { "OASIS OpenDocument (*.xml)", "*.xml", EETextFormat::Xml },
