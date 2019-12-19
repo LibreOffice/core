@@ -74,7 +74,7 @@ private:
    exception type, present is true iff the given exception type is a member of
    the set S, and children contains all the relevant direct subtypes of the
    given exception type, in no particular order (for nodes other than the root
-   node it holds that children is non-empty iff present is false).
+   node it holds that children are non-empty iff present is false).
  */
 class ExceptionTree {
 public:
