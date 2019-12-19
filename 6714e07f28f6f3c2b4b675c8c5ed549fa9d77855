@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_0cab741d",
+        "filename": "cui/source/options/optfltr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-19T05:42:36Z",
+      "side": 1,
+      "message": "We are trying to get rid of these lines. Please remove them instead of commenting.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "6714e07f28f6f3c2b4b675c8c5ed549fa9d77855",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_2ca8b01d",
+        "filename": "cui/source/options/optfltr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-19T05:42:36Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 8
+      },
+      "revId": "6714e07f28f6f3c2b4b675c8c5ed549fa9d77855",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_cc625c17",
+        "filename": "cui/source/options/optgdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-19T05:42:36Z",
+      "side": 1,
+      "message": "We are trying to get rid of these lines. Please remove them instead of commenting.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "6714e07f28f6f3c2b4b675c8c5ed549fa9d77855",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_ec671825",
+        "filename": "cui/source/options/optgdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-19T05:42:36Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 51
+      },
+      "revId": "6714e07f28f6f3c2b4b675c8c5ed549fa9d77855",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
