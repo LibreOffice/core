@@ -110,7 +110,7 @@ ScVbaCharacters::Insert( const OUString& rString )
 void SAL_CALL
 ScVbaCharacters::Delete(  )
 {
-    // #FIXME #TODO is this a bit suspect?, I wonder should the contents
+    // #FIXME #TODO is this a bit suspect? I wonder should the contents
     // of the cell be deleted from the parent ( range )
     m_xSimpleText->setString(OUString());
 }
