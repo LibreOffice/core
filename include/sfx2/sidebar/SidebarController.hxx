@@ -170,6 +170,8 @@ public:
 
     css::uno::Reference<css::frame::XFrame> getXFrame() {return mxFrame;}
 
+    void SyncUpdate();
+
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 

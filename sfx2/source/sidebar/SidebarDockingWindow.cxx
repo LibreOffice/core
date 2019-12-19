@@ -182,6 +182,14 @@ void SidebarDockingWindow::Resize()
     NotifyResize();
 }
 
+void SidebarDockingWindow::SyncUpdate()
+{
+    if (mpSidebarController.is())
+        mpSidebarController->SyncUpdate();
+    else
+        SAL_DEBUG("No controllers");
+}
+
 void SidebarDockingWindow::NotifyResize()
 {
     if (comphelper::LibreOfficeKit::isActive() && mpSidebarController.is() && SfxViewShell::Current())
