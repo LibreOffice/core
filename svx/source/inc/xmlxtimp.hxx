@@ -45,9 +45,8 @@ public:
                       const css::uno::Reference< css::container::XNameContainer >& xTable,
                       bool *bOptLoadedFromStorage ) throw();
 protected:
-    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
-                                      const OUString& rLocalName,
-                                      const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     const css::uno::Reference< css::container::XNameContainer > & mrTable;
