@@ -44,7 +44,7 @@ define gb_CObject__compiler
 endef
 
 # Avoid annoying warning D9025 about overriding command-line arguments.
-gb_Helper_remove_overriden_flags = \
+gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -W4 -w,$(1))) \
     $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2,$(1)) \
     $(lastword $(filter -Od -O2,$(1))) \
@@ -58,7 +58,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
-		$(call gb_Helper_remove_overriden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
+		$(call gb_Helper_remove_overridden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
 			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		$(if $(EXTERNAL_CODE), \
 			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
@@ -95,7 +95,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
 	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
-		$(call gb_Helper_remove_overriden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
+		$(call gb_Helper_remove_overridden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
 			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
