@@ -133,7 +133,8 @@ static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const P
     if ( nCell == 0 )
     {
         lcl_mergeBorder( PROP_LEFT_BORDER, pTableBorders, pCellProps );
-        if ( pVerticalVal )
+        // <w:insideV> counts if there are multiple cells in this row.
+        if (pVerticalVal && !bIsEndCol)
             pCellProps->Insert( PROP_RIGHT_BORDER, aVertProp, false );
     }
 
