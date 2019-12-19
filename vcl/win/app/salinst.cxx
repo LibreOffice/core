@@ -1081,7 +1081,10 @@ std::shared_ptr<vcl::BackendCapabilities> WinSalInstance::GetBackendCapabilities
 #if HAVE_FEATURE_SKIA
 #if SKIA_USE_BITMAP32
     if( SkiaHelper::isVCLSkiaEnabled())
+    {
         pBackendCapabilities->mbSupportsBitmap32 = true;
+        pBackendCapabilities->mbPrefersBitmap32 = true;
+    }
 #endif
 #endif
     return pBackendCapabilities;

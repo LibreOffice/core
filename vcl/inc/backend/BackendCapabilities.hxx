@@ -15,9 +15,15 @@ namespace vcl
 {
 struct BackendCapabilities
 {
+    // The backend is capable of handling 32bpp bitmaps (as opposed to having
+    // to split them to 24bpp data and extra alpha bitmap).
     bool mbSupportsBitmap32;
+    // Bitmaps should be created as 32bpp if possible, e.g. if the backend
+    // is more efficient with 32bpp formats.
+    bool mbPrefersBitmap32;
     BackendCapabilities()
         : mbSupportsBitmap32(false)
+        , mbPrefersBitmap32(false)
     {
     }
 };
