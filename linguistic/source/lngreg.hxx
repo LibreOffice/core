@@ -30,31 +30,31 @@ namespace com { namespace sun { namespace star { namespace lang {
 
 extern void * LngSvcMgr_getFactory
 (
-    const sal_Char * pImplName,
+    const char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
 extern void * DicList_getFactory
 (
-    const sal_Char * pImplName,
+    const char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
 void * LinguProps_getFactory
 (
-    const sal_Char * pImplName,
+    const char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
 extern void * ConvDicList_getFactory
 (
-    const sal_Char * pImplName,
+    const char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 
 extern void * GrammarCheckingIterator_getFactory
 (
-    const sal_Char * pImplName,
+    const char * pImplName,
     css::lang::XMultiServiceFactory * pServiceManager
 );
 

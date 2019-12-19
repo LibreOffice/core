@@ -137,7 +137,7 @@ bool isWellFormedXML( OString const & text )
 OString xmlStrToOString( const xmlChar* pString )
 {
     xmlChar* pTemp = xmlStrdup( pString );
-    OString sResult = reinterpret_cast<sal_Char*>( pTemp );
+    OString sResult = reinterpret_cast<char*>( pTemp );
     xmlFree( pTemp );
     return sResult;
 }

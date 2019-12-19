@@ -620,9 +620,9 @@ void LngSvcMgr::UpdateAll()
     SvtLinguConfig aCfg;
 
     const int nNumServices = 4;
-    const sal_Char * const apServices[nNumServices]       =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
-    const sal_Char * const apCurLists[nNumServices]       =  { "ServiceManager/SpellCheckerList",       "ServiceManager/GrammarCheckerList",       "ServiceManager/HyphenatorList",       "ServiceManager/ThesaurusList" };
-    const sal_Char * const apLastFoundLists[nNumServices] =  { "ServiceManager/LastFoundSpellCheckers", "ServiceManager/LastFoundGrammarCheckers", "ServiceManager/LastFoundHyphenators", "ServiceManager/LastFoundThesauri" };
+    const char * const apServices[nNumServices]       =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
+    const char * const apCurLists[nNumServices]       =  { "ServiceManager/SpellCheckerList",       "ServiceManager/GrammarCheckerList",       "ServiceManager/HyphenatorList",       "ServiceManager/ThesaurusList" };
+    const char * const apLastFoundLists[nNumServices] =  { "ServiceManager/LastFoundSpellCheckers", "ServiceManager/LastFoundGrammarCheckers", "ServiceManager/LastFoundHyphenators", "ServiceManager/LastFoundThesauri" };
 
     // usage of indices as above: 0 = spell checker, 1 = grammar checker, 2 = hyphenator, 3 = thesaurus
     std::vector< list_entry_map_t > aLastFoundSvcs(nNumServices);
@@ -684,7 +684,7 @@ void LngSvcMgr::UpdateAll()
     {
         for (int i = 0;  i < 2;  ++i)
         {
-            const sal_Char *pSubNodeName = (i == 0) ? apCurLists[k] : apLastFoundLists[k];
+            const char *pSubNodeName = (i == 0) ? apCurLists[k] : apLastFoundLists[k];
             OUString aSubNodeName( OUString::createFromAscii(pSubNodeName) );
 
             list_entry_map_t &rCurMap = (i == 0) ? aCurSvcs[k] : aLastFoundSvcs[k];
@@ -1845,7 +1845,7 @@ static uno::Reference< uno::XInterface > LngSvcMgr_CreateInstance(
 }
 
 void * LngSvcMgr_getFactory(
-            const sal_Char * pImplName,
+            const char * pImplName,
             lang::XMultiServiceFactory * pServiceManager )
 {
 

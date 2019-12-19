@@ -76,10 +76,10 @@ using namespace linguistic;
 // text stripping and dictionary saving.
 #define EXTENSION_FOR_TITLE_TEXT "."
 
-static const sal_Char* const pVerStr2    = "WBSWG2";
-static const sal_Char* const pVerStr5    = "WBSWG5";
-static const sal_Char* const pVerStr6    = "WBSWG6";
-static const sal_Char* const pVerOOo7    = "OOoUserDict1";
+static const char* const pVerStr2    = "WBSWG2";
+static const char* const pVerStr5    = "WBSWG5";
+static const char* const pVerStr6    = "WBSWG6";
+static const char* const pVerOOo7    = "OOoUserDict1";
 
 static const sal_Int16 DIC_VERSION_DONTKNOW = -1;
 static const sal_Int16 DIC_VERSION_2 = 2;
@@ -94,7 +94,7 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
     return xRes;
 }
 
-static bool getTag(const OString &rLine, const sal_Char *pTagName,
+static bool getTag(const OString &rLine, const char *pTagName,
     OString &rTagValue)
 {
     sal_Int32 nPos = rLine.indexOf(pTagName);
@@ -111,7 +111,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool 
 {
     // Sniff the header
     sal_Int16 nDicVersion = DIC_VERSION_DONTKNOW;
-    sal_Char pMagicHeader[MAX_HEADER_LENGTH];
+    char pMagicHeader[MAX_HEADER_LENGTH];
 
     nLng = LANGUAGE_NONE;
     bNeg = false;
@@ -314,7 +314,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
         DIC_VERSION_2 == nDicVersion)
     {
         sal_uInt16  nLen = 0;
-        sal_Char aWordBuf[ BUFSIZE ];
+        char aWordBuf[ BUFSIZE ];
 
         // Read the first word
         if (!pStream->eof())

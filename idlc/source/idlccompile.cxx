@@ -49,7 +49,7 @@ extern int yyparse();
 extern FILE* yyin;
 extern int yydebug;
 
-static sal_Char tmpFilePattern[512];
+static char tmpFilePattern[512];
 
 bool isFileUrl(const OString& fileName)
 {

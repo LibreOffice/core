@@ -20,7 +20,7 @@
 #include <errorhandler.hxx>
 #include <astinterface.hxx>
 
-static const sal_Char* errorCodeToMessage(ErrorCode eCode)
+static const char* errorCodeToMessage(ErrorCode eCode)
 {
     switch (eCode)
     {
@@ -121,7 +121,7 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
     return "unknown error";
 }
 
-static const sal_Char* warningCodeToMessage(WarningCode wCode)
+static const char* warningCodeToMessage(WarningCode wCode)
 {
     switch (wCode)
     {
@@ -131,7 +131,7 @@ static const sal_Char* warningCodeToMessage(WarningCode wCode)
     return "unknown warning";
 }
 
-static const sal_Char* parseStateToMessage(ParseState state)
+static const char* parseStateToMessage(ParseState state)
 {
     switch (state)
     {
@@ -452,7 +452,7 @@ void ErrorHandler::error3(ErrorCode e, AstDeclaration const * d1, AstDeclaration
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::warning0(WarningCode w, const sal_Char* warningmsg)
+void ErrorHandler::warning0(WarningCode w, const char* warningmsg)
 {
     if ( idlc()->getOptions()->isValid("-w") || idlc()->getOptions()->isValid("-we") ) {
         warningHeader(w);
@@ -465,7 +465,7 @@ void ErrorHandler::warning0(WarningCode w, const sal_Char* warningmsg)
         idlc()->incWarningCount();
 }
 
-void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, const sal_Char* errmsg)
+void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, const char* errmsg)
 {
     errorHeader(ErrorCode::SyntaxError, lineNumber);
     fprintf(stderr, "%s: %s\n", parseStateToMessage(ps), errmsg);

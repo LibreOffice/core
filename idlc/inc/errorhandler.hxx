@@ -83,10 +83,10 @@ public:
     static void error3(ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2, AstDeclaration const * d3);
 
     // Warning
-    static void warning0(WarningCode e, const sal_Char* warningmsg);
+    static void warning0(WarningCode e, const char* warningmsg);
 
     // Report a syntax error in IDL input
-    static void syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
+    static void syntaxError(ParseState state, sal_Int32 lineNumber, const char* errmsg);
 
     // Report an unsuccessful coercion attempt
     static void coercionError(AstExpression *pExpr, ExprType et);

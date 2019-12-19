@@ -187,7 +187,7 @@ static const struct ::cppu::ImplementationEntry s_component_entries[]
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void* numbertext_component_getFactory(sal_Char const* implName, void* xMgr,
+SAL_DLLPUBLIC_EXPORT void* numbertext_component_getFactory(char const* implName, void* xMgr,
                                                            void* xRegistry)
 {
     return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries);

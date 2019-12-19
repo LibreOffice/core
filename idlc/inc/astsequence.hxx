@@ -35,7 +35,7 @@ public:
     virtual bool isUnsigned() const override
     { return m_pMemberType != nullptr && m_pMemberType->isUnsigned(); }
 
-    virtual const sal_Char* getRelativName() const override;
+    virtual const char* getRelativName() const override;
 private:
     AstType const * m_pMemberType;
     mutable o3tl::optional<OString> m_xRelativName;

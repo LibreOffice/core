@@ -74,7 +74,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         {
             Environment java_env, loader_env;
 
-            const sal_Char * pEnvTypeName = nullptr;
+            const char * pEnvTypeName = nullptr;
             (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
                 &pEnvTypeName, reinterpret_cast<uno_Environment **>(&loader_env) );
             if (! loader_env.is())
@@ -163,7 +163,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
         {
             Environment java_env, loader_env;
 
-            const sal_Char * pEnvTypeName = nullptr;
+            const char * pEnvTypeName = nullptr;
             (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
                 &pEnvTypeName, reinterpret_cast<uno_Environment **>(&loader_env) );
 

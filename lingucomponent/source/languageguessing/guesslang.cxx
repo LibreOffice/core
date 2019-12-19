@@ -348,7 +348,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * guesslang_component_getFactory(
-    sal_Char const * implName, void * xMgr,
+    char const * implName, void * xMgr,
     void * xRegistry )
 {
     return ::cppu::component_getFactoryHelper(

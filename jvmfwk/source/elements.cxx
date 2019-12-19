@@ -72,7 +72,7 @@ static OString getElement(OString const & docPath,
             JFW_E_ERROR,
             "[Java framework] Error in function getElement (elements.cxx)");
     }
-    sValue = reinterpret_cast<sal_Char*>(pathObj->nodesetval->nodeTab[0]->content);
+    sValue = reinterpret_cast<char*>(pathObj->nodesetval->nodeTab[0]->content);
     return sValue;
 }
 

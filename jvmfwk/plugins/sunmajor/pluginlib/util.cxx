@@ -201,7 +201,7 @@ public:
 private:
     enum { BUFFER_SIZE = 1024 };
 
-    sal_Char m_aBuffer[BUFFER_SIZE];
+    char m_aBuffer[BUFFER_SIZE];
     FileHandleGuard m_aGuard;
     int m_nSize;
     int m_nIndex;
@@ -271,7 +271,7 @@ namespace {
 class AsynchReader: public salhelper::Thread
 {
     size_t  m_nDataSize;
-    std::unique_ptr<sal_Char[]> m_arData;
+    std::unique_ptr<char[]> m_arData;
 
     FileHandleGuard m_aGuard;
 
@@ -306,7 +306,7 @@ OString AsynchReader::getData()
 void AsynchReader::execute()
 {
     const sal_uInt64 BUFFER_SIZE = 4096;
-    sal_Char aBuffer[BUFFER_SIZE];
+    char aBuffer[BUFFER_SIZE];
     while (true)
     {
         sal_uInt64 nRead;
@@ -330,12 +330,12 @@ void AsynchReader::execute()
         else if (nRead <= BUFFER_SIZE)
         {
             //Save the data we have in m_arData into a temporary array
-            std::unique_ptr<sal_Char[]> arTmp( new sal_Char[m_nDataSize]);
+            std::unique_ptr<char[]> arTmp( new char[m_nDataSize]);
             if (m_nDataSize != 0) {
                 memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
             }
             //Enlarge m_arData to hold the newly read data
-            m_arData.reset(new sal_Char[static_cast<size_t>(m_nDataSize + nRead)]);
+            m_arData.reset(new char[static_cast<size_t>(m_nDataSize + nRead)]);
             //Copy back the data that was already in m_arData
             memcpy(m_arData.get(), arTmp.get(), m_nDataSize);
             //Add the newly read data to m_arData

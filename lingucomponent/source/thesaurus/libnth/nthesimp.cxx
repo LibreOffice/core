@@ -581,7 +581,7 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * lnth_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     if ( Thesaurus::getImplementationName_Static().equalsAscii( pImplName ) )
