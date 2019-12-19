@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
-#define INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
+#pragma once
 
 #ifdef _WIN32
 #include <prewin.h>
@@ -97,7 +95,5 @@ public:
     enum class CmpResult { LT, EQ, GT };
     friend CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
