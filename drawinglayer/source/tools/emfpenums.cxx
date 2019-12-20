@@ -78,15 +78,15 @@ namespace emfplushelper
     {
         switch (type)
         {
-            case ObjectTypeBrush: return "ObjectTypeBrush";
-            case ObjectTypePen: return "ObjectTypePen";
-            case ObjectTypePath: return "ObjectTypePath";
-            case ObjectTypeRegion: return "ObjectTypeRegion";
-            case ObjectTypeImage: return "ObjectTypeImage";
-            case ObjectTypeFont: return "ObjectTypeFont";
-            case ObjectTypeStringFormat: return "ObjectTypeStringFormat";
-            case ObjectTypeImageAttributes: return "ObjectTypeImageAttributes";
-            case ObjectTypeCustomLineCap: return "ObjectTypeCustomLineCap";
+            case ObjectType::ObjectTypeBrush: return "ObjectTypeBrush";
+            case ObjectType::ObjectTypePen: return "ObjectTypePen";
+            case ObjectType::ObjectTypePath: return "ObjectTypePath";
+            case ObjectType::ObjectTypeRegion: return "ObjectTypeRegion";
+            case ObjectType::ObjectTypeImage: return "ObjectTypeImage";
+            case ObjectType::ObjectTypeFont: return "ObjectTypeFont";
+            case ObjectType::ObjectTypeStringFormat: return "ObjectTypeStringFormat";
+            case ObjectType::ObjectTypeImageAttributes: return "ObjectTypeImageAttributes";
+            case ObjectType::ObjectTypeCustomLineCap: return "ObjectTypeCustomLineCap";
         }
         return "";
     }
