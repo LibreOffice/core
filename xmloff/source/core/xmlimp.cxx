@@ -729,7 +729,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     if(!maContexts.empty())
     {
         xContext = maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList);
-        SAL_WARN_IF( !xContext.is() || (xContext->GetPrefix() != nPrefix), "xmloff.core",
+        SAL_WARN_IF( xContext.is() && xContext->IsPrefixFilledIn() && (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
     else
@@ -782,7 +782,7 @@ rName
 
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
-        if (!xContext->GetLocalName().isEmpty()) // prefix+localname are only valid in the non-FastParser case
+        if (xContext->IsPrefixFilledIn()) // prefix+localname are only valid in the non-FastParser case
         {
             OUString aLocalName;
             sal_uInt16 nPrefix =

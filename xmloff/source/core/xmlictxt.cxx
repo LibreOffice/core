@@ -32,13 +32,16 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
     , mrImport(rImp)
     , mnPrefix(nPrfx)
     , maLocalName(rLName)
+    , mbPrefixAndLocalNameFilledIn(true)
 {
+    assert(!rLName.isEmpty());
 }
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
     : m_nRefCount(0)
     , mrImport(rImp)
     , mnPrefix(0)
+    , mbPrefixAndLocalNameFilledIn(false)
 {
 }
 

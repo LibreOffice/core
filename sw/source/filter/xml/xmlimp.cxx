@@ -244,7 +244,7 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         // don't use the autostyles from the styles-document for the progress
-        if ( ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
+        if ( !IsPrefixFilledIn() || ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
             GetSwImport().GetProgressBarHelper()->Increment
                 ( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
