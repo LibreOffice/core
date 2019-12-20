@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <tools/helpers.hxx>
+#include <boost/smart_ptr/make_shared.hpp>
 
 #include <salgdi.hxx>
 #include <salinst.hxx>
@@ -140,22 +141,21 @@ bool SkiaSalBitmap::CreateBitmapData()
             return false;
         }
         mScanlineSize = AlignedWidth4Bytes(bitScanlineWidth);
-        sal_uInt8* buffer = nullptr;
         if (mScanlineSize != 0 && mSize.Height() != 0)
         {
             size_t allocate = mScanlineSize * mSize.Height();
 #ifdef DBG_UTIL
             allocate += sizeof(CANARY);
 #endif
-            buffer = new sal_uInt8[allocate];
+            mBuffer = boost::make_shared<sal_uInt8[]>(allocate);
 #ifdef DBG_UTIL
             // fill with random garbage
+            sal_uInt8* buffer = mBuffer.get();
             for (size_t i = 0; i < allocate; i++)
                 buffer[i] = (i & 0xFF);
             memcpy(buffer + allocate - sizeof(CANARY), CANARY, sizeof(CANARY));
 #endif
         }
-        mBuffer.reset(buffer);
     }
     return true;
 }
@@ -613,9 +613,9 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
         assert(memcmp(mBuffer.get() + allocate, CANARY, sizeof(CANARY)) == 0);
         allocate += sizeof(CANARY);
 #endif
-        sal_uInt8* newBuffer = new sal_uInt8[allocate];
-        memcpy(newBuffer, mBuffer.get(), allocate);
-        mBuffer.reset(newBuffer);
+        boost::shared_ptr<sal_uInt8[]> newBuffer = boost::make_shared<sal_uInt8[]>(allocate);
+        memcpy(newBuffer.get(), mBuffer.get(), allocate);
+        mBuffer = newBuffer;
     }
 }
 
