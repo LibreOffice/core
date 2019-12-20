@@ -22,13 +22,10 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include <TitleHelper.hxx>
 
 namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
-
-class ListBox;
 
 namespace chart {
 
@@ -70,30 +67,30 @@ public:
 
 private:
     //ui controls
-    VclPtr<CheckBox> mpCBTitle;
-    VclPtr<CheckBox> mpCBSubtitle;
-    VclPtr<CheckBox> mpCBXAxis;
-    VclPtr<CheckBox> mpCBXAxisTitle;
-    VclPtr<CheckBox> mpCBYAxis;
-    VclPtr<CheckBox> mpCBYAxisTitle;
-    VclPtr<CheckBox> mpCBZAxis;
-    VclPtr<CheckBox> mpCBZAxisTitle;
-    VclPtr<CheckBox> mpCB2ndXAxis;
-    VclPtr<CheckBox> mpCB2ndXAxisTitle;
-    VclPtr<CheckBox> mpCB2ndYAxis;
-    VclPtr<CheckBox> mpCB2ndYAxisTitle;
-    VclPtr<CheckBox> mpCBLegend;
-    VclPtr<CheckBox> mpCBGridVerticalMajor;
-    VclPtr<CheckBox> mpCBGridHorizontalMajor;
-    VclPtr<CheckBox> mpCBGridVerticalMinor;
-    VclPtr<CheckBox> mpCBGridHorizontalMinor;
-    VclPtr<FixedText> mpTextTitle;
-    VclPtr<FixedText> mpTextSubTitle;
-    VclPtr<FixedText> mpLBAxis;
-    VclPtr<FixedText> mpLBGrid;
+    std::unique_ptr<weld::CheckButton> mxCBTitle;
+    std::unique_ptr<weld::CheckButton> mxCBSubtitle;
+    std::unique_ptr<weld::CheckButton> mxCBXAxis;
+    std::unique_ptr<weld::CheckButton> mxCBXAxisTitle;
+    std::unique_ptr<weld::CheckButton> mxCBYAxis;
+    std::unique_ptr<weld::CheckButton> mxCBYAxisTitle;
+    std::unique_ptr<weld::CheckButton> mxCBZAxis;
+    std::unique_ptr<weld::CheckButton> mxCBZAxisTitle;
+    std::unique_ptr<weld::CheckButton> mxCB2ndXAxis;
+    std::unique_ptr<weld::CheckButton> mxCB2ndXAxisTitle;
+    std::unique_ptr<weld::CheckButton> mxCB2ndYAxis;
+    std::unique_ptr<weld::CheckButton> mxCB2ndYAxisTitle;
+    std::unique_ptr<weld::CheckButton> mxCBLegend;
+    std::unique_ptr<weld::CheckButton> mxCBGridVerticalMajor;
+    std::unique_ptr<weld::CheckButton> mxCBGridHorizontalMajor;
+    std::unique_ptr<weld::CheckButton> mxCBGridVerticalMinor;
+    std::unique_ptr<weld::CheckButton> mxCBGridHorizontalMinor;
+    std::unique_ptr<weld::Label> mxTextTitle;
+    std::unique_ptr<weld::Label> mxTextSubTitle;
+    std::unique_ptr<weld::Label> mxLBAxis;
+    std::unique_ptr<weld::Label> mxLBGrid;
 
-    VclPtr<ListBox> mpLBLegendPosition;
-    VclPtr<VclHBox> mpBoxLegend;
+    std::unique_ptr<weld::ComboBox> mxLBLegendPosition;
+    std::unique_ptr<weld::Widget> mxBoxLegend;
 
     vcl::EnumContext maContext;
 
@@ -109,8 +106,8 @@ private:
 
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
-    DECL_LINK(CheckBoxHdl, Button*, void);
-    DECL_LINK(LegendPosHdl, ListBox&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(LegendPosHdl, weld::ComboBox&, void);
 };
 
 } } // end of namespace ::chart::sidebar
