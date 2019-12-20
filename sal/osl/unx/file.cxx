@@ -815,6 +815,28 @@ static oslFileError openMemoryAsFile(void *address, size_t size, oslFileHandle *
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR )
 #endif
 
+/*
+ * Reading files from /assets/ on Android is really slow; we should cache
+ * small files, particularly sidebar data we need rapidly.
+ */
+#ifdef ANDROID
+struct ACacheEntry {
+    OString aFilePath;
+    OString aData;
+};
+static size_t nHitCacheEntry = 0;
+static ACacheEntry aHitCache[16];
+// static ACacheEntry aMissCache[32];
+
+ACacheEntry *aCacheFind(ACacheEntry *pCache, int size, const char *cpFilePath)
+{
+    for (int i = 0; i < size; ++i)
+        if (!strcmp(pCache[i].aFilePath.getStr(), cpFilePath))
+            return pCache + i;
+    return nullptr;
+}
+#endif
+
 oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
                           mode_t mode)
 {
@@ -828,21 +850,50 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     {
         void* address;
         size_t size;
-        AAssetManager* mgr = lo_get_native_assetmgr();
-        AAsset* asset = AAssetManager_open(mgr, cpFilePath + sizeof("/assets/")-1, AASSET_MODE_BUFFER);
-        if (!asset)
+        ACacheEntry *pHit;
+
+        pHit = aCacheFind(aHitCache, SAL_N_ELEMENTS(aHitCache), cpFilePath);
+        if (pHit)
+        {
+            size = pHit->aData.getLength();
+            address = malloc(sizeof(char)*size);
+            memcpy(address, pHit->aData.getStr(), size);
+        }
+        // FIXME: make a proper cache class [!]
+/*        else if (pHit = aCacheFind(aMissCache, SAL_N_ELEMENTS(aMissCache), cpFilePath))
         {
             address = NULL;
             errno = ENOENT;
-            __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open %s", cpFilePath);
+            __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open via miss cache %s", cpFilePath);
             return osl_File_E_NOENT;
-        }
+            } */
         else
         {
-            size = AAsset_getLength(asset);
-            address = malloc(sizeof(char)*size);
-            AAsset_read(asset,address,size);
-            AAsset_close(asset);
+            AAssetManager* mgr = lo_get_native_assetmgr();
+            AAsset* asset = AAssetManager_open(mgr, cpFilePath + sizeof("/assets/")-1, AASSET_MODE_BUFFER);
+            if (!asset)
+            {
+                address = NULL;
+                errno = ENOENT;
+                __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open %s", cpFilePath);
+                // FIXME: populate aMissCache[
+                return osl_File_E_NOENT;
+            }
+            else
+            {
+                size = AAsset_getLength(asset);
+                address = malloc(sizeof(char)*size);
+                AAsset_read(asset,address,size);
+                AAsset_close(asset);
+
+                if (size < 50 * 1024)
+                {
+                    size_t nIdx = nHitCacheEntry % SAL_N_ELEMENTS(aHitCache);
+                    aHitCache[nIdx].aFilePath = OString(cpFilePath, strlen(cpFilePath));
+                    aHitCache[nIdx].aData = OString((char *)address, size);
+                    nHitCacheEntry++;
+                }
+            }
         }
 
         if (uFlags & osl_File_OpenFlag_Write)
