@@ -23,9 +23,6 @@
 
 #include "ChartErrorBarPanel.hxx"
 #include <ChartController.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css;
@@ -235,23 +232,18 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 
 ChartErrorBarPanel::ChartErrorBarPanel(
     vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    ChartController* pController)
-  : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame),
-    mxModel(pController->getModel()),
-    mxListener(new ChartSidebarModifyListener(this)),
-    mbModelValid(true)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame, ChartController* pController)
+    : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame, true)
+    , mxRBPosAndNeg(m_xBuilder->weld_radio_button("radiobutton_positive_negative"))
+    , mxRBPos(m_xBuilder->weld_radio_button("radiobutton_positive"))
+    , mxRBNeg(m_xBuilder->weld_radio_button("radiobutton_negative"))
+    , mxLBType(m_xBuilder->weld_combo_box("comboboxtext_type"))
+    , mxMFPos(m_xBuilder->weld_spin_button("spinbutton_pos"))
+    , mxMFNeg(m_xBuilder->weld_spin_button("spinbutton_neg"))
+    , mxModel(pController->getModel())
+    , mxListener(new ChartSidebarModifyListener(this))
+    , mbModelValid(true)
 {
-
-    get(mpRBPosAndNeg, "radiobutton_positive_negative");
-    get(mpRBPos, "radiobutton_positive");
-    get(mpRBNeg, "radiobutton_negative");
-
-    get(mpLBType, "comboboxtext_type");
-
-    get(mpMFPos, "spinbutton_pos");
-    get(mpMFNeg, "spinbutton_neg");
-
     Initialize();
 }
 
@@ -265,14 +257,14 @@ void ChartErrorBarPanel::dispose()
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
 
-    mpRBPosAndNeg.clear();
-    mpRBPos.clear();
-    mpRBNeg.clear();
+    mxRBPosAndNeg.reset();
+    mxRBPos.reset();
+    mxRBNeg.reset();
 
-    mpLBType.clear();
+    mxLBType.reset();
 
-    mpMFPos.clear();
-    mpMFNeg.clear();
+    mxMFPos.reset();
+    mxMFNeg.reset();
 
     PanelLayout::dispose();
 }
@@ -281,22 +273,22 @@ void ChartErrorBarPanel::Initialize()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->addModifyListener(mxListener);
-    mpRBNeg->Check(false);
-    mpRBPos->Check(false);
-    mpRBPosAndNeg->Check(false);
+    mxRBNeg->set_active(false);
+    mxRBPos->set_active(false);
+    mxRBPosAndNeg->set_active(false);
 
     updateData();
 
-    Link<RadioButton&,void> aLink = LINK(this, ChartErrorBarPanel, RadioBtnHdl);
-    mpRBPosAndNeg->SetToggleHdl(aLink);
-    mpRBPos->SetToggleHdl(aLink);
-    mpRBNeg->SetToggleHdl(aLink);
+    Link<weld::ToggleButton&,void> aLink = LINK(this, ChartErrorBarPanel, RadioBtnHdl);
+    mxRBPosAndNeg->connect_toggled(aLink);
+    mxRBPos->connect_toggled(aLink);
+    mxRBNeg->connect_toggled(aLink);
 
-    mpLBType->SetSelectHdl(LINK(this, ChartErrorBarPanel, ListBoxHdl));
+    mxLBType->connect_changed(LINK(this, ChartErrorBarPanel, ListBoxHdl));
 
-    Link<Edit&,void> aLink2 = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
-    mpMFPos->SetModifyHdl(aLink2);
-    mpMFNeg->SetModifyHdl(aLink2);
+    Link<weld::SpinButton&,void> aLink2 = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
+    mxMFPos->connect_value_changed(aLink2);
+    mxMFNeg->connect_value_changed(aLink2);
 }
 
 void ChartErrorBarPanel::updateData()
@@ -311,37 +303,37 @@ void ChartErrorBarPanel::updateData()
     SolarMutexGuard aGuard;
 
     if (bPos && bNeg)
-        mpRBPosAndNeg->Check();
+        mxRBPosAndNeg->set_active(true);
     else if (bPos)
-        mpRBPos->Check();
+        mxRBPos->set_active(true);
     else if (bNeg)
-        mpRBNeg->Check();
+        mxRBNeg->set_active(true);
 
     sal_Int32 nTypePos = getTypePos(mxModel, aCID);
-    mpLBType->SelectEntryPos(nTypePos);
+    mxLBType->set_active(nTypePos);
 
     if (nTypePos <= 1)
     {
         if (bPos)
-            mpMFPos->Enable();
+            mxMFPos->set_sensitive(true);
         else
-            mpMFPos->Disable();
+            mxMFPos->set_sensitive(false);
 
         if (bNeg)
-            mpMFNeg->Enable();
+            mxMFNeg->set_sensitive(true);
         else
-            mpMFNeg->Disable();
+            mxMFNeg->set_sensitive(false);
 
         double nValPos = getValue(mxModel, aCID, ErrorBarDirection::POSITIVE);
         double nValNeg = getValue(mxModel, aCID, ErrorBarDirection::NEGATIVE);
 
-        mpMFPos->SetValue(nValPos);
-        mpMFNeg->SetValue(nValNeg);
+        mxMFPos->set_value(nValPos);
+        mxMFNeg->set_value(nValNeg);
     }
     else
     {
-        mpMFPos->Disable();
-        mpMFNeg->Disable();
+        mxMFPos->set_sensitive(false);
+        mxMFNeg->set_sensitive(false);
     }
 }
 
@@ -399,31 +391,31 @@ void ChartErrorBarPanel::updateModel(
     xBroadcasterNew->addModifyListener(mxListener);
 }
 
-IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, weld::ToggleButton&, void)
 {
     OUString aCID = getCID(mxModel);
-    bool bPos = mpRBPosAndNeg->IsChecked() || mpRBPos->IsChecked();
-    bool bNeg = mpRBPosAndNeg->IsChecked() || mpRBNeg->IsChecked();
+    bool bPos = mxRBPosAndNeg->get_active() || mxRBPos->get_active();
+    bool bNeg = mxRBPosAndNeg->get_active() || mxRBNeg->get_active();
 
     setShowPositiveError(mxModel, aCID, bPos);
     setShowNegativeError(mxModel, aCID, bNeg);
 }
 
-IMPL_LINK_NOARG(ChartErrorBarPanel, ListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChartErrorBarPanel, ListBoxHdl, weld::ComboBox&, void)
 {
     OUString aCID = getCID(mxModel);
-    sal_Int32 nPos = mpLBType->GetSelectedEntryPos();
+    sal_Int32 nPos = mxLBType->get_active();
 
     setTypePos(mxModel, aCID, nPos);
 }
 
-IMPL_LINK(ChartErrorBarPanel, NumericFieldHdl, Edit&, rMetricField, void)
+IMPL_LINK(ChartErrorBarPanel, NumericFieldHdl, weld::SpinButton&, rMetricField, void)
 {
     OUString aCID = getCID(mxModel);
-    double nVal = static_cast<NumericField&>(rMetricField).GetValue();
-    if (&rMetricField == mpMFPos.get())
+    double nVal = rMetricField.get_value();
+    if (&rMetricField == mxMFPos.get())
         setValue(mxModel, aCID, nVal, ErrorBarDirection::POSITIVE);
-    else if (&rMetricField == mpMFNeg.get())
+    else if (&rMetricField == mxMFNeg.get())
         setValue(mxModel, aCID, nVal, ErrorBarDirection::NEGATIVE);
 }
 

@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustmentNEG">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPOS">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">chart2/res/errorup_30.png</property>
+    <property name="icon_name">chart2/res/errorup_30.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">chart2/res/errorbothverti_30.png</property>
+    <property name="icon_name">chart2/res/errorbothverti_30.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">chart2/res/errordown_30.png</property>
+    <property name="icon_name">chart2/res/errordown_30.png</property>
   </object>
   <object class="GtkGrid" id="ChartErrorBarPanel">
     <property name="visible">True</property>
@@ -52,8 +62,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -73,8 +81,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -87,8 +93,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -101,8 +105,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -111,13 +113,12 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="text" translatable="yes" context="sidebarerrorbar|spinbutton_pos">0.00</property>
+                    <property name="adjustment">adjustmentPOS</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -127,13 +128,12 @@
                     <property name="halign">start</property>
                     <property name="text" translatable="yes" context="sidebarerrorbar|spinbutton_neg">0.00</property>
                     <property name="input_purpose">alpha</property>
+                    <property name="adjustment">adjustmentNEG</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -146,10 +146,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_positive_negative|tooltip_text">Positive and Negative</property>
                         <property name="image">image2</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
+                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -163,11 +164,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_positive|tooltip_text">Positive</property>
                         <property name="image">image1</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">radiobutton_positive_negative</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -180,11 +182,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_negative|tooltip_text">Negative</property>
                         <property name="image">image3</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">radiobutton_positive_negative</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
