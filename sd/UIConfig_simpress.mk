@@ -151,7 +151,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/slidetransitionspanel \
 	sd/uiconfig/simpress/ui/slidetransitionspanelhorizontal \
 	sd/uiconfig/simpress/ui/tabledesignpanel \
-	sd/uiconfig/simpress/ui/tabledesignpanelhorizontal \
 	sd/uiconfig/simpress/ui/templatedialog \
 ))
 
