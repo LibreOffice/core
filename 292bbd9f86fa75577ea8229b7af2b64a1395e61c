@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_d60987dd",
+        "filename": "cui/source/options/optfltr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-20T20:13:29Z",
+      "side": 1,
+      "message": "We better not leave excess empty lines. Just one empty line here would be enough.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 0
+      },
+      "revId": "292bbd9f86fa75577ea8229b7af2b64a1395e61c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_760e73e6",
+        "filename": "cui/source/options/optgdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-20T20:13:29Z",
+      "side": 1,
+      "message": "Again, only one empty line please.",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 0
+      },
+      "revId": "292bbd9f86fa75577ea8229b7af2b64a1395e61c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
