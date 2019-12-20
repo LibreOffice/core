@@ -23,15 +23,12 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/layout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
 
 namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
 namespace com { namespace sun { namespace star { namespace view { class XSelectionChangeListener; } } } }
-
-class ListBox;
 
 namespace chart {
 
@@ -80,19 +77,19 @@ public:
 
 private:
     //ui controls
-    VclPtr<CheckBox> mpCBLabel;
-    VclPtr<CheckBox> mpCBTrendline;
-    VclPtr<CheckBox> mpCBXError;
-    VclPtr<CheckBox> mpCBYError;
+    std::unique_ptr<weld::CheckButton> mxCBLabel;
+    std::unique_ptr<weld::CheckButton> mxCBTrendline;
+    std::unique_ptr<weld::CheckButton> mxCBXError;
+    std::unique_ptr<weld::CheckButton> mxCBYError;
 
-    VclPtr<RadioButton> mpRBPrimaryAxis;
-    VclPtr<RadioButton> mpRBSecondaryAxis;
+    std::unique_ptr<weld::RadioButton> mxRBPrimaryAxis;
+    std::unique_ptr<weld::RadioButton> mxRBSecondaryAxis;
 
-    VclPtr<VclHBox> mpBoxLabelPlacement;
-    VclPtr<ListBox> mpLBLabelPlacement;
+    std::unique_ptr<weld::Widget> mxBoxLabelPlacement;
+    std::unique_ptr<weld::ComboBox> mxLBLabelPlacement;
 
-    VclPtr<FixedText> mpFTSeriesName;
-    VclPtr<FixedText> mpFTSeriesTemplate;
+    std::unique_ptr<weld::Label> mxFTSeriesName;
+    std::unique_ptr<weld::Label> mxFTSeriesTemplate;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
@@ -102,9 +99,9 @@ private:
 
     void Initialize();
 
-    DECL_LINK(CheckBoxHdl, Button*, void);
-    DECL_LINK(RadioBtnHdl, RadioButton&, void);
-    DECL_LINK(ListBoxHdl, ListBox&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(RadioBtnHdl, weld::ToggleButton&, void);
+    DECL_LINK(ListBoxHdl, weld::ComboBox&, void);
 };
 
 } } // end of namespace ::chart::sidebar
