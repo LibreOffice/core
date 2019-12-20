@@ -51,6 +51,7 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public css::xml::sax::XFastContextHa
     SvXMLImport&                       mrImport;
     sal_uInt16                         mnPrefix;
     OUString                           maLocalName;
+    bool                               mbPrefixAndLocalNameFilledIn;
     std::unique_ptr<SvXMLNamespaceMap> m_pRewindMap;
 
     SAL_DLLPRIVATE std::unique_ptr<SvXMLNamespaceMap> TakeRewindMap() { return std::move(m_pRewindMap); }
@@ -63,8 +64,9 @@ protected:
 
 public:
 
-    sal_uInt16 GetPrefix() const { return mnPrefix; }
-    const OUString& GetLocalName() const { return maLocalName; }
+    bool IsPrefixFilledIn() const { return mnPrefix != 0; }
+    sal_uInt16 GetPrefix() const { assert(mbPrefixAndLocalNameFilledIn && "those fields not filled, probably fast-parser context"); return mnPrefix; }
+    const OUString& GetLocalName() const { assert(mbPrefixAndLocalNameFilledIn && "those fields not filled, probably fast-parser context"); return maLocalName; }
 
     /** A contexts constructor does anything that is required if an element
      * starts. Namespace processing has been done already.
