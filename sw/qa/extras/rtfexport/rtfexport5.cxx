@@ -1143,6 +1143,17 @@ DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf129513, "tdf129513.rtf")
+{
+    // \pagebb after \intbl must not reset the "in table" flag
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    // Make sure the first paragraph is imported in table
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getCellNames().getLength());
+    uno::Reference<text::XText> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("In table"), xCell->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
