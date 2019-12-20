@@ -357,6 +357,7 @@
                   <object class="GtkEntry" id="function">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">1</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">5</property>
                     <property name="max_width_chars">1</property>
@@ -370,6 +371,7 @@
                   <object class="GtkEntry" id="arraycolumn">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">1</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">5</property>
                     <property name="max_width_chars">1</property>
@@ -383,6 +385,7 @@
                   <object class="GtkEntry" id="arrayrow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="max_length">1</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">5</property>
                     <property name="max_width_chars">1</property>

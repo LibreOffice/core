@@ -43,9 +43,11 @@ private:
     void LaunchCustomCalcSettings();
 
     bool IsValidSeparator(const OUString& rSep) const;
-    bool IsValidSeparatorSet() const;
 
     DECL_LINK( ButtonHdl, weld::Button&, void );
+    DECL_LINK( SepInsertTextHdl, OUString&, bool );
+    DECL_LINK( ColSepInsertTextHdl, OUString&, bool );
+    DECL_LINK( RowSepInsertTextHdl, OUString&, bool );
     DECL_LINK( SepModifyHdl, weld::Entry&, void );
     DECL_LINK( SepEditOnFocusHdl, weld::Widget&, void );
 
