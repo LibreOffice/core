@@ -9,6 +9,7 @@
  */
 
 #include <AccessibilityCheck.hxx>
+#include <AccessibilityIssue.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
@@ -45,13 +46,21 @@ OUString sTextBlinking("Blinking text.");
 OUString sAvoidFootnotes("Avoid footnotes.");
 OUString sAvoidEndnotes("Avoid endnotes.");
 
+void lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
+                 svx::AccessibilityIssueID eIssue = svx::AccessibilityIssueID::UNSPECIFIED)
+{
+    auto pIssue = std::make_shared<sw::AccessibilityIssue>(eIssue);
+    pIssue->m_aIssueText = rText;
+    rIssueCollection.getIssues().push_back(pIssue);
+}
+
 class BaseCheck
 {
 protected:
-    std::vector<svx::AccessibilityIssue>& m_rIssueCollection;
+    svx::AccessibilityIssueCollection& m_rIssueCollection;
 
 public:
-    BaseCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    BaseCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : m_rIssueCollection(rIssueCollection)
     {
     }
@@ -61,7 +70,7 @@ public:
 class NodeCheck : public BaseCheck
 {
 public:
-    NodeCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    NodeCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : BaseCheck(rIssueCollection)
     {
     }
@@ -81,14 +90,14 @@ class NoTextNodeAltTextCheck : public NodeCheck
         if (sAlternative.isEmpty())
         {
             OUString sName = pNoTextNode->GetFlyFormat()->GetName();
-            svx::AccessibilityIssue aIssue;
-            aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-            m_rIssueCollection.push_back(aIssue);
+
+            OUString sIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+            lclAddIssue(m_rIssueCollection, sIssueText);
         }
     }
 
 public:
-    NoTextNodeAltTextCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    NoTextNodeAltTextCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -117,9 +126,8 @@ private:
         if (rTable.IsTableComplex())
         {
             OUString sName = rTable.GetTableStyleName();
-            svx::AccessibilityIssue aIssue;
-            aIssue.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-            m_rIssueCollection.push_back(aIssue);
+            OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+            lclAddIssue(m_rIssueCollection, sIssueText);
         }
         else
         {
@@ -148,17 +156,16 @@ private:
                 if (!bAllColumnsSameSize)
                 {
                     OUString sName = rTable.GetTableStyleName();
-                    svx::AccessibilityIssue aIssue;
-                    aIssue.m_aIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-                    m_rIssueCollection.push_back(aIssue);
+                    OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+                    lclAddIssue(m_rIssueCollection, sIssueText);
                 }
             }
         }
     }
 
 public:
-    TableNodeMergeSplitCheck(std::vector<svx::AccessibilityIssue>& rAccessibilityIssueCollection)
-        : NodeCheck(rAccessibilityIssueCollection)
+    TableNodeMergeSplitCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
     {
     }
 
@@ -184,7 +191,7 @@ private:
     };
 
 public:
-    NumberingCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    NumberingCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
         , pPreviousTextNode(nullptr)
     {
@@ -201,10 +208,9 @@ public:
                     if (pCurrent->GetTextNode()->GetText().startsWith(rPair.second)
                         && pPreviousTextNode->GetText().startsWith(rPair.first))
                     {
-                        svx::AccessibilityIssue aIssue;
                         OUString sNumbering = rPair.first + " " + rPair.second + "...";
-                        aIssue.m_aIssueText = sFakeNumbering.replaceAll("%NUMBERING%", sNumbering);
-                        m_rIssueCollection.push_back(aIssue);
+                        OUString sIssueText = sFakeNumbering.replaceAll("%NUMBERING%", sNumbering);
+                        lclAddIssue(m_rIssueCollection, sIssueText);
                     }
                 }
             }
@@ -228,16 +234,15 @@ private:
                 OUString sText = xTextRange->getString();
                 if (INetURLObject(sText) == INetURLObject(sHyperlink))
                 {
-                    svx::AccessibilityIssue aIssue;
-                    aIssue.m_aIssueText = sHyperlinkTextIsLink.replaceFirst("%LINK%", sHyperlink);
-                    m_rIssueCollection.push_back(aIssue);
+                    OUString sIssueText = sHyperlinkTextIsLink.replaceFirst("%LINK%", sHyperlink);
+                    lclAddIssue(m_rIssueCollection, sIssueText);
                 }
             }
         }
     }
 
 public:
-    HyperlinkCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    HyperlinkCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -361,15 +366,13 @@ private:
             double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
             if (fContrastRatio < 4.5)
             {
-                svx::AccessibilityIssue aIssue;
-                aIssue.m_aIssueText = sTextContrast;
-                m_rIssueCollection.push_back(aIssue);
+                lclAddIssue(m_rIssueCollection, sTextContrast);
             }
         }
     }
 
 public:
-    TextContrastCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    TextContrastCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -411,15 +414,13 @@ private:
 
             if (bBlinking)
             {
-                svx::AccessibilityIssue aIssue;
-                aIssue.m_aIssueText = sTextBlinking;
-                m_rIssueCollection.push_back(aIssue);
+                lclAddIssue(m_rIssueCollection, sTextBlinking);
             }
         }
     }
 
 public:
-    BlinkingTextCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    BlinkingTextCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -451,7 +452,7 @@ public:
 class DocumentCheck : public BaseCheck
 {
 public:
-    DocumentCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    DocumentCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : BaseCheck(rIssueCollection)
     {
     }
@@ -463,7 +464,7 @@ public:
 class DocumentDefaultLanguageCheck : public DocumentCheck
 {
 public:
-    DocumentDefaultLanguageCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    DocumentDefaultLanguageCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : DocumentCheck(rIssueCollection)
     {
     }
@@ -475,9 +476,8 @@ public:
         LanguageType eLanguage = rLang.GetLanguage();
         if (eLanguage == LANGUAGE_NONE)
         {
-            svx::AccessibilityIssue aIssue(svx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
-            aIssue.m_aIssueText = sDocumentDefaultLanguage;
-            m_rIssueCollection.push_back(aIssue);
+            lclAddIssue(m_rIssueCollection, sDocumentDefaultLanguage,
+                        svx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
         }
         else
         {
@@ -486,10 +486,10 @@ public:
                 const SwAttrSet& rAttrSet = pTextFormatCollection->GetAttrSet();
                 if (rAttrSet.GetLanguage(false).GetLanguage() == LANGUAGE_NONE)
                 {
-                    svx::AccessibilityIssue aIssue(svx::AccessibilityIssueID::STYLE_LANGUAGE);
                     OUString sName = pTextFormatCollection->GetName();
-                    aIssue.m_aIssueText = sStyleNoLanguage.replaceAll("%STYLE_NAME%", sName);
-                    m_rIssueCollection.push_back(aIssue);
+                    OUString sIssueText = sStyleNoLanguage.replaceAll("%STYLE_NAME%", sName);
+                    lclAddIssue(m_rIssueCollection, sIssueText,
+                                svx::AccessibilityIssueID::STYLE_LANGUAGE);
                 }
             }
         }
@@ -499,7 +499,7 @@ public:
 class DocumentTitleCheck : public DocumentCheck
 {
 public:
-    DocumentTitleCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    DocumentTitleCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : DocumentCheck(rIssueCollection)
     {
     }
@@ -516,9 +516,8 @@ public:
             OUString sTitle = xDocumentProperties->getTitle();
             if (sTitle.isEmpty())
             {
-                svx::AccessibilityIssue aIssue(svx::AccessibilityIssueID::DOCUMENT_TITLE);
-                aIssue.m_aIssueText = sDocumentTitle;
-                m_rIssueCollection.push_back(aIssue);
+                lclAddIssue(m_rIssueCollection, sDocumentTitle,
+                            svx::AccessibilityIssueID::DOCUMENT_TITLE);
             }
         }
     }
@@ -527,7 +526,7 @@ public:
 class FootnoteEndnoteCheck : public DocumentCheck
 {
 public:
-    FootnoteEndnoteCheck(std::vector<svx::AccessibilityIssue>& rIssueCollection)
+    FootnoteEndnoteCheck(svx::AccessibilityIssueCollection& rIssueCollection)
         : DocumentCheck(rIssueCollection)
     {
     }
@@ -539,15 +538,11 @@ public:
             SwFormatFootnote const& rFootnote = pTextFootnote->GetFootnote();
             if (rFootnote.IsEndNote())
             {
-                svx::AccessibilityIssue aIssue;
-                aIssue.m_aIssueText = sAvoidEndnotes;
-                m_rIssueCollection.push_back(aIssue);
+                lclAddIssue(m_rIssueCollection, sAvoidEndnotes);
             }
             else
             {
-                svx::AccessibilityIssue aIssue;
-                aIssue.m_aIssueText = sAvoidFootnotes;
-                m_rIssueCollection.push_back(aIssue);
+                lclAddIssue(m_rIssueCollection, sAvoidFootnotes);
             }
         }
     }
@@ -567,9 +562,8 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         if (sAlternative.isEmpty())
         {
             OUString sName = pObject->GetName();
-            svx::AccessibilityIssue aIssue;
-            aIssue.m_aIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-            m_aIssueCollection.push_back(aIssue);
+            OUString sIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+            lclAddIssue(m_aIssueCollection, sIssueText);
         }
     }
 }
