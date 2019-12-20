@@ -156,13 +156,13 @@ VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
 
 StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
+    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame, true)
+    , mxValueSet(new SvtValueSet(nullptr))
+    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
 {
-    get(mpValueSet, "valueset");
+    mxValueSet->SetColCount(2);
 
-    mpValueSet->SetColCount(2);
-
-    mpValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
+    mxValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
 
     RefreshList();
 }
@@ -181,10 +181,12 @@ void StylePresetsPanel::RefreshList()
                 OUString aName = aTemplates.GetName(i,j);
                 OUString aURL = aTemplates.GetPath(i,j);
                 BitmapEx aPreview = CreatePreview(aURL, aName);
-                mpValueSet->InsertItem(j, Image(aPreview), aName);
+                sal_uInt16 nId = j + 1;
+                mxValueSet->InsertItem(nId, Image(aPreview), aName);
                 maTemplateEntries.push_back(std::make_unique<TemplateEntry>(aURL));
-                mpValueSet->SetItemData(j, maTemplateEntries.back().get());
+                mxValueSet->SetItemData(nId, maTemplateEntries.back().get());
             }
+            mxValueSet->SetOptimalSize();
         }
     }
 }
@@ -196,15 +198,16 @@ StylePresetsPanel::~StylePresetsPanel()
 
 void StylePresetsPanel::dispose()
 {
-    mpValueSet.disposeAndClear();
+    mxValueSetWin.reset();
+    mxValueSet.reset();
 
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
+IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, SvtValueSet*, void)
 {
-    sal_Int32 nItemId = mpValueSet->GetSelectedItemId();
-    TemplateEntry* pEntry = static_cast<TemplateEntry*>(mpValueSet->GetItemData(nItemId));
+    sal_Int32 nItemId = mxValueSet->GetSelectedItemId();
+    TemplateEntry* pEntry = static_cast<TemplateEntry*>(mxValueSet->GetItemData(nItemId));
 
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     if (pDocSh)
