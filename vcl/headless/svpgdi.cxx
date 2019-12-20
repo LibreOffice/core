@@ -2170,14 +2170,21 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 
 void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale)
 {
+#ifdef ANDROID
+    cairo_surface_set_device_scale(surface, x_scale, y_scale);
+#else
     static auto func = reinterpret_cast<void(*)(cairo_surface_t*, double, double)>(
         dlsym(nullptr, "cairo_surface_set_device_scale"));
     if (func)
         func(surface, x_scale, y_scale);
+#endif
 }
 
 void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double* x_scale, double* y_scale)
 {
+#ifdef ANDROID
+    cairo_surface_get_device_scale(surface, x_scale, y_scale);
+#else
     static auto func = reinterpret_cast<void(*)(cairo_surface_t*, double*, double*)>(
         dlsym(nullptr, "cairo_surface_get_device_scale"));
     if (func)
@@ -2189,6 +2196,7 @@ void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double* x_scale
         if (y_scale)
             *y_scale = 1.0;
     }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
