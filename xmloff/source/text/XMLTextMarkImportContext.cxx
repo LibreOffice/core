@@ -31,6 +31,7 @@
 #include <xmloff/odffields.hxx>
 #include <xmloff/xmlement.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -208,6 +209,12 @@ static auto InsertFieldmark(SvXMLImport & rImport,
         // move cursor after setFieldType as that may delete/re-insert
         rHelper.GetCursor()->gotoRange(xContent->getAnchor()->getEnd(), false);
         rHelper.GetCursor()->goLeft(1, false); // move before CH_TXT_ATR_FIELDEND
+        // tdf#129520: AppendTextNode() ignores the content index!
+        // plan B: insert a spurious paragraph break now and join
+        //         it in PopFieldmark()!
+        rHelper.GetText()->insertControlCharacter(rHelper.GetCursor(),
+                text::ControlCharacter::PARAGRAPH_BREAK, false);
+        rHelper.GetCursor()->goLeft(1, false); // back to previous paragraph
     }
 }
 
@@ -222,6 +229,8 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
         {
             try
             {   // skip CH_TXT_ATR_FIELDEND
+                rHelper.GetCursor()->goRight(1, true);
+                rHelper.GetCursor()->setString(OUString()); // undo AppendTextNode from InsertFieldmark
                 rHelper.GetCursor()->gotoRange(xField->getAnchor()->getEnd(), false);
             }
             catch (uno::Exception const&)
