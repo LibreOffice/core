@@ -24,6 +24,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <rtl/character.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -91,13 +92,21 @@ const Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int3
 
 Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale const & aLocale, MappingType nMappingType)
 {
-    Mapping dummy = { 0, 1, { 0, 0, 0 } };
-    sal_Int16 address = CaseMappingIndex[str[pos] >> 8];
+    Mapping dummy = { 0, 1, { str[pos], 0, 0 } };
 
-    dummy.map[0] = str[pos];
+    sal_uInt32 c;
+    if (pos > 0 && rtl::isHighSurrogate(str[pos-1]) && rtl::isLowSurrogate(str[pos])) {
+        c = rtl::combineSurrogates(str[pos-1], str[pos]);
+        if (c >= SAL_N_ELEMENTS(CaseMappingIndex) * 256)
+            return dummy;
+    } else {
+        c = str[pos];
+    }
+
+    sal_Int16 address = CaseMappingIndex[c >> 8];
 
     if (address >= 0) {
-        address = (address << 8) + (str[pos] & 0xFF);
+        address = (address << 8) + (c & 0xFF);
         if (static_cast<MappingType>(CaseMappingValue[address].type) & nMappingType) {
             MappingType type = static_cast<MappingType>(CaseMappingValue[address].type);
             if (type & MappingType::NotValue) {
