@@ -12,6 +12,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_outdev))
 $(eval $(call gb_CppunitTest_set_include,vcl_outdev,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/source/window \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_outdev, \
