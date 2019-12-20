@@ -508,7 +508,6 @@ custom_widgets = [
     'SvxLightCtl3D',
     'SvxRelativeField',
     'SwNavHelpToolBox',
-    'TableValueSet',
     'TemplateDefaultView',
     ]
 

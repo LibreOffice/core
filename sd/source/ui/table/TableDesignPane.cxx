@@ -83,20 +83,21 @@ static const OUStringLiteral gPropNames[CB_COUNT] =
     "UseBandingColumnStyle"
 };
 
-TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase )
+TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBase)
     : mrBase(rBase)
+    , m_xValueSet(new TableValueSet(rBuilder.weld_scrolled_window("previewswin")))
+    , m_xValueSetWin(new weld::CustomWeld(rBuilder, "previews", *m_xValueSet))
 {
-    pParent->get(m_pValueSet, "previews");
-    m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
-    m_pValueSet->SetExtraSpacing(8);
-    m_pValueSet->setModal(false);
-    m_pValueSet->SetColor();
-    m_pValueSet->SetSelectHdl (LINK(this, TableDesignWidget, implValueSetHdl));
+    m_xValueSet->SetStyle(m_xValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
+    m_xValueSet->SetExtraSpacing(8);
+    m_xValueSet->setModal(false);
+    m_xValueSet->SetColor();
+    m_xValueSet->SetSelectHdl(LINK(this, TableDesignWidget, implValueSetHdl));
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        pParent->get(m_aCheckBoxes[i], OString(gPropNames[i].data, gPropNames[i].size));
-        m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignWidget, implCheckBoxHdl ) );
+        m_aCheckBoxes[i] = rBuilder.weld_check_button(OString(gPropNames[i].data, gPropNames[i].size));
+        m_aCheckBoxes[i]->connect_toggled(LINK(this, TableDesignWidget, implCheckBoxHdl));
     }
 
     // get current controller and initialize listeners
@@ -141,7 +142,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
         return nullptr;
 }
 
-IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, SvtValueSet*, void)
 {
     ApplyStyle();
 }
@@ -151,7 +152,7 @@ void TableDesignWidget::ApplyStyle()
     try
     {
         OUString sStyleName;
-        sal_Int32 nIndex = static_cast< sal_Int32 >( m_pValueSet->GetSelectedItemId() ) - 1;
+        sal_Int32 nIndex = static_cast< sal_Int32 >( m_xValueSet->GetSelectedItemId() ) - 1;
 
         if( (nIndex >= 0) && (nIndex < mxTableFamily->getCount()) )
         {
@@ -196,7 +197,7 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, weld::ToggleButton&, void)
 {
     ApplyOptions();
     FillDesignPreviewControl();
@@ -217,7 +218,7 @@ void TableDesignWidget::ApplyOptions()
 
     for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
-        aReq.AppendItem( SfxBoolItem( gParamIds[i], m_aCheckBoxes[i]->IsChecked() ) );
+        aReq.AppendItem( SfxBoolItem( gParamIds[i], m_aCheckBoxes[i]->get_active() ) );
     }
 
     SdrView* pView = mrBase.GetDrawView();
@@ -279,12 +280,12 @@ void TableDesignWidget::onSelectionChanged()
 
 void TableValueSet::Resize()
 {
-    ValueSet::Resize();
+    SvtValueSet::Resize();
     // Calculate the number of rows and columns.
     if( GetItemCount() <= 0 )
         return;
 
-    Size aValueSetSize = GetSizePixel();
+    Size aValueSetSize = GetOutputSizePixel();
 
     Image aImage = GetItemImage(GetItemId(0));
     Size aItemSize = aImage.GetSizePixel();
@@ -314,13 +315,13 @@ void TableValueSet::Resize()
     }
 }
 
-TableValueSet::TableValueSet(Window *pParent, WinBits nStyle)
-    : ValueSet(pParent, nStyle)
+TableValueSet::TableValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
+    : SvtValueSet(std::move(pScrolledWindow))
     , m_bModal(false)
 {
 }
 
-void TableValueSet::DataChanged( const DataChangedEvent& /*rDCEvt*/ )
+void TableValueSet::StyleUpdated()
 {
     updateSettings();
 }
@@ -329,13 +330,11 @@ void TableValueSet::updateSettings()
 {
     if( !m_bModal )
     {
-        SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-        SetColor( GetSettings().GetStyleSettings().GetWindowColor() );
+        Color aColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+        SetColor(aColor);
         SetExtraSpacing(8);
     }
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(TableValueSet, WB_TABSTOP)
 
 void TableDesignWidget::updateControls()
 {
@@ -354,13 +353,13 @@ void TableDesignWidget::updateControls()
         {
             OSL_FAIL("sd::TableDesignWidget::updateControls(), exception caught!");
         }
-        m_aCheckBoxes[i]->Check(bUse);
-        m_aCheckBoxes[i]->Enable(bHasTable);
+        m_aCheckBoxes[i]->set_active(bUse);
+        m_aCheckBoxes[i]->set_sensitive(bHasTable);
     }
 
     FillDesignPreviewControl();
-    m_pValueSet->updateSettings();
-    m_pValueSet->Resize();
+    m_xValueSet->updateSettings();
+    m_xValueSet->Resize();
 
     sal_uInt16 nSelection = 0;
     if( mxSelectedTable.is() )
@@ -380,7 +379,7 @@ void TableDesignWidget::updateControls()
             }
         }
     }
-    m_pValueSet->SelectItem( nSelection );
+    m_xValueSet->SelectItem( nSelection );
 }
 
 void TableDesignWidget::addListener()
@@ -697,19 +696,19 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
 
 void TableDesignWidget::FillDesignPreviewControl()
 {
-    sal_uInt16 nSelectedItem = m_pValueSet->GetSelectedItemId();
-    m_pValueSet->Clear();
+    sal_uInt16 nSelectedItem = m_xValueSet->GetSelectedItemId();
+    m_xValueSet->Clear();
     try
     {
         TableStyleSettings aSettings;
         if( mxSelectedTable.is() )
         {
-            aSettings.mbUseFirstRow = m_aCheckBoxes[CB_HEADER_ROW]->IsChecked();
-            aSettings.mbUseLastRow = m_aCheckBoxes[CB_TOTAL_ROW]->IsChecked();
-            aSettings.mbUseRowBanding = m_aCheckBoxes[CB_BANDED_ROWS]->IsChecked();
-            aSettings.mbUseFirstColumn = m_aCheckBoxes[CB_FIRST_COLUMN]->IsChecked();
-            aSettings.mbUseLastColumn = m_aCheckBoxes[CB_LAST_COLUMN]->IsChecked();
-            aSettings.mbUseColumnBanding = m_aCheckBoxes[CB_BANDED_COLUMNS]->IsChecked();
+            aSettings.mbUseFirstRow = m_aCheckBoxes[CB_HEADER_ROW]->get_active();
+            aSettings.mbUseLastRow = m_aCheckBoxes[CB_TOTAL_ROW]->get_active();
+            aSettings.mbUseRowBanding = m_aCheckBoxes[CB_BANDED_ROWS]->get_active();
+            aSettings.mbUseFirstColumn = m_aCheckBoxes[CB_FIRST_COLUMN]->get_active();
+            aSettings.mbUseLastColumn = m_aCheckBoxes[CB_LAST_COLUMN]->get_active();
+            aSettings.mbUseColumnBanding = m_aCheckBoxes[CB_BANDED_COLUMNS]->get_active();
         }
 
         bool bIsPageDark = false;
@@ -728,7 +727,7 @@ void TableDesignWidget::FillDesignPreviewControl()
         {
             Reference< XIndexAccess > xTableStyle( mxTableFamily->getByIndex( nIndex ), UNO_QUERY );
             if( xTableStyle.is() )
-                m_pValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
+                m_xValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
         }
         catch( Exception& )
         {
@@ -736,22 +735,25 @@ void TableDesignWidget::FillDesignPreviewControl()
         }
         sal_Int32 nCols = 3;
         sal_Int32 nRows = (nCount+2)/3;
-        m_pValueSet->SetColCount(nCols);
-        m_pValueSet->SetLineCount(nRows);
-        WinBits nStyle = m_pValueSet->GetStyle() & ~WB_VSCROLL;
-        m_pValueSet->SetStyle(nStyle);
-        Size aSize(m_pValueSet->GetOptimalSize());
+        m_xValueSet->SetColCount(nCols);
+        m_xValueSet->SetLineCount(nRows);
+        WinBits nStyle = m_xValueSet->GetStyle() & ~WB_VSCROLL;
+        m_xValueSet->SetStyle(nStyle);
+
+        m_xValueSet->SetOptimalSize();
+        weld::DrawingArea* pDrawingArea = m_xValueSet->GetDrawingArea();
+        Size aSize = pDrawingArea->get_preferred_size();
         aSize.AdjustWidth(10 * nCols);
         aSize.AdjustHeight(10 * nRows);
-        m_pValueSet->set_width_request(aSize.Width());
-        m_pValueSet->set_height_request(aSize.Height());
-        m_pValueSet->Resize();
+        pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+
+        m_xValueSet->Resize();
     }
     catch( Exception& )
     {
         OSL_FAIL("sd::TableDesignWidget::FillDesignPreviewControl(), exception caught!");
     }
-    m_pValueSet->SelectItem(nSelectedItem);
+    m_xValueSet->SelectItem(nSelectedItem);
 }
 
 VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase& rBase )
