@@ -22,6 +22,7 @@ public:
         : svx::AccessibilityIssue(eIssueID)
     {
     }
+    void gotoIssue() const override {}
 };
 
 } // end sw namespace
