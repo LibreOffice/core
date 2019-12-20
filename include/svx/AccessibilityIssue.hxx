@@ -31,6 +31,7 @@ public:
     {
     }
     virtual ~AccessibilityIssue() {}
+    virtual void gotoIssue() const = 0;
 
     AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;
