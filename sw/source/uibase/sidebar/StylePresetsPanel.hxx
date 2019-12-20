@@ -52,11 +52,12 @@ private:
     virtual ~StylePresetsPanel() override;
     virtual void dispose() override;
 
-    VclPtr<ValueSet> mpValueSet;
+    std::unique_ptr<SvtValueSet> mxValueSet;
+    std::unique_ptr<weld::CustomWeld> mxValueSetWin;
 
     std::vector<std::unique_ptr<TemplateEntry>> maTemplateEntries;
 
-    DECL_LINK(DoubleClickHdl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl, SvtValueSet*, void);
 };
 
 }} // end of namespace sw::sidebar
