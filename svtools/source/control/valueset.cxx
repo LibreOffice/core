@@ -3981,4 +3981,12 @@ Image SvtValueSet::GetItemImage(sal_uInt16 nItemId) const
         return Image();
 }
 
+void SvtValueSet::SetColor(const Color& rColor)
+{
+    maColor  = rColor;
+    mbFormat = true;
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
