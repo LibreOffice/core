@@ -91,31 +91,36 @@ namespace emfplushelper
         }
     }
 
+    static sal_uInt16 GetObjectType(sal_uInt16 flags)
+    {
+        return (flags & 0x7f00) >> 8;
+    }
+
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
-        sal_uInt16 objecttype = flags & 0x7f00;
+        sal_uInt16 objecttype = GetObjectType(flags);
         sal_uInt16 index = flags & 0xff;
-        SAL_INFO("drawinglayer", "EMF+ Object: " << emfObjectToName(objecttype) << " (0x" << std::hex << objecttype << ")");
+        SAL_INFO("drawinglayer", "EMF+ Object: " << ObjectToString(objecttype) << " (0x" << std::hex << objecttype << ")");
         SAL_INFO("drawinglayer", "EMF+\tObject slot: " << std::dec << index);
         SAL_INFO("drawinglayer", "EMF+\tFlags: " << std::hex << flags);
 
         switch (objecttype)
         {
-            case EmfPlusObjectTypeBrush:
+            case ObjectType::ObjectTypeBrush:
             {
                 EMFPBrush *brush = new EMFPBrush(dataSize);
                 maEMFPObjects[index].reset(brush);
                 brush->Read(rObjectStream, *this);
                 break;
             }
-            case EmfPlusObjectTypePen:
+            case ObjectType::ObjectTypePen:
             {
                 EMFPPen *pen = new EMFPPen(dataSize);
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
                 break;
             }
-            case EmfPlusObjectTypePath:
+            case ObjectType::ObjectTypePath:
             {
                 sal_uInt32 header, pathFlags;
                 sal_Int32 points;
@@ -129,14 +134,14 @@ namespace emfplushelper
                 path->Read(rObjectStream, pathFlags);
                 break;
             }
-            case EmfPlusObjectTypeRegion:
+            case ObjectType::ObjectTypeRegion:
             {
                 EMFPRegion *region = new EMFPRegion();
                 maEMFPObjects[index].reset(region);
                 region->ReadRegion(rObjectStream, *this);
                 break;
             }
-            case EmfPlusObjectTypeImage:
+            case ObjectType::ObjectTypeImage:
             {
                 EMFPImage *image = new EMFPImage;
                 maEMFPObjects[index].reset(image);
@@ -148,7 +153,7 @@ namespace emfplushelper
                 image->Read(rObjectStream, dataSize, bUseWholeStream);
                 break;
             }
-            case EmfPlusObjectTypeFont:
+            case ObjectType::ObjectTypeFont:
             {
                 EMFPFont *font = new EMFPFont;
                 maEMFPObjects[index].reset(font);
@@ -158,21 +163,21 @@ namespace emfplushelper
                 font->Read(rObjectStream);
                 break;
             }
-            case EmfPlusObjectTypeStringFormat:
+            case ObjectType::ObjectTypeStringFormat:
             {
                 EMFPStringFormat *stringFormat = new EMFPStringFormat();
                 maEMFPObjects[index].reset(stringFormat);
                 stringFormat->Read(rObjectStream);
                 break;
             }
-            case EmfPlusObjectTypeImageAttributes:
+            case ObjectType::ObjectTypeImageAttributes:
             {
                 EMFPImageAttributes *imageAttributes = new EMFPImageAttributes();
                 maEMFPObjects[index].reset(imageAttributes);
                 imageAttributes->Read(rObjectStream);
                 break;
             }
-            case EmfPlusObjectTypeCustomLineCap:
+            case ObjectType::ObjectTypeCustomLineCap:
             {
                 SAL_WARN("drawinglayer", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
                 break;

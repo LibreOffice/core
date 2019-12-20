@@ -25,7 +25,7 @@
 namespace emfplushelper
 {
     const char* emfTypeToName(sal_uInt16 type);
-    OUString emfObjectToName(sal_uInt16 type);
+    OUString ObjectToString(sal_uInt16 type);
     OUString PixelOffsetModeToString(sal_uInt16 nPixelOffset);
     OUString SmoothingModeToString(sal_uInt16 nSmoothMode);
     OUString TextRenderingHintToString(sal_uInt16 nHint);
@@ -108,16 +108,19 @@ namespace emfplushelper
     //TODO EmfPlusRecordTypeSetTSGraphics 0x4039
     //TODO EmfPlusRecordTypeSetTSClip 0x403A
 
-    // EMF+object types
-    #define EmfPlusObjectTypeBrush 0x100
-    #define EmfPlusObjectTypePen 0x200
-    #define EmfPlusObjectTypePath 0x300
-    #define EmfPlusObjectTypeRegion 0x400
-    #define EmfPlusObjectTypeImage 0x500
-    #define EmfPlusObjectTypeFont 0x600
-    #define EmfPlusObjectTypeStringFormat 0x700
-    #define EmfPlusObjectTypeImageAttributes 0x800
-    #define EmfPlusObjectTypeCustomLineCap 0x900
+    enum ObjectType
+    {
+        ObjectTypeInvalid = 0x00000000,
+        ObjectTypeBrush = 0x00000001,
+        ObjectTypePen = 0x00000002,
+        ObjectTypePath = 0x00000003,
+        ObjectTypeRegion = 0x00000004,
+        ObjectTypeImage = 0x00000005,
+        ObjectTypeFont = 0x00000006,
+        ObjectTypeStringFormat = 0x00000007,
+        ObjectTypeImageAttributes = 0x00000008,
+        ObjectTypeCustomLineCap = 0x00000009
+    };
 
     enum PixelOffsetMode
     {

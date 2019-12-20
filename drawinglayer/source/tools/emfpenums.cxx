@@ -74,19 +74,19 @@ namespace emfplushelper
         return "";
     }
 
-    OUString emfObjectToName(sal_uInt16 type)
+    OUString ObjectToString(sal_uInt16 type)
     {
         switch (type)
         {
-            case EmfPlusObjectTypeBrush: return "EmfPlusObjectTypeBrush";
-            case EmfPlusObjectTypePen: return "EmfPlusObjectTypePen";
-            case EmfPlusObjectTypePath: return "EmfPlusObjectTypePath";
-            case EmfPlusObjectTypeRegion: return "EmfPlusObjectTypeRegion";
-            case EmfPlusObjectTypeImage: return "EmfPlusObjectTypeImage";
-            case EmfPlusObjectTypeFont: return "EmfPlusObjectTypeFont";
-            case EmfPlusObjectTypeStringFormat: return "EmfPlusObjectTypeStringFormat";
-            case EmfPlusObjectTypeImageAttributes: return "EmfPlusObjectTypeImageAttributes";
-            case EmfPlusObjectTypeCustomLineCap: return "EmfPlusObjectTypeCustomLineCap";
+            case ObjectType::ObjectTypeBrush: return "ObjectTypeBrush";
+            case ObjectType::ObjectTypePen: return "ObjectTypePen";
+            case ObjectType::ObjectTypePath: return "ObjectTypePath";
+            case ObjectType::ObjectTypeRegion: return "ObjectTypeRegion";
+            case ObjectType::ObjectTypeImage: return "ObjectTypeImage";
+            case ObjectType::ObjectTypeFont: return "ObjectTypeFont";
+            case ObjectType::ObjectTypeStringFormat: return "ObjectTypeStringFormat";
+            case ObjectType::ObjectTypeImageAttributes: return "ObjectTypeImageAttributes";
+            case ObjectType::ObjectTypeCustomLineCap: return "ObjectTypeCustomLineCap";
         }
         return "";
     }
