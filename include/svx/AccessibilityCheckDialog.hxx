@@ -27,27 +27,27 @@ private:
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Label> m_xLabel;
 
-    svx::AccessibilityIssue const& m_rAccessibilityIssue;
+    std::shared_ptr<AccessibilityIssue> const& m_pAccessibilityIssue;
 
 public:
     AccessibilityCheckEntry(weld::Container* pParent,
-                            svx::AccessibilityIssue const& rAccessibilityIssue);
+                            std::shared_ptr<AccessibilityIssue> const& pAccessibilityIssue);
+
     weld::Widget* get_widget() const { return m_xContainer.get(); }
 };
 
 class SVX_DLLPUBLIC AccessibilityCheckDialog final : public weld::GenericDialogController
 {
 private:
-    std::vector<svx::AccessibilityIssue> m_rAccessibilityIssueCollection;
+    AccessibilityIssueCollection m_aIssueCollection;
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aAccessibilityCheckEntries;
 
     // Controls
     std::unique_ptr<weld::Box> m_xAccessibilityCheckBox;
 
 public:
-    AccessibilityCheckDialog(
-        weld::Window* pParent,
-        std::vector<svx::AccessibilityIssue> const& rAccessibilityIssueCollection);
+    AccessibilityCheckDialog(weld::Window* pParent,
+                             AccessibilityIssueCollection const& rIssueCollection);
     virtual ~AccessibilityCheckDialog() override;
     virtual short run() override;
 };
