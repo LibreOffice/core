@@ -381,6 +381,27 @@ namespace emfplushelper
         return (format & 0xFF000000) >> 24;
     }
 
+    OUString GraphicsVersionToString(sal_uInt32 version)
+    {
+        OUString sVersion;
+        if ((version >> 12) == 0xDBC01)
+            sVersion = sVersion.concat("Metafile signature: 0xDBC01");
+
+        if (!sVersion.isEmpty())
+            sVersion = sVersion.concat(", ");
+
+        if ((version & 0x0FFFF) == 0x0001)
+            sVersion = sVersion.concat("GraphicsVersion1");
+        else if ((version & 0x0FFFF) == 0x0002)
+            sVersion = sVersion.concat("GraphicsVersion1_1");
+        else
+            sVersion = sVersion.concat("unknown");
+
+        SAL_WARN_IF((version & 0x0FFFF) > 0x0002 || (version & 0x0FFFF) == 0x0000, "drawinglayer", "EMF+\t\t\tInvalid graphics version");
+
+        return sVersion;
+    }
+
     OUString BitmapDataTypeToString(sal_uInt32 type)
     {
         switch (type)
