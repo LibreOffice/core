@@ -93,7 +93,7 @@ namespace svx
         if (!mbWideButton)
         {
             // usually the normal size is 16
-            const long nIOSSize = 40;
+            const long nIOSSize = 32;
             if (aItemSize.getWidth() < nIOSSize)
             {
                 aItemSize.setWidth(nIOSSize);
