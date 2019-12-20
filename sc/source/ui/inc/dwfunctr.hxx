@@ -20,8 +20,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
 
 #include <comphelper/configurationlistener.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 class ScFuncDesc;
@@ -46,11 +44,11 @@ class ScFunctionWin : public PanelLayout
 {
 
 private:
-    VclPtr<ListBox>     aCatBox;
-    VclPtr<ListBox>     aFuncList;
+    std::unique_ptr<weld::ComboBox> xCatBox;
+    std::unique_ptr<weld::TreeView> xFuncList;
+    std::unique_ptr<weld::Button> xInsertButton;
+    std::unique_ptr<weld::Label> xFiFuncDesc;
 
-    VclPtr<PushButton>  aInsertButton;
-    VclPtr<FixedText>   aFiFuncDesc;
     rtl::Reference<comphelper::ConfigurationListener> xConfigListener;
     std::unique_ptr<EnglishFunctionNameChange> xConfigChange;
     const ScFuncDesc*   pFuncDesc;
@@ -62,9 +60,10 @@ private:
     void            DoEnter();
     void            SetDescription();
 
-                    DECL_LINK( SetSelectionHdl, ListBox&, void );
-                    DECL_LINK( SetSelectionClickHdl, Button*, void );
-                    DECL_LINK( SelHdl, ListBox&, void );
+                    DECL_LINK( SetRowActivatedHdl, weld::TreeView&, bool );
+                    DECL_LINK( SetSelectionClickHdl, weld::Button&, void );
+                    DECL_LINK( SelComboHdl, weld::ComboBox&, void );
+                    DECL_LINK( SelTreeHdl, weld::TreeView&, void );
 
 public:
     ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame);
