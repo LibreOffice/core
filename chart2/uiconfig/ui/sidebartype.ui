@@ -16,14 +16,14 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTreeStore" id="liststore2">
+  <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
     </columns>
   </object>
   <object class="GtkGrid" id="ChartTypePanel">
@@ -377,9 +377,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="sidebartype|lbl_chartType">Chart Type:</property>
-                <accessibility>
-                  <relation type="label-for" target="cmb_chartType"/>
-                </accessibility>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">cmb_chartType</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -392,9 +391,20 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="model">liststore2</property>
-                <accessibility>
-                  <relation type="labelled-by" target="lbl_chartType"/>
-                </accessibility>
+                <property name="entry_text_column">0</property>
+                <property name="id_column">1</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+                <child>
+                  <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
+                  <attributes>
+                    <attribute name="pixbuf">2</attribute>
+                  </attributes>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
