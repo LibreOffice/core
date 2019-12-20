@@ -308,6 +308,7 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
 
 static constexpr sal_Unicode cEmDash = 0x2014;
 static constexpr sal_Unicode cEnDash = 0x2013;
+static constexpr sal_Unicode cApostrophe = 0x2019;
 
 SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
@@ -849,7 +850,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         }
         else if (pWordStt && !rCC.isDigit(aText, pStr - pStart))
         {
-            if( lcl_IsInAsciiArr( "-'", *pStr ) && // These characters are allowed in words
+            if( (lcl_IsInAsciiArr( "-'", *pStr ) || *pStr == cApostrophe) && // These characters are allowed in words
                 pWordStt - 1 == pStr &&
                 // Installation at beginning of paragraph. Replaced < by <= (#i38971#)
                 (pStart + 1) <= pStr &&
