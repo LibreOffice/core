@@ -19,13 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DEFAULTSHAPESPANEL_HXX
 #define INCLUDED_SVX_SOURCE_INC_DEFAULTSHAPESPANEL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-
-#include <map>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/layout.hxx>
 #include <svtools/valueset.hxx>
+#include <map>
 #include "ShapesUtil.hxx"
 
 using namespace css;
@@ -50,24 +47,34 @@ public:
     virtual void dispose() override;
 
 private:
-    VclPtr<ValueSet>          mpLineArrowSet;
-    VclPtr<ValueSet>          mpCurveSet;
-    VclPtr<ValueSet>          mpConnectorSet;
-    VclPtr<ValueSet>          mpBasicShapeSet;
-    VclPtr<ValueSet>          mpSymbolShapeSet;
-    VclPtr<ValueSet>          mpBlockArrowSet;
-    VclPtr<ValueSet>          mpFlowchartSet;
-    VclPtr<ValueSet>          mpCalloutSet;
-    VclPtr<ValueSet>          mpStarSet;
-    VclPtr<ValueSet>          mp3DObjectSet;
+    std::unique_ptr<SvtValueSet> mxLineArrowSet;
+    std::unique_ptr<weld::CustomWeld> mxLineArrowSetWin;
+    std::unique_ptr<SvtValueSet> mxCurveSet;
+    std::unique_ptr<weld::CustomWeld> mxCurveSetWin;
+    std::unique_ptr<SvtValueSet> mxConnectorSet;
+    std::unique_ptr<weld::CustomWeld> mxConnectorSetWin;
+    std::unique_ptr<SvtValueSet> mxBasicShapeSet;
+    std::unique_ptr<weld::CustomWeld> mxBasicShapeSetWin;
+    std::unique_ptr<SvtValueSet> mxSymbolShapeSet;
+    std::unique_ptr<weld::CustomWeld> mxSymbolShapeSetWin;
+    std::unique_ptr<SvtValueSet> mxBlockArrowSet;
+    std::unique_ptr<weld::CustomWeld> mxBlockArrowSetWin;
+    std::unique_ptr<SvtValueSet> mxFlowchartSet;
+    std::unique_ptr<weld::CustomWeld> mxFlowchartSetWin;
+    std::unique_ptr<SvtValueSet> mxCalloutSet;
+    std::unique_ptr<weld::CustomWeld> mxCalloutSetWin;
+    std::unique_ptr<SvtValueSet> mxStarSet;
+    std::unique_ptr<weld::CustomWeld> mxStarSetWin;
+    std::unique_ptr<SvtValueSet> mx3DObjectSet;
+    std::unique_ptr<weld::CustomWeld> mx3DObjectSetWin;
+
     Reference< XFrame >       mxFrame;
-    std::map<VclPtr<ValueSet>, std::map<sal_uInt16, OUString>> mpShapesSetMap;
+    std::map<SvtValueSet*, std::map<sal_uInt16, OUString>> mpShapesSetMap;
 
     void populateShapes();
     void Initialize();
-    DECL_LINK( ShapeSelectHdl, ValueSet*, void );
+    DECL_LINK( ShapeSelectHdl, SvtValueSet*, void );
 };
-
 
 } } // end of namespace sd::sidebar
 

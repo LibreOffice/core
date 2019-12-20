@@ -429,7 +429,7 @@ private:
     sal_uInt16      mnFirstLine;
     sal_uInt16      mnSpacing;
     DrawFrameStyle  mnFrameStyle;
-    Color const     maColor;
+    Color           maColor;
     OUString        maText;
     WinBits         mnStyle;
     Link<SvtValueSet*,void>  maDoubleClickHdl;
@@ -553,6 +553,7 @@ public:
     void*           GetItemData( sal_uInt16 nItemId ) const;
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
+    void            SetColor( const Color& rColor );
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;

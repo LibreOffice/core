@@ -28,20 +28,30 @@ namespace svx { namespace sidebar {
 DefaultShapesPanel::DefaultShapesPanel (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui", rxFrame),
-    SvxShapeCommandsMap(),
-    mxFrame(rxFrame)
+    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui", rxFrame, true)
+    , SvxShapeCommandsMap()
+    , mxLineArrowSet(new SvtValueSet(nullptr))
+    , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, "LinesArrows", *mxLineArrowSet))
+    , mxCurveSet(new SvtValueSet(nullptr))
+    , mxCurveSetWin(new weld::CustomWeld(*m_xBuilder, "Curves", *mxCurveSet))
+    , mxConnectorSet(new SvtValueSet(nullptr))
+    , mxConnectorSetWin(new weld::CustomWeld(*m_xBuilder, "Connectors", *mxConnectorSet))
+    , mxBasicShapeSet(new SvtValueSet(nullptr))
+    , mxBasicShapeSetWin(new weld::CustomWeld(*m_xBuilder, "BasicShapes", *mxBasicShapeSet))
+    , mxSymbolShapeSet(new SvtValueSet(nullptr))
+    , mxSymbolShapeSetWin(new weld::CustomWeld(*m_xBuilder, "SymbolShapes", *mxSymbolShapeSet))
+    , mxBlockArrowSet(new SvtValueSet(nullptr))
+    , mxBlockArrowSetWin(new weld::CustomWeld(*m_xBuilder, "BlockArrows", *mxBlockArrowSet))
+    , mxFlowchartSet(new SvtValueSet(nullptr))
+    , mxFlowchartSetWin(new weld::CustomWeld(*m_xBuilder, "Flowcharts", *mxFlowchartSet))
+    , mxCalloutSet(new SvtValueSet(nullptr))
+    , mxCalloutSetWin(new weld::CustomWeld(*m_xBuilder, "Callouts", *mxCalloutSet))
+    , mxStarSet(new SvtValueSet(nullptr))
+    , mxStarSetWin(new weld::CustomWeld(*m_xBuilder, "Stars", *mxStarSet))
+    , mx3DObjectSet(new SvtValueSet(nullptr))
+    , mx3DObjectSetWin(new weld::CustomWeld(*m_xBuilder, "3DObjects", *mx3DObjectSet))
+    , mxFrame(rxFrame)
 {
-    get(mpLineArrowSet, "LinesArrows");
-    get(mpCurveSet, "Curves");
-    get(mpConnectorSet, "Connectors");
-    get(mpBasicShapeSet, "BasicShapes");
-    get(mpSymbolShapeSet, "SymbolShapes");
-    get(mpBlockArrowSet, "BlockArrows");
-    get(mpFlowchartSet, "Flowcharts");
-    get(mpCalloutSet, "Callouts");
-    get(mpStarSet, "Stars");
-    get(mp3DObjectSet, "3DObjects");
     Initialize();
 }
 
@@ -67,16 +77,16 @@ DefaultShapesPanel::~DefaultShapesPanel()
 void DefaultShapesPanel::Initialize()
 {
     mpShapesSetMap = decltype(mpShapesSetMap){
-        { mpLineArrowSet,   mpLineShapes },
-        { mpCurveSet,       mpCurveShapes },
-        { mpConnectorSet,   mpConnectorShapes },
-        { mpBasicShapeSet,  mpBasicShapes },
-        { mpSymbolShapeSet, mpSymbolShapes },
-        { mpBlockArrowSet,  mpBlockArrowShapes },
-        { mpFlowchartSet,   mpFlowchartShapes },
-        { mpCalloutSet,     mpCalloutShapes },
-        { mpStarSet,        mpStarShapes },
-        { mp3DObjectSet,    mp3DShapes }
+        { mxLineArrowSet.get(),   mpLineShapes },
+        { mxCurveSet.get(),       mpCurveShapes },
+        { mxConnectorSet.get(),   mpConnectorShapes },
+        { mxBasicShapeSet.get(),  mpBasicShapes },
+        { mxSymbolShapeSet.get(), mpSymbolShapes },
+        { mxBlockArrowSet.get(),  mpBlockArrowShapes },
+        { mxFlowchartSet.get(),   mpFlowchartShapes },
+        { mxCalloutSet.get(),     mpCalloutShapes },
+        { mxStarSet.get(),        mpStarShapes },
+        { mx3DObjectSet.get(),    mp3DShapes }
     };
     populateShapes();
     for(auto& aSetMap: mpShapesSetMap)
@@ -89,20 +99,30 @@ void DefaultShapesPanel::Initialize()
 void DefaultShapesPanel::dispose()
 {
     mpShapesSetMap.clear();
-    mpLineArrowSet.clear();
-    mpCurveSet.clear();
-    mpConnectorSet.clear();
-    mpBasicShapeSet.clear();
-    mpSymbolShapeSet.clear();
-    mpBlockArrowSet.clear();
-    mpFlowchartSet.clear();
-    mpCalloutSet.clear();
-    mpStarSet.clear();
-    mp3DObjectSet.clear();
+    mxLineArrowSetWin.reset();
+    mxLineArrowSet.reset();
+    mxCurveSetWin.reset();
+    mxCurveSet.reset();
+    mxConnectorSetWin.reset();
+    mxConnectorSet.reset();
+    mxBasicShapeSetWin.reset();
+    mxBasicShapeSet.reset();
+    mxSymbolShapeSetWin.reset();
+    mxSymbolShapeSet.reset();
+    mxBlockArrowSetWin.reset();
+    mxBlockArrowSet.reset();
+    mxFlowchartSetWin.reset();
+    mxFlowchartSet.reset();
+    mxCalloutSetWin.reset();
+    mxCalloutSet.reset();
+    mxStarSetWin.reset();
+    mxStarSet.reset();
+    mx3DObjectSetWin.reset();
+    mx3DObjectSet.reset();
     PanelLayout::dispose();
 }
 
-IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
+IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, SvtValueSet*, rValueSet, void)
 {
     for(auto& aSetMap : mpShapesSetMap)
     {
