@@ -93,31 +93,39 @@ namespace emfplushelper
         return (flags & 0x7f00) >> 8;
     }
 
+    static bool ObjectContinues(sal_uInt16 flags)
+    {
+        return (flags & 0x8000) >> 8;
+    }
+
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt16 objecttype = GetObjectType(flags);
         sal_uInt16 index = flags & 0xff;
-        SAL_INFO("drawinglayer", "EMF+ Object: " << ObjectTypeToString(objecttype) << " (0x" << objecttype << ")");
-        SAL_INFO("drawinglayer", "EMF+\tObject slot: " << index);
-        SAL_INFO("drawinglayer", "EMF+\tFlags: " << (flags & 0xff00));
+        SAL_INFO("drawinglayer", "EMF+ Object: " << ObjectTypeToString(objecttype) << " (0x" << std::hex << objecttype << ")");
+        SAL_INFO("drawinglayer", "EMF+\tObject slot: " << std::dec << index);
+        SAL_INFO("drawinglayer", "EMF+\tData size: " << std::dec << dataSize);
+        SAL_INFO("drawinglayer", "EMF+\tFlags: 0x" << std::hex << flags);
+        if (ObjectContinues(flags))
+            SAL_INFO("drawinglayer", "EMF+\t\tMultipart object");
 
         switch (objecttype)
         {
-            case ObjectTypeBrush:
+            case ObjectType::ObjectTypeBrush:
             {
                 EMFPBrush *brush = new EMFPBrush();
                 maEMFPObjects[index].reset(brush);
                 brush->Read(rObjectStream, *this);
                 break;
             }
-            case ObjectTypePen:
+            case ObjectType::ObjectTypePen:
             {
                 EMFPPen *pen = new EMFPPen();
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
                 break;
             }
-            case ObjectTypePath:
+            case ObjectType::ObjectTypePath:
             {
                 sal_uInt32 header, pathFlags;
                 sal_Int32 points;
@@ -131,14 +139,14 @@ namespace emfplushelper
                 path->Read(rObjectStream, pathFlags);
                 break;
             }
-            case ObjectTypeRegion:
+            case ObjectType::ObjectTypeRegion:
             {
                 EMFPRegion *region = new EMFPRegion();
                 maEMFPObjects[index].reset(region);
                 region->ReadRegion(rObjectStream, *this);
                 break;
             }
-            case ObjectTypeImage:
+            case ObjectType::ObjectTypeImage:
             {
                 EMFPImage *image = new EMFPImage;
                 maEMFPObjects[index].reset(image);
@@ -150,7 +158,7 @@ namespace emfplushelper
                 image->Read(rObjectStream, dataSize, bUseWholeStream);
                 break;
             }
-            case ObjectTypeFont:
+            case ObjectType::ObjectTypeFont:
             {
                 EMFPFont *font = new EMFPFont;
                 maEMFPObjects[index].reset(font);
@@ -160,21 +168,21 @@ namespace emfplushelper
                 font->Read(rObjectStream);
                 break;
             }
-            case ObjectTypeStringFormat:
+            case ObjectType::ObjectTypeStringFormat:
             {
                 EMFPStringFormat *stringFormat = new EMFPStringFormat();
                 maEMFPObjects[index].reset(stringFormat);
                 stringFormat->Read(rObjectStream);
                 break;
             }
-            case ObjectTypeImageAttributes:
+            case ObjectType::ObjectTypeImageAttributes:
             {
                 EMFPImageAttributes *imageAttributes = new EMFPImageAttributes();
                 maEMFPObjects[index].reset(imageAttributes);
                 imageAttributes->Read(rObjectStream);
                 break;
             }
-            case ObjectTypeCustomLineCap:
+            case ObjectType::ObjectTypeCustomLineCap:
             {
                 SAL_WARN("drawinglayer", "EMF+\t TODO Object type 'custom line cap' not yet implemented");
                 break;
@@ -560,6 +568,8 @@ namespace emfplushelper
             // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background,
             // ranging from 0 for completely transparent to 0xFF for completely opaque.
             const Color color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff);
+
+            SAL_INFO("drawinglayer", "EMF+\t\t\tColor is " << color);
             EMFPPlusFillPolygonSolidColor(polygon, color);
 
             mrPropertyHolders.Current().setFillColor(color.getBColor());
@@ -899,7 +909,7 @@ namespace emfplushelper
                 wmfemfhelper::HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
                 bIsGetDCProcessing = false;
             }
-            if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000)))
+            if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || ObjectContinues(flags)))
             {
                 if (!mbMultipart)
                 {
@@ -926,7 +936,7 @@ namespace emfplushelper
                 mbMultipart = false;
             }
 
-            if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
+            if (type != EmfPlusRecordTypeObject || !ObjectContinues(flags))
             {
                 switch (type)
                 {
@@ -1531,7 +1541,7 @@ namespace emfplushelper
                             "drawinglayer", "EMF+\t Gamma value is not with bounds 1000 to 2200, value is " << mnTextContrast);
                         mnTextContrast = std::min(mnTextContrast, UPPERGAMMA);
                         mnTextContrast = std::max(mnTextContrast, LOWERGAMMA);
-                        SAL_INFO("drawinglayer", "EMF+\t Text contrast: " << (mnTextContrast / 1000) << " gamma");
+                        SAL_INFO("drawinglayer", "EMF+\t Text contrast: " << (mnTextContrast / 1000.0) << " gamma");
                         break;
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:
