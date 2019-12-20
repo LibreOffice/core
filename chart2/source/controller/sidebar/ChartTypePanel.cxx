@@ -144,6 +144,10 @@ void ChartTypePanel::dispose()
     m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
 
+    m_xSubTypeListWin.reset();
+    m_xSubTypeList.reset();
+    m_xMainTypeList.reset();
+
     PanelLayout::dispose();
 }
 
