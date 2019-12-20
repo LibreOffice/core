@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_5bf5a0ca",
+        "filename": "basic/source/classes/errobject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-20T16:01:03Z",
+      "side": 1,
+      "message": "that\u0027s broken double-checked locking",
+      "revId": "c7b128bc0705f50257e5dfe547c059d294428a14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
