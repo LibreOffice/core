@@ -698,11 +698,13 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     SAL_INFO("vcl.skia", "copyarea(" << this << "): " << Point(nSrcX, nSrcY) << "->"
                                      << Point(nDestX, nDestY) << "/"
                                      << Size(nSrcWidth, nSrcHeight));
-    sk_sp<SkImage> image
-        = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight));
+    // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
+    sk_sp<SkImage> image = mSurface->makeImageSnapshot();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    mSurface->getCanvas()->drawImage(image, nDestX, nDestY, &paint);
+    mSurface->getCanvas()->drawImageRect(
+        image, SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
+        SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight), &paint);
     postDraw();
 }
 
@@ -719,15 +721,16 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     else
         src = this;
     SAL_INFO("vcl.skia", "copybits(" << this << "): (" << src << "):" << rPosAry);
-    sk_sp<SkImage> image = src->mSurface->makeImageSnapshot(
-        SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
+    // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
+    sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    mSurface->getCanvas()->drawImageRect(image,
-                                         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
-                                                          rPosAry.mnDestWidth,
-                                                          rPosAry.mnDestHeight),
-                                         &paint);
+    mSurface->getCanvas()->drawImageRect(
+        image,
+        SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        &paint);
     postDraw();
 }
 
@@ -843,6 +846,9 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
     SAL_INFO("vcl.skia",
              "getbitmap(" << this << "): " << Point(nX, nY) << "/" << Size(nWidth, nHeight));
     mSurface->getCanvas()->flush();
+    // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
+    // e.g. for VirtualDevice's lame alpha blending, in which case the image will eventually end up
+    // in blendAlphaBitmap(), where we could simply use the proper rect of the image.
     sk_sp<SkImage> image = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
     return std::make_shared<SkiaSalBitmap>(image);
 }
