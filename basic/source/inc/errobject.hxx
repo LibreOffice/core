@@ -33,6 +33,7 @@ class SbxErrObject : public SbUnoObject
 
 public:
     static SbxVariableRef const & getErrObject();
+    static SbxVariableRef createErrObject();
     static css::uno::Reference< ooo::vba::XErrObject > const & getUnoErrObject();
 
     /// @throws css::uno::RuntimeException

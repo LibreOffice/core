@@ -20,6 +20,9 @@
 #ifndef INCLUDED_BASIC_INC_SBXBASE_HXX
 #define INCLUDED_BASIC_INC_SBXBASE_HXX
 
+#include <sal/config.h>
+
+#include <basic/sbxvar.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/errcode.hxx>
 
@@ -34,6 +37,7 @@ class SbxBasicFormater;
 struct SbxAppData
 {
     ErrCode             eErrCode;  // Error code
+    SbxVariableRef      m_aGlobErr; // Global error object
     std::vector<std::unique_ptr<SbxFactory>>
                         m_Factories;
 
