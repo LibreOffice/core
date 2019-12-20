@@ -114,6 +114,14 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
     mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pItem->Clone()) );
 
+    // Prevent accidental toggling of page orientation
+    if ((mpPageSizeItem->GetWidth() > mpPageSizeItem->GetHeight()) == bLandscape)
+    {
+        if ( mxUndoManager.is() )
+            mxUndoManager->leaveUndoContext();
+        return;
+    }
+
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
     mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pItem->Clone()) );
 
