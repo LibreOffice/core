@@ -10,7 +10,9 @@
       <object class="GtkLabel" id="accessibilityCheckEntryLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="selectable">True</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -19,7 +21,17 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkButton" id="accessibilityCheckEntryGotoButton">
+        <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryGotoButton">Goto Issue</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </object>
 </interface>
