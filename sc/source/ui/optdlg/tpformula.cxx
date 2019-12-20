@@ -56,6 +56,10 @@ ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogContr
     mxBtnCustomCalcCustom->connect_clicked(aLink2);
     mxBtnCustomCalcDetails->connect_clicked(aLink2);
 
+    mxEdSepFuncArg->connect_insert_text(LINK( this, ScTpFormulaOptions, SepInsertTextHdl ));
+    mxEdSepArrayCol->connect_insert_text(LINK( this, ScTpFormulaOptions, ColSepInsertTextHdl ));
+    mxEdSepArrayRow->connect_insert_text(LINK( this, ScTpFormulaOptions, RowSepInsertTextHdl ));
+
     Link<weld::Entry&,void> aLink = LINK( this, ScTpFormulaOptions, SepModifyHdl );
     mxEdSepFuncArg->connect_changed(aLink);
     mxEdSepArrayCol->connect_changed(aLink);
@@ -94,7 +98,9 @@ void ScTpFormulaOptions::OnFocusSeparatorInput(weld::Entry* pEdit)
 
     // Make sure the entire text is selected.
     pEdit->select_region(0, -1);
-    maOldSepValue = pEdit->get_text();
+    OUString sSepValue = pEdit->get_text();
+    if (!sSepValue.isEmpty())
+        maOldSepValue = sSepValue;
 }
 
 void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
@@ -161,14 +167,6 @@ bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
     return true;
 }
 
-bool ScTpFormulaOptions::IsValidSeparatorSet() const
-{
-    // Make sure the column and row separators are different.
-    OUString aColStr = mxEdSepArrayCol->get_text();
-    OUString aRowStr = mxEdSepArrayRow->get_text();
-    return aColStr != aRowStr;
-}
-
 IMPL_LINK( ScTpFormulaOptions, ButtonHdl, weld::Button&, rBtn, void )
 {
     if (&rBtn == mxBtnSepReset.get())
@@ -181,21 +179,32 @@ IMPL_LINK( ScTpFormulaOptions, ButtonHdl, weld::Button&, rBtn, void )
         LaunchCustomCalcSettings();
 }
 
+IMPL_LINK(ScTpFormulaOptions, SepInsertTextHdl, OUString&, rTest, bool)
+{
+    if (!IsValidSeparator(rTest) && !maOldSepValue.isEmpty())
+        // Invalid separator.  Restore the old value.
+        rTest = maOldSepValue;
+    return true;
+}
+
+IMPL_LINK(ScTpFormulaOptions, RowSepInsertTextHdl, OUString&, rTest, bool)
+{
+    // Invalid separator or same as ColStr - Restore the old value.
+    if ((!IsValidSeparator(rTest) || rTest == mxEdSepArrayCol->get_text()) && !maOldSepValue.isEmpty())
+        rTest = maOldSepValue;
+    return true;
+}
+
+IMPL_LINK(ScTpFormulaOptions, ColSepInsertTextHdl, OUString&, rTest, bool)
+{
+    // Invalid separator or same as RowStr - Restore the old value.
+    if ((!IsValidSeparator(rTest) || rTest == mxEdSepArrayRow->get_text()) && !maOldSepValue.isEmpty())
+        rTest = maOldSepValue;
+    return true;
+}
+
 IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, weld::Entry&, rEdit, void )
 {
-    OUString aStr = rEdit.get_text();
-    if (aStr.getLength() > 1)
-    {
-        // In case the string is more than one character long, only grab the
-        // first character.
-        aStr = aStr.copy(0, 1);
-        rEdit.set_text(aStr);
-    }
-
-    if ((!IsValidSeparator(aStr) || !IsValidSeparatorSet()) && !maOldSepValue.isEmpty())
-        // Invalid separator.  Restore the old value.
-        rEdit.set_text(maOldSepValue);
-
     OnFocusSeparatorInput(&rEdit);
 }
 
