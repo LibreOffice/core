@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
-#define INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
+#pragma once
 
 #include <i18nutil/transliteration.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -68,8 +67,5 @@ public:
     TransliterationFlags GetTransliterationFlags() const { return nTransliterationFlags; }
     void                SetTransliterationFlags( TransliterationFlags nSettings );
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
