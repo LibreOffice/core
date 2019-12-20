@@ -46,6 +46,7 @@ namespace emfplushelper
     bool PixelFormatIsCanonical(sal_uInt32 format);
     sal_uInt32 PixelFormatBitsPerPixel(sal_uInt32 format);
     sal_uInt32 PixelFormatEnumerationIndex(sal_uInt32 format);
+    OUString GraphicsVersionToString(sal_uInt32);
     OUString BitmapDataTypeToString(sal_uInt32 type);
 
     // EMF+ commands

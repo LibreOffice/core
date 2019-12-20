@@ -28,9 +28,9 @@ namespace emfplushelper
 {
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
-        sal_uInt32 header, bitmapType;
-        s.ReadUInt32(header).ReadUInt32(type);
-        SAL_INFO("drawinglayer", "EMF+\t\t\tHeader: 0x" << std::hex << header);
+        sal_uInt32 version, bitmapType;
+        s.ReadUInt32(version).ReadUInt32(type);
+        SAL_INFO("drawinglayer", "EMF+\t\t\tGraphics version: " << GraphicsVersionToString(version));
         SAL_INFO("drawinglayer", "EMF+\t\t\tType: " << ImageDataTypeToString(type) << " (0x" << type << ")" << std::dec);
 
         sal_uInt64 imagesize = dataSize - 8;
