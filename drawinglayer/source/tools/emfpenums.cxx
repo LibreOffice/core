@@ -409,6 +409,40 @@ namespace emfplushelper
         return (format >> 24);
     }
 
+    static sal_uInt32 GetGraphicsVersionSig(sal_uInt32 version)
+    {
+        return version >> 12;
+    }
+
+    static sal_uInt32 GetGraphicsVersion(sal_uInt32 version)
+    {
+        return version & 0x0FFF;
+    }
+
+    OUString GraphicsVersionToString(sal_uInt32 version)
+    {
+        OUString sVersion;
+
+        if (GetGraphicsVersionSig(version) == 0xDBC01)
+            sVersion = sVersion.concat("Metafile signature: 0xDBC01");
+
+        SAL_WARN_IF(GetGraphicsVersionSig(version) != 0xDBC01, "drawinglayer", "Metafile signature is invalid - it is 0x" << std::hex << version);
+
+        if (!sVersion.isEmpty())
+            sVersion = sVersion.concat(", ");
+
+        switch (GetGraphicsVersion(version))
+        {
+            case GraphicsVersion::GraphicsVersion1: sVersion = sVersion.concat("GraphicsVersion1"); break;
+            case GraphicsVersion::GraphicsVersion1_1: sVersion = sVersion.concat("GraphicsVersion1_1"); break;
+            default: sVersion = sVersion.concat("unknown"); break;
+        }
+
+        SAL_WARN_IF(GetGraphicsVersion(version) > 0x0002 || GetGraphicsVersion(version) == 0x0000, "drawinglayer", "EMF+\t\t\tInvalid graphics version");
+
+        return sVersion;
+    }
+
     OUString BitmapDataTypeToString(sal_uInt32 type)
     {
         switch (type)

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -698,7 +699,7 @@ namespace basegfx
             double fMiterMinimumAngle,
             basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
-            assert((fHalfLineWidth > 0.0) && "createAreaGeometryForJoin: LineWidth too small (!)");
+            SAL_WARN_IF((fHalfLineWidth > 0.0), "basegfx", "createAreaGeometryForJoin: LineWidth too small (!)");
             assert((eJoin != B2DLineJoin::NONE) && "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
 
             // LineJoin from tangent rPerpendPrev to tangent rPerpendEdge in rPoint

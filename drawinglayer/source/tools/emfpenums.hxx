@@ -301,6 +301,12 @@ namespace emfplushelper
         ImageDataTypeBitmap = 0x00000001,
         ImageDataTypeMetafile = 0x00000002
     };
+
+    enum GraphicsVersion
+    {
+        GraphicsVersion1 = 0x0001,
+        GraphicsVersion1_1 = 0x0002
+    };
 }
 
 #endif
