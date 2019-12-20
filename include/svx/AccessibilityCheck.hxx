@@ -37,6 +37,7 @@ public:
     {
     }
     virtual ~AccessibilityCheckResult() {}
+    virtual void gotoIssue() const = 0;
 };
 
 class SVX_DLLPUBLIC AccessibilityCheckResultCollection

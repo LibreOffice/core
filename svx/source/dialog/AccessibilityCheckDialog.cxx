@@ -20,10 +20,17 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     , m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
     , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
     , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
+    , m_xGotoButton(m_xBuilder->weld_button("accessibilityCheckEntryGotoButton"))
     , m_rAccessibilityCheckResult(rAccessibilityCheckResult)
 {
     m_xLabel->set_label(m_rAccessibilityCheckResult->m_aIssueText);
+    m_xGotoButton->connect_clicked(LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
     m_xContainer->show();
+}
+
+IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::Button&, void)
+{
+    m_rAccessibilityCheckResult->gotoIssue();
 }
 
 AccessibilityCheckDialog::AccessibilityCheckDialog(

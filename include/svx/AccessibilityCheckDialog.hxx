@@ -27,6 +27,7 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::Button> m_xGotoButton;
 
     std::shared_ptr<AccessibilityCheckResult> const& m_rAccessibilityCheckResult;
 
@@ -35,6 +36,8 @@ public:
         weld::Container* pParent, weld::Window* pDialog,
         std::shared_ptr<AccessibilityCheckResult> const& rAccessibilityCheckResult);
     weld::Widget* get_widget() const { return m_xContainer.get(); }
+
+    DECL_LINK(GotoButtonClicked, weld::Button&, void);
 };
 
 class SVX_DLLPUBLIC AccessibilityCheckDialog final : public weld::GenericDialogController

@@ -24,6 +24,8 @@ public:
         : svx::AccessibilityCheckResult(eIssueID)
     {
     }
+
+    void gotoIssue() const override {}
 };
 
 class SW_DLLPUBLIC AccessibilityCheck final : public svx::AccessibilityCheck
