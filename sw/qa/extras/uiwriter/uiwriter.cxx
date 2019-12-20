@@ -360,6 +360,7 @@ public:
     void testTdf91801();
     void testTdf51223();
     void testTdf108423();
+    void testTdf106164();
     void testInconsistentBookmark();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -563,6 +564,7 @@ public:
     CPPUNIT_TEST(testTdf51223);
     CPPUNIT_TEST(testInconsistentBookmark);
     CPPUNIT_TEST(testTdf108423);
+    CPPUNIT_TEST(testTdf106164);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7023,6 +7025,20 @@ void SwUiWriterTest::testTdf108423()
     pWrtShell->AutoCorrect(corr, cChar);
     OUString sText(sIApostrophe + u" " + sIApostrophe);
     CPPUNIT_ASSERT_EQUAL(sText, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testTdf106164()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // testing autocorrect of we're -> We're on start of first paragraph
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(u"we\u2019re");
+    const sal_Unicode cChar = ' ';
+    pWrtShell->AutoCorrect(corr, cChar);
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sIApostrophe(u"We\u2019re ");
+    CPPUNIT_ASSERT_EQUAL(sIApostrophe, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
