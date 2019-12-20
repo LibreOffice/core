@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_b6d2cb33",
+        "filename": "i18nutil/source/utility/casefolding.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-20T21:07:35Z",
+      "side": 1,
+      "message": "It looks odd to me that the call here increments by single (sal_Unicode) UTF-16 code pointers even if getValue() now is supposed to handle surrogates, and then this function returns a sal_Unicode again.\n\nSame for the four places in i18npool/source/transliteration/transliteration_body.cxx that call casefolding::getValue()\n\nBut maybe I\u0027m overlooking something?\nDoes this really work if the mapping is done by sal_Unicode?",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 77
+      },
+      "revId": "ab6318c76509543bc1eb8cd1a0f2eee906f675b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
