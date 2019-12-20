@@ -18,6 +18,7 @@
  */
 
 #include <errobject.hxx>
+#include <sbxbase.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XDefaultProperty.hpp>
@@ -192,8 +193,12 @@ SbxErrObject::getUnoErrObject()
 SbxVariableRef const &
 SbxErrObject::getErrObject()
 {
-    static SbxVariableRef pGlobErr = new SbxErrObject( "Err", uno::Any( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
-    return pGlobErr;
+    return GetSbxData_Impl().m_aGlobErr;
+}
+
+SbxVariableRef SbxErrObject::createErrObject()
+{
+    return new SbxErrObject("Err", uno::Any(uno::Reference< vba::XErrObject >(new ErrObject())));
 }
 
 void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const OUString& _description )
