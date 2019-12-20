@@ -20,7 +20,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/base64.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
@@ -97,9 +96,6 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
 
     ImplInitSettings( true, true, true );
 }
-
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ValueSet, WB_TABSTOP)
 
 ValueSet::~ValueSet()
 {

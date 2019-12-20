@@ -510,7 +510,6 @@ custom_widgets = [
     'SwNavHelpToolBox',
     'TableValueSet',
     'TemplateDefaultView',
-    'ValueSet',
     ]
 
 def get_constructor_guard(constructor):
