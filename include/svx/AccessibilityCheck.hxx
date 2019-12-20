@@ -11,9 +11,10 @@
 #ifndef INCLUDED_SVX_ACCESSIBILITYCHECK_HXX
 #define INCLUDED_SVX_ACCESSIBILITYCHECK_HXX
 
-#include <vector>
-#include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
+#include <vector>
+#include <memory>
+#include <rtl/ustring.hxx>
 #include <svx/AccessibilityIssue.hxx>
 
 namespace svx
@@ -21,14 +22,14 @@ namespace svx
 class SVX_DLLPUBLIC AccessibilityCheck
 {
 protected:
-    std::vector<AccessibilityIssue> m_aIssueCollection;
+    AccessibilityIssueCollection m_aIssueCollection;
 
 public:
     virtual ~AccessibilityCheck() {}
 
     virtual void check() = 0;
 
-    std::vector<svx::AccessibilityIssue> const& getIssueCollecton() { return m_aIssueCollection; }
+    AccessibilityIssueCollection& getIssueCollecton() { return m_aIssueCollection; }
 };
 
 } // end svx namespace

@@ -14,23 +14,22 @@
 
 namespace svx
 {
-AccessibilityCheckEntry::AccessibilityCheckEntry(weld::Container* pParent,
-                                                 AccessibilityIssue const& rAccessibilityIssue)
+AccessibilityCheckEntry::AccessibilityCheckEntry(
+    weld::Container* pParent, std::shared_ptr<AccessibilityIssue> const& rAccessibilityIssue)
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
     , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
     , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
-    , m_rAccessibilityIssue(rAccessibilityIssue)
+    , m_pAccessibilityIssue(rAccessibilityIssue)
 {
-    m_xLabel->set_label(m_rAccessibilityIssue.m_aIssueText);
+    m_xLabel->set_label(m_pAccessibilityIssue->m_aIssueText);
     m_xContainer->show();
 }
 
 AccessibilityCheckDialog::AccessibilityCheckDialog(
-    weld::Window* pParent,
-    std::vector<svx::AccessibilityIssue> const& rAccessibilityIssueCollection)
+    weld::Window* pParent, AccessibilityIssueCollection const& rIssueCollection)
     : GenericDialogController(pParent, "svx/ui/accessibilitycheckdialog.ui",
                               "AccessibilityCheckDialog")
-    , m_rAccessibilityIssueCollection(rAccessibilityIssueCollection)
+    , m_aIssueCollection(rIssueCollection)
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
 {
 }
@@ -41,10 +40,10 @@ short AccessibilityCheckDialog::run()
 {
     sal_Int32 i = 0;
 
-    for (svx::AccessibilityIssue const& rResult : m_rAccessibilityIssueCollection)
+    for (std::shared_ptr<AccessibilityIssue> const& pIssue : m_aIssueCollection.getIssues())
     {
         auto xEntry
-            = std::make_unique<AccessibilityCheckEntry>(m_xAccessibilityCheckBox.get(), rResult);
+            = std::make_unique<AccessibilityCheckEntry>(m_xAccessibilityCheckBox.get(), pIssue);
         m_xAccessibilityCheckBox->reorder_child(xEntry->get_widget(), i++);
         m_aAccessibilityCheckEntries.push_back(std::move(xEntry));
     }
