@@ -33,7 +33,7 @@
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -53,63 +53,34 @@ XMLSectionSourceDDEImportContext::~XMLSectionSourceDDEImportContext()
 {
 }
 
-namespace {
-
-enum XMLSectionSourceDDEToken
+void XMLSectionSourceDDEImportContext::startFastElement(sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList> & xAttrList)
 {
-    XML_TOK_SECTION_DDE_APPLICATION,
-    XML_TOK_SECTION_DDE_TOPIC,
-    XML_TOK_SECTION_DDE_ITEM,
-    XML_TOK_SECTION_IS_AUTOMATIC_UPDATE
-};
-
-}
-
-static const SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
-{
-    { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-          XML_TOK_SECTION_DDE_APPLICATION },
-    { XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, XML_TOK_SECTION_DDE_TOPIC },
-    { XML_NAMESPACE_OFFICE, XML_DDE_ITEM, XML_TOK_SECTION_DDE_ITEM },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE,
-          XML_TOK_SECTION_IS_AUTOMATIC_UPDATE },
-    XML_TOKEN_MAP_END
-};
-
-
-void XMLSectionSourceDDEImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
-{
-    static const SvXMLTokenMap aTokenMap(aSectionSourceDDETokenMap);
     OUString sApplication;
     OUString sTopic;
     OUString sItem;
     bool bAutomaticUpdate = false;
 
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
+    sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch (aTokenMap.Get(nPrefix, sLocalName))
+    for (auto &aIter : *pAttribList)
+    {
+        switch (aIter.getToken())
         {
-            case XML_TOK_SECTION_DDE_APPLICATION:
-                sApplication = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(OFFICE, XML_DDE_APPLICATION):
+                sApplication = aIter.toString();
                 break;
-            case XML_TOK_SECTION_DDE_TOPIC:
-                sTopic = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(OFFICE, XML_DDE_TOPIC):
+                sTopic = aIter.toString();
                 break;
-            case XML_TOK_SECTION_DDE_ITEM:
-                sItem = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(OFFICE, XML_DDE_ITEM):
+                sItem = aIter.toString();
                 break;
-            case XML_TOK_SECTION_IS_AUTOMATIC_UPDATE:
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                    bTmp, xAttrList->getValueByIndex(nAttr)))
+                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
                 {
                     bAutomaticUpdate = bTmp;
                 }
@@ -151,7 +122,7 @@ void XMLSectionSourceDDEImportContext::StartElement(
 
 }
 
-void XMLSectionSourceDDEImportContext::EndElement()
+void XMLSectionSourceDDEImportContext::endFastElement(sal_Int32 /*nElement*/)
 {
     // nothing to be done!
 }
