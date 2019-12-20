@@ -1026,6 +1026,8 @@ public:
 };
 
 
+const SwTwips WIDOW_MAGIC = (SAL_MAX_INT32 - 1)/2;
+
 } // namespace sw
 
 #endif
