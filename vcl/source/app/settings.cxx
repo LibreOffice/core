@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -472,8 +472,15 @@ ImplStyleData::ImplStyleData() :
     maEdgeBlendingTopLeftColor(Color(0xC0, 0xC0, 0xC0)),
     maEdgeBlendingBottomRightColor(Color(0x40, 0x40, 0x40)),
     mnListBoxMaximumLineCount(25),
+    // For some reason this isn't actually the column count that gets used, at least on iOS, but
+    // instead what SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() in
+    // svtools/source/config/accessibilityoptions.cxx returns.
     mnColorValueSetColumnCount(12),
+#ifdef IOS
+    maListBoxPreviewDefaultLogicSize(Size(30, 30)),
+#else
     maListBoxPreviewDefaultLogicSize(Size(15, 7)),
+#endif
     maListBoxPreviewDefaultPixelSize(Size(0, 0)), // on-demand calculated in GetListBoxPreviewDefaultPixelSize(),
     mbPreviewUsesCheckeredBackground(true)
 {
