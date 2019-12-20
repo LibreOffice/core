@@ -46,38 +46,31 @@
 #************************************************************************/
 
 ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame)
+    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame, true)
+    , xCatBox(m_xBuilder->weld_combo_box("category"))
+    , xFuncList(m_xBuilder->weld_tree_view("funclist"))
+    , xInsertButton(m_xBuilder->weld_button("insert"))
+    , xFiFuncDesc(m_xBuilder->weld_label("funcdesc"))
     , xConfigListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Calc/Formula/Syntax"))
     , xConfigChange(std::make_unique<EnglishFunctionNameChange>(xConfigListener, this))
     , pFuncDesc(nullptr)
 {
-    get(aCatBox, "category");
-    get(aFuncList, "funclist");
-    aFuncList->set_height_request(10 * aFuncList->GetTextHeight());
-    get(aInsertButton, "insert");
-    get(aFiFuncDesc, "funcdesc");
+    xFuncList->set_size_request(-1, xFuncList->get_height_rows(10));
 
     InitLRUList();
 
-    aFiFuncDesc->SetUpdateMode(true);
     nArgs=0;
-    aCatBox->SetDropDownLineCount(9);
-    vcl::Font aFont=aFiFuncDesc->GetFont();
-    aFont.SetColor(COL_BLACK);
-    aFiFuncDesc->SetFont(aFont);
-    aFiFuncDesc->SetBackground( GetBackground() );       //! never transparent?
-    aFiFuncDesc->set_height_request(5 * aFiFuncDesc->GetTextHeight());
+    xFiFuncDesc->set_size_request(-1, 5 * xFiFuncDesc->get_text_height());
 
-    Link<ListBox&,void> aLink=LINK( this, ScFunctionWin, SelHdl);
-    aCatBox->SetSelectHdl(aLink);
-    aFuncList->SetSelectHdl(aLink);
+    xCatBox->connect_changed(LINK( this, ScFunctionWin, SelComboHdl));
+    xFuncList->connect_changed(LINK( this, ScFunctionWin, SelTreeHdl));
 
-    aFuncList->SetDoubleClickHdl(LINK( this, ScFunctionWin, SetSelectionHdl));
-    aInsertButton->SetClickHdl(LINK( this, ScFunctionWin, SetSelectionClickHdl));
+    xFuncList->connect_row_activated(LINK( this, ScFunctionWin, SetRowActivatedHdl));
+    xInsertButton->connect_clicked(LINK( this, ScFunctionWin, SetSelectionClickHdl));
 
-    aCatBox->SelectEntryPos(0);
+    xCatBox->set_active(0);
 
-    SelHdl(*aCatBox);
+    SelComboHdl(*xCatBox);
 }
 
 /*************************************************************************
@@ -107,10 +100,10 @@ void ScFunctionWin::dispose()
         xConfigListener->dispose();
         xConfigListener.clear();
     }
-    aCatBox.clear();
-    aFuncList.clear();
-    aInsertButton.clear();
-    aFiFuncDesc.clear();
+    xCatBox.reset();
+    xFuncList.reset();
+    xInsertButton.reset();
+    xFiFuncDesc.reset();
     PanelLayout::dispose();
 }
 
@@ -133,9 +126,9 @@ void ScFunctionWin::InitLRUList()
     ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
-    sal_Int32  nSelPos   = aCatBox->GetSelectedEntryPos();
+    sal_Int32 nSelPos  = xCatBox->get_active();
 
-    if(nSelPos == 0)
+    if (nSelPos == 0)
         UpdateFunctionList();
 }
 
@@ -178,25 +171,20 @@ void ScFunctionWin::UpdateLRUList()
 
 void ScFunctionWin::SetDescription()
 {
-    aFiFuncDesc->SetText( EMPTY_OUSTRING );
+    xFiFuncDesc->set_label(EMPTY_OUSTRING);
     const ScFuncDesc* pDesc =
-             static_cast<const ScFuncDesc*>(aFuncList->GetEntryData(
-                    aFuncList->GetSelectedEntryPos() ));
+             reinterpret_cast<const ScFuncDesc*>(xFuncList->get_selected_id().toInt64());
     if (pDesc)
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        OUStringBuffer aBuf(aFuncList->GetSelectedEntry());
+        OUStringBuffer aBuf(xFuncList->get_selected_text());
         aBuf.append(":\n\n");
         aBuf.append(pDesc->GetParamList());
         aBuf.append("\n\n");
         aBuf.append(*pDesc->mxFuncDesc);
 
-        aFiFuncDesc->SetText(aBuf.makeStringAndClear());
-        aFiFuncDesc->StateChanged(StateChangedType::Text);
-        aFiFuncDesc->Invalidate();
-        aFiFuncDesc->Update();
-
+        xFiFuncDesc->set_label(aBuf.makeStringAndClear());
     }
 }
 
@@ -216,12 +204,12 @@ void ScFunctionWin::SetDescription()
 
 void ScFunctionWin::UpdateFunctionList()
 {
-    sal_Int32  nSelPos   = aCatBox->GetSelectedEntryPos();
-    sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    sal_Int32  nSelPos   = xCatBox->get_active();
+    sal_Int32  nCategory = ( -1 != nSelPos )
                             ? (nSelPos-1) : 0;
 
-    aFuncList->Clear();
-    aFuncList->SetUpdateMode( false );
+    xFuncList->clear();
+    xFuncList->freeze();
 
     if ( nSelPos > 0 )
     {
@@ -230,9 +218,7 @@ void ScFunctionWin::UpdateFunctionList()
         const ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
-            aFuncList->SetEntryData(
-                aFuncList->InsertEntry( *(pDesc->mxFuncName) ),
-                const_cast<ScFuncDesc *>(pDesc) );
+            xFuncList->append(OUString::number(reinterpret_cast<sal_Int64>(pDesc)), *(pDesc->mxFuncName));
             pDesc = pFuncMgr->Next();
         }
     }
@@ -241,20 +227,22 @@ void ScFunctionWin::UpdateFunctionList()
         for (const formula::IFunctionDescription* pDesc : aLRUList)
         {
             if (pDesc)
-                aFuncList->SetEntryData( aFuncList->InsertEntry( pDesc->getFunctionName()), const_cast<formula::IFunctionDescription *>(pDesc));
+            {
+                xFuncList->append(OUString::number(reinterpret_cast<sal_Int64>(pDesc)), pDesc->getFunctionName());
+            }
         }
     }
 
-    aFuncList->SetUpdateMode( true );
+    xFuncList->thaw();
 
-    if ( aFuncList->GetEntryCount() > 0 )
+    if (xFuncList->n_children() > 0)
     {
-        aFuncList->Enable();
-        aFuncList->SelectEntryPos( 0 );
+        xFuncList->set_sensitive(true);
+        xFuncList->select(0);
     }
     else
     {
-        aFuncList->Disable();
+        xFuncList->set_sensitive(false);
     }
 }
 
@@ -277,7 +265,7 @@ void ScFunctionWin::DoEnter()
 {
     OUString aFirstArgStr;
     OUStringBuffer aArgStr;
-    OUString aString=aFuncList->GetSelectedEntry();
+    OUString aString=xFuncList->get_selected_text();
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
 
@@ -293,13 +281,12 @@ void ScFunctionWin::DoEnter()
             // the above call can result in us being disposed
             if (OutputDevice::isDisposed())
                 return;
-            aString = "=" + aFuncList->GetSelectedEntry();
+            aString = "=" + xFuncList->get_selected_text();
             if (pHdl)
                 pHdl->ClearText();
         }
         const ScFuncDesc* pDesc =
-             static_cast<const ScFuncDesc*>(aFuncList->GetEntryData(
-                    aFuncList->GetSelectedEntryPos() ));
+             reinterpret_cast<const ScFuncDesc*>(xFuncList->get_selected_id().toInt64());
         if (pDesc)
         {
             pFuncDesc=pDesc;
@@ -338,7 +325,7 @@ void ScFunctionWin::DoEnter()
         {
             if (pHdl->GetEditString().isEmpty())
             {
-                aString = "=" + aFuncList->GetSelectedEntry();
+                aString = "=" + xFuncList->get_selected_text();
             }
             EditView *pEdView=pHdl->GetActiveView();
             if(pEdView!=nullptr) // @ needed because of crash during setting a name
@@ -386,18 +373,15 @@ void ScFunctionWin::DoEnter()
 #*
 #************************************************************************/
 
-IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
+IMPL_LINK_NOARG(ScFunctionWin, SelComboHdl, weld::ComboBox&, void)
 {
-    if (&rLb == aCatBox.get())
-    {
-        UpdateFunctionList();
-        SetDescription();
-    }
+    UpdateFunctionList();
+    SetDescription();
+}
 
-    if (&rLb == aFuncList.get())
-    {
-        SetDescription();
-    }
+IMPL_LINK_NOARG(ScFunctionWin, SelTreeHdl, weld::TreeView&, void)
+{
+    SetDescription();
 }
 
 /*************************************************************************
@@ -414,14 +398,15 @@ IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 #*
 #************************************************************************/
 
-IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, Button*, void )
+IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, weld::Button&, void )
 {
     DoEnter();          // saves the input
 }
 
-IMPL_LINK_NOARG( ScFunctionWin, SetSelectionHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScFunctionWin, SetRowActivatedHdl, weld::TreeView&, bool )
 {
     DoEnter();          // saves the input
+    return true;
 }
 
 void EnglishFunctionNameChange::setProperty(const css::uno::Any &rProperty)
