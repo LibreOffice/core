@@ -16,7 +16,7 @@
 namespace vcl
 {
 /// Buffers drawing on a vcl::RenderContext using a VirtualDevice.
-class BufferDevice
+class VCL_DLLPUBLIC BufferDevice
 {
     ScopedVclPtr<VirtualDevice> m_pBuffer;
     VclPtr<vcl::Window> m_pWindow;
