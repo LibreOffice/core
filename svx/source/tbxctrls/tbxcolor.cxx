@@ -34,11 +34,8 @@ namespace svx
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    #define TOOLBAR_RESNAME         "private:resource/toolbar/"
-    #define PROPNAME_LAYOUTMANAGER  "LayoutManager"
-
     ToolboxAccess::ToolboxAccess( const OUString& rToolboxName ) :
-        m_sToolboxResName   ( TOOLBAR_RESNAME )
+        m_sToolboxResName   ( "private:resource/toolbar/" )
     {
         m_sToolboxResName += rToolboxName;
 
@@ -50,7 +47,7 @@ namespace svx
                 Reference< XFrame > xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
                 Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY );
                 if ( xFrameProps.is() )
-                    xFrameProps->getPropertyValue( PROPNAME_LAYOUTMANAGER ) >>= m_xLayouter;
+                    xFrameProps->getPropertyValue( "LayoutManager" ) >>= m_xLayouter;
             }
             catch ( Exception const & )
             {
