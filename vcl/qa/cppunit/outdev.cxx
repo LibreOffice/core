@@ -16,6 +16,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <bufferdevice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -32,6 +33,7 @@ public:
     void testGetReadableFontColorWindow();
     void testDrawTransformedBitmapEx();
     void testDrawTransformedBitmapExFlip();
+    void testRTL();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -42,6 +44,7 @@ public:
     CPPUNIT_TEST(testGetReadableFontColorWindow);
     CPPUNIT_TEST(testDrawTransformedBitmapEx);
     CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
+    CPPUNIT_TEST(testRTL);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -252,6 +255,18 @@ void VclOutdevTest::testDrawTransformedBitmapExFlip()
     // - Color is expected to be black, is ffffff (row 2, col 2)
     // i.e. the top left quarter of the image was not black, due to a missing flip.
     CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), COL_BLACK, Color(aColor));
+}
+
+void VclOutdevTest::testRTL()
+{
+    ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
+    pWindow->EnableRTL();
+    vcl::RenderContext& rRenderContext = *pWindow;
+    vcl::BufferDevice pBuffer(pWindow, rRenderContext);
+
+    // Without the accompanying fix in place, this test would have failed, because the RTL status
+    // from pWindow was not propagated to pBuffer.
+    CPPUNIT_ASSERT(pBuffer->IsRTLEnabled());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
