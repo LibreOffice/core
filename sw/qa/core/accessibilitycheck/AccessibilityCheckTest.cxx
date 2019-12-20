@@ -29,10 +29,10 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheck)
     CPPUNIT_ASSERT(pDoc);
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
-    auto& aResults = aCheck.getResultCollecton();
+    auto const& aResults = aCheck.getResultCollecton().getResults();
     CPPUNIT_ASSERT_EQUAL(size_t(2), aResults.size());
-    CPPUNIT_ASSERT_EQUAL(svx::AccessibilityIssueID::DOCUMENT_LANGUAGE, aResults[0].m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(svx::AccessibilityIssueID::DOCUMENT_TITLE, aResults[1].m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(svx::AccessibilityIssueID::DOCUMENT_LANGUAGE, aResults[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(svx::AccessibilityIssueID::DOCUMENT_TITLE, aResults[1]->m_eIssueID);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

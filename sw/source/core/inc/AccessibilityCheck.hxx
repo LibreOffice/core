@@ -16,6 +16,16 @@
 
 namespace sw
 {
+class SW_DLLPUBLIC AccessibilityCheckResult final : public svx::AccessibilityCheckResult
+{
+public:
+    AccessibilityCheckResult(svx::AccessibilityIssueID eIssueID
+                             = svx::AccessibilityIssueID::UNSPECIFIED)
+        : svx::AccessibilityCheckResult(eIssueID)
+    {
+    }
+};
+
 class SW_DLLPUBLIC AccessibilityCheck final : public svx::AccessibilityCheck
 {
 private:

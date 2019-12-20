@@ -15,23 +15,23 @@ namespace svx
 {
 AccessibilityCheckEntry::AccessibilityCheckEntry(
     weld::Container* pParent, weld::Window* pDialog,
-    AccessibilityCheckResult const& rAccessibilityCheckResult)
+    std::shared_ptr<AccessibilityCheckResult> const& rAccessibilityCheckResult)
     : m_pDialog(pDialog)
     , m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
     , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
     , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
     , m_rAccessibilityCheckResult(rAccessibilityCheckResult)
 {
-    m_xLabel->set_label(m_rAccessibilityCheckResult.m_aIssueText);
+    m_xLabel->set_label(m_rAccessibilityCheckResult->m_aIssueText);
     m_xContainer->show();
 }
 
 AccessibilityCheckDialog::AccessibilityCheckDialog(
     weld::Window* pParent,
-    std::vector<AccessibilityCheckResult> const& rAccessibilityCheckResultCollection)
+    AccessibilityCheckResultCollection const& rAccessibilityCheckResultCollection)
     : GenericDialogController(pParent, "svx/ui/accessibilitycheckdialog.ui",
                               "AccessibilityCheckDialog")
-    , m_rAccessibilityCheckResultCollection(rAccessibilityCheckResultCollection)
+    , m_aAccessibilityCheckResultCollection(rAccessibilityCheckResultCollection)
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
 {
 }
@@ -42,7 +42,8 @@ short AccessibilityCheckDialog::run()
 {
     sal_Int32 i = 0;
 
-    for (AccessibilityCheckResult const& rResult : m_rAccessibilityCheckResultCollection)
+    for (std::shared_ptr<AccessibilityCheckResult> const& rResult :
+         m_aAccessibilityCheckResultCollection.getResults())
     {
         auto xEntry = std::make_unique<AccessibilityCheckEntry>(m_xAccessibilityCheckBox.get(),
                                                                 m_xDialog.get(), rResult);

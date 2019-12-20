@@ -11,9 +11,10 @@
 #ifndef INCLUDED_SVX_ACCESSIBILITYCHECK_HXX
 #define INCLUDED_SVX_ACCESSIBILITYCHECK_HXX
 
-#include <vector>
-#include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
+#include <vector>
+#include <memory>
+#include <rtl/ustring.hxx>
 
 namespace svx
 {
@@ -25,7 +26,7 @@ enum class AccessibilityIssueID
     STYLE_LANGUAGE
 };
 
-class SVX_DLLPUBLIC AccessibilityCheckResult final
+class SVX_DLLPUBLIC AccessibilityCheckResult
 {
 public:
     AccessibilityIssueID m_eIssueID;
@@ -35,22 +36,29 @@ public:
         : m_eIssueID(eIssueID)
     {
     }
+    virtual ~AccessibilityCheckResult() {}
+};
+
+class SVX_DLLPUBLIC AccessibilityCheckResultCollection
+{
+private:
+    std::vector<std::shared_ptr<AccessibilityCheckResult>> m_aResults;
+
+public:
+    std::vector<std::shared_ptr<AccessibilityCheckResult>>& getResults() { return m_aResults; }
 };
 
 class SVX_DLLPUBLIC AccessibilityCheck
 {
 protected:
-    std::vector<AccessibilityCheckResult> m_aResultCollection;
+    AccessibilityCheckResultCollection m_aResultCollection;
 
 public:
     virtual ~AccessibilityCheck() {}
 
     virtual void check() = 0;
 
-    std::vector<AccessibilityCheckResult> const& getResultCollecton()
-    {
-        return m_aResultCollection;
-    }
+    AccessibilityCheckResultCollection& getResultCollecton() { return m_aResultCollection; }
 };
 
 } // end svx namespace
