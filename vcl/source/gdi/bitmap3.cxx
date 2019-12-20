@@ -886,7 +886,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
             default:
             {
-                OSL_ENSURE(false, "BitDepth adaptation failed (!)");
+                SAL_WARN("vcl", "BitDepth adaptation failed, from " << rNew.GetBitCount() << " to " << GetBitCount());
                 break;
             }
         }
