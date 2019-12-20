@@ -3251,9 +3251,9 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     // Because the Orphan flag only exists for a short moment, we also check
     // whether the Framesize is set to very huge by CalcPreps, in order to
     // force a MoveFwd
-    if( IsWidow() || ( aRectFnSet.IsVert() ?
-                       ( 0 == getFrameArea().Left() ) :
-                       ( LONG_MAX - 20000 < getFrameArea().Bottom() ) ) )
+    if (IsWidow() || (aRectFnSet.IsVert()
+                        ? (0 == getFrameArea().Left())
+                        : (sw::WIDOW_MAGIC - 20000 < getFrameArea().Bottom())))
     {
         SetWidow(false);
         if ( GetFollow() )
@@ -3262,7 +3262,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
             // whether there's a Follow with a real height at all.
             // Else (e.g. for newly created SctFrames) we ignore the IsWidow() and
             // still check if we can find enough room
-            if( ( ( ! aRectFnSet.IsVert() && LONG_MAX - 20000 >= getFrameArea().Bottom() ) ||
+            if (((!aRectFnSet.IsVert() && getFrameArea().Bottom() <= sw::WIDOW_MAGIC - 20000) ||
                   (   aRectFnSet.IsVert() && 0 < getFrameArea().Left() ) ) &&
                   ( GetFollow()->IsVertical() ?
                     !GetFollow()->getFrameArea().Width() :

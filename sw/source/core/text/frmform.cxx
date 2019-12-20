@@ -838,7 +838,7 @@ bool SwTextFrame::CalcPreps()
                     // the range of 'long', while the value (SAL_MAX_INT32 - 1)/2 (which matches the
                     // old value on platforms where 'long' is 'sal_Int32') is empirically shown to
                     // be large enough in practice even on platforms where 'long' is 'sal_Int64':
-                    SwTwips nTmp  = (SAL_MAX_INT32 - 1)/2 - (getFrameArea().Top()+10000);
+                    SwTwips const nTmp = sw::WIDOW_MAGIC - (getFrameArea().Top()+10000);
                     SwTwips nDiff = nTmp - getFrameArea().Height();
 
                     {
