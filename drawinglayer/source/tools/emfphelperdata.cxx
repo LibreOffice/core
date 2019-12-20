@@ -96,13 +96,20 @@ namespace emfplushelper
         return (flags & 0x7f00) >> 8;
     }
 
+    static bool ObjectContinues(sal_uInt16 flags)
+    {
+        return (flags & 0x8000) >> 8;
+    }
+
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt16 objecttype = GetObjectType(flags);
         sal_uInt16 index = flags & 0xff;
         SAL_INFO("drawinglayer", "EMF+ Object: " << ObjectToString(objecttype) << " (0x" << std::hex << objecttype << ")");
         SAL_INFO("drawinglayer", "EMF+\tObject slot: " << std::dec << index);
-        SAL_INFO("drawinglayer", "EMF+\tFlags: " << std::hex << flags);
+        SAL_INFO("drawinglayer", "EMF+\tFlags: 0x" << std::hex << flags);
+        if (ObjectContinues(flags))
+            SAL_INFO("drawinglayer", "EMF+\tObject continues in next record");
 
         switch (objecttype)
         {
@@ -951,7 +958,7 @@ namespace emfplushelper
                 wmfemfhelper::HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
                 bIsGetDCProcessing = false;
             }
-            if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000)))
+            if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || ObjectContinues(flags)))
             {
                 if (!mbMultipart)
                 {
@@ -978,7 +985,7 @@ namespace emfplushelper
                 mbMultipart = false;
             }
 
-            if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
+            if (type != EmfPlusRecordTypeObject || !ObjectContinues(flags))
             {
                 switch (type)
                 {
