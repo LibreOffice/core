@@ -30,11 +30,22 @@ public:
         : m_eIssueID(eIssueID)
     {
     }
+    virtual ~AccessibilityIssue() {}
 
     AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;
 };
-}
+
+class SVX_DLLPUBLIC AccessibilityIssueCollection
+{
+private:
+    std::vector<std::shared_ptr<AccessibilityIssue>> m_aIssues;
+
+public:
+    std::vector<std::shared_ptr<AccessibilityIssue>>& getIssues() { return m_aIssues; }
+};
+
+} // end svx namespace
 
 #endif // INCLUDED_SVX_ACCESSIBILITYISSUE_HXX
 
