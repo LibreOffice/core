@@ -26,8 +26,6 @@
 
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -206,19 +204,17 @@ ChartAxisPanel::ChartAxisPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
-  : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame),
-    mxModel(pController->getModel()),
-    mxModifyListener(new ChartSidebarModifyListener(this)),
-    mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS)),
-    mbModelValid(true)
+    : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame, true)
+    , mxCBShowLabel(m_xBuilder->weld_check_button("checkbutton_show_label"))
+    , mxCBReverse(m_xBuilder->weld_check_button("checkbutton_reverse"))
+    , mxLBLabelPos(m_xBuilder->weld_combo_box("comboboxtext_label_position"))
+    , mxGridLabel(m_xBuilder->weld_widget("label_props"))
+    , mxNFRotation(m_xBuilder->weld_metric_spin_button("spinbutton1", FieldUnit::DEGREE))
+    , mxModel(pController->getModel())
+    , mxModifyListener(new ChartSidebarModifyListener(this))
+    , mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_AXIS))
+    , mbModelValid(true)
 {
-    get(mpCBShowLabel, "checkbutton_show_label");
-    get(mpCBReverse, "checkbutton_reverse");
-
-    get(mpLBLabelPos, "comboboxtext_label_position");
-    get(mpNFRotation, "spinbutton1");
-    get(mpGridLabel, "label_props");
-
     Initialize();
 }
 
@@ -236,13 +232,13 @@ void ChartAxisPanel::dispose()
     if (xSelectionSupplier.is())
         xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
 
-    mpCBShowLabel.clear();
-    mpCBReverse.clear();
+    mxCBShowLabel.reset();
+    mxCBReverse.reset();
 
-    mpLBLabelPos.clear();
-    mpGridLabel.clear();
+    mxLBLabelPos.reset();
+    mxGridLabel.reset();
 
-    mpNFRotation.clear();
+    mxNFRotation.reset();
 
     PanelLayout::dispose();
 }
@@ -258,14 +254,14 @@ void ChartAxisPanel::Initialize()
 
     updateData();
 
-    Link<Button*,void> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
-    mpCBShowLabel->SetClickHdl(aLink);
-    mpCBReverse->SetClickHdl(aLink);
+    Link<weld::ToggleButton&,void> aLink = LINK(this, ChartAxisPanel, CheckBoxHdl);
+    mxCBShowLabel->connect_toggled(aLink);
+    mxCBReverse->connect_toggled(aLink);
 
-    Link<Edit&, void> aSpinButtonLink = LINK(this, ChartAxisPanel, TextRotationHdl);
-    mpNFRotation->SetModifyHdl(aSpinButtonLink);
+    Link<weld::MetricSpinButton&, void> aSpinButtonLink = LINK(this, ChartAxisPanel, TextRotationHdl);
+    mxNFRotation->connect_value_changed(aSpinButtonLink);
 
-    mpLBLabelPos->SetSelectHdl(LINK(this, ChartAxisPanel, ListBoxHdl));
+    mxLBLabelPos->connect_changed(LINK(this, ChartAxisPanel, ListBoxHdl));
 }
 
 void ChartAxisPanel::updateData()
@@ -276,11 +272,11 @@ void ChartAxisPanel::updateData()
     OUString aCID = getCID(mxModel);
     SolarMutexGuard aGuard;
 
-    mpCBShowLabel->Check(isLabelShown(mxModel, aCID));
-    mpCBReverse->Check(isReverse(mxModel, aCID));
+    mxCBShowLabel->set_active(isLabelShown(mxModel, aCID));
+    mxCBReverse->set_active(isReverse(mxModel, aCID));
 
-    mpLBLabelPos->SelectEntryPos(getLabelPosition(mxModel, aCID));
-    mpNFRotation->SetValue(getAxisRotation(mxModel, aCID));
+    mxLBLabelPos->set_active(getLabelPosition(mxModel, aCID));
+    mxNFRotation->set_value(getAxisRotation(mxModel, aCID), FieldUnit::DEGREE);
 }
 
 VclPtr<vcl::Window> ChartAxisPanel::Create (
@@ -347,33 +343,32 @@ void ChartAxisPanel::selectionChanged(bool bCorrectType)
         updateData();
 }
 
-IMPL_LINK(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
+IMPL_LINK(ChartAxisPanel, CheckBoxHdl, weld::ToggleButton&, rCheckbox, void)
 {
-    CheckBox* pCheckbox = static_cast<CheckBox*>(pButton);
     OUString aCID = getCID(mxModel);
-    bool bChecked = pCheckbox->IsChecked();
+    bool bChecked = rCheckbox.get_active();
 
-    if (pCheckbox == mpCBShowLabel.get())
+    if (&rCheckbox == mxCBShowLabel.get())
     {
-        mpGridLabel->Enable(bChecked);
+        mxGridLabel->set_sensitive(bChecked);
         setLabelShown(mxModel, aCID, bChecked);
     }
-    else if (pCheckbox == mpCBReverse.get())
+    else if (&rCheckbox == mxCBReverse.get())
         setReverse(mxModel, aCID, bChecked);
 }
 
-IMPL_LINK_NOARG(ChartAxisPanel, ListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChartAxisPanel, ListBoxHdl, weld::ComboBox&, void)
 {
     OUString aCID = getCID(mxModel);
-    sal_Int32 nPos = mpLBLabelPos->GetSelectedEntryPos();
+    sal_Int32 nPos = mxLBLabelPos->get_active();
 
     setLabelPosition(mxModel, aCID, nPos);
 }
 
-IMPL_LINK(ChartAxisPanel, TextRotationHdl, Edit&, rMetricField, void)
+IMPL_LINK(ChartAxisPanel, TextRotationHdl, weld::MetricSpinButton&, rMetricField, void)
 {
     OUString aCID = getCID(mxModel);
-    double nVal = static_cast<NumericField&>(rMetricField).GetValue();
+    double nVal = rMetricField.get_value(FieldUnit::DEGREE);
     setAxisRotation(mxModel, aCID, nVal);
 }
 

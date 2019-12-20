@@ -15,7 +15,6 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/layout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
@@ -74,13 +73,11 @@ public:
 
 private:
     //ui controls
-    VclPtr<CheckBox> mpCBShowLabel;
-    VclPtr<CheckBox> mpCBReverse;
-
-    VclPtr<ListBox> mpLBLabelPos;
-    VclPtr<VclGrid> mpGridLabel;
-
-    VclPtr<MetricField> mpNFRotation;
+    std::unique_ptr<weld::CheckButton> mxCBShowLabel;
+    std::unique_ptr<weld::CheckButton> mxCBReverse;
+    std::unique_ptr<weld::ComboBox> mxLBLabelPos;
+    std::unique_ptr<weld::Widget> mxGridLabel;
+    std::unique_ptr<weld::MetricSpinButton> mxNFRotation;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxModifyListener;
@@ -90,9 +87,9 @@ private:
 
     void Initialize();
 
-    DECL_LINK(CheckBoxHdl, Button*, void);
-    DECL_LINK(ListBoxHdl, ListBox&, void);
-    DECL_LINK(TextRotationHdl, Edit&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(ListBoxHdl, weld::ComboBox&, void);
+    DECL_LINK(TextRotationHdl, weld::MetricSpinButton&, void);
 };
 
 } } // end of namespace ::chart::sidebar
