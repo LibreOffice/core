@@ -426,25 +426,24 @@ VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
 
 ThemePanel::ThemePanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame)
+    : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame, true)
+    , mxListBoxFonts(m_xBuilder->weld_tree_view("listbox_fonts"))
+    , mxValueSetColors(new SvtValueSet(nullptr))
+    , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))
+    , mxApplyButton(m_xBuilder->weld_button("apply"))
     , maColorSets()
 {
-    get(mpListBoxFonts, "listbox_fonts");
-    get(mpValueSetColors, "valueset_colors");
-    get(mpApplyButton, "apply");
+    mxValueSetColors->SetColCount(2);
+    mxValueSetColors->SetLineCount(3);
 
-    mpValueSetColors->SetColCount(2);
-    mpValueSetColors->SetLineCount(4);
-
-    mpApplyButton->SetClickHdl(LINK(this, ThemePanel, ClickHdl));
-    mpListBoxFonts->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickHdl));
-    mpValueSetColors->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickValueSetHdl));
+    mxApplyButton->connect_clicked(LINK(this, ThemePanel, ClickHdl));
+    mxListBoxFonts->connect_row_activated(LINK(this, ThemePanel, DoubleClickHdl));
+    mxValueSetColors->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickValueSetHdl));
 
     std::vector<FontSet> aFontSets = initFontSets();
     for (const FontSet & rFontSet : aFontSets)
-    {
-        mpListBoxFonts->InsertEntry(rFontSet.maName);
-    }
+        mxListBoxFonts->append_text(rFontSet.maName);
+    mxListBoxFonts->set_size_request(-1, mxListBoxFonts->get_height_rows(aFontSets.size()));
 
     maColorSets.init();
 
@@ -455,8 +454,12 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
 
         const OUString& aName = rColorSet.getName();
         BitmapEx aPreview = GenerateColorPreview(rColorSet);
-        mpValueSetColors->InsertItem(i, Image(aPreview), aName);
+
+        sal_uInt16 nId = i + 1;
+        mxValueSetColors->InsertItem(nId, Image(aPreview), aName);
     }
+
+    mxValueSetColors->SetOptimalSize();
 }
 
 ThemePanel::~ThemePanel()
@@ -466,33 +469,39 @@ ThemePanel::~ThemePanel()
 
 void ThemePanel::dispose()
 {
-    mpListBoxFonts.clear();
-    mpValueSetColors.clear();
-    mpApplyButton.clear();
+    mxListBoxFonts.reset();
+    mxValueSetColorsWin.reset();
+    mxValueSetColors.reset();
+    mxApplyButton.reset();
 
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(ThemePanel, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(ThemePanel, ClickHdl, weld::Button&, void)
 {
     DoubleClickHdl();
 }
-IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
+
+IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, SvtValueSet*, void)
 {
     DoubleClickHdl();
 }
-IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl, ListBox&, void)
+
+IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl, weld::TreeView&, bool)
 {
     DoubleClickHdl();
+    return true;
 }
+
 void ThemePanel::DoubleClickHdl()
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     if (pDocSh)
     {
-        OUString sEntryFonts = mpListBoxFonts->GetSelectedEntry();
-        sal_uInt32 nItemId = mpValueSetColors->GetSelectedItemId();
-        OUString sEntryColors = maColorSets.getColorSet(nItemId).getName();
+        OUString sEntryFonts = mxListBoxFonts->get_selected_text();
+        sal_uInt32 nItemId = mxValueSetColors->GetSelectedItemId();
+        sal_uInt32 nIndex = nItemId - 1;
+        OUString sEntryColors = maColorSets.getColorSet(nIndex).getName();
 
         StyleSet aStyleSet = setupThemes();
 
