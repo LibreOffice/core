@@ -36,7 +36,6 @@ class NumValueSet;
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxBrushItem;
-class ValueSet;
 class SdDrawDocument;
 
 namespace sd

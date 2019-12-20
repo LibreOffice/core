@@ -2270,6 +2270,7 @@ SvtValueSet::SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
+    mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
 
@@ -2826,6 +2827,27 @@ void SvtValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
     ImplDrawSelect(rRenderContext);
 }
 
+/**
+ * An inelegant method; sets the item width & height such that
+ * all of the included items and their labels fit; if we can
+ * calculate that.
+ */
+void SvtValueSet::RecalculateItemSizes()
+{
+    Size aLargestItem = GetLargestItemSize();
+
+    if ( mnUserItemWidth != aLargestItem.Width() ||
+         mnUserItemHeight != aLargestItem.Height() )
+    {
+        mnUserItemWidth = aLargestItem.Width();
+        mnUserItemHeight = aLargestItem.Height();
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
 void SvtValueSet::SelectItem( sal_uInt16 nItemId )
 {
     size_t nItemPos = 0;
@@ -3146,10 +3168,18 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         // calculate offsets
         long nStartX;
         long nStartY;
-        long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
-        long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
-        nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
-        nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
+        if (mbFullMode)
+        {
+            long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
+            long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
+            nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
+            nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
+        }
+        else
+        {
+            nStartX = 0;
+            nStartY = 0;
+        }
 
         // calculate and draw items
         maVirDev->SetLineColor();
@@ -3184,6 +3214,15 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         maItemListRect.SetRight( x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1 );
         maItemListRect.SetBottom( y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1 );
 
+        if (!mbFullMode)
+        {
+            // If want also draw parts of items in the last line,
+            // then we add one more line if parts of these line are
+            // visible
+            if (y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height())
+                nLastItem += mnCols;
+            maItemListRect.SetBottom( aWinSize.Height() - y );
+        }
         for (size_t i = 0; i < nItemCount; i++)
         {
             SvtValueSetItem* pItem = mItemList[i].get();
@@ -3553,6 +3592,11 @@ void SvtValueSet::StyleUpdated()
     CustomWidgetController::StyleUpdated();
 }
 
+void SvtValueSet::EnableFullItemMode( bool bFullMode )
+{
+    mbFullMode = bFullMode;
+}
+
 void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
 {
     if ( mnUserCols != nNewCols )
@@ -3676,11 +3720,12 @@ void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
 }
 
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                           const OUString& rText, size_t nPos )
+                           const OUString& rText, size_t nPos,
+                           bool bShowLegend )
 {
     std::unique_ptr<SvtValueSetItem> pItem(new SvtValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
+    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
     ImplInsertItem( std::move(pItem), nPos );
