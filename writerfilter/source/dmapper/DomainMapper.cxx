@@ -3036,7 +3036,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
     if (m_pImpl->m_nTableDepth > 0) //if we had a table
     {
         uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
-        sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
+        sal_Int16 nCurrentHorOriRel; //A temp variable to store the current setting
         xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
         //and the correction:
         if (nCurrentHorOriRel == text::RelOrientation::PAGE_FRAME)
