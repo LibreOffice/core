@@ -12,14 +12,11 @@ import java.util.Locale;
 public class LocaleHelper {
 
     private static final String SELECTED_LANG = "org.libreoffice.selected.lang";
+    // value for language that indicates that system's default language should be used
+    public static final String SYSTEM_DEFAULT_LANGUAGE = "SYSTEM_DEFAULT_LANGUAGE";
 
     public static Context onAttach(Context context){
         String lang = getPersistedData(context, Locale.getDefault().getLanguage());
-        return setLocale(context, lang);
-    }
-
-    public static Context onAttach(Context context, String defLang){
-        String lang = getPersistedData(context, defLang);
         return setLocale(context, lang);
     }
 
@@ -30,7 +27,12 @@ public class LocaleHelper {
 
     @SuppressWarnings("deprecation")
     private static Context updateResources(Context context, String lang) {
-        Locale locale = new Locale(lang);
+        Locale locale;
+        if (lang.equals(SYSTEM_DEFAULT_LANGUAGE)) {
+            locale = Locale.getDefault();
+        } else {
+            locale = new Locale(lang);
+        }
         Locale.setDefault(locale);
 
         Resources res = context.getResources();
