@@ -37,7 +37,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -298,20 +297,17 @@ bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
 
 OUString lcl_getSoundFileURL(
     const ::std::vector< OUString > & rSoundList,
-    const ListBox* rListBox )
+    const weld::ComboBox& rListBox )
 {
-    if( rListBox->GetSelectedEntryCount() > 0 )
+    sal_Int32 nPos = rListBox.get_active();
+    // the first three entries are no actual sounds
+    if( nPos >= 3 )
     {
-        sal_Int32 nPos = rListBox->GetSelectedEntryPos();
-        // the first three entries are no actual sounds
-        if( nPos >= 3 )
-        {
-            DBG_ASSERT( static_cast<sal_uInt32>(rListBox->GetEntryCount() - 3) == rSoundList.size(),
-                        "Sound list-box is not synchronized to sound list" );
-            nPos -= 3;
-            if( rSoundList.size() > static_cast<size_t>(nPos) )
-                return rSoundList[ nPos ];
-        }
+        DBG_ASSERT( static_cast<sal_uInt32>(rListBox.get_count() - 3) == rSoundList.size(),
+                    "Sound list-box is not synchronized to sound list" );
+        nPos -= 3;
+        if( rSoundList.size() > static_cast<size_t>(nPos) )
+            return rSoundList[ nPos ];
     }
 
     return OUString();
@@ -319,29 +315,29 @@ OUString lcl_getSoundFileURL(
 
 struct lcl_AppendSoundToListBox
 {
-    explicit lcl_AppendSoundToListBox( ListBox*  rListBox ) :
-            mrListBox( rListBox )
+    explicit lcl_AppendSoundToListBox(weld::ComboBox& rListBox)
+        : mrListBox( rListBox )
     {}
 
     void operator() ( const OUString & rString ) const
     {
         INetURLObject aURL( rString );
-        mrListBox->InsertEntry( aURL.GetBase() );
+        mrListBox.append_text( aURL.GetBase() );
     }
 
 private:
-    VclPtr<ListBox>  mrListBox;
+    weld::ComboBox&  mrListBox;
 };
 
 void lcl_FillSoundListBox(
     const ::std::vector< OUString > & rSoundList,
-    ListBox*  rOutListBox )
+    weld::ComboBox& rOutListBox )
 {
-    sal_Int32 nCount = rOutListBox->GetEntryCount();
+    sal_Int32 nCount = rOutListBox.get_count();
 
     // keep first three entries
     for( sal_Int32 i=nCount - 1; i>=3; --i )
-        rOutListBox->RemoveEntry( i );
+        rOutListBox.remove( i );
 
     ::std::for_each( rSoundList.begin(), rSoundList.end(),
                      lcl_AppendSoundToListBox( rOutListBox ));
@@ -369,29 +365,32 @@ size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
 namespace sd
 {
 
-namespace {
-
-class TransitionPane : public ValueSet
+class TransitionPane : public SvtValueSet
 {
 public:
-    explicit TransitionPane( vcl::Window *pParent )
-        : ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER |
-                  WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL )
+    explicit TransitionPane(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
+        : SvtValueSet(std::move(pScrolledWindow))
     {
+    }
+
+    void Recalculate()
+    {
+        GetScrollBar()->set_vpolicy(VclPolicyType::AUTOMATIC);
+        RecalculateItemSizes();
+    }
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
+    {
+        Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
+        pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+        SvtValueSet::SetDrawingArea(pDrawingArea);
+        SetOutputSizePixel(aSize);
+
+        SetStyle(GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL);
         EnableFullItemMode( false );
-        set_hexpand( true );
-        set_vexpand( true );
         SetColCount(3);
     }
-    virtual ~TransitionPane() override { disposeOnce(); }
-
-    virtual Size GetOptimalSize() const override
-    {
-        return LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
-    }
 };
-
-}
 
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
@@ -399,7 +398,7 @@ SlideTransitionPane::SlideTransitionPane(
     ViewShellBase & rBase,
     SdDrawDocument* pDoc,
     const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
-        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
+        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame, true ),
 
         mrBase( rBase ),
         mpDrawDoc( pDoc ),
@@ -418,7 +417,7 @@ SlideTransitionPane::SlideTransitionPane(
     SdDrawDocument* pDoc,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     bool /*bHorizontalLayout*/ ) :
-        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanelhorizontal.ui", rxFrame ),
+        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanelhorizontal.ui", rxFrame, true ),
 
         mrBase( rBase ),
         mpDrawDoc( pDoc ),
@@ -433,32 +432,30 @@ SlideTransitionPane::SlideTransitionPane(
 
 void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 {
-    get(mpFT_VARIANT, "variant_label");
-    get(mpLB_VARIANT, "variant_list");
-    get(mpFT_duration, "duration_label");
-    get(mpCBX_duration, "transition_duration");
-    get(mpFT_SOUND, "sound_label");
-    get(mpLB_SOUND, "sound_list");
-    get(mpCB_LOOP_SOUND, "loop_sound" );
-    get(mpRB_ADVANCE_ON_MOUSE, "rb_mouse_click");
-    get(mpRB_ADVANCE_AUTO, "rb_auto_after");
-    get(mpMF_ADVANCE_AUTO_AFTER, "auto_after_value");
-    auto nMax = mpMF_ADVANCE_AUTO_AFTER->GetMax();
-    mpMF_ADVANCE_AUTO_AFTER->SetMax(1000);
-    Size aOptimalSize(mpMF_ADVANCE_AUTO_AFTER->CalcMinimumSize());
-    mpMF_ADVANCE_AUTO_AFTER->set_width_request(aOptimalSize.Width());
-    mpMF_ADVANCE_AUTO_AFTER->SetMax(nMax);
-    get(mpPB_APPLY_TO_ALL, "apply_to_all");
-    get(mpPB_PLAY, "play");
-    get(mpCB_AUTO_PREVIEW, "auto_preview");
+    mxFT_VARIANT = m_xBuilder->weld_label("variant_label");
+    mxLB_VARIANT = m_xBuilder->weld_combo_box("variant_list");
+    mxFT_duration = m_xBuilder->weld_label("duration_label");
+    mxCBX_duration = m_xBuilder->weld_metric_spin_button("transition_duration", FieldUnit::SECOND);
+    mxFT_SOUND = m_xBuilder->weld_label("sound_label");
+    mxLB_SOUND = m_xBuilder->weld_combo_box("sound_list");
+    mxCB_LOOP_SOUND = m_xBuilder->weld_check_button("loop_sound");
+    mxRB_ADVANCE_ON_MOUSE = m_xBuilder->weld_radio_button("rb_mouse_click");
+    mxRB_ADVANCE_AUTO = m_xBuilder->weld_radio_button("rb_auto_after");
+    mxMF_ADVANCE_AUTO_AFTER  = m_xBuilder->weld_metric_spin_button("auto_after_value", FieldUnit::SECOND);
+    mxPB_APPLY_TO_ALL = m_xBuilder->weld_button("apply_to_all");
+    mxPB_PLAY = m_xBuilder->weld_button("play");
+    mxCB_AUTO_PREVIEW = m_xBuilder->weld_check_button("auto_preview");
 
-    VclPtr<VclAlignment> xAlign;
-    get(xAlign, "transitions_icons");
+    weld::SpinButton& rSpinButton = mxMF_ADVANCE_AUTO_AFTER->get_widget();
+    auto nMax = rSpinButton.get_max();
+    rSpinButton.set_max(1000);
+    Size aOptimalSize(rSpinButton.get_preferred_size());
+    rSpinButton.set_size_request(aOptimalSize.Width(), -1);
+    mxCBX_duration->get_widget().set_size_request(aOptimalSize.Width(), -1);
+    rSpinButton.set_max(nMax);
 
-    mpVS_TRANSITION_ICONS = VclPtr<TransitionPane>::Create(xAlign);
-    mpVS_TRANSITION_ICONS->Show();
-
-    mpLB_VARIANT->SetDropDownLineCount(4);
+    mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window("transitions_iconswin")));
+    mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, "transitions_icons", *mxVS_TRANSITION_ICONS));
 
     if( pDoc )
         mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
@@ -467,39 +464,34 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
 
     // dummy list box of slide transitions for startup.
-    mpVS_TRANSITION_ICONS->InsertItem(
+    mxVS_TRANSITION_ICONS->InsertItem(
         0, Image( StockImage::Yes, "sd/cmd/transition-none.png" ),
         SdResId( STR_SLIDETRANSITION_NONE ),
         VALUESET_APPEND, /* show legend */ true );
-    mpVS_TRANSITION_ICONS->RecalculateItemSizes();
-
-    mpCBX_duration->InsertValue(100, FieldUnit::CUSTOM);
-    mpCBX_duration->InsertValue(200, FieldUnit::CUSTOM);
-    mpCBX_duration->InsertValue(300, FieldUnit::CUSTOM);
-    mpCBX_duration->AdaptDropDownLineCountToMaximum();
+    mxVS_TRANSITION_ICONS->Recalculate();
 
     // set defaults
-    mpCB_AUTO_PREVIEW->Check();      // automatic preview on
+    mxCB_AUTO_PREVIEW->set_active(true);      // automatic preview on
 
     // update control states before adding handlers
     updateControls();
 
     // set handlers
-    mpPB_APPLY_TO_ALL->SetClickHdl( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
-    mpPB_PLAY->SetClickHdl( LINK( this, SlideTransitionPane, PlayButtonClicked ));
+    mxPB_APPLY_TO_ALL->connect_clicked( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
+    mxPB_PLAY->connect_clicked( LINK( this, SlideTransitionPane, PlayButtonClicked ));
 
-    mpVS_TRANSITION_ICONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
+    mxVS_TRANSITION_ICONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
 
-    mpLB_VARIANT->SetSelectHdl( LINK( this, SlideTransitionPane, VariantListBoxSelected ));
-    mpCBX_duration->SetModifyHdl(LINK( this, SlideTransitionPane, DurationModifiedHdl));
-    mpCBX_duration->SetLoseFocusHdl(LINK( this, SlideTransitionPane, DurationLoseFocusHdl));
-    mpLB_SOUND->SetSelectHdl( LINK( this, SlideTransitionPane, SoundListBoxSelected ));
-    mpCB_LOOP_SOUND->SetClickHdl( LINK( this, SlideTransitionPane, LoopSoundBoxChecked ));
+    mxLB_VARIANT->connect_changed( LINK( this, SlideTransitionPane, VariantListBoxSelected ));
+    mxCBX_duration->connect_value_changed(LINK( this, SlideTransitionPane, DurationModifiedHdl));
+    mxCBX_duration->connect_focus_out(LINK( this, SlideTransitionPane, DurationLoseFocusHdl));
+    mxLB_SOUND->connect_changed( LINK( this, SlideTransitionPane, SoundListBoxSelected ));
+    mxCB_LOOP_SOUND->connect_toggled( LINK( this, SlideTransitionPane, LoopSoundBoxChecked ));
 
-    mpRB_ADVANCE_ON_MOUSE->SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
-    mpRB_ADVANCE_AUTO->SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
-    mpMF_ADVANCE_AUTO_AFTER->SetModifyHdl( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
-    mpCB_AUTO_PREVIEW->SetClickHdl( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
+    mxRB_ADVANCE_ON_MOUSE->connect_toggled( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
+    mxRB_ADVANCE_AUTO->connect_toggled( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
+    mxMF_ADVANCE_AUTO_AFTER->connect_value_changed( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
+    mxCB_AUTO_PREVIEW->connect_toggled( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
     addListener();
 
     maLateInitTimer.SetTimeout(200);
@@ -518,20 +510,21 @@ void SlideTransitionPane::dispose()
 {
     maLateInitTimer.Stop();
     removeListener();
-    mpVS_TRANSITION_ICONS.disposeAndClear();
-    mpFT_VARIANT.clear();
-    mpLB_VARIANT.clear();
-    mpFT_duration.clear();
-    mpCBX_duration.clear();
-    mpFT_SOUND.clear();
-    mpLB_SOUND.clear();
-    mpCB_LOOP_SOUND.clear();
-    mpRB_ADVANCE_ON_MOUSE.clear();
-    mpRB_ADVANCE_AUTO.clear();
-    mpMF_ADVANCE_AUTO_AFTER.clear();
-    mpPB_APPLY_TO_ALL.clear();
-    mpPB_PLAY.clear();
-    mpCB_AUTO_PREVIEW.clear();
+    mxVS_TRANSITION_ICONSWin.reset();
+    mxVS_TRANSITION_ICONS.reset();
+    mxFT_VARIANT.reset();
+    mxLB_VARIANT.reset();
+    mxFT_duration.reset();
+    mxCBX_duration.reset();
+    mxFT_SOUND.reset();
+    mxLB_SOUND.reset();
+    mxCB_LOOP_SOUND.reset();
+    mxRB_ADVANCE_ON_MOUSE.reset();
+    mxRB_ADVANCE_AUTO.reset();
+    mxMF_ADVANCE_AUTO_AFTER.reset();
+    mxPB_APPLY_TO_ALL.reset();
+    mxPB_PLAY.reset();
+    mxCB_AUTO_PREVIEW.reset();
     PanelLayout::dispose();
 }
 
@@ -543,15 +536,9 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent&)
 void SlideTransitionPane::UpdateLook()
 {
     if( mbHorizontalLayout )
-    {
         SetBackground(Wallpaper());
-    }
     else
-    {
         SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
-        mpFT_duration->SetBackground(Wallpaper());
-        mpFT_SOUND->SetBackground(Wallpaper());
-    }
 }
 
 void SlideTransitionPane::onSelectionChanged()
@@ -620,31 +607,31 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbEffectAmbiguous )
     {
         SAL_WARN( "sd.transitions", "Unusual, ambiguous transition effect" );
-        mpVS_TRANSITION_ICONS->SetNoSelection();
+        mxVS_TRANSITION_ICONS->SetNoSelection();
     }
     else
     {
         // ToDo: That 0 is "no transition" is documented nowhere except in the
         // CTOR of sdpage
         if( aEffect.mnType == 0 )
-            mpVS_TRANSITION_ICONS->SetNoSelection();
+            mxVS_TRANSITION_ICONS->SetNoSelection();
         else
             updateVariants( getPresetOffset( aEffect ) );
     }
 
     if( aEffect.mbDurationAmbiguous )
     {
-        mpCBX_duration->SetText("");
-        mpCBX_duration->SetNoSelection();
+        mxCBX_duration->set_text("");
+//TODO        mxCBX_duration->SetNoSelection();
     }
     else
     {
-        mpCBX_duration->SetValue( (aEffect.mfDuration)*100.0 );
+        mxCBX_duration->set_value( (aEffect.mfDuration)*100.0, FieldUnit::SECOND );
     }
 
     if( aEffect.mbSoundAmbiguous )
     {
-        mpLB_SOUND->SetNoSelection();
+        mxLB_SOUND->set_active(-1);
         maCurrentSoundFile.clear();
     }
     else
@@ -652,54 +639,54 @@ void SlideTransitionPane::updateControls()
         maCurrentSoundFile.clear();
         if( aEffect.mbStopSound )
         {
-            mpLB_SOUND->SelectEntryPos( 1 );
+            mxLB_SOUND->set_active( 1 );
         }
         else if( aEffect.mbSoundOn && !aEffect.maSound.isEmpty() )
         {
             std::vector<OUString>::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
-                mpLB_SOUND->SelectEntryPos( nPos + 3 );
+                mxLB_SOUND->set_active( nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
         }
         else
         {
-            mpLB_SOUND->SelectEntryPos( 0 );
+            mxLB_SOUND->set_active( 0 );
         }
     }
 
     if( aEffect.mbLoopSoundAmbiguous )
     {
-        mpCB_LOOP_SOUND->SetState( TRISTATE_INDET );
+        mxCB_LOOP_SOUND->set_state(TRISTATE_INDET);
     }
     else
     {
-        mpCB_LOOP_SOUND->Check( aEffect.mbLoopSound );
+        mxCB_LOOP_SOUND->set_active(aEffect.mbLoopSound);
     }
 
     if( aEffect.mbPresChangeAmbiguous )
     {
-        mpRB_ADVANCE_ON_MOUSE->Check( false );
-        mpRB_ADVANCE_AUTO->Check( false );
+        mxRB_ADVANCE_ON_MOUSE->set_active( false );
+        mxRB_ADVANCE_AUTO->set_active( false );
     }
     else
     {
-        mpRB_ADVANCE_ON_MOUSE->Check( aEffect.mePresChange == PRESCHANGE_MANUAL );
-        mpRB_ADVANCE_AUTO->Check( aEffect.mePresChange == PRESCHANGE_AUTO );
-        mpMF_ADVANCE_AUTO_AFTER->SetValue( aEffect.mfTime * 100.0);
+        mxRB_ADVANCE_ON_MOUSE->set_active( aEffect.mePresChange == PRESCHANGE_MANUAL );
+        mxRB_ADVANCE_AUTO->set_active( aEffect.mePresChange == PRESCHANGE_AUTO );
+        mxMF_ADVANCE_AUTO_AFTER->set_value(aEffect.mfTime * 100.0, FieldUnit::SECOND);
     }
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        mpPB_PLAY->Hide();
-        mpCB_AUTO_PREVIEW->Check(false);
-        mpCB_AUTO_PREVIEW->Hide();
+        mxPB_PLAY->hide();
+        mxCB_AUTO_PREVIEW->set_active(false);
+        mxCB_AUTO_PREVIEW->hide();
     }
     else
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-        mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() );
+        mxCB_AUTO_PREVIEW->set_active( pOptions->IsPreviewTransitions() );
     }
 
     mbUpdatingControls = false;
@@ -709,18 +696,18 @@ void SlideTransitionPane::updateControls()
 
 void SlideTransitionPane::updateControlState()
 {
-    mpVS_TRANSITION_ICONS->Enable( mbHasSelection );
-    mpLB_VARIANT->Enable( mbHasSelection && mpLB_VARIANT->GetEntryCount() > 0 );
-    mpCBX_duration->Enable( mbHasSelection );
-    mpLB_SOUND->Enable( mbHasSelection );
-    mpCB_LOOP_SOUND->Enable( mbHasSelection && (mpLB_SOUND->GetSelectedEntryPos() > 2));
-    mpRB_ADVANCE_ON_MOUSE->Enable( mbHasSelection );
-    mpRB_ADVANCE_AUTO->Enable( mbHasSelection );
-    mpMF_ADVANCE_AUTO_AFTER->Enable( mbHasSelection && mpRB_ADVANCE_AUTO->IsChecked());
+    mxVS_TRANSITION_ICONSWin->set_sensitive( mbHasSelection );
+    mxLB_VARIANT->set_sensitive( mbHasSelection && mxLB_VARIANT->get_count() > 0 );
+    mxCBX_duration->set_sensitive( mbHasSelection );
+    mxLB_SOUND->set_sensitive( mbHasSelection );
+    mxCB_LOOP_SOUND->set_sensitive( mbHasSelection && (mxLB_SOUND->get_active() > 2));
+    mxRB_ADVANCE_ON_MOUSE->set_sensitive( mbHasSelection );
+    mxRB_ADVANCE_AUTO->set_sensitive( mbHasSelection );
+    mxMF_ADVANCE_AUTO_AFTER->set_sensitive( mbHasSelection && mxRB_ADVANCE_AUTO->get_active());
 
-    mpPB_APPLY_TO_ALL->Enable( mbHasSelection );
-    mpPB_PLAY->Enable( mbHasSelection );
-    mpCB_AUTO_PREVIEW->Enable( mbHasSelection );
+    mxPB_APPLY_TO_ALL->set_sensitive( mbHasSelection );
+    mxPB_PLAY->set_sensitive( mbHasSelection );
+    mxCB_AUTO_PREVIEW->set_sensitive( mbHasSelection );
 }
 
 void SlideTransitionPane::updateSoundList()
@@ -730,17 +717,17 @@ void SlideTransitionPane::updateSoundList()
     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, maSoundList );
     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, maSoundList );
 
-    lcl_FillSoundListBox( maSoundList, mpLB_SOUND );
+    lcl_FillSoundListBox( maSoundList, *mxLB_SOUND );
 }
 
 void SlideTransitionPane::openSoundFileDialog()
 {
-    if( ! mpLB_SOUND->IsEnabled())
+    if( ! mxLB_SOUND->get_sensitive())
         return;
 
     SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
 
-    DBG_ASSERT( mpLB_SOUND->GetSelectedEntryPos() == 2,
+    DBG_ASSERT( mxLB_SOUND->get_active() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
 
     bool bValidSoundFile( false );
@@ -785,7 +772,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
         if( bValidSoundFile )
             // skip first three entries in list
-            mpLB_SOUND->SelectEntryPos( nPos + 3 );
+            mxLB_SOUND->set_active( nPos + 3 );
     }
 
     if(  bValidSoundFile )
@@ -795,12 +782,12 @@ void SlideTransitionPane::openSoundFileDialog()
     {
         std::vector<OUString>::size_type nPos = 0;
         if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-            mpLB_SOUND->SelectEntryPos( nPos + 3 );
+            mxLB_SOUND->set_active( nPos + 3 );
         else
-            mpLB_SOUND->SelectEntryPos( 0 );  // NONE
+            mxLB_SOUND->set_active( 0 );  // NONE
     }
     else
-        mpLB_SOUND->SelectEntryPos( 0 );  // NONE
+        mxLB_SOUND->set_active( 0 );  // NONE
 }
 
 impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() const
@@ -809,15 +796,15 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     aResult.setAllAmbiguous();
 
     // check first (aResult might be overwritten)
-    if(  mpVS_TRANSITION_ICONS->IsEnabled() &&
-        !mpVS_TRANSITION_ICONS->IsNoSelection() &&
-         mpVS_TRANSITION_ICONS->GetSelectedItemId() > 0 )
+    if(  mxVS_TRANSITION_ICONSWin->get_sensitive() &&
+        !mxVS_TRANSITION_ICONS->IsNoSelection() &&
+         mxVS_TRANSITION_ICONS->GetSelectedItemId() > 0 )
     {
         const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
         auto aSelected = rPresetList.begin();
-        std::advance( aSelected, mpVS_TRANSITION_ICONS->GetSelectedItemId() - 1);
+        std::advance( aSelected, mxVS_TRANSITION_ICONS->GetSelectedItemId() - 1);
 
-        if( mpLB_VARIANT->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+        if (mxLB_VARIANT->get_active() == -1)
         {
             // Transition with just one effect.
             aResult = impl::TransitionEffect( **aSelected );
@@ -831,7 +818,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             {
                 if( aIter->getSetId() == (*aSelected)->getSetId() )
                 {
-                    if( mpLB_VARIANT->GetSelectedEntryPos() == nVariant)
+                    if( mxLB_VARIANT->get_active() == nVariant)
                     {
                         aResult = impl::TransitionEffect( *aIter );
                         aResult.setAllAmbiguous();
@@ -851,31 +838,31 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         }
         aResult.mbEffectAmbiguous = false;
     }
-    else if (mpVS_TRANSITION_ICONS->IsNoSelection())
+    else if (mxVS_TRANSITION_ICONS->IsNoSelection())
     {
         aResult.mbEffectAmbiguous = false;
     }
 
     //duration
 
-    if( mpCBX_duration->IsEnabled() && (!(mpCBX_duration->GetText()).isEmpty()) )
+    if( mxCBX_duration->get_sensitive() && (!(mxCBX_duration->get_text()).isEmpty()) )
     {
-        aResult.mfDuration = static_cast<double>(mpCBX_duration->GetValue())/100.0;
+        aResult.mfDuration = static_cast<double>(mxCBX_duration->get_value(FieldUnit::SECOND))/100.0;
         aResult.mbDurationAmbiguous = false;
     }
 
     // slide-advance mode
-    if( mpRB_ADVANCE_ON_MOUSE->IsEnabled() && mpRB_ADVANCE_AUTO->IsEnabled() &&
-        (mpRB_ADVANCE_ON_MOUSE->IsChecked() || mpRB_ADVANCE_AUTO->IsChecked()))
+    if( mxRB_ADVANCE_ON_MOUSE->get_sensitive() && mxRB_ADVANCE_AUTO->get_sensitive() &&
+        (mxRB_ADVANCE_ON_MOUSE->get_active() || mxRB_ADVANCE_AUTO->get_active()))
     {
-        if( mpRB_ADVANCE_ON_MOUSE->IsChecked())
+        if( mxRB_ADVANCE_ON_MOUSE->get_active())
             aResult.mePresChange = PRESCHANGE_MANUAL;
         else
         {
             aResult.mePresChange = PRESCHANGE_AUTO;
-            if( mpMF_ADVANCE_AUTO_AFTER->IsEnabled())
+            if( mxMF_ADVANCE_AUTO_AFTER->get_sensitive())
             {
-                aResult.mfTime = static_cast<double>(mpMF_ADVANCE_AUTO_AFTER->GetValue() ) / 100.0 ;
+                aResult.mfTime = static_cast<double>(mxMF_ADVANCE_AUTO_AFTER->get_value(FieldUnit::SECOND) ) / 100.0 ;
                 aResult.mbTimeAmbiguous = false;
             }
         }
@@ -884,12 +871,12 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // sound
-    if( mpLB_SOUND->IsEnabled())
+    if( mxLB_SOUND->get_sensitive())
     {
         maCurrentSoundFile.clear();
-        if( mpLB_SOUND->GetSelectedEntryCount() > 0 )
+        sal_Int32 nPos = mxLB_SOUND->get_active();
+        if (nPos != -1)
         {
-            sal_Int32 nPos = mpLB_SOUND->GetSelectedEntryPos();
             aResult.mbStopSound = nPos == 1;
             aResult.mbSoundOn = nPos > 1;
             if( aResult.mbStopSound )
@@ -899,7 +886,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             }
             else
             {
-                aResult.maSound = lcl_getSoundFileURL( maSoundList, mpLB_SOUND );
+                aResult.maSound = lcl_getSoundFileURL(maSoundList, *mxLB_SOUND);
                 aResult.mbSoundAmbiguous = false;
                 maCurrentSoundFile = aResult.maSound;
             }
@@ -907,9 +894,9 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // sound loop
-    if( mpCB_LOOP_SOUND->IsEnabled() )
+    if( mxCB_LOOP_SOUND->get_sensitive() )
     {
-        aResult.mbLoopSound = mpCB_LOOP_SOUND->IsChecked();
+        aResult.mbLoopSound = mxCB_LOOP_SOUND->get_active();
         aResult.mbLoopSoundAmbiguous = false;
     }
 
@@ -931,8 +918,8 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
         lcl_ApplyToPages( pSelectedPages, aEffect );
         mrBase.GetDocShell()->SetModified();
     }
-    if( mpCB_AUTO_PREVIEW->IsEnabled() &&
-        mpCB_AUTO_PREVIEW->IsChecked() && bPreview)
+    if( mxCB_AUTO_PREVIEW->get_sensitive() &&
+        mxCB_AUTO_PREVIEW->get_active() && bPreview)
     {
         if (aEffect.mnType) // mnType = 0 denotes no transition
             playCurrentEffect();
@@ -1017,7 +1004,7 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
     }
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, weld::Button&, void)
 {
     DBG_ASSERT( mpDrawDoc, "Invalid Draw Document!" );
     if( !mpDrawDoc )
@@ -1042,14 +1029,14 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, weld::Button&, void)
 {
     playCurrentEffect();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, ValueSet *, void)
+IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, SvtValueSet*, void)
 {
-    updateVariants( mpVS_TRANSITION_ICONS->GetSelectedItemId() - 1 );
+    updateVariants( mxVS_TRANSITION_ICONS->GetSelectedItemId() - 1 );
     applyToSelectedPages();
 }
 
@@ -1057,12 +1044,12 @@ IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, ValueSet *, void)
 void SlideTransitionPane::updateVariants( size_t nPresetOffset )
 {
     const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
-    mpLB_VARIANT->Clear();
-    mpVS_TRANSITION_ICONS->SetNoSelection();
+    mxLB_VARIANT->clear();
+    mxVS_TRANSITION_ICONS->SetNoSelection();
 
     if( nPresetOffset >= rPresetList.size() )
     {
-        mpLB_VARIANT->Enable( false );
+        mxLB_VARIANT->set_sensitive( false );
     }
     else
     {
@@ -1079,80 +1066,77 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
                     nFirstItem = nItem;
                 if( !aIt->getVariantLabel().isEmpty() )
                 {
-                    mpLB_VARIANT->InsertEntry( aIt->getVariantLabel() );
+                    mxLB_VARIANT->append_text( aIt->getVariantLabel() );
                     if( *pFound == aIt )
-                        mpLB_VARIANT->SelectEntryPos( mpLB_VARIANT->GetEntryCount()-1 );
+                        mxLB_VARIANT->set_active( mxLB_VARIANT->get_count()-1 );
                 }
             }
             nItem++;
         }
 
-        if( mpLB_VARIANT->GetEntryCount() == 0 )
-            mpLB_VARIANT->Enable( false );
+        if( mxLB_VARIANT->get_count() == 0 )
+            mxLB_VARIANT->set_sensitive( false );
         else
-            mpLB_VARIANT->Enable();
+            mxLB_VARIANT->set_sensitive(true);
 
         // item has the id of the first transition from this set.
-        mpVS_TRANSITION_ICONS->SelectItem( nFirstItem );
+        mxVS_TRANSITION_ICONS->SelectItem( nFirstItem );
     }
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, RadioButton&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, weld::ToggleButton&, void)
 {
     updateControlState();
     applyToSelectedPages(false);
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified, Edit&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified, weld::MetricSpinButton&, void)
 {
     applyToSelectedPages(false);
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, VariantListBoxSelected, ListBox&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, VariantListBoxSelected, weld::ComboBox&, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, DurationModifiedHdl, weld::MetricSpinButton&, void)
 {
-    double duration_value = static_cast<double>(mpCBX_duration->GetValue());
-    if(duration_value <= 0.0)
-        mpCBX_duration->SetValue(0);
+    double duration_value = static_cast<double>(mxCBX_duration->get_value(FieldUnit::SECOND));
+    if (duration_value <= 0.0)
+        mxCBX_duration->set_value(0, FieldUnit::SECOND);
     else
-        mpCBX_duration->SetValue(duration_value);
+        mxCBX_duration->set_value(duration_value, FieldUnit::SECOND);
 
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, DurationLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, DurationLoseFocusHdl, weld::Widget&, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected, ListBox&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected, weld::ComboBox&, void)
 {
-    if( mpLB_SOUND->GetSelectedEntryCount() )
+    sal_Int32 nPos = mxLB_SOUND->get_active();
+    if( nPos == 2 )
     {
-        sal_Int32 nPos = mpLB_SOUND->GetSelectedEntryPos();
-        if( nPos == 2 )
-        {
-            // other sound...
-            openSoundFileDialog();
-        }
+        // other sound...
+        openSoundFileDialog();
     }
     updateControlState();
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, weld::ToggleButton&, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, weld::ToggleButton&, void)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-    pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() );
+    pOptions->SetPreviewTransitions( mxCB_AUTO_PREVIEW->get_active() );
 }
 
 IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
@@ -1172,7 +1156,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
                 if ( aIcon.IsEmpty() ) // need a fallback
                     sImageName = "sd/cmd/transition-none.png";
 
-                mpVS_TRANSITION_ICONS->InsertItem(
+                mxVS_TRANSITION_ICONS->InsertItem(
                     nPresetOffset + 1, Image(StockImage::Yes, sImageName), sLabel,
                     VALUESET_APPEND, /* show legend */ true );
 
@@ -1185,11 +1169,11 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
         }
         nPresetOffset++;
     }
-    mpVS_TRANSITION_ICONS->RecalculateItemSizes();
+    mxVS_TRANSITION_ICONS->Recalculate();
 
     SAL_INFO( "sd.transitions", "Item transition offsets in ValueSet:");
-    for( size_t i = 0; i < mpVS_TRANSITION_ICONS->GetItemCount(); ++i )
-        SAL_INFO( "sd.transitions", i << ":" << mpVS_TRANSITION_ICONS->GetItemId( i ) );
+    for( size_t i = 0; i < mxVS_TRANSITION_ICONS->GetItemCount(); ++i )
+        SAL_INFO( "sd.transitions", i << ":" << mxVS_TRANSITION_ICONS->GetItemId( i ) );
 
     nPresetOffset = 0;
     SAL_INFO( "sd.transitions", "Transition presets by offsets:");
