@@ -21,8 +21,8 @@
 #define INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
 
 #include <svtools/valueset.hxx>
-#include <vcl/button.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
@@ -48,14 +48,14 @@ enum TableCheckBox : sal_uInt16
     CB_COUNT            = CB_BANDED_COLUMNS + 1
 };
 
-class TableValueSet : public ValueSet
+class TableValueSet : public SvtValueSet
 {
 private:
     bool m_bModal;
 public:
-    TableValueSet(vcl::Window *pParent, WinBits nStyle);
+    TableValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
     virtual void Resize() override;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void StyleUpdated() override;
     void updateSettings();
     void setModal(bool bModal) { m_bModal = bModal; }
 };
@@ -63,7 +63,7 @@ public:
 class TableDesignWidget final
 {
 public:
-    TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase );
+    TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBase);
     ~TableDesignWidget();
 
     // callbacks
@@ -80,14 +80,15 @@ private:
     void FillDesignPreviewControl();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
-    DECL_LINK(implValueSetHdl, ValueSet*, void);
-    DECL_LINK(implCheckBoxHdl, Button*, void);
+    DECL_LINK(implValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(implCheckBoxHdl, weld::ToggleButton&, void);
 
 private:
     ViewShellBase& mrBase;
 
-    VclPtr<TableValueSet> m_pValueSet;
-    VclPtr<CheckBox> m_aCheckBoxes[CB_COUNT];
+    std::unique_ptr<TableValueSet> m_xValueSet;
+    std::unique_ptr<weld::CustomWeld> m_xValueSetWin;
+    std::unique_ptr<weld::CheckButton> m_aCheckBoxes[CB_COUNT];
 
     css::uno::Reference< css::beans::XPropertySet > mxSelectedTable;
     css::uno::Reference< css::drawing::XDrawView > mxView;
@@ -97,13 +98,18 @@ private:
 class TableDesignPane : public PanelLayout
 {
 private:
-    TableDesignWidget const aImpl;
+    std::unique_ptr<TableDesignWidget> m_xImpl;
 public:
     TableDesignPane( vcl::Window* pParent, ViewShellBase& rBase )
         : PanelLayout(pParent, "TableDesignPanel",
-        "modules/simpress/ui/tabledesignpanel.ui", css::uno::Reference<css::frame::XFrame>())
-        , aImpl(this, rBase)
+            "modules/simpress/ui/tabledesignpanel.ui", css::uno::Reference<css::frame::XFrame>(), true)
+        , m_xImpl(new TableDesignWidget(*m_xBuilder, rBase))
     {
+    }
+    virtual void dispose() override
+    {
+        m_xImpl.reset();
+        PanelLayout::dispose();
     }
 };
 

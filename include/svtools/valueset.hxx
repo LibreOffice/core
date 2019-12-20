@@ -554,6 +554,10 @@ public:
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
     void            SetColor( const Color& rColor );
+    void            SetColor()
+    {
+        SetColor(COL_TRANSPARENT);
+    }
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;
