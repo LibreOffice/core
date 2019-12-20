@@ -201,7 +201,6 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
     if (!rUIXMLDescription.isEmpty())
     {
         bool bNonConforming = rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||
-                              rUIXMLDescription == "modules/swriter/ui/sidebarpage.ui" ||
                               rUIXMLDescription == "modules/swriter/ui/sidebartheme.ui" ||
                               rUIXMLDescription == "modules/swriter/ui/sidebarwrap.ui" ||
                               rUIXMLDescription == "modules/swriter/ui/notebookbar.ui" ||

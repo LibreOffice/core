@@ -175,7 +175,6 @@ modules/swriter/ui/selectautotextdialog.ui
 modules/swriter/ui/selectblockdialog.ui
 modules/swriter/ui/selectindexdialog.ui
 modules/swriter/ui/selecttabledialog.ui
-modules/swriter/ui/sidebarpage.ui
 modules/swriter/ui/sidebarstylepresets.ui
 modules/swriter/ui/sidebartheme.ui
 modules/swriter/ui/sidebarwrap.ui
