@@ -55,7 +55,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="can_default">True</property>
-                        <property name="has_default">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="functionpanel|insert|tooltip_text">Insert Function into calculation sheet</property>
                         <property name="image">image1</property>
