@@ -152,9 +152,6 @@ public:
                                     const OUString& rItemName,
                                     XMLConfigBaseContext* pBaseContext);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
 
     virtual void EndElement() override;
@@ -477,14 +474,6 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrf
                 msType = sValue;
         }
     }
-}
-
-SvXMLImportContextRef XMLConfigItemContext::CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference< css::xml::sax::XAttributeList>& )
-{
-    SvXMLImportContext* pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-    return pContext;
 }
 
 void XMLConfigItemContext::Characters( const OUString& rChars )

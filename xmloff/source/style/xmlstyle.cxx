@@ -158,13 +158,6 @@ SvXMLStyleContext::~SvXMLStyleContext()
 {
 }
 
-SvXMLImportContextRef SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
-                                                           const OUString& rLocalName,
-                                                           const uno::Reference< xml::sax::XAttributeList > & )
-{
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-}
-
 void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

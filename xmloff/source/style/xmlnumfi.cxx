@@ -153,9 +153,6 @@ public:
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
@@ -191,9 +188,6 @@ public:
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
@@ -653,14 +647,6 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
     }
 }
 
-SvXMLImportContextRef SvXMLNumFmtPropContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& )
-{
-    // no elements supported - use default context
-    return new SvXMLImportContext( GetImport(), nPrfx, rLName );
-}
-
 void SvXMLNumFmtPropContext::Characters( const OUString& )
 {
 }
@@ -698,14 +684,6 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
                 nTextPosition = nAttrVal;
         }
     }
-}
-
-SvXMLImportContextRef SvXMLNumFmtEmbeddedTextContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& )
-{
-    // no elements supported - use default context
-    return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
 void SvXMLNumFmtEmbeddedTextContext::Characters( const OUString& rChars )
