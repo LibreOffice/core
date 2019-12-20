@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_36cf9b80",
+        "filename": "scaddins/inc/pricing.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-20T21:23:16Z",
+      "side": 1,
+      "message": "Sigh.. this seems to be a misunderstanding. We don\u0027t even need CamelCase here, \"Lower barrier\" and \"Upper barrier\" are perfectly fine parameter names. In the case of \"PutCall\" it\u0027s even confusing, because it can be either a put or a call (\"p\" or \"c\" as argument, lower case as indicated in the description), I\u0027d suggest \"Put/Call\".",
+      "revId": "735e7acefc6b5b2b6c609cb427a5921865cd58bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_56cc9788",
+        "filename": "scaddins/inc/pricing.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-20T21:23:16Z",
+      "side": 1,
+      "message": "Similar, the argument to be passed is either \"i\" or \"o\", maybe \"Knock-In/Out\".",
+      "revId": "735e7acefc6b5b2b6c609cb427a5921865cd58bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_f6c84375",
+        "filename": "scaddins/inc/pricing.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-20T21:23:16Z",
+      "side": 1,
+      "message": "Similar, the argument to be passed is either \"c\" or \"e\"; as there is no mnemonic that would fit as name I suggest to stay with \"Barrier type\".",
+      "revId": "735e7acefc6b5b2b6c609cb427a5921865cd58bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_d6a507b7",
+        "filename": "scaddins/inc/pricing.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2019-12-20T21:23:16Z",
+      "side": 1,
+      "message": "Note that for the other functions below for the parameter names of string arguments the same is applicable.",
+      "revId": "735e7acefc6b5b2b6c609cb427a5921865cd58bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
