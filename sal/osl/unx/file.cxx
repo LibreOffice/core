@@ -37,6 +37,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <vector>
 #include <cassert>
 #include <limits>
 
@@ -102,6 +103,9 @@ struct FileHandle_Impl
 
     size_t       m_bufsiz;
     sal_uInt8 *  m_buffer;
+#ifdef ANDROID
+    rtl_String*  m_memstreambuf; /*< used for in-memory streams */
+#endif
 
     explicit FileHandle_Impl(int fd, Kind kind = KIND_FD, char const * path = "<anon>");
     ~FileHandle_Impl();
@@ -795,31 +799,6 @@ static bool osl_file_queryLocking(sal_uInt32 uFlags)
     return false;
 }
 
-#if defined ANDROID
-
-namespace {
-
-static oslFileError openMemoryAsFile(void *address, size_t size, oslFileHandle *pHandle,
-                                     const char *path)
-{
-    FileHandle_Impl *pImpl = new FileHandle_Impl(-1, FileHandle_Impl::KIND_MEM, path);
-    pImpl->m_size = sal::static_int_cast< sal_uInt64 >(size);
-
-    *pHandle = (oslFileHandle)(pImpl);
-
-    pImpl->m_bufptr = 0;
-    pImpl->m_buflen = size;
-
-    pImpl->m_bufsiz = size;
-    pImpl->m_buffer = (sal_uInt8*) address;
-
-    return osl_File_E_None;
-}
-
-}
-
-#endif
-
 #ifdef HAVE_O_EXLOCK
 #define OPEN_WRITE_FLAGS ( O_RDWR | O_EXLOCK | O_NONBLOCK )
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR | O_EXLOCK | O_NONBLOCK )
@@ -828,8 +807,89 @@ static oslFileError openMemoryAsFile(void *address, size_t size, oslFileHandle *
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR )
 #endif
 
-oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
-                          mode_t mode)
+#if defined ANDROID
+
+namespace {
+
+static oslFileError openMemoryAsFile(const OString &rData,
+                                     oslFileHandle *pHandle,
+                                     const char *path)
+{
+    const char *address = rData.getStr();
+    size_t size = rData.getLength();
+
+    FileHandle_Impl *pImpl = new FileHandle_Impl(-1, FileHandle_Impl::KIND_MEM, path);
+    pImpl->m_size = sal::static_int_cast< sal_uInt64 >(size);
+
+    *pHandle = (oslFileHandle)(pImpl);
+
+    pImpl->m_bufptr = 0;
+    pImpl->m_buflen = size;
+    pImpl->m_memstreambuf = rData.pData;
+    rtl_string_acquire(pImpl->m_memstreambuf);
+
+    pImpl->m_bufsiz = size;
+    pImpl->m_buffer = reinterpret_cast<sal_uInt8*>(const_cast<char *>(address));
+
+    return osl_File_E_None;
+}
+
+/*
+ * Reading files from /assets/ on Android via a transition into the VM
+ * shows on profiles and is rather slow; so we cache small files as
+ * used by UNO, UI-builder etc.
+ */
+class AndroidFileCache {
+public:
+    struct Entry {
+        OString maFilePath;
+        OString maData;
+    };
+    AndroidFileCache(size_t nElements)
+        : mnCur(0)
+    {
+        maEntries.resize(nElements);
+        assert (maEntries.size() == nElements);
+    }
+    Entry *find(const char *cpFilePath)
+    {
+        for (auto &it : maEntries)
+        {
+            if (!strcmp(it.maFilePath.getStr(), cpFilePath))
+                return &it;
+        }
+        return nullptr;
+    }
+    // no clever LRU - but - good enough for now.
+    void insert(const char *cpFilePath, OString &rData)
+    {
+        assert (maEntries.size() > 0);
+        if (++mnCur >= maEntries.size())
+            mnCur = 0;
+        maEntries[mnCur].maFilePath = OString(cpFilePath, strlen(cpFilePath));
+        maEntries[mnCur].maData = rData;
+    }
+    static AndroidFileCache &getHitCache()
+    {
+        static AndroidFileCache *pCache = new AndroidFileCache(16);
+        return *pCache;
+    }
+    static AndroidFileCache &getMissCache()
+    {
+        static AndroidFileCache *pCache = new AndroidFileCache(32);
+        return *pCache;
+    }
+private:
+    size_t             mnCur;
+    std::vector<Entry> maEntries;
+};
+
+} // namespace
+
+#endif
+
+oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
+                          sal_uInt32 uFlags, mode_t mode)
 {
     oslFileError eRet;
 
@@ -839,30 +899,54 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
      */
     if (strncmp(cpFilePath, "/assets/", sizeof ("/assets/") - 1) == 0)
     {
-        void* address;
-        size_t size;
-        // some requests are /assets//foo...
-        size_t offset = sizeof("/assets/")-1;
-        if (cpFilePath[offset] == '/') {
-            __android_log_print(ANDROID_LOG_DEBUG,"libo:sal/osl/unx/file", "double-slash in path: %s", cpFilePath);
-            offset++;
-        }
-        AAssetManager* mgr = lo_get_native_assetmgr();
-        AAsset* asset = AAssetManager_open(mgr, cpFilePath + offset, AASSET_MODE_BUFFER);
+        OString aData;
+        bool bCache = true;
 
-        if (!asset)
+        const char *cpAssetsPath = cpFilePath + sizeof("/assets/") - 1;
+        // some requests are /assets//foo...
+        if (cpAssetsPath[0] == '/')
         {
-            address = NULL;
-            errno = ENOENT;
-            __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open %s", cpFilePath);
-            return osl_File_E_NOENT;
+            __android_log_print(ANDROID_LOG_DEBUG,"libo:sal/osl/unx/file", "double-slash in path: %s", cpFilePath);
+            cpAssetsPath++;
         }
+
+        AndroidFileCache::Entry *pHit = AndroidFileCache::getHitCache().find(cpAssetsPath);
+        if (pHit)
+            aData = pHit->maData;
+
         else
         {
-            size = AAsset_getLength(asset);
-            address = malloc(sizeof(char)*size);
-            AAsset_read(asset,address,size);
-            AAsset_close(asset);
+            bCache = false;
+            AndroidFileCache::Entry *pMiss = AndroidFileCache::getMissCache().find(cpAssetsPath);
+            if (pMiss)
+            {
+                errno = ENOENT;
+                __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "miss cache: failed to open %s", cpFilePath);
+                return osl_File_E_NOENT;
+            }
+            AAssetManager* mgr = lo_get_native_assetmgr();
+            AAsset* asset = AAssetManager_open(mgr, cpAssetsPath, AASSET_MODE_BUFFER);
+            if (!asset)
+            {
+                AndroidFileCache::getMissCache().insert(cpAssetsPath, aData);
+                errno = ENOENT;
+                __android_log_print(ANDROID_LOG_ERROR,"libo:sal/osl/unx/file", "failed to open %s", cpFilePath);
+                return osl_File_E_NOENT;
+            }
+            else
+            {
+                rtl_String *pData = nullptr;
+                size_t size = AAsset_getLength(asset);
+                rtl_string_new_WithLength(&pData, size);
+                pData->length = size;
+                AAsset_read(asset, pData->buffer, size);
+                AAsset_close(asset);
+
+                aData = OString(pData, SAL_NO_ACQUIRE);
+
+                if (pData->length < 50 * 1024)
+                    AndroidFileCache::getHitCache().insert(cpAssetsPath, aData);
+            }
         }
 
         if (uFlags & osl_File_OpenFlag_Write)
@@ -872,8 +956,9 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
             // loading a document from /assets fails with that idiotic
             // "General Error" dialog...
         }
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ") => " << address);
-        return openMemoryAsFile(address, size, pHandle, cpFilePath);
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ") => '" << cpAssetsPath << "'"
+                 << aData.getLength() << " bytes from file " << (bCache ? "cache" : "system"));
+        return openMemoryAsFile(aData, pHandle, cpFilePath);
     }
 #endif
 
@@ -1068,7 +1153,9 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
 #ifdef ANDROID
-        free(pImpl->m_buffer);
+        rtl_string_release(pImpl->m_memstreambuf);
+        pImpl->m_memstreambuf = nullptr;
+
         pImpl->m_buffer = NULL;
 #endif
         delete pImpl;
