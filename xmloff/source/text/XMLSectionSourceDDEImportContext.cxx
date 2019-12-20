@@ -156,13 +156,4 @@ void XMLSectionSourceDDEImportContext::EndElement()
     // nothing to be done!
 }
 
-SvXMLImportContextRef XMLSectionSourceDDEImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & )
-{
-    // ignore -> default context
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

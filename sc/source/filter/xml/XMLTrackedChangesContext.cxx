@@ -266,9 +266,6 @@ public:
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -279,9 +276,6 @@ public:
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1183,13 +1177,6 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetInsertionCutOff(nID, nPosition);
 }
 
-SvXMLImportContextRef ScXMLInsertionCutOffContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-}
-
 void ScXMLInsertionCutOffContext::EndElement()
 {
 }
@@ -1239,13 +1226,6 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
     if (bPosition)
         nStartPosition = nEndPosition = nPosition;
     pChangeTrackingImportHelper->AddMoveCutOff(nID, nStartPosition, nEndPosition);
-}
-
-SvXMLImportContextRef ScXMLMovementCutOffContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
 void ScXMLMovementCutOffContext::EndElement()
