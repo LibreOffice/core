@@ -153,8 +153,10 @@ public:
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
 
-    virtual void Characters( const OUString& rChars ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement(sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class SvXMLNumFmtMapContext : public SvXMLImportContext
@@ -188,8 +190,10 @@ public:
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
 
-    virtual void Characters( const OUString& rChars ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement(sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 enum SvXMLStyleTokens
@@ -647,11 +651,16 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
     }
 }
 
-void SvXMLNumFmtPropContext::Characters( const OUString& )
+void SvXMLNumFmtPropContext::characters( const OUString& )
 {
 }
 
-void SvXMLNumFmtPropContext::EndElement()
+void SvXMLNumFmtPropContext::startFastElement(sal_Int32 /*nElement*/,
+    const uno::Reference<xml::sax::XFastAttributeList> & /*xAttrList*/)
+{
+}
+
+void SvXMLNumFmtPropContext::endFastElement(sal_Int32 /*nElement*/)
 {
     if (bColSet)
         rParent.AddColor( m_nColor );
@@ -686,12 +695,17 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
     }
 }
 
-void SvXMLNumFmtEmbeddedTextContext::Characters( const OUString& rChars )
+void SvXMLNumFmtEmbeddedTextContext::characters( const OUString& rChars )
 {
     aContent.append( rChars );
 }
 
-void SvXMLNumFmtEmbeddedTextContext::EndElement()
+void SvXMLNumFmtEmbeddedTextContext::startFastElement(sal_Int32 /*nElement*/,
+    const uno::Reference<xml::sax::XFastAttributeList> & /*xAttrList*/)
+{
+}
+
+void SvXMLNumFmtEmbeddedTextContext::endFastElement(sal_Int32 /*nElement*/)
 {
     rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear() );
 }
