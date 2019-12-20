@@ -27,6 +27,7 @@
 #include <basic/sbxform.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxprop.hxx>
+#include <errobject.hxx>
 #include <sbxbase.hxx>
 
 #include <rtl/ustring.hxx>
@@ -37,6 +38,7 @@
 
 SbxAppData::SbxAppData()
     : eErrCode(ERRCODE_NONE)
+    , m_aGlobErr(SbxErrObject::createErrObject())
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
 }
