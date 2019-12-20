@@ -151,6 +151,13 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/uitest/uiobject.hxx>
 
+// Needed for getUndoManager()
+#include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <editeng/sizeitem.hxx>
+#include <svx/rulritem.hxx>
+#include <svx/pageitem.hxx>
+
 #include <app.hxx>
 
 #include "../app/cmdlineargs.hxx"
@@ -706,6 +713,150 @@ std::string extractPrivateKey(const std::string & privateKey)
     pos2 = pos2 - pos1;
 
     return privateKey.substr(pos1, pos2);
+}
+
+// Gets an undo manager to enter and exit undo context. Needed by ToggleOrientation
+css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
+{
+    const css::uno::Reference< css::frame::XController >& xController = rxFrame->getController();
+    if ( xController.is() )
+    {
+        const css::uno::Reference< css::frame::XModel >& xModel = xController->getModel();
+        if ( xModel.is() )
+        {
+            const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );
+            return css::uno::Reference< css::document::XUndoManager >( xSuppUndo->getUndoManager(), css::uno::UNO_SET_THROW );
+        }
+    }
+
+    return css::uno::Reference< css::document::XUndoManager > ();
+}
+
+// Adjusts page margins for Writer doc. Needed by ToggleOrientation
+void ExecuteMarginLRChange(
+    const long nPageLeftMargin,
+    const long nPageRightMargin,
+    std::shared_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem)
+{
+    mpPageLRMarginItem->SetLeft( nPageLeftMargin );
+    mpPageLRMarginItem->SetRight( nPageRightMargin );
+    SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
+            SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
+}
+
+// Adjusts page margins for Writer doc. Needed by ToggleOrientation
+void ExecuteMarginULChange(
+        const long nPageTopMargin,
+        const long nPageBottomMargin,
+        std::shared_ptr<SvxLongULSpaceItem> mpPageULMarginItem)
+{
+    mpPageULMarginItem->SetUpper( nPageTopMargin );
+    mpPageULMarginItem->SetLower( nPageBottomMargin );
+    SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
+                                                          SfxCallMode::RECORD, { mpPageULMarginItem.get() });
+}
+
+// Main function which toggles page orientation of the Writer doc. Needed by ToggleOrientation
+void ExecuteOrientationChange()
+{
+    std::unique_ptr<SvxPageItem> mpPageItem(new SvxPageItem(SID_ATTR_PAGE));
+    std::unique_ptr<SvxSizeItem> mpPageSizeItem(new SvxSizeItem(SID_ATTR_PAGE_SIZE));
+    std::shared_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem(new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ));
+    std::shared_ptr<SvxLongULSpaceItem> mpPageULMarginItem(new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ));
+    // 1mm in twips rounded
+    // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
+    const long MINBODY = 56;
+    bool bIsLandscape = false;
+
+    css::uno::Reference< css::document::XUndoManager > mxUndoManager(
+                getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
+
+    if ( mxUndoManager.is() )
+        mxUndoManager->enterUndoContext( "" );
+
+
+    const SfxPoolItem* pItem;
+
+
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
+    mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pItem->Clone()) );
+
+
+
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
+    mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pItem->Clone()) );
+
+
+
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pItem);
+    mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pItem->Clone()) );
+
+
+    {
+        if ( mpPageSizeItem->GetSize().Width() > mpPageSizeItem->GetSize().Height())
+            bIsLandscape = true;
+
+        // toggle page orientation
+        mpPageItem->SetLandscape(!bIsLandscape);
+
+
+        // swap the width and height of the page size
+        const long nRotatedWidth = mpPageSizeItem->GetSize().Height();
+        const long nRotatedHeight = mpPageSizeItem->GetSize().Width();
+        mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
+
+
+        // apply changed attributes
+        if (SfxViewShell::Current())
+        {
+            SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
+                SfxCallMode::RECORD, { mpPageSizeItem.get(), mpPageItem.get() });
+        }
+    }
+
+
+    // check, if margin values still fit to the changed page size.
+    // if not, adjust margin values
+    {
+        const long nML = mpPageLRMarginItem->GetLeft();
+        const long nMR = mpPageLRMarginItem->GetRight();
+        const long nTmpPW = nML + nMR + MINBODY;
+
+        const long nPW  = mpPageSizeItem->GetSize().Width();
+
+        if ( nTmpPW > nPW )
+        {
+            if ( nML <= nMR )
+            {
+                ExecuteMarginLRChange( mpPageLRMarginItem->GetLeft(), nMR - (nTmpPW - nPW ), mpPageLRMarginItem );
+            }
+            else
+            {
+                ExecuteMarginLRChange( nML - (nTmpPW - nPW ), mpPageLRMarginItem->GetRight(), mpPageLRMarginItem );
+            }
+        }
+
+        const long nMT = mpPageULMarginItem->GetUpper();
+        const long nMB = mpPageULMarginItem->GetLower();
+        const long nTmpPH = nMT + nMB + MINBODY;
+
+        const long nPH  = mpPageSizeItem->GetSize().Height();
+
+        if ( nTmpPH > nPH )
+        {
+            if ( nMT <= nMB )
+            {
+                ExecuteMarginULChange( mpPageULMarginItem->GetUpper(), nMB - ( nTmpPH - nPH ), mpPageULMarginItem );
+            }
+            else
+            {
+                ExecuteMarginULChange( nMT - ( nTmpPH - nPH ), mpPageULMarginItem->GetLower(), mpPageULMarginItem );
+            }
+        }
+    }
+
+    if ( mxUndoManager.is() )
+        mxUndoManager->leaveUndoContext();
 }
 
 }  // end anonymous namespace
@@ -3397,6 +3548,11 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     else if (gImpl && aCommand == ".uno:LOKUnSetMobile")
     {
         comphelper::LibreOfficeKit::setMobile(nView, false);
+        return;
+    }
+    else if (gImpl && aCommand == ".uno:ToggleOrientation")
+    {
+        ExecuteOrientationChange();
         return;
     }
 
