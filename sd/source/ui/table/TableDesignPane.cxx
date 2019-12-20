@@ -28,7 +28,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/builderfactory.hxx>
 
 #include <tools/debug.hxx>
 #include <svl/style.hxx>

@@ -22,7 +22,6 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-//#include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeTemplateProvider.hxx>
@@ -46,9 +45,6 @@ namespace weld
 {
 class CustomWeld;
 }
-
-class ListBox;
-class ValueSet;
 
 namespace chart
 {
