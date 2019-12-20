@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_40c5ad8d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-12-20T09:58:31Z",
+      "side": 1,
+      "message": "Perhaps turn this into an \u0027enum class\u0027, since that\u0027s better (in general) in new code? Mostly because that does not convert to int implicitly.\n\nAnd also add a doxygen comment for what this does. (Just a one-liner is already good.)",
+      "revId": "74a6dd253b0186dd7d06ae42b64fe7e3eb96e11f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
