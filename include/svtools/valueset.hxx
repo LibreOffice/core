@@ -404,7 +404,6 @@ public:
 class SVT_DLLPUBLIC SvtValueSet : public weld::CustomWidgetController
 {
 private:
-
     ScopedVclPtr<VirtualDevice> maVirDev;
     css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
     SvtValueItemList   mItemList;
@@ -442,6 +441,7 @@ private:
     bool            mbBlackSel : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
+    bool            mbFullMode : 1;
     bool            mbEdgeBlending : 1;
     bool            mbHasVisibleItems : 1;
 
@@ -473,6 +473,7 @@ private:
 
 protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    weld::ScrolledWindow* GetScrollBar() const { return mxScrolledWindow.get(); }
 
 public:
     SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
@@ -502,9 +503,9 @@ public:
 
     /// Insert @rImage item.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage);
-    /// Insert @rImage item with @rStr as a tooltip
+    /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
-                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
+                               const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
     /// Insert an @rColor item with @rStr tooltip.
     void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
                                const OUString& rStr);
@@ -521,6 +522,7 @@ public:
     sal_uInt16      GetItemId( size_t nPos ) const;
     sal_uInt16      GetItemId( const Point& rPos ) const;
     tools::Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
+    void            EnableFullItemMode( bool bFullMode );
 
     void            SetColCount( sal_uInt16 nNewCols = 1 );
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
@@ -545,6 +547,8 @@ public:
     {
         return mbNoSelection;
     }
+
+    void            RecalculateItemSizes();
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;

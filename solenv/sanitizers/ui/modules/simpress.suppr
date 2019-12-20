@@ -36,7 +36,6 @@ sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='masterlabel'] 
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://svxlo-SvxFillAttrBox[@id='fillattr1'] no-labelled-by
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://svxcorelo-SvxColorListBox[@id='fillattr2'] no-labelled-by
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='customlabel'] orphan-label
-sd/uiconfig/simpress/ui/slidetransitionspanel.ui://GtkSpinButton[@id='auto_after_value:0sec'] no-labelled-by
 sd/uiconfig/simpress/ui/slidetransitionspanelhorizontal.ui://GtkLabel[@id='duration_label'] orphan-label
 sd/uiconfig/simpress/ui/slidetransitionspanelhorizontal.ui://GtkLabel[@id='variant_label'] orphan-label
 sd/uiconfig/simpress/ui/slidetransitionspanelhorizontal.ui://GtkComboBox[@id='variant_list'] no-labelled-by
