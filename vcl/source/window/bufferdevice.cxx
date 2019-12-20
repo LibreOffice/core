@@ -20,6 +20,7 @@ BufferDevice::BufferDevice(const VclPtr<vcl::Window>& pWindow, vcl::RenderContex
     m_pBuffer->SetTextColor(rRenderContext.GetTextColor());
     m_pBuffer->DrawOutDev(Point(0, 0), pWindow->GetOutputSizePixel(), Point(0, 0),
                           pWindow->GetOutputSizePixel(), rRenderContext);
+    m_pBuffer->EnableRTL(rRenderContext.IsRTLEnabled());
 }
 
 BufferDevice::~BufferDevice()

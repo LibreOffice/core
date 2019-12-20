@@ -13,6 +13,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/wrkwin.hxx>
+#include <bufferdevice.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
@@ -26,10 +27,12 @@ public:
 
     void testVirtualDevice();
     void testUseAfterDispose();
+    void testRTL();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
     CPPUNIT_TEST(testUseAfterDispose);
+    CPPUNIT_TEST(testRTL);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -95,6 +98,18 @@ void VclOutdevTest::testUseAfterDispose()
     pVDev->GetInverseViewTransformation();
 
     pVDev->GetViewTransformation();
+}
+
+void VclOutdevTest::testRTL()
+{
+    ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
+    pWindow->EnableRTL();
+    vcl::RenderContext& rRenderContext = *pWindow;
+    vcl::BufferDevice pBuffer(pWindow, rRenderContext);
+
+    // Without the accompanying fix in place, this test would have failed, because the RTL status
+    // from pWindow was not propagated to pBuffer.
+    CPPUNIT_ASSERT(pBuffer->IsRTLEnabled());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
