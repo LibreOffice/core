@@ -24,6 +24,8 @@
 
 #include <SkImage.h>
 
+#include <boost/smart_ptr/shared_ptr.hpp>
+
 class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap
 {
 public:
@@ -114,7 +116,7 @@ private:
     // mBitmap/mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
     SkBitmap mBitmap;
     sk_sp<SkImage> mImage; // possibly GPU-backed
-    std::shared_ptr<sal_uInt8[]> mBuffer;
+    boost::shared_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
 #ifdef DBG_UTIL
