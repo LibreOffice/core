@@ -40,7 +40,7 @@ class SdXMLNumberFormatImportContext : public SvXMLNumFormatContext
 
     bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
-    void add( OUString const & rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText );
+    void add( sal_Int32 nParentElement, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText );
 
 public:
 
@@ -52,10 +52,11 @@ public:
         SvXMLStylesContext& rStyles);
     virtual ~SdXMLNumberFormatImportContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 
     sal_Int32 GetDrawKey() const { return mnKey; }
 };

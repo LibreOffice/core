@@ -484,94 +484,86 @@ class SdXMLNumberFormatMemberImportContext : public SvXMLImportContext
 private:
     SdXMLNumberFormatImportContext* mpParent;
 
-    OUString const maNumberStyle;
+    sal_Int32 mnParentElement;
     bool mbLong;
     bool mbTextual;
     bool mbDecimal02;
     OUString maText;
-    SvXMLImportContextRef mxSlaveContext;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > mxSlaveContext;
 
 public:
 
     SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
-        const SvXMLImportContextRef& rSlaveContext );
+        const css::uno::Reference< css::xml::sax::XFastContextHandler >& rSlaveContext );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-
-    virtual void EndElement() override;
-
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL startFastElement(sal_Int32 /*nElement*/,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& /*xAttrList*/ ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
-SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, const SvXMLImportContextRef& rSlaveContext )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        SdXMLNumberFormatImportContext* pParent, const css::uno::Reference< css::xml::sax::XFastContextHandler >& rSlaveContext )
+:   SvXMLImportContext(rImport),
     mpParent( pParent ),
-    maNumberStyle( rLocalName ),
+    mnParentElement( nElement ),
     mxSlaveContext( rSlaveContext )
 {
     mbLong = false;
     mbTextual = false;
     mbDecimal02 = false;
 
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-
-        if( nPrefix == XML_NAMESPACE_NUMBER )
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_DECIMAL_PLACES ) )
-            {
-                mbDecimal02 =  IsXMLToken( sValue, XML_2 );
-            }
-            else if( IsXMLToken( aLocalName, XML_STYLE ) )
-            {
-                mbLong = IsXMLToken( sValue, XML_LONG );
-            }
-            else if( IsXMLToken( aLocalName, XML_TEXTUAL ) )
-            {
-                mbTextual = IsXMLToken( sValue, XML_TRUE );
-            }
+            case XML_ELEMENT(NUMBER, XML_DECIMAL_PLACES ):
+                mbDecimal02 =  IsXMLToken( aIter.toString(), XML_2 );
+                break;
+            case XML_ELEMENT(NUMBER, XML_STYLE ):
+                mbLong = IsXMLToken( aIter.toString(), XML_LONG );
+                break;
+            case XML_ELEMENT(NUMBER, XML_TEXTUAL ):
+                mbTextual = IsXMLToken( aIter.toString(), XML_TRUE );
+                break;
+            default: break;
         }
     }
 
 }
 
-SvXMLImportContextRef SdXMLNumberFormatMemberImportContext::CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLNumberFormatMemberImportContext::createFastChildContext( sal_Int32 nElement,
+                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return mxSlaveContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return mxSlaveContext->createFastChildContext( nElement, xAttrList );
 }
 
-void SdXMLNumberFormatMemberImportContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+void SdXMLNumberFormatMemberImportContext::startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    mxSlaveContext->StartElement( xAttrList );
+    mxSlaveContext->startFastElement( nElement, xAttrList );
 }
 
-void SdXMLNumberFormatMemberImportContext::EndElement()
+void SdXMLNumberFormatMemberImportContext::endFastElement(sal_Int32 nElement)
 {
-    mxSlaveContext->EndElement();
+    mxSlaveContext->endFastElement(nElement);
 
     if( mpParent )
-        mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
+        mpParent->add( mnParentElement, mbLong, mbTextual, mbDecimal02, maText );
 }
 
-void SdXMLNumberFormatMemberImportContext::Characters( const OUString& rChars )
+void SdXMLNumberFormatMemberImportContext::characters( const OUString& rChars )
 {
-    mxSlaveContext->Characters( rChars );
+    mxSlaveContext->characters( rChars );
     maText += rChars;
 }
 
@@ -606,7 +598,7 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 {
 }
 
-void SdXMLNumberFormatImportContext::add( OUString const & rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText )
+void SdXMLNumberFormatImportContext::add( sal_Int32 nParentElement, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText )
 {
     if (mnIndex == 16)
         return;
@@ -614,7 +606,7 @@ void SdXMLNumberFormatImportContext::add( OUString const & rNumberStyle, bool bL
     const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
     for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
     {
-        if( IsXMLToken(rNumberStyle, pStyleMember->meNumberStyle) &&
+        if( (nParentElement & TOKEN_MASK) == pStyleMember->meNumberStyle &&
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
@@ -642,7 +634,7 @@ bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pS
     return true;
 }
 
-void SdXMLNumberFormatImportContext::EndElement()
+void SdXMLNumberFormatImportContext::endFastElement(sal_Int32 /*nElement*/)
 {
     SvXMLNumFormatContext::EndElement();
 
@@ -707,9 +699,12 @@ void SdXMLNumberFormatImportContext::EndElement()
     }
 }
 
-SvXMLImportContextRef SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler >
+        SdXMLNumberFormatImportContext::createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
 {
-    return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
+    return new SdXMLNumberFormatMemberImportContext( GetImport(), nElement, xAttrList, this,
+        SvXMLNumFormatContext::createFastChildContext( nElement, xAttrList ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
