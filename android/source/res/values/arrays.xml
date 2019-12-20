@@ -14,6 +14,7 @@
         <item >3</item>
     </string-array>
     <string-array name="SupportedLanguagesValues">
+        <item>SYSTEM_DEFAULT_LANGUAGE</item>
         <item >de</item>
         <item >en</item>
         <item >tr</item>
@@ -43,6 +44,7 @@
         <item>@string/filter_drawings</item>
     </string-array>
     <string-array name="SupportedLanguages">
+        <item>(System Default)</item>
         <item>Deutsch</item>
         <item>English</item>
         <item>Turkçe</item>

@@ -178,7 +178,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.onAttach(newBase,"en"));
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
 
     public void createUI() {
@@ -842,7 +842,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         viewMode = Integer.valueOf(defaultPrefs.getString(EXPLORER_VIEW_TYPE_KEY, ""+ GRID_VIEW));
         filterMode = Integer.valueOf(defaultPrefs.getString(FILTER_MODE_KEY , "-1"));
         showHiddenFiles = defaultPrefs.getBoolean(ENABLE_SHOW_HIDDEN_FILES_KEY, false);
-        displayLanguage = defaultPrefs.getString(DISPLAY_LANGUAGE, "en");
+        displayLanguage = defaultPrefs.getString(DISPLAY_LANGUAGE, LocaleHelper.SYSTEM_DEFAULT_LANGUAGE);
 
         Intent i = this.getIntent();
         if (i.hasExtra(CURRENT_DIRECTORY_KEY)) {
