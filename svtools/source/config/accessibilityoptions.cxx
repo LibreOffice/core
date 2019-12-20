@@ -261,6 +261,9 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetListBoxMaximumLineCount() const
 
 sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
 {
+#ifdef IOS
+    return 4;
+#else
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Int16 nRet = 12;
 
@@ -275,6 +278,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
     }
 
     return nRet;
+#endif
 }
 
 bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
