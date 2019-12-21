@@ -1116,9 +1116,15 @@ SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rM
     {
         // Add entry for docking or un-docking the tool panel.
         if (mpParentWindow->IsFloatingMode())
+        {
             pMenu->InsertItem(MID_LOCK_TASK_PANEL, SfxResId(STR_SFX_DOCK));
+            pMenu->SetAccelKey(MID_LOCK_TASK_PANEL, vcl::KeyCode(KEY_F10, true, true, false, false));
+        }
         else
+        {
             pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SfxResId(STR_SFX_UNDOCK));
+            pMenu->SetAccelKey(MID_UNLOCK_TASK_PANEL, vcl::KeyCode(KEY_F10, true, true, false, false));
+        }
     }
 
     pMenu->InsertItem(MID_HIDE_SIDEBAR, SfxResId(SFX_STR_SIDEBAR_HIDE_SIDEBAR));
