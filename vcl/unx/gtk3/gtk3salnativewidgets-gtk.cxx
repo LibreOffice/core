@@ -2702,7 +2702,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     cairo_destroy(cr); // unref
 
-    if (!rControlRegion.IsEmpty())
+    if (rControlRegion.GetWidth() >= 0 && rControlRegion.GetHeight() >= 0)
         mpFrame->damaged(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 
     return true;
