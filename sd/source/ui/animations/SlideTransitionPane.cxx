@@ -405,26 +405,6 @@ SlideTransitionPane::SlideTransitionPane(
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
-        mbHorizontalLayout( false ),
-        maLateInitTimer()
-{
-    Initialize(pDoc);
-}
-
-SlideTransitionPane::SlideTransitionPane(
-    Window * pParent,
-    ViewShellBase & rBase,
-    SdDrawDocument* pDoc,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    bool /*bHorizontalLayout*/ ) :
-        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanelhorizontal.ui", rxFrame, true ),
-
-        mrBase( rBase ),
-        mpDrawDoc( pDoc ),
-        mbHasSelection( false ),
-        mbUpdatingControls( false ),
-        mbIsMainViewChangePending( false ),
-        mbHorizontalLayout( true ),
         maLateInitTimer()
 {
     Initialize(pDoc);
@@ -535,10 +515,7 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent&)
 
 void SlideTransitionPane::UpdateLook()
 {
-    if( mbHorizontalLayout )
-        SetBackground(Wallpaper());
-    else
-        SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
 }
 
 void SlideTransitionPane::onSelectionChanged()
