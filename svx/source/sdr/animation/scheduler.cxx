@@ -102,7 +102,7 @@ namespace sdr
             {
                 mnDeltaTime = mvEvents.front()->GetTime() - mnTime;
 
-                if(0L != mnDeltaTime)
+                if(0 != mnDeltaTime)
                 {
                     SetTimeout(mnDeltaTime);
                     Start();

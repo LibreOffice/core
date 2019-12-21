@@ -636,7 +636,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
         if( aGraphic.GetType() == GraphicType::Bitmap )
         {
             Bitmap      aBmp( aGraphic.GetBitmapEx().GetBitmap() );
-            const long  nTol = static_cast<long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255L / 100L);
+            const long  nTol = static_cast<long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255 / 100);
 
             aMask = aBmp.CreateMask( rColor, nTol );
 
