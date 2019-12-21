@@ -114,7 +114,16 @@ enum BreakType
     COLUMN_BREAK
 };
 
-enum SkipFootnoteSeparator
+/**
+ * Two special footnotes are a separator line, and a continuation line.
+ * In MSOffice, these can contain text as well, but LO doesn't implement this
+ * rarely used feature, so the separator text needs to be skipped. (tdf#123262)
+ * Three-way logic is needed because there is no guaranteed on-off event.
+ * OFF == not in footnote separator
+ * ON == in footnote separator
+ * SKIPPING == ON status has been recognized.
+ */
+enum class SkipFootnoteSeparator
 {
     OFF,
     ON,
