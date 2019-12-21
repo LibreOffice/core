@@ -2,7 +2,16 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkGrid" id="TableEditPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -16,7 +25,7 @@
         <property name="column_spacing">3</property>
         <property name="column_homogeneous">True</property>
         <child>
-          <object class="svxlo-SvxRelativeField" id="rowheight">
+          <object class="GtkSpinButton" id="rowheight">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -24,6 +33,7 @@
             <property name="halign">start</property>
             <property name="hexpand">True</property>
             <property name="text">0</property>
+            <property name="adjustment">adjustment1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="rowheight-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebartableedit|rowheight-atkobject">Row Height</property>
@@ -48,55 +58,53 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="insert">
+          <object class="GtkToolbar" id="insert">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
             <child>
-              <object class="GtkToolButton" id="insertrowsbefore">
+              <object class="GtkToolButton" id=".uno:InsertRowsBefore">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:InsertRowsBefore</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="insertrowsafter">
+              <object class="GtkToolButton" id=".uno:InsertRowsAfter">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:InsertRowsAfter</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="insertcolumnsbefore">
+              <object class="GtkToolButton" id=".uno:InsertColumnsBefore">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:InsertColumnsBefore</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="insertcolumnsafter">
+              <object class="GtkToolButton" id=".uno:InsertColumnsAfter">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:InsertColumnsAfter</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
           </object>
@@ -118,14 +126,13 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="select">
+          <object class="GtkToolbar" id="select">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="selectcell">
+              <object class="GtkToolButton" id=".uno:EntireCell">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:EntireCell</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -134,10 +141,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="selectrow">
+              <object class="GtkToolButton" id=".uno:EntireRow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:EntireRow</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -146,10 +152,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="selectcolumn">
+              <object class="GtkToolButton" id=".uno:EntireColumn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:EntireColumn</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -158,10 +163,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="selecttable">
+              <object class="GtkToolButton" id=".uno:SelectTable">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SelectTable</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -187,7 +191,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxRelativeField" id="columnwidth">
+          <object class="GtkSpinButton" id="columnwidth">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
@@ -195,6 +199,7 @@
             <property name="halign">start</property>
             <property name="hexpand">True</property>
             <property name="text">0</property>
+            <property name="adjustment">adjustment2</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="columnwidth-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebatableedit|columnwidth-atkobject">Column Width</property>
@@ -259,14 +264,13 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="rowsizing">
+          <object class="GtkToolbar" id="rowsizing">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="minimalrowheight">
+              <object class="GtkToolButton" id=".uno:SetMinimalRowHeight">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SetMinimalRowHeight</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -275,10 +279,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="optimalrowheight">
+              <object class="GtkToolButton" id=".uno:SetOptimalRowHeight">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SetOptimalRowHeight</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -287,10 +290,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="distributerows">
+              <object class="GtkToolButton" id=".uno:DistributeRows">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:DistributeRows</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -305,14 +307,13 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="columnsizing">
+          <object class="GtkToolbar" id="columnsizing">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="minimalcolumnwidth">
+              <object class="GtkToolButton" id=".uno:SetMinimalColumnWidth">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SetMinimalColumnWidth</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -321,10 +322,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="optimalcolumnwidth">
+              <object class="GtkToolButton" id=".uno:SetOptimalColumnWidth">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SetOptimalColumnWidth</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -333,10 +333,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="distributecolumns">
+              <object class="GtkToolButton" id=".uno:DistributeColumns">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:DistributeColumns</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -363,14 +362,13 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="delete">
+          <object class="GtkToolbar" id="delete">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="deleterows">
+              <object class="GtkToolButton" id=".uno:DeleteRows">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:DeleteRows</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -379,10 +377,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="deletecolumns">
+              <object class="GtkToolButton" id=".uno:DeleteColumns">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:DeleteColumns</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -391,10 +388,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="deletetable">
+              <object class="GtkToolButton" id=".uno:DeleteTable">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:DeleteTable</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -421,14 +417,13 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="split_merge">
+          <object class="GtkToolbar" id="split_merge">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="mergecells">
+              <object class="GtkToolButton" id=".uno:MergeCells">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:MergeCells</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -437,10 +432,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="splitcells">
+              <object class="GtkToolButton" id=".uno:SplitCell">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SplitCell</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -449,10 +443,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="splittable">
+              <object class="GtkToolButton" id=".uno:SplitTable">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SplitTable</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -477,15 +470,14 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="misc">
+          <object class="GtkToolbar" id="misc">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <child>
-              <object class="GtkToolButton" id="cellcolor1">
+              <object class="GtkToolButton" id=".uno:TableCellBackgroundColor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:TableCellBackgroundColor</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -494,10 +486,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="cellborders1">
+              <object class="GtkToolButton" id=".uno:SetBorderStyle">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:SetBorderStyle</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -506,10 +497,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="formula">
+              <object class="GtkToolButton" id=".uno:InsertFormula">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="action_name">.uno:InsertFormula</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
