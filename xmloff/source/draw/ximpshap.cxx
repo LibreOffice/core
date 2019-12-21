@@ -3727,8 +3727,9 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set pos, size, shear and rotate
-        SetTransformation();
+        // Transformation needs Mirrored-attributes from enhanced geometry
+        // Therefore moved to EndElement()
+        // SetTransformation();
 
         try
         {
@@ -3755,57 +3756,6 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 
 void SdXMLCustomShapeContext::EndElement()
 {
-    // for backward compatibility, the above SetTransformation() may already have
-    // applied a call to SetMirroredX/SetMirroredY. This is not yet added to the
-    // beans::PropertyValues in maCustomShapeGeometry. When applying these now, this
-    // would be lost again.
-    // TTTT: Remove again after aw080
-    if(!maUsedTransformation.isIdentity())
-    {
-        basegfx::B2DVector aScale, aTranslate;
-        double fRotate, fShearX;
-
-        maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-
-        bool bFlippedX(aScale.getX() < 0.0);
-        bool bFlippedY(aScale.getY() < 0.0);
-
-        if(bFlippedX && bFlippedY)
-        {
-            // when both are used it is the same as 180 degree rotation; reset
-            bFlippedX = bFlippedY = false;
-        }
-
-        if(bFlippedX || bFlippedY)
-        {
-            OUString sName;
-
-            if(bFlippedX)
-                sName = "MirroredX";
-            else
-                sName = "MirroredY";
-
-            //fdo#84043 overwrite the property if it already exists, otherwise append it
-            beans::PropertyValue* pItem;
-            auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
-                [&sName](beans::PropertyValue& rValue) { return rValue.Name == sName; });
-            if (aI != maCustomShapeGeometry.end())
-            {
-                beans::PropertyValue& rItem = *aI;
-                pItem = &rItem;
-            }
-            else
-            {
-                maCustomShapeGeometry.emplace_back();
-                pItem = &maCustomShapeGeometry.back();
-            }
-
-            pItem->Name = sName;
-            pItem->Handle = -1;
-            pItem->Value <<= true;
-            pItem->State = beans::PropertyState_DIRECT_VALUE;
-        }
-    }
 
     if ( !maCustomShapeGeometry.empty() )
     {
@@ -3841,6 +3791,8 @@ void SdXMLCustomShapeContext::EndElement()
             }
         }
     }
+
+    SetTransformation();
 
     SdXMLShapeContext::EndElement();
 

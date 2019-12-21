@@ -1672,22 +1672,19 @@ void SdrObjCustomShape::Shear( const Point& rRef, long nAngle, double tn, bool b
 }
 void SdrObjCustomShape::NbcShear( const Point& rRef, long nAngle, double tn, bool bVShear )
 {
-    // TTTT: Fix for old mirroring, can be removed again in aw080
+    // A vertical shear is actually a horizontal shear combined with a rotation.
+    // SdrTextObj changes aGeo.nRotationAngle accordingly, but does not
+    // know about fObjectRotation. Need to add it here later.
+    const long nRememberedAngle = aGeo.nRotationAngle;
+
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
 
-    // updating fObjectRotation
-    long nTextObjRotation = aGeo.nRotationAngle;
-    double fAngle = nTextObjRotation;
-
-    fAngle /= 100.0;
-
-    bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
-
-    fObjectRotation = fmod( bSingleFlip ? -fAngle : fAngle, 360.0 );
-
-    if ( fObjectRotation < 0 )
+    if (bVShear)
     {
-        fObjectRotation = 360.0 + fObjectRotation;
+        long nAngleDiff = aGeo.nRotationAngle - nRememberedAngle;
+        fObjectRotation += fmod(nAngleDiff / 100.0, 360.0);
+        if (fObjectRotation < 0)
+            fObjectRotation += 360.0;
     }
 
     InvalidateRenderGeometry();
@@ -2994,16 +2991,15 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
-    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
-    {
-        aScale.setX(fabs(aScale.getX()));
-        aScale.setY(fabs(aScale.getY()));
-        fRotate = fmod(fRotate + F_PI, F_2PI);
-    }
+    // The shape might have already flipping in its enhanced geometry. LibreOffice applies
+    // such after all transformations. We remove it, but remember it to apply them later.
+    bool bIsMirroredX = IsMirroredX();
+    SetMirroredX(false);
+    bool bIsMirroredY = IsMirroredY();
+    SetMirroredY(false);
 
-    // reset object shear and rotations
+    // The GeoStat in member aGeo is still needed, reset object shear and rotations.
+    // The single transformations will regenerate it.
     fObjectRotation = 0.0;
     aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
@@ -3019,14 +3015,19 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         }
     }
 
-    // build and set BaseRect (use scale)
-    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
+    // scale
+    Size aSize(FRound(fabs(aScale.getX())), FRound(fabs(aScale.getY())));
     // fdo#47434 We need a valid rectangle here
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
-
     tools::Rectangle aBaseRect(Point(), aSize);
-    SetSnapRect(aBaseRect);
+    SetLogicRect(aBaseRect);
+
+    // Apply flipping from Matrix, which is a transformation relative to origin
+    if (basegfx::fTools::less(aScale.getX(), 0.0))
+        Mirror(Point(0, 0), Point(0, 1000)); // mirror on the y-axis
+    if (basegfx::fTools::less(aScale.getY(), 0.0))
+        Mirror(Point(0, 0), Point(1000, 0)); // mirror on the x-axis
 
     // shear?
     if(!basegfx::fTools::equalZero(fShearX))
@@ -3044,7 +3045,6 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     if(!basegfx::fTools::equalZero(fRotate))
     {
         GeoStat aGeoStat;
-
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
@@ -3058,6 +3058,23 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     {
         Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
     }
+
+    // Apply flipping from enhanced geometry at center of the shape.
+    // create mathematically matrix for the applied transformations
+    basegfx::B2DHomMatrix aMathMat = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aScale, -fShearX, basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+                        aTranslate);
+    // The shape center is the midpoint of the diagonal
+    basegfx::B2DRange aDiagonal(0.0, 0.0, 1.0, 1.0);
+    aDiagonal.transform(aMathMat);
+    double fCenterX = aDiagonal.getCenterX();
+    double fCenterY = aDiagonal.getCenterY();
+    if (bIsMirroredX) // mirror on the y-axis
+        Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
+            Point(FRound(fCenterX), FRound(fCenterY + 1000.0)));
+    if (bIsMirroredY) // mirror on the x-axis
+        Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
+            Point(FRound(fCenterX + 1000.0), FRound(fCenterY)));
 }
 
 // taking fObjectRotation instead of aGeo.nAngle
@@ -3079,6 +3096,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 
         if ( bMirroredX )
         {
+            fShearX = -fShearX;
             tools::Polygon aPol = Rect2Poly(maRect, aNewGeo);
             tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
@@ -3101,6 +3119,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         }
         if ( bMirroredY )
         {
+            fShearX = -fShearX;
             tools::Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
             tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
