@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/relfld.hxx>
 
 namespace sw
@@ -44,8 +45,23 @@ private:
 
     SfxBindings* m_pBindings;
 
-    VclPtr<SvxRelativeField> m_pRowHeightEdit;
-    VclPtr<SvxRelativeField> m_pColumnWidthEdit;
+    std::unique_ptr<RelativeField> m_xRowHeightEdit;
+    std::unique_ptr<RelativeField> m_xColumnWidthEdit;
+    std::unique_ptr<weld::Toolbar> m_xInsert;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xInsertDispatch;
+    std::unique_ptr<weld::Toolbar> m_xSelect;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xSelectDispatch;
+    std::unique_ptr<weld::Toolbar> m_xRowSizing;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xRowSizingDispatch;
+    std::unique_ptr<weld::Toolbar> m_xColumnSizing;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xColumnSizingDispatch;
+    std::unique_ptr<weld::Toolbar> m_xDelete;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xDeleteDispatch;
+    std::unique_ptr<weld::Toolbar> m_xSplitMerge;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xSplitMergeDispatch;
+    std::unique_ptr<weld::Toolbar> m_xMisc;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xMiscDispatch;
+
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
     ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
     ::sfx2::sidebar::ControllerItem m_aInsertRowsBeforeController;
@@ -63,8 +79,8 @@ private:
     ::sfx2::sidebar::ControllerItem m_aDistributeColumnsController;
     ::sfx2::sidebar::ControllerItem m_aMergeCellsController;
 
-    DECL_LINK(RowHeightMofiyHdl, Edit&, void);
-    DECL_LINK(ColumnWidthMofiyHdl, Edit&, void);
+    DECL_LINK(RowHeightMofiyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ColumnWidthMofiyHdl, weld::MetricSpinButton&, void);
 };
 }
 } // end of namespace sw::sidebar
