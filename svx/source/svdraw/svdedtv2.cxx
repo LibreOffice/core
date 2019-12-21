@@ -1351,7 +1351,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             // involved polygon data to curve segments, even if not necessary.
             // It is better to try to reduce to more simple polygons.
             basegfx::B2DPolyPolygon aTmpPoly(basegfx::utils::simplifyCurveSegments(ImpGetPolyPolygon(pObj)));
-            aPolyPolygon.insert(0L, aTmpPoly);
+            aPolyPolygon.insert(0, aTmpPoly);
 
             if(!pInsOL)
             {

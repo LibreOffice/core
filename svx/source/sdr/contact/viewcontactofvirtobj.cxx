@@ -44,7 +44,7 @@ SdrVirtObj& ViewContactOfVirtObj::GetVirtObj() const
 // Access to possible sub-hierarchy
 sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
 {
-    // Here, SdrVirtObj's need to return 0L to show that they have no
+    // Here, SdrVirtObj's need to return 0 to show that they have no
     // sub-hierarchy, even when they are group objects. This is necessary
     // to avoid that the same VOCs will be added to the draw hierarchy
     // twice which leads to problems.
@@ -56,7 +56,7 @@ sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
 
     // As can be seen, with primitives, the problem will be solved using
     // a transformPrimitive, so this solution can stay with primitives.
-    return 0L;
+    return 0;
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
