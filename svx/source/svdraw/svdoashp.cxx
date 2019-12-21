@@ -2994,16 +2994,8 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
-    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
-    {
-        aScale.setX(fabs(aScale.getX()));
-        aScale.setY(fabs(aScale.getY()));
-        fRotate = fmod(fRotate + F_PI, F_2PI);
-    }
-
-    // reset object shear and rotations
+    // The GeoStat in member aGeo is still needed, reset object shear and rotations.
+    // The single transformations will regenerate it.
     fObjectRotation = 0.0;
     aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
@@ -3019,14 +3011,23 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         }
     }
 
+    // custom shapes hold mirror state not in negative scale values, but in properties
+    // MirroredX and MirroredY in item SDRATTR_CUSTOMSHAPE_GEOMETRY.
+    // So scaling factors are always positive.
+    // Order of scaling and reflection does not matter here.
     // build and set BaseRect (use scale)
-    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
+    Size aSize(FRound(fabs(aScale.getX())), FRound(fabs(aScale.getY())));
     // fdo#47434 We need a valid rectangle here
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
-
     tools::Rectangle aBaseRect(Point(), aSize);
-    SetSnapRect(aBaseRect);
+    SetLogicRect(aBaseRect);
+
+    // Apply flipping
+    if (basegfx::fTools::less(aScale.getX(), 0.0))
+        Mirror(Point(0, 0), Point(0, 1000)); // mirror on the y-axis
+    if (basegfx::fTools::less(aScale.getY(), 0.0))
+        Mirror(Point(0, 0), Point(1000, 0)); // mirror on the x-axis
 
     // shear?
     if(!basegfx::fTools::equalZero(fShearX))
