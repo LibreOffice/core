@@ -28,6 +28,7 @@
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
+
 // Decimal support
 // Implementation only for windows
 
