@@ -176,6 +176,68 @@ namespace emfplushelper
         return "";
     }
 
+    OUString HatchStyleToString(sal_uInt32 style)
+    {
+        switch (style)
+        {
+            case HatchStyleHorizontal: return "HatchStyleHorizontal";
+            case HatchStyleVertical: return "HatchStyleVertical";
+            case HatchStyleForwardDiagonal: return "HatchStyleForwardDiagonal";
+            case HatchStyleBackwardDiagonal: return "HatchStyleBackwardDiagonal";
+            case HatchStyleLargeGrid: return "HatchStyleLargeGrid";
+            case HatchStyleDiagonalCross: return "HatchStyleDiagonalCross";
+            case HatchStyle05Percent: return "HatchStyle05Percent";
+            case HatchStyle10Percent: return "HatchStyle10Percent";
+            case HatchStyle20Percent: return "HatchStyle20Percent";
+            case HatchStyle25Percent: return "HatchStyle25Percent";
+            case HatchStyle30Percent: return "HatchStyle30Percent";
+            case HatchStyle40Percent: return "HatchStyle40Percent";
+            case HatchStyle50Percent: return "HatchStyle50Percent";
+            case HatchStyle60Percent: return "HatchStyle60Percent";
+            case HatchStyle70Percent: return "HatchStyle70Percent";
+            case HatchStyle75Percent: return "HatchStyle75Percent";
+            case HatchStyle80Percent: return "HatchStyle80Percent";
+            case HatchStyle90Percent: return "HatchStyle90Percent";
+            case HatchStyleLightDownwardDiagonal: return "HatchStyleLightDownwardDiagonal";
+            case HatchStyleLightUpwardDiagonal: return "HatchStyleLightUpwardDiagonal";
+            case HatchStyleDarkDownwardDiagonal: return "HatchStyleDarkDownwardDiagonal";
+            case HatchStyleDarkUpwardDiagonal: return "HatchStyleDarkUpwardDiagonal";
+            case HatchStyleWideDownwardDiagonal: return "HatchStyleWideDownwardDiagonal";
+            case HatchStyleWideUpwardDiagonal: return "HatchStyleWideUpwardDiagonal";
+            case HatchStyleLightVertical: return "HatchStyleLightVertical";
+            case HatchStyleLightHorizontal: return "HatchStyleLightHorizontal";
+            case HatchStyleNarrowVertical: return "HatchStyleNarrowVertical";
+            case HatchStyleNarrowHorizontal: return "HatchStyleNarrowHorizontal";
+            case HatchStyleDarkVertical: return "HatchStyleDarkVertical";
+            case HatchStyleDarkHorizontal: return "HatchStyleDarkHorizontal";
+            case HatchStyleDashedDownwardDiagonal: return "HatchStyleDashedDownwardDiagonal";
+            case HatchStyleDashedUpwardDiagonal: return "HatchStyleDashedUpwardDiagonal";
+            case HatchStyleDashedHorizontal: return "HatchStyleDashedHorizontal";
+            case HatchStyleDashedVertical: return "HatchStyleDashedVertical";
+            case HatchStyleSmallConfetti: return "HatchStyleSmallConfetti";
+            case HatchStyleLargeConfetti: return "HatchStyleLargeConfetti";
+            case HatchStyleZigZag: return "HatchStyleZigZag";
+            case HatchStyleWave: return "HatchStyleWave";
+            case HatchStyleDiagonalBrick: return "HatchStyleDiagonalBrick";
+            case HatchStyleHorizontalBrick: return "HatchStyleHorizontalBrick";
+            case HatchStyleWeave: return "HatchStyleWeave";
+            case HatchStylePlaid: return "HatchStylePlaid";
+            case HatchStyleDivot: return "HatchStyleDivot";
+            case HatchStyleDottedGrid: return "HatchStyleDottedGrid";
+            case HatchStyleDottedDiamond: return "HatchStyleDottedDiamond";
+            case HatchStyleShingle: return "HatchStyleShingle";
+            case HatchStyleTrellis: return "HatchStyleTrellis";
+            case HatchStyleSphere: return "HatchStyleSphere";
+            case HatchStyleSmallGrid: return "HatchStyleSmallGrid";
+            case HatchStyleSmallCheckerBoard: return "HatchStyleSmallCheckerBoard";
+            case HatchStyleLargeCheckerBoard: return "HatchStyleLargeCheckerBoard";
+            case HatchStyleOutlinedDiamond: return "HatchStyleOutlinedDiamond";
+            case HatchStyleSolidDiamond: return "HatchStyleSolidDiamond";
+        }
+
+        return "";
+    }
+
     bool IsBrush(sal_uInt16 flags)
     {
         return (!((flags >> 15) & 0x0001));

@@ -81,7 +81,7 @@ namespace emfplushelper
                 hatchStyle = static_cast<EmfPlusHatchStyle>(style);
                 solidColor = ::Color(0xff - (foregroundColor >> 24), (foregroundColor >> 16) & 0xff, (foregroundColor >> 8) & 0xff, foregroundColor & 0xff);
                 secondColor = ::Color(0xff - (backgroundColor >> 24), (backgroundColor >> 16) & 0xff, (backgroundColor >> 8) & 0xff, backgroundColor & 0xff);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tHatch style: 0x" << std::hex << style);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tHatch style: " << HatchStyleToString(style) << " (0x" << std::hex << style << ")");
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tForeground color: 0x" << solidColor.AsRGBHexString());
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tBackground color: 0x" << secondColor.AsRGBHexString());
                 break;

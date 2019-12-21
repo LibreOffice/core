@@ -630,7 +630,7 @@ namespace emfplushelper
                     fillColor = brush->secondColor;
                 }
                 // temporal solution: create a solid colored polygon
-                // TODO create a 'real' hatching primitive
+                SAL_WARN("drawinglayer", "EMF+\t\tTODO create a 'real' hatching primitive");
                 mrTargetHolders.Current().append(
                     std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                         polygon,
