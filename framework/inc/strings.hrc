@@ -27,6 +27,7 @@
 #define STR_CLOSEDOC_ANDRETURN                      NC_("STR_CLOSEDOC_ANDRETURN", "~Close & Return to " )
 #define STR_TOOLBAR_VISIBLE_BUTTONS                 NC_("STR_TOOLBAR_VISIBLE_BUTTONS", "Visible ~Buttons")
 #define STR_TOOLBAR_CUSTOMIZE_TOOLBAR               NC_("STR_TOOLBAR_CUSTOMIZE_TOOLBAR", "~Customize Toolbar...")
+#define STR_TOOLBAR_UNDOCK_TOOLBAR                  NC_("STR_TOOLBAR_UNDOCK_TOOLBAR", "U~ndock Toolbar" )
 #define STR_TOOLBAR_DOCK_TOOLBAR                    NC_("STR_TOOLBAR_DOCK_TOOLBAR", "~Dock Toolbar" )
 #define STR_TOOLBAR_DOCK_ALL_TOOLBARS               NC_("STR_TOOLBAR_DOCK_ALL_TOOLBARS", "Dock ~All Toolbars" )
 #define STR_TOOLBAR_LOCK_TOOLBAR                    NC_("STR_TOOLBAR_LOCK_TOOLBAR", "~Lock Toolbar Position" )
