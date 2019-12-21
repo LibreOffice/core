@@ -422,6 +422,7 @@ RES_POOLCOLL_DOC_BEGIN = COLL_DOC_BITS,
 
 RES_POOLCOLL_DOC_TITEL = RES_POOLCOLL_DOC_BEGIN,        ///< Doc. title.
 RES_POOLCOLL_DOC_SUBTITEL,                              ///< Doc. subtitle.
+RES_POOLCOLL_DOC_APPENDIX,                              ///< Doc. appendix.
 
 RES_POOLCOLL_DOC_END,
 
