@@ -130,6 +130,9 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
     maWildcardReversePattern.clear();
     maWildcardReversePattern2.clear();
     TransliterationFlags transliterateFlags = static_cast<TransliterationFlags>(aSrchPara.transliterateFlags);
+    if (aSrchPara.AlgorithmType2 == SearchAlgorithms2::REGEXP)
+        // RESrchPrepare will consider SearchAlgorithms2::REGEXP in aSrchPara.transliterateFlags
+        transliterateFlags &= ~TransliterationFlags::IGNORE_CASE;
 
     // Create Transliteration class
     if( isSimpleTrans( transliterateFlags) )

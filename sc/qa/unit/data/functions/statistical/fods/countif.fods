@@ -3105,7 +3105,11 @@
      <table:table-cell table:style-name="ce51" office:value-type="float" office:value="1999" calcext:value-type="float">
       <text:p>1999</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>abc</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3136,7 +3140,11 @@
      <table:table-cell table:style-name="ce51" office:value-type="float" office:value="2000" calcext:value-type="float">
       <text:p>2000</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>ABC</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3168,7 +3176,11 @@
      <table:table-cell table:style-name="ce51" table:formula="of:=VALUE(&quot;0&quot;)" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Abc</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3200,7 +3212,11 @@
      <table:table-cell table:style-name="ce51" table:formula="of:=VALUE(&quot;0&quot;)" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>aBc</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3229,7 +3245,11 @@
      <table:table-cell table:style-name="ce51" table:formula="of:=VALUE(&quot;0&quot;)" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Abc</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3258,7 +3278,11 @@
      <table:table-cell table:style-name="ce51" office:value-type="float" office:value="2002" calcext:value-type="float">
       <text:p>2002</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>a</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3285,7 +3309,11 @@
      <table:table-cell table:style-name="ce51" office:value-type="float" office:value="2001" calcext:value-type="float">
       <text:p>2001</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>A</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3312,7 +3340,11 @@
      <table:table-cell table:style-name="ce52" office:value-type="string" calcext:value-type="string">
       <text:p>X</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>A</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3334,7 +3366,11 @@
      <table:table-cell table:style-name="ce51" office:value-type="float" office:value="2002" calcext:value-type="float">
       <text:p>2002</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>A</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell/>
     </table:table-row>
@@ -3902,9 +3938,22 @@
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="Default"/>
-     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;.*&quot;)" office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A34];12)=ROUND([.B34];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A34])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;.*&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;.*&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-insensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
       <text:p>2</text:p>
      </table:table-cell>
@@ -3920,9 +3969,22 @@
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="Default"/>
-     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;abc&quot;)" office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A35];12)=ROUND([.B35];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A35])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;abc&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;abc&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-insensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
@@ -3937,10 +3999,143 @@
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="6">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="Default"/>
-     <table:table-cell table:number-columns-repeated="22"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;ABC&quot;)" office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A36];12)=ROUND([.B36];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A36])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;ABC&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;ABC&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-insensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;a&quot;)" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A37];12)=ROUND([.B37];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;a&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;a&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-insensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;A&quot;)" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A38];12)=ROUND([.B38];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;A&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;A&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-insensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;(?-i)abc&quot;)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A39];12)=ROUND([.B39];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;(?-i)abc&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;(?-i)abc&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-sensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;(?-i)Abc&quot;)" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A40];12)=ROUND([.B40];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A40])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;(?-i)Abc&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;(?-i)Abc&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-sensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;(?-i)A&quot;)" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A41];12)=ROUND([.B41];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A41])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;(?-i)A&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;(?-i)A&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-sensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.$Q$3:.$Q$11];&quot;a(?-i)B(?i)c&quot;)" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A42];12)=ROUND([.B42];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce34" table:formula="of:=FORMULA([.A42])" office:value-type="string" office:string-value="=COUNTIF($Q$3:$Q$11;&quot;a(?-i)B(?i)c&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF($Q$3:$Q$11;&quot;a(?-i)B(?i)c&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>tdf#78840: case-sensitive</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="20"/>
      <table:table-cell table:style-name="ce56"/>
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
@@ -4349,7 +4544,7 @@
      <table:table-cell table:number-columns-repeated="27"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C42:Sheet2.C236 Sheet2.C2:Sheet2.C33">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C236">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
