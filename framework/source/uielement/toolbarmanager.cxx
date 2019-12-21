@@ -1447,8 +1447,22 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         nGroupLen = pMenu->GetItemCount();
     }
 
-    if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKTOOLBAR))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_TOOLBAR));
+    if (pToolBar->IsFloatingMode())
+    {
+        if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKTOOLBAR))
+        {
+            pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_TOOLBAR));
+            pMenu->SetAccelKey(MENUITEM_TOOLBAR_DOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
+        }
+    }
+    else
+    {
+        if (MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR))
+        {
+            pMenu->InsertItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, FwkResId(STR_TOOLBAR_UNDOCK_TOOLBAR));
+            pMenu->SetAccelKey(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
+        }
+    }
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKALLTOOLBAR))
         pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
@@ -1475,7 +1489,6 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 
         if ( !bIsFloating )
         {
-            pMenu->EnableItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, false);
             pMenu->EnableItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, false);
             Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
             if( xDockable.is() )
@@ -1644,6 +1657,18 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
 
                     xDisp->dispatch( aURL, aPropSeq );
                 }
+                break;
+            }
+
+            case MENUITEM_TOOLBAR_UNDOCKTOOLBAR:
+            {
+                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+
+                pExecuteInfo->aToolbarResName = m_aResourceName;
+                pExecuteInfo->nCmd            = EXEC_CMD_UNDOCKTOOLBAR;
+                pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
+
+                Application::PostUserEvent( LINK(nullptr, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
@@ -1882,6 +1907,11 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
             DockingWindow* pDockWin = dynamic_cast< DockingWindow* >( pWin.get() );
             if ( pDockWin )
                 pDockWin->Close();
+        }
+        else if (( pExecuteInfo->nCmd == EXEC_CMD_UNDOCKTOOLBAR ) &&
+                 ( pExecuteInfo->xLayoutManager.is() ))
+        {
+            pExecuteInfo->xLayoutManager->floatWindow( pExecuteInfo->aToolbarResName );
         }
         else if (( pExecuteInfo->nCmd == EXEC_CMD_DOCKTOOLBAR ) &&
                  ( pExecuteInfo->xLayoutManager.is() ))
