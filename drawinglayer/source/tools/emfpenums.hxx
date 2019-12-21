@@ -35,6 +35,7 @@ namespace emfplushelper
     bool IsBrush(sal_uInt16 flags);
     OUString BrushIDToString(sal_uInt16 flags, sal_uInt32 brushid);
     OUString BrushDataFlagsToString(sal_uInt32 brush);
+    OUString HatchStyleToString(sal_uInt32 style);
     OUString WrapModeToString(sal_uInt32 mode);
     OUString ImageDataTypeToString(sal_uInt32 type);
     OUString PixelFormatToString(sal_uInt32 format);
