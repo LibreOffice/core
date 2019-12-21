@@ -94,6 +94,7 @@ class ToolBarManager : public ToolbarManager_Base
         enum ExecuteCommand
         {
             EXEC_CMD_CLOSETOOLBAR,
+            EXEC_CMD_UNDOCKTOOLBAR,
             EXEC_CMD_DOCKTOOLBAR,
             EXEC_CMD_DOCKALLTOOLBARS
         };
