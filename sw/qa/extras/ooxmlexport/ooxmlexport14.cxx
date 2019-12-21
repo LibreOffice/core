@@ -15,6 +15,7 @@
 #include <editsh.hxx>
 #include <frmatr.hxx>
 #include <tools/lineend.hxx>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -77,6 +78,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName("NoParent"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xStyleProps, "CharFontName"));
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
+{
+    uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
+    uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName("Shadow"), uno::UNO_QUERY_THROW);
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+
+    // Shadows were inherited regardless of whether the style disabled them.
+    xStyleProps.set(paragraphStyles->getByName("Shadow-removed"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+
+    uno::Reference< container::XNameAccess > characterStyles = getStyles("CharacterStyles");
+    xStyleProps.set(characterStyles->getByName("CharShadow"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+
+    xStyleProps.set(characterStyles->getByName("CharShadow-removed"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
+    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")

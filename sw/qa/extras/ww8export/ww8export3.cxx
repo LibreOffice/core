@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -283,6 +284,28 @@ DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf1207
     sal_Int16   numFormat = getNumberingTypeOfParagraph(5);
     // last paragraph is not a list item
     CPPUNIT_ASSERT(style::NumberingType::CHAR_SPECIAL != numFormat);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
+{
+    uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
+    uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName("Shadow"), uno::UNO_QUERY_THROW);
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+
+    // Shadows were inherited regardless of whether the style disabled them.
+    xStyleProps.set(paragraphStyles->getByName("Shadow-removed"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+
+    uno::Reference< container::XNameAccess > characterStyles = getStyles("CharacterStyles");
+    xStyleProps.set(characterStyles->getByName("CharShadow"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+
+    xStyleProps.set(characterStyles->getByName("CharShadow-removed"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
+    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
 DECLARE_WW8EXPORT_TEST(testBtlrCell, "btlr-cell.doc")
