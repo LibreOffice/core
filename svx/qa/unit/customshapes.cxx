@@ -631,6 +631,46 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
     }
     CPPUNIT_ASSERT_EQUAL(OUString(), sError);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
+{
+    // The document contains two rotated shapes with the same geometry. For one of them
+    // "matrix(1 0 0 -1 0cm 0cm)" was manually added to the value of the draw:transform
+    // attribute. That should result in mirroring on the x-axis. Error was, that the lines
+    // which are drawn on the shape rectangle were mirrored, but not the rectangle itself.
+    // The rectangle was only shifted.
+    const OUString sFileName("tdf129532_MatrixFlipV.odg");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
+
+    uno::Reference<drawing::XShape> xShape0(getShape(0));
+    uno::Reference<beans::XPropertySet> xShape0Props(xShape0, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape0Props.is());
+    awt::Rectangle aBoundRect0;
+    xShape0Props->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect0;
+
+    uno::Reference<drawing::XShape> xShape1(getShape(1));
+    uno::Reference<beans::XPropertySet> xShape1Props(xShape1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShape1Props.is());
+    awt::Rectangle aBoundRect1;
+    xShape1Props->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRect1;
+
+    // The size of the two BoundRect rectangles are the same in case of correct
+    // vertical mirroring.
+    if (aBoundRect0.Width != aBoundRect1.Width)
+    {
+        sErrors += "\n Width expected: " + OUString::number(aBoundRect1.Width)
+                   + " actual: " + OUString::number(aBoundRect0.Width);
+    }
+    if (aBoundRect0.Height != aBoundRect1.Height)
+    {
+        sErrors += "\n Height expected: " + OUString::number(aBoundRect1.Height)
+                   + " actual: " + OUString::number(aBoundRect0.Height);
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
