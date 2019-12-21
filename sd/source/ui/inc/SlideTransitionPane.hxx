@@ -53,12 +53,6 @@ public:
         ViewShellBase & rBase,
         SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
-    explicit SlideTransitionPane(
-        Window * pParent,
-        ViewShellBase & rBase,
-        SdDrawDocument* pDoc,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        bool bHorizontalLayout );
     virtual ~SlideTransitionPane() override;
     virtual void dispose() override;
 
@@ -130,7 +124,6 @@ private:
     bool         mbHasSelection;
     bool         mbUpdatingControls;
     bool         mbIsMainViewChangePending;
-    bool const   mbHorizontalLayout;
 
     std::vector<OUString>  maSoundList;
     mutable OUString maCurrentSoundFile;
