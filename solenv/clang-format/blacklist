@@ -11696,7 +11696,6 @@ sd/source/ui/animations/CustomAnimationPane.cxx
 sd/source/ui/animations/CustomAnimationPane.hxx
 sd/source/ui/animations/STLPropertySet.cxx
 sd/source/ui/animations/STLPropertySet.hxx
-sd/source/ui/animations/SlideTransitionBox.cxx
 sd/source/ui/animations/SlideTransitionPane.cxx
 sd/source/ui/animations/motionpathtag.cxx
 sd/source/ui/animations/motionpathtag.hxx
