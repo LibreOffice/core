@@ -522,7 +522,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         bDone = true;
     }
 
-    if(!bDone && !pPath && pO->IsPolyObj() && 0L != pO->GetPointCount())
+    if(!bDone && !pPath && pO->IsPolyObj() && 0 != pO->GetPointCount())
     {
         // for PolyObj's, but NOT for SdrPathObj's, e.g. the measurement object
         sal_uInt32 nPointCount(pO->GetPointCount());

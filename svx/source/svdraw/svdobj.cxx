@@ -1190,7 +1190,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
 sal_uInt32 SdrObject::GetHdlCount() const
 {
-    return 8L;
+    return 8;
 }
 
 void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
@@ -1691,7 +1691,7 @@ bool SdrObject::IsPolyObj() const
 
 sal_uInt32 SdrObject::GetPointCount() const
 {
-    return 0L;
+    return 0;
 }
 
 Point SdrObject::GetPoint(sal_uInt32 /*i*/) const
