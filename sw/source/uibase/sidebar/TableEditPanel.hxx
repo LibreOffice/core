@@ -15,6 +15,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/relfld.hxx>
+#include <vcl/weldutils.hxx>
 
 namespace sw
 {
@@ -44,8 +45,11 @@ private:
 
     SfxBindings* m_pBindings;
 
-    VclPtr<SvxRelativeField> m_pRowHeightEdit;
-    VclPtr<SvxRelativeField> m_pColumnWidthEdit;
+    std::unique_ptr<RelativeField> m_xRowHeightEdit;
+    std::unique_ptr<RelativeField> m_xColumnWidthEdit;
+    std::unique_ptr<weld::Toolbar> m_xInsert;
+    std::unique_ptr<weld::ToolbarUnoDispatcher> m_xInsertDispatch;
+
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
     ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
     ::sfx2::sidebar::ControllerItem m_aInsertRowsBeforeController;
@@ -63,8 +67,8 @@ private:
     ::sfx2::sidebar::ControllerItem m_aDistributeColumnsController;
     ::sfx2::sidebar::ControllerItem m_aMergeCellsController;
 
-    DECL_LINK(RowHeightMofiyHdl, Edit&, void);
-    DECL_LINK(ColumnWidthMofiyHdl, Edit&, void);
+    DECL_LINK(RowHeightMofiyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ColumnWidthMofiyHdl, weld::MetricSpinButton&, void);
 };
 }
 } // end of namespace sw::sidebar
