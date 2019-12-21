@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEDROPDOWNCOMBOBOX_HXX
-#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEDROPDOWNCOMBOBOX_HXX
+#pragma once
 
 #include <standard/vclxaccessiblebox.hxx>
 
@@ -47,6 +46,5 @@ private:
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 };
 
-#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEDROPDOWNCOMBOBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
