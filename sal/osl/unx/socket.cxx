@@ -1404,7 +1404,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     {
         /* divide milliseconds into seconds and microseconds */
         tv.tv_sec=  pTimeout->Seconds;
-        tv.tv_usec= pTimeout->Nanosec / 1000L;
+        tv.tv_usec= pTimeout->Nanosec / 1000;
     }
 
     /* select */
@@ -2217,7 +2217,7 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
     {
         /* non-blocking call */
         tv.tv_sec  = pTimeout->Seconds;
-        tv.tv_usec = pTimeout->Nanosec / 1000L;
+        tv.tv_usec = pTimeout->Nanosec / 1000;
     }
 
     /* get max handle from all sets */

@@ -1542,7 +1542,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const Sdr
         const sal_uInt32 nChangeIndex(aNewPolygon.count() - 2);
         const basegfx::B2DPoint aSavedPrevCtrlPoint(aNewPolygon.getPrevControlPoint(nChangeIndex));
 
-        aNewPolygon.remove(nChangeIndex, 2L);
+        aNewPolygon.remove(nChangeIndex, 2);
         aNewPolygon.append(pU->GetFormPoly().getB2DPolygon());
 
         if(nChangeIndex < aNewPolygon.count())
@@ -2538,7 +2538,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
         if(bBefore)
         {
             // before first point
-            aCandidate.insert(0L, aTestPoint);
+            aCandidate.insert(0, aTestPoint);
 
             if(aCandidate.areControlPointsUsed())
             {
@@ -2655,7 +2655,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
                     if(nPointCount >= 3 && nPnt != 0 && nPnt + 1 < nPointCount)
                     {
                         // split in two objects at point nPnt
-                        basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1);
+                        basegfx::B2DPolygon aSplitPolyA(aCandidate, 0, nPnt + 1);
                         SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
 
                         pNewObj = CloneSdrObject(getSdrModelFromSdrObject());

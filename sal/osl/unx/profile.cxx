@@ -1029,11 +1029,11 @@ static bool OslProfile_rewindFile(osl_TFile* pFile, bool bTruncate)
     {
         pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
 
-        bRet = (lseek(pFile->m_Handle, SEEK_SET, 0L) == 0);
+        bRet = (lseek(pFile->m_Handle, SEEK_SET, 0) == 0);
 
         if (bTruncate)
         {
-            bRet &= (ftruncate(pFile->m_Handle, 0L) == 0);
+            bRet &= (ftruncate(pFile->m_Handle, 0) == 0);
         }
 
     }
