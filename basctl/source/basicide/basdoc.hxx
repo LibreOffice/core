@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
-#define INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
+#pragma once
 
 #include <sfx2/docfac.hxx>
 #include <svx/ifaceids.hxx>
@@ -65,7 +64,5 @@ public:
 // This typedef helps baside.sdi,
 // because I don't know how to use nested names in it.
 typedef basctl::DocShell basctl_DocShell;
-
-#endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
