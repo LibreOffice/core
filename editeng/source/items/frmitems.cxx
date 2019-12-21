@@ -1093,9 +1093,9 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
     if ( bRet )
     {
-//      SvxShadowLocation eSet = SvxShadowLocation::NONE;
         switch( aShadow.Location )
         {
+            case table::ShadowLocation_NONE        : eLocation = SvxShadowLocation::NONE; break;
             case table::ShadowLocation_TOP_LEFT    : eLocation = SvxShadowLocation::TopLeft; break;
             case table::ShadowLocation_TOP_RIGHT   : eLocation = SvxShadowLocation::TopRight; break;
             case table::ShadowLocation_BOTTOM_LEFT : eLocation = SvxShadowLocation::BottomLeft ; break;
