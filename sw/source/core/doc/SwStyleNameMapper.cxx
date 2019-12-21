@@ -608,6 +608,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
     static const std::vector<OUString> s_aDocProgNameArray = {
         "Title", // STR_POCO_PRGM_DOC_TITLE
         "Subtitle",
+        "Appendix",
     };
     return s_aDocProgNameArray;
 }

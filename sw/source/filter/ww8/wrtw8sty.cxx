@@ -250,6 +250,7 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
         case RES_POOLCOLL_NUM_LEVEL4:       nRet = 60;  break;
         case RES_POOLCOLL_NUM_LEVEL5:       nRet = 61;  break;
         case RES_POOLCOLL_DOC_TITEL:        nRet = 62;  break;
+        case RES_POOLCOLL_DOC_APPENDIX:     nRet = 63;  break;
         case RES_POOLCOLL_SIGNATURE:        nRet = 64;  break;
         case RES_POOLCOLL_TEXT:             nRet = 66;  break;
         case RES_POOLCOLL_TEXT_MOVE:        nRet = 67;  break;
