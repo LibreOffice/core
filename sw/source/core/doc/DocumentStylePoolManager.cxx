@@ -23,6 +23,7 @@
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcol.hxx>
 #include <fmtfsize.hxx>
 #include <paratr.hxx>
 #include <poolfmt.hxx>
@@ -435,7 +436,8 @@ static const char* STR_POOLCOLL_DOC_ARY[] =
 {
     // Category Chapter/Document
     STR_POOLCOLL_DOC_TITEL,
-    STR_POOLCOLL_DOC_SUBTITEL
+    STR_POOLCOLL_DOC_SUBTITEL,
+    STR_POOLCOLL_DOC_APPENDIX
 };
 
 static const char* STR_POOLCOLL_HTML_ARY[] =
@@ -1305,6 +1307,20 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
                 aSet.Put( SvxAdjustItem( SvxAdjust::Center, RES_PARATR_ADJUST ));
 
+                pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
+            }
+            break;
+
+        case RES_POOLCOLL_DOC_APPENDIX:         // Document Appendix tdf#114090
+            {
+                SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_16, 100, RES_CHRATR_FONTSIZE ) );
+
+                aSet.Put( SvxAdjustItem( SvxAdjust::Center, RES_PARATR_ADJUST ) );
+
+                SwTextFormatColl* pColl = SetAttrOutlineLevel( 0 ); // should not be needed when Heading becomes Outline Level 1
+                                                 // can also remove #include <fmtcol.hxx>
+              
                 pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
             }
             break;
