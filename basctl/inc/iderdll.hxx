@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASCTL_INC_IDERDLL_HXX
-#define INCLUDED_BASCTL_INC_IDERDLL_HXX
+#pragma once
 
 namespace basctl
 {
@@ -35,7 +34,5 @@ void ShellDestroyed (Shell const * pShell);
 ExtraData* GetExtraData();
 
 } // namespace basctl
-
-#endif // INCLUDED_BASCTL_INC_IDERDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
