@@ -3755,11 +3755,9 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
 
 void SdXMLCustomShapeContext::EndElement()
 {
-    // for backward compatibility, the above SetTransformation() may already have
-    // applied a call to SetMirroredX/SetMirroredY. This is not yet added to the
-    // beans::PropertyValues in maCustomShapeGeometry. When applying these now, this
-    // would be lost again.
-    // TTTT: Remove again after aw080
+    // Customshapes remember mirror state in its enhanced geometry.
+    // SetTransformation() in StartElement() may have applied mirroring, but that is not yet
+    // contained. Merge that information here before writing the property.
     if(!maUsedTransformation.isIdentity())
     {
         basegfx::B2DVector aScale, aTranslate;
@@ -3767,43 +3765,58 @@ void SdXMLCustomShapeContext::EndElement()
 
         maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
 
-        bool bFlippedX(aScale.getX() < 0.0);
-        bool bFlippedY(aScale.getY() < 0.0);
-
-        if(bFlippedX && bFlippedY)
+        if (aScale.getX() < 0.0)
         {
-            // when both are used it is the same as 180 degree rotation; reset
-            bFlippedX = bFlippedY = false;
-        }
-
-        if(bFlippedX || bFlippedY)
-        {
-            OUString sName;
-
-            if(bFlippedX)
-                sName = "MirroredX";
-            else
-                sName = "MirroredY";
-
-            //fdo#84043 overwrite the property if it already exists, otherwise append it
-            beans::PropertyValue* pItem;
+            const OUString sName("MirroredX");
+            //fdo#84043 Merge, if property exists, otherwise append it
             auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
                 [&sName](beans::PropertyValue& rValue) { return rValue.Name == sName; });
             if (aI != maCustomShapeGeometry.end())
             {
                 beans::PropertyValue& rItem = *aI;
-                pItem = &rItem;
+                bool bMirroredX;
+                rItem.Value >>= bMirroredX;
+                rItem.Value <<= !bMirroredX;
+                rItem.Handle = -1;
+                rItem.State = beans::PropertyState_DIRECT_VALUE;
             }
             else
             {
+                beans::PropertyValue* pItem;
                 maCustomShapeGeometry.emplace_back();
                 pItem = &maCustomShapeGeometry.back();
+                pItem->Name = sName;
+                pItem->Handle = -1;
+                pItem->Value <<= true;
+                pItem->State = beans::PropertyState_DIRECT_VALUE;
             }
+        }
 
-            pItem->Name = sName;
-            pItem->Handle = -1;
-            pItem->Value <<= true;
-            pItem->State = beans::PropertyState_DIRECT_VALUE;
+        if (aScale.getY() < 0.0)
+        {
+            const OUString sName("MirroredY");
+            //fdo#84043 Merge, if property exists, otherwise append it
+            auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
+                [&sName](beans::PropertyValue& rValue) { return rValue.Name == sName; });
+            if (aI != maCustomShapeGeometry.end())
+            {
+                beans::PropertyValue& rItem = *aI;
+                bool bMirroredY;
+                rItem.Value >>= bMirroredY;
+                rItem.Value <<= !bMirroredY;
+                rItem.Handle = -1;
+                rItem.State = beans::PropertyState_DIRECT_VALUE;
+            }
+            else
+            {
+                beans::PropertyValue* pItem;
+                maCustomShapeGeometry.emplace_back();
+                pItem = &maCustomShapeGeometry.back();
+                pItem->Name = sName;
+                pItem->Handle = -1;
+                pItem->Value <<= true;
+                pItem->State = beans::PropertyState_DIRECT_VALUE;
+            }
         }
     }
 

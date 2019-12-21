@@ -53,7 +53,8 @@
 #include <vcl/window.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
-
+#include <svx/svdoashp.hxx>
+#include <tools/gen.hxx>
 
 using namespace ::com::sun::star;
 
@@ -76,6 +77,7 @@ public:
     void testTdf67248();
     void testTdf119956();
     void testTdf120527();
+    void testTdf98839_ShearVFlipH();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -93,6 +95,7 @@ public:
     CPPUNIT_TEST(testTdf67248);
     CPPUNIT_TEST(testTdf119956);
     CPPUNIT_TEST(testTdf120527);
+    CPPUNIT_TEST(testTdf98839_ShearVFlipH);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -769,6 +772,32 @@ void SdMiscTest::testTdf119956()
 
     // Make sure, tab 3 is current tab now.
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pLayerTabBar->GetCurPagePos());
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf98839_ShearVFlipH()
+{
+    // Loads a document with a sheared shape and mirrors it
+    const OUString sURL = "sd/qa/unit/data/tdf98839_ShearVFlipH.odg";
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODG);
+    sd::GraphicViewShell* pViewShell = static_cast<sd::GraphicViewShell*>(xDocShRef->GetViewShell());
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>(pPage->GetObj(0));
+    pShape->Mirror(Point(4000, 2000), Point(4000, 10000));
+
+    // Save and examine attribute draw:transform
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    save(xDocShRef.get(), getFormat(ODG), aTempFile);
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
+    const OString sPathStart("/office:document-content/office:body/office:drawing/draw:page");
+    assertXPath(pXmlDoc, sPathStart);
+    const OUString sTransform = getXPath(pXmlDoc, sPathStart + "/draw:custom-shape","transform");
+
+    // Error was, that the shear angle had a wrong sign.
+    CPPUNIT_ASSERT_MESSAGE("expected: draw:transform='skewX (-0.64350...)", sTransform.startsWith("skewX (-"));
 
     xDocShRef->DoClose();
 }
