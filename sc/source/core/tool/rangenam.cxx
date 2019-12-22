@@ -468,7 +468,7 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
-    sal_Char const a('.');
+    char const a('.');
     if (rName.indexOf(a) != -1)
         return NAME_INVALID_BAD_STRING;
     sal_Int32 nPos = 0;

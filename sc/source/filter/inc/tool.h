@@ -31,7 +31,7 @@ const sal_uInt8 nFractionalFloat = 2;      //        "         "         "      
 
 struct LotusContext;
 
-void        PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString);
+void        PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, char *pString);
 
 void        SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt);
 

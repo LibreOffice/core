@@ -30,8 +30,8 @@
 #include <vector>
 #include <map>
 
-const sal_Char nHorizontal = 1;
-const sal_Char nVertical = 2;
+const char nHorizontal = 1;
+const char nVertical = 2;
 
 struct ScHTMLImage
 {
@@ -41,7 +41,7 @@ struct ScHTMLImage
     OUString            aFilterName;
     std::unique_ptr<Graphic>
                         pGraphic;       // is taken over by WriteToDocument
-    sal_Char            nDir;           // 1==hori, 2==verti, 3==both
+    char                nDir;           // 1==hori, 2==verti, 3==both
 
     ScHTMLImage() :
         aSize( 0, 0 ), aSpace( 0, 0 ), nDir( nHorizontal )

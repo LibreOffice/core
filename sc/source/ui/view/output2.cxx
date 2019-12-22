@@ -722,9 +722,9 @@ long ScDrawStringsVars::GetMaxDigitWidth()
     if (nMaxDigitWidth > 0)
         return nMaxDigitWidth;
 
-    for (sal_Char i = 0; i < 10; ++i)
+    for (char i = 0; i < 10; ++i)
     {
-        sal_Char cDigit = '0' + i;
+        char cDigit = '0' + i;
         long n = pOutput->pFmtDevice->GetTextWidth(OUString(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }

@@ -2528,7 +2528,7 @@ void ScInterpreter::ScExternal()
             ParamType   eParamType[MAXFUNCPARAM];
             void*       ppParam[MAXFUNCPARAM];
             double      nVal[MAXFUNCPARAM];
-            sal_Char*   pStr[MAXFUNCPARAM];
+            char*       pStr[MAXFUNCPARAM];
             sal_uInt8*  pCellArr[MAXFUNCPARAM];
             short       i;
 
@@ -2567,7 +2567,7 @@ void ScInterpreter::ScExternal()
                                 SetError( FormulaError::StringOverflow );
                             else
                             {
-                                pStr[i-1] = new sal_Char[ADDIN_MAXSTRLEN];
+                                pStr[i-1] = new char[ADDIN_MAXSTRLEN];
                                 strncpy( pStr[i-1], aStr.getStr(), ADDIN_MAXSTRLEN );
                                 pStr[i-1][ADDIN_MAXSTRLEN-1] = 0;
                                 ppParam[i] = pStr[i-1];
@@ -2646,7 +2646,7 @@ void ScInterpreter::ScExternal()
                         break;
                         case ParamType::PTR_STRING :
                         {
-                            std::unique_ptr<sal_Char[]> pcErg(new sal_Char[ADDIN_MAXSTRLEN]);
+                            std::unique_ptr<char[]> pcErg(new char[ADDIN_MAXSTRLEN]);
                             ppParam[0] = pcErg.get();
                             pLegacyFuncData->Call(ppParam);
                             OUString aUni( pcErg.get(), strlen(pcErg.get()), osl_getThreadTextEncoding() );

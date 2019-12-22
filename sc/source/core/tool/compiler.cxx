@@ -101,7 +101,7 @@ enum ScanState
 
 }
 
-static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
+static const char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 using namespace ::com::sun::star::i18n;
 
@@ -2840,7 +2840,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         // read the old names as well.
         struct FunctionName
         {
-            const sal_Char* pName;
+            const char* pName;
             OpCode          eOp;
         };
         static const FunctionName aOdffAliases[] = {
@@ -2872,8 +2872,8 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         // recognized as old versions wrote them.
         struct FunctionName
         {
-            const sal_Char* pName;
-            OpCode          eOp;
+            const char* pName;
+            OpCode      eOp;
         };
         static const FunctionName aOoxmlAliases[] = {
             { "EFFECTIVE",      ocEffect },         // EFFECTIVE -> EFFECT
@@ -2903,8 +2903,8 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         // those are renamed.
         struct FunctionName
         {
-            const sal_Char* pName;
-            OpCode          eOp;
+            const char* pName;
+            OpCode      eOp;
         };
         static const FunctionName aPodfAliases[] = {
             { "EFFECT",  ocEffect }      // EFFECTIVE -> EFFECT

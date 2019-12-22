@@ -1068,7 +1068,7 @@ void SAL_CALL ScShapeObj::removeEventListener(
 // XText
 // (special handling for ScCellFieldObj)
 
-static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const sal_Char* pName )
+static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const char* pName )
 {
     OUString aNameStr(OUString::createFromAscii(pName));
     try

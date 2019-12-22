@@ -317,7 +317,7 @@ struct XclFunctionInfo
     sal_uInt8 const           mnRetClass;         /// Token class of the return value.
     XclFuncParamInfo const    mpParamInfos[ EXC_FUNCINFO_PARAMINFO_COUNT ]; /// Information for all parameters.
     sal_uInt8 const           mnFlags;            /// Additional flags (EXC_FUNCFLAG_* constants).
-    const sal_Char*     mpcMacroName;       /** Function name, if simulated by
+    const char*               mpcMacroName;       /** Function name, if simulated by
                                                 a macro call (UTF-8) EXC_FUNCFLAG_ADDINEQUIV is 0;
                                                 or programmatical add-in name
                                                 if stored as such and

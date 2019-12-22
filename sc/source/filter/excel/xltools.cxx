@@ -435,7 +435,7 @@ OUString XclTools::GetXclFontName( const OUString& rFontName )
 static const char maDefNamePrefix[]    = "Excel_BuiltIn_"; /// Prefix for built-in defined names.
 static const char maDefNamePrefixXml[] = "_xlnm.";         /// Prefix for built-in defined names for OOX
 
-static const sal_Char* const ppcDefNames[] =
+static const char* const ppcDefNames[] =
 {
     "Consolidate_Area",
     "Auto_Open",
@@ -509,7 +509,7 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 static const char maStyleNamePrefix1[] = "Excel_BuiltIn_";  /// Prefix for built-in cell style names.
 static const char maStyleNamePrefix2[] = "Excel Built-in "; /// Prefix for built-in cell style names from OOX filter.
 
-static const sal_Char* const ppcStyleNames[] =
+static const char* const ppcStyleNames[] =
 {
     "",                 // "Normal" not used directly, but localized "Default"
     "RowLevel_",        // outline level will be appended

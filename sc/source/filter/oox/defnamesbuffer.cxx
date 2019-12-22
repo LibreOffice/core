@@ -55,7 +55,7 @@ const sal_uInt32 BIFF12_DEFNAME_BUILTIN     = 0x00000020;
 
 const OUStringLiteral spcOoxPrefix("_xlnm.");
 
-const sal_Char* const sppcBaseNames[] =
+const char* const sppcBaseNames[] =
 {
     "Consolidate_Area",
     "Auto_Open",

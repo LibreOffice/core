@@ -3503,7 +3503,7 @@ void ScInterpreter::ScChar()
             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
             RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
-        sal_Char cEncodedChar = static_cast<sal_Char>(fVal);
+        char cEncodedChar = static_cast<char>(fVal);
         OUString aStr(&cEncodedChar, 1,  osl_getThreadTextEncoding(), convertFlags);
         PushString(aStr);
     }

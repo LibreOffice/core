@@ -600,7 +600,7 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
 
 OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 {
-    const sal_Char* pChar;
+    const char* pChar;
     switch ( eVal )
     {
         // old CharSet strings for compatibility

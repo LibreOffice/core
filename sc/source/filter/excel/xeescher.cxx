@@ -1224,7 +1224,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
         case EXC_BIFF5:
         {
             // write the NOTE record directly, there may be the need to create more than one
-            const sal_Char* pcBuffer = maNoteText.getStr();
+            const char* pcBuffer = maNoteText.getStr();
             sal_uInt16 nCharsLeft = static_cast< sal_uInt16 >( maNoteText.getLength() );
 
             while( nCharsLeft )

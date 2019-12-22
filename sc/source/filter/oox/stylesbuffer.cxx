@@ -2340,7 +2340,7 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
 
 namespace {
 
-const sal_Char* const sppcStyleNames[] =
+const char* const sppcStyleNames[] =
 {
     "Normal",
     "RowLevel_",            // outline level will be appended

@@ -71,7 +71,7 @@
  * be synchronized with Writer's SwTableAutoFmtTbl sw/source/core/doc/tblafmt.cxx
  */
 
-static const sal_Char sAutoTblFmtName[] = "autotbl.fmt";
+static const char sAutoTblFmtName[] = "autotbl.fmt";
 
 // till SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;

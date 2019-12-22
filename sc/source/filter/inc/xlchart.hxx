@@ -1209,7 +1209,7 @@ struct XclChTypeInfo
     XclChTypeId         meTypeId;               /// Unique chart type identifier.
     XclChTypeCateg      meTypeCateg;            /// Chart type category this type belongs to.
     sal_uInt16          mnRecId;                /// Record identifier written to the file.
-    const sal_Char*     mpcServiceName;         /// Service name of the type.
+    const char*         mpcServiceName;         /// Service name of the type.
     XclChVarPointMode   meVarPointMode;         /// Mode for varying point colors.
     sal_Int32           mnDefaultLabelPos;      /// Default data label position (API constant).
     bool                mbCombinable2d;         /// true = Types can be combined in one axes set.

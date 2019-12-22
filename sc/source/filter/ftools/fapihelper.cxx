@@ -267,7 +267,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     }
 }
 
-ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
+ScfPropSetHelper::ScfPropSetHelper( const char* const* ppcPropNames ) :
     mnNextIdx( 0 )
 {
     OSL_ENSURE( ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );

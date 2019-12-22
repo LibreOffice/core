@@ -71,7 +71,7 @@ static LocaleMatch lclLocaleCompare(const lang::Locale& rLocale1, const Language
     return eMatchLevel;
 }
 
-ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const lang::Locale& rLocale) :
+ScCellKeyword::ScCellKeyword(const char* pName, OpCode eOpCode, const lang::Locale& rLocale) :
     mpName(pName),
     meOpCode(eOpCode),
     mrLocale(rLocale)
@@ -99,7 +99,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     }
 
     LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale("","",""));
-    const sal_Char* aBestMatchName = itr->second.front().mpName;
+    const char* aBestMatchName = itr->second.front().mpName;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
 
@@ -186,7 +186,7 @@ ScCellKeywordTranslator::~ScCellKeywordTranslator()
 struct TransItem
 {
     const sal_Unicode*  from;
-    const sal_Char*     to;
+    const char*         to;
     OpCode const        func;
 };
 
@@ -207,7 +207,7 @@ void ScCellKeywordTranslator::init()
     #include "cellkeywords.inl"
 }
 
-void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pName, const lang::Locale& rLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::addToMap(const OUString& rKey, const char* pName, const lang::Locale& rLocale, OpCode eOpCode)
 {
     ScCellKeyword aKeyItem( pName, eOpCode, rLocale );
 

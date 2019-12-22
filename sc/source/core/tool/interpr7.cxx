@@ -431,7 +431,7 @@ void ScInterpreter::ScEncodeURL()
         OStringBuffer aUrlBuf( nLen );
         for ( int i = 0; i < nLen; i++ )
         {
-            sal_Char c = aUtf8Str[ i ];
+            char c = aUtf8Str[ i ];
             if ( rtl::isAsciiAlphanumeric( static_cast<unsigned char>( c ) ) || c == '-' || c == '_' )
                 aUrlBuf.append( c );
             else

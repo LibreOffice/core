@@ -90,7 +90,7 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
     }
 }
 
-Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, const sal_Char* pcServiceName ) :
+Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, const char* pcServiceName ) :
     ::oox::drawingml::Shape( pcServiceName ),
     WorksheetHelper( rHelper )
 {

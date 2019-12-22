@@ -62,7 +62,7 @@ private:
     inline void         Read( ScAddress& );
     inline void         Read( ScRange& );
         // for addresses/ranges in the format row(16)/tab(8)/col(8)
-    inline void         Read( sal_Char& );
+    inline void         Read( char& );
     inline void         Read( sal_uInt8& );
     inline void         Read( sal_uInt16& );
     inline void         Read( sal_Int16& );
@@ -99,7 +99,7 @@ inline void ImportLotus::Read( ScRange& rRange )
     Read( rRange.aEnd );
 }
 
-inline void ImportLotus::Read( sal_Char& r )
+inline void ImportLotus::Read( char& r )
 {
     pIn->ReadChar( r );
 }

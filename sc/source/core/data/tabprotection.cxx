@@ -187,7 +187,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(
     // TODO: Right now, we only support double-hash by SHA1.
     if (eHash == PASSHASH_SHA1)
     {
-        auto aChars = comphelper::sequenceToContainer<vector<sal_Char>>(rPassHash);
+        auto aChars = comphelper::sequenceToContainer<vector<char>>(rPassHash);
 
         Sequence<sal_Int8> aNewHash;
         SvPasswordHelper::GetHashPassword(aNewHash, aChars.data(), aChars.size());

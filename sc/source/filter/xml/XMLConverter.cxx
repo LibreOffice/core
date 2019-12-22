@@ -355,7 +355,7 @@ struct ScXMLConditionInfo
     ScXMLConditionTokenType const meType;
     sheet::ValidationType const meValidation;
     sheet::ConditionOperator const meOperator;
-    const sal_Char*     mpcIdentifier;
+    const char*     mpcIdentifier;
     sal_Int32 const           mnIdentLength;
 };
 

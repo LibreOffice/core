@@ -626,7 +626,7 @@ void ScImportAsciiDlg::SetSeparators()
 {
     OString sString(OUStringToOString(maFieldSeparators,
         RTL_TEXTENCODING_MS_1252));
-    const sal_Char *aSep = sString.getStr();
+    const char *aSep = sString.getStr();
     sal_Int32 len = maFieldSeparators.getLength();
     for (int i = 0; i < len; ++i)
     {

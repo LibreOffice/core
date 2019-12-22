@@ -298,8 +298,8 @@ namespace {
 
 static const struct
 {
-    const sal_Char*     mpcListenerType;
-    const sal_Char*     mpcEventMethod;
+    const char*     mpcListenerType;
+    const char*     mpcEventMethod;
 }
 spTbxListenerData[] =
 {

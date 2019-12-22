@@ -486,7 +486,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     long nWidth, nHeight;
     nWidth = nHeight = 0;
-    sal_Char nDir = nHorizontal;
+    char nDir = nHorizontal;
     for (const std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
     {
         ScHTMLImage* pI = pImage.get();
@@ -562,7 +562,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     Point aInsertPos( aCellInsertPos );
     Point aSpace;
     Size aLogicSize;
-    sal_Char nDir = nHorizontal;
+    char nDir = nHorizontal;
     for (const std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
     {
         ScHTMLImage* pI = pImage.get();

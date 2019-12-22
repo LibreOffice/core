@@ -31,11 +31,11 @@
 #include <sal/log.hxx>
 #include <memory>
 
-static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );
+static const char*      GetAddInName( const sal_uInt8 nIndex );
 
 static DefTokenId           lcl_KnownAddIn(const OString& rTest);
 
-void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtString )
+void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
 {
     TokenId                     eParam[ 256 ];
     sal_Int32                   nPass;
@@ -392,7 +392,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
     FUNC_TYPE           eType = FT_NOP;
     TokenId             nBuf0;
     DefTokenId          eOc;
-    const sal_Char*     pExtName = nullptr;
+    const char*         pExtName = nullptr;
     RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pRngNmBffWK3;
 
     ScComplexRefData        aCRD;
@@ -610,7 +610,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
 
                 if( nStrLen )
                 {
-                    std::unique_ptr<sal_Char[]> p(new (::std::nothrow) sal_Char[ nStrLen + 1 ]);
+                    std::unique_ptr<char[]> p(new (::std::nothrow) char[ nStrLen + 1 ]);
                     if (p)
                     {
                         aIn.ReadBytes(p.get(), nStrLen);
@@ -1724,9 +1724,9 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
     return pToken[ nIndex ];
 }
 
-const sal_Char* GetAddInName( const sal_uInt8 n )
+const char* GetAddInName( const sal_uInt8 n )
 {
-    static const sal_Char*  pNames[ 256 ] =
+    static const char*  pNames[ 256 ] =
     {
         nullptr,                       //    0 8-Byte-IEEE-Float
         nullptr,                       //    1 Variable

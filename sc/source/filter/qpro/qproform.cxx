@@ -68,7 +68,7 @@ QProToSc::QProToSc( SvStream& rStream, svl::SharedStringPool& rSPool, const ScAd
     aEingPos = rRefPos;
 }
 
-void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString )
+void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const char* pExtString )
 {
     TokenId  eParam[ nBufSize ];
     sal_Int32    nCount;
@@ -204,7 +204,7 @@ ConvErr QProToSc::Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>
     QPRO_FUNC_TYPE eType;
     DefTokenId eOc;
     double nFloatArray[ nBufSize ] = {0};
-    const sal_Char* pExtString = nullptr;
+    const char* pExtString = nullptr;
 
     aCRD.InitFlags();
     aSRD.InitFlags();
@@ -660,9 +660,9 @@ DefTokenId QProToSc::IndexToDLLId( sal_uInt16 nIndex )
     return eId;
 }
 
-const sal_Char* QProToSc::getString( sal_uInt8 nIndex )
+const char* QProToSc::getString( sal_uInt8 nIndex )
 {
-    const sal_Char* pExtString = nullptr;
+    const char* pExtString = nullptr;
     switch( nIndex )
     {
         case 57:

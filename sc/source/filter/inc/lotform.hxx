@@ -70,7 +70,7 @@ private:
     static DefTokenId   IndexToToken( sal_uInt8 );
     static FUNC_TYPE    IndexToTypeWK123( sal_uInt8 );
     static DefTokenId   IndexToTokenWK123( sal_uInt8 );
-    void                DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtName );
+    void                DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtName );
     void                LotusRelToScRel(sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefData& rSRD);
     bool                bWK3;       // alternative Code translation for < WK1
     bool                bWK123;     // alternative for 123

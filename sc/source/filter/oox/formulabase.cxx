@@ -179,8 +179,8 @@ typedef std::shared_ptr< FunctionInfo > FunctionInfoRef;
 
 struct FunctionData
 {
-    const sal_Char*     mpcOdfFuncName;     /// ODF function name.
-    const sal_Char*     mpcOoxFuncName;     /// OOXML function name.
+    const char*     mpcOdfFuncName;     /// ODF function name.
+    const char*     mpcOoxFuncName;     /// OOXML function name.
     sal_uInt16 const          mnBiff12FuncId;     /// BIFF12 function identifier.
     sal_uInt16 const          mnBiffFuncId;       /// BIFF2-BIFF8 function identifier.
     sal_uInt8 const           mnMinParamCount;    /// Minimum number of parameters.
@@ -1138,7 +1138,7 @@ private:
 
     static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
     bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const char* pcOdfName, const char* pcOoxName );
     bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName );
 
     bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
@@ -1294,7 +1294,7 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rT
     return false;
 }
 
-bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName )
+bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const char* pcOdfName, const char* pcOoxName )
 {
     OUString aOoxName;
     if( pcOoxName ) aOoxName = OUString::createFromAscii( pcOoxName );

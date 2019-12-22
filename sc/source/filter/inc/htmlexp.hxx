@@ -105,7 +105,7 @@ class ScHTMLExport : public ScExportBase
     static sal_uInt16       nFontSize[SC_HTML_FONTSIZES];
     static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
     static const sal_uInt16 nCellSpacing;
-    static const sal_Char sIndentSource[];
+    static const char sIndentSource[];
 
     typedef std::unique_ptr<std::map<OUString, OUString> > FileNameMapPtr;
     typedef std::vector<ScHTMLGraphEntry> GraphEntryList;
@@ -120,7 +120,7 @@ class ScHTMLExport : public ScExportBase
     rtl_TextEncoding eDestEnc;
     SCTAB            nUsedTables;
     short            nIndent;
-    sal_Char         sIndent[nIndentMax+1];
+    char             sIndent[nIndentMax+1];
     bool const       bAll;           // whole document
     bool             bTabHasGraphics;
     bool             bTabAlignedLeft;
@@ -168,7 +168,7 @@ class ScHTMLExport : public ScExportBase
     Size        MMToPixel( const Size& r100thMMSize );
     void        IncIndent( short nVal );
 
-    const sal_Char* GetIndentStr() const
+    const char* GetIndentStr() const
     {
         return sIndent;
     }

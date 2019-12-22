@@ -59,7 +59,7 @@ public:
     explicit            Shape(
                             const WorksheetHelper& rHelper,
                             const AttributeList& rAttribs,
-                            const sal_Char* pcServiceName );
+                            const char* pcServiceName );
 
 protected:
     virtual void        finalizeXShape(

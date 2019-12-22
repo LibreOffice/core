@@ -104,7 +104,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         const ScMergeAttr&      rMergeAttr      = pAttr->GetItem( ATTR_MERGE );
         const SvxVerJustifyItem& rVerJustifyItem= pAttr->GetItem( ATTR_VER_JUSTIFY );
 
-        const sal_Char* pChar;
+        const char* pChar;
 
         if ( rMergeAttr.GetColMerge() != 0 )
             rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMGF );
@@ -190,7 +190,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     const SvxPostureItem&       rPostureItem    = pAttr->GetItem( ATTR_FONT_POSTURE );
     const SvxUnderlineItem&     rUnderlineItem  = pAttr->GetItem( ATTR_FONT_UNDERLINE );
 
-    const sal_Char* pChar;
+    const char* pChar;
 
     switch( rHorJustifyItem.GetValue() )
     {

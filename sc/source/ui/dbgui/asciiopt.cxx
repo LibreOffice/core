@@ -22,8 +22,8 @@
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 
-static const sal_Char pStrFix[] = "FIX";
-static const sal_Char pStrMrg[] = "MRG";
+static const char pStrFix[] = "FIX";
+static const char pStrMrg[] = "MRG";
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),

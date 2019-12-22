@@ -525,7 +525,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
 
 void ScParameterClassification::GenerateDocumentation()
 {
-    static const sal_Char aEnvVarName[] = "OOO_CALC_GENPARCLASSDOC";
+    static const char aEnvVarName[] = "OOO_CALC_GENPARCLASSDOC";
     if ( !getenv( aEnvVarName) )
         return;
     MergeArgumentsFromFunctionResource();

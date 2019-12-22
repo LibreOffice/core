@@ -31,7 +31,7 @@ namespace sdecl = comphelper::service_decl;
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * vbaobj_component_getFactory(
-        const sal_Char * pImplName, void *, void *)
+        const char * pImplName, void *, void *)
     {
     void* pRet = sdecl::component_getFactoryHelper(
             pImplName, {&range::serviceDecl, &workbook::serviceDecl, &worksheet::serviceDecl, &window::serviceDecl, &hyperlink::serviceDecl, &application::serviceDecl} );

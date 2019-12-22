@@ -91,7 +91,7 @@ SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "stardiv.StarCalc.ScSpreadsheetSe
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * sc_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
+    const char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     if (!pServiceManager)
         return nullptr;

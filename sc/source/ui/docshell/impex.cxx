@@ -313,7 +313,7 @@ bool ScImportExport::ImportString( const OUString& rText, SotClipboardFormatId n
         {
             rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
             OString aTmp( rText.getStr(), rText.getLength(), eEnc );
-            SvMemoryStream aStrm( const_cast<char *>(aTmp.getStr()), aTmp.getLength() * sizeof(sal_Char), StreamMode::READ );
+            SvMemoryStream aStrm( const_cast<char *>(aTmp.getStr()), aTmp.getLength() * sizeof(char), StreamMode::READ );
             aStrm.SetStreamCharSet( eEnc );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
             return ImportStream( aStrm, OUString(), nFmt );
@@ -368,7 +368,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
         aStrm.WriteChar( 0 );
         if( aStrm.TellEnd() <= nSizeLimit )
         {
-            rText = static_cast<const sal_Char*>(aStrm.GetData());
+            rText = static_cast<const char*>(aStrm.GetData());
             return true;
         }
     }

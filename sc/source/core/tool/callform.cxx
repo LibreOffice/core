@@ -51,11 +51,11 @@ typedef void (CALLTYPE* ExFuncPtr16)(void*, void*, void*, void*, void*, void*, v
 
 typedef void (CALLTYPE* GetFuncCountPtr)(sal_uInt16& nCount);
 typedef void (CALLTYPE* GetFuncDataPtr)
-    (sal_uInt16& nNo, sal_Char* pFuncName, sal_uInt16& nParamCount, ParamType* peType, sal_Char* pInternalName);
+    (sal_uInt16& nNo, char* pFuncName, sal_uInt16& nParamCount, ParamType* peType, char* pInternalName);
 
 typedef void (CALLTYPE* SetLanguagePtr)( sal_uInt16& nLanguage );
 typedef void (CALLTYPE* GetParamDesc)
-    (sal_uInt16& nNo, sal_uInt16& nParam, sal_Char* pName, sal_Char* pDesc );
+    (sal_uInt16& nNo, sal_uInt16& nParam, char* pName, char* pDesc );
 
 typedef void (CALLTYPE* IsAsync) ( sal_uInt16&      nNo,
                                    ParamType*   peType );
@@ -201,8 +201,8 @@ bool InitExternalFunc(const OUString& rModuleName)
     (*reinterpret_cast<GetFuncCountPtr>(fpGetCount))(nCount);
     for (sal_uInt16 i=0; i < nCount; i++)
     {
-        sal_Char cFuncName[256];
-        sal_Char cInternalName[256];
+        char cFuncName[256];
+        char cInternalName[256];
         sal_uInt16 nParamCount;
         ParamType eParamType[MAXFUNCPARAM];
         ParamType eAsyncType = ParamType::NONE;
@@ -354,8 +354,8 @@ void LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 
         oslGenericFunction fProc = pLib->getFunctionSymbol(GETPARAMDESC);
         if ( fProc != nullptr )
         {
-            sal_Char pcName[256];
-            sal_Char pcDesc[256];
+            char pcName[256];
+            char pcDesc[256];
             *pcName = *pcDesc = 0;
             sal_uInt16 nFuncNo = nNumber;   // don't let it mess up via reference...
             reinterpret_cast< ::GetParamDesc>(fProc)( nFuncNo, nParam, pcName, pcDesc );

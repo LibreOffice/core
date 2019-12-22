@@ -534,41 +534,41 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
 namespace {
 
 /** Property names for common font settings. */
-const sal_Char *const sppcPropNamesChCommon[] =
+const char *const sppcPropNamesChCommon[] =
 {
     "CharUnderline", "CharStrikeout", "CharColor", "CharContoured", "CharShadowed", nullptr
 };
 /** Property names for Western font settings. */
-const sal_Char *const sppcPropNamesChWstrn[] =
+const char *const sppcPropNamesChWstrn[] =
 {
     "CharFontName", "CharHeight", "CharPosture", "CharWeight", nullptr
 };
 /** Property names for Asian font settings. */
-const sal_Char *const sppcPropNamesChAsian[] =
+const char *const sppcPropNamesChAsian[] =
 {
     "CharFontNameAsian", "CharHeightAsian", "CharPostureAsian", "CharWeightAsian", nullptr
 };
 /** Property names for Complex font settings. */
-const sal_Char *const sppcPropNamesChCmplx[] =
+const char *const sppcPropNamesChCmplx[] =
 {
     "CharFontNameComplex", "CharHeightComplex", "CharPostureComplex", "CharWeightComplex", nullptr
 };
 /** Property names for escapement. */
-const sal_Char *const sppcPropNamesChEscapement[] =
+const char *const sppcPropNamesChEscapement[] =
 {
     "CharEscapement", "CharEscapementHeight", nullptr
 };
 const sal_Int8 EXC_API_ESC_HEIGHT           = 58;   /// Default escapement font height.
 
 /** Property names for Western font settings without font name. */
-const sal_Char *const *const sppcPropNamesChWstrnNoName = sppcPropNamesChWstrn + 1;
+const char *const *const sppcPropNamesChWstrnNoName = sppcPropNamesChWstrn + 1;
 /** Property names for Asian font settings without font name. */
-const sal_Char *const *const sppcPropNamesChAsianNoName = sppcPropNamesChAsian + 1;
+const char *const *const sppcPropNamesChAsianNoName = sppcPropNamesChAsian + 1;
 /** Property names for Complex font settings without font name. */
-const sal_Char *const *const sppcPropNamesChCmplxNoName = sppcPropNamesChCmplx + 1;
+const char *const *const sppcPropNamesChCmplxNoName = sppcPropNamesChCmplx + 1;
 
 /** Property names for font settings in form controls. */
-const sal_Char *const sppcPropNamesControl[] =
+const char *const sppcPropNamesControl[] =
 {
     "FontName", "FontFamily", "FontCharset", "FontHeight", "FontSlant",
     "FontWeight", "FontLineStyle", "FontStrikeout", "TextColor", nullptr
@@ -771,7 +771,7 @@ constexpr LanguageType PRV_LANGUAGE_ASIAN_PRIM = primary(LANGUAGE_CHINESE);
 struct XclBuiltInFormat
 {
     sal_uInt16          mnXclNumFmt;    /// Excel built-in index.
-    const sal_Char*     mpFormat;       /// Format string, may be 0 (meOffset used then).
+    const char*     mpFormat;       /// Format string, may be 0 (meOffset used then).
     NfIndexTableOffset const  meOffset;       /// SvNumberFormatter format index, if mpFormat==0.
     sal_uInt16 const          mnXclReuseFmt;  /// Use this Excel format, if meOffset==PRV_NF_INDEX_REUSE.
 };

@@ -139,25 +139,25 @@ using ::std::vector;
 
 //  Filter names (like in sclib.cxx)
 
-static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
-static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
-static const sal_Char pFilterAscii[]    = SC_TEXT_CSV_FILTER_NAME;
-static const sal_Char pFilterLotus[]    = "Lotus";
-static const sal_Char pFilterQPro6[]    = "Quattro Pro 6.0";
-static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
-static const sal_Char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
-static const sal_Char pFilterExcel5[]   = "MS Excel 5.0/95";
-static const sal_Char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char pFilterExcel95[]  = "MS Excel 95";
-static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
-static const sal_Char pFilterExcel97[]  = "MS Excel 97";
-static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
-static const sal_Char pFilterDBase[]    = "dBase";
-static const sal_Char pFilterDif[]      = "DIF";
-static const sal_Char pFilterSylk[]     = "SYLK";
-static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
-static const sal_Char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
-static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
+static const char pFilterSc50[]     = "StarCalc 5.0";
+static const char pFilterXML[]      = "StarOffice XML (Calc)";
+static const char pFilterAscii[]    = SC_TEXT_CSV_FILTER_NAME;
+static const char pFilterLotus[]    = "Lotus";
+static const char pFilterQPro6[]    = "Quattro Pro 6.0";
+static const char pFilterExcel4[]   = "MS Excel 4.0";
+static const char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
+static const char pFilterExcel5[]   = "MS Excel 5.0/95";
+static const char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
+static const char pFilterExcel95[]  = "MS Excel 95";
+static const char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
+static const char pFilterExcel97[]  = "MS Excel 97";
+static const char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
+static const char pFilterDBase[]    = "dBase";
+static const char pFilterDif[]      = "DIF";
+static const char pFilterSylk[]     = "SYLK";
+static const char pFilterHtml[]     = "HTML (StarCalc)";
+static const char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
+static const char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 #define ShellClass_ScDocShell
 #include <scslots.hxx>

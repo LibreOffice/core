@@ -183,7 +183,7 @@ private:
     /** Inserts the passed character array into the internal character buffer.
         @param nBegin  First index in internal buffer to fill.
         @param nLen  Number of characters to insert. */
-    void                CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen );
+    void                CharsToBuffer( const char* pcSource, sal_Int32 nBegin, sal_Int32 nLen );
 
     /** Initializes flags, string length, and resizes character buffer.
         @param nFlags  Modifiers for string export.
@@ -205,7 +205,7 @@ private:
         @param nCurrLen  The real count of characters contained in the passed buffer.
         @param nMaxLen  The maximum length allowed of the resulting string. */
     void                Build(
-                            const sal_Char* pcSource, sal_Int32 nCurrLen,
+                            const char* pcSource, sal_Int32 nCurrLen,
                             XclStrFlags nFlags, sal_uInt16 nMaxLen );
 
     /** Initializes string length and resizes character buffers for appending operation.
@@ -218,7 +218,7 @@ private:
     /** Appends the given character array to the character buffer.
         @param pcSource  The source character buffer. Trailing NUL character is not necessary.
         @param nAddLen  The real count of characters contained in the passed buffer. */
-    void                BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen );
+    void                BuildAppend( const char* pcSource, sal_Int32 nAddLen );
 
     /** Initializes write process on stream. */
     void                PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const;

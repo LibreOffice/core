@@ -83,12 +83,12 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
             bContextOrNotAsciiEncoding = false;
     }
 
-    const sal_Char p2DoubleQuotes_LF[] = "\"\"\n";
-    const sal_Char pSpecDataType_LF[] = "-1,0\n";
-    const sal_Char pEmptyData[] = "1,0\n\"\"\n";
-    const sal_Char pStringData[] = "1,0\n";
-    const sal_Char pNumData[] = "0,";
-    const sal_Char pNumDataERROR[] = "0,0\nERROR\n";
+    const char p2DoubleQuotes_LF[] = "\"\"\n";
+    const char pSpecDataType_LF[] = "-1,0\n";
+    const char pEmptyData[] = "1,0\n\"\"\n";
+    const char pStringData[] = "1,0\n";
+    const char pNumData[] = "0,";
+    const char pNumDataERROR[] = "0,0\nERROR\n";
 
     OUStringBuffer aOS;
     OUString       aString;

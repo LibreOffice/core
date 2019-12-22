@@ -162,7 +162,7 @@ static WKTYP ScanVersion(SvStream& aStream)
             if( nVersNr == 0x0004 && nRecLen == 26 )
             {
                 // 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)
-                sal_Char aDummy[22];
+                char aDummy[22];
                 aStream.ReadBytes(aDummy, 22);
                 return !aStream.good() ? eWK_Error : eWK3;
             }

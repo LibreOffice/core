@@ -454,16 +454,16 @@ const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType e
 namespace {
 
 // chart type service names
-const sal_Char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
-const sal_Char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
-const sal_Char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
-const sal_Char SERVICE_CHART2_LINE[]      = "com.sun.star.chart2.LineChartType";
-const sal_Char SERVICE_CHART2_NET[]       = "com.sun.star.chart2.NetChartType";
-const sal_Char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartType";
-const sal_Char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
-const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
-const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
-const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
+const char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
+const char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
+const char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
+const char SERVICE_CHART2_LINE[]      = "com.sun.star.chart2.LineChartType";
+const char SERVICE_CHART2_NET[]       = "com.sun.star.chart2.NetChartType";
+const char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartType";
+const char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
+const char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
+const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
+const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 
 namespace csscd = css::chart::DataLabelPlacement;
 
@@ -606,29 +606,29 @@ OUString XclChObjectTable::InsertObject(const uno::Any& rObj)
 namespace {
 
 /** Property names for line style in common objects. */
-const sal_Char* const sppcLineNamesCommon[] =
+const char* const sppcLineNamesCommon[] =
     { "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDashName", nullptr };
 /** Property names for line style in linear series objects. */
-const sal_Char* const sppcLineNamesLinear[] =
+const char* const sppcLineNamesLinear[] =
     { "LineStyle", "LineWidth", "Color", "Transparency", "LineDashName", nullptr };
 /** Property names for line style in filled series objects. */
-const sal_Char* const sppcLineNamesFilled[] =
+const char* const sppcLineNamesFilled[] =
     { "BorderStyle", "BorderWidth", "BorderColor", "BorderTransparency", "BorderDashName", nullptr };
 
 /** Property names for solid area style in common objects. */
-const sal_Char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", "FillTransparence", nullptr };
+const char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", "FillTransparence", nullptr };
 /** Property names for solid area style in filled series objects. */
-const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", "Transparency", nullptr };
+const char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", "Transparency", nullptr };
 /** Property names for gradient area style in common objects. */
-const sal_Char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", nullptr };
+const char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", nullptr };
 /** Property names for gradient area style in filled series objects. */
-const sal_Char* const sppcGradNamesFilled[] = {  "FillStyle", "GradientName", nullptr };
+const char* const sppcGradNamesFilled[] = {  "FillStyle", "GradientName", nullptr };
 /** Property names for hatch area style in common objects. */
-const sal_Char* const sppcHatchNamesCommon[] = { "FillStyle", "FillHatchName", "FillColor", "FillBackground", nullptr };
+const char* const sppcHatchNamesCommon[] = { "FillStyle", "FillHatchName", "FillColor", "FillBackground", nullptr };
 /** Property names for hatch area style in filled series objects. */
-const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Color", "FillBackground", nullptr };
+const char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Color", "FillBackground", nullptr };
 /** Property names for bitmap area style. */
-const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", nullptr };
+const char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", nullptr };
 
 } // namespace
 
