@@ -32,7 +32,7 @@ class SvXMLTokenMap;
 
 typedef std::vector<rtl::Reference<XMLTextColumnContext_Impl>> XMLTextColumnsArray_Impl;
 
-class XMLTextColumnsContext :public XMLElementPropertyContext
+class XMLTextColumnsContext final :public XMLElementPropertyContext
 {
     std::unique_ptr<XMLTextColumnsArray_Impl> pColumns;
     rtl::Reference<XMLTextColumnSepContext_Impl> mxColumnSep;

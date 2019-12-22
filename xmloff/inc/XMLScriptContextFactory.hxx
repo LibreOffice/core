@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 class SvXMLImport;
 class XMLEventsImportContext;
 
-class XMLScriptContextFactory : public XMLEventContextFactory
+class XMLScriptContextFactory final : public XMLEventContextFactory
 {
 public:
     XMLScriptContextFactory();

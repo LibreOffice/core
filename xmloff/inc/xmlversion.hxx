@@ -30,7 +30,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 
-class XMLVersionListExport : public SvXMLExport
+class XMLVersionListExport final : public SvXMLExport
 {
 private:
     const css::uno::Sequence < css::util::RevisionTag >& maVersions;
@@ -47,12 +47,10 @@ public:
     void        ExportContent_() override {}
 };
 
-class XMLVersionListImport : public SvXMLImport
+class XMLVersionListImport final : public SvXMLImport
 {
 private:
     css::uno::Sequence < css::util::RevisionTag >& maVersions;
-
-protected:
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -68,7 +66,7 @@ public:
         GetList() { return maVersions; }
 };
 
-class XMLVersionListContext : public SvXMLImportContext
+class XMLVersionListContext final : public SvXMLImportContext
 {
 private:
     XMLVersionListImport & GetImport() { return static_cast<XMLVersionListImport&>(SvXMLImportContext::GetImport()); }
@@ -84,7 +82,7 @@ public:
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
-class XMLVersionContext: public SvXMLImportContext
+class XMLVersionContext final : public SvXMLImportContext
 {
 private:
     static bool         ParseISODateTimeString(
@@ -99,7 +97,7 @@ public:
     virtual ~XMLVersionContext() override;
 };
 
-class XMLVersionListPersistence : public ::cppu::WeakImplHelper< css::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >
+class XMLVersionListPersistence final : public ::cppu::WeakImplHelper< css::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >
 {
 public:
     virtual css::uno::Sequence< css::util::RevisionTag > SAL_CALL load( const css::uno::Reference< css::embed::XStorage >& Storage ) override;

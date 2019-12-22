@@ -27,7 +27,7 @@
 struct SdXMLFixedDataStyle;
 class SdXMLImport;
 
-class SdXMLNumberFormatImportContext : public SvXMLNumFormatContext
+class SdXMLNumberFormatImportContext final : public SvXMLNumFormatContext
 {
     friend class SdXMLNumberFormatMemberImportContext;
 

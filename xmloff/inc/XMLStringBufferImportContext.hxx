@@ -30,7 +30,7 @@
  * Import all text into a string buffer.  Paragraph elements (<text:p>)
  * are recognized and cause a return character (0x0a) to be added.
  */
-class XMLStringBufferImportContext : public SvXMLImportContext
+class XMLStringBufferImportContext final : public SvXMLImportContext
 {
     OUStringBuffer& rTextBuffer;
 

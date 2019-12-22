@@ -23,13 +23,11 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimp.hxx>
 
-class PageStyleContext : public XMLPropStyleContext
+class PageStyleContext final : public XMLPropStyleContext
 {
 private:
     OUString sPageUsage;
     bool                m_bIsFillStyleAlreadyConverted : 1;
-
-protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

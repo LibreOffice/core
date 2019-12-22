@@ -41,7 +41,7 @@ class SvXMLImportContext;
 /**
  * DomBuilderContext creates a DOM tree suitable for in-memory processing of
  * XML data from a sequence of SAX events */
-class DomBuilderContext : public SvXMLImportContext
+class DomBuilderContext final : public SvXMLImportContext
 {
     css::uno::Reference<css::xml::dom::XNode> mxNode;
 

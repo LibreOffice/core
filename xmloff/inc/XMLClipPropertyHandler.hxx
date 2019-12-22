@@ -25,7 +25,7 @@
 /**
     PropertyHandler for the XML-data-type:
 */
-class XMLClipPropertyHandler : public XMLPropertyHandler
+class XMLClipPropertyHandler final : public XMLPropertyHandler
 {
     bool const m_bODF11;
 public:

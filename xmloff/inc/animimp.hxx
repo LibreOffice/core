@@ -28,7 +28,7 @@ class AnimImpImpl;
 
 // presentations:animations
 
-class XMLAnimationsContext : public SvXMLImportContext
+class XMLAnimationsContext final : public SvXMLImportContext
 {
     std::shared_ptr<AnimImpImpl> mpImpl;
 

@@ -61,7 +61,7 @@ inline bool StyleNameHash_Impl::operator()(
     return r1.m_nFamily == r2.m_nFamily && r1.m_aName == r2.m_aName;
 }
 
-class StyleMap :
+class StyleMap final :
     public ::cppu::WeakImplHelper< css::lang::XUnoTunnel>,
     public std::unordered_map< StyleNameKey_Impl, OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >

@@ -170,7 +170,7 @@ protected:
 
 
 /** import variable get fields (<text:variable-get>) */
-class XMLVariableGetFieldImportContext : public XMLVarFieldImportContext
+class XMLVariableGetFieldImportContext final : public XMLVarFieldImportContext
 {
 public:
 
@@ -182,7 +182,7 @@ public:
         const OUString& rLocalName);     /// element name w/o prefix
 
 
-protected:
+private:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const css::uno::Reference<
@@ -191,7 +191,7 @@ protected:
 
 
 /** import expression fields (<text:expression>) */
-class XMLExpressionFieldImportContext : public XMLVarFieldImportContext
+class XMLExpressionFieldImportContext final : public XMLVarFieldImportContext
 {
 public:
 
@@ -201,14 +201,14 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
 
-protected:
+private:
     virtual void PrepareField(
         const css::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /*** import text input fields (<text:text-input>) */
-class XMLTextInputFieldImportContext : public XMLVarFieldImportContext
+class XMLTextInputFieldImportContext final : public XMLVarFieldImportContext
 {
 public:
 
@@ -218,7 +218,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
 
-protected:
+private:
     virtual void PrepareField(
         const css::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
@@ -272,7 +272,7 @@ protected:
 
 
 /** import variable set fields (<text:variable-set>) */
-class XMLVariableSetFieldImportContext : public XMLSetVarFieldImportContext
+class XMLVariableSetFieldImportContext final : public XMLSetVarFieldImportContext
 {
 public:
 
@@ -282,7 +282,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
-protected:
+private:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
@@ -290,7 +290,7 @@ protected:
 
 
 /** variable input fields (<text:variable-input>) */
-class XMLVariableInputFieldImportContext : public XMLSetVarFieldImportContext
+class XMLVariableInputFieldImportContext final : public XMLSetVarFieldImportContext
 {
 public:
 
@@ -301,7 +301,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
-protected:
+private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -310,7 +310,7 @@ protected:
 
 
 /** user fields (<text:user-field-get>) */
-class XMLUserFieldImportContext : public XMLSetVarFieldImportContext
+class XMLUserFieldImportContext final : public XMLSetVarFieldImportContext
 {
 
 public:
@@ -324,7 +324,7 @@ public:
 };
 
 /** user input fields (<text:user-field-input>) */
-class XMLUserFieldInputImportContext : public XMLVarFieldImportContext
+class XMLUserFieldInputImportContext final : public XMLVarFieldImportContext
 {
 
 public:
@@ -342,7 +342,7 @@ public:
 
 
 /** sequence fields (<text:sequence>) */
-class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
+class XMLSequenceFieldImportContext final : public XMLSetVarFieldImportContext
 {
     OUString sNumFormat;
     OUString sNumFormatSync;
@@ -359,7 +359,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
-protected:
+private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -375,7 +375,7 @@ protected:
  * variable declaration container for all variable fields
  *      (variable-decls, user-field-decls, sequence-decls)
  */
-class XMLVariableDeclsImportContext : public SvXMLImportContext
+class XMLVariableDeclsImportContext final : public SvXMLImportContext
 {
     enum VarType const eVarDeclsContextType;
     XMLTextImportHelper& rImportHelper;
@@ -400,7 +400,7 @@ public:
  * variable field declarations
  *      (variable-decl, user-field-decl, sequence-decl)
  */
-class XMLVariableDeclImportContext : public SvXMLImportContext
+class XMLVariableDeclImportContext final : public SvXMLImportContext
 {
     XMLValueImportHelper aValueHelper;
     sal_Unicode cSeparationChar;
@@ -426,7 +426,7 @@ public:
 
 
 /** import table formula fields (deprecated; for Writer 2.0 compatibility) */
-class XMLTableFormulaImportContext : public XMLTextFieldImportContext
+class XMLTableFormulaImportContext final : public XMLTextFieldImportContext
 {
     XMLValueImportHelper aValueHelper;
 
@@ -440,7 +440,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
-protected:
+private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -453,7 +453,7 @@ protected:
 
 
 /** import database display fields (<text:database-display>) */
-class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
+class XMLDatabaseDisplayImportContext final : public XMLDatabaseFieldImportContext
 {
     XMLValueImportHelper aValueHelper;
 
@@ -472,7 +472,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
-protected:
+private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,

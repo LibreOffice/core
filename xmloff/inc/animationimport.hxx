@@ -32,7 +32,7 @@ namespace xmloff
 {
 class AnimationsImportHelperImpl;
 
-class AnimationNodeContext : public SvXMLImportContext
+class AnimationNodeContext final : public SvXMLImportContext
 {
     std::shared_ptr<AnimationsImportHelperImpl> mpHelper;
     css::uno::Reference< css::animations::XAnimationNode > mxNode;

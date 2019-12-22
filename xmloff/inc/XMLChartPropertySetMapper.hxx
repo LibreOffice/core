@@ -29,33 +29,31 @@ extern const XMLPropertyMapEntry aXMLChartPropMap[];
 
 class SvXMLExport;
 
-class XMLChartPropHdlFactory : public XMLPropertyHandlerFactory
+class XMLChartPropHdlFactory final : public XMLPropertyHandlerFactory
 {
 public:
     virtual ~XMLChartPropHdlFactory() override;
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };
 
-class XMLChartPropertySetMapper : public XMLPropertySetMapper
+class XMLChartPropertySetMapper final : public XMLPropertySetMapper
 {
 public:
     explicit XMLChartPropertySetMapper( bool bForExport );
             virtual ~XMLChartPropertySetMapper() override;
 };
 
-class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
+class XMLChartExportPropertyMapper final : public SvXMLExportPropertyMapper
 {
 private:
     SvXMLExport& mrExport;
     css::uno::Reference< css::chart2::XChartDocument > mxChartDoc;
 
-protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
         const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 
-private:
     /// this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set
     virtual void handleElementItem(
         SvXMLExport& rExport,
@@ -78,7 +76,7 @@ public:
     void setChartDoc( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 };
 
-class XMLChartImportPropertyMapper : public SvXMLImportPropertyMapper
+class XMLChartImportPropertyMapper final : public SvXMLImportPropertyMapper
 {
 private:
     SvXMLImport& mrImport;

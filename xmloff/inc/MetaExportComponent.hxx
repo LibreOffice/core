@@ -24,7 +24,7 @@
 
 #include <xmloff/xmlexp.hxx>
 
-class XMLMetaExportComponent : public SvXMLExport
+class XMLMetaExportComponent final : public SvXMLExport
 {
     css::uno::Reference< css::document::XDocumentProperties > mxDocProps;
 
@@ -36,7 +36,7 @@ public:
 
     virtual ~XMLMetaExportComponent() override;
 
-protected:
+private:
     // export the events off all autotexts
     virtual ErrCode exportDoc(
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;

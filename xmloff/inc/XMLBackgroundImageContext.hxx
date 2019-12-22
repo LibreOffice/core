@@ -27,7 +27,7 @@ namespace com { namespace sun { namespace star {
     namespace io { class XOutputStream; }
 } } }
 
-class XMLBackgroundImageContext : public XMLElementPropertyContext
+class XMLBackgroundImageContext final : public XMLElementPropertyContext
 {
     XMLPropertyState aPosProp;
     sal_Int32 const m_nBitmapModeIdx;

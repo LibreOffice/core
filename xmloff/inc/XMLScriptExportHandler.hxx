@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-class XMLScriptExportHandler : public XMLEventExportHandler
+class XMLScriptExportHandler final : public XMLEventExportHandler
 {
 public:
     XMLScriptExportHandler();

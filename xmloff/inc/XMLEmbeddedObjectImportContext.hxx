@@ -26,7 +26,7 @@
 namespace com { namespace sun { namespace star { namespace lang {
     class XComponent; } } } }
 
-class XMLEmbeddedObjectImportContext : public SvXMLImportContext
+class XMLEmbeddedObjectImportContext final : public SvXMLImportContext
 {
     css::uno::Reference<css::xml::sax::XDocumentHandler > xHandler;
     css::uno::Reference<css::lang::XComponent > xComp;

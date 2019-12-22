@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-class XMLImageMapContext : public SvXMLImportContext
+class XMLImageMapContext final : public SvXMLImportContext
 {
     /// the image map to be imported
     css::uno::Reference< css::container::XIndexContainer> xImageMap;

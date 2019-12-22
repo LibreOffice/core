@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
 class SvXMLImport;
 
 /// import footnote and endnote configuration elements
-class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
+class XMLFootnoteConfigurationImportContext final : public SvXMLStyleContext
 {
     OUString sCitationStyle;
     OUString sAnchorStyle;

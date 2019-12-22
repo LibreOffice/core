@@ -28,7 +28,7 @@ template<typename EnumT> struct SvXMLEnumMapEntry;
 /** Abstract base-class for different XML-types. Derivations of this class
     knows how to compare, im/export a special XML-type
 */
-class XMLFillBitmapSizePropertyHandler: public XMLPropertyHandler
+class XMLFillBitmapSizePropertyHandler final : public XMLPropertyHandler
 {
 public:
 

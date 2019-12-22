@@ -27,7 +27,7 @@
 typedef ::cppu::WeakImplHelper<
     css::xml::sax::XDocumentHandler > XMLBasicExportFilter_BASE;
 
-class XMLBasicExportFilter : public XMLBasicExportFilter_BASE
+class XMLBasicExportFilter final : public XMLBasicExportFilter_BASE
 {
 private:
     css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;

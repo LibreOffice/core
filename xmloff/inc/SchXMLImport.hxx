@@ -146,12 +146,11 @@ enum SchXMLRegEquationAttrMap
     XML_TOK_REGEQ_POS_Y
 };
 
-class SchXMLImport : public SvXMLImport
+class SchXMLImport final : public SvXMLImport
 {
 private:
     rtl::Reference<SchXMLImportHelper> maImportHelper;
 
-protected:
     virtual SvXMLImportContext *CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

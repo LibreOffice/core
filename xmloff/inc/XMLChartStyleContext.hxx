@@ -21,14 +21,13 @@
 
 #include <xmloff/XMLShapeStyleContext.hxx>
 
-class XMLChartStyleContext : public XMLShapeStyleContext
+class XMLChartStyleContext final : public XMLShapeStyleContext
 {
 private:
     OUString msDataStyleName;
     OUString msPercentageDataStyleName;
     SvXMLStylesContext& mrStyles;
 
-protected:
     /// is called when an attribute at the (auto)style element is found
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

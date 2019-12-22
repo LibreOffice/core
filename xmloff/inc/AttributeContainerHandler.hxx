@@ -25,7 +25,7 @@
 /**
     PropertyHandler for the XML-data-type:
 */
-class XMLAttributeContainerHandler : public XMLPropertyHandler
+class XMLAttributeContainerHandler final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLAttributeContainerHandler() override;

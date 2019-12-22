@@ -48,7 +48,7 @@ enum LineNumberingToken
 
 
 /** import <text:linenumbering-configuration> elements */
-class XMLLineNumberingImportContext : public SvXMLStyleContext
+class XMLLineNumberingImportContext final : public SvXMLStyleContext
 {
     OUString sStyleName;
     OUString sNumFormat;
@@ -78,7 +78,7 @@ public:
     void SetSeparatorText(const OUString& sText);
     void SetSeparatorIncrement(sal_Int16 nIncr);
 
-protected:
+private:
 
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;

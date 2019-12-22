@@ -25,7 +25,7 @@
 /**
     PropertyHandler for the XML-data-type:
 */
-class XMLTextColumnsPropertyHandler : public XMLPropertyHandler
+class XMLTextColumnsPropertyHandler final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLTextColumnsPropertyHandler () override;

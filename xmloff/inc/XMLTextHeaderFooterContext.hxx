@@ -27,7 +27,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-class XMLTextHeaderFooterContext: public SvXMLImportContext
+class XMLTextHeaderFooterContext final : public SvXMLImportContext
 {
     css::uno::Reference< css::text::XTextCursor > xOldTextCursor;
     css::uno::Reference< css::beans::XPropertySet > xPropSet;
