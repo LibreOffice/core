@@ -274,6 +274,8 @@ SelectionManager::SelectionManager() :
         m_bShutDown( false )
 {
     memset(&m_aDropEnterEvent, 0, sizeof(m_aDropEnterEvent));
+    m_EndThreadPipe[0] = 0;
+    m_EndThreadPipe[1] = 0;
     m_aDragRunning.reset();
 }
 
