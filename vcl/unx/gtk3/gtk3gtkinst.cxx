@@ -14027,6 +14027,11 @@ public:
         return create_virtual_device();
     }
 
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        fprintf(stderr, "do this %s %p\n", rIdent.getStr(), pMenu);
+    }
+
     OUString get_mru_entries() const override
     {
         const sal_Unicode cSep = ';';
@@ -14442,6 +14447,11 @@ public:
     }
 
     virtual void set_mru_entries(const OUString&) override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual void set_item_menu(const OString&, weld::Menu*) override
     {
         assert(false && "not implemented");
     }

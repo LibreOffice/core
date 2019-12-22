@@ -62,6 +62,10 @@
     constructor="com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.StyleToolBoxControl"
+    constructor="com_sun_star_comp_svx_StyleToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svx.LineEndToolBoxControl"
       constructor="com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

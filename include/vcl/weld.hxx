@@ -585,6 +585,8 @@ enum class EntryMessageType
     Error,
 };
 
+class Menu;
+
 /// A widget used to choose from a list of items.
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
@@ -723,6 +725,8 @@ public:
     virtual void set_custom_renderer() = 0;
     // create a virtual device compatible with the device passed in render_args wrt alpha
     virtual VclPtr<VirtualDevice> create_render_virtual_device() const = 0;
+    // set a sub menu for a entry, only works with custom rendering
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
 
     // for mru support
     virtual int get_max_mru_count() const = 0;
