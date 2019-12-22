@@ -489,7 +489,7 @@ void FontNameBox::EnableWYSIWYG()
     mbWYSIWYG = true;
 }
 
-IMPL_STATIC_LINK_NOARG(FontNameBox, CustomGetSizeHdl, weld::ComboBox::get_size_args, Size)
+IMPL_STATIC_LINK_NOARG(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size)
 {
     return gUserItemSz;
 }

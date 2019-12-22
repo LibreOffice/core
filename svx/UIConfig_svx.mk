@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/addnamespacedialog \
 	svx/uiconfig/ui/addsubmissiondialog \
 	svx/uiconfig/ui/asianphoneticguidedialog \
+	svx/uiconfig/ui/applystylebox \
 	svx/uiconfig/ui/cellmenu \
 	svx/uiconfig/ui/charsetmenu \
 	svx/uiconfig/ui/checkbuttonbox \

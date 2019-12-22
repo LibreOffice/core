@@ -165,7 +165,6 @@
                   <object class="GtkToggleToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="is_important">True</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -177,7 +176,6 @@
                   <object class="GtkToggleToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="is_important">True</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -249,7 +247,6 @@
               <object class="GtkToolButton" id=".uno:IncrementIndent">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="is_important">True</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -261,7 +258,6 @@
               <object class="GtkToolButton" id=".uno:DecrementIndent">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="is_important">True</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>

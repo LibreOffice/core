@@ -286,8 +286,6 @@ void SwDLL::RegisterControls()
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );
     SvxLineWidthToolBoxControl::RegisterControl(SID_ATTR_LINE_WIDTH, pMod );
 
-    SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );
-
     SwZoomControl::RegisterControl(SID_ATTR_ZOOM, pMod );
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);
     SvxPosSizeStatusBarControl::RegisterControl(0, pMod );
