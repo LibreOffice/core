@@ -29,7 +29,7 @@
 namespace writerfilter
 {
 
-class QNameToString : public virtual SvRefBase
+class QNameToString final : public virtual SvRefBase
 {
     typedef tools::SvRef<QNameToString> Pointer_t;
     typedef std::map < Id, std::string > Map;

@@ -47,7 +47,7 @@ class XDocumentHandler;
 
 namespace writerperfect
 {
-class WRITERPERFECT_DLLPUBLIC DocumentHandler : public OdfDocumentHandler
+class WRITERPERFECT_DLLPUBLIC DocumentHandler final : public OdfDocumentHandler
 {
 public:
     DocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler);

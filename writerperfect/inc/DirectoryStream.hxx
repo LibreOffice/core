@@ -32,7 +32,7 @@ class XContent;
 
 namespace writerperfect
 {
-class WRITERPERFECT_DLLPUBLIC DirectoryStream : public librevenge::RVNGInputStream
+class WRITERPERFECT_DLLPUBLIC DirectoryStream final : public librevenge::RVNGInputStream
 {
     struct Impl;
 

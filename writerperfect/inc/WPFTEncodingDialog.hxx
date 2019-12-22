@@ -20,7 +20,7 @@
 
 namespace writerperfect
 {
-class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog : public weld::GenericDialogController
+class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog final : public weld::GenericDialogController
 {
 public:
     WPFTEncodingDialog(weld::Window* pParent, const OUString& title, const OUString& defEncoding);
