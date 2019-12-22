@@ -188,7 +188,7 @@ enum class FDCategory
 
 struct FuncDataBase
 {
-    const sal_Char*         pIntName;
+    const char*         pIntName;
     const char*             pUINameID;          // resource ID to UI name
     const char**            pDescrID;           // resource ID to description, parameter names and ~ description
     bool const              bDouble;            // name already exist in Calc
@@ -509,7 +509,7 @@ protected:
     bool const                bPrefixSupport;
 public:
                             ConvertData(
-                                const sal_Char      pUnitName[],
+                                const char      pUnitName[],
                                 double              fConvertConstant,
                                 ConvertDataClass    eClass,
                                 bool                bPrefSupport = false );
@@ -536,7 +536,7 @@ class ConvertDataLinear final : public ConvertData
     double const            fOffs;
 public:
     inline                  ConvertDataLinear(
-                                const sal_Char      pUnitName[],
+                                const char      pUnitName[],
                                 double              fConvertConstant,
                                 double              fConvertOffset,
                                 ConvertDataClass    eClass,
@@ -718,7 +718,7 @@ inline ConvertDataClass ConvertData::Class() const
     return eClass;
 }
 
-inline ConvertDataLinear::ConvertDataLinear( const sal_Char p[], double fC, double fO, ConvertDataClass e,
+inline ConvertDataLinear::ConvertDataLinear( const char p[], double fC, double fO, ConvertDataClass e,
         bool bPrefSupport ) :
     ConvertData( p, fC, e, bPrefSupport ),
     fOffs( fO )

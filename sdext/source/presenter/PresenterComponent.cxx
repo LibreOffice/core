@@ -48,7 +48,7 @@ static const struct ImplementationEntry gServiceEntries[] =
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * presenter_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+        const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , gServiceEntries);
 }

@@ -57,7 +57,7 @@ enum class ScaCategory
 
 struct ScaFuncDataBase
 {
-    const sal_Char*             pIntName;           // internal name (get***)
+    const char*                 pIntName;           // internal name (get***)
     const char*                 pUINameID;          // resource ID to UI name
     const char**                pDescrID;           // resource ID to description, parameter names and ~ description
     // pCompName was originally meant to be able to load Excel documents that for

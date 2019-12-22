@@ -77,8 +77,8 @@ namespace
 
     struct ComponentDescription
     {
-        const sal_Char*     pAsciiServiceName;
-        const sal_Char*     pAsciiImplementationName;
+        const char*               pAsciiServiceName;
+        const char*               pAsciiImplementationName;
         ComponentFactory const    pFactory;
 
         ComponentDescription()
@@ -87,7 +87,7 @@ namespace
             ,pFactory( nullptr )
         {
         }
-        ComponentDescription( const sal_Char* _pAsciiServiceName, const sal_Char* _pAsciiImplementationName, ComponentFactory _pFactory )
+        ComponentDescription( const char* _pAsciiServiceName, const char* _pAsciiImplementationName, ComponentFactory _pFactory )
             :pAsciiServiceName( _pAsciiServiceName )
             ,pAsciiImplementationName( _pAsciiImplementationName )
             ,pFactory( _pFactory )
@@ -110,7 +110,7 @@ namespace
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* pdfimport_component_getFactory(
-    const sal_Char* pImplementationName,
+    const char* pImplementationName,
     SAL_UNUSED_PARAMETER void* /*pServiceManager*/,
     SAL_UNUSED_PARAMETER void* /*pRegistryKey*/ )
 {

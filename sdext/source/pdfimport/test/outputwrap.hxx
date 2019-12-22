@@ -74,7 +74,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
         virtual void SAL_CALL writeBytes(const css::uno::Sequence< ::sal_Int8 >& aData) override
         {
-            maBuffer.append(reinterpret_cast<const sal_Char *>(aData.getConstArray()), aData.getLength());
+            maBuffer.append(reinterpret_cast<const char *>(aData.getConstArray()), aData.getLength());
         }
 
         virtual void SAL_CALL flush() override

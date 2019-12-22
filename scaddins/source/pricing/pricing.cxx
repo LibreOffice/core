@@ -96,7 +96,7 @@ static uno::Reference< uno::XInterface > ScaPricingAddIn_CreateInstance(
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * pricing_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
 
@@ -130,8 +130,8 @@ ScaPricingAddIn::~ScaPricingAddIn()
 {
 }
 
-static const sal_Char*  pLang[] = { "de", "en" };
-static const sal_Char*  pCoun[] = { "DE", "US" };
+static const char*  pLang[] = { "de", "en" };
+static const char*  pCoun[] = { "DE", "US" };
 static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaPricingAddIn::InitDefLocales()
