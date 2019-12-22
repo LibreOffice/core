@@ -1197,8 +1197,8 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MapUnit::Map100thMM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MapUnit::Map100thMM)));
-                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100L, GraphicSize.Width())),
-                                                                          long(Fraction(OutputSize.Height() * 100L, GraphicSize.Height()))));
+                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
+                                                                          long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
                 nZ -= 10;
                 Fraction aFraction (std::max(MINZOOM, std::min(MAXZOOM, nZ)), 100);
 
@@ -2019,8 +2019,8 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                               OutputRect.GetHeight()), aMap));
             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100L, GraphicSize.Width())),
-                                                                      long(Fraction(OutputSize.Height() * 100L, GraphicSize.Height()))));
+            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
+                                                                      long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
             mpGraphic->SetZoom (nZ);
             break;
         }
