@@ -600,7 +600,7 @@ void SdOOXMLExportTest2::testExportTransitionsPPTX()
 void SdOOXMLExportTest2::testPresetShapesExport()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/preset-shapes-export.odp"), ODP);
-    const sal_Char *sShapeTypeAndValues[] =
+    const char *sShapeTypeAndValues[] =
     {
         "wedgeEllipseCallout",
         "adj1","val 45310",

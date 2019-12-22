@@ -127,7 +127,7 @@ public:
         static sal_uInt32 GetPresetID( const OUString& rPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId );
         static sal_uInt32 GetValueTypeForAttributeName( const OUString& rAttributeName );
 
-    static const sal_Char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection );
+    static const char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection );
     static css::uno::Reference< css::drawing::XShape > getTargetElementShape( const css::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
 };
 } // namespace ppt

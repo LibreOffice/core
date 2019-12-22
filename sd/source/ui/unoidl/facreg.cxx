@@ -61,7 +61,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * sd_component_getFactory(
-    const sal_Char * pImplName,
+    const char * pImplName,
     void           * pServiceManager,
     void           *  )
 {

@@ -1039,7 +1039,7 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage const * pPage)
 OUString HtmlExport::CreateMetaCharset()
 {
     OUString aStr;
-    const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
+    const char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
     if ( pCharSet )
     {
         aStr = "  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT=\"text/html; charset=" +

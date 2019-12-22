@@ -240,7 +240,7 @@ namespace {
             bDefaultValue is returned.  Otherwise <FALSE/> is returned.
         */
         bool GetBoolValue (
-            const sal_Char* pName,
+            const char* pName,
             const bool bDefaultValue) const
         {
             bool bValue = mrProperties.getBoolValue( pName, bDefaultValue );
@@ -252,7 +252,7 @@ namespace {
             returned.
         */
         bool GetBoolValue (
-            const sal_Char* pName,
+            const char* pName,
             const sal_Int32 nTriggerValue) const
         {
             sal_Int32 nValue = static_cast<sal_Int32>(mrProperties.getIntValue( pName, 0 ));
