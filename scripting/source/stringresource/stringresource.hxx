@@ -114,7 +114,7 @@ protected:
 
     // Checks read only status and throws exception if it's true
     /// @throws css::lang::NoSupportException
-    void implCheckReadOnly( const sal_Char* pExceptionMsg );
+    void implCheckReadOnly( const char* pExceptionMsg );
 
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method compares the locales exactly, no closest match search is performed

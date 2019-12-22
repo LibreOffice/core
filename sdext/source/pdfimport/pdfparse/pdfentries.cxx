@@ -157,27 +157,27 @@ PDFEntry* PDFName::clone() const
 OUString PDFName::getFilteredName() const
 {
     OStringBuffer aFilter( m_aName.getLength() );
-    const sal_Char* pStr = m_aName.getStr();
+    const char* pStr = m_aName.getStr();
     unsigned int nLen = m_aName.getLength();
     for( unsigned int i = 0; i < nLen; i++ )
     {
         if( (i < nLen - 3) && pStr[i] == '#' )
         {
-            sal_Char rResult = 0;
+            char rResult = 0;
             i++;
             if( pStr[i] >= '0' && pStr[i] <= '9' )
-                rResult = sal_Char( pStr[i]-'0' ) << 4;
+                rResult = char( pStr[i]-'0' ) << 4;
             else if( pStr[i] >= 'a' && pStr[i] <= 'f' )
-                rResult = sal_Char( pStr[i]-'a' + 10 ) << 4;
+                rResult = char( pStr[i]-'a' + 10 ) << 4;
             else if( pStr[i] >= 'A' && pStr[i] <= 'F' )
-                rResult = sal_Char( pStr[i]-'A' + 10 ) << 4;
+                rResult = char( pStr[i]-'A' + 10 ) << 4;
             i++;
             if( pStr[i] >= '0' && pStr[i] <= '9' )
-                rResult |= sal_Char( pStr[i]-'0' );
+                rResult |= char( pStr[i]-'0' );
             else if( pStr[i] >= 'a' && pStr[i] <= 'f' )
-                rResult |= sal_Char( pStr[i]-'a' + 10 );
+                rResult |= char( pStr[i]-'a' + 10 );
             else if( pStr[i] >= 'A' && pStr[i] <= 'F' )
-                rResult |= sal_Char( pStr[i]-'A' + 10 );
+                rResult |= char( pStr[i]-'A' + 10 );
             aFilter.append( rResult );
         }
         else
@@ -204,7 +204,7 @@ bool PDFString::emit( EmitContext& rWriteContext ) const
                          reinterpret_cast<sal_uInt8 *>(const_cast<char *>(aFiltered.getStr())),
                          pEData->m_nDecryptObject, pEData->m_nDecryptGeneration );
         // check for string or hex string
-        const sal_Char* pStr = aFiltered.getStr();
+        const char* pStr = aFiltered.getStr();
         if( aFiltered.getLength() > 1 &&
            ( (static_cast<unsigned char>(pStr[0]) == 0xff && static_cast<unsigned char>(pStr[1]) == 0xfe) ||
              (static_cast<unsigned char>(pStr[0]) == 0xfe && static_cast<unsigned char>(pStr[1]) == 0xff) ) )
@@ -247,10 +247,10 @@ OString PDFString::getFilteredString() const
     int nLen = m_aString.getLength();
     OStringBuffer aBuf( nLen );
 
-    const sal_Char* pStr = m_aString.getStr();
+    const char* pStr = m_aString.getStr();
     if( *pStr == '(' )
     {
-        const sal_Char* pRun = pStr+1;
+        const char* pRun = pStr+1;
         while( pRun - pStr < nLen-1 )
         {
             if( *pRun == '\\' )
@@ -258,7 +258,7 @@ OString PDFString::getFilteredString() const
                 pRun++;
                 if( pRun - pStr < nLen )
                 {
-                    sal_Char aEsc = 0;
+                    char aEsc = 0;
                     if( *pRun == 'n' )
                         aEsc = '\n';
                     else if( *pRun == 'r' )
@@ -306,25 +306,25 @@ OString PDFString::getFilteredString() const
     }
     else if( *pStr == '<' )
     {
-        const sal_Char* pRun = pStr+1;
+        const char* pRun = pStr+1;
         while( *pRun != '>' && pRun - pStr < nLen )
         {
-            sal_Char rResult = 0;
+            char rResult = 0;
             if( *pRun >= '0' && *pRun <= '9' )
-                rResult = sal_Char( ( *pRun-'0' ) << 4 );
+                rResult = char( ( *pRun-'0' ) << 4 );
             else if( *pRun >= 'a' && *pRun <= 'f' )
-                rResult = sal_Char( ( *pRun-'a' + 10 ) << 4 );
+                rResult = char( ( *pRun-'a' + 10 ) << 4 );
             else if( *pRun >= 'A' && *pRun <= 'F' )
-                rResult = sal_Char( ( *pRun-'A' + 10 ) << 4 );
+                rResult = char( ( *pRun-'A' + 10 ) << 4 );
             pRun++;
             if( *pRun != '>' && pRun - pStr < nLen )
             {
                 if( *pRun >= '0' && *pRun <= '9' )
-                    rResult |= sal_Char( *pRun-'0' );
+                    rResult |= char( *pRun-'0' );
                 else if( *pRun >= 'a' && *pRun <= 'f' )
-                    rResult |= sal_Char( *pRun-'a' + 10 );
+                    rResult |= char( *pRun-'a' + 10 );
                 else if( *pRun >= 'A' && *pRun <= 'F' )
-                    rResult |= sal_Char( *pRun-'A' + 10 );
+                    rResult |= char( *pRun-'A' + 10 );
             }
             pRun++;
             aBuf.append( rResult );
@@ -1101,12 +1101,12 @@ static const sal_uInt8 nPadString[32] =
     0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
 };
 
-static void pad_or_truncate_to_32( const OString& rStr, sal_Char* pBuffer )
+static void pad_or_truncate_to_32( const OString& rStr, char* pBuffer )
 {
     int nLen = rStr.getLength();
     if( nLen > 32 )
         nLen = 32;
-    const sal_Char* pStr = rStr.getStr();
+    const char* pStr = rStr.getStr();
     memcpy( pBuffer, pStr, nLen );
     int i = 0;
     while( nLen < 32 )
@@ -1118,7 +1118,7 @@ static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFF
 {
     // see PDF reference 1.4 Algorithm 3.2
     // encrypt pad string
-    sal_Char aPadPwd[ENCRYPTION_BUF_LEN];
+    char aPadPwd[ENCRYPTION_BUF_LEN];
     pad_or_truncate_to_32( rPwd, aPadPwd );
     ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
     aDigest.update(reinterpret_cast<unsigned char const*>(aPadPwd), sizeof(aPadPwd));

@@ -204,15 +204,15 @@ public:
 OString lcl_unescapeLineFeeds(const OString& i_rStr)
 {
     const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
-    const sal_Char* const pOrig(i_rStr.getStr());
-    std::unique_ptr<sal_Char[]> pBuffer(new sal_Char[nOrigLen + 1]);
+    const char* const pOrig(i_rStr.getStr());
+    std::unique_ptr<char[]> pBuffer(new char[nOrigLen + 1]);
 
-    const sal_Char* pRead(pOrig);
-    sal_Char* pWrite(pBuffer.get());
-    const sal_Char* pCur(pOrig);
+    const char* pRead(pOrig);
+    char* pWrite(pBuffer.get());
+    const char* pCur(pOrig);
     while ((pCur = strchr(pCur, '\\')) != nullptr)
     {
-        const sal_Char cNext(pCur[1]);
+        const char cNext(pCur[1]);
         if (cNext == 'n' || cNext == 'r' || cNext == '\\')
         {
             const size_t nLen(pCur - pRead);

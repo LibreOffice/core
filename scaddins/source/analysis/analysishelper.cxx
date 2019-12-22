@@ -687,9 +687,9 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
 }
 
 
-static sal_Char GetMaxChar( sal_uInt16 nBase )
+static char GetMaxChar( sal_uInt16 nBase )
 {
-    const sal_Char* const c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const char* const c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return c[ nBase ];
 }
 
@@ -722,7 +722,7 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
         else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
         {
             sal_Int32   nLeft = nPlaces - nLen;
-            std::unique_ptr<sal_Char[]> p( new sal_Char[ nLeft + 1 ] );
+            std::unique_ptr<char[]> p( new char[ nLeft + 1 ] );
             memset( p.get(), bNeg ? GetMaxChar( nBase ) : '0', nLeft );
             p[ nLeft ] = 0x00;
             aRet = OUString( p.get(), nLeft, RTL_TEXTENCODING_MS_1252 ) + aRet;
@@ -944,7 +944,7 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 OUString GetString( double f, bool bLeadingSign, sal_uInt16 nMaxDig )
 {
     const int       nBuff = 256;
-    sal_Char        aBuff[ nBuff + 1 ];
+    char        aBuff[ nBuff + 1 ];
     const char*     pFormStr = bLeadingSign? "%+.*g" : "%.*g";
     int             nLen = snprintf( aBuff, nBuff, pFormStr, int( nMaxDig ), f );
     // you never know which underlying implementation you get ...
@@ -2040,7 +2040,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
     }
 }
 
-ConvertData::ConvertData(const sal_Char p[], double fC, ConvertDataClass e, bool bPrefSupport)
+ConvertData::ConvertData(const char p[], double fC, ConvertDataClass e, bool bPrefSupport)
     : fConst(fC)
     , aName(p, strlen(p), RTL_TEXTENCODING_MS_1252)
     , eClass(e)

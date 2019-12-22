@@ -610,8 +610,8 @@ void LineDescriptorList::SplitText (
     const OUString& rsText,
     vector<OUString>& rTextParts)
 {
-    const sal_Char cQuote ('\'');
-    const sal_Char cSeparator (',');
+    const char cQuote ('\'');
+    const char cSeparator (',');
 
     sal_Int32 nIndex (0);
     sal_Int32 nStart (0);
@@ -663,7 +663,7 @@ void LineDescriptorList::FormatText (
             if (PresenterCanvasHelper::GetTextSize(
                 rxFont, *iPart).Width > nMaximalWidth)
             {
-                const sal_Char cSpace (' ');
+                const char cSpace (' ');
 
                 sal_Int32 nIndex (0);
                 sal_Int32 nStart (0);

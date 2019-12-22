@@ -753,7 +753,7 @@ namespace dlgprov
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * dlgprov_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager,
+        const char * pImplName, void * pServiceManager,
         void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper(
