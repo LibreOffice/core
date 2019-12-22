@@ -372,13 +372,16 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
 void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 nRows )
 {
     mpTableObj = pTable;
-    mxTable = new TableModel( pTable );
-    mxTable->init( nColumns, nRows );
-    Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
-    mxTable->addModifyListener( xListener );
-    mpLayouter.reset(new TableLayouter( mxTable ));
-    LayoutTable( mpTableObj->maRect, true, true );
-    mpTableObj->maLogicRect = mpTableObj->maRect;
+    if ( nColumns > 0 && nRows > 0 )
+    {
+        mxTable = new TableModel( pTable );
+        mxTable->init( nColumns, nRows );
+        Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
+        mxTable->addModifyListener( xListener );
+        mpLayouter.reset(new TableLayouter( mxTable ));
+        LayoutTable( mpTableObj->maRect, true, true );
+        mpTableObj->maLogicRect = mpTableObj->maRect;
+    }
 }
 
 
@@ -861,10 +864,10 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTableObj::CreateObjectSpecificView
     return std::make_unique<sdr::contact::ViewContactOfTableObj>(*this);
 }
 
-SdrTableObj::SdrTableObj(SdrModel& rSdrModel)
+SdrTableObj::SdrTableObj(SdrModel& rSdrModel, bool bToClone)
 :   SdrTextObj(rSdrModel)
 {
-    init( 1, 1 );
+    bToClone ? init( 0, 0 ) : init( 1, 1 );
 }
 
 SdrTableObj::SdrTableObj(

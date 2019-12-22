@@ -7544,7 +7544,13 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
     if (aRows.empty())
         return pRet;
 
-    sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj(*pSdrModel);
+    Size aSize( 200, 200 );
+    ::tools::Rectangle aRect (Point(), aSize);
+    sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj(
+        *pSdrModel,
+        aRect,
+        1,
+        1);
     pTable->uno_lock();
     Reference< XTable > xTable( pTable->getTable() );
 
