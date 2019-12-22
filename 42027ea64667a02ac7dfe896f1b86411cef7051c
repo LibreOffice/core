@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_d95e97e5",
+        "filename": "framework/source/loadenv/loadenv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-22T17:06:47Z",
+      "side": 1,
+      "message": "why not use the comphelper method here?",
+      "revId": "42027ea64667a02ac7dfe896f1b86411cef7051c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
