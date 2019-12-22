@@ -40,7 +40,7 @@ namespace com::sun::star::xml::crypto::sax { class XSAXEventKeeperStatusChangeLi
 namespace com::sun::star::xml::csax { class XCompressedDocumentHandler; }
 namespace com::sun::star::xml::wrapper { class XXMLDocumentWrapper; }
 
-class SAXEventKeeperImpl : public cppu::WeakImplHelper
+class SAXEventKeeperImpl final : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XSecuritySAXEventKeeper,
     css::xml::crypto::sax::XReferenceResolvedBroadcaster,

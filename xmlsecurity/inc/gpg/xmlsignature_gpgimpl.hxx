@@ -36,7 +36,7 @@ namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 
-class XSECXMLSEC_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
+class XSECXMLSEC_DLLPUBLIC XMLSignature_GpgImpl final : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
     css::lang::XServiceInfo >
 {

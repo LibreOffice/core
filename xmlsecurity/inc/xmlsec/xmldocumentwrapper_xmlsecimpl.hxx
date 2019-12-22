@@ -34,7 +34,7 @@
 
 #include <libxml/tree.h>
 
-class XSECXMLSEC_DLLPUBLIC XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper
+class XSECXMLSEC_DLLPUBLIC XMLDocumentWrapper_XmlSecImpl final : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLDocumentWrapper,
     css::xml::sax::XDocumentHandler,

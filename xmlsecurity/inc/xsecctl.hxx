@@ -91,7 +91,7 @@ public:
     }
 };
 
-class XSecController : public cppu::WeakImplHelper
+class XSecController final : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener,
     css::xml::crypto::sax::XSignatureCreationResultListener,

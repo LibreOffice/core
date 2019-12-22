@@ -37,7 +37,7 @@ namespace embed {
 
 // XUriBinding
 
-class UriBindingHelper : public cppu::WeakImplHelper< css::xml::crypto::XUriBinding >
+class UriBindingHelper final : public cppu::WeakImplHelper< css::xml::crypto::XUriBinding >
 {
 private:
     css::uno::Reference < css::embed::XStorage > mxStorage;
