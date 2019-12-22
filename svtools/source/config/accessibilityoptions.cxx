@@ -25,8 +25,9 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+
+#include <officecfg/Office/Common.hxx>
 
 #include <svl/hint.hxx>
 
@@ -42,264 +43,114 @@ using namespace com::sun::star::uno;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
-// class SvtAccessibilityOptions_Impl ---------------------------------------------
-
-class SvtAccessibilityOptions_Impl
-{
-private:
-    css::uno::Reference< css::container::XNameAccess > m_xCfg;
-
-public:
-    SvtAccessibilityOptions_Impl();
-
-    void        SetVCLSettings();
-    bool        GetIsForPagePreviews() const;
-    bool        GetIsHelpTipsDisappear() const;
-    bool        GetIsAllowAnimatedGraphics() const;
-    bool        GetIsAllowAnimatedText() const;
-    bool        GetIsAutomaticFontColor() const;
-    sal_Int16   GetHelpTipSeconds() const;
-    bool        IsSelectionInReadonly() const;
-    sal_Int16   GetEdgeBlending() const;
-    sal_Int16   GetListBoxMaximumLineCount() const;
-    sal_Int16   GetColorValueSetColumnCount() const;
-    bool        GetPreviewUsesCheckeredBackground() const;
-};
-
-// initialization of static members --------------------------------------
-
-SvtAccessibilityOptions_Impl* SvtAccessibilityOptions::sm_pSingleImplConfig =nullptr;
-sal_Int32                     SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
-
 namespace
 {
     struct SingletonMutex
         : public rtl::Static< ::osl::Mutex, SingletonMutex > {};
 }
 
+// class SvtAccessibilityOptions --------------------------------------------------
 
-// class SvtAccessibilityOptions_Impl ---------------------------------------------
-
-SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
+SvtAccessibilityOptions::SvtAccessibilityOptions()
 {
-    try
+    if (!utl::ConfigManager::IsFuzzing())
     {
-        m_xCfg.set(
-            ::comphelper::ConfigurationHelper::openConfig(
-                comphelper::getProcessComponentContext(),
-                "org.openoffice.Office.Common/Accessibility",
-                ::comphelper::EConfigurationModes::Standard ),
-            css::uno::UNO_QUERY);
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-        m_xCfg.clear();
+        ::osl::MutexGuard aGuard( SingletonMutex::get() );
+        svtools::ItemHolder2::holdConfigItem(EItem::AccessibilityOptions);
     }
 }
 
-bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
+SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = true;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("IsForPagePreviews") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-    return bRet;
 }
 
-bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
+void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint&  )
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = true;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("IsHelpTipsDisappear") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
+    NotifyListeners(ConfigurationHints::NONE);
 }
 
-bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
+
+bool SvtAccessibilityOptions::GetIsForPagePreviews() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = true;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("IsAllowAnimatedGraphics") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
+    return officecfg::Office::Common::Accessibility::IsForPagePreviews::get();
 }
 
-bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
+bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = true;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("IsAllowAnimatedText") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
+    return officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get();
 }
 
-bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
+bool SvtAccessibilityOptions::GetIsAllowAnimatedText() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = false;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("IsAutomaticFontColor") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
+    return officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get();
 }
 
-sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
+bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Int16                                       nRet = 4;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("HelpTipSeconds") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
+    return officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get();
 }
 
-bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
+bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = false;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("IsSelectionInReadonly") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
+    return officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get();
 }
 
-sal_Int16 SvtAccessibilityOptions_Impl::GetEdgeBlending() const
+bool SvtAccessibilityOptions::GetIsHelpTipsDisappear() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Int16 nRet = 35;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("EdgeBlending") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
+    return officecfg::Office::Common::Accessibility::IsHelpTipsDisappear::get();
 }
 
-sal_Int16 SvtAccessibilityOptions_Impl::GetListBoxMaximumLineCount() const
+sal_Int16 SvtAccessibilityOptions::GetHelpTipSeconds() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Int16 nRet = 25;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("ListBoxMaximumLineCount") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
+    o3tl::optional<sal_Int16> x(officecfg::Office::Common::Accessibility::HelpTipSeconds::get());
+    if (!x)
+        return 4;
+    else
+        return *x;
 }
 
-sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
+sal_Int16 SvtAccessibilityOptions::GetEdgeBlending() const
+{
+    o3tl::optional<sal_Int16> x(officecfg::Office::Common::Accessibility::EdgeBlending::get());
+    if (!x)
+        return 35;
+    else
+        return *x;
+}
+
+sal_Int16 SvtAccessibilityOptions::GetListBoxMaximumLineCount() const
+{
+    o3tl::optional<sal_Int16> x(officecfg::Office::Common::Accessibility::ListBoxMaximumLineCount::get());
+    if (!x)
+        return 25;
+    else
+        return *x;
+}
+
+sal_Int16 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
 {
 #ifdef IOS
     return 4;
 #else
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Int16 nRet = 12;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("ColorValueSetColumnCount") >>= nRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return nRet;
+    o3tl::optional<sal_Int16> x(officecfg::Office::Common::Accessibility::ColorValueSetColumnCount::get());
+    if (!x)
+        return 12;
+    else
+        return *x;
 #endif
 }
 
-bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
+bool SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
 {
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool bRet = false;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue("PreviewUsesCheckeredBackground") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-
-    return bRet;
+    o3tl::optional<bool> x(officecfg::Office::Common::Accessibility::PreviewUsesCheckeredBackground::get());
+    if (!x)
+        return false;
+    else
+        return *x;
 }
 
-void SvtAccessibilityOptions_Impl::SetVCLSettings()
+
+void SvtAccessibilityOptions::SetVCLSettings()
 {
     AllSettings aAllSettings(Application::GetSettings());
     StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
@@ -354,68 +205,6 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
     }
 
     Application::SetSettings(aAllSettings);
-}
-
-// class SvtAccessibilityOptions --------------------------------------------------
-
-SvtAccessibilityOptions::SvtAccessibilityOptions()
-{
-    if (!utl::ConfigManager::IsFuzzing())
-    {
-        ::osl::MutexGuard aGuard( SingletonMutex::get() );
-        if(!sm_pSingleImplConfig)
-        {
-            sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
-            svtools::ItemHolder2::holdConfigItem(EItem::AccessibilityOptions);
-        }
-        ++sm_nAccessibilityRefCount;
-    }
-    //StartListening( *sm_pSingleImplConfig, sal_True );
-}
-
-SvtAccessibilityOptions::~SvtAccessibilityOptions()
-{
-    //EndListening( *sm_pSingleImplConfig, sal_True );
-    ::osl::MutexGuard aGuard( SingletonMutex::get() );
-    if( !--sm_nAccessibilityRefCount )
-    {
-        //if( sm_pSingleImplConfig->IsModified() )
-        //  sm_pSingleImplConfig->Commit();
-        DELETEZ( sm_pSingleImplConfig );
-    }
-}
-
-void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint&  )
-{
-    NotifyListeners(ConfigurationHints::NONE);
-}
-
-
-bool SvtAccessibilityOptions::GetIsForPagePreviews() const
-{
-    return sm_pSingleImplConfig->GetIsForPagePreviews();
-}
-bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
-{
-    return sm_pSingleImplConfig->GetIsAllowAnimatedGraphics();
-}
-bool SvtAccessibilityOptions::GetIsAllowAnimatedText() const
-{
-    return sm_pSingleImplConfig->GetIsAllowAnimatedText();
-}
-bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
-{
-    return sm_pSingleImplConfig->GetIsAutomaticFontColor();
-}
-bool SvtAccessibilityOptions::IsSelectionInReadonly() const
-{
-    return sm_pSingleImplConfig->IsSelectionInReadonly();
-}
-
-
-void SvtAccessibilityOptions::SetVCLSettings()
-{
-    sm_pSingleImplConfig->SetVCLSettings();
 }
 
 

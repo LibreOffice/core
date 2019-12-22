@@ -23,13 +23,10 @@
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
-class SvtAccessibilityOptions_Impl;
-
 class SVT_DLLPUBLIC SvtAccessibilityOptions final :
     public utl::detail::Options, private SfxListener
 {
 private:
-    static SvtAccessibilityOptions_Impl* sm_pSingleImplConfig;
     static sal_Int32                     sm_nAccessibilityRefCount;
 
 public:
@@ -42,6 +39,12 @@ public:
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;
     bool        IsSelectionInReadonly() const;
+    bool        GetIsHelpTipsDisappear() const;
+    sal_Int16   GetHelpTipSeconds() const;
+    sal_Int16   GetEdgeBlending() const;
+    sal_Int16   GetListBoxMaximumLineCount() const;
+    sal_Int16   GetColorValueSetColumnCount() const;
+    bool        GetPreviewUsesCheckeredBackground() const;
 
     //SfxListener:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
