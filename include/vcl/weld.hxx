@@ -585,6 +585,8 @@ enum class EntryMessageType
     Error,
 };
 
+class Menu;
+
 /// A widget used to choose from a list of items.
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
@@ -593,7 +595,6 @@ private:
 
 public:
     // OUString is the id of the row, it may be null to measure the height of a generic line
-    typedef std::pair<vcl::RenderContext&, const OUString&> get_size_args;
     typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
         render_args;
 
@@ -615,11 +616,8 @@ protected:
                 rDevice, rRect, bSelected, rId));
     }
 
-    Link<get_size_args, Size> m_aGetSizeHdl;
-    Size signal_custom_get_size(vcl::RenderContext& rDevice, const OUString& rId)
-    {
-        return m_aGetSizeHdl.Call(std::pair<vcl::RenderContext&, const OUString&>(rDevice, rId));
-    }
+    Link<vcl::RenderContext&, Size> m_aGetSizeHdl;
+    Size signal_custom_get_size(vcl::RenderContext& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
 
 public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
@@ -717,12 +715,19 @@ public:
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_active_text(); }
 
     // for custom rendering a row
-    void connect_custom_get_size(const Link<get_size_args, Size>& rLink) { m_aGetSizeHdl = rLink; }
+    void connect_custom_get_size(const Link<vcl::RenderContext&, Size>& rLink)
+    {
+        m_aGetSizeHdl = rLink;
+    }
     void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
     // call set_custom_renderer after setting custom callbacks
     virtual void set_custom_renderer() = 0;
     // create a virtual device compatible with the device passed in render_args wrt alpha
     virtual VclPtr<VirtualDevice> create_render_virtual_device() const = 0;
+    // set a sub menu for a entry, only works with custom rendering
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
+    // get the width needed to show the menu launcher in a custom row
+    virtual int get_menu_button_width() const = 0;
 
     // for mru support
     virtual int get_max_mru_count() const = 0;
