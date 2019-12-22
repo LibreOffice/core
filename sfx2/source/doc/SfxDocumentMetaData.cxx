@@ -1003,7 +1003,7 @@ void SfxDocumentMetaData::updateUserDefinedAndAttributes()
                 "office:target-frame-name",
                 m_DefaultTarget);
         // xlink:show: _blank -> new, any other value -> replace
-        const sal_Char* show = m_DefaultTarget == "_blank" ? "new" : "replace";
+        const char* show = m_DefaultTarget == "_blank" ? "new" : "replace";
         attributes.emplace_back(
                 "xlink:show",
                 OUString::createFromAscii(show));
@@ -1750,7 +1750,7 @@ SfxDocumentMetaData::loadFromStorage(
     sal_uInt64 version = SotStorage::GetVersion( xStorage );
     // Oasis is also the default (0)
     bool bOasis = ( version > SOFFICE_FILEFORMAT_60 || version == 0 );
-    const sal_Char *pServiceName = bOasis
+    const char *pServiceName = bOasis
         ? "com.sun.star.document.XMLOasisMetaImporter"
         : "com.sun.star.document.XMLMetaImporter";
 
@@ -1834,7 +1834,7 @@ SfxDocumentMetaData::storeToStorage(
     const sal_uInt64 version = SotStorage::GetVersion( xStorage );
     // Oasis is also the default (0)
     const bool bOasis = ( version > SOFFICE_FILEFORMAT_60 || version == 0 );
-    const sal_Char *pServiceName = bOasis
+    const char *pServiceName = bOasis
         ? "com.sun.star.document.XMLOasisMetaExporter"
         : "com.sun.star.document.XMLMetaExporter";
 

@@ -526,7 +526,7 @@ void UsageInfo::save()
     osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
     osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
 
-    sal_Char time[1024];
+    char time[1024];
     sprintf(time,"%4i-%02i-%02iT%02i_%02i_%02i", localDateTime.Year, localDateTime.Month, localDateTime.Day, localDateTime.Hours, localDateTime.Minutes, localDateTime.Seconds);
 
     //filename type: usage-YYYY-MM-DDTHH_MM_SS.csv

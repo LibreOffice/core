@@ -44,7 +44,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void* cmdmail_component_getFactory(
-    const sal_Char* pImplName,
+    const char* pImplName,
     SAL_UNUSED_PARAMETER void* /*pSrvManager*/,
     SAL_UNUSED_PARAMETER void* /*pRegistryKey*/ )
 {

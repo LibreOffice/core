@@ -38,12 +38,12 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 {
     SAL_DLLPRIVATE static void OutMeta( SvStream& rStrm,
-                                const sal_Char *pIndent, const OUString& rName,
+                                const char *pIndent, const OUString& rName,
                                 const OUString& rContent, bool bHTTPEquiv,
                                 rtl_TextEncoding eDestEnc,
                                 OUString *pNonConvertableChars = nullptr );
     SAL_DLLPRIVATE inline static void OutMeta( SvStream& rStrm,
-                                const sal_Char *pIndent, const sal_Char *pName,
+                                const char *pIndent, const char *pName,
                                 const OUString& rContent, bool bHTTPEquiv,
                                 rtl_TextEncoding eDestEnc,
                                 OUString *pNonConvertableChars = nullptr );
@@ -51,7 +51,7 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 public:
     static void Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             const css::uno::Reference< css::document::XDocumentProperties>&,
-            const sal_Char *pIndent,
+            const char *pIndent,
             rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
             OUString *pNonConvertableChars = nullptr );
 
@@ -62,7 +62,7 @@ public:
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
-                            const sal_Char *pIndent, const sal_Char *pName,
+                            const char *pIndent, const char *pName,
                             const OUString& rContent, bool bHTTPEquiv,
                             rtl_TextEncoding eDestEnc,
                             OUString *pNonConvertableChars )

@@ -48,7 +48,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 };
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * macbe1_component_getFactory( const sal_Char *aImplementationName, void *aServiceManager, void *aRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * macbe1_component_getFactory( const char *aImplementationName, void *aServiceManager, void *aRegistryKey)
 {
 
     return cppu::component_getFactoryHelper(

@@ -47,7 +47,7 @@ OUString SfxViewFactory::GetAPIViewName() const
 // CTOR / DTOR -----------------------------------------------------------
 
 SfxViewFactory::SfxViewFactory( SfxViewCtor fnC,
-                                SfxInterfaceId nOrdinal, const sal_Char* asciiViewName ):
+                                SfxInterfaceId nOrdinal, const char* asciiViewName ):
     fnCreate(fnC),
     nOrd(nOrdinal),
     m_sViewName( OUString::createFromAscii( asciiViewName ) )

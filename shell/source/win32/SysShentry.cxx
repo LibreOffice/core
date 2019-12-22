@@ -44,7 +44,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void* syssh_component_getFactory(
-        const sal_Char* pImplName, void*, void* /*pRegistryKey*/ )
+        const char* pImplName, void*, void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
 
