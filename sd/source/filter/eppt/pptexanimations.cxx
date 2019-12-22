@@ -106,12 +106,12 @@ static void ImplTranslateAttribute( OUString& rString, const TranslateMode eTran
     }
     else if ( eTranslateMode & TRANSLATE_MEASURE )
     {
-        const sal_Char* pDest[] = { "#ppt_x", "#ppt_y", "#ppt_w", "#ppt_h", nullptr };
-        const sal_Char* pSource[] = { "x", "y", "width", "height", nullptr };
+        const char* pDest[] = { "#ppt_x", "#ppt_y", "#ppt_w", "#ppt_h", nullptr };
+        const char* pSource[] = { "x", "y", "width", "height", nullptr };
         sal_Int32 nIndex = 0;
 
-        const sal_Char** ps = pSource;
-        const sal_Char** pd = pDest;
+        const char** ps = pSource;
+        const char** pd = pDest;
 
         while( *ps )
         {
@@ -215,9 +215,9 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
     return nPresetSubType;
 }
 
-const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection )
+const char* AnimationExporter::FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection )
 {
-    const sal_Char* pRet = nullptr;
+    const char* pRet = nullptr;
     int             nFit = 0;
 
     const oox::ppt::transition* p = oox::ppt::transition::getList();
@@ -1519,7 +1519,7 @@ sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAtt
 
     struct Entry
     {
-        const sal_Char* pName;
+        const char* pName;
         sal_uInt8 nType;
     };
     static const Entry lcl_attributeMap[] =
@@ -1879,7 +1879,7 @@ void AnimationExporter::exportTransitionFilter( SvStream& rStrm, const Reference
         rStrm.WriteUInt32( nBits )
              .WriteUInt32( nTransition );
     }
-    const sal_Char* pFilter = FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
+    const char* pFilter = FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
     if ( pFilter )
     {
         const OUString aStr( OUString::createFromAscii( pFilter ) );

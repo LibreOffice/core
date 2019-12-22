@@ -105,7 +105,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
             {
                 try
                 {
-                    std::unique_ptr<sal_Char[]> pString( new sal_Char[ nItemSize ] );
+                    std::unique_ptr<char[]> pString( new char[ nItemSize ] );
                     if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
                     {
                         nItemSize >>= 1;
@@ -292,7 +292,7 @@ void Section::GetDictionary(Dictionary& rDict)
             }
             else
             {
-                std::unique_ptr<sal_Char[]> pString( new sal_Char[nSize] );
+                std::unique_ptr<char[]> pString( new char[nSize] );
                 aStream.ReadBytes(pString.get(), nSize);
                 aString = OUString(pString.get(), lcl_getMaxSafeStrLen(nSize), mnTextEnc);
             }

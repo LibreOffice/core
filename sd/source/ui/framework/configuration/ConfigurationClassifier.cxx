@@ -150,7 +150,7 @@ void ConfigurationClassifier::CopyResources (
 #if DEBUG_SD_CONFIGURATION_TRACE
 
 void ConfigurationClassifier::TraceResourceIdVector (
-    const sal_Char* pMessage,
+    const char* pMessage,
     const ResourceIdVector& rResources)
 {
 

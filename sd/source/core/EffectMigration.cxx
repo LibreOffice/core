@@ -52,7 +52,7 @@ namespace {
 struct deprecated_FadeEffect_conversion_table_entry
 {
     FadeEffect const  meFadeEffect;
-    const sal_Char* mpPresetId;
+    const char* mpPresetId;
 };
 
 }
@@ -222,8 +222,8 @@ namespace {
 struct deprecated_AnimationEffect_conversion_table_entry
 {
     AnimationEffect const meEffect;
-    const sal_Char* mpPresetId;
-    const sal_Char* mpPresetSubType;
+    const char* mpPresetId;
+    const char* mpPresetSubType;
 };
 
 }

@@ -89,7 +89,7 @@ public:
     const ResourceIdVector& GetC1andC2() const { return maC1andC2;}
 
     static void TraceResourceIdVector (
-        const sal_Char* pMessage,
+        const char* pMessage,
         const ResourceIdVector& rResources);
 
 #endif

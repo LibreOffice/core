@@ -130,16 +130,16 @@ namespace {
 
 struct XML_SERVICEMAP
 {
-    const sal_Char* mpService;
-    const sal_Char* mpStream;
+    const char* mpService;
+    const char* mpStream;
 };
 
 struct XML_SERVICES
 {
-    const sal_Char* mpMeta;
-    const sal_Char* mpStyles;
-    const sal_Char* mpContent;
-    const sal_Char* mpSettings;
+    const char* mpMeta;
+    const char* mpStyles;
+    const char* mpContent;
+    const char* mpSettings;
 };
 
 }
@@ -180,7 +180,7 @@ ErrCode ReadThroughComponent(
     const Reference<XComponent>& xModelComponent,
     const OUString& rStreamName,
     Reference<uno::XComponentContext> const & rxContext,
-    const sal_Char* pFilterName,
+    const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     bool bMustBeSuccessfull,
@@ -311,10 +311,10 @@ ErrCode ReadThroughComponent(
 ErrCode ReadThroughComponent(
     const uno::Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
-    const sal_Char* pStreamName,
-    const sal_Char* pCompatibilityStreamName,
+    const char* pStreamName,
+    const char* pCompatibilityStreamName,
     Reference<uno::XComponentContext> const & rxContext,
-    const sal_Char* pFilterName,
+    const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     bool bMustBeSuccessfull )
