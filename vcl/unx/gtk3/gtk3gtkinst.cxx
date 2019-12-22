@@ -7189,10 +7189,12 @@ public:
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
 
         GtkWidget* pImage = nullptr;
+
         if (GdkPixbuf* pixbuf = getPixbuf(rIcon))
         {
             pImage = gtk_image_new_from_pixbuf(pixbuf);
             g_object_unref(pixbuf);
+            gtk_widget_show(pImage);
         }
 
         gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
