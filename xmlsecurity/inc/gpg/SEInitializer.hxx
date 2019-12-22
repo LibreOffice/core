@@ -20,7 +20,7 @@
 
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
-class XSECXMLSEC_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper
+class XSECXMLSEC_DLLPUBLIC SEInitializerGpg final : public cppu::WeakImplHelper
 <
     css::xml::crypto::XSEInitializer,
     css::lang::XServiceInfo

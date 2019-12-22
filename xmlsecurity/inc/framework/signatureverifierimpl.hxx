@@ -39,7 +39,7 @@ typedef cppu::ImplInheritanceHelper
     css::lang::XServiceInfo
 > SignatureVerifierImpl_Base;
 
-class SignatureVerifierImpl : public SignatureVerifierImpl_Base
+class SignatureVerifierImpl final : public SignatureVerifierImpl_Base
 /****** SignatureVerifier.hxx/CLASS SignatureVerifierImpl *********************
  *
  *   NAME

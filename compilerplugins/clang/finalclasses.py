@@ -32,6 +32,7 @@ with open("workdir/loplugin.finalclasses.log") as txt:
         else:
             print( "unknown line: " + line)
 
+match_module_inc = re.compile('^\w+/inc/')
 tmpset = set()
 for clazz in sorted(definitionSet - inheritFromSet):
     file = definitionToFileDict[clazz]
@@ -42,7 +43,7 @@ for clazz in sorted(definitionSet - inheritFromSet):
     if (file.startswith("workdir/")): continue
     # We are only really interested in classes that are shared between linkage units, where the compiler
     # is not able to figure out for itself that classes are final.
-    if not(file.startswith("include/") or file.startswith("sw/inc/") or file.startswith("sc/inc/") or file.startswith("vcl/inc/")): continue
+    if not(file.startswith("include/") or match_module_inc.match(file)): continue
     # Exclude URE
     if file.startswith("include/com/"): continue
     if file.startswith("include/cppu/"): continue

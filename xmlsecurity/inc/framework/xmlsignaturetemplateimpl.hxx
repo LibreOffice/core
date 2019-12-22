@@ -34,7 +34,7 @@
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
-class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
+class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignatureTemplate ,
     css::lang::XServiceInfo >
 {

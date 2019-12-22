@@ -32,7 +32,7 @@ namespace xml { namespace crypto {
 
 class MacroSecurityTP;
 
-class MacroSecurity : public weld::GenericDialogController
+class MacroSecurity final : public weld::GenericDialogController
 {
 private:
     friend class MacroSecurityLevelTP;
