@@ -21,11 +21,8 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/field.hxx>
 
 namespace sc { namespace sidebar {
 
@@ -63,17 +60,29 @@ public:
 
 private:
     //ui controls
-    VclPtr<FixedText>                                  mpFTLeftIndent;
-    VclPtr<MetricField>                                mpMFLeftIndent;
-    VclPtr<CheckBox>                                   mpCBXWrapText;
-    VclPtr<CheckBox>                                   mpCBXMergeCell;
-    VclPtr<FixedText>                                  mpFtRotate;
-    VclPtr<MetricBox>                                  mpMtrAngle;
-    VclPtr<RadioButton>                                mpRefEdgeBottom;
-    VclPtr<RadioButton>                                mpRefEdgeTop;
-    VclPtr<RadioButton>                                mpRefEdgeStd;
-    VclPtr<CheckBox>                                   mpCBStacked;
-    VclPtr<VclHBox>                                    mpTextOrientBox;
+    std::unique_ptr<weld::Label> mxFTLeftIndent;
+    std::unique_ptr<weld::MetricSpinButton> mxMFLeftIndent;
+    std::unique_ptr<weld::CheckButton> mxCBXWrapText;
+    std::unique_ptr<weld::CheckButton> mxCBXMergeCell;
+    std::unique_ptr<weld::Label> mxFtRotate;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrAngle;
+    std::unique_ptr<weld::RadioButton> mxRefEdgeBottom;
+    std::unique_ptr<weld::RadioButton> mxRefEdgeTop;
+    std::unique_ptr<weld::RadioButton> mxRefEdgeStd;
+    std::unique_ptr<weld::CheckButton> mxCBStacked;
+    std::unique_ptr<weld::Widget> mxTextOrientBox;
+
+    std::unique_ptr<weld::Toolbar> mxHorizontalAlign;
+    std::unique_ptr<ToolbarUnoDispatcher> mxHorizontalAlignDispatch;
+
+    std::unique_ptr<weld::Toolbar> mxVertAlign;
+    std::unique_ptr<ToolbarUnoDispatcher> mxVertAlignDispatch;
+
+    std::unique_ptr<weld::Toolbar> mxWriteDirection;
+    std::unique_ptr<ToolbarUnoDispatcher> mxWriteDirectionDispatch;
+
+    std::unique_ptr<weld::Toolbar> mxIndentButtons;
+    std::unique_ptr<ToolbarUnoDispatcher> mxIndentButtonsDispatch;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
@@ -84,16 +93,17 @@ private:
     ::sfx2::sidebar::ControllerItem             maRefEdgeControl;
 
     bool                                        mbMultiDisable : 1;
+    bool                                        mbSettingToggles : 1;
 
     vcl::EnumContext                            maContext;
     SfxBindings* const                          mpBindings;
 
-    DECL_LINK( MFLeftIndentMdyHdl, Edit&, void );
-    DECL_LINK( CBOXMergnCellClkHdl, Button*, void );
-    DECL_LINK( CBOXWrapTextClkHdl, Button*, void );
-    DECL_LINK( AngleModifiedHdl, Edit&, void );
-    DECL_LINK( ClickStackHdl, Button*, void );
-    DECL_LINK( ReferenceEdgeHdl, Button*, void );
+    DECL_LINK( MFLeftIndentMdyHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( CBOXMergnCellClkHdl, weld::ToggleButton&, void );
+    DECL_LINK( CBOXWrapTextClkHdl, weld::ToggleButton&, void );
+    DECL_LINK( AngleModifiedHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ClickStackHdl, weld::ToggleButton&, void );
+    DECL_LINK( ReferenceEdgeHdl, weld::ToggleButton&, void );
 
     void Initialize();
     static void FormatDegrees(double& dTmp);
