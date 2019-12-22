@@ -248,7 +248,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference<XComponent>& xComponent,
     Reference<uno::XComponentContext> const & rxContext,
     Reference<beans::XPropertySet> const & rPropSet,
-    const sal_Char* pComponentName )
+    const char* pComponentName )
 {
     OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
     OSL_ENSURE(xComponent.is(), "Need component!");
@@ -292,10 +292,10 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xComponent,
-    const sal_Char* pStreamName,
+    const char* pStreamName,
     Reference<uno::XComponentContext> const & rxContext,
     Reference<beans::XPropertySet> const & rPropSet,
-    const sal_Char* pComponentName
+    const char* pComponentName
     )
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
@@ -1291,7 +1291,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                 // nBold:   -1 = yet undefined; 0 = false; 1 = true;
                 // nItalic: -1 = yet undefined; 0 = false; 1 = true;
                 // nSansSerifFixed: -1 = undefined; 0 = sans; 1 = serif; 2 = fixed;
-                const sal_Char *pText = "normal";
+                const char *pText = "normal";
                 if (nSansSerifFixed == -1 || nSansSerifFixed == 1)
                 {
                     pText = "normal";

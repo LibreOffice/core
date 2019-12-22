@@ -577,7 +577,7 @@ private:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * javavm_component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * javavm_component_getFactory(char const * pImplName,
                                                 void * pServiceManager,
                                                 void * pRegistryKey)
 {

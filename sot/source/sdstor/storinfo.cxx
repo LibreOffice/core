@@ -36,7 +36,7 @@ SotClipboardFormatId ReadClipboardFormat( SvStream & rStm )
     if( nLen > 0 )
     {
         // get a string name
-        std::unique_ptr<sal_Char[]> p(new( ::std::nothrow ) sal_Char[ nLen ]);
+        std::unique_ptr<char[]> p(new( ::std::nothrow ) char[ nLen ]);
         if (p && rStm.ReadBytes(p.get(), nLen) == static_cast<std::size_t>(nLen))
         {
             nFormat = SotExchange::RegisterFormatName(OUString(p.get(), nLen-1, RTL_TEXTENCODING_ASCII_US));

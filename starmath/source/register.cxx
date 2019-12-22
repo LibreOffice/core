@@ -31,7 +31,7 @@ using namespace ::com::sun::star::lang;
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void* sm_component_getFactory( const sal_Char* pImplementationName,
+SAL_DLLPUBLIC_EXPORT void* sm_component_getFactory( const char* pImplementationName,
                                      void* pServiceManager,
                                      void* /*pRegistryKey*/ )
 {

@@ -51,7 +51,7 @@ SmToken::SmToken()
 
 SmToken::SmToken(SmTokenType eTokenType,
                  sal_Unicode cMath,
-                 const sal_Char* pText,
+                 const char* pText,
                  TG nTokenGroup,
                  sal_uInt16 nTokenLevel)
     : aText(OUString::createFromAscii(pText))
@@ -1644,7 +1644,7 @@ std::unique_ptr<SmNode> SmParser::DoOper()
         case TLIMSUP :
         case TLIMINF :
             {
-                const sal_Char* pLim = nullptr;
+                const char* pLim = nullptr;
                 switch (eType)
                 {
                     case TLIM :     pLim = "lim";       break;
