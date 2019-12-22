@@ -53,7 +53,7 @@ namespace {
 struct BuiltinFormat
 {
     sal_Int32           mnNumFmtId;         /// Built-in number format index.
-    const sal_Char*     mpcFmtCode;         /// Format string, UTF-8, may be 0 (mnPredefId is used then).
+    const char*     mpcFmtCode;         /// Format string, UTF-8, may be 0 (mnPredefId is used then).
     sal_Int16 const     mnPredefId;         /// Predefined format index, if mpcFmtCode is 0.
     sal_Int32 const     mnReuseId;          /// Use this format, if mpcFmtCode is 0 and mnPredefId is -1.
 };
@@ -1627,8 +1627,8 @@ static const BuiltinFormat spBuiltinFormats_zh_TW[] =
 /** Specifies a built-in number format table for a specific locale. */
 struct BuiltinFormatTable
 {
-    const sal_Char*     mpcLocale;          /// The locale for this table.
-    const sal_Char*     mpcParent;          /// The locale of the parent table.
+    const char*          mpcLocale;          /// The locale for this table.
+    const char*          mpcParent;          /// The locale of the parent table.
     const BuiltinFormat* mpFormats;         /// The number format table (may be 0, if equal to parent).
 };
 
@@ -1927,7 +1927,7 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
     maModel.maFmtCode = sFormat.makeStringAndClear();
 }
 
-void NumberFormat::setFormatCode( const Locale& rLocale, const sal_Char* pcFmtCode )
+void NumberFormat::setFormatCode( const Locale& rLocale, const char* pcFmtCode )
 {
     maModel.maLocale = rLocale;
     maModel.maFmtCode = OStringToOUString( OString( pcFmtCode ), RTL_TEXTENCODING_UTF8 );

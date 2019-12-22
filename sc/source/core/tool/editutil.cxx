@@ -71,7 +71,7 @@ OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
     return aRet;
 }
 
-static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Char c )
+static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const char c )
 {
     sal_Int32 nParCount = rEngine.GetParagraphCount();
     OUStringBuffer aRet( nParCount * 80 );
@@ -84,7 +84,7 @@ static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Cha
     return aRet.makeStringAndClear();
 }
 
-static OUString lcl_GetDelimitedString( const EditTextObject& rEdit, const sal_Char c )
+static OUString lcl_GetDelimitedString( const EditTextObject& rEdit, const char c )
 {
     sal_Int32 nParCount = rEdit.GetParagraphCount();
     OUStringBuffer aRet( nParCount * 80 );

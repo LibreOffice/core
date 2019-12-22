@@ -445,7 +445,7 @@ private:
 namespace {
 
 // different names for bold font style (lowercase)
-static const sal_Char* const sppcBoldNames[] =
+static const char* const sppcBoldNames[] =
 {
     "bold",
     "fett",             // German 'bold'
@@ -456,7 +456,7 @@ static const sal_Char* const sppcBoldNames[] =
 };
 
 // different names for italic font style (lowercase)
-static const sal_Char* const sppcItalicNames[] =
+static const char* const sppcItalicNames[] =
 {
     "italic",
     "kursiv",           // German 'italic'

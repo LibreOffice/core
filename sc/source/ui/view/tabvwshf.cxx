@@ -370,7 +370,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OUString      aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
                     OUString aName;
                     OUString      aDlgTitle;
-                    const sal_Char* pHelpId = nullptr;
+                    const char* pHelpId = nullptr;
 
                     switch ( nSlot )
                     {

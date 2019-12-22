@@ -63,7 +63,7 @@ public:
     /** Sets the passed format code, encoded in UTF-8. */
     void                setFormatCode(
                             const css::lang::Locale& rLocale,
-                            const sal_Char* pcFmtCode );
+                            const char* pcFmtCode );
     /** Sets the passed predefined format code identifier. */
     void                setPredefinedId(
                             const css::lang::Locale& rLocale,

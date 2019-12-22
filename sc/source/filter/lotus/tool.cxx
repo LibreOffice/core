@@ -35,14 +35,14 @@
 
 #include <math.h>
 
-void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString)
+void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, char* pString)
 {
     // evaluate Label-Format
     SAL_WARN_IF( pString == nullptr, "sc.filter", "PutFormString(): pString == NULL" );
     if (!pString)
         return;
 
-    sal_Char            cForm;
+    char            cForm;
     SvxHorJustifyItem*  pJustify = nullptr;
 
     cForm = *pString;

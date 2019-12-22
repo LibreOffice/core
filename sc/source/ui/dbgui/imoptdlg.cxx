@@ -23,7 +23,7 @@
 #include <osl/thread.h>
 #include <global.hxx>
 
-static const sal_Char pStrFix[] = "FIX";
+static const char pStrFix[] = "FIX";
 
 //  The option string can no longer contain a semicolon (because of pick list),
 //  therefore, starting with version 336 comma instead

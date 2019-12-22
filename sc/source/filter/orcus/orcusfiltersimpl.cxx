@@ -56,7 +56,7 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
     {
         char pData[nReadBuffer];
         nRead = pStream->ReadBytes(pData, nReadBuffer);
-        aBuffer.append(static_cast<sal_Char*>(pData), nRead);
+        aBuffer.append(pData, nRead);
     }
     while (nRead == nReadBuffer);
 

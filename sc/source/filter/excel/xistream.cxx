@@ -944,7 +944,7 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
     nChars = GetMaxRawReadSize(nChars);
-    std::unique_ptr<sal_Char[]> pcBuffer(new sal_Char[ nChars + 1 ]);
+    std::unique_ptr<char[]> pcBuffer(new char[ nChars + 1 ]);
     sal_uInt16 nCharsRead = ReadRawData( pcBuffer.get(), nChars );
     pcBuffer[ nCharsRead ] = '\0';
     OUString aRet( pcBuffer.get(), strlen(pcBuffer.get()), mrRoot.GetTextEncoding() );

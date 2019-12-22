@@ -2916,7 +2916,7 @@ OUString XclImpPictureObj::GetOleStorageName() const
     if( (mbEmbedded || mbLinked) && !mbControl && (mnStorageId > 0) )
     {
         aStrgName = mbEmbedded ? OUStringLiteral(EXC_STORAGE_OLE_EMBEDDED) : OUStringLiteral(EXC_STORAGE_OLE_LINKED);
-        static const sal_Char spcHexChars[] = "0123456789ABCDEF";
+        static const char spcHexChars[] = "0123456789ABCDEF";
         for( sal_uInt8 nIndex = 32; nIndex > 0; nIndex -= 4 )
             aStrgName.append(OUStringChar( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] ));
     }

@@ -434,7 +434,7 @@ void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewS
     {
         // make sure it's a plain UTF-8 stream as written by OOo itself
 
-        const sal_Char pXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        const char pXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         sal_Int32 nLen = strlen(pXmlHeader);
 
         uno::Sequence<sal_Int8> aFileStart(nLen);

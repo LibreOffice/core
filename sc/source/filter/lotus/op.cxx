@@ -113,7 +113,7 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= std::min<sal_uInt16>(n, 5);
 
-    std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
+    std::unique_ptr<char[]> pText(new char[n + 1]);
     r.ReadBytes(pText.get(), n);
     pText[n] = 0;
 
@@ -193,7 +193,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     // POST: don't save for invalid coordinates
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
 
-    sal_Char cBuffer[ 16+1 ];
+    char cBuffer[ 16+1 ];
     r.ReadBytes(cBuffer, 16);
     cBuffer[ 16 ] = 0;
 
@@ -209,7 +209,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
             pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
                     static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
 
-        sal_Char cBuf[sizeof(cBuffer)+1];
+        char cBuf[sizeof(cBuffer)+1];
         if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
         {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
@@ -232,7 +232,7 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
     sal_uInt8               nType;
 
-    sal_Char cBuffer[ 16+1 ];
+    char cBuffer[ 16+1 ];
     r.ReadBytes(cBuffer, 16);
     cBuffer[ 16 ] = 0;
 
@@ -248,7 +248,7 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
             pRange.reset(new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt),
                     static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) ));
 
-        sal_Char cBuf[sizeof(cBuffer)+1];
+        char cBuf[sizeof(cBuffer)+1];
         if( rtl::isAsciiDigit( static_cast<unsigned char>(*cBuffer) ) )
         {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
@@ -363,7 +363,7 @@ void OP_Label123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= std::min<sal_uInt16>(n, 4);
 
-    std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
+    std::unique_ptr<char[]> pText(new char[n + 1]);
     r.ReadBytes(pText.get(), n);
     pText[ n ] = 0;
 
@@ -446,7 +446,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= std::min<sal_uInt16>(n, 4);
 
-    std::unique_ptr<sal_Char[]> pText(new sal_Char[n + 1]);
+    std::unique_ptr<char[]> pText(new char[n + 1]);
     r.ReadBytes(pText.get(), n);
     pText[ n ] = 0;
 
@@ -580,11 +580,11 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
     sal_uInt16 nSheetNum(0);
     rStream.ReadUInt16(nSheetNum);
 
-    ::std::vector<sal_Char> sSheetName;
+    ::std::vector<char> sSheetName;
     sSheetName.reserve(nLength-4);
     for (sal_uInt16 i = 4; i < nLength; ++i)
     {
-        sal_Char c;
+        char c;
         rStream.ReadChar( c );
         sSheetName.push_back(c);
     }

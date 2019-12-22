@@ -3282,9 +3282,9 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
 {
     struct ConvertInfo
     {
-        const sal_Char* pCurrText;
-        double          fRate;
-        int             nDec;
+        const char* pCurrText;
+        double      fRate;
+        int         nDec;
     };
     static const ConvertInfo aConvertTable[] = {
         { "EUR", 1.0,      2 },

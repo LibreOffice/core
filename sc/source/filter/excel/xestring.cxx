@@ -146,7 +146,7 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 {
     if( !cChar )
     {
-        sal_Char cByteChar = 0;
+        char cByteChar = 0;
         BuildAppend( &cByteChar, 1 );
     }
     else
@@ -473,13 +473,13 @@ void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin,
         mbWrapped = ::std::find( aBeg, aEnd, EXC_LF ) != aEnd;
 }
 
-void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
+void XclExpString::CharsToBuffer( const char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
     OSL_ENSURE( maCharBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
         "XclExpString::CharsToBuffer - char buffer invalid" );
     ScfUInt8Vec::iterator aBeg = maCharBuffer.begin() + nBegin;
     ScfUInt8Vec::iterator aEnd = aBeg + nLen;
-    const sal_Char* pcSrcChar = pcSource;
+    const char* pcSrcChar = pcSource;
     for( ScfUInt8Vec::iterator aIt = aBeg; aIt != aEnd; ++aIt, ++pcSrcChar )
         *aIt = static_cast< sal_uInt8 >( *pcSrcChar );
     mbIsUnicode = false;
@@ -518,7 +518,7 @@ void XclExpString::Build( const sal_Unicode* pcSource, sal_Int32 nCurrLen, XclSt
     CharsToBuffer( pcSource, 0, mnLen );
 }
 
-void XclExpString::Build( const sal_Char* pcSource, sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+void XclExpString::Build( const char* pcSource, sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     Init( nCurrLen, nFlags, nMaxLen, false );
     CharsToBuffer( pcSource, 0, mnLen );
@@ -544,7 +544,7 @@ void XclExpString::BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen )
     }
 }
 
-void XclExpString::BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen )
+void XclExpString::BuildAppend( const char* pcSource, sal_Int32 nAddLen )
 {
     OSL_ENSURE( !mbIsBiff8, "XclExpString::BuildAppend - must not be called at unicode strings" );
     if( !mbIsBiff8 )

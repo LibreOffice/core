@@ -173,7 +173,7 @@ public:
     // and to create own derivations of ObjectContact
     virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
         SdrPageWindow& rPageWindow,
-        const sal_Char* pDebugName) const override;
+        const char* pDebugName) const override;
 };
 
 extern Point aDragStartDiff;

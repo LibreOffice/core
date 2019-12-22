@@ -21,7 +21,7 @@
 #include <optab.h>
 #include "lotfilter.hxx"
 
-// edit function sal_Char *X( sal_Char * )
+// edit function char *X( char * )
 OPCODE_FKT LotusContext::pOpFkt[ FKT_LIMIT ] =
 {                       //  Code
     OP_BOF,             //    0

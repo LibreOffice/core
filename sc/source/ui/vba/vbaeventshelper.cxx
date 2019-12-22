@@ -529,13 +529,13 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
         return;
 
     // global
-    auto registerAutoEvent = [this](sal_Int32 nID, const sal_Char* sName)
+    auto registerAutoEvent = [this](sal_Int32 nID, const char* sName)
     { registerEventHandler(nID, script::ModuleType::NORMAL, (OString("Auto_").concat(sName)).getStr(), -1, uno::Any(false)); };
     registerAutoEvent(AUTO_OPEN,  "Open");
     registerAutoEvent(AUTO_CLOSE, "Close");
 
     // Workbook
-    auto registerWorkbookEvent = [this](sal_Int32 nID, const sal_Char* sName, sal_Int32 nCancelIndex)
+    auto registerWorkbookEvent = [this](sal_Int32 nID, const char* sName, sal_Int32 nCancelIndex)
     { registerEventHandler(nID, script::ModuleType::DOCUMENT, (OString("Workbook_").concat(sName)).getStr(), nCancelIndex, uno::Any(false)); };
     registerWorkbookEvent( WORKBOOK_ACTIVATE,            "Activate",           -1 );
     registerWorkbookEvent( WORKBOOK_DEACTIVATE,          "Deactivate",         -1 );
@@ -550,7 +550,7 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
     registerWorkbookEvent( WORKBOOK_WINDOWRESIZE,        "WindowResize",       -1 );
 
     // Worksheet events. All events have a corresponding workbook event.
-    auto registerWorksheetEvent = [this](sal_Int32 nID, const sal_Char* sName, sal_Int32 nCancelIndex)
+    auto registerWorksheetEvent = [this](sal_Int32 nID, const char* sName, sal_Int32 nCancelIndex)
     {
         registerEventHandler(nID, script::ModuleType::DOCUMENT, (OString("Worksheet_").concat(sName)).getStr(),
                              nCancelIndex, uno::Any(true));

@@ -97,7 +97,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
             break;
         case ParamType::PTR_STRING :
         {
-            sal_Char* pChar = static_cast<sal_Char*>(pData);
+            char* pChar = static_cast<char*>(pData);
             if ( p->pStr )
                 *p->pStr = OUString( pChar, strlen(pChar),osl_getThreadTextEncoding() );
             else

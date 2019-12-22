@@ -159,7 +159,7 @@ void ImportLotus::Userrange()
 
     Read( nRangeType );
 
-    sal_Char aBuffer[ 17 ];
+    char aBuffer[ 17 ];
     pIn->ReadBytes(aBuffer, 16);
     aBuffer[ 16 ] = 0;
     OUString      aName( aBuffer, strlen(aBuffer), eQuellChar );
@@ -198,7 +198,7 @@ void ImportLotus::Labelcell()
 {
     ScAddress   aA;
     OUString    aLabel;
-    sal_Char    cAlign;
+    char        cAlign;
 
     Read( aA );
     Read( cAlign );

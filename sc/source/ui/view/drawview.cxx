@@ -1159,7 +1159,7 @@ namespace sdr
             explicit ObjectContactOfScDrawView(
                 const ScDrawView& rScDrawView,
                 SdrPageWindow& rPageWindow,
-                const sal_Char* pDebugName);
+                const char* pDebugName);
 
             virtual bool supportsGridOffsets() const override;
             virtual void calculateGridOffsetForViewOjectContact(
@@ -1175,7 +1175,7 @@ namespace sdr
         ObjectContactOfScDrawView::ObjectContactOfScDrawView(
             const ScDrawView& rScDrawView,
             SdrPageWindow& rPageWindow,
-            const sal_Char* pDebugName)
+            const char* pDebugName)
         :   ObjectContactOfPageView(rPageWindow, pDebugName),
             mrScDrawView(rScDrawView)
         {
@@ -1232,7 +1232,7 @@ namespace sdr
 // Create own derivation of ObjectContact for calc
 sdr::contact::ObjectContact* ScDrawView::createViewSpecificObjectContact(
     SdrPageWindow& rPageWindow,
-    const sal_Char* pDebugName) const
+    const char* pDebugName) const
 {
     return new sdr::contact::ObjectContactOfScDrawView(
         *this,

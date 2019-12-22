@@ -255,7 +255,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
     {
         // When not loading, set up fake http headers to force the SfxHTMLParser to use UTF8
         // (used when pasting from clipboard)
-        const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
+        const char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
             OUString aContentType = "text/html; charset=" +
@@ -2774,7 +2774,7 @@ ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
     {
         /*  When not loading, set up fake HTTP headers to force the SfxHTMLParser
             to use UTF8 (used when pasting from clipboard) */
-        const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
+        const char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
             OUString aContentType = "text/html; charset=" +

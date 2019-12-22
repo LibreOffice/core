@@ -215,7 +215,7 @@ class ScfPropSetHelper
 {
 public:
     /** @param ppPropNames  A null-terminated array of ASCII property names. */
-    explicit            ScfPropSetHelper( const sal_Char* const* ppcPropNames );
+    explicit            ScfPropSetHelper( const char* const* ppcPropNames );
 
     // read properties --------------------------------------------------------
 

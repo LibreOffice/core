@@ -150,12 +150,12 @@ public:
 
     static void             SetOptionalPropertyValue(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
-        const sal_Char* pPropName, const css::uno::Any& rVal );
+        const char* pPropName, const css::uno::Any& rVal );
 
     template<typename ValueType>
     static void             SetOptionalPropertyValue(
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
-        const sal_Char* pPropName, const ValueType& rVal )
+        const char* pPropName, const ValueType& rVal )
     {
         css::uno::Any any;
         any <<= rVal;

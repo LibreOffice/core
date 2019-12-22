@@ -23,7 +23,7 @@
 
 OUString ScSheetEvents::GetEventName(ScSheetEventId nEvent)
 {
-    static const sal_Char* aEventNames[] =
+    static const char* aEventNames[] =
     {
         "OnFocus",                  // SC_SHEETEVENT_FOCUS
         "OnUnfocus",                // SC_SHEETEVENT_UNFOCUS

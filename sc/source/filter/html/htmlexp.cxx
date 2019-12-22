@@ -80,11 +80,11 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-const static sal_Char sMyBegComment[]   = "<!-- ";
-const static sal_Char sMyEndComment[]   = " -->";
-const static sal_Char sDisplay[]        = "display:";
-const static sal_Char sBorder[]         = "border:";
-const static sal_Char sBackground[]     = "background:";
+const static char sMyBegComment[]   = "<!-- ";
+const static char sMyEndComment[]   = " -->";
+const static char sDisplay[]        = "display:";
+const static char sBorder[]         = "border:";
+const static char sBackground[]     = "background:";
 
 const sal_uInt16 ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {
@@ -100,7 +100,7 @@ const char* ScHTMLExport::pFontSizeCss[SC_HTML_FONTSIZES] =
 };
 
 const sal_uInt16 ScHTMLExport::nCellSpacing = 0;
-const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
+const char ScHTMLExport::sIndentSource[nIndentMax+1] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 // Macros for HTML export
@@ -178,7 +178,7 @@ static void lcl_AddStamp( OUString& rStr, const OUString& rName,
 
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
-    sal_Char    buf[24];
+    char    buf[24];
 
     // <font COLOR="#00FF40">hello</font>
     snprintf( buf, 24, "\"#%02X%02X%02X\"", rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
@@ -889,7 +889,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         aStrTD.append('"');
     }
 
-    const sal_Char* pChar;
+    const char* pChar;
     sal_uInt16 nHeightPixel;
 
     const ScMergeAttr& rMergeAttr = pAttr->GetItem( ATTR_MERGE, pCondItemSet );

@@ -116,7 +116,7 @@ rtl_TextEncoding ScfTools::GetSystemTextEncoding()
 
 OUString ScfTools::GetHexStr( sal_uInt16 nValue )
 {
-    const sal_Char pHex[] = "0123456789ABCDEF";
+    const char pHex[] = "0123456789ABCDEF";
     OUString aStr = OUStringChar( pHex[ nValue >> 12 ] )
                   + OUStringChar( pHex[ (nValue >> 8) & 0x000F ] )
                   + OUStringChar( pHex[ (nValue >> 4) & 0x000F ] )

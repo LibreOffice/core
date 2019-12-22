@@ -1490,8 +1490,8 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
 
 struct ScGetPivotDataFunctionEntry
 {
-    const sal_Char*         pName;
-    sal_Int16 const               eFunc;
+    const char*       pName;
+    sal_Int16 const   eFunc;
 };
 
 bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sal_Int16& rFunc )

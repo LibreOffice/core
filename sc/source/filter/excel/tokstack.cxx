@@ -445,7 +445,7 @@ TokenId TokenPool::Store( const sal_uInt16 nIndex )
 
 TokenId TokenPool::Store( const OUString& rString )
 {
-    // mostly copied to Store( const sal_Char* ), to avoid a temporary string
+    // mostly copied to Store( const char* ), to avoid a temporary string
     if (!CheckElementOrGrow())
         return static_cast<const TokenId>(nElementCurrent+1);
 
