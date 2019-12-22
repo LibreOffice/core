@@ -100,7 +100,7 @@ class SVX_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
     virtual ~SdrTableObj() override;
 
 public:
-    SdrTableObj(SdrModel& rSdrModel);
+    SdrTableObj(SdrModel& rSdrModel, bool bToClone = false);
     SdrTableObj(
         SdrModel& rSdrModel,
         const ::tools::Rectangle& rNewRect,
