@@ -17,11 +17,10 @@
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/weld.hxx>
 
 namespace weld
 {
-class Toolbar;
-
 class VCL_DLLPUBLIC ToolbarUnoDispatcher
 {
 private:
