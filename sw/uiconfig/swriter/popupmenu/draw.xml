@@ -77,4 +77,7 @@
   <menu:menuitem menu:id=".uno:SignSignatureLine"/>
   <menu:menuitem menu:id=".uno:EditQrCode"/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:NameGroup"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
 </menu:menupopup>
