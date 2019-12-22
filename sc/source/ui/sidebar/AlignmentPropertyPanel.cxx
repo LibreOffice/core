@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void)
 IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, Button*, void)
 {
     bool bState = mpCBXWrapText->IsChecked();
-    SfxBoolItem aItem( SID_ATTR_ALIGN_LINEBREAK , bState);
+    ScLineBreakCell aItem(bState);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_LINEBREAK,
             SfxCallMode::RECORD, { &aItem });
 }
@@ -324,10 +324,10 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         else
         {
             mpCBXWrapText->Enable();
-            if(eState >= SfxItemState::DEFAULT && dynamic_cast<const SfxBoolItem*>( pState) )
+            if(eState >= SfxItemState::DEFAULT && dynamic_cast<const ScLineBreakCell*>( pState) )
             {
                 mpCBXWrapText->EnableTriState(false);
-                const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
+                const ScLineBreakCell* pItem = static_cast<const ScLineBreakCell*>(pState);
                 mpCBXWrapText->Check(pItem->GetValue());
             }
             else if(eState == SfxItemState::DONTCARE)
