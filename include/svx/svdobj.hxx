@@ -1061,7 +1061,8 @@ public:
         SdrModel& rSdrModel,
         SdrInventor nInventor,
         sal_uInt16 nObjIdentifier,
-        const tools::Rectangle* pSnapRect = nullptr);
+        const tools::Rectangle* pSnapRect = nullptr,
+        bool bToClone = false);
 
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
@@ -1082,7 +1083,10 @@ template< typename T > T* SdrObject::CloneHelper(SdrModel& rTargetModel) const
         SdrObjFactory::MakeNewObject(
             rTargetModel,
             GetObjInventor(),
-            GetObjIdentifier()));
+            GetObjIdentifier(),
+            nullptr,            // No snap rectangle
+            true)               // Set cloning flag
+        );
 
     if(nullptr != pObj)
     {
