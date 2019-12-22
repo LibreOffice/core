@@ -66,7 +66,7 @@ public:
     bool                isExportVba() const;
 
 private:
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< css::uno::XComponentContext >
                         mxConfigAccess;
 };
 
