@@ -5842,6 +5842,15 @@ public:
         return VclPtr<VirtualDevice>::Create();
     }
 
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
+
+        PopupMenu* pPopup = pInstanceMenu ? pInstanceMenu->getMenu() : nullptr;
+
+        assert(pPopup && "TODO");
+    }
+
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
         if (rEvent.GetId() == VclEventId::DropdownPreOpen
@@ -6253,6 +6262,11 @@ public:
     }
 
     virtual void set_mru_entries(const OUString&) override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual void set_item_menu(const OString&, weld::Menu*) override
     {
         assert(false && "not implemented");
     }

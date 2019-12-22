@@ -8899,6 +8899,21 @@ int get_height_rows(int nRowHeight, int nSeparatorHeight, int nRows)
     return (nRowHeight * nRows) + (nSeparatorHeight * (nRows + 1));
 }
 
+tools::Rectangle get_row_area(GtkTreeView* pTreeView, GList* pColumns, GtkTreePath* pPath)
+{
+    tools::Rectangle aRet;
+
+    GdkRectangle aRect;
+    for (GList* pEntry = g_list_last(pColumns); pEntry; pEntry = g_list_previous(pEntry))
+    {
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+        gtk_tree_view_get_cell_area(pTreeView, pPath, pColumn, &aRect);
+        aRet.Union(tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height));
+    }
+
+    return aRet;
+}
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -11042,22 +11057,11 @@ public:
 
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override
     {
-        tools::Rectangle aRet;
-
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* pPath = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
-
-        GdkRectangle aRect;
-        for (GList* pEntry = g_list_last(m_pColumns); pEntry; pEntry = g_list_previous(pEntry))
-        {
-            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
-            gtk_tree_view_get_cell_area(m_pTreeView, pPath, pColumn, &aRect);
-            aRet.Union(tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height));
-        }
-
+        tools::Rectangle aRet = ::get_row_area(m_pTreeView, m_pColumns, pPath);
         gtk_tree_path_free(pPath);
-
         return aRet;
     }
 
@@ -12529,12 +12533,32 @@ struct GtkTreeRowReferenceDeleter
     }
 };
 
+// pop down the toplevel combobox menu when something is activated from a custom
+// submenu, i.e. wysiwyg style menu
+class CustomRenderMenuButtonHelper : public MenuHelper
+{
+private:
+    GtkToggleButton* m_pComboBox;
+public:
+    CustomRenderMenuButtonHelper(GtkMenu* pMenu, GtkToggleButton* pComboBox)
+        : MenuHelper(pMenu, false)
+        , m_pComboBox(pComboBox)
+    {
+    }
+    virtual void signal_activate(GtkMenuItem*) override
+    {
+        gtk_toggle_button_set_active(m_pComboBox, false);
+    }
+};
+
 class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
 private:
     GtkBuilder* m_pComboBuilder;
     GtkComboBox* m_pComboBox;
+    GtkOverlay* m_pOverlay;
     GtkTreeView* m_pTreeView;
+    GtkMenuButton* m_pOverlayButton; // button that the StyleDropdown uses on an active row
     GtkWindow* m_pMenuWindow;
     GtkTreeModel* m_pTreeModel;
     GtkCellRenderer* m_pButtonTextRenderer;
@@ -12542,11 +12566,14 @@ private:
     GtkWidget* m_pToggleButton;
     GtkWidget* m_pEntry;
     GtkCellView* m_pCellView;
+    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
     std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
+    OUString m_sMenuButtonRow;
     bool m_bHoverSelection;
+    bool m_bMouseInOverlayButton;
     bool m_bPopupActive;
     bool m_bAutoComplete;
     bool m_bAutoCompleteCaseSensitive;
@@ -13296,7 +13323,7 @@ private:
     void signal_motion()
     {
         // if hover-selection was disabled after pressing a key, then turn it back on again
-        if (!m_bHoverSelection)
+        if (!m_bHoverSelection && !m_bMouseInOverlayButton)
         {
             gtk_tree_view_set_hover_selection(m_pTreeView, true);
             m_bHoverSelection = true;
@@ -13366,8 +13393,6 @@ private:
                     break;
                 }
             }
-
-//TODO            set_active(0);
         }
 
         while (m_nMRUCount > m_nMaxMRUCount)
@@ -13489,12 +13514,70 @@ private:
         enable_notify_events();
     }
 
+    static gboolean signalGetChildPosition(GtkOverlay*, GtkWidget*, GdkRectangle* pAllocation, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        return pThis->signal_get_child_position(pAllocation);
+    }
+
+    bool signal_get_child_position(GdkRectangle* pAllocation)
+    {
+        if (!gtk_widget_get_visible(GTK_WIDGET(m_pOverlayButton)))
+            return false;
+        if (!gtk_widget_get_realized(GTK_WIDGET(m_pTreeView)))
+            return false;
+        int nRow = find_id_including_mru(m_sMenuButtonRow, true);
+        if (nRow == -1)
+            return false;
+
+        gtk_widget_get_preferred_width(GTK_WIDGET(m_pOverlayButton), &pAllocation->width, nullptr);
+
+        GtkTreePath* pPath = gtk_tree_path_new_from_indices(nRow, -1);
+        GList* pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        tools::Rectangle aRect = get_row_area(m_pTreeView, pColumns, pPath);
+        gtk_tree_path_free(pPath);
+        g_list_free(pColumns);
+
+        pAllocation->x = aRect.Right() - pAllocation->width;
+        pAllocation->y = aRect.Top();
+        pAllocation->height = aRect.GetHeight();
+
+        return true;
+    }
+
+    static gboolean signalOverlayButtonCrossing(GtkWidget*, GdkEventCrossing* pEvent, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        pThis->signal_overlay_button_crossing(pEvent->type == GDK_ENTER_NOTIFY);
+        return false;
+    }
+
+    void signal_overlay_button_crossing(bool bEnter)
+    {
+        m_bMouseInOverlayButton = bEnter;
+        if (bEnter)
+        {
+            if (m_bHoverSelection)
+            {
+                // once toggled button is pressed, turn off hover selection until
+                // mouse leaves the overlay button
+                gtk_tree_view_set_hover_selection(m_pTreeView, false);
+                m_bHoverSelection = false;
+            }
+            int nRow = find_id_including_mru(m_sMenuButtonRow, true);
+            assert(nRow != -1);
+            tree_view_set_cursor(nRow); // select the buttons row
+        }
+    }
+
 public:
     GtkInstanceComboBox(GtkBuilder* pComboBuilder, GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(gtk_builder_get_object(pComboBuilder, "box")), pBuilder, bTakeOwnership)
         , m_pComboBuilder(pComboBuilder)
         , m_pComboBox(pComboBox)
+        , m_pOverlay(GTK_OVERLAY(gtk_builder_get_object(pComboBuilder, "overlay")))
         , m_pTreeView(GTK_TREE_VIEW(gtk_builder_get_object(pComboBuilder, "treeview")))
+        , m_pOverlayButton(GTK_MENU_BUTTON(gtk_builder_get_object(pComboBuilder, "overlaybutton")))
         , m_pMenuWindow(GTK_WINDOW(gtk_builder_get_object(pComboBuilder, "popup")))
         , m_pTreeModel(gtk_combo_box_get_model(pComboBox))
         , m_pButtonTextRenderer(nullptr)
@@ -13503,6 +13586,7 @@ public:
         , m_pCellView(nullptr)
         , m_aQuickSelectionEngine(*this)
         , m_bHoverSelection(false)
+        , m_bMouseInOverlayButton(false)
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
         , m_bAutoCompleteCaseSensitive(false)
@@ -13615,6 +13699,11 @@ public:
         // support typeahead for the menu itself, typing into the menu will
         // select via the vcl selection engine, a matching entry.
         g_signal_connect(m_pMenuWindow, "key-press-event", G_CALLBACK(signalKeyPress), this);
+
+        g_signal_connect(m_pOverlay, "get-child-position", G_CALLBACK(signalGetChildPosition), this);
+        gtk_overlay_add_overlay(m_pOverlay, GTK_WIDGET(m_pOverlayButton));
+        g_signal_connect(m_pOverlayButton, "leave-notify-event", G_CALLBACK(signalOverlayButtonCrossing), this);
+        g_signal_connect(m_pOverlayButton, "enter-notify-event", G_CALLBACK(signalOverlayButtonCrossing), this);
     }
 
     virtual int get_active() const override
@@ -13986,7 +14075,11 @@ public:
 
     virtual bool has_focus() const override
     {
-        return gtk_widget_has_focus(m_pToggleButton) || gtk_widget_has_focus(m_pEntry) || GtkInstanceWidget::has_focus();
+        bool bRet = gtk_widget_has_focus(m_pToggleButton) || gtk_widget_has_focus(m_pEntry) ||
+                    gtk_widget_has_focus(GTK_WIDGET(m_pOverlayButton)) ||
+                    gtk_widget_has_focus(GTK_WIDGET(m_pTreeView)) || GtkInstanceWidget::has_focus();
+        fprintf(stderr, "has focus is %d\n", bRet);
+        return bRet;
     }
 
     virtual bool changed_by_direct_pick() const override
@@ -14025,6 +14118,21 @@ public:
     VclPtr<VirtualDevice> create_render_virtual_device() const override
     {
         return create_virtual_device();
+    }
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        m_xCustomMenuButtonHelper.reset();
+        gtk_widget_set_visible(GTK_WIDGET(m_pOverlayButton), false); // always hide so it will recalc location
+        GtkInstanceMenu* pPopoverWidget = dynamic_cast<GtkInstanceMenu*>(pMenu);
+        GtkWidget* pMenuWidget = GTK_WIDGET(pPopoverWidget ? pPopoverWidget->getMenu() : nullptr);
+        gtk_menu_button_set_popup(m_pOverlayButton, pMenuWidget);
+        if (pMenuWidget)
+        {
+            gtk_widget_set_visible(GTK_WIDGET(m_pOverlayButton), true);
+            m_xCustomMenuButtonHelper.reset(new CustomRenderMenuButtonHelper(GTK_MENU(pMenuWidget), GTK_TOGGLE_BUTTON(m_pToggleButton)));
+        }
+        m_sMenuButtonRow = OUString::fromUtf8(rIdent);
     }
 
     OUString get_mru_entries() const override
@@ -14442,6 +14550,11 @@ public:
     }
 
     virtual void set_mru_entries(const OUString&) override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual void set_item_menu(const OString&, weld::Menu*) override
     {
         assert(false && "not implemented");
     }
