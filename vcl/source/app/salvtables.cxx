@@ -5691,6 +5691,8 @@ protected:
     // owner for ListBox/ComboBox UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<vcl_type> m_xComboBox;
+    ScopedVclPtr<MenuButton> m_xMenuButton;
+    OUString m_sMenuButtonRow;
 
 public:
     SalInstanceComboBox(vcl_type* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -5714,7 +5716,10 @@ public:
 
     // ComboBoxes are comprised of multiple subwidgets, consider the lot as
     // one thing for focus
-    virtual bool has_focus() const override { return m_xWidget->HasChildPathFocus(); }
+    virtual bool has_focus() const override
+    {
+        return m_xWidget->HasChildPathFocus() || (m_xMenuButton && (m_xMenuButton->HasFocus() || m_xMenuButton->InPopupMode()));
+    }
 
     virtual OUString get_active_id() const override
     {
@@ -5827,8 +5832,19 @@ public:
     {
         vcl::RenderContext* pRenderContext = pEvent->GetRenderContext();
         auto nPos = pEvent->GetItemId();
-        signal_custom_render(*pRenderContext, pEvent->GetRect(), pEvent->IsSelected(), get_id(nPos));
+        const tools::Rectangle& rRect = pEvent->GetRect();
+        const OUString sId = get_id(nPos);
+        signal_custom_render(*pRenderContext, rRect, pEvent->IsSelected(), sId);
         m_xComboBox->DrawEntry(*pEvent, false, false);  // draw separator
+
+        if (m_xMenuButton && m_xMenuButton->IsVisible() && m_sMenuButtonRow == sId)
+        {
+            if (m_xMenuButton->GetParent() != pEvent->GetWindow())
+                m_xMenuButton->SetParent(pEvent->GetWindow());
+            int nButtonWidth = get_menu_button_width();
+            m_xMenuButton->SetSizePixel(Size(nButtonWidth, rRect.GetHeight()));
+            m_xMenuButton->SetPosPixel(Point(rRect.GetWidth() - nButtonWidth, rRect.getY()));
+        }
     }
 
     VclPtr<VirtualDevice> create_render_virtual_device() const override
@@ -5836,10 +5852,30 @@ public:
         return VclPtr<VirtualDevice>::Create();
     }
 
-    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
     {
-        if (rEvent.GetId() == VclEventId::DropdownPreOpen
-            || rEvent.GetId() == VclEventId::DropdownClose)
+        SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
+
+        PopupMenu* pPopup = pInstanceMenu ? pInstanceMenu->getMenu() : nullptr;
+
+        if (!m_xMenuButton)
+            m_xMenuButton = VclPtr<MenuButton>::Create(m_xComboBox, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+
+        m_xMenuButton->SetPopupMenu(pPopup);
+        m_xMenuButton->Show(pPopup != nullptr);
+        m_sMenuButtonRow = OUString::fromUtf8(rIdent);
+    }
+
+    int get_menu_button_width() const override
+    {
+        const int nButtonWidth = 20;
+        return nButtonWidth;
+    }
+
+    void CallHandleEventListener(VclWindowEvent& rEvent)
+    {
+        if (rEvent.GetId() == VclEventId::DropdownPreOpen ||
+            rEvent.GetId() == VclEventId::DropdownClose)
         {
             signal_popup_toggled();
             return;
@@ -5945,6 +5981,11 @@ public:
     virtual void set_mru_entries(const OUString&) override
     {
         assert(false && "not implemented");
+    }
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    {
+        CallHandleEventListener(rEvent);
     }
 
     virtual ~SalInstanceComboBoxWithoutEdit() override
@@ -6083,9 +6124,7 @@ public:
         auto nOldEntryHeight = m_xComboBox->GetDropDownEntryHeight();
         auto nDropDownLineCount = m_xComboBox->GetDropDownLineCount();
 
-        Size aRowSize(signal_custom_get_size(*m_xComboBox, OUString()));
         m_xComboBox->EnableUserDraw(true);
-        m_xComboBox->SetUserItemSize(aRowSize);
         m_xComboBox->SetUserDrawHdl(LINK(this, SalInstanceComboBoxWithEdit, UserDrawHdl));
 
         // adjust the line count to fit approx the height it would have been before
@@ -6113,6 +6152,16 @@ public:
     virtual void set_mru_entries(const OUString& rEntries) override
     {
         m_xComboBox->SetMRUEntries(rEntries);
+    }
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    {
+        if (rEvent.GetId() == VclEventId::DropdownPreOpen)
+        {
+            Size aRowSize(signal_custom_get_size(*m_xComboBox));
+            m_xComboBox->SetUserItemSize(aRowSize);
+        }
+        CallHandleEventListener(rEvent);
     }
 
     virtual ~SalInstanceComboBoxWithEdit() override
@@ -6249,6 +6298,17 @@ public:
     virtual void set_mru_entries(const OUString&) override
     {
         assert(false && "not implemented");
+    }
+
+    virtual void set_item_menu(const OString&, weld::Menu*) override
+    {
+        assert(false && "not implemented");
+    }
+
+    int get_menu_button_width() const override
+    {
+        assert(false && "not implemented");
+        return 0;
     }
 
     VclPtr<VirtualDevice> create_render_virtual_device() const override

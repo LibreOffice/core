@@ -339,7 +339,7 @@ private:
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
     DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
-    DECL_STATIC_LINK(FontNameBox, CustomGetSizeHdl, weld::ComboBox::get_size_args, Size);
+    DECL_STATIC_LINK(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size);
     DECL_LINK(UpdateHdl, Timer*, void);
 
     void            LoadMRUEntries( const OUString& aFontMRUEntriesFile );
