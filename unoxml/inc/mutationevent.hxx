@@ -37,7 +37,7 @@ namespace DOM { namespace events {
 typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XMutationEvent >
     CMutationEvent_Base;
 
-class CMutationEvent
+class CMutationEvent final
     : public CMutationEvent_Base
 {
     css::uno::Reference< css::xml::dom::XNode > m_relatedNode;

@@ -39,7 +39,7 @@ namespace com::sun::star::awt { struct WindowEvent; }
 
 namespace unocontrols {
 
-class OMRCListenerMultiplexerHelper : public css::awt::XFocusListener
+class OMRCListenerMultiplexerHelper final : public css::awt::XFocusListener
                                     , public css::awt::XWindowListener
                                     , public css::awt::XKeyListener
                                     , public css::awt::XMouseListener
@@ -198,9 +198,7 @@ public:
 
     virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) override;
 
-//  protected methods
-
-protected:
+private:
 
     /**
         @short      Remove the listener from the peer.
