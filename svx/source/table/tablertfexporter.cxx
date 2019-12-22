@@ -204,7 +204,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
     const SvxPostureItem&       rPostureItem    = rCellSet.Get( EE_CHAR_ITALIC );
     const SvxUnderlineItem&     rUnderlineItem  = rCellSet.Get( EE_CHAR_UNDERLINE );
 
-    const sal_Char* pChar;
+    const char* pChar;
 
     switch( eHAdj )
     {

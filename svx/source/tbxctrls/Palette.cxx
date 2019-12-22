@@ -94,7 +94,7 @@ void PaletteASE::LoadPalette()
     aFile.SetEndian(SvStreamEndian::BIG);
 
     // Verify magic first 4 characters
-    sal_Char cMagic[5] = {0};
+    char cMagic[5] = {0};
     if ((aFile.ReadBytes(cMagic, 4) != 4) || (strncmp(cMagic, "ASEF", 4) != 0))
     {
         mbValidPalette = false;
@@ -136,7 +136,7 @@ void PaletteASE::LoadPalette()
                 continue;
         }
 
-        sal_Char cColorModel[5] = {0};
+        char cColorModel[5] = {0};
         aFile.ReadBytes(cColorModel, 4);
         OString aColorModel(cColorModel);
         // r, g, and b are floats ranging from 0 to 1

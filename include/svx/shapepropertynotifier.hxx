@@ -69,7 +69,7 @@ namespace svx
     class SVX_DLLPUBLIC PropertyValueProvider   :public IPropertyValueProvider
     {
     public:
-        PropertyValueProvider( ::cppu::OWeakObject& _rContext, const sal_Char* _pAsciiPropertyName )
+        PropertyValueProvider( ::cppu::OWeakObject& _rContext, const char* _pAsciiPropertyName )
             :m_rContext( _rContext )
             ,m_sPropertyName( OUString::createFromAscii( _pAsciiPropertyName ) )
         {

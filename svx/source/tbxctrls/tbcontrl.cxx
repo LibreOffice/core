@@ -2908,7 +2908,7 @@ struct SvxStyleToolBoxControl::Impl
                 bSpecModeCalc = xServices->supportsService(
                     "com.sun.star.sheet.SpreadsheetDocument")))
             {
-                static const sal_Char* aCalcStyles[] =
+                static const char* aCalcStyles[] =
                 {
                     "Default",
                     "Heading1",

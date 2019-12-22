@@ -220,7 +220,7 @@ namespace svxform
         }
 
 
-        static const sal_Char* aCharacterAndParagraphProperties[] =
+        static const char* aCharacterAndParagraphProperties[] =
         {
             "CharFontName",
             "CharFontStyleName",
@@ -363,7 +363,7 @@ namespace svxform
                 Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo(), UNO_SET_THROW );
 
                 OUString sPropertyName;
-                const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
+                const char** pCharacterProperty = aCharacterAndParagraphProperties;
                 while ( *pCharacterProperty )
                 {
                     sPropertyName = OUString::createFromAscii( *pCharacterProperty );

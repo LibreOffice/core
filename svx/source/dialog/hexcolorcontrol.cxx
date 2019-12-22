@@ -75,7 +75,7 @@ Color HexColorControl::GetColor() const
 
     if (nLen < 7)
     {
-        static const sal_Char* const pNullStr = "000000";
+        static const char* const pNullStr = "000000";
         aStr += OUString::createFromAscii( &pNullStr[nLen-1] );
     }
 

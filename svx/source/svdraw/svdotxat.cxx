@@ -53,7 +53,7 @@ namespace {
 // The style family which is appended to the style names is padded to this many characters.
 const short PADDING_LENGTH_FOR_STYLE_FAMILY = 5;
 // this character will be used to pad the style families when they are appended to the style names
-const sal_Char PADDING_CHARACTER_FOR_STYLE_FAMILY = ' ';
+const char PADDING_CHARACTER_FOR_STYLE_FAMILY = ' ';
 }
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt, bool bWdt ) const

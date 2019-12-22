@@ -243,7 +243,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
     INetURLObject   aNewURL;
     sal_uInt32      nNextNumber = 1999;
-    sal_Char const* pExt = nullptr;
+    char const*     pExt = nullptr;
     bool            bExists;
 
     aDir.Append( "dragdrop" );

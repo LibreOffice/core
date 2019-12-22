@@ -240,7 +240,7 @@ public:
     // and to create own derivations of ObjectContact
     virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
         SdrPageWindow& rPageWindow,
-        const sal_Char* pDebugName) const;
+        const char* pDebugName) const;
 };
 
 // First of all the app creates a SdrModel.

@@ -78,7 +78,7 @@ namespace svxform
 
     struct Ascii2Int16
     {
-        const sal_Char* pAscii;
+        const char* pAscii;
         sal_Int16 const nValue;
     };
 
@@ -126,7 +126,7 @@ namespace svxform
         return -1;
     }
 
-    static const sal_Char* lcl_implMapIntValue( const sal_Int16 _nValue, const Ascii2Int16* _pMap )
+    static const char* lcl_implMapIntValue( const sal_Int16 _nValue, const Ascii2Int16* _pMap )
     {
         // search the map for the given integer value
         const Ascii2Int16* pSearch = _pMap;
@@ -140,7 +140,7 @@ namespace svxform
 
         SAL_WARN( "svx", "lcl_implMapIntValue: could not convert the integer value "
                     << _nValue <<  " !");
-        static const sal_Char* const s_pDummy = "";
+        static const char* const s_pDummy = "";
             // just as a fallback...
         return s_pDummy;
     }

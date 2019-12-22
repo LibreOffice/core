@@ -60,11 +60,11 @@ SFX_IMPL_CHILDWINDOW(SvxRubyChildWindow, SID_RUBY_DIALOG);
 namespace
 {
 
-static const sal_Char cRubyBaseText[] = "RubyBaseText";
-static const sal_Char cRubyText[] = "RubyText";
-static const sal_Char cRubyAdjust[] = "RubyAdjust";
-static const sal_Char cRubyPosition[] = "RubyPosition";
-static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
+static const char cRubyBaseText[] = "RubyBaseText";
+static const char cRubyText[] = "RubyText";
+static const char cRubyAdjust[] = "RubyAdjust";
+static const char cRubyPosition[] = "RubyPosition";
+static const char cRubyCharStyleName[] = "RubyCharStyleName";
 
 } // end anonymous namespace
 
