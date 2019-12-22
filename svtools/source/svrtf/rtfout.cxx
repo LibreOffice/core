@@ -28,17 +28,17 @@ namespace {
 
 SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 {
-    sal_Char aNToABuf[] = "0000000000000000";
+    char aNToABuf[] = "0000000000000000";
 
     DBG_ASSERT( nLen < sizeof(aNToABuf), "too many places" );
     if( nLen >= sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 
     // set pointer to end of buffer
-    sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
+    char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
-        *(--pStr) = static_cast<sal_Char>(nHex & 0xf ) + 48;
+        *(--pStr) = static_cast<char>(nHex & 0xf ) + 48;
         if( *pStr > '9' )
             *pStr += 39;
         nHex >>= 4;
@@ -60,7 +60,7 @@ SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
     int *pUCMode, rtl_TextEncoding eDestEnc)
 {
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
     switch (c)
     {
     case 0x1:

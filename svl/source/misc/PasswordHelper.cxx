@@ -33,7 +33,7 @@ void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash,
         ::comphelper::HashType::SHA256));
     rPassHash.realloc(hash.size());
     ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
-    rtl_secureZeroMemory(const_cast<sal_Char *>(tmp.getStr()), tmp.getLength());
+    rtl_secureZeroMemory(const_cast<char *>(tmp.getStr()), tmp.getLength());
 }
 
 void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHash, OUString const& rPassword)
@@ -44,10 +44,10 @@ void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHas
         ::comphelper::HashType::SHA1));
     rPassHash.realloc(hash.size());
     ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
-    rtl_secureZeroMemory(const_cast<sal_Char *>(tmp.getStr()), tmp.getLength());
+    rtl_secureZeroMemory(const_cast<char *>(tmp.getStr()), tmp.getLength());
 }
 
-void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen)
+void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const char* pPass, sal_uInt32 nLen)
 {
     rPassHash.realloc(RTL_DIGEST_LENGTH_SHA1);
 
@@ -61,13 +61,13 @@ void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const
 void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     sal_Int32 nSize(sPass.getLength());
-    std::unique_ptr<sal_Char[]> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
+    std::unique_ptr<char[]> pCharBuffer(new char[nSize * sizeof(sal_Unicode)]);
 
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
         sal_Unicode ch(sPass[ i ]);
-        pCharBuffer[2 * i] = static_cast< sal_Char >(ch & 0xFF);
-        pCharBuffer[2 * i + 1] = static_cast< sal_Char >(ch >> 8);
+        pCharBuffer[2 * i] = static_cast< char >(ch & 0xFF);
+        pCharBuffer[2 * i + 1] = static_cast< char >(ch >> 8);
     }
 
     GetHashPassword(rPassHash, pCharBuffer.get(), nSize * sizeof(sal_Unicode));
@@ -77,13 +77,13 @@ void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPas
 void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     sal_Int32 nSize(sPass.getLength());
-    std::unique_ptr<sal_Char[]> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
+    std::unique_ptr<char[]> pCharBuffer(new char[nSize * sizeof(sal_Unicode)]);
 
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
         sal_Unicode ch(sPass[ i ]);
-        pCharBuffer[2 * i] = static_cast< sal_Char >(ch >> 8);
-        pCharBuffer[2 * i + 1] = static_cast< sal_Char >(ch & 0xFF);
+        pCharBuffer[2 * i] = static_cast< char >(ch >> 8);
+        pCharBuffer[2 * i + 1] = static_cast< char >(ch & 0xFF);
     }
 
     GetHashPassword(rPassHash, pCharBuffer.get(), nSize * sizeof(sal_Unicode));

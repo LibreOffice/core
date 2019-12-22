@@ -78,7 +78,7 @@ namespace {
 #if HAVE_FEATURE_NSS
 void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
-    static const sal_Char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
+    static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
@@ -1016,7 +1016,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         PLArenaPool *ts_arena = PORT_NewArena(10000);
         NSSCMSEncoderContext *ts_cms_ecx;
         ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, nullptr, nullptr, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback,
-                                          const_cast<sal_Char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
+                                          const_cast<char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
 
         if (NSS_CMSEncoder_Finish(ts_cms_ecx) != SECSuccess)
         {
@@ -1348,7 +1348,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     // to test it and risk locking up my token...
 
     cms_ecx = NSS_CMSEncoder_Start(cms_msg, nullptr, nullptr, &cms_output, arena, PDFSigningPKCS7PasswordCallback,
-                                   const_cast<sal_Char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
+                                   const_cast<char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
 
     if (!cms_ecx)
     {

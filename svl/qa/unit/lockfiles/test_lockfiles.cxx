@@ -83,7 +83,7 @@ OUString readLockFile(const OUString& aSource)
     OStringBuffer aResult(static_cast<int>(nSize));
     for (sal_Int8 nByte : aData)
     {
-        aResult.append(static_cast<sal_Char>(nByte));
+        aResult.append(static_cast<char>(nByte));
     }
     return OStringToOUString(aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
 }

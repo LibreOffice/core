@@ -578,7 +578,7 @@ struct RulerUnitData
     double const          nTick2;             // Tick quarter unit
     double const          nTick3;             // Tick half unit
     double const          nTick4;             // Tick whole unit
-    sal_Char const        aUnitStr[8];        // Unit string
+    char const            aUnitStr[8];        // Unit string
 };
 
 

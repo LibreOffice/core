@@ -58,10 +58,10 @@ HTMLOutContext::~HTMLOutContext()
     rtl_destroyUnicodeToTextConverter( m_hConv );
 }
 
-static const sal_Char *lcl_svhtml_GetEntityForChar( sal_uInt32 c,
+static const char *lcl_svhtml_GetEntityForChar( sal_uInt32 c,
                                              rtl_TextEncoding eDestEnc )
 {
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
 
     // Note: We currently handle special cases for ISO-8859-2 here simply because
     // the code was already submitted.  But we should also handle other code pages
@@ -391,7 +391,7 @@ static const sal_Char *lcl_svhtml_GetEntityForChar( sal_uInt32 c,
     return pStr;
 }
 
-static sal_Size lcl_FlushContext(HTMLOutContext& rContext, sal_Char* pBuffer, sal_uInt32 nFlags)
+static sal_Size lcl_FlushContext(HTMLOutContext& rContext, char* pBuffer, sal_uInt32 nFlags)
 {
     sal_uInt32 nInfo = 0;
     sal_Size nSrcChars;
@@ -411,7 +411,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
     OStringBuffer aDest;
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
                     "wrong destination encoding" );
-    const sal_Char *pStr = nullptr;
+    const char *pStr = nullptr;
     switch( c )
     {
     case 0xA0:      // is a hard blank
@@ -433,7 +433,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
         break;
     }
 
-    sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
+    char cBuffer[TXTCONV_BUFFER_SIZE];
     const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
                               RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
                               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
@@ -441,7 +441,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
     if( pStr )
     {
         sal_Size nLen = lcl_FlushContext(rContext, cBuffer, nFlags);
-        sal_Char *pBuffer = cBuffer;
+        char *pBuffer = cBuffer;
         while( nLen-- )
             aDest.append(*pBuffer++);
         aDest.append('&').append(pStr).append(';');
@@ -459,7 +459,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
                                                  nFlags, &nInfo, &nSrcChars);
         if( nLen > 0 && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0 )
         {
-            sal_Char *pBuffer = cBuffer;
+            char *pBuffer = cBuffer;
             while( nLen-- )
                 aDest.append(*pBuffer++);
         }
@@ -470,7 +470,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
             // entity.
             // coverity[callee_ptr_arith] - its ok
             nLen = lcl_FlushContext(rContext, cBuffer, nFlags);
-            sal_Char *pBuffer = cBuffer;
+            char *pBuffer = cBuffer;
             while( nLen-- )
                 aDest.append(*pBuffer++);
 
@@ -492,13 +492,13 @@ static OString lcl_FlushToAscii( HTMLOutContext& rContext )
 {
     OStringBuffer aDest;
 
-    sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
+    char cBuffer[TXTCONV_BUFFER_SIZE];
     const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
                               RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
                               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
                               RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
     sal_Size nLen = lcl_FlushContext(rContext, cBuffer, nFlags);
-    sal_Char *pBuffer = cBuffer;
+    char *pBuffer = cBuffer;
     while( nLen-- )
         aDest.append(*pBuffer++);
     return aDest.makeStringAndClear();
@@ -564,17 +564,17 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
 
 SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 {                                                  // out into a stream
-    sal_Char aNToABuf[] = "0000000000000000";
+    char aNToABuf[] = "0000000000000000";
 
     DBG_ASSERT( nLen < sizeof(aNToABuf), "too many places" );
     if( nLen>=sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 
     // set pointer to end of buffer
-    sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
+    char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
-        *(--pStr) = static_cast<sal_Char>(nHex & 0xf ) + 48;
+        *(--pStr) = static_cast<char>(nHex & 0xf ) + 48;
         if( *pStr > '9' )
             *pStr += 39;
         nHex >>= 4;
@@ -610,9 +610,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                                       const OUString& rName,
                                       const HTMLOutEvent *pEventTable,
                                       bool bOutStarBasic,
-                                      const sal_Char *pDelim,
-                                      const sal_Char *pIndentArea,
-                                      const sal_Char *pIndentMap,
+                                      const char *pDelim,
+                                      const char *pIndentArea,
+                                      const char *pIndentMap,
                                       rtl_TextEncoding eDestEnc,
                                       OUString *pNonConvertableChars    )
 {
@@ -641,7 +641,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
         if( pObj )
         {
-            const sal_Char *pShape = nullptr;
+            const char *pShape = nullptr;
             OString aCoords;
             switch( pObj->GetType() )
             {
@@ -917,7 +917,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
         if( pMacro && pMacro->HasMacro() &&
             ( JAVASCRIPT == pMacro->GetScriptType() || bOutStarBasic ))
         {
-            const sal_Char *pStr = STARBASIC == pMacro->GetScriptType()
+            const char *pStr = STARBASIC == pMacro->GetScriptType()
                 ? pEventTable[i].pBasicName
                 : pEventTable[i].pJavaName;
 
@@ -1027,7 +1027,7 @@ void HtmlWriterHelper::applyEvents(HtmlWriter& rHtmlWriter, const SvxMacroTableD
 
         if (pMacro && pMacro->HasMacro() && (JAVASCRIPT == pMacro->GetScriptType() || bOutStarBasic))
         {
-            const sal_Char* pAttributeName = nullptr;
+            const char* pAttributeName = nullptr;
             if (STARBASIC == pMacro->GetScriptType())
                 pAttributeName = pEventTable[i].pBasicName;
             else

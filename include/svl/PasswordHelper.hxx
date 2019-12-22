@@ -30,7 +30,7 @@ class SvPasswordHelper
     static void     GetHashPasswordBigEndian(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
 
 public:
-    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen);
+    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const char* pPass, sal_uInt32 nLen);
 
     SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
     SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
