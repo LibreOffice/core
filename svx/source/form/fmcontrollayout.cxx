@@ -144,7 +144,7 @@ namespace svxform
 
                 // depending on this script type, use the right property from the document's style which controls the
                 // default locale for document content
-                const sal_Char* pCharLocalePropertyName = "CharLocale";
+                const char* pCharLocalePropertyName = "CharLocale";
                 switch ( eSysLocaleScriptType )
                 {
                 case ScriptType::LATIN:

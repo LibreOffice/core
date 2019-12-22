@@ -79,7 +79,7 @@ namespace svxform
 
         struct ModuleInfo
         {
-            const sal_Char* pAsciiModuleOrServiceName;
+            const char* pAsciiModuleOrServiceName;
             DocumentType const    eType;
         };
 

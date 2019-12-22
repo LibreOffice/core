@@ -1458,7 +1458,7 @@ void SdrView::SetMasterPagePaintCaching(bool bOn)
 // Default ObjectContact is ObjectContactOfPageView
 sdr::contact::ObjectContact* SdrView::createViewSpecificObjectContact(
     SdrPageWindow& rPageWindow,
-    const sal_Char* pDebugName) const
+    const char* pDebugName) const
 {
     return new sdr::contact::ObjectContactOfPageView(rPageWindow, pDebugName);
 }
