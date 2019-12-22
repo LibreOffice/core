@@ -241,7 +241,6 @@ public:
     // Methods for number formats and color schemes
 
     void setNumberFormatsSupplier( const css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
-    void setAxesNumberFormats( const AxesNumberFormats& rAxesNumberFormats ) { m_aAxesNumberFormats = rAxesNumberFormats; };
 
     void setColorScheme( const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
 
@@ -427,7 +426,6 @@ protected:
     Date m_aNullDate;
 
     std::unique_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
-    AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead
 
     css::uno::Reference< css::chart2::XColorScheme >    m_xColorScheme;
 

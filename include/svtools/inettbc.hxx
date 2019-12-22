@@ -37,7 +37,6 @@ class SVT_DLLPUBLIC SvtURLBox : public ComboBox
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
     Link<SvtURLBox*,void>           aOpenHdl;
-    OUString                        aPlaceHolder;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
@@ -70,9 +69,6 @@ public:
     void                            UpdatePickList( );
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
-
-    bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
-                                        { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
 };
 
 class SVT_DLLPUBLIC URLBox

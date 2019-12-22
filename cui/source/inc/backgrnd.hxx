@@ -68,38 +68,6 @@ protected:
 private:
     // DDListBox for Writer -------------------------------
 
-    Color       aBgdColor;
-    sal_uInt16      nHtmlMode;
-    bool        bAllowShowSelector  : 1;
-    bool        bIsGraphicValid     : 1;
-    bool        bHighlighting       : 1;
-    bool        bCharBackColor      : 1;
-    bool        m_bColorSelected    : 1;
-    Graphic     aBgdGraphic;
-    OUString    aBgdGraphicPath;
-    OUString    aBgdGraphicFilter;
-
-    std::unique_ptr<Idle> m_pLoadIdle;
-    bool        m_bIsImportDlgInExecute = false;
-
-    std::unique_ptr<SvxOpenGraphicDialog> pImportDlg;
-
-    ///< Items for Sw-Table must be corrected
-    std::unique_ptr<SvxBrushItem>   m_pCellBrush;
-    std::unique_ptr<SvxBrushItem>   m_pRowBrush;
-    std::unique_ptr<SvxBrushItem>   m_pTableBrush;
-    sal_uInt16      m_nCellWhich = 0;
-    sal_uInt16      m_nRowWhich = 0;
-    sal_uInt16      m_nTableWhich = 0;
-    sal_Int32       m_nActPos = 0;
-
-    std::unique_ptr<SvxBrushItem> pHighlighting;
-
-    std::unique_ptr<SvxRectCtl> m_xWndPosition;
-    std::unique_ptr<ColorValueSet> m_xBackgroundColorSet;
-    std::unique_ptr<BackgroundPreviewImpl> m_xPreview1;
-    std::unique_ptr<BackgroundPreviewImpl> m_xPreview2;
-
     std::unique_ptr<weld::Label> m_xFindGraphicsFt;
     std::unique_ptr<weld::Widget> m_xAsGrid;
     std::unique_ptr<weld::Label> m_xSelectTxt;

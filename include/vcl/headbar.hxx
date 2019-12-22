@@ -223,7 +223,6 @@ private:
     bool                mbButtonStyle;
     bool                mbItemMode;
     Link<HeaderBar*,void> maStartDragHdl;
-    Link<HeaderBar*,void> maDragHdl;
     Link<HeaderBar*,void> maEndDragHdl;
     Link<HeaderBar*,void> maSelectHdl;
     Link<HeaderBar*,void> maCreateAccessibleHdl;

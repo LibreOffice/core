@@ -566,7 +566,6 @@ private:
     bool                            m_bRemoveThisParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
-    css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
 
     //annotation import
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
@@ -981,9 +980,6 @@ public:
 
     /// If we're importing autotext.
     bool IsReadGlossaries() const { return m_bIsReadGlossaries;}
-
-    /// If we're inside <w:rPr>, inside <w:style w:type="table">
-    bool m_bInTableStyleRunProps;
 
     tools::SvRef<SdtHelper> m_pSdtHelper;
 

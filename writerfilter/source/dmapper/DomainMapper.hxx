@@ -119,7 +119,6 @@ public:
      @see DomainMapper_Impl::processDeferredCharacterProperties()
     */
     void processDeferredCharacterProperties(const std::map<sal_Int32, css::uno::Any>& rDeferredCharacterProperties);
-    void setInTableStyleRunProps(bool bInTableStyleRunProps);
 
     /// Enable storing of seen tokens in a named grab bag.
     void enableInteropGrabBag(const OUString& aName);
