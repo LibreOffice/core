@@ -58,17 +58,6 @@ public:
     {
         m_aNumberFormatMap[tFullAxisIndex(nDimIndex,nAxisIndex)] = nFormatKey;
     }
-    bool hasFormat( sal_Int32 nDimIndex, sal_Int32 nAxisIndex ) const
-    {
-        return (m_aNumberFormatMap.find(tFullAxisIndex(nDimIndex,nAxisIndex)) !=m_aNumberFormatMap.end());
-    }
-    sal_Int32 getFormat( sal_Int32 nDimIndex, sal_Int32 nAxisIndex ) const
-    {
-        tNumberFormatMap::const_iterator aIt = m_aNumberFormatMap.find(tFullAxisIndex(nDimIndex,nAxisIndex));
-        if( aIt !=m_aNumberFormatMap.end() )
-            return aIt->second;
-        return 0;
-    }
 
 private:
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex;

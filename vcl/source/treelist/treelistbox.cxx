@@ -3529,11 +3529,6 @@ void SvTreeListBox::InitSettings()
         pCheckButtonData->SetDefaultImages(this);
 }
 
-bool SvTreeListBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
-{
-    return pImpl->SetCurrentTabPos( _nNewPos );
-}
-
 sal_uInt16 SvTreeListBox::GetCurrentTabPos() const
 {
     return pImpl->GetCurrentTabPos();

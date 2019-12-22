@@ -1382,16 +1382,6 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaul
 }
 
 
-SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart,
-    bool bSetDefaultHelpID )
-    :   ComboBox( pParent, _nStyle ),
-        eSmartProtocol( eSmart ),
-        bAutoCompleteMode( false ),
-        bHistoryDisabled( false )
-{
-    Init(bSetDefaultHelpID);
-}
-
 void SvtURLBox::Init(bool bSetDefaultHelpID)
 {
     pImpl.reset( new SvtURLBox_Impl );
@@ -1423,23 +1413,6 @@ void SvtURLBox::dispose()
 
     pImpl.reset();
     ComboBox::dispose();
-}
-
-void SvtURLBox::UpdatePickList( )
-{
-    if( pCtx.is() )
-    {
-        pCtx->Stop();
-        pCtx->join();
-        pCtx.clear();
-    }
-
-    OUString sText = GetText();
-    if ( !sText.isEmpty() )
-    {
-        pCtx = new SvtMatchContext_Impl( this, sText );
-        pCtx->launch();
-    }
 }
 
 void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
@@ -1704,12 +1677,6 @@ OUString SvtURLBox::GetURL()
     }
 
     return aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-}
-
-void SvtURLBox::DisableHistory()
-{
-    bHistoryDisabled = true;
-    UpdatePicklistForSmartProtocol_Impl();
 }
 
 /** Parse leading ~ for Unix systems,

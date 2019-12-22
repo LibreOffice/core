@@ -335,7 +335,6 @@ public:
     void           SetItemWidth( long nItemWidth );
     void           SetItemHeight( long nLineHeight );
     Size           GetLargestItemSize();
-    void           RecalculateItemSizes();
 
     void           SelectItem( sal_uInt16 nItemId );
     sal_uInt16     GetSelectedItemId() const
@@ -361,10 +360,6 @@ public:
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
     void            SetColor( const Color& rColor );
-    void            SetColor()
-    {
-        SetColor(COL_TRANSPARENT);
-    }
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;
@@ -386,10 +381,6 @@ public:
     void            SetSelectHdl(const Link<ValueSet*,void>& rLink)
     {
         maSelectHdl = rLink;
-    }
-    void            SetDoubleClickHdl(const Link<ValueSet*,void>& rLink)
-    {
-        maDoubleClickHdl = rLink;
     }
 
     void            SetHighlightHdl(const Link<ValueSet*,void>& rLink);
