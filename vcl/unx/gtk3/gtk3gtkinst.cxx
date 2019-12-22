@@ -7144,7 +7144,9 @@ public:
         else
         {
             GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
-            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
+            assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || !bActive);
+            if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
+                gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
         }
 
         enable_item_notify_events();
