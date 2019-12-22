@@ -57,7 +57,7 @@ namespace slideshow
     {
         namespace
         {
-            typedef const sal_Char*                   StringIteratorT;
+            typedef const char*                   StringIteratorT;
 
             struct ParserContext
             {

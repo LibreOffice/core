@@ -48,7 +48,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * localebe1_component_getFactory(
-    const sal_Char *aImplementationName,
+    const char *aImplementationName,
     void *aServiceManager,
     void *aRegistryKey) {
 

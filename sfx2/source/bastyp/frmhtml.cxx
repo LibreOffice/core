@@ -30,9 +30,9 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfxtypes.hxx>
 
-static sal_Char const sHTML_SC_yes[] =  "YES";
-static sal_Char const sHTML_SC_no[] =       "NO";
-static sal_Char const sHTML_SC_auto[] = "AUTO";
+static char const sHTML_SC_yes[] =  "YES";
+static char const sHTML_SC_no[] =       "NO";
+static char const sHTML_SC_auto[] = "AUTO";
 
 static HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
 {

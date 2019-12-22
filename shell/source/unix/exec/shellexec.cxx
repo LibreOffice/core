@@ -69,7 +69,7 @@ namespace
         for(sal_Int32 n=0; n < nmax; ++n)
         {
             // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
-            sal_Char c = rURL[n];
+            char c = rURL[n];
             if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
                 rBuffer.append( '\\' );
 

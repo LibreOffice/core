@@ -1316,7 +1316,7 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 extern "C"
-SAL_DLLPUBLIC_EXPORT void* ogltrans_component_getFactory( sal_Char const* pImplName,
+SAL_DLLPUBLIC_EXPORT void* ogltrans_component_getFactory( char const* pImplName,
                                          void*, void* )
 {
     return sdecl::component_getFactoryHelper( pImplName, {&OGLTransitionFactoryDecl} );

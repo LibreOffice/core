@@ -53,11 +53,11 @@
 
 using namespace ::com::sun::star;
 
-static sal_Char const sHTML_SC_yes[] =  "YES";
-static sal_Char const sHTML_SC_no[] =       "NO";
+static char const sHTML_SC_yes[] =  "YES";
+static char const sHTML_SC_no[] =       "NO";
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
-                                  const sal_Char *pIndent,
+                                  const char *pIndent,
                                   const OUString& rName,
                                   const OUString& rContent,
                                   bool bHTTPEquiv,
@@ -83,11 +83,11 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
 
 void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
-        const sal_Char *pIndent,
+        const char *pIndent,
         rtl_TextEncoding eDestEnc,
         OUString *pNonConvertableChars    )
 {
-    const sal_Char *pCharSet =
+    const char *pCharSet =
                 rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
 
     if( pCharSet )
@@ -287,7 +287,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             aAny = xSet->getPropertyValue("FrameIsScrollingMode");
             if ( aAny >>= bVal )
             {
-                const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
+                const char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolling)
                     .append(pStr);
             }
