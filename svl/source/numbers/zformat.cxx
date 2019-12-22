@@ -1459,7 +1459,7 @@ namespace {
 
 sal_Unicode toUniChar(sal_uInt8 n)
 {
-    sal_Char c;
+    char c;
     if (n < 10)
     {
         c = '0' + n;

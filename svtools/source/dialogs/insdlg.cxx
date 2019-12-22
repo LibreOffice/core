@@ -304,7 +304,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
                 // the user friendly description string is '\0' terminated.
                 const sal_Unicode* pUserTypeName =
                     reinterpret_cast< sal_Unicode* >(
-                        reinterpret_cast< sal_Char* >( pOleObjDescr ) +
+                        reinterpret_cast< char* >( pOleObjDescr ) +
                             pOleObjDescr->dwFullUserTypeName );
 
                 _rName += pUserTypeName;
@@ -321,7 +321,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
                 // the source string is '\0' terminated.
                 const sal_Unicode* pSrcOfCopy =
                     reinterpret_cast< sal_Unicode* >(
-                        reinterpret_cast< sal_Char* >( pOleObjDescr ) +
+                        reinterpret_cast< char* >( pOleObjDescr ) +
                             pOleObjDescr->dwSrcOfCopy );
 
                 _rSource += pSrcOfCopy;

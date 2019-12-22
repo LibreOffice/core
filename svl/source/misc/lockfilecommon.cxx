@@ -144,7 +144,7 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
             if ( aBuffer[io_nCurPos] != ',' && aBuffer[io_nCurPos] != ';' && aBuffer[io_nCurPos] != '\\' )
                 throw io::WrongFormatException();
 
-            aResult.append( static_cast<sal_Char>(aBuffer[io_nCurPos]) );
+            aResult.append( static_cast<char>(aBuffer[io_nCurPos]) );
 
             bEscape = false;
             io_nCurPos++;
@@ -156,7 +156,7 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
             if ( aBuffer[io_nCurPos] == '\\' )
                 bEscape = true;
             else
-                aResult.append( static_cast<sal_Char>(aBuffer[io_nCurPos]) );
+                aResult.append( static_cast<char>(aBuffer[io_nCurPos]) );
 
             io_nCurPos++;
         }

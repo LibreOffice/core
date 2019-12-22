@@ -34,8 +34,8 @@ class SvNumberFormatter;
 
 struct HTMLOutEvent
 {
-    const sal_Char *pBasicName;
-    const sal_Char *pJavaName;
+    const char *pBasicName;
+    const char *pJavaName;
     SvMacroItemId const nEvent;
 };
 
@@ -68,9 +68,9 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const OUString&, const ImageMap&, const OUString&,
                                    const HTMLOutEvent *pEventTable,
                                    bool bOutStarBasic,
-                                   const sal_Char *pDelim,
-                                   const sal_Char *pIndentArea,
-                                   const sal_Char *pIndentMap,
+                                   const char *pDelim,
+                                   const char *pIndentArea,
+                                   const char *pIndentMap,
                                    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                                    OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& FlushToAscii( SvStream&, HTMLOutContext& rContext );

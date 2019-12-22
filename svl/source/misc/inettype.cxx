@@ -31,7 +31,7 @@ namespace
 
 struct MediaTypeEntry
 {
-    sal_Char const * m_pTypeName;
+    char const *    m_pTypeName;
     INetContentType m_eTypeID;
 };
 
@@ -276,9 +276,9 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 //static
 OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 {
-    static std::array<sal_Char const *, CONTENT_TYPE_LAST + 1> aMap = [&]()
+    static std::array<char const *, CONTENT_TYPE_LAST + 1> aMap = [&]()
     {
-        std::array<sal_Char const *, CONTENT_TYPE_LAST + 1> tmp;
+        std::array<char const *, CONTENT_TYPE_LAST + 1> tmp;
         for (std::size_t i = 0; i <= CONTENT_TYPE_LAST; ++i)
             tmp[aStaticTypeNameMap[i].m_eTypeID] = aStaticTypeNameMap[i].m_pTypeName;
         tmp[CONTENT_TYPE_UNKNOWN] = CONTENT_TYPE_STR_APP_OCTSTREAM;

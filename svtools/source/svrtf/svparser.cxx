@@ -275,7 +275,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
         sal_Size nChars = 0;
         do
         {
-            sal_Char c1;    // signed, that's the text converter expects
+            char c1;    // signed, that's the text converter expects
             rInput.ReadChar( c1 );
             bErr = !rInput.good();
             if( !bErr )
@@ -352,7 +352,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                         }
                         else
                         {
-                            sal_Char sBuffer[10];
+                            char sBuffer[10];
                             sBuffer[0] = c1;
                             sal_uInt16 nLen = 1;
                             while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0 &&

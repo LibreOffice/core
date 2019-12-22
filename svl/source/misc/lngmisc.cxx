@@ -64,7 +64,7 @@ namespace linguistic
     bool ReplaceControlChars(OUString &rTxt)
     {
         // non breaking field character
-        static const sal_Char CH_TXTATR_INWORD = static_cast<sal_Char>(0x02);
+        static const char CH_TXTATR_INWORD = static_cast<char>(0x02);
 
         // the resulting string looks like this:
         // 1. non breaking field characters get removed
