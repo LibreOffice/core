@@ -30,13 +30,13 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.h>
 #include <sal/log.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -62,39 +62,9 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
-using ::comphelper::ConfigurationHelper;
-
-namespace {
-
-bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUString& rItemName )
+VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& /* rConfigCompName */)
+   : mxConfigAccess(rxContext)
 {
-    // some applications do not support all configuration items, assume 'false' in this case
-    try
-    {
-        Any aItem = ConfigurationHelper::readRelativeKey( rxConfigAccess, "Filter/Import/VBA", rItemName );
-        return aItem.has< bool >() && aItem.get< bool >();
-    }
-    catch(const Exception& )
-    {
-    }
-    return false;
-}
-
-} // namespace
-
-VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& rConfigCompName )
-{
-    OSL_ENSURE( rxContext.is(), "VbaFilterConfig::VbaFilterConfig - missing component context" );
-    if( rxContext.is() ) try
-    {
-        OSL_ENSURE( !rConfigCompName.isEmpty(), "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
-        OUString aConfigPackage = "org.openoffice.Office." + rConfigCompName;
-        mxConfigAccess = ConfigurationHelper::openConfig( rxContext, aConfigPackage, comphelper::EConfigurationModes::ReadOnly );
-    }
-    catch(const Exception& )
-    {
-    }
-    OSL_ENSURE( mxConfigAccess.is(), "VbaFilterConfig::VbaFilterConfig - cannot open configuration" );
 }
 
 VbaFilterConfig::~VbaFilterConfig()
@@ -103,17 +73,17 @@ VbaFilterConfig::~VbaFilterConfig()
 
 bool VbaFilterConfig::isImportVba() const
 {
-    return lclReadConfigItem( mxConfigAccess, "Load" );
+    return officecfg::Office::Calc::Filter::Import::VBA::Load::get(mxConfigAccess);
 }
 
 bool VbaFilterConfig::isImportVbaExecutable() const
 {
-    return lclReadConfigItem( mxConfigAccess, "Executable" );
+    return officecfg::Office::Calc::Filter::Import::VBA::Executable::get(mxConfigAccess);
 }
 
 bool VbaFilterConfig::isExportVba() const
 {
-    return lclReadConfigItem( mxConfigAccess, "Save" );
+    return officecfg::Office::Calc::Filter::Import::VBA::Save::get(mxConfigAccess);
 }
 
 VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
