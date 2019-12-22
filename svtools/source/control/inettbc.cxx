@@ -1588,13 +1588,6 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
             SetSelection( Selection( nLen, GetText().getLength() ) );
             return true;
         }
-
-        if ( MatchesPlaceHolder( GetText() ) )
-        {
-            // set the selection so a key stroke will overwrite
-            // the placeholder rather than edit it
-            SetSelection( Selection( 0, GetText().getLength() ) );
-        }
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -1643,8 +1636,6 @@ OUString SvtURLBox::GetURL()
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     OUString aText( GetText() );
-    if ( MatchesPlaceHolder( aText ) )
-        return aPlaceHolder;
 
     // try to get the right case preserving URL from the list of URLs
     for(std::vector<OUString>::iterator i = pImpl->aCompletions.begin(), j = pImpl->aURLs.begin(); i != pImpl->aCompletions.end() && j != pImpl->aURLs.end(); ++i, ++j)

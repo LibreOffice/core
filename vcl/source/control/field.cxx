@@ -1382,7 +1382,7 @@ bool MetricFormatter::TextToValue(const OUString& rStr, double& rValue, sal_Int6
 
 void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
-    if ( !TextToValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
+    if ( !TextToValue( rStr, rValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
         return;
 
     double nTempVal = rValue;
@@ -1396,7 +1396,6 @@ void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
 
 MetricFormatter::MetricFormatter(Edit* pEdit)
     : NumericFormatter(pEdit)
-    , mnBaseValue(0)
     , meUnit(FieldUnit::NONE)
 {
 }
@@ -1475,7 +1474,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 void MetricFormatter::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     // convert to previously configured units
-    nNewValue = MetricField::ConvertValue( nNewValue, mnBaseValue, GetDecimalDigits(), eInUnit, meUnit );
+    nNewValue = MetricField::ConvertValue( nNewValue, 0, GetDecimalDigits(), eInUnit, meUnit );
     NumericFormatter::SetUserValue( nNewValue );
 }
 
@@ -1483,7 +1482,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
 {
     double nTempValue;
     // caution: precision loss in double cast
-    if (!TextToValue(rStr, nTempValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
+    if (!TextToValue(rStr, nTempValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         nTempValue = static_cast<double>(mnLastValue);
 
     // caution: precision loss in double cast
@@ -1493,7 +1492,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
         nTempValue = static_cast<double>(mnMin);
 
     // convert to requested units
-    return MetricField::ConvertValue(static_cast<sal_Int64>(nTempValue), mnBaseValue, GetDecimalDigits(), meUnit, eOutUnit);
+    return MetricField::ConvertValue(static_cast<sal_Int64>(nTempValue), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 sal_Int64 MetricFormatter::GetValueFromString(const OUString& rStr) const
@@ -1515,35 +1514,35 @@ void MetricFormatter::SetValue( sal_Int64 nValue )
 void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
 {
     // convert to requested units
-    NumericFormatter::SetMin( MetricField::ConvertValue( nNewMin, mnBaseValue, GetDecimalDigits(),
+    NumericFormatter::SetMin( MetricField::ConvertValue( nNewMin, 0, GetDecimalDigits(),
                                                          eInUnit, meUnit ) );
 }
 
 sal_Int64 MetricFormatter::GetMin( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( NumericFormatter::GetMin(), mnBaseValue,
+    return MetricField::ConvertValue( NumericFormatter::GetMin(), 0,
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
 
 void MetricFormatter::SetMax( sal_Int64 nNewMax, FieldUnit eInUnit )
 {
     // convert to requested units
-    NumericFormatter::SetMax( MetricField::ConvertValue( nNewMax, mnBaseValue, GetDecimalDigits(),
+    NumericFormatter::SetMax( MetricField::ConvertValue( nNewMax, 0, GetDecimalDigits(),
                                                          eInUnit, meUnit ) );
 }
 
 sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( NumericFormatter::GetMax(), mnBaseValue,
+    return MetricField::ConvertValue( NumericFormatter::GetMax(), 0,
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
 
 sal_Int64 MetricFormatter::GetBaseValue() const
 {
     // convert to requested units
-    return MetricField::ConvertValue( mnBaseValue, mnBaseValue, GetDecimalDigits(),
+    return MetricField::ConvertValue( 0, 0, GetDecimalDigits(),
                                       meUnit, FieldUnit::NONE );
 }
 
@@ -1553,8 +1552,6 @@ void MetricFormatter::Reformat()
         return;
 
     OUString aText = GetField()->GetText();
-    if ( meUnit == FieldUnit::CUSTOM )
-        maCurUnitText = ImplMetricGetUnitText( aText );
 
     OUString aStr;
     // caution: precision loss in double cast
@@ -1565,18 +1562,15 @@ void MetricFormatter::Reformat()
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
-        if ( meUnit == FieldUnit::CUSTOM )
-            CustomConvert();
     }
     else
         SetValue( mnLastValue );
-    maCurUnitText.clear();
 }
 
 sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( 0/*nCorrectedValue*/, mnBaseValue, GetDecimalDigits(),
+    return MetricField::ConvertValue( 0/*nCorrectedValue*/, 0, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
 
@@ -1628,7 +1622,7 @@ void MetricField::SetUnit( FieldUnit nNewUnit )
 void MetricField::SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit )
 {
     // convert
-    nNewFirst = MetricField::ConvertValue( nNewFirst, mnBaseValue, GetDecimalDigits(),
+    nNewFirst = MetricField::ConvertValue( nNewFirst, 0, GetDecimalDigits(),
                                            eInUnit, meUnit );
     mnFirst = nNewFirst;
 }
@@ -1636,14 +1630,14 @@ void MetricField::SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit )
 sal_Int64 MetricField::GetFirst( FieldUnit eOutUnit ) const
 {
     // convert
-    return MetricField::ConvertValue( mnFirst, mnBaseValue, GetDecimalDigits(),
+    return MetricField::ConvertValue( mnFirst, 0, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
 
 void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 {
     // convert
-    nNewLast = MetricField::ConvertValue( nNewLast, mnBaseValue, GetDecimalDigits(),
+    nNewLast = MetricField::ConvertValue( nNewLast, 0, GetDecimalDigits(),
                                           eInUnit, meUnit );
     mnLast = nNewLast;
 }
@@ -1651,7 +1645,7 @@ void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 {
     // convert
-    return MetricField::ConvertValue( mnLast, mnBaseValue, GetDecimalDigits(),
+    return MetricField::ConvertValue( mnLast, 0, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
 
@@ -1723,11 +1717,6 @@ void MetricField::Last()
 {
     FieldLast();
     SpinField::Last();
-}
-
-void MetricField::CustomConvert()
-{
-    maCustomConvertLink.Call( *this );
 }
 
 boost::property_tree::ptree MetricField::DumpAsPropertyTree()
@@ -1828,15 +1817,10 @@ void MetricBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-void MetricBox::CustomConvert()
-{
-    maCustomConvertLink.Call( *this );
-}
-
 void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos )
 {
     // convert to previously configured units
-    nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
+    nValue = MetricField::ConvertValue( nValue, 0, GetDecimalDigits(),
                                         eInUnit, meUnit );
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }

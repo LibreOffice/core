@@ -127,7 +127,6 @@ namespace pcr
 
         // create a new page
         auto xPage = std::make_unique<OBrowserPage>(m_xTabControl->get_page(sIdent), m_xControlHoldingParent.get());
-        xPage->SetPageTitle(rText);
         // some knittings
         xPage->getListBox().SetListener(m_pListener);
         xPage->getListBox().SetObserver(m_pObserver);

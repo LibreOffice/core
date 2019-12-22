@@ -765,7 +765,6 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                     }
                 }
             }
-            pSeriesPlotter->setAxesNumberFormats( aAxesNumberFormats );
         }
     }
 }

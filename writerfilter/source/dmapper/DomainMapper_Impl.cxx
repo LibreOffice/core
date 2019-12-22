@@ -301,7 +301,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
-        m_bInTableStyleRunProps(false),
         m_nTableDepth(0),
         m_nTableCellDepth(0),
         m_nLastTableCellParagraphDepth(0),
@@ -1898,7 +1897,6 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                             throw uno::Exception("insertTextPortion failed", nullptr);
                         m_bTextInserted = true;
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
-                        mxTOCTextCursor = xTOCTextCursor;
                         if (!m_bStartGenericField)
                         {
                             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
@@ -4188,7 +4186,6 @@ DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
                 = xTextRange->getText()->createTextCursor();
             assert(xTOCTextCursor.is());
             xTOCTextCursor->gotoEnd(false);
-            mxTOCTextCursor = xTOCTextCursor;
             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
         }
         catch (const uno::Exception&)

@@ -738,8 +738,6 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
             ShowTracking( aSizeRect, ShowTrackFlags::Split );
         }
     }
-
-    maDragHdl.Call( this );
 }
 
 void HeaderBar::ImplEndDrag( bool bCancel )

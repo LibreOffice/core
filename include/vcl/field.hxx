@@ -195,7 +195,6 @@ class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 public:
     virtual                 ~MetricFormatter() override;
 
-    virtual void            CustomConvert() = 0;
     virtual void            Reformat() override;
 
     virtual void            SetUnit( FieldUnit meUnit );
@@ -226,9 +225,7 @@ public:
     static bool             TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue, sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit);
 
 protected:
-    sal_Int64               mnBaseValue;
     FieldUnit               meUnit;
-    Link<MetricFormatter&,void> maCustomConvertLink;
 
                             MetricFormatter(Edit* pEdit);
 
@@ -239,7 +236,6 @@ protected:
 
 private:
     OUString                maCustomUnitText;
-    OUString                maCurUnitText;
 };
 
 
@@ -463,7 +459,6 @@ public:
     virtual void            Down() override;
     virtual void            First() override;
     virtual void            Last() override;
-    virtual void            CustomConvert() override;
 
     virtual void            SetUnit( FieldUnit meUnit ) override;
 
@@ -638,7 +633,6 @@ public:
 
     virtual void            Modify() override;
 
-    virtual void            CustomConvert() override;
     virtual void            ReformatAll() override;
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FieldUnit::NONE,

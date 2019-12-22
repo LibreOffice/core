@@ -2846,11 +2846,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
 }
 
-void DomainMapper::setInTableStyleRunProps(bool bInTableStyleRunProps)
-{
-    m_pImpl->m_bInTableStyleRunProps = bInTableStyleRunProps;
-}
-
 void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
 {
     assert( m_pImpl->GetTopContextType() == CONTEXT_CHARACTER );
