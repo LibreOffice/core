@@ -261,14 +261,14 @@ namespace emfplushelper
                 s.ReadUInt32(color);
                 s.ReadUInt32(color);
 
-                if (additionalFlags & 0x02)
+                if (additionalFlags & 0x02) // BrushDataTransform
                 {
                     EmfPlusHelperData::readXForm(s, brush_transformation);
                     hasTransformation = true;
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse brush transformation: " << brush_transformation);
                 }
 
-                if (additionalFlags & 0x08)
+                if (additionalFlags & 0x08) // BrushDataBlendFactorsH
                 {
                     s.ReadInt32(blendPoints);
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse blend, points: " << blendPoints);
@@ -290,7 +290,7 @@ namespace emfplushelper
                     }
                 }
 
-                if (additionalFlags & 0x04)
+                if (additionalFlags & 0x04) // BrushDataPresetColors
                 {
                     s.ReadInt32(colorblendPoints);
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse color blend, points: " << colorblendPoints);
