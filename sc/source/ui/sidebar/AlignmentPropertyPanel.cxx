@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
 {
     mpCBXWrapText->EnableTriState(false);
     sal_uInt16 nVal = static_cast<sal_uInt16>(mpMFLeftIndent->GetValue());
-    SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  static_cast<sal_uInt16>(CalcToUnit( nVal,  MapUnit::MapTwip )) );
+    ScIndentItem aItem(static_cast<sal_uInt16>(CalcToUnit(nVal,  MapUnit::MapTwip)));
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_INDENT,
             SfxCallMode::RECORD, { &aItem });
