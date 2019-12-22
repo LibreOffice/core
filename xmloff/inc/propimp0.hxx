@@ -24,7 +24,7 @@
 
 // graphic property Stroke
 
-class XMLDurationPropertyHdl : public XMLPropertyHandler
+class XMLDurationPropertyHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLDurationPropertyHdl() override;
@@ -33,7 +33,7 @@ public:
 };
 
 class SvXMLImport;
-class XMLOpacityPropertyHdl : public XMLPropertyHandler
+class XMLOpacityPropertyHdl final : public XMLPropertyHandler
 {
 private:
     SvXMLImport* const    mpImport;
@@ -44,7 +44,7 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
-class XMLTextAnimationStepPropertyHdl : public XMLPropertyHandler
+class XMLTextAnimationStepPropertyHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLTextAnimationStepPropertyHdl() override;
@@ -53,7 +53,7 @@ public:
 };
 
 class SvXMLExport;
-class XMLDateTimeFormatHdl : public XMLPropertyHandler
+class XMLDateTimeFormatHdl final : public XMLPropertyHandler
 {
 private:
     SvXMLExport* mpExport;

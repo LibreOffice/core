@@ -27,7 +27,7 @@ template<typename EnumT> struct SvXMLEnumMapEntry;
 /** Abstract base-class for different XML-types. Derivations of this class
     knows how to compare, im/export a special XML-type
 */
-class XMLBitmapRepeatOffsetPropertyHandler: public XMLPropertyHandler
+class XMLBitmapRepeatOffsetPropertyHandler final : public XMLPropertyHandler
 {
     bool const mbX;
     OUString const msVertical;

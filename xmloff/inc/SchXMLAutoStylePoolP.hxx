@@ -23,7 +23,7 @@
 
 class SchXMLExport;
 
-class SchXMLAutoStylePoolP : public SvXMLAutoStylePoolP
+class SchXMLAutoStylePoolP final : public SvXMLAutoStylePoolP
 {
     SchXMLExport& mrSchXMLExport;
 

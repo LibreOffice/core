@@ -27,7 +27,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace io { class XOutputStream; } } } }
 
-class XMLReplacementImageContext : public SvXMLImportContext
+class XMLReplacementImageContext final : public SvXMLImportContext
 {
     css::uno::Reference < css::io::XOutputStream > m_xBase64Stream;
     css::uno::Reference < css::beans::XPropertySet > m_xPropSet;

@@ -31,7 +31,7 @@ class SvXMLImport;
 class XMLEventsImportContext;
 
 
-class XMLStarBasicContextFactory : public XMLEventContextFactory
+class XMLStarBasicContextFactory final : public XMLEventContextFactory
 {
 public:
     XMLStarBasicContextFactory();

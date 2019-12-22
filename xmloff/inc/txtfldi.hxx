@@ -213,7 +213,7 @@ protected:
 };
 
 /** inherit sender field because of fixed attribute in ProcessAttributes */
-class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
+class XMLAuthorFieldImportContext final : public XMLSenderFieldImportContext
 {
     bool bAuthorFullName;
     const OUString sPropertyFixed;
@@ -228,7 +228,7 @@ public:
         const OUString& sLocalName,      /// element name w/o prefix
         sal_uInt16 nToken);                     /// element token
 
-protected:
+private:
     /// start element
     virtual void StartElement(
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
@@ -242,7 +242,7 @@ protected:
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
-class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
+class XMLPlaceholderFieldImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyHint;
 
@@ -258,7 +258,7 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -307,7 +307,7 @@ public:
 
 /** import date fields (<text:date>);
     inherit from TimeField to reuse implementation */
-class XMLDateFieldImportContext : public XMLTimeFieldImportContext
+class XMLDateFieldImportContext final : public XMLTimeFieldImportContext
 {
 public:
 
@@ -323,7 +323,7 @@ public:
 };
 
 /** import page continuation fields (<text:page-continuation-string>) */
-class XMLPageContinuationImportContext : public XMLTextFieldImportContext
+class XMLPageContinuationImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertySubType;
     const OUString sPropertyNumberingType;
@@ -351,7 +351,7 @@ public:
 };
 
 /** import page number fields (<text:page-number>) */
-class XMLPageNumberImportContext : public XMLTextFieldImportContext
+class XMLPageNumberImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertySubType;
     const OUString sPropertyNumberingType;
@@ -428,7 +428,7 @@ public:
 };
 
 /** import database name fields (<text:database-name>) */
-class XMLDatabaseNameImportContext : public XMLDatabaseFieldImportContext
+class XMLDatabaseNameImportContext final : public XMLDatabaseFieldImportContext
 {
 public:
 
@@ -475,7 +475,7 @@ public:
 };
 
 /** import database select fields (<text:database-select>) */
-class XMLDatabaseSelectImportContext : public XMLDatabaseNextImportContext
+class XMLDatabaseSelectImportContext final : public XMLDatabaseNextImportContext
 {
     const OUString sPropertySetNumber;
     sal_Int32 nNumber;
@@ -499,7 +499,7 @@ public:
 };
 
 /** import database display number fields (<text:database-row-number>) */
-class XMLDatabaseNumberImportContext : public XMLDatabaseFieldImportContext
+class XMLDatabaseNumberImportContext final : public XMLDatabaseFieldImportContext
 {
     const OUString sPropertyNumberingType;
     const OUString sPropertySetNumber;
@@ -560,7 +560,7 @@ protected:
 };
 
 /** import docinfo fields with date or time attributes and numberformats */
-class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
+class XMLDateTimeDocInfoImportContext final : public XMLSimpleDocInfoImportContext
 {
     const OUString sPropertyNumberFormat;
     const OUString sPropertyIsDate;
@@ -580,7 +580,7 @@ public:
                                     const OUString& sLocalName,
                                     sal_uInt16 nToken);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -591,7 +591,7 @@ protected:
 };
 
 /** import revision field (<text:editing-cycles>) */
-class XMLRevisionDocInfoImportContext : public XMLSimpleDocInfoImportContext
+class XMLRevisionDocInfoImportContext final : public XMLSimpleDocInfoImportContext
 {
 public:
 
@@ -601,14 +601,14 @@ public:
                                     const OUString& sLocalName,
                                     sal_uInt16 nToken);
 
-protected:
+private:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import user docinfo field (<text:user-defined>) */
-class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
+class XMLUserDocInfoImportContext final : public XMLSimpleDocInfoImportContext
 {
     OUString aName;
     const OUString sPropertyName;
@@ -626,7 +626,7 @@ public:
                                 const OUString& sLocalName,
                                 sal_uInt16 nToken);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -635,7 +635,7 @@ protected:
 };
 
 /** import hidden paragraph fields (<text:hidden-paragraph>) */
-class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
+class XMLHiddenParagraphImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyCondition;
     const OUString sPropertyIsHidden;
@@ -650,7 +650,7 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -661,7 +661,7 @@ protected:
 };
 
 /** import conditional text fields (<text:conditional-text>) */
-class XMLConditionalTextImportContext : public XMLTextFieldImportContext
+class XMLConditionalTextImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyCondition;
     const OUString sPropertyCurrentPresentation;
@@ -682,7 +682,7 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -693,7 +693,7 @@ protected:
 };
 
 /** import conditional text fields (<text:hidden-text>) */
-class XMLHiddenTextImportContext : public XMLTextFieldImportContext
+class XMLHiddenTextImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyCondition;
     const OUString sPropertyContent;
@@ -713,7 +713,7 @@ public:
                                sal_uInt16 nPrfx,
                                const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -724,7 +724,7 @@ protected:
 };
 
 /** import file name fields (<text:file-name>) */
-class XMLFileNameImportContext : public XMLTextFieldImportContext
+class XMLFileNameImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyFixed;
     const OUString sPropertyFileFormat;
@@ -740,7 +740,7 @@ public:
                              sal_uInt16 nPrfx,
                              const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -751,7 +751,7 @@ protected:
 };
 
 /** import document template name fields (<text:template-name>) */
-class XMLTemplateNameImportContext : public XMLTextFieldImportContext
+class XMLTemplateNameImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyFileFormat;
 
@@ -764,7 +764,7 @@ public:
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -775,7 +775,7 @@ protected:
 };
 
 /** import chapter fields (<text:chapter>) */
-class XMLChapterImportContext : public XMLTextFieldImportContext
+class XMLChapterImportContext final : public XMLTextFieldImportContext
 {
     sal_Int16 nFormat;
     sal_Int8 nLevel;
@@ -787,7 +787,7 @@ public:
                             sal_uInt16 nPrfx,
                             const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -798,7 +798,7 @@ protected:
 };
 
 /** import count fields (<text:[XXX]-count>) */
-class XMLCountFieldImportContext : public XMLTextFieldImportContext
+class XMLCountFieldImportContext final : public XMLTextFieldImportContext
 {
     const OUString sPropertyNumberingType;
 
@@ -828,7 +828,7 @@ private:
 };
 
 /** import page variable fields (<text:get-page-variable>) */
-class XMLPageVarGetFieldImportContext : public XMLTextFieldImportContext
+class XMLPageVarGetFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sNumberFormat;
     OUString sLetterSync;
@@ -842,7 +842,7 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -853,7 +853,7 @@ protected:
 };
 
 /** import page variable fields (<text:get-page-variable>) */
-class XMLPageVarSetFieldImportContext : public XMLTextFieldImportContext
+class XMLPageVarSetFieldImportContext final : public XMLTextFieldImportContext
 {
     sal_Int16 nAdjust;
     bool bActive;
@@ -865,7 +865,7 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -876,7 +876,7 @@ protected:
 };
 
 /** import macro fields (<text:execute-macro>) */
-class XMLMacroFieldImportContext : public XMLTextFieldImportContext
+class XMLMacroFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sDescription;
     SvXMLImportContextRef xEventContext;
@@ -892,7 +892,7 @@ public:
                                sal_uInt16 nPrfx,
                                const OUString& sLocalName);
 
-protected:
+private:
     /// for <office:events> children
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -909,7 +909,7 @@ protected:
 };
 
 /** import reference fields (<text:reference-get>) */
-class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
+class XMLReferenceFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sName;
     OUString sLanguage;
@@ -928,7 +928,7 @@ public:
                                    sal_uInt16 nPrfx,
                                    const OUString& sLocalName);
 
-protected:
+private:
     /// start element
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
@@ -943,7 +943,7 @@ protected:
 };
 
 /** import dde field declaration container (<text:dde-connection-decls>) */
-class XMLDdeFieldDeclsImportContext : public SvXMLImportContext
+class XMLDdeFieldDeclsImportContext final : public SvXMLImportContext
 {
 public:
 
@@ -958,7 +958,7 @@ public:
 };
 
 /** import dde field declaration (<text:dde-connection-decl>) */
-class XMLDdeFieldDeclImportContext : public SvXMLImportContext
+class XMLDdeFieldDeclImportContext final : public SvXMLImportContext
 {
     const SvXMLTokenMap& rTokenMap;
 
@@ -975,7 +975,7 @@ public:
 };
 
 /** import dde fields (<text:dde-connection>) */
-class XMLDdeFieldImportContext : public XMLTextFieldImportContext
+class XMLDdeFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sName;
     OUString const sPropertyContent;
@@ -987,7 +987,7 @@ public:
                              sal_uInt16 nPrfx,
                              const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1001,7 +1001,7 @@ protected:
 };
 
 /** import sheet name fields (Calc) dde fields (<text:sheet-name>) */
-class XMLSheetNameImportContext : public XMLTextFieldImportContext
+class XMLSheetNameImportContext final : public XMLTextFieldImportContext
 {
 
 public:
@@ -1011,7 +1011,7 @@ public:
                               sal_uInt16 nPrfx,
                               const OUString& sLocalName);
 
-protected:
+private:
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1022,7 +1022,7 @@ protected:
 };
 
 /** import page|slide name fields (<text:page-name>) */
-class XMLPageNameFieldImportContext : public XMLTextFieldImportContext
+class XMLPageNameFieldImportContext final : public XMLTextFieldImportContext
 {
 public:
 
@@ -1042,7 +1042,7 @@ public:
 };
 
 /** import hyperlinks as URL fields (Calc, Impress, Draw) (<office:a>) */
-class XMLUrlFieldImportContext : public XMLTextFieldImportContext
+class XMLUrlFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sURL;
     OUString sFrame;
@@ -1055,7 +1055,7 @@ public:
                              sal_uInt16 nPrfx,
                              const OUString& sLocalName);
 
-protected:
+private:
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1066,7 +1066,7 @@ protected:
 };
 
 /** import bibliography info fields (<text:bibliography-mark>) */
-class XMLBibliographyFieldImportContext : public XMLTextFieldImportContext
+class XMLBibliographyFieldImportContext final : public XMLTextFieldImportContext
 {
     ::std::vector< css::beans::PropertyValue> aValues;
 
@@ -1094,7 +1094,7 @@ private:
 };
 
 /** Import an annotation field (<text:annotation>) */
-class XMLAnnotationImportContext : public XMLTextFieldImportContext
+class XMLAnnotationImportContext final : public XMLTextFieldImportContext
 {
     OUStringBuffer aAuthorBuffer;
     OUStringBuffer aInitialsBuffer;
@@ -1117,7 +1117,7 @@ public:
                                sal_uInt16 nPrfx,
                                const OUString& sLocalName);
 
-protected:
+private:
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1134,7 +1134,7 @@ protected:
 };
 
 /** Import a script field (<text:script>) */
-class XMLScriptImportContext : public XMLTextFieldImportContext
+class XMLScriptImportContext final : public XMLTextFieldImportContext
 {
     OUString sContent;
     OUString sScriptType;
@@ -1148,7 +1148,7 @@ public:
                            sal_uInt16 nPrfx,
                            const OUString& sLocalName);
 
-protected:
+private:
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1159,7 +1159,7 @@ protected:
 };
 
 /** import measure fields (<text:measure>) */
-class XMLMeasureFieldImportContext : public XMLTextFieldImportContext
+class XMLMeasureFieldImportContext final : public XMLTextFieldImportContext
 {
     sal_Int16 mnKind;
 
@@ -1170,7 +1170,7 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1181,7 +1181,7 @@ protected:
 };
 
 /** dropdown field (filter legacy) */
-class XMLDropDownFieldImportContext : public XMLTextFieldImportContext
+class XMLDropDownFieldImportContext final : public XMLTextFieldImportContext
 {
     std::vector<OUString> aLabels;
     OUString sName;
@@ -1204,7 +1204,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1215,7 +1215,7 @@ protected:
 };
 
 /** import header fields (<draw:header>) */
-class XMLHeaderFieldImportContext : public XMLTextFieldImportContext
+class XMLHeaderFieldImportContext final : public XMLTextFieldImportContext
 {
 public:
 
@@ -1235,7 +1235,7 @@ public:
 };
 
 /** import footer fields (<draw:footer>) */
-class XMLFooterFieldImportContext : public XMLTextFieldImportContext
+class XMLFooterFieldImportContext final : public XMLTextFieldImportContext
 {
 public:
 
@@ -1255,7 +1255,7 @@ public:
 };
 
 /** import footer fields (<draw:date-and-time>) */
-class XMLDateTimeFieldImportContext : public XMLTextFieldImportContext
+class XMLDateTimeFieldImportContext final : public XMLTextFieldImportContext
 {
 public:
 

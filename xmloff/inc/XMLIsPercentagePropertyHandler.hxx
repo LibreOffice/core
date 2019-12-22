@@ -26,7 +26,7 @@
     This is a handler that returns true for import if the attribute string
     contains a '%' value. For export this is only usable for filtering.
 */
-class XMLIsPercentagePropertyHandler : public XMLPropertyHandler
+class XMLIsPercentagePropertyHandler final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLIsPercentagePropertyHandler () override;

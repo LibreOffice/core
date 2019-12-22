@@ -25,7 +25,7 @@
 /**
     This is a handler either only import/exports percent or measure.
 */
-class XMLPercentOrMeasurePropertyHandler : public XMLPropertyHandler
+class XMLPercentOrMeasurePropertyHandler final : public XMLPropertyHandler
 {
 public:
     XMLPercentOrMeasurePropertyHandler();

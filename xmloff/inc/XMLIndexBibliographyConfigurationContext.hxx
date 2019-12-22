@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
  *
  * Little cheat: Cover all child elements in CreateChildContext.
  */
-class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
+class XMLIndexBibliographyConfigurationContext final : public SvXMLStyleContext
 {
     OUString sSuffix;
     OUString sPrefix;
