@@ -303,8 +303,6 @@ const SfxItemSet* FuPage::ExecuteDialog(vcl::Window* pParent, SfxRequest& rReq)
     }
     else if (nId == SID_SELECT_BACKGROUND)
     {
-        OUString aFileName;
-        OUString aFilterName;
         Graphic aGraphic;
         ErrCode nError = ERRCODE_GRFILTER_OPENERROR;
 
@@ -313,7 +311,8 @@ const SfxItemSet* FuPage::ExecuteDialog(vcl::Window* pParent, SfxRequest& rReq)
 
         if (pArgs && pArgs->GetItemState(SID_SELECT_BACKGROUND, true, &pItem) == SfxItemState::SET)
         {
-            aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            OUString aFileName(static_cast<const SfxStringItem*>(pItem)->GetValue());
+            OUString aFilterName;
 
             if (pArgs->GetItemState(FN_PARAM_FILTER, true, &pItem) == SfxItemState::SET)
                 aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -326,11 +325,9 @@ const SfxItemSet* FuPage::ExecuteDialog(vcl::Window* pParent, SfxRequest& rReq)
             SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE), pParent);
 
             nError = aDlg.Execute();
-            if (nError != ERRCODE_NONE)
+            if (nError == ERRCODE_NONE)
             {
                 nError = aDlg.GetGraphic(aGraphic);
-                aFileName = aDlg.GetPath();
-                aFilterName = aDlg.GetDetectedFilter();
             }
         }
 
