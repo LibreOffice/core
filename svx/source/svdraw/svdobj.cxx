@@ -3072,7 +3072,8 @@ SdrObject* SdrObjFactory::MakeNewObject(
     SdrModel& rSdrModel,
     SdrInventor nInventor,
     sal_uInt16 nIdentifier,
-    const tools::Rectangle* pSnapRect)
+    const tools::Rectangle* pSnapRect,
+    bool bToClone)
 {
     SdrObject* pObj(nullptr);
     bool bSetSnapRect(nullptr != pSnapRect);
@@ -3182,7 +3183,11 @@ SdrObject* SdrObjFactory::MakeNewObject(
 #if HAVE_FEATURE_AVMEDIA
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj(rSdrModel);               break;
 #endif
-            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
+            case sal_uInt16(OBJ_TABLE      ):
+            {
+                pObj=new sdr::table::SdrTableObj(rSdrModel, bToClone);
+            }
+            break;
         }
     }
 
