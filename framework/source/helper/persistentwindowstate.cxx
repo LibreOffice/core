@@ -18,13 +18,16 @@
  */
 
 #include <helper/persistentwindowstate.hxx>
+#include <officecfg/Setup.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <comphelper/lok.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 
@@ -164,11 +167,17 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
     OUString sWindowState;
     try
     {
-        ::comphelper::ConfigurationHelper::readDirectKey(rxContext,
-            "org.openoffice.Setup/",
-            "Office/Factories/*[\"" + sModuleName + "\"]",
-            "ooSetupFactoryWindowAttributes",
-            ::comphelper::EConfigurationModes::ReadOnly) >>= sWindowState;
+        css::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get(rxContext));
+        css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xModuleCfg, css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::beans::XPropertySet > xProps;
+        xAccess->getByHierarchicalName(sModuleName) >>= xProps;
+        if (!xProps.is())
+        {
+            throw css::container::NoSuchElementException(
+              "The requested path \"" + sModuleName + "\" does not exist.");
+        }
+        xProps->getPropertyValue("ooSetupFactoryWindowAttributes") >>= sWindowState;
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -184,12 +193,19 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
 {
     try
     {
-        ::comphelper::ConfigurationHelper::writeDirectKey(rxContext,
-            "org.openoffice.Setup/",
-            "Office/Factories/*[\"" + sModuleName + "\"]",
-            "ooSetupFactoryWindowAttributes",
-            css::uno::makeAny(sWindowState),
-            ::comphelper::EConfigurationModes::Standard);
+        css::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get(rxContext));
+        css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xModuleCfg, css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::beans::XPropertySet > xProps;
+        xAccess->getByHierarchicalName(sModuleName) >>= xProps;
+        if (!xProps.is())
+        {
+            throw css::container::NoSuchElementException(
+              "The requested path \"" + sModuleName + "\" does not exist.");
+        }
+        xProps->setPropertyValue("ooSetupFactoryWindowAttributes", css::uno::makeAny(sWindowState));
+        css::uno::Reference< css::util::XChangesBatch > xBatch(xModuleCfg, css::uno::UNO_QUERY_THROW);
+        xBatch->commitChanges();
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
