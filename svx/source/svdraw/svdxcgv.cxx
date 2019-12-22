@@ -371,7 +371,7 @@ bool SdrExchangeView::Paste(
         // New mechanism to re-create the connections of cloned connectors
         aCloneList.CopyConnections();
 
-        if(0L != nCloneErrCnt)
+        if(0 != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
             OStringBuffer aStr("SdrExchangeView::Paste(): Error when cloning ");

@@ -147,7 +147,7 @@ bool ViewContact::isAnimatedInAnyViewObjectContact() const
     return false;
 }
 
-// Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
+// Access to possible sub-hierarchy and parent. GetObjectCount() default is 0
 // and GetViewContact default pops up an assert since it's an error if
 // GetObjectCount has a result != 0 and it's not overridden.
 sal_uInt32 ViewContact::GetObjectCount() const
