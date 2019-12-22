@@ -187,7 +187,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
 IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
 {
     bool bVertical = mpCBStacked->IsChecked();
-    SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
+    ScVerticalStackCell aStackItem(bVertical);
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, { &aStackItem });
 }
@@ -341,8 +341,8 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         if (eState >= SfxItemState::DEFAULT)
         {
             mpCBStacked->EnableTriState(false);
-            const SfxBoolItem* aStackItem = static_cast<const SfxBoolItem*>(pState);
-            mbMultiDisable = aStackItem->GetValue();
+            const SfxBoolItem* pStackItem = static_cast<const ScVerticalStackCell*>(pState);
+            mbMultiDisable = pStackItem->GetValue();
             mpCBStacked->Check(mbMultiDisable);
             mpTextOrientBox->Enable(!mbMultiDisable);
         }
