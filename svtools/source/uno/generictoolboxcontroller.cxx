@@ -192,12 +192,14 @@ void GenericToolboxController::statusChanged( const FeatureStateEvent& Event )
         if ( Event.State >>= bValue )
         {
             // Boolean, treat it as checked/unchecked
-            m_pToolbox->set_item_active( sId, bValue );
+            m_pToolbox->set_item_active(sId, bValue);
         }
         else if ( Event.State >>= aStrValue )
         {
-            m_pToolbox->set_item_label( sId, aStrValue );
+            m_pToolbox->set_item_label(sId, aStrValue);
         }
+        else
+            m_pToolbox->set_item_active(sId, false);
     }
 }
 
