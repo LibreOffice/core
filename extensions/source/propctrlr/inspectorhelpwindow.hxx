@@ -40,8 +40,6 @@ namespace pcr
         void            SetText(const OUString& rStr);
 
         void            SetLimits(sal_Int32 nMinLines, sal_Int32 nMaxLines);
-        long            GetMinimalHeightPixel();
-        long            GetOptimalHeightPixel();
 
         void            Show(bool bShow) { m_xHelpFrame->set_visible(bShow); }
         bool            IsVisible() const { return m_xHelpFrame->get_visible(); }

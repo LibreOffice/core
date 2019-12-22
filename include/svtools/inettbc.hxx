@@ -56,7 +56,6 @@ protected:
 
 public:
                                     SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
-                                    SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     virtual ~SvtURLBox() override;
     virtual void                    dispose() override;
 
@@ -64,9 +63,6 @@ public:
     const Link<SvtURLBox*,void>&    GetOpenHdl() const { return aOpenHdl; }
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     OUString                        GetURL();
-    void                            DisableHistory();
-
-    void                            UpdatePickList( );
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
 };

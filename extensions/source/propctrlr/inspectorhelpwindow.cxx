@@ -47,11 +47,6 @@ namespace pcr
         m_nMaxLines = nMaxLines;
     }
 
-    long InspectorHelpWindow::GetMinimalHeightPixel()
-    {
-        return impl_getMinimalTextWindowHeight();
-    }
-
     long InspectorHelpWindow::impl_getMinimalTextWindowHeight()
     {
         return m_xHelpText->get_height_rows(m_nMinLines);
@@ -60,19 +55,6 @@ namespace pcr
     long InspectorHelpWindow::impl_getMaximalTextWindowHeight()
     {
         return m_xHelpText->get_height_rows(m_nMaxLines);
-    }
-
-    long InspectorHelpWindow::GetOptimalHeightPixel()
-    {
-        // --- calc the height as needed for the mere text window
-        long nMinTextWindowHeight = impl_getMinimalTextWindowHeight();
-        long nMaxTextWindowHeight = impl_getMaximalTextWindowHeight();
-
-        long nActTextWindowHeight = m_xHelpFrame->get_preferred_size().Height();
-
-        long nOptTextWindowHeight = std::max( nMinTextWindowHeight, std::min( nMaxTextWindowHeight, nActTextWindowHeight ) );
-
-        return nOptTextWindowHeight;
     }
 
 } // namespace pcr

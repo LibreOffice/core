@@ -1715,27 +1715,6 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     }
 }
 
-/**
- * An inelegant method; sets the item width & height such that
- * all of the included items and their labels fit; if we can
- * calculate that.
- */
-void ValueSet::RecalculateItemSizes()
-{
-    Size aLargestItem = GetLargestItemSize();
-
-    if ( mnUserItemWidth != aLargestItem.Width() ||
-         mnUserItemHeight != aLargestItem.Height() )
-    {
-        mnUserItemWidth = aLargestItem.Width();
-        mnUserItemHeight = aLargestItem.Height();
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
-    }
-}
-
 void ValueSet::SelectItem( sal_uInt16 nItemId )
 {
     size_t nItemPos = 0;
