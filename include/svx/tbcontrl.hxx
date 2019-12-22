@@ -146,7 +146,6 @@ class SvxFontItem;
 class SfxStyleControllerItem_Impl;
 class SfxStyleSheetBasePool;
 class SfxTemplateItem;
-class SvxStyleBox_Impl;
 class PaletteManager;
 
 namespace svx
@@ -154,25 +153,22 @@ namespace svx
     class ToolboxButtonColorUpdaterBase;
 }
 
-class SVXCORE_DLLPUBLIC SvxStyleToolBoxControl final : public SfxToolBoxControl
+class SVXCORE_DLLPUBLIC SvxStyleToolBoxControl final : public cppu::ImplInheritanceHelper<svt::ToolboxController,
+                                                                                          css::lang::XServiceInfo>
 {
     struct Impl;
     std::unique_ptr<Impl> pImpl;
 
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxStyleToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
+    SvxStyleToolBoxControl();
     virtual ~SvxStyleToolBoxControl() override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
+    // XToolbarController
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
-    DECL_LINK( VisibilityNotification, SvxStyleBox_Impl&, void );
-
-private:
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
@@ -182,6 +178,12 @@ private:
     // XComponent
     virtual void SAL_CALL dispose() override;
 
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+private:
 #define MAX_FAMILIES 5
 
     SfxStyleSheetBasePool* pStyleSheetPool;
