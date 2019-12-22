@@ -22,8 +22,10 @@
 #include <services.h>
 #include <targets.h>
 
+#include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
+
 // include others
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -53,28 +55,11 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
 
                         m_xDesktop = css::frame::Desktop::create(m_xContext);
 
-                        m_xConfig.set(
-                            ::comphelper::ConfigurationHelper::openConfig(
-                                m_xContext,
-                                "/org.openoffice.Setup/Office/Factories",
-                                ::comphelper::EConfigurationModes::ReadOnly),
-                            css::uno::UNO_QUERY_THROW);
-
                         // ask for office locale
-                        ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xContext,
-                            "/org.openoffice.Setup",
-                            "L10N",
-                            "ooLocale",
-                            ::comphelper::EConfigurationModes::ReadOnly) >>= m_sLocale;
+                        m_sLocale = officecfg::Setup::L10N::ooLocale::get(m_xContext);
 
                         // detect system
-                        ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xContext,
-                            "/org.openoffice.Office.Common",
-                            "Help",
-                            "System",
-                            ::comphelper::EConfigurationModes::ReadOnly) >>= m_sSystem;
+                        m_sSystem = officecfg::Office::Common::Help::System::get(m_xContext);
 
                         // Start listening for disposing events of these services,
                         // so we can react e.g. for an office shutdown
