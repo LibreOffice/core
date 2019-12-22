@@ -51,15 +51,15 @@ public:
         const css::uno::Reference< css::lang::XComponent >&    xComponent,
         css::uno::Reference< css::uno::XComponentContext > const & rxContext,
         css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
-        const sal_Char* pComponentName );
+        const char* pComponentName );
 
     static bool WriteThroughComponent(
         const css::uno::Reference< css::embed::XStorage >& xStor,
         const css::uno::Reference< css::lang::XComponent >& xComponent,
-        const sal_Char* pStreamName,
+        const char* pStreamName,
         css::uno::Reference< css::uno::XComponentContext > const & rxContext,
         css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
-        const sal_Char* pComponentName );
+        const char* pComponentName );
 };
 
 

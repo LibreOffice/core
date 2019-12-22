@@ -45,7 +45,7 @@ using namespace store;
  */
 static sal_Size convertTextToUnicode (
     rtl_TextToUnicodeConverter  hConverter,
-    const sal_Char *pSrcBuffer, sal_Size nSrcLength,
+    const char *pSrcBuffer, sal_Size nSrcLength,
     sal_Unicode    *pDstBuffer, sal_Size nDstLength)
 {
     sal_uInt32 nCvtInfo = 0;
@@ -178,7 +178,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
                 inode_holder_type xNode (aPage.get());
 
                 // Setup FindData.
-                sal_Char *p = xNode->m_aNameBlock.m_pData;
+                char *p = xNode->m_aNameBlock.m_pData;
                 sal_Int32 n = rtl_str_getLength (p);
                 sal_Int32 k = rFindData.m_nLength;
 

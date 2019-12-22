@@ -121,14 +121,14 @@ struct SmToken
     SmToken();
     SmToken(SmTokenType eTokenType,
             sal_Unicode cMath,
-            const sal_Char* pText,
+            const char* pText,
             TG nTokenGroup = TG::NONE,
             sal_uInt16 nTokenLevel = 0);
 };
 
 struct SmTokenTableEntry
 {
-    const sal_Char* pIdent;
+    const char* pIdent;
     SmTokenType const     eType;
     sal_Unicode const     cMathChar;
     TG const              nGroup;

@@ -1703,7 +1703,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                     // read font name
                     while(true)
                     {
-                        sal_Char nChar8(0);
+                        char nChar8(0);
                         pS->ReadChar( nChar8 );
                         if (nChar8 == 0)
                             break;

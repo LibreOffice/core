@@ -250,7 +250,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const Reference<XComponent>& xModelComponent,
     Reference<uno::XComponentContext> const & rxContext,
     Reference<beans::XPropertySet> const & rPropSet,
-    const sal_Char* pFilterName,
+    const char* pFilterName,
     bool bEncrypted )
 {
     ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
@@ -350,11 +350,11 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
 ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
-    const sal_Char* pStreamName,
-    const sal_Char* pCompatibilityStreamName,
+    const char* pStreamName,
+    const char* pCompatibilityStreamName,
     Reference<uno::XComponentContext> const & rxContext,
     Reference<beans::XPropertySet> const & rPropSet,
-    const sal_Char* pFilterName )
+    const char* pFilterName )
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");

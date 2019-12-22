@@ -279,11 +279,11 @@ struct OStorePageNameBlock
     G          m_aGuard;
     K          m_aKey;
     sal_uInt32 m_nAttrib = 0;
-    sal_Char   m_pData[STORE_MAXIMUM_NAMESIZE] = {};
+    char       m_pData[STORE_MAXIMUM_NAMESIZE] = {};
 
     /** size.
     */
-    static const size_t theSize = sizeof(G) + sizeof(K) + sizeof(sal_uInt32) + sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE]);
+    static const size_t theSize = sizeof(G) + sizeof(K) + sizeof(sal_uInt32) + sizeof(char[STORE_MAXIMUM_NAMESIZE]);
 
     /** Construction.
     */
@@ -629,7 +629,7 @@ public:
     sal_uInt32 path() const
     {
         page const & rPage = PAGE();
-        const sal_Char * pszName = rPage.m_aNameBlock.m_pData;
+        const char * pszName = rPage.m_aNameBlock.m_pData;
         sal_uInt32       nPath   = store::ntohl(rPage.m_aNameBlock.m_aKey.m_nHigh);
         return rtl_crc32 (nPath, pszName, rtl_str_getLength(pszName));
     }

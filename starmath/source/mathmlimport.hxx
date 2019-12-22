@@ -51,17 +51,17 @@ public:
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
         css::uno::Reference< css::uno::XComponentContext > const & rxContext,
         css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
-        const sal_Char* pFilterName,
+        const char* pFilterName,
         bool bEncrypted );
 
     static ErrCode ReadThroughComponent(
         const css::uno::Reference< css::embed::XStorage >& xStorage,
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
-        const sal_Char* pStreamName,
-        const sal_Char* pCompatibilityStreamName,
+        const char* pStreamName,
+        const char* pCompatibilityStreamName,
         css::uno::Reference< css::uno::XComponentContext > const & rxContext,
         css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
-        const sal_Char* pFilterName );
+        const char* pFilterName );
 };
 
 

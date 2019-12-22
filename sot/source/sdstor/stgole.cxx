@@ -114,7 +114,7 @@ bool StgCompObjStream::Load()
             // higher bits are ignored
             sal_uLong nStrLen = ::std::min( nLen1, sal_Int32(0xFFFE) );
 
-            std::unique_ptr<sal_Char[]> p(new sal_Char[ nStrLen+1 ]);
+            std::unique_ptr<char[]> p(new char[ nStrLen+1 ]);
             p[nStrLen] = 0;
             if (ReadBytes( p.get(), nStrLen ) == nStrLen)
             {
