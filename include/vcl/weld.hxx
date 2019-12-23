@@ -1966,12 +1966,18 @@ public:
     virtual bool get_item_active(const OString& rIdent) const = 0;
     virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) = 0;
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) = 0;
+    virtual bool get_item_visible(const OString& rIdent) const = 0;
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual OUString get_item_label(const OString& rIdent) const = 0;
+    virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) = 0;
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 
     virtual int get_n_items() const = 0;
     virtual OString get_item_ident(int nIndex) const = 0;
+    virtual void set_item_ident(int nIndex, const OString& rIdent) = 0;
     virtual void set_item_label(int nIndex, const OUString& rLabel) = 0;
     virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
         = 0;

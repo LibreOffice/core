@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_WELDUTILS_HXX
 
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -20,19 +19,6 @@
 
 namespace weld
 {
-class Toolbar;
-
-class VCL_DLLPUBLIC ToolbarUnoDispatcher
-{
-private:
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
-    DECL_LINK(SelectHdl, const OString&, void);
-
-public:
-    // fill in the label and icons for actions and dispatch the action on item click
-    ToolbarUnoDispatcher(Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame);
-};
-
 typedef cppu::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
 
 class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base

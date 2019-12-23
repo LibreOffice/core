@@ -971,6 +971,16 @@ public:
         return m_xToolBox->IsItemEnabled(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
     }
 
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) override
+    {
+        m_xToolBox->ShowItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bVisible);
+    }
+
+    virtual bool get_item_visible(const OString& rIdent) const override
+    {
+        return m_xToolBox->IsItemVisible(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         sal_uInt16 nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
@@ -1045,9 +1055,24 @@ public:
         return m_xToolBox->GetItemCommand(m_xToolBox->GetItemId(nIndex)).toUtf8();
     }
 
+    virtual void set_item_ident(int nIndex, const OString& rIdent) override
+    {
+        return m_xToolBox->SetItemCommand(m_xToolBox->GetItemId(nIndex), OUString::fromUtf8(rIdent));
+    }
+
     virtual void set_item_label(int nIndex, const OUString& rLabel) override
     {
         m_xToolBox->SetItemText(m_xToolBox->GetItemId(nIndex), rLabel);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        return m_xToolBox->GetItemText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    }
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        m_xToolBox->SetItemText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rLabel);
     }
 
     virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
@@ -1058,6 +1083,11 @@ public:
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) override
     {
         m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(nIndex), rTip);
+    }
+
+    virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) override
+    {
+        m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rTip);
     }
 
     virtual vcl::ImageType get_icon_size() const override
