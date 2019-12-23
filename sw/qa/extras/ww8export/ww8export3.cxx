@@ -305,7 +305,7 @@ DECLARE_WW8EXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowS
 
     xStyleProps.set(characterStyles->getByName("CharShadow-removed"), uno::UNO_QUERY_THROW);
     aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
-    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
 DECLARE_WW8EXPORT_TEST(testBtlrCell, "btlr-cell.doc")

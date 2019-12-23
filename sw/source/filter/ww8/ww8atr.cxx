@@ -5508,11 +5508,12 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
        nDist = rBox.GetDistance( SvxBoxItemLine::RIGHT );
     }
 
-    if( pBorderLine )
+    // RTF: avoid regressions since RTF doesn't know how to export a border_NONE style-override
+    if( pBorderLine || GetExport().GetExportFormat() != MSWordExportBase::ExportFormat::RTF )
     {
         const SfxPoolItem* pItem = GetExport().HasItem( RES_CHRATR_SHADOW );
         const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
-        const bool bShadow =
+        const bool bShadow = pBorderLine &&
             pShadowItem && pShadowItem->GetLocation() != SvxShadowLocation::NONE &&
             pShadowItem->GetWidth() > 0;
 

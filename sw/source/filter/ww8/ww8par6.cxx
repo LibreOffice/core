@@ -5056,8 +5056,6 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
 
             SetWW8_BRC(nBrcVer, aBrc, pData, nLen);
 
-            // Border style is none -> no border, no shadow
-            if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != SvxBorderLineStyle::NONE )
             {
                 Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
                 Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);
@@ -5067,8 +5065,10 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
 
                 short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
                 SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);
-                if( SetShadow( aShadowItem, &aSizeArray[0], aBrc ) )
-                    NewAttr( aShadowItem );
+                // Word only allows shadows on visible borders
+                if ( aBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT ) )
+                   SetShadow( aShadowItem, &aSizeArray[0], aBrc );
+                NewAttr( aShadowItem );
             }
         }
     }
