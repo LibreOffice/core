@@ -492,10 +492,11 @@ void SvxDialControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     //use same logic as DialControl_Impl::SetSize
     int nDim = (std::min<int>(pDrawingArea->get_approximate_digit_width() * 12,
                               pDrawingArea->get_text_height() * 6) - 1) | 1;
-    pDrawingArea->set_size_request(nDim, nDim);
+    Size aSize(nDim, nDim);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     mpImpl.reset(new DialControl_Impl(pDrawingArea->get_ref_device()));
     //set size and use that
-    Init(GetOutputSizePixel());
+    Init(aSize);
 }
 
 void SvxDialControl::Resize()
