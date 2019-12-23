@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/dispatchcommand.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 
@@ -104,36 +104,6 @@ void TriStateEnabled::ButtonToggled(weld::ToggleButton& rToggle)
         }
     }
     eState = rToggle.get_state();
-}
-
-ToolbarUnoDispatcher::ToolbarUnoDispatcher(Toolbar& rToolbar,
-                                           const css::uno::Reference<css::frame::XFrame>& rFrame)
-    : m_xFrame(rFrame)
-{
-    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
-    vcl::ImageType eSize = rToolbar.get_icon_size();
-
-    for (int i = 0, nItems = rToolbar.get_n_items(); i < nItems; ++i)
-    {
-        OUString sCommand = OUString::fromUtf8(rToolbar.get_item_ident(i));
-
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
-        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
-        rToolbar.set_item_label(i, aLabel);
-        OUString aTooltip(
-            vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties, rFrame));
-        rToolbar.set_item_tooltip_text(i, aTooltip);
-        auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sCommand, rFrame, eSize));
-        rToolbar.set_item_icon(i, xImage);
-    }
-
-    rToolbar.connect_clicked(LINK(this, ToolbarUnoDispatcher, SelectHdl));
-}
-
-IMPL_LINK(ToolbarUnoDispatcher, SelectHdl, const OString&, rCommand, void)
-{
-    comphelper::dispatchCommand(OUString::fromUtf8(rCommand), m_xFrame,
-                                css::uno::Sequence<css::beans::PropertyValue>());
 }
 }
 

@@ -7122,6 +7122,18 @@ public:
         return gtk_widget_get_sensitive(GTK_WIDGET(m_aMap.find(rIdent)->second));
     }
 
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) override
+    {
+        disable_item_notify_events();
+        gtk_widget_set_visible(GTK_WIDGET(m_aMap[rIdent]), bVisible);
+        enable_item_notify_events();
+    }
+
+    virtual bool get_item_visible(const OString& rIdent) const override
+    {
+        return gtk_widget_get_visible(GTK_WIDGET(m_aMap.find(rIdent)->second));
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         disable_item_notify_events();
@@ -7178,10 +7190,28 @@ public:
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
 
+    virtual void set_item_ident(int nIndex, const OString& rIdent) override
+    {
+        GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), rIdent.getStr());
+    }
+
     virtual void set_item_label(int nIndex, const OUString& rLabel) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
+    }
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        GtkToolButton* pItem = m_aMap[rIdent];
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
+    }
+
+    OUString get_item_label(const OString& rIdent) const override
+    {
+        const gchar* pText = gtk_tool_button_get_label(m_aMap.find(rIdent)->second);
+        return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
@@ -7203,6 +7233,12 @@ public:
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        gtk_widget_set_tooltip_text(GTK_WIDGET(pItem), OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) override
+    {
+        GtkToolButton* pItem = m_aMap[rIdent];
         gtk_widget_set_tooltip_text(GTK_WIDGET(pItem), OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
     }
 

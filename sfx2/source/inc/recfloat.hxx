@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_RECFLOAT_HXX
 #define INCLUDED_SFX2_SOURCE_INC_RECFLOAT_HXX
 
-#include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/weldutils.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/weldutils.hxx>
 
 class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
 {
@@ -41,7 +41,7 @@ public:
 class SfxRecordingFloat_Impl : public SfxModelessDialogController
 {
     std::unique_ptr<weld::Toolbar> m_xToolbar;
-    weld::ToolbarUnoDispatcher m_aDispatcher;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xDispatcher;
 public:
     SfxRecordingFloat_Impl(SfxBindings* pBindings,
                            SfxChildWindow* pChildWin,
