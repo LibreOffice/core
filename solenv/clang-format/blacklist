@@ -14084,7 +14084,6 @@ svx/source/inc/datalistener.hxx
 svx/source/inc/datanavi.hxx
 svx/source/inc/delayedevent.hxx
 svx/source/inc/docrecovery.hxx
-svx/source/inc/eventhandler.hxx
 svx/source/inc/filtnav.hxx
 svx/source/inc/fmPropBrw.hxx
 svx/source/inc/fmcontrolbordermanager.hxx
@@ -14207,7 +14206,6 @@ svx/source/sdr/contact/viewobjectcontactofsdrole2obj.cxx
 svx/source/sdr/contact/viewobjectcontactofsdrpage.cxx
 svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx
 svx/source/sdr/contact/viewobjectcontactredirector.cxx
-svx/source/sdr/event/eventhandler.cxx
 svx/source/sdr/overlay/overlayanimatedbitmapex.cxx
 svx/source/sdr/overlay/overlaybitmapex.cxx
 svx/source/sdr/overlay/overlaycrosshair.cxx
