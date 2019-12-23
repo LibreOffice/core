@@ -111,12 +111,12 @@ static inline sal_uInt32 getSystemTicks()
 }
 
 
-static void out( const sal_Char * pText, FILE * stream = stderr,
-                 sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
+static void out( const char * pText, FILE * stream = stderr,
+                 sal_Int32 nStart = -1, char cFillchar = ' ' )
 {
     static sal_Int32 s_nPos = 0;
 
-    sal_Char ar[2] = { cFillchar, 0 };
+    char ar[2] = { cFillchar, 0 };
     while (s_nPos < nStart)
     {
         ::fprintf( stream, ar );
@@ -125,7 +125,7 @@ static void out( const sal_Char * pText, FILE * stream = stderr,
 
     ::fprintf( stream, pText );
 
-    for ( const sal_Char * p = pText; *p; ++p )
+    for ( const char * p = pText; *p; ++p )
     {
         if (*p == '\n')
             s_nPos = 0;
@@ -135,24 +135,24 @@ static void out( const sal_Char * pText, FILE * stream = stderr,
 }
 
 static inline void out( const OUString & rText, FILE * stream = stderr,
-                        sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
+                        sal_Int32 nStart = -1, char cFillchar = ' ' )
 {
     OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
     out( aText.getStr(), stream, nStart, cFillchar );
 }
 
 static inline void out( double fVal, FILE * stream = stderr,
-                        sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
+                        sal_Int32 nStart = -1, char cFillchar = ' ' )
 {
-    sal_Char ar[128];
+    char ar[128];
     ::snprintf( ar, sizeof(ar), (fVal < 0.000001 ? "%g" : "%f"), fVal );
     out( ar, stream, nStart, cFillchar );
 }
 
 static inline void out( sal_Int64 nVal, FILE * stream = stderr,
-                        sal_Int32 nStart = -1, sal_Char cFillchar = ' ' )
+                        sal_Int32 nStart = -1, char cFillchar = ' ' )
 {
-    sal_Char ar[128];
+    char ar[128];
     ::snprintf( ar, sizeof(ar), "%ld", nVal );
     out( ar, stream, nStart, cFillchar );
 }
@@ -186,7 +186,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
         {
             uno_Environment * pCurrentEnv = 0;
             uno_Environment * pEnv = 0;
-            const sal_Char * pEnvTypeName = 0;
+            const char * pEnvTypeName = 0;
             (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pEnv );
 
             sal_Bool bNeedsMapping =
@@ -528,10 +528,10 @@ typedef std::map< std::string, TimeEntry > t_TimeEntryMap;
 struct TimingSheet
 {
     t_TimeEntryMap      _entries;
-    void insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nTicks );
+    void insert( const char * pText, sal_Int64 nLoop, sal_uInt32 nTicks );
 };
 
-void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nTicks )
+void TimingSheet::insert( const char * pText, sal_Int64 nLoop, sal_uInt32 nTicks )
 {
     _entries[ pText ] = TimeEntry( nLoop, nTicks );
 }
@@ -1249,7 +1249,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
 
