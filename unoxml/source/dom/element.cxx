@@ -26,6 +26,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/xml/dom/DOMException.hpp>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <comphelper/attributelist.hxx>
@@ -36,8 +38,6 @@
 #include "elementlist.hxx"
 #include "attributesmap.hxx"
 #include "document.hxx"
-
-#include <mutationevent.hxx>
 
 using namespace css::uno;
 using namespace css::xml::dom;

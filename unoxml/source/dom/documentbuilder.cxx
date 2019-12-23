@@ -20,15 +20,11 @@
 #include "documentbuilder.hxx"
 
 #include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
 
 #include <libxml/xmlerror.h>
-#include <libxml/tree.h>
 
 #include <memory>
 
-#include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -45,7 +41,6 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include <node.hxx>
 #include "document.hxx"
 
 using namespace css::io;

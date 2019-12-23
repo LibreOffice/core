@@ -21,6 +21,8 @@
 
 #include <string.h>
 
+#include <com/sun/star/xml/dom/DOMException.hpp>
+
 #include "element.hxx"
 #include "document.hxx"
 

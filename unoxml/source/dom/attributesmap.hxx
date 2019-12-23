@@ -29,6 +29,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include "element.hxx"
+
 namespace DOM
 {
     class CElement;

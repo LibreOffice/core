@@ -27,10 +27,11 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 
+#include <com/sun/star/xml/xpath/XPathException.hpp>
+
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include "nodelist.hxx"
 #include "xpathobject.hxx"
 
 #include <node.hxx>

@@ -29,8 +29,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "node.hxx"
-
 namespace DOM {namespace events
 {
 class CEvent : public cppu::WeakImplHelper< css::xml::dom::events::XEvent >

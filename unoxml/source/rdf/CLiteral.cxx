@@ -27,8 +27,6 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <rtl/ustrbuf.hxx>
-
 
 /// anonymous implementation namespace
 namespace {

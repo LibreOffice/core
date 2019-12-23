@@ -45,7 +45,6 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 using namespace css;
 using namespace css::io;

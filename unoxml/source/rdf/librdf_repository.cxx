@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/io/XSeekableInputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/rdf/ParseException.hpp>
 #include <com/sun/star/rdf/QueryException.hpp>
@@ -48,7 +48,6 @@
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/rdf/FileFormat.hpp>
-#include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/rdf/BlankNode.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Literal.hpp>
@@ -60,7 +59,6 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
