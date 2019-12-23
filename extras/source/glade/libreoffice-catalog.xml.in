@@ -99,9 +99,6 @@
     <glade-widget-class title="Page List Control" name="sduilo-SdPageListControl"
                         generic-name="Page List Control" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Sidebar Dial Control" name="svxlo-SidebarDialControl"
-                        generic-name="Sidebar Dial Control" parent="GtkSpinner"
-                        icon-name="widget-gtk-spinner"/>
     <glade-widget-class title="Relative Numeric Field" name="svxlo-SvxRelativeField"
                         generic-name="Relative Numeric Field" parent="GtkSpinButton"
                         icon-name="widget-gtk-spinbutton"/>
