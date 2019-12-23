@@ -21,7 +21,6 @@
 #define INCLUDED_UNOXML_SOURCE_DOM_NOTATIONSMAP_HXX
 
 #include <sal/types.h>
-#include <rtl/ref.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>

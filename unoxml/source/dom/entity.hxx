@@ -21,7 +21,6 @@
 #define INCLUDED_UNOXML_SOURCE_DOM_ENTITY_HXX
 
 #include <libxml/tree.h>
-#include <libxml/entities.h>
 
 #include <sal/types.h>
 

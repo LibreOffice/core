@@ -29,6 +29,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <node.hxx>
+
 namespace DOM
 {
     class CNode;

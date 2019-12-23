@@ -31,16 +31,12 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
-#include <com/sun/star/xml/xpath/Libxml2ExtensionHandle.hpp>
-#include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace XPath

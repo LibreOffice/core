@@ -20,13 +20,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "../dom/documentbuilder.hxx"
 #include "../dom/saxbuilder.hxx"

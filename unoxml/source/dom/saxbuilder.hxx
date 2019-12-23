@@ -21,7 +21,6 @@
 #define INCLUDED_UNOXML_SOURCE_DOM_SAXBUILDER_HXX
 
 #include <stack>
-#include <map>
 
 #include <sal/types.h>
 #include <osl/mutex.hxx>
@@ -30,15 +29,12 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 #include <com/sun/star/xml/dom/SAXDocumentBuilderState.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace DOM
