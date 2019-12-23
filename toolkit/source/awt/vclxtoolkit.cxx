@@ -800,7 +800,7 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
 struct MessageBoxTypeInfo
 {
     css::awt::MessageBoxType const eType;
-    const sal_Char          *pName;
+    const char              *pName;
     sal_Int32 const          nLen;
 };
 

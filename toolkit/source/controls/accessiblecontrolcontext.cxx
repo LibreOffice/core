@@ -197,7 +197,7 @@ namespace toolkit
     }
 
 
-    OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
+    OUString OAccessibleControlContext::getModelStringProperty( const char* _pPropertyName )
     {
         OUString sReturn;
         try
