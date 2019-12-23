@@ -1234,7 +1234,7 @@ void SdImportTest::testBnc862510_7()
 // high quality (and is much faster) than importing individual editable elements.
 // So that's the "new" way of importing.
 // The user then breaks the image to editable elements (which is not perfect,
-// but very close to the old way), only :wif they need editing ability.
+// but very close to the old way), only if they need editing ability.
 // PDFium should overall be better, and where it isn't, we just need to improve it.
 // So these tests aren't really useful anymore. They should be modified to do
 // import+break and then check the results. But that isn't straight-forward and
