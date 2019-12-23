@@ -103,42 +103,42 @@ namespace ftp {
     public:
         static bool parseDOS (
             FTPDirentry &rEntry,
-            const sal_Char  *pBuffer );
+            const char  *pBuffer );
 
         static bool parseVMS (
             FTPDirentry &rEntry,
-            const sal_Char  *pBuffer );
+            const char  *pBuffer );
 
         static bool parseUNIX (
             FTPDirentry &rEntry,
-            const sal_Char  *pBuffer );
+            const char  *pBuffer );
 
 
     private:
 
         static bool parseUNIX_isSizeField (
-            const sal_Char *pStart,
-            const sal_Char *pEnd,
+            const char *pStart,
+            const char *pEnd,
             sal_uInt32     &rSize);
 
         static bool parseUNIX_isMonthField (
-            const sal_Char *pStart,
-            const sal_Char *pEnd,
+            const char *pStart,
+            const char *pEnd,
             DateTime& rDateTime);
 
         static bool parseUNIX_isDayField (
-            const sal_Char *pStart,
-            const sal_Char *pEnd,
+            const char *pStart,
+            const char *pEnd,
             DateTime& rDateTime);
 
         static bool parseUNIX_isYearTimeField (
-            const sal_Char *pStart,
-            const sal_Char *pEnd,
+            const char *pStart,
+            const char *pEnd,
             DateTime& rDateTime);
 
         static bool parseUNIX_isTime (
-            const sal_Char *pStart,
-            const sal_Char *pEnd,
+            const char *pStart,
+            const char *pEnd,
             sal_uInt16      nHour,
             DateTime& rDateTime);
 
@@ -148,7 +148,7 @@ namespace ftp {
 
         static bool setPath (
             OUString& rPath,
-            const sal_Char *value,
+            const char *value,
             sal_Int32       length = -1);
     };
 

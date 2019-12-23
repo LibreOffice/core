@@ -32,7 +32,7 @@ using namespace com::sun::star::lang;
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * ucb_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * )
+    const char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = nullptr;
 

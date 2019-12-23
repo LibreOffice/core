@@ -58,7 +58,7 @@ static bool ascii_isWhitespace( sal_Unicode ch )
 
 bool FTPDirectoryParser::parseDOS (
     FTPDirentry &rEntry,
-    const sal_Char  *pBuffer)
+    const char  *pBuffer)
 {
     bool   bDirectory = false;
     sal_uInt32 nSize = 0;
@@ -86,7 +86,7 @@ bool FTPDirectoryParser::parseDOS (
 
     int nDigits = 0;
     enum StateType eState = STATE_INIT_LWS;
-    for (const sal_Char *p = pBuffer;
+    for (const char *p = pBuffer;
          eState != STATE_ERROR && *p;
          ++p)
     {
@@ -555,14 +555,14 @@ bool FTPDirectoryParser::parseDOS (
  */
 bool FTPDirectoryParser::parseVMS (
     FTPDirentry &rEntry,
-    const sal_Char  *pBuffer)
+    const char  *pBuffer)
 {
     static OUString aFirstLineName;
     static bool bFirstLineDir = false;
 
     for (bool bFirstLine = true;; bFirstLine = false)
     {
-        const sal_Char *p = pBuffer;
+        const char *p = pBuffer;
         if (bFirstLine)
         {
             // Skip <*lws> part:
@@ -570,7 +570,7 @@ bool FTPDirectoryParser::parseVMS (
                 ++p;
 
             // Parse <filename "."> part:
-            const sal_Char *pFileName = p;
+            const char *pFileName = p;
             while ((*p >= 'A' && *p <= 'Z') ||
                    (*p >= 'a' && *p <= 'z') ||
                    (*p >= '0' && *p <= '9') ||
@@ -586,7 +586,7 @@ bool FTPDirectoryParser::parseVMS (
             }
 
             // Parse <filetype ";"> part:
-            const sal_Char *pFileType = ++p;
+            const char *pFileType = ++p;
             while ((*p >= 'A' && *p <= 'Z') ||
                    (*p >= 'a' && *p <= 'z') ||
                    (*p >= '0' && *p <= '9') ||
@@ -721,7 +721,7 @@ bool FTPDirectoryParser::parseVMS (
             return false;
 
         // Parse <month "-"> part and set entry date's month:
-        sal_Char const * pMonth = p;
+        char const * pMonth = p;
         sal_Int32 const monthLen = 3;
         for (int i = 0; i < monthLen; ++i)
         {
@@ -842,9 +842,9 @@ bool FTPDirectoryParser::parseVMS (
  */
 bool FTPDirectoryParser::parseUNIX (
     FTPDirentry &rEntry,
-    const sal_Char  *pBuffer)
+    const char  *pBuffer)
 {
-    const sal_Char *p1, *p2;
+    const char *p1, *p2;
     p1 = p2 = pBuffer;
 
     if (!((*p1 == '-') || (*p1 == 'd') || (*p1 == 'l')))
@@ -876,8 +876,8 @@ bool FTPDirectoryParser::parseUNIX (
         FOUND_NONE, FOUND_SIZE, FOUND_MONTH, FOUND_DAY, FOUND_YEAR_TIME
     };
 
-    const sal_Char *pDayStart = nullptr;
-    const sal_Char *pDayEnd = nullptr;
+    const char *pDayStart = nullptr;
+    const char *pDayEnd = nullptr;
     Mode eMode;
     for (eMode = FOUND_NONE; *p1 && eMode != FOUND_YEAR_TIME; p1 = p2 + 1)
     {
@@ -950,8 +950,8 @@ bool FTPDirectoryParser::parseUNIX (
  * parseUNIX_isSizeField.
  */
 bool FTPDirectoryParser::parseUNIX_isSizeField (
-    const sal_Char *pStart,
-    const sal_Char *pEnd,
+    const char *pStart,
+    const char *pEnd,
     sal_uInt32     &rSize)
 {
     if (!*pStart || !*pEnd || pStart == pEnd)
@@ -1003,8 +1003,8 @@ bool FTPDirectoryParser::parseUNIX_isSizeField (
  * parseUNIX_isMonthField.
  */
 bool FTPDirectoryParser::parseUNIX_isMonthField (
-    const sal_Char *pStart,
-    const sal_Char *pEnd,
+    const char *pStart,
+    const char *pEnd,
     DateTime       &rDateTime)
 {
     if (!*pStart || !*pEnd || pStart + 3 != pEnd)
@@ -1101,8 +1101,8 @@ bool FTPDirectoryParser::parseUNIX_isMonthField (
  * parseUNIX_isDayField.
  */
 bool FTPDirectoryParser::parseUNIX_isDayField (
-    const sal_Char *pStart,
-    const sal_Char *pEnd,
+    const char *pStart,
+    const char *pEnd,
     DateTime       &rDateTime)
 {
     if (!*pStart || !*pEnd || pStart == pEnd)
@@ -1128,8 +1128,8 @@ bool FTPDirectoryParser::parseUNIX_isDayField (
  * parseUNIX_isYearTimeField.
  */
 bool FTPDirectoryParser::parseUNIX_isYearTimeField (
-    const sal_Char *pStart,
-    const sal_Char *pEnd,
+    const char *pStart,
+    const char *pEnd,
     DateTime       &rDateTime)
 {
     if (!*pStart || !*pEnd || pStart == pEnd ||
@@ -1175,8 +1175,8 @@ bool FTPDirectoryParser::parseUNIX_isYearTimeField (
  * parseUNIX_isTime.
  */
 bool FTPDirectoryParser::parseUNIX_isTime (
-    const sal_Char *pStart,
-    const sal_Char *pEnd,
+    const char *pStart,
+    const char *pEnd,
     sal_uInt16      nHour,
     DateTime       &rDateTime)
 {
@@ -1255,7 +1255,7 @@ void FTPDirectoryParser::setYear (
  * setPath.
  */
 bool FTPDirectoryParser::setPath (
-    OUString &rPath, const sal_Char *value, sal_Int32 length)
+    OUString &rPath, const char *value, sal_Int32 length)
 {
     if (value)
     {
