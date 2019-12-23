@@ -160,6 +160,10 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
+    SID_DOCK_ALL_TOOLBARS
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_ZOOM_ENTIRE_PAGE
     [
         ExecMethod = MiscExec_Impl ;
