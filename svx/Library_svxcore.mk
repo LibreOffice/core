@@ -216,7 +216,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewcontactofsdrmeasureobj \
     svx/source/sdr/contact/objectcontactofobjlistpainter \
     svx/source/sdr/contact/viewobjectcontactofe3d \
-    svx/source/sdr/event/eventhandler \
     svx/source/sdr/overlay/overlayline \
     svx/source/sdr/overlay/overlaycrosshair \
     svx/source/sdr/overlay/overlayrollingrectangle \
