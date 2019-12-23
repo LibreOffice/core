@@ -344,7 +344,7 @@ svt::MultiLineEditImplementation
 svt::MultiLineTextCell
 svx::CommonStyleManager
 svx::PropertyValueProvider
-svx::SvxDialControl::DialControl_Impl
+svx::DialControl::DialControl_Impl
 svxform::FormToolboxes
 sw::BroadcastingModify
 sw::UnoCursorHint
