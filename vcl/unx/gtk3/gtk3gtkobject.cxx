@@ -344,11 +344,25 @@ void GtkSalObjectWidgetClip::ApplyClipRegion()
     if( m_pSocket )
     {
         GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow));
-        gtk_fixed_move(pContainer, m_pScrolledWindow, m_aRect.Left() + m_aClipRect.Left(), m_aRect.Top() + m_aClipRect.Top());
+
+        GtkAllocation allocation;
+        allocation.x = m_aRect.Left() + m_aClipRect.Left();
+        allocation.y = m_aRect.Top() + m_aClipRect.Top();
         if (m_aClipRect.IsEmpty())
-            gtk_widget_set_size_request(m_pScrolledWindow, m_aRect.GetWidth(), m_aRect.GetHeight());
+        {
+            allocation.width = m_aRect.GetWidth();
+            allocation.height = m_aRect.GetHeight();
+        }
         else
-            gtk_widget_set_size_request(m_pScrolledWindow, m_aClipRect.GetWidth(), m_aClipRect.GetHeight());
+        {
+            allocation.width = m_aClipRect.GetWidth();
+            allocation.height = m_aClipRect.GetHeight();
+        }
+
+        gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
+        gtk_widget_set_size_request(m_pScrolledWindow, allocation.width, allocation.height);
+        gtk_widget_size_allocate(m_pScrolledWindow, &allocation);
+
         gtk_adjustment_set_value(gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Left());
         gtk_adjustment_set_value(gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Top());
     }
