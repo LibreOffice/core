@@ -101,7 +101,7 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
                                 const char* pStr)
 {
     OStringBuffer aRet;
-    if (!pLine->isEmpty())
+    if (pLine && !pLine->isEmpty())
     {
         aRet.append(pStr);
         // single line
