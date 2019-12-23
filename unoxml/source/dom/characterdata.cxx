@@ -25,9 +25,9 @@
 
 #include <osl/diagnose.h>
 
+#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
-
-#include <mutationevent.hxx>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
 using namespace css::uno;
 using namespace css::xml::dom;

@@ -22,7 +22,6 @@
 
 #include <memory>
 
-#include <libxml/tree.h>
 #include <libxml/xpath.h>
 
 #include <sal/types.h>
@@ -33,6 +32,8 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
+
+#include "../dom/document.hxx"
 
 namespace DOM {
     class CDocument;

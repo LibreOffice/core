@@ -33,9 +33,7 @@
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

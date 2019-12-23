@@ -22,8 +22,6 @@
 #include <string.h>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "element.hxx"

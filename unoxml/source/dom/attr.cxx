@@ -26,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
 #include "document.hxx"

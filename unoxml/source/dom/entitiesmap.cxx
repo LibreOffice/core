@@ -21,8 +21,6 @@
 
 #include <osl/diagnose.h>
 
-#include "documenttype.hxx"
-
 using namespace css::uno;
 using namespace css::xml::dom;
 

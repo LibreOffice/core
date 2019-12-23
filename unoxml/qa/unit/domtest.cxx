@@ -18,18 +18,11 @@
  */
 
 #include <rtl/ref.hxx>
-#include <rtl/byteseq.hxx>
 #include <sal/log.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
 #include <comphelper/seqstream.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <unotest/macros_test.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>

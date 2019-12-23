@@ -21,7 +21,6 @@
 #define INCLUDED_UNOXML_INC_EVENTDISPATCHER_HXX
 
 #include <map>
-#include <vector>
 
 #include <libxml/tree.h>
 
@@ -29,8 +28,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
-#include <com/sun/star/xml/dom/events/EventType.hpp>
-#include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 
 namespace osl { class Mutex; }

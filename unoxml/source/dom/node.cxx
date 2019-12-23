@@ -19,19 +19,19 @@
 
 #include <node.hxx>
 
-#include <stdio.h>
 #include <string.h>
 
 #include <libxml/xmlstring.h>
 
 #include <algorithm>
 
-#include <rtl/uuid.h>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/xml/dom/DOMException.hpp>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <comphelper/servicehelper.hxx>
@@ -41,7 +41,6 @@
 #include "childlist.hxx"
 
 #include <eventdispatcher.hxx>
-#include <mutationevent.hxx>
 
 using namespace css;
 using namespace css::uno;

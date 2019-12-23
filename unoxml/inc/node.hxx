@@ -40,7 +40,6 @@
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
-#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
