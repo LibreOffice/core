@@ -1011,6 +1011,35 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        case SID_DOCK_ALL_TOOLBARS:
+        {
+            Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
+            Reference< XFrame > xFrame = xDesktop->getActiveFrame();
+
+            Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+            Reference< css::frame::XLayoutManager > xLayoutManager;
+            if ( xPropSet.is() )
+            {
+                try
+                {
+                    Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                    aValue >>= xLayoutManager;
+                }
+                catch ( const css::uno::RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( css::uno::Exception& )
+                {
+                }
+            }
+
+            if ( xLayoutManager.is() )
+                xLayoutManager->dockAllWindows(UIElementType::TOOLBAR);
+
+            bDone = true;
+            break;
+        }
         case SID_MENUBAR:
         {
             sfx2::SfxNotebookBar::ToggleMenubar();
