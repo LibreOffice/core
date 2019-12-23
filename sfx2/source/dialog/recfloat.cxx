@@ -82,8 +82,10 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
-        vcl::Window* pWin = GetWindow();
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        SfxRecordingFloat_Impl* pFloatDlg = static_cast<SfxRecordingFloat_Impl*>(GetController().get());
+        weld::Dialog* pDlg = pFloatDlg->getDialog();
+
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pDlg,
                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                        SfxResId(STR_MACRO_LOSS)));
         xQueryBox->set_default_response(RET_NO);
