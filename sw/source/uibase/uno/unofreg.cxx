@@ -43,7 +43,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * sw_component_getFactory(
-    const sal_Char * pImplName,
+    const char * pImplName,
     void * pServiceManager,
     void * )
 {

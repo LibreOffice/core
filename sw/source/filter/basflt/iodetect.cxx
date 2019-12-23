@@ -237,7 +237,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
     return SwIoSystem::GetFilterOfFormat(FILTER_TEXT);
 }
 
-bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
+bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
     rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd)
 {
     bool bSwap = false;
@@ -306,11 +306,11 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
             if (bLE != bNativeLE)
             {
                 bSwap = true;
-                sal_Char* pF = reinterpret_cast<char*>(pNewBuf);
-                sal_Char* pN = pF+1;
+                char* pF = reinterpret_cast<char*>(pNewBuf);
+                char* pN = pF+1;
                 for(sal_uLong n = 0; n < nNewLen; ++n, pF+=2, pN+=2 )
                 {
-                    sal_Char c = *pF;
+                    char c = *pF;
                     *pF = *pN;
                     *pN = c;
                 }

@@ -86,7 +86,7 @@ void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const u
     SwVbaTableHelper aTableHelper( xTextTable );
     sal_Int32 nColCount = aTableHelper.getTabColumnsCount( nEndRow );
     // FIXME: the column count > 26
-    //sal_Char cCol = 'A' + nColCount - 1;
+    //char cCol = 'A' + nColCount - 1;
     OUString sCol = SwVbaTableHelper::getColumnStr( nColCount - 1);
     sRangeName += ":" + sCol + OUString::number(nEndRow + 1);
 

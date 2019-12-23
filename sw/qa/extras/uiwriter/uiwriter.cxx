@@ -964,7 +964,7 @@ void SwUiWriterTest::testImportRTF()
 
     // Insert the RTF at the cursor position.
     OString aData = "{\\rtf1 Hello world!\\par}";
-    SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
+    SvMemoryStream aStream(const_cast<char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCursor());
     Reader* pRTFReader = SwReaderWriter::GetRtfReader();
     CPPUNIT_ASSERT(pRTFReader != nullptr);
@@ -996,7 +996,7 @@ void SwUiWriterTest::testExportRTF()
     SwWriter aWrt(aStream, *xClpDoc);
     aWrt.Write(xWrt);
 
-    OString aData(static_cast<const sal_Char*>(aStream.GetData()), aStream.GetSize());
+    OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
 
     //Amusingly eventually there was a commit id with "ccc" in it, and so the rtf contained
     //{\*\generator LibreOfficeDev/4.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/f70664ccc6837f2cc21a29bb4f44e41e100efe6b}

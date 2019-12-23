@@ -1125,7 +1125,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
 {
     // search the corresponding style
     sal_uInt16 nPoolId = 0;
-    const sal_Char* sName = nullptr;
+    const char* sName = nullptr;
     switch( nToken2 )
     {
     case HtmlTokenId::EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
@@ -1691,7 +1691,7 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
         SvMemoryStream aStream;
         aStream.WriteStream( *pStream );
 
-        rStr = OUString(static_cast<const sal_Char *>(aStream.GetData()), aStream.TellEnd(),
+        rStr = OUString(static_cast<const char *>(aStream.GetData()), aStream.TellEnd(),
             GetSrcEncoding());
     }
 

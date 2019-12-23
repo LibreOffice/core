@@ -529,7 +529,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     if( (nFrameOpts & (HtmlFrmOpts::Id|HtmlFrmOpts::Name)) &&
         !rFrameFormat.GetName().isEmpty() )
     {
-        const sal_Char *pStr =
+        const char *pStr =
             (nFrameOpts & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         sOut.append(' ').append(pStr).
             append("=\"");
@@ -557,7 +557,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     }
 
     // ALIGN
-    const sal_Char *pStr = nullptr;
+    const char *pStr = nullptr;
     RndStdIds eAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if( (nFrameOpts & HtmlFrmOpts::Align) &&
         ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) )
@@ -810,7 +810,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     if( (nFrameOptions & (HtmlFrmOpts::Id|HtmlFrmOpts::Name)) &&
         !rFrameFormat.GetName().isEmpty() && !bReplacement)
     {
-        const sal_Char* pAttributeName = (nFrameOptions & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
+        const char* pAttributeName = (nFrameOptions & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         aHtml.attribute(pAttributeName, rFrameFormat.GetName());
     }
 
@@ -829,7 +829,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     }
 
     // align
-    const sal_Char* pAlignString = nullptr;
+    const char* pAlignString = nullptr;
     RndStdIds eAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if( (nFrameOptions & HtmlFrmOpts::Align) &&
         ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) && !bReplacement)
@@ -1002,7 +1002,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
          (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
     {
-        const sal_Char* pSurroundString = nullptr;
+        const char* pSurroundString = nullptr;
 
         const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
         sal_Int16 eHoriOri = rFrameFormat.GetHoriOrient().GetHoriOrient();
@@ -1160,7 +1160,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
         rHTMLWrt.m_aImgMapNames.push_back(aIMapName);
 
         OString aIndMap, aIndArea;
-        const sal_Char *pIndArea = nullptr, *pIndMap = nullptr;
+        const char *pIndArea = nullptr, *pIndMap = nullptr;
 
         if (rHTMLWrt.m_bLFPossible)
         {
@@ -1201,7 +1201,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                        const OUString& rGraphicURL,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size &rRealSize, HtmlFrmOpts nFrameOpts,
-                       const sal_Char *pMarkType,
+                       const char *pMarkType,
                        const ImageMap *pAltImgMap,
                        const OUString& rMimeType )
 {
@@ -1449,7 +1449,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
 }
 
 Writer& OutHTML_BulletImage( Writer& rWrt,
-                             const sal_Char *pTag,
+                             const char *pTag,
                              const SvxBrushItem* pBrush,
                              const OUString &rGraphicURL)
 {

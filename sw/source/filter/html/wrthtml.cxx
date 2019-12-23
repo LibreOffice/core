@@ -86,7 +86,7 @@
 
 using namespace css;
 
-static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
+static char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions )
@@ -302,7 +302,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
     bool bWriteUTF8 = m_bWriteClipboardDoc;
     m_eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding();
-    const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( m_eDestEnc );
+    const char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( m_eDestEnc );
     m_eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
     // Only for the MS-IE we favour the export of styles.
@@ -642,7 +642,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
                                   rHTMLWrt.m_eDestEnc,
                                   &rHTMLWrt.m_aNonConvertableCharacters );
-        const sal_Char* const pDelim = "&#255;";
+        const char* const pDelim = "&#255;";
         if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aFilter.isEmpty() )
@@ -865,7 +865,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 }
 
 // write the StyleTable, general data, header/footer/footnotes
-static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
+static void OutBodyColor( const char* pTag, const SwFormat *pFormat,
                           SwHTMLWriter& rHWrt )
 {
     const SwFormat *pRefFormat = nullptr;
@@ -1214,7 +1214,7 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
 }
 
 void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
-                                    const sal_Char *pMarkType )
+                                    const char *pMarkType )
 {
     if( !rMark.isEmpty() && !m_aImplicitMarks.empty() )
     {

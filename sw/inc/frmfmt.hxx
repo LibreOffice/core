@@ -84,7 +84,7 @@ class SW_DLLPUBLIC SwFrameFormat
 protected:
     SwFrameFormat(
         SwAttrPool& rPool,
-        const sal_Char* pFormatNm,
+        const char* pFormatNm,
         SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = nullptr);

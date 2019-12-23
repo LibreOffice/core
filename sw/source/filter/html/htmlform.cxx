@@ -129,7 +129,7 @@ static SvMacroItemId aEventTypeTable[] =
     SvMacroItemId::NONE
 };
 
-const sal_Char * aEventListenerTable[] =
+const char * aEventListenerTable[] =
 {
     "XSubmitListener",
     "XResetListener",
@@ -141,7 +141,7 @@ const sal_Char * aEventListenerTable[] =
     ""
 };
 
-const sal_Char * aEventMethodTable[] =
+const char * aEventMethodTable[] =
 {
     "approveSubmit",
     "approveReset",
@@ -153,7 +153,7 @@ const sal_Char * aEventMethodTable[] =
     ""
 };
 
-const sal_Char * aEventSDOptionTable[] =
+const char * aEventSDOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_SDonsubmit,
     OOO_STRING_SVTOOLS_HTML_O_SDonreset,
@@ -165,7 +165,7 @@ const sal_Char * aEventSDOptionTable[] =
     nullptr
 };
 
-const sal_Char * aEventOptionTable[] =
+const char * aEventOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_onsubmit,
     OOO_STRING_SVTOOLS_HTML_O_onreset,
@@ -1545,7 +1545,7 @@ void SwHTMLParser::InsertInput()
     }
 
     // Default is HTMLInputType::Text
-    const sal_Char *pType = "TextField";
+    const char *pType = "TextField";
     bool bKeepCRLFInValue = false;
     switch( eType )
     {

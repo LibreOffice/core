@@ -390,7 +390,7 @@ std::pair<bool, OUString> lcl_MakeParagraphSignatureFieldText(const SignatureDes
 
     if (aDescr.isValid())
     {
-        const sal_Char* pData = utf8Text.getStr();
+        const char* pData = utf8Text.getStr();
         const std::vector<unsigned char> data(pData, pData + utf8Text.getLength());
 
         OString encSignature;

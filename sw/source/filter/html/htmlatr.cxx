@@ -2545,7 +2545,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     if( rHTMLWrt.m_bClearLeft || rHTMLWrt.m_bClearRight )
     {
-        const sal_Char* pString;
+        const char* pString;
         if( rHTMLWrt.m_bClearLeft )
         {
             if( rHTMLWrt.m_bClearRight )
@@ -2974,7 +2974,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     if( bScriptDependent )
     {
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_class "=\"";
-        const sal_Char* pStr = nullptr;
+        const char* pStr = nullptr;
         switch( rHTMLWrt.m_nCSS1Script )
         {
         case CSS1_OUTMODE_WESTERN:
@@ -3172,7 +3172,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
         return  rWrt;
 
     const SvxAdjustItem& rAdjust = static_cast<const SvxAdjustItem&>(rHt);
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
     switch( rAdjust.GetAdjust() )
     {
     case SvxAdjust::Center: pStr = OOO_STRING_SVTOOLS_HTML_AL_center; break;

@@ -134,7 +134,7 @@ ErrCode ReadThroughComponent(
     uno::Reference<XComponent> const & xModelComponent,
     const OUString& rStreamName,
     uno::Reference<uno::XComponentContext> const & rxContext,
-    const sal_Char* pFilterName,
+    const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     bool bMustBeSuccessfull,
@@ -261,10 +261,10 @@ ErrCode ReadThroughComponent(
 ErrCode ReadThroughComponent(
     uno::Reference<embed::XStorage> const & xStorage,
     uno::Reference<XComponent> const & xModelComponent,
-    const sal_Char* pStreamName,
-    const sal_Char* pCompatibilityStreamName,
+    const char* pStreamName,
+    const char* pCompatibilityStreamName,
     uno::Reference<uno::XComponentContext> const & rxContext,
-    const sal_Char* pFilterName,
+    const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     bool bMustBeSuccessfull)

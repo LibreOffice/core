@@ -206,7 +206,7 @@ public:
         sal_uLong nCount;
 
     public:
-        MovedData( CompareData& rData, const sal_Char* pDiscard );
+        MovedData( CompareData& rData, const char* pDiscard );
 
         sal_uLong GetIndex( sal_uLong n ) const { return pIndex[ n ]; }
         sal_uLong GetLineNum( sal_uLong n ) const { return pLineNum[ n ]; }
@@ -232,8 +232,8 @@ private:
 
     static void CountDifference( const CompareData& rData, sal_uLong* pCounts );
     static void SetDiscard( const CompareData& rData,
-                            sal_Char* pDiscard, const sal_uLong* pCounts );
-    static void CheckDiscard( sal_uLong nLen, sal_Char* pDiscard );
+                            char* pDiscard, const sal_uLong* pCounts );
+    static void CheckDiscard( sal_uLong nLen, char* pDiscard );
     static void ShiftBoundaries( CompareData& rData1, CompareData& rData2 );
 
 public:
@@ -571,8 +571,8 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
     std::unique_ptr<MovedData> pMD1, pMD2;
     // Look for the differing lines
     {
-        std::unique_ptr<sal_Char[]> pDiscard1( new sal_Char[ rData1.GetLineCount() ] );
-        std::unique_ptr<sal_Char[]> pDiscard2( new sal_Char[ rData2.GetLineCount() ] );
+        std::unique_ptr<char[]> pDiscard1( new char[ rData1.GetLineCount() ] );
+        std::unique_ptr<char[]> pDiscard2( new char[ rData2.GetLineCount() ] );
 
         std::unique_ptr<sal_uLong[]> pCount1(new sal_uLong[ nDiff ]);
         std::unique_ptr<sal_uLong[]> pCount2(new sal_uLong[ nDiff ]);
@@ -613,7 +613,7 @@ void Compare::CountDifference( const CompareData& rData, sal_uLong* pCounts )
 }
 
 void Compare::SetDiscard( const CompareData& rData,
-                            sal_Char* pDiscard, const sal_uLong* pCounts )
+                            char* pDiscard, const sal_uLong* pCounts )
 {
     const sal_uLong nLen = rData.GetLineCount();
 
@@ -636,7 +636,7 @@ void Compare::SetDiscard( const CompareData& rData,
     }
 }
 
-void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
+void Compare::CheckDiscard( sal_uLong nLen, char* pDiscard )
 {
     for( sal_uLong n = 0; n < nLen; ++n )
     {
@@ -748,7 +748,7 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
     }
 }
 
-Compare::MovedData::MovedData( CompareData& rData, const sal_Char* pDiscard )
+Compare::MovedData::MovedData( CompareData& rData, const char* pDiscard )
     : nCount( 0 )
 {
     sal_uLong nLen = rData.GetLineCount();

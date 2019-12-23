@@ -460,7 +460,7 @@ static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     sal_Int16 eFormat = rInfo.aFormat.GetNumberingType();
     if( (bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC) != eFormat )
     {
-        const sal_Char *pStr = SwHTMLWriter::GetNumFormat( eFormat );
+        const char *pStr = SwHTMLWriter::GetNumFormat( eFormat );
         if( pStr )
         {
             pParts[0] = OUString::createFromAscii( pStr );
@@ -487,7 +487,7 @@ static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
 }
 
 static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
-                                  int nParts, const sal_Char *pName )
+                                  int nParts, const char *pName )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 

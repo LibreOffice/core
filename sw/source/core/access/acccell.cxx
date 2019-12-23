@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace sw::access;
 
-const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleCellView";
+const char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleCellView";
 
 bool SwAccessibleCell::IsSelected()
 {

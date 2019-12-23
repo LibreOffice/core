@@ -150,7 +150,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         }
         OUString sMethod( rDesc.EventMethod );
 
-        const sal_Char *pOpt = nullptr;
+        const char *pOpt = nullptr;
         for( int j=0; aEventListenerTable[j]; j++ )
         {
             if( sListener.equalsAscii( aEventListenerTable[j] ) &&
@@ -487,7 +487,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     aTmp = xFormPropSet->getPropertyValue( "SubmitEncoding" );
     if( auto eEncType = o3tl::tryAccess<form::FormSubmitEncoding>(aTmp) )
     {
-        const sal_Char *pStr = nullptr;
+        const char *pStr = nullptr;
         switch( *eEncType )
         {
         case form::FormSubmitEncoding_MULTIPART:
@@ -840,7 +840,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                     !*o3tl::forceAccess<bool>(aTmp)) )
                 {
-                    const sal_Char *pWrapStr = nullptr;
+                    const char *pWrapStr = nullptr;
                     auto aTmp2 = xPropSet->getPropertyValue( "HardLineBreaks" );
                     auto b = o3tl::tryAccess<bool>(aTmp2);
                     pWrapStr = (b && *b) ? OOO_STRING_SVTOOLS_HTML_WW_hard

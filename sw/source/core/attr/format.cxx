@@ -36,7 +36,7 @@
 using namespace com::sun::star;
 
 
-SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
               const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
     m_aFormatName( OUString::createFromAscii(pFormatNm) ),

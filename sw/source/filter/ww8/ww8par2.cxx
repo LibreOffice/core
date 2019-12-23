@@ -4300,7 +4300,7 @@ void WW8RStyle::ImportOldFormatStyles()
         if (sName.isEmpty())
         {
             ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
-            if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
+            if (const char *pStr = GetEnglishNameFromSti(eSti))
                 sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
         }
 

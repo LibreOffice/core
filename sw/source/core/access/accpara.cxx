@@ -109,8 +109,8 @@ namespace com::sun::star::text {
     class XText;
 }
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
-const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
+const char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
+const char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
 
 OUString const & SwAccessibleParagraph::GetString()
 {

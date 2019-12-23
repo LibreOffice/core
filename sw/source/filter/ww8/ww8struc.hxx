@@ -866,7 +866,7 @@ struct WW8_ATRDEXTRA
 
 struct WW67_ATRD                // for versions 6/7
 {
-    sal_Char xstUsrInitl[ 10 ];     // pascal-style String holding initials
+    char xstUsrInitl[ 10 ];     // pascal-style String holding initials
                                     // of annotation author
     SVBT16 ibst;                    // index into GrpXstAtnOwners
     SVBT16 ak;                      // not used

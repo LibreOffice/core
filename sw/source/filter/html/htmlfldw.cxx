@@ -39,9 +39,9 @@
 
 using namespace nsSwDocInfoSubType;
 
-const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
+const char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
 {
-    const sal_Char *pFormatStr = nullptr;
+    const char *pFormatStr = nullptr;
 
     switch( static_cast<SvxNumType>(nFormat) )
     {
@@ -71,7 +71,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     SwFieldIds nField = pFieldTyp->Which();
     sal_uLong nFormat = pField->GetFormat();
 
-    const sal_Char *pTypeStr=nullptr, // TYPE
+    const char *pTypeStr=nullptr, // TYPE
                       *pSubStr=nullptr,   // SUBTYPE
                    *pFormatStr=nullptr;  // FORMAT (SW)
     OUString aValue;              // VALUE (SW)

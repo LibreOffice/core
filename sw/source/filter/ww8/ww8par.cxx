@@ -2905,7 +2905,7 @@ void SwWW8ImplReader::PostProcessAttrs()
  convert from 1252 on the undefined character
 */
 static std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
-    sal_Char const *pIn, std::size_t nInLen, sal_Unicode *pOut, std::size_t nOutLen)
+    char const *pIn, std::size_t nInLen, sal_Unicode *pOut, std::size_t nOutLen)
 {
     const sal_uInt32 nFlags =
         RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
@@ -3099,14 +3099,14 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     sal_Unicode* pBuffer = pStr->buffer;
     sal_Unicode* pWork = pBuffer;
 
-    std::unique_ptr<sal_Char[]> p8Bits;
+    std::unique_ptr<char[]> p8Bits;
 
     rtl_TextToUnicodeConverter hConverter = nullptr;
     if (!m_bIsUnicode || m_bVer67)
         hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
 
     if (!m_bIsUnicode)
-        p8Bits.reset( new sal_Char[nStrLen] );
+        p8Bits.reset( new char[nStrLen] );
 
     // read the stream data
     sal_uInt8   nBCode = 0;
@@ -3149,16 +3149,16 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
             {
                 if (nUCode >= 0x3000) //0x8000 ?
                 {
-                    sal_Char aTest[2];
-                    aTest[0] = static_cast< sal_Char >((nUCode & 0xFF00) >> 8);
-                    aTest[1] = static_cast< sal_Char >(nUCode & 0x00FF);
+                    char aTest[2];
+                    aTest[0] = static_cast< char >((nUCode & 0xFF00) >> 8);
+                    aTest[1] = static_cast< char >(nUCode & 0x00FF);
                     OUString aTemp(aTest, 2, eSrcCJKCharSet);
                     OSL_ENSURE(aTemp.getLength() == 1, "so much for that theory");
                     *pWork++ = aTemp[0];
                 }
                 else
                 {
-                    sal_Char cTest = static_cast< sal_Char >(nUCode & 0x00FF);
+                    char cTest = static_cast< char >(nUCode & 0x00FF);
                     pWork += Custom8BitToUnicode(hConverter, &cTest, 1, pWork, 1);
                 }
             }
@@ -6167,7 +6167,7 @@ ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
     ErrCode nErrRet = ERRCODE_NONE;
 
     {
-        static const sal_Char* aNames[ 13 ] = {
+        static const char* aNames[ 13 ] = {
             "WinWord/WW", "WinWord/WW8", "WinWord/WWFT",
             "WinWord/WWFLX", "WinWord/WWFLY",
             "WinWord/WWF",

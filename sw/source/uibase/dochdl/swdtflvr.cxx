@@ -4185,7 +4185,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
         pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
     const OString aName(OUStringToOString(sName, eEncoding));
 
-    std::unique_ptr<sal_Char[]> pMem(new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
+    std::unique_ptr<char[]> pMem(new char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
 
     sal_Int32 nLen = aAppNm.getLength();
     memcpy( pMem.get(), aAppNm.getStr(), nLen );

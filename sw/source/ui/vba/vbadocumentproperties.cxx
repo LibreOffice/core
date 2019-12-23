@@ -364,7 +364,7 @@ public:
         return aItem;
     }
 
-    static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, std::shared_ptr< PropertGetSetHelper > const & rHelper )
+    static DocPropInfo createDocPropInfo( const char* sDesc, const char* sPropName, std::shared_ptr< PropertGetSetHelper > const & rHelper )
     {
         return createDocPropInfo( OUString::createFromAscii( sDesc ), OUString::createFromAscii( sPropName ), rHelper );
     }

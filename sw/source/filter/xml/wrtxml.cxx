@@ -465,9 +465,9 @@ ErrCode SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
 
 bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<XComponent> & xComponent,
-    const sal_Char* pStreamName,
+    const char* pStreamName,
     const uno::Reference<uno::XComponentContext> & rxContext,
-    const sal_Char* pServiceName,
+    const char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<beans::PropertyValue> & rMediaDesc )
 {
@@ -524,7 +524,7 @@ bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<XComponent> & xComponent,
     const uno::Reference<XComponentContext> & rxContext,
-    const sal_Char* pServiceName,
+    const char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<PropertyValue> & rMediaDesc )
 {

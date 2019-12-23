@@ -649,7 +649,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // all the ranges to use in
     sal_Int32 nRows = pTable->GetTabLines().size();
     sal_Int32 nCols = pTable->GetTabLines().front()->GetTabBoxes().size();
-    std::vector<std::vector<sal_Char>> aMap(nRows);
+    std::vector<std::vector<char>> aMap(nRows);
     for (sal_Int32 i = 0; i < nRows; ++i)
         aMap[i].resize(nCols);
 
@@ -704,7 +704,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         ii = 0;
         while (ii < iiEnd)
         {
-            sal_Char &rChar = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii];
+            char &rChar = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii];
 
             // label should be used but is not yet found?
             if (rChar == 'x' && bFirstIsLabel && aLabelIdx[oi] == -1)
@@ -986,7 +986,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     sal_Int32 nTableCols = 0;
 
     // data used to build 'CellRangeRepresentation' from later on
-    std::vector< std::vector< sal_Char > > aMap;
+    std::vector< std::vector< char > > aMap;
 
     uno::Sequence< sal_Int32 > aSequenceMapping( nNumDS_LDS );
     sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
@@ -1121,7 +1121,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 {
                     for (sal_Int32 k = nStartCol;  k <= nEndCol;  ++k)
                     {
-                        sal_Char &rChar = aMap[i][k];
+                        char &rChar = aMap[i][k];
                         if (rChar == '\0')   // check for overlapping values and/or labels
                             rChar = 'L';
                         else
@@ -1143,7 +1143,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 {
                     for (sal_Int32 k = nStartCol;  k <= nEndCol;  ++k)
                     {
-                        sal_Char &rChar = aMap[i][k];
+                        char &rChar = aMap[i][k];
                         if (rChar == '\0')   // check for overlapping values and/or labels
                             rChar = 'x';
                         else

@@ -2330,7 +2330,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
 
 static bool lcl_SeqHasProperty(
     const uno::Sequence< beans::PropertyValue >& rOptions,
-    const sal_Char *pPropName )
+    const char *pPropName )
 {
     return std::any_of(rOptions.begin(), rOptions.end(),
         [&pPropName](const beans::PropertyValue& rProp) {
@@ -2339,7 +2339,7 @@ static bool lcl_SeqHasProperty(
 
 static bool lcl_GetBoolProperty(
     const uno::Sequence< beans::PropertyValue >& rOptions,
-    const sal_Char *pPropName )
+    const char *pPropName )
 {
     bool bRes = false;
     auto pOption = std::find_if(rOptions.begin(), rOptions.end(),

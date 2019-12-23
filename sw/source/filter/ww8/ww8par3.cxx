@@ -2256,7 +2256,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     struct CtrlFontMapEntry
     {
         sal_uInt16 nWhichId;
-        const sal_Char* pPropNm;
+        const char* pPropNm;
     };
     const CtrlFontMapEntry aMapTable[] =
     {

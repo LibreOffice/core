@@ -54,41 +54,41 @@
 
 using namespace ::com::sun::star;
 
-const sal_Char sCalc_Add[]  =   "add";
-const sal_Char sCalc_Sub[]  =   "sub";
-const sal_Char sCalc_Mul[]  =   "mul";
-const sal_Char sCalc_Div[]  =   "div";
-const sal_Char sCalc_Phd[]  =   "phd";
-const sal_Char sCalc_Sqrt[] =   "sqrt";
-const sal_Char sCalc_Pow[]  =   "pow";
-const sal_Char sCalc_Or[]   =   "or";
-const sal_Char sCalc_Xor[]  =   "xor";
-const sal_Char sCalc_And[]  =   "and";
-const sal_Char sCalc_Not[]  =   "not";
-const sal_Char sCalc_Eq[]   =   "eq";
-const sal_Char sCalc_Neq[]  =   "neq";
-const sal_Char sCalc_Leq[]  =   "leq";
-const sal_Char sCalc_Geq[]  =   "geq";
-const sal_Char sCalc_L[]    =   "l";
-const sal_Char sCalc_G[]    =   "g";
-const sal_Char sCalc_Sum[]  =   "sum";
-const sal_Char sCalc_Mean[] =   "mean";
-const sal_Char sCalc_Min[]  =   "min";
-const sal_Char sCalc_Max[]  =   "max";
-const sal_Char sCalc_Sin[]  =   "sin";
-const sal_Char sCalc_Cos[]  =   "cos";
-const sal_Char sCalc_Tan[]  =   "tan";
-const sal_Char sCalc_Asin[] =   "asin";
-const sal_Char sCalc_Acos[] =   "acos";
-const sal_Char sCalc_Atan[] =   "atan";
-const sal_Char sCalc_Round[]=   "round";
-const sal_Char sCalc_Date[] =   "date";
+const char sCalc_Add[]  =   "add";
+const char sCalc_Sub[]  =   "sub";
+const char sCalc_Mul[]  =   "mul";
+const char sCalc_Div[]  =   "div";
+const char sCalc_Phd[]  =   "phd";
+const char sCalc_Sqrt[] =   "sqrt";
+const char sCalc_Pow[]  =   "pow";
+const char sCalc_Or[]   =   "or";
+const char sCalc_Xor[]  =   "xor";
+const char sCalc_And[]  =   "and";
+const char sCalc_Not[]  =   "not";
+const char sCalc_Eq[]   =   "eq";
+const char sCalc_Neq[]  =   "neq";
+const char sCalc_Leq[]  =   "leq";
+const char sCalc_Geq[]  =   "geq";
+const char sCalc_L[]    =   "l";
+const char sCalc_G[]    =   "g";
+const char sCalc_Sum[]  =   "sum";
+const char sCalc_Mean[] =   "mean";
+const char sCalc_Min[]  =   "min";
+const char sCalc_Max[]  =   "max";
+const char sCalc_Sin[]  =   "sin";
+const char sCalc_Cos[]  =   "cos";
+const char sCalc_Tan[]  =   "tan";
+const char sCalc_Asin[] =   "asin";
+const char sCalc_Acos[] =   "acos";
+const char sCalc_Atan[] =   "atan";
+const char sCalc_Round[]=   "round";
+const char sCalc_Date[] =   "date";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
 {
     union{
-        const sal_Char* pName;
+        const char* pName;
         const OUString* pUName;
     };
     SwCalcOper eOp;
@@ -229,7 +229,7 @@ SwCalc::SwCalc( SwDoc& rD )
     m_sCurrSym = comphelper::string::strip(m_pLocaleDataWrapper->getCurrSymbol(), ' ');
     m_sCurrSym  = m_pCharClass->lowercase( m_sCurrSym );
 
-    static sal_Char const
+    static char const
         sNType0[] = "false",
         sNType1[] = "true",
         sNType2[] = "pi",
@@ -259,7 +259,7 @@ SwCalc::SwCalc( SwDoc& rD )
         sNType25[] = "user_state" ,
         sNType26[] = "graph"
         ;
-    static const sal_Char* const sNTypeTab[ 27 ] =
+    static const char* const sNTypeTab[ 27 ] =
     {
         sNType0, sNType1, sNType2, sNType3, sNType4, sNType5,
         sNType6, sNType7, sNType8, sNType9, sNType10, sNType11,
@@ -1440,7 +1440,7 @@ SwSbxValue& SwSbxValue::MakeDouble()
 #include <stdio.h>
 void main()
 {
-    static sal_Char
+    static char
         sNType0[] = "false",    sNType1[] = "true",     sNType2[] = "pi",
         sNType3[] = "e",        sNType4[] = "tables",   sNType5[] = "graf",
         sNType6[] = "ole",      sNType7[] = "page",     sNType8[] = "para",
@@ -1455,7 +1455,7 @@ void main()
         sNType25[] = "user_state",          sNType26[] = "graph"
         ;
 
-    static const sal_Char* sNTypeTab[ 27 ] =
+    static const char* sNTypeTab[ 27 ] =
     {
         sNType0, sNType1, sNType2, sNType3, sNType4, sNType5,
         sNType6, sNType7, sNType8, sNType9, sNType10, sNType11,
@@ -1466,12 +1466,12 @@ void main()
 
     const unsigned short nTableSize = 47;
     int aArr[ nTableSize ] = { 0 };
-    sal_Char ch;
+    char ch;
 
     for( int n = 0; n < 27; ++n )
     {
         unsigned int ii = 0;
-        const sal_Char* pp = sNTypeTab[ n ];
+        const char* pp = sNTypeTab[ n ];
 
         while( *pp )
         {

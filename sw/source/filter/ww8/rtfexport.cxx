@@ -1074,7 +1074,7 @@ OString RtfExport::getStream()
     OString aRet;
 
     if (m_pStream)
-        aRet = OString(static_cast<const sal_Char*>(m_pStream->GetData()), m_pStream->Tell());
+        aRet = OString(static_cast<const char*>(m_pStream->GetData()), m_pStream->Tell());
 
     return aRet;
 }
@@ -1085,7 +1085,7 @@ SvStream& RtfExport::OutULong(sal_uLong nVal) { return Writer::OutULong(Strm(), 
 
 SvStream& RtfExport::OutLong(long nVal) { return Writer::OutLong(Strm(), nVal); }
 
-void RtfExport::OutUnicode(const sal_Char* pToken, const OUString& rContent, bool bUpr)
+void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bUpr)
 {
     if (!rContent.isEmpty())
     {
@@ -1102,7 +1102,7 @@ void RtfExport::OutUnicode(const sal_Char* pToken, const OUString& rContent, boo
     }
 }
 
-void RtfExport::OutDateTime(const sal_Char* pStr, const util::DateTime& rDT)
+void RtfExport::OutDateTime(const char* pStr, const util::DateTime& rDT)
 {
     Strm().WriteChar('{').WriteCharPtr(pStr).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_YR);
     OutULong(rDT.Year).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MO);
@@ -1408,8 +1408,7 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
-    const sal_Char* pStr
-        = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
+    const char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
     if (m_pCurrentPageDesc->GetFollow() && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
     {
@@ -1423,7 +1422,7 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
-void RtfExport::WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr,
+void RtfExport::WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const char* pStr,
                                   bool bTitlepg)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");

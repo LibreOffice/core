@@ -36,7 +36,7 @@ namespace {
 struct BuiltinStyleTable
 {
     sal_Int32 const wdBuiltinStyle;
-    const sal_Char* pOOoStyleName;
+    const char* pOOoStyleName;
     sal_Int32 const wdStyleType;
 };
 
@@ -154,8 +154,8 @@ namespace {
 
 struct MSOStyleNameTable
 {
-    const sal_Char* pMSOStyleName;
-    const sal_Char* pOOoStyleName;
+    const char* pMSOStyleName;
+    const char* pOOoStyleName;
 };
 
 }

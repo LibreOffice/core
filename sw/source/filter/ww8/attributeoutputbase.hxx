@@ -677,7 +677,7 @@ public:
 class WW8Ruby
 {
     sal_Int32 m_nJC;
-    sal_Char m_cDirective;
+    char m_cDirective;
     sal_uInt32 m_nRubyHeight;
     sal_uInt32 m_nBaseHeight;
     OUString m_sFontFamily;
@@ -685,7 +685,7 @@ class WW8Ruby
 public:
     WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWordExportBase& rExport );
     sal_Int32   GetJC() const { return m_nJC; }
-    sal_Char    GetDirective() const { return m_cDirective; }
+    char    GetDirective() const { return m_cDirective; }
     sal_uInt32   GetRubyHeight() const { return m_nRubyHeight; }
     sal_uInt32   GetBaseHeight() const { return m_nBaseHeight; }
     OUString const & GetFontFamily() const { return m_sFontFamily; }

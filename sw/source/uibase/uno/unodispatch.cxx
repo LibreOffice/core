@@ -39,7 +39,7 @@ static const char cURLFormLetter[] = ".uno:DataSourceBrowser/FormLetter";
 static const char cURLInsertContent[] = ".uno:DataSourceBrowser/InsertContent";//data into fields
 static const char cURLInsertColumns[] = ".uno:DataSourceBrowser/InsertColumns";//data into text
 static const char cURLDocumentDataSource[] = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
-static const sal_Char cInternalDBChangeNotification[] = ".uno::Writer/DataSourceChanged";
+static const char cInternalDBChangeNotification[] = ".uno::Writer/DataSourceChanged";
 
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)
@@ -378,7 +378,7 @@ void SwXDispatch::disposing( const lang::EventObject& rSource )
     m_pView = nullptr;
 }
 
-const sal_Char* SwXDispatch::GetDBChangeURL()
+const char* SwXDispatch::GetDBChangeURL()
 {
     return cInternalDBChangeNotification;
 }

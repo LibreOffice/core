@@ -29,8 +29,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeaderView";
-const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
+const char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeaderView";
+const char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
