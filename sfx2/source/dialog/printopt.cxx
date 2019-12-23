@@ -116,8 +116,6 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
-    SvtPrinterOptions       aPrinterOptions;
-    SvtPrintFileOptions     aPrintFileOptions;
 
     m_xPaperSizeCB->set_active( aWarnOptions.IsPaperSize() );
     m_xPaperOrientationCB->set_active( aWarnOptions.IsPaperOrientation() );
@@ -128,8 +126,8 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xPaperOrientationCB->save_state();
     m_xTransparencyCB->save_state();
 
-    aPrinterOptions.GetPrinterOptions( maPrinterOptions );
-    aPrintFileOptions.GetPrinterOptions( maPrintFileOptions );
+    SvtBasePrintOptions::GetPrinterOptions( maPrinterOptions );
+    SvtBasePrintOptions::GetPrinterOptions( maPrintFileOptions );
     if(m_xPrintFileOutputRB->get_active()){
        m_xPrinterOutputRB->set_active(true);
     }
