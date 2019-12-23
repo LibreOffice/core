@@ -222,7 +222,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * ucpexpand1_component_getFactory(
-    const sal_Char * pImplName,
+    const char * pImplName,
     void * pServiceManager,
     void * pRegistryKey )
 {

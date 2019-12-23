@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * ucpdav1_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
 

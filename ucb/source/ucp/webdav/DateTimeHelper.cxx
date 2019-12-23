@@ -163,8 +163,8 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     int hours;
     int minutes;
     int seconds;
-    sal_Char string_month[3 + 1];
-    sal_Char string_day[3 + 1];
+    char string_month[3 + 1];
+    char string_day[3 + 1];
 
     sal_Int32 found = s.indexOf (',');
     if (found != -1)
