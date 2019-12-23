@@ -350,7 +350,7 @@ void ImportExcel8::ReadBasic()
             oox::StorageRef vbaStg = root.openSubStorage( "_VBA_PROJECT_CUR", false );
             if ( vbaStg.get() )
             {
-                oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel(), "Calc" );
+                oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel() );
                 // collect names of embedded form controls, as specified in the VBA project
                 uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
                 aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );

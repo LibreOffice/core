@@ -40,7 +40,7 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContext, const Reference< XSpreadsheetDocument >& rxDocument ) :
-    ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ), "Calc" ),
+    ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ) ),
     mxDocument( rxDocument )
 {
 }

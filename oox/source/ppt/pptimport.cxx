@@ -318,7 +318,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 
 ::oox::ole::VbaProject* PowerPointImport::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Impress" );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel() );
 }
 
 OUString PowerPointImport::getImplementationName()

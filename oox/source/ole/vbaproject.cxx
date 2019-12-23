@@ -62,8 +62,8 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
-VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& /* rConfigCompName */)
-   : mxConfigAccess(rxContext)
+VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext )
+   : mxContext(rxContext)
 {
 }
 
@@ -73,17 +73,17 @@ VbaFilterConfig::~VbaFilterConfig()
 
 bool VbaFilterConfig::isImportVba() const
 {
-    return officecfg::Office::Calc::Filter::Import::VBA::Load::get(mxConfigAccess);
+    return officecfg::Office::Calc::Filter::Import::VBA::Load::get(mxContext);
 }
 
 bool VbaFilterConfig::isImportVbaExecutable() const
 {
-    return officecfg::Office::Calc::Filter::Import::VBA::Executable::get(mxConfigAccess);
+    return officecfg::Office::Calc::Filter::Import::VBA::Executable::get(mxContext);
 }
 
 bool VbaFilterConfig::isExportVba() const
 {
-    return officecfg::Office::Calc::Filter::Import::VBA::Save::get(mxConfigAccess);
+    return officecfg::Office::Calc::Filter::Import::VBA::Save::get(mxContext);
 }
 
 VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
@@ -108,8 +108,8 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
 }
 
 VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
-        const Reference< XModel >& rxDocModel, const OUString& rConfigCompName ) :
-    VbaFilterConfig( rxContext, rConfigCompName ),
+        const Reference< XModel >& rxDocModel ) :
+    VbaFilterConfig( rxContext ),
     mxContext( rxContext ),
     mxDocModel( rxDocModel ),
     maPrjName( "Standard" )

@@ -54,8 +54,7 @@ class VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const OUString& rConfigCompName );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         ~VbaFilterConfig();
 
     /** Returns true, if the VBA source code and forms should be imported. */
@@ -67,7 +66,7 @@ public:
 
 private:
     css::uno::Reference< css::uno::XComponentContext >
-                        mxConfigAccess;
+                        mxContext;
 };
 
 
@@ -116,8 +115,7 @@ class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 public:
     explicit            VbaProject(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
-                            const OUString& rConfigCompName );
+                            const css::uno::Reference< css::frame::XModel >& rxDocModel );
     virtual             ~VbaProject();
 
     /** Imports the entire VBA project from the passed storage.
