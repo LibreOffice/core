@@ -19,22 +19,17 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/NavigationBarMode.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
@@ -42,16 +37,12 @@
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
-#include <sfx2/app.hxx>
+#include <sfx2/shell.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/fmsearch.hxx>
-#include <svx/svxids.hrc>
-#include <svl/lstner.hxx>
 
 #include <svx/fmtools.hxx>
-#include <svx/fmsrccfg.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/component.hxx>
 #include <comphelper/container.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <unotools/configitem.hxx>
@@ -60,7 +51,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <queue>
-#include <set>
 #include <vector>
 #include <memory>
 

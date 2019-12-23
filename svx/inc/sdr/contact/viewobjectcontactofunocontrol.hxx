@@ -24,7 +24,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
-#include <svx/svxdllapi.h>
 
 class OutputDevice;
 namespace vcl { class Window; }

@@ -34,7 +34,6 @@
 #include <vcl/image.hxx>
 #include <vcl/treelistbox.hxx>
 
-#include <svx/fmtools.hxx>
 #include "fmexch.hxx"
 #include "sqlparserclient.hxx"
 

@@ -30,12 +30,10 @@
 
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/runtime/XFormControllerContext.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>

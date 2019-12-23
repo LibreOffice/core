@@ -24,10 +24,11 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/task/StatusIndicatorFactory.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 #define RECOVERY_CMDPART_PROTOCOL                   "vnd.sun.star.autorecovery:"

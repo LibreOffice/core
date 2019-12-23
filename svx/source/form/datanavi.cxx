@@ -46,6 +46,8 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
+#include <vcl/layout.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

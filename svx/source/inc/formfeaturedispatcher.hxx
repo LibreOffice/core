@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SOURCE_INC_FORMFEATUREDISPATCHER_HXX
 
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 
 #include <cppuhelper/implbase.hxx>
