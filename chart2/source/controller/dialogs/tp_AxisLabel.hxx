@@ -46,7 +46,7 @@ private:
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
     bool                m_bComplexCategories;
 
-    svx::SvxDialControl m_aCtrlDial;
+    svx::DialControl m_aCtrlDial;
     std::unique_ptr<weld::CheckButton> m_xCbShowDescription;
     std::unique_ptr<weld::Label> m_xFlOrder;
     std::unique_ptr<weld::RadioButton> m_xRbSideBySide;

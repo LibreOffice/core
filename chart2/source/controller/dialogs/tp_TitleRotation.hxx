@@ -37,7 +37,7 @@ namespace chart
 class SchAlignmentTabPage : public SfxTabPage
 {
 private:
-    svx::SvxDialControl m_aCtrlDial;
+    svx::DialControl m_aCtrlDial;
     std::unique_ptr<weld::Label> m_xFtRotate;
     std::unique_ptr<weld::SpinButton> m_xNfRotate;
     std::unique_ptr<weld::CheckButton> m_xCbStacked;

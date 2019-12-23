@@ -66,13 +66,13 @@ private:
     state of the control.
 
     It is possible to link a numeric field to this control using the function
-    SetLinkedField(). The SvxDialControl will take full control of this numeric
+    SetLinkedField(). The DialControl will take full control of this numeric
     field:
     -   Sets the rotation angle to the numeric field in mouse operations.
     -   Shows the value entered/modified in the numeric field.
     -   Enables/disables/shows/hides the field according to own state changes.
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl final : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl final : public weld::CustomWidgetController
 {
 public:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
