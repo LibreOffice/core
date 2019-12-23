@@ -39,6 +39,29 @@
       "revId": "276a90c6b3fb046df13ae85dcdec5f28f23ee527",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_5c2b5593",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-23T16:39:45Z",
+      "side": 1,
+      "message": "\"Calc\" matches the original VbaFilterConfig ctor\u0027s rConfigCompName, but \u003chttps://gerrit.libreoffice.org/#/c/85759/\u003e \"Following 276a90c6b3fb046df13ae85dcdec5f28f23ee527\" now reveals that not all calls of that ctor passed in \"Calc\"?",
+      "range": {
+        "startLine": 76,
+        "startChar": 30,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "276a90c6b3fb046df13ae85dcdec5f28f23ee527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
