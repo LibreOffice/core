@@ -29,12 +29,10 @@
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/image.hxx>
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 

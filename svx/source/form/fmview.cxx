@@ -57,6 +57,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -64,6 +65,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX
 
 #include <vcl/bitmapex.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 
 // predefines

@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "fmdocumentclassification.hxx"
-#include <unotools/confignode.hxx>
 
 
 namespace svxform

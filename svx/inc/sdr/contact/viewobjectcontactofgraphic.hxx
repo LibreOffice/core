@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFGRAPHIC_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
-#include <memory>
 
 class SdrGrafObj;
 

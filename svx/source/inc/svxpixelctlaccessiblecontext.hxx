@@ -20,28 +20,12 @@
 #define INCLUDED_SVX_SOURCE_INC_SVXPIXELCTLACCESSIBLECONTEXT_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
-#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/accessibleselectionhelper.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/basemutex.hxx>
 
-#include <svx/rectenum.hxx>
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 
 

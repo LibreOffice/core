@@ -40,7 +40,6 @@
 #include <vcl/canvastools.hxx>
 #include <comphelper/lok.hxx>
 
-#include <eventhandler.hxx>
 #include <memory>
 
 using namespace com::sun::star;
