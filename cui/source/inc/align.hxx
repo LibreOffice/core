@@ -79,7 +79,7 @@ private:
     weld::TriStateEnabled m_aHyphenState;
     weld::TriStateEnabled m_aShrinkState;
 
-    SvxDialControl m_aCtrlDial;
+    DialControl m_aCtrlDial;
     SvtValueSet m_aVsRefEdge;
 
     std::unique_ptr<weld::ComboBox> m_xLbHorAlign;
