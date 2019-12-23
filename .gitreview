@@ -3,5 +3,4 @@ host=gerrit.libreoffice.org
 port=29418
 project=core
 defaultremote=logerrit
-defaultbranch=libreoffice-6-4
-
+defaultbranch=distro/lhm/libreoffice-6-4+backports
