@@ -68,6 +68,7 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext >
                         mxConfigAccess;
+    OUString            mConfigCompName;
 };
 
 
