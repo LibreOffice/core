@@ -36,7 +36,7 @@
 class SdrView;
 
 namespace svx {
-class SvxDialControl;
+class DialControl;
 };
 
 namespace svx { namespace sidebar {
@@ -95,7 +95,7 @@ private:
     std::unique_ptr<weld::SpinButton> mxMtrAngle;
 
     //rotation control
-    std::unique_ptr<svx::SvxDialControl> mxCtrlDial;
+    std::unique_ptr<svx::DialControl> mxCtrlDial;
     std::unique_ptr<weld::CustomWeld> mxDial;
 
     //flip
@@ -153,7 +153,7 @@ private:
     DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ClickAutoHdl, weld::ToggleButton&, void );
     DECL_LINK( AngleModifiedHdl, weld::SpinButton&, void );
-    DECL_LINK( RotationHdl, svx::SvxDialControl*, void );
+    DECL_LINK( RotationHdl, svx::DialControl*, void );
     DECL_STATIC_LINK( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void );
 
     void Initialize();
