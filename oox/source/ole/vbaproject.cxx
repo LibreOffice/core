@@ -37,6 +37,8 @@
 #include <rtl/ustrbuf.h>
 #include <sal/log.hxx>
 #include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -62,8 +64,8 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
-VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& /* rConfigCompName */)
-   : mxConfigAccess(rxContext)
+VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& rConfigCompName )
+   : mxConfigAccess(rxContext), mConfigCompName(rConfigCompName)
 {
 }
 
@@ -73,16 +75,54 @@ VbaFilterConfig::~VbaFilterConfig()
 
 bool VbaFilterConfig::isImportVba() const
 {
-    return officecfg::Office::Calc::Filter::Import::VBA::Load::get(mxConfigAccess);
+    if (mConfigCompName == "Calc")
+    {
+         return officecfg::Office::Calc::Filter::Import::VBA::Load::get(mxConfigAccess);
+    }
+    else if (mConfigCompName == "Impress")
+    {
+         return officecfg::Office::Impress::Filter::Import::VBA::Load::get(mxConfigAccess);
+    }
+    else if (mConfigCompName == "Writer")
+    {
+         return officecfg::Office::Writer::Filter::Import::VBA::Load::get(mxConfigAccess);
+    }
+    assert(false && "VbaFilterConfig::isImportVba Unknow component");
+
 }
 
 bool VbaFilterConfig::isImportVbaExecutable() const
 {
-    return officecfg::Office::Calc::Filter::Import::VBA::Executable::get(mxConfigAccess);
+    if (mConfigCompName == "Calc")
+    {
+         return officecfg::Office::Calc::Filter::Import::VBA::Executable::get(mxConfigAccess);
+    }
+    else if (mConfigCompName == "Impress")
+    {
+         assert(false && "VbaFilterConfig::isImportVbaExecutable Impress has no Executable");
+    }
+    else if (mConfigCompName == "Writer")
+    {
+         return officecfg::Office::Writer::Filter::Import::VBA::Executable::get(mxConfigAccess);
+    }
+    assert(false && "VbaFilterConfig::isImportVbaExecutable Unknow component");
 }
 
 bool VbaFilterConfig::isExportVba() const
 {
+    if (mConfigCompName == "Calc")
+    {
+         return officecfg::Office::Calc::Filter::Import::VBA::Save::get(mxConfigAccess);
+    }
+    else if (mConfigCompName == "Impress")
+    {
+         return officecfg::Office::Impress::Filter::Import::VBA::Save::get(mxConfigAccess);
+    }
+    else if (mConfigCompName == "Writer")
+    {
+         return officecfg::Office::Writer::Filter::Import::VBA::Save::get(mxConfigAccess);
+    }
+    assert(false && "VbaFilterConfig::isExportVba Unknow component");
     return officecfg::Office::Calc::Filter::Import::VBA::Save::get(mxConfigAccess);
 }
 
