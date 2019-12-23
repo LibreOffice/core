@@ -58,7 +58,6 @@ RootAccess::RootAccess(
     OUString const & locale, bool update):
     Access(components), pathRepresentation_(pathRepresentation),
     locale_(locale),
-    lock_( lock() ),
     update_(update), finalized_(false), alive_(true)
 {
 }
@@ -112,7 +111,7 @@ void RootAccess::addChangesListener(
 {
     assert(thisIs(IS_ANY));
     {
-        osl::MutexGuard g(*lock_);
+        osl::MutexGuard g(theConfigLock());
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
@@ -133,7 +132,7 @@ void RootAccess::removeChangesListener(
     css::uno::Reference< css::util::XChangesListener > const & aListener)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(theConfigLock());
     checkLocalizedPropertyAccess();
     ChangesListeners::iterator i(changesListeners_.find(aListener));
     if (i != changesListeners_.end()) {
@@ -150,7 +149,7 @@ void RootAccess::commitChanges()
     }
     Broadcaster bc;
     {
-        osl::MutexGuard g(*lock_);
+        osl::MutexGuard g(theConfigLock());
 
         checkLocalizedPropertyAccess();
         int finalizedLayer;
@@ -169,7 +168,7 @@ void RootAccess::commitChanges()
 
 sal_Bool RootAccess::hasPendingChanges() {
     assert(thisIs(IS_UPDATE));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(theConfigLock());
     checkLocalizedPropertyAccess();
     //TODO: Optimize:
     std::vector< css::util::ElementChange > changes;
@@ -180,7 +179,7 @@ sal_Bool RootAccess::hasPendingChanges() {
 css::uno::Sequence< ::css::util::ElementChange > RootAccess::getPendingChanges()
 {
     assert(thisIs(IS_UPDATE));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(theConfigLock());
     checkLocalizedPropertyAccess();
     std::vector< css::util::ElementChange > changes;
     reportChildChanges(&changes);
@@ -189,7 +188,7 @@ css::uno::Sequence< ::css::util::ElementChange > RootAccess::getPendingChanges()
 
 RootAccess::~RootAccess()
 {
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(theConfigLock());
     if (alive_)
         getComponents().removeRootAccess(this);
 }
@@ -280,7 +279,7 @@ void RootAccess::clearListeners() throw() {
 css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(theConfigLock());
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     if (res.hasValue()) {
@@ -301,7 +300,7 @@ css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
 OUString RootAccess::getImplementationName()
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(theConfigLock());
     checkLocalizedPropertyAccess();
     return "configmgr.RootAccess";
 }
