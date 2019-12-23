@@ -63,6 +63,7 @@
             <property name="can_focus">False</property>
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:InsertRowsBefore">
                 <property name="visible">True</property>
@@ -129,6 +130,9 @@
           <object class="GtkToolbar" id="select">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:EntireCell">
                 <property name="visible">True</property>
@@ -267,6 +271,9 @@
           <object class="GtkToolbar" id="rowsizing">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:SetMinimalRowHeight">
                 <property name="visible">True</property>
@@ -310,6 +317,9 @@
           <object class="GtkToolbar" id="columnsizing">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="toolbar_style">text</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:SetMinimalColumnWidth">
                 <property name="visible">True</property>
@@ -365,6 +375,9 @@
           <object class="GtkToolbar" id="delete">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:DeleteRows">
                 <property name="visible">True</property>
@@ -420,6 +433,9 @@
           <object class="GtkToolbar" id="split_merge">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:MergeCells">
                 <property name="visible">True</property>
@@ -474,6 +490,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id=".uno:TableCellBackgroundColor">
                 <property name="visible">True</property>
