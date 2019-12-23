@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
@@ -30,17 +30,13 @@
 #include <tools/fract.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <basegfx/range/b2drange.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 class SdrView;
-class FixedText;
-class MetricField;
-class CheckBox;
-class MetricBox;
-class Edit;
-class ToolBox;
 
 namespace svx {
-class DialControl;
+class SvxDialControl;
 };
 
 namespace svx { namespace sidebar {
@@ -84,31 +80,36 @@ public:
 
 private:
     //Position
-    VclPtr<FixedText>        mpFtPosX;
-    VclPtr<MetricField>      mpMtrPosX;
-    VclPtr<FixedText>        mpFtPosY;
-    VclPtr<MetricField>      mpMtrPosY;
+    std::unique_ptr<weld::Label> mxFtPosX;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrPosX;
+    std::unique_ptr<weld::Label> mxFtPosY;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrPosY;
 
     // size
-    VclPtr<FixedText>        mpFtWidth;
-    VclPtr<MetricField>      mpMtrWidth;
-    VclPtr<FixedText>        mpFtHeight;
-    VclPtr<MetricField>      mpMtrHeight;
-    VclPtr<CheckBox>         mpCbxScale;
+    std::unique_ptr<weld::Label> mxFtWidth;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrWidth;
+    std::unique_ptr<weld::Label> mxFtHeight;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrHeight;
+    std::unique_ptr<weld::CheckButton> mxCbxScale;
 
     //rotation
-    VclPtr<FixedText>        mpFtAngle;
-    VclPtr<MetricBox>        mpMtrAngle;
+    std::unique_ptr<weld::Label> mxFtAngle;
+    std::unique_ptr<weld::SpinButton> mxMtrAngle;
 
     //rotation control
-    VclPtr<SidebarDialControl>  mpDial;
+    std::unique_ptr<svx::SvxDialControl> mxCtrlDial;
+    std::unique_ptr<weld::CustomWeld> mxDial;
 
     //flip
-    VclPtr<FixedText>        mpFtFlip;
-    VclPtr<ToolBox>          mpFlipTbx;
+    std::unique_ptr<weld::Label> mxFtFlip;
+    std::unique_ptr<weld::Toolbar> mxFlipTbx;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFlipDispatch;
+
+    std::unique_ptr<weld::Toolbar> mxArrangeTbx;
+    std::unique_ptr<ToolbarUnoDispatcher> mxArrangeDispatch;
 
     //edit charts button for online's mobile view
-    VclPtr<PushButton>       mpBtnEditChart;
+    std::unique_ptr<weld::Button> mxBtnEditChart;
 
     // Internal variables
     basegfx::B2DRange                       maRect;
@@ -148,15 +149,14 @@ private:
 
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-    DECL_LINK( ChangePosXHdl, Edit&, void );
-    DECL_LINK( ChangePosYHdl, Edit&, void );
-    DECL_LINK( ChangeWidthHdl, Edit&, void );
-    DECL_LINK( ChangeHeightHdl, Edit&, void );
-    DECL_LINK( ClickAutoHdl, Button*, void );
-    DECL_LINK( AngleModifiedHdl, Edit&, void );
-    DECL_LINK( RotationHdl, svx::DialControl*, void );
-    DECL_LINK( FlipHdl, ToolBox *, void );
-    DECL_STATIC_LINK( PosSizePropertyPanel, ClickChartEditHdl, Button*, void );
+    DECL_LINK( ChangePosXHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangePosYHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangeWidthHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ClickAutoHdl, weld::ToggleButton&, void );
+    DECL_LINK( AngleModifiedHdl, weld::SpinButton&, void );
+    DECL_LINK( RotationHdl, svx::SvxDialControl*, void );
+    DECL_STATIC_LINK( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void );
 
     void Initialize();
     void executeSize();
