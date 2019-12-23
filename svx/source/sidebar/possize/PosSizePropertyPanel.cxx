@@ -75,7 +75,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxCbxScale(m_xBuilder->weld_check_button("ratio")),
     mxFtAngle(m_xBuilder->weld_label("rotationlabel")),
     mxMtrAngle(m_xBuilder->weld_spin_button("rotation")),
-    mxCtrlDial(new SvxDialControl),
+    mxCtrlDial(new DialControl),
     mxDial(new weld::CustomWeld(*m_xBuilder, "orientationcontrol", *mxCtrlDial)),
     mxFtFlip(m_xBuilder->weld_label("fliplabel")),
     mxFlipTbx(m_xBuilder->weld_toolbar("selectrotationtype")),
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, weld::SpinButton&, void
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, SvxDialControl*, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 {
     sal_Int32 nTmp = mxCtrlDial->GetRotation();
 
