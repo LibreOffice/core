@@ -71,6 +71,7 @@
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

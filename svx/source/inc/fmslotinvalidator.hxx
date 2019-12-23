@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 
+#include <sal/types.h>
+
 namespace svx
 {
     typedef sal_uInt16 SfxSlotId;

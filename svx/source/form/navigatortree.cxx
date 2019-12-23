@@ -52,6 +52,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <vcl/treelistentry.hxx>
 #include <vcl/commandevent.hxx>

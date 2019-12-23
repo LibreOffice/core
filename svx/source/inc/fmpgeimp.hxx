@@ -20,19 +20,15 @@
 #define INCLUDED_SVX_SOURCE_INC_FMPGEIMP_HXX
 
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XForms.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XMap.hpp>
 
 #include <tools/link.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <svx/svxdllapi.h>
-#include <map>
 
 class FmFormObj;
 class FmFormPage;

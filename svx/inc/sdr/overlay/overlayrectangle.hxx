@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <tools/gen.hxx>
 
 namespace tools { class PolyPolygon; }
 

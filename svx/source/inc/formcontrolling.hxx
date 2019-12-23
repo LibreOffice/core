@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SOURCE_INC_FORMCONTROLLING_HXX
 
 #include <com/sun/star/form/runtime/XFormController.hpp>
-#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>

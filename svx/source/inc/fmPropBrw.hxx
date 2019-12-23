@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMPROPBRW_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMPROPBRW_HXX
 
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
