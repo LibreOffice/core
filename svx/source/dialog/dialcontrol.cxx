@@ -215,7 +215,7 @@ void DialControlBmp::DrawBackground()
     DrawEllipse( aEllipseRect );
 }
 
-SvxDialControl::DialControl_Impl::DialControl_Impl(OutputDevice& rReference) :
+DialControl::DialControl_Impl::DialControl_Impl(OutputDevice& rReference) :
     mxBmpEnabled(VclPtr<DialControlBmp>::Create(rReference)),
     mxBmpDisabled(VclPtr<DialControlBmp>::Create(rReference)),
     mxBmpBuffered(VclPtr<DialControlBmp>::Create(rReference)),
@@ -230,7 +230,7 @@ SvxDialControl::DialControl_Impl::DialControl_Impl(OutputDevice& rReference) :
 {
 }
 
-void SvxDialControl::DialControl_Impl::Init( const Size& rWinSize, const vcl::Font& rWinFont )
+void DialControl::DialControl_Impl::Init( const Size& rWinSize, const vcl::Font& rWinFont )
 {
     maWinFont = rWinFont;
     maWinFont.SetTransparent(true);
@@ -238,7 +238,7 @@ void SvxDialControl::DialControl_Impl::Init( const Size& rWinSize, const vcl::Fo
     SetSize(rWinSize);
 }
 
-void SvxDialControl::DialControl_Impl::SetSize( const Size& rWinSize )
+void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 {
     // make the control squared, and adjusted so that we have a well-defined
     // center ["(x - 1) | 1" creates odd value <= x]
@@ -254,7 +254,7 @@ void SvxDialControl::DialControl_Impl::SetSize( const Size& rWinSize )
     mxBmpBuffered->SetSize( maWinSize );
 }
 
-void SvxDialControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void DialControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     //use same logic as DialControl_Impl::SetSize
@@ -267,26 +267,26 @@ void SvxDialControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Init(aSize);
 }
 
-void SvxDialControl::Resize()
+void DialControl::Resize()
 {
     mpImpl->SetSize(GetOutputSizePixel());
     InvalidateControl();
 }
 
-void SvxDialControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void DialControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Point aPos;
     rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));
 }
 
-void SvxDialControl::StyleUpdated()
+void DialControl::StyleUpdated()
 {
     CustomWidgetController::StyleUpdated();
     Init( mpImpl->maWinSize, mpImpl->maWinFont );
     InvalidateControl();
 }
 
-bool SvxDialControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool DialControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if( rMEvt.IsLeft() )
     {
@@ -298,14 +298,14 @@ bool SvxDialControl::MouseButtonDown(const MouseEvent& rMEvt)
     return true;
 }
 
-bool SvxDialControl::MouseMove( const MouseEvent& rMEvt )
+bool DialControl::MouseMove( const MouseEvent& rMEvt )
 {
     if( IsMouseCaptured() && rMEvt.IsLeft() )
         HandleMouseEvent( rMEvt.GetPosPixel(), false );
     return true;
 }
 
-bool SvxDialControl::MouseButtonUp(const MouseEvent&)
+bool DialControl::MouseButtonUp(const MouseEvent&)
 {
     if( IsMouseCaptured() )
     {
@@ -316,7 +316,7 @@ bool SvxDialControl::MouseButtonUp(const MouseEvent&)
     return true;
 }
 
-bool SvxDialControl::KeyInput( const KeyEvent& rKEvt )
+bool DialControl::KeyInput( const KeyEvent& rKEvt )
 {
     const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     if( !rKCode.GetModifier() && (rKCode.GetCode() == KEY_ESCAPE) )
@@ -327,18 +327,18 @@ bool SvxDialControl::KeyInput( const KeyEvent& rKEvt )
     return CustomWidgetController::KeyInput(rKEvt);
 }
 
-void SvxDialControl::LoseFocus()
+void DialControl::LoseFocus()
 {
     // release captured mouse
     HandleEscapeEvent();
 }
 
-bool SvxDialControl::HasRotation() const
+bool DialControl::HasRotation() const
 {
     return !mpImpl->mbNoRot;
 }
 
-void SvxDialControl::SetNoRotation()
+void DialControl::SetNoRotation()
 {
     if( !mpImpl->mbNoRot )
     {
@@ -349,12 +349,12 @@ void SvxDialControl::SetNoRotation()
     }
 }
 
-sal_Int32 SvxDialControl::GetRotation() const
+sal_Int32 DialControl::GetRotation() const
 {
     return mpImpl->mnAngle;
 }
 
-void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces)
+void DialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces)
 {
     mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
 
@@ -370,39 +370,39 @@ void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimal
     if( mpImpl->mpLinkField )
     {
         weld::SpinButton& rField = *mpImpl->mpLinkField;
-        rField.connect_value_changed(LINK(this, SvxDialControl, LinkedFieldModifyHdl));
+        rField.connect_value_changed(LINK(this, DialControl, LinkedFieldModifyHdl));
     }
 }
 
-IMPL_LINK_NOARG(SvxDialControl, LinkedFieldModifyHdl, weld::SpinButton&, void)
+IMPL_LINK_NOARG(DialControl, LinkedFieldModifyHdl, weld::SpinButton&, void)
 {
     LinkedFieldModifyHdl();
 }
 
-void SvxDialControl::LinkedFieldModifyHdl()
+void DialControl::LinkedFieldModifyHdl()
 {
     if( mpImpl->mpLinkField )
         SetRotation(mpImpl->mpLinkField->get_value() * mpImpl->mnLinkedFieldValueMultiplyer);
 }
 
-void SvxDialControl::SaveValue()
+void DialControl::SaveValue()
 {
     mpImpl->mnInitialAngle = mpImpl->mnAngle;
 }
 
-bool SvxDialControl::IsValueModified() const
+bool DialControl::IsValueModified() const
 {
     return mpImpl->mnInitialAngle != mpImpl->mnAngle;
 }
 
-void SvxDialControl::Init( const Size& rWinSize, const vcl::Font& rWinFont )
+void DialControl::Init( const Size& rWinSize, const vcl::Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
     EnableRTL( false ); // don't mirror mouse handling
     SetOutputSizePixel( mpImpl->maWinSize );
 }
 
-void SvxDialControl::Init( const Size& rWinSize )
+void DialControl::Init( const Size& rWinSize )
 {
     //hidpi TODO: GetDefaultFont() picks a font size too small, so fix it here.
     vcl::Font aDefaultSize = Application::GetSettings().GetStyleSettings().GetLabelFont();
@@ -414,7 +414,7 @@ void SvxDialControl::Init( const Size& rWinSize )
     Init( rWinSize, aFont );
 }
 
-void SvxDialControl::InvalidateControl()
+void DialControl::InvalidateControl()
 {
     mpImpl->mxBmpBuffered->CopyBackground( IsEnabled() ? *mpImpl->mxBmpEnabled : *mpImpl->mxBmpDisabled );
     if( !mpImpl->mbNoRot )
@@ -422,7 +422,7 @@ void SvxDialControl::InvalidateControl()
     Invalidate();
 }
 
-void SvxDialControl::SetRotation(sal_Int32 nAngle)
+void DialControl::SetRotation(sal_Int32 nAngle)
 {
     bool bOldSel = mpImpl->mbNoRot;
     mpImpl->mbNoRot = false;
@@ -439,7 +439,7 @@ void SvxDialControl::SetRotation(sal_Int32 nAngle)
     }
 }
 
-void SvxDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
+void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
 {
     long nX = rPos.X() - mpImpl->mnCenterX;
     long nY = mpImpl->mnCenterY - rPos.Y();
@@ -458,7 +458,7 @@ void SvxDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
     }
 }
 
-void SvxDialControl::HandleEscapeEvent()
+void DialControl::HandleEscapeEvent()
 {
     if( IsMouseCaptured() )
     {
