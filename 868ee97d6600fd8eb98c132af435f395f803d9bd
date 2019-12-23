@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_dc60c535",
+        "filename": "xmlsecurity/source/dialogs/macrosecurity.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2019-12-23T13:44:56Z",
+      "side": 1,
+      "message": "Any chance to not have a new string here?",
+      "revId": "868ee97d6600fd8eb98c132af435f395f803d9bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
