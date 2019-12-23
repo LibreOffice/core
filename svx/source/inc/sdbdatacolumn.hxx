@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <osl/diagnose.h>
 
 
 namespace svxform

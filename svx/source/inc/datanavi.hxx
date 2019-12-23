@@ -20,8 +20,6 @@
 #define INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 
 #include <vcl/builder.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/tabctrl.hxx>

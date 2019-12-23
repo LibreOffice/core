@@ -20,10 +20,7 @@
 #ifndef INCLUDED_SVX_INC_ACCESSIBLETABLESHAPE_HXX
 #define INCLUDED_SVX_INC_ACCESSIBLETABLESHAPE_HXX
 
-#include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
-#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 
 #include <rtl/ref.hxx>
 
@@ -32,7 +29,6 @@
 #include <svx/AccessibleShape.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
-#include <cppuhelper/compbase.hxx>
 
 namespace sdr { namespace table {
     class SvxTableController;

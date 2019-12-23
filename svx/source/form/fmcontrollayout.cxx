@@ -33,6 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/confignode.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 

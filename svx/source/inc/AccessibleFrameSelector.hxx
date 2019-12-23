@@ -20,18 +20,11 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_ACCESSIBLEFRAMESELECTOR_HXX
 #define INCLUDED_SVX_SOURCE_INC_ACCESSIBLEFRAMESELECTOR_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <tools/link.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/accessibleselectionhelper.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include<comphelper/accessiblecomponenthelper.hxx>
 #include <svx/framebordertype.hxx>
-#include <vcl/vclptr.hxx>
 
 namespace svx {
 

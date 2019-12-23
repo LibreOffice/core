@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "delayedevent.hxx"
+#include "fmcontrolbordermanager.hxx"
 #include "formdispatchinterceptor.hxx"
 #include "sqlparserclient.hxx"
 
@@ -36,15 +37,9 @@
 #include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/form/DatabaseDeleteEvent.hpp>
 #include <com/sun/star/form/DatabaseParameterEvent.hpp>
-#include <com/sun/star/form/ErrorEvent.hpp>
 #include <com/sun/star/form/validation/XFormComponentValidityListener.hpp>
-#include <com/sun/star/form/XConfirmDeleteBroadcaster.hpp>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
-#include <com/sun/star/form/XDatabaseParameterBroadcaster2.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/runtime/XFilterController.hpp>
@@ -55,18 +50,13 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/util/XModeSelector.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <comphelper/proparrhlp.hxx>

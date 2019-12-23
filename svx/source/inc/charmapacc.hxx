@@ -20,10 +20,11 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_CHARMAPACC_HXX
 #define INCLUDED_SVX_SOURCE_INC_CHARMAPACC_HXX
 
-#include <vcl/image.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
+#include <tools/gen.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 class SvxShowCharSet;

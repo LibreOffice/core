@@ -23,8 +23,6 @@
 #include <sal/types.h>
 #include <com/sun/star/util/XBroadcaster.hpp>
 #include <com/sun/star/table/XTable.hpp>
-#include <basegfx/range/b2irectangle.hxx>
-#include <basegfx/tuple/b2ituple.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include "celltypes.hxx"

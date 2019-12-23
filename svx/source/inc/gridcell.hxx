@@ -35,7 +35,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XButton.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -44,6 +43,7 @@
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/uno3.hxx>
+#include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>

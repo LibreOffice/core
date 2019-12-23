@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGRAPHIC_HXX
 
-#include <sal/types.h>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdograf.hxx>
 

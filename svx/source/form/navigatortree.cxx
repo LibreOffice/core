@@ -53,6 +53,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
 #include <tools/diagnose_ex.h>
+#include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <vcl/treelistentry.hxx>
 #include <vcl/commandevent.hxx>

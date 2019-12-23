@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -46,6 +47,7 @@
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 
 #include <comphelper/processfactory.hxx>

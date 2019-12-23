@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_SVDOUTLINERCACHE_HXX
 #define INCLUDED_SVX_SOURCE_INC_SVDOUTLINERCACHE_HXX
 
-#include <sal/types.h>
 #include <memory>
 #include <vector>
 #include <set>
