@@ -5508,11 +5508,10 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
        nDist = rBox.GetDistance( SvxBoxItemLine::RIGHT );
     }
 
-    if( pBorderLine )
     {
         const SfxPoolItem* pItem = GetExport().HasItem( RES_CHRATR_SHADOW );
         const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
-        const bool bShadow =
+        const bool bShadow = pBorderLine &&
             pShadowItem && pShadowItem->GetLocation() != SvxShadowLocation::NONE &&
             pShadowItem->GetWidth() > 0;
 

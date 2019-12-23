@@ -5054,23 +5054,20 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
 
             SetWW8_BRC(nBrcVer, aBrc, pData, nLen);
 
+            Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
+            Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);
+            Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, nullptr, true);
+            Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, nullptr, true);
+            NewAttr( *aBoxItem );
+
+            short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
+            SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);
             // Border style is none -> no border, no shadow
             if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != SvxBorderLineStyle::NONE )
-            {
-                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
-                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);
-                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::LEFT, 0, nullptr, true);
-                Set1Border(*aBoxItem, aBrc, SvxBoxItemLine::RIGHT, 0, nullptr, true);
-                NewAttr( *aBoxItem );
-
-                short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
-                SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);
-                if( SetShadow( aShadowItem, &aSizeArray[0], aBrc ) )
-                    NewAttr( aShadowItem );
-            }
+                SetShadow( aShadowItem, &aSizeArray[0], aBrc );
+            NewAttr( aShadowItem );
         }
     }
-
 }
 
 void SwWW8ImplReader::Read_Hyphenation( sal_uInt16, const sal_uInt8* pData, short nLen )
