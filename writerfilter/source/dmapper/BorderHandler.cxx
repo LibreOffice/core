@@ -176,9 +176,7 @@ PropertyMapPtr  BorderHandler::getProperties()
     }
     return pPropertyMap;
 }
-/*-------------------------------------------------------------------------
-    used only in OOXML import
-  -----------------------------------------------------------------------*/
+
 table::BorderLine2 BorderHandler::getBorderLine()
 {
     table::BorderLine2 aBorderLine;
