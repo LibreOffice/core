@@ -2441,7 +2441,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             FieldFlags::Start | FieldFlags::CmdStart );
                     if ( isDropdownOrCheckbox )
                         WriteFormData( *pFieldmark );
-                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
+                    // tdf#129514 need CmdEnd for docx
+                    OutputField(nullptr, lcl_getFieldId(pFieldmark), OUString(),
+                            FieldFlags::CmdEnd | FieldFlags::Close);
                     if ( isDropdownOrCheckbox )
                         AppendBookmark( pFieldmark->GetName() );
                 }
