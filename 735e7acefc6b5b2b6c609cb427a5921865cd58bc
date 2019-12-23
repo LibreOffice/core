@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f7c97a3_39078b1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-12-23T05:15:26Z",
+      "side": 1,
+      "message": "“meaningfull” → “meaningful”",
+      "range": {
+        "startLine": 7,
+        "startChar": 32,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "735e7acefc6b5b2b6c609cb427a5921865cd58bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f7c97a3_36cf9b80",
         "filename": "scaddins/inc/pricing.hrc",
         "patchSetId": 3
