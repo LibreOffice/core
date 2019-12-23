@@ -89,14 +89,14 @@ public:
 
 private:
     void broadcast_changed(
-            sal_Char const * const i_asciiAttributeName,
+            char const * const i_asciiAttributeName,
             const css::uno::Any& i_oldValue,
             const css::uno::Any& i_newValue,
             ::comphelper::ComponentGuard& i_Guard
         );
 
     template< class TYPE >
-    void impl_set( TYPE & io_attribute, TYPE const & i_newValue, sal_Char const * i_attributeName )
+    void impl_set( TYPE & io_attribute, TYPE const & i_newValue, char const * i_attributeName )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         if ( io_attribute == i_newValue )
