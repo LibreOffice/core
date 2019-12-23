@@ -137,6 +137,55 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     return xController;
 }
 
+Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
+    weld::Toolbar& rToolbar,
+    const OUString& rsCommandName,
+    const Reference<frame::XFrame>& rxFrame)
+{
+    Reference<frame::XToolbarController> xController;
+
+    xController.set(
+        static_cast<XWeak*>(new svt::GenericToolboxController(
+                ::comphelper::getProcessComponentContext(),
+                rxFrame,
+                rToolbar,
+                rsCommandName)),
+        UNO_QUERY);
+
+    // Initialize the controller with eg a service factory.
+    Reference<lang::XInitialization> xInitialization (xController, UNO_QUERY);
+    if (/*!bFactoryHasController &&*/ xInitialization.is())
+    {
+        beans::PropertyValue aPropValue;
+        std::vector<Any> aPropertyVector;
+
+        aPropValue.Name = "Frame";
+        aPropValue.Value <<= rxFrame;
+        aPropertyVector.push_back(makeAny(aPropValue));
+
+        aPropValue.Name = "ServiceManager";
+        aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
+        aPropertyVector.push_back(makeAny(aPropValue));
+
+        aPropValue.Name = "CommandURL";
+        aPropValue.Value <<= rsCommandName;
+        aPropertyVector.push_back(makeAny(aPropValue));
+
+        Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
+        xInitialization->initialize(aArgs);
+    }
+
+    if (xController.is())
+    {
+        Reference<util::XUpdatable> xUpdatable(xController, UNO_QUERY);
+        if (xUpdatable.is())
+            xUpdatable->update();
+    }
+
+    return xController;
+}
+
+
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     ToolBox* pToolBox,
     const OUString& rsCommandName,
