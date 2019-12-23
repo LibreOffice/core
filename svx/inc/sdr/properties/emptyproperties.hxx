@@ -25,6 +25,7 @@
 #include <memory>
 
 #include <svx/sdr/properties/properties.hxx>
+#include <svl/itemset.hxx>
 
 
 namespace sdr

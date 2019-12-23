@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <editeng/flstitem.hxx>
 

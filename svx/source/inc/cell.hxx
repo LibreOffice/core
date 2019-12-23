@@ -22,7 +22,6 @@
 
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <rtl/ref.hxx>

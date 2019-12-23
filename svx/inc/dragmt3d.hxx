@@ -24,7 +24,6 @@
 #include <svx/svddrgmt.hxx>
 #include <svx/view3d.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <vcl/timer.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 // Parameters for the interaction of a 3D object

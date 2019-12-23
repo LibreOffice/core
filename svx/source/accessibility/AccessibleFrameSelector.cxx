@@ -49,7 +49,6 @@ using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::lang::EventObject;
-using ::com::sun::star::awt::XFocusListener;
 
 using namespace ::com::sun::star::accessibility;
 

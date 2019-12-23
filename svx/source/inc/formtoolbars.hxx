@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FORMTOOLBARS_HXX
 #define INCLUDED_SVX_SOURCE_INC_FORMTOOLBARS_HXX
 
-#include "fmdocumentclassification.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <svx/svxdllapi.h>
 
 namespace svxform
 {

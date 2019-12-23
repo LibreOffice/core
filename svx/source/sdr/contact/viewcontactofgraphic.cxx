@@ -51,7 +51,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-#include <eventhandler.hxx>
 #include <bitmaps.hlst>
 
 namespace sdr

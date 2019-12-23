@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include <datanavi.hxx>
 #include <fmservs.hxx>
 
