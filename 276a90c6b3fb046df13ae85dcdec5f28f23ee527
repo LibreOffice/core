@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_bc34e94b",
+        "filename": "include/oox/ole/vbaproject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-23T13:01:23Z",
+      "side": 1,
+      "message": "would arguably be better to use a different name for this variable (e.g., mxContext)",
+      "revId": "276a90c6b3fb046df13ae85dcdec5f28f23ee527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_dc39a541",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-23T13:01:23Z",
+      "side": 1,
+      "message": "can\u0027t this unused parameter be dropped?",
+      "range": {
+        "startLine": 65,
+        "startChar": 83,
+        "endLine": 65,
+        "endChar": 120
+      },
+      "revId": "276a90c6b3fb046df13ae85dcdec5f28f23ee527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
