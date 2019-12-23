@@ -1128,7 +1128,7 @@ static Reference< XInterface > Test_Impl_create(
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * component_getFactory(
-    const sal_Char * pImplName, SAL_UNUSED_PARAMETER void * pServiceManager,
+    const char * pImplName, SAL_UNUSED_PARAMETER void * pServiceManager,
     SAL_UNUSED_PARAMETER void * )
 {
     void * pRet = nullptr;
