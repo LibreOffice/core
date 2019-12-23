@@ -32,7 +32,7 @@ struct Encoder
     }
     void checkSupports(sal_Unicode c)
     {
-        sal_Char aTempArray[8];
+        char aTempArray[8];
         sal_Size nTempSize;
         sal_uInt32 nCvtInfo;
 

@@ -55,9 +55,9 @@ namespace
     void Test::testEncoding(rtl_TextEncoding eEncoding)
     {
         //Taking the single byte legacy encodings, fill in all possible values
-        std::vector<sal_Char> aAllChars(255);
+        std::vector<char> aAllChars(255);
         for (int i = 1; i <= 255; ++i)
-            aAllChars[i-1] = static_cast<sal_Char>(i);
+            aAllChars[i-1] = static_cast<char>(i);
 
         //Some slots are unused, so don't map to private, just set them to 'X'
         sal_uInt32 const convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS ^ RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE;

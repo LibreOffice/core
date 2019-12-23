@@ -26,9 +26,9 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 
-int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uInt32 nSize)
+int INetMIMEMessageStream::GetHeaderLine(char* pData, sal_uInt32 nSize)
 {
-    sal_Char* pWBuf = pData;
+    char* pWBuf = pData;
 
     sal_uInt32 i, n;
 
@@ -49,7 +49,7 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uInt32 nSize)
             }
         }
 
-        pMsgWrite = const_cast<char *>(static_cast<sal_Char const *>(maMsgBuffer.GetData()));
+        pMsgWrite = const_cast<char *>(static_cast<char const *>(maMsgBuffer.GetData()));
         pMsgRead  = pMsgWrite + maMsgBuffer.Tell();
     }
 
@@ -69,10 +69,10 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uInt32 nSize)
     return (pWBuf - pData);
 }
 
-int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uInt32 nSize)
+int INetMIMEMessageStream::GetBodyLine(char* pData, sal_uInt32 nSize)
 {
-    sal_Char* pWBuf = pData;
-    sal_Char* pWEnd = pData + nSize;
+    char* pWBuf = pData;
+    char* pWEnd = pData + nSize;
 
     if (pSourceMsg->GetDocumentLB())
     {
@@ -86,7 +86,7 @@ int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uInt32 nSize)
     return (pWBuf - pData);
 }
 
-int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uInt32 nSize)
+int INetMIMEMessageStream::GetMsgLine(char* pData, sal_uInt32 nSize)
 {
     // Check for header or body.
     if (!bHeaderGenerated)
@@ -246,10 +246,10 @@ INetMIMEMessageStream::~INetMIMEMessageStream()
     pChildStrm.reset();
 }
 
-int INetMIMEMessageStream::Read(sal_Char* pData, sal_uInt32 nSize)
+int INetMIMEMessageStream::Read(char* pData, sal_uInt32 nSize)
 {
-    sal_Char* pWBuf = pData;
-    sal_Char* pWEnd = pData + nSize;
+    char* pWBuf = pData;
+    char* pWEnd = pData + nSize;
 
     while (pWBuf < pWEnd)
     {

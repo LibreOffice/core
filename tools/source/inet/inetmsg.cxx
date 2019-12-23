@@ -46,7 +46,7 @@ void INetMIMEMessage::SetHeaderField_Impl (
  *   1*DIGIT                                     (delta seconds)
  */
 
-static const sal_Char *months[12] =
+static const char *months[12] =
 {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -259,7 +259,7 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
         return;
 
     // Generate a unique boundary from current time.
-    sal_Char sTail[16 + 1];
+    char sTail[16 + 1];
     tools::Time aCurTime( tools::Time::SYSTEM );
     sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
     nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
