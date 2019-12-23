@@ -195,22 +195,22 @@ protected:
         writeActual(transformationToOneLineString(rTransform), sCheck);
     }
 
-    bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, const OUString& sCheck, const double fEPS, OUString& rExpectedTranform)
+    bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, const OUString& sCheck, const double fEPS, OUString& rExpectedTransform)
     {
-        rExpectedTranform = readExpected(sCheck); // Reference transformation string
+        rExpectedTransform = readExpected(sCheck); // Reference transformation string
 
         // Convert string back to a transformation;
         drawing::HomogenMatrix3 aExpectedTransform;
         sal_Int32 nIdx {0};
-        aExpectedTransform.Line1.Column1 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line1.Column2 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line1.Column3 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line2.Column1 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line2.Column2 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line2.Column3 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line3.Column1 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line3.Column2 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line3.Column3 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line1.Column1 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line1.Column2 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line1.Column3 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line2.Column1 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line2.Column2 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line2.Column3 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line3.Column1 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line3.Column2 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line3.Column3 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
 
         // Check the equality of the two transformation
         return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < fEPS &&
