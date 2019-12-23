@@ -3028,9 +3028,11 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
         lcl_startParagraphGroup();
     }
     else
+    {
         // No context? Then this image should not appear directly inside the
         // document, just save it for later usage.
         m_pImpl->PushPendingShape(xShape);
+    }
 
     m_pImpl->SetIsFirstParagraphInShape(true);
 
