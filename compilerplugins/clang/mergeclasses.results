@@ -399,7 +399,6 @@ merge svt::table::ITableDataSort with svt::table::UnoControlTableModel
 merge svt::table::ITableInputHandler with svt::table::DefaultInputHandler
 merge svt::table::ITableModelListener with svt::table::TableControl_Impl
 merge svt::table::ITableRenderer with svt::table::GridTableRenderer
-merge svx::DialControl with svx::sidebar::SidebarDialControl
 merge svx::IContextRequestObserver with svx::FmTextControlShell
 merge svx::IControllerFeatureInvalidation with FmXFormShell
 merge svx::IFocusObserver with svx::FmTextControlShell
