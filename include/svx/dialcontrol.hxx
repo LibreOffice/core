@@ -179,6 +179,7 @@ public:
     const OUString&     GetText() const { return mpImpl->maText; }
     void                SetText(const OUString& rText) { mpImpl->maText = rText; }
 
+    void                Init( const Size& rWinSize );
 private:
     struct DialControl_Impl
     {
@@ -207,7 +208,6 @@ private:
     void                HandleEscapeEvent();
 
     void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
-    void                Init( const Size& rWinSize );
 
     void                InvalidateControl();
 
