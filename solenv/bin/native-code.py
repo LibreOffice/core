@@ -506,7 +506,6 @@ custom_widgets = [
     'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',
-    'SidebarDialControl',
     'SidebarToolBox',
     'Svx3DPreviewControl',
     'SvxCharViewControl',
