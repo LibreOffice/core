@@ -389,7 +389,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         aIdent += sTmpBuffer2;
 
                         // Is it a unit?
-                        const sal_Char *pCmp1 = nullptr, *pCmp2 = nullptr, *pCmp3 = nullptr;
+                        const char *pCmp1 = nullptr, *pCmp2 = nullptr, *pCmp3 = nullptr;
                         double nScale1 = 1., nScale2 = 1.;
                         CSS1Token nToken1 = CSS1_LENGTH,
                                   nToken2 = CSS1_LENGTH,

@@ -187,8 +187,8 @@ public:
     void resetStream();
     SvStream& OutULong(sal_uLong nVal);
     SvStream& OutLong(long nVal);
-    void OutUnicode(const sal_Char* pToken, const OUString& rContent, bool bUpr = false);
-    void OutDateTime(const sal_Char* pStr, const css::util::DateTime& rDT);
+    void OutUnicode(const char* pToken, const OUString& rContent, bool bUpr = false);
+    void OutDateTime(const char* pStr, const css::util::DateTime& rDT);
     void OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage);
 
     sal_uInt16 GetColor(const Color& rColor) const;
@@ -220,7 +220,7 @@ private:
     /// This is necessary to have the numbering table ready before the main text is being processed.
     void BuildNumbering();
     void WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader);
-    void WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr,
+    void WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const char* pStr,
                            bool bTitlepg = false);
 
     RtfColorTable m_aColTable;

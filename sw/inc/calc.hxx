@@ -58,36 +58,36 @@ enum SwCalcOper
 };
 
 // Calculate Operations Strings
-extern const sal_Char sCalc_Add[];
-extern const sal_Char sCalc_Sub[];
-extern const sal_Char sCalc_Mul[];
-extern const sal_Char sCalc_Div[];
-extern const sal_Char sCalc_Phd[];
-extern const sal_Char sCalc_Sqrt[];
-extern const sal_Char sCalc_Pow[];
-extern const sal_Char sCalc_Or[];
-extern const sal_Char sCalc_Xor[];
-extern const sal_Char sCalc_And[];
-extern const sal_Char sCalc_Not[];
-extern const sal_Char sCalc_Eq[];
-extern const sal_Char sCalc_Neq[];
-extern const sal_Char sCalc_Leq[];
-extern const sal_Char sCalc_Geq[];
-extern const sal_Char sCalc_L[];
-extern const sal_Char sCalc_G[];
-extern const sal_Char sCalc_Sum[];
-extern const sal_Char sCalc_Mean[];
-extern const sal_Char sCalc_Min[];
-extern const sal_Char sCalc_Max[];
-extern const sal_Char sCalc_Sin[];
-extern const sal_Char sCalc_Cos[];
-extern const sal_Char sCalc_Tan[];
-extern const sal_Char sCalc_Asin[];
-extern const sal_Char sCalc_Acos[];
-extern const sal_Char sCalc_Atan[];
-extern const sal_Char sCalc_Tdif[];
-extern const sal_Char sCalc_Round[];
-extern const sal_Char sCalc_Date[];
+extern const char sCalc_Add[];
+extern const char sCalc_Sub[];
+extern const char sCalc_Mul[];
+extern const char sCalc_Div[];
+extern const char sCalc_Phd[];
+extern const char sCalc_Sqrt[];
+extern const char sCalc_Pow[];
+extern const char sCalc_Or[];
+extern const char sCalc_Xor[];
+extern const char sCalc_And[];
+extern const char sCalc_Not[];
+extern const char sCalc_Eq[];
+extern const char sCalc_Neq[];
+extern const char sCalc_Leq[];
+extern const char sCalc_Geq[];
+extern const char sCalc_L[];
+extern const char sCalc_G[];
+extern const char sCalc_Sum[];
+extern const char sCalc_Mean[];
+extern const char sCalc_Min[];
+extern const char sCalc_Max[];
+extern const char sCalc_Sin[];
+extern const char sCalc_Cos[];
+extern const char sCalc_Tan[];
+extern const char sCalc_Asin[];
+extern const char sCalc_Acos[];
+extern const char sCalc_Atan[];
+extern const char sCalc_Tdif[];
+extern const char sCalc_Round[];
+extern const char sCalc_Date[];
 
 //  Calculate ErrorCodes
 enum class SwCalcError

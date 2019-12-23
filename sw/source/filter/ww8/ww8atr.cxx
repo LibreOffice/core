@@ -2185,7 +2185,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 {
     if ( const SwTOXBase* pTOX = rSect.GetTOXBase() )
     {
-        static const sal_Char sEntryEnd[] = "\" ";
+        static const char sEntryEnd[] = "\" ";
 
         ww::eField eCode = ww::eTOC;
         OUString sStr = pTOX ->GetMSTOCExpression();
@@ -2311,7 +2311,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( TOX_USER == pTOX->GetType() )
                         {
                             sStr += "\""
-                                + OUStringChar(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
+                                + OUStringChar(static_cast<char>( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ))
                                 + sEntryEnd;
                         }
                     }

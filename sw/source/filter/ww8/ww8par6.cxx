@@ -2931,7 +2931,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
                 {
                     //convert single byte from MS1252 to Unicode
                     m_cSymbol = OUString(
-                        reinterpret_cast<const sal_Char*>(pData+2), 1,
+                        reinterpret_cast<const char*>(pData+2), 1,
                         RTL_TEXTENCODING_MS_1252).toChar();
                 }
                 else

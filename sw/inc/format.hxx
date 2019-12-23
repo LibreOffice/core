@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
 
 protected:
-    SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+    SwFormat( SwAttrPool& rPool, const char* pFormatNm,
             const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( SwAttrPool& rPool, const OUString &rFormatNm, const sal_uInt16* pWhichRanges,
             SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );

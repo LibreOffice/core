@@ -42,7 +42,7 @@ namespace {
 
 struct HTMLNumFormatTableEntry
 {
-    const sal_Char *pName;
+    const char *pName;
     NfIndexTableOffset const eFormat;
 };
 
@@ -583,7 +583,7 @@ void SwHTMLParser::InsertFieldText()
     }
 }
 
-void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
+void SwHTMLParser::InsertCommentText( const char *pTag )
 {
     bool bEmpty = m_aContents.isEmpty();
     if( !bEmpty )
@@ -596,7 +596,7 @@ void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
     }
 }
 
-void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag )
+void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
 {
     OUString aComment( rComment );
     if( pTag )

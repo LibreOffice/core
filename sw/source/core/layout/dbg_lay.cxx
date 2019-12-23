@@ -403,7 +403,7 @@ void SwImplProtocol::FileInit()
         nInitFile = 0;
         while( aStream.good() )
         {
-            sal_Char c;
+            char c;
             aStream.ReadChar( c );
             if( '\n' == c || '\r' == c )    // line ending
             {
@@ -463,7 +463,7 @@ static void lcl_Padded(OStringBuffer& rOut, const OString& s, size_t length)
 
 static void lcl_Padded(OStringBuffer& rOut, const long n, size_t length = 5)
 {
-    sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
+    char sz[RTL_STR_MAX_VALUEOFINT64];
     rtl_str_valueOfInt64(sz, n, 10);
     OString s(sz);
     lcl_Padded(rOut, s, length);

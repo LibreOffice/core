@@ -161,21 +161,21 @@ static Writer& OutCSS1_SwFormatLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt
 namespace
 {
 
-const sal_Char sCSS1_rule_end[] = " }";
-const sal_Char sCSS1_span_tag_end[] = "\">";
-const sal_Char cCSS1_style_opt_end  = '\"';
+const char sCSS1_rule_end[] = " }";
+const char sCSS1_span_tag_end[] = "\">";
+const char cCSS1_style_opt_end  = '\"';
 
-const sal_Char* const sHTML_FTN_fontheight = "57%";
+const char* const sHTML_FTN_fontheight = "57%";
 
 OString lclConvToHex(sal_uInt16 nHex)
 {
-    sal_Char aNToABuf[] = "00";
+    char aNToABuf[] = "00";
 
     // set pointer to end of buffer
-    sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
+    char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < 2; ++n )
     {
-        *(--pStr) = static_cast<sal_Char>(nHex & 0xf ) + 48;
+        *(--pStr) = static_cast<char>(nHex & 0xf ) + 48;
         if( *pStr > '9' )
             *pStr += 39;
         nHex >>= 4;
@@ -234,8 +234,8 @@ public:
 
 }
 
-void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
-                                     const sal_Char *pVal,
+void SwHTMLWriter::OutCSS1_Property( const char *pProp,
+                                     const char *pVal,
                                      const OUString *pSVal )
 {
     if (IgnorePropertyForReqIF(mbReqIF, pProp))
@@ -370,7 +370,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     long nMul = 1000;
     long nDiv = 1;
     long nFac = 100;
-    const sal_Char *pUnit;
+    const char *pUnit;
     switch( eUnit )
     {
     case FieldUnit::MM_100TH:
@@ -486,14 +486,14 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     rOut.append(pUnit);
 }
 
-void SwHTMLWriter::OutCSS1_UnitProperty( const sal_Char *pProp, long nVal )
+void SwHTMLWriter::OutCSS1_UnitProperty( const char *pProp, long nVal )
 {
     OStringBuffer sOut;
     AddUnitPropertyValue(sOut, nVal, m_eCSS1Unit);
     OutCSS1_PropertyAscii(pProp, sOut.makeStringAndClear());
 }
 
-void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
+void SwHTMLWriter::OutCSS1_PixelProperty( const char *pProp, long nVal,
                                           bool bVert )
 {
     OString sOut(OString::number(ToPixel(nVal,bVert)) + sCSS1_UNIT_px);
@@ -1148,7 +1148,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
 
     if( !bContainsKeyword && bGeneric )
     {
-        const sal_Char *pStr = nullptr;
+        const char *pStr = nullptr;
         switch( rFontItem.GetFamily() )
         {
         case FAMILY_ROMAN:      pStr = sCSS1_PV_serif;      break;
@@ -1650,7 +1650,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 
     if( bPseudo )
     {
-        const sal_Char *pPseudo = nullptr;
+        const char *pPseudo = nullptr;
         switch( rPageDesc.GetPoolFormatId() )
         {
         case RES_POOLPAGE_FIRST:    pPseudo = sCSS1_first;  break;
@@ -1909,7 +1909,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 if( !(nFrameOpts & HtmlFrmOpts::Align) )
                 {
                     // float
-                    const sal_Char *pStr = text::HoriOrientation::RIGHT==rHoriOri.GetHoriOrient()
+                    const char *pStr = text::HoriOrientation::RIGHT==rHoriOri.GetHoriOrient()
                             ? sCSS1_PV_right
                             : sCSS1_PV_left;
                     OutCSS1_PropertyAscii( sCSS1_P_float, pStr );
@@ -2245,7 +2245,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     bool bNone = false;
 
-    const sal_Char *pUStr = nullptr;
+    const char *pUStr = nullptr;
     if( pUItem )
     {
         switch( pUItem->GetLineStyle() )
@@ -2268,7 +2268,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
         }
     }
 
-    const sal_Char *pOStr = nullptr;
+    const char *pOStr = nullptr;
     if( pOItem )
     {
         switch( pOItem->GetLineStyle() )
@@ -2291,7 +2291,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
         }
     }
 
-    const sal_Char *pCOStr = nullptr;
+    const char *pCOStr = nullptr;
     if( pCOItem )
     {
         switch( pCOItem->GetStrikeout() )
@@ -2314,7 +2314,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
         }
     }
 
-    const sal_Char *pBStr = nullptr;
+    const char *pBStr = nullptr;
     if( pBItem )
     {
         if( !pBItem->GetValue() )
@@ -2495,7 +2495,7 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    const sal_Char *pStr = nullptr;
+    const char *pStr = nullptr;
     switch( static_cast<const SvxPostureItem&>(rHt).GetPosture() )
     {
     case ITALIC_NONE:       pStr = sCSS1_PV_normal;     break;
@@ -2629,7 +2629,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    const sal_Char *pStr = nullptr;
+    const char *pStr = nullptr;
     switch( static_cast<const SvxWeightItem&>(rHt).GetWeight() )
     {
     case WEIGHT_ULTRALIGHT: pStr = sCSS1_PV_extra_light;    break;
@@ -2733,7 +2733,7 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
         !rHTMLWrt.m_bNoAlign)
         return rWrt;
 
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
     switch( static_cast<const SvxAdjustItem&>(rHt).GetAdjust() )
     {
     case SvxAdjust::Left:   pStr = sCSS1_PV_left;       break;
@@ -2754,7 +2754,7 @@ static Writer& OutCSS1_SvxFormatSplit( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    const sal_Char *pStr = static_cast<const SvxFormatSplitItem&>(rHt).GetValue()
+    const char *pStr = static_cast<const SvxFormatSplitItem&>(rHt).GetValue()
                             ? sCSS1_PV_auto
                             : sCSS1_PV_avoid;
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_inside, pStr );
@@ -2766,7 +2766,7 @@ static Writer& OutCSS1_SwFormatLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    const sal_Char *pStr = static_cast<const SwFormatLayoutSplit&>(rHt).GetValue()
+    const char *pStr = static_cast<const SwFormatLayoutSplit&>(rHt).GetValue()
                             ? sCSS1_PV_auto
                             : sCSS1_PV_avoid;
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_inside, pStr );
@@ -3028,8 +3028,8 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
     if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PRINT_EXT) )
         return rWrt;
 
-    const sal_Char *pBreakBefore = nullptr;
-    const sal_Char *pBreakAfter = nullptr;
+    const char *pBreakBefore = nullptr;
+    const char *pBreakAfter = nullptr;
 
     if( pKeepItem )
     {
@@ -3190,7 +3190,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         return rWrt;
 
     // if necessary, add the orientation of the Graphic
-    const sal_Char *pRepeat = nullptr, *pHori = nullptr, *pVert = nullptr;
+    const char *pRepeat = nullptr, *pHori = nullptr, *pVert = nullptr;
     if( pGrf || !aLink.isEmpty() )
     {
         if( GPOS_TILED==ePos )
@@ -3310,7 +3310,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 }
 
 static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
-                                   const sal_Char *pProperty,
+                                   const char *pProperty,
                                    const SvxBorderLine *pLine )
 {
     if( !pLine || pLine->isEmpty() )
@@ -3467,7 +3467,7 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
 
     SvxFrameDirection nDir =
         static_cast< const SvxFrameDirectionItem& >( rHt ).GetValue();
-    const sal_Char* pStr = nullptr;
+    const char* pStr = nullptr;
     switch( nDir )
     {
     case SvxFrameDirection::Horizontal_LR_TB:

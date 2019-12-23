@@ -33,7 +33,7 @@ using namespace ::com::sun::star::accessibility;
 using uno::RuntimeException;
 using uno::Sequence;
 
-const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
+const char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
 
 bool SwAccessiblePage::IsSelected()
 {

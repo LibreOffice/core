@@ -62,7 +62,7 @@
 
 using namespace ::com::sun::star;
 
-const sal_Char cFactory[] = "private:factory/swriter";
+const char cFactory[] = "private:factory/swriter";
 
 static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xViewProps,
     bool bEnableOnlineMode)

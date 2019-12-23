@@ -418,7 +418,7 @@ public:
     void OutAnchor( const OUString& rName );
     void OutBookmarks();
     void OutPointFieldmarks( const SwPosition& rPos );
-    void OutImplicitMark( const OUString& rMark, const sal_Char *pMarkType );
+    void OutImplicitMark( const OUString& rMark, const char *pMarkType );
 
     OUString convertHyperlinkHRefValue(const OUString& rURL);
 
@@ -451,15 +451,15 @@ public:
 
     void OutStyleSheet( const SwPageDesc& rPageDesc );
 
-    inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
-                                       const sal_Char *pVal );
-    inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
+    inline void OutCSS1_PropertyAscii( const char *pProp,
+                                       const char *pVal );
+    inline void OutCSS1_PropertyAscii( const char *pProp,
                                        const OString& rVal );
-    inline void OutCSS1_Property( const sal_Char *pProp, const OUString& rVal );
-    void OutCSS1_Property( const sal_Char *pProp, const sal_Char *pVal,
+    inline void OutCSS1_Property( const char *pProp, const OUString& rVal );
+    void OutCSS1_Property( const char *pProp, const char *pVal,
                            const OUString *pSVal );
-    void OutCSS1_UnitProperty( const sal_Char *pProp, long nVal );
-    void OutCSS1_PixelProperty( const sal_Char *pProp, long nVal, bool bVert );
+    void OutCSS1_UnitProperty( const char *pProp, long nVal );
+    void OutCSS1_PixelProperty( const char *pProp, long nVal, bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
 
     // events of BODY tag from SFX configuration
@@ -574,7 +574,7 @@ public:
     inline bool IsCSS1Source( sal_uInt16 n ) const;
     inline bool IsCSS1Script( sal_uInt16 n ) const;
 
-    static const sal_Char *GetNumFormat( sal_uInt16 nFormat );
+    static const char *GetNumFormat( sal_uInt16 nFormat );
     static void PrepareFontList( const SvxFontItem& rFontItem, OUString& rNames,
                                  sal_Unicode cQuote, bool bGeneric );
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
@@ -599,19 +599,19 @@ inline bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
     return CSS1_OUTMODE_ANY_SCRIPT == nScript || n == nScript;
 }
 
-inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
-                                                 const sal_Char *pVal )
+inline void SwHTMLWriter::OutCSS1_PropertyAscii( const char *pProp,
+                                                 const char *pVal )
 {
     OutCSS1_Property( pProp, pVal, nullptr );
 }
 
-inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
+inline void SwHTMLWriter::OutCSS1_PropertyAscii( const char *pProp,
                                                  const OString& rVal )
 {
     OutCSS1_Property( pProp, rVal.getStr(), nullptr );
 }
 
-inline void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
+inline void SwHTMLWriter::OutCSS1_Property( const char *pProp,
                                             const OUString& rVal )
 {
     OutCSS1_Property( pProp, nullptr, &rVal );
@@ -666,11 +666,11 @@ Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        const OUString& rGraphicURL,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, HtmlFrmOpts nFrameOpts,
-                       const sal_Char *pMarkType,
+                       const char *pMarkType,
                        const ImageMap *pGenImgMap,
                        const OUString& rMimeType = OUString() );
 
-Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
+Writer& OutHTML_BulletImage( Writer& rWrt, const char *pTag,
                              const SvxBrushItem* pBrush,
                              const OUString& rGraphicURL);
 

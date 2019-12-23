@@ -7036,7 +7036,7 @@ struct WW8_FFN_Ver6
 {
     WW8_FFN_BASE base;
     // from Ver6
-    sal_Char szFfn[maxStrSize]; // 0x6 or 0x40 from Ver8 on zero terminated string that
+    char szFfn[maxStrSize]; // 0x6 or 0x40 from Ver8 on zero terminated string that
                         // records name of font.
                         // Maximal size of szFfn is 65 characters.
                         // Attention: This array can also be smaller!!!

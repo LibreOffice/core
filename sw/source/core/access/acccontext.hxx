@@ -41,7 +41,7 @@ namespace accessibility {
     class AccessibleShape;
 }
 
-const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
+const char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
 
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper<

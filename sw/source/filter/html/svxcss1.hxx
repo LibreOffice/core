@@ -85,7 +85,7 @@ namespace o3tl {
 
 struct CSS1PropertyEnum
 {
-    const sal_Char *pName;  // property value
+    const char *pName;  // property value
     sal_uInt16 const nEnum;       // and the corresponding value of enum
 };
 

@@ -3630,7 +3630,7 @@ namespace
 {
 
 /// Does the same as comphelper::string::padToLength(), but extends the start, not the end.
-OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, sal_Char cFill)
+OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, char cFill)
 {
     if (nLen > aString.getLength())
     {
@@ -5834,7 +5834,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     }
 
     // MSO exports English names and writerfilter only recognize them.
-    const sal_Char *pEnglishName = nullptr;
+    const char *pEnglishName = nullptr;
     const char* pType = nullptr;
     switch (eType)
     {
@@ -7167,13 +7167,13 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 
     OString sBracket;
     if ((cStart == '{') || (cEnd == '}'))
-        sBracket = const_cast<sal_Char *>("curly");
+        sBracket = const_cast<char *>("curly");
     else if ((cStart == '<') || (cEnd == '>'))
-        sBracket = const_cast<sal_Char *>("angle");
+        sBracket = const_cast<char *>("angle");
     else if ((cStart == '[') || (cEnd == ']'))
-        sBracket = const_cast<sal_Char *>("square");
+        sBracket = const_cast<char *>("square");
     else
-        sBracket = const_cast<sal_Char *>("round");
+        sBracket = const_cast<char *>("round");
     AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_combineBrackets ), sBracket.getStr() );
 }
 
@@ -9214,7 +9214,7 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
     m_pSerializer->endElementNS(XML_w, XML_numPicBullet);
 }
 
-void DocxAttributeOutput::AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
+void DocxAttributeOutput::AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const char* sAttrValue )
 {
     AddToAttrList( pAttrList, 1, nAttrName, sAttrValue );
 }

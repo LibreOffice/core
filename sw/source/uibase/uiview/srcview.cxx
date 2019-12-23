@@ -176,7 +176,7 @@ static rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     if(RTL_TEXTENCODING_DONTKNOW == eRet)
     {
         SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-        const sal_Char *pCharSet =
+        const char *pCharSet =
             rtl_getBestMimeCharsetFromTextEncoding( rHtmlOptions.GetTextEncoding() );
         eRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
     }
@@ -771,7 +771,7 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void SwSrcView::Load(SwDocShell* pDocShell)
 {
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-    const sal_Char *pCharSet =
+    const char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( rHtmlOptions.GetTextEncoding() );
     rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
@@ -792,7 +792,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
                                             pDocShell->GetHeaderAttributes() );
             if( RTL_TEXTENCODING_DONTKNOW == eHeaderEnc )
             {
-                const sal_Char *pTmpCharSet =
+                const char *pTmpCharSet =
                     rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 );
                 eHeaderEnc = rtl_getTextEncodingFromMimeCharset( pTmpCharSet );
             }

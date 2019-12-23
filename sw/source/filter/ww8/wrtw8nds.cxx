@@ -1231,7 +1231,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
             break;
 
         case TOX_USER:
-            sText += "\" \\f \"" + OUStringChar(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
+            sText += "\" \\f \"" + OUStringChar(static_cast<char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
             [[fallthrough]];
         case TOX_CONTENT:
             {

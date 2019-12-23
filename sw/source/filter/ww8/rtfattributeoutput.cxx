@@ -98,7 +98,7 @@ using namespace ::com::sun::star;
 using namespace sw::util;
 
 static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBorderLine* pLine,
-                                const sal_Char* pStr)
+                                const char* pStr)
 {
     OStringBuffer aRet;
     if (!pLine->isEmpty())
@@ -190,7 +190,7 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
 }
 
 static OString OutBorderLine(RtfExport const& rExport, const editeng::SvxBorderLine* pLine,
-                             const sal_Char* pStr, sal_uInt16 nDist,
+                             const char* pStr, sal_uInt16 nDist,
                              SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE)
 {
     OStringBuffer aRet;
@@ -1687,7 +1687,7 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<OUString>& rStart
 }
 
 void RtfAttributeOutput::WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader,
-                                                const sal_Char* pStr, bool bTitlepg)
+                                                const char* pStr, bool bTitlepg)
 {
     OStringBuffer aSectionBreaks = m_aSectionBreaks;
     m_aSectionBreaks.setLength(0);
@@ -2100,7 +2100,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             OStringBuffer aBuf;
                             OString aStr;
                             OUString aTmp;
-                            const sal_Char* pStr;
+                            const char* pStr;
 
                             m_aRun->append(OUStringToOString(FieldString(ww::eFORMTEXT),
                                                              m_rExport.GetCurrentEncoding()));
@@ -2108,18 +2108,18 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DATAFIELD
                                 " ");
                             for (int i = 0; i < 8; i++)
-                                aBuf.append(sal_Char(0x00));
+                                aBuf.append(char(0x00));
                             xPropSet->getPropertyValue("Name") >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
-                            aBuf.append(static_cast<sal_Char>(aStr.getLength()));
+                            aBuf.append(static_cast<char>(aStr.getLength()));
                             aBuf.append(aStr);
-                            aBuf.append(sal_Char(0x00));
+                            aBuf.append(char(0x00));
                             xPropSet->getPropertyValue("DefaultText") >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
-                            aBuf.append(static_cast<sal_Char>(aStr.getLength()));
+                            aBuf.append(static_cast<char>(aStr.getLength()));
                             aBuf.append(aStr);
                             for (int i = 0; i < 11; i++)
-                                aBuf.append(sal_Char(0x00));
+                                aBuf.append(char(0x00));
                             aStr = aBuf.makeStringAndClear();
                             pStr = aStr.getStr();
                             for (int i = 0; i < aStr.getLength(); i++, pStr++)
@@ -2686,7 +2686,7 @@ void RtfAttributeOutput::CharScaleWidth(const SvxCharScaleWidthItem& rScaleWidth
 
 void RtfAttributeOutput::CharRelief(const SvxCharReliefItem& rRelief)
 {
-    const sal_Char* pStr;
+    const char* pStr;
     switch (rRelief.GetValue())
     {
         case FontRelief::Embossed:
@@ -2889,7 +2889,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
             if (pFill)
                 m_aStyles.append(pFill);
 
-            const sal_Char* pAdjStr = nullptr;
+            const char* pAdjStr = nullptr;
             switch (rTS.GetAdjustment())
             {
                 case SvxTabAdjust::Right:
@@ -3426,7 +3426,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
 {
     static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-    static const sal_Char* aBorderNames[]
+    static const char* aBorderNames[]
         = { OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL,
             OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };
 
@@ -3487,7 +3487,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             eShadowLocation = static_cast<const SvxShadowItem*>(pItem)->GetLocation();
 
         const SvxBoxItemLine* pBrd = aBorders;
-        const sal_Char** pBrdNms = aBorderNames;
+        const char** pBrdNms = aBorderNames;
         for (int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {
             if (const editeng::SvxBorderLine* pLn = rBox.GetLine(*pBrd))
@@ -3942,7 +3942,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     const Graphic* pGraphic = rOLENode.GetGraphic();
     Size aMapped(pGraphic->GetPrefSize());
     auto& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
-    const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
+    const char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
     const sal_uInt8* pGraphicAry = nullptr;
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, *pGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
@@ -4021,10 +4021,10 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         return;
 
     ConvertDataFormat aConvertDestinationFormat = ConvertDataFormat::WMF;
-    const sal_Char* pConvertDestinationBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+    const char* pConvertDestinationBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
 
     GfxLink aGraphicLink;
-    const sal_Char* pBLIPType = nullptr;
+    const char* pBLIPType = nullptr;
     if (rGraphic.IsGfxLink())
     {
         aGraphicLink = rGraphic.GetGfxLink();

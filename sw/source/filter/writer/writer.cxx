@@ -42,13 +42,13 @@ namespace
 {
     SvStream& lcl_OutLongExt( SvStream& rStrm, sal_uLong nVal, bool bNeg )
     {
-        sal_Char aBuf[28];
+        char aBuf[28];
 
         int i = SAL_N_ELEMENTS(aBuf);
         aBuf[--i] = 0;
         do
         {
-            aBuf[--i] = '0' + static_cast<sal_Char>(nVal % 10);
+            aBuf[--i] = '0' + static_cast<char>(nVal % 10);
             nVal /= 10;
         } while (nVal);
 

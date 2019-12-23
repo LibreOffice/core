@@ -159,7 +159,7 @@ namespace ww
         @return the name word would give it if it's an inbuilt name, otherwise
         NULL
     */
-    const sal_Char* GetEnglishNameFromSti(sti eSti) throw();
+    const char* GetEnglishNameFromSti(sti eSti) throw();
 
     /** Determine if the WinWord sti is standard Character Style
 

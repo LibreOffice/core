@@ -1747,8 +1747,8 @@ void SwWW8Writer::InsAsString8(ww::bytes &rO, const OUString& rStr,
         rtl_TextEncoding eCodeSet)
 {
     OString sTmp(OUStringToOString(rStr, eCodeSet));
-    const sal_Char *pStart = sTmp.getStr();
-    const sal_Char *pEnd = pStart + sTmp.getLength();
+    const char *pStart = sTmp.getStr();
+    const char *pEnd = pStart + sTmp.getLength();
     rO.reserve(rO.size() + sTmp.getLength());
 
     std::copy(pStart, pEnd, std::inserter(rO, rO.end()));

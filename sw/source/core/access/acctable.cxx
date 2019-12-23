@@ -1732,7 +1732,7 @@ uno::Reference< XAccessibleTable >
 
 OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName()
 {
-    static const sal_Char sImplName[] = "com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";
+    static const char sImplName[] = "com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";
     return sImplName;
 }
 

@@ -880,7 +880,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         rtl::Reference<TransferDataContainer> pClipCntnr = new TransferDataContainer;
 
-                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<sal_Char const *>(
+                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<char const *>(
                                     pStrm->GetData()), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? &GetView()->GetEditWin() : nullptr );

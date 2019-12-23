@@ -720,8 +720,8 @@ private:
     // insert bookmark
     void InsertBookmark( const OUString& rName );
 
-    void InsertCommentText( const sal_Char *pTag );
-    void InsertComment( const OUString& rName, const sal_Char *pTag = nullptr );
+    void InsertCommentText( const char *pTag );
+    void InsertComment( const OUString& rName, const char *pTag = nullptr );
 
     // Has the current paragraph bookmarks?
     bool HasCurrentParaBookmarks( bool bIgnoreStack=false ) const;

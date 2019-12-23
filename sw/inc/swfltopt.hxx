@@ -28,10 +28,10 @@ private:
     virtual void ImplCommit() override;
 
 public:
-    SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
+    SwFilterOptions( sal_uInt16 nCnt, const char** ppNames,
                       sal_uInt64* pValues );
 
-    void GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
+    void GetValues( sal_uInt16 nCnt, const char** ppNames,
                      sal_uInt64* pValues );
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
