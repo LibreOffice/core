@@ -1913,11 +1913,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 rContext->Insert( PROP_CHAR_LEFT_BORDER_DISTANCE, uno::makeAny( pBorderHandler->getLineDistance()));
                 rContext->Insert( PROP_CHAR_RIGHT_BORDER_DISTANCE, uno::makeAny( pBorderHandler->getLineDistance()));
 
-                if( pBorderHandler->getShadow() )
-                {
-                    table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
-                    rContext->Insert(PROP_CHAR_SHADOW_FORMAT, uno::makeAny(aFormat));
-                }
+                table::ShadowFormat aFormat;
+                // Word only allows shadows on visible borders
+                if ( pBorderHandler->getShadow() && pBorderHandler->getBorderLine().LineStyle != table::BorderLineStyle::NONE )
+                    aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
+                rContext->Insert(PROP_CHAR_SHADOW_FORMAT, uno::makeAny(aFormat));
             }
         }
         break;
