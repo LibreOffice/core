@@ -48,17 +48,17 @@ public:
                 SvtBasePrintOptions();
                 virtual ~SvtBasePrintOptions() override;
 
-    bool        IsReduceTransparency() const;
-    sal_Int16   GetReducedTransparencyMode() const;
-    bool        IsReduceGradients() const;
-    sal_Int16   GetReducedGradientMode() const;
-    sal_Int16   GetReducedGradientStepCount() const;
-    bool        IsReduceBitmaps() const;
-    sal_Int16   GetReducedBitmapMode() const;
-    sal_Int16   GetReducedBitmapResolution() const;
-    bool        IsReducedBitmapIncludesTransparency() const;
-    bool        IsConvertToGreyscales() const;
-    bool        IsPDFAsStandardPrintJobFormat() const;
+    static bool        IsReduceTransparency();
+    static sal_Int16   GetReducedTransparencyMode();
+    static bool        IsReduceGradients();
+    static sal_Int16   GetReducedGradientMode();
+    static sal_Int16   GetReducedGradientStepCount();
+    static bool        IsReduceBitmaps();
+    static sal_Int16   GetReducedBitmapMode();
+    static sal_Int16   GetReducedBitmapResolution();
+    static bool        IsReducedBitmapIncludesTransparency();
+    static bool        IsConvertToGreyscales();
+    static bool        IsPDFAsStandardPrintJobFormat();
 
     void        SetReduceTransparency( bool bState );
     void        SetReducedTransparencyMode( sal_Int16 nMode );
@@ -74,8 +74,8 @@ public:
 
 public:
 
-    void        GetPrinterOptions( PrinterOptions& rOptions ) const;
-    void        SetPrinterOptions( const PrinterOptions& rOptions );
+    static void        GetPrinterOptions( PrinterOptions& rOptions );
+    void               SetPrinterOptions( const PrinterOptions& rOptions );
 };
 
 
