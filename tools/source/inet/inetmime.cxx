@@ -32,8 +32,8 @@
 
 namespace {
 
-rtl_TextEncoding getCharsetEncoding(const sal_Char * pBegin,
-                                           const sal_Char * pEnd);
+rtl_TextEncoding getCharsetEncoding(const char * pBegin,
+                                           const char * pEnd);
 
 /** Check for US-ASCII white space character.
 
@@ -92,8 +92,8 @@ bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding)
     return rtl_isOctetTextEncoding(eEncoding);
 }
 
-std::unique_ptr<sal_Unicode[]> convertToUnicode(const sal_Char * pBegin,
-                                         const sal_Char * pEnd,
+std::unique_ptr<sal_Unicode[]> convertToUnicode(const char * pBegin,
+                                         const char * pEnd,
                                          rtl_TextEncoding eEncoding,
                                          sal_Size & rSize)
 {
@@ -161,36 +161,36 @@ void writeUTF8(OStringBuffer & rSink, sal_uInt32 nChar)
     DBG_ASSERT(nChar < 0x80000000, "writeUTF8(): Bad char");
 
     if (nChar < 0x80)
-        rSink.append(sal_Char(nChar));
+        rSink.append(char(nChar));
     else if (nChar < 0x800)
-        rSink.append(sal_Char(nChar >> 6 | 0xC0))
-             .append(sal_Char((nChar & 0x3F) | 0x80));
+        rSink.append(char(nChar >> 6 | 0xC0))
+             .append(char((nChar & 0x3F) | 0x80));
     else if (nChar < 0x10000)
-        rSink.append(sal_Char(nChar >> 12 | 0xE0))
-             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
-             .append(sal_Char((nChar & 0x3F) | 0x80));
+        rSink.append(char(nChar >> 12 | 0xE0))
+             .append(char((nChar >> 6 & 0x3F) | 0x80))
+             .append(char((nChar & 0x3F) | 0x80));
     else if (nChar < 0x200000)
-        rSink.append(sal_Char(nChar >> 18 | 0xF0))
-             .append(sal_Char((nChar >> 12 & 0x3F) | 0x80))
-             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
-             .append(sal_Char((nChar & 0x3F) | 0x80));
+        rSink.append(char(nChar >> 18 | 0xF0))
+             .append(char((nChar >> 12 & 0x3F) | 0x80))
+             .append(char((nChar >> 6 & 0x3F) | 0x80))
+             .append(char((nChar & 0x3F) | 0x80));
     else if (nChar < 0x4000000)
-        rSink.append(sal_Char(nChar >> 24 | 0xF8))
-             .append(sal_Char((nChar >> 18 & 0x3F) | 0x80))
-             .append(sal_Char((nChar >> 12 & 0x3F) | 0x80))
-             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
-             .append(sal_Char((nChar & 0x3F) | 0x80));
+        rSink.append(char(nChar >> 24 | 0xF8))
+             .append(char((nChar >> 18 & 0x3F) | 0x80))
+             .append(char((nChar >> 12 & 0x3F) | 0x80))
+             .append(char((nChar >> 6 & 0x3F) | 0x80))
+             .append(char((nChar & 0x3F) | 0x80));
     else
-        rSink.append(sal_Char(nChar >> 30 | 0xFC))
-             .append(sal_Char((nChar >> 24 & 0x3F) | 0x80))
-             .append(sal_Char((nChar >> 18 & 0x3F) | 0x80))
-             .append(sal_Char((nChar >> 12 & 0x3F) | 0x80))
-             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
-             .append(sal_Char((nChar & 0x3F) | 0x80));
+        rSink.append(char(nChar >> 30 | 0xFC))
+             .append(char((nChar >> 24 & 0x3F) | 0x80))
+             .append(char((nChar >> 18 & 0x3F) | 0x80))
+             .append(char((nChar >> 12 & 0x3F) | 0x80))
+             .append(char((nChar >> 6 & 0x3F) | 0x80))
+             .append(char((nChar & 0x3F) | 0x80));
 }
 
-bool translateUTF8Char(const sal_Char *& rBegin,
-                                 const sal_Char * pEnd,
+bool translateUTF8Char(const char *& rBegin,
+                                 const char * pEnd,
                                  sal_uInt32 & rCharacter)
 {
     if (rBegin == pEnd || static_cast< unsigned char >(*rBegin) < 0x80
@@ -200,7 +200,7 @@ bool translateUTF8Char(const sal_Char *& rBegin,
     int nCount;
     sal_uInt32 nMin;
     sal_uInt32 nUCS4;
-    const sal_Char * p = rBegin;
+    const char * p = rBegin;
     if (static_cast< unsigned char >(*p) < 0xE0)
     {
         nCount = 1;
@@ -247,8 +247,8 @@ bool translateUTF8Char(const sal_Char *& rBegin,
     return true;
 }
 
-void appendISO88591(OUStringBuffer & rText, sal_Char const * pBegin,
-                    sal_Char const * pEnd);
+void appendISO88591(OUStringBuffer & rText, char const * pBegin,
+                    char const * pEnd);
 
 struct Parameter
 {
@@ -281,8 +281,8 @@ bool parseParameters(ParameterList const & rInput,
 
 //  appendISO88591
 
-void appendISO88591(OUStringBuffer & rText, sal_Char const * pBegin,
-                    sal_Char const * pEnd)
+void appendISO88591(OUStringBuffer & rText, char const * pBegin,
+                    char const * pEnd)
 {
     sal_Int32 nLength = pEnd - pBegin;
     std::unique_ptr<sal_Unicode[]> pBuffer(new sal_Unicode[nLength]);
@@ -644,7 +644,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                         int nWeight2 = INetMIME::getHexWeight(p[1]);
                         if (nWeight1 >= 0 && nWeight2 >= 0)
                         {
-                            aSink.append(sal_Char(nWeight1 << 4 | nWeight2));
+                            aSink.append(char(nWeight1 << 4 | nWeight2));
                             p += 2;
                             continue;
                         }
@@ -722,9 +722,9 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
 }
 
-bool equalIgnoreCase(const sal_Char * pBegin1,
-                               const sal_Char * pEnd1,
-                               const sal_Char * pString2)
+bool equalIgnoreCase(const char * pBegin1,
+                               const char * pEnd1,
+                               const char * pString2)
 {
     DBG_ASSERT(pBegin1 && pBegin1 <= pEnd1 && pString2,
                "equalIgnoreCase(): Bad sequences");
@@ -740,7 +740,7 @@ bool equalIgnoreCase(const sal_Char * pBegin1,
 
 struct EncodingEntry
 {
-    sal_Char const * m_aName;
+    char const * m_aName;
     rtl_TextEncoding const m_eEncoding;
 };
 
@@ -924,8 +924,8 @@ static EncodingEntry const aEncodingMap[]
         { "ISO-10646-UCS-2", RTL_TEXTENCODING_UCS2 },
         { "CSUNICODE", RTL_TEXTENCODING_UCS2 } };
 
-rtl_TextEncoding getCharsetEncoding(sal_Char const * pBegin,
-                                              sal_Char const * pEnd)
+rtl_TextEncoding getCharsetEncoding(char const * pBegin,
+                                              char const * pEnd)
 {
     for (const EncodingEntry& i : aEncodingMap)
         if (equalIgnoreCase(pBegin, pEnd, i.m_aName))
@@ -988,7 +988,7 @@ bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
 // static
 bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
                                const sal_Unicode * pEnd1,
-                               const sal_Char * pString2)
+                               const char * pString2)
 {
     DBG_ASSERT(pBegin1 && pBegin1 <= pEnd1 && pString2,
                "INetMIME::equalIgnoreCase(): Bad sequences");
@@ -1092,28 +1092,28 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
     // base64 = ALPHA / DIGIT / "+" / "/"
 
-    const sal_Char * pBegin = rBody.getStr();
-    const sal_Char * pEnd = pBegin + rBody.getLength();
+    const char * pBegin = rBody.getStr();
+    const char * pEnd = pBegin + rBody.getLength();
 
     OUStringBuffer sDecoded;
-    const sal_Char * pCopyBegin = pBegin;
+    const char * pCopyBegin = pBegin;
 
     /* bool bStartEncodedWord = true; */
-    const sal_Char * pWSPBegin = pBegin;
+    const char * pWSPBegin = pBegin;
 
-    for (const sal_Char * p = pBegin; p != pEnd;)
+    for (const char * p = pBegin; p != pEnd;)
     {
         OUString sEncodedText;
         if (*p == '=' /* && bStartEncodedWord */)
         {
-            const sal_Char * q = p + 1;
+            const char * q = p + 1;
             bool bEncodedWord = q != pEnd && *q++ == '?';
 
             rtl_TextEncoding eCharsetEncoding = RTL_TEXTENCODING_DONTKNOW;
             if (bEncodedWord)
             {
-                const sal_Char * pCharsetBegin = q;
-                const sal_Char * pLanguageBegin = nullptr;
+                const char * pCharsetBegin = q;
+                const char * pLanguageBegin = nullptr;
                 int nAlphaCount = 0;
                 for (bool bDone = false; !bDone;)
                     if (q == pEnd)
@@ -1123,7 +1123,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                     }
                     else
                     {
-                        sal_Char cChar = *q++;
+                        char cChar = *q++;
                         switch (cChar)
                         {
                             case '*':
@@ -1245,7 +1245,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                             if (bEncodedWord)
                             {
                                 for (int nShift = 16; nCount-- > 0; nShift -= 8)
-                                    sText.append(sal_Char(nValue >> nShift & 0xFF));
+                                    sText.append(char(nValue >> nShift & 0xFF));
                                 if (*q == '?')
                                 {
                                     ++q;
@@ -1262,8 +1262,8 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                 }
                 else
                 {
-                    const sal_Char * pEncodedTextBegin = q;
-                    const sal_Char * pEncodedTextCopyBegin = q;
+                    const char * pEncodedTextBegin = q;
+                    const char * pEncodedTextCopyBegin = q;
                     for (bool bDone = false; !bDone;)
                         if (q == pEnd)
                         {
@@ -1294,7 +1294,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                                     sText.append(rBody.copy(
                                         (pEncodedTextCopyBegin - pBegin),
                                         (q - 1 - pEncodedTextCopyBegin)));
-                                    sText.append(sal_Char(nDigit1 << 4 | nDigit2));
+                                    sText.append(char(nDigit1 << 4 | nDigit2));
                                     q += 2;
                                     pEncodedTextCopyBegin = q;
                                     break;
@@ -1384,8 +1384,8 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
             default:
             {
-                const sal_Char * pUTF8Begin = p - 1;
-                const sal_Char * pUTF8End = pUTF8Begin;
+                const char * pUTF8Begin = p - 1;
+                const char * pUTF8End = pUTF8Begin;
                 sal_uInt32 nCharacter = 0;
                 if (translateUTF8Char(pUTF8End, pEnd, nCharacter))
                 {

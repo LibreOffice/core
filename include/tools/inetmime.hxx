@@ -143,7 +143,7 @@ public:
      */
     static bool equalIgnoreCase(const sal_Unicode * pBegin1,
                                 const sal_Unicode * pEnd1,
-                                const sal_Char * pString2);
+                                const char * pString2);
 
     static bool scanUnsigned(const sal_Unicode *& rBegin,
                              const sal_Unicode * pEnd, bool bLeadingZeroes,

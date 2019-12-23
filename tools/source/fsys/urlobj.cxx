@@ -289,8 +289,8 @@ int INetURLObject::SubString::compare(SubString const & rOther,
 
 struct INetURLObject::SchemeInfo
 {
-    sal_Char const * m_pScheme;
-    sal_Char const * m_pPrefix;
+    char const * m_pScheme;
+    char const * m_pPrefix;
     bool const m_bAuthority;
     bool const m_bUser;
     bool const m_bAuth;
@@ -305,8 +305,8 @@ struct INetURLObject::PrefixInfo
 {
     enum class Kind { Official, Internal, External }; // order is important!
 
-    sal_Char const * m_pPrefix;
-    sal_Char const * m_pTranslatedPrefix;
+    char const * m_pPrefix;
+    char const * m_pTranslatedPrefix;
     INetProtocol const m_eScheme;
     Kind const m_eKind;
 };
@@ -2181,7 +2181,7 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
     }
     if (pFirst == pLast)
     {
-        sal_Char const * q = pFirst->m_pPrefix + i;
+        char const * q = pFirst->m_pPrefix + i;
         while (p < pEnd && *q != '\0'
                && rtl::toAsciiLowerCase(*p) == static_cast<unsigned char>(*q))
         {

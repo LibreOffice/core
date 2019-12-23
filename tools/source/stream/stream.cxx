@@ -450,10 +450,10 @@ bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
 
 bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
-    sal_Char    buf[256+1];
+    char    buf[256+1];
     bool        bEnd        = false;
     sal_uInt64  nOldFilePos = Tell();
-    sal_Char    c           = 0;
+    char    c           = 0;
     std::size_t nTotalLen   = 0;
 
     OStringBuffer aBuf(4096);
@@ -621,7 +621,7 @@ OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
 {
     OStringBuffer aOutput(256);
 
-    sal_Char buf[ 256 + 1 ];
+    char buf[ 256 + 1 ];
     bool bEnd = false;
     sal_uInt64 nFilePos = rStream.Tell();
 
@@ -632,7 +632,7 @@ OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
             break;
 
         std::size_t nReallyRead = nLen;
-        const sal_Char* pPtr = buf;
+        const char* pPtr = buf;
         while (nLen && *pPtr)
         {
             ++pPtr;
@@ -1516,7 +1516,7 @@ void SvStream::EncryptBuffer(void* pStart, std::size_t nLen) const
     }
 }
 
-static unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersion)
+static unsigned char implGetCryptMask(const char* pStr, sal_Int32 nLen, long nVersion)
 {
     unsigned char nCryptMask = 0;
 
