@@ -1294,6 +1294,13 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="Executable" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
+              <label>Executable code</label>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="Save" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
             <!-- OldLocation: soffice.cfg -->
