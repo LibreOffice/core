@@ -44,7 +44,7 @@ public:
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 
 private:
-    svx::SvxDialControl m_aAngleDial;
+    svx::DialControl m_aAngleDial;
     std::unique_ptr<weld::CheckButton> m_xCB_Clockwise;
     std::unique_ptr<weld::Frame> m_xFL_StartingAngle;
     std::unique_ptr<weld::SpinButton> m_xNF_StartingAngle;

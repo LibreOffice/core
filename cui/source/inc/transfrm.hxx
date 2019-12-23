@@ -174,7 +174,7 @@ private:
     MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
-    svx::SvxDialControl m_aCtlAngle;
+    svx::DialControl m_aCtlAngle;
     SvxRectCtl m_aCtlRect;
 
     std::unique_ptr<weld::Widget> m_xFlPosition;
