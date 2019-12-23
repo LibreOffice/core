@@ -7241,7 +7241,6 @@ include/svx/sidebar/LineWidthPopup.hxx
 include/svx/sidebar/PanelLayout.hxx
 include/svx/sidebar/SelectionAnalyzer.hxx
 include/svx/sidebar/SelectionChangeHandler.hxx
-include/svx/sidebar/SidebarDialControl.hxx
 include/svx/sidebar/ValueSetWithTextControl.hxx
 include/svx/spacinglistbox.hxx
 include/svx/sphere3d.hxx
@@ -14301,7 +14300,6 @@ svx/source/sidebar/paragraph/ParaSpacingWindow.cxx
 svx/source/sidebar/paragraph/ParaSpacingWindow.hxx
 svx/source/sidebar/possize/PosSizePropertyPanel.cxx
 svx/source/sidebar/possize/PosSizePropertyPanel.hxx
-svx/source/sidebar/possize/SidebarDialControl.cxx
 svx/source/sidebar/shadow/ShadowPropertyPanel.cxx
 svx/source/sidebar/shadow/ShadowPropertyPanel.hxx
 svx/source/sidebar/shapes/DefaultShapesPanel.cxx
