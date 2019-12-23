@@ -41,8 +41,6 @@ class SvxDialControl;
 
 namespace svx { namespace sidebar {
 
-class SidebarDialControl;
-
 class PosSizePropertyPanel
 :   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
