@@ -170,7 +170,7 @@ namespace XPath
 
         std::shared_ptr<xmlChar const> str(
             xmlXPathCastToString(m_pXPathObj.get()), xmlFree);
-        sal_Char const*const pS(reinterpret_cast<sal_Char const*>(str.get()));
+        char const*const pS(reinterpret_cast<char const*>(str.get()));
         return OUString(pS, strlen(pS), RTL_TEXTENCODING_UTF8);
     }
 

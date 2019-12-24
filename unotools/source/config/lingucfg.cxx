@@ -273,7 +273,7 @@ uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
     sal_Int32 nIdx = 0;
     for (sal_Int32 i = 0; i < nMax;  ++i)
     {
-        const sal_Char *pFullPropName = aNamesToHdl[i].pFullPropName;
+        const char *pFullPropName = aNamesToHdl[i].pFullPropName;
         if (pFullPropName)
             pNames[ nIdx++ ] = OUString::createFromAscii( pFullPropName );
     }

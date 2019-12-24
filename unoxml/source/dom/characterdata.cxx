@@ -88,7 +88,7 @@ namespace DOM
         // get current data
         std::shared_ptr<xmlChar const> const pContent(
             xmlNodeGetContent(m_aNodePtr), xmlFree);
-        OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+        OString aData(reinterpret_cast<char const*>(pContent.get()));
         OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
         if (offset > tmp.getLength() || offset < 0 || count < 0) {
             DOMException e;
@@ -158,7 +158,7 @@ namespace DOM
         // get current data
         std::shared_ptr<xmlChar const> const pContent(
             xmlNodeGetContent(m_aNodePtr), xmlFree);
-        OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+        OString aData(reinterpret_cast<char const*>(pContent.get()));
         OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
         if (offset > tmp.getLength() || offset < 0) {
             DOMException e;
@@ -193,7 +193,7 @@ namespace DOM
         // get current data
         std::shared_ptr<xmlChar const> const pContent(
             xmlNodeGetContent(m_aNodePtr), xmlFree);
-        OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+        OString aData(reinterpret_cast<char const*>(pContent.get()));
         OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
         if (offset > tmp.getLength() || offset < 0 || count < 0){
             DOMException e;
@@ -246,7 +246,7 @@ namespace DOM
             // get current data
             std::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
-            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+            OString aData(reinterpret_cast<char const*>(pContent.get()));
             OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;

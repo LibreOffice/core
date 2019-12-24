@@ -14,7 +14,7 @@
 namespace sdecl = ::comphelper::service_decl;
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* utl_component_getFactory(
-    sal_Char const* pImplName, void*, void*)
+    char const* pImplName, void*, void*)
 {
     return sdecl::component_getFactoryHelper( pImplName,
             {&OTempFileServiceDecl, &ServiceDocumenterDecl});

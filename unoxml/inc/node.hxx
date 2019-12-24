@@ -83,8 +83,8 @@ namespace DOM
     void pushContext(Context& io_rContext);
     void popContext(Context& io_rContext);
 
-    sal_Int32 getTokenWithPrefix( const Context& rContext, const sal_Char* xPrefix, const sal_Char* xName );
-    sal_Int32 getToken( const Context& rContext, const sal_Char* xName );
+    sal_Int32 getTokenWithPrefix( const Context& rContext, const char* xPrefix, const char* xName );
+    sal_Int32 getToken( const Context& rContext, const char* xName );
 
     /// add namespaces on this node to context
     void addNamespaces(Context& io_rContext, xmlNodePtr pNode);

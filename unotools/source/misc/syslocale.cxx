@@ -187,7 +187,7 @@ const LanguageTag& SvtSysLocale::GetUILanguageTag() const
 // static
 rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
 {
-    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
+    const char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
             osl_getThreadTextEncoding() );
     if ( !pCharSet )
     {

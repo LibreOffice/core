@@ -76,10 +76,10 @@ namespace DOM
         for (xmlNsPtr pNs = pNode->nsDef; pNs != nullptr; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
             // prefix can be NULL when xmlns attribute is empty (xmlns="")
-            OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
+            OString prefix(reinterpret_cast<const char*>(pPrefix),
                            pPrefix ? strlen(reinterpret_cast<const char*>(pPrefix)) : 0);
             const xmlChar *pHref = pNs->href;
-            OUString val(reinterpret_cast<const sal_Char*>(pHref),
+            OUString val(reinterpret_cast<const char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
                 RTL_TEXTENCODING_UTF8);
 
@@ -98,13 +98,13 @@ namespace DOM
         }
     }
 
-    sal_Int32 getToken( const Context& rContext, const sal_Char* pToken )
+    sal_Int32 getToken( const Context& rContext, const char* pToken )
     {
         const Sequence<sal_Int8> aSeq( reinterpret_cast<sal_Int8 const *>(pToken), strlen( pToken ) );
         return rContext.mxTokenHandler->getTokenFromUTF8( aSeq );
     }
 
-    sal_Int32 getTokenWithPrefix( const Context& rContext, const sal_Char* pPrefix, const sal_Char* pName )
+    sal_Int32 getTokenWithPrefix( const Context& rContext, const char* pPrefix, const char* pName )
     {
         sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
         OString prefix(pPrefix,

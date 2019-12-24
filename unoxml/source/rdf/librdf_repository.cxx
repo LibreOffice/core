@@ -2353,7 +2353,7 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
             "librdf_uri_as_string failed", m_rRep);
     }
     OUString uriU( OStringToOUString(
-        OString(reinterpret_cast<const sal_Char*>(uri)),
+        OString(reinterpret_cast<const char*>(uri)),
         RTL_TEXTENCODING_UTF8) );
     try {
         return rdf::URI::create(m_xContext, uriU);
@@ -2395,7 +2395,7 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
                 "blank node has no label", m_rRep);
         }
         OUString labelU( OStringToOUString(
-            OString(reinterpret_cast<const sal_Char*>(label)),
+            OString(reinterpret_cast<const char*>(label)),
             RTL_TEXTENCODING_UTF8) );
         try {
             return rdf::BlankNode::create(m_xContext, labelU);
@@ -2428,11 +2428,11 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
         librdf_node_get_literal_value_datatype_uri(i_pNode) );
     OSL_ENSURE(!lang || !pType, "convertToXNode: invalid literal");
     const OUString valueU( OStringToOUString(
-        OString(reinterpret_cast<const sal_Char*>(value)),
+        OString(reinterpret_cast<const char*>(value)),
         RTL_TEXTENCODING_UTF8) );
     if (lang) {
         const OUString langU( OStringToOUString(
-            OString(reinterpret_cast<const sal_Char*>(lang)),
+            OString(reinterpret_cast<const char*>(lang)),
             RTL_TEXTENCODING_UTF8) );
         return rdf::Literal::createWithLanguage(m_xContext, valueU, langU);
     } else if (pType) {

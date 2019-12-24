@@ -28,7 +28,7 @@
 namespace unodevtools {
 
 
-bool readOption( OUString * pValue, const sal_Char * pOpt,
+bool readOption( OUString * pValue, const char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
     const OUString dash = "-";
@@ -65,7 +65,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
 }
 
 
-bool readOption( const sal_Char * pOpt,
+bool readOption( const char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
     OUString aOpt = OUString::createFromAscii(pOpt);
