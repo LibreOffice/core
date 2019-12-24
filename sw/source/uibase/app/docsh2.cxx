@@ -21,27 +21,23 @@
 
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
-#include <ooo/vba/XSinkCaller.hpp>
 #include <ooo/vba/word/XDocument.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 
 #include <sal/log.hxx>
 #include <edtwin.hxx>
-#include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <svl/lckbitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/transfer.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -50,15 +46,11 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/evntconf.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #include <editeng/svxacorr.hxx>
-#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -70,10 +62,8 @@
 #include <sfx2/app.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
-#include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <fmtcol.hxx>
-#include <swevent.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -83,7 +73,6 @@
 #include <globdoc.hxx>
 #include <fldwrap.hxx>
 #include <redlndlg.hxx>
-#include <docstyle.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -93,12 +82,9 @@
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
-#include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
 #include <srcview.hxx>
-#include <poolfmt.hxx>
-#include <usrpref.hxx>
 #include <wdocsh.hxx>
 #include <unotxdoc.hxx>
 #include <acmplwrd.hxx>
@@ -108,13 +94,9 @@
 #include <swcli.hxx>
 
 #include <cmdid.h>
-#include <globals.h>
 #include <helpids.h>
-#include <app.hrc>
 #include <strings.hrc>
-#include <globals.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -123,8 +105,6 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <editeng/acorrcfg.hxx>
-#include <SwStyleNameMapper.hxx>
-#include <o3tl/deleter.hxx>
 #include <officecfg/Office/Security.hxx>
 
 #include <sfx2/fcontnr.hxx>

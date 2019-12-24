@@ -25,9 +25,9 @@
 #include <editeng/lrspitem.hxx>
 #include <osl/diagnose.h>
 
-#include <frmmgr.hxx>
-#include <frmfmt.hxx>
 #include <colmgr.hxx>
+#include <fmtfsize.hxx>
+#include <swtypes.hxx>
 
 // private methods
 

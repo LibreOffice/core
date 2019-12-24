@@ -19,22 +19,18 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <hintids.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/childwin.hxx>
 #include <unotools/useroptions.hxx>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svx/colorwindow.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/svxids.hrc>
+#include <editeng/editids.hrc>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -52,17 +48,13 @@
 #include <wview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <dbmgr.hxx>
 #include <uinums.hxx>
 #include <prtopt.hxx>
 #include <navicfg.hxx>
 #include <doc.hxx>
-#include <cmdid.h>
-#include <app.hrc>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
 
-#include <unomid.h>
 #include <tools/color.hxx>
 #include <PostItMgr.hxx>
 

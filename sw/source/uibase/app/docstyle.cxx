@@ -33,7 +33,6 @@
 #include <drawdoc.hxx>
 #include <fmtcol.hxx>
 #include <uitool.hxx>
-#include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <frmfmt.hxx>
@@ -51,23 +50,18 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
 #include <cmdid.h>
-#include <app.hrc>
 #include <strings.hrc>
 #include <paratr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <numrule.hxx>
-#include <fmthdft.hxx>
-#include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <SwRewriter.hxx>
 #include <hints.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 
 // The Format names in the list of all names have the

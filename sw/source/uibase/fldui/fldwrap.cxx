@@ -18,18 +18,10 @@
  */
 
 #include <cmdid.h>
-#include <swtypes.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <viewopt.hxx>
 #include <docsh.hxx>
 #include <fldwrap.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <swmodule.hxx>
 
-#include <globals.hrc>
 #include <swabstdlg.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwFieldDlgWrapper, FN_INSERT_FIELD)

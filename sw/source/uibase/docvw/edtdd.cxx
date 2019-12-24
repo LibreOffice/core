@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdobj.hxx>
@@ -39,7 +37,6 @@
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
-#include <swundo.hxx>
 
 using namespace ::com::sun::star;
 

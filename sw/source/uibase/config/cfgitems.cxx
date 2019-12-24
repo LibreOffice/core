@@ -17,15 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basic/sbxvar.hxx>
-
-#include <svx/svxids.hrc>
-#include <editeng/svxenum.hxx>
-
 #include <viewopt.hxx>
-#include <swtypes.hxx>
 #include <cmdid.h>
-#include <prtopt.hxx>
 #include <cfgitems.hxx>
 #include <crstate.hxx>
 

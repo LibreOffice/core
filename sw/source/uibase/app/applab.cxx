@@ -19,14 +19,10 @@
 
 #include <config_features.h>
 
-#include <cstdarg>
-
 #include <hintids.hxx>
 
 #include <comphelper/string.hxx>
 #include <o3tl/deleter.hxx>
-#include <vcl/svapp.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
@@ -35,9 +31,6 @@
 #include <editeng/pbinitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/protitem.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <fmthdft.hxx>
 #include <fmtanchr.hxx>
@@ -45,27 +38,19 @@
 #include <fmtornt.hxx>
 #include <swwait.hxx>
 #include <gloshdl.hxx>
-#include <mdiexp.hxx>
-#include <frmatr.hxx>
-#include <paratr.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <fldbas.hxx>
-#include <swundo.hxx>
 #include <wrtsh.hxx>
 #include <cmdid.h>
 #include <dbmgr.hxx>
-#include <fmtcol.hxx>
-#include <expfld.hxx>
 #include <fldmgr.hxx>
-#include <label.hxx>
 #include <labimg.hxx>
 #include <section.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 
-#include <app.hrc>
 #include <strings.hrc>
 #include <swabstdlg.hxx>
 

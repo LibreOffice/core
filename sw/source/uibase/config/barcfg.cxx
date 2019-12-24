@@ -22,8 +22,6 @@
 #include <wrtsh.hxx>
 #include <barcfg.hxx>
 
-#include <unomid.h>
-
 using namespace utl;
 using namespace com::sun::star::uno;
 
