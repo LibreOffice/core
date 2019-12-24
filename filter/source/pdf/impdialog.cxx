@@ -186,6 +186,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
     mbUseTaggedPDFUserSelection = mbUseTaggedPDF;
 
     mnPDFTypeSelection =  maConfigItem.ReadInt32( "SelectPdfVersion", 0 );
+    mbPDFUACompliance = maConfigItem.ReadBool("PDFUACompliance", false);
+
     if ( mbIsPresentation )
     {
         mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", false );
@@ -368,10 +370,14 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( "ReduceImageResolution", mbReduceImageResolution );
     maConfigItem.WriteInt32("MaxImageResolution", mnMaxImageResolution );
 
-    // always write the user selection, never the overridden PDF/A value
+    // always write the user selection, never the overridden value
+    const bool bIsPDFUA = mbPDFUACompliance;
     const bool bIsPDFA = (1 == mnPDFTypeSelection) || (2 == mnPDFTypeSelection);
-    maConfigItem.WriteBool("UseTaggedPDF", bIsPDFA ? mbUseTaggedPDFUserSelection : mbUseTaggedPDF);
+    const bool bUserSelectionTags = bIsPDFA || bIsPDFUA;
+    maConfigItem.WriteBool("UseTaggedPDF", bUserSelectionTags ? mbUseTaggedPDFUserSelection : mbUseTaggedPDF);
+
     maConfigItem.WriteInt32("SelectPdfVersion", mnPDFTypeSelection );
+    maConfigItem.WriteBool("PDFUACompliance", mbPDFUACompliance);
 
     if ( mbIsPresentation )
     {
@@ -471,6 +477,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxCbPDFA(m_xBuilder->weld_check_button("pdfa"))
     , mxRbPDFA1b(m_xBuilder->weld_radio_button("pdfa1"))
     , mxRbPDFA2b(m_xBuilder->weld_radio_button("pdfa2"))
+    , mxCbPDFUA(m_xBuilder->weld_check_button("pdfua"))
     , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
     , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
     , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
@@ -540,7 +547,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
     mxFtWatermark->set_sensitive(false );
     mxEdWatermark->set_sensitive( false );
-    mxCbPDFA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
+    mxCbPDFA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle));
 
     const bool bIsPDFA = (1 == pParent->mnPDFTypeSelection) || (2 == pParent->mnPDFTypeSelection);
     mxCbPDFA->set_active(bIsPDFA);
@@ -556,13 +563,18 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxRbPDFA2b->set_active(true);
         break;
     }
-    // the ToggleExportPDFAHdl handler will read or write the *UserSelection based
+
+    const bool bIsPDFUA = pParent->mbPDFUACompliance;
+    mxCbPDFUA->set_active(bIsPDFUA);
+    mxCbPDFUA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle));
+
+    // the TogglePDFVersionOrUniversalAccessibilityHandle handler will read or write the *UserSelection based
     // on the mxCbPDFA (= bIsPDFA) state, so we have to prepare the correct input state.
-    if (bIsPDFA)
+    if (bIsPDFA || bIsPDFUA)
         mxCbTaggedPDF->set_active(pParent->mbUseTaggedPDFUserSelection);
     else
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDFUserSelection;
-    ToggleExportPDFAHdl( *mxCbPDFA );
+    TogglePDFVersionOrUniversalAccessibilityHandle(*mxCbPDFA);
 
     mxCbExportFormFields->set_active(pParent->mbExportFormFields);
     mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
@@ -675,14 +687,20 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     pParent->mbUseTaggedPDF = mxCbTaggedPDF->get_active();
 
     const bool bIsPDFA = mxCbPDFA->get_active();
+    const bool bIsPDFUA = mxCbPDFUA->get_active();
+
     if (bIsPDFA)
     {
         pParent->mnPDFTypeSelection = 2;
         if( mxRbPDFA1b->get_active() )
             pParent->mnPDFTypeSelection = 1;
     }
-    else
+
+    pParent->mbPDFUACompliance = bIsPDFUA;
+
+    if (!bIsPDFA && !bIsPDFUA)
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDF;
+
     pParent->mbUseTaggedPDFUserSelection = mbUseTaggedPDFUserSelection;
     pParent->mbExportFormFields = mxCbExportFormFields->get_active();
 
@@ -784,20 +802,21 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::ToggleButton&, v
     }
 }
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle, weld::ToggleButton&, void)
 {
     const bool bIsPDFA = mxCbPDFA->get_active();
+    const bool bIsPDFUA = mxCbPDFUA->get_active();
 
     // set the security page status (and its controls as well)
     ImpPDFTabSecurityPage* pSecPage = mpParent ? mpParent->getSecurityPage() : nullptr;
     if (pSecPage)
         pSecPage->ImplPDFASecurityControl(!bIsPDFA);
 
-    mxCbTaggedPDF->set_sensitive(!bIsPDFA);
+    mxCbTaggedPDF->set_sensitive(!bIsPDFA && !bIsPDFUA);
     mxRbPDFA1b->set_sensitive(bIsPDFA);
     mxRbPDFA2b->set_sensitive(bIsPDFA);
 
-    if (bIsPDFA)
+    if (bIsPDFA || bIsPDFUA)
     {
         // store the users selection of subordinate controls and set required PDF/A values
         mbUseTaggedPDFUserSelection = mxCbTaggedPDF->get_active();

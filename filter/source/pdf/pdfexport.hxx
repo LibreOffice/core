@@ -52,6 +52,7 @@ private:
 
     bool                mbUseTaggedPDF;
     sal_Int32           mnPDFTypeSelection;
+    bool                mbPDFUACompliance;
     bool                mbExportNotes;
     bool                mbExportPlaceholders;
     bool                mbUseReferenceXObject;

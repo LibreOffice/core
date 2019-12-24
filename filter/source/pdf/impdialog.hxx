@@ -78,6 +78,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbUseTaggedPDF;
     bool                        mbUseTaggedPDFUserSelection;
     sal_Int32                   mnPDFTypeSelection;
+    bool                        mbPDFUACompliance;
     bool                        mbExportNotes;
     bool                        mbViewPDF;
     bool                        mbUseReferenceXObject;
@@ -189,6 +190,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> mxCbPDFA;
     std::unique_ptr<weld::RadioButton> mxRbPDFA1b;
     std::unique_ptr<weld::RadioButton> mxRbPDFA2b;
+    std::unique_ptr<weld::CheckButton> mxCbPDFUA;
     std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
     std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
     std::unique_ptr<weld::Widget> mxFormsFrame;
@@ -224,8 +226,9 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     void                        TogglePagesHdl();
     void                        EnableExportNotesPages();
 
+    DECL_LINK(TogglePDFVersionOrUniversalAccessibilityHandle, weld::ToggleButton&, void);
+
 public:
-    DECL_LINK(ToggleExportPDFAHdl, weld::ToggleButton&, void);
 
     ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual                     ~ImpPDFTabGeneralPage() override;

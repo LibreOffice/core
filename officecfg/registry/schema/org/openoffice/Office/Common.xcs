@@ -5331,6 +5331,14 @@
             <value>0</value>
           </prop>
           <!-- END PDF Version selection -->
+          <!-- PDF/UA Compliance -->
+          <prop oor:name="PDFUACompliance" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if the document is PDF/UA (Universal Accessibility) compliant</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <!-- END PDF/UA Compliance -->
           <!-- PDF Relative Link -->
           <prop oor:name="ExportLinksRelativeFsys" oor:type="xs:boolean" oor:nillable="false">
             <info>
@@ -5452,9 +5460,9 @@
       <prop oor:name="UseWebDAVFileLocking" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if WebDAV-specific file locking is used for documents
-	  on WebDAV shares. It is not recommended to set this option to 'false' in
-	  scenarios where multi-user, concurrent read/write access to WebDAV share
-	  is required</desc>
+          on WebDAV shares. It is not recommended to set this option to 'false' in
+          scenarios where multi-user, concurrent read/write access to WebDAV share
+          is required</desc>
         </info>
         <value>true</value>
       </prop>
