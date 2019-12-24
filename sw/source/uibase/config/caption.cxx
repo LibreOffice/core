@@ -18,7 +18,7 @@
  */
 
 
-#include <numrule.hxx>
+#include <editeng/svxenum.hxx>
 #include <caption.hxx>
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :

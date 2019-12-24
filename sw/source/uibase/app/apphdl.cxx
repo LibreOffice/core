@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>

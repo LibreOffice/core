@@ -28,7 +28,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <dbui.hrc>
 #include <strings.hrc>
 #include <mmconfigitem.hxx>
 #include <swmodule.hxx>

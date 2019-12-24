@@ -19,12 +19,10 @@
 
 #include "AnnotationMenuButton.hxx"
 
-#include <app.hrc>
 #include <strings.hrc>
 
 #include <unotools/useroptions.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>

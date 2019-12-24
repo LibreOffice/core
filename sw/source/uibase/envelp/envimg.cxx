@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <tools/stream.hxx>
-#include <sfx2/app.hxx>
 #include <editeng/paperinf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/useroptions.hxx>

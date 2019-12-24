@@ -34,7 +34,6 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/diagnose_ex.h>
@@ -45,7 +44,6 @@
 #include <unodispatch.hxx>
 #include <wrtsh.hxx>
 #include <dbui.hrc>
-#include <unomid.h>
 
 using namespace utl;
 using namespace ::com::sun::star;

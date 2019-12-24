@@ -27,7 +27,6 @@
 #include <edtwin.hxx>
 
 #include <syncbtn.hxx>
-#include <swtypes.hxx>
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER(SwSyncChildWin, FN_SYNC_LABELS)
 

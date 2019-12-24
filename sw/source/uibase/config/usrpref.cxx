@@ -21,21 +21,13 @@
 
 #include <osl/diagnose.h>
 #include <o3tl/any.hxx>
-#include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <swtypes.hxx>
-#include <hintids.hxx>
-#include <uitool.hxx>
 #include <usrpref.hxx>
-#include <crstate.hxx>
-#include <linguistic/lngprops.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/localedatawrapper.hxx>
-
-#include <unomid.h>
 
 using namespace utl;
 using namespace ::com::sun::star;
