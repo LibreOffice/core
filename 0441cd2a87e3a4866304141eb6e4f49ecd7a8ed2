@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_df399741",
+        "filename": "cui/uiconfig/ui/accelconfigpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-24T09:06:11Z",
+      "side": 1,
+      "message": "Somehow the tooltips were shown without this (at least for me) - just without additional data... yet seems useful to have this explicitly.",
+      "range": {
+        "startLine": 436,
+        "startChar": 44,
+        "endLine": 436,
+        "endChar": 55
+      },
+      "revId": "0441cd2a87e3a4866304141eb6e4f49ecd7a8ed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
