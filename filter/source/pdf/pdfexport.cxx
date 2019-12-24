@@ -80,6 +80,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mxIH                        ( rxIH ),
     mbUseTaggedPDF              ( false ),
     mnPDFTypeSelection          ( 0 ),
+    mbPDFUACompliance           ( false),
     mbExportNotes               ( true ),
     mbExportPlaceholders        ( false ),
     mbUseReferenceXObject       ( false ),
@@ -473,6 +474,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mbUseTaggedPDF;
                 else if ( rFilterData[ nData ].Name == "SelectPdfVersion" )
                     rFilterData[ nData ].Value >>= mnPDFTypeSelection;
+                else if ( rFilterData[ nData ].Name == "PDFUACompliance" )
+                    rFilterData[ nData ].Value >>= mbPDFUACompliance;
                 else if ( rFilterData[ nData ].Name == "ExportNotes" )
                     rFilterData[ nData ].Value >>= mbExportNotes;
                 else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
