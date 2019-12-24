@@ -67,7 +67,6 @@ cui/ui/areatabpage.ui
 cui/ui/asiantypography.ui
 cui/ui/assigncomponentdialog.ui
 cui/ui/autocorrectdialog.ui
-cui/ui/backgroundpage.ui
 cui/ui/baselinksdialog.ui
 cui/ui/borderareatransparencydialog.ui
 cui/ui/borderbackgrounddialog.ui
