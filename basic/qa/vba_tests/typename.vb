@@ -61,6 +61,23 @@ Function verify_testTypeName() As String
     date1 = TypeName(l1)
     TestLog_ASSERT date1 = date2, "the return TypeName is: " & date1
 
+    ' tdf#129596 - Types of constant values
+    date2 = "Integer"
+    date1 = TypeName(32767)
+    TestLog_ASSERT date1 = date2, "the return TypeName is: " & date1
+
+    date2 = "Integer"
+    date1 = TypeName(-32767)
+    TestLog_ASSERT date1 = date2, "the return TypeName is: " & date1
+
+    date2 = "Long"
+    date1 = TypeName(1048575)
+    TestLog_ASSERT date1 = date2, "the return TypeName is: " & date1
+
+    date2 = "Long"
+    date1 = TypeName(-1048575)
+    TestLog_ASSERT date1 = date2, "the return TypeName is: " & date1
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testTypeName = result
 
