@@ -63,7 +63,7 @@ public:
 
 #define ENUM_STRING_MAP_END()           { nullptr, 0, 0 }
 
-/** Map a const sal_Char* (with length) to a sal_uInt16 value.
+/** Map a const char* (with length) to a sal_uInt16 value.
  * To be used with SvXMLUnitConverter::convertEnum(...)
  */
 template<typename EnumT>

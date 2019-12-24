@@ -43,7 +43,7 @@ extern "C"
                 classname##_getSupportedServiceNames() );\
         }
 
-XMLOFF_DLLPUBLIC void * xo_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     if( pServiceManager )

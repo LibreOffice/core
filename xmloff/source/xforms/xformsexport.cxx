@@ -108,7 +108,7 @@ namespace {
 
 struct ExportTable
 {
-    const sal_Char* pPropertyName;
+    const char* pPropertyName;
     sal_uInt16 const nNamespace;
     sal_uInt16 const nToken;
     convert_t const aConverter;

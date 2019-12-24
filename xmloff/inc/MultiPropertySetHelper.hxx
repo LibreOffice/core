@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
 /**
  * The MultiPropertySetHelper performs the following functions:
  *
- * Given a list of property names (as sal_Char** or OUString*), it can
+ * Given a list of property names (as char** or OUString*), it can
  * query an XMultiPropertySet (or XPropertySet) which of these properties
  * it supports (method hasProperties(...)). The properties *MUST* be
  * sorted alphabetically.
@@ -79,7 +79,7 @@ class MultiPropertySetHelper
 
 public:
 
-    MultiPropertySetHelper( const sal_Char** pNames );
+    MultiPropertySetHelper( const char** pNames );
 
     ~MultiPropertySetHelper();
 

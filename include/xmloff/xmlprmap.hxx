@@ -105,7 +105,7 @@ public:
 
     /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */
     sal_Int32 FindEntryIndex(
-        const sal_Char* sApiName, sal_uInt16 nNameSpace, const OUString& sXMLName ) const;
+        const char* sApiName, sal_uInt16 nNameSpace, const OUString& sXMLName ) const;
 
     /** searches for an entry that matches the given ContextId or gives -1 if nothing found */
     sal_Int32 FindEntryIndex( const sal_Int16 nContextId ) const;

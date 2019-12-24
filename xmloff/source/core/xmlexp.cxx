@@ -104,7 +104,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
-sal_Char const sXML_1_2[] = "1.2";
+char const sXML_1_2[] = "1.2";
 
 #define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
 #define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
@@ -122,9 +122,9 @@ namespace {
 
 struct XMLServiceMapEntry_Impl
 {
-    const sal_Char *sModelService;
+    const char *sModelService;
     sal_Int32 const      nModelServiceLen;
-    const sal_Char *sFilterService;
+    const char *sFilterService;
     sal_Int32 const      nFilterServiceLen;
 };
 
@@ -910,8 +910,8 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
 }
 
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
-                                     const sal_Char *pName,
-                                       const sal_Char *pValue )
+                                     const char *pName,
+                                       const char *pValue )
 {
     OUString sName( OUString::createFromAscii( pName ) );
     OUString sValue( OUString::createFromAscii( pValue ) );
@@ -920,7 +920,7 @@ void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
         GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), sValue );
 }
 
-void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
+void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const char *pName,
                               const OUString& rValue )
 {
     OUString sName( OUString::createFromAscii( pName ) );
@@ -1320,7 +1320,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     }
 
     // office:version = ...
-    const sal_Char* pVersion = nullptr;
+    const char* pVersion = nullptr;
     switch (getDefaultVersion())
     {
     case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
@@ -2406,7 +2406,7 @@ void SvXMLElementExport::StartElement(
 SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
     sal_uInt16 nPrefixKey,
-    const sal_Char *pLName,
+    const char *pLName,
     bool bIWSOutside,
     bool bIWSInside )
     : mrExport( rExp )

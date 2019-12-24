@@ -80,44 +80,44 @@ using namespace ::xmloff::token;
 
 
 // service prefix and service names
-const sal_Char sAPI_textfield_prefix[]  = "com.sun.star.text.TextField.";
-const sal_Char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
-const sal_Char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";
+const char sAPI_textfield_prefix[]  = "com.sun.star.text.TextField.";
+const char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
+const char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";
 
-const sal_Char sAPI_date_time[]                 = "DateTime";
-const sal_Char sAPI_page_number[]               = "PageNumber";
-const sal_Char sAPI_docinfo_change_date_time[]  = "DocInfo.ChangeDateTime";
-const sal_Char sAPI_docinfo_create_date_time[]  = "DocInfo.CreateDateTime";
-const sal_Char sAPI_docinfo_custom[]            = "DocInfo.Custom";
-const sal_Char sAPI_docinfo_print_date_time[]   = "DocInfo.PrintDateTime";
-const sal_Char sAPI_dde[]                       = "DDE";
-const sal_Char sAPI_url[]                       = "URL";
+const char sAPI_date_time[]                 = "DateTime";
+const char sAPI_page_number[]               = "PageNumber";
+const char sAPI_docinfo_change_date_time[]  = "DocInfo.ChangeDateTime";
+const char sAPI_docinfo_create_date_time[]  = "DocInfo.CreateDateTime";
+const char sAPI_docinfo_custom[]            = "DocInfo.Custom";
+const char sAPI_docinfo_print_date_time[]   = "DocInfo.PrintDateTime";
+const char sAPI_dde[]                       = "DDE";
+const char sAPI_url[]                       = "URL";
 
 // property names
-const sal_Char sAPI_is_fixed[]          = "IsFixed";
-const sal_Char sAPI_content[]           = "Content";
-const sal_Char sAPI_author[]            = "Author";
-const sal_Char sAPI_hint[]              = "Hint";
-const sal_Char sAPI_name[]              = "Name";
-const sal_Char sAPI_sub_type[]          = "SubType";
-const sal_Char sAPI_date_time_value[]   = "DateTimeValue";
-const sal_Char sAPI_number_format[]     = "NumberFormat";
-const sal_Char sAPI_numbering_type[]    = "NumberingType";
-const sal_Char sAPI_offset[]            = "Offset";
-const sal_Char sAPI_condition[]         = "Condition";
-const sal_Char sAPI_set_number[]        = "SetNumber";
-const sal_Char sAPI_file_format[]       = "FileFormat";
-const sal_Char sAPI_is_date[]           = "IsDate";
-const sal_Char sAPI_current_presentation[] = "CurrentPresentation";
-const sal_Char sAPI_is_hidden[]         = "IsHidden";
-const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
+const char sAPI_is_fixed[]          = "IsFixed";
+const char sAPI_content[]           = "Content";
+const char sAPI_author[]            = "Author";
+const char sAPI_hint[]              = "Hint";
+const char sAPI_name[]              = "Name";
+const char sAPI_sub_type[]          = "SubType";
+const char sAPI_date_time_value[]   = "DateTimeValue";
+const char sAPI_number_format[]     = "NumberFormat";
+const char sAPI_numbering_type[]    = "NumberingType";
+const char sAPI_offset[]            = "Offset";
+const char sAPI_condition[]         = "Condition";
+const char sAPI_set_number[]        = "SetNumber";
+const char sAPI_file_format[]       = "FileFormat";
+const char sAPI_is_date[]           = "IsDate";
+const char sAPI_current_presentation[] = "CurrentPresentation";
+const char sAPI_is_hidden[]         = "IsHidden";
+const char sAPI_is_fixed_language[] = "IsFixedLanguage";
 
-const sal_Char sAPI_true[] = "TRUE";
+const char sAPI_true[] = "TRUE";
 
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const sal_Char* pService,
+    const char* pService,
     sal_uInt16 nPrefix, const OUString& rElementName)
 :   SvXMLImportContext( rImport, nPrefix, rElementName )
 ,   rTextImportHelper(rHlp)
@@ -1143,7 +1143,7 @@ static const OUStringLiteral gsPropertyIsVisible("IsVisible");
 
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const sal_Char* pServiceName, sal_uInt16 nPrfx,
+    const char* pServiceName, sal_uInt16 nPrfx,
     const OUString& sLocalName, bool bUseDisply)
 :   XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, sLocalName)
 ,   nCommandType( sdb::CommandType::TABLE )
@@ -1291,7 +1291,7 @@ void XMLDatabaseNameImportContext::ProcessAttribute(
 
 XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const sal_Char* pServiceName, sal_uInt16 nPrfx,
+    const char* pServiceName, sal_uInt16 nPrfx,
     const OUString& sLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, pServiceName,
                                       nPrfx, sLocalName, false),
@@ -1535,10 +1535,10 @@ void XMLSimpleDocInfoImportContext::PrepareField(
     }
 }
 
-const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
+const char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
     sal_uInt16 nToken)
 {
-    const sal_Char* pServiceName = nullptr;
+    const char* pServiceName = nullptr;
 
     switch(nToken)
     {
@@ -2272,10 +2272,10 @@ void XMLCountFieldImportContext::PrepareField(
     }
 }
 
-const sal_Char* XMLCountFieldImportContext::MapTokenToServiceName(
+const char* XMLCountFieldImportContext::MapTokenToServiceName(
     sal_uInt16 nToken)
 {
-    const sal_Char* pServiceName = nullptr;
+    const char* pServiceName = nullptr;
 
     switch (nToken)
     {
@@ -3132,10 +3132,10 @@ void XMLBibliographyFieldImportContext::PrepareField(
     xPropertySet->setPropertyValue("Fields", Any(aValueSequence));
 }
 
-const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
+const char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     const OUString& sName)
 {
-    const sal_Char* pName = nullptr;
+    const char* pName = nullptr;
 
     if (IsXMLToken(sName, XML_IDENTIFIER))
     {
@@ -3488,7 +3488,7 @@ void XMLAnnotationImportContext::PrepareField(
     if ( sBuffer.getLength() )
     {
         // delete last paragraph mark (if necessary)
-        if (sal_Char(0x0a) == sBuffer[sBuffer.getLength()-1])
+        if (char(0x0a) == sBuffer[sBuffer.getLength()-1])
             sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
         xPropertySet->setPropertyValue(sAPI_content, makeAny(sBuffer));
     }
