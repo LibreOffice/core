@@ -62,7 +62,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/help.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 // namespaces
 

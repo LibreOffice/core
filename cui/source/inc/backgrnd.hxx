@@ -19,10 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
 #define INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
 
-#include <vcl/graph.hxx>
-#include <svx/SvxColorValueSet.hxx>
-#include <svx/dlgctrl.hxx>
-#include <editeng/brushitem.hxx>
 #include <memory>
 
 #include "cuitabarea.hxx"

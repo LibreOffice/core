@@ -20,11 +20,9 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
-#include <algorithm>
 #include <strings.hrc>
 #include <helpids.h>
 

@@ -23,10 +23,9 @@
 #include <dialmgr.hxx>
 
 #include <basegfx/range/b2irange.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 
 #include <comphelper/random.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

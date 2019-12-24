@@ -19,7 +19,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <config_folders.h>
 #include <CustomNotebookbarGenerator.hxx>
 #include <osl/file.hxx>
