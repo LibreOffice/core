@@ -2803,8 +2803,18 @@ void SbiRuntime::StepLOADSC( sal_uInt32 nOp1 )
 void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
-    p->PutInteger( static_cast<sal_Int16>( nOp1 ) );
-    PushVar( p );
+
+    OUString aStr = pImg->GetString(static_cast<short>(nOp1));
+    double n = ::rtl::math::stringToDouble(aStr, '.', ',');
+    if (n >= SbxMININT && n <= SbxMAXINT)
+    {
+        p->PutInteger(static_cast<sal_Int16>(n));
+    }
+    else
+    {
+        p->PutLong(static_cast<sal_Int32>(n));
+    }
+    PushVar(p);
 }
 
 // store a named argument in Argv (+Arg-no. from 1!)
