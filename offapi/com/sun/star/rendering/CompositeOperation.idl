@@ -24,7 +24,7 @@ module com { module sun { module star { module rendering {
 /** These constants determine how the primitive color is combined with
     the background.<p>
 
-    When performing this calculations, it is assumed that all color
+    When performing these calculations, it is assumed that all color
     values are premultiplied with the corresponding alpha values (if
     no alpha is specified, 1.0 is assumed). Then, the following
     general compositing operation is performed:
