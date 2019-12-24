@@ -24,7 +24,6 @@
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/debug.hxx>
 
 #include <memory>
 #include <vector>
