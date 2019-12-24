@@ -1398,6 +1398,12 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     if( m_bIsPDF_A2 )
         m_aContext.Version = PDFWriter::PDFVersion::PDF_1_6; //we could even use 1.7 features
 
+    if (m_aContext.UniversalAccessibilityCompliance)
+    {
+        m_bIsPDF_UA = true;
+        m_aContext.Tagged = true;
+    }
+
     if( m_aContext.DPIx == 0 || m_aContext.DPIy == 0 )
         SetReferenceDevice( VirtualDevice::RefDevMode::PDF1 );
     else
