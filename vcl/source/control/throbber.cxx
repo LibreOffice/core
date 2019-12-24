@@ -177,7 +177,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
 {
     ::std::vector< OUString > aImageURLs;
 
-    sal_Char const* const pResolutions[] = { "16", "32", "64" };
+    char const* const pResolutions[] = { "16", "32", "64" };
     size_t const nImageCounts[] = { 6, 12, 12 };
 
     size_t index = 0;

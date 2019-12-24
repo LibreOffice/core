@@ -44,7 +44,7 @@ void INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
                 RTL_TEXTENCODING_UTF8));
 
             rOStm.WriteBytes(sOut.getStr(), sOut.getLength());
-            static const sal_Char aEndChar[2] = { 0 };
+            static const char aEndChar[2] = { 0 };
             rOStm.WriteBytes(aEndChar, sizeof(aEndChar));
         }
         break;
@@ -91,7 +91,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
     int     iAltOffset;         // (alternate text?)
     int     iAnchorOffset;      // HREF in image
     int     iExtraHTML_Offset;  // Extra HTML (stored in CImageElement)
-    sal_Char pImageURL[1];      // Append all variable-length strings starting here
+    char pImageURL[1];      // Append all variable-length strings starting here
 */
             rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset;

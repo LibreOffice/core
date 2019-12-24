@@ -44,7 +44,7 @@ class VCL_DLLPUBLIC Task
     friend struct ImplSchedulerData;
 
     ImplSchedulerData *mpSchedulerData; ///< Pointer to the element in scheduler list
-    const sal_Char    *mpDebugName;     ///< Useful for debugging
+    const char        *mpDebugName;     ///< Useful for debugging
     TaskPriority       mePriority;      ///< Task priority
     bool               mbActive;        ///< Currently in the scheduler
     bool               mbStatic;        ///< Is a static object
@@ -70,7 +70,7 @@ protected:
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const = 0;
 
 public:
-    Task( const sal_Char *pDebugName );
+    Task( const char *pDebugName );
     Task( const Task& rTask );
     virtual ~Task() COVERITY_NOEXCEPT_FALSE;
     Task& operator=( const Task& rTask );
@@ -78,7 +78,7 @@ public:
     void            SetPriority(TaskPriority ePriority);
     TaskPriority    GetPriority() const { return mePriority; }
 
-    void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
+    void            SetDebugName( const char *pDebugName ) { mpDebugName = pDebugName; }
     const char     *GetDebugName() const { return mpDebugName; }
 
     // Call handler

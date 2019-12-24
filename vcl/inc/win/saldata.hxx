@@ -187,7 +187,7 @@ void ImplSalPostDispatchMsg( const MSG* pMsg );
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Font& rFont );
 
 rtl_TextEncoding ImplSalGetSystemEncoding();
-OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 nLen = -1);
+OUString ImplSalGetUniString(const char* pStr, sal_Int32 nLen = -1);
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 #define SAL_FRAME_WNDEXTRA          sizeof( DWORD )

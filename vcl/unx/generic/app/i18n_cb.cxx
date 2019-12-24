@@ -469,7 +469,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
         if( call_data->data.text )
         {
             // XIM with text
-            sal_Char* pMBString = nullptr;
+            char* pMBString = nullptr;
             size_t nLength = 0;
             if( call_data->data.text->encoding_is_wchar )
             {
@@ -477,7 +477,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
                 {
                     wchar_t* pWString = call_data->data.text->string.wide_char;
                     size_t nBytes = wcstombs( nullptr, pWString, 1024 );
-                    pMBString = static_cast<sal_Char*>(alloca( nBytes+1 ));
+                    pMBString = static_cast<char*>(alloca( nBytes+1 ));
                     nLength = wcstombs( pMBString, pWString, nBytes+1 );
                 }
             }

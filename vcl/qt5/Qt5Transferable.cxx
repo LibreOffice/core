@@ -136,8 +136,8 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
         if (m_bConvertFromLocale)
         {
             QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
-            aString = OUString(reinterpret_cast<const sal_Char*>(aByteData.data()),
-                               aByteData.size(), osl_getThreadTextEncoding());
+            aString = OUString(reinterpret_cast<const char*>(aByteData.data()), aByteData.size(),
+                               osl_getThreadTextEncoding());
         }
         else
         {

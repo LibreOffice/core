@@ -47,7 +47,7 @@ std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Task& task )
 {
     stream << "a: " << task.IsActive() << " p: " << static_cast<int>(task.GetPriority());
-    const sal_Char *name = task.GetDebugName();
+    const char *name = task.GetDebugName();
     if( nullptr == name )
         return stream << " (nullptr)";
     else
@@ -68,7 +68,7 @@ std::basic_ostream<charT, traits> & operator <<(
     bool bIsIdle = (dynamic_cast<const Idle*>( &timer ) != nullptr);
     stream << (bIsIdle ? "Idle " : "Timer")
            << " a: " << timer.IsActive() << " p: " << static_cast<int>(timer.GetPriority());
-    const sal_Char *name = timer.GetDebugName();
+    const char *name = timer.GetDebugName();
     if ( nullptr == name )
         stream << " (nullptr)";
     else
@@ -624,7 +624,7 @@ Task& Task::operator=( const Task& rTask )
     return *this;
 }
 
-Task::Task( const sal_Char *pDebugName )
+Task::Task( const char *pDebugName )
     : mpSchedulerData( nullptr )
     , mpDebugName( pDebugName )
     , mePriority( TaskPriority::DEFAULT )

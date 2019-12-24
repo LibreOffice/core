@@ -581,9 +581,9 @@ public:
         {}
     };
 
-    static const sal_Char* getStructureTag( PDFWriter::StructElement );
-    static const sal_Char* getAttributeTag( PDFWriter::StructAttribute eAtr );
-    static const sal_Char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
+    static const char* getStructureTag( PDFWriter::StructElement );
+    static const char* getAttributeTag( PDFWriter::StructAttribute eAtr );
+    static const char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
 
     // returns true if compression was done
     // else false

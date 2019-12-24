@@ -35,15 +35,15 @@ namespace psp {
 sal_Int32   getHexValueOf (sal_Int32 nValue, OStringBuffer& pBuffer);
 sal_Int32   getAlignedHexValueOf (sal_Int32 nValue, OStringBuffer& pBuffer);
 sal_Int32   getValueOf    (sal_Int32 nValue, OStringBuffer& pBuffer);
-sal_Int32   appendStr     (const sal_Char* pSrc, OStringBuffer& pDst);
+sal_Int32   appendStr     (const char* pSrc, OStringBuffer& pDst);
 
 inline void getValueOfDouble( OStringBuffer& pBuffer, double f, int nPrecision = 0)
 {
     pBuffer.append(rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ));
 }
 
-bool    WritePS (osl::File* pFile, const sal_Char* pString);
-bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength);
+bool    WritePS (osl::File* pFile, const char* pString);
+bool    WritePS (osl::File* pFile, const char* pString, sal_uInt64 nInLength);
 bool    WritePS (osl::File* pFile, const OString &rString);
 bool    WritePS (osl::File* pFile, const OUString &rString);
 

@@ -344,7 +344,7 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
             for(int n = 0; n < pNameRecord->slen/2; n++ )
             {
                 sal_Unicode aCode = static_cast<sal_Unicode>(getUInt16BE( pNameBuffer ));
-                sal_Char aChar = aCode >> 8;
+                char aChar = aCode >> 8;
                 if( aChar )
                     aName.append( aChar );
                 aChar = aCode & 0x00ff;

@@ -29,7 +29,7 @@ namespace psp {
 sal_Int32
 getHexValueOf (sal_Int32 nValue, OStringBuffer& pBuffer)
 {
-    const static sal_Char pHex [0x10] = {
+    const static char pHex [0x10] = {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
@@ -109,7 +109,7 @@ getValueOf (sal_Int32 nValue, OStringBuffer& pBuffer)
             return nChar;
         }
 
-    sal_Char  pInvBuffer [32];
+    char  pInvBuffer [32];
     sal_Int32 nInvChar = 0;
     while (nValue > 0)
     {
@@ -126,7 +126,7 @@ getValueOf (sal_Int32 nValue, OStringBuffer& pBuffer)
 }
 
 sal_Int32
-appendStr (const sal_Char* pSrc, OStringBuffer& pDst)
+appendStr (const char* pSrc, OStringBuffer& pDst)
 {
     sal_Int32 nBytes = strlen (pSrc);
     pDst.append(pSrc, nBytes);
@@ -139,7 +139,7 @@ appendStr (const sal_Char* pSrc, OStringBuffer& pDst)
  */
 
 bool
-WritePS (osl::File* pFile, const sal_Char* pString)
+WritePS (osl::File* pFile, const char* pString)
 {
     sal_uInt64 nInLength = rtl_str_getLength (pString);
     sal_uInt64 nOutLength = 0;
@@ -151,7 +151,7 @@ WritePS (osl::File* pFile, const sal_Char* pString)
 }
 
 bool
-WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength)
+WritePS (osl::File* pFile, const char* pString, sal_uInt64 nInLength)
 {
     sal_uInt64 nOutLength = 0;
 

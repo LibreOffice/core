@@ -127,7 +127,7 @@ const sal_uInt8 PDFWriterImpl::s_nPadString[32] =
 
 static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
-    static const sal_Char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
+    static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
@@ -163,7 +163,7 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
     }
 }
 
-static void appendName( const sal_Char* pStr, OStringBuffer& rBuffer )
+static void appendName( const char* pStr, OStringBuffer& rBuffer )
 {
     // FIXME i59651 see above
     while( pStr && *pStr )
@@ -185,7 +185,7 @@ static void appendName( const sal_Char* pStr, OStringBuffer& rBuffer )
 }
 
 //used only to emit encoded passwords
-static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStringBuffer& rBuffer )
+static void appendLiteralString( const char* pStr, sal_Int32 nLength, OStringBuffer& rBuffer )
 {
     while( nLength )
     {
@@ -210,10 +210,10 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
         case ')' :
         case '\\' :
             rBuffer.append( "\\" );
-            rBuffer.append( static_cast<sal_Char>(*pStr) );
+            rBuffer.append( static_cast<char>(*pStr) );
             break;
         default:
-            rBuffer.append( static_cast<sal_Char>(*pStr) );
+            rBuffer.append( static_cast<char>(*pStr) );
             break;
         }
         pStr++;
@@ -256,7 +256,7 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
             (aChar >= 'A' && aChar <= 'Z' ) ||
             aChar == '-' )
         {
-            rBuffer.append(static_cast<sal_Char>(aChar));
+            rBuffer.append(static_cast<char>(aChar));
         }
         else
         {
@@ -1437,20 +1437,20 @@ OString PDFWriter::GetDateTime()
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
     osl_getDateTimeFromTimeValue(&aTVal, &aDT);
     aRet.append("D:");
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Year / 1000) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Year / 100) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Year / 10) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + (aDT.Year % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Month / 10) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + (aDT.Month % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Day / 10) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + (aDT.Day % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Hours / 10) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + (aDT.Hours % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Minutes / 10) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + (aDT.Minutes % 10)));
-    aRet.append(static_cast<sal_Char>('0' + ((aDT.Seconds / 10) % 10)));
-    aRet.append(static_cast<sal_Char>('0' + (aDT.Seconds % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Year / 1000) % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Year / 100) % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Year / 10) % 10)));
+    aRet.append(static_cast<char>('0' + (aDT.Year % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Month / 10) % 10)));
+    aRet.append(static_cast<char>('0' + (aDT.Month % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Day / 10) % 10)));
+    aRet.append(static_cast<char>('0' + (aDT.Day % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Hours / 10) % 10)));
+    aRet.append(static_cast<char>('0' + (aDT.Hours % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Minutes / 10) % 10)));
+    aRet.append(static_cast<char>('0' + (aDT.Minutes % 10)));
+    aRet.append(static_cast<char>('0' + ((aDT.Seconds / 10) % 10)));
+    aRet.append(static_cast<char>('0' + (aDT.Seconds % 10)));
 
     sal_uInt32 nDelta = 0;
     if (aGMT.Seconds > aTVal.Seconds)
@@ -1468,11 +1468,11 @@ OString PDFWriter::GetDateTime()
 
     if (nDelta)
     {
-        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 36000) % 10)));
-        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 3600) % 10)));
+        aRet.append(static_cast<char>('0' + ((nDelta / 36000) % 10)));
+        aRet.append(static_cast<char>('0' + ((nDelta / 3600) % 10)));
         aRet.append("'");
-        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 600) % 6)));
-        aRet.append(static_cast<sal_Char>('0' + ((nDelta / 60) % 10)));
+        aRet.append(static_cast<char>('0' + ((nDelta / 600) % 6)));
+        aRet.append(static_cast<char>('0' + ((nDelta / 60) % 10)));
     }
     aRet.append( "'" );
 
@@ -1516,25 +1516,25 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     // to use the localtime notation only
     // according to a recommendation in XMP Specification (Jan 2004, page 75)
     // the Acrobat way seems the right approach
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year/1000)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year/100)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year/10)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Year)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Year/1000)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Year/100)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Year/10)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Year)%10)) );
     aCreationMetaDateString.append( "-" );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Month/10)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Month)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Month/10)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Month)%10)) );
     aCreationMetaDateString.append( "-" );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Day/10)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Day)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Day/10)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Day)%10)) );
     aCreationMetaDateString.append( "T" );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Hours/10)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Hours)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Hours/10)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Hours)%10)) );
     aCreationMetaDateString.append( ":" );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Minutes/10)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Minutes)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Minutes/10)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Minutes)%10)) );
     aCreationMetaDateString.append( ":" );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Seconds/10)%10)) );
-    aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((aDT.Seconds)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Seconds/10)%10)) );
+    aCreationMetaDateString.append( static_cast<char>('0' + ((aDT.Seconds)%10)) );
 
     sal_uInt32 nDelta = 0;
     if( aGMT.Seconds > aTVal.Seconds )
@@ -1554,11 +1554,11 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     }
     if( nDelta )
     {
-        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/36000)%10)) );
-        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/3600)%10)) );
+        aCreationMetaDateString.append( static_cast<char>('0' + ((nDelta/36000)%10)) );
+        aCreationMetaDateString.append( static_cast<char>('0' + ((nDelta/3600)%10)) );
         aCreationMetaDateString.append( ":" );
-        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/600)%6)) );
-        aCreationMetaDateString.append( static_cast<sal_Char>('0' + ((nDelta/60)%10)) );
+        aCreationMetaDateString.append( static_cast<char>('0' + ((nDelta/600)%6)) );
+        aCreationMetaDateString.append( static_cast<char>('0' + ((nDelta/60)%10)) );
     }
     aID.append( i_rCString1.getStr(), i_rCString1.getLength() );
 
@@ -1620,7 +1620,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer const & rIn
         //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
         rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_vEncryptionBuffer.data(), nChars );
-        appendLiteralString( reinterpret_cast<sal_Char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
+        appendLiteralString( reinterpret_cast<char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
     }
     else
         appendLiteralString( rInString.getStr(), nChars , rOutBuffer );
@@ -1638,7 +1638,7 @@ void PDFWriterImpl::appendLiteralStringEncrypt( const OUString& rInString, const
     OString aBufferString( OUStringToOString( rInString, nEnc ) );
     sal_Int32 nLen = aBufferString.getLength();
     OStringBuffer aBuf( nLen );
-    const sal_Char* pT = aBufferString.getStr();
+    const char* pT = aBufferString.getStr();
 
     for( sal_Int32 i = 0; i < nLen; i++, pT++ )
     {
@@ -1884,7 +1884,7 @@ sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
     return nObject;
 }
 
-const sal_Char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
+const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
 {
     static std::map< PDFWriter::StructAttribute, const char* > aAttributeStrings;
     // fill maps once
@@ -1920,7 +1920,7 @@ const sal_Char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr
     return it != aAttributeStrings.end() ? it->second : "";
 }
 
-const sal_Char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue eVal )
+const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue eVal )
 {
     static std::map< PDFWriter::StructAttributeValue, const char* > aValueStrings;
 
@@ -2527,7 +2527,7 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
         {
             int nOffset = nSubsetID % 26;
             nSubsetID /= 26;
-            rBuffer.append( static_cast<sal_Char>('A'+nOffset) );
+            rBuffer.append( static_cast<char>('A'+nOffset) );
         }
         rBuffer.append( '+' );
     }
@@ -8573,7 +8573,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     else
                         // Previous reference end -> reference start.
                         nOffset = nCopyStart;
-                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nOffset, nReferenceStart - nOffset);
+                    aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nOffset, nReferenceStart - nOffset);
                     // Write the updated reference.
                     aLine.append(" ");
                     aLine.append(nRef);
@@ -8594,11 +8594,11 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
             if (nLen < 0)
                 SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
             else
-                aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
+                aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
         }
         else
             // Can copy it as-is.
-            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + rObject.GetDictionaryOffset(), rObject.GetDictionaryLength());
+            aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + rObject.GetDictionaryOffset(), rObject.GetDictionaryLength());
 
         aLine.append(">>\n");
     }
@@ -8607,7 +8607,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
     {
         aLine.append("stream\n");
         SvMemoryStream& rStream = pStream->GetMemory();
-        aLine.append(static_cast<const sal_Char*>(rStream.GetData()), rStream.GetSize());
+        aLine.append(static_cast<const char*>(rStream.GetData()), rStream.GetSize());
         aLine.append("\nendstream\n");
     }
 
@@ -8639,7 +8639,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     else
                         // Previous reference end -> reference start.
                         nOffset = nCopyStart;
-                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nOffset, nReferenceStart - nOffset);
+                    aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nOffset, nReferenceStart - nOffset);
 
                     // Write the updated reference.
                     aLine.append(" ");
@@ -8661,11 +8661,11 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
             if (nLen < 0)
                 SAL_WARN("vcl.pdfwriter", "copyExternalResource() failed");
             else
-                aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
+                aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + nCopyStart, nLen);
         }
         else
             // Can copy it as-is.
-            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + rObject.GetArrayOffset(), rObject.GetArrayLength());
+            aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + rObject.GetArrayOffset(), rObject.GetArrayLength());
 
         aLine.append("]\n");
     }
@@ -8673,7 +8673,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
     // If the object has a number element outside a dictionary or array, copy that.
     if (filter::PDFNumberElement* pNumber = rObject.GetNumberElement())
     {
-        aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + pNumber->GetLocation(), pNumber->GetLength());
+        aLine.append(static_cast<const char*>(rDocBuffer.GetData()) + pNumber->GetLocation(), pNumber->GetLength());
         aLine.append("\n");
     }
 
@@ -8934,7 +8934,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
 
         aLine.append(">>\nstream\n");
         // Copy the original page streams to the form XObject stream.
-        aLine.append(static_cast<const sal_Char*>(aStream.GetData()), aStream.GetSize());
+        aLine.append(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
         aLine.append("\nendstream\nendobj\n\n");
         if (!updateObject(nWrappedFormObject))
             return;
@@ -10275,7 +10275,7 @@ void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
     m_aOutline[nItem].m_nDestID = nDestID;
 }
 
-const sal_Char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
+const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
 {
     static std::map< PDFWriter::StructElement, const char* > aTagStrings;
     if( aTagStrings.empty() )

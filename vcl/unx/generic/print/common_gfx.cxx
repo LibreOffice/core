@@ -474,7 +474,7 @@ void
 PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const PolyFlags* pFlgAry)
 {
     const sal_uInt32 nBezString= 1024;
-    sal_Char pString[nBezString];
+    char pString[nBezString];
 
     if ( nPoints > 1 && maLineColor.Is() && pPath )
     {
@@ -525,7 +525,7 @@ void
 PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const PolyFlags* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
-    sal_Char pString[nBezString];
+    char pString[nBezString];
     // premature end of operation
     if (nPoints <= 0 || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
         return;
@@ -581,7 +581,7 @@ void
 PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const PolyFlags* const* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
-    sal_Char pString[nBezString];
+    char pString[nBezString];
     if ( !nPoly || !pPtAry || !pPoints || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
@@ -814,7 +814,7 @@ PrinterGfx::PSRotate (sal_Int32 nAngle)
 }
 
 void
-PrinterGfx::PSPointOp (const Point& rPoint, const sal_Char* pOperator)
+PrinterGfx::PSPointOp (const Point& rPoint, const char* pOperator)
 {
     OStringBuffer pPSCommand;
 
@@ -919,7 +919,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
     // build the command, it is a char with bit representation 000cxxyy
     // c represents the char, xx and yy repr. the field width of the dx and dy shift,
     // dx and dy represent the number of bytes to read after the opcode
-    sal_Char cCmd = (eType == lineto ? sal_Char(0x00) : sal_Char(0x10));
+    char cCmd = (eType == lineto ? char(0x00) : char(0x10));
     switch (nYPrec)
     {
         case 2: break;
@@ -1010,7 +1010,7 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
         PSRotate (mnTextAngle);
     }
 
-    sal_Char pBuffer[256];
+    char pBuffer[256];
     if( maVirtualStatus.mbArtBold )
     {
         sal_Int32 nLW = maVirtualStatus.mnTextWidth;

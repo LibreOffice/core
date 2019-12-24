@@ -127,20 +127,20 @@ namespace
 {
 bool isCharacterVariantCode(sal_uInt32 nFeatureCode)
 {
-    return sal_Char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
-           && sal_Char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
+    return char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
+           && char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
 }
 
 bool isStylisticSetCode(sal_uInt32 nFeatureCode)
 {
-    return sal_Char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
-           && sal_Char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
+    return char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
+           && char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
 }
 
 OUString getNumericLowerPart(sal_uInt32 nFeatureCode)
 {
-    sal_Char cChar1((sal_uInt32(nFeatureCode) >> 8) & 0xFF);
-    sal_Char cChar2((sal_uInt32(nFeatureCode) >> 0) & 0xFF);
+    char cChar1((sal_uInt32(nFeatureCode) >> 8) & 0xFF);
+    char cChar2((sal_uInt32(nFeatureCode) >> 0) & 0xFF);
 
     if (rtl::isAsciiDigit(static_cast<unsigned char>(cChar1))
         && rtl::isAsciiDigit(static_cast<unsigned char>(cChar2)))

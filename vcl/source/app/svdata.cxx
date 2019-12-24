@@ -111,7 +111,7 @@ namespace
         DECL_LINK(implTimeoutHdl, Timer *, void);
 
     public:
-        SystemDependentDataBuffer(const sal_Char* pDebugName)
+        SystemDependentDataBuffer(const char* pDebugName)
         :   basegfx::SystemDependentDataManager(),
             maTimer(std::make_unique<AutoTimer>(pDebugName))
         {

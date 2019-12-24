@@ -51,7 +51,7 @@ namespace psp
 
     inline double StringToDouble(const OString& rStr)
     {
-        return rtl::math::stringToDouble(rStr, '.', static_cast<sal_Char>(0));
+        return rtl::math::stringToDouble(rStr, '.', static_cast<char>(0));
     }
 
     // fills a character buffer with the string representation of a double

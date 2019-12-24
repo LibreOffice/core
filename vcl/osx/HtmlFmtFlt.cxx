@@ -90,8 +90,8 @@ Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
     size_t lHtmlFormatHeader = dummyHtmlHeader.length();
 
     std::string textHtml(
-        reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()),
-        reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()) + aTextHtml.getLength());
+        reinterpret_cast<const char*>(aTextHtml.getConstArray()),
+        reinterpret_cast<const char*>(aTextHtml.getConstArray()) + aTextHtml.getLength());
 
     std::string::size_type nStartHtml = textHtml.find(TAG_HTML) + lHtmlFormatHeader - 1; // we start one before '<HTML>' Word 2000 does also so
     std::string::size_type nEndHtml = textHtml.find(TAG_END_HTML) + lHtmlFormatHeader + TAG_END_HTML.length() + 1; // our SOffice 5.2 wants 2 behind </HTML>?
@@ -122,9 +122,9 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
   assert(isHTMLFormat(aHTMLFormat) && "No HTML Format provided");
 
   Sequence<sal_Int8>& nonconstHTMLFormatRef = const_cast< Sequence<sal_Int8>& >(aHTMLFormat);
-  sal_Char* dataStart = reinterpret_cast<sal_Char*>(nonconstHTMLFormatRef.getArray());
-  sal_Char* dataEnd = dataStart + nonconstHTMLFormatRef.getLength() - 1;
-  const sal_Char* htmlStartTag = strcasestr(dataStart, HtmlStartTag);
+  char* dataStart = reinterpret_cast<char*>(nonconstHTMLFormatRef.getArray());
+  char* dataEnd = dataStart + nonconstHTMLFormatRef.getLength() - 1;
+  const char* htmlStartTag = strcasestr(dataStart, HtmlStartTag);
 
   assert(htmlStartTag && "Seems to be no HTML at all");
 
@@ -158,7 +158,7 @@ bool isHTMLFormat(const Sequence<sal_Int8>& aHtmlSequence)
 
   return rtl_str_compareIgnoreAsciiCase_WithLength(HtmlFormatStart,
                                                    HtmlFormatStartLen,
-                                                   reinterpret_cast<const sal_Char*>(aHtmlSequence.getConstArray()),
+                                                   reinterpret_cast<const char*>(aHtmlSequence.getConstArray()),
                                                    HtmlFormatStartLen) == 0;
 }
 

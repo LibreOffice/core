@@ -20,11 +20,11 @@ namespace font
 {
 OUString featureCodeAsString(uint32_t nFeature)
 {
-    std::vector<sal_Char> aString(5, 0);
-    aString[0] = sal_Char(nFeature >> 24 & 0xff);
-    aString[1] = sal_Char(nFeature >> 16 & 0xff);
-    aString[2] = sal_Char(nFeature >> 8 & 0xff);
-    aString[3] = sal_Char(nFeature >> 0 & 0xff);
+    std::vector<char> aString(5, 0);
+    aString[0] = char(nFeature >> 24 & 0xff);
+    aString[1] = char(nFeature >> 16 & 0xff);
+    aString[2] = char(nFeature >> 8 & 0xff);
+    aString[3] = char(nFeature >> 0 & 0xff);
 
     return OStringToOUString(aString.data(), RTL_TEXTENCODING_ASCII_US);
 }

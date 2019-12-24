@@ -2235,7 +2235,7 @@ void WinSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 
 static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
                                 UINT& rCount, UINT nMaxSize,
-                                const sal_Char* pReplace )
+                                const char* pReplace )
 {
     static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
@@ -2333,9 +2333,9 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     sal_uInt16      nCode = nKeyCode & 0x0FFF;
     sal_uLong       nSysCode2 = 0;
-    const sal_Char*   pReplace = nullptr;
+    const char*   pReplace = nullptr;
     sal_Unicode cSVCode = 0;
-    sal_Char    aFBuf[4];
+    char    aFBuf[4];
     nSysCode = 0;
 
     if ( (nCode >= KEY_0) && (nCode <= KEY_9) )
@@ -2348,19 +2348,19 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aFBuf[0] = 'F';
         if (nCode <= KEY_F9)
         {
-            aFBuf[1] = sal::static_int_cast<sal_Char>('1' + (nCode - KEY_F1));
+            aFBuf[1] = sal::static_int_cast<char>('1' + (nCode - KEY_F1));
             aFBuf[2] = 0;
         }
         else if (nCode <= KEY_F19)
         {
             aFBuf[1] = '1';
-            aFBuf[2] = sal::static_int_cast<sal_Char>('0' + (nCode - KEY_F10));
+            aFBuf[2] = sal::static_int_cast<char>('0' + (nCode - KEY_F10));
             aFBuf[3] = 0;
         }
         else
         {
             aFBuf[1] = '2';
-            aFBuf[2] = sal::static_int_cast<sal_Char>('0' + (nCode - KEY_F20));
+            aFBuf[2] = sal::static_int_cast<char>('0' + (nCode - KEY_F20));
             aFBuf[3] = 0;
         }
         pReplace = aFBuf;
