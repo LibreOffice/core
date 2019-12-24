@@ -204,7 +204,7 @@ namespace utl
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
-            const sal_Char* _pConfigLocation, const sal_Int32 _nLevels )
+            const char* _pConfigLocation, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
         implConstruct( OUString::createFromAscii( _pConfigLocation ), _nLevels );
@@ -229,7 +229,7 @@ namespace utl
             "Could not access the configuration node located at " << _rConfigLocation);
     }
 
-    void OConfigurationValueContainer::registerExchangeLocation( const sal_Char* _pRelativePath,
+    void OConfigurationValueContainer::registerExchangeLocation( const char* _pRelativePath,
         void* _pContainer, const Type& _rValueType )
     {
         // checks...

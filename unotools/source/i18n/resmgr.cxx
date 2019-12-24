@@ -112,7 +112,7 @@ static int IgnoringCrtReportHook(int reportType, wchar_t *message, int * /* retu
 
 namespace Translate
 {
-    std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
+    std::locale Create(const char* pPrefixName, const LanguageTag& rLocale)
     {
         static std::unordered_map<OString, std::locale> aCache;
         OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();

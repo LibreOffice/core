@@ -82,7 +82,7 @@ namespace utl
         OConfigurationValueContainer(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             ::osl::Mutex& _rAccessSafety,
-            const sal_Char* _pConfigLocation,
+            const char* _pConfigLocation,
             const sal_Int32 _nLevels
         );
 
@@ -104,7 +104,7 @@ namespace utl
                 is the type of your accessor. This type must be supported by the configuration.
         */
         void    registerExchangeLocation(
-            const sal_Char* _pRelativePathAscii,
+            const char* _pRelativePathAscii,
             void* _pContainer,
             const css::uno::Type& _rValueType
         );

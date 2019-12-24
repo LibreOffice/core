@@ -62,13 +62,13 @@ namespace DOM
         // add namespace definitions to attributes
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != nullptr; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : reinterpret_cast<const xmlChar*>("");
-            OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
+            OUString prefix(reinterpret_cast<const char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
             OUString name = (prefix.isEmpty())
                 ? OUString( "xmlns" ) : "xmlns:" + prefix;
             const xmlChar *pHref = pNs->href;
-            OUString val(reinterpret_cast<const sal_Char*>(pHref),
+            OUString val(reinterpret_cast<const char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
                 RTL_TEXTENCODING_UTF8);
             pAttrs->AddAttribute(name, type, val);
@@ -243,7 +243,7 @@ namespace DOM
         std::shared_ptr<xmlChar const> const pValue(
             xmlGetProp(m_aNodePtr, reinterpret_cast<xmlChar const *>(o1.getStr())), xmlFree);
         OUString const ret( pValue
-            ?   OUString(reinterpret_cast<sal_Char const*>(pValue.get()),
+            ?   OUString(reinterpret_cast<char const*>(pValue.get()),
                         strlen(reinterpret_cast<char const*>(pValue.get())),
                         RTL_TEXTENCODING_UTF8)
             :   OUString() );
@@ -326,7 +326,7 @@ namespace DOM
         if (nullptr == pValue) {
             return OUString();
         }
-        OUString const ret(reinterpret_cast<sal_Char const*>(pValue.get()),
+        OUString const ret(reinterpret_cast<char const*>(pValue.get()),
                         strlen(reinterpret_cast<char const*>(pValue.get())),
                         RTL_TEXTENCODING_UTF8);
         return ret;
@@ -620,7 +620,7 @@ namespace DOM
             aChangeType = AttrChangeType_ADDITION;
             xmlNewProp(m_aNodePtr, pName, pValue);
         } else {
-            oldValue = OUString(reinterpret_cast<sal_Char const*>(pOld.get()),
+            oldValue = OUString(reinterpret_cast<char const*>(pOld.get()),
                         strlen(reinterpret_cast<char const*>(pOld.get())),
                         RTL_TEXTENCODING_UTF8);
             xmlSetProp(m_aNodePtr, pName, pValue);
@@ -702,7 +702,7 @@ namespace DOM
             aChangeType = AttrChangeType_ADDITION;
             xmlNewNsProp(m_aNodePtr, pNs, pLName, pValue);
         } else {
-            oldValue = OUString(reinterpret_cast<sal_Char const*>(pOld.get()),
+            oldValue = OUString(reinterpret_cast<char const*>(pOld.get()),
                         strlen(reinterpret_cast<char const*>(pOld.get())),
                         RTL_TEXTENCODING_UTF8);
             xmlSetNsProp(m_aNodePtr, pNs, pLName, pValue);

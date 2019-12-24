@@ -81,7 +81,7 @@ namespace utl
         */
         OConfigurationNode  openNode(const OUString& _rPath) const throw();
 
-        OConfigurationNode  openNode( const sal_Char* _pAsciiPath ) const
+        OConfigurationNode  openNode( const char* _pAsciiPath ) const
         {
             return openNode( OUString::createFromAscii( _pAsciiPath ) );
         }
@@ -112,7 +112,7 @@ namespace utl
         */
         css::uno::Any       getNodeValue(const OUString& _rPath) const throw();
 
-        css::uno::Any       getNodeValue( const sal_Char* _pAsciiPath ) const
+        css::uno::Any       getNodeValue( const char* _pAsciiPath ) const
         {
             return getNodeValue( OUString::createFromAscii( _pAsciiPath ) );
         }
@@ -125,7 +125,7 @@ namespace utl
         */
         bool            setNodeValue(const OUString& _rPath, const css::uno::Any& _rValue) const throw();
 
-        bool            setNodeValue( const sal_Char* _pAsciiPath, const css::uno::Any& _rValue ) const
+        bool            setNodeValue( const char* _pAsciiPath, const css::uno::Any& _rValue ) const
         {
             return setNodeValue( OUString::createFromAscii( _pAsciiPath ), _rValue );
         }
