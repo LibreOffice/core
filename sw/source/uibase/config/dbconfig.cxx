@@ -22,8 +22,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <swdbdata.hxx>
 
-#include <unomid.h>
-
 using namespace utl;
 using namespace com::sun::star::uno;
 

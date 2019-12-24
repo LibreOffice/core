@@ -19,13 +19,10 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <osl/diagnose.h>
-
-#include <unomid.h>
+#include <tools/globname.hxx>
 
 #include <swtypes.hxx>
-#include <shellio.hxx>
 #include <globdoc.hxx>
 #include <strings.hrc>
 

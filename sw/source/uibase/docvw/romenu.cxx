@@ -21,19 +21,13 @@
 #include <hintids.hxx>
 
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <vcl/imap.hxx>
-#include <vcl/inetimg.hxx>
 #include <vcl/transfer.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/gallery.hxx>
 #include <svx/graphichelper.hxx>
 #include <editeng/brushitem.hxx>
 
-#include <frmatr.hxx>
-#include <fmturl.hxx>
 #include <fmtinfmt.hxx>
 #include <docsh.hxx>
 #include <view.hxx>

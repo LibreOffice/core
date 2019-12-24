@@ -17,25 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/adjustitem.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svl/urihelper.hxx>
-#include <svx/langbox.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <poolfmt.hxx>
-#include <fmtcol.hxx>
-#include <docary.hxx>
+#include <docsh.hxx>
 #include <wrtsh.hxx>
-#include <uitool.hxx>
 #include <view.hxx>
-#include <swevent.hxx>
 #include <gloshdl.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
@@ -44,18 +35,13 @@
 #include <initui.hxx>
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
-#include <docsh.hxx>
 
 #include <strings.hrc>
-#include <swerror.h>
-#include <frmmgr.hxx>
 #include <vcl/svapp.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <sfx2/event.hxx>
 #include <swabstdlg.hxx>
-
-#include <IDocumentFieldsAccess.hxx>
 
 #include <memory>
 

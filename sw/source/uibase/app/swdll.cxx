@@ -26,7 +26,6 @@
 #include <globdoc.hxx>
 #include <initui.hxx>
 #include <swmodule.hxx>
-#include <swtypes.hxx>
 #include <init.hxx>
 #include <dobjfac.hxx>
 
@@ -42,7 +41,6 @@
 #include <editeng/acorrcfg.hxx>
 
 #include <swacorr.hxx>
-#include <unomid.h>
 #include <swabstdlg.hxx>
 
 #include "swdllimpl.hxx"

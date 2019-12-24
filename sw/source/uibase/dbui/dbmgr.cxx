@@ -20,11 +20,9 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstdarg>
 
 #include <unotxdoc.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/printer.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -42,22 +40,17 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vcl/errinf.hxx>
+#include <vcl/print.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <dbconfig.hxx>
-#include <pagedesc.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
 #include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/oldprintadaptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/progress.hxx>
@@ -69,27 +62,16 @@
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
-#include <initui.hxx>
-#include <swundo.hxx>
-#include <flddat.hxx>
-#include <modcfg.hxx>
-#include <shellio.hxx>
 #include <dbui.hxx>
 #include <dbmgr.hxx>
 #include <doc.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
-#include <IDocumentContentOperations.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
-#include <dbui.hrc>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <mmconfigitem.hxx>
-#include <sfx2/request.hxx>
-#include <hintids.hxx>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -109,7 +91,6 @@
 #include <svtools/htmlcfg.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -124,19 +105,12 @@
 #include <rtl/tencinfo.h>
 #include <cppuhelper/implbase.hxx>
 #include <ndindex.hxx>
-#include <pam.hxx>
-#include <swcrsr.hxx>
 #include <swevent.hxx>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <swabstdlg.hxx>
-#include <fmthdft.hxx>
 #include <vector>
-#include <unomid.h>
 #include <section.hxx>
 #include <rootfrm.hxx>
-#include <fmtpdsc.hxx>
-#include <ndtxt.hxx>
 #include <calc.hxx>
 #include <dbfld.hxx>
 #include <IDocumentState.hxx>
@@ -146,7 +120,6 @@
 
 #include <memory>
 #include <comphelper/propertysequence.hxx>
-#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw;

@@ -30,7 +30,6 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 
 namespace sw { namespace sidebarwindows {
 

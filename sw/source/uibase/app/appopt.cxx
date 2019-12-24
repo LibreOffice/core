@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <hintids.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -33,15 +32,10 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svx/optgrid.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <fontcfg.hxx>
-#include <optload.hxx>
-#include <optcomp.hxx>
-#include <edtwin.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <doc.hxx>
@@ -49,26 +43,17 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <uitool.hxx>
-#include <initui.hxx>
-#include <fldbas.hxx>
 #include <wview.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <pview.hxx>
 #include <usrpref.hxx>
-#include <modcfg.hxx>
-#include <glosdoc.hxx>
 #include <uiitems.hxx>
 #include <editeng/langitem.hxx>
 #include <unotools/lingucfg.hxx>
-#include <editeng/unolingu.hxx>
 #include <globals.hrc>
-#include <globals.h>
-#include <svl/slstitm.hxx>
 #include <swabstdlg.hxx>
 #include <swwrtshitem.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

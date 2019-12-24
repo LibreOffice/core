@@ -20,8 +20,6 @@
 #include <config_features.h>
 
 #include <hintids.hxx>
-#include <swerror.h>
-#include <vcl/graph.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <unotools/resmgr.hxx>
@@ -31,7 +29,6 @@
 #include <svx/TextCharacterSpacingPopup.hxx>
 #include <svx/TextUnderlinePopup.hxx>
 #include <svx/ParaSpacingControl.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
@@ -46,14 +43,12 @@
 #include <svx/fontwork.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svx/grafctrl.hxx>
-#include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/modctrl.hxx>
-#include <svx/svxids.hrc>
 #include <sfx2/emojipopup.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
@@ -63,14 +58,10 @@
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
-#include <swevent.hxx>
 #include <cmdid.h>
-#include <dobjfac.hxx>
-#include <init.hxx>
 #include <pview.hxx>
 #include <wview.hxx>
 #include <wdocsh.hxx>
-#include <globdoc.hxx>
 #include <srcview.hxx>
 #include <glshell.hxx>
 #include <tabsh.hxx>
@@ -90,7 +81,6 @@
 #include <wlistsh.hxx>
 #include <wtabsh.hxx>
 #include <navipi.hxx>
-#include <chartins.hxx>
 #include <inputwin.hxx>
 #include <usrpref.hxx>
 #include <uinums.hxx>
@@ -108,7 +98,6 @@
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <sfx2/evntconf.hxx>
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
 #include <wordcountdialog.hxx>
@@ -140,8 +129,6 @@ bool     g_bNoInterrupt     = false;
 #include <sfx2/app.hxx>
 
 #include <svx/svxerr.hxx>
-
-#include <unomid.h>
 
 #include "swdllimpl.hxx"
 #include <dbconfig.hxx>

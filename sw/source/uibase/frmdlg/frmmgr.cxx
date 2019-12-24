@@ -21,15 +21,12 @@
 #include <hintids.hxx>
 
 #include <svl/stritem.hxx>
-#include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/opaqitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/xdef.hxx>
-#include <svx/svxids.hrc>
 #include <fmtclds.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>

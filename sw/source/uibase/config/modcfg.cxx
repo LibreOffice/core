@@ -18,25 +18,18 @@
  */
 
 #include <memory>
-#include <hintids.hxx>
 #include <comphelper/classids.hxx>
 #include <o3tl/any.hxx>
-#include <tools/stream.hxx>
 #include <tools/fontenum.hxx>
-#include <vcl/svapp.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>
+#include <editeng/editids.hrc>
 #include <osl/diagnose.h>
 
 #include <tools/mapunit.hxx>
 #include <tools/globname.hxx>
-#include <swtypes.hxx>
 #include <itabenum.hxx>
 #include <modcfg.hxx>
-#include <fldupde.hxx>
 #include <caption.hxx>
-
-#include <unomid.h>
 
 using namespace com::sun::star::uno;
 

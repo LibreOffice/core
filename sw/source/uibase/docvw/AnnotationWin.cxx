@@ -23,7 +23,6 @@
 #include <PostItMgr.hxx>
 
 #include <strings.hrc>
-#include <cmdid.h>
 
 #include <vcl/edit.hxx>
 #include <vcl/menu.hxx>

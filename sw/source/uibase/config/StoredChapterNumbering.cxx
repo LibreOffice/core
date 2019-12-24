@@ -13,7 +13,6 @@
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -32,7 +31,6 @@
 #include <xmloff/xmlnumi.hxx>
 
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <unosett.hxx>

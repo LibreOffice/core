@@ -20,15 +20,12 @@
 #include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 
-#include <svx/svxids.hrc>
-#include <editeng/svxenum.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/svxacorr.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/region.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <swmodule.hxx>
-#include <swtypes.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
 #include <swrect.hxx>
