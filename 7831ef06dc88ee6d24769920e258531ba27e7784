@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7c97a3_7f940345",
+        "filename": "framework/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-12-24T04:55:44Z",
+      "side": 1,
+      "message": "Remove the CamelCase: “Undock”.",
+      "range": {
+        "startLine": 30,
+        "startChar": 87,
+        "endLine": 30,
+        "endChar": 94
+      },
+      "revId": "7831ef06dc88ee6d24769920e258531ba27e7784",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
