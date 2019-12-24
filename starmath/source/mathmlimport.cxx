@@ -23,7 +23,7 @@ into one string, xml parser hands them to us line by line rather than all in
 one go*/
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -264,13 +264,13 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
+    Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(rxContext);
 
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= rPropSet;
 
     // get filter
-    Reference< xml::sax::XDocumentHandler > xFilter(
+    Reference< xml::sax::XFastDocumentHandler > xFilter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             OUString::createFromAscii(pFilterName), aArgs, rxContext),
         UNO_QUERY );
@@ -279,7 +279,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
         return nError;
 
     // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
+    xParser->setFastDocumentHandler( xFilter );
 
     // connect model and filter
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
