@@ -30,7 +30,7 @@
 */
 struct XMLPropertyMapEntry
 {
-    const sal_Char* msApiName;      /// Property-Name
+    const char*     msApiName;      /// Property-Name
     sal_Int32       nApiNameLength; /// length of property name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */

@@ -910,17 +910,17 @@ static const XMLTokenEnum* aTypeLevelNameMap[] =
     aLevelNameBibliographyMap   // bibliography
 };
 
-static const sal_Char* aLevelStylePropNameTOCMap[] =
+static const char* aLevelStylePropNameTOCMap[] =
     { nullptr, "ParaStyleLevel1", "ParaStyleLevel2", "ParaStyleLevel3",
           "ParaStyleLevel4", "ParaStyleLevel5", "ParaStyleLevel6",
           "ParaStyleLevel7", "ParaStyleLevel8", "ParaStyleLevel9",
           "ParaStyleLevel10", nullptr };
-static const sal_Char* aLevelStylePropNameTableMap[] =
+static const char* aLevelStylePropNameTableMap[] =
     { nullptr, "ParaStyleLevel1", nullptr };
-static const sal_Char* aLevelStylePropNameAlphaMap[] =
+static const char* aLevelStylePropNameAlphaMap[] =
     { nullptr, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
           "ParaStyleLevel3", nullptr };
-static const sal_Char* aLevelStylePropNameBibliographyMap[] =
+static const char* aLevelStylePropNameBibliographyMap[] =
           // TODO: replace with real property names, when available
     { nullptr, "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
           "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
@@ -932,7 +932,7 @@ static const sal_Char* aLevelStylePropNameBibliographyMap[] =
           "ParaStyleLevel1",
           nullptr };
 
-static const sal_Char** aTypeLevelStylePropNameMap[] =
+static const char** aTypeLevelStylePropNameMap[] =
 {
     aLevelStylePropNameTOCMap,          // TOC
     aLevelStylePropNameTableMap,        // table index
@@ -1007,7 +1007,7 @@ bool XMLSectionExport::ExportIndexTemplate(
         }
 
         // paragraph level style name
-        const sal_Char* pPropName(
+        const char* pPropName(
             aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
         OSL_ENSURE(nullptr != pPropName, "can't find property name");
         if (nullptr != pPropName)

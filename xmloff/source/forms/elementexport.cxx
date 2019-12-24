@@ -139,7 +139,7 @@ namespace xmloff
         exportEvents();
     }
 
-    void OElementExport::implStartElement(const sal_Char* _pName)
+    void OElementExport::implStartElement(const char* _pName)
     {
         m_pXMLElement = std::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
     }
@@ -732,8 +732,8 @@ namespace xmloff
 
         if ((CCAFlags::CurrentValue | CCAFlags::Value) & m_nIncludeCommon)
         {
-            const sal_Char* pCurrentValuePropertyName = nullptr;
-            const sal_Char* pValuePropertyName = nullptr;
+            const char* pCurrentValuePropertyName = nullptr;
+            const char* pValuePropertyName = nullptr;
 
             // get the property names
             getValuePropertyNames(m_eType, m_nClassId, pCurrentValuePropertyName, pValuePropertyName);
@@ -741,7 +741,7 @@ namespace xmloff
             // add the attributes if necessary and possible
             if (pCurrentValuePropertyName && (CCAFlags::CurrentValue & m_nIncludeCommon))
             {
-                static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
+                static const char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
                 // don't export the current-value if this value originates from a data binding
                 // #i26944#
                 if ( controlHasActiveDataBinding() )
@@ -759,7 +759,7 @@ namespace xmloff
 
             if (pValuePropertyName && (CCAFlags::Value & m_nIncludeCommon))
             {
-                static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
+                static const char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
                 static const sal_uInt16 nValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Value);
                 exportGenericPropertyAttribute(
                     nValueAttributeNamespaceKey,
@@ -1153,8 +1153,8 @@ namespace xmloff
             // need to export the min value and the max value as attributes
             // It depends on the real type (FormComponentType) of the control, which properties hold these
             // values
-            const sal_Char* pMinValuePropertyName = nullptr;
-            const sal_Char* pMaxValuePropertyName = nullptr;
+            const char* pMinValuePropertyName = nullptr;
+            const char* pMaxValuePropertyName = nullptr;
             getValueLimitPropertyNames(m_nClassId, pMinValuePropertyName, pMaxValuePropertyName);
 
             OSL_ENSURE((nullptr == pMinValuePropertyName) == (SCAFlags::NONE == (SCAFlags::MinValue & m_nIncludeSpecial)),
@@ -1163,8 +1163,8 @@ namespace xmloff
                 "OControlExport::exportCommonControlAttributes: no property found for the max value attribute!");
 
             // add the two attributes
-            static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
-            static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
+            static const char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
+            static const char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
             static const sal_uInt16 nMinValueNamespaceKey = OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags::MinValue);
             static const sal_uInt16 nMaxValueNamespaceKey = OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags::MaxValue);
 
@@ -1361,10 +1361,10 @@ namespace xmloff
         }
     }
 
-    void OControlExport::implStartElement(const sal_Char* _pName)
+    void OControlExport::implStartElement(const char* _pName)
     {
         // before we let the base class start it's outer element, we add a wrapper element
-        const sal_Char *pOuterElementName = getOuterXMLElementName();
+        const char *pOuterElementName = getOuterXMLElementName();
         if (pOuterElementName)
             m_pOuterElement = std::make_unique<SvXMLElementExport>(
                                         m_rContext.getGlobalContext(),
@@ -1388,12 +1388,12 @@ namespace xmloff
         m_pOuterElement.reset();
     }
 
-    const sal_Char* OControlExport::getOuterXMLElementName() const
+    const char* OControlExport::getOuterXMLElementName() const
     {
         return nullptr;
     }
 
-    const sal_Char* OControlExport::getXMLElementName() const
+    const char* OControlExport::getXMLElementName() const
     {
         return getElementName(m_eType);
     }
@@ -1953,7 +1953,7 @@ namespace xmloff
 
     }
 
-    const sal_Char* OColumnExport::getOuterXMLElementName() const
+    const char* OColumnExport::getOuterXMLElementName() const
     {
         return "column";
     }
@@ -2002,7 +2002,7 @@ namespace xmloff
         OSL_ENSURE(m_xProps.is(), "OFormExport::OFormExport: invalid arguments!");
     }
 
-    const sal_Char* OFormExport::getXMLElementName() const
+    const char* OFormExport::getXMLElementName() const
     {
         return "form";
     }

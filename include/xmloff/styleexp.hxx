@@ -83,7 +83,7 @@ public:
 //      const OUString* pPrefix = 0);
 
 //  void exportStyleFamily(
-//      const sal_Char *pFamily, const OUString& rXMLFamily,
+//      const char *pFamily, const OUString& rXMLFamily,
 //      const rtl::Reference < XMLPropertySetMapper >& rPropMapper,
 //      bool bUsed, sal_uInt16 nFamily = 0,
 //      const OUString* pPrefix = 0);
@@ -100,7 +100,7 @@ public:
         const OUString* pPrefix = nullptr);
 
     void exportStyleFamily(
-        const sal_Char *pFamily, const OUString& rXMLFamily,
+        const char *pFamily, const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
         bool bUsed, sal_uInt16 nFamily,
         const OUString* pPrefix = nullptr);

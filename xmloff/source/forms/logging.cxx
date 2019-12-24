@@ -24,7 +24,7 @@ namespace xmloff
 
 #ifdef TIMELOG
     //= OStackedLogging
-    void OStackedLogging::enterContext( const sal_Char* _pContextName )
+    void OStackedLogging::enterContext( const char* _pContextName )
     {
         m_aLogger.push( new ::rtl::Logfile( _pContextName ) );
     }

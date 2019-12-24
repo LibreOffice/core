@@ -610,7 +610,7 @@ void XMLRedlineExport::WriteComment(const OUString& rComment)
     {
         // iterate over all string-pieces separated by return (0x0a) and
         // put each inside a paragraph element.
-        SvXMLTokenEnumerator aEnumerator(rComment, sal_Char(0x0a));
+        SvXMLTokenEnumerator aEnumerator(rComment, char(0x0a));
         OUString aSubString;
         while (aEnumerator.getNextToken(aSubString))
         {

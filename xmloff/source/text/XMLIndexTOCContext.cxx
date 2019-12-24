@@ -57,7 +57,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::IllegalArgumentException;
 
 
-static const sal_Char* aIndexServiceMap[] =
+static const char* aIndexServiceMap[] =
 {
     "com.sun.star.text.ContentIndex",
     "com.sun.star.text.DocumentIndex",

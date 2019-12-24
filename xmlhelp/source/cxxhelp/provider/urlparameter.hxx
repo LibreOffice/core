@@ -35,7 +35,7 @@ namespace chelp {
     {
     public:
 
-        explicit DbtToStringConverter( const sal_Char* ptr )
+        explicit DbtToStringConverter( const char* ptr )
             : m_ptr( ptr )
         {
         }
@@ -86,11 +86,11 @@ namespace chelp {
 
             //fdo#82025 - use strlen instead of stored length byte to determine string len
             //There is a one byte length field at m_ptr[2 + m_ptr[0] +  m_ptr[1
-            //+ m_ptr[0]]] but by default sal_Char is signed so anything larger
+            //+ m_ptr[0]]] but by default char is signed so anything larger
             //than 127 defaults to a negative value, casting it would allow up
             //to 255 but instead make use of the null termination to avoid
             //running into a later problem with strings >= 255
-            const sal_Char* pTitle = m_ptr + 3 + m_ptr[0] +  static_cast<sal_Int32>(m_ptr[ 1+ static_cast<sal_Int32>(m_ptr[0]) ]);
+            const char* pTitle = m_ptr + 3 + m_ptr[0] +  static_cast<sal_Int32>(m_ptr[ 1+ static_cast<sal_Int32>(m_ptr[0]) ]);
 
             return OUString(pTitle, rtl_str_getLength(pTitle), RTL_TEXTENCODING_UTF8);
         }
@@ -98,7 +98,7 @@ namespace chelp {
 
     private:
 
-        const sal_Char* m_ptr;
+        const char* m_ptr;
 
     };
 

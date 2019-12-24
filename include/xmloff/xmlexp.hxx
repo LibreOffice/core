@@ -335,9 +335,9 @@ public:
     void ClearAttrList();
 
     // Add an attribute to the common attribute list.
-    void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName,
-                            const sal_Char *pValue );
-    void AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName,
+    void AddAttributeASCII( sal_uInt16 nPrefix, const char *pName,
+                            const char *pValue );
+    void AddAttribute( sal_uInt16 nPrefix, const char *pName,
                        const OUString& rValue );
     void AddAttribute( sal_uInt16 nPrefix, const OUString& rName,
                        const OUString& rValue );
@@ -649,7 +649,7 @@ public:
     // The constructor prints a start tag that has the common attributes
     // of the XMLExport instance attached.
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
-                        const sal_Char *pName,
+                        const char *pName,
                         bool bIgnWSOutside, bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
                         const OUString& rName,

@@ -30,7 +30,7 @@ namespace xmloff
     //= OValuePropertiesMetaData
     void OValuePropertiesMetaData::getValuePropertyNames(
             OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
-            sal_Char const * & _rpCurrentValuePropertyName, sal_Char const * & _rpValuePropertyName)
+            char const * & _rpCurrentValuePropertyName, char const * & _rpValuePropertyName)
     {
         // reset the pointers in case we can't determine the property names
         _rpCurrentValuePropertyName = _rpValuePropertyName = nullptr;
@@ -92,7 +92,7 @@ namespace xmloff
     }
 
     void OValuePropertiesMetaData::getValueLimitPropertyNames(sal_Int16 _nFormComponentType,
-        sal_Char const * & _rpMinValuePropertyName, sal_Char const * & _rpMaxValuePropertyName)
+        char const * & _rpMinValuePropertyName, char const * & _rpMaxValuePropertyName)
     {
         _rpMinValuePropertyName = _rpMaxValuePropertyName = nullptr;
         switch (_nFormComponentType)
@@ -126,7 +126,7 @@ namespace xmloff
 
     void OValuePropertiesMetaData::getRuntimeValuePropertyNames(
         OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
-        sal_Char const * & _rpValuePropertyName, sal_Char const * & _rpDefaultValuePropertyName )
+        char const * & _rpValuePropertyName, char const * & _rpDefaultValuePropertyName )
     {
         // reset the pointers in case we can't determine the property names
         _rpValuePropertyName = _rpDefaultValuePropertyName = nullptr;

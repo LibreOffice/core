@@ -50,18 +50,18 @@
 
 
 // service names
-static const sal_Char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
-static const sal_Char sAPI_get_expression[]     = "GetExpression";
-static const sal_Char sAPI_set_expression[]     = "SetExpression";
-static const sal_Char sAPI_user[]               = "User";
-static const sal_Char sAPI_database[]           = "com.sun.star.text.TextField.Database";
+static const char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
+static const char sAPI_get_expression[]     = "GetExpression";
+static const char sAPI_set_expression[]     = "SetExpression";
+static const char sAPI_user[]               = "User";
+static const char sAPI_database[]           = "com.sun.star.text.TextField.Database";
 
 // property names
-static const sal_Char sAPI_content[]            = "Content";
-static const sal_Char sAPI_sub_type[]           = "SubType";
-static const sal_Char sAPI_number_format[]      = "NumberFormat";
-static const sal_Char sAPI_is_visible[]         = "IsVisible";
-static const sal_Char sAPI_current_presentation[]   = "CurrentPresentation";
+static const char sAPI_content[]            = "Content";
+static const char sAPI_sub_type[]           = "SubType";
+static const char sAPI_number_format[]      = "NumberFormat";
+static const char sAPI_is_visible[]         = "IsVisible";
+static const char sAPI_current_presentation[]   = "CurrentPresentation";
 
 
 using namespace ::com::sun::star;
@@ -77,7 +77,7 @@ using namespace ::xmloff::token;
 
 XMLVarFieldImportContext::XMLVarFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const sal_Char* pServiceName, sal_uInt16 nPrfx,
+    const char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName,
     bool bFormula, bool bFormulaDefault,
     bool bDescription, bool bHelp, bool bHint, bool bVisible,
@@ -244,7 +244,7 @@ void XMLVarFieldImportContext::PrepareField(
 
 XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const sal_Char* pServiceName, sal_uInt16 nPrfx,
+    const char* pServiceName, sal_uInt16 nPrfx,
     const OUString& rLocalName, VarType eVarType,
     bool bFormula, bool bFormulaDefault,
     bool bDescription, bool bHelp, bool bHint, bool bVisible, bool bIsDisplayFormula,
@@ -754,7 +754,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 }
                 case XML_TOK_TEXTFIELD_NUMBERING_SEPARATOR:
                     cSeparationChar =
-                        static_cast<sal_Char>(xAttrList->getValueByIndex(i).toChar());
+                        static_cast<char>(xAttrList->getValueByIndex(i).toChar());
                     break;
 
                 default:

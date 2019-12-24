@@ -1315,7 +1315,7 @@ void SdXMLExport::ImpPrepDrawPageInfos()
     }
 }
 
-static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, const sal_Char* pPrefix )
+static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, const char* pPrefix )
 {
     // search rVector if there is already a string that equals rText
     auto aIter = std::find(rVector.begin(), rVector.end(), rText);
@@ -1330,7 +1330,7 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
     return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
-static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
+static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const char* pPrefix )
 {
     // search rVector if there is already a DateTimeDeclImpl with rText,bFixed and nFormat
     auto aIter = std::find_if(rVector.begin(), rVector.end(),
@@ -1356,9 +1356,9 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
 }
 
-static const sal_Char gpStrHeaderTextPrefix[] = "hdr";
-static const sal_Char gpStrFooterTextPrefix[] = "ftr";
-static const sal_Char gpStrDateTimeTextPrefix[] = "dtd";
+static const char gpStrHeaderTextPrefix[] = "hdr";
+static const char gpStrFooterTextPrefix[] = "ftr";
+static const char gpStrDateTimeTextPrefix[] = "dtd";
 
 HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
 {
