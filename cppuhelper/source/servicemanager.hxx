@@ -88,18 +88,15 @@ public:
             explicit ImplementationInfo(OUString const & theName):
                 name(theName) {}
 
-            ImplementationInfo(const ImplementationInfo&) = delete;
-            const ImplementationInfo& operator=(const ImplementationInfo&) = delete;
-
-            OUString const name;
-            OUString const loader;
-            OUString const uri;
-            OUString const environment;
-            OUString const constructor;
-            OUString const prefix;
-            css::uno::Reference< css::uno::XComponentContext > const
+            OUString name;
+            OUString loader;
+            OUString uri;
+            OUString environment;
+            OUString constructor;
+            OUString prefix;
+            css::uno::Reference< css::uno::XComponentContext >
                 alienContext;
-            OUString const rdbFile;
+            OUString rdbFile;
             std::vector< OUString > services;
             std::vector< OUString > singletons;
         };
@@ -113,8 +110,7 @@ public:
                 css::uno::Reference< css::uno::XComponentContext > const &
                     alienContext,
                 OUString const & rdbFile):
-                info(
-                    new ImplementationInfo(
+                info( ImplementationInfo(
                         name, loader, uri, environment, constructorName, prefix,
                         alienContext, rdbFile)),
                 constructor(nullptr), status(STATUS_NEW), dispose(true)
@@ -128,7 +124,7 @@ public:
                     theFactory2,
                 css::uno::Reference< css::lang::XComponent > const &
                     theComponent):
-                info(new ImplementationInfo(name)), constructor(nullptr),
+                info(ImplementationInfo(name)), constructor(nullptr),
                 factory1(theFactory1), factory2(theFactory2),
                 component(theComponent), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }
@@ -161,7 +157,7 @@ public:
             // ImplementationWrapper---also due to a
             // ServiceManager::createContentEnumeration call---and will be
             // loaded later).
-            std::shared_ptr< ImplementationInfo > info;
+            ImplementationInfo info;
             WrapperConstructorFn constructor;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
             css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
