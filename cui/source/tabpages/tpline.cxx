@@ -60,7 +60,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
-#include <vcl/settings.hxx>
 #include <cuitabarea.hxx>
 #include <svtools/unitconv.hxx>
 

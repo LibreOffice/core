@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>

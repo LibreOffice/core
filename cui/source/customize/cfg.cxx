@@ -39,7 +39,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -61,7 +60,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

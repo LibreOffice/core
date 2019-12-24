@@ -21,14 +21,12 @@
 
 #include <bitset>
 
-#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <editeng/editids.hrc>
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <svx/colorbox.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
