@@ -22,6 +22,30 @@
       "revId": "0441cd2a87e3a4866304141eb6e4f49ecd7a8ed2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f7c97a3_1f194fd6",
+        "filename": "cui/uiconfig/ui/accelconfigpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-12-24T09:35:01Z",
+      "side": 1,
+      "message": "It\u0027s required for gtk to send query_tooltip signal\n\nhttps://developer.gnome.org/gtk3/stable/GtkTooltip.html",
+      "parentUuid": "5f7c97a3_df399741",
+      "range": {
+        "startLine": 436,
+        "startChar": 44,
+        "endLine": 436,
+        "endChar": 55
+      },
+      "revId": "0441cd2a87e3a4866304141eb6e4f49ecd7a8ed2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
