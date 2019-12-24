@@ -552,6 +552,10 @@ The following structure describes the permissions used in PDF security
 
         /* decides the PDF language level to be produced */
         PDFVersion                      Version;
+
+        /* PDF/UA compliance */
+        bool UniversalAccessibilityCompliance;
+
         /* valid for PDF >= 1.4
            causes the MarkInfo entry in the document catalog to be set
         */
