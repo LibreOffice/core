@@ -39,7 +39,7 @@ namespace xmlscript
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * xmlscript_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+        const char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, ::xmlscript::s_entries );

@@ -40,7 +40,7 @@ namespace xmloff
         OStackedLogging() { }
 
     protected:
-        void    enterContext( const sal_Char* _pContextName );
+        void    enterContext( const char* _pContextName );
         void    leaveTopContext( );
     };
 

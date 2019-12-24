@@ -40,8 +40,8 @@ namespace xmloff
         static void getValuePropertyNames(
             OControlElement::ElementType _eType,
             sal_Int16 _nFormComponentType,
-            sal_Char const * & _rpCurrentValuePropertyName,
-            sal_Char const * & _rpValuePropertyName);
+            char const * & _rpCurrentValuePropertyName,
+            char const * & _rpValuePropertyName);
 
         /** calculate the property names for the <em>min-value</em> and the <em>max-value</em> attribute.
 
@@ -50,8 +50,8 @@ namespace xmloff
         */
         static void getValueLimitPropertyNames(
             sal_Int16 _nFormComponentType,
-            sal_Char const * & _rpMinValuePropertyName,
-            sal_Char const * & _rpMaxValuePropertyName);
+            char const * & _rpMinValuePropertyName,
+            char const * & _rpMaxValuePropertyName);
 
         /** calculate the names of the properties which, at runtime, are used for <em>value</em> and
             <em>default value</em>.
@@ -59,8 +59,8 @@ namespace xmloff
         static void getRuntimeValuePropertyNames(
             OControlElement::ElementType _eType,
             sal_Int16 _nFormComponentType,
-            sal_Char const * & _rpValuePropertyName,
-            sal_Char const * & _rpDefaultValuePropertyName);
+            char const * & _rpValuePropertyName,
+            char const * & _rpDefaultValuePropertyName);
     };
 
 }   // namespace xmloff

@@ -235,7 +235,7 @@ namespace xmloff
         }
     }
 
-    void OPropertyExport::exportStringPropertyAttribute( const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportStringPropertyAttribute( const sal_uInt16 _nNamespaceKey, const char* _pAttributeName,
             const OUString& _rPropertyName )
     {
         DBG_CHECK_PROPERTY( _rPropertyName, OUString );
@@ -257,7 +257,7 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const char* _pAttributeName,
             const OUString& _rPropertyName, const BoolAttrFlags _nBooleanAttributeFlags)
     {
         DBG_CHECK_PROPERTY_NO_TYPE( _rPropertyName );
@@ -295,7 +295,7 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    void OPropertyExport::exportInt16PropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportInt16PropertyAttribute(const sal_uInt16 _nNamespaceKey, const char* _pAttributeName,
         const OUString& _rPropertyName, const sal_Int16 _nDefault, bool force)
     {
         DBG_CHECK_PROPERTY( _rPropertyName, sal_Int16 );
@@ -315,7 +315,7 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    void OPropertyExport::exportInt32PropertyAttribute( const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportInt32PropertyAttribute( const sal_uInt16 _nNamespaceKey, const char* _pAttributeName,
         const OUString& _rPropertyName, const sal_Int32 _nDefault )
     {
         DBG_CHECK_PROPERTY( _rPropertyName, sal_Int32 );
@@ -336,7 +336,7 @@ namespace xmloff
     }
 
     void OPropertyExport::exportEnumPropertyAttributeImpl(
-            const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+            const sal_uInt16 _nNamespaceKey, const char* _pAttributeName,
             const OUString &rPropertyName, const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
             const sal_uInt16 _nDefault, const bool _bVoidDefault)
     {
@@ -441,7 +441,7 @@ namespace xmloff
     }
 
     void OPropertyExport::exportGenericPropertyAttribute(
-            const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName, const sal_Char* _pPropertyName)
+            const sal_uInt16 _nAttributeNamespaceKey, const char* _pAttributeName, const char* _pPropertyName)
     {
         DBG_CHECK_PROPERTY_ASCII_NO_TYPE( _pPropertyName );
 
@@ -468,7 +468,7 @@ namespace xmloff
         AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sValue);
     }
 
-    void OPropertyExport::exportStringSequenceAttribute(const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName,
+    void OPropertyExport::exportStringSequenceAttribute(const sal_uInt16 _nAttributeNamespaceKey, const char* _pAttributeName,
         const OUString& _rPropertyName)
     {
         const sal_Unicode _aListSeparator = ',';
@@ -625,7 +625,7 @@ namespace xmloff
     }
 
 #ifdef DBG_UTIL
-    void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const OUString& _rValue)
+    void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, const char* _pName, const OUString& _rValue)
     {
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(OUString::createFromAscii(_pName)).isEmpty(),
             "OPropertyExport::AddAttribute: already have such an attribute");

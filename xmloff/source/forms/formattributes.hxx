@@ -182,7 +182,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the CCA_* constants.
         */
-        static const sal_Char* getCommonControlAttributeName(CCAFlags _nId);
+        static const char* getCommonControlAttributeName(CCAFlags _nId);
 
         /** calculates the xml namespace key to use for a common control attribute
             @param _nId
@@ -194,7 +194,7 @@ namespace xmloff
             @param  _eAttrib
                 enum value specifying the attribute
         */
-        static const sal_Char* getFormAttributeName(FormAttributes _eAttrib);
+        static const char* getFormAttributeName(FormAttributes _eAttrib);
 
         /** calculates the xml namespace key to use for an attribute of a form xml representation
             @param  _eAttrib
@@ -206,7 +206,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static const sal_Char* getDatabaseAttributeName(DAFlags _nId);
+        static const char* getDatabaseAttributeName(DAFlags _nId);
 
         /** calculates the xml namespace key to use for a database attribute.
             @param _nId
@@ -222,13 +222,13 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the SCA_* constants.
         */
-        static const sal_Char* getSpecialAttributeName(SCAFlags _nId);
+        static const char* getSpecialAttributeName(SCAFlags _nId);
 
         /** calculates the xml attribute representation of a binding attribute.
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static const sal_Char* getBindingAttributeName(BAFlags _nId);
+        static const char* getBindingAttributeName(BAFlags _nId);
 
         /** calculates the xml namespace key to use for a binding attribute.
             @param _nId
@@ -250,7 +250,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute
         */
-        static const sal_Char* getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
+        static const char* getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
 
         /** calculates the xml namedspace key of an attribute of the office:forms element
             @param _nId
@@ -313,7 +313,7 @@ namespace xmloff
                 the name of the property assigned to the attribute
         */
         void    addStringProperty(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName);
+            const char* _pAttributeName, const OUString& _rPropertyName);
 
         /** add an attribute assignment referring to a boolean property to the map
 
@@ -328,7 +328,7 @@ namespace xmloff
                 if <FALSE/>, the attribute value is used as property value directly
         */
         void    addBooleanProperty(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const char* _pAttributeName, const OUString& _rPropertyName,
             const bool _bAttributeDefault, const bool _bInverseSemantics = false);
 
         /** add an attribute assignment referring to an int16 property to the map
@@ -339,7 +339,7 @@ namespace xmloff
                 the name of the property assigned to the attribute
         */
         void    addInt16Property(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName);
+            const char* _pAttributeName, const OUString& _rPropertyName);
 
         /** add an attribute assignment referring to an int32 property to the map
 
@@ -349,7 +349,7 @@ namespace xmloff
                 the name of the property assigned to the attribute
         */
         void    addInt32Property(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName );
+            const char* _pAttributeName, const OUString& _rPropertyName );
 
         /** add an attribute assignment referring to an enum property to the map
 
@@ -364,7 +364,7 @@ namespace xmloff
         */
         template<typename EnumT>
         void    addEnumProperty(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const char* _pAttributeName, const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<EnumT>* _pValueMap,
             const css::uno::Type* _pType = nullptr)
         {
@@ -374,12 +374,12 @@ namespace xmloff
 
     private:
         void addEnumPropertyImpl(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const char* _pAttributeName, const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
             const css::uno::Type* _pType);
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const char* _pAttributeName, const OUString& _rPropertyName,
             const css::uno::Type& _rType);
     };
 }   // namespace xmloff

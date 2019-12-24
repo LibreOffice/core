@@ -120,7 +120,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> const & xMap,
-        const sal_Char* pServiceName);
+        const char* pServiceName);
 
     void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -149,7 +149,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     Reference<XIndexContainer> const & xMap,
-    const sal_Char* pServiceName) :
+    const char* pServiceName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         xImageMap(xMap),
         bIsActive(true),

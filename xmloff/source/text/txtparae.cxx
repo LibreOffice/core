@@ -347,7 +347,7 @@ static bool txtparae_bContainsIllegalCharacters = false;
 // For the export pass all properties can be queried using a multi property
 // set.
 
-static const sal_Char* aParagraphPropertyNamesAuto[] =
+static const char* aParagraphPropertyNamesAuto[] =
 {
     "NumberingRules",
     "ParaConditionalStyleName",
@@ -366,7 +366,7 @@ enum eParagraphPropertyNamesEnumAuto
 
 }
 
-static const sal_Char* aParagraphPropertyNames[] =
+static const char* aParagraphPropertyNames[] =
 {
     "NumberingIsNumber",
     "NumberingStyleName",

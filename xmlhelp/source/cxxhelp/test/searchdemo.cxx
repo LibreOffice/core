@@ -43,7 +43,7 @@ void print_rtl_OUString( const OUString bla )
 {
     OString bluber = OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
     char* bluberChr = new char[ 1+bluber.getLength() ];
-    const sal_Char* jux = bluber.getStr();
+    const char* jux = bluber.getStr();
 
     for( int i = 0; i < bluber.getLength(); ++i )
         bluberChr[i] = jux[i];

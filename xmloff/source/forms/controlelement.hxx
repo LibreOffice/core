@@ -72,7 +72,7 @@ namespace xmloff
             @param  _eType
                 the element type
         */
-        static const sal_Char* getElementName(ElementType _eType);
+        static const char* getElementName(ElementType _eType);
     };
 
 }   // namespace xmloff

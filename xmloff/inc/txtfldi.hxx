@@ -126,7 +126,7 @@ public:
     XMLTextFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
-        const sal_Char* pService,               /// name of SO API service
+        const char* pService,               /// name of SO API service
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
@@ -405,7 +405,7 @@ protected:
     /// protected constructor: only for subclasses
     XMLDatabaseFieldImportContext(SvXMLImport& rImport,
                                   XMLTextImportHelper& rHlp,
-                                  const sal_Char* pServiceName,
+                                  const char* pServiceName,
                                   sal_uInt16 nPrfx,
                                   const OUString& sLocalName,
                                   bool bUseDisplay );
@@ -454,7 +454,7 @@ protected:
     // for use in child classes
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
-                                 const sal_Char* pServiceName,
+                                 const char* pServiceName,
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName);
 
@@ -556,7 +556,7 @@ protected:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
-    static const sal_Char* MapTokenToServiceName(sal_uInt16 nToken);
+    static const char* MapTokenToServiceName(sal_uInt16 nToken);
 };
 
 /** import docinfo fields with date or time attributes and numberformats */
@@ -824,7 +824,7 @@ private:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
-    static const sal_Char* MapTokenToServiceName(sal_uInt16 nToken);
+    static const char* MapTokenToServiceName(sal_uInt16 nToken);
 };
 
 /** import page variable fields (<text:get-page-variable>) */
@@ -1090,7 +1090,7 @@ private:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
-    static const sal_Char* MapBibliographyFieldName(const OUString& sName);
+    static const char* MapBibliographyFieldName(const OUString& sName);
 };
 
 /** Import an annotation field (<text:annotation>) */

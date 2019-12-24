@@ -174,8 +174,8 @@ namespace {
 
 struct FieldConversion
 {
-    const sal_Char*     cFieldServiceName;
-    FieldId const       eFieldId;
+    const char*     cFieldServiceName;
+    FieldId const   eFieldId;
 };
 
 }
@@ -2969,7 +2969,7 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
         //todo: might make sense to hash this list, too
         struct NumberingPairs
         {
-            const sal_Char* cWordName;
+            const char*     cWordName;
             sal_Int16 const nType;
         };
         static const NumberingPairs aNumberingPairs[] =
@@ -3478,7 +3478,7 @@ void DomainMapper_Impl::ChainTextFrames()
     }
 }
 
-uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const sal_Char* pFieldMasterService, const OUString& rFieldMasterName)
+uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName)
 {
     // query master, create if not available
     uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
@@ -3999,8 +3999,8 @@ void DomainMapper_Impl::handleAuthor
     constexpr sal_uInt8 SET_DATE = 0x04;
     struct DocPropertyMap
     {
-        const sal_Char* pDocPropertyName;
-        const sal_Char* pServiceName;
+        const char*     pDocPropertyName;
+        const char*     pServiceName;
         sal_uInt8 const nFlags;
     };
     static const DocPropertyMap aDocProperties[] =

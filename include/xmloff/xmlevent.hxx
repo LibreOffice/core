@@ -49,7 +49,7 @@ struct XMLEventName
     OUString m_aName;
 
     XMLEventName() : m_nPrefix( 0 ) {}
-    XMLEventName( sal_uInt16 n, const sal_Char *p ) :
+    XMLEventName( sal_uInt16 n, const char *p ) :
         m_nPrefix( n ),
         m_aName( OUString::createFromAscii(p) )
        {}
@@ -74,9 +74,9 @@ struct XMLEventName
  */
 struct XMLEventNameTranslation
 {
-    const sal_Char* sAPIName;
+    const char* sAPIName;
     sal_uInt16 const nPrefix;    // namespace prefix
-    const sal_Char* sXMLName;
+    const char* sXMLName;
 };
 
 /// a translation table for the events defined in the XEventsSupplier service

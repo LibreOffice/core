@@ -166,7 +166,7 @@ bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
                     sal_Int32 nRead = xIn->readBytes( aData, nValueLen );
                     if( nRead == nValueLen )
                     {
-                        const char* pData = reinterpret_cast<const sal_Char*>(aData.getConstArray());
+                        const char* pData = reinterpret_cast<const char*>(aData.getConstArray());
                         rValue.copyToBuffer( pData, nValueLen );
                         bSuccess = true;
                     }

@@ -23,7 +23,7 @@ namespace xmloff
 {
 
     //= OControlElement
-    const sal_Char* OControlElement::getElementName(ElementType _eType)
+    const char* OControlElement::getElementName(ElementType _eType)
     {
         switch (_eType)
         {

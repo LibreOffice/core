@@ -34,14 +34,14 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 
 MultiPropertySetHelper::MultiPropertySetHelper(
-    const sal_Char** pNames ) :
+    const char** pNames ) :
         nLength( 0 ),
         aPropertySequence(),
         aValues(),
         pValues( nullptr )
 {
     // first count the elements
-    for( const sal_Char** pPtr = pNames; *pPtr != nullptr; pPtr++ )
+    for( const char** pPtr = pNames; *pPtr != nullptr; pPtr++ )
         nLength++;
 
     // allocate array and create strings

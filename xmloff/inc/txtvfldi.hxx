@@ -137,7 +137,7 @@ public:
         // for XMLTextFieldImportContext:
         SvXMLImport& rImport,           /// XML Import
         XMLTextImportHelper& rHlp,      /// text import helper
-        const sal_Char* pServiceName,   /// name of SO API service
+        const char* pServiceName,   /// name of SO API service
         sal_uInt16 nPrfx,               /// namespace prefix
         const OUString& rLocalName,  /// element name w/o prefix
         // config variables for PrepareField behavior:
@@ -240,7 +240,7 @@ public:
         // for XMLTextFieldImportContext:
         SvXMLImport& rImport,           /// see XMLTextFieldImportContext
         XMLTextImportHelper& rHlp,      /// see XMLTextFieldImportContext
-        const sal_Char* pServiceName,   /// see XMLTextFieldImportContext
+        const char* pServiceName,   /// see XMLTextFieldImportContext
         sal_uInt16 nPrfx,               /// see XMLTextFieldImportContext
         const OUString& rLocalName, /// see XMLTextFieldImportContext
         // for finding appropriate field master (see EndElement())

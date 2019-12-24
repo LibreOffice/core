@@ -571,7 +571,7 @@ namespace xmloff
         m_rEventManager.registerEvents(m_xElement, _rEvents);
     }
 
-    void OElementImport::simulateDefaultedAttribute(const sal_Char* _pAttributeName, const OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
+    void OElementImport::simulateDefaultedAttribute(const char* _pAttributeName, const OUString& _rPropertyName, const char* _pAttributeDefault)
     {
         OSL_ENSURE( m_xInfo.is(), "OPropertyImport::simulateDefaultedAttribute: the component should be more gossipy about it's properties!" );
 
@@ -602,7 +602,7 @@ namespace xmloff
 
     OUString OControlImport::determineDefaultServiceName() const
     {
-        const sal_Char* pServiceName = nullptr;
+        const char* pServiceName = nullptr;
         switch ( m_eElementType )
         {
         case OControlElement::TEXT:
@@ -639,7 +639,7 @@ namespace xmloff
 
     bool OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const sal_Char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BAFlags::LinkedCell);
+        static const char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BAFlags::LinkedCell);
 
         if (IsXMLToken(_rLocalName, XML_ID))
         {   // it's the control id
@@ -690,11 +690,11 @@ namespace xmloff
         if ( OElementImport::tryGenericAttribute( _nNamespaceKey, _rLocalName, _rValue ) )
             return true;
 
-        static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
-        static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
-        static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
-        static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
-        static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCAFlags::RepeatDelay );
+        static const char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
+        static const char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
+        static const char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
+        static const char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
+        static const char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCAFlags::RepeatDelay );
 
         sal_Int32 nHandle = -1;
         if ( _rLocalName.equalsAscii( pValueAttributeName ) )
@@ -767,10 +767,10 @@ namespace xmloff
             return;
         }
 
-        const sal_Char* pValueProperty = nullptr;
-        const sal_Char* pCurrentValueProperty = nullptr;
-        const sal_Char* pMinValueProperty = nullptr;
-        const sal_Char* pMaxValueProperty = nullptr;
+        const char* pValueProperty = nullptr;
+        const char* pCurrentValueProperty = nullptr;
+        const char* pMinValueProperty = nullptr;
+        const char* pMaxValueProperty = nullptr;
 
         bool bRetrievedValues = false;
         bool bRetrievedValueLimits = false;
@@ -928,8 +928,8 @@ namespace xmloff
             OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the class id!" );
         }
 
-        const sal_Char* pValueProperty = nullptr;
-        const sal_Char* pDefaultValueProperty = nullptr;
+        const char* pValueProperty = nullptr;
+        const char* pDefaultValueProperty = nullptr;
         getRuntimeValuePropertyNames(m_eElementType, nClassId, pValueProperty, pDefaultValueProperty);
         if ( pDefaultValueProperty && pValueProperty )
         {
@@ -1060,7 +1060,7 @@ namespace xmloff
     bool OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName,
         const OUString& _rValue )
     {
-        static const sal_Char* s_pImageDataAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ImageData);
+        static const char* s_pImageDataAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ImageData);
 
         if (_rLocalName.equalsAscii(s_pImageDataAttributeName))
         {
@@ -1183,8 +1183,8 @@ namespace xmloff
     {
         // need special handling for the State & CurrentState properties:
         // they're stored as booleans, but expected to be int16 properties
-        static const sal_Char* pCurrentSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected);
-        static const sal_Char* pSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected);
+        static const char* pCurrentSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected);
+        static const char* pSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected);
         if  (  _rLocalName.equalsAscii( pCurrentSelectedAttributeName )
             || _rLocalName.equalsAscii( pSelectedAttributeName )
             )
@@ -1217,8 +1217,8 @@ namespace xmloff
 
     bool OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCAFlags::TargetLocation );
-        static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCAFlags::ImageData );
+        static const char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCAFlags::TargetLocation );
+        static const char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCAFlags::ImageData );
 
         // need to make the URL absolute if
         // * it's the image-data attribute
@@ -1587,7 +1587,7 @@ namespace xmloff
 
     bool OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const sal_Char* pListSourceAttributeName = OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource);
+        static const char* pListSourceAttributeName = OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource);
         if ( _rLocalName.equalsAscii(pListSourceAttributeName) )
         {
             PropertyValue aListSource;

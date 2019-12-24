@@ -57,7 +57,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     const OUString& rLocalName,
     const SvXMLEnumMapEntry<sal_uInt16>* pLevelNameMap,
     enum XMLTokenEnum eLevelAttrName,
-    const sal_Char** pLevelStylePropMap,
+    const char** pLevelStylePropMap,
     const bool* pAllowedTokenTypes,
     bool bT )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
@@ -161,7 +161,7 @@ void XMLIndexTemplateContext::EndElement()
 
         if (bStyleNameOK)
         {
-            const sal_Char* pStyleProperty =
+            const char* pStyleProperty =
                 pOutlineLevelStylePropMap[nOutlineLevel];
 
             DBG_ASSERT(nullptr != pStyleProperty, "need property name");
@@ -315,7 +315,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aSvLevelNameTOCMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const sal_Char* aLevelStylePropNameTOCMap[] =
+const char* aLevelStylePropNameTOCMap[] =
     { nullptr, "ParaStyleLevel1", "ParaStyleLevel2", "ParaStyleLevel3",
           "ParaStyleLevel4", "ParaStyleLevel5", "ParaStyleLevel6",
           "ParaStyleLevel7", "ParaStyleLevel8", "ParaStyleLevel9",
@@ -357,7 +357,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aLevelNameAlphaMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const sal_Char* aLevelStylePropNameAlphaMap[] =
+const char* aLevelStylePropNameAlphaMap[] =
     { nullptr, "ParaStyleSeparator", "ParaStyleLevel1", "ParaStyleLevel2",
           "ParaStyleLevel3", nullptr };
 
@@ -404,7 +404,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aLevelNameBibliographyMap[] =
 };
 
 // TODO: replace with real property names, when available
-const sal_Char* aLevelStylePropNameBibliographyMap[] =
+const char* aLevelStylePropNameBibliographyMap[] =
 {
     nullptr, "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
     "ParaStyleLevel1", "ParaStyleLevel1", "ParaStyleLevel1",
@@ -433,7 +433,7 @@ const bool aAllowedTokenTypesBibliography[] =
 // no name map
 const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameTableMap = nullptr;
 
-const sal_Char* aLevelStylePropNameTableMap[] =
+const char* aLevelStylePropNameTableMap[] =
     { nullptr, "ParaStyleLevel1", nullptr };
 
 const bool aAllowedTokenTypesTable[] =

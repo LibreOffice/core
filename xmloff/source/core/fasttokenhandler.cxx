@@ -39,13 +39,13 @@ TokenMap::TokenMap() :
     maTokenNamesUtf8( static_cast< size_t >( XML_TOKEN_COUNT ) ),
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
-    static const sal_Char* sppcTokenNames[] =
+    static const char* sppcTokenNames[] =
     {
 #include <tokennames.inc>
         ""
     };
 
-    const sal_Char* const* ppcTokenName = sppcTokenNames;
+    const char* const* ppcTokenName = sppcTokenNames;
     int i = 0;
     for( auto& rTokenName : maTokenNamesUtf8 )
     {

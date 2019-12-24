@@ -56,7 +56,7 @@ namespace xmloff
 
     protected:
         /// get the name of the XML element
-        virtual const sal_Char* getXMLElementName() const = 0;
+        virtual const char* getXMLElementName() const = 0;
         /// examine the element we're exporting
         virtual void examine();
         /// export the attributes
@@ -73,7 +73,7 @@ namespace xmloff
         virtual void exportServiceNameAttribute();
 
         /// start the XML element
-        virtual void implStartElement(const sal_Char* _pName);
+        virtual void implStartElement(const char* _pName);
 
         /// ends the XML element
         virtual void implEndElement();
@@ -123,16 +123,16 @@ namespace xmloff
 
     protected:
         /// start the XML element
-        virtual void implStartElement(const sal_Char* _pName) override;
+        virtual void implStartElement(const char* _pName) override;
 
         /// ends the XML element
         virtual void implEndElement() override;
 
         /// get the name of the outer XML element
-        virtual const sal_Char* getOuterXMLElementName() const;
+        virtual const char* getOuterXMLElementName() const;
 
         // get the name of the XML element
-        virtual const sal_Char* getXMLElementName() const override;
+        virtual const char* getXMLElementName() const override;
 
         /** examine the control. Some kind of CtorImpl.
         */
@@ -275,7 +275,7 @@ namespace xmloff
 
     protected:
         // OControlExport overridables
-        virtual const sal_Char* getOuterXMLElementName() const override;
+        virtual const char* getOuterXMLElementName() const override;
         virtual void exportServiceNameAttribute() override;
         virtual void exportAttributes() override;
 
@@ -303,7 +303,7 @@ namespace xmloff
             );
 
     protected:
-        virtual const sal_Char* getXMLElementName() const override;
+        virtual const char* getXMLElementName() const override;
         virtual void exportSubTags() override;
         virtual void exportAttributes() override;
     };
