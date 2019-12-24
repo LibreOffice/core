@@ -48,7 +48,6 @@
 #include <svx/svxids.hrc>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>

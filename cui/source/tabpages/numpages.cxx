@@ -58,7 +58,6 @@
 #include <sfx2/opengrf.hxx>
 
 #include <strings.hrc>
-#include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/filedlghelper.hxx>
