@@ -31,7 +31,6 @@
 #include "ShadowOverlayObject.hxx"
 
 #include <vcl/svapp.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -49,9 +48,6 @@
 #include <edtwin.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
-#include <ndtxt.hxx>
-#include <redline.hxx>
-#include <docary.hxx>
 #include <rootfrm.hxx>
 #include <SwRewriter.hxx>
 #include <tools/color.hxx>
@@ -66,26 +62,20 @@
 #include <svl/srchitem.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <svtools/langtab.hxx>
 #include <svl/hint.hxx>
 
 #include <svx/svdview.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/kernitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 
-#include <i18nlangtag/mslangid.hxx>
-#include <i18nlangtag/lang.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>
-#include <swevent.hxx>
 #include <memory>
 
 // distance between Anchor Y and initial note position

@@ -17,29 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
-
 #include <hintids.hxx>
 
 #include <comphelper/string.hxx>
 #include <sfx2/request.hxx>
-#include <svx/svxids.hrc>
 
-#include <vcl/svapp.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docfac.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <fmthdft.hxx>
 #include <swwait.hxx>
-#include <paratr.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -48,7 +40,6 @@
 #include <fldbas.hxx>
 #include <swundo.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#include <dbmgr.hxx>
 #include <dialoghelp.hxx>
 #include <fmtcol.hxx>
 #include <frmmgr.hxx>
@@ -60,14 +51,10 @@
 #include <fmtpdsc.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
-#include <app.hrc>
 #include <strings.hrc>
 #include <swabstdlg.hxx>
 #include <envimg.hxx>
 #include "appenv.hxx"
-
-#include <memory>
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER

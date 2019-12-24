@@ -19,7 +19,6 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <algorithm>
 #include <svl/eitem.hxx>
 #include <tools/fract.hxx>
 #include <editeng/lrspitem.hxx>
@@ -28,7 +27,6 @@
 #include <svx/pageitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <tgrditem.hxx>
@@ -36,7 +34,6 @@
 #include <colex.hxx>
 #include <colmgr.hxx>
 #include <svx/unobrushitemhelper.hxx>
-#include <svx/svxids.hrc>
 
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {

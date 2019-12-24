@@ -38,7 +38,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <DocumentContentOperationsManager.hxx>
 #include <svl/grabbagitem.hxx>
 
 #define TEXT_PADDING 3

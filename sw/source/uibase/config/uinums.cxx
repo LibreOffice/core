@@ -20,8 +20,6 @@
 #include <memory>
 #include <uinums.hxx>
 
-#include <hintids.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
@@ -31,8 +29,6 @@
 #include <wrtsh.hxx>
 #include <poolfmt.hxx>
 #include <charfmt.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

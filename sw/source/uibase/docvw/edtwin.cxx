@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -34,10 +32,8 @@
 
 #include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <sot/storage.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
 #include <basic/sbxvar.hxx>
@@ -53,27 +49,16 @@
 #include <svl/ptitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/langitem.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/svxacorr.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
-#include <basegfx/color/bcolortools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
@@ -83,7 +68,6 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <textboxhelper.hxx>
@@ -99,21 +83,17 @@
 #include <txatbase.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
-#include <fmtfsize.hxx>
-#include <fmtclds.hxx>
 #include <fmthdft.hxx>
 #include <frmfmt.hxx>
 #include <modcfg.hxx>
 #include <fmtcol.hxx>
 #include <wview.hxx>
-#include <listsh.hxx>
 #include <gloslst.hxx>
 #include <inputwin.hxx>
 #include <gloshdl.hxx>
 #include <swundo.hxx>
 #include <drwtxtsh.hxx>
 #include <fchrfmt.hxx>
-#include <fmturl.hxx>
 #include "romenu.hxx"
 #include <initui.hxx>
 #include <frmatr.hxx>
@@ -121,11 +101,9 @@
 #include <acmplwrd.hxx>
 #include <swcalwrp.hxx>
 #include <swdtflvr.hxx>
-#include <wdocsh.hxx>
 #include <breakit.hxx>
 #include <checkit.hxx>
 #include <pagefrm.hxx>
-#include <HeaderFooterWin.hxx>
 
 #include <helpids.h>
 #include <cmdid.h>
@@ -138,10 +116,7 @@
 #include <svtools/ruler.hxx>
 #include <formatclipboard.hxx>
 #include <vcl/svapp.hxx>
-#include <docstat.hxx>
 #include <wordcountdialog.hxx>
-#include <swwait.hxx>
-#include <txtfld.hxx>
 #include <fmtfld.hxx>
 
 #include <IMark.hxx>

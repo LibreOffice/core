@@ -596,3 +596,15 @@ blacklist:
     sw/source/filter/xml/xmlimp.cxx:
     # Actually used
     - com/sun/star/text/XTextRange.hpp
+    sw/source/uibase/app/docsh2.cxx:
+    # Needed for direct member access
+    - ooo/vba/word/XDocument.hpp
+    sw/source/uibase/dbui/mmconfigitem.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDataSource.hpp
+    sw/source/uibase/dochdl/gloshdl.cxx:
+    # Needed for direct member access
+    - docsh.hxx
+    sw/source/uibase/dochdl/swdtflvr.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h

@@ -33,32 +33,20 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <editeng/unolingu.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <tools/resary.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
-#include <basic/basmgr.hxx>
-#include <editeng/langitem.hxx>
-#include <svl/macitem.hxx>
-#include <basic/sbmod.hxx>
 #include <fmtrfmrk.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>
-#include <docsh.hxx>
 #include <swmodule.hxx>
-#include <charatr.hxx>
 #include <fmtinfmt.hxx>
 #include <cellatr.hxx>
 #include <dbmgr.hxx>
@@ -77,7 +65,6 @@
 #include <flddropdown.hxx>
 #include <strings.hrc>
 #include <tox.hxx>
-#include <cnttab.hxx>
 #include <unotools/useroptions.hxx>
 
 using namespace com::sun::star::uno;
