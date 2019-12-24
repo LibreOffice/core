@@ -7214,7 +7214,17 @@ void DocxAttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
 void DocxAttributeOutput::CharBorder(
     const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow )
 {
-    impl_borderLine( m_pSerializer, XML_bdr, pAllBorder, nDist, bShadow );
+    css::table::BorderLine2 rStyleBorder;
+    const SvxBoxItem* pInherited = nullptr;
+    if ( GetExport().m_bStyDef && GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
+        pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxBoxItem>(RES_CHRATR_BOX);
+    else if ( m_rExport.m_pChpIter ) // incredibly undocumented, but this is the character-style info, right?
+        pInherited = static_cast<const SvxBoxItem*>(GetExport().m_pChpIter->HasTextItem(RES_CHRATR_BOX));
+
+    if ( pInherited )
+        rStyleBorder = SvxBoxItem::SvxLineToLine(pInherited->GetRight(), false);
+
+    impl_borderLine( m_pSerializer, XML_bdr, pAllBorder, nDist, bShadow, &rStyleBorder );
 }
 
 void DocxAttributeOutput::CharHighlight( const SvxBrushItem& rHighlight )
