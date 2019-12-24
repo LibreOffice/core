@@ -17,22 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-
 #include <doc.hxx>
 #include <osl/thread.h>
 #include <vcl/help.hxx>
-#include <svl/stritem.hxx>
-#include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
-#include <editeng/flditem.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/svdotext.hxx>
-#include <editeng/outliner.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>
@@ -42,24 +33,18 @@
 #include <docsh.hxx>
 #include <edtwin.hxx>
 #include <dpage.hxx>
-#include <shellres.hxx>
 #include <docufld.hxx>
-#include <dbfld.hxx>
 #include <reffld.hxx>
 #include <cellatr.hxx>
 #include <shdwcrsr.hxx>
-#include <fmtcol.hxx>
-#include <charfmt.hxx>
+#include <fmtinfmt.hxx>
 #include <fmtftn.hxx>
 #include <redline.hxx>
 #include <tox.hxx>
-#include <txttxmrk.hxx>
+#include <txatbase.hxx>
 #include <uitool.hxx>
 #include <viewopt.hxx>
 #include <strings.hrc>
-
-#include <PostItMgr.hxx>
-#include <fmtfld.hxx>
 
 #include <IDocumentMarkAccess.hxx>
 #include <txtfrm.hxx>

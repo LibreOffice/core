@@ -18,24 +18,9 @@
  */
 
 #include <cmdid.h>
-#include <swmodule.hxx>
-#include <view.hxx>
-#include <wrtsh.hxx>
-#include <globals.hrc>
 
-#include <sfx2/styfitem.hxx>
-
-#include <uitool.hxx>
 #include <ccoll.hxx>
 #include <fmtcol.hxx>
-#include <hintids.hxx>
-#include <docsh.hxx>
-#include <docstyle.hxx>
-#include <hints.hxx>
-
-#include <vcl/svapp.hxx>
-
-#include <unomid.h>
 
 //!! order of entries has to be the same as in
 //!! CommandStruct SwCondCollItem::aCmds[]

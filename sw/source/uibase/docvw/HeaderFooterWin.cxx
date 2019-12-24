@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <app.hrc>
 #include <strings.hrc>
-#include <globals.hrc>
 
 #include <doc.hxx>
 #include <drawdoc.hxx>
@@ -21,7 +19,6 @@
 #include <HeaderFooterWin.hxx>
 #include <pagedesc.hxx>
 #include <pagefrm.hxx>
-#include <SwRewriter.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -41,16 +38,12 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <svx/hdft.hxx>
-#include <svx/svxids.hrc>
-#include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/gradient.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>

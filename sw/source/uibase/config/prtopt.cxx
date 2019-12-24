@@ -23,8 +23,6 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <unomid.h>
-
 using namespace utl;
 using namespace com::sun::star::uno;
 

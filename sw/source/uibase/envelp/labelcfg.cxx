@@ -22,7 +22,6 @@
 
 #include <swtypes.hxx>
 #include <labelcfg.hxx>
-#include <labimp.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/configpaths.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -30,8 +29,6 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-
-#include <unomid.h>
 
 using namespace utl;
 using namespace ::com::sun::star::uno;

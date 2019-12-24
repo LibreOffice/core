@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cstddef>
-#include <cstdlib>
 
 #include "SidebarWinAcc.hxx"
 #include <PostItMgr.hxx>
@@ -33,13 +32,10 @@
 #include "OverlayRanges.hxx"
 
 #include <strings.hrc>
-#include <app.hrc>
 
 #include <viewopt.hxx>
 #include <cmdid.h>
 
-#include <editeng/editobj.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/editview.hxx>
@@ -48,11 +44,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 
-#include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
 #include <svl/stritem.hxx>
-
-#include <svx/svxids.hrc>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -72,23 +65,15 @@
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <swmodule.hxx>
-#include <langhelper.hxx>
 
 #include <txtannotationfld.hxx>
 #include <ndtxt.hxx>
 
-#include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
-#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <drawdoc.hxx>
 
 using namespace sw::sidebarwindows;
 

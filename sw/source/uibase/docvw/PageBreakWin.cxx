@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <globals.hrc>
 #include <bitmaps.hlst>
 
 #include <cmdid.h>
@@ -31,7 +30,6 @@
 #include <wrtsh.hxx>
 
 #include <basegfx/color/bcolortools.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -45,7 +43,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/canvastools.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

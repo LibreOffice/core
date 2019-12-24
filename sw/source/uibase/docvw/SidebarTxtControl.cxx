@@ -41,21 +41,18 @@
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <uitool.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <shellres.hxx>
 #include <AnnotationWin.hxx>
 #include <redline.hxx>
 #include <memory>

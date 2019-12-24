@@ -25,9 +25,6 @@
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <swtypes.hxx>
-
-#include <unomid.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;

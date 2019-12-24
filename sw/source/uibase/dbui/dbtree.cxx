@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/formats.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -27,21 +26,17 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svx/dbaexchange.hxx>
 
 #include <dbmgr.hxx>
-#include <swmodule.hxx>
-#include <view.hxx>
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <bitmaps.hlst>
-
-#include <unomid.h>
 
 
 using namespace ::com::sun::star;
@@ -51,7 +46,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 
 class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >

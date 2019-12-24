@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <swtypes.hxx>
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
 #include <cmdid.h>
