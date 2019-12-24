@@ -99,7 +99,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShado
 
     xStyleProps.set(characterStyles->getByName("CharShadow-removed"), uno::UNO_QUERY_THROW);
     aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
-    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
