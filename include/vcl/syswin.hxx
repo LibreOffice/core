@@ -114,7 +114,7 @@ protected:
 
     SAL_DLLPRIVATE void DoInitialLayout();
 
-    SAL_DLLPRIVATE void SetIdleDebugName( const sal_Char *pDebugName );
+    SAL_DLLPRIVATE void SetIdleDebugName( const char *pDebugName );
 
 public:
     virtual         ~SystemWindow() override;
@@ -220,7 +220,7 @@ public:
     void createScreenshot(VirtualDevice& rOutput);
 };
 
-inline void SystemWindow::SetIdleDebugName( const sal_Char *pDebugName )
+inline void SystemWindow::SetIdleDebugName( const char *pDebugName )
 {
     maLayoutIdle.SetDebugName( pDebugName );
 }

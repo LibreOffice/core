@@ -361,7 +361,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
     OString aFontName(OUStringToOString(rFont.GetFamilyName(), eFontNameEncoding));
     for ( i = 0; i < W_LF_FACESIZE; i++ )
     {
-        sal_Char nChar = ( i < aFontName.getLength() ) ? aFontName[i] : 0;
+        char nChar = ( i < aFontName.getLength() ) ? aFontName[i] : 0;
         pWMF->WriteChar( nChar );
     }
     UpdateRecordHeader();
@@ -1887,7 +1887,7 @@ void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sa
          .WriteUInt32( nRemainingSize )                 // remaining size of data in following records, missing in MSDN documentation
          .WriteUInt32( nTotalSize );                    // total size of EMF stream
 
-   pWMF->WriteBytes(static_cast<const sal_Char*>(rStream.GetData()) + rStream.Tell(), nCurSize);
+   pWMF->WriteBytes(static_cast<const char*>(rStream.GetData()) + rStream.Tell(), nCurSize);
    rStream.SeekRel( nCurSize );
    UpdateRecordHeader();
 }

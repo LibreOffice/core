@@ -248,7 +248,7 @@ public:
     void            PSMoveTo (const Point& rPoint);
     void            PSScale (double fScaleX, double fScaleY);
     void            PSLineTo(const Point& rPoint );
-    void            PSPointOp (const Point& rPoint, const sal_Char* pOperator);
+    void            PSPointOp (const Point& rPoint, const char* pOperator);
     void            PSHexString (const unsigned char* pString, sal_Int16 nLen);
     void            PSShowGlyph (const unsigned char nGlyphId);
 

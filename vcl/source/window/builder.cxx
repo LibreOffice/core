@@ -3608,7 +3608,7 @@ namespace
             return vcl::KeyCode(KEY_DELETE, bShift, bMod1, bMod2, bMod3);
 
         assert (rKey.first.getLength() == 1);
-        sal_Char cChar = rKey.first.toChar();
+        char cChar = rKey.first.toChar();
 
         if (cChar >= 'a' && cChar <= 'z')
             return vcl::KeyCode(KEY_A + (cChar - 'a'), bShift, bMod1, bMod2, bMod3);

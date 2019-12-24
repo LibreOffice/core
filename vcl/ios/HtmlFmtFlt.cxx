@@ -93,8 +93,8 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8> const& aText
     std::string dummyHtmlHeader = GetHtmlFormatHeader(0, 0, 0, 0);
     size_t lHtmlFormatHeader = dummyHtmlHeader.length();
 
-    std::string textHtml(reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()),
-                         reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray())
+    std::string textHtml(reinterpret_cast<const char*>(aTextHtml.getConstArray()),
+                         reinterpret_cast<const char*>(aTextHtml.getConstArray())
                              + aTextHtml.getLength());
 
     std::string::size_type nStartHtml = textHtml.find(TAG_HTML) + lHtmlFormatHeader
@@ -129,9 +129,9 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
     assert(isHTMLFormat(aHTMLFormat) && "No HTML Format provided");
 
     Sequence<sal_Int8>& nonconstHTMLFormatRef = const_cast<Sequence<sal_Int8>&>(aHTMLFormat);
-    sal_Char* dataStart = reinterpret_cast<sal_Char*>(nonconstHTMLFormatRef.getArray());
-    sal_Char* dataEnd = dataStart + nonconstHTMLFormatRef.getLength() - 1;
-    const sal_Char* htmlStartTag = strcasestr(dataStart, HtmlStartTag);
+    char* dataStart = reinterpret_cast<char*>(nonconstHTMLFormatRef.getArray());
+    char* dataEnd = dataStart + nonconstHTMLFormatRef.getLength() - 1;
+    const char* htmlStartTag = strcasestr(dataStart, HtmlStartTag);
 
     assert(htmlStartTag && "Seems to be no HTML at all");
 
@@ -165,7 +165,7 @@ bool isHTMLFormat(const Sequence<sal_Int8>& aHtmlSequence)
 
     return rtl_str_compareIgnoreAsciiCase_WithLength(
                HtmlFormatStart, HtmlFormatStartLen,
-               reinterpret_cast<const sal_Char*>(aHtmlSequence.getConstArray()), HtmlFormatStartLen)
+               reinterpret_cast<const char*>(aHtmlSequence.getConstArray()), HtmlFormatStartLen)
            == 0;
 }
 

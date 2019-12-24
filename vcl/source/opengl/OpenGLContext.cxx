@@ -240,7 +240,7 @@ static OUString getGLString(GLenum eGlEnum)
     const GLubyte* pString = glGetString(eGlEnum);
     if (pString)
     {
-        sString = OUString::createFromAscii(reinterpret_cast<const sal_Char*>(pString));
+        sString = OUString::createFromAscii(reinterpret_cast<const char*>(pString));
     }
 
     CHECK_GL_ERROR();

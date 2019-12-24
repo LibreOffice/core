@@ -112,7 +112,7 @@ protected:
     void registerEventHandler(
             sal_Int32 nEventId,
             sal_Int32 nModuleType,
-            const sal_Char* pcMacroName,
+            const char* pcMacroName,
             sal_Int32 nCancelIndex = -1,
             const css::uno::Any& rUserData = css::uno::Any() );
 

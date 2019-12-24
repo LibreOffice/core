@@ -51,7 +51,7 @@ namespace ooo
         }
 
         /// @throws css::uno::Exception
-        inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const sal_Char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs )
+        inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs )
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
             OUString sVarName( OUString::createFromAscii( _pAsciiName ) );

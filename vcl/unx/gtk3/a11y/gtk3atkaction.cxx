@@ -177,10 +177,10 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
             rBuffer.append("<Alt>");
 
         if( ( rKeyStroke.KeyCode >= awt::Key::A ) && ( rKeyStroke.KeyCode <= awt::Key::Z ) )
-            rBuffer.append( static_cast<sal_Char>( 'a' + ( rKeyStroke.KeyCode - awt::Key::A ) ) );
+            rBuffer.append( static_cast<char>( 'a' + ( rKeyStroke.KeyCode - awt::Key::A ) ) );
         else
         {
-            sal_Char c = '\0';
+            char c = '\0';
 
             switch( rKeyStroke.KeyCode )
             {

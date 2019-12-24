@@ -284,7 +284,7 @@ bool XPMReader::ImplGetColor()
     if (mnStringSize < mnCpp)
         return false;
 
-    OString aKey(reinterpret_cast<sal_Char*>(pString), mnCpp);
+    OString aKey(reinterpret_cast<char*>(pString), mnCpp);
     colordata aValue;
     bool bStatus = ImplGetColSub(aValue);
     if (bStatus)
@@ -318,7 +318,7 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
             Scanline pMaskScanline = mpMaskAcc ? mpMaskAcc->GetScanline(nY) : nullptr;
             for (sal_uLong i = 0; i < mnWidth; ++i)
             {
-                OString aKey(reinterpret_cast<sal_Char*>(pString), mnCpp);
+                OString aKey(reinterpret_cast<char*>(pString), mnCpp);
                 auto it = maColMap.find(aKey);
                 if (it != maColMap.end())
                 {

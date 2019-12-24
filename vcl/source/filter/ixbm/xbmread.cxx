@@ -57,7 +57,7 @@ class XBMReader : public GraphicReader
 
     void            InitTable();
     OString         FindTokenLine( SvStream* pInStm, const char* pTok1, const char* pTok2 );
-    int             ParseDefine( const sal_Char* pDefine );
+    int             ParseDefine( const char* pDefine );
     void            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
 
 public:
@@ -154,7 +154,7 @@ OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
     return aRet;
 }
 
-int XBMReader::ParseDefine( const sal_Char* pDefine )
+int XBMReader::ParseDefine( const char* pDefine )
 {
     sal_Int32 nRet = 0;
     const char* pTmp = pDefine;

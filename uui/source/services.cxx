@@ -31,7 +31,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * uui_component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * uui_component_getFactory(char const * pImplName,
                         void * pServiceManager,
                         void *)
 {

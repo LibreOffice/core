@@ -33,10 +33,10 @@ protected:
     virtual void SetDeletionFlags() override;
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const override;
 
-    Timer( bool bAuto, const sal_Char *pDebugName );
+    Timer( bool bAuto, const char *pDebugName );
 
 public:
-    Timer( const sal_Char *pDebugName = nullptr );
+    Timer( const char *pDebugName = nullptr );
     Timer( const Timer& rTimer );
     virtual ~Timer() override;
     Timer& operator=( const Timer& rTimer );
@@ -72,7 +72,7 @@ public:
 class VCL_DLLPUBLIC AutoTimer : public Timer
 {
 public:
-    AutoTimer( const sal_Char *pDebugName = nullptr );
+    AutoTimer( const char *pDebugName = nullptr );
 };
 
 /// Value suitable as a timeout user input into an EditBox to an expensive update

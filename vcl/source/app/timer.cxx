@@ -36,7 +36,7 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nTimeNow ) const
         ? Scheduler::ImmediateTimeoutMs : nWakeupTime - nTimeNow;
 }
 
-Timer::Timer( bool bAuto, const sal_Char *pDebugName )
+Timer::Timer( bool bAuto, const char *pDebugName )
     : Task( pDebugName )
     , mnTimeout( Scheduler::ImmediateTimeoutMs )
     , mbAuto( bAuto )
@@ -44,7 +44,7 @@ Timer::Timer( bool bAuto, const sal_Char *pDebugName )
     SetPriority( TaskPriority::DEFAULT );
 }
 
-Timer::Timer( const sal_Char *pDebugName )
+Timer::Timer( const char *pDebugName )
     : Timer( false, pDebugName )
 {
 }
@@ -94,7 +94,7 @@ void Timer::SetTimeout( sal_uInt64 nNewTimeout )
         StartTimer( mnTimeout );
 }
 
-AutoTimer::AutoTimer( const sal_Char *pDebugName )
+AutoTimer::AutoTimer( const char *pDebugName )
     : Timer( true, pDebugName )
 {
 }

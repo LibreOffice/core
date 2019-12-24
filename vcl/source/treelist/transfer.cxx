@@ -893,7 +893,7 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
             //              writes now UTF16 format into the stream
             //JP 6.8.2001:  and now it writes UTF8 because then exist no problem with
             //              little / big endians! - Bug 88121
-            maAny <<= OUString( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ), nLen - 1, RTL_TEXTENCODING_UTF8 );
+            maAny <<= OUString( reinterpret_cast< const char* >( aSeq.getConstArray() ), nLen - 1, RTL_TEXTENCODING_UTF8 );
         }
         else
             maAny <<= aSeq;
@@ -1497,7 +1497,7 @@ bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rSt
         else if( aAny >>= aSeq )
         {
 
-            const sal_Char* pChars = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
+            const char* pChars = reinterpret_cast< const char* >( aSeq.getConstArray() );
             sal_Int32       nLen = aSeq.getLength();
 
             //JP 10.10.2001: 92930 - don't copy the last zero character into the string.
@@ -1895,8 +1895,8 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
 
             if (2048 == aSeq.getLength())
             {
-                const sal_Char* p1 = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
-                const sal_Char* p2 =  reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024;
+                const char* p1 = reinterpret_cast< const char* >( aSeq.getConstArray() );
+                const char* p2 =  reinterpret_cast< const char* >( aSeq.getConstArray() ) + 1024;
                 rBmk = INetBookmark( OUString( p1, strlen(p1), osl_getThreadTextEncoding() ),
                                      OUString( p2, strlen(p2), osl_getThreadTextEncoding() ) );
                 bRet = true;

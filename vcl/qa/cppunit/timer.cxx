@@ -472,7 +472,7 @@ class IdleSerializer : public Idle
     sal_uInt32 const mnPosition;
     sal_uInt32 &mrProcesed;
 public:
-    IdleSerializer(const sal_Char *pDebugName, TaskPriority ePrio,
+    IdleSerializer(const char *pDebugName, TaskPriority ePrio,
                    sal_uInt32 nPosition, sal_uInt32 &rProcesed)
         : Idle( pDebugName )
         , mnPosition( nPosition )
@@ -526,7 +526,7 @@ class TestAutoIdleRR : public AutoIdle
 
 public:
     TestAutoIdleRR( sal_uInt32 &rCount,
-                    const sal_Char *pDebugName )
+                    const char *pDebugName )
         : AutoIdle( pDebugName )
         , mrCount( rCount )
     {

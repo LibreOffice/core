@@ -226,7 +226,7 @@ Any UniDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      oOOData <<= OUString(static_cast<const sal_Char*>([mSystemData bytes]),
+      oOOData <<= OUString(static_cast<const char*>([mSystemData bytes]),
                                  [mSystemData length],
                                  RTL_TEXTENCODING_UTF8);
     }

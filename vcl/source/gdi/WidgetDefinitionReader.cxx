@@ -26,7 +26,7 @@ bool lcl_fileExists(OUString const& sFilename)
     return osl::FileBase::E_None == eRC;
 }
 
-int lcl_gethex(sal_Char aChar)
+int lcl_gethex(char aChar)
 {
     if (aChar >= '0' && aChar <= '9')
         return aChar - '0';
@@ -43,7 +43,7 @@ bool readColor(OString const& rString, Color& rColor)
     if (rString.getLength() != 7)
         return false;
 
-    const sal_Char aChar(rString[0]);
+    const char aChar(rString[0]);
 
     if (aChar != '#')
         return false;

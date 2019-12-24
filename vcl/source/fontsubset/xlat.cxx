@@ -88,7 +88,7 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
     ensureConverter( nSelect );
 
     sal_Unicode aUCS2Char = aChar;
-    sal_Char aTempArray[8];
+    char aTempArray[8];
     sal_Size nTempSize;
     sal_uInt32 nCvtInfo;
 

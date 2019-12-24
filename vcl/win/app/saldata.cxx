@@ -40,7 +40,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
     return eEncoding;
 }
 
-OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
+OUString ImplSalGetUniString(const char* pStr, sal_Int32 const nLen)
 {
     return OUString( pStr, (-1 == nLen) ? strlen(pStr) : nLen,
                       ImplSalGetSystemEncoding(),

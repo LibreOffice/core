@@ -20,13 +20,13 @@
 #include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
 
-Idle::Idle( bool bAuto, const sal_Char *pDebugName )
+Idle::Idle( bool bAuto, const char *pDebugName )
     : Timer( bAuto, pDebugName )
 {
     SetPriority( TaskPriority::DEFAULT_IDLE );
 }
 
-Idle::Idle( const sal_Char *pDebugName )
+Idle::Idle( const char *pDebugName )
     : Idle( false, pDebugName )
 {
 }
@@ -57,7 +57,7 @@ sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nTimeNow */ ) const
     return Scheduler::ImmediateTimeoutMs;
 }
 
-AutoIdle::AutoIdle( const sal_Char *pDebugName )
+AutoIdle::AutoIdle( const char *pDebugName )
     : Idle( true, pDebugName )
 {
 }

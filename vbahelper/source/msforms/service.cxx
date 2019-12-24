@@ -32,7 +32,7 @@ namespace sdecl = comphelper::service_decl;
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * msforms_component_getFactory(
-        const sal_Char * pImplName, void *, void *)
+        const char * pImplName, void *, void *)
     {
         SAL_INFO("vbahelper", "In component_getFactory for " << pImplName );
         void* pRet = sdecl::component_getFactoryHelper(

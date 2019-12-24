@@ -649,7 +649,7 @@ bool SelectionManager::convertData(
                     OUString aString;
                     aValue >>= aString;
                     OString aByteString( bCompoundText ? convertToCompound( aString ) : OUStringToOString( aString, aEncoding ) );
-                    rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aByteString.getStr()), aByteString.getLength() * sizeof( sal_Char ) );
+                    rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aByteString.getStr()), aByteString.getLength() * sizeof( char ) );
                     bSuccess = true;
                 }
             }
