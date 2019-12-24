@@ -36,7 +36,6 @@
 #include <svx/dlgutil.hxx>
 #include <svx/anchorid.hxx>
 #include <svl/rectitem.hxx>
-#include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
 #include <vcl/canvastools.hxx>
 

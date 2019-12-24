@@ -4,3 +4,20 @@ blacklist:
     cui/source/customize/macropg.cxx:
     # Needed for TypedWhichId macro
     - svl/macitem.hxx
+    cui/source/customize/CommandCategoryListBox.cxx:
+    # Actually used
+    - com/sun/star/script/browse/XBrowseNode.hpp
+    cui/source/customize/cfgutil.cxx:
+    # Actually used
+    - com/sun/star/script/browse/XBrowseNode.hpp
+    cui/source/dialogs/DiagramDialog.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/PropertyValue.hpp
+    cui/source/dialogs/SignSignatureLineDialog.cxx:
+    # Actually used
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/security/XCertificate.hpp
+    cui/source/dialogs/thesdlg.cxx:
+    # Actually used
+    - com/sun/star/linguistic2/XMeaning.hpp
+    - com/sun/star/linguistic2/XThesaurus.hpp

@@ -18,8 +18,6 @@
  */
 
 #include <swpossizetabpage.hxx>
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <svx/svddef.hxx>

@@ -23,6 +23,7 @@
 #include <svx/langbox.hxx>
 #include <vcl/metric.hxx>
 
+#include <map>
 #include <set>
 
 class CharClass;

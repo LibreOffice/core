@@ -30,7 +30,6 @@
 #include <dialmgr.hxx>
 #include <optpath.hxx>
 #include <strings.hrc>
-#include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
-#include <officecfg/Office/Common.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

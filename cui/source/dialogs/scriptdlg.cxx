@@ -20,7 +20,6 @@
 #include <memory>
 #include <utility>
 
-#include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

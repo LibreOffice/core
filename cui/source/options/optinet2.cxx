@@ -24,7 +24,6 @@
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/svapp.hxx>
