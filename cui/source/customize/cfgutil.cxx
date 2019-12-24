@@ -599,11 +599,14 @@ void CuiConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchI
     m_pFunctionListBox->freeze();
     for (const auto & rInfo : xCommands)
     {
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rInfo.Command, m_sModuleLongName);
+
         OUString sUIName = MapCommand2UIName(rInfo.Command);
         aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = aArr.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
+        pGrpInfo->sTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
         m_pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(pGrpInfo)), sUIName);
     }
     m_pFunctionListBox->thaw();
