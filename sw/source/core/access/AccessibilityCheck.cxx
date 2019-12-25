@@ -46,12 +46,14 @@ OUString sTextBlinking("Blinking text.");
 OUString sAvoidFootnotes("Avoid footnotes.");
 OUString sAvoidEndnotes("Avoid endnotes.");
 
-void lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
-                 svx::AccessibilityIssueID eIssue = svx::AccessibilityIssueID::UNSPECIFIED)
+std::shared_ptr<sw::AccessibilityIssue>
+lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
+            svx::AccessibilityIssueID eIssue = svx::AccessibilityIssueID::UNSPECIFIED)
 {
     auto pIssue = std::make_shared<sw::AccessibilityIssue>(eIssue);
     pIssue->m_aIssueText = rText;
     rIssueCollection.getIssues().push_back(pIssue);
+    return pIssue;
 }
 
 class BaseCheck
@@ -92,7 +94,21 @@ class NoTextNodeAltTextCheck : public NodeCheck
             OUString sName = pNoTextNode->GetFlyFormat()->GetName();
 
             OUString sIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
-            lclAddIssue(m_rIssueCollection, sIssueText);
+
+            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
+
+            if (pNoTextNode->IsOLENode())
+            {
+                pIssue->setDoc(pNoTextNode->GetDoc());
+                pIssue->setIssueObject(IssueObject::OLE);
+                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+            }
+            else if (pNoTextNode->IsGrfNode())
+            {
+                pIssue->setDoc(pNoTextNode->GetDoc());
+                pIssue->setIssueObject(IssueObject::GRAPHIC);
+                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+            }
         }
     }
 
