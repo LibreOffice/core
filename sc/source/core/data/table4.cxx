@@ -202,8 +202,13 @@ double approxDiff( double a, double b )
     // We now have two subtractions with a similar but not equal error. Obtain
     // the exponent of the error magnitude and round accordingly.
     const double e = fabs(d - c);
-    const double fExp = floor( log10( e));
-    return rtl::math::round( c, -static_cast<int>(fExp)-1);
+    const int nExp = floor( log10( e));
+    const int nExpVal = floor(log10(fabs(c))); // c is not 0 here
+    // tdf#123456: Limit precision to 15 significant decimal digits, as in other UI operations.
+    // See e.g. DISPLAY_LEN in sc/source/core/data/simpleformulacalc.cxx, and mnMaxGeneralPrecision
+    // in sc/source/core/data/column3.cxx.
+    const int nRoundPrec = -std::max(nExp, nExpVal-15)-1;
+    return rtl::math::round( c, nRoundPrec);
 }
 }
 
