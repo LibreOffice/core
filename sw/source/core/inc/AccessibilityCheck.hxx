@@ -12,22 +12,11 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
 
 #include <svx/AccessibilityCheck.hxx>
+#include <AccessibilityCheckResult.hxx>
 #include <doc.hxx>
 
 namespace sw
 {
-class SW_DLLPUBLIC AccessibilityCheckResult final : public svx::AccessibilityCheckResult
-{
-public:
-    AccessibilityCheckResult(svx::AccessibilityIssueID eIssueID
-                             = svx::AccessibilityIssueID::UNSPECIFIED)
-        : svx::AccessibilityCheckResult(eIssueID)
-    {
-    }
-
-    void gotoIssue() const override {}
-};
-
 class SW_DLLPUBLIC AccessibilityCheck final : public svx::AccessibilityCheck
 {
 private:

@@ -37,6 +37,7 @@ public:
     {
     }
     virtual ~AccessibilityCheckResult() {}
+    virtual bool canGotoIssue() const = 0;
     virtual void gotoIssue() const = 0;
 };
 

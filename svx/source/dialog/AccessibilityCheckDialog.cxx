@@ -24,6 +24,7 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     , m_rAccessibilityCheckResult(rAccessibilityCheckResult)
 {
     m_xLabel->set_label(m_rAccessibilityCheckResult->m_aIssueText);
+    m_xGotoButton->set_visible(rAccessibilityCheckResult->canGotoIssue());
     m_xGotoButton->connect_clicked(LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
     m_xContainer->show();
 }
