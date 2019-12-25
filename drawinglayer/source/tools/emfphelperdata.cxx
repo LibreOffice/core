@@ -37,6 +37,8 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -619,22 +621,151 @@ namespace emfplushelper
                         isHatchBlend = false;
                         break;
                 }
+
                 Color fillColor;
                 if (isHatchBlend)
                 {
                     fillColor = brush->solidColor;
                     fillColor.Merge(brush->secondColor, static_cast<sal_uInt8>(255 * blendFactor));
+
+                    mrTargetHolders.Current().append(
+                        std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                            polygon,
+                            fillColor.getBColor()));
                 }
                 else
                 {
-                    fillColor = brush->secondColor;
+                    switch (brush->hatchStyle)
+                    {
+                        case HatchStyleHorizontal:
+                        {
+                            fillColor = brush->solidColor;
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatch(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, 0, fillColor.getBColor(), 10.0, true)));
+                            auto aContent = drawinglayer::primitive2d::Primitive2DContainer { xHatch };
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(polygon, aContent));
+
+                            break;
+                        }
+
+                        case HatchStyleVertical:
+                        {
+                            fillColor = brush->solidColor;
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatch(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, F_PI2, fillColor.getBColor(), 10.0, true)));
+                            auto aContent = drawinglayer::primitive2d::Primitive2DContainer { xHatch };
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(polygon, aContent));
+
+                            break;
+                        }
+
+                        case HatchStyleForwardDiagonal:
+                        {
+                            fillColor = brush->solidColor;
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatch(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, -F_PI4, fillColor.getBColor(), 10.0, true)));
+                            auto aContent = drawinglayer::primitive2d::Primitive2DContainer { xHatch };
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(polygon, aContent));
+
+                            break;
+                        }
+
+                        case HatchStyleBackwardDiagonal:
+                        {
+                            fillColor = brush->solidColor;
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatch(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, F_PI4, fillColor.getBColor(), 10.0, true)));
+                            auto aContent = drawinglayer::primitive2d::Primitive2DContainer { xHatch };
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(polygon, aContent));
+
+                            break;
+                        }
+
+                        case HatchStyleLargeGrid:
+                        {
+                            fillColor = brush->solidColor;
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatchHorz(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, 0, fillColor.getBColor(), 10.0, true)));
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatchVert(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, F_PI2, fillColor.getBColor(), 5.0, false)));
+
+                            auto aContent = drawinglayer::primitive2d::Primitive2DContainer { xHatchHorz, xHatchVert };
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(polygon, aContent));
+
+                            break;
+                        }
+
+                        case HatchStyleDiagonalCross:
+                        {
+                            fillColor = brush->solidColor;
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatchHorz(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, F_PI4, fillColor.getBColor(), 10.0, true)));
+
+                            const drawinglayer::primitive2d::Primitive2DReference xHatchVert(new drawinglayer::primitive2d::FillHatchPrimitive2D(
+                                                    polygon.getB2DRange(),
+                                                    brush->secondColor.getBColor(),
+                                                    drawinglayer::attribute::FillHatchAttribute(drawinglayer::attribute::HatchStyle::Single,
+                                                        10.0, -F_PI4, fillColor.getBColor(), 5.0, false)));
+
+                            auto aContent = drawinglayer::primitive2d::Primitive2DContainer { xHatchHorz, xHatchVert };
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::MaskPrimitive2D>(polygon, aContent));
+
+                            break;
+                        }
+
+                        default:
+                        {
+                            fillColor = brush->solidColor;
+
+                            mrTargetHolders.Current().append(
+                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                    polygon,
+                                    fillColor.getBColor()));
+                        }
+                    }
                 }
                 // temporal solution: create a solid colored polygon
                 SAL_WARN("drawinglayer", "EMF+\t\tTODO create a 'real' hatching primitive");
-                mrTargetHolders.Current().append(
-                    std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
-                        polygon,
-                        fillColor.getBColor()));
             }
             else if (brush->type == BrushTypeTextureFill)
             {
