@@ -55,7 +55,7 @@ namespace emfplushelper
         EmfPlusHatchStyle hatchStyle;
         std::unique_ptr<EMFPImage> image;
 
-        EMFPBrush(sal_uInt32 datasize);
+        EMFPBrush(sal_uInt32 size);
         virtual ~EMFPBrush() override;
 
         sal_uInt32 GetType() const { return type; }
