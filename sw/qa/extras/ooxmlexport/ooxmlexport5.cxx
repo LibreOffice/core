@@ -44,11 +44,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_TEST(testFDO76248, "FDO76248.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76248, "FDO76248.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-       return;
     // In two cases the a:graphicData elements had no children, which is invalid.
     assertXPath(pXmlDoc, "//a:graphicData[not(*)]", 0);
 }
@@ -92,7 +90,7 @@ DECLARE_OOXMLEXPORT_TEST(testTscp, "tscp.docx")
     CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo76589 , "fdo76589.docx")
 {
     /* Numbered list was not preserve after RT.
      * In numbering.xml, when NumberingType is "decimal" and level is zero,
@@ -100,8 +98,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
      * It should be <w:lvlText w:val="%1" />
      */
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","%1" );
 }
@@ -131,12 +127,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
         return;
 }
 
-DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAuthorPropertySdt, "author-property.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns1:coreProperties[1]/ns0:creator[1]");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:dataBinding", "storeItemID","{6C3C8BC8-F283-45AE-878A-BAB7291924A1}");
@@ -145,7 +138,7 @@ DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
     //            "xmlns:ns0='http://purl.org/dc/elements/1.1/' xmlns:ns1='http://schemas.openxmlformats.org/package/2006/metadata/core-properties'");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76586, "fdo76586.docx")
 {
     /*
      * In the test file gridCol had only one value for entire table width
@@ -154,24 +147,19 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
 
-    if (!pXmlDoc)
-       return;
-
     // there is only one table in the test file
     assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[1]", "w", "1601");
     assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO76587 , "fdo76587.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76587 , "fdo76587.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "line", "240");
     assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "lineRule", "auto");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO77890 , "fdo77890.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO77890 , "fdo77890.docx")
 {
     /*
     Ensure that the page break is preserved i.e it should not be converted to a section break, in case
@@ -179,17 +167,13 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77890 , "fdo77890.docx")
     For additional comments please refer to https://www.libreoffice.org/bugzilla/show_bug.cgi?id=77890#c2
     */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:br", "type", "page");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testNumberedList,"NumberedList.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNumberedList,"NumberedList.docx")
 {
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:pStyle", "val", "NumberedList1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:numPr/w:ilvl","val", "0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:numPr/w:numId","val", "0");
@@ -199,22 +183,17 @@ DECLARE_OOXMLEXPORT_TEST(testNumberedList,"NumberedList.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:numPr/w:numId","val", "0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO76597, "fdo76597.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76597, "fdo76597.docx")
 {
     // check XML
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "96");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "120");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeTIF, "fdo77476.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tiff']", "PartName", "/word/media/image1.tif");
 }
@@ -227,12 +206,9 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFloatingTable, "fdo77887.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "horzAnchor", "margin");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "leftFromText", "141");
@@ -245,12 +221,9 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
     assertXPathNoAttribute(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "tblpYSpec");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeRight, "tdf90681-1.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeRight, "tdf90681-1.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:tcPr/w:vMerge", "val", "restart");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
@@ -258,12 +231,9 @@ DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeRight, "tdf90681-1.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:vMerge", "val", "continue");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:vMerge", "val", "restart");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:vMerge", "val", "continue");
@@ -272,25 +242,20 @@ DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
 DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeTableInTable, "ooo96040-2.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
     if (!pXmlDoc)
-       return;
+        return;
 }
 
 DECLARE_OOXMLEXPORT_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
     if (!pXmlDoc)
-       return;
+        return;
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if(!pXmlDoc)
-        return;
 
     // Problem :If the table preferred width is in percent, then after RT it changes to 0 & width type changes
     // to 'auto' instead of 'pct'.
@@ -298,12 +263,9 @@ DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblW[1]", "type","pct");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO75431, "fdo75431.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc, "//w:tbl", 2);
     assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
@@ -320,14 +282,12 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO77812, "fdo77812.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO77812, "fdo77812.docx")
 {
     /* Additional sectPr was getting inserted and hence Column properties
      * were getting added into this additional sectPr instead of Default setPr.
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     // Check no additional section break is inserted.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:sectPr", 0);
@@ -338,12 +298,9 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77812, "fdo77812.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeOLE, "fdo77759.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']",
@@ -379,63 +336,50 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
 }
 
 
-DECLARE_OOXMLEXPORT_TEST(testPageBreakInFirstPara,"fdo77727.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageBreakInFirstPara,"fdo77727.docx")
 {
     /* Break to next page was not exported if it is in first paragraph of the section.
      * Now after fix , LO writes Next Page Break and also preserves <w:br> tag.
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type","page");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78284, "fdo78284.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc,"/ContentType:Types/ContentType:Override[@PartName='/word/media/OOXDiagramDataRels1_0.png']",
                         "ContentType",
                         "image/png");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78384,"fdo78384.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo78469, "fdo78469.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78469, "fdo78469.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
-    if (!pXmlDoc)
-       return;
     // make sure dataBinding & text tags not present in sdtcontent
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:dataBinding[1]",0);
     assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:text[1]",0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78887, "fdo78887.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78887, "fdo78887.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[1]", 1);
     assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:t[1]", "Lyrics: ");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[2]", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78887b, "missing_newline.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78887b, "missing_newline.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/w:br[1]", 1);
     assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:t[1]", "Tab and line break");
@@ -443,22 +387,16 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78887b, "missing_newline.odt")
     assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[6]/w:t[1]", "New line");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo78651, "fdo78651.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-        return;
     // ensure that there are only two tables
     assertXPath(pXmlDoc, "//w:tbl", 2);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78882, "fdo78882.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-        return;
 
     // Ensure that Section Break is getting written inside second paragraph
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:pPr[1]/w:sectPr[1]",1);
@@ -467,7 +405,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:p[1]/w:pPr[1]/w:sectPr[1]",0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo76934, "fdo76934.docx")
 {
     /* Issue was, AutoSpacing property if present inside styles.xml, LO was not able to
      * preserve it.
@@ -475,14 +413,11 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
 
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
 
-    if (!pXmlDoc)
-        return;
-
     // Ensure that after fix LO is preserving AutoSpacing property in styles.xml
     assertXPath ( pXmlDoc, "/w:styles[1]/w:style[@w:styleId='Title']/w:pPr[1]/w:spacing[1]", "beforeAutospacing", "1" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79540, "fdo79540.docx")
 {
     /* Issue was, <w:drawing> was getting written inside <w:drawing>.
      * So postpone the writing of Inner Drawing tag.
@@ -490,9 +425,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
      */
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-        return;
 
     // Ensure that two separate w:drawing tags are written and they are not nested.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing", 1);
@@ -544,24 +476,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFo
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in second footnote", 2, getParagraphs(xFootnoteText) );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79668,"fdo79668.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79668,"fdo79668.docx")
 {
     // fdo#79668: Document was Crashing on DebugUtil build while Saving
     // because of repeated attribute value in same element.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // w:pPr's  w:shd attributes were getting added to w:pPrChange/w:pPr's w:shd hence checking
     // w:fill for both shd elements
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:shd", "fill", "FFFFFF" );
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pPrChange/w:pPr/w:shd", "fill", "FFFFFF" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78907,"fdo78907.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page" );
 
     xmlDocPtr pXmlDoc1 = parseExport("word/footer1.xml");
@@ -570,11 +498,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
     assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
 }
 
-DECLARE_OOXMLEXPORT_TEST(tdf118702,"tdf118702.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf118702,"tdf118702.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:type", "val", "nextPage" );
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:pgSz", "orient", "landscape" );
 }
@@ -589,11 +515,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
         return;
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO79915, "fdo79915.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO79915, "fdo79915.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[10]/w:t", "How much buoyancy does the water provide?");
 }
@@ -608,13 +532,10 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")
 }
 
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79968_sldx, "fdo79968.docx")
 {
     // This UT for DOCX embedded with powerpoint slide
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.presentationml.slide']",
@@ -635,13 +556,10 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
         "PowerPoint.Slide.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
 {
     // This UT for DOCX embedded with binary excel work sheet.
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.binary.macroEnabled.12']",
@@ -685,13 +603,10 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV",0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo77129, "fdo77129.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo77129, "fdo77129.docx")
 {
     // The problem was that text after TOC field was missing if footer reference  comes in field.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    if (!pXmlDoc)
-       return;
 
     // Data was lost from this paragraph.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t", "Abstract");
@@ -724,13 +639,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129402, "fdo77129.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("How\t2"), aTocString);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
 {
     // This UT for DOCX embedded with excel work sheet.
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.macroEnabled.12']",
@@ -751,12 +663,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
         "Excel.SheetMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80522,"fdo80522.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-word.document.macroEnabled.12']",
@@ -777,12 +686,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
         "Word.DocumentMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.presentation.macroEnabled.12']",
@@ -803,12 +709,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
         "PowerPoint.ShowMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.slide.macroEnabled.12']",
@@ -829,13 +732,10 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
         "PowerPoint.SlideMacroEnabled.12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80898, "fdo80898.docx")
 {
     // This UT for DOCX embedded with binary excel work sheet.
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
-
-    if (!pXmlDoc)
-       return;
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/msword']",
@@ -856,13 +756,11 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
         "Word.Document.8");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
 {
     // Issue was Direct Formatting for non-first Table cells was not getting preserved.
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-       return;
 
     // Ensure that for Third Table cell Direct Formatting is preserved.
     // In file, Direct Formatting used for Third Table cell is Line Spacing="1.5 lines"
@@ -935,12 +833,10 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo83048, "fdo83048.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo83048, "fdo83048.docx")
 {
     // Issue was wrong SDT properties were getting exported for Date SDT
     xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
-    if (!pXmlDoc)
-       return;
 
     // Make sure Date is inside SDT tag.
     // This will happen only if right SDT properties are exported.
@@ -948,11 +844,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo83048, "fdo83048.docx")
                        "1/2/2013");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdt2Run, "sdt-2-run.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
 
     // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[1]/w:t", "first");
@@ -961,11 +855,9 @@ DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", "third");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFD083057, "fdo83057.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFD083057, "fdo83057.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
-    if (!pXmlDoc)
-        return;
 
     // A fly frame was attached to a para which started with a hint (run) containing an SDT.
     // This SDT was handled while exporting the FLYFRAME and also the text of the run.
