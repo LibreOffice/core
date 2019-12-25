@@ -114,6 +114,7 @@ static const sal_Char
     sImplSttSkipChars[] = "\"\'([{\x83\x84\x89\x91\x92\x93\x94",
     /* also at these ends - Brackets and all kinds of begin characters */
     sImplEndSkipChars[] = "\"\')]}\x83\x84\x89\x91\x92\x93\x94";
+static const sal_Char cEndOfSkipChars = '\x94'; // see above
 
 static OUString EncryptBlockName_Imp(const OUString& rName);
 
@@ -189,6 +190,11 @@ static bool lcl_IsInAsciiArr( const sal_Char* pArr, const sal_Unicode c )
             bRet = true;
             break;
         }
+
+    // check for typographical quotation marks in the case of skipped characters
+    if ( !bRet && *(--pArr) == cEndOfSkipChars && 0x2018 <= c && c <= 0x201F )
+        bRet = true;
+
     return bRet;
 }
 
