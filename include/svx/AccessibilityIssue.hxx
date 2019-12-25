@@ -12,6 +12,9 @@
 #define INCLUDED_SVX_ACCESSIBILITYISSUE_HXX
 
 #include <svx/svxdllapi.h>
+#include <rtl/ustring.hxx>
+#include <vector>
+#include <memory>
 
 namespace svx
 {
@@ -31,6 +34,7 @@ public:
     {
     }
     virtual ~AccessibilityIssue() {}
+    virtual bool canGotoIssue() const = 0;
     virtual void gotoIssue() const = 0;
 
     AccessibilityIssueID m_eIssueID;

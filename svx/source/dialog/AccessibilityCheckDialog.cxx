@@ -23,6 +23,7 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     , m_pAccessibilityIssue(rAccessibilityIssue)
 {
     m_xLabel->set_label(m_pAccessibilityIssue->m_aIssueText);
+    m_xGotoButton->set_visible(m_pAccessibilityIssue->canGotoIssue());
     m_xGotoButton->connect_clicked(LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
     m_xContainer->show();
 }
