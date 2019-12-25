@@ -309,7 +309,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         //Determine if accessibility support is needed
         bool bSupportAccessibility = jfw::isAccessibilitySupportDesired();
         nFeatureFlags = bSupportAccessibility ?
-            JFW_FEATURE_ACCESSBRIDGE : 0L;
+            JFW_FEATURE_ACCESSBRIDGE : 0;
 
 
         // 'bInfoFound' indicates whether a Java installation has been found
