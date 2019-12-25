@@ -172,6 +172,10 @@ static bool lcl_IsSymbolChar( CharClass const & rCC, const OUString& rTxt,
 
 static bool lcl_IsInAsciiArr( const char* pArr, const sal_Unicode c )
 {
+    // tdf#54409 check also typographical quotation marks in the case of skipped ASCII quotation marks
+    if ( 0x2018 <= c && c <= 0x201F && (pArr == sImplSttSkipChars || pArr == sImplEndSkipChars) )
+        return true;
+
     bool bRet = false;
     for( ; *pArr; ++pArr )
         if( *pArr == c )
