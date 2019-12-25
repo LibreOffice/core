@@ -66,7 +66,7 @@ namespace emfplushelper
                 s.ReadUInt32(color);
 
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tSolid color: 0x" << std::hex << color << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\tsolid color: 0x" << std::hex << color << std::dec);
                 break;
             }
             case BrushTypeHatchFill:
