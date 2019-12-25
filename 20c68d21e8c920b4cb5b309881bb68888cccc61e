@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d7e7e6e_2881b123",
+        "filename": "chart2/inc/ChartView.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-25T13:26:50Z",
+      "side": 1,
+      "message": "Why would we need a \"#pragma once\" here?\n\n(i.e. Please remove it. We need one \"#pragma once\" per header file, and we put it at the top of the source file.)",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 255,
+        "endChar": 12
+      },
+      "revId": "20c68d21e8c920b4cb5b309881bb68888cccc61e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
