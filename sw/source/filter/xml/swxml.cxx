@@ -22,7 +22,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -159,11 +159,11 @@ ErrCode ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
+    uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(rxContext);
     SAL_INFO( "sw.filter", "parser created" );
     // get filter
     const OUString aFilterName(OUString::createFromAscii(pFilterName));
-    uno::Reference< xml::sax::XDocumentHandler > xFilter(
+    uno::Reference< xml::sax::XFastDocumentHandler > xFilter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY);
     SAL_WARN_IF(!xFilter.is(), "sw.filter", "Can't instantiate filter component: " << aFilterName);
@@ -171,21 +171,16 @@ ErrCode ReadThroughComponent(
         return ERR_SWG_READ_ERROR;
     SAL_INFO( "sw.filter", "" << pFilterName << " created" );
     // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
+    xParser->setFastDocumentHandler( xFilter );
 
     // connect model and filter
     uno::Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
-    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xFilter.get() );
 
     // finally, parser the stream
     try
     {
-        if( xFastParser.is() )
-            xFastParser->parseStream( aParserInput );
-        else
-            xParser->parseStream( aParserInput );
+        xParser->parseStream( aParserInput );
     }
     catch( xml::sax::SAXParseException& r)
     {
