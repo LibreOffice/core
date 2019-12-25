@@ -47,20 +47,16 @@ DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Description"), getProperty<OUString>(getShape(1), "Description"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlZorder, "dml-zorder.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlZorder, "dml-zorder.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // This was "0": causing that in Word, the second shape was on top, while in the original odt the first shape is on top.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "relativeHeight", "2");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // Relative size wasn't exported all, then relativeFrom was "page", not "margin".
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
 }
@@ -76,11 +72,9 @@ DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.do
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.gif")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlGroupshapeRelsize, "dml-groupshape-relsize.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlGroupshapeRelsize, "dml-groupshape-relsize.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // Relative size wasn't imported.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
 }
@@ -349,15 +343,13 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
     CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 14026 : 14023), xChildGroup->getPosition().Y);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")
 {
     // Problem was when a fill gradient was imported from a theme, (fillRef in ooxml)
     // not just the theme was written out but the explicit values too
     // Besides the duplication of values it causes problems with writing out
     // <a:schemeClr val="phClr"> into document.xml, while phClr can be used just for theme definitions.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     // check no explicit gradFill has been exported
     assertXPath(pXmlDoc,
@@ -443,36 +435,30 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx"
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 
+    if (!mbExported)
+        return;
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127814, "tdf127814.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127814, "tdf127814.docx")
 {
     // Paragraph top margin was 0 in a table started on a new page
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "before", "0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf128752, "tdf128752.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128752, "tdf128752.docx")
 {
     // Paragraph bottom margin was 200, docDefault instead of table style setting
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", "0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf119054, "tdf119054.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119054, "tdf119054.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     // Don't overwrite before and after spacing of Heading2 by table style
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before");
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after");
@@ -480,7 +466,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119054, "tdf119054.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "line", "240");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69636, "fdo69636.docx")
 {
     /*
      * The problem was that the exporter didn't mirror the workaround of the
@@ -488,31 +474,25 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
      * mso-layout-flow-alt property was completely missing in the output.
      */
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     // VML
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox", "style").match("mso-layout-flow-alt:bottom-to-top"));
     // drawingML
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "vert", "vert270");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLData, "TestVMLData.docx")
 {
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data should not come under w:rPr element.
     xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
-    if (!pXmlDoc)
-        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "stroked").match("f"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageData, "image_data.docx")
 {
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
     xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
-    if (!pXmlDoc)
-        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 
@@ -642,11 +622,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
     CPPUNIT_ASSERT(abs(2843 - aPos[3].Y) < 10);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo73215, "fdo73215.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73215, "fdo73215.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // 'rect' was 'pictureFrame', which isn't valid.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:prstGeom",
                 "prst", "rect");
@@ -655,16 +633,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73215, "fdo73215.docx")
                 "name", "adj1");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testBehinddoc, "behinddoc.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBehinddoc, "behinddoc.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // This was "0", shape was in the foreground.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", "1");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
 {
     /* Given file contains 3 DrawingML objects as 1Picture,1SmartArt and 1Shape.
      * Check for SmartArt.
@@ -674,8 +650,6 @@ DECLARE_OOXMLEXPORT_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
     */
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr","id","1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr","name","Diagram1");
 
@@ -686,30 +660,24 @@ DECLARE_OOXMLEXPORT_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr","name","Picture 1");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo65833, "fdo65833.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo65833, "fdo65833.docx")
 {
     // The "editas" attribute for vml group shape was not preserved.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", "canvas");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo73247, "fdo73247.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73247, "fdo73247.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
                 "rot", "1969200");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo70942, "fdo70942.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70942, "fdo70942.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
                 "prst", "ellipse");
 }
@@ -839,42 +807,34 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
     CPPUNIT_ASSERT_EQUAL(drawing::LineJoint_MITER, getProperty<drawing::LineJoint>(xShape3, "LineJoint"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO73546, "FDO73546.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO73546, "FDO73546.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69616, "fdo69616.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     // VML
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testAlignForShape,"Shape.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignForShape,"Shape.docx")
 {
     //fdo73545:Shape Horizontal and vertical orientation is wrong
     //The wp:align tag is missing after roundtrip
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/"
                          "wp:anchor/wp:positionH/wp:align");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
 {
     /* DOCX contatining Shape with LineStyle as Dash Type should get preserved inside
      * an XML tag <a:prstDash> with value "dash", "sysDot", "lgDot", etc.
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "lgDashDotDot");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "lgDashDot");
@@ -924,18 +884,16 @@ DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservati
             "val", "160000");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType_VML, "LineStyle_DashType_VML.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType_VML, "LineStyle_DashType_VML.docx")
 {
     /* DOCX contatining "Shape with text inside" having Line Style as "Dash Type" should get
      * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo74110,"fdo74110.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74110,"fdo74110.docx")
 {
     /*
     The File contains word art which is being exported as shape and the mapping is defaulted to
@@ -944,26 +902,20 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74110,"fdo74110.docx")
     Hence the following test case.
     */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]",
                 "prst", "rect");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]",0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOuterShdw,"testOuterShdw.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOuterShdw,"testOuterShdw.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "1041400");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExtentValue, "fdo74605.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     sal_Int32 nX = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent", "cx").toInt32();
     // This was negative.
     CPPUNIT_ASSERT(nX >= 0);
@@ -975,11 +927,9 @@ DECLARE_OOXMLEXPORT_TEST(testExtentValue, "fdo74605.docx")
 // because it's exported with 255% height percentage from a 255 HeightPercent
 // settings, but 255 is a special flag that the value is synced to the
 // other dimension.
-DECLARE_OOXMLEXPORT_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     // check no explicit pctHeight has been exported, all we care
     // about at this point is that it's not 255000
