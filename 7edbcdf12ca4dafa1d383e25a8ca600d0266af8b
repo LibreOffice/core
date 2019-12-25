@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bac4a6e_31520125",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2019-12-25T08:06:13Z",
+      "side": 1,
+      "message": "oh, is the bug number really 123456? :)",
+      "revId": "7edbcdf12ca4dafa1d383e25a8ca600d0266af8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
