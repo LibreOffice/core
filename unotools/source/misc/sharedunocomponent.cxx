@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace utl
 {
@@ -59,7 +60,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "DisposableComponent::~DisposableComponent: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "unotools", "DisposableComponent::~DisposableComponent" );
             }
             m_xComponent.clear();
         }
@@ -155,7 +156,7 @@ namespace utl
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "unotools", "CloseableComponentImpl::impl_nf_switchListening" );
         }
     }
 

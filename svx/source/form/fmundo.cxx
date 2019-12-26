@@ -882,7 +882,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmXUndoEnvironment::switchListening: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "FmXUndoEnvironment::switchListening" );
     }
 }
 
@@ -916,7 +916,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmXUndoEnvironment::switchListening: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "FmXUndoEnvironment::switchListening" );
     }
 }
 
@@ -992,7 +992,7 @@ void FmUndoPropertyAction::Undo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoPropertyAction::Undo: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "FmUndoPropertyAction::Undo" );
         }
         rEnv.UnLock();
     }
@@ -1012,7 +1012,7 @@ void FmUndoPropertyAction::Redo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoPropertyAction::Redo: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "FmUndoPropertyAction::Redo" );
         }
         rEnv.UnLock();
     }
@@ -1162,7 +1162,7 @@ void FmUndoContainerAction::Undo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoContainerAction::Undo: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "FmUndoContainerAction::Undo" );
         }
         rEnv.UnLock();
     }
@@ -1190,7 +1190,7 @@ void FmUndoContainerAction::Redo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoContainerAction::Redo: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "FmUndoContainerAction::Redo" );
         }
         rEnv.UnLock();
     }

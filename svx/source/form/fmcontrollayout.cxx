@@ -280,7 +280,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ControlLayouter::initializeControlLayout: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "ControlLayouter::initializeControlLayout" );
         }
     }
 

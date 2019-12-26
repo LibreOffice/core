@@ -521,8 +521,7 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION("forms.component");
-                    SAL_WARN("forms.component",  "OControlModel::OControlModel: caught an exception!");
+                    TOOLS_WARN_EXCEPTION("forms.component",  "OControlModel::OControlModel");
                 }
             }
         }
@@ -2148,8 +2147,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
 
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("forms.component");
-        SAL_WARN("forms.component",  "OBoundControlModel::doSetControlValue: caught an exception!");
+        TOOLS_WARN_EXCEPTION("forms.component",  "OBoundControlModel::doSetControlValue");
     }
 }
 
@@ -2169,8 +2167,7 @@ void OBoundControlModel::onConnectedValidator( )
 
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("forms.component");
-        SAL_WARN("forms.component",  "OBoundControlModel::onConnectedValidator: caught an exception!");
+        TOOLS_WARN_EXCEPTION("forms.component",  "OBoundControlModel::onConnectedValidator");
     }
 
     recheckValidity( false );
@@ -2189,8 +2186,7 @@ void OBoundControlModel::onDisconnectedValidator( )
 
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("forms.component");
-        SAL_WARN("forms.component",  "OBoundControlModel::onDisconnectedValidator: caught an exception!");
+        TOOLS_WARN_EXCEPTION("forms.component",  "OBoundControlModel::onDisconnectedValidator");
     }
 
     recheckValidity( false );
@@ -2463,8 +2459,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
 
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("forms.component");
-        SAL_WARN("forms.component",  "OBoundControlModel::disconnectExternalValueBinding: caught an exception!");
+        TOOLS_WARN_EXCEPTION("forms.component",  "OBoundControlModel::disconnectExternalValueBinding");
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -2792,8 +2787,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("forms.component");
-        SAL_WARN("forms.component",  "OBoundControlModel::recheckValidity: caught an exception!");
+        TOOLS_WARN_EXCEPTION("forms.component",  "OBoundControlModel::recheckValidity");
     }
 }
 

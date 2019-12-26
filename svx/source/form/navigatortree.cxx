@@ -52,6 +52,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
+#include <tools/diagnose_ex.h>
 #include <bitmaps.hlst>
 #include <vcl/treelistentry.hxx>
 #include <vcl/commandevent.hxx>
@@ -1191,7 +1192,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "NavigatorTree::doPaste: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "NavigatorTree::doPaste" );
         }
     }
 

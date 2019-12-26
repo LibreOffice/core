@@ -251,7 +251,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "forms.component", "OReferenceValueComponent::translateControlValueToExternalValue" );
         }
 
         return aExternalValue;
