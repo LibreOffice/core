@@ -381,7 +381,7 @@ public:
                                 //  1 = Level 2
                                 //  2 = Custom
     sal_uInt16 m_f2on1          : 1;  // 2-page-on-1 feature is turned on.
-    sal_uInt16 m_reserved1      : 4;  // in 97 its marked as reserved BUT
+    sal_uInt16 m_reserved1      : 4;  // in 97 it's marked as reserved BUT
     sal_uInt16 m_reserved2      : 6;  // reserved ?
     //we find that the following applies,
     //2 == Japanese
