@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
 
@@ -240,7 +241,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ControlBorderManager::controlStatusGained: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "ControlBorderManager::controlStatusGained" );
         }
     }
 
@@ -264,7 +265,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ControlBorderManager::controlStatusLost: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "ControlBorderManager::controlStatusLost" );
         }
     }
 
@@ -413,7 +414,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ControlBorderManager::validityChanged: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "ControlBorderManager::validityChanged" );
         }
     }
 

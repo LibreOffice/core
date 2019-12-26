@@ -479,7 +479,7 @@ namespace
                         }
                         catch(SQLException&)
                         {
-                            OSL_FAIL( "lcl_createSDBCXColumn: caught an exception!" );
+                            TOOLS_WARN_EXCEPTION( "connectivity", "lcl_createSDBCXColumn" );
                         }
                     }
 

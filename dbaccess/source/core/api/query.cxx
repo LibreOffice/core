@@ -90,7 +90,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         }
         catch(Exception&)
         {
-            OSL_FAIL("OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
+            TOOLS_WARN_EXCEPTION("dbaccess", "OQueryDescriptor_Base::OQueryDescriptor_Base");
         }
 
         m_xCommandDefinition->addPropertyChangeListener(OUString(), this);

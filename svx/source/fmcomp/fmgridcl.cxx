@@ -1483,7 +1483,7 @@ void FmGridControl::RowHeightChanged()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmGridControl::RowHeightChanged: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "FmGridControl::RowHeightChanged" );
         }
     }
 }
@@ -2051,7 +2051,7 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
                         }
                         catch(const Exception&)
                         {
-                            OSL_FAIL("exception occurred while deleting a column");
+                            TOOLS_WARN_EXCEPTION("svx", "exception occurred while deleting a column");
                         }
                     }
                 }

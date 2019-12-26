@@ -47,6 +47,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/edit.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
@@ -455,7 +456,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "BibFrameController_Impl::dispatch: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "extensions.biblio", "BibFrameController_Impl::dispatch" );
             }
 
             sal_uInt16 nCount = aStatusListeners.size();
