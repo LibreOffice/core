@@ -211,6 +211,19 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
         // correct, keep these.
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
+        // \chbrdr requires *all* of the border settings to be present,
+        // otherwise a default (NONE) border is created from the removed
+        // attributes which then overrides the style-defined border.
+        // See BorderHandler.cxx and NS_ooxml::LN_EG_RPrBase_bdr in DomainMapper.
+        // This also is needed for NS_ooxml::LN_CT_PBdr_top etc.
+        case NS_ooxml::LN_CT_Border_sz:
+        case NS_ooxml::LN_CT_Border_val:
+        case NS_ooxml::LN_CT_Border_color:
+        case NS_ooxml::LN_CT_Border_space:
+        case NS_ooxml::LN_CT_Border_shadow:
+        case NS_ooxml::LN_CT_Border_frame:
+        case NS_ooxml::LN_CT_Border_themeTint:
+        case NS_ooxml::LN_CT_Border_themeColor:
             return true;
 
         default:
