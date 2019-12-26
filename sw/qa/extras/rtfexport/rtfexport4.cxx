@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
@@ -239,6 +240,70 @@ DECLARE_RTFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     // - Actual  : 0
     // i.e. custom writing mode was lost.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf129631_lostBorders, "tdf129631_lostBorders.rtf")
+{
+    uno::Reference<container::XNameAccess> paragraphStyles = getStyles("ParagraphStyles");
+    uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName("Border"),
+                                                    uno::UNO_QUERY_THROW);
+    table::BorderLine2 aBorderLine = getProperty<table::BorderLine2>(xStyleProps, "RightBorder");
+    CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "The border style has normal black borders", COL_BLACK,
+        Color(getProperty<table::BorderLine>(xStyleProps, "RightBorder").Color));
+
+    aBorderLine = getProperty<table::BorderLine2>(getParagraph(2), "RightBorder");
+    CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "The second paragraph should have dark green borders", sal_Int32(432686),
+        getProperty<table::BorderLine>(getParagraph(2), "RightBorder").Color);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
+{
+    uno::Reference<container::XNameAccess> paragraphStyles = getStyles("ParagraphStyles");
+    uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName("Shadow"),
+                                                    uno::UNO_QUERY_THROW);
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+
+    // Shadows were inherited regardless of whether the style disabled them.
+    xStyleProps.set(paragraphStyles->getByName("Shadow-removed"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
+    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+
+    uno::Reference<container::XNameAccess> characterStyles = getStyles("CharacterStyles");
+    xStyleProps.set(characterStyles->getByName("CharShadow"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+
+    xStyleProps.set(characterStyles->getByName("CharShadow-removed"), uno::UNO_QUERY_THROW);
+    aShadow = getProperty<table::ShadowFormat>(xStyleProps, "CharShadowFormat");
+    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2, "style");
+    aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+
+    xRun.set(getRun(getParagraph(1), 4, "shadow"));
+    aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    table::BorderLine2 aBorderLine = getProperty<table::BorderLine2>(xRun, "CharRightBorder");
+    // MS formats can't have a shadow without a border.
+    // Char borders are all or none, so have to decide to add borders, or throw away shadow...
+    if (mbExported)
+        CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
+
+    xRun.set(getRun(getParagraph(4), 2, "shadow"));
+    aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+    //CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+
+    xRun.set(getRun(getParagraph(9), 2, "End of test"));
+    aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    aBorderLine = getProperty<table::BorderLine2>(xRun, "CharRightBorder");
+    CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
