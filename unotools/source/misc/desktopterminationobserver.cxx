@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 
@@ -101,7 +102,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OObserverImpl::ensureObservation: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "unotools", "OObserverImpl::ensureObservation" );
             }
         }
 

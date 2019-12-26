@@ -50,6 +50,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 
 using namespace ::accessibility;
@@ -682,7 +683,7 @@ bool AccessibleControlShape::ensureControlModelAccess()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "AccessibleControlShape::ensureControlModelAccess" );
     }
 
     return m_xControlModel.is();
@@ -738,7 +739,7 @@ OUString AccessibleControlShape::getControlModelStringProperty( const OUString& 
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "OAccessibleControlContext::getModelStringProperty" );
     }
     return sReturn;
 }
