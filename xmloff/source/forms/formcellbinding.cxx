@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "strings.hxx"
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -196,7 +197,7 @@ OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FormCellBindingHelper::getStringAddressFromCellBinding: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "xmloff", "FormCellBindingHelper::getStringAddressFromCellBinding" );
     }
 
     return sAddress;
@@ -224,7 +225,7 @@ OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Refere
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FormCellBindingHelper::getStringAddressFromCellListSource: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "xmloff", "FormCellBindingHelper::getStringAddressFromCellListSource" );
     }
 
     return sAddress;
@@ -251,7 +252,7 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "xmloff", "FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies" );
     }
 
     return bYesItIs;
@@ -421,7 +422,7 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rI
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FormCellBindingHelper::doConvertAddressRepresentations: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "xmloff", "FormCellBindingHelper::doConvertAddressRepresentations" );
         }
     }
 

@@ -131,8 +131,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("svx");
-            OSL_FAIL( "getModelLineEndSetting: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "getModelLineEndSetting" );
         }
         return eFormat;
     }
@@ -579,8 +578,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("svx");
-        OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "DbCellControl::doPropertyListening" );
     }
 }
 
@@ -602,8 +600,7 @@ void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, bool
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("svx");
-        OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "DbCellControl::doPropertyListening" );
     }
 }
 

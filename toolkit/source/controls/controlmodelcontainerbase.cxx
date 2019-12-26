@@ -832,7 +832,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
 
     if ( ( _nGroup < 0 ) || ( _nGroup >= static_cast<sal_Int32>(maGroups.size()) ) )
     {
-        SAL_WARN("toolkit", "invalid argument and I am not allowed to throw an exception!" );
+        SAL_WARN("toolkit", "invalid argument and I am not allowed to throw exception!" );
         _rGroup.realloc( 0 );
         _rName.clear();
     }

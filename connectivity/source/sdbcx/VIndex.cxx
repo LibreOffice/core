@@ -26,6 +26,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <TConnection.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::connectivity;
 using namespace ::dbtools;
@@ -152,7 +153,7 @@ Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OIndex::getColumns: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OIndex::getColumns" );
     }
 
     return m_pColumns.get();

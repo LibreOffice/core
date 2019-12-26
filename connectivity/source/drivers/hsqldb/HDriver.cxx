@@ -646,7 +646,7 @@ namespace connectivity
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL( "ODriverDelegator::preCommit: caught an exception!" );
+                    TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "ODriverDelegator::preCommit" );
                 }
             }
         }
@@ -833,7 +833,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "lcl_getSystemLocale: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "lcl_getSystemLocale" );
             }
             if ( sLocaleString.isEmpty() )
             {
@@ -863,7 +863,7 @@ namespace connectivity
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "ODriverDelegator::onConnectedNewDatabase" );
         }
     }
 
