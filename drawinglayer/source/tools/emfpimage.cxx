@@ -23,6 +23,13 @@
 
 namespace emfplushelper
 {
+    EMFPImage::EMFPImage()
+        : type(0)
+        , width(0)
+        , height(0)
+        , stride(0)
+        , pixelFormat(PixelFormatUndefined) {}
+
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 header, bitmapType;
