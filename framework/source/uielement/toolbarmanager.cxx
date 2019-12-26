@@ -1515,6 +1515,8 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
                     Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame));
                     commandToImage[aCommandURL] = aImage;
                     xVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
+                    vcl::KeyCode aKeyCodeShortCut = vcl::CommandInfoProvider::GetCommandKeyCodeShortcut( aCommandURL, m_xFrame );
+                    xVisibleItemsPopupMenu->SetAccelKey( STARTID_CUSTOMIZE_POPUPMENU+nPos, aKeyCodeShortCut );
                 }
                 else
                 {
@@ -1524,6 +1526,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         }
 
         // Now we go through all the contextual menu to update the icons
+        // and accelerator key shortcuts
         std::map< OUString, Image >::iterator it;
         for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
         {
@@ -1533,6 +1536,9 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
             if (it != commandToImage.end()) {
                 pMenu->SetItemImage( nId, it->second );
             }
+            vcl::KeyCode aKeyCodeShortCut = vcl::CommandInfoProvider::GetCommandKeyCodeShortcut( cmdUrl, m_xFrame );
+            if ( aKeyCodeShortCut.GetFullCode() != 0 )
+                pMenu->SetAccelKey( nId, aKeyCodeShortCut );
         }
     }
 
