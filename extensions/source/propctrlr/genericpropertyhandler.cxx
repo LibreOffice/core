@@ -39,6 +39,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <o3tl/functional.hxx>
@@ -104,7 +105,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EnumRepresentation::EnumRepresentation: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EnumRepresentation::EnumRepresentation" );
         }
     }
 
@@ -118,7 +119,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EnumRepresentation::getDescriptions: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EnumRepresentation::getDescriptions" );
         }
 
         return std::vector< OUString >( aNames.begin(), aNames.end() );
@@ -134,7 +135,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EnumRepresentation::impl_getValues: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EnumRepresentation::impl_getValues" );
         }
     }
 
@@ -522,7 +523,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "GenericPropertyHandler::impl_ensurePropertyMap: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "GenericPropertyHandler::impl_ensurePropertyMap" );
             }
         }
     }

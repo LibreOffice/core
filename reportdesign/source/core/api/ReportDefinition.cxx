@@ -224,7 +224,7 @@ static void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDe
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL( "lcl_extractAndStartStatusIndicator: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "reportdesign", "lcl_extractAndStartStatusIndicator" );
     }
 }
 

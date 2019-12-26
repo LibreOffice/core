@@ -30,6 +30,7 @@
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/PColumn.hxx>
 #include <comphelper/numbers.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -85,7 +86,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPredicateInputController::getSeparatorChars: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OPredicateInputController::getSeparatorChars" );
         }
         return false;
     }
@@ -119,7 +120,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPredicateInputController::OPredicateInputController: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OPredicateInputController::OPredicateInputController" );
         }
     }
 

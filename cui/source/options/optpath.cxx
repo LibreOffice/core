@@ -644,7 +644,7 @@ void SvxPathTabPage::GetPathList(
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "SvxPathTabPage::GetPathList(): caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "cui.options", "SvxPathTabPage::GetPathList()" );
     }
 }
 

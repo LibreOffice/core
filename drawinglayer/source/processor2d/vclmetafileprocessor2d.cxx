@@ -20,6 +20,7 @@
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
 #include <tools/gen.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
@@ -1086,7 +1087,7 @@ namespace drawinglayer
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_FAIL("VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
+                    TOOLS_WARN_EXCEPTION("drawinglayer", "VclMetafileProcessor2D: No access to printable flag of Control");
                 }
             }
 
@@ -1163,7 +1164,7 @@ namespace drawinglayer
                     }
                     catch( const uno::Exception& )
                     {
-                        OSL_FAIL("VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
+                        TOOLS_WARN_EXCEPTION("drawinglayer", "VclMetafileProcessor2D: Printing of Control failed");
                     }
                 }
 

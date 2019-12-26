@@ -24,6 +24,7 @@
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
+#include <tools/diagnose_ex.h>
 
 #define TEXTTYPE_SINGLELINE     0
 #define TEXTTYPE_MULTILINE      1
@@ -124,7 +125,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EditPropertyHandler::getPropertyValue: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EditPropertyHandler::getPropertyValue" );
         }
 
         return aReturn;
@@ -179,7 +180,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EditPropertyHandler::setPropertyValue: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EditPropertyHandler::setPropertyValue" );
         }
     }
 

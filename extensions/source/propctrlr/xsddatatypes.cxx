@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 
 namespace pcr
@@ -45,7 +46,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDDataType: getSave: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType: getSave" );
         }
         return aReturn;
     }
@@ -74,7 +75,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDDataType::classify: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::classify" );
         }
         return nTypeClass;
     }
@@ -100,7 +101,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
         }
     }
 
@@ -114,7 +115,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDDataType::hasFacet: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::hasFacet" );
         }
         return bReturn;
     }
@@ -128,7 +129,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
         }
         return aReturn;
     }
@@ -174,7 +175,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDDataType::copyFacetsFrom: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::copyFacetsFrom" );
         }
     }
 

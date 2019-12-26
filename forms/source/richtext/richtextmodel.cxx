@@ -30,6 +30,7 @@
 #include <svl/itempool.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -515,7 +516,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ORichTextModel::getEditEngine: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "forms.richtext", "ORichTextModel::getEditEngine" );
             }
         }
         return pEngine;

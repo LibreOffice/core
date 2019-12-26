@@ -1410,7 +1410,7 @@ void FmXFormShell::ExecuteTabOrderDialog_Lock(const Reference<XTabControllerMode
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "FmXFormShell::ExecuteTabOrderDialog" );
     }
 }
 
