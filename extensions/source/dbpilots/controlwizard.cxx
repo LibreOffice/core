@@ -19,6 +19,7 @@
 
 #include "controlwizard.hxx"
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -176,7 +177,7 @@ namespace dbp
             }
             catch(const Exception&)
             {
-                OSL_FAIL("OControlWizardPage::initializePage: caught an exception!");
+                TOOLS_WARN_EXCEPTION("extensions.dbpilots", "OControlWizardPage::initializePage");
             }
 
             INetURLObject aURL( sDataSource );
@@ -351,7 +352,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OControlWizard::implDeterminePage: caught an exception!");
+            TOOLS_WARN_EXCEPTION("extensions.dbpilots", "OControlWizard::implDeterminePage");
         }
     }
 
@@ -386,7 +387,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OControlWizard::getFormConnection: caught an exception!");
+            TOOLS_WARN_EXCEPTION("extensions.dbpilots", "OControlWizard::getFormConnection");
         }
         return xConn;
     }
@@ -416,7 +417,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OControlWizard::setFormConnection: caught an exception!");
+            TOOLS_WARN_EXCEPTION( "extensions.dbpilots", "OControlWizard::setFormConnection");
         }
     }
 
@@ -566,7 +567,7 @@ namespace dbp
         catch(const SQLException& e) { aSQLException <<= e; }
         catch(const Exception&)
         {
-            OSL_FAIL("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
+            TOOLS_WARN_EXCEPTION( "extensions.dbpilots", "OControlWizard::initContext: could not retrieve the control context");
         }
 
         ::comphelper::disposeComponent(xStatement);
@@ -618,7 +619,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OControlWizard::commitControlSettings: could not commit the basic control settings!");
+            TOOLS_WARN_EXCEPTION( "extensions.dbpilots", "OControlWizard::commitControlSettings: could not commit the basic control settings!");
         }
     }
 
@@ -643,7 +644,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OControlWizard::initControlSettings: could not retrieve the basic control settings!");
+            TOOLS_WARN_EXCEPTION( "extensions.dbpilots", "OControlWizard::initControlSettings: could not retrieve the basic control settings!");
         }
     }
 

@@ -2001,8 +2001,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow" );
         }
     }
 
@@ -2078,8 +2077,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL( "FormComponentPropertyHandler::onNewComponent: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::onNewComponent" );
         }
     }
 
@@ -2333,8 +2331,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL( "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_getRowSet_nothrow" );
         }
         return xReturn;
     }
@@ -2372,8 +2369,7 @@ namespace pcr
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_initFieldList_nothrow" );
         }
     }
 
@@ -2422,8 +2418,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-                OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
+                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
             }
             // additional info about what happened
             INetURLObject aParser( sDataSourceName );
@@ -2481,8 +2476,7 @@ namespace pcr
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_describeCursorSource_nothrow");
         }
     }
 
@@ -2656,8 +2650,7 @@ namespace pcr
         catch (const SQLException& e) { aErrorInfo = e; }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow" );
         }
 
         if ( aErrorInfo.isValid() )
@@ -2745,8 +2738,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_dialogFormatting_nothrow" );
         }
         return bChanged;
     }
@@ -3264,8 +3256,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-                OSL_FAIL( "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow" );
             }
         }
         return bHas;

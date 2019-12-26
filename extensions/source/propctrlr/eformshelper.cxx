@@ -93,7 +93,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::isEForm: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::isEForm" );
         }
         return false;
     }
@@ -186,7 +186,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::canBindToDataType: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::canBindToDataType" );
         }
 
         return bCan;
@@ -203,7 +203,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::isListEntrySink: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::isListEntrySink" );
         }
         return bIs;
     }
@@ -310,7 +310,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "EFormsHelper::getFormModelNames: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getFormModelNames" );
             }
         }
     }
@@ -336,7 +336,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getBindingNames: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getBindingNames" );
         }
     }
 
@@ -353,7 +353,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getFormModelByName: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getFormModelByName" );
         }
         return xReturn;
     }
@@ -372,7 +372,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentFormModel: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getCurrentFormModel" );
         }
         return xModel;
     }
@@ -389,7 +389,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentFormModel: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getCurrentFormModel" );
         }
         return sModelName;
     }
@@ -406,7 +406,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentBinding: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getCurrentBinding" );
         }
 
         return xBinding;
@@ -424,7 +424,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentBindingName: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getCurrentBindingName" );
         }
         return sBindingName;
     }
@@ -442,7 +442,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentListSourceBinding: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getCurrentListSourceBinding" );
         }
         return xReturn;
     }
@@ -459,7 +459,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::setListSourceBinding: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::setListSourceBinding" );
         }
     }
 
@@ -485,7 +485,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::setBinding: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::setBinding" );
         }
     }
 
@@ -618,7 +618,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getModelElementUIName: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getModelElementUIName" );
         }
 
         return sUIName;
@@ -690,7 +690,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getAllElementUINames: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getAllElementUINames" );
         }
 
         _rElementNames.resize( rMapUINameToElement.size() );
@@ -720,7 +720,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::firePropertyChange: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::firePropertyChange" );
         }
     }
 
@@ -754,7 +754,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::firePropertyChanges: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::firePropertyChanges" );
         }
     }
 

@@ -426,7 +426,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "OPropertyBrowserController::suspendPropertyHandlers_nothrow" );
             }
         }
         return true;
@@ -1145,7 +1145,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPropertyBrowserController::describePropertyLine: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "OPropertyBrowserController::describePropertyLine" );
         }
     }
 
@@ -1492,7 +1492,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "OPropertyBrowserController::rebuildPropertyUI" );
         }
 
         getPropertyBox().ChangeEntry( aDescriptor );

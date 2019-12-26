@@ -3095,7 +3095,7 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
         try {
             // no notification is required the storage is set the first time
             pImpl->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-            OSL_ENSURE( pImpl->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
+            OSL_ENSURE( pImpl->m_xDocStorage.is(), "The method must either return storage or throw exception!" );
 
             SetupStorage( pImpl->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImpl->m_bCreateTempStor = false;

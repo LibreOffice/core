@@ -159,7 +159,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "DocumentClassification::classifyHostDocument: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "DocumentClassification::classifyHostDocument" );
         }
 
         return eType;

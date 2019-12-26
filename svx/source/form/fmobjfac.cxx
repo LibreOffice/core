@@ -99,8 +99,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("svx");
-            OSL_FAIL( "lcl_initProperty: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "svx", "lcl_initProperty" );
         }
     }
 }

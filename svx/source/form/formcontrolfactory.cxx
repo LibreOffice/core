@@ -214,7 +214,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "lcl_getDataSourceIndirectProperties: caught an exception!" );
+                TOOLS_WARN_EXCEPTION( "svx", "lcl_getDataSourceIndirectProperties" );
             }
             return aInfo;
         }

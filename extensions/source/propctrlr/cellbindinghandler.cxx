@@ -28,6 +28,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 
 extern "C" void createRegistryInfo_CellBindingPropertyHandler()
@@ -220,7 +221,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow" );
         }
     }
 
@@ -338,7 +339,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingPropertyHandler::setPropertyValue" );
         }
     }
 
