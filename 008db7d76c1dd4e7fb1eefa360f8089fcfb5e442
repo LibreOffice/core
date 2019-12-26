@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d96bc57_ae0a21c8",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-12-26T20:03:02Z",
+      "side": 1,
+      "message": "instead of needing the extra constant, you could write this as:\n    if ( !bRet \u0026\u0026 *pArr \u003d\u003d 0 \u0026\u0026 0x2018 \u003c\u003d c \u0026\u0026 c \u003c\u003d 0x201F )\nbecause the string will be null terminated",
+      "revId": "008db7d76c1dd4e7fb1eefa360f8089fcfb5e442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
