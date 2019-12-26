@@ -1184,7 +1184,7 @@ try
 }
 catch(const Exception&)
 {
-    OSL_FAIL( "TransferFormComponentProperties: caught an exception!" );
+    TOOLS_WARN_EXCEPTION( "connectivity.commontools", "TransferFormComponentProperties" );
 }
 }
 
