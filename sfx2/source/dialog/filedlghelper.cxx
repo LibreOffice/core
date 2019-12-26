@@ -391,7 +391,7 @@ bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedControlId
         }
         catch( const IllegalArgumentException& )
         {
-            OSL_FAIL( "FileDialogHelper_Impl::updateExtendedControl: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "sfx", "FileDialogHelper_Impl::updateExtendedControl" );
         }
     }
     return bIsEnabled;
@@ -614,7 +614,7 @@ void FileDialogHelper_Impl::updateVersions()
                                                                 aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                                 embed::ElementModes::READ );
 
-                DBG_ASSERT( xStorage.is(), "The method must return the storage or throw an exception!" );
+                DBG_ASSERT( xStorage.is(), "The method must return the storage or throw exception!" );
                 if ( !xStorage.is() )
                     throw uno::RuntimeException();
 
@@ -1701,7 +1701,7 @@ void FileDialogHelper_Impl::displayFolder( const OUString& _rPath )
         }
         catch( const IllegalArgumentException& )
         {
-            OSL_FAIL( "FileDialogHelper_Impl::displayFolder: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "sfx", "FileDialogHelper_Impl::displayFolder" );
         }
     }
 }
@@ -1718,7 +1718,7 @@ void FileDialogHelper_Impl::setFileName( const OUString& _rFile )
         }
         catch( const IllegalArgumentException& )
         {
-            OSL_FAIL( "FileDialogHelper_Impl::setFileName: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "sfx", "FileDialogHelper_Impl::setFileName" );
         }
     }
 }

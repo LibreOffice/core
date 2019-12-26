@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 
 
@@ -211,7 +212,7 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "toolkit", "OAccessibleControlContext::getModelStringProperty" );
         }
         return sReturn;
     }
