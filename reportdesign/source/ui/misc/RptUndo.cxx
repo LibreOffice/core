@@ -32,6 +32,7 @@
 #include <comphelper/types.hxx>
 #include <svx/unoshape.hxx>
 #include <utility>
+#include <tools/diagnose_ex.h>
 #include <vcl/settings.hxx>
 
 #include <functional>
@@ -185,7 +186,7 @@ void OSectionUndo::Undo()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OSectionUndo::Undo: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OSectionUndo::Undo" );
     }
 }
 
@@ -206,7 +207,7 @@ void OSectionUndo::Redo()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OSectionUndo::Redo: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OSectionUndo::Redo" );
     }
 }
 
