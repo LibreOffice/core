@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0429746f_9daf9015",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T13:50:01Z",
+      "side": 0,
+      "message": "Removing this is wrong. This changes how the test is executed: currently, lines above this check are executed, including number of charts test, on both passes, and only the part below is 2nd-pass-specific. Your change removes all checking in the first pass.\n\nAs I wrote to Onur Yılmaz about similar case in https://gerrit.libreoffice.org/c/core/+/85826/3/sw/qa/extras/ooxmlexport/ooxmlexport6.cxx#b449 , you could just change the check from testing result of parseExport *after* its execution to testing mbExported *before* the call, but keep the unit test running for both passes.",
+      "range": {
+        "startLine": 324,
+        "startChar": 4,
+        "endLine": 326,
+        "endChar": 0
+      },
+      "revId": "637b1d7bb5c20b8c4c3a457d2f0043f8834b43a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
