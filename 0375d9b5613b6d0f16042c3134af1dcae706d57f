@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cb9d32c_2327eab1",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T05:54:03Z",
+      "side": 0,
+      "message": "This is not OK: making this change export-only, you also make the code above only testing things in export case. But it might make sense to check it also on initial import stage.",
+      "range": {
+        "startLine": 448,
+        "startChar": 4,
+        "endLine": 449,
+        "endChar": 15
+      },
+      "revId": "0375d9b5613b6d0f16042c3134af1dcae706d57f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
