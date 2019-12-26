@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f87410b3_7aa3a83b",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T05:34:02Z",
+      "side": 1,
+      "message": "1. Why is the change?\n2. The bug was about creation of duplicating element attributes. This asserts in the saving process itself, and parseExport here is irrelevant in fact. The `if (!pXmlDoc) return;)` test is unnecessary, and looks like only needed to avoid warning about unused pXmlDoc (which, where required, should be silenced using either `[[maybe_unused]]` attribute, or old-style `(void)pXmlDoc;` trick).\n\nYou need to check if the unit test expectedly fails on writing duplicate attributes (reverting/disabling the fix in source code) without the parseExport. If it does, then simply totally remove the call, and leave only the comment in the body. If the assertion/crash happens in the parseExport, then just don\u0027t assign the call\u0027s result to any variables. And if it\u0027s important to make sure the call returns a pointer, only then you could (optionally) use the variable, and making the test export-only, *assert* on it being valid (instead of current useless check).\n\nDoes it make sense?",
+      "revId": "d19db7a775acb096fb066807268a0b97acf742b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a57dc4a8_a6b53b1f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T05:34:02Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 11
+      },
+      "revId": "d19db7a775acb096fb066807268a0b97acf742b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cca9bf74_9dab0b39",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T05:34:02Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 246,
+        "startChar": 7,
+        "endLine": 246,
+        "endChar": 11
+      },
+      "revId": "d19db7a775acb096fb066807268a0b97acf742b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c4a674a_d656d17c",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T05:34:02Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 253,
+        "startChar": 7,
+        "endLine": 253,
+        "endChar": 11
+      },
+      "revId": "d19db7a775acb096fb066807268a0b97acf742b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73e0c37b_5306f0e3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T05:34:02Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 515,
+        "startChar": 8,
+        "endLine": 515,
+        "endChar": 11
+      },
+      "revId": "d19db7a775acb096fb066807268a0b97acf742b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
