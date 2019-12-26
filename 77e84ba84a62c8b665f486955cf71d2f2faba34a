@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d0ce9a5_55487f1b",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T09:12:28Z",
+      "side": 1,
+      "message": "What disabling these tests has to do with the task? ;-)",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 5
+      },
+      "revId": "77e84ba84a62c8b665f486955cf71d2f2faba34a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
