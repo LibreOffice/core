@@ -6399,7 +6399,7 @@ module com {
     published interface XTransactionListener {
      interface ::com::sun::star::lang::XEventListener;
      void preCommit([in] ::com::sun::star::lang::EventObject aEvent) raises (::com::sun::star::uno::Exception);
-     void commited([in] ::com::sun::star::lang::EventObject aEvent);
+     void committed([in] ::com::sun::star::lang::EventObject aEvent);
      void preRevert([in] ::com::sun::star::lang::EventObject aEvent) raises (::com::sun::star::uno::Exception);
      void reverted([in] ::com::sun::star::lang::EventObject aEvent);
     };

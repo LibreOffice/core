@@ -652,7 +652,7 @@ namespace connectivity
         }
     }
 
-    void SAL_CALL ODriverDelegator::commited( const css::lang::EventObject& /*aEvent*/ )
+    void SAL_CALL ODriverDelegator::committed( const css::lang::EventObject& /*aEvent*/ )
     {
     }
 

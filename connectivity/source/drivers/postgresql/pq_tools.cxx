@@ -277,7 +277,7 @@ DisposeGuard::~DisposeGuard()
 
 TransactionGuard::TransactionGuard( const Reference< XStatement > &stmt )
     : m_stmt( stmt ),
-      m_commited( false )
+      m_committed( false )
 {
     m_stmt->executeUpdate( getStatics().BEGIN );
 }
@@ -285,7 +285,7 @@ TransactionGuard::TransactionGuard( const Reference< XStatement > &stmt )
 void TransactionGuard::commit()
 {
     m_stmt->executeUpdate( getStatics().COMMIT );
-    m_commited = true;
+    m_committed = true;
 }
 
 void TransactionGuard::executeUpdate( const OUString & sql )
@@ -297,7 +297,7 @@ TransactionGuard::~TransactionGuard()
 {
     try
     {
-        if( ! m_commited )
+        if( ! m_committed )
             m_stmt->executeUpdate( getStatics().ROLLBACK );
     }
     catch( css::uno::Exception & )

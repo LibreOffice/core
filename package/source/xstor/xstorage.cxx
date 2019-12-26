@@ -1976,7 +1976,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
                        static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
                     break;
                 case STOR_MESS_COMMITTED:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
+                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->committed( aSource );
                     break;
                 case STOR_MESS_PREREVERT:
                        static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preRevert( aSource );
