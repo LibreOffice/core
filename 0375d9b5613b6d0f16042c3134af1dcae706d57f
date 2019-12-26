@@ -22,6 +22,30 @@
       "revId": "0375d9b5613b6d0f16042c3134af1dcae706d57f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54da1ad2_401e54fc",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-26T06:45:13Z",
+      "side": 0,
+      "message": "For this specific case, where the test should be run both in import and import-export-import, you possibly would make it more correct if change `if (!pXmlDoc) return;` after parseExport into `if (!mbExported) return;` before parseExport. This would make the test check the right thing, and not pass when parseExport had returned nullptr because of some problem.",
+      "parentUuid": "6cb9d32c_2327eab1",
+      "range": {
+        "startLine": 448,
+        "startChar": 4,
+        "endLine": 449,
+        "endChar": 15
+      },
+      "revId": "0375d9b5613b6d0f16042c3134af1dcae706d57f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
