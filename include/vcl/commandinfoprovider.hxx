@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
@@ -71,6 +72,9 @@ namespace vcl { namespace CommandInfoProvider {
     /** Returns the shortcut for a command in human-readable form */
     VCL_DLLPUBLIC OUString GetCommandShortcut (const OUString& rCommandName,
                                                const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    VCL_DLLPUBLIC KeyCode GetCommandKeyCodeShortcut (const OUString& rCommandName,
+                                                     const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     VCL_DLLPUBLIC OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
 

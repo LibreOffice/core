@@ -1515,6 +1515,8 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
                     Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame));
                     commandToImage[aCommandURL] = aImage;
                     xVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
+                    vcl::KeyCode aKeyCodeShortCut = vcl::CommandInfoProvider::GetCommandKeyCodeShortcut( aCommandURL, m_xFrame );
+                    xVisibleItemsPopupMenu->SetAccelKey( STARTID_CUSTOMIZE_POPUPMENU+nPos, aKeyCodeShortCut );
                 }
                 else
                 {
@@ -1532,6 +1534,11 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
             it = commandToImage.find( cmdUrl );
             if (it != commandToImage.end()) {
                 pMenu->SetItemImage( nId, it->second );
+            }
+            if ( m_pToolBar->GetItemType(nPos) == ToolBoxItemType::BUTTON )
+            {
+                vcl::KeyCode aKeyCodeShortCut = vcl::CommandInfoProvider::GetCommandKeyCodeShortcut( cmdUrl, m_xFrame );
+                pMenu->SetAccelKey( nId, aKeyCodeShortCut );
             }
         }
     }
