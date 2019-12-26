@@ -1630,7 +1630,7 @@ namespace drawinglayer
                     aTransform,
                     false,
                     eHatch,
-                    Color(rFillHatchAttribute.getColor()),
+                    Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
                     SvtGraphicFill::GradientType::Linear,
                     Color(),
                     Color(),
@@ -1651,7 +1651,7 @@ namespace drawinglayer
 
             mpOutputDevice->DrawHatch(aToolsPolyPolygon,
                 Hatch(aHatchStyle,
-                    Color(rFillHatchAttribute.getColor()),
+                    Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
                     basegfx::fround(rFillHatchAttribute.getDistance()),
                     basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
 
