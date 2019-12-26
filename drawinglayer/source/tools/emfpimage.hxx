@@ -34,6 +34,7 @@ namespace emfplushelper
         sal_uInt32 pixelFormat;
         Graphic graphic;
 
+        EMFPImage();
         void Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream);
     };
 }
