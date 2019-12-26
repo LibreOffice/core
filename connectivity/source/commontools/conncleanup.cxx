@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 
 namespace dbtools
@@ -55,7 +56,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::OAutoConnectionDisposer" );
         }
     }
 
@@ -69,7 +70,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::startPropertyListening" );
         }
     }
 
@@ -90,7 +91,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::stopPropertyListening" );
         }
     }
 
@@ -105,7 +106,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::startRowSetListening" );
         }
         m_bRSListening = true;
     }
@@ -120,7 +121,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::stopRowSetListening" );
         }
         m_bRSListening = false;
     }
@@ -202,7 +203,7 @@ namespace dbtools
         }
         catch(Exception&)
         {
-            OSL_FAIL("OAutoConnectionDisposer::clearConnection: caught an exception!");
+            TOOLS_WARN_EXCEPTION("connectivity.commontools", "OAutoConnectionDisposer::clearConnection");
         }
     }
 

@@ -49,6 +49,7 @@
 #include <comphelper/property.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <tabwin.hrc>
 
@@ -288,7 +289,7 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmTabWin::UpdateContent: caught an exception!" );
+        TOOLS_WARN_EXCEPTION( "svx", "FmTabWin::UpdateContent" );
     }
 }
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <map>
 
@@ -48,7 +49,7 @@ namespace svt
                     }
                     catch( const css::uno::Exception& )
                     {
-                        OSL_FAIL( "THeaderCellMapFunctorDispose: caught an exception!" );
+                        TOOLS_WARN_EXCEPTION( "svtools", "THeaderCellMapFunctorDispose" );
                     }
             }
         };
