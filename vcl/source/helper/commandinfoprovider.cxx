@@ -158,6 +158,33 @@ static OUString RetrieveShortcutsFromConfiguration(
     return OUString();
 }
 
+static vcl::KeyCode RetrieveKeyCodeShortcutsFromConfiguration(
+    const Reference<ui::XAcceleratorConfiguration>& rxConfiguration,
+    const OUString& rsCommandName)
+{
+    if (rxConfiguration.is())
+    {
+        try
+        {
+            Sequence<OUString> aCommands { rsCommandName };
+
+            Sequence<Any> aKeyCodes (rxConfiguration->getPreferredKeyEventsForCommandList(aCommands));
+            if (aCommands.getLength() == 1)
+            {
+                awt::KeyEvent aKeyEvent;
+                if (aKeyCodes[0] >>= aKeyEvent)
+                {
+                    return AWTKey2VCLKey(aKeyEvent);
+                }
+            }
+        }
+        catch (css::lang::IllegalArgumentException&)
+        {
+        }
+    }
+    return vcl::KeyCode();
+}
+
 static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName, const OUString& rsModuleName)
 {
     Sequence< OUString > aSequence;
@@ -276,6 +303,25 @@ OUString GetCommandShortcut (const OUString& rsCommandName,
         return sShortcut;
 
     return OUString();
+}
+
+vcl::KeyCode GetCommandKeyCodeShortcut (const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
+{
+    vcl::KeyCode aKeyCodeShortcut;
+
+    aKeyCodeShortcut = RetrieveKeyCodeShortcutsFromConfiguration(GetDocumentAcceleratorConfiguration(rxFrame), rsCommandName);
+    if (aKeyCodeShortcut.GetCode())
+        return aKeyCodeShortcut;
+
+    aKeyCodeShortcut = RetrieveKeyCodeShortcutsFromConfiguration(GetModuleAcceleratorConfiguration(rxFrame), rsCommandName);
+    if (aKeyCodeShortcut.GetCode())
+        return aKeyCodeShortcut;
+
+    aKeyCodeShortcut = RetrieveKeyCodeShortcutsFromConfiguration(GetGlobalAcceleratorConfiguration(), rsCommandName);
+    if (aKeyCodeShortcut.GetCode())
+        return aKeyCodeShortcut;
+
+    return vcl::KeyCode();
 }
 
 OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
