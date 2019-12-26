@@ -92,7 +92,7 @@ case "$1" in
 	fi
         echo "Please go to https://gerrit.libreoffice.org/ and:"
         echo "- press the 'register' button in the top right corner"
-        echo "- after login set yourself a username (its recommended to use your IRC-nick)"
+        echo "- after login set yourself a username (it is recommended to use your IRC-nick)"
 	if test "z$ssh_key" = "z"; then
             echo "- add your public ssh-key into the ssh keys settings."
 	else
