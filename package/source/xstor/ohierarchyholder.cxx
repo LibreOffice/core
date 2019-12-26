@@ -299,7 +299,7 @@ void SAL_CALL OHierarchyElement_Impl::preCommit( const css::lang::EventObject& /
 {
 }
 
-void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*aEvent*/ )
+void SAL_CALL OHierarchyElement_Impl::committed( const css::lang::EventObject& /*aEvent*/ )
 {
     try
     {
