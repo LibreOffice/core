@@ -152,7 +152,7 @@ public:
 class TransactionGuard
 {
     css::uno::Reference< css::sdbc::XStatement > m_stmt;
-    bool m_commited;
+    bool m_committed;
 public:
     /// takes over ownership of given statement
     explicit TransactionGuard( const css::uno::Reference< css::sdbc::XStatement > &stmt );

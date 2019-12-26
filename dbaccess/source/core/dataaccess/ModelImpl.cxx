@@ -118,7 +118,7 @@ public:
 
     // XTransactionListener
     virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL committed( const css::lang::EventObject& aEvent ) override;
     virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) override;
     virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) override;
 
@@ -304,7 +304,7 @@ void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEvent )
+void SAL_CALL DocumentStorageAccess::committed( const css::lang::EventObject& aEvent )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
