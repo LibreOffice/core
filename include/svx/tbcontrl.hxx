@@ -264,6 +264,9 @@ private:
     OUString     m_aFormatString;
     LanguageType m_eLanguage;
     sal_uInt32   m_nFormatKey;
+
+    weld::Toolbar* m_pToolbar;
+    std::unique_ptr<svtools::ToolbarPopupBase> m_xPopover;
 public:
     static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
                                     std::vector<sal_uInt16>& rCurrencyList );
@@ -274,8 +277,13 @@ public:
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 nSelectModifier ) override;
 
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
     using svt::ToolboxController::createPopupWindow;
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    void EndPopupMode();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
