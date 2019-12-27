@@ -88,7 +88,7 @@ void test::ostring::StringConcat::checkConcat()
 
     CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< int > > )), typeid( OString( "num" ) + OString::number( 10 )));
-    CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10L )));
+    CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< long long > > )), typeid( OString( "num" ) + OString::number( 10L )));
     CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10ULL )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< unsigned long long > > )), typeid( OString( "num" ) + OString::number( 10ULL )));

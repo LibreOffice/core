@@ -2922,7 +2922,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     {
         // Now in consideration of Escape/Propr
         // possibly enlarge Ascent or Descent
-        short nDiff = static_cast<short>(rFont.GetFontSize().Height()*rFont.GetEscapement()/100L);
+        short nDiff = static_cast<short>(rFont.GetFontSize().Height()*rFont.GetEscapement()/100);
         if ( rFont.GetEscapement() > 0 )
         {
             nAscent = static_cast<sal_uInt16>(static_cast<long>(nAscent)*nPropr/100 + nDiff);
@@ -3501,7 +3501,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         // In case of high/low do it yourself:
                                         if ( aTmpFont.GetEscapement() )
                                         {
-                                            long nDiff = aTmpFont.GetFontSize().Height() * aTmpFont.GetEscapement() / 100L;
+                                            long nDiff = aTmpFont.GetFontSize().Height() * aTmpFont.GetEscapement() / 100;
                                             if ( !IsVertical() )
                                                 aOutPos.AdjustY( -nDiff );
                                             else
@@ -3636,7 +3636,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             short _nEsc = aTmpFont.GetEscapement();
                                             if( _nEsc )
                                             {
-                                                long nShift = (_nEsc * aTmpFont.GetFontSize().Height()) / 100L;
+                                                long nShift = (_nEsc * aTmpFont.GetFontSize().Height()) / 100;
                                                 if( !IsVertical() )
                                                     aRedLineTmpPos.AdjustY( -nShift );
                                                 else
