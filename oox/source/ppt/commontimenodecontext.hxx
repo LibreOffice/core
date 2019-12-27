@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_PPT_COMMONTIMENODECONTEXT_HXX
-#define INCLUDED_OOX_SOURCE_PPT_COMMONTIMENODECONTEXT_HXX
+#pragma once
 
 #include <oox/ppt/timenode.hxx>
 #include <oox/ppt/timenodelistcontext.hxx>
@@ -44,6 +43,5 @@ namespace oox { namespace ppt {
 
 } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

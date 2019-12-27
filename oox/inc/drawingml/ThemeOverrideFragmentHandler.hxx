@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_THEMEOVERRICEFRAGMENTHANDLER_HXX
-#define INCLUDED_OOX_DRAWINGML_THEMEOVERRICEFRAGMENTHANDLER_HXX
+#pragma once
 
 #include <oox/core/fragmenthandler2.hxx>
 
@@ -35,6 +34,5 @@ private:
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

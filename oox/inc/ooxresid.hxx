@@ -7,13 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OOX_INC_RESID_HXX
-#define INCLUDED_OOX_INC_RESID_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <oox/dllapi.h>
 
 OUString OoxResId(const char* pId);
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

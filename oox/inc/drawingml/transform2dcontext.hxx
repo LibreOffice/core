@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TRANSFORM2DCONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TRANSFORM2DCONTEXT_HXX
+#pragma once
 
 #include <oox/core/contexthandler2.hxx>
 
@@ -43,6 +42,5 @@ private:
 } // namespace drawingml
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

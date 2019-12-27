@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_DOCPROP_OOXMLDOCPROPIMPORT_HXX
-#define INCLUDED_OOX_SOURCE_DOCPROP_OOXMLDOCPROPIMPORT_HXX
+#pragma once
 
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -55,6 +54,5 @@ private:
 } // namespace docprop
 } // namespace oox
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

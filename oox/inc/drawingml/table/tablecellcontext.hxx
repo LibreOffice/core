@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLECELLCONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TABLE_TABLECELLCONTEXT_HXX
+#pragma once
 
 #include <oox/drawingml/shapecontext.hxx>
 #include <drawingml/table/tablecell.hxx>
@@ -41,6 +40,5 @@ private:
 
 } } }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

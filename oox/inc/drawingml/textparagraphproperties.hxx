@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <drawingml/misccontexts.hxx>
@@ -133,6 +132,5 @@ protected:
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
