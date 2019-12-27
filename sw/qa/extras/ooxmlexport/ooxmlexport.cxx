@@ -313,6 +313,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartDupe, "chart-dupe.docx")
 
     xmlDocPtr pXmlDocCT = parseExport("[Content_Types].xml");
 
+    if (!pXmlDocCT)
+        return; // initial import
 
     assertXPath(pXmlDocCT,
         "/ContentType:Types/ContentType:Override[@PartName='/word/charts/chart1.xml']",
