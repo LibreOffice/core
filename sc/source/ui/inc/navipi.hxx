@@ -112,10 +112,9 @@ class ColumnEdit : public SpinField
 public:
     ColumnEdit(Window* pParent, WinBits nWinBits);
     ~ColumnEdit() override;
-    void SetNavigatorDlg(ScNavigatorDlg *pNaviDlg, const ScDocument* pDoc)
+    void SetNavigatorDlg(ScNavigatorDlg *pNaviDlg)
     {
         xDlg = pNaviDlg;
-        mpDoc = pDoc;
     }
     SCCOL   GetCol() const { return nCol; }
     void    SetCol( SCCOL nColNo );
@@ -130,7 +129,6 @@ protected:
     virtual void    dispose() override;
 
 private:
-    const ScDocument* mpDoc;
     VclPtr<ScNavigatorDlg> xDlg;
     SCCOL           nCol;
 
