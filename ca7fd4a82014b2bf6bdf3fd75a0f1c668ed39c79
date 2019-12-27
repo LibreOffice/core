@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7a30297_e939a26b",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-27T17:23:38Z",
+      "side": 1,
+      "message": "This might be a leftover from your previous change: now that you\u0027ve put the proper check in the proper place, you only need to make it normal OOXMLEXPORT_TEST again, so that the starting part of the test is executed both in first and second passes.",
+      "range": {
+        "startLine": 428,
+        "startChar": 20,
+        "endLine": 428,
+        "endChar": 31
+      },
+      "revId": "ca7fd4a82014b2bf6bdf3fd75a0f1c668ed39c79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
