@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_d787b6d5",
+        "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-12-27T19:07:21Z",
+      "side": 1,
+      "message": "It looks like I might be able to inherit from VCLXAccessibleEdit instead and gain almost everything in that case, including XAccessibleEditableText.",
+      "parentUuid": "7aa08908_14093c32",
+      "range": {
+        "startLine": 128,
+        "startChar": 51,
+        "endLine": 128,
+        "endChar": 74
+      },
+      "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_7406c021",
         "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2016-01-27T21:10:55Z",
       "side": 1,
       "message": "with this implementation every instance is leaked",
+      "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b75f8a74",
+        "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-12-27T19:07:21Z",
+      "side": 1,
+      "message": "This is copy/pasted from somewhere - I can\u0027t find it back now.",
+      "parentUuid": "7aa08908_7406c021",
       "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
