@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPERTYMAP_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPERTYMAP_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <com/sun/star/beans/Property.hpp>
@@ -63,6 +62,5 @@ PropertyMap;
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
