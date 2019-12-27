@@ -141,6 +141,7 @@ public:
     void testN862510_4();
     void testBnc870237();
     void testBnc887225();
+    void testPredefinedTableStyle();
     void testBnc591147();
     void testCreationDate();
     void testBnc584721_1();
@@ -247,6 +248,7 @@ public:
     CPPUNIT_TEST(testN862510_4);
     CPPUNIT_TEST(testBnc870237);
     CPPUNIT_TEST(testBnc887225);
+    CPPUNIT_TEST(testPredefinedTableStyle);
     CPPUNIT_TEST(testBnc591147);
     CPPUNIT_TEST(testCreationDate);
     CPPUNIT_TEST(testBnc584721_1);
@@ -892,6 +894,34 @@ void SdImportTest::testCreationDate()
     sax::Converter::convertDateTime(aBuffer, aDate, nullptr);
     // Metadata wasn't imported, this was 0000-00-00.
     CPPUNIT_ASSERT_EQUAL(OUString("2013-11-09T10:37:56"), aBuffer.makeStringAndClear());
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testPredefinedTableStyle()
+{
+    // 073A0DAA-6AF3-43AB-8588-CEC1D06C72B9 (Medium Style 2)
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/predefined-table-style.pptx"), PPTX );
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCell;
+    sal_Int32 nColor;
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nColor);
+
+    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13421772), nColor);
+
+    xCell.set(xTable->getCellByPosition(0, 2), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15198183), nColor);
+
     xDocShRef->DoClose();
 }
 
