@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7bbb6c9_eab950fc",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport6.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-27T19:00:24Z",
+      "side": 1,
+      "message": "Oh - sorry for overlooking this (I should have saw this, and told you so that you fixed it all together)\n\nThis seems to be just a copypasted comment from ooxmlexport13.cxx, right? ;-) please remove.\n\nThis is the last fix here - I swear! :-P",
+      "range": {
+        "startLine": 437,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 62
+      },
+      "revId": "023221a9d71fdeae4209f767faa9848cfb3d6de4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
