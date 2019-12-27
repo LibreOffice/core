@@ -27,6 +27,7 @@
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weldutils.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -47,7 +48,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 {
     Reference<frame::XToolbarController> xController (
         CreateToolBarController(
-            pToolBox,
+            VCLUnoHelper::GetInterface(pToolBox),
             rsCommandName,
             rxFrame, rxController,
             nWidth));
@@ -142,15 +143,25 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    Reference<frame::XToolbarController> xController;
+    css::uno::Reference<css::awt::XWindow> xWidget(new weld::TransportAsXWindow(&rToolbar));
 
-    xController.set(
-        static_cast<XWeak*>(new svt::GenericToolboxController(
-                ::comphelper::getProcessComponentContext(),
-                rxFrame,
-                rToolbar,
-                rsCommandName)),
-        UNO_QUERY);
+    Reference<frame::XToolbarController> xController(
+        CreateToolBarController(
+            xWidget,
+            rsCommandName,
+            rxFrame, rxFrame->getController(),
+            -1));
+
+    if (!xController.is())
+    {
+        xController.set(
+            static_cast<XWeak*>(new svt::GenericToolboxController(
+                    ::comphelper::getProcessComponentContext(),
+                    rxFrame,
+                    rToolbar,
+                    rsCommandName)),
+            UNO_QUERY);
+    }
 
     // Initialize the controller with eg a service factory.
     Reference<lang::XInitialization> xInitialization (xController, UNO_QUERY);
@@ -187,7 +198,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 
 
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
-    ToolBox* pToolBox,
+    const Reference<awt::XWindow>& rxToolbar,
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame,
     const Reference<frame::XController>& rxController,
@@ -217,7 +228,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             aPropValue.Name = "ParentWindow";
-            aPropValue.Value <<= VCLUnoHelper::GetInterface(pToolBox);
+            aPropValue.Value <<= rxToolbar;
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             if (nWidth > 0)

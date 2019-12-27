@@ -54,7 +54,7 @@ public:
 
 private:
     static css::uno::Reference<css::frame::XToolbarController> CreateToolBarController(
-        ToolBox* pToolBox,
+        const css::uno::Reference<css::awt::XWindow>& rToolbar,
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const css::uno::Reference<css::frame::XController>& rxController,
