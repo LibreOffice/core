@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_XMLSEC_WRAPPER_H
-#define INCLUDED_XMLSECURITY_INC_XMLSEC_WRAPPER_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -45,6 +44,5 @@
 #include <xmlsec/nss/pkikeys.h>
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

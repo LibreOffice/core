@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
+#pragma once
 
 #include <xsecxmlsecdllapi.h>
 
@@ -32,6 +31,5 @@ int xmlRegisterStreamInputCallbacks(
 );
 int xmlUnregisterStreamInputCallbacks() ;
 
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
