@@ -445,7 +445,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
             {
                 // LookupAccountNameW returned SID of a domain; likely the hostname is the same as
                 // username (case-insensitive): something like "JOHNSMITH\JohnSmith", so looking up
-                // for "JohnSmith" without doman returns domain itself. Try getting the SID of the
+                // for "JohnSmith" without domain returns domain itself. Try getting the SID of the
                 // user using fully qualified name (the case of user of another domain having name
                 // identical this hostname is not handled).
                 sLookupUserName = o3tl::toU(wszDomainName) + OUStringLiteral("\\") + strUserName;
