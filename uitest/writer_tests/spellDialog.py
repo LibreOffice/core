@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 
 from libreoffice.linguistic.linguservice import get_spellchecker
+from com.sun.star.lang import Locale
 
 class SpellingAndGrammarDialog(UITestCase):
 
@@ -62,6 +63,8 @@ frog, dogg, catt"""
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         cursor = document.getCurrentController().getViewCursor()
+        # Inserted text must be en_US, so make sure to set language in current location
+        cursor.CharLocale = Locale("en", "US", "")
         input_text = self.TDF46852_INPUT.replace('\n', '\r') # \r = para break
         document.Text.insertString(cursor, input_text, False)
 
@@ -94,5 +97,6 @@ frog, dogg, catt"""
                 )
             )
 
-        self.assertTrue(re.match(self.TDF46852_REGEX, document.Text.getString()))
+        output_text = document.Text.getString().replace('\r\n', '\n')
+        self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
         
