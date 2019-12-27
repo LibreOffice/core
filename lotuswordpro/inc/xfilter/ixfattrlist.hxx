@@ -57,8 +57,7 @@
  * @file
  * Interface for the attribute list of a xml element.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFATTRLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFATTRLIST_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -83,6 +82,5 @@ public:
     virtual void    Clear() = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

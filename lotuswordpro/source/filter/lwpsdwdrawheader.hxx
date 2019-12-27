@@ -59,8 +59,7 @@
  * The file declares structures and enums used by Lwp-Drawing-Module
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWDRAWHEADER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWDRAWHEADER_HXX
+#pragma once
 
 #include <lwpheader.hxx>
 #include <lwptools.hxx>
@@ -349,6 +348,5 @@ struct DrawingOffsetAndScale
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

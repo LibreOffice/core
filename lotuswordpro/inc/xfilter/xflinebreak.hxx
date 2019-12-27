@@ -57,8 +57,7 @@
  * @file
  * Line break object,<text:line-break/>
  *************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEBREAK_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEBREAK_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -78,5 +77,4 @@ inline void XFLineBreak::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:line-break" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

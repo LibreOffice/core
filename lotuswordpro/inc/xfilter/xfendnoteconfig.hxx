@@ -57,8 +57,7 @@
  * @file
  * Endnote config.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENDNOTECONFIG_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENDNOTECONFIG_HXX
+#pragma once
 
 class XFEndnoteConfig : public XFFootnoteConfig
 {
@@ -74,5 +73,4 @@ public:
     }
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

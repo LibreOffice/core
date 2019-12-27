@@ -57,8 +57,7 @@
  * @file
  * End note object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENDNOTE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENDNOTE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -111,6 +110,5 @@ inline void XFEndNote::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:endnote" );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

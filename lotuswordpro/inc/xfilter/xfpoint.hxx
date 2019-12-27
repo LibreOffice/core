@@ -57,8 +57,7 @@
  * @file
  * Represent a point.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPOINT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPOINT_HXX
+#pragma once
 
 class XFPoint
 {
@@ -100,5 +99,4 @@ private:
     double  m_fY;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

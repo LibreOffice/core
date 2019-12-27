@@ -57,8 +57,7 @@
  * @file
  * Manager for all config object,include line number config.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONFIGMANAGER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONFIGMANAGER_HXX
+#pragma once
 
 #include <xfilter/xfstylecont.hxx>
 #include <xfilter/xflinenumberconfig.hxx>
@@ -106,5 +105,4 @@ private:
     std::unique_ptr<XFEndnoteConfig>    m_pEndnoteConfig;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

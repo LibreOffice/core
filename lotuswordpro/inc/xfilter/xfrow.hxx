@@ -57,8 +57,7 @@
  * @file
  * Table row object. A table is consist by rows.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROW_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROW_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 #include <rtl/ref.hxx>
@@ -131,5 +130,4 @@ inline void XFRow::RemoveCell(sal_Int32 cell)
     m_aCells.erase(cell);
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

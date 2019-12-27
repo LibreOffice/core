@@ -57,8 +57,7 @@
  * @file
  * input list field.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINPUTLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINPUTLIST_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 
@@ -107,5 +106,4 @@ inline void XFInputList::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:drop-down" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

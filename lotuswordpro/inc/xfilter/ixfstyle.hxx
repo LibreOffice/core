@@ -57,8 +57,7 @@
  * @file
  * Interface for all style object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 /**
@@ -108,6 +107,5 @@ public:
     virtual void ToXml(IXFStream * stream) = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

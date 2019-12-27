@@ -57,8 +57,7 @@
  * @file
  * Draw path object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPATH_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPATH_HXX
+#pragma once
 
 #include <xfilter/xfdrawobj.hxx>
 #include <vector>
@@ -135,6 +134,5 @@ inline void XFSvgPathEntry::SetCommand(const OUString& cmd)
     m_strCommand = cmd;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPSVSTREAM_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPSVSTREAM_HXX
+#pragma once
 
 #include "lwpheader.hxx"
 
@@ -97,6 +96,5 @@ private:
     // compressed stream which is to be used for Chart/OLE as BENTO container
     LwpSvStream * m_pCompressedStream;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

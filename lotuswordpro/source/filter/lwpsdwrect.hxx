@@ -58,8 +58,7 @@
  * For LWP filter architecture prototype
  * Implementation file of SdwRectangle.
  */
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWRECT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWRECT_HXX
+#pragma once
 
 #include <lwpheader.hxx>
 #include <tools/gen.hxx>
@@ -120,6 +119,5 @@ public:
     static double CalcDistBetween2Points(long nX1, long nY1, long nX2, long nY2);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

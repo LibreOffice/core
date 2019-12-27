@@ -57,8 +57,7 @@
  * @file
  * Bookmark ref.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBOOKMARK_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBOOKMARK_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -127,6 +126,5 @@ public:
     XFBookmarkEnd():XFBookmark(false){}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

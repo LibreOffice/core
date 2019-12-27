@@ -58,8 +58,7 @@
  * Font declaration for OOo xml file.This is needed for every font that was
  * used.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONTDECL_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONTDECL_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -89,5 +88,4 @@ private:
     OUString   m_strFontFamily;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

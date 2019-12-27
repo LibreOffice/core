@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARSETMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARSETMGR_HXX
+#pragma once
 
 #include <lwpfilehdr.hxx>
 #include <map>
@@ -81,6 +80,5 @@ private:
     static LwpCharSetMgr* Instance;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

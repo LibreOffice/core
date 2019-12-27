@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPFOUNDRY_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPFOUNDRY_HXX
+#pragma once
 
 #include "lwpheader.hxx"
 #include "lwpobjid.hxx"
@@ -302,6 +301,5 @@ public:
     void AddStyle(LwpObjectID styleObjID, std::unique_ptr<IXFStyle> pStyle);
     IXFStyle* GetStyle(const LwpObjectID &styleObjID);
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

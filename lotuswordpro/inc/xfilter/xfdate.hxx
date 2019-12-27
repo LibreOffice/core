@@ -57,8 +57,7 @@
  * @file
  * Date field with date style.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -91,6 +90,5 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

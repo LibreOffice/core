@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTABLE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTABLE_HXX
+#pragma once
 
 #include <lwpfrib.hxx>
 
@@ -70,6 +69,5 @@ public:
 private:
     LwpObjectID m_objTable;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

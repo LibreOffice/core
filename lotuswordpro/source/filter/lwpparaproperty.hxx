@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
+#pragma once
 
 #include <memory>
 #include <lwpobj.hxx>
@@ -264,6 +263,5 @@ inline sal_uInt32 LwpParaBackGroundProperty::GetType()
     return PP_LOCAL_BACKGROUND;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

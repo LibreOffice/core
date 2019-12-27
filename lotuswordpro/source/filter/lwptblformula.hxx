@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype - table object
  */
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLFORMULA_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLFORMULA_HXX
+#pragma once
 
 /* These token types are written to the file.  Don't change their
 values unless you filter them.
@@ -213,6 +212,5 @@ private:
     sal_uInt16 m_nFormulaRow;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

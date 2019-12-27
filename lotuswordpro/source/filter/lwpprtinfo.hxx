@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPRTINFO_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPRTINFO_HXX
+#pragma once
 
 #include <lwpatomholder.hxx>
 #include <lwpobjstrm.hxx>
@@ -75,6 +74,5 @@ public:
 public:
     static void Skip(LwpObjectStream *pStrm);
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

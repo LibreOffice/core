@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPDROPCAPMGR_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPDROPCAPMGR_HXX
+#pragma once
 
 #include "xfilter/xfparagraph.hxx"
 
@@ -73,5 +72,4 @@ public:
 private:
     XFParagraph* m_pXFPara;
 };
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

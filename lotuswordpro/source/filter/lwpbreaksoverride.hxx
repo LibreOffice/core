@@ -57,8 +57,7 @@
 * @file
 * Breaks override of Wordpro.
 ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
+#pragma once
 
 #include <memory>
 #include <lwpoverride.hxx>
@@ -234,6 +233,5 @@ inline void LwpBreaksOverride::RevertUseNextStyle()
     LwpOverride::Override(BO_USENEXTSTYLE, STATE_STYLE);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

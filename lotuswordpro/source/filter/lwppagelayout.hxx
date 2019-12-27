@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
+#pragma once
 
 #include "lwplayout.hxx"
 #include <xfilter/xfmasterpage.hxx>
@@ -156,6 +155,5 @@ private:
     sal_Int32 m_nBorderOffset;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

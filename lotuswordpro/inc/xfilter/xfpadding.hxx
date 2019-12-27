@@ -57,8 +57,7 @@
  * @file
  * Padding for paragraph.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPADDING_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPADDING_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -202,5 +201,4 @@ inline bool operator!=(XFPadding const & p1, XFPadding const & p2)
     return !(p1==p2);
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

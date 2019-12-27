@@ -57,8 +57,7 @@
 * @file
 * Background object of Wordpro.
 ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDSTUFF_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDSTUFF_HXX
+#pragma once
 #include <lwpcolor.hxx>
 #include "lwpstyledef.hxx"
 
@@ -88,6 +87,5 @@ private:
     LwpColor    m_aPatternColor;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

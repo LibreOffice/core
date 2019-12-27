@@ -57,8 +57,7 @@
  * @file
  * Factory object for XFFont.It also manages all font life cycle.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONTFACTORY_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONTFACTORY_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -100,6 +99,5 @@ private:
     std::vector< rtl::Reference<XFFont> > s_aFonts;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

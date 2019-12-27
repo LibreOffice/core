@@ -57,8 +57,7 @@
  * @file
  * Style container,which response for special style,ie. text style.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLECONT_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLECONT_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <vector>
@@ -145,6 +144,5 @@ inline size_t XFStyleContainer::GetCount() const
     return m_aStyles.size();
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

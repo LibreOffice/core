@@ -57,8 +57,7 @@
  * @file
  * Base style object .
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLE_HXX
+#pragma once
 
 #include <xfilter/ixfstyle.hxx>
 
@@ -114,6 +113,5 @@ protected:
     OUString   m_strParentStyleName;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

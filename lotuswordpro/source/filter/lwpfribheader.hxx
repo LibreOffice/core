@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBHEADER_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBHEADER_HXX
+#pragma once
 
 #define FRIB_TAG_NOUNICODE 0x40 // Don't translate text to/from Unicode
 #define FRIB_TAG_MODIFIER 0x80  // This frib has a modifier on it
@@ -119,6 +118,5 @@ enum
     FRIB_TAG_RUBYFRAME      // FT_RUBYFRAME
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

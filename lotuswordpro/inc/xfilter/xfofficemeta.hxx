@@ -58,8 +58,7 @@
  * Meta info for the full document.
  * You can see this by click: File->Properties.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFOFFICEMETA_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFOFFICEMETA_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 
@@ -88,6 +87,5 @@ private:
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

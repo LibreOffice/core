@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARGINS_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARGINS_HXX
+#pragma once
 
 #include <lwpobjstrm.hxx>
 #include <lwptools.hxx>
@@ -103,6 +102,5 @@ inline double LwpMargins::GetMarginsValue(sal_uInt8 nWhichSide)
     //        a better solution would be to enum value for the parameter side
     return 0;
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

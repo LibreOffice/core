@@ -57,8 +57,7 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
@@ -148,5 +147,4 @@ inline void XFDrawStyle::SetArrowEnd(const OUString& end, double size)
     m_bArrowEndCenter = true;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

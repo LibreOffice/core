@@ -58,8 +58,7 @@
  * Tool functions for xml filter.
  * Don't use any template for the ***TOOUString function list for easy.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFUTIL_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFUTIL_HXX
+#pragma once
 
 #include <xfilter/xfdefs.hxx>
 #include <rtl/ustring.hxx>
@@ -91,6 +90,5 @@ OUString   GetValueType(enumXFValueType type);
 
 OUString   GetColorMode(enumXFColorMode mode);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

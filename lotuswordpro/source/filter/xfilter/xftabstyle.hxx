@@ -57,8 +57,7 @@
  * @file
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABSTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTABSTYLE_HXX
+#pragma once
 
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
@@ -115,5 +114,4 @@ inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
     m_strLeader = OUString(chs);
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

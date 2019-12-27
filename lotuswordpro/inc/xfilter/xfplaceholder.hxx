@@ -57,8 +57,7 @@
  * @file
  * place holder object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPLACEHOLDER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPLACEHOLDER_HXX
+#pragma once
 
 #include <xfilter/xfcontent.hxx>
 
@@ -137,5 +136,4 @@ inline void XFHolderEnd::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:placeholder" );
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

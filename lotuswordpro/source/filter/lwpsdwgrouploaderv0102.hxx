@@ -54,8 +54,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -87,6 +86,5 @@ public:
     XFFrame* CreateDrawObject();
 };
 
-#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

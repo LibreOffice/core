@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -509,6 +508,5 @@ protected:
     LwpObjectID m_LayRelativity;
     rtl::Reference<XFFont> m_pFont;//for frame position
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

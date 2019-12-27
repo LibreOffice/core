@@ -57,8 +57,7 @@
  * @file
  * Image style object.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFIMAGESTYLE_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFIMAGESTYLE_HXX
+#pragma once
 
 #include <xfilter/xfframestyle.hxx>
 #include <xfilter/xfrect.hxx>
@@ -104,5 +103,4 @@ inline void XFImageStyle::SetClip(double left, double right, double top, double 
     m_fClipBottom = bottom;
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

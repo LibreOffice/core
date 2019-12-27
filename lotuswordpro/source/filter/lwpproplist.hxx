@@ -58,8 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPROPLIST_HXX
-#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPROPLIST_HXX
+#pragma once
 
 #include <lwpobj.hxx>
 #include "lwpdlvlist.hxx"
@@ -93,6 +92,5 @@ private:
     LwpPropListElement* FindPropByName(const OUString& name);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
