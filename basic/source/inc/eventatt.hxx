@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_EVENTATT_HXX
-#define INCLUDED_BASIC_SOURCE_INC_EVENTATT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -29,6 +28,5 @@ class SbxArray;
 // and attach events.
 void RTL_Impl_CreateUnoDialog( SbxArray& rPar );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

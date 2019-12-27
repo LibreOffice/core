@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_INC_RUNTIME_HXX
-#define INCLUDED_BASIC_SOURCE_INC_RUNTIME_HXX
+#pragma once
 
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>
@@ -410,6 +409,5 @@ bool IsBaseIndexOne();
 
 void removeDimAsNewRecoverItem( SbxVariable* pVar );
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

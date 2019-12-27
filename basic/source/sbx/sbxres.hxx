@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_SBX_SBXRES_HXX
-#define INCLUDED_BASIC_SOURCE_SBX_SBXRES_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -50,6 +49,5 @@ enum class StringId {
 OUString GetSbxRes( StringId );
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
