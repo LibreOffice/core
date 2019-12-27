@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTR_HXX
-#define INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -32,6 +31,5 @@ public:
     const OUString& getValue() const { return aValue;}
 };
 
-#endif // INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

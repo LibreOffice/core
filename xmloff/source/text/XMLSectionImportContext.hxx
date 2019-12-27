@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONIMPORTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -83,6 +82,5 @@ private:
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

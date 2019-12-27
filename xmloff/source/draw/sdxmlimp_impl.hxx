@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLIMP_IMPL_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLIMP_IMPL_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -258,6 +257,5 @@ public:
     virtual void NotifyEmbeddedFontRead() override;
 };
 
-#endif  //  _SDXMLIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

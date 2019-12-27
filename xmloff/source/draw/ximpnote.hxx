@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPNOTE_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPNOTE_HXX
+#pragma once
 
 #include "sdxmlimp_impl.hxx"
 #include "ximppage.hxx"
@@ -35,6 +34,5 @@ public:
     virtual ~SdXMLNotesContext() override;
 };
 
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPNOTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

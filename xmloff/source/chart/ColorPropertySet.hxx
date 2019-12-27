@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef XMLOFF_COLORPROPERTYSET_HXX
-#define XMLOFF_COLORPROPERTYSET_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <tools/color.hxx>
@@ -80,6 +79,5 @@ private:
 } //  namespace xmloff
 
 // XMLOFF_COLORPROPERTYSET_HXX
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
