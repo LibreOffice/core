@@ -7052,6 +7052,17 @@ private:
             gtk_container_forall(GTK_CONTAINER(pWidget), find_menu_button, user_data);
     }
 
+    static void find_menupeer_button(GtkWidget *pWidget, gpointer user_data)
+    {
+        if (g_strcmp0(gtk_widget_get_name(pWidget), "GtkButton") == 0)
+        {
+            GtkWidget **ppButton = static_cast<GtkWidget**>(user_data);
+            *ppButton = pWidget;
+        }
+        else if (GTK_IS_CONTAINER(pWidget))
+            gtk_container_forall(GTK_CONTAINER(pWidget), find_menupeer_button, user_data);
+    }
+
     static void collect(GtkWidget* pItem, gpointer widget)
     {
         if (GTK_IS_TOOL_BUTTON(pItem))
@@ -7139,8 +7150,24 @@ public:
         disable_item_notify_events();
 
         GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
-        assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || !bActive);
-        if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
+
+        assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || GTK_IS_MENU_TOOL_BUTTON(pToolButton) || !bActive);
+        if (GTK_IS_MENU_TOOL_BUTTON(pToolButton))
+        {
+            GtkButton* pButton = nullptr;
+            // there is no GtkMenuToggleToolButton so abuse the CHECKED state of the GtkMenuToolButton button
+            // to emulate one
+            find_menupeer_button(GTK_WIDGET(pToolButton), &pButton);
+            if (pButton)
+            {
+                GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(pButton));
+                auto eState = gtk_style_context_get_state(pWidgetContext) & ~GTK_STATE_FLAG_CHECKED;
+                if (bActive)
+                    eState |= GTK_STATE_FLAG_CHECKED;
+                gtk_style_context_set_state(pWidgetContext, static_cast<GtkStateFlags>(eState));
+            }
+        }
+        else if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
             gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
 
         enable_item_notify_events();
@@ -7148,12 +7175,25 @@ public:
 
     virtual bool get_item_active(const OString& rIdent) const override
     {
-        auto aFind = m_aMenuButtonMap.find(rIdent);
-        if (aFind != m_aMenuButtonMap.end())
-            return aFind->second->get_active();
-
         GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
-        return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
+
+        assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || GTK_IS_MENU_TOOL_BUTTON(pToolButton));
+        if (GTK_IS_MENU_TOOL_BUTTON(pToolButton))
+        {
+            GtkButton* pButton = nullptr;
+            // there is no GtkMenuToggleToolButton so abuse the CHECKED state of the GtkMenuToolButton button
+            // to emulate one
+            find_menupeer_button(GTK_WIDGET(pToolButton), &pButton);
+            if (pButton)
+            {
+                GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(pButton));
+                return gtk_style_context_get_state(pWidgetContext) & GTK_STATE_FLAG_CHECKED;
+            }
+        }
+        else if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
+            return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
+
+        return false;
     }
 
     virtual void set_menu_item_active(const OString& rIdent, bool bActive) override

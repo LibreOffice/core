@@ -32,6 +32,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weldutils.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>
@@ -3740,15 +3741,166 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
     PopupWindowController( rContext, nullptr, OUString() ),
     m_eLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() ),
-    m_nFormatKey( NUMBERFORMAT_ENTRY_NOT_FOUND )
+    m_nFormatKey( NUMBERFORMAT_ENTRY_NOT_FOUND ),
+    m_pToolbar(nullptr)
 {
 }
 
 SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
 
+namespace
+{
+
+    class ToolbarPopup : public svtools::ToolbarPopupBase
+    {
+    protected:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xTopLevel;
+    public:
+        ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, weld::Widget* pParent, const OUString& rUIFile, const OString& rId)
+            : ToolbarPopupBase(rFrame)
+            , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+            , m_xTopLevel(m_xBuilder->weld_container(rId))
+        {
+        }
+        weld::Container* getTopLevel()
+        {
+            return m_xTopLevel.get();
+        }
+    };
+
+    class CurrencyList_Impl : public ToolbarPopup
+    {
+    private:
+        rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
+        std::unique_ptr<weld::Label> m_xLabel;
+        std::unique_ptr<weld::TreeView> m_xCurrencyLb;
+        std::unique_ptr<weld::Button> m_xOkBtn;
+        OUString&       m_rSelectedFormat;
+        LanguageType&   m_eSelectedLanguage;
+
+        std::vector<OUString> m_aFormatEntries;
+        LanguageType          m_eFormatLanguage;
+        DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
+        DECL_LINK(FocusHdl, weld::Widget&, void);
+        DECL_LINK(OKHdl, weld::Button&, void);
+
+    public:
+        CurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
+            : ToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/currencywindow.ui", "CurrencyWindow")
+            , m_xControl(pControl)
+            , m_xLabel(m_xBuilder->weld_label("label"))
+            , m_xCurrencyLb(m_xBuilder->weld_tree_view("currency"))
+            , m_xOkBtn(m_xBuilder->weld_button("ok"))
+            , m_rSelectedFormat(rSelectedFormat)
+            , m_eSelectedLanguage(eSelectedLanguage)
+        {
+            m_xTopLevel->connect_focus_in(LINK(this, CurrencyList_Impl, FocusHdl));
+
+            m_xCurrencyLb->set_size_request(-1, m_xCurrencyLb->get_height_rows(12));
+
+            std::vector< OUString > aList;
+            std::vector< sal_uInt16 > aCurrencyList;
+            const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
+            sal_uInt16 nLen = rCurrencyTable.size();
+
+            SvNumberFormatter aFormatter( m_xControl->getContext(), LANGUAGE_SYSTEM );
+            m_eFormatLanguage = aFormatter.GetLanguage();
+
+            SvxCurrencyToolBoxControl::GetCurrencySymbols( aList, true, aCurrencyList );
+
+            sal_uInt16 nPos = 0, nCount = 0;
+            sal_Int32 nSelectedPos = -1;
+            bool bIsSymbol;
+            NfWSStringsDtor aStringsDtor;
+
+            for( const auto& rItem : aList )
+            {
+                sal_uInt16& rCurrencyIndex = aCurrencyList[ nCount ];
+                if ( rCurrencyIndex < nLen )
+                {
+                    m_xCurrencyLb->append_text(rItem);
+                    const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
+
+                    bIsSymbol = nPos >= nLen;
+
+                    sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol );
+                    const OUString& rFormatStr = aStringsDtor[ nDefaultFormat ];
+                    m_aFormatEntries.push_back( rFormatStr );
+                    if( rFormatStr == m_rSelectedFormat )
+                        nSelectedPos = nPos;
+                    ++nPos;
+                }
+                ++nCount;
+            }
+            // enable multiple selection enabled so we can start with nothing selected
+            m_xCurrencyLb->set_selection_mode(SelectionMode::Multiple);
+            m_xCurrencyLb->connect_row_activated( LINK( this, CurrencyList_Impl, RowActivatedHdl ) );
+            m_xLabel->set_label(SvxResId(RID_SVXSTR_TBLAFMT_CURRENCY));
+            m_xCurrencyLb->select( nSelectedPos );
+            m_xOkBtn->connect_clicked(LINK(this, CurrencyList_Impl, OKHdl));
+        }
+
+    };
+
+    IMPL_LINK_NOARG(CurrencyList_Impl, FocusHdl, weld::Widget&, void)
+    {
+        m_xCurrencyLb->grab_focus();
+    }
+
+    IMPL_LINK_NOARG(CurrencyList_Impl, OKHdl, weld::Button&, void)
+    {
+        RowActivatedHdl(*m_xCurrencyLb);
+    }
+
+    IMPL_LINK_NOARG(CurrencyList_Impl, RowActivatedHdl, weld::TreeView&, bool)
+    {
+        if (!m_xControl.is())
+            return true;
+
+        // multiple selection enabled so we can start with nothing selected,
+        // so force single selection after something is picked
+        int nSelected = m_xCurrencyLb->get_selected_index();
+        if (nSelected == -1)
+            return true;
+
+        m_xCurrencyLb->set_selection_mode(SelectionMode::Single);
+
+        m_rSelectedFormat = m_aFormatEntries[nSelected];
+        m_eSelectedLanguage = m_eFormatLanguage;
+
+        m_xControl->execute(nSelected + 1);
+
+        m_xControl->EndPopupMode();
+
+        return true;
+    }
+}
+
+void SvxCurrencyToolBoxControl::EndPopupMode()
+{
+    m_pToolbar->set_menu_item_active(m_aCommandURL.toUtf8(), false);
+}
+
+void SvxCurrencyToolBoxControl::dispose()
+{
+    m_xPopover.reset();
+    svt::PopupWindowController::dispose();
+}
+
 void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
+
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(getParent().get()))
+    {
+        m_pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
+        assert(m_pToolbar && "must be a toolbar");
+        auto xPopover = std::make_unique<CurrencyList_Impl>(this, m_pToolbar, m_aFormatString, m_eLanguage);
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), xPopover->getTopLevel());
+        m_xPopover = std::move(xPopover);
+        return;
+    }
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
