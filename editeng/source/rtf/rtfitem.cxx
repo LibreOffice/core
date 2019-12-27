@@ -417,7 +417,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if( IsCalcValue() )
                         CalcValue();
 
-                    nTokenValue = short( 100L * aLSpace.GetLineHeight() / nTokenValue );
+                    nTokenValue = short( 100 * aLSpace.GetLineHeight() / nTokenValue );
 
                     aLSpace.SetPropLineSpace( static_cast<sal_uInt16>(nTokenValue) );
                     aLSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
