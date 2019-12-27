@@ -16,6 +16,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/weld.hxx>
 
 namespace weld
 {
