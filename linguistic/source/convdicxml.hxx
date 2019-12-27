@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
+#pragma once
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -99,6 +98,5 @@ private:
 };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
