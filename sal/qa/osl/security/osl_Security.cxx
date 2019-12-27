@@ -415,7 +415,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     SID_NAME_USE eSidType;
     DWORD dwErrorCode = 0;
 
-    LPCWSTR wszAccName = o3tl::toW(strUserName.getStr( ));
+    OUString sLookupUserName = strUserName;
+    LPCWSTR wszAccName = o3tl::toW(sLookupUserName.getStr( ));
 
     // Create buffers for the SID and the domain name.
     PSID pSid = static_cast<PSID>(new BYTE[dwSidBufferSize]);
@@ -440,6 +441,17 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                            &eSidType
                            ))
         {
+            if (eSidType == SID_NAME_USE::SidTypeDomain)
+            {
+                // LookupAccountNameW returned SID of a domain; likely the hostname is the same as
+                // username (case-insensitive): something like "JOHNSMITH\JohnSmith", so looking up
+                // for "JohnSmith" without doman returns domain itself. Try getting the SID of the
+                // user using fully qualified name (the case of user of another domain having name
+                // identical this hostname is not handled).
+                sLookupUserName = o3tl::toU(wszDomainName) + OUStringLiteral("\\") + strUserName;
+                wszAccName = o3tl::toW(sLookupUserName.getStr());
+                continue;
+            }
             if (IsValidSid( pSid) == FALSE)
                 wprintf(L"# The SID for %s is invalid.\n", wszAccName);
             break;
