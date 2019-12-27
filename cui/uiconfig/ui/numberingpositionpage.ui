@@ -485,6 +485,16 @@ numbering and text:</property>
             <property name="position">1</property>
           </packing>
         </child>
+        <child type="label">
+              <object class="GtkLabel" id="previewlabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="numberingpositionpage|previewlabel">Preview</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
       </object>
       <packing>
         <property name="expand">False</property>
