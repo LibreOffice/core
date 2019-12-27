@@ -220,9 +220,9 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         sal_uInt32 nRed = ((nFore & 0xff0000)>>0x10) * nWW8BrushStyle;
         sal_uInt32 nGreen = ((nFore & 0xff00)>>0x8) * nWW8BrushStyle;
         sal_uInt32 nBlue = (nFore & 0xff) * nWW8BrushStyle;
-        nRed += ((nBack & 0xff0000)>>0x10)  * (1000L - nWW8BrushStyle);
-        nGreen += ((nBack & 0xff00)>>0x8)* (1000L - nWW8BrushStyle);
-        nBlue += (nBack & 0xff) * (1000L - nWW8BrushStyle);
+        nRed += ((nBack & 0xff0000)>>0x10)  * (1000 - nWW8BrushStyle);
+        nGreen += ((nBack & 0xff00)>>0x8)* (1000 - nWW8BrushStyle);
+        nBlue += (nBack & 0xff) * (1000 - nWW8BrushStyle);
 
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
