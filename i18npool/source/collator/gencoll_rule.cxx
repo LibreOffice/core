@@ -88,7 +88,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    fseek(fp, 0L, SEEK_END);
+    fseek(fp, 0, SEEK_END);
     int fileSize = ftell(fp);
     rewind(fp);
 

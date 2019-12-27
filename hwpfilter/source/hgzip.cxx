@@ -66,7 +66,7 @@ gz_stream *gz_open(HStream & _stream)
 //s->_inputstream = NULL;
     s->z_err = Z_OK;
     s->z_eof = 0;
-    s->crc = crc32(0L, Z_NULL, 0);
+    s->crc = crc32(0, Z_NULL, 0);
     s->msg = nullptr;
 
     s->mode = 'r';
@@ -194,7 +194,7 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
             else if (s->z_err == Z_OK)
             {
                 inflateReset(&(s->stream));
-                s->crc = crc32(0L, Z_NULL, 0);
+                s->crc = crc32(0, Z_NULL, 0);
             }
         }
         if (s->z_err != Z_OK || s->z_eof)

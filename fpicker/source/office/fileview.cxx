@@ -1213,8 +1213,8 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
     if ( nMinTimeout <= 0 )
         nMinTimeout = sal_Int32( 1000 );
-    pTimeout->Seconds = nMinTimeout / 1000L;
-    pTimeout->Nanosec = ( nMinTimeout % 1000L ) * 1000000L;
+    pTimeout->Seconds = nMinTimeout / 1000;
+    pTimeout->Nanosec = ( nMinTimeout % 1000 ) * 1000000;
 
     m_xContentEnumerator->enumerateFolderContent( _rFolder, this );
 
