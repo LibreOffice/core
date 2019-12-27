@@ -3226,9 +3226,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
             // zoom for each sheet
             if( rTabSett.mnNormalZoom )
-                rViewTab.aZoomX = rViewTab.aZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
+                rViewTab.aZoomX = rViewTab.aZoomY = Fraction( rTabSett.mnNormalZoom, 100 );
             if( rTabSett.mnPageZoom )
-                rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
+                rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100 );
 
             rViewTab.bShowGrid = rTabSett.mbShowGrid;
 
@@ -3246,9 +3246,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
                 // view mode and default zoom (for new sheets) from current sheet
                 if( rTabSett.mnNormalZoom )
-                    aDefZoomX = aDefZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
+                    aDefZoomX = aDefZoomY = Fraction( rTabSett.mnNormalZoom, 100 );
                 if( rTabSett.mnPageZoom )
-                    aDefPageZoomX = aDefPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
+                    aDefPageZoomX = aDefPageZoomY = Fraction( rTabSett.mnPageZoom, 100 );
                 /*  #i46820# set pagebreak mode via SetPagebreakMode(), this will
                     update map modes that are needed to draw text correctly. */
                 SetPagebreakMode( rTabSett.mbPageMode );
