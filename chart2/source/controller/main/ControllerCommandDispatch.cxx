@@ -553,13 +553,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
         if ( xChartDoc.is() )
         {
             ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
-            Reference< lang::XServiceInfo > xParentServiceInfo(rModel.getParent(), uno::UNO_QUERY);
-            OSL_ENSURE(xParentServiceInfo.is(), "Invalid XServiceInfo");
-            if ( xParentServiceInfo.is() )
-            {
-                css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(rModel.getParent(), uno::UNO_QUERY);
-                bCanCreateDataProvider = xCreatorDoc.is();
-            }
+            css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(rModel.getParent(), uno::UNO_QUERY);
+            bCanCreateDataProvider = xCreatorDoc.is();
         }
     }
 
@@ -632,8 +627,9 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:FormatChartArea" ] = m_aCommandAvailability[ ".uno:DiagramArea" ];
     m_aCommandAvailability[ ".uno:FormatLegend" ] = m_aCommandAvailability[ ".uno:Legend" ];
 
-    // depending on own data
-    m_aCommandAvailability[".uno:DataRanges"] = bIsWritable && bModelStateIsValid && !m_apModelState->bHasDataFromPivotTable && bCanCreateDataProvider;
+    // depending on own data and ability to create new data provider
+    m_aCommandAvailability[".uno:DataRanges"] = bIsWritable && bModelStateIsValid && !m_apModelState->bHasDataFromPivotTable
+        && ((m_apModelState->bHasOwnData && bCanCreateDataProvider) || !m_apModelState->bHasOwnData);
     m_aCommandAvailability[ ".uno:DiagramData" ] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && bEnableDataTableDialog;
 
     // titles
