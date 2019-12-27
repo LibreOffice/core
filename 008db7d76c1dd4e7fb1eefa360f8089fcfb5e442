@@ -16,6 +16,24 @@
       "revId": "008db7d76c1dd4e7fb1eefa360f8089fcfb5e442",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbc5618e_4cb67747",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2019-12-27T08:34:21Z",
+      "side": 1,
+      "message": "@Noel: it\u0027s possible, that this could work without error, but I\u0027m not sure, that this could be correct, because the function called also with quotation-mark-less char* arguments, likely because we don\u0027t want to accept quotation marks (ASCII or typographical) in those cases. So only the recent solution seems to be safe enough. Thanks for your review!",
+      "parentUuid": "6d96bc57_ae0a21c8",
+      "revId": "008db7d76c1dd4e7fb1eefa360f8089fcfb5e442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
