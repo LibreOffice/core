@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_INC_TEMPLWIN_HRC
-#define INCLUDED_SVTOOLS_INC_TEMPLWIN_HRC
+#pragma once
 
 #include <utility>
 
@@ -53,6 +52,5 @@ const std::pair<const char*, int> STRARY_SVT_DOCINFO[] =
     { NC_("STRARY_SVT_DOCINFO", "Size") , DI_SIZE }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

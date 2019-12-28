@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
-#define INCLUDED_SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
+#pragma once
 
 #include <svtools/table/tableinputhandler.hxx>
 
@@ -55,6 +54,5 @@ namespace svt { namespace table
 } } // namespace svt::table
 
 
-#endif // INCLUDED_SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
