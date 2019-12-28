@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbbd9699_268ed402",
+        "filename": "soltools/cpp/_getopt.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T12:28:46Z",
+      "side": 0,
+      "message": "When you remove this line, you will have excess empty lines (one above and one below). We better have only one empty line here, after removal.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 6
+      },
+      "revId": "76f726bdebe50d27b229fb1a3537045e14fe4236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a3214be_075d1f6e",
+        "filename": "soltools/mkdepend/collectdircontent.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T12:28:46Z",
+      "side": 0,
+      "message": "Same here",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 6
+      },
+      "revId": "76f726bdebe50d27b229fb1a3537045e14fe4236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
