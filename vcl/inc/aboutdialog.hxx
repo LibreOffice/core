@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ABOUT_DIALOG_HXX
-#define INCLUDED_VCL_ABOUT_DIALOG_HXX
+#pragma once
 
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
@@ -56,6 +55,5 @@ public:
 };
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

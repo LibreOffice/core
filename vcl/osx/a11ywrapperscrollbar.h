@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_A11YWRAPPERSCROLLBAR_H
-#define INCLUDED_VCL_OSX_A11YWRAPPERSCROLLBAR_H
+#pragma once
 
 #include <osx/a11ywrapper.h>
 
@@ -28,6 +27,5 @@
 -(NSArray *)accessibilityAttributeNames;
 @end
 
-#endif // INCLUDED_VCL_OSX_A11YWRAPPERSCROLLBAR_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

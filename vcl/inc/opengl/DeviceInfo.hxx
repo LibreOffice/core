@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_DEVICEINFO_HXX
-#define INCLUDED_VCL_INC_OPENGL_DEVICEINFO_HXX
+#pragma once
 
 class OpenGLDeviceInfo
 {
@@ -18,6 +17,5 @@ public:
     virtual bool isDeviceBlocked() = 0;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

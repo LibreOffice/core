@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IOS_CLIPBOARD_HXX
-#define INCLUDED_VCL_IOS_CLIPBOARD_HXX
+#pragma once
 
 #include "DataFlavorMapping.hxx"
 #include <rtl/ustring.hxx>
@@ -106,6 +105,5 @@ private:
     UIPasteboard* mPasteboard;
 };
 
-#endif // INCLUDED_VCL_IOS_CLIPBOARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

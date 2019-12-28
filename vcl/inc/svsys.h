@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SVSYS_H
-#define INCLUDED_VCL_INC_SVSYS_H
+#pragma once
 
 #include <config_features.h>
 
@@ -36,6 +35,5 @@
 #include "unx/svsys.h"
 #endif
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

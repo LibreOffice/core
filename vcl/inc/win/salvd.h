@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALVD_H
-#define INCLUDED_VCL_INC_WIN_SALVD_H
+#pragma once
 
 #include <sal/config.h>
 #include <win/scoped_gdi.hxx>
@@ -65,6 +64,5 @@ public:
 };
 
 
-#endif // INCLUDED_VCL_INC_WIN_SALVD_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

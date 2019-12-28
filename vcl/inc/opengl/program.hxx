@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_PROGRAM_H
-#define INCLUDED_VCL_INC_OPENGL_PROGRAM_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -117,6 +116,5 @@ private:
     GLuint GetUniformLocation( const OString& rName );
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_PROGRAM_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

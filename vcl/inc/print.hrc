@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PRINT_HRC
-#define INCLUDED_VCL_INC_PRINT_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -110,6 +109,5 @@ const char* RID_STR_PAPERNAMES[] =
     NC_("RID_STR_PAPERNAMES", "16k (197 x 273)")
 };
 
-#endif // INCLUDED_VCL_INC_PRINT_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

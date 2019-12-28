@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_TYPESERIALIZER_HXX
-#define INCLUDED_VCL_INC_TYPESERIALIZER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <tools/GenericTypeSerializer.hxx>
@@ -33,6 +32,5 @@ public:
     void writeGradient(const Gradient& rGradient);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

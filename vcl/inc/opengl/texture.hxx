@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_TEXTURE_H
-#define INCLUDED_VCL_INC_OPENGL_TEXTURE_H
+#pragma once
 
 #include <epoxy/gl.h>
 #include <vcl/dllapi.h>
@@ -134,6 +133,5 @@ template<> void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(
     std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry)
     const;
 
-#endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

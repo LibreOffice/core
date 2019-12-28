@@ -22,8 +22,7 @@
  * @brief TrueType font creator
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
-#define INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
+#pragma once
 
 #include <sft.hxx>
 
@@ -215,6 +214,5 @@ extern "C"
  void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this);
 }
 
-#endif // INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

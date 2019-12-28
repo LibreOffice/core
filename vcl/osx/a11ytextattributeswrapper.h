@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_A11YTEXTATTRIBUTESWRAPPER_H
-#define INCLUDED_VCL_OSX_A11YTEXTATTRIBUTESWRAPPER_H
+#pragma once
 
 #include <osx/a11ywrapper.h>
 
@@ -27,6 +26,5 @@
 }
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange;
 @end
-#endif // INCLUDED_VCL_OSX_A11YTEXTATTRIBUTESWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

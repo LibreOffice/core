@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
+#pragma once
 
 #include <unx/genprn.h>
 
@@ -46,6 +45,5 @@ public:
     sal_uInt32 GetCapabilities(const ImplJobSetup* i_pSetupData, PrinterCapType i_nType) override;
 };
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

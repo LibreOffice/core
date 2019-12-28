@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IOS_IOSTRANSFERABLE_HXX
-#define INCLUDED_VCL_IOS_IOSTRANSFERABLE_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -68,6 +67,5 @@ private:
     UIPasteboard* mPasteboard;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

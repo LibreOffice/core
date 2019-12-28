@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_OPENGL_TEXTURE_STATE_H
-#define INCLUDED_VCL_INC_OPENGL_TEXTURE_STATE_H
+#pragma once
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -71,6 +70,5 @@ public:
 
 
 
-#endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_STATE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_X11_SALVD_H
-#define INCLUDED_VCL_INC_SKIA_X11_SALVD_H
+#pragma once
 
 #include <salvd.hxx>
 
@@ -41,6 +40,5 @@ public:
     virtual bool SetSize(long nNewDX, long nNewDY) override;
 };
 
-#endif // INCLUDED_VCL_INC_SKIA_X11_SALVD_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

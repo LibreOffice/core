@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_UTILS_H
-#define INCLUDED_VCL_INC_SKIA_UTILS_H
+#pragma once
 
 #include <vcl/skia/SkiaHelper.hxx>
 
@@ -51,6 +50,5 @@ VCL_DLLPUBLIC void dump(const sk_sp<SkSurface>& surface, const char* file);
 
 } // namespace
 
-#endif // INCLUDED_VCL_INC_SKIA_UTILS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
