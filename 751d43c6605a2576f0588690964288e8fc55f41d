@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80341603_21c0efe1",
+        "filename": "sc/inc/AccessibleFilterMenu.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T11:53:45Z",
+      "side": 0,
+      "message": "When you remove this line, you will have excess empty lines (one above and one below). We better have only one empty line here, after removal.",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 6
+      },
+      "revId": "751d43c6605a2576f0588690964288e8fc55f41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19c7a539_ee8d485d",
+        "filename": "sc/inc/AccessibleFilterMenuItem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T11:53:45Z",
+      "side": 0,
+      "message": "Same here...",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 6
+      },
+      "revId": "751d43c6605a2576f0588690964288e8fc55f41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "822e2762_558c45f4",
+        "filename": "sc/inc/AccessibleFilterTopWindow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T11:53:45Z",
+      "side": 0,
+      "message": "And same here...",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 6
+      },
+      "revId": "751d43c6605a2576f0588690964288e8fc55f41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
