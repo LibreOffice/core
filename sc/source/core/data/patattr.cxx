@@ -61,6 +61,7 @@
 #include <validat.hxx>
 #include <scmod.hxx>
 #include <fillinfo.hxx>
+#include <boost/functional/hash.hpp>
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
@@ -139,9 +140,17 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
 
-    return SfxPoolItem::operator==(rCmp) &&
-            EqualPatternSets( GetItemSet(), static_cast<const ScPatternAttr&>(rCmp).GetItemSet() ) &&
-            StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() );
+    if (!SfxPoolItem::operator==(rCmp) )
+        return false;
+    if (!mxHashCode)
+        CalcHashCode();
+    auto const & rOther = static_cast<const ScPatternAttr&>(rCmp);
+    if (!rOther.mxHashCode)
+        rOther.CalcHashCode();
+    if (*mxHashCode != *rOther.mxHashCode)
+        return false;
+    return EqualPatternSets( GetItemSet(), rOther.GetItemSet() ) &&
+            StrCmp( GetStyleName(), rOther.GetStyleName() );
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
@@ -880,8 +889,10 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 {
-    if( pEditSet )
-        GetFromEditItemSet( GetItemSet(), *pEditSet );
+    if( !pEditSet )
+        return;
+    GetFromEditItemSet( GetItemSet(), *pEditSet );
+    mxHashCode.reset();
 }
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
@@ -922,13 +933,19 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
             {
                 //  item is set in OldAttrs (or its parent) -> compare pointers
                 if ( pThisItem == pOldItem )
+                {
                     rThisSet.ClearItem( nSubWhich );
+                    mxHashCode.reset();
+                }
             }
             else if ( eOldState != SfxItemState::DONTCARE )
             {
                 //  not set in OldAttrs -> compare item value to default item
                 if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
+                {
                     rThisSet.ClearItem( nSubWhich );
+                    mxHashCode.reset();
+                }
             }
         }
     }
@@ -948,6 +965,7 @@ void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
     SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
         rSet.ClearItem(pWhich[i]);
+    mxHashCode.reset();
 }
 
 static SfxStyleSheetBase* lcl_CopyStyleToPool
@@ -1343,6 +1361,12 @@ void ScPatternAttr::SetKey(sal_uInt64 nKey)
 sal_uInt64 ScPatternAttr::GetKey() const
 {
     return mnKey;
+}
+
+void ScPatternAttr::CalcHashCode() const
+{
+    auto const & rSet = GetItemSet();
+    mxHashCode = boost::hash_range(rSet.GetItems_Impl(), rSet.GetItems_Impl() + rSet.Count());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
