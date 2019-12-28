@@ -2461,7 +2461,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
         rfmscContextInfo.arrFields.clear();
         rfmscContextInfo.xCursor = nullptr;
         rfmscContextInfo.strUsedFields.clear();
-        return 0L;
+        return 0;
     }
 
     rfmscContextInfo.xCursor = xIter;

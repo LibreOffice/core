@@ -478,7 +478,7 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
         if( nNew > m_pStgStrm->GetSize() )
         {
             if( !SetSize( nNew ) )
-                return 0L;
+                return 0;
             m_pStgStrm->Pos2Page( m_nPos );
         }
         nLen = m_pStgStrm->Write( p, nLen );
