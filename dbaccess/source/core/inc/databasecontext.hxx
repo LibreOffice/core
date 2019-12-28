@@ -41,6 +41,10 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 
+#if HAVE_FEATURE_SCRIPTING
+#include <basic/basrdll.hxx>
+#endif
+
 #include <basic/basicmanagerrepository.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -84,6 +88,10 @@ private:
     */
     css::uno::Reference< css::uno::XInterface >
             impl_createNewDataSource();
+
+#if HAVE_FEATURE_SCRIPTING
+    BasicDLL m_aBasicDLL;
+#endif
 
 protected:
     ::osl::Mutex                    m_aMutex;
