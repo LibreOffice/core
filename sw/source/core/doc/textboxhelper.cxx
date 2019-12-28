@@ -42,6 +42,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
 using namespace com::sun::star;
@@ -124,6 +125,9 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
                  xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
     syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0,
                  xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST));
+    text::WritingMode eMode;
+    if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
+        syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
@@ -386,6 +390,12 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         syncProperty(pShape, RES_BOX, TOP_BORDER_DISTANCE, rValue);
     else if (rPropertyName == UNO_NAME_TEXT_LOWERDIST)
         syncProperty(pShape, RES_BOX, BOTTOM_BORDER_DISTANCE, rValue);
+    else if (rPropertyName == UNO_NAME_TEXT_WRITINGMODE)
+    {
+        text::WritingMode eMode;
+        if (rValue >>= eMode)
+            syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
+    }
 }
 
 void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
