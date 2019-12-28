@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef __com_sun_star_beans_Pair_idl__
+#define __com_sun_star_beans_Pair_idl__
 
 module com {  module sun {  module star {  module beans {
 
@@ -42,5 +43,6 @@ struct Pair<T, U> {
 
 }; }; }; };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef __com_sun_star_security_XAccessController_idl__
+#define __com_sun_star_security_XAccessController_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/security/XAccessControlContext.idl>
@@ -130,5 +131,6 @@ published interface XAccessController : com::sun::star::uno::XInterface
 
 }; }; }; };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
