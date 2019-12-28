@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_container_XEnumerableMap_idl__
-#define __com_sun_star_container_XEnumerableMap_idl__
+#pragma once
 
 #include <com/sun/star/container/XMap.idl>
 #include <com/sun/star/container/XEnumeration.idl>
@@ -95,6 +94,5 @@ interface XEnumerableMap : XMap
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
