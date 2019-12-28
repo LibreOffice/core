@@ -62,6 +62,7 @@
 #include <validat.hxx>
 #include <scmod.hxx>
 #include <fillinfo.hxx>
+#include <boost/functional/hash.hpp>
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
@@ -140,9 +141,17 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
 
-    return SfxPoolItem::operator==(rCmp) &&
-            EqualPatternSets( GetItemSet(), static_cast<const ScPatternAttr&>(rCmp).GetItemSet() ) &&
-            StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() );
+    if (!SfxPoolItem::operator==(rCmp) )
+        return false;
+    if (!mxHashCode)
+        CalcHashCode();
+    auto rOther = static_cast<const ScPatternAttr&>(rCmp);
+    if (!rOther.mxHashCode)
+        rOther.CalcHashCode();
+    if (*mxHashCode != *rOther.mxHashCode)
+        return false;
+    return EqualPatternSets( GetItemSet(), rOther.GetItemSet() ) &&
+            StrCmp( GetStyleName(), rOther.GetStyleName() );
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
@@ -883,6 +892,7 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 {
     if( pEditSet )
         GetFromEditItemSet( GetItemSet(), *pEditSet );
+    mxHashCode.reset();
 }
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
@@ -933,6 +943,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
             }
         }
     }
+    mxHashCode.reset();
 }
 
 bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
@@ -949,6 +960,7 @@ void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
     SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
         rSet.ClearItem(pWhich[i]);
+    mxHashCode.reset();
 }
 
 static SfxStyleSheetBase* lcl_CopyStyleToPool
@@ -1173,6 +1185,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         GetItemSet().SetParent(nullptr);
         pStyle = nullptr;
     }
+    mxHashCode.reset();
 }
 
 void ScPatternAttr::UpdateStyleSheet(const ScDocument* pDoc)
@@ -1198,6 +1211,7 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument* pDoc)
     }
     else
         pStyle = nullptr;
+    mxHashCode.reset();
 }
 
 void ScPatternAttr::StyleToName()
@@ -1210,6 +1224,7 @@ void ScPatternAttr::StyleToName()
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );
     }
+    mxHashCode.reset();
 }
 
 bool ScPatternAttr::IsSymbolFont() const
@@ -1344,6 +1359,12 @@ void ScPatternAttr::SetKey(sal_uInt64 nKey)
 sal_uInt64 ScPatternAttr::GetKey() const
 {
     return mnKey;
+}
+
+void ScPatternAttr::CalcHashCode() const
+{
+    auto rSet = GetItemSet();
+    mxHashCode = boost::hash_range(rSet.GetItems_Impl(), rSet.GetItems_Impl() + rSet.Count());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
