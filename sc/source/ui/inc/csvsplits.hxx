@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CSVSPLITS_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CSVSPLITS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -79,6 +78,5 @@ private:
     sal_uInt32                  GetIterIndex( const_iterator const &  aIter ) const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_DPTYPES_HXX
-#define INCLUDED_SC_INC_DPTYPES_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -16,5 +15,4 @@
 
 typedef std::unordered_set<OUString> ScDPUniqueStringSet;
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

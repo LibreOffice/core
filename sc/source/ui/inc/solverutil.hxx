@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SOLVERUTIL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SOLVERUTIL_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -37,6 +36,5 @@ public:
     static css::uno::Sequence<css::beans::PropertyValue> GetDefaults( const OUString& rImplName );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCL_OPINLINFUN_statistical
-#define SC_OPENCL_OPINLINFUN_statistical
+#pragma once
 std::string MinDecl = "#define Min 2.22507e-308\n";
 std::string F_PIDecl="#define F_PI 3.1415926\n";
 std::string fBigInvDecl ="#define fBigInv  2.22045e-016\n";
@@ -1361,6 +1360,5 @@ std::string gauss =
 "    else\n"
 "        return nVal;\n"
 "}\n";
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

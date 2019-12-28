@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_FUPOOR_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_FUPOOR_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 #include <sfx2/request.hxx>
@@ -105,6 +104,5 @@ public:
     virtual bool doConstructOrthogonal() const;
 };
 
-#endif      // _SD_FUPOOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

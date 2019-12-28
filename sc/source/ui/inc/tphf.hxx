@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX
+#pragma once
 
 #include <svx/hdft.hxx>
 
@@ -68,6 +67,5 @@ public:
     static const sal_uInt16*      GetRanges();
 };
 
-#endif // INCLUDED_SC_SOURCE_UI_INC_TPHF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

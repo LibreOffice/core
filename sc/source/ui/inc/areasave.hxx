@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_AREASAVE_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_AREASAVE_HXX
+#pragma once
 
 #include <address.hxx>
 #include <tools/solar.h>
@@ -68,6 +67,5 @@ public:
     void push_back(const ScAreaLinkSaver&);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_UNDOCONVERT_HXX
-#define INCLUDED_SC_UNDOCONVERT_HXX
+#pragma once
 
 #include "undobase.hxx"
 #include <cellvalues.hxx>
@@ -32,6 +31,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

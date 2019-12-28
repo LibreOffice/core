@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_PATATTR_HXX
-#define INCLUDED_SC_INC_PATATTR_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
@@ -145,6 +144,5 @@ public:
     sal_uInt64              GetKey() const;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

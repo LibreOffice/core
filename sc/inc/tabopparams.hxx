@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_TABOPPARAMS_HXX
-#define INCLUDED_SC_INC_TABOPPARAMS_HXX
+#pragma once
 
 #include "address.hxx"
 
@@ -84,6 +83,5 @@ struct ScInterpreterTableOpParams
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

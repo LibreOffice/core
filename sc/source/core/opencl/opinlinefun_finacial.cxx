@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCL_OPINLINFUN_finacial
-#define SC_OPENCL_OPINLINFUN_finacial
+#pragma once
 
 std::string nCorrValDecl ="double constant nCorrVal[]"
 "= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
@@ -1915,6 +1914,5 @@ std::string GetDiffDate_new=
 "    return bNeg? -nRet : nRet;\n"
 "}\n";
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

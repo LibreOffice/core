@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_EDITFIELD_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_EDITFIELD_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -40,6 +39,5 @@ public:
     void set_sensitive(bool bSensitive) { m_xEntry->set_sensitive(bSensitive); }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

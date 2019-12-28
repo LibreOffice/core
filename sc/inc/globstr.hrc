@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_GLOBSTR_HRC
-#define SC_GLOBSTR_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 #define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
@@ -525,6 +524,5 @@
 #define STR_HYPHENATECELL_OFF                   NC_("STR_HYPHENATECELL_OFF", "Hyphenate: Off")
 #define STR_INDENTCELL                          NC_("STR_INDENTCELL", "Indent: ")
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

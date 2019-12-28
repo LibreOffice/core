@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINKS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINKS_HXX
+#pragma once
 
 #include <ooo/vba/excel/XHyperlinks.hpp>
 #include <rtl/ref.hxx>
@@ -134,6 +133,5 @@ private:
     ScVbaHyperlinksRef mxSheetHlinks;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

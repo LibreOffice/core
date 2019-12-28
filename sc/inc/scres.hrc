@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCRES_HRC
-#define SC_SCRES_HRC
+#pragma once
 
 #include "sc.hrc"
 
@@ -44,6 +43,5 @@
 
 #define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

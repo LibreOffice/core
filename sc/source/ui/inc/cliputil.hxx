@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CLIPUTIL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CLIPUTIL_HXX
+#pragma once
 
 #include <types.hxx>
 
@@ -27,6 +26,5 @@ namespace ScClipUtil
         const ScRangeList& rDest);
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAOUTLINE_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAOUTLINE_HXX
+#pragma once
 
 #include <ooo/vba/excel/XOutline.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
@@ -40,6 +39,5 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

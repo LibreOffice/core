@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DOCUMENT_HXX
-#define INCLUDED_SC_INC_DOCUMENT_HXX
+#pragma once
 
 #include <vcl/idle.hxx>
 #include <vcl/errcode.hxx>
@@ -2654,7 +2653,5 @@ public:
         mrDoc.SetDocShellRecalc(false);
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

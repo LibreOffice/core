@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_FUCONSTR_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_FUCONSTR_HXX
+#pragma once
 
 #include "fudraw.hxx"
 
@@ -39,6 +38,5 @@ public:
             bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
 };
 
-#endif      // _SD_FUCONSTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

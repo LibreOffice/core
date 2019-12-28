@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_FONTHELPER_HXX
-#define INCLUDED_SC_INC_FONTHELPER_HXX
+#pragma once
 
 #include "scdllapi.h"
 #include <o3tl/optional.hxx>
@@ -46,6 +45,5 @@ struct SC_DLLPUBLIC ScDxfFont
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

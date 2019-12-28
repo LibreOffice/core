@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLFORMULA_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLFORMULA_HXX
+#pragma once
 
 #include <osl/diagnose.h>
 #include <formula/opcode.hxx>
@@ -549,6 +548,5 @@ inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uIn
     ::set_flag( rnTokenId, nTokenClass );
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_AREALINK_HXX
-#define INCLUDED_SC_INC_AREALINK_HXX
+#pragma once
 
 #include "refreshtimer.hxx"
 #include "address.hxx"
@@ -75,6 +74,5 @@ public:
     DECL_LINK( RefreshHdl, Timer*, void );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
