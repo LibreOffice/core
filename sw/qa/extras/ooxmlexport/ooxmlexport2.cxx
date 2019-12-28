@@ -79,7 +79,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -90,8 +90,6 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 
     // Validation test: order of elements were wrong.
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
-    if (!pXmlDoc)
-        return;
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
     int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
@@ -519,7 +517,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCellBtlr, "cell-btlr.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCellBtlr, "cell-btlr.docx")
 {
     /*
      * The problem was that the exporter didn't mirror the workaround of the
@@ -528,8 +526,6 @@ DECLARE_OOXMLEXPORT_TEST(testCellBtlr, "cell-btlr.docx")
      */
 
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
 }
 
@@ -867,7 +863,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2.docx")
 {
     // The problem was that the exporter didn't mirror the workaround of the
     // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
@@ -877,8 +873,6 @@ DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-
     // for Word to handle (larger than 31 points)
 
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
 
     // Assert the XPath expression - page borders
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders", "offsetFrom", "page");
@@ -903,12 +897,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
         parseDump("/root/page[3]/header/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testGrabBag, "grabbag.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGrabBag, "grabbag.docx")
 {
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
 }
 
@@ -1090,12 +1082,10 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nShadowTransparence);
 }
 
-DECLARE_OOXMLEXPORT_TEST(NoFillAttrInImagedata, "NoFillAttrInImagedata.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(NoFillAttrInImagedata, "NoFillAttrInImagedata.docx")
 {
     //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "type");
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "color2");
