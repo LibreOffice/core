@@ -491,12 +491,10 @@ DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
     xmlXPathFreeObject(pXmlObj);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
 {
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
 }
 
@@ -529,25 +527,21 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCustomXmlRelationships, "customxml.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomXmlRelationships, "customxml.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("customXml/_rels/item1.xml.rels");
-    if(!pXmlDoc)
-        return;
 
     // Check there is a relation to itemProps1.xml.
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship", 1);
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69644, "fdo69644.docx")
 {
     // The problem was that the exporter exported the table definition
     // with only 3 columns, instead of 5 columns.
     // Check that the table grid is exported with 5 columns
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
@@ -557,11 +551,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
     getParagraph(1, "Sample pages document.");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testPgMargin, "testPgMargin.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPgMargin, "testPgMargin.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
@@ -673,14 +665,12 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCellGridSpan, "cell-grid-span.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCellGridSpan, "cell-grid-span.docx")
 {
     // The problem was during export gridSpan value for 1st & 2nd cells for test document
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
     // Verifying gridSpan element is not present in RoundTripped Document (As it's Default value is 1).
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
@@ -697,11 +687,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing","1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "afterAutospacing","1");
 
@@ -784,19 +772,15 @@ DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:footnoteRef", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSpacingLineRule,"table_lineRule.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSpacingLineRule,"table_lineRule.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableLineSpacing, "table_atleast.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 
@@ -925,14 +909,12 @@ DECLARE_OOXMLEXPORT_TEST(testTableThemePreservation, "table-theme-preservation.d
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testcantSplit, "2_table_doc.docx")
 {
     // if Split table value is true for a table then during export do not write <w:cantSplit w:val="false"/>
     // in table row property,As default row prop is allow row to break across page.
     // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val","true");
 }
@@ -968,20 +950,16 @@ DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
     CPPUNIT_ASSERT_EQUAL( OUString("Heading Base"), xStyle->getParentStyle() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testcolumnbreak, "columnbreak.docx")
 {
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(5, "This is first line after col brk."), "BreakType"));
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testGlossary, "testGlossary.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGlossary, "testGlossary.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/glossary/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
 }
 
@@ -990,20 +968,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
     // crashtest
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
-    if (!pXmlDoc)
-        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.docx")
 {
     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 
     // let's also assert that the formula was exported properly
