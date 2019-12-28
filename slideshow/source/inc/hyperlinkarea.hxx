@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -93,6 +92,5 @@ namespace slideshow
     }
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

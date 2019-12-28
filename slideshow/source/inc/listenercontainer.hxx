@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <algorithm>
@@ -415,6 +414,5 @@ class ThreadUnsafeListenerContainer : public ListenerContainerBase<ListenerT,
 } // namespace internal
 } // namespace slideshow
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

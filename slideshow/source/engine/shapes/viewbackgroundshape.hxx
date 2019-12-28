@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWBACKGROUNDSHAPE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWBACKGROUNDSHAPE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XBitmap.hpp>
@@ -95,6 +94,5 @@ namespace slideshow
     }
 }
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWBACKGROUNDSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

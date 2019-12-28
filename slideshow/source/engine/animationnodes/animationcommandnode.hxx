@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
+#pragma once
 
 #include <basecontainernode.hxx>
 #include <iexternalmediashapebase.hxx>
@@ -56,6 +55,5 @@ private:
 } // namespace internal
 } // namespace slideshow
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
