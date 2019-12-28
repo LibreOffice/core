@@ -532,7 +532,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
 DECLARE_OOXMLEXPORT_TEST(testCustomXmlRelationships, "customxml.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("customXml/_rels/item1.xml.rels");
-    if(!pXmlDoc)
+    if (!pXmlDoc)
         return;
 
     // Check there is a relation to itemProps1.xml.
@@ -1015,7 +1015,7 @@ DECLARE_OOXMLEXPORT_TEST(testSingleCellTableBorders, "tdf124399_SingleCellTableB
     // tdf#124399: Extra borders on single cell tables fixed.
 
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
+    if (ument)
         return;
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:top    [@w:val = 'nil']", 1);
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 1);
@@ -1026,7 +1026,7 @@ DECLARE_OOXMLEXPORT_TEST(testInsideBorders, "tdf129242_InsideBorders.docx")
     // tdf#129242: Don't remove inside borders if the table has more than one cells.
 
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
+    if (ument)
         return;
 
     // If this is not 0, then inside borders are removed.
