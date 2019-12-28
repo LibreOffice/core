@@ -532,7 +532,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
 DECLARE_OOXMLEXPORT_TEST(testCustomXmlRelationships, "customxml.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("customXml/_rels/item1.xml.rels");
-    if(!pXmlDoc)
+    if (!pXmlDoc)
         return;
 
     // Check there is a relation to itemProps1.xml.
