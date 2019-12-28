@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_TXENCTAB_HRC
-#define INCLUDED_SVX_INC_TXENCTAB_HRC
+#pragma once
 
 #include <rtl/textenc.h>
 #include <utility>
@@ -109,6 +108,5 @@ const std::pair<const char*, rtl_TextEncoding> RID_SVXSTR_TEXTENCODING_TABLE[] =
     { NC_("RID_SVXSTR_TEXTENCODING_TABLE", "Cyrillic (PT154)")                                , RTL_TEXTENCODING_PT154            }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

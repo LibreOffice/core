@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_TRANSLATION_UNODIALOG_HXX
-#define INCLUDED_SVX_SOURCE_UNODIALOGS_TEXTCONVERSIONDLGS_CHINESE_TRANSLATION_UNODIALOG_HXX
+#pragma once
 
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -125,6 +124,5 @@ private:
 
 } //end namespace
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

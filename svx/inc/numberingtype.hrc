@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
-#define INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
+#pragma once
 
 #include <utility>
 
@@ -63,6 +62,5 @@ const std::pair<const char*, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
     { NC_("RID_SVXSTRARY_NUMBERINGTYPE", "१, २, ३, ..."),                         59 /* NUMBER_INDIC_DEVANAGARI          */ },
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

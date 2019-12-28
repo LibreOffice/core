@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_TABWIN_HRC
-#define INCLUDED_SVX_INC_TABWIN_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -29,6 +28,5 @@ const char* RID_RSC_TABWIN_PREFIX[] =
     NC_("RID_RSC_TABWIN_PREFIX", "SQL")
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

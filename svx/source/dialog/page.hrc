@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_DIALOG_PAGE_HRC
-#define INCLUDED_SVX_SOURCE_DIALOG_PAGE_HRC
+#pragma once
 
 #include <i18nutil/paper.hxx>
 #include <utility>
@@ -94,6 +93,5 @@ const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =
     { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "Japanese Postcard") , PAPER_POSTCARD_JP}
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

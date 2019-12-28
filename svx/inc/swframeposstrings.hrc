@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SWFRAMEPOSSTRINGS_HRC
-#define INCLUDED_SVX_INC_SWFRAMEPOSSTRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -69,6 +68,5 @@ const char* RID_SVXSW_FRAMEPOSITIONS[] =
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Line of text")
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

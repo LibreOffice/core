@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SVXERR_HRC
-#define INCLUDED_SVX_INC_SVXERR_HRC
+#pragma once
 
 #include <utility>
 
@@ -75,6 +74,5 @@ const ErrMsgCode RID_SVXERRCODE[] =
     { nullptr, ERRCODE_NONE }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

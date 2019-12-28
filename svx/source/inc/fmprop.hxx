@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_INC_FMPROP_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMPROP_HXX
+#pragma once
 
 // PropertyIds, which have an assignment to a PropertyName, could continue
 // to be WhichIds in the future -> Itemset
@@ -146,6 +145,5 @@
 #define FM_PROP_MOUSE_WHEEL_BEHAVIOR         "MouseWheelBehavior"
 #define FM_PROP_DESCRIPTION                  "Description"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

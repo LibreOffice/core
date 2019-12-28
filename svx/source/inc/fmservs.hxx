@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -107,6 +106,5 @@ css::uno::Reference<css::uno::XInterface>
 LegacyFormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
-#endif // INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

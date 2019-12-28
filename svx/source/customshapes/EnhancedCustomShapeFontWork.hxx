@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEFONTWORK_HXX
-#define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEFONTWORK_HXX
+#pragma once
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
@@ -37,6 +36,5 @@ class EnhancedCustomShapeFontWork
             const SdrObjCustomShape& rSdrObjCustomShape);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

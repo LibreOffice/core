@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
-#define INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
+#pragma once
 
 // IDs as in SUBTOTAL_FUNC of Calc
 
@@ -30,6 +29,5 @@
 #define PSZ_FUNC_SELECTION_COUNT    13
 #define PSZ_FUNC_NONE               16
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

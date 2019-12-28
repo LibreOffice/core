@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_FORMDISPATCHINTERCEPTOR_HXX
-#define INCLUDED_SVX_SOURCE_INC_FORMDISPATCHINTERCEPTOR_HXX
+#pragma once
 
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
@@ -102,6 +101,5 @@ namespace svxform
 }
 
 
-#endif // INCLUDED_SVX_SOURCE_INC_FORMDISPATCHINTERCEPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
