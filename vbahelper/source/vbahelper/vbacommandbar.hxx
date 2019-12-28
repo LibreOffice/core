@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBAR_HXX
-#define INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBAR_HXX
+#pragma once
 
 #include <ooo/vba/XCommandBar.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -93,6 +92,5 @@ private:
     OUString maName;
 };
 
-#endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

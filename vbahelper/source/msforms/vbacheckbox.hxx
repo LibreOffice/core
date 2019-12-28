@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACHECKBOX_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACHECKBOX_HXX
+#pragma once
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XCheckBox.hpp>
 
@@ -49,6 +48,5 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
 
-#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACHECKBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
