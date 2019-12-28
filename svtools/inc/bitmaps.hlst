@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_INC_BITMAPS_HRC
-#define INCLUDED_SVTOOLS_INC_BITMAPS_HRC
+#pragma once
 
 #define BMP_IMPRESS_SC              "res/sx03123.png"
 #define BMP_BITMAP_SC               "res/sx03125.png"
@@ -115,6 +114,5 @@
 
 #define BMP_TAB_LOCK "cmd/sc_lock.png"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
