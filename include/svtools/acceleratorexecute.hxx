@@ -160,7 +160,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final : private TMutexInit
             @return [bool]
                     true if this key is configured and match to a command.
                     Attention: This state does not mean the success state
-                    of the corresponding execute. Because its done asynchronous!
+                    of the corresponding execute. Because it's done asynchronously!
          */
         bool execute(const vcl::KeyCode&       aKey);
         bool execute(const css::awt::KeyEvent& aKey);
