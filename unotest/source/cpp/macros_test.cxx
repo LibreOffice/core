@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
+#include <basic/basrdll.hxx>
 #include <cppunit/TestAssert.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequence.hxx>
@@ -21,6 +22,13 @@
 using namespace css;
 
 namespace unotest {
+
+MacrosTest::MacrosTest()
+    : mpDll(std::make_unique<BasicDLL>())
+{
+}
+
+MacrosTest::~MacrosTest() = default;
 
 uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService, const uno::Sequence<beans::PropertyValue>& rExtraArgs)
 {
