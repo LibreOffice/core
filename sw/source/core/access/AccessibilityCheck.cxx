@@ -104,7 +104,7 @@ public:
     }
 };
 
-// Check Table node if the table is merged and splitted.
+// Check Table node if the table is merged and split.
 class TableNodeMergeSplitCheck : public NodeCheck
 {
 private:
@@ -314,7 +314,7 @@ private:
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
         if (xProperties.is())
         {
-            // Forground color
+            // Foreground color
             sal_Int32 nCharColor;
             xProperties->getPropertyValue("CharColor") >>= nCharColor;
             Color aForegroundColor(nCharColor);
