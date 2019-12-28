@@ -31,12 +31,15 @@
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
+#include <basic/basrdll.hxx>
 
 using ::basic::BasicManagerRepository;
 using ::basic::BasicManagerCreationListener;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::uno::XInterface;
+
+static BasicDLL* pBasic = nullptr;
 
 class SfxBasicManagerCreationListener : public ::basic::BasicManagerCreationListener
 {
@@ -91,6 +94,8 @@ SfxAppData_Impl::SfxAppData_Impl()
     , bInQuit( false )
 
 {
+    pBasic = new BasicDLL;
+
 #if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::registerCreationListener( *pBasMgrListener );
 #endif
@@ -105,6 +110,8 @@ SfxAppData_Impl::~SfxAppData_Impl()
     BasicManagerRepository::revokeCreationListener( *pBasMgrListener );
     pBasMgrListener.reset();
 #endif
+
+    delete pBasic;
 }
 
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
