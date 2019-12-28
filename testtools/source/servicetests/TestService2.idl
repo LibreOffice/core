@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __testtools_servicetests_TestService2_idl__
-#define __testtools_servicetests_TestService2_idl__
+#pragma once
 
 #include <TestService1.idl>
 #include <XTestService2.idl>
@@ -36,6 +35,5 @@ interface TestService2 {
 
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

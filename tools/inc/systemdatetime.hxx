@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_TOOLS_INC_SYSTEMDATETIME_H
-#define INCLUDED_TOOLS_INC_SYSTEMDATETIME_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -21,6 +20,5 @@ constexpr sal_Int64 HOUR_MASK = SAL_CONST_INT64(10000000000000);
  */
 bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
