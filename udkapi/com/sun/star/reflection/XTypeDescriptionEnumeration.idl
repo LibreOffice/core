@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
+#define __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
 
 #include <com/sun/star/reflection/XTypeDescription.idl>
 #include <com/sun/star/container/XEnumeration.idl>
@@ -48,5 +49,6 @@ published interface XTypeDescriptionEnumeration : com::sun::star::container::XEn
 
 }; }; }; };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

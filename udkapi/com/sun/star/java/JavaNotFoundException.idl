@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef __com_sun_star_java_JavaNotFoundException_idl__
+#define __com_sun_star_java_JavaNotFoundException_idl__
 
 #include <com/sun/star/java/JavaInitializationException.idl>
 
@@ -34,5 +35,6 @@ exception JavaNotFoundException: JavaInitializationException
 
 }; }; }; };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

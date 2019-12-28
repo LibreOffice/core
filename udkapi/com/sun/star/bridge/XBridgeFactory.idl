@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGEFACTORY_IDL_
+#define _COM_SUN_STAR_BRIDGE_XBRIDGEFACTORY_IDL_
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
@@ -83,5 +84,6 @@ published interface XBridgeFactory: com::sun::star::uno::XInterface
 
 };};};};
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

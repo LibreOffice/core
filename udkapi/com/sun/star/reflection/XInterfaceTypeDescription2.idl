@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef __com_sun_star_reflection_XInterfaceTypeDescription2_idl__
+#define __com_sun_star_reflection_XInterfaceTypeDescription2_idl__
 
 #include <com/sun/star/reflection/XInterfaceTypeDescription.idl>
 
@@ -62,5 +63,6 @@ interface XInterfaceTypeDescription2: XInterfaceTypeDescription {
 
 }; }; }; };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
