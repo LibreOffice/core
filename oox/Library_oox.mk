@@ -11,10 +11,7 @@ $(eval $(call gb_Library_Library,oox))
 
 $(eval $(call gb_Library_set_precompiled_header,oox,oox/inc/pch/precompiled_oox))
 
-$(eval $(call gb_Library_use_custom_headers,oox,\
-	oox/generated \
-	officecfg/registry \
-))
+$(eval $(call gb_Library_use_custom_headers,oox,oox/generated))
 
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
