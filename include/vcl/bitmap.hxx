@@ -71,6 +71,7 @@ enum class BmpConversion
     N8BitGreys,
     N8BitColors,
     N24Bit,
+    N32Bit,
     N8BitTrans,
     Ghosted
 };
