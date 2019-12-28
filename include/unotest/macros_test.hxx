@@ -10,6 +10,9 @@
 #ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
 #define INCLUDED_UNOTEST_MACROS_TEST_HXX
 
+#include <sal/config.h>
+
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -22,16 +25,24 @@ struct TestMacroInfo
     OUString sMacroUrl;
 };
 
+class BasicDLL;
+
 namespace unotest {
 
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
+    MacrosTest();
+    ~MacrosTest();
+
     css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
         const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args = css::uno::Sequence<css::beans::PropertyValue>() );
 
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
+
+private:
+    std::unique_ptr<BasicDLL> mpDll;
 };
 
 }
