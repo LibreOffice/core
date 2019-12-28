@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_container_XContainerApproveListener_idl
-#define __com_sun_star_container_XContainerApproveListener_idl
+#pragma once
 
 #include <com/sun/star/container/ContainerEvent.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
@@ -66,6 +65,5 @@ interface XContainerApproveListener
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
