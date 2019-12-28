@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_OPTLOAD_HRC
-#define INCLUDED_SW_INC_OPTLOAD_HRC
+#pragma once
 
 #include <tools/fldunit.hxx>
 #include <utility>
@@ -40,6 +39,5 @@ const std::pair<const char*, FieldUnit> STR_ARR_METRIC[] =
     { NC_("STR_ARR_METRIC", "Line") , FieldUnit::LINE }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

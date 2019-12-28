@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_POOLFMT_HXX
-#define INCLUDED_SW_INC_POOLFMT_HXX
+#pragma once
 
 #include <limits.h>
 #include <editeng/frmdir.hxx>
@@ -449,6 +448,5 @@ SvxFrameDirection GetDefaultFrameDirection(LanguageType nLanguage);
 
 bool IsConditionalByPoolId(sal_uInt16 nId);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

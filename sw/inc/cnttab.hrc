@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CNTTAB_HRC
-#define INCLUDED_SW_INC_CNTTAB_HRC
+#pragma once
 
 #include "tox.hxx"
 
@@ -33,6 +32,5 @@ const std::pair<const char*, SwTOOElements> RES_SRCTYPES[] =
     { NC_("RES_SRCTYPES", "Other OLE Objects"), SwTOOElements::Other},
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

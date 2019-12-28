@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_SWSCANNER_HXX
-#define INCLUDED_SW_INC_SWSCANNER_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include "modeltoviewhelper.hxx"
@@ -72,6 +71,5 @@ public:
     sal_Int32 getOverriddenDashCount() const {return m_nOverriddenDashCount; }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
+#pragma once
 
 #include <tools/color.hxx>
 
@@ -31,6 +30,5 @@ namespace vcl {
 
 void SwCalcPixStatics( vcl::RenderContext const *pOut );
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

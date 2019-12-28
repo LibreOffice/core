@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_DATEFORMEFIELDBUTTO_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_DATEFORMEFIELDBUTTO_HXX
+#pragma once
 
 #include "FormFieldButton.hxx"
 
@@ -40,6 +39,5 @@ private:
     SvNumberFormatter* m_pNumberFormatter;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

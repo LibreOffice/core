@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_SWSMARTTAGMGR_HXX
-#define INCLUDED_SW_INC_SWSMARTTAGMGR_HXX
+#pragma once
 
 #include <svx/SmartTagMgr.hxx>
 
@@ -41,6 +40,5 @@ public:
       virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

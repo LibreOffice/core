@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_FLDREF_HRC
-#define INCLUDED_SW_INC_FLDREF_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -31,6 +30,5 @@ const char* FLD_REF_PAGE_TYPES[] =
     NC_("fldrefpage|liststore1", "Numbered Paragraphs"),
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

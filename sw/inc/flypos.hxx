@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_FLYPOS_HXX
-#define INCLUDED_SW_INC_FLYPOS_HXX
+#pragma once
 
 #include "swdllapi.h"
 #include <memory>
@@ -50,6 +49,5 @@ typedef std::shared_ptr< SwPosFlyFrame > SwPosFlyFramePtr;
 struct SwPosFlyFrameCmp { bool operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const; };
 typedef std::set< SwPosFlyFramePtr, SwPosFlyFrameCmp > SwPosFlyFrames;
 
-#endif // INCLUDED_SW_INC_FLYPOS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

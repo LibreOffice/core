@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_FLYFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_FLYFRM_HXX
+#pragma once
 
 #include "layfrm.hxx"
 #include <vector>
@@ -279,6 +278,5 @@ private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

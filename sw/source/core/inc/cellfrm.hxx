@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_CELLFRM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_CELLFRM_HXX
+#pragma once
 
 #include "layfrm.hxx"
 
@@ -65,6 +64,5 @@ public:
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CELLATR_HXX
-#define INCLUDED_SW_INC_CELLATR_HXX
+#pragma once
 
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
@@ -109,6 +108,5 @@ inline const SwTableBoxFormula        &SwFormat::GetTableBoxFormula(bool bInP) c
 inline const SwTableBoxValue          &SwFormat::GetTableBoxValue(bool bInP) const
     {   return m_aSet.GetTableBoxValue(bInP); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_DBUI_HRC
-#define INCLUDED_SW_INC_DBUI_HRC
+#pragma once
 
 #include <utility>
 
@@ -58,6 +57,5 @@ const std::pair<const char*, int> SA_ADDRESS_HEADER[] =
     { NC_("SA_ADDRESS_HEADER", "Gender"),                 MM_PART_GENDER          }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

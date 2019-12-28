@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_SWERROR_H
-#define INCLUDED_SW_INC_SWERROR_H
+#pragma once
 
 // Import & Export
 #define ERR_SWG_FILE_FORMAT_ERROR       ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 1 )
@@ -42,6 +41,5 @@
 #define WARN_WRITE_ERROR_FILE           ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 76)
 #define WARN_FORMAT_FILE_ROWCOL         ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Read, 77)
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

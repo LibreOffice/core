@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_CHARATR_HXX
-#define INCLUDED_SW_INC_CHARATR_HXX
+#pragma once
 
 #include "format.hxx"
 #include "hintids.hxx"
@@ -131,6 +130,5 @@ inline const SvxFontItem         &SwFormat::GetCTLFont(bool bInP) const
 inline const SvxColorItem            &SwFormat::GetColor(bool bInP) const
     {   return m_aSet.GetColor(bInP); }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

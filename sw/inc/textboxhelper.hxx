@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_INC_TEXTBOXHELPER_HXX
-#define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
+#pragma once
 
 #include <map>
 #include <set>
@@ -128,6 +127,5 @@ public:
                              SavedLink& rSavedLinks, SavedContent& rResetContent);
 };
 
-#endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

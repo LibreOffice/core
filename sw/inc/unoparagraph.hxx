@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_UNOPARAGRAPH_HXX
-#define INCLUDED_SW_INC_UNOPARAGRAPH_HXX
+#pragma once
 
 #include <memory>
 
@@ -220,6 +219,5 @@ struct SwXParagraphEnumeration
         SwTable const*const pTable = nullptr);
 };
 
-#endif // INCLUDED_SW_INC_UNOPARAGRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

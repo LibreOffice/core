@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
+#pragma once
 
 #include <IDocumentListsAccess.hxx>
 #include <memory>
@@ -68,6 +67,5 @@ class DocumentListsManager : public IDocumentListsAccess
 
 }
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

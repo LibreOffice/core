@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_HTMLTBL_HXX
-#define INCLUDED_SW_INC_HTMLTBL_HXX
+#pragma once
 
 #include <memory>
 #include <vcl/timer.hxx>
@@ -434,6 +433,5 @@ void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight 
     m_nInhRightBorderWidth = nRight;
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

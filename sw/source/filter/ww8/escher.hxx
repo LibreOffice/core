@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_ESCHER_HXX
-#define INCLUDED_SW_SOURCE_FILTER_WW8_ESCHER_HXX
+#pragma once
 
 #include <filter/msfilter/escherex.hxx>
 #include <svx/svdtrans.hxx>
@@ -176,6 +175,5 @@ private:
     SwEscherEx &operator=(const SwEscherEx&) = delete;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

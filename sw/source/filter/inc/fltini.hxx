@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_FILTER_INC_FLTINI_HXX
-#define INCLUDED_SW_SOURCE_FILTER_INC_FLTINI_HXX
+#pragma once
 
 #include <shellio.hxx>
 
@@ -81,6 +80,5 @@ public:
 SW_DLLPUBLIC void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     SwTwips nPageWidth);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOMANAGER_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNDOMANAGER_HXX
+#pragma once
 
 #include <IDocumentUndoRedo.hxx>
 #include <svx/sdrundomanager.hxx>
@@ -126,6 +125,5 @@ private:
 
 } // namespace sw
 
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

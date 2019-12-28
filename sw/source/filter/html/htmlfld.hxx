@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFLD_HXX
-#define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFLD_HXX
+#pragma once
 
 
 #define OOO_STRING_SW_HTML_FT_author "AUTHOR"
@@ -78,6 +77,5 @@
 #define OOO_STRING_SW_HTML_FF_path "PATH"
 #define OOO_STRING_SW_HTML_FF_name_noext "NAME-NOEXT"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

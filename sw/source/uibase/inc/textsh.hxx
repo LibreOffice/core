@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TEXTSH_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_TEXTSH_HXX
+#pragma once
 
 #include "basesh.hxx"
 #include <unotools/caserotate.hxx>
@@ -83,6 +82,5 @@ public:
     SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

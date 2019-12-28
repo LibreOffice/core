@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCCELL_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCCELL_HXX
+#pragma once
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
@@ -133,6 +132,5 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
