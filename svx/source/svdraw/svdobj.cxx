@@ -1691,7 +1691,7 @@ bool SdrObject::IsPolyObj() const
 
 sal_uInt32 SdrObject::GetPointCount() const
 {
-    return 0L;
+    return 0;
 }
 
 Point SdrObject::GetPoint(sal_uInt32 /*i*/) const
