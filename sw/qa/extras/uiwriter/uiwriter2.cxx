@@ -2451,4 +2451,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
     CPPUNIT_ASSERT_EQUAL(OUString("Lohit Devanagari"), sFontName);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
+{
+    createDoc("tdf129655-vtextbox.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
