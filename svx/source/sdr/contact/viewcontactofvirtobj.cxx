@@ -56,7 +56,7 @@ sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
 
     // As can be seen, with primitives, the problem will be solved using
     // a transformPrimitive, so this solution can stay with primitives.
-    return 0L;
+    return 0;
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
