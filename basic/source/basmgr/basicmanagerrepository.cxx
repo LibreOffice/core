@@ -196,8 +196,8 @@ namespace basic
 
     ImplRepository& ImplRepository::Instance()
     {
-        static ImplRepository repository;
-        return repository;
+        static ImplRepository* repository = new ImplRepository; // do not delete
+        return *repository;
     }
 
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
