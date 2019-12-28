@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
-#define INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/securityoptions.hxx>
@@ -66,6 +65,5 @@ public:
     void    SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert );
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

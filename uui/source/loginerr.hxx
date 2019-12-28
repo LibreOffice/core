@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_LOGINERR_HXX
-#define INCLUDED_UUI_SOURCE_LOGINERR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -155,7 +154,6 @@ inline void LoginErrorInfo::SetModifyUserName( bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_MODIFY_USER_NAME;
 }
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
