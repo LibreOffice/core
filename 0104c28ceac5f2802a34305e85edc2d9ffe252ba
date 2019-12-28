@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1ebd0d3_78205764",
+        "filename": "sw/inc/acmplwrd.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T12:24:45Z",
+      "side": 0,
+      "message": "When you remove this line, you will have excess empty lines (one above and one below). We better have only one empty line here, after removal.",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 6
+      },
+      "revId": "0104c28ceac5f2802a34305e85edc2d9ffe252ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81cd3a85_f0ea5976",
+        "filename": "sw/inc/anchoreddrawobject.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T12:24:45Z",
+      "side": 0,
+      "message": "Same here.",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 6
+      },
+      "revId": "0104c28ceac5f2802a34305e85edc2d9ffe252ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5365186_d4535ac3",
+        "filename": "sw/inc/anchoredobject.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-28T12:24:45Z",
+      "side": 0,
+      "message": "And same here...",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 500,
+        "endChar": 6
+      },
+      "revId": "0104c28ceac5f2802a34305e85edc2d9ffe252ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
