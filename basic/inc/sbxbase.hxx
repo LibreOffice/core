@@ -40,6 +40,7 @@ struct SbxAppData
     SbxVariableRef      m_aGlobErr; // Global error object
     std::vector<std::unique_ptr<SbxFactory>>
                         m_Factories;
+    tools::SvRef<SvRefBase> mrImplRepository;
 
     // Pointer to Format()-Command helper class
     std::unique_ptr<SbxBasicFormater>   pBasicFormater;
