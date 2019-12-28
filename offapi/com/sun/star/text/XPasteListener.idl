@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#ifndef __com_sun_star_text_XPasteListener_idl__
-#define __com_sun_star_text_XPasteListener_idl__
+#pragma once
 
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/uno/XInterface.idl>
@@ -38,6 +37,5 @@ interface XPasteListener : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

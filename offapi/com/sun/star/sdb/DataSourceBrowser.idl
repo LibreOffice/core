@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_sdb_DataSourceBrowser_idl__
-#define __com_sun_star_sdb_DataSourceBrowser_idl__
+#pragma once
 
 #include <com/sun/star/frame/XController.idl>
 #include <com/sun/star/lang/XInitialization.idl>
@@ -263,6 +262,5 @@ published service DataSourceBrowser
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

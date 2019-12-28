@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_clipboard_XClipboardFactory_idl__
-#define __com_sun_star_datatransfer_clipboard_XClipboardFactory_idl__
+#pragma once
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/uno/XInterface.idl>
@@ -55,6 +54,5 @@ published interface XClipboardFactory: com::sun::star::uno::XInterface
 
 }; }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

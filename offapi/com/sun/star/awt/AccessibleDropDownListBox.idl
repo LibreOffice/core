@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_AccessibleDropDownListBox_idl__
-#define __com_sun_star_awt_AccessibleDropDownListBox_idl__
+#pragma once
 
 #include <com/sun/star/accessibility/AccessibleContext.idl>
 
@@ -99,6 +98,5 @@ service AccessibleDropDownListBox
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

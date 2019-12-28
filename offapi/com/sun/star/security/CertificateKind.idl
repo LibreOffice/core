@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_security_CertificateKind_idl_
-#define __com_sun_star_security_CertificateKind_idl_
+#pragma once
 
 module com { module sun { module star { module security {
 
@@ -36,6 +35,5 @@ enum CertificateKind
 
 } ; } ; } ; } ;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

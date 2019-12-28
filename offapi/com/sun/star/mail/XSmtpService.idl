@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_mail_XSmtpService_idl__
-#define __com_sun_star_mail_XSmtpService_idl__
+#pragma once
 
 #include <com/sun/star/mail/XMailService.idl>
 #include <com/sun/star/mail/XMailMessage.idl>
@@ -76,6 +75,5 @@ interface XSmtpService: ::com::sun::star::mail::XMailService {
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

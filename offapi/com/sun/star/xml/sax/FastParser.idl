@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COM_SUN_STAR_XML_SAX_FASTPARSER_IDL
-#define INCLUDED_COM_SUN_STAR_XML_SAX_FASTPARSER_IDL
+#pragma once
 
 #include <com/sun/star/xml/sax/XFastParser.idl>
 
@@ -18,6 +17,5 @@ service FastParser: XFastParser;
 
 }; }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

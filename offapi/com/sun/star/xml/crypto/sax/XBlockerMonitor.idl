@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_sax_xblockermonitor_idl_
-#define __com_sun_star_xml_crypto_sax_xblockermonitor_idl_
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
@@ -43,6 +42,5 @@ interface XBlockerMonitor : com::sun::star::uno::XInterface
 
 } ; } ; } ; } ; } ; } ;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

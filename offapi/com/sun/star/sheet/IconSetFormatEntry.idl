@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_IconSetEntryType_idl__
-#define __com_sun_star_sheet_IconSetEntryType_idl__
+#pragma once
 
 module com {  module sun {  module star {  module sheet {
 
@@ -31,6 +30,5 @@ constants IconSetFormatEntry
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

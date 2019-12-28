@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_task_DocumentMacroConfirmationRequest_idl__
-#define __com_sun_star_task_DocumentMacroConfirmationRequest_idl__
+#pragma once
 
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 #include <com/sun/star/embed/XStorage.idl>
@@ -64,6 +63,5 @@ exception DocumentMacroConfirmationRequest : ClassifiedInteractionRequest
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

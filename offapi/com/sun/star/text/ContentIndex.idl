@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_text_ContentIndex_idl__
-#define __com_sun_star_text_ContentIndex_idl__
+#pragma once
 
 #include <com/sun/star/text/BaseIndex.idl>
 
@@ -57,6 +56,5 @@ published service ContentIndex
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

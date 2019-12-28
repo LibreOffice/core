@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart2_data_XNumericalDataSequence_idl
-#define com_sun_star_chart2_data_XNumericalDataSequence_idl
+#pragma once
 
 #include <com/sun/star/chart2/data/XDataSequence.idl>
 
@@ -49,6 +48,5 @@ interface XNumericalDataSequence : ::com::sun::star::uno::XInterface
 } ; // star
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

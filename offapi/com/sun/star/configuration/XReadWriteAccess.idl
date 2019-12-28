@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_XREADWRITEACCESS_IDL
-#define _COM_SUN_STAR_CONFIGURATION_XREADWRITEACCESS_IDL
+#pragma once
 
 #include <com/sun/star/beans/XHierarchicalPropertySetInfo.idl>
 #include <com/sun/star/container/XHierarchicalNameReplace.idl>
@@ -33,6 +32,5 @@ interface XReadWriteAccess {
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

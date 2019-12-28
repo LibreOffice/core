@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_scanner_ScannerManager_idl__
-#define __com_sun_star_scanner_ScannerManager_idl__
+#pragma once
 
 #include <com/sun/star/scanner/XScannerManager2.idl>
 
@@ -35,6 +34,5 @@ published service ScannerManager : XScannerManager2;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

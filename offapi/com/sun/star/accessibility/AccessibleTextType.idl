@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_accessibility_AccessibleTextType_idl__
-#define __com_sun_star_accessibility_AccessibleTextType_idl__
+#pragma once
 
 module com { module sun { module star { module accessibility {
 
@@ -94,6 +93,5 @@ constants AccessibleTextType
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

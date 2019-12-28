@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
-#define __com_sun_star_accessibility_XAccessibleComponent_idl__
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/XFocusListener.idl>
@@ -209,6 +208,5 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

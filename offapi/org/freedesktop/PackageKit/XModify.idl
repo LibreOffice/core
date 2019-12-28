@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef org_freedesktop_PackageKit_XModify_idl
-#define org_freedesktop_PackageKit_XModify_idl
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 
@@ -103,6 +102,5 @@ interface XModify : com::sun::star::uno::XInterface
 } ; // org
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

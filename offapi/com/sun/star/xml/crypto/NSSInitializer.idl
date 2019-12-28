@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_NSSInitializer_idl_
-#define __com_sun_star_xml_crypto_NSSInitializer_idl_
+#pragma once
 
 #include <com/sun/star/xml/crypto/XNSSInitializer.idl>
 
@@ -32,6 +31,5 @@ service NSSInitializer : XNSSInitializer;
 } ; } ; } ; } ; } ;
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

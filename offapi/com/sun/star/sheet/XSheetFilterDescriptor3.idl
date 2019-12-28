@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor3_idl__
-#define __com_sun_star_sheet_XSheetFilterDescriptor3_idl__
+#pragma once
 
 #include <com/sun/star/sheet/TableFilterField3.idl>
 #include <com/sun/star/uno/XInterface.idl>
@@ -41,6 +40,5 @@ interface XSheetFilterDescriptor3: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

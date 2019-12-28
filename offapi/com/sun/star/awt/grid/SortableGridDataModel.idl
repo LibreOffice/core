@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_grid_SortableGridDataModel_idl__
-#define __com_sun_star_awt_grid_SortableGridDataModel_idl__
+#pragma once
 
 #include <com/sun/star/i18n/XCollator.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -88,6 +87,5 @@ service SortableGridDataModel : XSortableMutableGridDataModel
 }; }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

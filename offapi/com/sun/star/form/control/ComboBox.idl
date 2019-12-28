@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_control_ComboBox_idl__
-#define __com_sun_star_form_control_ComboBox_idl__
+#pragma once
 
 #include <com/sun/star/awt/UnoControlComboBox.idl>
 #include <com/sun/star/form/XBoundControl.idl>
@@ -45,7 +44,6 @@ published service ComboBox
 
 }; }; }; }; };
 
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

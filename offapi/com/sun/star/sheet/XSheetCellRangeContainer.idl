@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_XSheetCellRangeContainer_idl__
-#define __com_sun_star_sheet_XSheetCellRangeContainer_idl__
+#pragma once
 
 #include <com/sun/star/sheet/XSheetCellRanges.idl>
 #include <com/sun/star/table/CellRangeAddress.idl>
@@ -100,6 +99,5 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

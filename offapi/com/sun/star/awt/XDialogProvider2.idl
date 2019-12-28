@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_XDialogProvider2_idl__
-#define __com_sun_star_awt_XDialogProvider2_idl__
+#pragma once
 
 #include <com/sun/star/awt/XDialogProvider.idl>
 #include <com/sun/star/beans/NamedValue.idl>
@@ -118,6 +117,5 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_runtime_FormController_idl__
-#define __com_sun_star_form_runtime_FormController_idl__
+#pragma once
 
 #include <com/sun/star/form/runtime/XFormController.idl>
 
@@ -35,6 +34,5 @@ service FormController : XFormController;
 }; }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

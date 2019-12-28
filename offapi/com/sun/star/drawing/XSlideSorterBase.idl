@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_XSlideSorterBase_idl__
-#define __com_sun_star_drawing_XSlideSorterBase_idl__
+#pragma once
 
 #include <com/sun/star/drawing/framework/XView.idl>
 #include <com/sun/star/drawing/XDrawView.idl>
@@ -114,6 +113,5 @@ interface XSlideSorterBase
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

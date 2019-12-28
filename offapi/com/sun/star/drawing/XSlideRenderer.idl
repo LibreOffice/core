@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_XSlideRenderer_idl__
-#define __com_sun_star_drawing_XSlideRenderer_idl__
+#pragma once
 
 #include <com/sun/star/awt/XBitmap.idl>
 #include <com/sun/star/drawing/XDrawPage.idl>
@@ -99,6 +98,5 @@ interface XSlideRenderer
 
 }; }; }; }; // ::com::sun::star::drawing
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

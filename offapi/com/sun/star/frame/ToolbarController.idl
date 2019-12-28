@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_frame_ToolbarController_idl__
-#define __com_sun_star_frame_ToolbarController_idl__
+#pragma once
 
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/util/XUpdatable.idl>
@@ -115,6 +114,5 @@ service ToolbarController
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

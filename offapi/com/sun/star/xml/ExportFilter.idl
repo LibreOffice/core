@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COM_SUN_STAR_XML_EXPORTFILTER_IDL__
-#define _COM_SUN_STAR_XML_EXPORTFILTER_IDL__
+#pragma once
 
 #include <com/sun/star/xml/XExportFilter.idl>
 
@@ -52,6 +51,5 @@ published service ExportFilter
 };
 
 }; }; }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

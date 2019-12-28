@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_READWRITEACCESS_IDL
-#define _COM_SUN_STAR_CONFIGURATION_READWRITEACCESS_IDL
+#pragma once
 
 #include <com/sun/star/configuration/XReadWriteAccess.idl>
 
@@ -31,6 +30,5 @@ service ReadWriteAccess: com::sun::star::configuration::XReadWriteAccess {
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

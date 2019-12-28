@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_i18n_Calendar2_idl__
-#define __com_sun_star_i18n_Calendar2_idl__
+#pragma once
 
 #include <com/sun/star/i18n/CalendarItem2.idl>
 
@@ -74,4 +73,3 @@ published struct Calendar2
 
 }; }; }; };
 
-#endif

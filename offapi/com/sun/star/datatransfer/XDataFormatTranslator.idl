@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_datatransfer_XDataFormatTranslator_idl__
-#define __com_sun_star_datatransfer_XDataFormatTranslator_idl__
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/datatransfer/DataFlavor.idl>
@@ -64,6 +63,5 @@ published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

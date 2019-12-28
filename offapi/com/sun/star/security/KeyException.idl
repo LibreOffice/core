@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_security_KeyException_idl__
-#define __com_sun_star_security_KeyException_idl__
+#pragma once
 
 #include <com/sun/star/uno/SecurityException.idl>
 
@@ -33,6 +32,5 @@ exception KeyException : com::sun::star::uno::SecurityException
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

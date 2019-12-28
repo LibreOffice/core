@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_sdb_XTextConnectionSettings_idl__
-#define __com_sun_star_sdb_XTextConnectionSettings_idl__
+#pragma once
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
@@ -39,6 +38,5 @@ interface XTextConnectionSettings {
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

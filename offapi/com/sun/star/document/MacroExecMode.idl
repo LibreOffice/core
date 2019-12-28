@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_document_MacroExecMode_idl__
-#define __com_sun_star_document_MacroExecMode_idl__
+#pragma once
 
 
 module com { module sun { module star { module document {
@@ -108,6 +107,5 @@ published constants MacroExecMode
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

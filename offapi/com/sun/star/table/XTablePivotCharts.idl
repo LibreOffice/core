@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_table_XTablePivotCharts_idl__
-#define __com_sun_star_table_XTablePivotCharts_idl__
+#pragma once
 
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/awt/Rectangle.idl>
@@ -50,6 +49,5 @@ interface XTablePivotCharts: com::sun::star::container::XNameAccess
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

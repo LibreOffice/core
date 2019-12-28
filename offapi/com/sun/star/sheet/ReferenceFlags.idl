@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_ReferenceFlags_idl__
-#define __com_sun_star_sheet_ReferenceFlags_idl__
+#pragma once
 
 
 module com {  module sun {  module star {  module sheet {
@@ -74,6 +73,5 @@ constants ReferenceFlags
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

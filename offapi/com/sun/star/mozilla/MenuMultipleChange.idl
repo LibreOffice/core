@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_mozilla_MenuMultipleChange_idl__
-#define __com_sun_star_mozilla_MenuMultipleChange_idl__
+#pragma once
 
 #include <com/sun/star/lang/XComponent.idl>
 
@@ -73,6 +72,5 @@ published struct MenuMultipleChange
 
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

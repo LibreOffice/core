@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_gallery_XGalleryTheme_idl__
-#define __com_sun_star_gallery_XGalleryTheme_idl__
+#pragma once
 
 #include <com/sun/star/container/XIndexAccess.idl>
 #include <com/sun/star/lang/XComponent.idl>
@@ -146,6 +145,5 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

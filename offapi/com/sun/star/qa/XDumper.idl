@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_qa_XDumper_idl
-#define com_sun_star_qa_XDumper_idl
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 
@@ -41,6 +40,5 @@ interface XDumper : com::sun::star::uno::XInterface
 } ; // star
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

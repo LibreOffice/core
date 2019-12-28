@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef org_freedesktop_PackageKit_SyncDbusSessionHelper_idl
-#define org_freedesktop_PackageKit_SyncDbusSessionHelper_idl
+#pragma once
 
 #include <org/freedesktop/PackageKit/XSyncDbusSessionHelper.idl>
 
@@ -21,6 +20,5 @@ service SyncDbusSessionHelper : XSyncDbusSessionHelper;
 } ; // freedesktop
 } ; // org
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

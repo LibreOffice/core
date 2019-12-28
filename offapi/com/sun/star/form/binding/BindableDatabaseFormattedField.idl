@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_binding_BindableDatabaseFormattedField_idl__
-#define __com_sun_star_form_binding_BindableDatabaseFormattedField_idl__
+#pragma once
 
 #include <com/sun/star/form/component/DatabaseFormattedField.idl>
 #include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
@@ -50,6 +49,5 @@ service BindableDatabaseFormattedField
 
 }; }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

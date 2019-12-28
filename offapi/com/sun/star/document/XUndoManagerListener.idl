@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_document_XUndoManagerListener_idl__
-#define __com_sun_star_document_XUndoManagerListener_idl__
+#pragma once
 
 #include <com/sun/star/document/UndoManagerEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
@@ -131,6 +130,5 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

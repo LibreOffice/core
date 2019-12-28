@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ucb_CachedDynamicResultSetStubFactory_idl__
-#define __com_sun_star_ucb_CachedDynamicResultSetStubFactory_idl__
+#pragma once
 
 #include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.idl>
 
@@ -33,6 +32,5 @@ published service CachedDynamicResultSetStubFactory
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

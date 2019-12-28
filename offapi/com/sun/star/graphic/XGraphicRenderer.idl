@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_XGraphicRenderer_idl
-#define com_sun_star_graphic_XGraphicRenderer_idl
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
@@ -43,6 +42,5 @@ interface XGraphicRenderer : ::com::sun::star::uno::XInterface
 
 } ; } ; } ; } ;
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

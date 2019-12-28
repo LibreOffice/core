@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_TextRangeContentProperties_idl__
-#define __com_sun_star_text_TextRangeContentProperties_idl__
+#pragma once
 
 #include <com/sun/star/table/XCell.idl>
 #include <com/sun/star/text/XTextContent.idl>
@@ -92,6 +91,5 @@ service TextRangeContentProperties
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

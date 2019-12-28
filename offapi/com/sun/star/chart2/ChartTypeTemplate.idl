@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_ChartTypeTemplate_idl
-#define com_sun_star_chart2_ChartTypeTemplate_idl
+#pragma once
 
 #include <com/sun/star/chart2/XChartTypeTemplate.idl>
 
@@ -41,6 +40,5 @@ service ChartTypeTemplate
 } ; // sun
 } ; // star
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

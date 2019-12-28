@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_FormattedString_idl
-#define com_sun_star_chart2_FormattedString_idl
+#pragma once
 
 #include <com/sun/star/chart2/XFormattedString2.idl>
 
@@ -28,6 +27,5 @@ service FormattedString : XFormattedString2;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

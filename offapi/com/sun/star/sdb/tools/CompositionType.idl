@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_tools_CompositionType_idl__
-#define __com_sun_star_sdb_tools_CompositionType_idl__
+#pragma once
 
 module com {  module sun {  module star {  module sdb { module tools {
 
@@ -74,6 +73,5 @@ constants CompositionType
 
 }; }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

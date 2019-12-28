@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_frame_XLayoutManager2_idl__
-#define __com_sun_star_frame_XLayoutManager2_idl__
+#pragma once
 
 #include <com/sun/star/frame/XLayoutManager.idl>
 #include <com/sun/star/frame/XFrameActionListener.idl>
@@ -83,6 +82,5 @@ interface XLayoutManager2
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

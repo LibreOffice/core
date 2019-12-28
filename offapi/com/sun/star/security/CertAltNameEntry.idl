@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_security_CertAltNameEntry_idl__
-#define __com_sun_star_security_CertAltNameEntry_idl__
+#pragma once
 
 #include <com/sun/star/security/ExtAltNameType.idl>
 
@@ -46,6 +45,5 @@ struct CertAltNameEntry
 
 
 }; }; }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_i18n_TextConversionType_idl__
-#define __com_sun_star_i18n_TextConversionType_idl__
+#pragma once
 
 
 
@@ -49,6 +48,5 @@ published constants TextConversionType
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_clipboard_XClipboardEx_idl__
-#define __com_sun_star_datatransfer_clipboard_XClipboardEx_idl__
+#pragma once
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.idl>
 
@@ -45,6 +44,5 @@ published interface XClipboardEx: com::sun::star::datatransfer::clipboard::XClip
 
 }; }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

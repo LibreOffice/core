@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_datatransfer_XMimeContentTypeFactory_idl__
-#define __com_sun_star_datatransfer_XMimeContentTypeFactory_idl__
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -60,6 +59,5 @@ published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

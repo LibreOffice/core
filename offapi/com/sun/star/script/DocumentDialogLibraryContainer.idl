@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_DocumentDialogLibraryContainer_idl__
-#define __com_sun_star_script_DocumentDialogLibraryContainer_idl__
+#pragma once
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.idl>
 #include <com/sun/star/document/XStorageBasedDocument.idl>
@@ -62,6 +61,5 @@ service DocumentDialogLibraryContainer : XStorageBasedLibraryContainer
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

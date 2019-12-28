@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_XConfigurationChangeListener_idl__
-#define __com_sun_star_drawing_framework_XConfigurationChangeListener_idl__
+#pragma once
 
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
@@ -42,6 +41,5 @@ interface XConfigurationChangeListener
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

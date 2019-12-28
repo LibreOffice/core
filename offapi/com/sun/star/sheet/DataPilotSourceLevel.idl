@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_DataPilotSourceLevel_idl__
-#define __com_sun_star_sheet_DataPilotSourceLevel_idl__
+#pragma once
 
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/sheet/XMembersSupplier.idl>
@@ -82,6 +81,5 @@ service DataPilotSourceLevel
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

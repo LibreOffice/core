@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_Spreadsheet_idl__
-#define __com_sun_star_sheet_Spreadsheet_idl__
+#pragma once
 
 #include <com/sun/star/sheet/SheetCellRange.idl>
 #include <com/sun/star/sheet/XSpreadsheet.idl>
@@ -197,6 +196,5 @@ service Spreadsheet
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_script_theServiceDocumenter_idl__
-#define __com_sun_star_script_theServiceDocumenter_idl__
+#pragma once
 
 #include <com/sun/star/script/XServiceDocumenter.idl>
 
@@ -21,6 +20,5 @@ singleton theServiceDocumenter : XServiceDocumenter;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

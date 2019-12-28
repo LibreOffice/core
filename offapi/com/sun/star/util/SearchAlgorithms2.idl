@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_util_SearchAlgorithms2_idl__
-#define __com_sun_star_util_SearchAlgorithms2_idl__
+#pragma once
 
 module com { module sun { module star { module util {
 
@@ -37,6 +36,5 @@ constants SearchAlgorithms2
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

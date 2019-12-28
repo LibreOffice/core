@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_TablePageStyle_idl__
-#define __com_sun_star_sheet_TablePageStyle_idl__
+#pragma once
 
 #include <com/sun/star/style/PageStyle.idl>
 #include <com/sun/star/sheet/XHeaderFooterContent.idl>
@@ -180,6 +179,5 @@ published service TablePageStyle
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

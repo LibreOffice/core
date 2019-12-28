@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_embed_StorageStream_idl__
-#define __com_sun_star_embed_StorageStream_idl__
+#pragma once
 
 #include <com/sun/star/embed/XEncryptionProtectedSource.idl>
 #include <com/sun/star/lang/XComponent.idl>
@@ -200,6 +199,5 @@ published service StorageStream
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

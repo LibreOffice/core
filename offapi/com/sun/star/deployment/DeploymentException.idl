@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_DeploymentException_idl
-#define _com_sun_star_deployment_DeploymentException_idl
+#pragma once
 
 #include <com/sun/star/uno/Exception.idl>
 
@@ -38,6 +37,5 @@ exception DeploymentException : com::sun::star::uno::Exception
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

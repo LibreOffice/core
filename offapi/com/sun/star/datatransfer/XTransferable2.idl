@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_datatransfer_XTransferable2_idl__
-#define __com_sun_star_datatransfer_XTransferable2_idl__
+#pragma once
 
 #include <com/sun/star/datatransfer/XTransferable.idl>
 
@@ -42,7 +41,6 @@ interface XTransferable2 : com::sun::star::datatransfer::XTransferable
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

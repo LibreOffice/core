@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ucb_XRemoteContentProviderChangeListener_idl__
-#define __com_sun_star_ucb_XRemoteContentProviderChangeListener_idl__
+#pragma once
 
 #include <com/sun/star/lang/XEventListener.idl>
 #include <com/sun/star/ucb/RemoteContentProviderChangeEvent.idl>
@@ -46,6 +45,5 @@ published interface XRemoteContentProviderChangeListener:
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

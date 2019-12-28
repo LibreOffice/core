@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_dialogs_XFilePickerControlAccess_idl__
-#define __com_sun_star_ui_dialogs_XFilePickerControlAccess_idl__
+#pragma once
 
 #include <com/sun/star/ui/dialogs/XFilePicker.idl>
 
@@ -131,6 +130,5 @@ void enableControl( [in] short ControlId, [in] boolean bEnable );
 }; }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

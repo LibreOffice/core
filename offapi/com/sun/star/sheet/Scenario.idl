@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_Scenario_idl__
-#define __com_sun_star_sheet_Scenario_idl__
+#pragma once
 
 #include <com/sun/star/sheet/XScenario.idl>
 #include <com/sun/star/sheet/XScenarioEnhanced.idl>
@@ -88,6 +87,5 @@ service Scenario
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

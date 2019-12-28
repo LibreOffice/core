@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_i18n_LocaleCalendar2_idl__
-#define __com_sun_star_i18n_LocaleCalendar2_idl__
+#pragma once
 
 #include <com/sun/star/i18n/XCalendar4.idl>
 
@@ -22,6 +21,5 @@ service LocaleCalendar2 : XCalendar4;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

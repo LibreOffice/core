@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_logging_SimpleTextFormatter_idl__
-#define __com_sun_star_logging_SimpleTextFormatter_idl__
+#pragma once
 
 
 module com { module sun { module star { module logging {
@@ -44,6 +43,5 @@ service SimpleTextFormatter : XLogFormatter
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

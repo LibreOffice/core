@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_thePackageManagerFactory_idl
-#define _com_sun_star_deployment_thePackageManagerFactory_idl
+#pragma once
 
 #include <com/sun/star/deployment/XPackageManagerFactory.idl>
 
@@ -42,6 +41,5 @@ singleton thePackageManagerFactory : XPackageManagerFactory;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

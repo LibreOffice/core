@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_XTableColumns_idl__
-#define __com_sun_star_table_XTableColumns_idl__
+#pragma once
 
 #include <com/sun/star/container/XIndexAccess.idl>
 
@@ -60,6 +59,5 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_text_ObjectIndex_idl__
-#define __com_sun_star_text_ObjectIndex_idl__
+#pragma once
 
 #include <com/sun/star/text/BaseIndex.idl>
 
@@ -55,7 +54,6 @@ published service ObjectIndex
 
 }; }; }; };
 
-#endif
 
 
 

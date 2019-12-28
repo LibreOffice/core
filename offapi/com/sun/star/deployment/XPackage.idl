@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_XPackage_idl
-#define _com_sun_star_deployment_XPackage_idl
+#pragma once
 
 #include <com/sun/star/beans/Optional.idl>
 #include <com/sun/star/beans/Ambiguous.idl>
@@ -365,6 +364,5 @@ interface XPackage
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

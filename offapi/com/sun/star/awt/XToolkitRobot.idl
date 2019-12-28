@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_awt_XToolkitRobot_idl__
-#define __com_sun_star_awt_XToolkitRobot_idl__
+#pragma once
 
 #include <com/sun/star/awt/KeyEvent.idl>
 #include <com/sun/star/awt/XTopWindow.idl>
@@ -35,6 +34,5 @@ interface XToolkitRobot
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_script_XStorageBasedLibraryContainer_idl__
-#define __com_sun_star_script_XStorageBasedLibraryContainer_idl__
+#pragma once
 
 #include <com/sun/star/embed/XStorage.idl>
 #include <com/sun/star/script/XPersistentLibraryContainer.idl>
@@ -86,6 +85,5 @@ interface XStorageBasedLibraryContainer
 }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

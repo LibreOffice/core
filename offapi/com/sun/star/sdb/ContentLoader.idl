@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_sdb_ContentLoader_idl__
-#define __com_sun_star_sdb_ContentLoader_idl__
+#pragma once
 
 #include <com/sun/star/frame/FrameLoader.idl>
 
@@ -88,6 +87,5 @@ published service ContentLoader
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef __com_sun_star_ucb_GlobalTransferCommandArgument2_idl__
-#define __com_sun_star_ucb_GlobalTransferCommandArgument2_idl__
+#pragma once
 
 #include <com/sun/star/ucb/GlobalTransferCommandArgument.idl>
 
@@ -31,6 +30,5 @@ struct GlobalTransferCommandArgument2 : GlobalTransferCommandArgument
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

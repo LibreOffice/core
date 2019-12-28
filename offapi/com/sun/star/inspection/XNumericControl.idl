@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_inspection_XNumericControl_idl__
-#define __com_sun_star_inspection_XNumericControl_idl__
+#pragma once
 
 #include <com/sun/star/inspection/XPropertyControl.idl>
 #include <com/sun/star/beans/Optional.idl>
@@ -77,6 +76,5 @@ interface XNumericControl : XPropertyControl
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

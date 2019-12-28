@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COM_SUN_STAR_FRAME_GLOBALEVENTBROADCASTER_IDL
-#define COM_SUN_STAR_FRAME_GLOBALEVENTBROADCASTER_IDL
+#pragma once
 
 #include <com/sun/star/frame/XGlobalEventBroadcaster.idl>
 
@@ -41,6 +40,5 @@ singleton theGlobalEventBroadcaster: XGlobalEventBroadcaster;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

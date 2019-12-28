@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_security_keyusage_idl_
-#define __com_sun_star_security_keyusage_idl_
+#pragma once
 
 module com { module sun { module star { module security {
 
@@ -37,6 +36,5 @@ constants KeyUsage
 } ; } ; } ; } ;
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

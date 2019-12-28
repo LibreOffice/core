@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_i18n_NativeNumberSupplier2_idl__
-#define __com_sun_star_i18n_NativeNumberSupplier2_idl__
+#pragma once
 
 #include <com/sun/star/i18n/XNativeNumberSupplier2.idl>
 
@@ -40,6 +39,5 @@ service NativeNumberSupplier2 : com::sun::star::i18n::XNativeNumberSupplier2;
 
 }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

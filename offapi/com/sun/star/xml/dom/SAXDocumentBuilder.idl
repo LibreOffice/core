@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_dom_SAXDocumentBuilder_idl
-#define __com_sun_star_xml_dom_SAXDocumentBuilder_idl
+#pragma once
 
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.idl>
 
@@ -28,6 +27,5 @@ service SAXDocumentBuilder : XSAXDocumentBuilder2;
 
 };};};};};
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

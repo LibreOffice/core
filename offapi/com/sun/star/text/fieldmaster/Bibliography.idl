@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_fieldmaster_Bibliography_idl_
-#define __com_sun_star_text_fieldmaster_Bibliography_idl_
+#pragma once
 
 #include <com/sun/star/text/TextFieldMaster.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
@@ -78,6 +77,5 @@ published service Bibliography
 
 }; }; }; }; };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

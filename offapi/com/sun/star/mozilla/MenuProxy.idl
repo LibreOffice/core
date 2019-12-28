@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_mozilla_MenuProxy_idl__
-#define __com_sun_star_mozilla_MenuProxy_idl__
+#pragma once
 
 #include <com/sun/star/mozilla/XMenuProxy.idl>
 
@@ -42,6 +41,5 @@ published service MenuProxy
 
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

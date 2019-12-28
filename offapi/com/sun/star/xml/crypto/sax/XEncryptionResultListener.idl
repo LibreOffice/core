@@ -19,8 +19,7 @@
 
 
 
-#ifndef __com_sun_star_xml_crypto_sax_xencryptionresultlistener_idl_
-#define __com_sun_star_xml_crypto_sax_xencryptionresultlistener_idl_
+#pragma once
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
@@ -50,6 +49,5 @@ interface XEncryptionResultListener : com::sun::star::uno::XInterface
 } ; } ; } ; } ; } ; } ;
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

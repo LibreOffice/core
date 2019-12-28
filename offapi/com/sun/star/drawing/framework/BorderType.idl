@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_BorderType_idl__
-#define __com_sun_star_drawing_framework_BorderType_idl__
+#pragma once
 
 
 module com { module sun { module star { module drawing { module framework {
@@ -35,6 +34,5 @@ enum BorderType
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

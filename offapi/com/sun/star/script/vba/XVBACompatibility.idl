@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_vba_XVBACompatibility_idl__
-#define __com_sun_star_script_vba_XVBACompatibility_idl__
+#pragma once
 
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/script/vba/XVBAScriptListener.idl>
@@ -49,6 +48,5 @@ interface XVBACompatibility
 }; }; }; }; };
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

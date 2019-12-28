@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __com_sun_star_text_UserDefinedIndex_idl__
-#define __com_sun_star_text_UserDefinedIndex_idl__
+#pragma once
 
 #include <com/sun/star/text/BaseIndex.idl>
 #include <com/sun/star/text/XDocumentIndexMark.idl>
@@ -72,6 +71,5 @@ published service UserDefinedIndex
 
 
 }; }; }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
