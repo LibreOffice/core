@@ -22,6 +22,7 @@
 #include <scriptcont.hxx>
 #include <dlgcont.hxx>
 #include <sbintern.hxx>
+#include <sbxbase.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -62,10 +63,11 @@ namespace basic
 
     typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
-    class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
+    class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener, public SvRefBase
     {
     private:
         ImplRepository();
+        ~ImplRepository();
 
     private:
         BasicManagerStore   m_aStore;
@@ -193,11 +195,23 @@ namespace basic
     {
     }
 
+    ImplRepository::~ImplRepository()
+    {
+        // Avoid double-delete of managers when they are destroyed in our dtor, and start notify us
+        for (auto& it : m_aStore)
+            EndListening(*it.second);
+    }
 
     ImplRepository& ImplRepository::Instance()
     {
-        static ImplRepository repository;
-        return repository;
+        tools::SvRef<SvRefBase>& repository = GetSbxData_Impl().mrImplRepository;
+        {
+            static osl::Mutex aMutex;
+            osl::MutexGuard aGuard(aMutex);
+            if (!repository)
+                repository = new ImplRepository;
+        }
+        return *static_cast<ImplRepository*>(repository.get());
     }
 
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
