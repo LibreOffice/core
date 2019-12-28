@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
-#define ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -33,6 +32,5 @@
 #define RID_STR_ACC_COLUMN_NUM                  NC_("RID_STR_ACC_COLUMN_NUM", "Column %COLUMNNUMBER")
 #define RID_STR_ACC_ROW_NUM                     NC_("RID_STR_ACC_ROW_NUM", "Row %ROWNUMBER")
 
-#endif          // ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
