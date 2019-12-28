@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
-#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
+#pragma once
 
 #include <extended/AccessibleBrowseBoxTableBase.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -216,6 +215,5 @@ inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 } // namespace accessibility
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
