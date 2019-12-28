@@ -28,30 +28,43 @@
 #include <sbxbase.hxx>
 #include <config_features.h>
 
-struct BasicDLL::Impl
+namespace
+{
+struct BasicDLLImpl : public SvRefBase
 {
     bool        bDebugMode;
     bool        bBreakEnabled;
 
     std::unique_ptr<SbxAppData> xSbxAppData;
 
-    Impl()
+    BasicDLLImpl()
         : bDebugMode(false)
         , bBreakEnabled(true)
         , xSbxAppData(new SbxAppData)
     { }
+
+    ~BasicDLLImpl()
+    {
+        osl::MutexGuard aGuard(getMutex());
+        BASIC_DLL = nullptr;
+    }
+
+    static BasicDLLImpl* BASIC_DLL;
+    static osl::Mutex& getMutex()
+    {
+        static osl::Mutex aMutex;
+        return aMutex;
+    }
 };
-
-namespace {
-
-BasicDLL * BASIC_DLL;
-
+BasicDLLImpl* BasicDLLImpl::BASIC_DLL = nullptr;
 }
 
 BasicDLL::BasicDLL()
-    : m_xImpl(new Impl)
 {
-    BASIC_DLL = this;
+    osl::MutexGuard aGuard(BasicDLLImpl::getMutex());
+    if (!BasicDLLImpl::BASIC_DLL)
+        BasicDLLImpl::BASIC_DLL = new BasicDLLImpl;
+    m_xImpl = BasicDLLImpl::BASIC_DLL;
 }
 
 BasicDLL::~BasicDLL()
@@ -60,37 +73,34 @@ BasicDLL::~BasicDLL()
 
 void BasicDLL::EnableBreak( bool bEnable )
 {
-    BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
-    if ( pThis )
+    DBG_ASSERT( BasicDLLImpl::BASIC_DLL, "BasicDLL::EnableBreak: No instance yet!" );
+    if (BasicDLLImpl::BASIC_DLL)
     {
-        pThis->m_xImpl->bBreakEnabled = bEnable;
+        BasicDLLImpl::BASIC_DLL->bBreakEnabled = bEnable;
     }
 }
 
 void BasicDLL::SetDebugMode( bool bDebugMode )
 {
-    BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
-    if ( pThis )
+    DBG_ASSERT( BasicDLLImpl::BASIC_DLL, "BasicDLL::EnableBreak: No instance yet!" );
+    if (BasicDLLImpl::BASIC_DLL)
     {
-        pThis->m_xImpl->bDebugMode = bDebugMode;
+        BasicDLLImpl::BASIC_DLL->bDebugMode = bDebugMode;
     }
 }
 
 
 void BasicDLL::BasicBreak()
 {
-    BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
+    DBG_ASSERT( BasicDLLImpl::BASIC_DLL, "BasicDLL::EnableBreak: No instance yet!" );
 #if HAVE_FEATURE_SCRIPTING
-    if ( pThis )
+    if (BasicDLLImpl::BASIC_DLL)
     {
         // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
         // but the Basic doesn't stop early enough, the box might appear more often...
         static bool bJustStopping = false;
         if (StarBASIC::IsRunning() && !bJustStopping
-            && (pThis->m_xImpl->bBreakEnabled || pThis->m_xImpl->bDebugMode))
+            && (BasicDLLImpl::BASIC_DLL->bBreakEnabled || BasicDLLImpl::BASIC_DLL->bDebugMode))
         {
             bJustStopping = true;
             StarBASIC::Stop();
@@ -106,7 +116,7 @@ void BasicDLL::BasicBreak()
 
 SbxAppData& GetSbxData_Impl()
 {
-    return *BASIC_DLL->m_xImpl->xSbxAppData;
+    return *BasicDLLImpl::BASIC_DLL->xSbxAppData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

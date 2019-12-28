@@ -10,6 +10,9 @@
 #ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
 #define INCLUDED_UNOTEST_MACROS_TEST_HXX
 
+#include <sal/config.h>
+
+#include <basic/basrdll.hxx>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -32,6 +35,9 @@ public:
 
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
+
+private:
+    BasicDLL maDll;
 };
 
 }
