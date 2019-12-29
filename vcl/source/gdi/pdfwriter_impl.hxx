@@ -25,6 +25,8 @@
 #include <memory>
 #include <vector>
 
+#include <pdf/BitmapID.hxx>
+
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -85,6 +87,8 @@ namespace o3tl {
 
 namespace vcl
 {
+
+using namespace vcl::pdf;
 
 class PDFStreamIf;
 class Matrix3;
@@ -171,24 +175,6 @@ public:
     };
 
     friend struct PDFPage;
-
-    struct BitmapID
-    {
-        Size        m_aPixelSize;
-        sal_Int32   m_nSize;
-        BitmapChecksum   m_nChecksum;
-        BitmapChecksum   m_nMaskChecksum;
-
-        BitmapID() : m_nSize( 0 ), m_nChecksum( 0 ), m_nMaskChecksum( 0 ) {}
-
-        bool operator==( const BitmapID& rComp ) const
-        {
-            return (m_aPixelSize == rComp.m_aPixelSize &&
-                    m_nSize == rComp.m_nSize &&
-                    m_nChecksum == rComp.m_nChecksum &&
-                    m_nMaskChecksum == rComp.m_nMaskChecksum );
-        }
-    };
 
     /// Contains information to emit a reference XObject.
     struct ReferenceXObjectEmit
