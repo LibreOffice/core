@@ -70,6 +70,7 @@ class ScRangeList;
 class ScPrintUIOptions;
 class ScSheetSaveData;
 struct ScFormatSaveData;
+class ScPostIt;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
@@ -673,8 +674,10 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
+    ScDocShell*             GetDocShell() const { return pDocShell; }
+
                             /// XSheetAnnotations
-    virtual void SAL_CALL   insertNew( const css::table::CellAddress& aPosition,
+    SC_DLLPUBLIC virtual void SAL_CALL   insertNew( const css::table::CellAddress& aPosition,
                                 const OUString& aText ) override;
     virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex ) override;
 
