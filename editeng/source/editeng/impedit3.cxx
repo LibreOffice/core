@@ -2922,7 +2922,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     {
         // Now in consideration of Escape/Propr
         // possibly enlarge Ascent or Descent
-        short nDiff = static_cast<short>(rFont.GetFontSize().Height()*rFont.GetEscapement()/100L);
+        short nDiff = static_cast<short>(rFont.GetFontSize().Height()*rFont.GetEscapement()/100);
         if ( rFont.GetEscapement() > 0 )
         {
             nAscent = static_cast<sal_uInt16>(static_cast<long>(nAscent)*nPropr/100 + nDiff);
