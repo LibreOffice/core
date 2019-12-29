@@ -104,14 +104,13 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     enum ResourceKind { ResXObject, ResExtGState, ResShading, ResPattern };
-    typedef std::map< OString, sal_Int32 > ResourceMap;
     struct ResourceDict
     {
         // note: handle fonts globally for performance
-        ResourceMap m_aXObjects;
-        ResourceMap m_aExtGStates;
-        ResourceMap m_aShadings;
-        ResourceMap m_aPatterns;
+        std::map<OString, sal_Int32> m_aXObjects;
+        std::map<OString, sal_Int32> m_aExtGStates;
+        std::map<OString, sal_Int32> m_aShadings;
+        std::map<OString, sal_Int32> m_aPatterns;
 
         void append( OStringBuffer&, sal_Int32 nFontDictObject );
     };
