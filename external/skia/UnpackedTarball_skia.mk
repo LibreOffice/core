@@ -25,6 +25,7 @@ skia_patches := \
     Wdeprecated-copy.patch.0 \
     Wdeprecated-copy-dtor.patch.0 \
     fix-msvc.patch.1 \
+    fix-gcc-x86.patch.1	\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

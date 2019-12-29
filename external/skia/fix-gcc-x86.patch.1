@@ -1,0 +1,20 @@
+--- skia/third_party/skcms/skcms.cc		2019-12-28 22:39:17.886442654 +0000
++++ skia/third_party/skcms/skcms.cc~	2019-12-28 22:34:34.486843710 +0000
+@@ -2051,6 +2051,7 @@
+     #define N 4
+     template <typename T> using V = Vec<N,T>;
+     using Color = float;
++    #pragma message "Fallback to float color"
+ #endif
+ 
+     #include "src/Transform_inl.h"
+--- skia/third_party/skcms/src/Transform_inl.h	2019-12-28 22:38:41.739366565 +0000
++++ skia/third_party/skcms/src/Transform_inl.h~	2019-12-28 22:37:41.087942963 +0000
+@@ -85,6 +85,7 @@
+ // It helps codegen to call __builtin_memcpy() when we know the byte count at compile time.
+ #if defined(__clang__) || defined(__GNUC__)
+     #define SI static inline __attribute__((always_inline))
++    #pragma message "Forcing always_inline attribute for gcc"
+ #else
+     #define SI static inline
+ #endif
