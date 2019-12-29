@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_3e0069aa",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-12-29T10:01:36Z",
+      "side": 1,
+      "message": "what\u0027s wrong with using a URL here?  what if the original input was a non-file URL?",
+      "revId": "34824c77f2fcffe6ea90a8c3063a033670ef3f56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
