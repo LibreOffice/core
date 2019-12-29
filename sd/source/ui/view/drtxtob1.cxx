@@ -742,6 +742,12 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         break;
     }
 
+    if ( pOLV )
+    {
+        pOLV->ShowCursor();
+        pOLV->GetWindow()->GrabFocus();
+    }
+
     Invalidate( SID_OUTLINE_LEFT );
     Invalidate( SID_OUTLINE_RIGHT );
     Invalidate( SID_OUTLINE_UP );
