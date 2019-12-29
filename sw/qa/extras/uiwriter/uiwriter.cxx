@@ -363,6 +363,7 @@ public:
     void testTdf106164();
     void testTdf54409();
     void testTdf38394();
+    void testTdf59666();
     void testInconsistentBookmark();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -569,6 +570,7 @@ public:
     CPPUNIT_TEST(testTdf106164);
     CPPUNIT_TEST(testTdf54409);
     CPPUNIT_TEST(testTdf38394);
+    CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7080,6 +7082,20 @@ void SwUiWriterTest::testTdf38394()
     pWrtShell->AutoCorrect(corr, cChar);
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"l\u2019« ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testTdf59666()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // testing missing autocorrect of single Greek letters
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(u"\u03C0");
+    const sal_Unicode cChar = ' ';
+    pWrtShell->AutoCorrect(corr, cChar);
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"\u03C0 ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 

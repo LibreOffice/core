@@ -890,6 +890,10 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         lcl_IsInAsciiArr( ".-)>", *pDelim ) )
         return;
 
+    // tdf#59666 don't capitalize single Greek letters (except in Greek texts)
+    if ( 1 == pDelim - pWordStt && 0x03B1 <= *pWordStt && *pWordStt <= 0x03C9 && eLang != LANGUAGE_GREEK )
+        return;
+
     if( !bAtStart ) // Still no beginning of a paragraph?
     {
         if (NonFieldWordDelim(*pStr))
