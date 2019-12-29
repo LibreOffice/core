@@ -792,7 +792,7 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
 
         if (rParam.pShadow && rParam.pShadow->GetLocation() != SvxShadowLocation::NONE)
             nPaperWidth -= ( rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::LEFT) +
-                             rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT) ) * 100L / nZoom;
+                             rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT) ) * 100 / nZoom;
 
         pEditEngine->SetPaperSize( Size( nPaperWidth, 10000 ) );
 
