@@ -87,9 +87,8 @@ PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter,
     , mpTextListStyle( new TextListStyle )
     , mbCommentAuthorsRead(false)
 {
-    // TODO JNA Typo
-    TextParagraphPropertiesVector& rParagraphDefaulsVector( mpTextListStyle->getListStyle() );
-    for (auto const& elem : rParagraphDefaulsVector)
+    TextParagraphPropertiesVector& rParagraphDefaultsVector( mpTextListStyle->getListStyle() );
+    for (auto const& elem : rParagraphDefaultsVector)
     {
         // ppt is having zero bottom margin per default, whereas OOo is 0,5cm,
         // so this attribute needs to be set always
