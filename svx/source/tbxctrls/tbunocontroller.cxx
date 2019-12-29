@@ -364,6 +364,11 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
         SolarMutexGuard aSolarMutexGuard;
         if ( rEvent.FeatureURL.Path == "FontHeight" )
         {
+            ToolBox* pToolBox = nullptr;
+            sal_uInt16 nId = 0;
+            if ( !getToolboxId( nId, &pToolBox ) )
+                return;
+
             if ( rEvent.IsEnabled )
             {
                 m_pBox->Enable();
@@ -374,7 +379,12 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
                     m_pBox->statusChanged_Impl( long( -1 ), true );
             }
             else
+            {
                 m_pBox->Disable();
+                m_pBox->statusChanged_Impl( long( -1 ), true );
+            }
+
+            pToolBox->EnableItem( nId, rEvent.IsEnabled );
         }
         else if ( rEvent.FeatureURL.Path == "CharFontName" )
         {
