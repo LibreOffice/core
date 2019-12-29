@@ -177,7 +177,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     if( bIsThumbBmp )
     {
         const SvStreamCompressFlags nOldCompressMode = rOut.GetCompressMode();
-        const sal_uIntPtr           nOldVersion = rOut.GetVersion();
+        const sal_uInt64           nOldVersion = rOut.GetVersion();
 
         rOut.SetCompressMode( SvStreamCompressFlags::ZBITMAP );
         rOut.SetVersion( SOFFICE_FILEFORMAT_50 );
