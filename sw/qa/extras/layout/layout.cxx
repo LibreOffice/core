@@ -2198,7 +2198,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125300)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Keep line spacing before bottom cell border (it was 1892)
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[5]/polyline/point[@y='2092']", 2);
+    sal_Int32 y1
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[5]/polyline/point[1]", "y")
+              .toInt32();
+    sal_Int32 y2
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[5]/polyline/point[2]", "y")
+              .toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2092, y1, 7);
+    CPPUNIT_ASSERT_EQUAL(y1, y2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116830)
@@ -2308,7 +2315,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115630)
                    "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/polyline[1]/point[2]",
                    "x")
               .toInt32();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2886), nXRight - nXLeft);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2886, nXRight - nXLeft, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf108021)
@@ -2445,7 +2452,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testHorizontal_multilevel)
     sal_Int32 nYposition
         = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/textarray[7]", "y")
               .toInt32();
-    CPPUNIT_ASSERT(nYposition > 7943 && nYposition < 7947);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7945, nYposition, 20);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
@@ -2495,7 +2502,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129054)
               "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[4]/polyline[1]/point[31]",
               "y")
               .toInt32();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4810), nYTop - nYBottom);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4810, nYTop - nYBottom, 5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129173)
