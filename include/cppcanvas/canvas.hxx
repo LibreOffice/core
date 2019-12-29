@@ -54,18 +54,15 @@ namespace cppcanvas
     class Canvas
     {
     public:
-        enum
-        {
-            /** Extra pixel used when canvas anti-aliases.
+        /** Extra pixel used when canvas anti-aliases.
 
-                Enlarge the bounding box of drawing primitives by this
-                amount in both dimensions, and on both sides of the
-                bounds, to account for extra pixel touched outside the
-                actual primitive bounding box, when the canvas
-                performs anti-aliasing.
-             */
-            ANTIALIASING_EXTRA_SIZE=2
-        };
+            Enlarge the bounding box of drawing primitives by this
+            amount in both dimensions, and on both sides of the
+            bounds, to account for extra pixel touched outside the
+            actual primitive bounding box, when the canvas
+            performs anti-aliasing.
+         */
+        static constexpr auto ANTIALIASING_EXTRA_SIZE=2;
 
         Canvas() = default;
         Canvas(Canvas const &) = default;
