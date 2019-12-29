@@ -135,7 +135,7 @@ GalleryBrowser1::GalleryBrowser1(
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
     mpThemes->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERYPROPS_GALTHEME));
 
-    for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
+    for( sal_uInt64 i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
 
     ImplAdjustControls();
@@ -593,7 +593,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 {
     OUString  aNewTheme( SvxResId(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
-    sal_uIntPtr nCount = 0;
+    sal_uInt16 nCount = 0;
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {
