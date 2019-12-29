@@ -22,16 +22,12 @@
 #include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <svl/srchitem.hxx>
 #include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
 #include <editeng/acorrcfg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <uitool.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <glshell.hxx>
@@ -43,7 +39,6 @@
 #include <shellio.hxx>
 #include <initui.hxx>
 #include <cmdid.h>
-#include <swerror.h>
 #include <strings.hrc>
 
 #define ShellClass_SwWebGlosDocShell

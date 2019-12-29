@@ -18,14 +18,12 @@
  */
 
 #include <wrtsh.hxx>
-#include <shellres.hxx>
 #include <swwait.hxx>
 #include <view.hxx>
 #include <toxmgr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
-#include <globals.hrc>
 
 // handle indexes with TOXMgr
 SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):

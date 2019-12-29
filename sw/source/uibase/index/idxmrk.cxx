@@ -17,28 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <svl/stritem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/eitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <svl/itemset.hxx>
-#include <editeng/langitem.hxx>
-#include <swtypes.hxx>
 #include <idxmrk.hxx>
-#include <txttxmrk.hxx>
 #include <wrtsh.hxx>
-#include <view.hxx>
-#include <multmrk.hxx>
-#include <swundo.hxx>
 #include <cmdid.h>
-#include <swmodule.hxx>
-#include <fldmgr.hxx>
-#include <fldbas.hxx>
-#include <swcont.hxx>
-#include <svl/cjkoptions.hxx>
-#include <ndtxt.hxx>
-#include <breakit.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
 

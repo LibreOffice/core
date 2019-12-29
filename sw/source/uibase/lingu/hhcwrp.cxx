@@ -21,10 +21,8 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>
-#include <globals.hrc>
 #include <splargs.hxx>
 
-#include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <rtl/ustring.hxx>
@@ -39,14 +37,9 @@
 #include <index.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
-#include <viscrs.hxx>
 #include <ndtxt.hxx>
 #include <fmtruby.hxx>
 #include <breakit.hxx>
-
-#include <olmenu.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

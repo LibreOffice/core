@@ -22,15 +22,12 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svx/rulritem.hxx>
-#include <svl/srchitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/spltitem.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
@@ -38,8 +35,6 @@
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/svxids.hrc>
-#include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/request.hxx>
@@ -53,7 +48,6 @@
 #include <editeng/itemtype.hxx>
 
 #include <fmtornt.hxx>
-#include <fmtclds.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtfsize.hxx>
@@ -64,7 +58,6 @@
 #include <uitool.hxx>
 #include <inputwin.hxx>
 #include <uiitems.hxx>
-#include <usrpref.hxx>
 #include <tabsh.hxx>
 #include <swtablerep.hxx>
 #include <tablemgr.hxx>
@@ -74,11 +67,10 @@
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <tblsel.hxx>
+#include <viewopt.hxx>
 
-#include <app.hrc>
 #include <strings.hrc>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <unobaseclass.hxx>
 
 #define ShellClass_SwTableShell

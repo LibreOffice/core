@@ -22,21 +22,15 @@
 #include <sal/config.h>
 
 #include <hintids.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/svxids.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svl/visitem.hxx>
-#include <sfx2/objitem.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <svx/gallery.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
@@ -44,21 +38,16 @@
 #include <vcl/inputctx.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/ptitem.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
-#include <svl/srchitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/xflclit.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/objface.hxx>
 #include <fmturl.hxx>
@@ -74,9 +63,6 @@
 #include <basesh.hxx>
 #include <viewopt.hxx>
 #include <fontcfg.hxx>
-#include <docstat.hxx>
-#include <usrfld.hxx>
-#include <expfld.hxx>
 #include <fmtsrnd.hxx>
 #include <fldmgr.hxx>
 #include <frmmgr.hxx>
@@ -84,27 +70,20 @@
 #include <mdiexp.hxx>
 #include <swdtflvr.hxx>
 #include <pagedesc.hxx>
-#include <convert.hxx>
 #include <fmtcol.hxx>
 #include <edtwin.hxx>
 #include <tblafmt.hxx>
-#include <caption.hxx>
 #include <swwait.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <strings.hrc>
-#include <globals.h>
 #include <unotxdoc.hxx>
-#include <fmtinfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swabstdlg.hxx>
 #include <modcfg.hxx>
-#include <instable.hxx>
 #include <svx/fmshell.hxx>
 #include <SwRewriter.hxx>
-#include <unomid.h>
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>
@@ -115,8 +94,6 @@
 
 #include <svx/svxdlg.hxx>
 
-#include <SwStyleNameMapper.hxx>
-#include <poolfmt.hxx>
 #include <shellres.hxx>
 #include <UndoTable.hxx>
 

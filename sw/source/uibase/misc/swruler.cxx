@@ -16,14 +16,11 @@
 #include <viewsh.hxx>
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <viewopt.hxx>
 #include <view.hxx>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <strings.hrc>

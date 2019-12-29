@@ -22,35 +22,24 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
-#include <svl/ownlist.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/lnkbase.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <vcl/errinf.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svxids.hrc>
+#include <i18nutil/transliteration.hxx>
+#include <svl/eitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
-#include <svl/urihelper.hxx>
-#include <basic/sbxvar.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
-#include <editeng/opaqitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -61,7 +50,6 @@
 #include <wdocsh.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtclds.hxx>
-#include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
@@ -77,36 +65,24 @@
 #include <frmfmt.hxx>
 #include <tablemgr.hxx>
 #include <swundo.hxx>
-#include <shellio.hxx>
-#include <frmdlg.hxx>
-#include <usrpref.hxx>
-#include <swtable.hxx>
-#include <tblafmt.hxx>
-#include <caption.hxx>
-#include <idxmrk.hxx>
-#include <poolfmt.hxx>
 #include <breakit.hxx>
-#include <modcfg.hxx>
-#include <column.hxx>
 #include <edtwin.hxx>
 #include <strings.hrc>
-#include <swerror.h>
 #include <unochart.hxx>
-#include <tgrditem.hxx>
 #include <chartins.hxx>
+#include <viewopt.hxx>
 
 #define ShellClass_SwTextShell
 #include <sfx2/msg.hxx>
 #include <vcl/EnumContext.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>
+#include <SwCapObjType.hxx>
 
 using namespace ::com::sun::star;
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <swabstdlg.hxx>
-#include <unomid.h>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svtools/embedhlp.hxx>

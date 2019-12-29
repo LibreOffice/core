@@ -17,22 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sal/config.h>
-#include <swtypes.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <editeng/sizeitem.hxx>
-#include <editeng/paperinf.hxx>
-#include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/svdtrans.hxx>
 #include "PageHeaderPanel.hxx"
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>
-#include <uitool.hxx>
 #include <cmdid.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

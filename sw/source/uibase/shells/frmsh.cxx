@@ -21,13 +21,8 @@
 
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/imapobj.hxx>
-#include <svtools/miscopt.hxx>
-#include <svl/srchitem.hxx>
-#include <vcl/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -35,7 +30,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
@@ -55,29 +49,19 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
-#include <frmatr.hxx>
 #include <uitool.hxx>
 #include <frmfmt.hxx>
 #include <frmsh.hxx>
 #include <frmmgr.hxx>
-#include <frmdlg.hxx>
-#include <swevent.hxx>
-#include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swdtflvr.hxx>
-#include <swwait.hxx>
-#include <docstat.hxx>
-#include <IDocumentStatistics.hxx>
+#include <viewopt.hxx>
 
 #include <cmdid.h>
-#include <cfgitems.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <swabstdlg.hxx>
 
-#include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
-#include <svx/svxids.hrc>
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>

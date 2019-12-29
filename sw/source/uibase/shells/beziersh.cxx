@@ -19,11 +19,9 @@
 
 #include <cmdid.h>
 #include <svx/svdview.hxx>
-#include <svl/srchitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -33,14 +31,11 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
-#include <globals.hrc>
 #include <drawbase.hxx>
 #include <beziersh.hxx>
 #define ShellClass_SwBezierShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-
-#include <unomid.h>
 
 SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell)
 

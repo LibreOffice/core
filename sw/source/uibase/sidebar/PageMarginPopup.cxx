@@ -18,7 +18,6 @@
  */
 #include <PageMarginPopup.hxx>
 #include "PageMarginControl.hxx"
-#include <svx/pageitem.hxx>
 #include <vcl/toolbox.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL(PageMarginPopup, SfxVoidItem);

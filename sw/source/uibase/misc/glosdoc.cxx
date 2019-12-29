@@ -32,14 +32,12 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
-#include <uitool.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <swunohelper.hxx>
 
 #include <unoatxt.hxx>
 #include <swerror.h>
-#include <globals.hrc>
 
 #include <memory>
 

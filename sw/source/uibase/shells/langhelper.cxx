@@ -27,15 +27,14 @@
 #include <charfmt.hxx>
 
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/langitem.hxx>
 
 #include <svl/languageoptions.hxx>
@@ -48,8 +47,6 @@
 #include <pam.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
-
-#include <swabstdlg.hxx>
 
 #include <langhelper.hxx>
 #include <memory>

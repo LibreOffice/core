@@ -20,8 +20,6 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include "PageMarginControl.hxx"
 #include <strings.hrc>
 
@@ -30,7 +28,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/svxids.hrc>
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
 #include <svl/itempool.hxx>
@@ -44,8 +41,6 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-
-#include <vcl/settings.hxx>
 
 #define SWPAGE_LEFT_GVALUE      "Sw_Page_Left"
 #define SWPAGE_RIGHT_GVALUE     "Sw_Page_Right"

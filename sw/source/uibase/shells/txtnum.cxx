@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -32,14 +31,11 @@
 #include <wdocsh.hxx>
 #include <poolfmt.hxx>
 #include <textsh.hxx>
-#include <uiitems.hxx>
 #include <swabstdlg.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <globals.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
-#include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <memory>

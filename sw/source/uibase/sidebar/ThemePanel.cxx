@@ -12,25 +12,11 @@
 
 #include "ThemePanel.hxx"
 
-#include <swtypes.hxx>
-#include <cmdid.h>
-
-#include <svl/intitem.hxx>
-#include <svx/svxids.hrc>
-#include <svx/dlgutil.hxx>
-#include <svx/rulritem.hxx>
-
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <editeng/fontitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/borderline.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <charatr.hxx>

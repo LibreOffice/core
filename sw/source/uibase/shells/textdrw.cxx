@@ -37,8 +37,6 @@
 #include <svl/urihelper.hxx>
 #include <avmedia/mediawindow.hxx>
 
-#include <unomid.h>
-
 using namespace ::com::sun::star;
 
 void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget, const OUString& rText)

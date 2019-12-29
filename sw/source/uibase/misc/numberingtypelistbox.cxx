@@ -18,18 +18,14 @@
  */
 
 #include <numberingtypelistbox.hxx>
-#include <cnttab.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <editeng/numitem.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
 #include <osl/diagnose.h>
-
-#include <unomid.h>
 
 using namespace com::sun::star;
 

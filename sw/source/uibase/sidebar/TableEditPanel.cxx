@@ -18,7 +18,6 @@
 #include <svtools/unitconv.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>
-#include <svx/svxids.hrc>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

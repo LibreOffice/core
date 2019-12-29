@@ -31,10 +31,8 @@
 #include <redlndlg.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sfxbasecontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/compbase.hxx>

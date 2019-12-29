@@ -17,23 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <initui.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
-#include <globals.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <linguistic/lngprops.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <swwait.hxx>
 
 #include <hyp.hxx>
 #include <mdiexp.hxx>
-#include <olmenu.hxx>
 #include <strings.hrc>
-
-#include <unomid.h>
 
 #include <memory>
 

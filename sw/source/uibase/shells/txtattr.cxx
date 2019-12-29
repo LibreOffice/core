@@ -21,9 +21,7 @@
 
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/ctloptions.hxx>
-#include <svx/svxids.hrc>
 #include <swmodule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -39,16 +37,13 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <paratr.hxx>
-#include <comphelper/lok.hxx>
 
 #include <fmtinfmt.hxx>
-#include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <textsh.hxx>
-#include <num.hxx>
 #include <swundo.hxx>
 #include <fmtcol.hxx>
 
@@ -56,7 +51,6 @@
 #include <globals.h>
 #include <SwStyleNameMapper.hxx>
 #include <swabstdlg.hxx>
-#include <outline.hxx>
 #include <memory>
 
 const sal_uInt32 nFontInc = 40;      // 2pt

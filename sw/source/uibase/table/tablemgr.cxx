@@ -25,28 +25,21 @@
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 
-#include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
-#include <cmdid.h>
-#include <frmatr.hxx>
 #include <view.hxx>
-#include <basesh.hxx>
 #include <swundo.hxx>
 #include <tablemgr.hxx>
 #include <frmfmt.hxx>
-#include <instable.hxx>
-#include <swerror.h>
 #include <swabstdlg.hxx>
 #include <swcli.hxx>
 #include <docsh.hxx>
 #include <unotbl.hxx>
 #include <unochart.hxx>
-#include <memory>
 
 #include <comphelper/lok.hxx>
 

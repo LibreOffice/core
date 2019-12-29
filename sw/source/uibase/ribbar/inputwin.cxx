@@ -27,17 +27,14 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/event.hxx>
-#include <vcl/settings.hxx>
 
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <calc.hxx>
 #include <inputwin.hxx>
 #include <fldbas.hxx>
 #include <fldmgr.hxx>
@@ -52,7 +49,6 @@
 #include <pam.hxx>
 
 #include <swundo.hxx>
-#include <dbui.hrc>
 
 #include <IDocumentContentOperations.hxx>
 

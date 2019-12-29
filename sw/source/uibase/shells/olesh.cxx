@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/objitem.hxx>
 #include <vcl/EnumContext.hxx>
-#include <wrtsh.hxx>
 #include <view.hxx>
-#include <globals.hrc>
 #include <frmsh.hxx>
 #include <olesh.hxx>
-
-#include <cmdid.h>
 
 #define ShellClass_SwOleShell
 #include <sfx2/msg.hxx>

@@ -22,15 +22,12 @@
 #include <i18nutil/transliteration.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
-#include <svl/cjkoptions.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/langitem.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/sdooitm.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
@@ -54,13 +51,10 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <initui.hxx>
 #include <drwtxtsh.hxx>
-#include <swundo.hxx>
 #include <breakit.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 
 #define ShellClass_SwDrawTextShell
 #include <sfx2/msg.hxx>
@@ -68,13 +62,9 @@
 #include <uitool.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/xtable.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <swabstdlg.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <memory>
 

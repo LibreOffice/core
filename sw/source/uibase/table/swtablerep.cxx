@@ -17,37 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <editeng/keepitem.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/frmdiritem.hxx>
-#include <svl/ctloptions.hxx>
-#include <swmodule.hxx>
-#include <fmtornt.hxx>
-#include <fmtpdsc.hxx>
-#include <fmtlsplt.hxx>
-
-#include <svtools/htmlcfg.hxx>
-#include <fmtrowsplt.hxx>
-#include <sfx2/htmlmode.hxx>
-
-#include <docsh.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <viewopt.hxx>
-#include <uitool.hxx>
-#include <frmatr.hxx>
-
+#include <tabcol.hxx>
 #include "tablepg.hxx"
-#include <tablemgr.hxx>
-#include <pagedesc.hxx>
-#include <poolfmt.hxx>
-#include <SwStyleNameMapper.hxx>
 
-#include <cmdid.h>
 #include <swtablerep.hxx>
 #include <memory>
 

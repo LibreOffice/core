@@ -19,12 +19,9 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 
-#include <sfx2/app.hxx>
-#include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -32,20 +29,14 @@
 #include <chartins.hxx>
 #include <tablemgr.hxx>
 #include <frmfmt.hxx>
-#include <swtable.hxx>
-#include <tblsel.hxx>
 #include <unochart.hxx>
-#include <doc.hxx>
 
 #include <edtwin.hxx>
 
 #include <cmdid.h>
 #include <anchoredobject.hxx>
 
-#include <comphelper/classids.hxx>
-
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/component_context.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>

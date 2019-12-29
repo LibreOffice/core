@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdmark.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdopath.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/event.hxx>
 
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <drawbase.hxx>
 #include <conpoly.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 
 ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)

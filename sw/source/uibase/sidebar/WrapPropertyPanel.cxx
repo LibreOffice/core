@@ -20,16 +20,12 @@
 #include "WrapPropertyPanel.hxx"
 
 #include <cmdid.h>
-#include <swtypes.hxx>
 #include <svx/spacinglistbox.hxx>
-#include <svx/svxids.hrc>
 #include <svx/svdtrans.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
