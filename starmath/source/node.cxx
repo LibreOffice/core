@@ -490,7 +490,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // make distance depend on font size
     long  nDist = +(rFormat.GetDistance(DIS_VERTICAL)
-                    * GetFont().GetFontSize().Height()) / 100L;
+                    * GetFont().GetFontSize().Height()) / 100;
 
     if (nSize < 1)
         return;
@@ -600,7 +600,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     // make distance depend on font size
-    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetFontSize().Height()) / 100L;
+    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetFontSize().Height()) / 100;
     if (!IsUseExtraSpaces())
         nDist = 0;
 
@@ -658,7 +658,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pOper->Arrange(rDev, rFormat);
     pBody->Arrange(rDev, rFormat);
 
-    long nDist = (pOper->GetRect().GetWidth() * rFormat.GetDistance(DIS_HORIZONTAL)) / 100L;
+    long nDist = (pOper->GetRect().GetWidth() * rFormat.GetDistance(DIS_HORIZONTAL)) / 100;
 
     SmRect::operator = (*pNode0);
 
@@ -727,7 +727,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
           nVerOffset;
     lcl_GetHeightVerOffset(*pBody, nHeight, nVerOffset);
     nHeight += rFormat.GetDistance(DIS_ROOT)
-               * GetFont().GetFontSize().Height() / 100L;
+               * GetFont().GetFontSize().Height() / 100;
 
     // font specialist advised to change the width first
     pRootSym->AdaptToY(rDev, nHeight);
@@ -797,7 +797,7 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     const SmRect &rOpRect = pOper->GetRect();
 
     long nDist = (rOpRect.GetWidth() *
-                 rFormat.GetDistance(DIS_HORIZONTAL)) / 100L;
+                 rFormat.GetDistance(DIS_HORIZONTAL)) / 100;
 
     SmRect::operator = (*pLeft);
 
@@ -840,13 +840,13 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pDenom->Arrange(rDev, rFormat);
 
     long  nFontHeight = GetFont().GetFontSize().Height(),
-          nExtLen     = nFontHeight * rFormat.GetDistance(DIS_FRACTION) / 100L,
-          nThick      = nFontHeight * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L,
+          nExtLen     = nFontHeight * rFormat.GetDistance(DIS_FRACTION) / 100,
+          nThick      = nFontHeight * rFormat.GetDistance(DIS_STROKEWIDTH) / 100,
           nWidth      = std::max(pNum->GetItalicWidth(), pDenom->GetItalicWidth()),
           nNumDist    = bIsTextmode ? 0 :
-                            nFontHeight * rFormat.GetDistance(DIS_NUMERATOR)   / 100L,
+                            nFontHeight * rFormat.GetDistance(DIS_NUMERATOR)   / 100,
           nDenomDist  = bIsTextmode ? 0 :
-                            nFontHeight * rFormat.GetDistance(DIS_DENOMINATOR) / 100L;
+                            nFontHeight * rFormat.GetDistance(DIS_DENOMINATOR) / 100;
 
     // font specialist advised to change the width first
     pLine->AdaptToY(rDev, nThick);
@@ -1201,7 +1201,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             case LSUB :
                 if (!bIsTextmode)
                     nDist = nOrigHeight
-                            * rFormat.GetDistance(DIS_SUBSCRIPT) / 100L;
+                            * rFormat.GetDistance(DIS_SUBSCRIPT) / 100;
                 aPos  = pSubSup->GetRect().AlignTo(aTmpRect,
                                 eSubSup == LSUB ? RectPos::Left : RectPos::Right,
                                 RectHorAlign::Center, RectVerAlign::Bottom);
@@ -1214,7 +1214,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             case LSUP :
                 if (!bIsTextmode)
                     nDist = nOrigHeight
-                            * rFormat.GetDistance(DIS_SUPERSCRIPT) / 100L;
+                            * rFormat.GetDistance(DIS_SUPERSCRIPT) / 100;
                 aPos  = pSubSup->GetRect().AlignTo(aTmpRect,
                                 eSubSup == LSUP ? RectPos::Left : RectPos::Right,
                                 RectHorAlign::Center, RectVerAlign::Top);
@@ -1226,7 +1226,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             case CSUB :
                 if (!bIsTextmode)
                     nDist = nOrigHeight
-                            * rFormat.GetDistance(DIS_LOWERLIMIT) / 100L;
+                            * rFormat.GetDistance(DIS_LOWERLIMIT) / 100;
                 aPos = pSubSup->GetRect().AlignTo(rBodyRect, RectPos::Bottom,
                                 RectHorAlign::Center, RectVerAlign::Baseline);
                 aPos.AdjustY(nDist );
@@ -1234,7 +1234,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             case CSUP :
                 if (!bIsTextmode)
                     nDist = nOrigHeight
-                            * rFormat.GetDistance(DIS_UPPERLIMIT) / 100L;
+                            * rFormat.GetDistance(DIS_UPPERLIMIT) / 100;
                 aPos = pSubSup->GetRect().AlignTo(rBodyRect, RectPos::Top,
                                 RectHorAlign::Center, RectVerAlign::Baseline);
                 aPos.AdjustY( -nDist );
@@ -1379,14 +1379,14 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         nBraceHeight = pBody->GetType() == SmNodeType::Bracebody ?
                               static_cast<SmBracebodyNode *>(pBody)->GetBodyHeight()
                             : pBody->GetHeight();
-        nBraceHeight += 2 * (nBraceHeight * nPerc / 100L);
+        nBraceHeight += 2 * (nBraceHeight * nPerc / 100);
     }
     else
         nBraceHeight = nFaceHeight;
 
     // distance to the argument
     nPerc = bIsABS ? 0 : rFormat.GetDistance(DIS_BRACKETSPACE);
-    long  nDist = nFaceHeight * nPerc / 100L;
+    long  nDist = nFaceHeight * nPerc / 100;
 
     // if wanted, scale the braces to the wanted size
     if (bScale)
@@ -1394,8 +1394,8 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         Size  aTmpSize (pLeft->GetFont().GetFontSize());
         OSL_ENSURE(pRight->GetFont().GetFontSize() == aTmpSize,
                     "Sm : different font sizes");
-        aTmpSize.setWidth( std::min(nBraceHeight * 60L / 100L,
-                            rFormat.GetBaseSize().Height() * 3L / 2L) );
+        aTmpSize.setWidth( std::min(nBraceHeight * 60 / 100,
+                            rFormat.GetBaseSize().Height() * 3 / 2) );
         // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
         aTmpSize.setWidth( aTmpSize.Width() * 182 );
@@ -1467,7 +1467,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                         DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
     sal_uInt16 nPerc   = rFormat.GetDistance(nIndex);
     if (bScale)
-        nHeight += 2 * (nHeight * nPerc / 100L);
+        nHeight += 2 * (nHeight * nPerc / 100);
     for (size_t i = 1; i < nNumSubNodes; i += 2)
     {
         SmNode *pNode = GetSubNode(i);
@@ -1477,7 +1477,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // horizontal distance between argument and brackets or separators
     long  nDist = GetFont().GetFontSize().Height()
-                  * rFormat.GetDistance(DIS_BRACKETSPACE) / 100L;
+                  * rFormat.GetDistance(DIS_BRACKETSPACE) / 100;
 
     SmNode *pLeft = GetSubNode(0);
     SmRect::operator = (*pLeft);
@@ -1589,10 +1589,10 @@ long SmOperNode::CalcSymbolHeight(const SmNode &rSymbol,
     if (!rFormat.IsTextmode())
     {
         // set minimum size ()
-        nHeight += (nHeight * 20L) / 100L;
+        nHeight += (nHeight * 20) / 100;
 
         nHeight += nHeight
-                   * rFormat.GetDistance(DIS_OPERATORSIZE) / 100L;
+                   * rFormat.GetDistance(DIS_OPERATORSIZE) / 100;
         nHeight = nHeight * 686L / 845L;
     }
 
@@ -1632,7 +1632,7 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     long  nOrigHeight = GetFont().GetFontSize().Height(),
           nDist = nOrigHeight
-                  * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
+                  * rFormat.GetDistance(DIS_OPERATORSPACE) / 100;
 
     Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, bDynamicallySized ? RectVerAlign::CenterY : RectVerAlign::Mid);
     aPos.AdjustX( -nDist );
@@ -1701,7 +1701,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             eVerAlign = RectVerAlign::AttributeHi;
             if (pBody->GetType() == SmNodeType::Attribut)
                 nDist = GetFont().GetFontSize().Height()
-                        * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100L;
+                        * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100;
     }
     Point  aPos = pAttr->AlignTo(*pBody, RectPos::Attribute, RectHorAlign::Center, eVerAlign);
     aPos.AdjustY( -nDist );
@@ -1972,7 +1972,7 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     maPoly.SetPoint(aPointB, 1);
 
     long  nThick       = GetFont().GetFontSize().Height()
-                            * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L;
+                            * rFormat.GetDistance(DIS_STROKEWIDTH) / 100;
     mnWidth = nThick + 2 * nBorderwidth;
 
     SmRect::operator = (SmRect(maToSize.Width(), maToSize.Height()));
@@ -1991,7 +1991,7 @@ void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
 {
     // some additional length so that the horizontal
     // bar will be positioned above the argument
-    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
+    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10);
 }
 
 
@@ -2256,8 +2256,8 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // define horizontal and vertical minimal distances that separate
     // the elements
-    long  nHorDist = nNormDist * rFormat.GetDistance(DIS_MATRIXCOL) / 100L,
-          nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100L;
+    long  nHorDist = nNormDist * rFormat.GetDistance(DIS_MATRIXCOL) / 100,
+          nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100;
 
     // build array that holds the leftmost position for each column
     std::vector<long> aColLeft(mnNumCols);
@@ -2768,7 +2768,7 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // make distance depend on the font height
     // (so that it increases when scaling (e.g. size *2 {a ~ b})
-    long  nDist  = GetFont().GetFontSize().Height() / 10L,
+    long  nDist  = GetFont().GetFontSize().Height() / 10,
           nSpace = mnNum * nDist;
 
     // get a SmRect with Baseline and all the bells and whistles
