@@ -252,9 +252,9 @@ void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
 void GtkSalObjectBase::SetForwardKey( bool bEnable )
 {
     if( bEnable )
-        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );
+        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
     else
-        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
+        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
 }
 
 GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
