@@ -673,6 +673,8 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
+    ScDocShell*             GetDocShell() const { return pDocShell; }
+
                             /// XSheetAnnotations
     virtual void SAL_CALL   insertNew( const css::table::CellAddress& aPosition,
                                 const OUString& aText ) override;
