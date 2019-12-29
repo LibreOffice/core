@@ -1363,6 +1363,29 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
     }
 }
 
+ScPostIt* ScDocFunc::ImportNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate )
+{
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote( rPos );
+    assert(!pOldNote && "imported data has >1 notes on same cell?");
+
+    // create new note
+    ScPostIt* pNewNote = nullptr;
+    if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, /*nNoteId*/0 )) )
+    {
+        if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
+        if( pDate ) pNewNote->SetDate( *pDate );
+    }
+
+    rDoc.SetStreamValid(rPos.Tab(), false);
+
+    aModificator.SetDocumentModified();
+
+    return pNewNote;
+}
+
 bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                     bool bApi )
 {
