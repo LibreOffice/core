@@ -1282,6 +1282,15 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash == cPrev ) ||
                         ( cEnDash == cPrev );
+                    // tdf#38394 use opening quotation mark << in French l'<<word>>
+                    if ( !bSingle && !bSttQuote && cPrev == cApostrophe &&
+                        (nInsPos == 2 || (nInsPos > 2 && IsWordDelim( rTxt[ nInsPos-3 ] ))) )
+                    {
+                        const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
+                        if ( primary(eLang) == primary(LANGUAGE_FRENCH) )
+                            bSttQuote = true;
+                    }
+                    // tdf#108423 for capitalization of English i'm
                     b_iApostrophe = bSingle && ( cPrev == 'i' ) &&
                         (( nInsPos == 1 ) || IsWordDelim( rTxt[ nInsPos-2 ] ));
                 }
