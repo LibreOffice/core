@@ -17,20 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
 #include <i18nutil/unicode.hxx>
-#include <svl/eitem.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <initui.hxx>
-#include <viewopt.hxx>
 #include <docsh.hxx>
 #include <gloshdl.hxx>
-#include <glosdoc.hxx>
 #include <gloslst.hxx>
 #include <workctrl.hxx>
 #include <strings.hrc>
@@ -39,7 +33,6 @@
 #include <wrtsh.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svl/imageitm.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -50,7 +43,6 @@
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <toolkit/helper/vclunohelper.hxx>

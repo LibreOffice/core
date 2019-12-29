@@ -608,3 +608,111 @@ blacklist:
     sw/source/uibase/dochdl/swdtflvr.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    sw/source/uibase/shells/basesh.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sw/source/uibase/shells/slotadd.cxx:
+    # Needed for swslots.hxx
+    - config_options.h
+    - cmdid.h
+    - unomid.h
+    - svx/unomid.hxx
+    - svl/globalnameitem.hxx
+    - editeng/memberids.h
+    - svl/imageitm.hxx
+    - svl/rectitem.hxx
+    - sfx2/objitem.hxx
+    - sfx2/objsh.hxx
+    - svx/rulritem.hxx
+    - sfx2/zoomitem.hxx
+    - svx/viewlayoutitem.hxx
+    - svx/zoomslideritem.hxx
+    - svx/hlnkitem.hxx
+    - svx/SmartTagItem.hxx
+    - svl/ptitem.hxx
+    - svx/pageitem.hxx
+    - svl/srchitem.hxx
+    - sfx2/tplpitem.hxx
+    - sfx2/watermarkitem.hxx
+    - editeng/wrlmitem.hxx
+    - editeng/protitem.hxx
+    - editeng/opaqitem.hxx
+    - editeng/tstpitem.hxx
+    - editeng/autokernitem.hxx
+    - editeng/keepitem.hxx
+    - editeng/kernitem.hxx
+    - editeng/spltitem.hxx
+    - editeng/brushitem.hxx
+    - editeng/wghtitem.hxx
+    - editeng/shaditem.hxx
+    - editeng/pbinitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/prntitem.hxx
+    - editeng/orphitem.hxx
+    - editeng/widwitem.hxx
+    - editeng/lineitem.hxx
+    - editeng/pmdlitem.hxx
+    - editeng/cmapitem.hxx
+    - editeng/langitem.hxx
+    - editeng/formatbreakitem.hxx
+    - editeng/hyphenzoneitem.hxx
+    - editeng/escapementitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/adjustitem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/fontitem.hxx
+    - editeng/shdditem.hxx
+    - editeng/udlnitem.hxx
+    - editeng/postitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/contouritem.hxx
+    - editeng/colritem.hxx
+    - editeng/boxitem.hxx
+    - editeng/sizeitem.hxx
+    - editeng/lrspitem.hxx
+    - svx/xlnstit.hxx
+    - svx/xlnedit.hxx
+    - svx/xfillit0.hxx
+    - svx/xflclit.hxx
+    - svx/xflgrit.hxx
+    - svx/xflhtit.hxx
+    - svx/xbtmpit.hxx
+    - svx/xlineit0.hxx
+    - svx/xlnwtit.hxx
+    - svx/xlndsit.hxx
+    - svx/xlnclit.hxx
+    - svx/xtextit0.hxx
+    - svx/xftadit.hxx
+    - svx/xftdiit.hxx
+    - svx/xftstit.hxx
+    - svx/xftmrit.hxx
+    - svx/xftouit.hxx
+    - svx/xftshit.hxx
+    - svx/xftshcit.hxx
+    - svx/xftshxy.hxx
+    - svx/grafctrl.hxx
+    - paratr.hxx
+    - fmtinfmt.hxx
+    - fmtsrnd.hxx
+    - envimg.hxx
+    - fmtline.hxx
+    - svx/clipfmtitem.hxx
+    - editeng/blinkitem.hxx
+    - svl/slstitm.hxx
+    - editeng/paravertalignitem.hxx
+    - editeng/charreliefitem.hxx
+    - editeng/charrotateitem.hxx
+    - editeng/charscaleitem.hxx
+    - svx/postattr.hxx
+    - sfx2/frame.hxx
+    - svx/chrtitem.hxx
+    - svx/drawitem.hxx
+    - svx/xflftrit.hxx
+    - svx/xlncapit.hxx
+    - svx/xlinjoit.hxx
+    - svx/galleryitem.hxx
+    - sfx2/msg.hxx
+    sw/source/uibase/shells/textsh.cxx:
+    # Needed for defines in swslots.hxx
+    - globals.hrc
+

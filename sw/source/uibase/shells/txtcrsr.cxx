@@ -23,27 +23,22 @@
 
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <basic/sbxvar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <textsh.hxx>
-#include <num.hxx>
 #include <edtwin.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 
 #include <cmdid.h>
-#include <globals.h>
 #include <globals.hrc>
 
 #include <svx/svdouno.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sdrobjectfilter.hxx>
-#include <svx/svxids.hrc>
-#include <outline.hxx>
 
 using namespace ::com::sun::star;
 

@@ -27,12 +27,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -51,47 +49,30 @@
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/wghtitem.hxx>
 #include <editeng/contouritem.hxx>
-#include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <svx/postattr.hxx>
-#include <svx/svdoutl.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <editeng/writingmodeitem.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
-#include <uitool.hxx>
 #include <chrdlgmodes.hxx>
-#include <pardlg.hxx>
-#include <swdtflvr.hxx>
-#include <drwtxtsh.hxx>
-#include <swmodule.hxx>
-#include <initui.hxx>
 #include <edtwin.hxx>
-#include <swwait.hxx>
-#include <docstat.hxx>
 #include <SwRewriter.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <breakit.hxx>
 #include <annotsh.hxx>
@@ -102,22 +83,16 @@
 #include <swtypes.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
-#include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <svtools/langtab.hxx>
 
-#include <docsh.hxx>
 #include <svl/undo.hxx>
 #include <swabstdlg.hxx>
-#include <app.hrc>
 
 #include <comphelper/string.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -125,7 +100,6 @@
 
 #include <langhelper.hxx>
 
-#include <tools/diagnose_ex.h>
 #include <memory>
 
 using namespace ::com::sun::star;

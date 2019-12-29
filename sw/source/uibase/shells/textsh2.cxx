@@ -17,12 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
-
-#include <svl/eitem.hxx>
-#include <svl/whiter.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
@@ -43,14 +38,8 @@
 #include <wrtsh.hxx>
 #include <swtypes.hxx>
 #include <cmdid.h>
-#include <swevent.hxx>
 #include <textsh.hxx>
 #include <swabstdlg.hxx>
-#include <dbui.hrc>
-
-#include <unomid.h>
-
-#include <memory>
 
 using namespace ::svx;
 using namespace ::com::sun::star;

@@ -22,7 +22,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/ptitem.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/sizeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -30,14 +29,13 @@
 #include <fmtclds.hxx>
 #include <frmfmt.hxx>
 #include <cmdid.h>
-#include <basesh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <drawbase.hxx>
 #include <edtwin.hxx>
-#include <caption.hxx>
 #include <swmodule.hxx>
 #include <swundo.hxx>
+#include <SwCapObjType.hxx>
 #include <SwRewriter.hxx>
 #include <strings.hrc>
 

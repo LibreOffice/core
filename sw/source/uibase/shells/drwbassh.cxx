@@ -23,13 +23,10 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
-#include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <drawdoc.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>
@@ -41,26 +38,20 @@
 #include <viewopt.hxx>
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
-#include <wrap.hxx>
 #include <drawbase.hxx>
 #include <drwbassh.hxx>
 #include <swdtflvr.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #define ShellClass_SwDrawBaseShell
 #include <sfx2/msg.hxx>
-#include <svx/svxids.hrc>
 #include <swslots.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <swabstdlg.hxx>
 #include <swundo.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <IDocumentDrawModelAccess.hxx>
-#include <memory>
 #include <fmtfollowtextflow.hxx>
 
 using namespace ::com::sun::star;

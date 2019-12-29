@@ -17,14 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sal/config.h>
-#include <swtypes.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/sizeitem.hxx>
-#include <editeng/paperinf.hxx>
-#include <svx/svxids.hrc>
 #include <svx/colorbox.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/rulritem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -33,10 +27,8 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include "PageStylesPanel.hxx"
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <cmdid.h>
 

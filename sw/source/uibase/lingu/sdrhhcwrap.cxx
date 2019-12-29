@@ -17,23 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdotext.hxx>
-#include <editeng/editdata.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdogrp.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/svdmodel.hxx>
-#include <editeng/langitem.hxx>
-#include <linguistic/lngprops.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <svx/svdview.hxx>
-#include <editeng/unolingu.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <drawdoc.hxx>
 #include "sdrhhcwrap.hxx"
-#include <frmfmt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -41,7 +30,6 @@
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <docary.hxx>
 #include <edtwin.hxx>
 
 using namespace ::com::sun::star;

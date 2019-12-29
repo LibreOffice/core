@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/fmglob.hxx>
 #include <svx/svdview.hxx>
-#include <svx/fmshell.hxx>
 #include <vcl/ptrstyle.hxx>
 
 #include <swmodule.hxx>

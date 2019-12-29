@@ -26,8 +26,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/itemiter.hxx>
-#include <svl/srchitem.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <uitool.hxx>
@@ -35,16 +33,11 @@
 #include <textboxhelper.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
-#include <swwait.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <docstat.hxx>
-#include <IDocumentStatistics.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <svx/svdoashp.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xtable.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/opengrf.hxx>
@@ -52,12 +45,10 @@
 #include <svx/svdundo.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/svxids.hrc>
 
 #include <swundo.hxx>
 #include <wrtsh.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <drwbassh.hxx>
 #include <drawsh.hxx>
@@ -65,7 +56,6 @@
 #define ShellClass_SwDrawShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#include <swabstdlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

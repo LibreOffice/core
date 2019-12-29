@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdview.hxx>
-#include <svx/drawitem.hxx>
 
-#include <svx/xtable.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <cmdid.h>
 
 #include <drawsh.hxx>
@@ -39,12 +35,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace com::sun::star::drawing;
 

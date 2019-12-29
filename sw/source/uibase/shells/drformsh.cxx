@@ -17,18 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svl/srchitem.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -37,10 +33,8 @@
 #include <tools/urlobj.hxx>
 
 #include <viewopt.hxx>
-#include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <drwbassh.hxx>
 #include <drformsh.hxx>
 #include <svl/urihelper.hxx>
@@ -51,8 +45,6 @@
 #define ShellClass_SwDrawFormShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

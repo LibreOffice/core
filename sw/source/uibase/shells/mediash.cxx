@@ -18,42 +18,12 @@
  */
 
 #include <cmdid.h>
-#include <hintids.hxx>
-#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
-#include <svl/urihelper.hxx>
-#include <sfx2/dispatch.hxx>
-#include <editeng/sizeitem.hxx>
-#include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgcoitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdgtritm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgmoitm.hxx>
 #include <svx/svdview.hxx>
-#include <editeng/brushitem.hxx>
-#include <svx/grfflt.hxx>
-#include <fmturl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <viewopt.hxx>
-#include <swmodule.hxx>
-#include <frmatr.hxx>
-#include <swundo.hxx>
-#include <uitool.hxx>
-#include <docsh.hxx>
 #include <mediash.hxx>
-#include <frmmgr.hxx>
-#include <frmdlg.hxx>
-#include <frmfmt.hxx>
-#include <grfatr.hxx>
-#include <usrpref.hxx>
-#include <edtwin.hxx>
-#include <swwait.hxx>
 
 #include <sfx2/objface.hxx>
 #include <vcl/EnumContext.hxx>
@@ -64,7 +34,6 @@
 #define ShellClass_SwMediaShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#include <swabstdlg.hxx>
 #include <memory>
 
 SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell)

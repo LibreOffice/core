@@ -23,51 +23,36 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/urihelper.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svl/srchitem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgcoitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdgtritm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgmoitm.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/compressgraphicdialog.hxx>
-#include <vcl/GraphicNativeTransform.hxx>
 #include <svx/tbxcolor.hxx>
 #include <drawdoc.hxx>
-#include <fmturl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
-#include <frmatr.hxx>
 #include <swundo.hxx>
 #include <uitool.hxx>
 #include <docsh.hxx>
 #include <grfsh.hxx>
 #include <frmmgr.hxx>
-#include <frmdlg.hxx>
 #include <frmfmt.hxx>
 #include <grfatr.hxx>
-#include <usrpref.hxx>
-#include <edtwin.hxx>
 #include <swwait.hxx>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #define ShellClass_SwGrfShell
 
@@ -76,9 +61,6 @@
 #include <swabstdlg.hxx>
 #include <unocrsr.hxx>
 #include <memory>
-
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define TOOLBOX_NAME "colorbar"
 

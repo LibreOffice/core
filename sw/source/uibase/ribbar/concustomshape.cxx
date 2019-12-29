@@ -17,23 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/bindings.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/sdtagitm.hxx>
-#include <svx/sdtakitm.hxx>
-#include <svx/sdtaditm.hxx>
-#include <svx/sdtaaitm.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdocapt.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/outlobj.hxx>
-#include <cmdid.h>
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
-#include <viewopt.hxx>
 #include <drawbase.hxx>
 #include <concustomshape.hxx>
 #include <svx/gallery.hxx>

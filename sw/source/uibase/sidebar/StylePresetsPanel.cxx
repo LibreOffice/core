@@ -12,25 +12,13 @@
 
 #include "StylePresetsPanel.hxx"
 
-#include <swtypes.hxx>
-#include <cmdid.h>
-
-#include <svl/intitem.hxx>
-#include <svx/svxids.hrc>
-#include <svx/dlgutil.hxx>
-#include <svx/rulritem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
 
-#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <sfx2/doctempl.hxx>
@@ -38,7 +26,6 @@
 #include <shellio.hxx>
 #include <docsh.hxx>
 
-#include <comphelper/documentconstants.hxx>
 #include <sfx2/docfile.hxx>
 
 namespace sw { namespace sidebar {

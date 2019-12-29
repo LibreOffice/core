@@ -21,16 +21,12 @@
 #include "PageColumnControl.hxx"
 
 #include <cmdid.h>
-#include <swtypes.hxx>
 
-#include <svx/sidebar/ValueSetWithTextControl.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/settings.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/svxids.hrc>
 
 namespace sw { namespace sidebar {
 
