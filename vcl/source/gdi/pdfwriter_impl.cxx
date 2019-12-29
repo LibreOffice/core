@@ -7295,8 +7295,8 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
         " Do Q\n";
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
-    pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
-    pushResource( ResExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
+    pushResource( ResourceKind::XObject, aTrName, m_aTransparentObjects.back().m_nObject );
+    pushResource( ResourceKind::ExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
 }
 
 void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, sal_Int32 nObject )
@@ -7305,22 +7305,22 @@ void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, 
     {
         switch( eKind )
         {
-            case ResXObject:
+            case ResourceKind::XObject:
                 m_aGlobalResourceDict.m_aXObjects[ rResource ] = nObject;
                 if( ! m_aOutputStreams.empty() )
                     m_aOutputStreams.front().m_aResourceDict.m_aXObjects[ rResource ] = nObject;
                 break;
-            case ResExtGState:
+            case ResourceKind::ExtGState:
                 m_aGlobalResourceDict.m_aExtGStates[ rResource ] = nObject;
                 if( ! m_aOutputStreams.empty() )
                     m_aOutputStreams.front().m_aResourceDict.m_aExtGStates[ rResource ] = nObject;
                 break;
-            case ResShading:
+            case ResourceKind::Shading:
                 m_aGlobalResourceDict.m_aShadings[ rResource ] = nObject;
                 if( ! m_aOutputStreams.empty() )
                     m_aOutputStreams.front().m_aResourceDict.m_aShadings[ rResource ] = nObject;
                 break;
-            case ResPattern:
+            case ResourceKind::Pattern:
                 m_aGlobalResourceDict.m_aPatterns[ rResource ] = nObject;
                 if( ! m_aOutputStreams.empty() )
                     m_aOutputStreams.front().m_aResourceDict.m_aPatterns[ rResource ] = nObject;
@@ -7428,8 +7428,8 @@ void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, 
         " Do Q\n";
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
-    pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
-    pushResource( ResExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
+    pushResource( ResourceKind::XObject, aTrName, m_aTransparentObjects.back().m_nObject );
+    pushResource( ResourceKind::ExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
 
 }
 
@@ -9350,7 +9350,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
     OString aObjName = "Im" + OString::number(nObject);
-    pushResource( ResXObject, aObjName, nObject );
+    pushResource( ResourceKind::XObject, aObjName, nObject );
 
 }
 
@@ -9427,7 +9427,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
 
     sal_Int32 nObject = it->m_aReferenceXObject.getObject();
     OString aObjName = "Im" + OString::number(nObject);
-    pushResource( ResXObject, aObjName, nObject );
+    pushResource( ResourceKind::XObject, aObjName, nObject );
 
     return *it;
 }
@@ -9482,7 +9482,7 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
     OStringBuffer aObjName( 16 );
     aObjName.append( 'P' );
     aObjName.append( it->m_nObject );
-    pushResource( ResShading, aObjName.makeStringAndClear(), it->m_nObject );
+    pushResource( ResourceKind::Shading, aObjName.makeStringAndClear(), it->m_nObject );
 
     return it->m_nObject;
 }
@@ -9659,7 +9659,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
                 aObjName.append( 'P' );
                 aObjName.append( m_aTilings.back().m_nObject );
                 OString aPatternName( aObjName.makeStringAndClear() );
-                pushResource( ResPattern, aPatternName, m_aTilings.back().m_nObject );
+                pushResource( ResourceKind::Pattern, aPatternName, m_aTilings.back().m_nObject );
 
                 // fill a rRect with the pattern
                 OStringBuffer aLine( 100 );

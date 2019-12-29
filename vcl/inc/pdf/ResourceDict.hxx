@@ -17,12 +17,12 @@
 
 namespace vcl::pdf
 {
-enum ResourceKind
+enum class ResourceKind
 {
-    ResXObject,
-    ResExtGState,
-    ResShading,
-    ResPattern
+    XObject,
+    ExtGState,
+    Shading,
+    Pattern
 };
 
 struct ResourceDict
