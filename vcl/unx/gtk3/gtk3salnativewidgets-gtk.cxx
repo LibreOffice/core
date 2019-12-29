@@ -762,7 +762,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         {
             stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
             if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-                stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_PRELIGHT);
+                stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
 
             GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
                                                       mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
@@ -946,7 +946,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     {
         stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
         if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-            stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_PRELIGHT);
+            stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
 
         GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
                                                   mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
