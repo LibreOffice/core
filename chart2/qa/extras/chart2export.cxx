@@ -2023,15 +2023,15 @@ void Chart2ExportTest::testAxisTitlePositionDOCX()
     // test X Axis title position
     OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:title/c:layout/c:manualLayout/c:x", "val");
     double nX = aXVal.toDouble();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.698208543867708, nX, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.698208543867708, nX, 1e-3);
     OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:title/c:layout/c:manualLayout/c:y", "val");
     double nY = aYVal.toDouble();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.805152435594555, nY, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.805152435594555, nY, 1e-3);
 
     // test Y Axis title position
     aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:layout/c:manualLayout/c:x", "val");
     nX = aXVal.toDouble();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0253953671500755, nX, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0253953671500755, nX, 1e-3);
     aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:layout/c:manualLayout/c:y", "val");
     nY = aYVal.toDouble();
     // just test the first two decimal digits because it is not perfect in docx yet.
