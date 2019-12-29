@@ -60,9 +60,9 @@ void Test::test() {
     testPrintf(
         "-123", "%" SAL_PRI_PTRDIFFT "d", static_cast< std::ptrdiff_t >(-123));
     testPrintf("-123", "%" SAL_PRIdINTPTR, static_cast< sal_IntPtr >(-123));
-    testPrintf("123", "%" SAL_PRIuUINTPTR, static_cast< sal_uIntPtr >(123));
-    testPrintf("abc", "%" SAL_PRIxUINTPTR, static_cast< sal_uIntPtr >(0xabc));
-    testPrintf("ABC", "%" SAL_PRIXUINTPTR, static_cast< sal_uIntPtr >(0xabc));
+    testPrintf("123", "%" SAL_PRIuUINTPTR, static_cast< sal_uInt32 >(123));
+    testPrintf("abc", "%" SAL_PRIxUINTPTR, static_cast< sal_uInt32 >(0xabc));
+    testPrintf("ABC", "%" SAL_PRIXUINTPTR, static_cast< sal_uInt32 >(0xabc));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

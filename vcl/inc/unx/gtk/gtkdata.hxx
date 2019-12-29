@@ -114,7 +114,7 @@ public:
 
     GtkSalSystem* getSystem() const { return m_pSys; }
 
-    GtkWidget* findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const;
+    GtkWidget* findGtkWidgetForNativeHandle(sal_uInt32 hWindow) const;
 
     virtual void deregisterFrame( SalFrame* pFrame ) override;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
