@@ -116,7 +116,7 @@ void HelpIndexer::helpDocument(OUString const & fileName, Document *doc) const {
 
     OUString path = "#HLP#" + d_module + "/" + fileName;
     std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
-    doc->add(*_CLNEW Field(_T("path"), aPath.data(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+    doc->add(*_CLNEW Field(_T("path"), aPath.data(), int(Field::STORE_YES) | int(Field::INDEX_UNTOKENIZED)));
 
     OUString sEscapedFileName =
         rtl::Uri::encode(fileName,
@@ -124,11 +124,11 @@ void HelpIndexer::helpDocument(OUString const & fileName, Document *doc) const {
 
     // Add the caption as a field.
     OUString captionPath = d_captionDir + "/" + sEscapedFileName;
-    doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
+    doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), int(Field::STORE_NO) | int(Field::INDEX_TOKENIZED)));
 
     // Add the content as a field.
     OUString contentPath = d_contentDir + "/" + sEscapedFileName;
-    doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
+    doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), int(Field::STORE_NO) | int(Field::INDEX_TOKENIZED)));
 }
 
 lucene::util::Reader *HelpIndexer::helpFileReader(OUString const & path) {
