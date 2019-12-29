@@ -683,7 +683,7 @@ void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuff
     rPage.appendPoint( Point( static_cast<long>(f[4]), static_cast<long>(f[5]) ), rBuffer );
 }
 
-static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, const PDFWriterImpl::ResourceMap& rList )
+static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, std::map<OString, sal_Int32> const & rList )
 {
     if( rList.empty() )
         return;
