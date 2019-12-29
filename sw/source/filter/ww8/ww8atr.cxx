@@ -4743,7 +4743,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
             else // Proportional
             {
                 if ( rSpacing.GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off )
-                    nSpace = static_cast<short>( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
+                    nSpace = static_cast<short>( ( 240 * rSpacing.GetPropLineSpace() ) / 100 );
                 nMulti = 1;
             }
         }

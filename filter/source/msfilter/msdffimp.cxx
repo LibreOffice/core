@@ -385,7 +385,7 @@ sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
     sal_Int32 nAngle = 0;
     if ( nContent )
     {
-        nAngle = ( static_cast<sal_Int16>( nContent >> 16) * 100L ) + ( ( ( nContent & 0x0000ffff) * 100L ) >> 16 );
+        nAngle = ( static_cast<sal_Int16>( nContent >> 16) * 100 ) + ( ( ( nContent & 0x0000ffff) * 100 ) >> 16 );
         nAngle = NormAngle36000( -nAngle );
     }
     return nAngle;
@@ -2858,7 +2858,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     {
         nRotateAngle = GetPropertyValue( DFF_Prop_Rotation, 0 );
         if(nRotateAngle)//fixed point number
-            nRotateAngle = ( static_cast<sal_Int16>( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
+            nRotateAngle = ( static_cast<sal_Int16>( nRotateAngle >> 16) * 100 ) + ( ( ( nRotateAngle & 0x0000ffff) * 100 ) >> 16 );
         nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
         //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient needs to be rotated a little less
         //or it needs to be rotated a little more
@@ -5279,10 +5279,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             // Distance of Textbox to its surrounding Customshape
-            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
-            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
-            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
-            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
+            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440);
+            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440 );
+            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720  );
+            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720 );
 
             ScaleEmu( nTextLeft );
             ScaleEmu( nTextRight );
