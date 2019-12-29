@@ -637,7 +637,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfua|tooltip_text">Creates an universal accessibility compliant PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
+                        <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfua|tooltip_text">Creates a universal accessibility-compliant PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
