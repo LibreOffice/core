@@ -316,6 +316,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/scrptrun \
     vcl/source/gdi/CommonSalLayout \
     vcl/source/gdi/TypeSerializer \
+    vcl/source/pdf/ResourceDict \
     vcl/source/graphic/GraphicLoader \
     vcl/source/graphic/GraphicObject \
     vcl/source/graphic/GraphicObject2 \

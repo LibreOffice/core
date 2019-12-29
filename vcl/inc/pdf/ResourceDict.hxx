@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#ifndef INCLUDED_VCL_INC_PDF_RESOURCEDICT_HXX
+#define INCLUDED_VCL_INC_PDF_RESOURCEDICT_HXX
+
+#include <vcl/dllapi.h>
+#include <rtl/strbuf.hxx>
+#include <map>
+
+namespace vcl::pdf
+{
+enum ResourceKind
+{
+    ResXObject,
+    ResExtGState,
+    ResShading,
+    ResPattern
+};
+
+struct ResourceDict
+{
+    // note: handle fonts globally for performance
+    std::map<OString, sal_Int32> m_aXObjects;
+    std::map<OString, sal_Int32> m_aExtGStates;
+    std::map<OString, sal_Int32> m_aShadings;
+    std::map<OString, sal_Int32> m_aPatterns;
+
+    void append(OStringBuffer& rBuffer, sal_Int32 nFontDictObject);
+};
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -683,45 +683,6 @@ void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuff
     rPage.appendPoint( Point( static_cast<long>(f[4]), static_cast<long>(f[5]) ), rBuffer );
 }
 
-static void appendResourceMap( OStringBuffer& rBuf, const char* pPrefix, std::map<OString, sal_Int32> const & rList )
-{
-    if( rList.empty() )
-        return;
-    rBuf.append( '/' );
-    rBuf.append( pPrefix );
-    rBuf.append( "<<" );
-    int ni = 0;
-    for (auto const& item : rList)
-    {
-        if( !item.first.isEmpty() && item.second > 0 )
-        {
-            rBuf.append( '/' );
-            rBuf.append( item.first );
-            rBuf.append( ' ' );
-            rBuf.append( item.second );
-            rBuf.append( " 0 R" );
-            if( ((++ni) & 7) == 0 )
-                rBuf.append( '\n' );
-        }
-    }
-    rBuf.append( ">>\n" );
-}
-
-void PDFWriterImpl::ResourceDict::append( OStringBuffer& rBuf, sal_Int32 nFontDictObject )
-{
-    rBuf.append( "<</Font " );
-    rBuf.append( nFontDictObject );
-    rBuf.append( " 0 R\n" );
-    appendResourceMap( rBuf, "XObject", m_aXObjects );
-    appendResourceMap( rBuf, "ExtGState", m_aExtGStates );
-    appendResourceMap( rBuf, "Shading", m_aShadings );
-    appendResourceMap( rBuf, "Pattern", m_aPatterns );
-    rBuf.append( "/ProcSet[/PDF/Text" );
-    if( !m_aXObjects.empty() )
-        rBuf.append( "/ImageC/ImageI/ImageB" );
-    rBuf.append( "]\n>>\n" );
-};
-
 PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
         :
         m_pWriter( pWriter ),
