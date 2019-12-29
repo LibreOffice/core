@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 
+#include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
@@ -103,17 +104,6 @@ class PDFWriterImpl : public VirtualDevice
     friend class PDFStreamIf;
 
 public:
-    enum ResourceKind { ResXObject, ResExtGState, ResShading, ResPattern };
-    struct ResourceDict
-    {
-        // note: handle fonts globally for performance
-        std::map<OString, sal_Int32> m_aXObjects;
-        std::map<OString, sal_Int32> m_aExtGStates;
-        std::map<OString, sal_Int32> m_aShadings;
-        std::map<OString, sal_Int32> m_aPatterns;
-
-        void append( OStringBuffer&, sal_Int32 nFontDictObject );
-    };
 
     struct PDFPage
     {
