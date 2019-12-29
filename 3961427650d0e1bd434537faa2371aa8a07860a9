@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9d11b96_5d04b7d1",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-12-29T23:46:02Z",
+      "side": 1,
+      "message": "Could you please also hyphenate “accessibility-complaint”? Thanks",
+      "range": {
+        "startLine": 640,
+        "startChar": 137,
+        "endLine": 640,
+        "endChar": 160
+      },
+      "revId": "3961427650d0e1bd434537faa2371aa8a07860a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
