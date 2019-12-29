@@ -1567,8 +1567,8 @@ void Chart2ImportTest::testAxisTitlePositionDOCX()
     CPPUNIT_ASSERT(xAxisTitle.is());
 
     awt::Point aPos = xAxisTitle->getPosition();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10640), static_cast<sal_Int32>(aPos.X));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7157), static_cast<sal_Int32>(aPos.Y));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10640, aPos.X, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7157, aPos.Y, 2);
 
     // test Y Axis title position
     uno::Reference< chart::XAxisYSupplier > xAxisYSupp(mxDiagram, uno::UNO_QUERY);
@@ -1578,8 +1578,8 @@ void Chart2ImportTest::testAxisTitlePositionDOCX()
     CPPUNIT_ASSERT(xAxisTitle.is());
 
     aPos = xAxisTitle->getPosition();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(387), static_cast<sal_Int32>(aPos.X));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6378), static_cast<sal_Int32>(aPos.Y));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(387, aPos.X, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6378, aPos.Y, 300);
 }
 
 void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()
