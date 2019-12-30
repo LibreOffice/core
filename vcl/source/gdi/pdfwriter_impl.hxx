@@ -187,6 +187,19 @@ struct ReferenceXObjectEmit
     sal_Int32 getObject() const;
 };
 
+struct BitmapEmit
+{
+    BitmapID    m_aID;
+    BitmapEx    m_aBitmap;
+    sal_Int32   m_nObject;
+    ReferenceXObjectEmit m_aReferenceXObject;
+
+    BitmapEmit()
+        : m_nObject(0)
+    {
+    }
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -195,19 +208,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct BitmapEmit
-    {
-        BitmapID    m_aID;
-        BitmapEx    m_aBitmap;
-        sal_Int32   m_nObject;
-        ReferenceXObjectEmit m_aReferenceXObject;
-
-        BitmapEmit()
-            : m_nObject(0)
-        {
-        }
-    };
 
     struct JPGEmit
     {
