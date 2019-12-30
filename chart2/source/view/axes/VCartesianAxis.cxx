@@ -733,22 +733,15 @@ bool VCartesianAxis::createTextShapes(
         // recalculate the nLimitedSpaceForText in case of 90 and 270 degree if the text break is true
         if ( rAxisLabelProperties.fRotationAngleDegree == 90.0 || rAxisLabelProperties.fRotationAngleDegree == 270.0 )
         {
-            if ( rAxisLabelProperties.m_aFontReferenceSize.Height - rAxisLabelProperties.m_aMaximumSpaceForLabels.Height > 2 * rAxisLabelProperties.m_aMaximumSpaceForLabels.Y )
-            {
-                const sal_Int32 nFullHeight = rAxisLabelProperties.m_aFontReferenceSize.Height;
-                sal_Int32 nMaxLabelsHeight = nFullHeight - ( rAxisLabelProperties.m_aMaximumSpaceForLabels.Height + rAxisLabelProperties.m_aMaximumSpaceForLabels.Y );
-                nLimitedSpaceForText = nMaxLabelsHeight;
-            }
-            else
-            {
-                nLimitedSpaceForText = -1;
-            }
+            nLimitedSpaceForText = rAxisLabelProperties.m_aFontReferenceSize.Height - pTickFactory->getXaxisStartPos().getY();
+            m_aAxisProperties.m_bLimitSpaceForLabels = false;
         }
 
         // recalculate the nLimitedSpaceForText in case of vertical category axis if the text break is true
         if ( m_aAxisProperties.m_bSwapXAndY && bIsVerticalAxis && rAxisLabelProperties.fRotationAngleDegree == 0.0 )
         {
-            nLimitedSpaceForText = rAxisLabelProperties.m_aMaximumSpaceForLabels.X;
+            nLimitedSpaceForText = pTickFactory->getXaxisStartPos().getX();
+            m_aAxisProperties.m_bLimitSpaceForLabels = false;
         }
     }
 

@@ -204,6 +204,11 @@ sal_Int32 TickFactory2D::getTickScreenDistance( TickIter& rIter )
     return pFirstTickInfo->getScreenDistanceBetweenTicks( *pSecondTickInfo );
 }
 
+B2DVector TickFactory2D::getXaxisStartPos() const
+{
+    return m_aAxisStartScreenPosition2D;
+}
+
 B2DVector TickFactory2D::getTickScreenPosition2D( double fScaledLogicTickValue ) const
 {
     B2DVector aRet(m_aAxisStartScreenPosition2D);
