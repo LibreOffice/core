@@ -360,6 +360,18 @@ struct PDFAnnotation
     {}
 };
 
+struct PDFLink : public PDFAnnotation
+{
+    sal_Int32                   m_nDest; // set to -1 for URL, to a dest else
+    OUString               m_aURL;
+    sal_Int32                   m_nStructParent; // struct parent entry
+
+    PDFLink()
+            : m_nDest( -1 ),
+              m_nStructParent( -1 )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -368,18 +380,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFLink : public PDFAnnotation
-    {
-        sal_Int32                   m_nDest; // set to -1 for URL, to a dest else
-        OUString               m_aURL;
-        sal_Int32                   m_nStructParent; // struct parent entry
-
-        PDFLink()
-                : m_nDest( -1 ),
-                  m_nStructParent( -1 )
-        {}
-    };
 
     /// A PDF Screen annotation.
     struct PDFScreen : public PDFAnnotation
