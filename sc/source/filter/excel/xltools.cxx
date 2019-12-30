@@ -312,8 +312,32 @@ sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
     return limit_cast< sal_uInt16 >( fXclWidth );
 }
 
+// takes font height in twips (1/20 pt = 1/1440 in)
+// returns correction value in 1/256th of *digit width* of default font
 double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
 {
+    // Excel uses *max digit width of default font* (W) as cell width unit. Also it has 5-pixel
+    // "correction" to cell widths (ECMA-376-1:2016 18.3.1.81): each cell has 1-pixel padding, then
+    // 3 pixels for the border (which may be 1-pixel - hairline - then it will have 2 additional
+    // 1-pixel spacings from each side; or e.g. 2 hairlines with 1-pixel spacing in the middle; or
+    // thick 3-pixel). Obviously, correction size entirely depends on pixel size (and it is actually
+    // different in Excel on monitors with different resolution). Thus actual (displayed/printed)
+    // cell widths consist of X*W+5px; stored in file is the X (or X*256 if 1/256th of digit width
+    // units are used) value.
+    // This formula apparently converts this 5-pixel correction to 1/256th of digit width units.
+    // Looks like it is created from
+    //
+    //    5 * 256 * 1440 * 2.1333 / (96 * max(N-15, 60)) + 50.0
+    //
+    // where 5 - pixel correction; 256 - used to produce 1/256th of digit width; 1440 - used to
+    // convert font height N (in twips) to inches; 2.1333 - an (empirical?) quotient to convert
+    // font *height* into digit *width*; 96 - "standard" monitor resolution (DPI).
+    // Additionally the formula uses 15 (of unknown origin), 60 (minimal font height 3 pt), and
+    // 50.0 (also of unknown origin).
+    //
+    // TODO: convert this to take font digit width directly (and possibly DPI?), to avoid guessing
+    // the digit width and pixel size. Or DPI might stay 96, to not follow Excel dependency on DPI
+    // in addition to used font, and have absolute size of the correction fixed 5/96 in.
     return 40960.0 / ::std::max( nXclDefFontHeight - 15, 60L ) + 50.0;
 }
 
