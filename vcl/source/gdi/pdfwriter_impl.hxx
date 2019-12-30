@@ -372,6 +372,20 @@ struct PDFLink : public PDFAnnotation
     {}
 };
 
+/// A PDF embedded file.
+struct PDFEmbeddedFile
+{
+    /// ID of the file.
+    sal_Int32 m_nObject;
+    /// Contents of the file.
+    std::shared_ptr<std::vector<sal_Int8>> m_pData;
+
+    PDFEmbeddedFile()
+        : m_nObject(0)
+    {
+    }
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -393,20 +407,6 @@ public:
 
         PDFScreen()
             : m_nTempFileObject(0)
-        {
-        }
-    };
-
-    /// A PDF embedded file.
-    struct PDFEmbeddedFile
-    {
-        /// ID of the file.
-        sal_Int32 m_nObject;
-        /// Contents of the file.
-        std::shared_ptr<std::vector<sal_Int8>> m_pData;
-
-        PDFEmbeddedFile()
-            : m_nObject(0)
         {
         }
     };
