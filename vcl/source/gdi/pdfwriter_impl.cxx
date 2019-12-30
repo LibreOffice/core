@@ -5808,7 +5808,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
 }
 
 void PDFWriterImpl::drawVerticalGlyphs(
-        const std::vector<PDFWriterImpl::PDFGlyph>& rGlyphs,
+        const std::vector<PDFGlyph>& rGlyphs,
         OStringBuffer& rLine,
         const Point& rAlignOffset,
         const Matrix3& rRotScale,
@@ -5877,7 +5877,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
 }
 
 void PDFWriterImpl::drawHorizontalGlyphs(
-        const std::vector<PDFWriterImpl::PDFGlyph>& rGlyphs,
+        const std::vector<PDFGlyph>& rGlyphs,
         OStringBuffer& rLine,
         const Point& rAlignOffset,
         bool bFirst,
