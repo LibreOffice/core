@@ -1932,7 +1932,7 @@ const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue
     return it != aValueStrings.end() ? it->second : "";
 }
 
-static void appendStructureAttributeLine( PDFWriter::StructAttribute i_eAttr, const PDFWriterImpl::PDFStructureAttribute& i_rVal, OStringBuffer& o_rLine, bool i_bIsFixedInt )
+static void appendStructureAttributeLine( PDFWriter::StructAttribute i_eAttr, const PDFStructureAttribute& i_rVal, OStringBuffer& o_rLine, bool i_bIsFixedInt )
 {
     o_rLine.append( "/" );
     o_rLine.append( PDFWriterImpl::getAttributeTag( i_eAttr ) );
