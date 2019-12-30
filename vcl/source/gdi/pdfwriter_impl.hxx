@@ -320,6 +320,15 @@ struct PDFDest
     tools::Rectangle                   m_aRect;
 };
 
+//--->i56629
+struct PDFNamedDest
+{
+    OUString               m_aDestName;
+    sal_Int32                   m_nPage;
+    PDFWriter::DestAreaType     m_eType;
+    tools::Rectangle                   m_aRect;
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -328,15 +337,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-//--->i56629
-    struct PDFNamedDest
-    {
-        OUString               m_aDestName;
-        sal_Int32                   m_nPage;
-        PDFWriter::DestAreaType     m_eType;
-        tools::Rectangle                   m_aRect;
-    };
 
     struct PDFOutlineEntry
     {
