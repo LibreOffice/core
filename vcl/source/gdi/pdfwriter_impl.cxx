@@ -5694,7 +5694,7 @@ void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
     const int nFontGlyphId = pGlyph->glyphId();
     FontSubset& rSubset = m_aSubsets[ pFont ];
     // search for font specific glyphID
-    FontMapping::iterator it = rSubset.m_aMapping.find( nFontGlyphId );
+    auto it = rSubset.m_aMapping.find( nFontGlyphId );
     if( it != rSubset.m_aMapping.end() )
     {
         nMappedFontObject = it->second.m_nFontID;
