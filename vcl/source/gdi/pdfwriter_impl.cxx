@@ -11224,7 +11224,7 @@ void PDFWriterImpl::MARK( const char* pString )
         emitComment( pString );
 }
 
-sal_Int32 PDFWriterImpl::ReferenceXObjectEmit::getObject() const
+sal_Int32 ReferenceXObjectEmit::getObject() const
 {
     if (m_nFormObject > 0)
         return m_nFormObject;
