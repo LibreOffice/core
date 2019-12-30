@@ -22,6 +22,30 @@
       "revId": "3961427650d0e1bd434537faa2371aa8a07860a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046df3e9_dcd9a41e",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2019-12-30T08:44:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9d11b96_5d04b7d1",
+      "range": {
+        "startLine": 640,
+        "startChar": 137,
+        "endLine": 640,
+        "endChar": 160
+      },
+      "revId": "3961427650d0e1bd434537faa2371aa8a07860a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
