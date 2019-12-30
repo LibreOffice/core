@@ -552,6 +552,14 @@ struct PDFGlyph
     {}
 };
 
+struct StreamRedirect
+{
+    SvStream*       m_pStream;
+    MapMode         m_aMapMode;
+    tools::Rectangle       m_aTargetRect;
+    ResourceDict    m_aResourceDict;
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -674,13 +682,6 @@ private:
     /* output redirection; e.g. to accumulate content streams for
        XObjects
      */
-    struct StreamRedirect
-    {
-        SvStream*       m_pStream;
-        MapMode         m_aMapMode;
-        tools::Rectangle       m_aTargetRect;
-        ResourceDict    m_aResourceDict;
-    };
     std::list< StreamRedirect >         m_aOutputStreams;
 
     // graphics state
