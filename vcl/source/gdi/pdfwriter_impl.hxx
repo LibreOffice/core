@@ -329,6 +329,25 @@ struct PDFNamedDest
     tools::Rectangle                   m_aRect;
 };
 
+struct PDFOutlineEntry
+{
+    sal_Int32                   m_nObject;
+    sal_Int32                   m_nParentObject;
+    sal_Int32                   m_nNextObject;
+    sal_Int32                   m_nPrevObject;
+    std::vector< sal_Int32 >    m_aChildren;
+    OUString               m_aTitle;
+    sal_Int32                   m_nDestID;
+
+    PDFOutlineEntry()
+            : m_nObject( 0 ),
+              m_nParentObject( 0 ),
+              m_nNextObject( 0 ),
+              m_nPrevObject( 0 ),
+              m_nDestID( -1 )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -337,25 +356,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFOutlineEntry
-    {
-        sal_Int32                   m_nObject;
-        sal_Int32                   m_nParentObject;
-        sal_Int32                   m_nNextObject;
-        sal_Int32                   m_nPrevObject;
-        std::vector< sal_Int32 >    m_aChildren;
-        OUString               m_aTitle;
-        sal_Int32                   m_nDestID;
-
-        PDFOutlineEntry()
-                : m_nObject( 0 ),
-                  m_nParentObject( 0 ),
-                  m_nNextObject( 0 ),
-                  m_nPrevObject( 0 ),
-                  m_nDestID( -1 )
-        {}
-    };
 
     struct PDFAnnotation
     {
