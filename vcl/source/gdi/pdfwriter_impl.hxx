@@ -224,6 +224,21 @@ struct GradientEmit
     sal_Int32   m_nObject;
 };
 
+// for tilings (drawWallpaper, begin/endPattern)
+struct TilingEmit
+{
+    sal_Int32                   m_nObject;
+    tools::Rectangle                   m_aRectangle;
+    Size                        m_aCellSize;
+    SvtGraphicFill::Transform   m_aTransform;
+    ResourceDict                m_aResources;
+    std::unique_ptr<SvMemoryStream> m_pTilingStream;
+
+    TilingEmit()
+            : m_nObject( 0 )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -232,21 +247,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    // for tilings (drawWallpaper, begin/endPattern)
-    struct TilingEmit
-    {
-        sal_Int32                   m_nObject;
-        tools::Rectangle                   m_aRectangle;
-        Size                        m_aCellSize;
-        SvtGraphicFill::Transform   m_aTransform;
-        ResourceDict                m_aResources;
-        std::unique_ptr<SvMemoryStream> m_pTilingStream;
-
-        TilingEmit()
-                : m_nObject( 0 )
-        {}
-    };
 
     // for transparency group XObjects
     struct TransparencyEmit
