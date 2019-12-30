@@ -5671,7 +5671,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 
     const PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
     sal_Int32 nFontID = 0;
-    FontEmbedData::iterator it = m_aSystemFonts.find( pDevFont );
+    auto it = m_aSystemFonts.find( pDevFont );
     if( it != m_aSystemFonts.end() )
         nFontID = it->second.m_nNormalFontID;
     else

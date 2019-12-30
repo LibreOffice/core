@@ -311,7 +311,6 @@ public:
 
         EmbedFont() : m_nNormalFontID( 0 ) {}
     };
-    typedef std::map< const PhysicalFontFace*, EmbedFont > FontEmbedData;
 
     struct PDFDest
     {
@@ -643,7 +642,7 @@ private:
     std::list< TransparencyEmit >       m_aTransparentObjects;
     /*  contains all font subsets in use */
     std::map<const PhysicalFontFace*, FontSubset> m_aSubsets;
-    FontEmbedData                       m_aSystemFonts;
+    std::map<const PhysicalFontFace*, EmbedFont> m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
