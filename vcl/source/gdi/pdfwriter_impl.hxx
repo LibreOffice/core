@@ -348,6 +348,18 @@ struct PDFOutlineEntry
     {}
 };
 
+struct PDFAnnotation
+{
+    sal_Int32                   m_nObject;
+    tools::Rectangle                   m_aRect;
+    sal_Int32                   m_nPage;
+
+    PDFAnnotation()
+            : m_nObject( -1 ),
+              m_nPage( -1 )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -356,18 +368,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFAnnotation
-    {
-        sal_Int32                   m_nObject;
-        tools::Rectangle                   m_aRect;
-        sal_Int32                   m_nPage;
-
-        PDFAnnotation()
-                : m_nObject( -1 ),
-                  m_nPage( -1 )
-        {}
-    };
 
     struct PDFLink : public PDFAnnotation
     {
