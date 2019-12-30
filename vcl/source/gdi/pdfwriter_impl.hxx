@@ -300,11 +300,10 @@ public:
         sal_Int32   m_nFontID;
         sal_uInt8   m_nSubsetGlyphID;
     };
-    typedef std::map< sal_GlyphId, Glyph > FontMapping;
     struct FontSubset
     {
         std::vector< FontEmit >        m_aSubsets;
-        FontMapping         m_aMapping;
+        std::map<sal_GlyphId, Glyph>         m_aMapping;
     };
     typedef std::map< const PhysicalFontFace*, FontSubset > FontSubsetData;
     struct EmbedFont
