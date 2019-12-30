@@ -394,6 +394,22 @@ struct PDFNoteEntry : public PDFAnnotation
     {}
 };
 
+/// A PDF Screen annotation.
+struct PDFScreen : public PDFAnnotation
+{
+    /// Linked video.
+    OUString m_aURL;
+    /// Embedded video.
+    OUString m_aTempFileURL;
+    /// ID of the EmbeddedFile object.
+    sal_Int32 m_nTempFileObject;
+
+    PDFScreen()
+        : m_nTempFileObject(0)
+    {
+    }
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -402,22 +418,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    /// A PDF Screen annotation.
-    struct PDFScreen : public PDFAnnotation
-    {
-        /// Linked video.
-        OUString m_aURL;
-        /// Embedded video.
-        OUString m_aTempFileURL;
-        /// ID of the EmbeddedFile object.
-        sal_Int32 m_nTempFileObject;
-
-        PDFScreen()
-            : m_nTempFileObject(0)
-        {
-        }
-    };
 
     struct PDFWidget : public PDFAnnotation
     {
