@@ -4271,7 +4271,7 @@ bool MenuOrToolMenuButton::get_active() const
 {
     if (m_pMenuButton)
         return m_pMenuButton->get_active();
-    return m_pToolbar->get_item_active(m_aIdent);
+    return m_pToolbar->get_menu_item_active(m_aIdent);
 }
 
 void MenuOrToolMenuButton::set_active(bool bActive) const
@@ -4281,7 +4281,7 @@ void MenuOrToolMenuButton::set_active(bool bActive) const
         m_pMenuButton->set_active(bActive);
         return;
     }
-    m_pToolbar->set_item_active(m_aIdent, bActive);
+    m_pToolbar->set_menu_item_active(m_aIdent, bActive);
 }
 
 weld::Widget* MenuOrToolMenuButton::get_widget() const

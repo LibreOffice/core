@@ -7138,16 +7138,10 @@ public:
     {
         disable_item_notify_events();
 
-        auto aFind = m_aMenuButtonMap.find(rIdent);
-        if (aFind != m_aMenuButtonMap.end())
-            aFind->second->set_active(bActive);
-        else
-        {
-            GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
-            assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || !bActive);
-            if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
-                gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
-        }
+        GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
+        assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || !bActive);
+        if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
 
         enable_item_notify_events();
     }
@@ -7160,6 +7154,24 @@ public:
 
         GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
         return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
+    }
+
+    virtual void set_menu_item_active(const OString& rIdent, bool bActive) override
+    {
+        disable_item_notify_events();
+
+        auto aFind = m_aMenuButtonMap.find(rIdent);
+        assert (aFind != m_aMenuButtonMap.end());
+        aFind->second->set_active(bActive);
+
+        enable_item_notify_events();
+    }
+
+    virtual bool get_menu_item_active(const OString& rIdent) const override
+    {
+        auto aFind = m_aMenuButtonMap.find(rIdent);
+        assert (aFind != m_aMenuButtonMap.end());
+        return aFind->second->get_active();
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override

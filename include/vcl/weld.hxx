@@ -1964,6 +1964,8 @@ public:
     virtual bool get_item_sensitive(const OString& rIdent) const = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual bool get_item_active(const OString& rIdent) const = 0;
+    virtual void set_menu_item_active(const OString& rIdent, bool bActive) = 0;
+    virtual bool get_menu_item_active(const OString& rIdent) const = 0;
     virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) = 0;
     virtual void set_item_visible(const OString& rIdent, bool bVisible) = 0;
