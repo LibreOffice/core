@@ -256,6 +256,36 @@ struct TransparencyEmit
     {}
 };
 
+// font subsets
+class GlyphEmit
+{
+    // performance: actually this should probably a vector;
+    std::vector<sal_Ucs>            m_CodeUnits;
+    sal_uInt8                       m_nSubsetGlyphID;
+
+public:
+    GlyphEmit() : m_nSubsetGlyphID(0)
+    {
+    }
+
+    void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
+    sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }
+
+    void addCode( sal_Ucs i_cCode )
+    {
+        m_CodeUnits.push_back(i_cCode);
+    }
+    sal_Int32 countCodes() const { return m_CodeUnits.size(); }
+    const std::vector<sal_Ucs>& codes() const { return m_CodeUnits; }
+    sal_Ucs getCode( sal_Int32 i_nIndex ) const
+    {
+        sal_Ucs nRet = 0;
+        if (static_cast<size_t>(i_nIndex) < m_CodeUnits.size())
+            nRet = m_CodeUnits[i_nIndex];
+        return nRet;
+    }
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -265,35 +295,6 @@ class PDFWriterImpl : public VirtualDevice
 public:
     friend struct vcl::pdf::PDFPage;
 
-    // font subsets
-    class GlyphEmit
-    {
-        // performance: actually this should probably a vector;
-        std::vector<sal_Ucs>            m_CodeUnits;
-        sal_uInt8                       m_nSubsetGlyphID;
-
-    public:
-        GlyphEmit() : m_nSubsetGlyphID(0)
-        {
-        }
-
-        void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
-        sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }
-
-        void addCode( sal_Ucs i_cCode )
-        {
-            m_CodeUnits.push_back(i_cCode);
-        }
-        sal_Int32 countCodes() const { return m_CodeUnits.size(); }
-        const std::vector<sal_Ucs>& codes() const { return m_CodeUnits; }
-        sal_Ucs getCode( sal_Int32 i_nIndex ) const
-        {
-            sal_Ucs nRet = 0;
-            if (static_cast<size_t>(i_nIndex) < m_CodeUnits.size())
-                nRet = m_CodeUnits[i_nIndex];
-            return nRet;
-        }
-    };
     struct FontEmit
     {
         sal_Int32           m_nFontID;
