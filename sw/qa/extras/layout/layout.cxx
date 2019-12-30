@@ -2437,6 +2437,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122800)
     // This failed, if the textarray length of the first axis label not 22.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128996)
+{
+    SwDoc* pDoc = createDoc("tdf128996.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[1]/text",
+                       "A very long category name 1");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127304)
 {
     SwDoc* pDoc = createDoc("tdf127304.odt");
