@@ -560,6 +560,35 @@ struct StreamRedirect
     ResourceDict    m_aResourceDict;
 };
 
+// graphics state
+struct GraphicsState
+{
+    vcl::Font                        m_aFont;
+    MapMode                          m_aMapMode;
+    Color                            m_aLineColor;
+    Color                            m_aFillColor;
+    Color                            m_aTextLineColor;
+    Color                            m_aOverlineColor;
+    basegfx::B2DPolyPolygon          m_aClipRegion;
+    bool                             m_bClipRegion;
+    ComplexTextLayoutFlags            m_nLayoutMode;
+    LanguageType                     m_aDigitLanguage;
+    PushFlags                        m_nFlags;
+    GraphicsStateUpdateFlags         m_nUpdateFlags;
+
+    GraphicsState() :
+            m_aLineColor( COL_TRANSPARENT ),
+            m_aFillColor( COL_TRANSPARENT ),
+            m_aTextLineColor( COL_TRANSPARENT ),
+            m_aOverlineColor( COL_TRANSPARENT ),
+            m_bClipRegion( false ),
+            m_nLayoutMode( ComplexTextLayoutFlags::Default ),
+            m_aDigitLanguage( 0 ),
+            m_nFlags( PushFlags::ALL ),
+            m_nUpdateFlags( GraphicsStateUpdateFlags::All )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -684,34 +713,6 @@ private:
      */
     std::list< StreamRedirect >         m_aOutputStreams;
 
-    // graphics state
-    struct GraphicsState
-    {
-        vcl::Font                        m_aFont;
-        MapMode                          m_aMapMode;
-        Color                            m_aLineColor;
-        Color                            m_aFillColor;
-        Color                            m_aTextLineColor;
-        Color                            m_aOverlineColor;
-        basegfx::B2DPolyPolygon          m_aClipRegion;
-        bool                             m_bClipRegion;
-        ComplexTextLayoutFlags            m_nLayoutMode;
-        LanguageType                     m_aDigitLanguage;
-        PushFlags                        m_nFlags;
-        GraphicsStateUpdateFlags         m_nUpdateFlags;
-
-        GraphicsState() :
-                m_aLineColor( COL_TRANSPARENT ),
-                m_aFillColor( COL_TRANSPARENT ),
-                m_aTextLineColor( COL_TRANSPARENT ),
-                m_aOverlineColor( COL_TRANSPARENT ),
-                m_bClipRegion( false ),
-                m_nLayoutMode( ComplexTextLayoutFlags::Default ),
-                m_aDigitLanguage( 0 ),
-                m_nFlags( PushFlags::ALL ),
-                m_nUpdateFlags( GraphicsStateUpdateFlags::All )
-        {}
-    };
     std::list< GraphicsState >              m_aGraphicsStack;
     GraphicsState                           m_aCurrentPDFState;
 
