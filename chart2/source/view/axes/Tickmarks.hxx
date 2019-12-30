@@ -135,6 +135,7 @@ public:
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;
+    ::basegfx::B2DVector getXaxisStartPos() const;
 
 private:
     ::basegfx::B2DVector     getTickScreenPosition2D( double fScaledLogicTickValue ) const;
