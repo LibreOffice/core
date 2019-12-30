@@ -281,10 +281,10 @@ void ScMacrosTest::testVba()
     sTempDir += OUStringChar(SAL_PATHDELIMITER);
     OUString sTestFileName("My Test WorkBook.xls");
     Sequence< uno::Any > aParams;
-    for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
+    for (const auto& rTestInfo : testInfo)
     {
         OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
+        createFileURL(rTestInfo.sFileBaseName + "xls", aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
         OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
@@ -297,7 +297,7 @@ void ScMacrosTest::testVba()
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
-        bool bWorkbooksHandling = testInfo[i].sFileBaseName == "Workbooks." && !sTempDir.isEmpty() ;
+        bool bWorkbooksHandling = rTestInfo.sFileBaseName == "Workbooks." && !sTempDir.isEmpty() ;
 
         if ( bWorkbooksHandling )
         {
@@ -309,15 +309,15 @@ void ScMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url " << testInfo[i].sMacroUrl);
+        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url " << rTestInfo.sMacroUrl);
 
         SfxObjectShell::CallXScript(
-            xComponent, testInfo[i].sMacroUrl, aParams, aRet, aOutParamIndex,
+            xComponent, rTestInfo.sMacroUrl, aParams, aRet, aOutParamIndex,
             aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            OUString("script reported failure in file " + testInfo[i].sFileBaseName + "xls")
+            OUString("script reported failure in file " + rTestInfo.sFileBaseName + "xls")
                 .toUtf8()
                 .getStr(),
             OUString("OK"), aStringRes);
