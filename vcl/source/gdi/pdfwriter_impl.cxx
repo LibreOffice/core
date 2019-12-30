@@ -10954,10 +10954,10 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
         for (auto const& nKidIndex : rGroupWidget.m_aKidsIndex)
         {
             PDFWidget& rKid = m_aWidgets[nKidIndex];
-            PDFAppearanceMap::iterator app_it = rKid.m_aAppearances.find( "N" );
+            auto app_it = rKid.m_aAppearances.find( "N" );
             if( app_it != rKid.m_aAppearances.end() )
             {
-                PDFAppearanceStreams::iterator stream_it = app_it->second.find( "Yes" );
+                auto stream_it = app_it->second.find( "Yes" );
                 if( stream_it != app_it->second.end() )
                 {
                     SvMemoryStream* pStream = stream_it->second;
