@@ -386,6 +386,14 @@ struct PDFEmbeddedFile
     }
 };
 
+struct PDFNoteEntry : public PDFAnnotation
+{
+    PDFNote m_aContents;
+
+    PDFNoteEntry()
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -409,14 +417,6 @@ public:
             : m_nTempFileObject(0)
         {
         }
-    };
-
-    struct PDFNoteEntry : public PDFAnnotation
-    {
-        PDFNote                     m_aContents;
-
-        PDFNoteEntry()
-        {}
     };
 
     struct PDFWidget : public PDFAnnotation
