@@ -98,7 +98,7 @@ static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const
 }
 
 static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
-        sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow )
+        sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow, bool isColumn )
 {
     o3tl::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
     o3tl::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
@@ -156,9 +156,12 @@ static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const P
     if ( nRow == 0 )
     {
         lcl_mergeBorder( PROP_TOP_BORDER, pTableBorders, pCellProps );
-        if ( pHorizontalVal )
+        if ( pHorizontalVal && !isColumn)
             pCellProps->Insert( PROP_BOTTOM_BORDER, aHorizProp, false );
     }
+
+    if (isColumn)
+        lcl_mergeBorder( PROP_BOTTOM_BORDER, pTableBorders, pCellProps );
 
     if ( bIsEndRow )
     {
@@ -761,7 +764,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
                 if ( rInfo.pTableStyle )
                 {
-                    PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCnfStyleMask );
+                    PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties(nCnfStyleMask);
 
                     // Check if we need to clean up some empty border definitions to match what Word does.
                     static const PropertyIds pBorders[] =
@@ -827,7 +830,30 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
                 }
 
-                lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
+                // Checking if current cell is vertically merged with all the other
+                // cells below to the bottom.
+                // This must be done in order to apply the bottom border of the table
+                // to the first cell in a vertical merge.
+                bool isColumn = false;
+                if (m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE))
+                    isColumn = true;
+                else
+                    isColumn = false;
+                sal_Int32 colSize = m_aCellProperties.size();
+                for (sal_Int32 i = nRow + 1; i < colSize; i++)
+                {
+                    sal_Int32 rowSize = m_aCellProperties[i].size();
+                    if (rowSize > nCell)
+                    {
+                        if (m_aCellProperties[i][nCell]->getProperty(PROP_VERTICAL_MERGE) && isColumn)
+                            isColumn = true;
+                        else
+                            isColumn = false;
+                    }
+                }
+
+
+                lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow, isColumn );
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
                 aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE,
