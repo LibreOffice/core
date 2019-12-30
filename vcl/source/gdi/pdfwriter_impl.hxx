@@ -217,6 +217,13 @@ struct JPGEmit
     }
 };
 
+struct GradientEmit
+{
+    Gradient    m_aGradient;
+    Size        m_aSize;
+    sal_Int32   m_nObject;
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -225,13 +232,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct GradientEmit
-    {
-        Gradient    m_aGradient;
-        Size        m_aSize;
-        sal_Int32   m_nObject;
-    };
 
     // for tilings (drawWallpaper, begin/endPattern)
     struct TilingEmit
