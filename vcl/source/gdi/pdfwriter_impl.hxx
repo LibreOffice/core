@@ -305,7 +305,6 @@ public:
         std::vector< FontEmit >        m_aSubsets;
         std::map<sal_GlyphId, Glyph>         m_aMapping;
     };
-    typedef std::map< const PhysicalFontFace*, FontSubset > FontSubsetData;
     struct EmbedFont
     {
         sal_Int32                       m_nNormalFontID;
@@ -643,7 +642,7 @@ private:
     std::vector< TilingEmit >           m_aTilings;
     std::list< TransparencyEmit >       m_aTransparentObjects;
     /*  contains all font subsets in use */
-    FontSubsetData                      m_aSubsets;
+    std::map<const PhysicalFontFace*, FontSubset> m_aSubsets;
     FontEmbedData                       m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
