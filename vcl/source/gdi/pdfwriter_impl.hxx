@@ -286,6 +286,33 @@ public:
     }
 };
 
+struct FontEmit
+{
+    sal_Int32           m_nFontID;
+    std::map<sal_GlyphId, GlyphEmit>     m_aMapping;
+
+    explicit FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
+};
+
+struct Glyph
+{
+    sal_Int32   m_nFontID;
+    sal_uInt8   m_nSubsetGlyphID;
+};
+
+struct FontSubset
+{
+    std::vector< FontEmit >        m_aSubsets;
+    std::map<sal_GlyphId, Glyph>         m_aMapping;
+};
+
+struct EmbedFont
+{
+    sal_Int32                       m_nNormalFontID;
+
+    EmbedFont() : m_nNormalFontID( 0 ) {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -294,30 +321,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct FontEmit
-    {
-        sal_Int32           m_nFontID;
-        std::map<sal_GlyphId, GlyphEmit>     m_aMapping;
-
-        explicit FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
-    };
-    struct Glyph
-    {
-        sal_Int32   m_nFontID;
-        sal_uInt8   m_nSubsetGlyphID;
-    };
-    struct FontSubset
-    {
-        std::vector< FontEmit >        m_aSubsets;
-        std::map<sal_GlyphId, Glyph>         m_aMapping;
-    };
-    struct EmbedFont
-    {
-        sal_Int32                       m_nNormalFontID;
-
-        EmbedFont() : m_nNormalFontID( 0 ) {}
-    };
 
     struct PDFDest
     {
