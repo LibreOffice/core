@@ -27,6 +27,7 @@
 
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
+#include <pdf/Matrix3.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -97,7 +98,6 @@ namespace vcl
 using namespace vcl::pdf;
 
 class PDFStreamIf;
-class Matrix3;
 
 namespace filter
 {
