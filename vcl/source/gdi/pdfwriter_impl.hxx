@@ -200,6 +200,23 @@ struct BitmapEmit
     }
 };
 
+struct JPGEmit
+{
+    BitmapID            m_aID;
+    std::unique_ptr<SvMemoryStream>
+                        m_pStream;
+    Bitmap              m_aMask;
+    sal_Int32           m_nObject;
+    bool                m_bTrueColor;
+    ReferenceXObjectEmit m_aReferenceXObject;
+
+    JPGEmit()
+        : m_nObject(0)
+        , m_bTrueColor(false)
+    {
+    }
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -208,23 +225,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct JPGEmit
-    {
-        BitmapID            m_aID;
-        std::unique_ptr<SvMemoryStream>
-                            m_pStream;
-        Bitmap              m_aMask;
-        sal_Int32           m_nObject;
-        bool                m_bTrueColor;
-        ReferenceXObjectEmit m_aReferenceXObject;
-
-        JPGEmit()
-            : m_nObject(0)
-            , m_bTrueColor(false)
-        {
-        }
-    };
 
     struct GradientEmit
     {
