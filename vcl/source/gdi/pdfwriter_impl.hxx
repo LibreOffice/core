@@ -62,14 +62,13 @@ class SvStream;
 class SvMemoryStream;
 
 // the maximum password length
-#define ENCRYPTED_PWD_SIZE     32
-#define MD5_DIGEST_SIZE        16
-#define SECUR_40BIT_KEY         5
+constexpr sal_Int32 ENCRYPTED_PWD_SIZE = 32;
+constexpr sal_Int32 MD5_DIGEST_SIZE = 16;
 // security 128 bit
-#define SECUR_128BIT_KEY       16
+constexpr sal_Int32 SECUR_128BIT_KEY = 16;
 // maximum length of MD5 digest input, in step 2 of algorithm 3.1
 // PDF spec ver. 1.4: see there for details
-#define MAXIMUM_RC4_KEY_LENGTH (SECUR_128BIT_KEY+3+2)
+constexpr sal_Int32 MAXIMUM_RC4_KEY_LENGTH = SECUR_128BIT_KEY + 3 + 2;
 
 enum class GraphicsStateUpdateFlags {
     Font                  = 0x0001,
