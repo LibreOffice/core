@@ -530,6 +530,28 @@ struct PDFAddStream
     PDFAddStream() : m_pStream( nullptr ), m_nStreamObject( 0 ), m_bCompress( true ) {}
 };
 
+// helper structure for drawLayout and friends
+struct PDFGlyph
+{
+    Point const       m_aPos;
+    const GlyphItem* m_pGlyph;
+    sal_Int32 const   m_nNativeWidth;
+    sal_Int32 const   m_nMappedFontId;
+    sal_uInt8 const   m_nMappedGlyphId;
+    int const         m_nCharPos;
+
+    PDFGlyph( const Point& rPos,
+              const GlyphItem* pGlyph,
+              sal_Int32 nNativeWidth,
+              sal_Int32 nFontId,
+              sal_uInt8 nMappedGlyphId,
+              int nCharPos )
+    : m_aPos( rPos ), m_pGlyph(pGlyph), m_nNativeWidth( nNativeWidth ),
+      m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId ),
+      m_nCharPos(nCharPos)
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -538,28 +560,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    // helper structure for drawLayout and friends
-    struct PDFGlyph
-    {
-        Point const       m_aPos;
-        const GlyphItem* m_pGlyph;
-        sal_Int32 const   m_nNativeWidth;
-        sal_Int32 const   m_nMappedFontId;
-        sal_uInt8 const   m_nMappedGlyphId;
-        int const         m_nCharPos;
-
-        PDFGlyph( const Point& rPos,
-                  const GlyphItem* pGlyph,
-                  sal_Int32 nNativeWidth,
-                  sal_Int32 nFontId,
-                  sal_uInt8 nMappedGlyphId,
-                  int nCharPos )
-        : m_aPos( rPos ), m_pGlyph(pGlyph), m_nNativeWidth( nNativeWidth ),
-          m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId ),
-          m_nCharPos(nCharPos)
-        {}
-    };
 
     static const char* getStructureTag( PDFWriter::StructElement );
     static const char* getAttributeTag( PDFWriter::StructAttribute eAtr );
