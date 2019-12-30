@@ -288,11 +288,10 @@ public:
             return nRet;
         }
     };
-    typedef std::map< sal_GlyphId, GlyphEmit > FontEmitMapping;
     struct FontEmit
     {
         sal_Int32           m_nFontID;
-        FontEmitMapping     m_aMapping;
+        std::map<sal_GlyphId, GlyphEmit>     m_aMapping;
 
         explicit FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
     };
