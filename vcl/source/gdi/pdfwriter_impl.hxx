@@ -162,6 +162,31 @@ struct PDFPage
     double getHeight() const { return m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight; }
 };
 
+/// Contains information to emit a reference XObject.
+struct ReferenceXObjectEmit
+{
+    /// ID of the Form XObject, if any.
+    sal_Int32 m_nFormObject;
+    /// ID of the vector/embedded object, if m_nFormObject is used.
+    sal_Int32 m_nEmbeddedObject;
+    /// ID of the bitmap object, if m_nFormObject is used.
+    sal_Int32 m_nBitmapObject;
+    /// Size of the bitmap replacement, in pixels.
+    Size m_aPixelSize;
+    /// PDF data from the graphic object, if not writing a reference XObject.
+    std::vector<sal_Int8> m_aPDFData;
+
+    ReferenceXObjectEmit()
+        : m_nFormObject(0),
+          m_nEmbeddedObject(0),
+          m_nBitmapObject(0)
+    {
+    }
+
+    /// Returns the ID one should use when referring to this bitmap.
+    sal_Int32 getObject() const;
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -170,31 +195,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    /// Contains information to emit a reference XObject.
-    struct ReferenceXObjectEmit
-    {
-        /// ID of the Form XObject, if any.
-        sal_Int32 m_nFormObject;
-        /// ID of the vector/embedded object, if m_nFormObject is used.
-        sal_Int32 m_nEmbeddedObject;
-        /// ID of the bitmap object, if m_nFormObject is used.
-        sal_Int32 m_nBitmapObject;
-        /// Size of the bitmap replacement, in pixels.
-        Size m_aPixelSize;
-        /// PDF data from the graphic object, if not writing a reference XObject.
-        std::vector<sal_Int8> m_aPDFData;
-
-        ReferenceXObjectEmit()
-            : m_nFormObject(0),
-              m_nEmbeddedObject(0),
-              m_nBitmapObject(0)
-        {
-        }
-
-        /// Returns the ID one should use when referring to this bitmap.
-        sal_Int32 getObject() const;
-    };
 
     struct BitmapEmit
     {
