@@ -69,62 +69,30 @@ public:
         Data(const Data&) = delete;
         const Data& operator=(const Data&) = delete;
 
-        struct ImplementationInfo {
-            ImplementationInfo(
+        struct Implementation {
+            Implementation(
                 OUString const & theName, OUString const & theLoader,
-                OUString const & theUri,
-                OUString const & theEnvironment,
-                OUString const & theConstructor,
+                OUString const & theUri, OUString const & theEnvironment,
+                OUString const & theConstructorName,
                 OUString const & thePrefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     theAlienContext,
                 OUString const & theRdbFile):
-                name(theName), loader(theLoader), uri(theUri),
-                environment(theEnvironment), constructor(theConstructor),
-                prefix(thePrefix), alienContext(theAlienContext),
-                rdbFile(theRdbFile)
-            {}
-
-            explicit ImplementationInfo(OUString const & theName):
-                name(theName) {}
-
-            OUString name;
-            OUString loader;
-            OUString uri;
-            OUString environment;
-            OUString constructor;
-            OUString prefix;
-            css::uno::Reference< css::uno::XComponentContext >
-                alienContext;
-            OUString rdbFile;
-            std::vector< OUString > services;
-            std::vector< OUString > singletons;
-        };
-
-        struct Implementation {
-            Implementation(
-                OUString const & name, OUString const & loader,
-                OUString const & uri, OUString const & environment,
-                OUString const & constructorName,
-                OUString const & prefix,
-                css::uno::Reference< css::uno::XComponentContext > const &
-                    alienContext,
-                OUString const & rdbFile):
-                info( ImplementationInfo(
-                        name, loader, uri, environment, constructorName, prefix,
-                        alienContext, rdbFile)),
-                constructor(nullptr), status(STATUS_NEW), dispose(true)
+                name(theName), loader(theLoader), uri(theUri), environment(theEnvironment),
+                constructorName(theConstructorName), prefix(thePrefix),
+                alienContext(theAlienContext), rdbFile(theRdbFile),
+                constructorFn(nullptr), status(STATUS_NEW), dispose(true)
             {}
 
             Implementation(
-                OUString const & name,
+                OUString const & theName,
                 css::uno::Reference< css::lang::XSingleComponentFactory >
                     const & theFactory1,
                 css::uno::Reference< css::lang::XSingleServiceFactory > const &
                     theFactory2,
                 css::uno::Reference< css::lang::XComponent > const &
                     theComponent):
-                info(ImplementationInfo(name)), constructor(nullptr),
+                name(theName), constructorFn(nullptr),
                 factory1(theFactory1), factory2(theFactory2),
                 component(theComponent), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }
@@ -146,9 +114,9 @@ public:
 
             enum Status { STATUS_NEW, STATUS_WRAPPER, STATUS_LOADED };
 
-            // Logically, exactly one of constructor, factory1, factory2 should
+            // Logically, exactly one of constructorFn, factory1, factory2 should
             // be set.  However, there are two exceptions:  For one, when
-            // constructor is set, ServiceManager::createContentEnumeration will
+            // constructorFn is set, ServiceManager::createContentEnumeration will
             // store the necessary ImplementationWrapper in factory1 (so that
             // multiple calls to createContentEnumeration will return the same
             // wrapper).  For another, when factory1 should be set but status is
@@ -157,8 +125,17 @@ public:
             // ImplementationWrapper---also due to a
             // ServiceManager::createContentEnumeration call---and will be
             // loaded later).
-            ImplementationInfo info;
-            WrapperConstructorFn constructor;
+            OUString name;
+            OUString loader;
+            OUString uri;
+            OUString environment;
+            OUString constructorName;
+            OUString prefix;
+            css::uno::Reference< css::uno::XComponentContext > alienContext;
+            OUString rdbFile;
+            std::vector< OUString > services;
+            std::vector< OUString > singletons;
+            WrapperConstructorFn constructorFn;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
             css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
             css::uno::Reference< css::lang::XComponent > component;
