@@ -520,6 +520,16 @@ struct PDFStructureElement
 
 };
 
+struct PDFAddStream
+{
+    OUString           m_aMimeType;
+    PDFOutputStream*        m_pStream;
+    sal_Int32               m_nStreamObject;
+    bool                    m_bCompress;
+
+    PDFAddStream() : m_pStream( nullptr ), m_nStreamObject( 0 ), m_bCompress( true ) {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -528,16 +538,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFAddStream
-    {
-        OUString           m_aMimeType;
-        PDFOutputStream*        m_pStream;
-        sal_Int32               m_nStreamObject;
-        bool                    m_bCompress;
-
-        PDFAddStream() : m_pStream( nullptr ), m_nStreamObject( 0 ), m_bCompress( true ) {}
-    };
 
     // helper structure for drawLayout and friends
     struct PDFGlyph
