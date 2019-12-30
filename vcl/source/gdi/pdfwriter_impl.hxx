@@ -70,6 +70,9 @@ constexpr sal_Int32 SECUR_128BIT_KEY = 16;
 // PDF spec ver. 1.4: see there for details
 constexpr sal_Int32 MAXIMUM_RC4_KEY_LENGTH = SECUR_128BIT_KEY + 3 + 2;
 
+namespace vcl::pdf
+{
+
 enum class GraphicsStateUpdateFlags {
     Font                  = 0x0001,
     MapMode               = 0x0002,
@@ -81,8 +84,11 @@ enum class GraphicsStateUpdateFlags {
     DigitLanguage         = 0x0400,
     All                   = 0x077f
 };
+
+} // end vcl::pdf
+
 namespace o3tl {
-    template<> struct typed_flags<GraphicsStateUpdateFlags> : is_typed_flags<GraphicsStateUpdateFlags, 0x077f> {};
+    template<> struct typed_flags<vcl::pdf::GraphicsStateUpdateFlags> : is_typed_flags<vcl::pdf::GraphicsStateUpdateFlags, 0x077f> {};
 }
 
 namespace vcl
