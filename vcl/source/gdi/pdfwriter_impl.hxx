@@ -99,6 +99,12 @@ namespace filter
 class PDFObjectElement;
 }
 
+namespace pdf
+{
+constexpr sal_Int32 g_nInheritedPageWidth = 595;  // default A4 in inch/72
+constexpr sal_Int32 g_nInheritedPageHeight = 842; // default A4 in inch/72
+}
+
 class PDFWriterImpl : public VirtualDevice
 {
     friend class PDFStreamIf;
@@ -160,7 +166,7 @@ public:
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
         void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
 
-        double getHeight() const { return m_nPageHeight ? m_nPageHeight : PDFWriterImpl::g_nInheritedPageHeight; }
+        double getHeight() const { return m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight; }
     };
 
     friend struct PDFPage;
@@ -645,8 +651,6 @@ private:
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
-    static constexpr sal_Int32          g_nInheritedPageWidth = 595;  // default A4 in inch/72
-    static constexpr sal_Int32          g_nInheritedPageHeight = 842; // default A4 in inch/72
     sal_Int32                           m_nCurrentPage;
 
     sal_Int32                           m_nCatalogObject;
