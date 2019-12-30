@@ -164,6 +164,8 @@ struct PDFPage
     // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
     void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
 
+    void appendMatrix3(Matrix3 const & rMatrix, OStringBuffer& rBuffer);
+
     double getHeight() const { return m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight; }
 };
 

@@ -566,7 +566,10 @@ public:
     void translate( double tx, double ty );
     void invert();
 
-    void append( PDFPage const & rPage, OStringBuffer& rBuffer );
+    double get(size_t i) const
+    {
+        return f[i];
+    }
 
     Point transform( const Point& rPoint ) const;
 };
@@ -668,19 +671,6 @@ void Matrix3::invert()
     fn[5] = -(f[4]*fn[1] + f[5]*fn[3]);
 
     set( fn );
-}
-
-void Matrix3::append( PDFPage const & rPage, OStringBuffer& rBuffer )
-{
-    appendDouble( f[0], rBuffer );
-    rBuffer.append( ' ' );
-    appendDouble( f[1], rBuffer );
-    rBuffer.append( ' ' );
-    appendDouble( f[2], rBuffer );
-    rBuffer.append( ' ' );
-    appendDouble( f[3], rBuffer );
-    rBuffer.append( ' ' );
-    rPage.appendPoint( Point( static_cast<long>(f[4]), static_cast<long>(f[5]) ), rBuffer );
 }
 
 PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
@@ -1242,7 +1232,20 @@ void PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, 
     rBuffer.append( "S\n" );
 }
 
- PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
+void PDFPage::appendMatrix3(Matrix3 const & rMatrix, OStringBuffer& rBuffer)
+{
+    appendDouble(rMatrix.get(0), rBuffer);
+    rBuffer.append(' ');
+    appendDouble(rMatrix.get(1), rBuffer);
+    rBuffer.append(' ');
+    appendDouble(rMatrix.get(2), rBuffer);
+    rBuffer.append(' ');
+    appendDouble(rMatrix.get(3), rBuffer);
+    rBuffer.append(' ');
+    appendPoint(Point(long(rMatrix.get(4)), long(rMatrix.get(5))), rBuffer);
+}
+
+PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
                                const css::uno::Reference< css::beans::XMaterialHolder >& xEnc,
                                PDFWriter& i_rOuterFace)
         : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::NONE, OUTDEV_PDF),
@@ -5860,7 +5863,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         aMat.scale( fTempXScale, fYScale );
         aMat.rotate( fAngle+fDeltaAngle );
         aMat.translate( aCurPos.X()+aDeltaPos.X(), aCurPos.Y()+aDeltaPos.Y() );
-        aMat.append( m_aPages.back(), rLine );
+        m_aPages.back().appendMatrix3(aMat, rLine);
         rLine.append( " Tm" );
         if( i == 0 || rGlyphs[i-1].m_nMappedFontId != rGlyphs[i].m_nMappedFontId )
         {
@@ -5932,7 +5935,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             aMat.scale( fXScale, 1.0 );
             aMat.rotate( fAngle );
             aMat.translate( aCurPos.X(), aCurPos.Y() );
-            aMat.append( m_aPages.back(), rLine );
+            m_aPages.back().appendMatrix3(aMat, rLine);
             rLine.append( " Tm\n" );
         }
         // set up correct font
@@ -7140,7 +7143,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     Matrix3 aMat;
     aMat.rotate( fAngle );
     aMat.translate( aPos.X(), aPos.Y() );
-    aMat.append( m_aPages.back(), aLine );
+    m_aPages.back().appendMatrix3(aMat, aLine);
     aLine.append( " cm\n" );
 
     if ( aUnderlineColor.GetTransparency() != 0 )
