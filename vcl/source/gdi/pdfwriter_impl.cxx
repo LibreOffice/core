@@ -5421,9 +5421,9 @@ struct AnnotSortContainer
 
 struct AnnotSorterLess
 {
-    std::vector< PDFWriterImpl::PDFWidget >& m_rWidgets;
+    std::vector<PDFWidget>& m_rWidgets;
 
-    explicit AnnotSorterLess( std::vector< PDFWriterImpl::PDFWidget >& rWidgets ) : m_rWidgets( rWidgets ) {}
+    explicit AnnotSorterLess( std::vector<PDFWidget>& rWidgets ) : m_rWidgets( rWidgets ) {}
 
     bool operator()( const AnnotationSortEntry& rLeft, const AnnotationSortEntry& rRight )
     {

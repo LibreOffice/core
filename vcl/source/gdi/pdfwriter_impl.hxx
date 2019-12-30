@@ -410,6 +410,52 @@ struct PDFScreen : public PDFAnnotation
     }
 };
 
+struct PDFWidget : public PDFAnnotation
+{
+    typedef std::unordered_map<OString, SvMemoryStream*> PDFAppearanceStreams;
+
+    PDFWriter::WidgetType       m_eType;
+    OString                m_aName;
+    OUString               m_aDescription;
+    OUString               m_aText;
+    DrawTextFlags          m_nTextStyle;
+    OUString               m_aValue;
+    OString                m_aDAString;
+    OString                m_aDRDict;
+    OString                m_aMKDict;
+    OString                m_aMKDictCAString;  // i12626, added to be able to encrypt the /CA text string
+                                                    // since the object number is not known at the moment
+                                                    // of filling m_aMKDict, the string will be encrypted when emitted.
+                                                    // the /CA string MUST BE the last added to m_aMKDict
+                                                    // see code for details
+    sal_Int32                   m_nFlags;
+    sal_Int32                   m_nParent; // if not 0, parent's object number
+    std::vector<sal_Int32>      m_aKids; // widget children, contains object numbers
+    std::vector<sal_Int32>      m_aKidsIndex; // widget children, contains index to m_aWidgets
+    OUString               m_aOnValue;
+    sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
+    sal_Int32                   m_nRadioGroup;
+    sal_Int32                   m_nMaxLen;
+    bool                        m_bSubmit;
+    bool                        m_bSubmitGet;
+    sal_Int32                   m_nDest;
+    std::vector<OUString>  m_aListEntries;
+    std::vector<sal_Int32>      m_aSelectedEntries;
+    std::unordered_map<OString, PDFAppearanceStreams> m_aAppearances;
+    PDFWidget()
+            : m_eType( PDFWriter::PushButton ),
+              m_nTextStyle( DrawTextFlags::NONE ),
+              m_nFlags( 0 ),
+              m_nParent( 0 ),
+              m_nTabOrder( 0 ),
+              m_nRadioGroup( -1 ),
+              m_nMaxLen( 0 ),
+              m_bSubmit( false ),
+              m_bSubmitGet( false ),
+              m_nDest( -1 )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -418,52 +464,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFWidget : public PDFAnnotation
-    {
-        typedef std::unordered_map<OString, SvMemoryStream*> PDFAppearanceStreams;
-
-        PDFWriter::WidgetType       m_eType;
-        OString                m_aName;
-        OUString               m_aDescription;
-        OUString               m_aText;
-        DrawTextFlags          m_nTextStyle;
-        OUString               m_aValue;
-        OString                m_aDAString;
-        OString                m_aDRDict;
-        OString                m_aMKDict;
-        OString                m_aMKDictCAString;  // i12626, added to be able to encrypt the /CA text string
-                                                        // since the object number is not known at the moment
-                                                        // of filling m_aMKDict, the string will be encrypted when emitted.
-                                                        // the /CA string MUST BE the last added to m_aMKDict
-                                                        // see code for details
-        sal_Int32                   m_nFlags;
-        sal_Int32                   m_nParent; // if not 0, parent's object number
-        std::vector<sal_Int32>      m_aKids; // widget children, contains object numbers
-        std::vector<sal_Int32>      m_aKidsIndex; // widget children, contains index to m_aWidgets
-        OUString               m_aOnValue;
-        sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
-        sal_Int32                   m_nRadioGroup;
-        sal_Int32                   m_nMaxLen;
-        bool                        m_bSubmit;
-        bool                        m_bSubmitGet;
-        sal_Int32                   m_nDest;
-        std::vector<OUString>  m_aListEntries;
-        std::vector<sal_Int32>      m_aSelectedEntries;
-        std::unordered_map<OString, PDFAppearanceStreams> m_aAppearances;
-        PDFWidget()
-                : m_eType( PDFWriter::PushButton ),
-                  m_nTextStyle( DrawTextFlags::NONE ),
-                  m_nFlags( 0 ),
-                  m_nParent( 0 ),
-                  m_nTabOrder( 0 ),
-                  m_nRadioGroup( -1 ),
-                  m_nMaxLen( 0 ),
-                  m_bSubmit( false ),
-                  m_bSubmitGet( false ),
-                  m_nDest( -1 )
-        {}
-    };
 
     struct PDFStructureAttribute
     {
