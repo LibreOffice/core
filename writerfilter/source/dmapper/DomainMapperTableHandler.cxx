@@ -98,7 +98,7 @@ static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const
 }
 
 static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
-        sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow )
+        sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow, bool isColumn )
 {
     o3tl::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
     o3tl::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
@@ -156,9 +156,12 @@ static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const P
     if ( nRow == 0 )
     {
         lcl_mergeBorder( PROP_TOP_BORDER, pTableBorders, pCellProps );
-        if ( pHorizontalVal )
+        if ( pHorizontalVal && !isColumn )
             pCellProps->Insert( PROP_BOTTOM_BORDER, aHorizProp, false );
     }
+
+    if ( isColumn )
+        lcl_mergeBorder( PROP_BOTTOM_BORDER, pTableBorders, pCellProps );
 
     if ( bIsEndRow )
     {
@@ -717,7 +720,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             bool bIsEndRow = aRowOfCellsIterator == aLastRowIterator;
 
             //aCellIterator points to a PropertyMapPtr;
-            if( *aCellIterator )
+            if (*aCellIterator)
             {
                 // remove directly applied insideV/H borders since they are meaningless without a context (tdf#82177)
                 (*aCellIterator)->Erase(META_PROP_VERTICAL_BORDER);
@@ -726,42 +729,42 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 pAllCellProps->InsertProps(rInfo.pTableDefaults);
 
                 sal_Int32 nCellStyleMask = 0;
-                if (aCellIterator==aRowOfCellsIterator->begin())
+                if (aCellIterator == aRowOfCellsIterator->begin())
                 {
-                    if(rInfo.nTblLook&0x80)
+                    if (rInfo.nTblLook & 0x80)
                         nCellStyleMask = CNF_FIRST_COLUMN;      // first col style used
                 }
                 else if (bIsEndCol)
                 {
-                    if(rInfo.nTblLook&0x100)
+                    if (rInfo.nTblLook & 0x100)
                         nCellStyleMask = CNF_LAST_COLUMN;       // last col style used
                 }
-                if(!nCellStyleMask)                 // if no cell style is used yet
+                if (!nCellStyleMask)                 // if no cell style is used yet
                 {
-                    if(!(rInfo.nTblLook&0x400))
+                    if (!(rInfo.nTblLook & 0x400))
                     {   // vbanding used
                         int n = nCell + 1;
-                        if(rInfo.nTblLook&0x80)
+                        if (rInfo.nTblLook & 0x80)
                             n++;
-                        if(n & 1)
+                        if (n & 1)
                             nCellStyleMask = CNF_ODD_VBAND;
                         else
                             nCellStyleMask = CNF_EVEN_VBAND;
                     }
                 }
                 sal_Int32 nCnfStyleMask = nCellStyleMask + nRowStyleMask;
-                if(nCnfStyleMask == CNF_FIRST_COLUMN + CNF_FIRST_ROW)
+                if (nCnfStyleMask == CNF_FIRST_COLUMN + CNF_FIRST_ROW)
                     nCnfStyleMask |= CNF_FIRST_ROW_FIRST_COLUMN;
-                else if(nCnfStyleMask == CNF_FIRST_COLUMN + CNF_LAST_ROW)
+                else if (nCnfStyleMask == CNF_FIRST_COLUMN + CNF_LAST_ROW)
                     nCnfStyleMask |= CNF_LAST_ROW_FIRST_COLUMN;
-                else if(nCnfStyleMask == CNF_LAST_COLUMN + CNF_FIRST_ROW)
+                else if (nCnfStyleMask == CNF_LAST_COLUMN + CNF_FIRST_ROW)
                     nCnfStyleMask |= CNF_FIRST_ROW_LAST_COLUMN;
-                else if(nCnfStyleMask == CNF_LAST_COLUMN + CNF_LAST_ROW)
+                else if (nCnfStyleMask == CNF_LAST_COLUMN + CNF_LAST_ROW)
                     nCnfStyleMask |= CNF_LAST_ROW_LAST_COLUMN;
 
-                if ( rInfo.pTableStyle )
+                if (rInfo.pTableStyle)
                 {
-                    PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCnfStyleMask );
+                    PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties(nCnfStyleMask);
 
                     // Check if we need to clean up some empty border definitions to match what Word does.
                     static const PropertyIds pBorders[] =
@@ -803,16 +806,16 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                         }
                     }
 
-                    pAllCellProps->InsertProps( pStyleProps );
+                    pAllCellProps->InsertProps(pStyleProps);
                 }
 
                 // Remove properties from style/row that aren't allowed in cells
-                pAllCellProps->Erase( PROP_HEADER_ROW_COUNT );
-                pAllCellProps->Erase( PROP_TBL_HEADER );
+                pAllCellProps->Erase(PROP_HEADER_ROW_COUNT);
+                pAllCellProps->Erase(PROP_TBL_HEADER);
 
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
-                std::swap(*(*aCellIterator), *pAllCellProps );
+                std::swap(*(*aCellIterator), *pAllCellProps);
 
 #ifdef DBG_UTIL
                 TagLogger::getInstance().startElement("cell");
@@ -837,7 +840,30 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     rInfo.pTableBorders->Erase(META_PROP_HORIZONTAL_BORDER);
                 }
 
-                lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
+                // Checking if current cell is vertically merged with all the other
+                // cells below to the bottom.
+                // This must be done in order to apply the bottom border of the table
+                // to the first cell in a vertical merge.
+                bool isColumn = false;
+                if (m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE))
+                    isColumn = true;
+                else
+                    isColumn = false;
+                sal_Int32 colSize = m_aCellProperties.size();
+                for (sal_Int32 i = nRow + 1; i < colSize; i++)
+                {
+                    sal_Int32 rowSize = m_aCellProperties[i].size();
+                    if (rowSize > nCell)
+                    {
+                        if (m_aCellProperties[i][nCell]->getProperty(PROP_VERTICAL_MERGE) && isColumn)
+                            isColumn = true;
+                        else
+                            isColumn = false;
+                    }
+                }
+
+
+                lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow, isColumn );
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
                 aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE,
