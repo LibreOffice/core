@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfe36089_e18ac795",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-30T09:15:51Z",
+      "side": 1,
+      "message": "Gallery::GetThemeCount() returns size_t which is essentially unsigned long (aka sal_uInt64). We assign its value to nCount, and then compare it with i.\n\nSo it might be a good idea to use sal_uInt64 or (maybe as even better option) size_t as type of i here.",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 81
+      },
+      "revId": "392a4c0ced3172ae35669948364f4ed097a0acfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "719d1b76_44b47ef6",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-30T09:15:51Z",
+      "side": 1,
+      "message": "As seen on line 598, nCount is compared to 16000 which is well within range of sal_uInt32, or even sal_uInt16.",
+      "range": {
+        "startLine": 596,
+        "startChar": 4,
+        "endLine": 596,
+        "endChar": 26
+      },
+      "revId": "392a4c0ced3172ae35669948364f4ed097a0acfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5928d673_0f7bd789",
+        "filename": "svx/source/gallery2/galobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-12-30T09:15:51Z",
+      "side": 1,
+      "message": "nOldVersion gets its first value from the GetVersion() method which returns sal_Int32, and then passed to the SetVersion() method which again takes a sal_Int32 param. So it looks sensible to stick with it.",
+      "range": {
+        "startLine": 180,
+        "startChar": 35,
+        "endLine": 180,
+        "endChar": 46
+      },
+      "revId": "392a4c0ced3172ae35669948364f4ed097a0acfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
