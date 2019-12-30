@@ -589,6 +589,8 @@ struct GraphicsState
     {}
 };
 
+enum class Mode { DEFAULT, NOWRITE };
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -776,12 +778,10 @@ i12626
     void drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines );
 
-    enum Mode { DEFAULT, NOWRITE };
-
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
      */
-    void updateGraphicsState(Mode mode = DEFAULT);
+    void updateGraphicsState(Mode mode = Mode::DEFAULT);
 
     /* writes a transparency group object */
     void writeTransparentObject( TransparencyEmit& rObject );
