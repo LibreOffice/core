@@ -456,6 +456,27 @@ struct PDFWidget : public PDFAnnotation
     {}
 };
 
+struct PDFStructureAttribute
+{
+    PDFWriter::StructAttributeValue     eValue;
+    sal_Int32                           nValue;
+
+    PDFStructureAttribute()
+            : eValue( PDFWriter::Invalid ),
+              nValue( 0 )
+    {}
+
+    explicit PDFStructureAttribute( PDFWriter::StructAttributeValue eVal )
+            : eValue( eVal ),
+              nValue( 0 )
+    {}
+
+    explicit PDFStructureAttribute( sal_Int32 nVal )
+            : eValue( PDFWriter::Invalid ),
+              nValue( nVal )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -464,27 +485,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFStructureAttribute
-    {
-        PDFWriter::StructAttributeValue     eValue;
-        sal_Int32                           nValue;
-
-        PDFStructureAttribute()
-                : eValue( PDFWriter::Invalid ),
-                  nValue( 0 )
-        {}
-
-        explicit PDFStructureAttribute( PDFWriter::StructAttributeValue eVal )
-                : eValue( eVal ),
-                  nValue( 0 )
-        {}
-
-        explicit PDFStructureAttribute( sal_Int32 nVal )
-                : eValue( PDFWriter::Invalid ),
-                  nValue( nVal )
-        {}
-    };
 
     struct PDFStructureElementKid // for Kids entries
     {
