@@ -7338,7 +7338,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const tools::Rectangle& rT
     clearClipRegion();
     // this is needed to point m_aCurrentPDFState at the pushed state
     // ... but it's pointless to actually write into the "outer" stream here!
-    updateGraphicsState(NOWRITE);
+    updateGraphicsState(Mode::NOWRITE);
 
     m_aOutputStreams.push_front( StreamRedirect() );
     m_aOutputStreams.front().m_pStream = pStream;
@@ -7380,7 +7380,7 @@ SvStream* PDFWriterImpl::endRedirect()
     m_aCurrentPDFState.m_aFillColor = COL_TRANSPARENT;
 
     // needed after pop() to set m_aCurrentPDFState
-    updateGraphicsState(NOWRITE);
+    updateGraphicsState(Mode::NOWRITE);
 
     return pStream;
 }
@@ -9818,7 +9818,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
 
     // everything is up to date now
     m_aCurrentPDFState = m_aGraphicsStack.front();
-    if ((mode != NOWRITE) &&  !aLine.isEmpty())
+    if ((mode != Mode::NOWRITE) &&  !aLine.isEmpty())
         writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
