@@ -239,6 +239,23 @@ struct TilingEmit
     {}
 };
 
+// for transparency group XObjects
+struct TransparencyEmit
+{
+    sal_Int32           m_nObject;
+    sal_Int32           m_nExtGStateObject;
+    double              m_fAlpha;
+    tools::Rectangle    m_aBoundRect;
+    std::unique_ptr<SvMemoryStream>  m_pContentStream;
+    std::unique_ptr<SvMemoryStream>  m_pSoftMaskStream;
+
+    TransparencyEmit()
+            : m_nObject( 0 ),
+              m_nExtGStateObject( -1 ),
+              m_fAlpha( 0.0 )
+    {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -247,23 +264,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    // for transparency group XObjects
-    struct TransparencyEmit
-    {
-        sal_Int32           m_nObject;
-        sal_Int32           m_nExtGStateObject;
-        double              m_fAlpha;
-        tools::Rectangle    m_aBoundRect;
-        std::unique_ptr<SvMemoryStream>  m_pContentStream;
-        std::unique_ptr<SvMemoryStream>  m_pSoftMaskStream;
-
-        TransparencyEmit()
-                : m_nObject( 0 ),
-                  m_nExtGStateObject( -1 ),
-                  m_fAlpha( 0.0 )
-        {}
-    };
 
     // font subsets
     class GlyphEmit
