@@ -103,6 +103,65 @@ namespace pdf
 {
 constexpr sal_Int32 g_nInheritedPageWidth = 595;  // default A4 in inch/72
 constexpr sal_Int32 g_nInheritedPageHeight = 842; // default A4 in inch/72
+
+struct PDFPage
+{
+    VclPtr<PDFWriterImpl>             m_pWriter;
+    double const                      m_nPageWidth;           // in inch/72
+    double const                      m_nPageHeight;          // in inch/72
+    PDFWriter::Orientation const      m_eOrientation;
+    sal_Int32                   m_nPageObject;
+    std::vector<sal_Int32>      m_aStreamObjects;
+    sal_Int32                   m_nStreamLengthObject;
+    sal_uInt64                  m_nBeginStreamPos;
+    std::vector<sal_Int32>      m_aAnnotations;
+    std::vector<sal_Int32>      m_aMCIDParents;
+    PDFWriter::PageTransition   m_eTransition;
+    sal_uInt32                  m_nTransTime;
+
+    PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation );
+
+    void beginStream();
+    void endStream();
+    bool emit( sal_Int32 nParentPage );
+
+    // converts point from ref device coordinates to
+    // page coordinates and appends the point to the buffer
+    // if pOutPoint is set it will be updated to the emitted point
+    // (in PDF map mode, that is 10th of point)
+    void appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const;
+    // appends a B2DPoint without further transformation
+    void appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const;
+    // appends a rectangle
+    void appendRect( const tools::Rectangle& rRect, OStringBuffer& rBuffer ) const;
+    // converts a rectangle to 10th points page space
+    void convertRect( tools::Rectangle& rRect ) const;
+    // appends a polygon optionally closing it
+    void appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
+    // appends a polygon optionally closing it
+    void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const;
+    // appends a polypolygon optionally closing the subpaths
+    void appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
+    // appends a polypolygon optionally closing the subpaths
+    void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
+    // converts a length (either vertical or horizontal; this
+    // can be important if the source MapMode is not
+    // symmetrical) to page length and appends it to the buffer
+    // if pOutLength is set it will be updated to the emitted length
+    // (in PDF map mode, that is 10th of point)
+    void appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = nullptr ) const;
+    // the same for double values
+    void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32 nPrecision = 5 ) const;
+    // appends LineInfo
+    // returns false if too many dash array entry were created for
+    // the implementation limits of some PDF readers
+    bool appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const;
+    // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
+    void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
+
+    double getHeight() const { return m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight; }
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -110,66 +169,7 @@ class PDFWriterImpl : public VirtualDevice
     friend class PDFStreamIf;
 
 public:
-
-    struct PDFPage
-    {
-        VclPtr<PDFWriterImpl>             m_pWriter;
-        double const                      m_nPageWidth;           // in inch/72
-        double const                      m_nPageHeight;          // in inch/72
-        PDFWriter::Orientation const      m_eOrientation;
-        sal_Int32                   m_nPageObject;
-        std::vector<sal_Int32>      m_aStreamObjects;
-        sal_Int32                   m_nStreamLengthObject;
-        sal_uInt64                  m_nBeginStreamPos;
-        std::vector<sal_Int32>      m_aAnnotations;
-        std::vector<sal_Int32>      m_aMCIDParents;
-        PDFWriter::PageTransition   m_eTransition;
-        sal_uInt32                  m_nTransTime;
-
-        PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation );
-
-        void beginStream();
-        void endStream();
-        bool emit( sal_Int32 nParentPage );
-
-        // converts point from ref device coordinates to
-        // page coordinates and appends the point to the buffer
-        // if pOutPoint is set it will be updated to the emitted point
-        // (in PDF map mode, that is 10th of point)
-        void appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const;
-        // appends a B2DPoint without further transformation
-        void appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const;
-        // appends a rectangle
-        void appendRect( const tools::Rectangle& rRect, OStringBuffer& rBuffer ) const;
-        // converts a rectangle to 10th points page space
-        void convertRect( tools::Rectangle& rRect ) const;
-        // appends a polygon optionally closing it
-        void appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
-        // appends a polygon optionally closing it
-        void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const;
-        // appends a polypolygon optionally closing the subpaths
-        void appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
-        // appends a polypolygon optionally closing the subpaths
-        void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
-        // converts a length (either vertical or horizontal; this
-        // can be important if the source MapMode is not
-        // symmetrical) to page length and appends it to the buffer
-        // if pOutLength is set it will be updated to the emitted length
-        // (in PDF map mode, that is 10th of point)
-        void appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = nullptr ) const;
-        // the same for double values
-        void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32 nPrecision = 5 ) const;
-        // appends LineInfo
-        // returns false if too many dash array entry were created for
-        // the implementation limits of some PDF readers
-        bool appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const;
-        // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
-        void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
-
-        double getHeight() const { return m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight; }
-    };
-
-    friend struct PDFPage;
+    friend struct vcl::pdf::PDFPage;
 
     /// Contains information to emit a reference XObject.
     struct ReferenceXObjectEmit
