@@ -487,6 +487,39 @@ struct PDFStructureElementKid // for Kids entries
     PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
 };
 
+struct PDFStructureElement
+{
+    sal_Int32                                           m_nObject;
+    PDFWriter::StructElement                            m_eType;
+    OString                                        m_aAlias;
+    sal_Int32                                           m_nOwnElement; // index into structure vector
+    sal_Int32                                           m_nParentElement; // index into structure vector
+    sal_Int32                                           m_nFirstPageObject;
+    bool                                                m_bOpenMCSeq;
+    std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
+    std::list< PDFStructureElementKid >                 m_aKids;
+    std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
+                                                        m_aAttributes;
+    tools::Rectangle                                    m_aBBox;
+    OUString                                            m_aActualText;
+    OUString                                            m_aAltText;
+    css::lang::Locale                                   m_aLocale;
+
+    // m_aContents contains the element's marked content sequence
+    // as pairs of (page nr, MCID)
+
+    PDFStructureElement()
+            : m_nObject( 0 ),
+              m_eType( PDFWriter::NonStructElement ),
+              m_nOwnElement( -1 ),
+              m_nParentElement( -1 ),
+              m_nFirstPageObject( 0 ),
+              m_bOpenMCSeq( false )
+    {
+    }
+
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -495,39 +528,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFStructureElement
-    {
-        sal_Int32                                           m_nObject;
-        PDFWriter::StructElement                            m_eType;
-        OString                                        m_aAlias;
-        sal_Int32                                           m_nOwnElement; // index into structure vector
-        sal_Int32                                           m_nParentElement; // index into structure vector
-        sal_Int32                                           m_nFirstPageObject;
-        bool                                                m_bOpenMCSeq;
-        std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
-        std::list< PDFStructureElementKid >                 m_aKids;
-        std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
-                                                            m_aAttributes;
-        tools::Rectangle                                    m_aBBox;
-        OUString                                            m_aActualText;
-        OUString                                            m_aAltText;
-        css::lang::Locale                                   m_aLocale;
-
-        // m_aContents contains the element's marked content sequence
-        // as pairs of (page nr, MCID)
-
-        PDFStructureElement()
-                : m_nObject( 0 ),
-                  m_eType( PDFWriter::NonStructElement ),
-                  m_nOwnElement( -1 ),
-                  m_nParentElement( -1 ),
-                  m_nFirstPageObject( 0 ),
-                  m_bOpenMCSeq( false )
-        {
-        }
-
-    };
 
     struct PDFAddStream
     {
