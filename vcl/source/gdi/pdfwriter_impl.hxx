@@ -477,6 +477,16 @@ struct PDFStructureAttribute
     {}
 };
 
+struct PDFStructureElementKid // for Kids entries
+{
+    sal_Int32 const nObject;  // an object number if nMCID is -1,
+                        // else the page object relevant to MCID
+    sal_Int32 const nMCID;    // an MCID if >= 0
+
+    explicit PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
+    PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
+};
+
 }
 
 class PDFWriterImpl : public VirtualDevice
@@ -485,16 +495,6 @@ class PDFWriterImpl : public VirtualDevice
 
 public:
     friend struct vcl::pdf::PDFPage;
-
-    struct PDFStructureElementKid // for Kids entries
-    {
-        sal_Int32 const nObject;  // an object number if nMCID is -1,
-                            // else the page object relevant to MCID
-        sal_Int32 const nMCID;    // an MCID if >= 0
-
-        explicit PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
-        PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
-    };
 
     struct PDFStructureElement
     {
