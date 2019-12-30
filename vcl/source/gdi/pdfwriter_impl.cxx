@@ -566,7 +566,7 @@ public:
     void translate( double tx, double ty );
     void invert();
 
-    void append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuffer );
+    void append( PDFPage const & rPage, OStringBuffer& rBuffer );
 
     Point transform( const Point& rPoint ) const;
 };
@@ -670,7 +670,7 @@ void Matrix3::invert()
     set( fn );
 }
 
-void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuffer )
+void Matrix3::append( PDFPage const & rPage, OStringBuffer& rBuffer )
 {
     appendDouble( f[0], rBuffer );
     rBuffer.append( ' ' );
@@ -683,7 +683,7 @@ void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuff
     rPage.appendPoint( Point( static_cast<long>(f[4]), static_cast<long>(f[5]) ), rBuffer );
 }
 
-PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
+PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
         :
         m_pWriter( pWriter ),
         m_nPageWidth( nPageWidth ),
@@ -699,7 +699,7 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, doub
     m_nPageObject = m_pWriter->createObject();
 }
 
-void PDFWriterImpl::PDFPage::beginStream()
+void PDFPage::beginStream()
 {
     if (g_bDebugDisableCompression)
     {
@@ -731,7 +731,7 @@ void PDFWriterImpl::PDFPage::beginStream()
     m_pWriter->checkAndEnableStreamEncryption( m_aStreamObjects.back() );
 }
 
-void PDFWriterImpl::PDFPage::endStream()
+void PDFPage::endStream()
 {
     if (!g_bDebugDisableCompression)
         m_pWriter->endCompression();
@@ -756,7 +756,7 @@ void PDFWriterImpl::PDFPage::endStream()
     m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
+bool PDFPage::emit(sal_Int32 nParentObject )
 {
     // emit page object
     if( ! m_pWriter->updateObject( m_nPageObject ) )
@@ -917,7 +917,7 @@ static GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, Out
 }
 }
 
-void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const
+void PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer ) const
 {
     Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                m_pWriter->m_aMapMode,
@@ -935,7 +935,7 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
     appendFixedInt( nValue, rBuffer );
 }
 
-void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const
+void PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const
 {
     double fValue   = pixelToPoint(rPoint.getX());
 
@@ -945,7 +945,7 @@ void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, 
     appendDouble( fValue, rBuffer, nLog10Divisor );
 }
 
-void PDFWriterImpl::PDFPage::appendRect( const tools::Rectangle& rRect, OStringBuffer& rBuffer ) const
+void PDFPage::appendRect( const tools::Rectangle& rRect, OStringBuffer& rBuffer ) const
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
     rBuffer.append( ' ' );
@@ -955,7 +955,7 @@ void PDFWriterImpl::PDFPage::appendRect( const tools::Rectangle& rRect, OStringB
     rBuffer.append( " re" );
 }
 
-void PDFWriterImpl::PDFPage::convertRect( tools::Rectangle& rRect ) const
+void PDFPage::convertRect( tools::Rectangle& rRect ) const
 {
     Point aLL = lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
@@ -972,7 +972,7 @@ void PDFWriterImpl::PDFPage::convertRect( tools::Rectangle& rRect ) const
     rRect.SetBottom( rRect.Top() + aSize.Height() );
 }
 
-void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
+void PDFPage::appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
     sal_uInt16 nPoints = rPoly.GetSize();
     /*
@@ -1017,7 +1017,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OString
     }
 }
 
-void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const
+void PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer ) const
 {
     basegfx::B2DPolygon aPoly( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                             m_pWriter->m_aMapMode,
@@ -1092,20 +1092,20 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
     }
 }
 
-void PDFWriterImpl::PDFPage::appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const
+void PDFPage::appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const
 {
     sal_uInt16 nPolygons = rPolyPoly.Count();
     for( sal_uInt16 n = 0; n < nPolygons; n++ )
         appendPolygon( rPolyPoly[n], rBuffer );
 }
 
-void PDFWriterImpl::PDFPage::appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const
+void PDFPage::appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const
 {
     for(auto const& rPolygon : rPolyPoly)
         appendPolygon( rPolygon, rBuffer );
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
+void PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
 {
     sal_Int32 nValue = nLength;
     if ( nLength < 0 )
@@ -1124,7 +1124,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     appendFixedInt( nValue, rBuffer );
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32 nPrecision ) const
+void PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32 nPrecision ) const
 {
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
@@ -1134,7 +1134,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
     appendDouble( fLength, rBuffer, nPrecision );
 }
 
-bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
+bool PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer ) const
 {
     if(LineStyle::Dash == rInfo.GetStyle() && rInfo.GetDashLen() != rInfo.GetDotLen())
     {
@@ -1203,7 +1203,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
     return true;
 }
 
-void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer ) const
+void PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer ) const
 {
     if( nWidth <= 0 )
         return;
