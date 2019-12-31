@@ -28,11 +28,9 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <comphelper/sequence.hxx>
 
-using namespace com::sun::star;
+using namespace css;
 
-namespace drawinglayer
-{
-namespace primitive2d
+namespace drawinglayer::primitive2d
 {
 Primitive2DDecompositionVisitor::~Primitive2DDecompositionVisitor() {}
 
@@ -110,13 +108,7 @@ sal_Int64 SAL_CALL BasePrimitive2D::estimateUsage()
 {
     return 0; // for now ignore the objects themselves
 }
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-namespace primitive2d
-{
 void BufferedDecompositionPrimitive2D::create2DDecomposition(
     Primitive2DContainer& /*rContainer*/,
     const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -145,15 +137,9 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
 
     rVisitor.append(getBuffered2DDecomposition());
 }
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 // tooling
 
-namespace drawinglayer
-{
-namespace primitive2d
-{
 Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
 {
     const sal_uInt32 nSize(size());
@@ -454,7 +440,7 @@ OUString idToString(sal_uInt32 nId)
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }
 }
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

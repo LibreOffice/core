@@ -40,19 +40,12 @@
 #define ImplPrimitive2DIDBlock(TheClass, TheID)                                                    \
     sal_uInt32 TheClass::getPrimitive2DID() const { return TheID; }
 
-// predefines
-
-namespace drawinglayer
-{
-namespace geometry
+namespace drawinglayer::geometry
 {
 class ViewInformation2D;
 }
-}
 
-namespace drawinglayer
-{
-namespace primitive2d
+namespace drawinglayer::primitive2d
 {
 /// typedefs for basePrimitive2DImplBase, Primitive2DSequence and Primitive2DReference
 typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>
@@ -123,15 +116,7 @@ public:
     basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
     Primitive2DContainer maybeInvert(bool bInvert = false) const;
 };
-}
-}
 
-// basePrimitive2D class
-
-namespace drawinglayer
-{
-namespace primitive2d
-{
 /** BasePrimitive2D class
 
     Baseclass for all C++ implementations of css::graphic::XPrimitive2D
@@ -255,15 +240,7 @@ public:
     // XAccounting
     virtual sal_Int64 SAL_CALL estimateUsage() override;
 };
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-// BufferedDecompositionPrimitive2D class
-
-namespace drawinglayer
-{
-namespace primitive2d
-{
 /** BufferedDecompositionPrimitive2D class
 
     Baseclass for all C++ implementations of css::graphic::XPrimitive2D
@@ -333,15 +310,9 @@ public:
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
 };
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 // tooling
 
-namespace drawinglayer
-{
-namespace primitive2d
-{
 /// get B2DRange from a given Primitive2DReference
 basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(
     const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
@@ -354,8 +325,7 @@ bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DRefer
 
 OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
 
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 
