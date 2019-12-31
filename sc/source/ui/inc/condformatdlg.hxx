@@ -71,7 +71,6 @@ public:
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry&, void );
 
     DECL_LINK( TypeListHdl, weld::ComboBox&, void );
-    DECL_LINK( AfterTypeListHdl, void*, void );
     DECL_LINK( ColFormatTypeHdl, weld::ComboBox&, void );
     DECL_LINK( AfterColFormatTypeHdl, void*, void );
 };
