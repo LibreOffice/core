@@ -348,12 +348,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	configmgr \
 	ctl \
 	cui \
+	dba \
+	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
-		dba \
 		dbase \
 		dbmm \
-		dbaxml \
-		dbahsql) \
+		dbaxml) \
 	dbtools \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
@@ -1123,7 +1123,7 @@ $(eval $(call gb_Helper_register_mos,\
 	chart \
 	cnr \
 	cui \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
+	dba \
 	dkt \
 	editeng \
 	flt \
