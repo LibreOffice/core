@@ -135,7 +135,7 @@ GalleryBrowser1::GalleryBrowser1(
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
     mpThemes->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERYPROPS_GALTHEME));
 
-    for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
+    for( size_t i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
 
     ImplAdjustControls();
