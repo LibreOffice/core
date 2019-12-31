@@ -94,7 +94,9 @@ OUString byteStreamToOUString( CDOTransferable::ByteSequence_t& aByteStream )
     sal_Int32 nMemSize = aByteStream.getLength( );
 
     // if there is a trailing L"\0" subtract 1 from length
-    if ( 0 == aByteStream[ aByteStream.getLength( ) - 2 ] &&
+    // for unknown reason, the sequence may sometimes arrive empty
+    if ( aByteStream.getLength( ) > 1 &&
+         0 == aByteStream[ aByteStream.getLength( ) - 2 ] &&
          0 == aByteStream[ aByteStream.getLength( ) - 1 ] )
         nWChars = static_cast< sal_Int32 >( nMemSize / sizeof( sal_Unicode ) ) - 1;
     else
@@ -110,6 +112,8 @@ Any byteStreamToAny( CDOTransferable::ByteSequence_t& aByteStream, const Type& a
     if ( aRequestedDataType == CPPUTYPE_OUSTRING )
     {
         OUString str = byteStreamToOUString( aByteStream );
+        if (str.isEmpty())
+            throw RuntimeException();
         aAny <<= str;
     }
     else
