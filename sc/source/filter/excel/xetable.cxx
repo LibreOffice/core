@@ -1681,11 +1681,6 @@ void XclExpColinfo::WriteBody( XclExpStream& rStrm )
 
 void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
 {
-    // if last column is equal to last possible column, Excel adds one more
-    sal_uInt16 nLastXclCol = mnLastXclCol;
-    if( nLastXclCol == static_cast< sal_uInt16 >( rStrm.GetRoot().GetMaxPos().Col() ) )
-        ++nLastXclCol;
-
     const double nExcelColumnWidth = mnScWidth  / static_cast< double >( sc::TwipsToHMM( GetCharWidth() ) );
 
     // tdf#101363 In MS specification the output value is set with double precision after delimiter:
@@ -1703,7 +1698,7 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_customWidth,    ToPsz( mbCustomWidth ),
             XML_hidden,         ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
             XML_outlineLevel,   OString::number(mnOutlineLevel),
-            XML_max,            OString::number(nLastXclCol + 1),
+            XML_max,            OString::number(mnLastXclCol + 1),
             XML_min,            OString::number(mnFirstXclCol + 1),
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId(rStrm, maXFId.mnXFIndex),

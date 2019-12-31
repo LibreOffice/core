@@ -69,6 +69,7 @@
 #include <test/xmltesttools.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <comphelper/storagehelper.hxx>
@@ -230,6 +231,7 @@ public:
     void testXltxExport();
     void testRotatedImageODS();
     void testTdf128976();
+    void testTdf120502();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -361,6 +363,7 @@ public:
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
     CPPUNIT_TEST(testTdf128976);
+    CPPUNIT_TEST(testTdf120502);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4659,6 +4662,46 @@ void ScExportTest::testTdf128976()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(45), nColumn0Width);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf120502()
+{
+    // Create an empty worksheet; resize last column on its first sheet; export to XLSX, and check
+    // that the last exportd column number is correct
+    css::uno::Reference<css::frame::XDesktop2> xDesktop
+        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop);
+
+    css::uno::Sequence<css::beans::PropertyValue> args(1);
+    args[0].Name = "Hidden";
+    args[0].Value <<= true;
+
+    css::uno::Reference<css::lang::XComponent> xComponent
+        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xShell = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xShell);
+
+    ScDocument& rDoc = xShell->GetDocument();
+    const SCCOL nMaxCol = rDoc.MaxCol(); // 0-based
+
+    const auto nOldWidth = rDoc.GetColWidth(nMaxCol, 0);
+    rDoc.SetColWidth(nMaxCol, 0, nOldWidth + 100);
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xShell->DoClose();
+    const xmlDocPtr pSheet1
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet1);
+
+    // This was 1025 when nMaxCol+1 was 1024
+    assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
