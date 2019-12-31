@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 

@@ -143,8 +143,7 @@ OUString SAL_CALL SecurityEnvironment_NssImpl::getImplementationName() {
 
 /* XServiceInfo */
 sal_Bool SAL_CALL SecurityEnvironment_NssImpl::supportsService( const OUString& serviceName) {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    return comphelper::findValue(seqServiceNames, serviceName) != -1;
+    return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
