@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24d56628_b9f24d31",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-12-31T16:03:03Z",
+      "side": 1,
+      "message": "I would like more if Muhammet\u0027s opinion (expressed in comment to patch set 2) that size_t is better would be followed. Using sal_uInt64 here looks funny (although technically correct): as if we actually require that out theme count be no less than what only fits to 64 bits :-) compared to, e.g., 32 bits that we use to count textual data length (in OUString) ;-)\n\nUsing `auto` or `size_t` would make the size of variable an implementation detail.",
+      "range": {
+        "startLine": 138,
+        "startChar": 9,
+        "endLine": 138,
+        "endChar": 19
+      },
+      "revId": "9f7a4f14a310628d0649c31d22c8ba8493443511",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
