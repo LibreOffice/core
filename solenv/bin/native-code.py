@@ -66,6 +66,8 @@ core_factory_list = [
     ("libcuilo.a", "cui_component_getFactory"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
     ("libguesslanglo.a", "guesslang_component_getFactory"),
+    ("libbiblo.a", "bib_component_getFactory"),
+    ("libdbalo.a", "dba_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -134,7 +136,7 @@ core_constructor_list = [
     "com_sun_star_comp_SequenceOutputStreamService",
     "com_sun_star_comp_util_OfficeInstallationDirectories",
 # dbaccess/util/dba.component
-    ("com_sun_star_comp_dba_ORowSet_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+    "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
     ("com_sun_star_comp_forms_FormOperations_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_comp_forms_ODatabaseForm_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
@@ -277,6 +279,7 @@ core_constructor_list = [
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
+    "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
 # xmloff/util/xo.component
     "XMLMetaExportComponent_get_implementation",
     "XMLMetaImportComponent_get_implementation",
