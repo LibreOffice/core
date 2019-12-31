@@ -1775,8 +1775,8 @@ void HwpReader::makePageStyle()
          rendEl("style:properties");
          rendEl("style:footer-style");
 
-    /* Footnote style, but it fell in the dtd, the specification has been defined. REALKING */
-         rstartEl("style:footnote-layout", mxList.get());
+    /* Footnote style */
+         rstartEl("style:page-layout-properties", mxList.get());
 
          padd("style:distance-before-sep", sXML_CDATA,
               Double2Str(WTI(hwpinfo.splinetext)) + "inch");
@@ -1798,7 +1798,7 @@ void HwpReader::makePageStyle()
          mxList->clear();
          rendEl("style:footnote-sep");
 
-         rendEl("style:footnote-layout");
+         rendEl("style:page-layout-properties");
 
          rendEl("style:page-master");
      }
