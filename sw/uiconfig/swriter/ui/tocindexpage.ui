@@ -875,7 +875,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="useff">
-                            <property name="label" translatable="yes" context="tocindexpage|useff">Combine identical entries with p or _pp</property>
+                            <property name="label" translatable="yes" context="tocindexpage|useff">Combine identical entries with f. or _ff.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
