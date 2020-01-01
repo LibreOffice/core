@@ -22,25 +22,12 @@
 
 #include <i18nutil/paper.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
 enum class PaperSizeApp
 {
     Std,
     Draw
-};
-
-class SVX_DLLPUBLIC PaperSizeListBox final : public ListBox
-{
-public:
-    PaperSizeListBox( vcl::Window* pParent );
-
-    void FillPaperSizeEntries( PaperSizeApp eApp );
-    void SetSelection(  Paper eSize  );
-    Paper GetSelection() const;
-
-    Size GetOptimalSize() const override;
 };
 
 class SVX_DLLPUBLIC SvxPaperSizeListBox
