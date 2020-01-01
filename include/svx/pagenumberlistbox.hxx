@@ -22,18 +22,7 @@
 
 #include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
-
-class SVX_DLLPUBLIC PageNumberListBox final : public ListBox
-{
-public:
-    PageNumberListBox( vcl::Window* pParent );
-
-    void SetSelection( sal_uInt16 );
-
-    Size GetOptimalSize() const override;
-};
 
 class SVX_DLLPUBLIC SvxPageNumberListBox
 {

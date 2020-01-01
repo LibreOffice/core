@@ -20,59 +20,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/pagenumberlistbox.hxx>
 #include <editeng/numitem.hxx>
-#include <vcl/builderfactory.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <numberingtype.hrc>
-
-PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
-    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
-{
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
-    {
-        sal_uInt16 nData = RID_SVXSTRARY_NUMBERINGTYPE[i].second;
-        switch (nData)
-        {
-            // String list array is also used in Writer and contains strings
-            // for Bullet and Graphics, ignore those here.
-            case css::style::NumberingType::CHAR_SPECIAL:
-            case css::style::NumberingType::BITMAP:
-            case css::style::NumberingType::BITMAP | LINK_TOKEN:
-            break;
-            default:
-                {
-                    OUString aStr = SvxResId(RID_SVXSTRARY_NUMBERINGTYPE[i].first);
-                    sal_Int32 nPos = InsertEntry( aStr );
-                    SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nData)) );
-                }
-        }
-    }
-    SetDropDownLineCount(6);
-}
-
-VCL_BUILDER_FACTORY(PageNumberListBox);
-
-void PageNumberListBox::SetSelection( sal_uInt16 nPos )
-{
-    sal_Int32 nEntryCount = GetEntryCount();
-    sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
-
-    for (sal_Int32 i = 0; i < nEntryCount; ++i )
-    {
-        sal_uInt16 nTmp = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(GetEntryData(i)));
-
-        if ( nTmp == nPos )
-        {
-            nSelPos = i;
-            break;
-        }
-    }
-    SelectEntryPos( ( nSelPos != LISTBOX_ENTRY_NOTFOUND ) ? nSelPos : LISTBOX_ENTRY_NOTFOUND );
-}
-
-Size PageNumberListBox::GetOptimalSize() const
-{
-    return Size(150, ListBox::GetOptimalSize().Height());
-}
 
 SvxPageNumberListBox::SvxPageNumberListBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
