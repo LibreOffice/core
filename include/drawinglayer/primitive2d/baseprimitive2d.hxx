@@ -23,11 +23,11 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <cppuhelper/compbase.hxx>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <deque>
 
 /** defines for DeclPrimitive2DIDBlock and ImplPrimitive2DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
@@ -47,75 +47,8 @@ class ViewInformation2D;
 
 namespace drawinglayer::primitive2d
 {
-/// typedefs for basePrimitive2DImplBase, Primitive2DSequence and Primitive2DReference
 typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>
     BasePrimitive2DImplBase;
-typedef css::uno::Reference<css::graphic::XPrimitive2D> Primitive2DReference;
-typedef css::uno::Sequence<Primitive2DReference> Primitive2DSequence;
-
-class Primitive2DContainer;
-// Visitor class for walking a tree of Primitive2DReference in BasePrimitive2D::get2DDecomposition
-class DRAWINGLAYER_DLLPUBLIC Primitive2DDecompositionVisitor
-{
-public:
-    virtual void append(const Primitive2DReference&) = 0;
-    virtual void append(const Primitive2DContainer&) = 0;
-    virtual void append(Primitive2DContainer&&) = 0;
-    virtual ~Primitive2DDecompositionVisitor();
-};
-
-class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer
-    : public std::deque<Primitive2DReference>,
-      public Primitive2DDecompositionVisitor
-{
-public:
-    explicit Primitive2DContainer() {}
-    explicit Primitive2DContainer(size_type count)
-        : deque(count)
-    {
-    }
-    virtual ~Primitive2DContainer() override;
-    Primitive2DContainer(const Primitive2DContainer& other)
-        : deque(other)
-    {
-    }
-    Primitive2DContainer(Primitive2DContainer&& other) noexcept
-        : deque(std::move(other))
-    {
-    }
-    Primitive2DContainer(const std::deque<Primitive2DReference>& other)
-        : deque(other)
-    {
-    }
-    Primitive2DContainer(std::initializer_list<Primitive2DReference> init)
-        : deque(init)
-    {
-    }
-    template <class Iter>
-    Primitive2DContainer(Iter first, Iter last)
-        : deque(first, last)
-    {
-    }
-
-    virtual void append(const Primitive2DReference&) override;
-    virtual void append(const Primitive2DContainer& rSource) override;
-    virtual void append(Primitive2DContainer&& rSource) override;
-    void append(const Primitive2DSequence& rSource);
-    Primitive2DContainer& operator=(const Primitive2DContainer& r)
-    {
-        deque::operator=(r);
-        return *this;
-    }
-    Primitive2DContainer& operator=(Primitive2DContainer&& r) noexcept
-    {
-        deque::operator=(std::move(r));
-        return *this;
-    }
-    bool operator==(const Primitive2DContainer& rB) const;
-    bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
-    basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
-    Primitive2DContainer maybeInvert(bool bInvert = false) const;
-};
 
 /** BasePrimitive2D class
 
@@ -189,7 +122,7 @@ public:
     the parameter ViewInformation2D is the same as the last one. This is usually the case
     for view-independent primitives which are defined by not using ViewInformation2D
     in their get2DDecomposition/getB2DRange implementations.
- */
+*/
 class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D : protected cppu::BaseMutex,
                                                public BasePrimitive2DImplBase
 {
@@ -310,20 +243,6 @@ public:
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
 };
-
-// tooling
-
-/// get B2DRange from a given Primitive2DReference
-basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DReference(
-    const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
-
-/** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
-    and using compare operator
- */
-bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DReference& rA,
-                                                          const Primitive2DReference& rB);
-
-OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
 
 } // end of namespace drawinglayer::primitive2d
 
