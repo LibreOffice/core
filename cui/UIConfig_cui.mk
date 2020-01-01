@@ -28,7 +28,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/baselinksdialog \
 	cui/uiconfig/ui/bitmaptabpage \
-	cui/uiconfig/ui/blackorwhitelistentrydialog \
 	cui/uiconfig/ui/borderareatransparencydialog \
 	cui/uiconfig/ui/borderbackgrounddialog \
 	cui/uiconfig/ui/borderpage \
