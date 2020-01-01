@@ -191,6 +191,9 @@
                             </child>
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
+                              <attributes>
+                                <attribute name="surface">3</attribute>
+                              </attributes>
                             </child>
                           </object>
                           <packing>
@@ -411,6 +414,9 @@
                                 </child>
                                 <child>
                                   <object class="GtkCellRendererPixbuf" id="cellrenderertext2"/>
+                                  <attributes>
+                                    <attribute name="surface">3</attribute>
+                                  </attributes>
                                 </child>
                               </object>
                               <packing>
@@ -523,6 +529,9 @@
                                 </child>
                                 <child>
                                   <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
+                                  <attributes>
+                                    <attribute name="surface">3</attribute>
+                                  </attributes>
                                 </child>
                               </object>
                               <packing>
