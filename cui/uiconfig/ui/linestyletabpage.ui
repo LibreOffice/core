@@ -293,6 +293,9 @@
                             </child>
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                              <attributes>
+                                <attribute name="surface">3</attribute>
+                              </attributes>
                             </child>
                           </object>
                           <packing>
