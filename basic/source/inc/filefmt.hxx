@@ -41,11 +41,13 @@ class SvStream;
 // Version 12: aoo#64377 increase code size that basic can handle
 //             tdf#75973 support user defined types B_USERTYPES in password protected macros
 // Version 13: tdf#94617 store methods nStart information greater than sal_Int16 limit
+// Version 14: tdf#57113 store Unicode strings along with legacy 1-byte-encoded strings
 //
 
 #define B_LEGACYVERSION 0x00000011
 #define B_EXT_IMG_VERSION 0x00000012
-#define B_CURVERSION 0x00000013
+static constexpr sal_uInt32 B_USTRPOOL_VERSION = 0x00000014;
+static constexpr sal_uInt32 B_CURVERSION = 0x00000014;
 
 // The file contains either a module- or a library-record.
 // Those records contain further records. Every record's got

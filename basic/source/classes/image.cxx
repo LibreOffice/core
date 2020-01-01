@@ -90,6 +90,47 @@ static void SbiCloseRecord( SvStream& r, sal_uInt64 nOff )
     r.Seek( nPos );
 }
 
+static constexpr sal_uInt32 nUnicodeDataMagicNumber = 0x556E6920; // "Uni "
+
+static bool V14DataFollows(SvStream& r, sal_uInt32 nVer, sal_uInt64 nNext)
+{
+    // Check that version is OK and there's data for magic number + at least 2 bytes
+    const auto nPos = r.Tell();
+    bool bResult = nVer >= B_USTRPOOL_VERSION && nPos + 6 < nNext;
+    if (bResult)
+    {
+        sal_uInt32 nMagic = 0;
+        r.ReadUInt32(nMagic);
+        if (nMagic != nUnicodeDataMagicNumber)
+        {
+            r.Seek(nPos); // return
+            bResult = false;
+        }
+    }
+    return bResult;
+}
+
+static bool ReadV14String(SvStream& r, sal_uInt64 nNext, OUString& rStr)
+{
+    bool bResult = false;
+    const auto nPos = r.Tell();
+    OUString s = r.ReadUniOrByteString(RTL_TEXTENCODING_UTF8);
+    if (r.Tell() <= nNext)
+    {
+        rStr = s;
+        bResult = true;
+    }
+    else
+        r.Seek(nPos); // return
+
+    return bResult;
+}
+
+static bool MaybeReadV14String(SvStream& r, sal_uInt32 nVer, sal_uInt64 nNext, OUString& rStr)
+{
+    return V14DataFollows(r, nVer, nNext) && ReadV14String(r, nNext, rStr);
+}
+
 bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 {
 
@@ -128,21 +169,33 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         nNext += nLen + 8;
         if( r.GetError() == ERRCODE_NONE )
         {
+            // For fileformat version 14, the nLen includes the legacy data size, plus following
+            // pool of Unicode strings. Leading data is backward-compatible; Unicode strings repeat
+            // legacy 1-byte strings in the data, to enable reading it without data loss.
             switch( static_cast<FileOffset>( nSign ) )
             {
+                // For FileOffset::Name, FileOffset::Comment, FileOffset::Source
+                // the data layout is: 1-byte legacy string, then optional Unicode data magic number
+                // and utf-8 string.
             case FileOffset::Name:
                 aName = r.ReadUniOrByteString(eCharSet);
+                MaybeReadV14String(r, nVersion, nNext, aName);
                 break;
             case FileOffset::Comment:
                 aComment = r.ReadUniOrByteString(eCharSet );
+                MaybeReadV14String(r, nVersion, nNext, aComment);
                 break;
             case FileOffset::Source:
             {
                 aOUSource = r.ReadUniOrByteString(eCharSet);
+                MaybeReadV14String(r, nVersion, nNext, aOUSource);
                 break;
             }
             case FileOffset::ExtSource:
             {
+                // the data layout is: nCount legacy strings, then optional Unicode data magic
+                // number and nCount utf-8 strings.
+
                 //assuming an empty string with just the lead 32bit/16bit len indicator
                 const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
                 const sal_uInt64 nMaxStrings = r.remainingSize() / nMinStringSize;
@@ -155,6 +208,22 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 for( sal_uInt16 j = 0; j < nCount; ++j)
                 {
                     aOUSource += r.ReadUniOrByteString(eCharSet);
+                }
+                if (V14DataFollows(r, nVersion, nNext))
+                {
+                    OUString sV14Source;
+                    for (sal_uInt16 j = 0; j < nCount; ++j)
+                    {
+                        OUString s;
+                        if (!ReadV14String(r, nNext, s))
+                        {
+                            sV14Source.clear();
+                            break;
+                        }
+                        sV14Source += s;
+                    }
+                    if (!sV14Source.isEmpty())
+                        aOUSource = sV14Source;
                 }
                 break;
             }
@@ -189,6 +258,11 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 break;
             case FileOffset::StringPool:
             {
+                // the data layout is: nCount of 32-bit offsets into both legacy 1-byte char stream
+                // and resulting char buffer (1:1 correspondence assumed; 16 of 32 bits used);
+                // 32-bit length N of following 1-byte char stream (16 bits used); N bytes of 1-byte
+                // char stream; then optional stream of N sal_Unicode characters.
+
                 if( bBadVer ) break;
                 //assuming an empty string with just the lead 32bit len indicator
                 const sal_uInt64 nMinStringSize = 4;
@@ -211,13 +285,32 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     pStrings.reset(new sal_Unicode[ nLen ]);
                     nStringSize = static_cast<sal_uInt16>(nLen);
 
-                    std::unique_ptr<char[]> pByteStrings(new char[ nLen ]);
-                    r.ReadBytes(pByteStrings.get(), nStringSize);
-                    for( size_t j = 0; j < mvStringOffsets.size(); j++ )
+                    bool bV14DataRead = false;
+                    const auto nPos = r.Tell();
+                    if (nVersion >= B_USTRPOOL_VERSION && nPos + 3 * nLen + 4 <= nNext)
                     {
-                        sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[ j ]);
-                        OUString aStr( pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet );
-                        memcpy( pStrings.get() + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof( sal_Unicode ) );
+                        // skip legacy 1-byte string, and read UTF-16 stream directly
+                        r.SeekRel(nLen);
+                        if (V14DataFollows(r, nVersion, nNext))
+                        {
+                            OUString s = read_uInt16s_ToOUString(r, nLen);
+                            memcpy(pStrings.get(), s.getStr(),
+                                   (s.getLength() + 1) * sizeof(sal_Unicode));
+                            bV14DataRead = true;
+                        }
+                        else
+                            r.Seek(nPos); // return back to read legacy data
+                    }
+                    if (!bV14DataRead)
+                    {
+                        std::unique_ptr<char[]> pByteStrings(new char[nLen]);
+                        r.ReadBytes(pByteStrings.get(), nLen);
+                        for (size_t j = 0; j < mvStringOffsets.size(); j++)
+                        {
+                            sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[j]);
+                            OUString aStr(pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet);
+                            memcpy(pStrings.get() + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof(sal_Unicode));
+                        }
                     }
                 }
                 break;
