@@ -1,0 +1,42 @@
+---
+assumeFilename: slideshow/source/engine/slideshowimpl.cxx
+blacklist:
+    slideshow/source/inc/mouseeventhandler.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    slideshow/source/engine/opengl/Operation.hxx:
+    # Needed for licensing
+    - config_lgpl.h
+    # Wrapper for external lib
+    - glm/gtc/type_ptr.hpp
+    slideshow/source/engine/opengl/TransitionImpl.hxx:
+    # Needed for licensing
+    - config_lgpl.h
+    # Wrapper for external lib
+    - glm/gtc/type_ptr.hpp
+    slideshow/source/engine/opengl/Operation.cxx:
+    # Wrapper for external lib
+    - glm/gtc/matrix_transform.hpp
+    - glm/gtc/type_ptr.hpp
+    slideshow/source/engine/opengl/TransitionImpl.cxx:
+    # Wrapper for external lib
+    - glm/gtc/matrix_transform.hpp
+    - glm/gtc/type_ptr.hpp
+    slideshow/source/engine/smilfunctionparser.cxx:
+    # Boost wrapper is needed
+    - boost/spirit/include/classic_core.hpp
+    slideshow/source/engine/shapes/drawshape.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    slideshow/source/engine/shapes/viewappletshape.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    # Needed for direct member access
+    - basegfx/matrix/b2dhommatrix.hxx
+    slideshow/source/engine/shapes/mediashape.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    slideshow/source/engine/shapes/viewmediashape.cxx:
+    # Actually used
+    - com/sun/star/media/XPlayer.hpp
+    - com/sun/star/media/XPlayerWindow.hpp

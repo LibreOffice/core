@@ -20,16 +20,11 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYERMANAGER_HXX
 
-#include <cppcanvas/spritecanvas.hxx>
-
-#include <unoview.hxx>
 #include <unoviewcontainer.hxx>
 #include <attributableshape.hxx>
 #include "layer.hxx"
 #include <tools.hxx>
 
-#include <algorithm>
-#include <functional>
 #include <memory>
 #include <map>
 #include <unordered_map>

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_HSLCOLOR_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_HSLCOLOR_HXX
 
-#include <cppcanvas/color.hxx>
-
 
 /* Definition of HSLColor class */
 

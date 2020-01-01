@@ -20,7 +20,6 @@
 
 #include <com/sun/star/animations/Timing.hpp>
 
-#include <tools.hxx>
 #include "nodetools.hxx"
 
 

@@ -21,10 +21,7 @@
 #include <tools/diagnose_ex.h>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <sal/log.hxx>
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
+#include <cppcanvas/canvas.hxx>
 
 #include <functional>
 #include <algorithm>

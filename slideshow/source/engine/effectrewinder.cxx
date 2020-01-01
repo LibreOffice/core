@@ -21,11 +21,9 @@
 #include "effectrewinder.hxx"
 #include <eventqueue.hxx>
 #include <usereventqueue.hxx>
-#include <mouseeventhandler.hxx>
 #include <basecontainernode.hxx>
 #include <delayevent.hxx>
 
-#include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

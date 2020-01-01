@@ -21,7 +21,6 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_CURSORMANAGER_HXX
 
 #include <sal/types.h>
-#include <memory>
 
 
 /* Definition of CursorManager interface */

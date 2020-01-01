@@ -22,19 +22,13 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include <math.h>
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 
-#include <cppuhelper/exc_hlp.hxx>
-
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

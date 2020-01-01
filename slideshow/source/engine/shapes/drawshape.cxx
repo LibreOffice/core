@@ -19,13 +19,8 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <osl/diagnose.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
@@ -33,24 +28,13 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#include <rtl/math.hxx>
-
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 
-#include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-#include <tools/stream.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
-
 #include <comphelper/scopeguard.hxx>
-#include <canvas/canvastools.hxx>
 
-#include <cmath>
 #include <algorithm>
 #include <iterator>
 #include <functional>
-#include <limits>
 
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
@@ -58,12 +42,9 @@
 #include <wakeupevent.hxx>
 #include <subsettableshapemanager.hxx>
 #include "intrinsicanimationactivity.hxx"
-#include <slideshowexceptions.hxx>
 #include <tools.hxx>
 #include "gdimtftools.hxx"
 #include "drawinglayeranimation.hxx"
-
-#include <math.h>
 
 using namespace ::com::sun::star;
 

@@ -18,12 +18,11 @@
  */
 
 
-#include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
-#include <transitionfactory.hxx>
 #include "transitionfactorytab.hxx"
+#include <transitioninfo.hxx>
 #include <tools.hxx>
 
 #include <algorithm>

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_EXPRESSIONNODE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_EXPRESSIONNODE_HXX
 
-#include <memory>
-
 /* Definition of ExpressionNode interface */
 
 namespace slideshow

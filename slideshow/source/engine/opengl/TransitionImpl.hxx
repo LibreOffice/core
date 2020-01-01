@@ -29,7 +29,10 @@
 #define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 
 #include <config_lgpl.h>
+#include <epoxy/gl.h>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <sal/types.h>
 
 #include <limits>
 #include <memory>

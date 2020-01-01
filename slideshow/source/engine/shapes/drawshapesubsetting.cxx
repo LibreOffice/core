@@ -20,20 +20,15 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <rtl/math.hxx>
-
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <basegfx/numeric/ftools.hxx>
 
 #include "drawshapesubsetting.hxx"
-#include "drawshape.hxx"
+#include "gdimtftools.hxx"
 
 #include <algorithm>
-#include <functional>
-#include <limits>
 
 using namespace ::com::sun::star;
 

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITY_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITY_HXX
 
-#include <sal/types.h>
-
 #include <memory>
 
 #include "disposable.hxx"

@@ -20,10 +20,6 @@
 
 #include <expressionnodefactory.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-
-#include <functional>
 #include <algorithm>
 
 

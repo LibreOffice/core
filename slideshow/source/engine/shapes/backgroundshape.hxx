@@ -22,6 +22,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <memory>
+
 namespace com { namespace sun { namespace star { namespace drawing
 {
     class XDrawPage;

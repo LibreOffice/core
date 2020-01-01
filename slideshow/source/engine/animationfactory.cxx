@@ -30,8 +30,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -19,10 +19,6 @@
 
 
 #include <tools/diagnose_ex.h>
-#include <canvas/canvastools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/customsprite.hxx>

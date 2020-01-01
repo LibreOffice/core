@@ -26,15 +26,12 @@
 
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
-#include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
-#include <tools.hxx>
 #include <eventqueue.hxx>
 #include <eventmultiplexer.hxx>
 #include <listenercontainer.hxx>

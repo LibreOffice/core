@@ -19,9 +19,6 @@
 
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
-
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
@@ -30,12 +27,10 @@
 #include <delayevent.hxx>
 #include <usereventqueue.hxx>
 #include <cursormanager.hxx>
-#include <slideshowexceptions.hxx>
 
 #include <vector>
 #include <queue>
 #include <map>
-#include <functional>
 #include <algorithm>
 
 

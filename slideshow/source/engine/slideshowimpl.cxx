@@ -22,46 +22,27 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/exc_hlp.hxx>
 
-#include <comphelper/anytostring.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/storagehelper.hxx>
-
-#include <cppcanvas/spritecanvas.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/polypolygon.hxx>
 
 #include <tools/debug.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 
-#include <vcl/font.hxx>
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
@@ -90,7 +71,6 @@
 #include <slideview.hxx>
 #include <tools.hxx>
 #include <unoview.hxx>
-#include <slidebitmap.hxx>
 #include "rehearsetimingsactivity.hxx"
 #include "waitsymbol.hxx"
 #include "effectrewinder.hxx"
@@ -99,11 +79,7 @@
 
 #include <map>
 #include <vector>
-#include <iterator>
-#include <string>
 #include <algorithm>
-#include <stdio.h>
-#include <iostream>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;

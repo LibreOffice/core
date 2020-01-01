@@ -21,9 +21,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <osl/diagnose.h>
 

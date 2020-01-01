@@ -24,7 +24,6 @@
 #include <cppcanvas/bitmap.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <tools.hxx>

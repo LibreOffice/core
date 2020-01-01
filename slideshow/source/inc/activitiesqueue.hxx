@@ -23,7 +23,6 @@
 #include <deque>
 
 #include "activity.hxx"
-#include "unoviewcontainer.hxx"
 
 #include <canvas/elapsedtime.hxx>
 

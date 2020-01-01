@@ -18,15 +18,11 @@
  */
 
 
-#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include "gdimtftools.hxx"
 
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -34,16 +30,12 @@
 
 #include <comphelper/fileformat.h>
 
-#include <tools/stream.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/graph.hxx>
-
-#include <unotools/streamwrap.hxx>
 
 #include <tools.hxx>
 

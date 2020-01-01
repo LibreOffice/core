@@ -21,12 +21,9 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SLIDEANIMATIONS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <basegfx/vector/b2dvector.hxx>
 
-#include <event.hxx>
 #include <slideshowcontext.hxx>
-#include <subsettableshapemanager.hxx>
 #include <animationnode.hxx>
 
 namespace com { namespace sun { namespace star { namespace animations

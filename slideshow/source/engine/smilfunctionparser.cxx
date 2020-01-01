@@ -20,16 +20,12 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <rtl/math.hxx>
-
+#include <slideshowexceptions.hxx>
 #include <smilfunctionparser.hxx>
 #include <expressionnodefactory.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 
 // Makes parser a static resource,
 // we're synchronized externally.
@@ -38,7 +34,6 @@
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 
 #if defined(DBG_UTIL)
-#include <typeinfo>
 #define BOOST_SPIRIT_DEBUG
 #endif
 #include <boost/spirit/include/classic_core.hpp>

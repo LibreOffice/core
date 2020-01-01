@@ -20,11 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_TRANSITIONTOOLS_HXX
 
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#include <algorithm>
 
 
 namespace slideshow {

@@ -19,21 +19,17 @@
 
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
-
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/utils/canvastools.hxx>
 
-#include <cppcanvas/spritecanvas.hxx>
+#include <cppcanvas/canvas.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

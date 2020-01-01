@@ -20,10 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATEDSPRITE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATEDSPRITE_HXX
 
-#include <cppcanvas/customsprite.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 

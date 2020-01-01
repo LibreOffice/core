@@ -18,19 +18,15 @@
  */
 
 
-#include <cppuhelper/exc_hlp.hxx>
-
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-#include <sal/log.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <activity.hxx>
 #include <slideshowcontext.hxx>
 #include "userpaintoverlay.hxx"
 #include <mouseeventhandler.hxx>

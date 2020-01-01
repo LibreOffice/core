@@ -24,8 +24,6 @@
 #include <eventqueue.hxx>
 #include "animationaudionode.hxx"
 #include <delayevent.hxx>
-#include <tools.hxx>
-#include "nodetools.hxx"
 
 using namespace com::sun::star;
 

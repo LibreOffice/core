@@ -18,20 +18,11 @@
  */
 
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
 
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-
-#include <basegfx/numeric/ftools.hxx>
 #include <sal/log.hxx>
 
-#include <cmath>
 #include <algorithm>
-#include <functional>
-#include <limits>
 
 #include "backgroundshape.hxx"
 #include <slideshowexceptions.hxx>

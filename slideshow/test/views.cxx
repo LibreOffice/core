@@ -22,14 +22,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <cppcanvas/spritecanvas.hxx>
-
-#include <view.hxx>
 #include <unoview.hxx>
 #include <unoviewcontainer.hxx>
-#include <shape.hxx>
 #include "tests.hxx"
 
 namespace target = slideshow::internal;

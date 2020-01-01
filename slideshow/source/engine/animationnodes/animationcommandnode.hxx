@@ -22,7 +22,6 @@
 
 #include <basecontainernode.hxx>
 #include <iexternalmediashapebase.hxx>
-#include <soundplayer.hxx>
 #include <com/sun/star/animations/XCommand.hpp>
 
 namespace slideshow {

@@ -18,11 +18,8 @@
  */
 
 
-#include <canvas/canvastools.hxx>
-
 #include "appletshape.hxx"
 #include "externalshapebase.hxx"
-#include <vieweventhandler.hxx>
 #include "viewappletshape.hxx"
 #include <tools.hxx>
 

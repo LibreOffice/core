@@ -28,7 +28,6 @@
 
 #include <functional>
 #include <memory>
-#include <vector>
 
 namespace slideshow { namespace internal {
 

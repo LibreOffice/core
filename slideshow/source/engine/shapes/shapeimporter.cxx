@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/cvtgrf.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
-#include <unotools/streamwrap.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
@@ -29,27 +25,23 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/drawing/XLayerSupplier.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
-#include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
 #include "backgroundshape.hxx"
 #include "mediashape.hxx"
 #include "appletshape.hxx"
 #include <shapeimporter.hxx>
 #include <slideshowexceptions.hxx>
-#include "gdimtftools.hxx"
 #include <tools.hxx>
 #include <slideshowcontext.hxx>
+#include <unoviewcontainer.hxx>
 
 #include <memory>
 

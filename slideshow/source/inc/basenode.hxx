@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_BASENODE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_BASENODE_HXX
 
+#include <basegfx/vector/b2dvector.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.hxx>
 

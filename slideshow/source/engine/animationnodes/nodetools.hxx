@@ -20,12 +20,10 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_NODETOOLS_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_NODETOOLS_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include <shapemanager.hxx>
 #include <basenode.hxx>
-#include <doctreenode.hxx>
 #include <attributableshape.hxx>
 
 

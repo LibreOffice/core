@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
 
+#include <rtl/ustring.hxx>
+
 #include <memory>
 #include <vector>
 #include <utility>
