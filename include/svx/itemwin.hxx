@@ -112,6 +112,10 @@ public:
     void Fill( const XBitmapListRef   &pList );
     void Fill( const XPatternListRef  &pList );
 
+    static void Fill(weld::ComboBox&, const XHatchListRef &pList);
+    static void Fill(weld::ComboBox&, const XBitmapListRef &pList);
+    static void Fill(weld::ComboBox&, const XPatternListRef &pList);
+
 private:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;

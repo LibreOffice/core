@@ -370,15 +370,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     LayoutHdl_Impl( *m_xLayoutBox );
 
     //adjust numeration type of the page style
-    //Get the Position of the saved NumType
-    for (int i=0; i < m_xNumberFormatBox->get_count(); ++i)
-    {
-        if (eNumType == m_xNumberFormatBox->get_id(i).toInt32())
-        {
-            m_xNumberFormatBox->set_active(i);
-            break;
-        }
-    }
+    m_xNumberFormatBox->set_active_id(eNumType);
 
     m_xPaperTrayBox->clear();
     sal_uInt8 nPaperBin = PAPERBIN_PRINTER_SETTINGS;
@@ -689,10 +681,9 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     }
 
     //Get the NumType value
-    nPos = m_xNumberFormatBox->get_active();
-    SvxNumType nEntryData = static_cast<SvxNumType>(m_xNumberFormatBox->get_id(nPos).toInt32());
     if (m_xNumberFormatBox->get_value_changed_from_saved())
     {
+        SvxNumType nEntryData = m_xNumberFormatBox->get_active_id();
         aPage.SetNumType( nEntryData );
         bMod = true;
     }

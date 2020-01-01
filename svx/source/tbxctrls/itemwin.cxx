@@ -705,4 +705,80 @@ void SvxFillAttrBox::Fill( const XPatternListRef &pList )
     ListBox::SetUpdateMode(true);
 }
 
+void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
+{
+    if( !pList.is() )
+        return;
+
+    long nCount = pList->Count();
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    rBox.freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XHatchEntry* pEntry = pList->GetHatch(i);
+        const BitmapEx aBitmapEx = pList->GetUiBitmap( i );
+        if( !aBitmapEx.IsEmpty() )
+        {
+            const Size aBmpSize(aBitmapEx.GetSizePixel());
+            pVD->SetOutputSizePixel(aBmpSize, false);
+            pVD->DrawBitmapEx(Point(), aBitmapEx);
+            rBox.append("", pEntry->GetName(), *pVD);
+        }
+        else
+            rBox.append_text(pEntry->GetName());
+    }
+
+    rBox.thaw();
+}
+
+void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
+{
+    if( !pList.is() )
+        return;
+
+    long nCount = pList->Count();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    pVD->SetOutputSizePixel(aSize, false);
+    rBox.freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XBitmapEntry* pEntry = pList->GetBitmap( i );
+        BitmapEx aBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        formatBitmapExToSize(aBitmapEx, aSize);
+        pVD->DrawBitmapEx(Point(), aBitmapEx);
+        rBox.append("", pEntry->GetName(), *pVD);
+    }
+
+    rBox.thaw();
+}
+
+void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XPatternListRef &pList)
+{
+    if( !pList.is() )
+        return;
+
+    long nCount = pList->Count();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    pVD->SetOutputSizePixel(aSize, false);
+    rBox.freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XBitmapEntry* pEntry = pList->GetBitmap( i );
+        BitmapEx aBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        formatBitmapExToSize(aBitmapEx, aSize);
+        pVD->DrawBitmapEx(Point(), aBitmapEx);
+        rBox.append("", pEntry->GetName(), *pVD);
+    }
+
+    rBox.thaw();
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
