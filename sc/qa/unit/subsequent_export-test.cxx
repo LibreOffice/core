@@ -4667,7 +4667,7 @@ void ScExportTest::testTdf128976()
 void ScExportTest::testTdf120502()
 {
     // Create an empty worksheet; resize last column on its first sheet; export to XLSX, and check
-    // that the last exportd column number is correct
+    // that the last exported column number is correct
     css::uno::Reference<css::frame::XDesktop2> xDesktop
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop);
