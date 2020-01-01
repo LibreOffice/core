@@ -138,6 +138,7 @@
           <object class="GtkComboBoxText" id="marginLB">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -147,6 +148,7 @@
         <child>
           <object class="GtkLabel" id="customlabel">
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <property name="label" translatable="yes" context="pageformatpanel|customlabel">Custom</property>
           </object>
           <packing>

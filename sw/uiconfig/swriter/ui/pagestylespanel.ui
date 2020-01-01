@@ -34,7 +34,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
-        <property name="margin_right">12</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="border_width">6</property>
@@ -71,7 +70,8 @@
         <child>
           <object class="GtkComboBoxText" id="numberbox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -95,7 +95,7 @@
         <child>
           <object class="GtkComboBoxText" id="layoutbox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <items>
               <item translatable="yes" context="pagestylespanel|liststorePageLayout">Right and left</item>
@@ -126,7 +126,8 @@
         <child>
           <object class="GtkComboBoxText" id="columnbox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <items>
               <item translatable="yes" context="pagestylespanel|columnbox">1 Column</item>
               <item translatable="yes" context="pagestylespanel|columnbox">2 Columns</item>
@@ -144,6 +145,7 @@
           <object class="GtkComboBox" id="lbhatching">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="model">liststore4</property>
             <property name="entry_text_column">0</property>
             <property name="id_column">1</property>
@@ -169,6 +171,7 @@
           <object class="GtkComboBox" id="lbbitmap">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="model">liststore5</property>
             <property name="entry_text_column">0</property>
             <property name="id_column">1</property>
@@ -192,14 +195,14 @@
         </child>
         <child>
           <object class="GtkMenuButton" id="lbcolor">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="halign">start</property>
             <property name="valign">center</property>
+            <property name="hexpand">True</property>
             <property name="draw_indicator">True</property>
             <property name="label" translatable="no"></property>
-            <property name="width_request">150</property>
             <child>
               <placeholder/>
             </child>
@@ -210,15 +213,15 @@
           </packing>
         </child>
         <child>
-           <object class="GtkMenuButton" id="lbgradient">
+          <object class="GtkMenuButton" id="lbgradient">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="halign">start</property>
             <property name="valign">center</property>
+            <property name="hexpand">True</property>
             <property name="draw_indicator">True</property>
             <property name="label" translatable="no"></property>
-            <property name="width_request">150</property>
             <child>
               <placeholder/>
             </child>
@@ -231,7 +234,8 @@
         <child>
           <object class="GtkComboBoxText" id="bgselect">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -241,6 +245,7 @@
         <child>
           <object class="GtkLabel" id="customlabel">
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <property name="label" translatable="yes" context="pagestylespanel|customlabel">Custom</property>
           </object>
           <packing>
