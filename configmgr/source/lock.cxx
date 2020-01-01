@@ -25,8 +25,10 @@ namespace configmgr {
 
     osl::Mutex& theConfigLock()
     {
-        static osl::Mutex lock;
-        return lock;
+        // tdf#xxxx deliberately leak this because on Windows some configmgr objects are still alive
+        // at DLL exit.
+        static osl::Mutex* lock = new osl::Mutex;
+        return *lock;
     }
 
 }
