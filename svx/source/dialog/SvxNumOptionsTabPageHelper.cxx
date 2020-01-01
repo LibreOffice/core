@@ -35,60 +35,6 @@ Reference<XDefaultNumberingProvider> SvxNumOptionsTabPageHelper::GetNumberingPro
     return xRet;
 }
 
-void SvxNumOptionsTabPageHelper::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove )
-{
-    Reference<XDefaultNumberingProvider> xDefNum = GetNumberingProvider();
-    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
-
-    // Extended numbering schemes present in the resource but not offered by
-    // the i18n framework per configuration must be removed from the listbox.
-    // Do not remove a special entry matching nDoNotRemove.
-    const sal_uInt16 nDontRemove = SAL_MAX_UINT16;
-    ::std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
-    for (size_t i=0; i<aRemove.size(); ++i)
-    {
-        sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(
-                sal::static_int_cast< sal_Int32 >(i))));
-        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
-            aRemove[i] = nEntryData;
-    }
-    if(xInfo.is())
-    {
-        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        for(const sal_Int16 nCurrent : aTypes)
-        {
-            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
-            {
-                bool bInsert = true;
-                for(sal_Int32 nEntry = 0; nEntry < rFmtLB.GetEntryCount(); nEntry++)
-                {
-                    sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(nEntry)));
-                    if(nEntryData == static_cast<sal_uInt16>(nCurrent))
-                    {
-                        bInsert = false;
-                        aRemove[nEntry] = nDontRemove;
-                        break;
-                    }
-                }
-                if(bInsert)
-                {
-                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
-                    sal_Int32 nPos = rFmtLB.InsertEntry(aIdent);
-                    rFmtLB.SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(nCurrent)));
-                }
-            }
-        }
-    }
-    for (unsigned short i : aRemove)
-    {
-        if (i != nDontRemove)
-        {
-            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>(static_cast<sal_uLong>(i)));
-            rFmtLB.RemoveEntry( nPos);
-        }
-    }
-}
-
 void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uInt16 nDoNotRemove)
 {
     Reference<XDefaultNumberingProvider> xDefNum = GetNumberingProvider();
