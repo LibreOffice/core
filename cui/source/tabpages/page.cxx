@@ -436,7 +436,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xPaperSizeBox->clear();
 
     m_xPaperSizeBox->FillPaperSizeEntries( ( ePaperStart == PAPER_A3 ) ? PaperSizeApp::Std : PaperSizeApp::Draw );
-    m_xPaperSizeBox->SetSelection( ePaper );
+    m_xPaperSizeBox->set_active_id( ePaper );
 
     // application specific
 
@@ -627,7 +627,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    Paper ePaper = m_xPaperSizeBox->GetSelection();
+    Paper ePaper = m_xPaperSizeBox->get_active_id();
     bool bChecked = m_xLandscapeBtn->get_active();
 
     if ( PAPER_USER == ePaper )
@@ -819,7 +819,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
 {
-    Paper ePaper = m_xPaperSizeBox->GetSelection();
+    Paper ePaper = m_xPaperSizeBox->get_active_id();
 
     if ( ePaper != PAPER_USER )
     {
@@ -884,7 +884,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, weld::MetricSpinButton&, 
     }
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, eUnit );
-    m_xPaperSizeBox->SetSelection( ePaper );
+    m_xPaperSizeBox->set_active_id( ePaper );
     UpdateExample_Impl( true );
 
     RangeHdl_Impl();
@@ -1238,7 +1238,7 @@ DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     // Inquiry whether the page margins are beyond the printing area.
     // If not, ask user whether they shall be taken.
     // If not, stay on the TabPage.
-    Paper ePaper = m_xPaperSizeBox->GetSelection();
+    Paper ePaper = m_xPaperSizeBox->get_active_id();
 
     if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && IsMarginOutOfRange() )
     {

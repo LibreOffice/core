@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="SlideBackgroundPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -62,7 +73,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxFillTypeBox" id="fillstyle">
+          <object class="GtkComboBoxText" id="fillstyle">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
@@ -73,11 +84,18 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxColorListBox" id="fillattr">
+          <object class="GtkMenuButton" id="fillattr">
             <property name="width_request">150</property>
-            <property name="can_focus">False</property>
-            <property name="has_tooltip">True</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="valign">center</property>
             <property name="hexpand">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="label" translatable="no"></property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -130,7 +148,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="hexpand">True</property>
-            <property name="action_name">.uno:SelectBackground</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -138,11 +155,25 @@
           </packing>
         </child>
         <child>
-          <object class="svxlo-SvxFillAttrBox" id="fillattr1">
-            <property name="width_request">150</property>
+          <object class="GtkComboBox" id="fillattr1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
+            <property name="model">liststore4</property>
+            <property name="entry_text_column">0</property>
+            <property name="id_column">1</property>
+            <child>
+              <object class="GtkCellRendererText" id="cellrenderertext3"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+            <child>
+              <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+              <attributes>
+                <attribute name="surface">3</attribute>
+              </attributes>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -150,11 +181,18 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxColorListBox" id="fillattr2">
+          <object class="GtkMenuButton" id="fillattr2">
             <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="valign">center</property>
             <property name="hexpand">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="label" translatable="no"></property>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -178,7 +216,7 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-PaperSizeListBox" id="paperformat">
+          <object class="GtkComboBoxText" id="paperformat">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
@@ -214,7 +252,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="action_name">.uno:SlideMasterPage</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -267,6 +304,7 @@
         <child>
           <object class="GtkLabel" id="customlabel">
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <property name="label" translatable="yes" context="sidebarslidebackground|customlabel">Custom</property>
           </object>
           <packing>

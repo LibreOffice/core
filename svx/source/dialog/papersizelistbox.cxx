@@ -105,7 +105,7 @@ void SvxPaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
     }
 }
 
-void SvxPaperSizeListBox::SetSelection( Paper ePreselectPaper )
+void SvxPaperSizeListBox::set_active_id( Paper ePreselectPaper )
 {
     int nEntryCount = m_xControl->get_count();
     int nSelPos = -1;
@@ -128,7 +128,7 @@ void SvxPaperSizeListBox::SetSelection( Paper ePreselectPaper )
     m_xControl->set_active((nSelPos != -1) ? nSelPos : nUserPos);
 }
 
-Paper SvxPaperSizeListBox::GetSelection() const
+Paper SvxPaperSizeListBox::get_active_id() const
 {
     return static_cast<Paper>(m_xControl->get_active_id().toInt32());
 }
