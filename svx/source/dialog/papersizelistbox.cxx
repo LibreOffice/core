@@ -20,69 +20,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/papersizelistbox.hxx>
-#include <vcl/builderfactory.hxx>
 #include "page.hrc"
-
-PaperSizeListBox::PaperSizeListBox(vcl::Window* pParent)
-    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
-{
-    SetDropDownLineCount(6);
-}
-
-VCL_BUILDER_FACTORY(PaperSizeListBox);
-
-void PaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
-{
-    const std::pair<const char*, int>* pPaperAry = eApp == PaperSizeApp::Std ?
-        RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW;
-    sal_uInt32 nCnt = eApp == PaperSizeApp::Std ?
-        SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_STD) : SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_DRAW);
-
-    for ( sal_uInt32 i = 0; i < nCnt; ++i )
-    {
-        OUString aStr = SvxResId(pPaperAry[i].first);
-        Paper eSize = static_cast<Paper>(pPaperAry[i].second);
-        sal_Int32 nPos = InsertEntry( aStr );
-        SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uLong>(eSize)) );
-    }
-}
-
-void PaperSizeListBox::SetSelection( Paper ePreselectPaper )
-{
-    sal_Int32 nEntryCount = GetEntryCount();
-    sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
-    sal_Int32 nUserPos = LISTBOX_ENTRY_NOTFOUND;
-
-    for (sal_Int32 i = 0; i < nEntryCount; ++i )
-    {
-        Paper eTmp = static_cast<Paper>(reinterpret_cast<sal_uLong>(GetEntryData(i)));
-
-        if ( eTmp == ePreselectPaper )
-        {
-            nSelPos = i;
-            break;
-        }
-
-        if ( eTmp == PAPER_USER )
-           nUserPos = i;
-    }
-
-    // preselect current paper format - #115915#: ePaper might not be in aPaperSizeBox so use PAPER_USER instead
-    SelectEntryPos( ( nSelPos != LISTBOX_ENTRY_NOTFOUND ) ? nSelPos : nUserPos );
-}
-
-Paper PaperSizeListBox::GetSelection() const
-{
-    const sal_Int32 nPos = GetSelectedEntryPos();
-    Paper ePaper = static_cast<Paper>(reinterpret_cast<sal_uLong>(GetEntryData( nPos )));
-
-    return ePaper;
-}
-
-Size PaperSizeListBox::GetOptimalSize() const
-{
-    return Size(150, ListBox::GetOptimalSize().Height());
-}
 
 SvxPaperSizeListBox::SvxPaperSizeListBox(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
