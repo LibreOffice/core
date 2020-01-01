@@ -733,6 +733,7 @@ Do you still want to apply these settings?</property>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidget2">
+    <property name="ignore_hidden">True</property>
     <widgets>
       <widget name="comboPaperTray"/>
       <widget name="comboPageLayout"/>
