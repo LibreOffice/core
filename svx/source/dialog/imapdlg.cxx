@@ -425,7 +425,7 @@ bool SvxIMapDlg::DoSave()
     {
         const OUString    aFilter( aDlg.GetCurrentFilter() );
         OUString          aExt;
-        sal_uIntPtr       nFormat;
+        sal_Int64       nFormat;
 
         if ( aFilter == aBinFilter )
         {
