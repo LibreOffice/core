@@ -126,10 +126,6 @@
                         generic-name="Page Size ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
 
-    <glade-widget-class title="Page Numbering ListBox" name="svxcorelo-PageNumberListBox"
-                        generic-name="Page Numbering ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
                         generic-name="Sidebar ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar">

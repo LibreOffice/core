@@ -502,7 +502,6 @@ custom_widgets = [
     'IndexBox',
     'ManagedMenuButton',
     'OptionalBox',
-    'PageNumberListBox',
     'PaperSizeListBox',
     'PriorityHBox',
     'PriorityMergedHBox',
