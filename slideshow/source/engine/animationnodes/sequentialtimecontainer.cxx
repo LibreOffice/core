@@ -22,9 +22,6 @@
 #include <eventqueue.hxx>
 #include <usereventqueue.hxx>
 #include "sequentialtimecontainer.hxx"
-#include <tools.hxx>
-
-#include <algorithm>
 
 namespace slideshow {
 namespace internal {

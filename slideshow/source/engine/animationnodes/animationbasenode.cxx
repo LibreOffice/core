@@ -18,13 +18,10 @@
  */
 
 
-#include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/anytostring.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
-#include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "nodetools.hxx"

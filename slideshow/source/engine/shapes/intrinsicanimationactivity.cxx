@@ -20,10 +20,8 @@
 
 #include <tools/diagnose_ex.h>
 
-#include "drawshapesubsetting.hxx"
 #include <subsettableshapemanager.hxx>
 #include <eventqueue.hxx>
-#include <eventmultiplexer.hxx>
 #include "intrinsicanimationactivity.hxx"
 #include <intrinsicanimationeventhandler.hxx>
 

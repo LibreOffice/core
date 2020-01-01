@@ -20,12 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_EXTERNALSHAPEBASE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_EXTERNALSHAPEBASE_HXX
 
-#include <vector>
-
 #include <iexternalmediashapebase.hxx>
 #include <unoview.hxx>
-#include <subsettableshapemanager.hxx>
-#include <slideshowexceptions.hxx>
 #include <slideshowcontext.hxx>
 
 

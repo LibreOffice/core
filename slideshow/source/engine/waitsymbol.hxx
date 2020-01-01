@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_WAITSYMBOL_HXX
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <cppcanvas/customsprite.hxx>
+#include <cppcanvas/sprite.hxx>
 
 #include <vieweventhandler.hxx>
 #include <screenupdater.hxx>

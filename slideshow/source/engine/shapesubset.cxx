@@ -19,9 +19,6 @@
 
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
-
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <shapesubset.hxx>
 

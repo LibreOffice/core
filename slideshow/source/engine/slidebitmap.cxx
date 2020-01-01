@@ -20,12 +20,9 @@
 
 #include <tools/diagnose_ex.h>
 #include <slidebitmap.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

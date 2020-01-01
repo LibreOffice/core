@@ -21,7 +21,6 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWUPDATE_HXX
 
 #include "disposable.hxx"
-#include "view.hxx"
 #include <memory>
 
 /* Definition of ViewUpdate interface */

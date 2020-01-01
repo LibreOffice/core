@@ -28,8 +28,6 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/make_shared_from_uno.hxx>
 
 #include <cppcanvas/spritecanvas.hxx>
@@ -49,12 +47,13 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-#include <com/sun/star/presentation/XSlideShow.hpp>
+#include <com/sun/star/awt/XPaintListener.hpp>
+#include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 
 #include <memory>
 #include <vector>
-#include <iterator>
 #include <algorithm>
 
 using namespace com::sun::star;

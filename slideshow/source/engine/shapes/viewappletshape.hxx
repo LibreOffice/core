@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWAPPLETSHAPE_HXX
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 
 #include <memory>
 

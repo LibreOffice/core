@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
 
@@ -30,7 +29,6 @@
 
 #include <memory>
 #include <set>
-#include <vector>
 
 namespace basegfx {
     class B2DRange;

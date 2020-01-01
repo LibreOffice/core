@@ -43,6 +43,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include <unoview.hxx>
+#include <slideshowexceptions.hxx>
 #include <smilfunctionparser.hxx>
 #include <tools.hxx>
 

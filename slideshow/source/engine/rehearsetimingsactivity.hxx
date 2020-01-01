@@ -21,8 +21,12 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
 
 #include <activity.hxx>
+#include <activitiesqueue.hxx>
+#include <eventqueue.hxx>
+#include <vieweventhandler.hxx>
 
 #include <basegfx/range/b2drange.hxx>
+#include <vcl/font.hxx>
 
 #include <vector>
 #include <utility>

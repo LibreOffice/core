@@ -29,7 +29,6 @@
 #include <comphelper/random.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <vector>
 
 #include <cppcanvas/color.hxx>
 
@@ -39,9 +38,6 @@
 #include "hslcolor.hxx"
 
 #include <memory>
-#include <cstdlib>
-#include <string.h>
-#include <algorithm>
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;

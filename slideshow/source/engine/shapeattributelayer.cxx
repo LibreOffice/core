@@ -22,14 +22,10 @@
 #include <tools/diagnose_ex.h>
 #include <shapeattributelayer.hxx>
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <rtl/math.hxx>
 
 

@@ -22,6 +22,7 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <memory>
 #include <vcl/vclptr.hxx>

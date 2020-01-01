@@ -25,13 +25,6 @@
 #include "viewbackgroundshape.hxx"
 #include <tools.hxx>
 
-#include <rtl/math.hxx>
-
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

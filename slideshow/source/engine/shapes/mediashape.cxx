@@ -18,8 +18,6 @@
  */
 
 
-#include <canvas/canvastools.hxx>
-
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include "mediashape.hxx"

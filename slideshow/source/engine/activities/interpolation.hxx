@@ -22,6 +22,10 @@
 
 #include <basegfx/utils/lerp.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
+
+#include <rgbcolor.hxx>
+#include <hslcolor.hxx>
 
 namespace basegfx
 {

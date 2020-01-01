@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SHAPESUBSET_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_SHAPESUBSET_HXX
 
-#include "attributableshape.hxx"
 #include "subsettableshapemanager.hxx"
 #include "doctreenode.hxx"
 

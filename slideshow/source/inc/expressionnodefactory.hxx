@@ -22,8 +22,7 @@
 
 #include "expressionnode.hxx"
 
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/range/b2drectangle.hxx>
+#include <memory>
 
 
 /* Definition of ExpressionNodeFactory class */

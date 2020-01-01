@@ -20,28 +20,16 @@
 
 #include <osl/diagnose.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
-#include <canvas/canvastools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/numeric/ftools.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#include <com/sun/star/drawing/TextAnimationKind.hpp>
-
-#include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/anytostring.hxx>
 
 #include <slide.hxx>
 #include <slideshowcontext.hxx>
@@ -57,13 +45,8 @@
 #include "shapemanagerimpl.hxx"
 #include <usereventqueue.hxx>
 #include "userpaintoverlay.hxx"
-#include <event.hxx>
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
-
-#include <iterator>
-#include <functional>
-#include <iostream>
 
 using namespace ::com::sun::star;
 

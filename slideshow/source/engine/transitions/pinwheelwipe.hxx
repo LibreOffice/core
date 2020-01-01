@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PINWHEELWIPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PINWHEELWIPE_HXX
 
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include "parametricpolypolygon.hxx"
 
 

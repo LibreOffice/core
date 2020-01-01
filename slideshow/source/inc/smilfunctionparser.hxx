@@ -21,9 +21,10 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_SMILFUNCTIONPARSER_HXX
 
 #include "expressionnode.hxx"
-#include "slideshowexceptions.hxx"
 
 #include <basegfx/range/b2drectangle.hxx>
+
+#include <memory>
 
 
 /* Definition of SmilFunctionParser class */

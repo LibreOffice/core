@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 
-#include <osl/mutex.hxx>
 #include <algorithm>
+#include <memory>
 #include <vector>
 #include <iterator>
 

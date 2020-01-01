@@ -23,6 +23,7 @@
 #include <animatedsprite.hxx>
 
 #include <cppcanvas/canvas.hxx>
+#include <cppcanvas/customsprite.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <basegfx/vector/b2dvector.hxx>

@@ -24,7 +24,6 @@
 #include <activity.hxx>
 #include <slideshowcontext.hxx>
 #include "drawshape.hxx"
-#include <tools.hxx>
 
 /* Definition of IntrinsicAnimationActivity class */
 

@@ -23,14 +23,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <cppcanvas/spritecanvas.hxx>
-
-#include <view.hxx>
 #include <unoview.hxx>
 #include <unoviewcontainer.hxx>
-#include <shape.hxx>
 #include "tests.hxx"
 #include <../engine/slide/layermanager.hxx>
 #include <../engine/slide/layer.hxx>

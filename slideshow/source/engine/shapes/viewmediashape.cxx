@@ -21,48 +21,31 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <math.h>
-
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-
 #include <sal/log.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <canvas/canvastools.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/canvas.hxx>
 #include <avmedia/mediawindow.hxx>
-
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLContext.hxx>
-#endif
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/media/XPlayerWindow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include "viewmediashape.hxx"
-#include "mediashape.hxx"
 #include <tools.hxx>
 #include <unoview.hxx>
 

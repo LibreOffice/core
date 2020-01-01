@@ -25,12 +25,12 @@
 
 #include <attributableshape.hxx>
 #include <doctreenodesupplier.hxx>
+#include "drawshapesubsetting.hxx"
 #include "gdimtftools.hxx"
 #include "viewshape.hxx"
 #include <hyperlinkarea.hxx>
 
 #include <o3tl/optional.hxx>
-#include <set>
 #include <vector>
 
 class Graphic;

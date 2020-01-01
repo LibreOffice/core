@@ -23,8 +23,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <cppcanvas/spritecanvas.hxx>
-
 #include "combtransition.hxx"
 
 namespace slideshow {

@@ -20,10 +20,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <cppuhelper/exc_hlp.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -31,7 +27,6 @@
 
 #include <transitionfactory.hxx>
 #include "transitionfactorytab.hxx"
-#include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
 #include <animationfactory.hxx>
 #include "clippingfunctor.hxx"

@@ -23,7 +23,6 @@
 
 #include <basecontainernode.hxx>
 #include <activitiesfactory.hxx>
-#include <shapeattributelayer.hxx>
 #include <shapeattributelayerholder.hxx>
 #include <attributableshape.hxx>
 #include <shapesubset.hxx>

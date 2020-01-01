@@ -22,8 +22,6 @@
 
 #include "continuouskeytimeactivitybase.hxx"
 
-#include <algorithm>
-#include <iterator>
 #include <tuple>
 
 namespace slideshow

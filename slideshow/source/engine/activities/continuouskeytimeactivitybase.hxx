@@ -23,7 +23,6 @@
 #include "simplecontinuousactivitybase.hxx"
 
 #include <basegfx/utils/keystoplerp.hxx>
-#include <vector>
 
 
 namespace slideshow

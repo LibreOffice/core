@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_MOUSEEVENTHANDLER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_MOUSEEVENTHANDLER_HXX
 
+#include <sal/types.h>
+
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace awt

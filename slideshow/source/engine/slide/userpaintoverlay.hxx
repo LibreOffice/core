@@ -20,9 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_USERPAINTOVERLAY_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_USERPAINTOVERLAY_HXX
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <cppcanvas/canvasgraphic.hxx>
 
-#include <unoview.hxx>
 #include <rgbcolor.hxx>
 
 #include <memory>

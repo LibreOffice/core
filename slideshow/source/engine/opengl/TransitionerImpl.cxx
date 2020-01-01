@@ -27,8 +27,6 @@
  ************************************************************************/
 
 #include <sal/types.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <memory>
 
@@ -67,8 +65,6 @@
 #include <vcl/window.hxx>
 
 #include "TransitionImpl.hxx"
-
-#include <vcl/sysdata.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <chrono>

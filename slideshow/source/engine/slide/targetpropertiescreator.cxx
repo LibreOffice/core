@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>

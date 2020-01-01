@@ -21,25 +21,16 @@
 #include <sal/log.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/customsprite.hxx>
 
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "slidechangebase.hxx"
 #include <transitionfactory.hxx>
 #include "transitionfactorytab.hxx"
-#include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
-#include <animationfactory.hxx>
 #include "clippingfunctor.hxx"
 #include "combtransition.hxx"
 #include <tools.hxx>

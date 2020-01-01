@@ -18,9 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -28,13 +25,10 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b1drange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <cppcanvas/spritecanvas.hxx>
 
 #include "tests.hxx"
 #include <view.hxx>
-#include <unoview.hxx>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 
 #include <vector>
