@@ -215,11 +215,12 @@ public:
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
 {
-
 public:
-         FillTypeLB( vcl::Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+    FillTypeLB( vcl::Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
 
     void Fill();
+
+    static void Fill(weld::ComboBox& rListBox);
 };
 
 /************************************************************************/

@@ -40,7 +40,7 @@
 #include <svx/pagenumberlistbox.hxx>
 
 class List;
-class SvxColorListBox;
+class ColorListBox;
 namespace sw { namespace sidebar {
 
 class PageStylesPanel:
@@ -85,15 +85,15 @@ private:
     ::sfx2::sidebar::ControllerItem maBgBitmapControl;
     ::sfx2::sidebar::ControllerItem maBgFillStyleControl;
 
-    VclPtr<SvxColorListBox> mpBgColorLB;
-    VclPtr<SvxFillAttrBox>  mpBgHatchingLB;
-    VclPtr<SvxColorListBox> mpBgGradientLB;
-    VclPtr<SvxFillAttrBox>  mpBgBitmapLB;
-    VclPtr<ListBox>         mpLayoutSelectLB;
-    VclPtr<ListBox>         mpColumnCount;
-    VclPtr<PageNumberListBox> mpNumberSelectLB;
-    VclPtr<SvxFillTypeBox>  mpBgFillType;
-    VclPtr<FixedText>       mpCustomEntry;
+    std::unique_ptr<ColorListBox> mxBgColorLB;
+    std::unique_ptr<weld::ComboBox> mxBgHatchingLB;
+    std::unique_ptr<ColorListBox> mxBgGradientLB;
+    std::unique_ptr<weld::ComboBox> mxBgBitmapLB;
+    std::unique_ptr<weld::ComboBox> mxLayoutSelectLB;
+    std::unique_ptr<weld::ComboBox> mxColumnCount;
+    std::unique_ptr<SvxPageNumberListBox> mxNumberSelectLB;
+    std::unique_ptr<weld::ComboBox> mxBgFillType;
+    std::unique_ptr<weld::Label> mxCustomEntry;
     OUString aCustomEntry;
 
     void Initialize();
@@ -106,12 +106,12 @@ private:
 
     void ModifyFillColor();
 
-    DECL_LINK( ModifyColumnCountHdl, ListBox&, void );
-    DECL_LINK( ModifyNumberingHdl, ListBox&, void );
-    DECL_LINK( ModifyLayoutHdl, ListBox&, void );
-    DECL_LINK( ModifyFillStyleHdl, ListBox&, void );
-    DECL_LINK( ModifyFillColorHdl, ListBox&, void );
-    DECL_LINK( ModifyFillColorListHdl, SvxColorListBox&, void );
+    DECL_LINK( ModifyColumnCountHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyNumberingHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyLayoutHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyFillStyleHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyFillColorHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyFillColorListHdl, ColorListBox&, void );
 };
 
 } } //end of namespace sw::sidebar
