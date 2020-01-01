@@ -69,7 +69,6 @@ cui/ui/assigncomponentdialog.ui
 cui/ui/autocorrectdialog.ui
 cui/ui/backgroundpage.ui
 cui/ui/baselinksdialog.ui
-cui/ui/blackorwhitelistentrydialog.ui
 cui/ui/borderareatransparencydialog.ui
 cui/ui/borderbackgrounddialog.ui
 cui/ui/borderpage.ui
