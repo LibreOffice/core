@@ -90,6 +90,27 @@ static void SbiCloseRecord( SvStream& r, sal_uInt64 nOff )
     r.Seek( nPos );
 }
 
+static constexpr sal_uInt32 nUnicodeDataMagicNumber = 0x556E6920; // "Uni " BE
+
+static bool GetToUnicodePoolData(SvStream& r, sal_uInt64 nLen, sal_uInt64 nNext)
+{
+    const auto nPos = r.Tell();
+    // Check space for legacy data, magic number and Unicode data
+    bool bResult = nPos + nLen + sizeof(sal_uInt32) + nLen * sizeof(sal_Unicode) <= nNext;
+    if (bResult)
+    {
+        r.SeekRel(nLen); // Skip legacy data
+        sal_uInt32 nMagic = 0;
+        r.ReadUInt32(nMagic);
+        if (nMagic != nUnicodeDataMagicNumber)
+        {
+            r.Seek(nPos); // return
+            bResult = false;
+        }
+    }
+    return bResult;
+}
+
 bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 {
 
@@ -189,6 +210,11 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 break;
             case FileOffset::StringPool:
             {
+                // the data layout is: nCount of 32-bit offsets into both legacy 1-byte char stream
+                // and resulting char buffer (1:1 correspondence assumed; 16 of 32 bits used);
+                // 32-bit length N of following 1-byte char stream (16 bits used); N bytes of 1-byte
+                // char stream; then optional magic number and stream of N sal_Unicode characters.
+
                 if( bBadVer ) break;
                 //assuming an empty string with just the lead 32bit len indicator
                 const sal_uInt64 nMinStringSize = 4;
@@ -211,13 +237,21 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     pStrings.reset(new sal_Unicode[ nLen ]);
                     nStringSize = static_cast<sal_uInt16>(nLen);
 
-                    std::unique_ptr<char[]> pByteStrings(new char[ nLen ]);
-                    r.ReadBytes(pByteStrings.get(), nStringSize);
-                    for( size_t j = 0; j < mvStringOffsets.size(); j++ )
+                    if (GetToUnicodePoolData(r, nLen, nNext))
                     {
-                        sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[ j ]);
-                        OUString aStr( pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet );
-                        memcpy( pStrings.get() + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof( sal_Unicode ) );
+                        OUString s = read_uInt16s_ToOUString(r, nLen);
+                        memcpy(pStrings.get(), s.getStr(), s.getLength() * sizeof(sal_Unicode));
+                    }
+                    else
+                    {
+                        std::unique_ptr<char[]> pByteStrings(new char[nLen]);
+                        r.ReadBytes(pByteStrings.get(), nLen);
+                        for (size_t j = 0; j < mvStringOffsets.size(); j++)
+                        {
+                            sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[j]);
+                            OUString aStr(pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet);
+                            memcpy(pStrings.get() + nOff2, aStr.getStr(), (aStr.getLength() + 1) * sizeof(sal_Unicode));
+                        }
                     }
                 }
                 break;
@@ -435,8 +469,14 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         }
         r.WriteUInt32( nStringSize );
         r.WriteBytes(pByteStrings.get(), nStringSize);
-
         pByteStrings.reset();
+
+        // Now write magic number and store the same data in UTF-16; this is backward compatible:
+        // old readers will not read this data after having read legacy data, and will proceed
+        // straight to the end of the record. So no version restriction here.
+        r.WriteUInt32(nUnicodeDataMagicNumber);
+        write_uInt16s_FromOUString(r, OUString(pStrings.get(), nStringSize));
+
         SbiCloseRecord( r, nPos );
     }
     // User defined types
