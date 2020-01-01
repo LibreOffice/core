@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SVXNUMOPTIONSTABPAGEHELPER_HXX
 
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
@@ -44,7 +43,6 @@ public:
             Pass ::std::numeric_limits<sal_uInt16>::max() if there is no such
             restriction.
     */
-    static void GetI18nNumbering(ListBox& rFmtLB, sal_uInt16 nDoNotRemove);
     static void GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uInt16 nDoNotRemove);
 };
 
