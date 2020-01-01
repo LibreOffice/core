@@ -18,7 +18,7 @@
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 
 #include <memory>

@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/polygonprimitive2d \
     drawinglayer/source/primitive2d/polypolygonprimitive2d \
     drawinglayer/source/primitive2d/primitivetools2d \
+    drawinglayer/source/primitive2d/Primitive2DContainer \
     drawinglayer/source/primitive2d/sceneprimitive2d \
     drawinglayer/source/primitive2d/sdrdecompositiontools2d \
     drawinglayer/source/primitive2d/shadowprimitive2d \
@@ -116,6 +117,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/textlineprimitive2d \
     drawinglayer/source/primitive2d/textprimitive2d \
     drawinglayer/source/primitive2d/textstrikeoutprimitive2d \
+    drawinglayer/source/primitive2d/Tools \
     drawinglayer/source/primitive2d/transformprimitive2d \
     drawinglayer/source/primitive2d/transparenceprimitive2d \
     drawinglayer/source/primitive2d/unifiedtransparenceprimitive2d \

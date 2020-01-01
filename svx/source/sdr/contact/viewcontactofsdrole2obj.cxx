@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <drawinglayer/primitive2d/Tools.hxx>
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
 #include <sdr/contact/viewobjectcontactofsdrole2obj.hxx>
