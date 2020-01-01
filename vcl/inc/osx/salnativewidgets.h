@@ -20,42 +20,50 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
 #define INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
 
-// since 10.4 ... no metrics are returned, and we have to fix the values
-#define BUTTON_WIDTH 16
-#define BUTTON_HEIGHT 17
+#define TAB_HEIGHT 20             // height of tab header in pixels
+#define TAB_TEXT_MARGIN 12        // left/right margin of text within tab headers
+#define VCL_TAB_TEXT_SEPARATOR 2  // Space between two tabs required by VCL
 
-//standard height of the AHIG
-//tabs
-#define TAB_HEIGHT_NORMAL 20
+#define FOCUS_RING_WIDTH 4  // width of focus ring in pixels
 
-#define TAB_TEXT_OFFSET     12
-#define VCL_TAB_TEXT_OFFSET 2
+#define MEDIUM_PROGRESS_INDICATOR_HEIGHT 10  // height of medium progress indicator in pixels
+#define LARGE_PROGRESS_INDICATOR_HEIGHT 16   // height of large progress indicator in pixels
 
-//listboxes, comboboxes (they have the same dimensions)
-#define COMBOBOX_HEIGHT_NORMAL 20
-#define DROPDOWN_BUTTON_WIDTH 20
+#define PUSH_BUTTON_NORMAL_HEIGHT 21  // height of normal push button without focus ring in pixels
+#define PUSH_BUTTON_SMALL_HEIGHT 15   // height of small push button without focus ring in pixels
 
-//text edit
-#define TEXT_EDIT_HEIGHT_NORMAL 22
+#define RADIO_BUTTON_SMALL_SIZE 14     // width/height of small radio button without focus ring in pixels
+#define RADIO_BUTTON_TEXT_SEPARATOR 3  // space between radio button and following text in pixels
 
-//spin box
-#define SPIN_BUTTON_SPACE           2
-#define SPIN_BUTTON_WIDTH           13
-#define SPIN_UPPER_BUTTON_HEIGHT    11
-#define SPIN_LOWER_BUTTON_HEIGHT    10
+#define CHECKBOX_SMALL_SIZE 14     // width/heiht of checkbox without focus ring in pixels
+#define CHECKBOX_TEXT_SEPARATOR 3  // space between checkbox and following text in pixels
 
-// progress bar
-#define INTRO_PROGRESS_HEIGHT 9
+#define SLIDER_WIDTH 19   // width of slider in pixels
+#define SLIDER_HEIGHT 18  // height of slider in pixels
 
-// for some controls, like spinbuttons + spinboxes, or listboxes
-// we need it to adjust text position beside radio and check buttons
+#define EDITBOX_HEIGHT 21       // height of editbox without focus ring in pixels
+#define EDITBOX_BORDER_WIDTH 1  // width of editbox border in pixels
+#define EDITBOX_INSET_MARGIN 1  // width of left/right as well as top/bottom editbox margin in pixels
 
-#define TEXT_SEPARATOR 3
+#define COMBOBOX_HEIGHT 20        // height of combobox without focus ring in pixels
+#define COMBOBOX_BUTTON_WIDTH 18  // width of combobox button without focus ring in pixels
+#define COMBOBOX_BORDER_WIDTH 1   // width of combobox border in pixels
+#define COMBOBOX_TEXT_MARGIN 1    // left/right margin of text in pixels
 
-// extra border for focus ring
-#define FOCUS_RING_WIDTH 4
+#define LISTBOX_HEIGHT 20        // height of listbox without focus ring in pixels
+#define LISTBOX_BUTTON_WIDTH 18  // width of listbox button without focus ring in pixels
+#define LISTBOX_BORDER_WIDTH 1   // width of listbox border in pixels
+#define LISTBOX_TEXT_MARGIN 1    // left/right margin of text in pixels
 
-#define CLIP_FUZZ 1
+#define SPIN_BUTTON_WIDTH 13         // width of spin button without focus ring in pixels
+#define SPIN_UPPER_BUTTON_HEIGHT 11  // height of upper spin button without focus ring in pixels
+#define SPIN_LOWER_BUTTON_HEIGHT 11  // height of lower spin button without focus ring in pixels
+
+// FIXME: spinboxes are positioned one pixel shifted to the right by VCL. As positioning as well as size should be equal to
+// corresponing editboxes, comboboxes or listboxes, positioning of spinboxes should by equal too. Issue cannot be fixed within
+// native widget drawing code. As a workaround, an offset is considered for spinboxes to align spinboxes correctly.
+
+#define SPINBOX_OFFSET 1  // left offset for alignment with editboxes, comboboxes, and listboxes
 
 #endif // INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
 
