@@ -245,6 +245,8 @@ DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( const OUString& r
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CATEGORYNAME;
     else if (rField == "CELLREF")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLREF;
+    else if (rField == "PERCENTAGE")
+        return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_PERCENTAGE;
     else
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT;
 }
