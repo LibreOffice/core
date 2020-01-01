@@ -50,7 +50,7 @@
     </style:style>
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
   </office:automatic-styles>
   <office:body>
