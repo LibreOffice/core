@@ -45,9 +45,9 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
 {
     if ( eStyle == Style::DropDownButton )
-        m_pToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWNONLY | m_pToolbar->GetItemBits( m_nID ) );
+        m_xToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWNONLY | m_xToolbar->GetItemBits( m_nID ) );
     else // Style::ToggleDropDownButton
-        m_pToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
+        m_xToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWN | m_xToolbar->GetItemBits( m_nID ) );
 }
 
 ToggleButtonToolbarController::~ToggleButtonToolbarController()
@@ -94,10 +94,10 @@ uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPop
             aPopup->SetTipHelpText( sal_uInt16( i+1 ), m_aDropdownMenuList[i].mTipHelpText );
     }
 
-    m_pToolbar->SetItemDown( m_nID, true );
+    m_xToolbar->SetItemDown( m_nID, true );
     aPopup->SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
-    aPopup->Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
-    m_pToolbar->SetItemDown( m_nID, false );
+    aPopup->Execute( m_xToolbar, m_xToolbar->GetItemRect( m_nID ));
+    m_xToolbar->SetItemDown( m_nID, false );
 
     return xWindow;
 }

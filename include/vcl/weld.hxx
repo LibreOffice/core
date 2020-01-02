@@ -1973,6 +1973,12 @@ public:
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_item_label(const OString& rIdent) const = 0;
     virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) = 0;
+    virtual OUString get_item_tooltip_text(const OString& rIdent) const = 0;
+    virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) = 0;
+    virtual void set_item_image(const OString& rIdent,
+                                const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+        = 0;
+    virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) = 0;
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
@@ -1981,7 +1987,8 @@ public:
     virtual OString get_item_ident(int nIndex) const = 0;
     virtual void set_item_ident(int nIndex, const OString& rIdent) = 0;
     virtual void set_item_label(int nIndex, const OUString& rLabel) = 0;
-    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+    virtual void set_item_image(int nIndex,
+                                const css::uno::Reference<css::graphic::XGraphic>& rIcon)
         = 0;
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) = 0;
 

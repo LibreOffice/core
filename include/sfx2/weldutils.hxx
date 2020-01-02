@@ -38,13 +38,14 @@ private:
         ControllerContainer;
     ControllerContainer maControllers;
 
-    css::uno::Reference<css::frame::XToolbarController>
-    GetControllerForCommand(const OUString& rCommand) const;
-
 public:
     // fill in the label and icons for actions and dispatch the action on item click
     ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
                          const css::uno::Reference<css::frame::XFrame>& rFrame);
+
+    css::uno::Reference<css::frame::XToolbarController>
+    GetControllerForCommand(const OUString& rCommand) const;
+
     void dispose();
     ~ToolbarUnoDispatcher();
 };

@@ -1099,7 +1099,25 @@ public:
         m_xToolBox->SetItemText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rLabel);
     }
 
-    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
+    virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
+    {
+        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image(StockImage::Yes, rIconName));
+    }
+
+    virtual void set_item_image(const OString& rIdent, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
+    {
+        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image(rIcon));
+    }
+
+    virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) override
+    {
+        if (pDevice)
+            m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), createImage(*pDevice));
+        else
+            m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image());
+    }
+
+    virtual void set_item_image(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         m_xToolBox->SetItemImage(m_xToolBox->GetItemId(nIndex), Image(rIcon));
     }
@@ -1112,6 +1130,11 @@ public:
     virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) override
     {
         m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rTip);
+    }
+
+    virtual OUString get_item_tooltip_text(const OString& rIdent) const override
+    {
+        return m_xToolBox->GetQuickHelpText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
     }
 
     virtual vcl::ImageType get_icon_size() const override
