@@ -1131,6 +1131,10 @@ void Desktop::Exception(ExceptionCategory nCategory)
     // protect against recursive calls
     static bool bInException = false;
 
+#if HAVE_FEATURE_BREAKPAD
+    CrashReporter::removeExceptionHandler(); // disallow re-entry
+#endif
+
     SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
     if ( bInException )

@@ -36,12 +36,42 @@
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
+#include <locale>
+#include <codecvt>
 #endif
 
 osl::Mutex CrashReporter::maMutex;
-google_breakpad::ExceptionHandler* CrashReporter::mpExceptionHandler = nullptr;
+std::unique_ptr<google_breakpad::ExceptionHandler> CrashReporter::mpExceptionHandler;
 bool CrashReporter::mbInit = false;
 CrashReporter::vmaKeyValues CrashReporter::maKeyValues;
+
+
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
+{
+    CrashReporter::addKeyValue("DumpFile", OStringToOUString(descriptor.path(), RTL_TEXTENCODING_UTF8), CrashReporter::Write);
+    SAL_WARN("desktop", "minidump generated: " << descriptor.path());
+
+    return succeeded;
+}
+#elif defined WNT
+static bool dumpCallback(const wchar_t* path, const wchar_t* id,
+    void* /*context*/, EXCEPTION_POINTERS* /*exinfo*/,
+    MDRawAssertionInfo* /*assertion*/,
+    bool succeeded)
+{
+    // TODO: moggi: can we avoid this conversion
+#ifdef _MSC_VER
+#pragma warning (disable: 4996)
+#endif
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
+    std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
+    CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath.c_str(), RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
+    CrashReporter::addKeyValue("GDIHandles", OUString::number(::GetGuiResources(::GetCurrentProcess(), GR_GDIOBJECTS)), CrashReporter::Write);
+    SAL_WARN("desktop", "minidump generated: " << aPath);
+    return succeeded;
+}
+#endif
 
 
 void CrashReporter::writeToFile(std::ios_base::openmode Openmode)
@@ -183,10 +213,21 @@ bool CrashReporter::readSendConfig(std::string& response)
     return crashreport::readConfig(CrashReporter::getIniFileName(), &response);
 }
 
-void CrashReporter::storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler)
+void CrashReporter::installExceptionHandler()
 {
-    if(IsDumpEnable())
-        mpExceptionHandler = pExceptionHandler;
+    if (!IsDumpEnable())
+        return;
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    google_breakpad::MinidumpDescriptor descriptor("/tmp");
+    mpExceptionHandler = std::make_unique<google_breakpad::ExceptionHandler>(descriptor, nullptr, dumpCallback, nullptr, true, -1);
+#elif defined WNT
+    mpExceptionHandler = std::make_unique<google_breakpad::ExceptionHandler>(L".", nullptr, dumpCallback, nullptr, google_breakpad::ExceptionHandler::HANDLER_ALL);
+#endif
+}
+
+void CrashReporter::removeExceptionHandler()
+{
+    mpExceptionHandler.reset();
 }
 
 
