@@ -118,6 +118,7 @@
 #define UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX "CharPropHeightComplex"
 #define UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX "CharDiffHeightComplex"
 #define UNO_NAME_CHAR_ESCAPEMENT_HEIGHT "CharEscapementHeight"
+#define UNO_NAME_CHAR_TRANSPARENCE "CharTransparence"
 #define UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS "HideTabLeaderAndPageNumber"
 #define UNO_NAME_TAB_IN_TOC "TabInTOC"
 #define UNO_NAME_TOC_BOOKMARK "TOCBookmark"

@@ -824,6 +824,22 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
+{
+    // Test the CharTransparence text portion property.
+
+    // Create a new document.
+    loadURL("private:factory/swriter", nullptr);
+
+    // Set a custom transparency.
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    sal_Int16 nExpected = 42;
+    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nExpected));
+
+    // Get the transparency & verify.
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xParagraph, "CharTransparence"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
