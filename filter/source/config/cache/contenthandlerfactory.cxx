@@ -57,7 +57,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
 
-    auto & cache = TheFilterCache::get();
+    auto & cache = GetFilterCache();
 
     // search handler on cache
     CacheItem aHandler = cache.getItem(FilterCache::E_CONTENTHANDLER, sHandler);

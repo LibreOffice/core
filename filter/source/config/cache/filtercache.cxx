@@ -2213,6 +2213,12 @@ bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
     return false;
 }
 
+FilterCache& GetFilterCache()
+{
+    static FilterCache aCache;
+    return aCache;
+}
+
     } // namespace config
 } // namespace filter
 

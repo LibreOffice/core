@@ -55,7 +55,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
 
-    auto & cache = TheFilterCache::get();
+    auto & cache = GetFilterCache();
 
     // search loader on cache
     CacheItem aLoader = cache.getItem(m_eType, sLoader);
