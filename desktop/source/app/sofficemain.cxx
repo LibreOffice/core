@@ -42,22 +42,6 @@
 
 #if HAVE_FEATURE_BREAKPAD
 #include <desktop/crashreport.hxx>
-
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-#include <client/linux/handler/exception_handler.h>
-#elif defined WNT
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmicrosoft-enum-value"
-#endif
-#include <client/windows/handler/exception_handler.h>
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
-#include <locale>
-#include <codecvt>
-#endif
-
 #endif
 
 
@@ -70,50 +54,10 @@
 #  define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
 #endif
 
-#if HAVE_FEATURE_BREAKPAD
-
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
-{
-    CrashReporter::addKeyValue("DumpFile", OStringToOUString(descriptor.path(), RTL_TEXTENCODING_UTF8), CrashReporter::Write);
-    SAL_WARN("desktop", "minidump generated: " << descriptor.path());
-
-    return succeeded;
-}
-#elif defined WNT
-static bool dumpCallback(const wchar_t* path, const wchar_t* id,
-                            void* /*context*/, EXCEPTION_POINTERS* /*exinfo*/,
-                            MDRawAssertionInfo* /*assertion*/,
-                            bool succeeded)
-{
-    // TODO: moggi: can we avoid this conversion
-#ifdef _MSC_VER
-#pragma warning (disable: 4996)
-#endif
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
-    std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
-    CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath.c_str(), RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
-    CrashReporter::addKeyValue("GDIHandles", OUString::number(::GetGuiResources (::GetCurrentProcess(), GR_GDIOBJECTS)), CrashReporter::Write);
-    SAL_WARN("desktop", "minidump generated: " << aPath);
-    return succeeded;
-}
-#endif
-
-#endif
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if HAVE_FEATURE_BREAKPAD
-
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-    google_breakpad::MinidumpDescriptor descriptor("/tmp");
-    google_breakpad::ExceptionHandler eh(descriptor, nullptr, dumpCallback, nullptr, true, -1);
-
-    CrashReporter::storeExceptionHandler(&eh);
-#elif defined WNT
-    google_breakpad::ExceptionHandler eh(L".", nullptr, dumpCallback, nullptr, google_breakpad::ExceptionHandler::HANDLER_ALL);
-
-    CrashReporter::storeExceptionHandler(&eh);
-#endif
+    CrashReporter::installExceptionHandler();
 #endif
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS) && HAVE_FEATURE_OPENGL
