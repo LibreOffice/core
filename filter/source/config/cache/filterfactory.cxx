@@ -75,7 +75,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
 
-    auto & cache = TheFilterCache::get();
+    auto & cache = GetFilterCache();
 
     // search filter on cache
     CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
@@ -124,7 +124,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     std::vector<OUString> lUNOFilters;
     try
     {
-        lUNOFilters = TheFilterCache::get().getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
+        lUNOFilters = GetFilterCache().getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
