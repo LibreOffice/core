@@ -45,6 +45,11 @@ namespace com :: sun :: star :: util { class XURLTransformer; }
 
 class ToolBox;
 
+namespace weld
+{
+    class Toolbar;
+}
+
 namespace svt
 {
 
@@ -165,8 +170,9 @@ class SVT_DLLPUBLIC ToolboxController :
         // TODO remove
         const css::uno::Reference< css::awt::XWindow >& getParent() const { return m_xParentWindow;}
 
-        bool                                                      m_bInitialized : 1,
-                                                                  m_bDisposed : 1;
+        bool                                                      m_bInitialized,
+                                                                  m_bDisposed,
+                                                                  m_bSidebar;
         sal_uInt16                                                m_nToolBoxId;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
@@ -177,6 +183,7 @@ class SVT_DLLPUBLIC ToolboxController :
         css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
         css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;
         OUString                                                  m_sModuleName;
+        weld::Toolbar*                                            m_pToolbar;
 };
 
 }

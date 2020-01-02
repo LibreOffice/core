@@ -38,16 +38,16 @@ FixedTextToolbarController::FixedTextToolbarController(
     ToolBox* pToolbar, sal_uInt16 nID, const OUString& aCommand)
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, aCommand)
 {
-    m_pFixedTextControl = VclPtr<FixedText>::Create(m_pToolbar, WB_NOMULTILINE | WB_VCENTER
+    m_pFixedTextControl = VclPtr<FixedText>::Create(m_xToolbar, WB_NOMULTILINE | WB_VCENTER
                                                                     | WB_LEFT | WB_NOPOINTERFOCUS);
-    m_pToolbar->SetItemWindow(m_nID, m_pFixedTextControl);
-    m_pToolbar->SetItemBits(m_nID, ToolBoxItemBits::AUTOSIZE | m_pToolbar->GetItemBits(m_nID));
+    m_xToolbar->SetItemWindow(m_nID, m_pFixedTextControl);
+    m_xToolbar->SetItemBits(m_nID, ToolBoxItemBits::AUTOSIZE | m_xToolbar->GetItemBits(m_nID));
 }
 
 void SAL_CALL FixedTextToolbarController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
-    m_pToolbar->SetItemWindow(m_nID, nullptr);
+    m_xToolbar->SetItemWindow(m_nID, nullptr);
     m_pFixedTextControl.disposeAndClear();
     ComplexToolbarController::dispose();
 }

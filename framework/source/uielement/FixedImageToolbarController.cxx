@@ -42,8 +42,8 @@ FixedImageToolbarController::FixedImageToolbarController(
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, aCommand)
     , m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize())
 {
-    m_pFixedImageControl = VclPtr<FixedImage>::Create(m_pToolbar, 0);
-    m_pToolbar->SetItemWindow(m_nID, m_pFixedImageControl);
+    m_pFixedImageControl = VclPtr<FixedImage>::Create(m_xToolbar, 0);
+    m_xToolbar->SetItemWindow(m_nID, m_pFixedImageControl);
 
     bool bBigImages(SvtMiscOptions().AreCurrentSymbolsLarge());
 
@@ -59,7 +59,7 @@ void SAL_CALL FixedImageToolbarController::dispose()
     SolarMutexGuard aSolarMutexGuard;
     SvtMiscOptions().RemoveListenerLink(
         LINK(this, FixedImageToolbarController, MiscOptionsChanged));
-    m_pToolbar->SetItemWindow(m_nID, nullptr);
+    m_xToolbar->SetItemWindow(m_nID, nullptr);
     m_pFixedImageControl.disposeAndClear();
     ComplexToolbarController::dispose();
 }

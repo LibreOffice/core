@@ -124,7 +124,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( nullptr )
 {
-    m_pComboBox = VclPtr<ComboBoxControl>::Create( m_pToolbar, WB_DROPDOWN, this );
+    m_pComboBox = VclPtr<ComboBoxControl>::Create( m_xToolbar, WB_DROPDOWN, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -133,7 +133,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     ::Size aPixelSize = m_pComboBox->LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
 
     m_pComboBox->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
-    m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
+    m_xToolbar->SetItemWindow( m_nID, m_pComboBox );
 }
 
 ComboboxToolbarController::~ComboboxToolbarController()
@@ -144,7 +144,7 @@ void SAL_CALL ComboboxToolbarController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, nullptr );
+    m_xToolbar->SetItemWindow( m_nID, nullptr );
     m_pComboBox.disposeAndClear();
 
     ComplexToolbarController::dispose();

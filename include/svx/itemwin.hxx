@@ -113,6 +113,7 @@ public:
     void Fill( const XPatternListRef  &pList );
 
     static void Fill(weld::ComboBox&, const XHatchListRef &pList);
+    static void Fill(weld::ComboBox&, const XGradientListRef &pList);
     static void Fill(weld::ComboBox&, const XBitmapListRef &pList);
     static void Fill(weld::ComboBox&, const XPatternListRef &pList);
 

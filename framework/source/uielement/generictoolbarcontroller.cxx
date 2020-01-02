@@ -92,7 +92,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XComponentC
                                                     sal_uInt16                               nID,
                                                     const OUString&                          aCommand ) :
     svt::ToolboxController( rxContext, rFrame, aCommand )
-    ,   m_pToolbar( pToolbar )
+    ,   m_xToolbar( pToolbar )
     ,   m_nID( nID )
     ,   m_bEnumCommand( isEnumCommand( aCommand ))
     ,   m_bMadeInvisible( false )
@@ -112,7 +112,7 @@ void SAL_CALL GenericToolbarController::dispose()
 
     svt::ToolboxController::dispose();
 
-    m_pToolbar.clear();
+    m_xToolbar.clear();
     m_nID = 0;
 }
 
@@ -167,11 +167,11 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
     if ( m_bDisposed )
         return;
 
-    if ( m_pToolbar )
+    if ( m_xToolbar )
     {
-        m_pToolbar->EnableItem( m_nID, Event.IsEnabled );
+        m_xToolbar->EnableItem( m_nID, Event.IsEnabled );
 
-        ToolBoxItemBits nItemBits = m_pToolbar->GetItemBits( m_nID );
+        ToolBoxItemBits nItemBits = m_xToolbar->GetItemBits( m_nID );
         nItemBits &= ~ToolBoxItemBits::CHECKABLE;
         TriState eTri = TRISTATE_FALSE;
 
@@ -185,8 +185,8 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID );
-            m_pToolbar->CheckItem( m_nID, bValue );
+                m_xToolbar->ShowItem( m_nID );
+            m_xToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = TRISTATE_TRUE;
             nItemBits |= ToolBoxItemBits::CHECKABLE;
@@ -197,7 +197,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
             {
                 bValue = aStrValue == m_aEnumCommand;
 
-                m_pToolbar->CheckItem( m_nID, bValue );
+                m_xToolbar->CheckItem( m_nID, bValue );
                 if ( bValue )
                     eTri = TRISTATE_TRUE;
                 nItemBits |= ToolBoxItemBits::CHECKABLE;
@@ -217,24 +217,24 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                 {
                     aStrValue = FwkResId(STR_SAVECOPYDOC) + aStrValue.copy( 4 );
                 }
-                m_pToolbar->SetItemText( m_nID, aStrValue );
+                m_xToolbar->SetItemText( m_nID, aStrValue );
                 // tdf#124267 strip mnemonic from tooltip
-                m_pToolbar->SetQuickHelpText(m_nID, aStrValue.replaceFirst("~", ""));
+                m_xToolbar->SetQuickHelpText(m_nID, aStrValue.replaceFirst("~", ""));
             }
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID );
+                m_xToolbar->ShowItem( m_nID );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = TRISTATE_INDET;
             nItemBits |= ToolBoxItemBits::CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID );
+                m_xToolbar->ShowItem( m_nID );
         }
         else if ( Event.State >>= aItemVisibility )
         {
-            m_pToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
+            m_xToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
             m_bMadeInvisible = !aItemVisibility.bVisible;
         }
         else if ( Event.State >>= aControlCommand )
@@ -247,19 +247,19 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                     {
                         OUString aHelpText;
                         aControlCommand.Arguments[i].Value >>= aHelpText;
-                        m_pToolbar->SetQuickHelpText(m_nID, aHelpText);
+                        m_xToolbar->SetQuickHelpText(m_nID, aHelpText);
                         break;
                     }
                 }
             }
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID );
+                m_xToolbar->ShowItem( m_nID );
         }
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID );
+            m_xToolbar->ShowItem( m_nID );
 
-        m_pToolbar->SetItemState( m_nID, eTri );
-        m_pToolbar->SetItemBits( m_nID, nItemBits );
+        m_xToolbar->SetItemState( m_nID, eTri );
+        m_xToolbar->SetItemBits( m_nID, nItemBits );
     }
 }
 

@@ -116,7 +116,7 @@ DropdownToolbarController::DropdownToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pListBoxControl( nullptr )
 {
-    m_pListBoxControl = VclPtr<ListBoxControl>::Create( m_pToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );
+    m_pListBoxControl = VclPtr<ListBoxControl>::Create( m_xToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -125,7 +125,7 @@ DropdownToolbarController::DropdownToolbarController(
     ::Size aPixelSize = m_pListBoxControl->LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
 
     m_pListBoxControl->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
-    m_pToolbar->SetItemWindow( m_nID, m_pListBoxControl );
+    m_xToolbar->SetItemWindow( m_nID, m_pListBoxControl );
     m_pListBoxControl->SetDropDownLineCount( 5 );
 }
 
@@ -137,7 +137,7 @@ void SAL_CALL DropdownToolbarController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, nullptr );
+    m_xToolbar->SetItemWindow( m_nID, nullptr );
     m_pListBoxControl.disposeAndClear();
 
     ComplexToolbarController::dispose();

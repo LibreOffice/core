@@ -341,7 +341,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     batch->commit();
 }
 
-void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
+void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater)
 {
     mpBtnUpdater = pBtnUpdater;
 }
