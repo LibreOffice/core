@@ -164,20 +164,22 @@ private:
     OUString url_;
     Data const & data_;
     osl::Condition delay_;
+    std::shared_ptr<osl::Mutex> lock_;
 };
 
 Components::WriteThread::WriteThread(
     rtl::Reference< WriteThread > * reference, Components & components,
     OUString const & url, Data const & data):
     Thread("configmgrWriter"), reference_(reference), components_(components),
-    url_(url), data_(data)
+    url_(url), data_(data),
+    lock_( lock() )
 {
     assert(reference != nullptr);
 }
 
 void Components::WriteThread::execute() {
     delay_.wait(std::chrono::seconds(1)); // must not throw; result_error is harmless and ignored
-    osl::MutexGuard g(theConfigLock()); // must not throw
+    osl::MutexGuard g(*lock_); // must not throw
     try {
         try {
             writeModFile(components_, url_, data_);
@@ -292,7 +294,7 @@ void Components::writeModifications() {
 void Components::flushModifications() {
     rtl::Reference< WriteThread > thread;
     {
-        osl::MutexGuard g(theConfigLock());
+        osl::MutexGuard g(*lock_);
         thread = writeThread_;
     }
     if (thread.is()) {
@@ -459,6 +461,7 @@ Components::Components(
     modificationTarget_(ModificationTarget::None)
 {
     assert(context.is());
+    lock_ = lock();
     OUString conf(expand("${CONFIGURATION_LAYERS}"));
     int layer = 0;
     for (sal_Int32 i = 0;;) {
@@ -619,7 +622,7 @@ Components::~Components()
     if (bExitWasCalled)
     {
         // do not write, re-join threads
-        osl::MutexGuard g(theConfigLock());
+        osl::MutexGuard g(*lock_);
 
         if (writeThread_.is())
         {

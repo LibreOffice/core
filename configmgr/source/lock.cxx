@@ -19,15 +19,17 @@
 
 #include <sal/config.h>
 
+#include <osl/mutex.hxx>
+
 #include "lock.hxx"
 
 namespace configmgr {
 
-    osl::Mutex& theConfigLock()
-    {
-        static osl::Mutex lock;
-        return lock;
-    }
+std::shared_ptr<osl::Mutex> const & lock()
+{
+    static std::shared_ptr<osl::Mutex> theLock(new osl::Mutex);
+    return theLock;
+}
 
 }
 

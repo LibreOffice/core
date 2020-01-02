@@ -59,6 +59,7 @@ public:
         context_(context)
     {
         assert(context.is());
+        lock_ = lock();
     }
 
 private:
@@ -80,13 +81,14 @@ private:
         css::uno::Sequence< OUString > const & includedPaths,
         css::uno::Sequence< OUString > const & excludedPaths) override;
 
+    std::shared_ptr<osl::Mutex> lock_;
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
 void Service::insertExtensionXcsFile(
     sal_Bool shared, OUString const & fileUri)
 {
-    osl::MutexGuard g(theConfigLock());
+    osl::MutexGuard g(*lock_);
     Components::getSingleton(context_).insertExtensionXcsFile(shared, fileUri);
 }
 
@@ -95,7 +97,7 @@ void Service::insertExtensionXcuFile(
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(theConfigLock());
+        osl::MutexGuard g(*lock_);
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.insertExtensionXcuFile(shared, fileUri, &mods);
@@ -109,7 +111,7 @@ void Service::removeExtensionXcuFile(OUString const & fileUri)
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(theConfigLock());
+        osl::MutexGuard g(*lock_);
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.removeExtensionXcuFile(fileUri, &mods);
@@ -126,7 +128,7 @@ void Service::insertModificationXcuFile(
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(theConfigLock());
+        osl::MutexGuard g(*lock_);
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.insertModificationXcuFile(
