@@ -396,8 +396,10 @@ public:
     bool mbLOKParentNotifier;
 };
 
+namespace vcl
+{
 /// Sets up the buffer to have settings matching the window, and restores the original state in the dtor.
-class PaintBufferGuard
+class VCL_DLLPUBLIC PaintBufferGuard
 {
     ImplFrameData* mpFrameData;
     VclPtr<vcl::Window> m_pWindow;
@@ -415,6 +417,7 @@ public:
     /// Returns either the frame's buffer or the window, in case of no buffering.
     vcl::RenderContext* GetRenderContext();
 };
+}
 
 // helper methods
 
