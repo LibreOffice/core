@@ -21,7 +21,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
-#include <sfx2/templdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxsids.hrc>

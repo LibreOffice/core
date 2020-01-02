@@ -30,13 +30,10 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <comphelper/processfactory.hxx>
+#include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
@@ -51,10 +48,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/event.hxx>
 

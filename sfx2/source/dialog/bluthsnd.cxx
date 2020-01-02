@@ -7,10 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <stdio.h>
 

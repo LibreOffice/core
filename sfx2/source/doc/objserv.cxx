@@ -19,20 +19,14 @@
 
 #include <config_features.h>
 
-#include <sot/storage.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
-#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -55,27 +49,20 @@
 #include <sal/log.hxx>
 
 #include <comphelper/string.hxx>
-#include <basic/sbx.hxx>
+#include <basic/sbxcore.hxx>
 #include <basic/sberrors.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
-#include <svtools/asynclink.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <comphelper/fileformat.h>
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <tools/link.hxx>
 
 #include <sfx2/asyncfunc.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/event.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewsh.hxx>
@@ -86,14 +73,12 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <objshimp.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <versdlg.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/checkin.hxx>
@@ -102,19 +87,12 @@
 #include <sfx2/sfxsids.hrc>
 #include <SfxRedactionHelper.hxx>
 
-#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 
 #include <guisaveas.hxx>
 #include <saveastemplatedlg.hxx>
@@ -122,10 +100,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
-
-#include <svx/unoshape.hxx>
-#include <svx/xlineit0.hxx>
-#include <com/sun/star/util/Color.hpp>
 
 #include <autoredactdialog.hxx>
 

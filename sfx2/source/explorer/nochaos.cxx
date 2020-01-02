@@ -23,7 +23,6 @@
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <nochaos.hxx>
 #include <memory>
 

@@ -33,7 +33,6 @@
 #include <com/sun/star/rdf/RepositoryException.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
-#include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Repository.hpp>
 
@@ -57,9 +56,7 @@
 
 #include <vector>
 #include <set>
-#include <map>
 
-#include <unotools/ucbhelper.hxx>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 

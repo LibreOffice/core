@@ -26,7 +26,6 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
-#include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -34,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <framework/interaction.hxx>
 #include <osl/file.hxx>
-#include <rtl/ref.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <tools/diagnose_ex.h>

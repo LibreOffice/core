@@ -31,13 +31,10 @@
 #include <sfx2/app.hxx>
 #include <sfx2/mgetempl.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
 
-#include <sfx2/templdlg.hxx>
-#include <templdgi.hxx>
 #include <sfx2/strings.hrc>
 
 #include <svl/stritem.hxx>

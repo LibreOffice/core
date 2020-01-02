@@ -30,12 +30,10 @@
 #include <tools/diagnose_ex.h>
 #include <svl/macitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/evntconf.hxx>
 #include <unotools/eventcfg.hxx>
 #include <sal/log.hxx>
 
-#include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
@@ -43,8 +41,6 @@
 
 #include <sfx2/app.hxx>
 
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>
 #include <macroloader.hxx>

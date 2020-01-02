@@ -21,8 +21,6 @@
 #include <ctime>
 #endif
 
-#include <string>
-
 #include <unotools/viewoptions.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -35,9 +33,6 @@
 #include <splitwin.hxx>
 #include <workwin.hxx>
 #include <sfx2/dockwin.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include <memory>
 #include <vector>

@@ -9,26 +9,14 @@
 
 #include <autoredactdialog.hxx>
 
-#include <preview.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <svl/eitem.hxx>
-#include <svl/itemset.hxx>
-#include <svtools/ehdl.hxx>
-#include <svtools/sfxecode.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
-#include <tools/debug.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/viewoptions.hxx>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

@@ -24,27 +24,17 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/file.hxx>
-#include <osl/thread.hxx>
 #include <rtl/ustring.hxx>
 
-#include <svl/itemset.hxx>
-#include <svl/urihelper.hxx>
-#include <svtools/asynclink.hxx>
 #include <svtools/inettbc.hxx>
 
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfxtypes.hxx>
-#include <helper.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
