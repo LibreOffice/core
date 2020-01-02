@@ -114,6 +114,10 @@ static void CheckRange( SwCursor* pCurrentCursor )
 
 // SwCursorShell
 
+/**
+ * Add a copy of current cursor, append it after current, and collapse current cursor.
+ * @return - Returns a newly created copy of current cursor.
+ */
 SwPaM * SwCursorShell::CreateCursor()
 {
     // don't create new Cursor with active table Selection
@@ -126,6 +130,8 @@ SwPaM * SwCursorShell::CreateCursor()
     // Hide PaM logically, to avoid undoing the inverting from
     // copied PaM (#i75172#)
     pNew->swapContent(*m_pCurrentCursor);
+
+    m_pCurrentCursor->DeleteMark();
 
     UpdateCursor( SwCursorShell::SCROLLWIN );
     return pNew;
@@ -3482,11 +3488,6 @@ void SwCursorShell::SetSelection( const SwPaM& rCursor )
     StartAction();
     SwPaM* pCursor = GetCursor();
     *pCursor->GetPoint() = *rCursor.GetPoint();
-    if(rCursor.HasMark())
-    {
-        pCursor->SetMark();
-        *pCursor->GetMark() = *rCursor.GetMark();
-    }
     if(rCursor.GetNext() != &rCursor)
     {
         const SwPaM *_pStartCursor = rCursor.GetNext();
@@ -3500,6 +3501,13 @@ void SwCursorShell::SetSelection( const SwPaM& rCursor )
                 *pCurrentCursor->GetMark() = *_pStartCursor->GetMark();
             }
         } while( (_pStartCursor = _pStartCursor->GetNext()) != &rCursor );
+    }
+    // CreateCursor() adds a copy of current cursor after current, and then deletes mark of current
+    // cursor; therefore set current cursor's mark only after creating all other cursors
+    if (rCursor.HasMark())
+    {
+        pCursor->SetMark();
+        *pCursor->GetMark() = *rCursor.GetMark();
     }
     EndAction();
 }

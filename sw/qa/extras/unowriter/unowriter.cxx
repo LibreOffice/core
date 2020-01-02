@@ -793,7 +793,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     loadURL("private:factory/swriter", nullptr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, css::uno::UNO_QUERY_THROW);
     auto xSimpleText = xTextDocument->getText();
-    xSimpleText->insertString(xSimpleText->getStart(), "abc abc abc", false);
+    xSimpleText->insertString(xSimpleText->getStart(), "Abc aBc abC", false);
 
     // Create a search descriptor and find all occurencies of search string
     css::uno::Reference<css::util::XSearchable> xSearchable(mxComponent, css::uno::UNO_QUERY_THROW);
@@ -802,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     xSearchDescriptor->setPropertyValue("SearchCaseSensitive", css::uno::Any(false));
     xSearchDescriptor->setPropertyValue("SearchBackwards", css::uno::Any(true));
     xSearchDescriptor->setPropertyValue("SearchRegularExpression", css::uno::Any(false));
-    xSearchDescriptor->setSearchString("Abc");
+    xSearchDescriptor->setSearchString("abc");
     auto xSearchResult = xSearchable->findAll(xSearchDescriptor);
 
     // Select them all
@@ -812,16 +812,16 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     xSelectionSupplier->select(css::uno::Any(xSearchResult));
     css::uno::Reference<css::container::XIndexAccess> xSelection(xSelectionSupplier->getSelection(),
                                                                  css::uno::UNO_QUERY_THROW);
-    // Now check that they all are selected.
+    // Now check that they all are selected in the reverse order ("SearchBackwards").
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSelection->getCount());
-    for (sal_Int32 i = 0; i < xSelection->getCount(); ++i)
-    {
-        css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(i),
-                                                              css::uno::UNO_QUERY_THROW);
-        // For i=0, result was empty (cursor was put before the last occurence without selection)
-        const OString sComment = "i=" + OString::number(i);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sComment.getStr(), OUString("abc"), xTextRange->getString());
-    }
+    css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
+                                                          css::uno::UNO_QUERY_THROW);
+    // For #0, result was empty (cursor was put before the last occurence without selection)
+    CPPUNIT_ASSERT_EQUAL(OUString("abC"), xTextRange->getString());
+    xTextRange.set(xSelection->getByIndex(1), css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("aBc"), xTextRange->getString());
+    xTextRange.set(xSelection->getByIndex(2), css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Abc"), xTextRange->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
