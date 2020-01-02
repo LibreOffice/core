@@ -431,8 +431,6 @@ SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
     Show();
 }
 
-VCL_BUILDER_FACTORY(SvxFillTypeBox)
-
 bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
     MouseNotifyEvent nType = rNEvt.GetType();
