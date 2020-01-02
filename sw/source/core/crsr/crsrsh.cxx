@@ -127,8 +127,6 @@ SwPaM * SwCursorShell::CreateCursor()
     // copied PaM (#i75172#)
     pNew->swapContent(*m_pCurrentCursor);
 
-    m_pCurrentCursor->DeleteMark();
-
     UpdateCursor( SwCursorShell::SCROLLWIN );
     return pNew;
 }
