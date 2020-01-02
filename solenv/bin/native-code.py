@@ -515,7 +515,6 @@ custom_widgets = [
     'SvxCharViewControl',
     'SvxColorListBox',
     'SvxColorValueSet',
-    'SvxFillAttrBox',
     'SvxFillTypeBox',
     'SvxLightCtl3D',
     'SvxRelativeField',
