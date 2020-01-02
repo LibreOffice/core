@@ -205,6 +205,24 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
         @since LibreOffice 6.3
     */
     void setParentWindow([in] ::com::sun::star::awt::XWindow xParentWindow);
+
+    /** signs the content of the Scripting including macros and basic dialogs with the provided certificate.
+
+        <p>The rest of document content will not be signed.</p>
+
+        @since LibreOffice 6.5
+    */
+    boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
+                                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                                [in] ::com::sun::star::io::XStream xStream);
+
+    /** signs the full Package, which means everything in the storage except the content of META-INF with the provided certificate.
+
+        @since LibreOffice 6.5
+    */
+    boolean signPackageWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
+                                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                                [in] ::com::sun::star::io::XStream xStream);
 };
 
 } ; } ; } ; } ;

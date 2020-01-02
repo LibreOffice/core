@@ -101,7 +101,12 @@ private:
     chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction,
                            const CertificateKind certificateKind=CertificateKind_NONE);
 
-public:
+    bool signWithCertificateImpl(
+        css::uno::Reference<css::security::XCertificate> const& xCertificate,
+        css::uno::Reference<css::embed::XStorage> const& xStorage,
+        css::uno::Reference<css::io::XStream> const& xStream, DocumentSignatureMode eMode);
+
+ public:
     explicit DocumentDigitalSignatures(
         const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
 
@@ -183,6 +188,16 @@ public:
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
                             css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const & xStream) override;
+
+    sal_Bool SAL_CALL signPackageWithCertificate(
+                            css::uno::Reference<css::security::XCertificate> const& xCertificate,
+                            css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
+                            css::uno::Reference<css::io::XStream> const& xStream) override;
+
+    sal_Bool SAL_CALL signScriptingContentWithCertificate(
+                            css::uno::Reference<css::security::XCertificate> const& xCertificate,
+                            css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
+                            css::uno::Reference<css::io::XStream> const& xStream) override;
 
     void SAL_CALL setParentWindow(const css::uno::Reference<css::awt::XWindow>& rParentwindow) override
     {
@@ -764,7 +779,35 @@ sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
             css::uno::Reference<css::embed::XStorage> const & xStorage,
             css::uno::Reference<css::io::XStream> const & xStream)
 {
-    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Content);
+    return signWithCertificateImpl(xCertificate, xStorage, xStream, DocumentSignatureMode::Content);
+}
+
+sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(
+    css::uno::Reference<css::security::XCertificate> const& xCertificate,
+    css::uno::Reference<css::embed::XStorage> const& xStorage,
+    css::uno::Reference<css::io::XStream> const& xStream)
+{
+    return signWithCertificateImpl(xCertificate, xStorage, xStream, DocumentSignatureMode::Package);
+}
+
+sal_Bool DocumentDigitalSignatures::signScriptingContentWithCertificate(
+    css::uno::Reference<css::security::XCertificate> const& xCertificate,
+    css::uno::Reference<css::embed::XStorage> const& xStorage,
+    css::uno::Reference<css::io::XStream> const& xStream)
+{
+    return signWithCertificateImpl(xCertificate, xStorage, xStream, DocumentSignatureMode::Macros);
+}
+
+bool DocumentDigitalSignatures::signWithCertificateImpl(
+    css::uno::Reference<css::security::XCertificate> const& xCertificate,
+    css::uno::Reference<css::embed::XStorage> const& xStorage,
+    css::uno::Reference<css::io::XStream> const& xStream,
+    DocumentSignatureMode eMode)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),
+               "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+
+    DocumentSignatureManager aSignatureManager(mxCtx, eMode);
 
     if (!aSignatureManager.init())
         return false;
