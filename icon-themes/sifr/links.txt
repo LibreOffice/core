@@ -594,7 +594,12 @@ cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_ellipsetoolbox.png cmd/sc_ellipse.png
 
 # Format
+cmd/32/styleapply.png cmd/32/formatarea.png
+cmd/32/fillstyle.png cmd/32/formatarea.png
+cmd/32/fillcolor.png cmd/32/formatarea.png
+cmd/32/stylewatercanmode.png cmd/32/formatarea.png
 cmd/lc_styleapply.png cmd/lc_formatarea.png
+cmd/lc_stylewatercanmode.png cmd/lc_formatarea.png
 cmd/lc_fillstyle.png cmd/lc_formatarea.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
 cmd/sc_stylewatercanmode.png cmd/sc_formatarea.png
@@ -859,9 +864,6 @@ cmd/lc_underlinesimple.png cmd/lc_underline.png
 cmd/sc_underlinesimple.png cmd/sc_underline.png
 
 # Slide command aliases
-cmd/lc_insertslide.png cmd/lc_insertpage.png
-cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
-cmd/lc_deleteslide.png cmd/lc_deletepage.png
 cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
 cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
 cmd/lc_moveslideup.png cmd/lc_upsearch.png
@@ -872,9 +874,6 @@ cmd/lc_previousslide.png cmd/lc_prevrecord.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_slidesetup.png cmd/lc_pagesetup.png
 
-cmd/sc_insertslide.png cmd/sc_insertpage.png
-cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
-cmd/sc_deleteslide.png cmd/sc_deletepage.png
 cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
 cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
 cmd/sc_moveslideup.png cmd/sc_upsearch.png
@@ -1000,6 +999,7 @@ res/lc10716.png cmd/lc_datafilterautofilter.png
 res/lc10853.png cmd/lc_recsearch.png
 
 res/harddisk_16.png cmd/sc_open.png
+res/lx03150.png cmd/32/showsinglepage.png
 res/lx03164.png cmd/lc_open.png
 res/lx03167.png cmd/lc_openremote.png
 res/newdoc.png cmd/lc_open.png
@@ -1014,6 +1014,7 @@ res/sx10598.png cmd/sc_formatgroup.png
 res/sc05500.png cmd/sc_adddirect.png
 res/sc05678.png cmd/sc_inserthyperlink.png
 res/sc10851.png cmd/sc_inserthyperlink.png
+res/sx03150.png cmd/sc_showsinglepage.png
 res/sx03164.png cmd/sc_open.png
 res/sx03187.png cmd/sc_inserttable.png
 res/sx03201.png cmd/sc_copy.png
@@ -1388,8 +1389,6 @@ cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 
 # Print Preview Toolbar
-cmd/lc_showsinglepage.png cmd/lc_adddirect.png
-cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 cmd/lc_closepreview.png cmd/lc_cancel.png
 cmd/sc_closepreview.png cmd/sc_cancel.png
 
@@ -1504,13 +1503,6 @@ cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
 cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
 cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
 cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
-
-# Slide command aliases
-cmd/lc_firstslide.png cmd/lc_firstpage.png
-cmd/lc_lastslide.png cmd/lc_lastrecord.png
-
-cmd/sc_firstslide.png cmd/sc_firstpage.png
-cmd/sc_lastslide.png cmd/sc_lastrecord.png
 
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
@@ -1767,11 +1759,6 @@ cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 
 # draw
 # ===============================================
-cmd/sc_masterpage.png cmd/sc_slidemasterpage.png
-cmd/lc_masterpage.png cmd/lc_slidemasterpage.png
-
-cmd/sc_pagemode.png cmd/sc_normalmultipanegui.png
-cmd/lc_pagemode.png cmd/lc_normalmultipanegui.png
 
 # Sheet
 cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
