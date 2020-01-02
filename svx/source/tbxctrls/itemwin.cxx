@@ -515,8 +515,6 @@ SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
     Show();
 }
 
-VCL_BUILDER_FACTORY(SvxFillAttrBox)
-
 bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
     MouseNotifyEvent nType = rNEvt.GetType();
