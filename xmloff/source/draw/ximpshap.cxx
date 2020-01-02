@@ -575,21 +575,38 @@ void SdXMLShapeContext::SetTransformation()
             }
 
             // now set transformation for this object
-            drawing::HomogenMatrix3 aMatrix;
 
-            aMatrix.Line1.Column1 = maUsedTransformation.get(0, 0);
-            aMatrix.Line1.Column2 = maUsedTransformation.get(0, 1);
-            aMatrix.Line1.Column3 = maUsedTransformation.get(0, 2);
+            // maUsedTransformtion contains the mathematical correct matrix, which if
+            // applied to a unit square would generate the transformed shape. But the property
+            // "Transformation" contains a matrix, which can be used in TRSetBaseGeometry
+            // and would be created by TRGetBaseGeometry. And those use a mathematically wrong
+            // sign for the shearing angle. So we need to adapt the matrix here.
+            basegfx::B2DTuple aScale;
+            basegfx::B2DTuple aTranslate;
+            double fRotate;
+            double fShearX;
+            maUsedTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+            basegfx::B2DHomMatrix aB2DHomMatrix;
+            aB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                                        aScale,
+                                        basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
+                                        basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+                                    aTranslate);
+            drawing::HomogenMatrix3 aUnoMatrix;
 
-            aMatrix.Line2.Column1 = maUsedTransformation.get(1, 0);
-            aMatrix.Line2.Column2 = maUsedTransformation.get(1, 1);
-            aMatrix.Line2.Column3 = maUsedTransformation.get(1, 2);
+            aUnoMatrix.Line1.Column1 = aB2DHomMatrix.get(0, 0);
+            aUnoMatrix.Line1.Column2 = aB2DHomMatrix.get(0, 1);
+            aUnoMatrix.Line1.Column3 = aB2DHomMatrix.get(0, 2);
 
-            aMatrix.Line3.Column1 = maUsedTransformation.get(2, 0);
-            aMatrix.Line3.Column2 = maUsedTransformation.get(2, 1);
-            aMatrix.Line3.Column3 = maUsedTransformation.get(2, 2);
+            aUnoMatrix.Line2.Column1 = aB2DHomMatrix.get(1, 0);
+            aUnoMatrix.Line2.Column2 = aB2DHomMatrix.get(1, 1);
+            aUnoMatrix.Line2.Column3 = aB2DHomMatrix.get(1, 2);
 
-            xPropSet->setPropertyValue("Transformation", Any(aMatrix));
+            aUnoMatrix.Line3.Column1 = aB2DHomMatrix.get(2, 0);
+            aUnoMatrix.Line3.Column2 = aB2DHomMatrix.get(2, 1);
+            aUnoMatrix.Line3.Column3 = aB2DHomMatrix.get(2, 2);
+
+            xPropSet->setPropertyValue("Transformation", Any(aUnoMatrix));
         }
     }
 }
