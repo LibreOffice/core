@@ -977,7 +977,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     {
         // ImplPaintBorder() is a NOP, we have a native border, and this is a sub-edit of a control.
         // That means we have to draw the parent native widget to paint the edit area to clear our background.
-        PaintBufferGuard g(ImplGetWindowImpl()->mpFrameData, GetParent());
+        vcl::PaintBufferGuard g(ImplGetWindowImpl()->mpFrameData, GetParent());
         GetParent()->Paint(rRenderContext, rRectangle);
     }
 }

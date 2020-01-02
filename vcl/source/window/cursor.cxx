@@ -122,10 +122,10 @@ static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
     if (!pWindow || pWindow->IsDisposed())
         return;
 
-    std::unique_ptr<PaintBufferGuard> pGuard;
+    std::unique_ptr<vcl::PaintBufferGuard> pGuard;
     const bool bDoubleBuffering = pWindow->SupportsDoubleBuffering();
     if (bDoubleBuffering)
-        pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
+        pGuard.reset(new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
 
     vcl::RenderContext* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow;
 
