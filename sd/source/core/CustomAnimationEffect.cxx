@@ -523,7 +523,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
 /** checks if the text for this effect has changed and updates internal flags.
     returns true if something changed.
 */
-bool CustomAnimationEffect::checkForText()
+bool CustomAnimationEffect::checkForText(Reference< XEnumeration > xEnumeration)
 {
     bool bChange = false;
 
@@ -543,7 +543,9 @@ bool CustomAnimationEffect::checkForText()
             Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
             if( xEA.is() )
             {
-                Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
+                if ( !xEnumeration.is() )
+                    xEnumeration = xEA->createEnumeration();
+
                 if( xEnumeration.is() )
                 {
                     bool bHasText = xEnumeration->hasMoreElements();
@@ -2144,11 +2146,27 @@ void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
     if( !(aTarget >>= aParaTarget ) )
         return;
 
-    bool bChanges = std::accumulate(maEffects.begin(), maEffects.end(), false,
-        [&aParaTarget](const bool bCheck, const CustomAnimationEffectPtr& rxEffect) {
+    // get one enumeration object for following reusage inside all animation effects
+    Reference< XEnumeration > xEnumeration;
+    if( hasEffect( aParaTarget.Shape ) )
+    {
+        Reference< XText > xText( aParaTarget.Shape, UNO_QUERY );
+        if( xText.is() )
+        {
+            Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
+            if( xEA.is() )
+            {
+                xEnumeration = xEA->createEnumeration();
+            }
+        }
+    }
+
+    // update internal flags for each animation effect
+    const bool bChanges = std::accumulate(maEffects.begin(), maEffects.end(), false,
+        [&aParaTarget, &xEnumeration](const bool bCheck, const CustomAnimationEffectPtr& rxEffect) {
             bool bRes = bCheck;
             if (rxEffect->getTargetShape() == aParaTarget.Shape)
-                bRes |= rxEffect->checkForText();
+                bRes |= rxEffect->checkForText( xEnumeration );
             return bRes;
         });
 

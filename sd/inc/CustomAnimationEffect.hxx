@@ -25,6 +25,7 @@
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <vcl/timer.hxx>
 #include "sddllapi.h"
 #include <list>
@@ -144,7 +145,7 @@ public:
     SAL_DLLPRIVATE OUString getPath() const;
     SAL_DLLPRIVATE void setPath( const OUString& rPath );
 
-    SAL_DLLPRIVATE bool checkForText();
+    SAL_DLLPRIVATE bool checkForText( css::uno::Reference< ::com::sun::star::container::XEnumeration > xEnumeration = css::uno::Reference< ::com::sun::star::container::XEnumeration >() );
     SAL_DLLPRIVATE bool calculateIterateDuration();
 
     SAL_DLLPRIVATE void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
