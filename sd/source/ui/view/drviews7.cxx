@@ -1449,8 +1449,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if( mpDrawView->IsTextEdit() )
         {
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-            if (pOLV && URLFieldHelper::IsCursorAtURLField(pOLV->GetEditView()))
+            if (URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
                 bDisableEditHyperlink = false;
         }
         else
