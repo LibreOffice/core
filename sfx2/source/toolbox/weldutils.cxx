@@ -57,6 +57,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
     : m_xFrame(rFrame)
     , m_pToolbar(&rToolbar)
 {
+    rToolbar.connect_clicked(LINK(this, ToolbarUnoDispatcher, SelectHdl));
+
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
     vcl::ImageType eSize = rToolbar.get_icon_size();
 
@@ -75,12 +77,10 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
             vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties, rFrame));
         rToolbar.set_item_tooltip_text(i, aTooltip);
         auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sCommand, rFrame, eSize));
-        rToolbar.set_item_icon(i, xImage);
+        rToolbar.set_item_image(i, xImage);
 
         CreateController(sCommand);
     }
-
-    rToolbar.connect_clicked(LINK(this, ToolbarUnoDispatcher, SelectHdl));
 }
 
 void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)

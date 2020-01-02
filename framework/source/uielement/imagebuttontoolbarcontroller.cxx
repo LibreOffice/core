@@ -66,7 +66,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, true );
 
     // Height will be controlled by scaling according to button height
-    m_pToolbar->SetItemImage( m_nID, aImage );
+    m_xToolbar->SetItemImage( m_nID, aImage );
 }
 
 ImageButtonToolbarController::~ImageButtonToolbarController()
@@ -100,7 +100,7 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
                                        aURL,
                                        aImage ))
                 {
-                    m_pToolbar->SetItemImage( m_nID, aImage );
+                    m_xToolbar->SetItemImage( m_nID, aImage );
 
                     // send notification
                     uno::Sequence< beans::NamedValue > aInfo { { "URL", css::uno::makeAny(aURL) } };

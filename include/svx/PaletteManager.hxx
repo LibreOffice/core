@@ -29,7 +29,7 @@
 
 class SvxColorValueSet;
 namespace com::sun::star::uno { class XComponentContext; }
-namespace svx { class ToolboxButtonColorUpdater; }
+namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
 
 class SVX_DLLPUBLIC PaletteManager
@@ -40,7 +40,7 @@ class SVX_DLLPUBLIC PaletteManager
     sal_uInt16              mnCurrentPalette;
 
     long                    mnColorCount;
-    svx::ToolboxButtonColorUpdater* mpBtnUpdater;
+    svx::ToolboxButtonColorUpdaterBase* mpBtnUpdater;
 
     XColorListRef           pColorList;
     std::deque<NamedColor>  maRecentColors;
@@ -69,7 +69,7 @@ public:
     long        GetRecentColorCount() const;
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
 
-    void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
+    void        SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater);
     void        PopupColorPicker(weld::Window* pParent, const OUString& aCommand, const Color& rInitialColor);
 
     void        SetColorSelectFunction(const std::function<void(const OUString&, const NamedColor&)>& aColorSelectFunction);
