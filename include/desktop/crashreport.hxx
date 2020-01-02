@@ -18,6 +18,7 @@
 #include <config_features.h>
 
 // vector not sort the entries
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -46,7 +47,8 @@ public:
 #if HAVE_FEATURE_BREAKPAD
     static void addKeyValue(const OUString& rKey, const OUString& rValue, tAddKeyHandling AddKeyHandling);
 
-    static void storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler);
+    static void installExceptionHandler();
+    static void removeExceptionHandler();
 
     static bool crashReportInfoExists();
 
@@ -71,7 +73,7 @@ private:
     typedef std::vector<mpair> vmaKeyValues;
     static vmaKeyValues maKeyValues; // used to temporarily save entries before the old info has been uploaded
 
-    static google_breakpad::ExceptionHandler* mpExceptionHandler;
+    static std::unique_ptr<google_breakpad::ExceptionHandler> mpExceptionHandler;
 
     static std::string getIniFileName();
     static void writeCommonInfo();
