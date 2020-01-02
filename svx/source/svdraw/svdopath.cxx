@@ -2924,17 +2924,44 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // create transformation for polygon, set values at aGeo direct
-    basegfx::B2DHomMatrix aTransform;
-
     // #i75086#
     // Given polygon is already scaled (for historical reasons), but not mirrored yet.
     // Thus, when scale is negative in X or Y, apply the needed mirroring accordingly.
-    if(basegfx::fTools::less(aScale.getX(), 0.0) || basegfx::fTools::less(aScale.getY(), 0.0))
+    // tdf#98565, tdf#98584. The matrix might contain additional scaling. This might happen,
+    // if the file has a draw:transform attribute with values matrix(...) or skewY(...).
+    // To detect it, we compare the width and height of the polygon, with the scaling factors
+    // in the matrix. Unfortunately the width and height of the polygon is based on the size
+    // including curves, when loading is finished, and it is based on svg:width and svg:height,
+    // while the shape is loading. I use maSnapRect to distinguish these cases, which is empty
+    // while the shape is loading. Any better idea?
+    basegfx::B2DHomMatrix aTransform;
+    basegfx::B2DRange aPointsRange;
+    if (maSnapRect.IsEmpty())
     {
-        aTransform.scale(
-            basegfx::fTools::less(aScale.getX(), 0.0) ? -1.0 : 1.0,
-            basegfx::fTools::less(aScale.getY(), 0.0) ? -1.0 : 1.0);
+        // Using getRange() would give width and height including curve, but we need the range
+        // of the pure point coordinates here.
+        for (auto const& rPolygon : rPolyPolygon)
+        {
+            for (sal_uInt32 a(0); a < rPolygon.count(); a++)
+            {
+                aPointsRange.expand(rPolygon.getB2DPoint(a));
+            }
+        }
     }
+    else
+    {
+        aPointsRange = basegfx::utils::getRange(rPolyPolygon);
+    }
+    double fPolyScaleX(basegfx::fTools::less(aScale.getX(), 0.0) ? -1.0 : 1.0);
+    double fPolyScaleY(basegfx::fTools::less(aScale.getY(), 0.0) ? -1.0 : 1.0);
+    double fCurrentPointsWidth(aPointsRange.getWidth());
+    if (fCurrentPointsWidth != 0.0 && aScale.getX() != 0.0)
+        fPolyScaleX *= fabs(aScale.getX()) / fCurrentPointsWidth;
+    double fCurrentPointsHeight(aPointsRange.getHeight());
+    if (fCurrentPointsHeight != 0.0 && aScale.getY() != 0.0)
+        fPolyScaleY *= fabs(aScale.getY()) / fCurrentPointsHeight;
+    if (fPolyScaleX != 1.0 || fPolyScaleY != 1.0)
+        aTransform.scale(fPolyScaleX, fPolyScaleY);
 
     if(!basegfx::fTools::equalZero(fShearX))
     {
