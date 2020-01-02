@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_use_externals,writerfilter_dmapper,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_dmapper, \
+    writerfilter/qa/cppunittests/dmapper/CellColorHandler \
     writerfilter/qa/cppunittests/dmapper/DomainMapperTableHandler \
 ))
 
