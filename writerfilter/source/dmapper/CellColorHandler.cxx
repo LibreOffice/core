@@ -276,7 +276,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( nShadingPattern ));
     }
 
-    if (m_OutputFormat == Paragraph)
+    if (m_OutputFormat == Paragraph && m_nShadingPattern != NS_ooxml::LN_Value_ST_Shd_nil)
     {
         if (nWW8BrushStyle || !m_bAutoFillColor)
             pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
