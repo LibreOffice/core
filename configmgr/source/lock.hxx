@@ -22,10 +22,11 @@
 
 #include <sal/config.h>
 #include <osl/mutex.hxx>
+#include <memory>
 
 namespace configmgr {
 
-    osl::Mutex& theConfigLock();
+std::shared_ptr<osl::Mutex> const & lock();
 
 }
 

@@ -34,7 +34,7 @@ namespace configmgr { namespace default_provider {
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    osl::MutexGuard guard(theConfigLock());
+    osl::MutexGuard guard(*lock());
     static css::uno::Reference< css::uno::XInterface > singleton(
         configuration_provider::createDefault(context));
     return singleton;
