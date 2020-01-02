@@ -144,7 +144,7 @@ public:
     SAL_DLLPRIVATE OUString getPath() const;
     SAL_DLLPRIVATE void setPath( const OUString& rPath );
 
-    SAL_DLLPRIVATE bool checkForText();
+    SAL_DLLPRIVATE bool checkForText( const std::vector<sal_Int32>* paragraphNumberingLevel = nullptr );
     SAL_DLLPRIVATE bool calculateIterateDuration();
 
     SAL_DLLPRIVATE void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
@@ -333,6 +333,8 @@ protected:
     SAL_DLLPRIVATE void notify_listeners();
 
     SAL_DLLPRIVATE void updateTextGroups();
+
+    SAL_DLLPRIVATE bool getParagraphNumberingLevels( const css::uno::Reference< css::drawing::XShape >& xShape, std::vector< sal_Int32 >& rParagraphNumberingLevel );
 
 protected:
     css::uno::Reference< css::animations::XTimeContainer > mxSequenceRoot;
