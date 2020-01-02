@@ -312,7 +312,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaHadField(false),
         m_bParaAutoBefore(false),
         m_bFirstParagraphInCell(true),
-        m_bSaveFirstParagraphInCell(false)
+        m_bSaveFirstParagraphInCell(false),
+        m_bParaAnchoredObject(false)
 
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
@@ -6140,6 +6141,9 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
     if( xTextContent.is())
     {
         appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+
+        // Remember this paragraph has an anchored object.
+        m_bParaAnchoredObject = true;
 
         if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
         {

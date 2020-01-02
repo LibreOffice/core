@@ -1045,6 +1045,8 @@ public:
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
 
+    bool HasAnchoredObjects() const { return m_bParaAnchoredObject; }
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
@@ -1056,6 +1058,8 @@ private:
     /// Current paragraph in a table is first paragraph of a cell
     bool m_bFirstParagraphInCell;
     bool m_bSaveFirstParagraphInCell;
+    /// Current paragraph has an anchored object
+    bool m_bParaAnchoredObject;
 };
 
 } //namespace dmapper

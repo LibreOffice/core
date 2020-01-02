@@ -433,7 +433,7 @@ void TableManager::endRow()
         {
             const css::uno::Reference<css::text::XTextRange>& rEndCellEndHandle = pTableData->getCurrentRow()->getCellEnd(pTableData->getCurrentRow()->getCellCount()-1);
             auto xCursor(rEndCellEndHandle->getText()->createTextCursorByRange(rEndCellEndHandle));
-            if (!xCursor->getString().isEmpty())
+            if (!xCursor->getString().isEmpty() || mpTableDataHandler->getDomainMapperImpl().HasAnchoredObjects())
             {
                 // add a dummy character to get a right handle for gridAfter cells after the last non-empty cell, removing that later
                 xCursor->gotoEnd(false);
