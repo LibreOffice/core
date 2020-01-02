@@ -22,13 +22,11 @@
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
 #include <vcl/windowstate.hxx>
 
 #include <recfloat.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>

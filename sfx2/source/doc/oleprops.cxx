@@ -22,10 +22,8 @@
 
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 

@@ -24,28 +24,19 @@
 #endif
 
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/io/XStream.hpp>
 
 
-#include <osl/thread.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <tools/stream.hxx>
-#include <tools/helpers.hxx>
-#include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

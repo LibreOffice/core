@@ -18,26 +18,17 @@
  */
 
 
-#include <limits.h>
 #include <stdlib.h>
 #include <algorithm>
 
-#include <appdata.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/sfxhelp.hxx>
-#include <sfx2/ctrlitem.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/viewsh.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/IDialogRenderable.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
 
 #include <sfx2/strings.hrc>

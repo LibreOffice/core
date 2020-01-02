@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <unotools/localedatawrapper.hxx>
-#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
@@ -43,7 +42,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 
 #include <sfx2/sfxuno.hxx>
 #include <memory>

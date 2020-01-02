@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/registry/MergeConflictException.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -27,7 +25,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -36,20 +33,15 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <arrdecl.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/sfxuno.hxx>
 #include "syspath.hxx"
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 
-#include <assert.h>
 #include <memory>
 
 using namespace ::com::sun::star;

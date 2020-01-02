@@ -23,7 +23,6 @@
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/sfxuno.hxx>
 
 #include <sfx2/strings.hrc>
 

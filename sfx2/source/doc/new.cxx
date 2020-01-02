@@ -21,6 +21,7 @@
 #include <sfx2/new.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/outdev.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/sfxecode.hxx>
@@ -35,7 +36,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
 #include <preview.hxx>
-#include <sfx2/printer.hxx>
 #include <unotools/viewoptions.hxx>
 
 void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)

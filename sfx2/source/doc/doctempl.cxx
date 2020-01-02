@@ -21,23 +21,15 @@
 #include <limits.h>
 #include <com/sun/star/uno/Any.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.hxx>
 #include <sal/log.hxx>
 
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <svtools/ehdl.hxx>
-#include <svtools/sfxecode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -47,24 +39,17 @@
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/AnyCompareFactory.hpp>
-#include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include "doctemplateslocal.hxx"
 #include <sfxurlrelocator.hxx>
@@ -83,18 +68,12 @@ using namespace ::ucbhelper;
 
 
 #include <sfx2/doctempl.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfxtypes.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <strings.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
 
-#include <unotools/ucbhelper.hxx>
 #include <memory>
 #include <vector>
 

@@ -29,7 +29,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

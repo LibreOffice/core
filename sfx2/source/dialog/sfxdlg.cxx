@@ -20,8 +20,6 @@
 
 #include <sfx2/sfxdlg.hxx>
 
-#include <osl/module.hxx>
-
 SfxAbstractDialogFactory* SfxAbstractDialogFactory::Create()
 {
     return dynamic_cast <SfxAbstractDialogFactory*>( VclAbstractDialogFactory::Create() );

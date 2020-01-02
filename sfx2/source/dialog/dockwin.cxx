@@ -18,8 +18,8 @@
  */
 
 #include <svl/eitem.hxx>
+#include <svl/solar.hrc>
 #include <vcl/event.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 
 #include <vcl/svapp.hxx>
@@ -36,16 +36,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
 #include <splitwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/sfxhelp.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/msgpool.hxx>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

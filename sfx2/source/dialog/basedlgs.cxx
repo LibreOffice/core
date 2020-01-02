@@ -17,27 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-
-#include <comphelper/lok.hxx>
-
-#include <osl/file.hxx>
 #include <vcl/help.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/controldims.hxx>
 #include <vcl/idle.hxx>
 
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <workwin.hxx>
 
 using namespace ::com::sun::star::uno;

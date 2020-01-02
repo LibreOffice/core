@@ -21,6 +21,7 @@
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
+#include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -31,8 +32,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -40,14 +39,12 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <sfx2/sfxhelp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/templdlg.hxx>
 #include <templdgi.hxx>
 #include <tplcitem.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -57,14 +54,10 @@
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
-#include <arrdecl.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include <sfx2/doctempl.hxx>
 #include <sfx2/module.hxx>
 #include <helpids.h>
 #include <bitmaps.hlst>
-#include <appdata.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <vcl/svlbitm.hxx>

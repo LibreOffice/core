@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <arrdecl.hxx>
 #include <map>
 
 #include <cppuhelper/implbase.hxx>
@@ -28,9 +27,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/file.hxx>
@@ -40,11 +37,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svl/eitem.hxx>
-#include <svl/lstner.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
-#include <basic/sbx.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/eventcfg.hxx>
 
@@ -52,10 +46,6 @@
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
-#include <basic/sbuno.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
-#include <unotools/printwarningoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -66,34 +56,23 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <svl/urihelper.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svl/sharecontrolfile.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <svtools/asynclink.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/classids.hxx>
 
 #include <sfx2/app.hxx>
-#include <sfx2/docfac.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <objshimp.hxx>
-#include <sfxtypes.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/strings.hrc>
-#include <appdata.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>
 #include <sfx2/QuerySaveDocument.hxx>
-#include <sfx2/msg.hxx>
 #include <appbaslib.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -110,9 +89,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 
 using ::basic::BasicManagerRepository;
-#include <uno/mapping.hxx>
-
-#include <sfxslots.hxx>
 
 namespace {
 
