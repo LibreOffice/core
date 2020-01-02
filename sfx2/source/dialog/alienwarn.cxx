@@ -18,10 +18,7 @@
  */
 
 
-#include <sal/macros.h>
-#include <sfx2/sfxuno.hxx>
 #include <unotools/saveopt.hxx>
-#include <vcl/svapp.hxx>
 #include <alienwarn.hxx>
 
 SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, const OUString& _rFormatName,

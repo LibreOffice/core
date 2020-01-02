@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -34,7 +33,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -43,13 +41,10 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/io/IOException.hpp>
 
 #include <guisaveas.hxx>
 
@@ -57,11 +52,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
-#include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -72,32 +63,18 @@
 #include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/asyncfunc.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <sfxtypes.hxx>
 #include <alienwarn.hxx>
 
-#include <sfx2/docmacromode.hxx>
-#include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <rtl/ref.hxx>
-#include <framework/interaction.hxx>
-#include <svtools/sfxecode.hxx>
-
 #include <memory>
-
-#include <com/sun/star/frame/Desktop.hpp>
 
 #include <officecfg/Office/Common.hxx>
 

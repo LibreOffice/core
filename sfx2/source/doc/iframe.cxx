@@ -34,13 +34,10 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include <svtools/miscopt.hxx>
-#include <svl/ownlist.hxx>
 #include <svl/itemprop.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>

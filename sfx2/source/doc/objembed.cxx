@@ -18,11 +18,7 @@
  */
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
-#include <com/sun/star/embed/XComponentSupplier.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -30,8 +26,9 @@
 #include <sfx2/event.hxx>
 
 #include <comphelper/fileformat.h>
-#include <svtools/embedtransfer.hxx>
+#include <tools/globname.hxx>
 #include <tools/fract.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gdimtf.hxx>
 

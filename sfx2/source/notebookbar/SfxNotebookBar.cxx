@@ -11,8 +11,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
-#include <unotools/viewoptions.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/syswin.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -21,7 +19,6 @@
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>

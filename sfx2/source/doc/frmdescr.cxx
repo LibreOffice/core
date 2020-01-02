@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/stream.hxx>
-#include <vcl/splitwin.hxx>
 #include <svl/itemset.hxx>
 
 #include <sfx2/frmdescr.hxx>

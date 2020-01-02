@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_folders.h>
 
 #include <tools/inetmsg.hxx>
 #include <tools/diagnose_ex.h>
@@ -33,28 +32,23 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <unotools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -62,25 +56,18 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <basic/sbuno.hxx>
-#include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
 
-#include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <tools/inetmime.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/inettype.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
@@ -100,21 +87,15 @@
 #include <sfx2/objsh.hxx>
 #include <objshimp.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <arrdecl.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
-#include <helper.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <workwin.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/infobar.hxx>
-#include <appbaslib.hxx>
 #include <openflag.hxx>
 #include "objstor.hxx"
 #include <appopen.hxx>

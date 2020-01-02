@@ -8,7 +8,6 @@
  */
 
 #include <sfx2/inputdlg.hxx>
-#include <vcl/svapp.hxx>
 
 InputDialog::InputDialog(weld::Widget* pParent, const OUString &rLabelText)
     : GenericDialogController(pParent, "sfx/ui/inputdialog.ui", "InputDialog")

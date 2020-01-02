@@ -17,7 +17,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
@@ -32,7 +31,6 @@
 #include <sot/storage.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/langhelp.hxx>
-#include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
@@ -50,7 +48,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

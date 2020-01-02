@@ -19,12 +19,9 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -34,42 +31,29 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/system/SimpleSystemMail.hpp>
 #include <com/sun/star/system/SimpleCommandMail.hpp>
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <rtl/textenc.h>
-#include <rtl/uri.h>
-#include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
 #include <sfx2/mailmodelapi.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 
 #include <unotools/tempfile.hxx>
-#include <unotools/configitem.hxx>
-#include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 

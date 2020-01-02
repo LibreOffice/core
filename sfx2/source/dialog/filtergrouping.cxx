@@ -21,11 +21,8 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/strings.hrc>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <osl/thread.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

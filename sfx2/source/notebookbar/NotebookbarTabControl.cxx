@@ -24,19 +24,16 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/notebookbar/NotebookbarTabControl.hxx>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #define ICON_SIZE 25

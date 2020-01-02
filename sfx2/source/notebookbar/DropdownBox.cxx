@@ -19,8 +19,6 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
 #include "DropdownBox.hxx"
 
 #define NOTEBOOK_HEADER_HEIGHT 30

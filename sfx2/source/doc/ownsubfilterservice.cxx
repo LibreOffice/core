@@ -28,7 +28,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/globname.hxx>
 

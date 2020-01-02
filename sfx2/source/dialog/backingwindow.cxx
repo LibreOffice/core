@@ -18,33 +18,26 @@
  */
 
 #include "backingwindow.hxx"
-#include <sfx2/inputdlg.hxx>
 
-#include <sal/log.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/fixed.hxx>
 
-#include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
-#include <vcl/toolbox.hxx>
 
 #include <vcl/menubtn.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/propertysequence.hxx>
 
-#include <toolkit/awt/vclxmenu.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -58,7 +51,6 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <officecfg/Office/Common.hxx>
 

@@ -21,7 +21,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 
@@ -30,8 +29,6 @@
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/util/SearchResult.hpp>
-#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -54,7 +51,6 @@
 #include <sal/log.hxx>
 
 #include <vcl/wmf.hxx>
-#include <vcl/gdimetafiletools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vcllayout.hxx>

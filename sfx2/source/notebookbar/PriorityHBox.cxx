@@ -19,9 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
-#include "DropdownBox.hxx"
 #include "PriorityHBox.hxx"
 
 namespace

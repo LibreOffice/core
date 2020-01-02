@@ -42,8 +42,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -55,7 +53,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/xml/dom/XSAXDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -64,7 +61,6 @@
 #include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 
-#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>

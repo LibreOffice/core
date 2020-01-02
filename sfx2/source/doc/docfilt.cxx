@@ -21,17 +21,13 @@
 #include <ctime>
 #endif
 
-#include <string>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/fileformat.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/sfxuno.hxx>
 #include <sfx2/objsh.hxx>
 
 using namespace ::com::sun::star;

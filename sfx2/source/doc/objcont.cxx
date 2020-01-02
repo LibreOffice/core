@@ -23,32 +23,21 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/fileurl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/style.hxx>
 
-#include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/rectitem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/uri.hxx>
-#include <math.h>
-#include <sal/log.hxx>
 
-#include <unotools/saveopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/oldprintadaptor.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/gdimtf.hxx>
 
@@ -56,31 +45,19 @@
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <appdata.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <objshimp.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/sfxhelp.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
-#include <basic/basmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
-#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/request.hxx>
-#include <openflag.hxx>
 #include <memory>
 #include <helpids.h>
-
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
-
-#include <typeinfo>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

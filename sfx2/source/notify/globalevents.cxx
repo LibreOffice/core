@@ -36,9 +36,6 @@
 #include <rtl/ref.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxbasemodel.hxx>
-#include <sfx2/evntconf.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/eventcfg.hxx>
 #include <eventsupplier.hxx>

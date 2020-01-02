@@ -18,11 +18,9 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
 using namespace css;

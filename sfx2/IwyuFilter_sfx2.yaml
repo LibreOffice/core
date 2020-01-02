@@ -68,3 +68,30 @@ blacklist:
     sfx2/source/control/sfxstatuslistener.cxx:
     # Actually used
     - com/sun/star/frame/XDispatchProvider.hpp
+    sfx2/source/doc/docinf.cxx:
+    # Actually used
+    - com/sun/star/document/XDocumentProperties.hpp
+    sfx2/source/doc/DocumentMetadataAccess.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    sfx2/source/doc/graphhelp.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/guisaveas.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/objstor.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
+    sfx2/source/doc/syspath.cxx:
+    # Needed on WIN32
+    - syspathw32.hxx
+    sfx2/source/doc/syspathw32.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/printhelper.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx
+    sfx2/source/doc/sfxbasemodel.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - cppuhelper/interfacecontainer.hxx

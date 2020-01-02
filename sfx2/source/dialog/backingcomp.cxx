@@ -19,18 +19,10 @@
 
 #include "backingwindow.hxx"
 
-#include <helpids.h>
-
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -47,19 +39,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <svl/solar.hrc>
-#include <svl/urihelper.hxx>
-#include <osl/file.hxx>
-#include <unotools/configmgr.hxx>
-
-#include <unotools/bootstrap.hxx>
 
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 

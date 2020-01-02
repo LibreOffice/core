@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/passwd.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <vcl/svapp.hxx>

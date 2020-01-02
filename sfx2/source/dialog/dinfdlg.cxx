@@ -18,11 +18,9 @@
  */
 
 #include <svl/eitem.hxx>
-#include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/datetime.hxx>
@@ -31,9 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/controldims.hxx>
 #include <svtools/imagemgr.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -45,7 +41,6 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -62,9 +57,6 @@
 #include <sfx2/securitypage.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -76,8 +68,6 @@
 #include <dinfdlg.hrc>
 #include <sfx2/strings.hrc>
 #include <strings.hxx>
-#include <bitmaps.hlst>
-#include <vcl/help.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>

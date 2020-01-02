@@ -32,8 +32,6 @@
 #include <framework/undomanagerhelper.hxx>
 #include <framework/imutex.hxx>
 
-#include <stack>
-
 
 namespace sfx2
 {

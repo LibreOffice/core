@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
@@ -30,7 +29,6 @@
 #include <comphelper/random.hxx>
 
 #include <algorithm>
-#include <list>
 #include <memory>
 #include <unordered_map>
 #if OSL_DEBUG_LEVEL > 0

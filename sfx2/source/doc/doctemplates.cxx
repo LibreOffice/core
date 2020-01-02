@@ -21,7 +21,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -43,7 +42,6 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -52,7 +50,6 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
-#include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -72,7 +69,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 
-#include <rtl/ref.hxx>
 #include <svtools/templatefoldercache.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -83,7 +79,6 @@
 #include <sfxurlrelocator.hxx>
 #include "doctemplateslocal.hxx"
 #include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/strings.hrc>
 #include <doctempl.hrc>
 

@@ -18,7 +18,6 @@
  */
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/charmapcontrol.hxx>
-#include <unotools/viewoptions.hxx>
 #include <vcl/toolbox.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL(CharmapPopup, SfxVoidItem);

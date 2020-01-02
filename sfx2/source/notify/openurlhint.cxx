@@ -18,7 +18,6 @@
  */
 
 #include <openurlhint.hxx>
-#include <sfx2/sfxsids.hrc>
 
 SfxOpenUrlHint::SfxOpenUrlHint( const OUString& sDocumentURL ) :
     msDocumentURL(sDocumentURL) { }

@@ -20,7 +20,6 @@
 
 #include <srchdlg.hxx>
 #include <comphelper/string.hxx>
-#include <sfx2/sfxuno.hxx>
 
 #include <tools/debug.hxx>
 #include <unotools/viewoptions.hxx>
