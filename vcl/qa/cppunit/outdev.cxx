@@ -17,6 +17,7 @@
 #include <vcl/metaact.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <bufferdevice.hxx>
+#include <window.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -34,6 +35,7 @@ public:
     void testDrawTransformedBitmapEx();
     void testDrawTransformedBitmapExFlip();
     void testRTL();
+    void testRTLGuard();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -45,6 +47,7 @@ public:
     CPPUNIT_TEST(testDrawTransformedBitmapEx);
     CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
     CPPUNIT_TEST(testRTL);
+    CPPUNIT_TEST(testRTLGuard);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -267,6 +270,18 @@ void VclOutdevTest::testRTL()
     // Without the accompanying fix in place, this test would have failed, because the RTL status
     // from pWindow was not propagated to pBuffer.
     CPPUNIT_ASSERT(pBuffer->IsRTLEnabled());
+}
+
+void VclOutdevTest::testRTLGuard()
+{
+    ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
+    pWindow->EnableRTL();
+    pWindow->RequestDoubleBuffering(true);
+    ImplFrameData* pFrameData = pWindow->ImplGetWindowImpl()->mpFrameData;
+    vcl::PaintBufferGuard aGuard(pFrameData, pWindow);
+    // Without the accompanying fix in place, this test would have failed, because the RTL status
+    // from pWindow was not propagated to aGuard.
+    CPPUNIT_ASSERT(aGuard.GetRenderContext()->IsRTLEnabled());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
