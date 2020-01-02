@@ -702,6 +702,8 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
         }
         else if( nPrefix == XML_NAMESPACE_LO_EXT)
         {
+            // Deprecated. New documents use the chart:data-label element
+            // instead in order to store custom label text.
             if( IsXMLToken( aLocalName, XML_CUSTOM_LABEL_FIELD) && !mbHasLabelParagraph)
             {
                 sCustomLabelField = xAttrList->getValueByIndex( i );
