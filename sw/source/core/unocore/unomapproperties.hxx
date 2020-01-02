@@ -121,6 +121,7 @@
         { OUString(UNO_NAME_PARA_BACK_COLOR),                     RES_BACKGROUND,                cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_BACK_COLOR                         }, \
         { OUString(UNO_NAME_CHAR_CASE_MAP),                       RES_CHRATR_CASEMAP,            cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
         { OUString(UNO_NAME_CHAR_COLOR),                          RES_CHRATR_COLOR,              cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { OUString(UNO_NAME_CHAR_TRANSPARENCE),                   RES_CHRATR_COLOR,              cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_ALPHA }, \
         { OUString(UNO_NAME_CHAR_STRIKEOUT),                      RES_CHRATR_CROSSEDOUT,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_CROSS_OUT                          }, \
         { OUString(UNO_NAME_CHAR_CROSSED_OUT),                    RES_CHRATR_CROSSEDOUT,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_CROSSED_OUT                        }, \
         { OUString(UNO_NAME_CHAR_ESCAPEMENT),                     RES_CHRATR_ESCAPEMENT,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_ESC                                }, \
@@ -362,6 +363,7 @@
                     { OUString(UNO_NAME_PARA_GRAPHIC_LOCATION), RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION}, \
                     { OUString(UNO_NAME_CHAR_CASE_MAP), RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},\
                     { OUString(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},\
+                    { OUString(UNO_NAME_CHAR_TRANSPARENCE), RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_ALPHA},\
                     { OUString(UNO_NAME_CHAR_STRIKEOUT), RES_CHRATR_CROSSEDOUT,  cppu::UnoType<sal_Int16>::get(),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},\
                     { OUString(UNO_NAME_CHAR_CROSSED_OUT), RES_CHRATR_CROSSEDOUT,  cppu::UnoType<bool>::get()  ,        PROPERTY_NONE, 0},\
                     { OUString(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  cppu::UnoType<sal_Int16>::get(),             PROPERTY_NONE, MID_ESC          },\
@@ -466,6 +468,7 @@
 #define COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE \
                     { OUString(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        }, \
                     { OUString(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},  \
+                    { OUString(UNO_NAME_CHAR_TRANSPARENCE), RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_ALPHA },  \
                     { OUString(UNO_NAME_CHAR_CONTOURED), RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},  \
                     { OUString(UNO_NAME_CHAR_EMPHASIS), RES_CHRATR_EMPHASIS_MARK,           cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, MID_EMPHASIS},   \
                     { OUString(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  cppu::UnoType<sal_Int16>::get(),             PROPERTY_NONE, MID_ESC          },  \
