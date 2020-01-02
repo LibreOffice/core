@@ -32,6 +32,11 @@
 
 namespace vcl { class Window; }
 
+namespace svtools
+{
+    class ToolbarPopupBase;
+}
+
 namespace svt
 {
 class PopupWindowControllerImpl;
@@ -44,6 +49,8 @@ public:
                            const css::uno::Reference< css::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
     virtual ~PopupWindowController() override;
+
+    void EndPopupMode();
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) = 0;
 
@@ -60,6 +67,9 @@ public:
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+
+protected:
+    std::unique_ptr<svtools::ToolbarPopupBase> mxPopover;
 
 private:
     std::unique_ptr<PopupWindowControllerImpl, o3tl::default_delete<PopupWindowControllerImpl>>  mxImpl;

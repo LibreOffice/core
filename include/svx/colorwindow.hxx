@@ -132,6 +132,7 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     const sal_uInt16    theSlotId;
+    OUString            maCommand;
     weld::Window* const mpParentWindow;
     MenuOrToolMenuButton maMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
@@ -150,6 +151,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
     weld::Button* mpDefaultButton;
 
+    Link<const NamedColor&, void> maSelectedLink;
     DECL_LINK(SelectHdl, SvtValueSet*, void);
     DECL_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_LINK(AutoColorClickHdl, weld::Button&, void);
@@ -160,13 +162,14 @@ private:
     NamedColor GetAutoColor() const;
 
 public:
-    ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager,
+    ColorWindow(const OUString& rCommand,
+                std::shared_ptr<PaletteManager> const & rPaletteManager,
                 ColorStatus& rColorStatus,
                 sal_uInt16 nSlotId,
                 const css::uno::Reference< css::frame::XFrame >& rFrame,
                 weld::Window* pParentWindow, const MenuOrToolMenuButton &rMenuButton,
                 ColorSelectFunction const& rColorSelectFunction);
-    weld::Container* GetWidget() { return mxTopLevel.get(); }
+    weld::Container* getTopLevel() { return mxTopLevel.get(); }
     virtual ~ColorWindow() override;
     void                ShowNoneButton();
     void                SetNoSelection();
@@ -179,6 +182,7 @@ public:
 
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
+    void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
 #endif

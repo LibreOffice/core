@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
@@ -32,16 +33,16 @@
 
 namespace svx
 {
-    ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
-            sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton, const OUString& rCommandLabel)
+    ToolboxButtonColorUpdaterBase::ToolboxButtonColorUpdaterBase(bool bWideButton, const OUString& rCommandLabel)
         : mbWideButton(bWideButton)
-        , mnBtnId(nTbxBtnId)
-        , mpTbx(pToolBox)
+        , mbWasHiContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         , maCurColor(COL_TRANSPARENT)
         , maCommandLabel(rCommandLabel)
     {
-        DBG_ASSERT(pToolBox, "ToolBox not found :-(");
-        mbWasHiContrastMode = pToolBox && pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
+    }
+
+    void ToolboxButtonColorUpdaterBase::Init(sal_uInt16 nSlotId)
+    {
         switch (nSlotId)
         {
             case SID_ATTR_CHAR_COLOR:
@@ -68,10 +69,29 @@ namespace svx
         }
     }
 
-    ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
+    VclToolboxButtonColorUpdater::VclToolboxButtonColorUpdater(
+            sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton, const OUString& rCommandLabel)
+        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel)
+        , mnBtnId(nTbxBtnId)
+        , mpTbx(pToolBox)
+    {
+        Init(nSlotId);
+    }
+
+    void VclToolboxButtonColorUpdater::SetQuickHelpText(const OUString& rText)
+    {
+        mpTbx->SetQuickHelpText(mnBtnId, rText);
+    }
+
+    OUString VclToolboxButtonColorUpdater::GetQuickHelpText() const
+    {
+        return mpTbx->GetQuickHelpText(mnBtnId);
+    }
+
+    ToolboxButtonColorUpdaterBase::~ToolboxButtonColorUpdaterBase()
     {}
 
-    void ToolboxButtonColorUpdater::Update(const NamedColor &rNamedColor)
+    void ToolboxButtonColorUpdaterBase::Update(const NamedColor &rNamedColor)
     {
         Update(rNamedColor.first);
         if (!mbWideButton)
@@ -80,12 +100,13 @@ namespace svx
             OUString colorSuffix = OUString(" (%1)").replaceFirst("%1", rNamedColor.second);
             OUString colorHelpText = maCommandLabel + colorSuffix;
 
-            mpTbx->SetQuickHelpText(mnBtnId, colorHelpText);
+            SetQuickHelpText(colorHelpText);
         }
     }
 
-    void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
+    void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdate)
     {
+#if 0
         Image aImage(mpTbx->GetItemImage(mnBtnId));
         Size aItemSize(mbWideButton ? mpTbx->GetItemContentSize(mnBtnId) : aImage.GetSizePixel());
 #ifdef IOS // tdf#126966
@@ -102,7 +123,7 @@ namespace svx
         }
 #endif
         const bool bSizeChanged = (maBmpSize != aItemSize);
-        const bool bDisplayModeChanged = (mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode());
+        const bool bDisplayModeChanged = (mbWasHiContrastMode != Application::GetSettings().GetStyleSettings().GetHighContrastMode());
         Color aColor(rColor);
 
         // !!! #109290# Workaround for SetFillColor with COL_AUTO
@@ -120,7 +141,7 @@ namespace svx
         pVirDev->SetOutputSizePixel(aItemSize);
         maBmpSize = aItemSize;
 
-        mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
+        mbWasHiContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
         if ((COL_TRANSPARENT != aColor) && (maBmpSize.Width() == maBmpSize.Height()))
             pVirDev->SetLineColor(aColor);
@@ -152,11 +173,12 @@ namespace svx
         pVirDev->DrawRect(maUpdRect);
 
         mpTbx->SetItemOverlayImage(mnBtnId, Image(pVirDev->GetBitmapEx(Point(0,0), aItemSize)));
+#endif
     }
 
-    OUString ToolboxButtonColorUpdater::GetCurrentColorName()
+    OUString ToolboxButtonColorUpdaterBase::GetCurrentColorName()
     {
-        OUString sColorName = mpTbx->GetQuickHelpText(mnBtnId);
+        OUString sColorName = GetQuickHelpText();
         // The obtained string is of format: color context (color name)
         // Generate a substring which contains only the color name
         sal_Int32 nStart = sColorName.indexOf('(');
@@ -165,6 +187,25 @@ namespace svx
         if(nLength > 0)
             sColorName = sColorName.copy( 0, nLength - 1);
         return sColorName;
+    }
+
+    ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
+                                                         const OUString& rCommandLabel)
+        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel)
+        , msBtnId(rTbxBtnId)
+        , mpTbx(ptrTbx)
+    {
+        Init(nSlotId);
+    }
+
+    void ToolboxButtonColorUpdater::SetQuickHelpText(const OUString& rText)
+    {
+        mpTbx->set_item_tooltip_text(msBtnId, rText);
+    }
+
+    OUString ToolboxButtonColorUpdater::GetQuickHelpText() const
+    {
+        return mpTbx->get_item_tooltip_text(msBtnId);
     }
 }
 

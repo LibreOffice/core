@@ -166,6 +166,7 @@ Condition::~Condition()
 void Condition::SetBackgroundDropdownClick()
 {
     m_xBackColorFloat.reset(new ColorWindow(
+                            OUString() /*m_aCommandURL*/,
                             m_xPaletteManager,
                             m_aColorStatus,
                             SID_BACKGROUND_COLOR,
@@ -174,12 +175,13 @@ void Condition::SetBackgroundDropdownClick()
                             MenuOrToolMenuButton(m_xActions.get(), "background"),
                             m_aBackColorWrapper));
 
-    m_xActions->set_item_popover("background", m_xBackColorFloat->GetWidget());
+    m_xActions->set_item_popover("background", m_xBackColorFloat->getTopLevel());
 }
 
 void Condition::SetForegroundDropdownClick()
 {
     m_xForeColorFloat.reset(new ColorWindow(
+                            OUString() /*m_aCommandURL*/,
                             m_xPaletteManager,
                             m_aColorStatus,
                             SID_ATTR_CHAR_COLOR2,
@@ -188,7 +190,7 @@ void Condition::SetForegroundDropdownClick()
                             MenuOrToolMenuButton(m_xActions.get(), "foreground"),
                             m_aForeColorWrapper));
 
-    m_xActions->set_item_popover("foreground", m_xForeColorFloat->GetWidget());
+    m_xActions->set_item_popover("foreground", m_xForeColorFloat->getTopLevel());
 }
 
 

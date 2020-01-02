@@ -25,6 +25,7 @@
 #include <vcl/weldutils.hxx>
 
 #include <svtools/popupwindowcontroller.hxx>
+#include <svtools/toolbarmenu.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -174,6 +175,7 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
 // XComponent
 void SAL_CALL PopupWindowController::dispose()
 {
+    mxPopover.reset();
     mxImpl.reset();
     svt::ToolboxController::dispose();
 }
@@ -231,6 +233,11 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
         }
     }
     return Reference< awt::XWindow >();
+}
+
+void PopupWindowController::EndPopupMode()
+{
+    m_pToolbar->set_menu_item_active(m_aCommandURL.toUtf8(), false);
 }
 
 }

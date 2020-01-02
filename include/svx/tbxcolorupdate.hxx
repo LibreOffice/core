@@ -31,6 +31,10 @@
 class ToolBox;
 class VirtualDevice;
 
+namespace weld
+{
+    class Toolbar;
+}
 
 namespace svx
 {
@@ -42,12 +46,11 @@ namespace svx
 
         formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
     */
-    class ToolboxButtonColorUpdater
+    class ToolboxButtonColorUpdaterBase
     {
     public:
-                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
-                                              const OUString& rCommandLabel );
-                    ~ToolboxButtonColorUpdater();
+        ToolboxButtonColorUpdaterBase(bool bWideButton, const OUString& rCommandLabel);
+        virtual ~ToolboxButtonColorUpdaterBase();
 
         void        Update( const NamedColor& rNamedColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
@@ -55,22 +58,51 @@ namespace svx
         OUString    GetCurrentColorName();
 
     private:
-        ToolboxButtonColorUpdater(ToolboxButtonColorUpdater const &) = delete;
-        ToolboxButtonColorUpdater& operator =(ToolboxButtonColorUpdater const &) = delete;
+        ToolboxButtonColorUpdaterBase(ToolboxButtonColorUpdaterBase const &) = delete;
+        ToolboxButtonColorUpdaterBase& operator =(ToolboxButtonColorUpdaterBase const &) = delete;
 
-        bool const            mbWideButton;
-        sal_uInt16 const      mnBtnId;
-        VclPtr<ToolBox> mpTbx;
+    protected:
+        bool const  mbWideButton;
+        bool        mbWasHiContrastMode;
         Color       maCurColor;
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
-        bool        mbWasHiContrastMode;
         OUString    maCommandLabel;
+
+        void Init(sal_uInt16 nSlotId);
+
+        virtual void SetQuickHelpText(const OUString& rText) = 0;
+        virtual OUString GetQuickHelpText() const = 0;
     };
 
+    class VclToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
+    {
+    public:
+        VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
+                                     const OUString& rCommandLabel);
 
+    private:
+        sal_uInt16 const      mnBtnId;
+        VclPtr<ToolBox> mpTbx;
+
+        virtual void SetQuickHelpText(const OUString& rText) override;
+        virtual OUString GetQuickHelpText() const override;
+    };
+
+    class ToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
+    {
+    public:
+        ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
+                                  const OUString& rCommandLabel);
+
+    private:
+        OString msBtnId;
+        weld::Toolbar* mpTbx;
+
+        virtual void SetQuickHelpText(const OUString& rText) override;
+        virtual OUString GetQuickHelpText() const override;
+    };
 }
-
 
 #endif // INCLUDED_SVX_TBXCOLORUPDATE_HXX
 

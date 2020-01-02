@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
@@ -59,6 +60,7 @@ ToolboxController::ToolboxController(
     ,   m_xContext( rxContext )
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
+    ,   m_pToolbar(nullptr)
 {
     OSL_ASSERT( m_xContext.is() );
     registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
@@ -82,6 +84,7 @@ ToolboxController::ToolboxController() :
     ,   m_bDisposed( false )
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_aListenerContainer( m_aMutex )
+    ,   m_pToolbar(nullptr)
 {
     registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
@@ -205,6 +208,12 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
 
     if ( !m_aCommandURL.isEmpty() )
         m_aListenerMap.emplace( m_aCommandURL, Reference< XDispatch >() );
+
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(getParent().get()))
+    {
+        m_pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
+        assert(m_pToolbar && "must be a toolbar");
+    }
 }
 
 void SAL_CALL ToolboxController::update()

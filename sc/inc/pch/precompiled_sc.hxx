@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-03 09:20:23 using:
+ Generated on 2020-01-02 15:21:26 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -472,6 +472,7 @@
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
 #include <formulacell.hxx>
+#include <funcdesc.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
 #include <hints.hxx>

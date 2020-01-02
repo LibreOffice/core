@@ -150,7 +150,7 @@ class PaletteManager;
 
 namespace svx
 {
-    class ToolboxButtonColorUpdater;
+    class ToolboxButtonColorUpdaterBase;
 }
 
 class SVX_DLLPUBLIC SvxStyleToolBoxControl final : public SfxToolBoxControl
@@ -204,7 +204,7 @@ typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunct
 class SVX_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
                                                                                  css::frame::XSubToolbarController >
 {
-    std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
+    std::unique_ptr<svx::ToolboxButtonColorUpdaterBase> m_xBtnUpdater;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
     ColorStatus m_aColorStatus;
     bool m_bSplitButton;
@@ -265,8 +265,6 @@ private:
     LanguageType m_eLanguage;
     sal_uInt32   m_nFormatKey;
 
-    weld::Toolbar* m_pToolbar;
-    std::unique_ptr<svtools::ToolbarPopupBase> m_xPopover;
 public:
     static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
                                     std::vector<sal_uInt16>& rCurrencyList );
@@ -277,13 +275,8 @@ public:
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 nSelectModifier ) override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-
     using svt::ToolboxController::createPopupWindow;
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
-
-    void EndPopupMode();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
