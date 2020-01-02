@@ -382,7 +382,7 @@
 #define RID_SVXSTR_CANNOTCONVERTURL_ERR             NC_("RID_SVXSTR_CANNOTCONVERTURL_ERR", "The URL <%1> cannot be converted to a filesystem path.")
 
 #define RID_SVXSTR_ABOUT_VERSION                    NC_("aboutdialog|textbuffer1", "Version: %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX")
-#define RID_SVXSTR_ABOUT_COPYRIGHT                  NC_("aboutdialog|copyright", "Copyright © 2000–2019 LibreOffice contributors.")
+#define RID_SVXSTR_ABOUT_COPYRIGHT                  NC_("aboutdialog|copyright", "Copyright © 2000–2020 LibreOffice contributors.")
 #define RID_SVXSTR_ABOUT_CREDITS_URL                NC_("aboutdialog|link", "https://www.libreoffice.org/about-us/credits/")
 #define RID_SVXSTR_ABOUT_BUILDID                    NC_("aboutdialog|buildid", "Build ID: $BUILDID")
 #define RID_SVXSTR_ABOUT_VENDOR                     NC_("aboutdialog|vendor", "This release was supplied by %OOOVENDOR.")
