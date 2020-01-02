@@ -510,12 +510,18 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWX      :
             {
-                rFullTrans.shearX(tan(static_cast<ImpSdXMLExpTransObj2DSkewX*>(pObj)->mfSkewX));
+                // For to get a mathematical correct matrix from already existing documents,
+                // mirror the value here. ODF spec is unclear about direction.
+                rFullTrans.shearX(-tan(static_cast<ImpSdXMLExpTransObj2DSkewX*>(pObj)->mfSkewX));
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWY      :
             {
-                rFullTrans.shearY(tan(static_cast<ImpSdXMLExpTransObj2DSkewY*>(pObj)->mfSkewY));
+                // LibreOffice does not write skewY, OOo neither. Such files are foreign documents
+                // or manually set transformations. OOo had used the value as -tan(value) before
+                // errors were introduced, Scribus 1.5.4 uses it as -tan(value) too, MS Office does
+                // not shear at all. ODF spec is unclear about direction.
+                rFullTrans.shearY(-tan(static_cast<ImpSdXMLExpTransObj2DSkewY*>(pObj)->mfSkewY));
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_MATRIX     :

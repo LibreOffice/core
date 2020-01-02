@@ -2929,12 +2929,30 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // #i75086#
     // Given polygon is already scaled (for historical reasons), but not mirrored yet.
     // Thus, when scale is negative in X or Y, apply the needed mirroring accordingly.
-    if(basegfx::fTools::less(aScale.getX(), 0.0) || basegfx::fTools::less(aScale.getY(), 0.0))
+    double fScaleX(basegfx::fTools::less(aScale.getX(), 0.0) ? -1.0 : 1.0);
+    double fScaleY(basegfx::fTools::less(aScale.getY(), 0.0) ? -1.0 : 1.0);
+
+    // tdf#98565, tdf#98584. While loading a shape, svg:width and svg:height is used to scale
+    // the polygon. But draw:transform might introduce additional scaling factors, which need to
+    // be applied to the polygon too, so aScale cannot be ignored while loading.
+    // I use "maSnapRect.IsEmpty() && GetPathPoly().count()" to detect this case. Any better
+    // idea? The behavior in other cases is the same as it was before this fix.
+    if (maSnapRect.IsEmpty() && GetPathPoly().count())
     {
-        aTransform.scale(
-            basegfx::fTools::less(aScale.getX(), 0.0) ? -1.0 : 1.0,
-            basegfx::fTools::less(aScale.getY(), 0.0) ? -1.0 : 1.0);
+        // In case of a Writer document, the scaling factors were converted to twips. That is not
+        // correct here, because width and height are already in the points coordinates and aScale
+        // is no length but only a factor here. Convert back.
+        if (getSdrModelFromSdrObject().IsWriter())
+        {
+            aScale.setX(aScale.getX() * 127.0 / 72.0);
+            aScale.setY(aScale.getY() * 127.0 / 72.0);
+        }
+        fScaleX *= fabs(aScale.getX());
+        fScaleY *= fabs(aScale.getY());
     }
+
+    if (fScaleX != 1.0 || fScaleY != 1.0)
+        aTransform.scale(fScaleX, fScaleY);
 
     if(!basegfx::fTools::equalZero(fShearX))
     {
