@@ -32,7 +32,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/weldutils.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>
@@ -1775,7 +1774,8 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     }
 }
 
-ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager,
+ColorWindow::ColorWindow(const OUString& rCommand,
+                         std::shared_ptr<PaletteManager> const & rPaletteManager,
                          ColorStatus&               rColorStatus,
                          sal_uInt16                 nSlotId,
                          const Reference< XFrame >& rFrame,
@@ -1785,6 +1785,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     : ToolbarPopupBase(rFrame)
     , m_xBuilder(Application::CreateBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui"))
     , theSlotId(nSlotId)
+    , maCommand(rCommand)
     , mpParentWindow(pParentWindow)
     , maMenuButton(rMenuButton)
     , mxPaletteManager(rPaletteManager)
@@ -1877,6 +1878,12 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     mxRecentColorSet->set_size_request(aSize.Width(), aSize.Height());
 
     AddStatusListener( ".uno:ColorTableState" );
+    AddStatusListener( maCommand );
+    if ( maCommand == ".uno:FrameLineColor" )
+    {
+        AddStatusListener( ".uno:BorderTLBR" );
+        AddStatusListener( ".uno:BorderBLTR" );
+    }
 }
 
 IMPL_LINK_NOARG(ColorWindow, FocusHdl, weld::Widget&, void)
@@ -2036,7 +2043,9 @@ IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
     if (maMenuButton.get_active())
         maMenuButton.set_active(false);
 
-    maColorSelectFunction(OUString(), aNamedColor);
+    maSelectedLink.Call(aNamedColor);
+
+    maColorSelectFunction(maCommand, aNamedColor);
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
@@ -2092,7 +2101,9 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
     if (maMenuButton.get_active())
         maMenuButton.set_active(false);
 
-    maColorSelectFunction(OUString(), aNamedColor);
+    maSelectedLink.Call(aNamedColor);
+
+    maColorSelectFunction(maCommand, aNamedColor);
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
@@ -2119,7 +2130,7 @@ IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
 {
     if (maMenuButton.get_active())
         maMenuButton.set_active(false);
-    mxPaletteManager->PopupColorPicker(mpParentWindow, OUString(), GetSelectEntryColor().first);
+    mxPaletteManager->PopupColorPicker(mpParentWindow, maCommand, GetSelectEntryColor().first);
 }
 
 void SvxColorWindow::StartSelection()
@@ -3456,25 +3467,54 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
 {
     PopupWindowController::initialize( rArguments );
 
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    if ( !getToolboxId( nId, &pToolBox ) )
-    {
-        SAL_WARN("svx.tbxcrtls", "ToolBox not found!");
-        return;
-    }
-
     m_nSlotId = MapCommandToSlotId( m_aCommandURL );
+
     if ( m_nSlotId == SID_ATTR_LINE_COLOR || m_nSlotId == SID_ATTR_FILL_COLOR ||
          m_nSlotId == SID_FRAME_LINECOLOR || m_nSlotId == SID_BACKGROUND_COLOR )
+    {
         // Sidebar uses wide buttons for those.
-        m_bSplitButton = typeid( *pToolBox ) != typeid( sfx2::sidebar::SidebarToolBox );
+        m_bSplitButton = !m_bSidebar;
+    }
 
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(getCommandURL(), getModuleName());
     OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
-    m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox, !m_bSplitButton,  aCommandLabel ) );
-    pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
+    if (m_pToolbar)
+    {
+        EnsurePaletteManager();
+
+        const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
+        weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
+
+        const OString aId(m_aCommandURL.toUtf8());
+
+        auto xPopover = std::make_unique<ColorWindow>(
+                            m_aCommandURL,
+                            m_xPaletteManager,
+                            m_aColorStatus,
+                            m_nSlotId,
+                            m_xFrame,
+                            pParentFrame,
+                            MenuOrToolMenuButton(m_pToolbar, aId),
+                            m_aColorSelectFunction);
+
+        if ( m_bSplitButton )
+            xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
+
+        m_pToolbar->set_item_popover(aId, xPopover->getTopLevel());
+        mxPopover = std::move(xPopover);
+
+        m_xBtnUpdater.reset(new svx::ToolboxButtonColorUpdater(m_nSlotId, aId, m_pToolbar, !m_bSplitButton, aCommandLabel, m_xFrame));
+        return;
+    }
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox))
+    {
+        m_xBtnUpdater.reset( new svx::VclToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox, !m_bSplitButton,  aCommandLabel, m_aCommandURL, m_xFrame ) );
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
+    }
 }
 
 void SvxColorToolBoxControl::update()
@@ -3552,11 +3592,15 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if ( !getToolboxId( nId, &pToolBox ) )
-        return;
+    getToolboxId(nId, &pToolBox);
 
     if ( rEvent.FeatureURL.Complete == m_aCommandURL )
-        pToolBox->EnableItem( nId, rEvent.IsEnabled );
+    {
+        if (m_pToolbar)
+            m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+        else
+            pToolBox->EnableItem( nId, rEvent.IsEnabled );
+    }
 
     bool bValue;
     if ( !m_bSplitButton )
@@ -3565,15 +3609,29 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
         m_xBtnUpdater->Update( m_aColorStatus.GetColor() );
     }
     else if ( rEvent.State >>= bValue )
-        pToolBox->CheckItem( nId, bValue );
+    {
+        if (m_pToolbar)
+            m_pToolbar->set_item_active(m_aCommandURL.toUtf8(), bValue);
+        else if (pToolBox)
+            pToolBox->CheckItem( nId, bValue );
+    }
 }
 
 void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
 {
     if ( !m_bSplitButton )
     {
-        // Open the popup also when Enter key is pressed.
-        createPopupWindow();
+        if (m_pToolbar)
+        {
+            // Toggle the popup also when toolbutton is activated
+            const OString aId(m_aCommandURL.toUtf8());
+            m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+        }
+        else
+        {
+            // Open the popup also when Enter key is pressed.
+            createPopupWindow();
+        }
         return;
     }
 
@@ -3611,17 +3669,7 @@ sal_Bool SvxColorToolBoxControl::opensSubToolbar()
 
 void SvxColorToolBoxControl::updateImage()
 {
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    if ( !getToolboxId( nId, &pToolBox ) )
-        return;
-
-    Image aImage = vcl::CommandInfoProvider::GetImageForCommand(m_aCommandURL, m_xFrame, pToolBox->GetImageSize());
-    if ( !!aImage )
-    {
-        pToolBox->SetItemImage( nId, aImage );
-        m_xBtnUpdater->Update(m_xBtnUpdater->GetCurrentColor(), true);
-    }
+    m_xBtnUpdater->Update(m_xBtnUpdater->GetCurrentColor(), true);
 }
 
 OUString SvxColorToolBoxControl::getSubToolbarName()
@@ -3741,8 +3789,7 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
     PopupWindowController( rContext, nullptr, OUString() ),
     m_eLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() ),
-    m_nFormatKey( NUMBERFORMAT_ENTRY_NOT_FOUND ),
-    m_pToolbar(nullptr)
+    m_nFormatKey( NUMBERFORMAT_ENTRY_NOT_FOUND )
 {
 }
 
@@ -3877,28 +3924,15 @@ namespace
     }
 }
 
-void SvxCurrencyToolBoxControl::EndPopupMode()
-{
-    m_pToolbar->set_menu_item_active(m_aCommandURL.toUtf8(), false);
-}
-
-void SvxCurrencyToolBoxControl::dispose()
-{
-    m_xPopover.reset();
-    svt::PopupWindowController::dispose();
-}
-
 void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
-    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(getParent().get()))
+    if (m_pToolbar)
     {
-        m_pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
-        assert(m_pToolbar && "must be a toolbar");
         auto xPopover = std::make_unique<CurrencyList_Impl>(this, m_pToolbar, m_aFormatString, m_eLanguage);
         m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), xPopover->getTopLevel());
-        m_xPopover = std::move(xPopover);
+        mxPopover = std::move(xPopover);
         return;
     }
 
@@ -4310,6 +4344,7 @@ void ColorListBox::createColorWindow()
     EnsurePaletteManager();
 
     m_xColorWindow.reset(new ColorWindow(
+                            OUString() /*m_aCommandURL*/,
                             m_xPaletteManager,
                             m_aColorStatus,
                             m_nSlotId,
@@ -4319,7 +4354,7 @@ void ColorListBox::createColorWindow()
                             m_aColorWrapper));
 
     SetNoSelection();
-    m_xButton->set_popover(m_xColorWindow->GetWidget());
+    m_xButton->set_popover(m_xColorWindow->getTopLevel());
     if (m_bShowNoneButton)
         m_xColorWindow->ShowNoneButton();
     m_xColorWindow->SelectEntry(m_aSelectedColor);

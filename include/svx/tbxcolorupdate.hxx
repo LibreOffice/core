@@ -24,13 +24,18 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
-
 #include <svx/Palette.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 
 class ToolBox;
 class VirtualDevice;
 
+namespace weld
+{
+    class Toolbar;
+}
 
 namespace svx
 {
@@ -42,12 +47,14 @@ namespace svx
 
         formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
     */
-    class ToolboxButtonColorUpdater
+    class ToolboxButtonColorUpdaterBase
     {
     public:
-                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
-                                              const OUString& rCommandLabel );
-                    ~ToolboxButtonColorUpdater();
+        ToolboxButtonColorUpdaterBase(bool bWideButton, const OUString& rCommandLabel,
+                                      const OUString& rCommandURL,
+                                      const css::uno::Reference<css::frame::XFrame>& rFrame);
+
+        virtual ~ToolboxButtonColorUpdaterBase();
 
         void        Update( const NamedColor& rNamedColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
@@ -55,22 +62,67 @@ namespace svx
         OUString    GetCurrentColorName();
 
     private:
-        ToolboxButtonColorUpdater(ToolboxButtonColorUpdater const &) = delete;
-        ToolboxButtonColorUpdater& operator =(ToolboxButtonColorUpdater const &) = delete;
+        ToolboxButtonColorUpdaterBase(ToolboxButtonColorUpdaterBase const &) = delete;
+        ToolboxButtonColorUpdaterBase& operator =(ToolboxButtonColorUpdaterBase const &) = delete;
 
-        bool const            mbWideButton;
-        sal_uInt16 const      mnBtnId;
-        VclPtr<ToolBox> mpTbx;
+    protected:
+        bool const  mbWideButton;
+        bool        mbWasHiContrastMode;
         Color       maCurColor;
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
-        bool        mbWasHiContrastMode;
         OUString    maCommandLabel;
+        OUString    maCommandURL;
+        css::uno::Reference<css::frame::XFrame> mxFrame;
+
+        void Init(sal_uInt16 nSlotId);
+
+        virtual void SetQuickHelpText(const OUString& rText) = 0;
+        virtual OUString GetQuickHelpText() const = 0;
+        virtual void SetImage(VirtualDevice* pVirDev) = 0;
+        virtual VclPtr<VirtualDevice> CreateVirtualDevice() const = 0;
+        virtual vcl::ImageType GetImageSize() const = 0;
+        virtual Size GetItemSize() const = 0;
     };
 
+    class VclToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
+    {
+    public:
+        VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
+                                     const OUString& rCommandLabel, const OUString& rCommandURL,
+                                     const css::uno::Reference<css::frame::XFrame>& rFrame);
 
+
+    private:
+        sal_uInt16 const      mnBtnId;
+        VclPtr<ToolBox> mpTbx;
+
+        virtual void SetQuickHelpText(const OUString& rText) override;
+        virtual OUString GetQuickHelpText() const override;
+        virtual void SetImage(VirtualDevice* pVirDev) override;
+        virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
+        virtual vcl::ImageType GetImageSize() const override;
+        virtual Size GetItemSize() const override;
+    };
+
+    class ToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
+    {
+    public:
+        ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
+                                  const OUString& rCommandLabel, const css::uno::Reference<css::frame::XFrame>& rFrame);
+
+    private:
+        OString msBtnId;
+        weld::Toolbar* mpTbx;
+
+        virtual void SetQuickHelpText(const OUString& rText) override;
+        virtual OUString GetQuickHelpText() const override;
+        virtual void SetImage(VirtualDevice* pVirDev) override;
+        virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
+        virtual vcl::ImageType GetImageSize() const override;
+        virtual Size GetItemSize() const override;
+    };
 }
-
 
 #endif // INCLUDED_SVX_TBXCOLORUPDATE_HXX
 

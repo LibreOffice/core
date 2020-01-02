@@ -17,6 +17,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
+#include <sfx2/weldutils.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -29,9 +30,9 @@ namespace chart { namespace sidebar {
 
 namespace {
 
-SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pToolBoxColor)
+SvxColorToolBoxControl* getColorToolBoxControl(ToolbarUnoDispatcher& rColorDispatch)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = pToolBoxColor->GetFirstController();
+    css::uno::Reference<css::frame::XToolbarController> xController = rColorDispatch.GetControllerForCommand(".uno:FillColor");
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
     return pToolBoxColorControl;
 }
@@ -261,7 +262,7 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
     mbModelValid(true),
-    maFillColorWrapper(mxModel, getColorToolBoxControl(mpToolBoxColor.get()), "FillColor")
+    maFillColorWrapper(mxModel, getColorToolBoxControl(*mxColorDispatch), "FillColor")
 {
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM,
         OBJECTTYPE_DATA_SERIES, OBJECTTYPE_DATA_POINT,
@@ -296,7 +297,7 @@ void ChartAreaPanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
-    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mpToolBoxColor.get());
+    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(*mxColorDispatch);
     pToolBoxColor->setColorSelectFunction(maFillColorWrapper);
 
     updateData();

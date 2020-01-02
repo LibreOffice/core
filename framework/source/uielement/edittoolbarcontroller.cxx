@@ -116,7 +116,7 @@ EditToolbarController::EditToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pEditControl( nullptr )
 {
-    m_pEditControl = VclPtr<EditControl>::Create( m_pToolbar, WB_BORDER, this );
+    m_pEditControl = VclPtr<EditControl>::Create( m_xToolbar, WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -124,7 +124,7 @@ EditToolbarController::EditToolbarController(
     sal_Int32 nHeight = getFontSizePixel( m_pEditControl ) + 6 + 1;
 
     m_pEditControl->SetSizePixel( ::Size( nWidth, nHeight ));
-    m_pToolbar->SetItemWindow( m_nID, m_pEditControl );
+    m_xToolbar->SetItemWindow( m_nID, m_pEditControl );
 }
 
 EditToolbarController::~EditToolbarController()
@@ -135,7 +135,7 @@ void SAL_CALL EditToolbarController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, nullptr );
+    m_xToolbar->SetItemWindow( m_nID, nullptr );
     m_pEditControl.disposeAndClear();
 
     ComplexToolbarController::dispose();
