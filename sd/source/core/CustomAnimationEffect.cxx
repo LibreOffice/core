@@ -63,6 +63,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <algorithm>
+#include <numeric>
 #include <deque>
 
 #include <cppuhelper/implbase.hxx>
@@ -527,7 +528,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
 /** checks if the text for this effect has changed and updates internal flags.
     returns true if something changed.
 */
-bool CustomAnimationEffect::checkForText()
+bool CustomAnimationEffect::checkForText( const std::vector<sal_Int32>* paragraphNumberingLevel )
 {
     bool bChange = false;
 
@@ -544,35 +545,51 @@ bool CustomAnimationEffect::checkForText()
         // get paragraph
         if( xText.is() )
         {
-            Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
-            if( xEA.is() )
+            sal_Int32 nPara = aParaTarget.Paragraph;
+
+            bool bHasText = false;
+            sal_Int32 nParaDepth = 0;
+
+            if ( paragraphNumberingLevel )
             {
-                Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
-                if( xEnumeration.is() )
+                bHasText = !paragraphNumberingLevel->empty();
+                if (nPara >= 0 && static_cast<size_t>(nPara) < paragraphNumberingLevel->size())
+                    nParaDepth = paragraphNumberingLevel->at(nPara);
+            }
+            else
+            {
+                Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
+                if( xEA.is() )
                 {
-                    bool bHasText = xEnumeration->hasMoreElements();
-                    bChange |= bHasText != mbHasText;
-                    mbHasText = bHasText;
-
-                    sal_Int32 nPara = aParaTarget.Paragraph;
-
-                    while( xEnumeration->hasMoreElements() && nPara-- )
-                        xEnumeration->nextElement();
-
-                    if( xEnumeration->hasMoreElements() )
+                    Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
+                    if( xEnumeration.is() )
                     {
-                        Reference< XPropertySet > xParaSet;
-                        xEnumeration->nextElement() >>= xParaSet;
-                        if( xParaSet.is() )
+                        bHasText = xEnumeration->hasMoreElements();
+
+                        while( xEnumeration->hasMoreElements() && nPara-- )
+                            xEnumeration->nextElement();
+
+                        if( xEnumeration->hasMoreElements() )
                         {
-                            sal_Int32 nParaDepth = 0;
-                            const OUString strNumberingLevel( "NumberingLevel" );
-                            xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
-                            bChange |= nParaDepth != mnParaDepth;
-                            mnParaDepth = nParaDepth;
+                            Reference< XPropertySet > xParaSet;
+                            xEnumeration->nextElement() >>= xParaSet;
+                            if( xParaSet.is() )
+                            {
+                                const OUString strNumberingLevel( "NumberingLevel" );
+                                xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
+                            }
                         }
                     }
                 }
+            }
+
+            if( bHasText )
+            {
+                bChange |= bHasText != mbHasText;
+                mbHasText = bHasText;
+
+                bChange |= nParaDepth != mnParaDepth;
+                mnParaDepth = nParaDepth;
             }
         }
     }
@@ -2143,21 +2160,65 @@ bool EffectSequenceHelper::hasEffect( const css::uno::Reference< css::drawing::X
     return false;
 }
 
+bool EffectSequenceHelper::getParagraphNumberingLevels( const Reference< XShape >& xShape, std::vector< sal_Int32 >& rParagraphNumberingLevel )
+{
+    rParagraphNumberingLevel.clear();
+
+    if( !hasEffect( xShape ) )
+        return false;
+
+    Reference< XText > xText( xShape, UNO_QUERY );
+    if( xText.is() )
+    {
+        Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
+        if( xEA.is() )
+        {
+            Reference< XEnumeration > xEnumeration = xEA->createEnumeration();
+
+            if( xEnumeration.is() )
+            {
+                for( sal_Int32 index = 0; xEnumeration->hasMoreElements(); index++ )
+                {
+                    Reference< XPropertySet > xParaSet;
+                    xEnumeration->nextElement() >>= xParaSet;
+
+                    sal_Int32 nParaDepth = 0;
+                    if( xParaSet.is() )
+                    {
+                        const OUString strNumberingLevel( "NumberingLevel" );
+                        xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
+                    }
+
+                    rParagraphNumberingLevel.push_back( nParaDepth );
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
 void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
 {
-    bool bChanges = false;
-
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
         return;
 
-    EffectSequence::iterator aIter( maEffects.begin() );
-    while( aIter != maEffects.end() )
-    {
-        if( (*aIter)->getTargetShape() == aParaTarget.Shape )
-            bChanges |= (*aIter)->checkForText();
-        ++aIter;
-    }
+    // get map [paragraph index] -> [NumberingLevel]
+    // for following reusage inside all animation effects
+    std::vector< sal_Int32 > paragraphNumberingLevel;
+    std::vector< sal_Int32 >* paragraphNumberingLevelParam = nullptr;
+    if ( getParagraphNumberingLevels( aParaTarget.Shape, paragraphNumberingLevel ) )
+        paragraphNumberingLevelParam = &paragraphNumberingLevel;
+
+    // update internal flags for each animation effect
+    const bool bChanges = std::accumulate(maEffects.begin(), maEffects.end(), false,
+        [&aParaTarget, &paragraphNumberingLevelParam](const bool bCheck, const CustomAnimationEffectPtr& rxEffect) {
+            bool bRes = bCheck;
+            if (rxEffect->getTargetShape() == aParaTarget.Shape)
+                bRes |= rxEffect->checkForText( paragraphNumberingLevelParam );
+            return bRes;
+        });
 
     if( bChanges )
         rebuild();
@@ -3214,14 +3275,21 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
 
 void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
 {
-    bool bChanges = false;
+    // get map [paragraph index] -> [NumberingLevel]
+    // for following reusage inside all animation effects
+    std::vector< sal_Int32 > paragraphNumberingLevel;
+    std::vector< sal_Int32 >* paragraphNumberingLevelParam = nullptr;
+    if ( getParagraphNumberingLevels( xShape, paragraphNumberingLevel ) )
+        paragraphNumberingLevelParam = &paragraphNumberingLevel;
 
-    EffectSequence::iterator aIter;
-    for( aIter = maEffects.begin(); aIter != maEffects.end(); ++aIter )
-    {
-        if( (*aIter)->getTargetShape() == xShape )
-            bChanges |= (*aIter)->checkForText();
-    }
+    // update internal flags for each animation effect
+    const bool bChanges = std::accumulate(maEffects.begin(), maEffects.end(), false,
+        [&xShape, &paragraphNumberingLevelParam](const bool bCheck, const CustomAnimationEffectPtr& rxEffect) {
+            bool bRes = bCheck;
+            if (rxEffect->getTargetShape() == xShape)
+                bRes |= rxEffect->checkForText( paragraphNumberingLevelParam );
+            return bRes;
+        });
 
     if( bChanges )
         EffectSequenceHelper::implRebuild();
