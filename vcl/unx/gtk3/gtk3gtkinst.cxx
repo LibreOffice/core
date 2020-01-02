@@ -2989,6 +2989,34 @@ namespace
         return pRet;
     }
 
+    GdkPixbuf* getPixbuf(const OUString& rIconName)
+    {
+        if (rIconName.isEmpty())
+            return nullptr;
+
+        GdkPixbuf* pixbuf = nullptr;
+
+        if (rIconName.lastIndexOf('.') != rIconName.getLength() - 4)
+        {
+            assert((rIconName== "dialog-warning" || rIconName== "dialog-error" || rIconName== "dialog-information") &&
+                   "unknown stock image");
+
+            GError *error = nullptr;
+            GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+            pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
+                                              16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+        }
+        else
+        {
+            const AllSettings& rSettings = Application::GetSettings();
+            pixbuf = load_icon_by_name_theme_lang(rIconName,
+                                       rSettings.GetStyleSettings().DetermineIconTheme(),
+                                       rSettings.GetUILanguageTag().getBcp47());
+        }
+
+        return pixbuf;
+    }
+
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
         GtkWidget* pImage = nullptr;
@@ -7268,7 +7296,23 @@ public:
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
+    virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
+    {
+        GtkToolButton* pItem = m_aMap[rIdent];
+
+        GtkWidget* pImage = nullptr;
+
+        if (GdkPixbuf* pixbuf = getPixbuf(rIconName))
+        {
+            pImage = gtk_image_new_from_pixbuf(pixbuf);
+            g_object_unref(pixbuf);
+            gtk_widget_show(pImage);
+        }
+
+        gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
+    }
+
+    virtual void set_item_image(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
 
@@ -7955,34 +7999,6 @@ public:
         }
         g_free(pStr);
         return found;
-    }
-
-    GdkPixbuf* getPixbuf(const OUString& rIconName)
-    {
-        if (rIconName.isEmpty())
-            return nullptr;
-
-        GdkPixbuf* pixbuf = nullptr;
-
-        if (rIconName.lastIndexOf('.') != rIconName.getLength() - 4)
-        {
-            assert((rIconName== "dialog-warning" || rIconName== "dialog-error" || rIconName== "dialog-information") &&
-                   "unknown stock image");
-
-            GError *error = nullptr;
-            GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
-            pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(rIconName, RTL_TEXTENCODING_UTF8).getStr(),
-                                              16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
-        }
-        else
-        {
-            const AllSettings& rSettings = Application::GetSettings();
-            pixbuf = load_icon_by_name_theme_lang(rIconName,
-                                       rSettings.GetStyleSettings().DetermineIconTheme(),
-                                       rSettings.GetUILanguageTag().getBcp47());
-        }
-
-        return pixbuf;
     }
 
     void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, const VirtualDevice* pDevice)

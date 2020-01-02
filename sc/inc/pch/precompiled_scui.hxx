@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-15 16:58:12 using:
+ Generated on 2020-01-02 15:21:50 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,14 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -92,6 +85,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/inettbc.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/unitconv.hxx>

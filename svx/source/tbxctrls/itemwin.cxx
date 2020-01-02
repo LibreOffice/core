@@ -732,6 +732,33 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
     rBox.thaw();
 }
 
+void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XGradientListRef &pList)
+{
+    if( !pList.is() )
+        return;
+
+    long nCount = pList->Count();
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    rBox.freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XGradientEntry* pEntry = pList->GetGradient(i);
+        const BitmapEx aBitmapEx = pList->GetUiBitmap( i );
+        if( !aBitmapEx.IsEmpty() )
+        {
+            const Size aBmpSize(aBitmapEx.GetSizePixel());
+            pVD->SetOutputSizePixel(aBmpSize, false);
+            pVD->DrawBitmapEx(Point(), aBitmapEx);
+            rBox.append("", pEntry->GetName(), *pVD);
+        }
+        else
+            rBox.append_text(pEntry->GetName());
+    }
+
+    rBox.thaw();
+}
+
 void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
 {
     if( !pList.is() )

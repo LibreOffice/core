@@ -1099,7 +1099,12 @@ public:
         m_xToolBox->SetItemText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rLabel);
     }
 
-    virtual void set_item_icon(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
+    virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
+    {
+        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image(StockImage::Yes, rIconName));
+    }
+
+    virtual void set_item_image(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         m_xToolBox->SetItemImage(m_xToolBox->GetItemId(nIndex), Image(rIcon));
     }

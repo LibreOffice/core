@@ -75,7 +75,7 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
             vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties, rFrame));
         rToolbar.set_item_tooltip_text(i, aTooltip);
         auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sCommand, rFrame, eSize));
-        rToolbar.set_item_icon(i, xImage);
+        rToolbar.set_item_image(i, xImage);
 
         CreateController(sCommand);
     }

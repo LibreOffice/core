@@ -260,8 +260,8 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
-    mbModelValid(true),
-    maFillColorWrapper(mxModel, getColorToolBoxControl(mpToolBoxColor.get()), "FillColor")
+    mbModelValid(true)
+    //TODO maFillColorWrapper(mxModel, getColorToolBoxControl(mxToolBoxColor.get()), "FillColor")
 {
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM,
         OBJECTTYPE_DATA_SERIES, OBJECTTYPE_DATA_POINT,
@@ -296,8 +296,10 @@ void ChartAreaPanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
-    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mpToolBoxColor.get());
+#if 0
+    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mxToolBoxColor.get());
     pToolBoxColor->setColorSelectFunction(maFillColorWrapper);
+#endif
 
     updateData();
 }
@@ -480,7 +482,7 @@ void ChartAreaPanel::updateData()
         XFillFloatTransparenceItem aFillFloatTransparenceItem = getXTransparencyGradientForName(mxModel, aFillFloatTransparenceName);
         updateFillFloatTransparence(false, true, &aFillFloatTransparenceItem);
 
-        maFillColorWrapper.updateData();
+///TODO        maFillColorWrapper.updateData();
     }
 
     if (xInfo->hasPropertyByName("FillColor"))

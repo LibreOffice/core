@@ -79,7 +79,7 @@ private:
     bool mbUpdate;
     bool mbModelValid;
 
-    ChartColorWrapper maFillColorWrapper;
+//TODO    ChartColorWrapper maFillColorWrapper;
 };
 
 } } // end of namespace svx::sidebar
