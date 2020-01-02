@@ -62,7 +62,7 @@ class GenericToolbarController final : public svt::ToolboxController
         };
 
     private:
-        VclPtr<ToolBox>     m_pToolbar;
+        VclPtr<ToolBox>     m_xToolbar;
         sal_uInt16          m_nID;
         bool                m_bEnumCommand : 1,
                             m_bMadeInvisible : 1;

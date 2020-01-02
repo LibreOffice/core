@@ -32,8 +32,6 @@
 
 #include <memory>
 
-namespace svx { class ToolboxButtonColorUpdater; }
-
 namespace rptui
 {
     class OColorPopup;

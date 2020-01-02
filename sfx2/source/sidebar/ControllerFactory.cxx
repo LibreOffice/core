@@ -231,6 +231,10 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
             aPropValue.Value <<= rxToolbar;
             aPropertyVector.push_back( makeAny( aPropValue ));
 
+            aPropValue.Name = "IsSidebar";
+            aPropValue.Value <<= true;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+
             if (nWidth > 0)
             {
                 aPropValue.Name = "Width";

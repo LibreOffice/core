@@ -88,7 +88,7 @@ class ComplexToolbarController : public svt::ToolboxController
         void notifyFocusLost();
         void notifyTextChanged( const OUString& aText );
 
-        VclPtr<ToolBox>                                      m_pToolbar;
+        VclPtr<ToolBox>                                      m_xToolbar;
         sal_uInt16                                           m_nID;
         bool                                                 m_bMadeInvisible;
         mutable css::util::URL                               m_aURL;

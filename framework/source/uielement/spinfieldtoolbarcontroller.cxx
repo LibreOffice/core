@@ -160,7 +160,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     ,   m_nStep( 0.0 )
     ,   m_pSpinfieldControl( nullptr )
 {
-    m_pSpinfieldControl = VclPtr<SpinfieldControl>::Create( m_pToolbar, WB_SPIN|WB_BORDER, this );
+    m_pSpinfieldControl = VclPtr<SpinfieldControl>::Create( m_xToolbar, WB_SPIN|WB_BORDER, this );
     if ( nWidth == 0 )
         nWidth = 100;
 
@@ -168,7 +168,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     sal_Int32 nHeight = getFontSizePixel( m_pSpinfieldControl ) + 5 + 1;
 
     m_pSpinfieldControl->SetSizePixel( ::Size( nWidth, nHeight ));
-    m_pToolbar->SetItemWindow( m_nID, m_pSpinfieldControl );
+    m_xToolbar->SetItemWindow( m_nID, m_pSpinfieldControl );
 }
 
 SpinfieldToolbarController::~SpinfieldToolbarController()
@@ -179,7 +179,7 @@ void SAL_CALL SpinfieldToolbarController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, nullptr );
+    m_xToolbar->SetItemWindow( m_nID, nullptr );
     m_pSpinfieldControl.disposeAndClear();
 
     ComplexToolbarController::dispose();
