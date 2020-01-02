@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e14df350_ed0f7099",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-02T19:10:48Z",
+      "side": 0,
+      "message": "I seem to have already mentioned: this change is *not* right. The whole \"testZoom\" test consists of initial block (here lines 84 to 89) that are executed on both phases of the test (1 - initial import; 2 - file is imported, then exported, then imported again; these lines test that data was read correctly both initially, and after round-trip); and the trailing clock - lines 92 to 103 - only executed for second test phase (it tests XML that LO writes inside the ZIP which is DOCX, and that naturally only makes sense when LO actually wrote something).\n\nThis specific test falls under the category \"where *not* applicable\" of tdf#129423.",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "1e34eadc148f60c039de1393345c49d94bf35417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
