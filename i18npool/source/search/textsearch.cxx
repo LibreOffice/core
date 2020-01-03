@@ -131,8 +131,15 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
     maWildcardReversePattern2.clear();
     TransliterationFlags transliterateFlags = static_cast<TransliterationFlags>(aSrchPara.transliterateFlags);
     if (aSrchPara.AlgorithmType2 == SearchAlgorithms2::REGEXP)
-        // RESrchPrepare will consider SearchAlgorithms2::REGEXP in aSrchPara.transliterateFlags
+    {
+        // RESrchPrepare will consider aSrchPara.transliterateFlags when
+        // picking the actual regex pattern
+        // (sSrchStr|sSrchStr2|SearchOptions2::searchString) and setting
+        // case-insensitivity. Create transliteration instance, if any, without
+        // ignore-case so later in TextSearch::searchForward() the string to
+        // match is not case-altered, leave case-(in)sensitive to regex engine.
         transliterateFlags &= ~TransliterationFlags::IGNORE_CASE;
+    }
 
     // Create Transliteration class
     if( isSimpleTrans( transliterateFlags) )
