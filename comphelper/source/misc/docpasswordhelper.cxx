@@ -20,6 +20,8 @@
 #include <algorithm>
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -361,6 +363,25 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     OUString aPassword;
     DocPasswordVerifierResult eResult = DocPasswordVerifierResult::WrongPassword;
 
+    sal_Int32 nMediaEncDataCount = rMediaEncData.getLength();
+
+    // tdf#93389: if the document is being restored from autorecovery, we need to add encryption
+    // data also for real document type.
+    // TODO: get real filter name here (from CheckPasswd_Impl), to only add necessary data
+    bool bForSalvage = false;
+    if (nMediaEncDataCount)
+    {
+        for (auto& val : rMediaEncData)
+        {
+            if (val.Name == "ForSalvage")
+            {
+                --nMediaEncDataCount; // don't consider this element below
+                val.Value >>= bForSalvage;
+                break;
+            }
+        }
+    }
+
     // first, try provided default passwords
     if( pbIsDefaultPassword )
         *pbIsDefaultPassword = false;
@@ -385,7 +406,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     // try media encryption data (skip, if result is OK or ABORT)
     if( eResult == DocPasswordVerifierResult::WrongPassword )
     {
-        if( rMediaEncData.getLength() > 0 )
+        if (nMediaEncDataCount)
         {
             eResult = rVerifier.verifyEncryptionData( rMediaEncData );
             if( eResult == DocPasswordVerifierResult::OK )
@@ -449,6 +470,26 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         if (!bHasEncryptionData)
             aEncData = comphelper::concatSequences(
                 aEncData, OStorageHelper::CreatePackageEncryptionData(aPassword));
+
+        if (bForSalvage)
+        {
+            // TODO: add individual methods for different target filter, and only call what's needed
+
+            // 1. Prepare binary MS formats encryption data
+            auto aUniqueID = GenerateRandomByteSequence(16);
+            auto aEnc97Key = GenerateStd97Key(aPassword.getStr(), aUniqueID);
+            // 2. Add MS binary and OOXML encryption data to result
+            uno::Sequence< beans::NamedValue > aContainer(3);
+            aContainer[0].Name = "STD97EncryptionKey";
+            aContainer[0].Value <<= aEnc97Key;
+            aContainer[1].Name = "STD97UniqueID";
+            aContainer[1].Value <<= aUniqueID;
+            aContainer[2].Name = "OOXPassword";
+            aContainer[2].Value <<= aPassword;
+
+            aEncData = comphelper::concatSequences(
+                aEncData, aContainer);
+        }
     }
 
     return (eResult == DocPasswordVerifierResult::OK) ? aEncData : uno::Sequence< beans::NamedValue >();

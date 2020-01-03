@@ -48,6 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -236,6 +237,21 @@ sal_uInt32 CheckPasswd_Impl
                             const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_ENCRYPTIONDATA, false);
                             if ( pEncryptionDataItem )
                                 pEncryptionDataItem->GetValue() >>= aEncryptionData;
+
+                            // tdf#93389: if recoverying a document, encryption data should contain
+                            // entries for the real filter, not only for recovery ODF, to keep it
+                            // encrypted. Pass this in encryption data.
+                            // TODO: pass here the real filter (from AutoRecovery::implts_openDocs)
+                            // to marshal this to requestAndVerifyDocPassword
+                            if (pSet->GetItemState(SID_DOC_SALVAGE, false) == SfxItemState::SET)
+                            {
+                                uno::Sequence< beans::NamedValue > aContainer(1);
+                                aContainer[0].Name = "ForSalvage";
+                                aContainer[0].Value <<= true;
+
+                                aEncryptionData = comphelper::concatSequences(
+                                    aEncryptionData, aContainer);
+                            }
 
                             SfxDocPasswordVerifier aVerifier( xStorage );
                             aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
