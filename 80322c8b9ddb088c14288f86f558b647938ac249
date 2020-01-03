@@ -22,6 +22,29 @@
       "revId": "80322c8b9ddb088c14288f86f558b647938ac249",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c090ffed_6d1649bc",
+        "filename": "basic/source/comp/exprgen.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-01-03T10:51:50Z",
+      "side": 1,
+      "message": "What about merge the 2 cases since they\u0027re identical?\ncase SbxINTEGER:\ncase SbxLONG:\n    nStringId \u003d ...",
+      "range": {
+        "startLine": 79,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "80322c8b9ddb088c14288f86f558b647938ac249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
