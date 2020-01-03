@@ -26,7 +26,7 @@ namespace pcr
         : m_pParent(pParent)
         , m_xBuilder(Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserpage.ui"))
         , m_xContainer(m_xBuilder->weld_container("BrowserPage"))
-        , m_xListBox(std::make_unique<OBrowserListBox>(*m_xBuilder, pInitialControlContainer))
+        , m_xListBox(new OBrowserListBox(*m_xBuilder, pInitialControlContainer))
     {
     }
 
