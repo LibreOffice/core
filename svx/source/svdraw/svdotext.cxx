@@ -802,13 +802,22 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rTextRect=aAnkRect;
 }
 
-OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
+bool SdrTextObj::CanCreateEditOutlinerParaObject() const
 {
-    OutlinerParaObject* pPara=nullptr;
+    if( HasTextImpl( pEdtOutl ) )
+    {
+        return pEdtOutl->GetParagraphCount() > 0;
+    }
+    return false;
+}
+
+std::unique_ptr<OutlinerParaObject> SdrTextObj::CreateEditOutlinerParaObject() const
+{
+    std::unique_ptr<OutlinerParaObject> pPara;
     if( HasTextImpl( pEdtOutl ) )
     {
         sal_Int32 nParaCount = pEdtOutl->GetParagraphCount();
-        pPara = pEdtOutl->CreateParaObject(0, nParaCount);
+        pPara.reset(pEdtOutl->CreateParaObject(0, nParaCount));
     }
     return pPara;
 }
