@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "051bf6c8_8cb6a351",
+        "filename": "drawinglayer/source/tools/emfppath.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-01-03T16:26:59Z",
+      "side": 1,
+      "message": "coverity points out that this will always return 0, possibly you meant 0x7FFFFFFF. Is there any known examples of this record in an existing file ?  I feel from the docs that these are not fixed 4 byte len fields, but variable either 1 or 2 byte long.",
+      "revId": "65429eac65efbc68f60882e3a87085cf682cf62a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
