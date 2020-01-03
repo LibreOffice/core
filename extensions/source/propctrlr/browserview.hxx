@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <o3tl/deleter.hxx>
 #include <vcl/weld.hxx>
 
 namespace pcr
@@ -30,7 +31,7 @@ namespace pcr
     class OPropertyEditor;
     class OPropertyBrowserView final
     {
-        std::unique_ptr<OPropertyEditor> m_xPropBox;
+        std::unique_ptr<OPropertyEditor, o3tl::default_delete<OPropertyEditor>> m_xPropBox;
         sal_uInt16                  m_nActivePage;
         Link<LinkParamNone*,void>   m_aPageActivationHandler;
 
