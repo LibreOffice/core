@@ -50,8 +50,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	i18npool/util/i18npool \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
-	lingucomponent/source/spellcheck/spell/spell \
-	lingucomponent/source/thesaurus/libnth/lnth \
+	$(if $(filter-out iOS,$(OS)), \
+		lingucomponent/source/spellcheck/spell/spell \
+		lingucomponent/source/thesaurus/libnth/lnth \
+	) \
 	lingucomponent/source/numbertext/numbertext \
 	linguistic/source/lng \
 	$(if $(ENABLE_LWP), \
