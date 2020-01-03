@@ -162,7 +162,7 @@ void AccessibleShape::Init()
                 OutlinerParaObject* pOutlinerParaObject = nullptr;
 
                 if( pTextObj )
-                    pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
+                    pOutlinerParaObject = pTextObj->CreateEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
 
                 bool bOwnParaObj = pOutlinerParaObject != nullptr;
 
