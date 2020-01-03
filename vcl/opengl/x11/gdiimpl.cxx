@@ -244,6 +244,7 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
 
     SystemWindowData aWinData;
     aWinData.pVisual = nullptr;
+    aWinData.bClipUsingNativeWidget = false;
 
     const SystemEnvData* sysData(pParent->GetSystemData());
 
