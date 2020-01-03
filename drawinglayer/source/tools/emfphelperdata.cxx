@@ -928,6 +928,7 @@ namespace emfplushelper
         mnHDPI(0),
         mnVDPI(0),
         mbSetTextContrast(false),
+        mnTextContrast(0),
         mnFrameLeft(0),
         mnFrameTop(0),
         mnFrameRight(0),
