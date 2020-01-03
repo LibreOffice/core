@@ -23,14 +23,38 @@
 #include <sal/log.hxx>
 #include "emfppath.hxx"
 
+namespace
+{
+    const unsigned char nTopBitInt7 = 0x80;
+    const unsigned char nSignBitInt7 = 0x40;
+    // include the sign bit so if its negative we get
+    // that "missing" bit pre-set to 1
+    const unsigned char nValueMaskInt7 = 0x7F;
+}
+
 namespace emfplushelper
 {
-    static sal_Int16 GetEmfPlusInteger(sal_Int32 nInt)
+    // see 2.2.2.21 EmfPlusInteger7
+    //     2.2.2.22 EmfPlusInteger15
+    // and 2.2.2.37 EmfPlusPointR Object
+    static sal_Int16 GetEmfPlusInteger(SvStream& s)
     {
-        if (nInt & 0x80000000)
-            return (nInt & 0x7FFF) >> 16;
+        unsigned char u8(0);
+        s.ReadUChar(u8);
 
-        return nInt >> 24;
+        bool bIsEmfPlusInteger15 = u8 & nTopBitInt7;
+        bool bNegative = u8 & nSignBitInt7;
+        unsigned char val1 = u8 & nValueMaskInt7;
+        if (bNegative)
+            val1 |= nTopBitInt7;
+        if (!bIsEmfPlusInteger15)
+        {
+            return static_cast<signed char>(val1);
+        }
+
+        s.ReadUChar(u8);
+        sal_uInt16 nRet = (val1 << 8) | u8;
+        return static_cast<sal_Int16>(nRet);
     }
 
     EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
@@ -60,10 +84,8 @@ namespace emfplushelper
                 // EMFPlusPointR: points are stored in EMFPlusInteger7 or
                 // EMFPlusInteger15 objects, see section 2.2.2.21/22
                 // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
-                sal_Int32 x, y;
-                s.ReadInt32(x).ReadInt32(y);
-                x = GetEmfPlusInteger(x);
-                y = GetEmfPlusInteger(y);
+                sal_Int32 x = GetEmfPlusInteger(s);
+                sal_Int32 y = GetEmfPlusInteger(s);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
                 SAL_INFO("drawinglayer", "EMF+\t\t\tEmfPlusPointR [x,y]: " << x << ", " << y);
