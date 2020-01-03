@@ -759,6 +759,8 @@ i12626
     /* the buffer where the data are encrypted, dynamically allocated */
     std::vector<sal_uInt8>                  m_vEncryptionBuffer;
 
+    void addRoleMap(OString aAlias, PDFWriter::StructElement eType);
+
     /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
     void checkAndEnableStreamEncryption( sal_Int32 nObject );
 

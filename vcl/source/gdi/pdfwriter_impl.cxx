@@ -10080,6 +10080,16 @@ const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
     return it != aTagStrings.end() ? it->second : "Div";
 }
 
+void PDFWriterImpl::addRoleMap(OString aAlias, PDFWriter::StructElement eType)
+{
+    OString aTag = getStructureTag(eType);
+    // For PDF/UA it's not allowed to map an alias with the same name.
+    // Not sure if this allowed, necessary or recommended otherwise, so
+    // only enable filtering when PDF/UA is enabled.
+    if (!m_bIsPDF_UA || aAlias != aTag)
+        m_aRoleMap[aAlias] = aTag;
+}
+
 void PDFWriterImpl::beginStructureElementMCSeq()
 {
     if( m_bEmitStructure &&
@@ -10209,7 +10219,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         appendName( rAlias, aNameBuf );
         OString aAliasName( aNameBuf.makeStringAndClear() );
         rEle.m_aAlias = aAliasName;
-        m_aRoleMap[ aAliasName ] = getStructureTag( eType );
+        addRoleMap(aAliasName, eType);
     }
 
     if (g_bDebugDisableCompression)
@@ -10331,8 +10341,8 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 std::list< sal_Int32 > aNewChildren;
 
                 // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
-                OString aAliasName( "Div" );
-                m_aRoleMap[ aAliasName ] = getStructureTag( PDFWriter::Division );
+                OString aAliasName("Div");
+                addRoleMap(aAliasName, PDFWriter::Division);
 
                 while( rEle.m_aKids.size() > ncMaxPDFArraySize )
                 {
