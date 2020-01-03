@@ -379,7 +379,7 @@ public:
     {
     public:
         LinkListener();
-        virtual ~LinkListener() = 0;
+        virtual ~LinkListener() COVERITY_NOEXCEPT_FALSE = 0;
         virtual void notify(sal_uInt16 nFileId, LinkUpdateType eType) = 0;
 
         struct Hash
