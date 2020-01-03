@@ -538,7 +538,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         OutlinerParaObject* pOutlinerParaObject = nullptr;
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj && pTextObj->getActiveText() == mpText )
-            pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
+            pOutlinerParaObject = pTextObj->CreateEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
         bool bOwnParaObj(false);
 
         if( pOutlinerParaObject )
@@ -669,7 +669,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
             bool bTextEditActive = false;
             SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mpObject);
             // similar to the GetBackgroundTextForwarder check, see if the text edit is active
-            if (pTextObj && pTextObj->getActiveText() == mpText && pTextObj->GetEditOutlinerParaObject())
+            if (pTextObj && pTextObj->getActiveText() == mpText && pTextObj->CanCreateEditOutlinerParaObject())
                 bTextEditActive = true; // text edit active
             if (bTextEditActive)
                 mbDataValid = false;

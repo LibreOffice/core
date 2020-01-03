@@ -546,7 +546,7 @@ namespace drawinglayer
 
                 if(bInEditMode)
                 {
-                    std::unique_ptr<OutlinerParaObject> pTempObj = rTextObj.GetEditOutlinerParaObject();
+                    std::unique_ptr<OutlinerParaObject> pTempObj = rTextObj.CreateEditOutlinerParaObject();
 
                     if(pTempObj)
                     {
@@ -555,7 +555,7 @@ namespace drawinglayer
                     else
                     {
                         // #i100537#
-                        // GetEditOutlinerParaObject() returning no object does not mean that
+                        // CreateEditOutlinerParaObject() returning no object does not mean that
                         // text edit mode is not active. Do not reset the flag here
                         // bInEditMode = false;
                     }

@@ -231,7 +231,7 @@ namespace sdr
 
             if( mxCell.is() )
             {
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject().release();
+                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -311,7 +311,7 @@ namespace sdr
                 rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject().release();
+                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -332,7 +332,7 @@ namespace sdr
                 const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject().release();
+                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -601,8 +601,7 @@ bool Cell::IsTextEditActive() const
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if(rTableObj.getActiveCell().get() == this )
     {
-        std::unique_ptr<OutlinerParaObject> pParaObj = rTableObj.GetEditOutlinerParaObject();
-        if( pParaObj != nullptr )
+        if( rTableObj.CanCreateEditOutlinerParaObject() )
         {
             isActive = true;
         }
@@ -632,11 +631,11 @@ bool Cell::hasText() const
 }
 
 
-std::unique_ptr<OutlinerParaObject> Cell::GetEditOutlinerParaObject() const
+std::unique_ptr<OutlinerParaObject> Cell::CreateEditOutlinerParaObject() const
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if( rTableObj.getActiveCell().get() == this )
-        return rTableObj.GetEditOutlinerParaObject();
+        return rTableObj.CreateEditOutlinerParaObject();
     return nullptr;
 }
 
