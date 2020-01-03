@@ -1319,7 +1319,7 @@ void WW8Export::WriteSdrTextObj(const SdrTextObj& rTextObj, sal_uInt8 nTyp)
     */
     if (rTextObj.IsTextEditActive())
     {
-        pParaObj = rTextObj.GetEditOutlinerParaObject();
+        pParaObj = rTextObj.CreateEditOutlinerParaObject().release();
         bOwnParaObj = true;
     }
     else
