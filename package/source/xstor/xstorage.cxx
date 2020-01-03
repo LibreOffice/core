@@ -859,7 +859,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 TOOLS_INFO_EXCEPTION("package.xstor", "No Encryption");
             }
 
-            if (bHasCommonEncryptionData && ::package::PackageEncryptionDatasEqual(pElement->m_xStream->GetCachedEncryptionData(), aCommonEncryptionData))
+            if (bHasCommonEncryptionData && ::package::PackageEncryptionDataLessOrEqual(pElement->m_xStream->GetCachedEncryptionData(), aCommonEncryptionData))
             {
                 // If the stream can be opened with the common storage password
                 // it must be stored with the common storage password as well
