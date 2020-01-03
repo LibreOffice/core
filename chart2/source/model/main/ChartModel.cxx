@@ -1085,7 +1085,7 @@ namespace
 enum eServiceType
 {
     SERVICE_DASH_TABLE,
-    SERVICE_GARDIENT_TABLE,
+    SERVICE_GRADIENT_TABLE,
     SERVICE_HATCH_TABLE,
     SERVICE_BITMAP_TABLE,
     SERVICE_TRANSP_GRADIENT_TABLE,
@@ -1099,7 +1099,7 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
 {
     static tServiceNameMap aServiceNameMap{
         {"com.sun.star.drawing.DashTable",                    SERVICE_DASH_TABLE},
-        {"com.sun.star.drawing.GradientTable",                SERVICE_GARDIENT_TABLE},
+        {"com.sun.star.drawing.GradientTable",                SERVICE_GRADIENT_TABLE},
         {"com.sun.star.drawing.HatchTable",                   SERVICE_HATCH_TABLE},
         {"com.sun.star.drawing.BitmapTable",                  SERVICE_BITMAP_TABLE},
         {"com.sun.star.drawing.TransparencyGradientTable",    SERVICE_TRANSP_GRADIENT_TABLE},
@@ -1119,7 +1119,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
         switch( (*aIt).second )
         {
             case SERVICE_DASH_TABLE:
-            case SERVICE_GARDIENT_TABLE:
+            case SERVICE_GRADIENT_TABLE:
             case SERVICE_HATCH_TABLE:
             case SERVICE_BITMAP_TABLE:
             case SERVICE_TRANSP_GRADIENT_TABLE:
