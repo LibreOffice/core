@@ -55,7 +55,8 @@ namespace com { namespace sun { namespace star { namespace uno {
 } } } }
 
 namespace package {
-    bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 );
+    // all data in aHash1 is contained in aHash2
+    bool PackageEncryptionDataLessOrEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 );
 }
 
 struct WSInternalData_Impl;
