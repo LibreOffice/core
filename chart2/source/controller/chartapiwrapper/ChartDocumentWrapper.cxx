@@ -86,7 +86,7 @@ enum eServiceType
     SERVICE_NAME_BUBBLE_DIAGRAM,
 
     SERVICE_NAME_DASH_TABLE,
-    SERVICE_NAME_GARDIENT_TABLE,
+    SERVICE_NAME_GRADIENT_TABLE,
     SERVICE_NAME_HATCH_TABLE,
     SERVICE_NAME_BITMAP_TABLE,
     SERVICE_NAME_TRANSP_GRADIENT_TABLE,
@@ -114,7 +114,7 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         {"com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM},
 
         {"com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE},
-        {"com.sun.star.drawing.GradientTable",                SERVICE_NAME_GARDIENT_TABLE},
+        {"com.sun.star.drawing.GradientTable",                SERVICE_NAME_GRADIENT_TABLE},
         {"com.sun.star.drawing.HatchTable",                   SERVICE_NAME_HATCH_TABLE},
         {"com.sun.star.drawing.BitmapTable",                  SERVICE_NAME_BITMAP_TABLE},
         {"com.sun.star.drawing.TransparencyGradientTable",    SERVICE_NAME_TRANSP_GRADIENT_TABLE},
@@ -1174,7 +1174,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 break;
 
             case SERVICE_NAME_DASH_TABLE:
-            case SERVICE_NAME_GARDIENT_TABLE:
+            case SERVICE_NAME_GRADIENT_TABLE:
             case SERVICE_NAME_HATCH_TABLE:
             case SERVICE_NAME_BITMAP_TABLE:
             case SERVICE_NAME_TRANSP_GRADIENT_TABLE:
