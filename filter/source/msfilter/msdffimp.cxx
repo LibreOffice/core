@@ -2674,7 +2674,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
     if ( IsProperty( DFF_Prop_shadowType ) )
     {
-        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType, 0 ) );
+        auto eShadowType = GetPropertyValue(DFF_Prop_shadowType, 0);
         if( eShadowType != mso_shadowOffset && !bNonZeroShadowOffset )
         {
             //0.12" == 173 twip == 302 100mm
