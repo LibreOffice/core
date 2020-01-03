@@ -4251,7 +4251,7 @@ void VclBuilder::set_response(const OString& sID, short nResponse)
         default:
             assert(nResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
             break;
-    };
+    }
 
     for (const auto & child : m_aChildren)
     {

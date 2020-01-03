@@ -252,7 +252,7 @@ bool TGAReader::ImplReadHeader()
         case 11 :
             mbEncoding = true;
             break;
-    };
+    }
 
     if ( mpFileHeader->nImageIDLength )         // skip the Image ID
         m_rTGA.SeekRel( mpFileHeader->nImageIDLength );

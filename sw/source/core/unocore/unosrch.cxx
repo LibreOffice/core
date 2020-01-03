@@ -560,7 +560,7 @@ SET_BOOL:
 SET_UINT16:
         aRet <<= nSet;
         break;
-    };
+    }
 
     return aRet;
 }

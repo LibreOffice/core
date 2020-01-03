@@ -771,7 +771,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
             case PPDKey::SetupType::JCLSetup:          pSetupType = "JCLSetup";break;
             case PPDKey::SetupType::AnySetup:          pSetupType = "AnySetup";break;
             default: break;
-        };
+        }
         SAL_INFO("vcl.unx.print", "\t\"" << pKey->getKey() << "\" ("
                 << pKey->countValues() << "values) OrderDependency: "
                 << pKey->m_nOrderDependency << pSetupType );
@@ -787,7 +787,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
                 case eSymbol:           pVType = "symbol";break;
                 case eNo:               pVType = "no";break;
                 default: break;
-            };
+            }
             SAL_INFO("vcl.unx.print", "\t\t"
                 << (pValue == pKey->m_pDefaultValue ? "(Default:) " : "")
                 << "option: \"" << pValue->m_aOption

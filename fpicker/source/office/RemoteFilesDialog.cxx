@@ -552,7 +552,7 @@ void RemoteFilesDialog::AddService()
         default :
             // Do Nothing
             break;
-    };
+    }
 }
 
 IMPL_LINK_NOARG( RemoteFilesDialog, SelectServiceHdl, weld::ComboBox&, void )
@@ -609,7 +609,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OString&, rIdent, void 
                 default :
                     // Do Nothing
                     break;
-            };
+            }
         }
     }
     if( sIdent == "delete_service"  && m_xServices_lb->get_count() > 0 )

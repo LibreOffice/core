@@ -583,7 +583,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     xTreeLB->iter_nth_sibling(*xParent, nGroup);
 
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pPageInfo)));;
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pPageInfo)));
     xTreeLB->insert(xParent.get(), -1, &rPageName, &sId, nullptr, nullptr, nullptr, false, nullptr);
     return pPageInfo;
 }
@@ -596,7 +596,7 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
 {
     OptionsGroupInfo* pInfo =
         new OptionsGroupInfo( pCreateShell, pCreateModule, nDialogId );
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pInfo)));;
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pInfo)));
     xTreeLB->append(sId, rGroupName);
 
     sal_uInt16 nRet = 0;

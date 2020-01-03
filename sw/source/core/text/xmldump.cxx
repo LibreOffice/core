@@ -308,7 +308,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         name = "notxt";
         break;
     default: break;
-    };
+    }
 
     if ( name != nullptr )
     {

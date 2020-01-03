@@ -950,7 +950,7 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
             nEvent = SalEvent::NONE;
             pEventData = nullptr;
         break;
-    };
+    }
 
     if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow.get() && pEventData )
         ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow.get(), nEvent, pEventData );

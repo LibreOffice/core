@@ -547,7 +547,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::DOCINFO_CUSTOM:
         pData.reset( new editeng::CustomPropertyField(mpImpl->msString1, mpImpl->msString2) );
         break;
-    };
+    }
 
     return pData;
 }

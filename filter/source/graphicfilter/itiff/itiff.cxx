@@ -1336,7 +1336,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             {
                 pTIFF->ResetError();
                 break;
-            };
+            }
             nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
 
             pTIFF->ReadUInt16( nNumTags );
