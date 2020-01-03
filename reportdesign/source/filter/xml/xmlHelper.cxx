@@ -52,7 +52,7 @@
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>
 
-#define XML_RPT_ALGINMENT   (XML_DB_TYPES_START+1)
+#define XML_RPT_ALIGNMENT   (XML_DB_TYPES_START+1)
 namespace rptxml
 {
     using namespace ::xmloff::token;
@@ -77,7 +77,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 
     switch(nType)
     {
-        case XML_RPT_ALGINMENT:
+        case XML_RPT_ALIGNMENT:
             {
                 static SvXMLEnumMapEntry<style::VerticalAlignment> const pXML_VerticalAlign_Enum[] =
                 {
@@ -120,7 +120,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool
 
             MAP_CONST_C_ASCII(      PROPERTY_CONTROLBACKGROUND,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
-            MAP_CONST_C_ASCII(      PROPERTY_VERTICALALIGN,   STYLE,    VERTICAL_ALIGN,       XML_RPT_ALGINMENT, 0 ),
+            MAP_CONST_C_ASCII(      PROPERTY_VERTICALALIGN,   STYLE,    VERTICAL_ALIGN,       XML_RPT_ALIGNMENT, 0 ),
             MAP_CONST_C_ASCII(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
             MAP_CONST_P_ASCII(      PROPERTY_CONTROLBACKGROUND,
@@ -146,7 +146,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool
             MAP_CONST_C_ASCII(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
             MAP_CONST_C_ASCII(      PROPERTY_VERTICALALIGN,
-                                                STYLE,    VERTICAL_ALIGN,       XML_RPT_ALGINMENT, 0 ),
+                                                STYLE,    VERTICAL_ALIGN,       XML_RPT_ALIGNMENT, 0 ),
             MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
