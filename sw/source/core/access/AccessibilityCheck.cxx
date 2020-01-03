@@ -350,7 +350,7 @@ private:
                 rPageSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
             Color aPageBackground;
 
-            if (pXFillStyleItem->GetValue() == css::drawing::FillStyle_SOLID)
+            if (pXFillStyleItem && pXFillStyleItem->GetValue() == css::drawing::FillStyle_SOLID)
             {
                 const XFillColorItem* rXFillColorItem
                     = rPageSet.GetItem<XFillColorItem>(XATTR_FILLCOLOR, false);
