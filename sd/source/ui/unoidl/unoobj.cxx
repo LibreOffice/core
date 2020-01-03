@@ -854,8 +854,7 @@ bool SdXShape::IsEmptyPresObj() const
         if( pTextObj == nullptr )
             return true;
 
-        const std::unique_ptr<OutlinerParaObject> pParaObj(pTextObj->GetEditOutlinerParaObject());
-        return !pParaObj;
+        return !pTextObj->CanCreateEditOutlinerParaObject();
     }
 
     return false;

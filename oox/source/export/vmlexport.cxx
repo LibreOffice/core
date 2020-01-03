@@ -1359,7 +1359,7 @@ sal_Int32 VMLExport::StartShape()
         */
         if (pTxtObj->IsTextEditActive())
         {
-            pParaObj = pTxtObj->GetEditOutlinerParaObject().release();
+            pParaObj = pTxtObj->CreateEditOutlinerParaObject().release();
             bOwnParaObj = true;
         }
         else
