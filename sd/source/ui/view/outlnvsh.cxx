@@ -959,8 +959,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
-                            std::unique_ptr<OutlinerParaObject> pParaObj = pTextObj->GetEditOutlinerParaObject();
-                            if( pParaObj )
+                            if( pTextObj->CanCreateEditOutlinerParaObject() )
                             {
                                 bDisable = false;
                             }
