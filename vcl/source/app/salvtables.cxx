@@ -723,12 +723,12 @@ public:
 
     virtual void set_stack_background() override
     {
-        set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());;
+        set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
     }
 
     virtual void set_highlight_background() override
     {
-        set_background(m_xWidget->GetSettings().GetStyleSettings().GetHighlightColor());;
+        set_background(m_xWidget->GetSettings().GetStyleSettings().GetHighlightColor());
     }
 
     SystemWindow* getSystemWindow()
@@ -1033,7 +1033,7 @@ public:
         auto aPopup = m_aMenus.find(nItemId);
         if (aPopup != m_aMenus.end())
         {
-            return PopupMenu::GetActivePopupMenu() == aPopup->second;;
+            return PopupMenu::GetActivePopupMenu() == aPopup->second;
         }
 
         return false;

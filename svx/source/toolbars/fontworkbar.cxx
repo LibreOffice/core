@@ -537,7 +537,7 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
             }
         }
         break;
-    };
+    }
 }
 
 void FontworkBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )

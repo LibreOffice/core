@@ -1337,7 +1337,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 }
             }
             break;
-        };
+        }
         if ( bCreateEvent )
         {
             EscherExContainer aAnimEvent( rStrm, DFF_msofbtAnimEvent, i + 1 );

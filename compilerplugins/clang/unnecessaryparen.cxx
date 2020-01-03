@@ -600,7 +600,7 @@ bool UnnecessaryParen::removeParens(ParenExpr const * expr) {
     }
     unsigned firstLen = Lexer::MeasureTokenLength(
         firstBegin, compiler.getSourceManager(), compiler.getLangOpts());
-    for (auto l = firstBegin.getLocWithOffset(std::max<unsigned>(firstLen, 1));;
+    for (auto l = firstBegin.getLocWithOffset(std::max<unsigned>(firstLen, 1));
          l = l.getLocWithOffset(1))
     {
         unsigned n = Lexer::MeasureTokenLength(

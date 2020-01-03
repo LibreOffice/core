@@ -134,7 +134,7 @@ IMPL_LINK_NOARG( PlacesListBox, DoubleClick, weld::TreeView&, bool )
             }
             default:
                 break;
-        };
+        }
     }
     return true;
 }

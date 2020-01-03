@@ -100,7 +100,7 @@ namespace dmapper {
                         case NS_ooxml::LN_CT_TrPr_del:
                             nToken = XML_tableRowDelete;
                             break;
-                    };
+                    }
                     std::shared_ptr<TrackChangesHandler> pTrackChangesHandler( new TrackChangesHandler( nToken ) );
                     pProperties->resolve(*pTrackChangesHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -131,7 +131,7 @@ namespace dmapper {
                         default:
                             throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
                             break;
-                    };
+                    }
                     std::shared_ptr<TrackChangesHandler> pTrackChangesHandler( new TrackChangesHandler( nToken ) );
                     pProperties->resolve(*pTrackChangesHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -160,7 +160,7 @@ namespace dmapper {
                     case NS_ooxml::LN_Value_ST_VerticalJc_center: nVertOrient = text::VertOrientation::CENTER; break;
                     case NS_ooxml::LN_Value_ST_VerticalJc_bottom: nVertOrient = text::VertOrientation::BOTTOM; break;
                     default:;
-                };
+                }
                 TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
                 pCellPropMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
                 //todo: in ooxml import the value of m_ncell is wrong
@@ -174,7 +174,7 @@ namespace dmapper {
                         case NS_ooxml::LN_Value_ST_VerticalJc_center: aVertOrient = "center"; break;
                         case NS_ooxml::LN_Value_ST_VerticalJc_both: aVertOrient = "both"; break;
                         case NS_ooxml::LN_Value_ST_VerticalJc_bottom: aVertOrient = "bottom"; break;
-                    };
+                    }
                     if (!aVertOrient.isEmpty())
                     {
                         beans::PropertyValue aValue;

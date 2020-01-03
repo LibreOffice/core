@@ -3500,18 +3500,18 @@ ErrCode WW8Export::ExportDocument_Impl()
     }
 
     m_pGrf.reset();
-    m_pMagicTable.reset();;
-    m_pFieldFootnote.reset();;
-    m_pFieldTextBxs.reset();;
-    m_pFieldHFTextBxs.reset();;
-    m_pFieldAtn.reset();;
-    m_pFieldEdn.reset();;
-    m_pFieldHdFt.reset();;
-    m_pFieldMain.reset();;
-    m_pStyles.reset();;
+    m_pMagicTable.reset();
+    m_pFieldFootnote.reset();
+    m_pFieldTextBxs.reset();
+    m_pFieldHFTextBxs.reset();
+    m_pFieldAtn.reset();
+    m_pFieldEdn.reset();
+    m_pFieldHdFt.reset();
+    m_pFieldMain.reset();
+    m_pStyles.reset();
     pO.reset();
-    m_pChpPlc.reset();;
-    m_pPapPlc.reset();;
+    m_pChpPlc.reset();
+    m_pPapPlc.reset();
     pSepx.reset();
 
     delete m_pRedlAuthors;

@@ -3786,7 +3786,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
             }
             default:
                 break;
-        };
+        }
     }
     else if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {

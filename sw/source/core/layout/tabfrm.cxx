@@ -5205,7 +5205,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                         case text::VertOrientation::CENTER:   lTopOfst = nDiff / 2; break;
                         case text::VertOrientation::BOTTOM:   lTopOfst = nDiff;     break;
                         default: break;
-                    };
+                    }
                 }
                 long nTmp = aRectFnSet.YInc(
                                     aRectFnSet.GetPrtTop(*this), lTopOfst );

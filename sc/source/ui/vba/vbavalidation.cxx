@@ -357,7 +357,7 @@ ScVbaValidation::getType()
             case sheet::ValidationType::ValidationType_MAKE_FIXED_SIZE:
             default:
                 break;
-        };
+        }
     }
     return nExcelType;
 }

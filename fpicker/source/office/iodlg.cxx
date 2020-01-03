@@ -991,7 +991,7 @@ IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl, weld::Button&, void 
         default :
             // Do Nothing
             break;
-    };
+    }
 }
 
 IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl, weld::Button&, void )
