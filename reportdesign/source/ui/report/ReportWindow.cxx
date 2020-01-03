@@ -342,10 +342,10 @@ void OReportWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsed
     m_aViewsWindow->fillCollapsedSections(_rCollapsedPositions);
 }
 
-void OReportWindow::collapseSections(const uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections)
+void OReportWindow::collapseSections(const uno::Sequence< css::beans::PropertyValue>& _aCollapsedSections)
 {
 
-    m_aViewsWindow->collapseSections(_aCollpasedSections);
+    m_aViewsWindow->collapseSections(_aCollapsedSections);
 }
 
 void OReportWindow::alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection)
