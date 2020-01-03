@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c5ab6b6_81fd0579",
+        "filename": "compilerplugins/clang/cstylecast.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-01-03T08:36:40Z",
+      "side": 1,
+      "message": "Wrong here since it corresponds to \"for\" instruction, you must let the semicolon",
+      "range": {
+        "startLine": 583,
+        "startChar": 80,
+        "endLine": 583,
+        "endChar": 81
+      },
+      "revId": "a2e8d24ace4dfb05cb88b799f4d45e0372d61c0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
