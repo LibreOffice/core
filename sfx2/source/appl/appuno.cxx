@@ -176,7 +176,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
 
-    sal_Int32 nCount = rArgs.getLength();
+    const sal_Int32 nCount = rArgs.getLength();
     if ( !nCount )
         return;
 
@@ -267,8 +267,6 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
         return;
     }
-
-    OSL_ASSERT(nCount > 0);
 
 #ifdef DBG_UTIL
     // detect parameters that don't match to any formal argument or one of its members
