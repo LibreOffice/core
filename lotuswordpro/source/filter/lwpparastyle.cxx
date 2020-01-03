@@ -597,7 +597,7 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
             return;
 
         enumXFTab eType = enumXFTabNone;
-        LwpTab::TabType type = pTab->GetTabType();
+        sal_uInt32 type = pTab->GetTabType();
         switch(type)
         {
         case LwpTab::TT_LEFT:
