@@ -614,6 +614,7 @@ The following structure describes the permissions used in PDF security
                 ConvertOOoTargetToPDFTarget( false ),
                 ForcePDFAction( false ),
                 Version( PDFWriter::PDFVersion::PDF_1_5 ),
+                UniversalAccessibilityCompliance( false ),
                 Tagged( false ),
                 SubmitFormat( PDFWriter::FDF ),
                 AllowDuplicateFieldNames( false ),
