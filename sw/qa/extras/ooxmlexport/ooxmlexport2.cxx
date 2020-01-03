@@ -90,6 +90,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZoom, "zoom.docx")
 
     // Validation test: order of elements were wrong.
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
     int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
