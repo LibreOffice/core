@@ -41,7 +41,7 @@
 // AquaSalGraphics::getNativeControlRegion to determine native rectangle in pixels to draw the widget
 // AquaSalGraphics::drawNativeControl to do the drawing operation itself
 
-// getNativeControlRegion has to calculate a content rectangle within it is safe to draw the widget. Furthermore a boundig rectangle
+// getNativeControlRegion has to calculate a content rectangle within it is safe to draw the widget. Furthermore a bounding rectangle
 // has to be calculated by getNativeControlRegion to consider adornments like a focus rectangle. As drawNativeControl uses Carbon
 // API calls, all widgets are drawn without text. Drawing of text is done separately by VCL on top of graphical Carbon widget
 // representation. drawNativeControl is called by VCL using content rectangle determined by getNativeControlRegion.

@@ -35,7 +35,7 @@
 #define RADIO_BUTTON_SMALL_SIZE 14     // width/height of small radio button without focus ring in pixels
 #define RADIO_BUTTON_TEXT_SEPARATOR 3  // space between radio button and following text in pixels
 
-#define CHECKBOX_SMALL_SIZE 14     // width/heiht of checkbox without focus ring in pixels
+#define CHECKBOX_SMALL_SIZE 14     // width/height of checkbox without focus ring in pixels
 #define CHECKBOX_TEXT_SEPARATOR 3  // space between checkbox and following text in pixels
 
 #define SLIDER_WIDTH 19   // width of slider in pixels
@@ -60,7 +60,7 @@
 #define SPIN_LOWER_BUTTON_HEIGHT 11  // height of lower spin button without focus ring in pixels
 
 // FIXME: spinboxes are positioned one pixel shifted to the right by VCL. As positioning as well as size should be equal to
-// corresponing editboxes, comboboxes or listboxes, positioning of spinboxes should by equal too. Issue cannot be fixed within
+// corresponding editboxes, comboboxes or listboxes, positioning of spinboxes should by equal too. Issue cannot be fixed within
 // native widget drawing code. As a workaround, an offset is considered for spinboxes to align spinboxes correctly.
 
 #define SPINBOX_OFFSET 1  // left offset for alignment with editboxes, comboboxes, and listboxes
