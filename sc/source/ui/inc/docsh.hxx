@@ -129,7 +129,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     {
         public:
             explicit    PrepareSaveGuard( ScDocShell & rDocShell );
-                        ~PrepareSaveGuard();
+                        ~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE;
         private:
                         ScDocShell & mrDocShell;
     };

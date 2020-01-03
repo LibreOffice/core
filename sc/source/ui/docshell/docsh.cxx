@@ -1713,7 +1713,7 @@ ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
         mrDocShell.SfxObjectShell::SetVisArea( tools::Rectangle() );   // "Normally" worked on => no VisArea.
 }
 
-ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
+ScDocShell::PrepareSaveGuard::~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE
 {
     if (mrDocShell.m_aDocument.HasExternalRefManager())
     {
