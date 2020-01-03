@@ -144,8 +144,8 @@ void PosSizePropertyPanel::dispose()
     mxFtFlip.reset();
     mxFlipDispatch.reset();
     mxFlipTbx.reset();
-    mxArrangeTbx.reset();
     mxArrangeDispatch.reset();
+    mxArrangeTbx.reset();
     mxBtnEditChart.reset();
 
     maTransfPosXControl.dispose();
