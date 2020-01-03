@@ -763,7 +763,7 @@ public:
     virtual sal_Int16 SAL_CALL resetActionLocks() override;
 };
 
-class ScTableSheetObj : public ScCellRangeObj,
+class SC_DLLPUBLIC ScTableSheetObj : public ScCellRangeObj,
                         public css::sheet::XSpreadsheet,
                         public css::container::XNamed,
                         public css::sheet::XSheetPageBreak,

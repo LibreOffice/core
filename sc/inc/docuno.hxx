@@ -654,7 +654,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScAnnotationsObj final : public cppu::WeakImplHelper<
+class SC_DLLPUBLIC ScAnnotationsObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSheetAnnotations,
                                 css::container::XEnumerationAccess,
                                 css::lang::XServiceInfo>,
