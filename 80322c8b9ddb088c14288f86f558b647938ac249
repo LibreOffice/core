@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df93d80_a06500d2",
+        "filename": "basic/qa/vba_tests/typename.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-03T10:45:34Z",
+      "side": 1,
+      "message": "I realize that you use the code conventions from pre-existing code. But please, in this case, don\u0027t do that: not only is there a typo \"dataN\"-\u003e\"dateN\"; but also it\u0027s *much* easier to see the test written like\n\n    TestLog_ASSERT date2 \u003d \"Integer\", \"the return TypeName is: \" \u0026 date1\n\nthan to look up several lines above to find out that date1 is \"Integer\".\n\nAdditionally, \"the return TypeName is: Foo\" will not tell much to the one who will happen to break this, and will not see which line exactly had issued the message. Some more descriptive message would be better, like `\"TypeName(32767)\u003d\" \u0026 date1`.",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "80322c8b9ddb088c14288f86f558b647938ac249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
