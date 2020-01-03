@@ -191,9 +191,9 @@ namespace rptui
 
         /** collapse all sections given by their position
         *
-        * \param _aCollpasedSections The position of the sections which should be collapsed.
+        * \param _aCollapsedSections The position of the sections which should be collapsed.
         */
-        void collapseSections(const css::uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections);
+        void collapseSections(const css::uno::Sequence< css::beans::PropertyValue>& _aCollapsedSections);
 
         /** align all marked objects in all sections
         */

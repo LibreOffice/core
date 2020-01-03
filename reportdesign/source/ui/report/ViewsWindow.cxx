@@ -1603,9 +1603,9 @@ void OViewsWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedP
     }
 }
 
-void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& _aCollpasedSections)
+void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& _aCollapsedSections)
 {
-    for (const beans::PropertyValue& rSection : _aCollpasedSections)
+    for (const beans::PropertyValue& rSection : _aCollapsedSections)
     {
         sal_uInt16 nPos = sal_uInt16(-1);
         if ( (rSection.Value >>= nPos) && nPos < m_aSections.size() )

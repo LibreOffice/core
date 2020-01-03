@@ -563,9 +563,9 @@ void ODesignView::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPo
     m_aScrollWindow->fillCollapsedSections(_rCollapsedPositions);
 }
 
-void ODesignView::collapseSections(const uno::Sequence< beans::PropertyValue>& _aCollpasedSections)
+void ODesignView::collapseSections(const uno::Sequence< beans::PropertyValue>& _aCollapsedSections)
 {
-    m_aScrollWindow->collapseSections(_aCollpasedSections);
+    m_aScrollWindow->collapseSections(_aCollapsedSections);
 }
 
 OUString ODesignView::getCurrentPage() const

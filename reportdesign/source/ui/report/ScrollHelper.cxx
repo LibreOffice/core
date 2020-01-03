@@ -319,9 +319,9 @@ void OScrollWindowHelper::fillCollapsedSections(::std::vector<sal_uInt16>& _rCol
     m_aReportWindow->fillCollapsedSections(_rCollapsedPositions);
 }
 
-void OScrollWindowHelper::collapseSections(const uno::Sequence< css::beans::PropertyValue>& _aCollpasedSections)
+void OScrollWindowHelper::collapseSections(const uno::Sequence< css::beans::PropertyValue>& _aCollapsedSections)
 {
-    m_aReportWindow->collapseSections(_aCollpasedSections);
+    m_aReportWindow->collapseSections(_aCollapsedSections);
 }
 
 bool OScrollWindowHelper::EventNotify( NotifyEvent& rNEvt )
