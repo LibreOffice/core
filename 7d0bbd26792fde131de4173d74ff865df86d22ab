@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d74576c_9346d2bf",
+        "filename": "basegfx/source/polygon/b2dlinegeometry.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-01-03T07:52:19Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"\u003c\u003d\" instead? Indeed, \"assert\" asserts when condition is false.\nHere the SAL_WARN_IF logs if condition is true.",
+      "range": {
+        "startLine": 702,
+        "startChar": 40,
+        "endLine": 702,
+        "endChar": 41
+      },
+      "revId": "7d0bbd26792fde131de4173d74ff865df86d22ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
