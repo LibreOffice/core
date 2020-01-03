@@ -4429,10 +4429,11 @@ void ScExportTest::testTdf112567()
 {
     // Set the system locale to Hungarian (a language with different range separator)
     SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
     aOptions.SetLocaleConfigString("hu-HU");
     aOptions.Commit();
-    comphelper::ScopeGuard g([&aOptions] {
-        aOptions.SetLocaleConfigString(OUString());
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
         aOptions.Commit();
     });
 
@@ -4455,10 +4456,11 @@ void ScExportTest::testTdf112567b()
 {
     // Set the system locale to Hungarian (a language with different range separator)
     SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
     aOptions.SetLocaleConfigString("hu-HU");
     aOptions.Commit();
-    comphelper::ScopeGuard g([&aOptions] {
-        aOptions.SetLocaleConfigString(OUString());
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
         aOptions.Commit();
     });
 
