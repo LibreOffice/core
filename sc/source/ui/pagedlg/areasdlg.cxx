@@ -63,8 +63,8 @@ namespace
 
 // global functions (->at the end of the file):
 
-static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc, bool bIsRow, ScRange* pRange );
-static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument* pDoc, bool bIsRow, OUString& rStr );
+static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange );
+static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr );
 
 #if 0
 // this method is useful when debugging address flags.
@@ -187,7 +187,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ 
         else
         {
             bool bRow = ( m_xEdRepeatRow.get() == m_pRefInputEdit );
-            lcl_GetRepeatRangeString(&rRef, pDoc, bRow, aStr);
+            lcl_GetRepeatRangeString(&rRef, *pDoc, bRow, aStr);
             m_pRefInputEdit->SetRefString( aStr );
         }
         Impl_ModifyHdl( *m_pRefInputEdit );
@@ -275,12 +275,12 @@ void ScPrintAreasDlg::Impl_Reset()
 
     // repeat row
 
-    lcl_GetRepeatRangeString(pRepeatRowRange, pDoc, true, aStrRange);
+    lcl_GetRepeatRangeString(pRepeatRowRange, *pDoc, true, aStrRange);
     m_xEdRepeatRow->SetText( aStrRange );
 
     // repeat column
 
-    lcl_GetRepeatRangeString(pRepeatColRange, pDoc, false, aStrRange);
+    lcl_GetRepeatRangeString(pRepeatColRange, *pDoc, false, aStrRange);
     m_xEdRepeatCol->SetText( aStrRange );
 
     Impl_ModifyHdl( *m_xEdPrintArea );
@@ -303,7 +303,7 @@ bool ScPrintAreasDlg::Impl_GetItem( const formula::RefEdit* pEd, SfxStringItem& 
     {
         ScRange aRange;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        lcl_CheckRepeatString(aRangeStr, pDoc, m_xEdRepeatRow.get() == pEd, &aRange);
+        lcl_CheckRepeatString(aRangeStr, *pDoc, m_xEdRepeatRow.get() == pEd, &aRange);
         aRangeStr = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
     }
 
@@ -347,11 +347,11 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
     bool bRepeatRowOk = aStrRepeatRow.isEmpty();
     if ( !bRepeatRowOk )
-        bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, pDoc, true, nullptr);
+        bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, *pDoc, true, nullptr);
 
     bool bRepeatColOk = aStrRepeatCol.isEmpty();
     if ( !bRepeatColOk )
-        bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, nullptr);
+        bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, *pDoc, false, nullptr);
 
     // error messages
 
@@ -429,13 +429,13 @@ void ScPrintAreasDlg::Impl_FillLists()
 
             if (rEntry.second->HasType(ScRangeData::Type::RowHeader))
             {
-                lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
+                lcl_GetRepeatRangeString(&aRange, *pDoc, true, aSymbol);
                 m_xLbRepeatRow->append(aSymbol, aName);
             }
 
             if (rEntry.second->HasType(ScRangeData::Type::ColHeader))
             {
-                lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
+                lcl_GetRepeatRangeString(&aRange, *pDoc, false, aSymbol);
                 m_xLbRepeatCol->append(aSymbol, aName);
             }
         }
@@ -584,7 +584,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit&, rEd, void )
 
 // TODO: It might make sense to move these functions to address.?xx. -kohei
 
-static bool lcl_CheckOne_OOO( const ScDocument* pDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_OOO( const ScDocument& rDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // Allowed syntax for rStr:
     // Row: [$]1-MAXTAB
@@ -616,7 +616,7 @@ static bool lcl_CheckOne_OOO( const ScDocument* pDoc, const OUString& rStr, bool
         else
         {
             SCCOL nCol = 0;
-            bStrOk = ::AlphaToCol( pDoc, nCol, aStr);
+            bStrOk = ::AlphaToCol(rDoc, nCol, aStr);
             nNum = nCol;
         }
     }
@@ -627,10 +627,10 @@ static bool lcl_CheckOne_OOO( const ScDocument* pDoc, const OUString& rStr, bool
     return bStrOk;
 }
 
-static bool lcl_CheckOne_XL_A1( const ScDocument* pDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_A1( const ScDocument& rDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // XL A1 style is identical to OOO one for print range formats.
-    return lcl_CheckOne_OOO(pDoc, rStr, bIsRow, rVal);
+    return lcl_CheckOne_OOO(rDoc, rStr, bIsRow, rVal);
 }
 
 static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
@@ -661,14 +661,14 @@ static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& r
     return true;
 }
 
-static bool lcl_CheckRepeatOne( const ScDocument* pDoc, const OUString& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckRepeatOne( const ScDocument& rDoc, const OUString& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
 {
     switch (eConv)
     {
         case formula::FormulaGrammar::CONV_OOO:
-            return lcl_CheckOne_OOO(pDoc, rStr, bIsRow, rVal);
+            return lcl_CheckOne_OOO(rDoc, rStr, bIsRow, rVal);
         case formula::FormulaGrammar::CONV_XL_A1:
-            return lcl_CheckOne_XL_A1(pDoc, rStr, bIsRow, rVal);
+            return lcl_CheckOne_XL_A1(rDoc, rStr, bIsRow, rVal);
         case formula::FormulaGrammar::CONV_XL_R1C1:
             return lcl_CheckOne_XL_R1C1(rStr, bIsRow, rVal);
         default:
@@ -679,12 +679,12 @@ static bool lcl_CheckRepeatOne( const ScDocument* pDoc, const OUString& rStr, fo
     return false;
 }
 
-static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc, bool bIsRow, ScRange* pRange )
+static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange )
 {
     // Row: [valid row] rsep [valid row]
     // Col: [valid col] rsep [valid col]
 
-    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     const sal_Unicode rsep = ScCompiler::GetNativeSymbolChar(ocRange);
 
     if (pRange)
@@ -713,7 +713,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc,
             if (aBuf.isEmpty())
                 return false;
 
-            bool bRes = lcl_CheckRepeatOne(pDoc, aBuf, eConv, bIsRow, nVal);
+            bool bRes = lcl_CheckRepeatOne(rDoc, aBuf, eConv, bIsRow, nVal);
             if (!bRes)
                 return false;
 
@@ -740,7 +740,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc,
 
     if (!aBuf.isEmpty())
     {
-        bool bRes = lcl_CheckRepeatOne(pDoc, aBuf, eConv, bIsRow, nVal);
+        bool bRes = lcl_CheckRepeatOne(rDoc, aBuf, eConv, bIsRow, nVal);
         if (!bRes)
             return false;
 
@@ -764,24 +764,24 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc,
     return true;
 }
 
-static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument* pDoc, bool bIsRow, OUString& rStr )
+static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr )
 {
     rStr.clear();
     if (!pRange)
         return;
 
-    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     const ScAddress& rStart = pRange->aStart;
     const ScAddress& rEnd   = pRange->aEnd;
 
     const ScRefFlags nFmt = bIsRow
                             ? (ScRefFlags::ROW_VALID | ScRefFlags::ROW_ABS)
                             : (ScRefFlags::COL_VALID | ScRefFlags::COL_ABS);
-    rStr += rStart.Format(nFmt, pDoc, eConv);
+    rStr += rStart.Format(nFmt, &rDoc, eConv);
     if ((bIsRow && rStart.Row() != rEnd.Row()) || (!bIsRow && rStart.Col() != rEnd.Col()))
     {
         rStr += ScCompiler::GetNativeSymbol(ocRange);
-        rStr += rEnd.Format(nFmt, pDoc, eConv);
+        rStr += rEnd.Format(nFmt, &rDoc, eConv);
     }
 }
 

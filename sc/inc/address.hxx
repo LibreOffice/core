@@ -988,7 +988,7 @@ inline OUString ScColToAlpha( SCCOL nCol )
 }
 
 /// get column number of A..IV... string
-bool AlphaToCol( const ScDocument* pDoc, SCCOL& rCol, const OUString& rStr);
+bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, const OUString& rStr);
 
 #endif // INCLUDED_SC_INC_ADDRESS_HXX
 

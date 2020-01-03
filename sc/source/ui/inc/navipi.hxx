@@ -134,7 +134,7 @@ private:
 
     void EvalText();
     void ExecuteCol();
-    static SCCOL AlphaToNum    ( const ScDocument* pDoc, OUString& rStr );
+    static SCCOL AlphaToNum    ( const ScDocument& rDoc, OUString& rStr );
     static SCCOL NumStrToAlpha ( OUString& rStr );
     static SCCOL NumToAlpha    ( SCCOL nColNo, OUString& rStr );
 };
