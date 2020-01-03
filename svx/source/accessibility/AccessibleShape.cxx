@@ -159,18 +159,10 @@ void AccessibleShape::Init()
             if( pSdrObject )
             {
                 SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
-                OutlinerParaObject* pOutlinerParaObject = nullptr;
-
-                if( pTextObj )
-                    pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
-
-                bool bOwnParaObj = pOutlinerParaObject != nullptr;
-
-                if (!pOutlinerParaObject)
-                    pOutlinerParaObject = pSdrObject->GetOutlinerParaObject();
+                const bool hasOutlinerParaObject = pTextObj->CanCreateEditOutlinerParaObject() || pSdrObject->GetOutlinerParaObject() != nullptr;
 
                 // create AccessibleTextHelper to handle this shape's text
-                if( !pOutlinerParaObject )
+                if( !hasOutlinerParaObject )
                 {
                     // empty text -> use proxy edit source to delay creation of EditEngine
                     mpText.reset( new AccessibleTextHelper( std::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) ) );
@@ -182,9 +174,6 @@ void AccessibleShape::Init()
                 }
                 if( pWindow->HasFocus() )
                     mpText->SetFocus();
-
-                if( bOwnParaObj )
-                    delete pOutlinerParaObject;
 
                 mpText->SetEventSource(this);
             }
