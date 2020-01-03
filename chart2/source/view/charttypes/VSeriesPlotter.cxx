@@ -2570,7 +2570,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
             break;
         default:
             break;
-    };
+    }
     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
         xTarget, eLegendSymbolStyle, xShapeFactory
             , rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol ));
@@ -2601,7 +2601,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
             break;
         default:
             break;
-    };
+    }
 
     // the default properties for the data point are the data series properties.
     // If a data point has own attributes overwrite them

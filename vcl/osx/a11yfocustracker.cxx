@@ -85,7 +85,7 @@ void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEve
         break;
     default:
         break;
-    };
+    }
 }
 
 AquaA11yFocusTracker::AquaA11yFocusTracker() :

@@ -215,7 +215,7 @@ namespace sdr
                         bRemoveRenderGeometry = true;
                     break;
                     default: break;
-                };
+                }
             }
             else if ( rHint.GetId() == SfxHintId::DataChanged )
             {

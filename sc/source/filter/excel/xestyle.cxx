@@ -3173,7 +3173,7 @@ void XclExpDxf::SaveXmlExt( XclExpXmlStream& rStrm )
         mpBorder->SaveXml(rStrm);
     if (mpProt)
         mpProt->SaveXml(rStrm);
-    rStyleSheet->endElementNS( XML_x14, XML_dxf );;
+    rStyleSheet->endElementNS( XML_x14, XML_dxf );
 }
 
 

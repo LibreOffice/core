@@ -1536,7 +1536,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         bGoEnd = true;break;
                     default:
                         break;
-                    };
+                    }
 
                     // range is checked in ImplSetSelection ...
                     if ( bGoLeft && aSel.Max() )

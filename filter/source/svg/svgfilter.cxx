@@ -362,7 +362,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
             // always leave helper endless loop
             break;
-        };
+        }
     }
     else if( mxSrcDoc.is() )
     {

@@ -201,7 +201,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         case NS_ooxml::LN_Value_ST_Shd_pct85: nWW8BrushStyle = 850; break;
         case NS_ooxml::LN_Value_ST_Shd_pct87: nWW8BrushStyle = 875; break;
         case NS_ooxml::LN_Value_ST_Shd_pct95: nWW8BrushStyle = 950; break;
-    };
+    }
 
     sal_Int32 nApplyColor = 0;
     if( !nWW8BrushStyle )
@@ -270,7 +270,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         case NS_ooxml::LN_Value_ST_Shd_pct85: nShadingPattern = drawing::ShadingPattern::PCT85; break;
         case NS_ooxml::LN_Value_ST_Shd_pct87: nShadingPattern = drawing::ShadingPattern::PCT87; break;
         case NS_ooxml::LN_Value_ST_Shd_pct95: nShadingPattern = drawing::ShadingPattern::PCT95; break;
-        };
+        }
 
         // Write the shading pattern property
         pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( nShadingPattern ));
