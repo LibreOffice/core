@@ -2089,6 +2089,7 @@ bool SwFEShell::ImpEndCreate()
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // #i44344#, #i44681# - positioning attributes already set
         pFormat->PosAttrSet();
+        pFormat->SetName(GetUniqueShapeName());
 
         SwDrawContact *pContact = new SwDrawContact( pFormat, &rSdrObj );
         // #i35635#
