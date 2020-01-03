@@ -4059,7 +4059,7 @@ void ScExportTest::testConditionalFormatPriorityCheckXLSX()
     {
         OString aIdx = OString::number(nIdx);
         OUString aCellAddr = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]", "sqref");
-        OUString aPriority = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]/x:cfRule", "priority");;
+        OUString aPriority = getXPath(pDoc, "//x:conditionalFormatting[" + aIdx + "]/x:cfRule", "priority");
 
         CPPUNIT_ASSERT_MESSAGE("conditionalFormatting sqref must be either A1 or A3", aCellAddr == "A1" || aCellAddr == "A3");
 

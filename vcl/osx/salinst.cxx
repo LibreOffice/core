@@ -475,7 +475,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     default:
         OSL_FAIL( "unhandled NSApplicationDefined event" );
         break;
-    };
+    }
 }
 
 bool AquaSalInstance::RunInMainYield( bool bHandleAllCurrentEvents )

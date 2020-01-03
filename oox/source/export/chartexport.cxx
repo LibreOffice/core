@@ -1560,7 +1560,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
                 {
                     uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
                     uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
-                    rTransparenceValue >>= aTransparenceGradient;;
+                    rTransparenceValue >>= aTransparenceGradient;
                     WriteGradientFill(aGradient, aTransparenceGradient);
                 }
                 else

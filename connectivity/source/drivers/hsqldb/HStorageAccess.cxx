@@ -167,7 +167,7 @@ jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key )
         }
         else
         {
-            return static_cast<unsigned char>(aData[0]);;
+            return static_cast<unsigned char>(aData[0]);
         }
     }
     return -1;
