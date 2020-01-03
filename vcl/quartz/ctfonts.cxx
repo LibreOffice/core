@@ -411,7 +411,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
 
     if( fWeight > 0 )
     {
-        nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_BLACK - WEIGHT_NORMAL)/0.68));
+        nInt = rint(int(WEIGHT_NORMAL) + fWeight * ((WEIGHT_BLACK - WEIGHT_NORMAL)/0.68));
         if( nInt > WEIGHT_BLACK )
         {
             nInt = WEIGHT_BLACK;
@@ -419,7 +419,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     }
     else if( fWeight < 0 )
     {
-        nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_NORMAL - WEIGHT_THIN)/0.8));
+        nInt = rint(int(WEIGHT_NORMAL) + fWeight * ((WEIGHT_NORMAL - WEIGHT_THIN)/0.8));
         if( nInt < WEIGHT_THIN )
         {
             nInt = WEIGHT_THIN;
@@ -443,7 +443,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
 
     if( fWidth > 0 )
     {
-        nInt = rint( WIDTH_NORMAL + fWidth * ((WIDTH_ULTRA_EXPANDED - WIDTH_NORMAL)/0.4));
+        nInt = rint( int(WIDTH_NORMAL) + fWidth * ((WIDTH_ULTRA_EXPANDED - WIDTH_NORMAL)/0.4));
         if( nInt > WIDTH_ULTRA_EXPANDED )
         {
             nInt = WIDTH_ULTRA_EXPANDED;
@@ -451,7 +451,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     }
     else if( fWidth < 0 )
     {
-        nInt = rint( WIDTH_NORMAL + fWidth * ((WIDTH_NORMAL - WIDTH_ULTRA_CONDENSED)/0.5));
+        nInt = rint( int(WIDTH_NORMAL) + fWidth * ((WIDTH_NORMAL - WIDTH_ULTRA_CONDENSED)/0.5));
         if( nInt < WIDTH_ULTRA_CONDENSED )
         {
             nInt = WIDTH_ULTRA_CONDENSED;
