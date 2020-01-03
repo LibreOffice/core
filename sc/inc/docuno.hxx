@@ -21,6 +21,8 @@
 #define INCLUDED_SC_INC_DOCUNO_HXX
 
 #include "address.hxx"
+
+#include <sal/types.h>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fmdmod.hxx>
@@ -658,7 +660,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScAnnotationsObj final : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScAnnotationsObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSheetAnnotations,
                                 css::container::XEnumerationAccess,
                                 css::lang::XServiceInfo>,
