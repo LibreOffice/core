@@ -492,7 +492,8 @@ public:
     virtual void NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject) override;
     void NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaObject> pTextObject, SdrText* pText );
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
-    std::unique_ptr<OutlinerParaObject> GetEditOutlinerParaObject() const;
+    bool CanCreateEditOutlinerParaObject() const;
+    std::unique_ptr<OutlinerParaObject> CreateEditOutlinerParaObject() const;
 
     virtual void NbcReformatText() override;
 
