@@ -195,7 +195,7 @@ void FuText::DoExecute( SfxRequest& )
         SdrViewEvent aVEvt;
         mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         mpView->MarkObj(aVEvt.pRootObj, pPV);
-        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && mpViewShell->GetDocSh())
+        if (comphelper::LibreOfficeKit::isActive() && mpViewShell->GetDocSh())
             mpViewShell->GetDocSh()->SetModified();
 
         mxTextObj.reset( dynamic_cast< SdrTextObj* >( aVEvt.pObj ) );
