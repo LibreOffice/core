@@ -164,7 +164,7 @@ void ColumnEdit::EvalText()
         else
         {
             ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-            nCol = AlphaToNum( pViewSh->GetViewData().GetDocument(), aStrCol );
+            nCol = AlphaToNum( *pViewSh->GetViewData().GetDocument(), aStrCol );
         }
     }
     else
@@ -200,7 +200,7 @@ void ColumnEdit::SetCol( SCCOL nColNo )
     }
 }
 
-SCCOL ColumnEdit::AlphaToNum( const ScDocument* pDoc, OUString& rStr )
+SCCOL ColumnEdit::AlphaToNum( const ScDocument& rDoc, OUString& rStr )
 {
     SCCOL  nColumn = 0;
 
@@ -208,7 +208,7 @@ SCCOL ColumnEdit::AlphaToNum( const ScDocument* pDoc, OUString& rStr )
     {
         rStr = rStr.toAsciiUpperCase();
 
-        if (::AlphaToCol( pDoc, nColumn, rStr))
+        if (::AlphaToCol( rDoc, nColumn, rStr))
             ++nColumn;
 
         if ( (rStr.getLength() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )

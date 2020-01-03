@@ -2535,13 +2535,13 @@ OUString ScRefAddress::GetRefString( const ScDocument* pDoc, SCTAB nActTab,
     return aAdr.Format(nFlags, pDoc, rDetails);
 }
 
-bool AlphaToCol( const ScDocument* pDoc, SCCOL& rCol, const OUString& rStr)
+bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, const OUString& rStr)
 {
     SCCOL nResult = 0;
     sal_Int32 nStop = rStr.getLength();
     sal_Int32 nPos = 0;
     sal_Unicode c;
-    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
+    const SCCOL nMaxCol = rDoc.MaxCol();
     while (nResult <= nMaxCol && nPos < nStop && (c = rStr[nPos]) != 0 &&
             rtl::isAsciiAlpha(c))
     {
@@ -2550,7 +2550,7 @@ bool AlphaToCol( const ScDocument* pDoc, SCCOL& rCol, const OUString& rStr)
         nResult += ScGlobal::ToUpperAlpha(c) - 'A';
         ++nPos;
     }
-    bool bOk = (pDoc->ValidCol(nResult) && nPos > 0);
+    bool bOk = (rDoc.ValidCol(nResult) && nPos > 0);
     if (bOk)
         rCol = nResult;
     return bOk;

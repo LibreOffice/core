@@ -3866,7 +3866,7 @@ ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) con
 ScTableColumnObj* ScTableColumnsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     SCCOL nCol = 0;
-    if ( ::AlphaToCol( &pDocShell->GetDocument(), nCol, aName) )
+    if ( ::AlphaToCol( pDocShell->GetDocument(), nCol, aName) )
         if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
             return new ScTableColumnObj( pDocShell, nCol, nTab );
 
@@ -3976,7 +3976,7 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     SCCOL nCol = 0;
-    if ( ::AlphaToCol( &pDocShell->GetDocument(), nCol, aName) )
+    if ( ::AlphaToCol( pDocShell->GetDocument(), nCol, aName) )
         if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
             return true;
 
