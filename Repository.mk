@@ -428,7 +428,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
-	$(if $(filter-out iOS,$(OS)),spell) \
+	$(if $(filter-out ANDROID iOS,$(OS)),spell) \
 	$(if $(DISABLE_GUI),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
@@ -487,6 +487,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 	$(if $(filter iOS MACOSX,$(OS)), \
 		MacOSXSpell \
+	) \
+	$(if $(filter ANDROID,$(OS)), \
+		AndroidSpell \
 	) \
 ))
 

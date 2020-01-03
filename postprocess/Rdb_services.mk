@@ -50,8 +50,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	i18npool/util/i18npool \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
-	$(if $(filter-out iOS,$(OS)), \
+	$(if $(filter-out ANDROID iOS,$(OS)), \
 		lingucomponent/source/spellcheck/spell/spell \
+	) \
+	$(if $(filter-out iOS,$(OS)), \
 		lingucomponent/source/thesaurus/libnth/lnth \
 	) \
 	lingucomponent/source/numbertext/numbertext \
@@ -128,6 +130,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/impress/wpftimpress \
 	writerperfect/source/writer/wpftwriter \
 	writerperfect/source/calc/wpftcalc \
+	$(if $(filter ANDROID,$(OS)), \
+		lingucomponent/source/spellcheck/androidspell/AndroidSpell \
+	) \
 	$(if $(filter MACOSX,$(OS)), \
 		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
 		fpicker/source/aqua/fps_aqua \
