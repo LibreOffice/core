@@ -53,6 +53,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <o3tl/deleter.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
@@ -90,7 +91,9 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    SetController(std::make_shared<FmPropBrw>(::comphelper::getProcessComponentContext(), _pBindings, this, _pParent->GetFrameWeld(), _pInfo));
+    std::shared_ptr<FmPropBrw> xControl(new FmPropBrw(::comphelper::getProcessComponentContext(), _pBindings,
+                                                         this, _pParent->GetFrameWeld(), _pInfo), o3tl::default_delete<FmPropBrw>());
+    SetController(std::move(xControl));
     static_cast<FmPropBrw*>(GetController().get())->Initialize( _pInfo );
 }
 
