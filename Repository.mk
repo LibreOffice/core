@@ -385,7 +385,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	localebe1 \
 	log \
 	lng \
-	lnth \
+	$(if $(filter-out iOS,$(OS)),lnth) \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
@@ -419,7 +419,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
-	spell \
+	$(if $(filter-out iOS,$(OS)),spell) \
 	$(if $(DISABLE_GUI),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
