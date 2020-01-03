@@ -228,7 +228,7 @@ namespace sdr
 
             if( mxCell.is() )
             {
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -308,7 +308,7 @@ namespace sdr
                 rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -329,7 +329,7 @@ namespace sdr
                 const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
                 const bool bOwnParaObj = pParaObj != nullptr;
 
@@ -593,11 +593,9 @@ bool Cell::IsTextEditActive()
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if(rTableObj.getActiveCell().get() == this )
     {
-        OutlinerParaObject* pParaObj = rTableObj.GetEditOutlinerParaObject();
-        if( pParaObj != nullptr )
+        if( rTableObj.CanCreateEditOutlinerParaObject() )
         {
             isActive = true;
-            delete pParaObj;
         }
     }
     return isActive;
@@ -624,12 +622,19 @@ bool Cell::hasText() const
     return false;
 }
 
-
-OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
+bool Cell::CanCreateEditOutlinerParaObject() const
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if( rTableObj.getActiveCell().get() == this )
-        return rTableObj.GetEditOutlinerParaObject();
+        return rTableObj.CanCreateEditOutlinerParaObject();
+    return false;
+}
+
+std::unique_ptr<OutlinerParaObject> Cell::CreateEditOutlinerParaObject() const
+{
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    if( rTableObj.getActiveCell().get() == this )
+        return rTableObj.CreateEditOutlinerParaObject();
     return nullptr;
 }
 

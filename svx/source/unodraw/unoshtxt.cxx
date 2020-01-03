@@ -547,7 +547,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         OutlinerParaObject* pOutlinerParaObject = nullptr;
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj && pTextObj->getActiveText() == mpText )
-            pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+            pOutlinerParaObject = pTextObj->CreateEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
         bool bOwnParaObj(false);
 
         if( pOutlinerParaObject )
@@ -665,7 +665,24 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
             return GetBackgroundTextForwarder();
     }
     else
+    {
+        // tdf#123470 if the text edit mode of the shape is active, then we
+        // cannot trust a previously cached TextForwarder state as the text may
+        // be out of date, so force a refetch in that case.
+        if (IsEditMode())
+        {
+            assert(!mbForwarderIsEditMode); // because without a view there is no other option except !mbForwarderIsEditMode
+            bool bTextEditActive = false;
+            SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mpObject);
+            // similar to the GetBackgroundTextForwarder check, see if the text edit is active
+            if (pTextObj && pTextObj->getActiveText() == mpText && pTextObj->CanCreateEditOutlinerParaObject())
+                bTextEditActive = true; // text edit active
+            if (bTextEditActive)
+                mbDataValid = false;
+        }
+
         return GetBackgroundTextForwarder();
+    }
 }
 
 

@@ -2490,7 +2490,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         */
         if (pTxtObj->IsTextEditActive())
         {
-            pParaObj = pTxtObj->GetEditOutlinerParaObject();
+            pParaObj = pTxtObj->CreateEditOutlinerParaObject().release();
             bOwnParaObj = true;
         }
         else
