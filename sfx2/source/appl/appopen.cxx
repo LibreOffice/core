@@ -243,6 +243,18 @@ ErrCode CheckPasswd_Impl
                             if ( !aEncryptionData.hasElements() && aGpgProperties.hasElements() )
                                 aEncryptionData = ::comphelper::DocPasswordHelper::decryptGpgSession(aGpgProperties);
 
+                            // tdf#93389: if recoverying a document, encryption data should contain
+                            // entries for the real filter, not only for recovery ODF, to keep it
+                            // encrypted. Pass this in encryption data.
+                            // TODO: pass here the real filter (from AutoRecovery::implts_openDocs)
+                            // to marshal this to requestAndVerifyDocPassword
+                            if (pSet->GetItemState(SID_DOC_SALVAGE, false) == SfxItemState::SET)
+                            {
+                                aEncryptionData = comphelper::concatSequences(
+                                    aEncryptionData, std::initializer_list<beans::NamedValue>{
+                                                         { "ForSalvage", css::uno::Any(true) } });
+                            }
+
                             SfxDocPasswordVerifier aVerifier( xStorage );
                             aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
                                 aVerifier, aEncryptionData, aPassword, xInteractionHandler, pFile->GetOrigURL(), comphelper::DocPasswordRequestType::Standard );
