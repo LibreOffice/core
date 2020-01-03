@@ -96,7 +96,10 @@ public:
 public:
     void    Read(LwpObjectStream *pStrm);
     inline sal_uInt32 GetPosition() const;
-    inline TabType GetTabType() const;
+    sal_uInt8 GetTabType() const
+    {
+        return m_nType;
+    }
     inline LeaderType GetLeaderType() const;
     inline sal_uInt16 GetAlignChar() const;
 
@@ -111,11 +114,6 @@ private:
 inline sal_uInt32 LwpTab::GetPosition() const
 {
     return m_nX;
-}
-
-inline LwpTab::TabType LwpTab::GetTabType() const
-{
-    return static_cast<LwpTab::TabType>(m_nType);
 }
 
 inline LwpTab::LeaderType LwpTab::GetLeaderType() const
