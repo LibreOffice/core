@@ -71,15 +71,8 @@ void AccessibleCell::Init()
     const vcl::Window* pWindow = maShapeTreeInfo.GetWindow ();
     if( (pView != nullptr) && (pWindow != nullptr) && mxCell.is())
     {
-        OutlinerParaObject* pOutlinerParaObject = mxCell->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
-
-        bool bOwnParaObject = pOutlinerParaObject != nullptr;
-
-        if( !pOutlinerParaObject )
-            pOutlinerParaObject = mxCell->GetOutlinerParaObject();
-
         // create AccessibleTextHelper to handle this shape's text
-        if( pOutlinerParaObject )
+        if( mxCell->CanCreateEditOutlinerParaObject() || mxCell->GetOutlinerParaObject() != nullptr )
         {
             // non-empty text -> use full-fledged edit source right away
 
@@ -88,9 +81,6 @@ void AccessibleCell::Init()
                 mpText->SetFocus();
             mpText->SetEventSource(this);
         }
-
-        if( bOwnParaObject)
-            delete pOutlinerParaObject;
     }
 }
 

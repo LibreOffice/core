@@ -970,8 +970,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
-                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
-                            if( pParaObj )
+                            if( pTextObj->CanCreateEditOutlinerParaObject() )
                             {
                                 delete pParaObj;
                                 bDisable = false;
