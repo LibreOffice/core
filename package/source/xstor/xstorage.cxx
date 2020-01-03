@@ -914,7 +914,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 AddLog( OSL_LOG_PREFIX "No Encryption" );
             }
 
-            if ( bHasCommonEncryptionData && ::package::PackageEncryptionDatasEqual( pElement->m_pStream->GetCachedEncryptionData(), aCommonEncryptionData ) )
+            if (bHasCommonEncryptionData && ::package::PackageEncryptionDataLessOrEqual(pElement->m_pStream->GetCachedEncryptionData(), aCommonEncryptionData))
             {
                 // If the stream can be opened with the common storage password
                 // it must be stored with the common storage password as well
