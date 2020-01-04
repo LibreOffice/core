@@ -226,7 +226,7 @@ namespace
     struct FrameRefHash
     {
         size_t operator()(const Reference<XTextFrame>& rFrame) const
-            { return sal::static_int_cast<size_t>(reinterpret_cast<sal_uIntPtr>(rFrame.get())); }
+            { return sal::static_int_cast<size_t>(reinterpret_cast<size_t>(rFrame.get())); }
     };
 
     bool lcl_TextContentsUnfiltered(const Reference<XTextContent>&)

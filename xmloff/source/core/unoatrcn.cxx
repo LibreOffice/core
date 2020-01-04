@@ -100,7 +100,7 @@ sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const css::uno::Sequen
 {
     if( isUnoTunnelId<SvUnoAttributeContainer>(rId) )
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uInt64>(this));
     }
     return 0;
 }

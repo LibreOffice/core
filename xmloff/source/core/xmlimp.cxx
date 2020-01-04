@@ -461,7 +461,7 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
 {
     if( isUnoTunnelId<SvXMLImport>(rId) )
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uInt64>(this));
     }
     return 0;
 }

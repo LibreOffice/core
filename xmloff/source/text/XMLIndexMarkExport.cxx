@@ -224,7 +224,7 @@ void XMLIndexMarkExport::GetID(
     const Reference<XPropertySet> & rPropSet)
 {
     // HACK: use address of object to form identifier
-    sal_Int64 nId = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(rPropSet.get()));
+    sal_Int64 nId = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uInt64>(rPropSet.get()));
     sBuf.append("IMark");
     sBuf.append(nId);
 }
