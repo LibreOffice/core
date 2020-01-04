@@ -302,13 +302,16 @@ void Qt5Frame::TriggerPaintEvent(QRect aRect)
 
 void Qt5Frame::InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics)
 {
+    const qreal ratio = qApp->devicePixelRatio();
     int width = 640;
     int height = 480;
     m_pSvpGraphics = pQt5SvpGraphics;
-    m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
+    m_pSurface.reset(
+        cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ceil(width * ratio), ceil(height * ratio)));
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
     cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(), &m_aDamageHandler,
                                 nullptr);
+    cairo_surface_set_device_scale(m_pSurface.get(), ratio, ratio);
 }
 
 SalGraphics* Qt5Frame::AcquireGraphics()
@@ -473,13 +476,15 @@ Size Qt5Frame::CalcDefaultSize()
 {
     assert(isWindow());
 
+    const qreal scale = qApp->devicePixelRatio();
     Size aSize;
     if (!m_bFullScreen)
     {
         const QScreen* pScreen = screen();
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         aSize = bestmaxFrameSizeForScreenSize(
-            toSize(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size()));
+            toSize(pScreen ? pScreen->size() / scale
+                           : QApplication::desktop()->screenGeometry(0).size() / scale));
         SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     else
@@ -488,7 +493,8 @@ Size Qt5Frame::CalcDefaultSize()
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             aSize = toSize(
-                QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
+                QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size()
+                / scale);
             SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         else
@@ -496,7 +502,8 @@ Size Qt5Frame::CalcDefaultSize()
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
+            aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size()
+                           / scale);
         }
     }
 
