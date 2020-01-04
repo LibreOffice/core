@@ -600,7 +600,8 @@ void Qt5Instance::MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
 
 std::unique_ptr<QApplication> Qt5Instance::CreateQApplication(int& nArgc, char** pArgv)
 {
-    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     FreeableCStr session_manager;
     if (getenv("SESSION_MANAGER") != nullptr)
