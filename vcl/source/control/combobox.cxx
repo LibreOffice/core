@@ -159,6 +159,7 @@ void ComboBox::ImplCalcEditHeight()
     tools::Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
     tools::Rectangle aBoundRegion, aContentRegion;
     ImplControlValue aControlValue;
+    aControlValue.setFontHeight(m_pImpl->m_pSubEdit->GetTextHeight());
     ControlType aType = IsDropDownBox() ? ControlType::Combobox : ControlType::Editbox;
     if( GetNativeControlRegion( aType, ControlPart::Entire,
                                 aCtrlRegion,
