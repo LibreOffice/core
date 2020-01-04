@@ -252,20 +252,22 @@ class VCL_DLLPUBLIC ImplControlValue
         ControlType const mType;
         ButtonValue     mTristate;    // Tristate value: on, off, mixed
         long            mNumber;      // numeric value
+        int             mFontHeight;  // the desired height of the font
     protected:
         ImplControlValue( ControlType i_eType, long i_nNumber )
         : mType( i_eType )
         , mTristate( ButtonValue::DontKnow )
         , mNumber( i_nNumber )
+        , mFontHeight( 0 )
         {}
 
     public:
         explicit ImplControlValue( ButtonValue nTristate )
-            : mType( ControlType::Generic ), mTristate(nTristate), mNumber(0) {}
+            : mType( ControlType::Generic ), mTristate(nTristate), mNumber(0), mFontHeight(0) {}
         explicit ImplControlValue( long nNumeric )
-            : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber( nNumeric) {}
+            : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber( nNumeric), mFontHeight(0) {}
         ImplControlValue()
-            : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber(0) {}
+            : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber(0), mFontHeight(0) {}
 
         virtual ~ImplControlValue();
 
@@ -283,6 +285,9 @@ class VCL_DLLPUBLIC ImplControlValue
 
         long         getNumericVal() const { return mNumber; }
         void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
+
+        int          getFontHeight() const { return mFontHeight; }
+        void         setFontHeight(int height) { mFontHeight = height; }
 };
 
 /* ScrollbarValue:

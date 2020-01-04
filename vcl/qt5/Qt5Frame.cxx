@@ -169,6 +169,8 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
 
+    m_scaling = std::max(static_cast<qreal>(0.1), static_cast<qreal>(qApp->devicePixelRatio()));
+
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->GetQWidget()->window()->windowHandle();
@@ -284,19 +286,26 @@ Qt5Frame::~Qt5Frame()
 void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                       sal_Int32 nExtentsHeight) const
 {
-    m_pQWidget->update(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
+    m_pQWidget->update(floor(nExtentsX/m_scaling),
+                       floor(nExtentsY/m_scaling),
+                       ceil(nExtentsWidth/m_scaling),
+                       ceil(nExtentsHeight/m_scaling));
 }
 
 void Qt5Frame::TriggerPaintEvent()
 {
-    QSize aSize(m_pQWidget->size());
+    QSize aSize(ceil(m_pQWidget->size().width()*m_scaling),
+                ceil(m_pQWidget->size().height()*m_scaling));
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
 void Qt5Frame::TriggerPaintEvent(QRect aRect)
 {
-    SalPaintEvent aPaintEvt(aRect.x(), aRect.y(), aRect.width(), aRect.height(), true);
+    SalPaintEvent aPaintEvt(floor(aRect.x()*m_scaling),
+                            floor(aRect.y()*m_scaling),
+                            ceil(aRect.width()*m_scaling),
+                            ceil(aRect.height()*m_scaling), true);
     CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
@@ -333,7 +342,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
         if (!m_pQt5Graphics.get() || m_bGraphicsInvalid)
         {
             m_pQt5Graphics.reset(new Qt5Graphics(this));
-            m_pQImage.reset(new QImage(m_pQWidget->size(), Qt5_DefaultFormat32));
+            m_pQImage.reset(new QImage(m_pQWidget->size()*m_scaling, Qt5_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
             m_pQt5Graphics->ChangeQImage(m_pQImage.get());
             m_bGraphicsInvalid = false;
@@ -442,13 +451,13 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-        asChild()->setMinimumSize(nWidth, nHeight);
+        asChild()->setMinimumSize(ceil(nWidth/m_scaling), ceil(nHeight/m_scaling));
 }
 
 void Qt5Frame::SetMaxClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-        asChild()->setMaximumSize(nWidth, nHeight);
+        asChild()->setMaximumSize(ceil(nWidth/m_scaling), ceil(nHeight/m_scaling));
 }
 
 void Qt5Frame::SetDefaultPos()
@@ -462,7 +471,7 @@ void Qt5Frame::SetDefaultPos()
         QWidget* const pWindow = m_pParent->GetQWidget()->window();
         QWidget* const pWidget = asChild();
         QPoint aPos = pWindow->rect().center() - pWidget->rect().center();
-        SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
+        SetPosSize(round(aPos.x()*m_scaling), round(aPos.y()*m_scaling), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
         assert(!m_bDefaultPos);
     }
     else
@@ -478,17 +487,17 @@ Size Qt5Frame::CalcDefaultSize()
     {
         const QScreen* pScreen = screen();
         aSize = bestmaxFrameSizeForScreenSize(
-            toSize(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size()));
+            toSize(m_scaling*(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size())));
     }
     else
     {
         if (!m_bFullScreenSpanAll)
             aSize = toSize(
-                QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
+                m_scaling*QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
         else
         {
             int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
+            aSize = toSize(m_scaling*QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
         }
     }
 
@@ -524,9 +533,9 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
             {
                 m_bDefaultSize = false;
                 if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
-                    asChild()->resize(nWidth, nHeight);
+                    asChild()->resize(ceil(nWidth/m_scaling), ceil(nHeight/m_scaling));
                 else
-                    asChild()->setFixedSize(nWidth, nHeight);
+                    asChild()->setFixedSize(ceil(nWidth/m_scaling), ceil(nHeight/m_scaling));
             }
 
             // assume the resize happened
@@ -551,7 +560,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
 
             Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
             if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
-                nY += pTopLevel->menuBar()->geometry().height();
+                nY += round(pTopLevel->menuBar()->geometry().height()*m_scaling);
         }
 
         if (!(nFlags & SAL_FRAME_POSSIZE_X))
@@ -565,14 +574,14 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         maGeometry.nY = nY;
 
         m_bDefaultPos = false;
-        asChild()->move(nX, nY);
+        asChild()->move(round(nX/m_scaling), round(nY/m_scaling));
     }
 }
 
 void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
 {
-    rWidth = m_pQWidget->width();
-    rHeight = m_pQWidget->height();
+    rWidth = ceil(m_pQWidget->width()*m_scaling);
+    rHeight = ceil(m_pQWidget->height()*m_scaling);
 }
 
 void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
@@ -583,7 +592,7 @@ void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
     if (!pScreen)
         return;
 
-    QSize aSize = pScreen->availableVirtualSize();
+    QSize aSize = pScreen->availableVirtualSize()*m_scaling;
     rRect = tools::Rectangle(0, 0, aSize.width(), aSize.height());
 }
 
@@ -628,8 +637,8 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
         && !isMaximized() && (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask)
     {
         QWidget* const pChild = asChild();
-        pChild->resize(pState->mnWidth, pState->mnHeight);
-        pChild->move(pState->mnX, pState->mnY);
+        pChild->resize(ceil(pState->mnWidth/m_scaling), ceil(pState->mnHeight/m_scaling));
+        pChild->move(ceil(pState->mnX/m_scaling), ceil(pState->mnY/m_scaling));
         SetWindowStateImpl(Qt::WindowMaximized);
     }
     else if (pState->mnMask
@@ -672,10 +681,10 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     {
         // geometry() is the drawable area, which is wanted here
         QRect rect = asChild()->geometry();
-        pState->mnX = rect.x();
-        pState->mnY = rect.y();
-        pState->mnWidth = rect.width();
-        pState->mnHeight = rect.height();
+        pState->mnX = floor(rect.x()*m_scaling);
+        pState->mnY = floor(rect.y()*m_scaling);
+        pState->mnWidth = ceil(rect.width()*m_scaling);
+        pState->mnHeight = ceil(rect.height()*m_scaling);
         // the menubar is drawn natively, adjust for that
         if (maGeometry.nTopDecoration)
         {
@@ -1164,7 +1173,10 @@ void Qt5Frame::BeginSetClipRegion(sal_uInt32)
 
 void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
 {
-    m_aRegion = m_aRegion.united(QRegion(nX, nY, nWidth, nHeight));
+    m_aRegion = m_aRegion.united(QRegion(floor(nX/m_scaling),
+                                         floor(nY/m_scaling),
+                                         floor(nWidth/m_scaling),
+                                         floor(nHeight/m_scaling)));
 }
 
 void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
@@ -1331,8 +1343,8 @@ void Qt5Frame::handleDragMove(QDragMoveEvent* pEvent)
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
-    aEvent.LocationX = pEvent->pos().x();
-    aEvent.LocationY = pEvent->pos().y();
+    aEvent.LocationX = round(pEvent->pos().x()*m_scaling);
+    aEvent.LocationY = round(pEvent->pos().y()*m_scaling);
     aEvent.DropAction = nUserDropAction;
     aEvent.SourceActions = nSourceActions;
 
@@ -1368,8 +1380,8 @@ void Qt5Frame::handleDrop(QDropEvent* pEvent)
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
-    aEvent.LocationX = pEvent->pos().x();
-    aEvent.LocationY = pEvent->pos().y();
+    aEvent.LocationX = round(pEvent->pos().x()*m_scaling);
+    aEvent.LocationY = round(pEvent->pos().y()*m_scaling);
     aEvent.SourceActions = nSourceActions;
     aEvent.DropAction = nUserDropAction;
     aEvent.Transferable = lcl_getXTransferable(pEvent->mimeData());

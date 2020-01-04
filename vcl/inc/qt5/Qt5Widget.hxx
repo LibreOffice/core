@@ -36,6 +36,7 @@ class Qt5Widget : public QWidget
     bool m_bNonEmptyIMPreeditSeen;
     int m_nDeltaX;
     int m_nDeltaY;
+    qreal m_scaling;
 
     enum class ButtonKeyState
     {
