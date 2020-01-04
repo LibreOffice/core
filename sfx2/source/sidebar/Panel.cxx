@@ -61,6 +61,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxElement()
     , mxPanelComponent()
     , mbIsExpanded(bIsInitiallyExpanded)
+    , mbLurking(false)
     , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
@@ -74,6 +75,12 @@ Panel::~Panel()
     assert(!mpTitleBar);
 }
 
+void Panel::SetLurkMode(bool bLurk)
+{
+    // cf. DeckLayouter
+    mbLurking = bLurk;
+}
+
 void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
@@ -81,9 +88,14 @@ void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
 
 boost::property_tree::ptree Panel::DumpAsPropertyTree()
 {
-    boost::property_tree::ptree aTree(vcl::Window::DumpAsPropertyTree());
-    aTree.put("type", "panel");
-    return aTree;
+    if (!IsLurking())
+    {
+        boost::property_tree::ptree aTree(vcl::Window::DumpAsPropertyTree());
+        aTree.put("type", "panel");
+        return aTree;
+    }
+    else
+        return boost::property_tree::ptree();
 }
 
 void Panel::dispose()

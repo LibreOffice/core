@@ -297,7 +297,7 @@ sal_Int32 PlacePanels (
             }
         }
 
-        if (rPanel.IsExpanded())
+        if (rPanel.IsExpanded() && !rPanel.IsLurking())
         {
             rPanel.Show();
 
@@ -361,69 +361,73 @@ void GetRequestedSizes (
 
     for (auto& rItem : rLayoutItems)
     {
-        ui::LayoutSize aLayoutSize (ui::LayoutSize(0,0,0));
-        if (rItem.mpPanel != nullptr)
+        rItem.maLayoutSize = ui::LayoutSize(0,0,0);
+
+        if (rItem.mpPanel == nullptr)
+            continue;
+
+        if (rItem.mpPanel->IsLurking())
         {
-            if (rLayoutItems.size() == 1
-                && rItem.mpPanel->IsTitleBarOptional())
-            {
-                // There is only one panel and its title bar is
-                // optional => hide it.
-                rAvailableHeight -= nDeckSeparatorHeight;
-                rItem.mbShowTitleBar = false;
-            }
-            else
-            {
-                // Show the title bar and a separator above and below
-                // the title bar.
-                const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rItem.mpPanel->GetDPIScaleFactor());
-
-                rAvailableHeight -= nPanelTitleBarHeight;
-                rAvailableHeight -= nDeckSeparatorHeight;
-            }
-
-            if (rItem.mpPanel->IsExpanded())
-            {
-                Reference<ui::XSidebarPanel> xPanel (rItem.mpPanel->GetPanelComponent());
-                if (xPanel.is())
-                {
-                    aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
-                    if (!(0 <= aLayoutSize.Minimum && aLayoutSize.Minimum <= aLayoutSize.Preferred
-                          && aLayoutSize.Preferred <= aLayoutSize.Maximum))
-                    {
-                        SAL_WARN("sfx.sidebar", "Please follow LayoutSize constraints: 0 ≤ "
-                                                "Minimum ≤ Preferred ≤ Maximum."
-                                                " Currently: Minimum: "
-                                                    << aLayoutSize.Minimum
-                                                    << " Preferred: " << aLayoutSize.Preferred
-                                                    << " Maximum: " << aLayoutSize.Maximum);
-                    }
-
-                    sal_Int32 nWidth = xPanel->getMinimalWidth();
-
-                    uno::Reference<frame::XDesktop2> xDesktop
-                        = frame::Desktop::create(comphelper::getProcessComponentContext());
-                    uno::Reference<frame::XFrame> xFrame = xDesktop->getActiveFrame();
-                    if (xFrame.is())
-                    {
-                        SidebarController* pController
-                            = SidebarController::GetSidebarControllerForFrame(xFrame);
-                        if (pController && pController->getMaximumWidth() < nWidth)
-                        {
-                            // Add 100 extra pixels to still have the sidebar resizable
-                            // (See also documentation of XSidebarPanel::getMinimalWidth)
-                            pController->setMaximumWidth(nWidth + 100);
-                        }
-                    }
-
-                    if (nWidth > rMinimalWidth)
-                        rMinimalWidth = nWidth;
-                }
-                else
-                    aLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
-            }
+            rItem.mbShowTitleBar = false;
+            continue;
         }
-        rItem.maLayoutSize = aLayoutSize;
+
+        if (rLayoutItems.size() == 1
+            && rItem.mpPanel->IsTitleBarOptional())
+        {
+            // There is only one panel and its title bar is
+            // optional => hide it.
+            rAvailableHeight -= nDeckSeparatorHeight;
+            rItem.mbShowTitleBar = false;
+        }
+        else
+        {
+            // Show the title bar and a separator above and below
+            // the title bar.
+            const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rItem.mpPanel->GetDPIScaleFactor());
+
+            rAvailableHeight -= nPanelTitleBarHeight;
+            rAvailableHeight -= nDeckSeparatorHeight;
+        }
+
+        if (rItem.mpPanel->IsExpanded() && rItem.mpPanel->GetPanelComponent().is())
+        {
+            Reference<ui::XSidebarPanel> xPanel (rItem.mpPanel->GetPanelComponent());
+
+            rItem.maLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
+            if (!(0 <= rItem.maLayoutSize.Minimum && rItem.maLayoutSize.Minimum <= rItem.maLayoutSize.Preferred
+                  && rItem.maLayoutSize.Preferred <= rItem.maLayoutSize.Maximum))
+            {
+                SAL_WARN("sfx.sidebar", "Please follow LayoutSize constraints: 0 ≤ "
+                         "Minimum ≤ Preferred ≤ Maximum."
+                         " Currently: Minimum: "
+                         << rItem.maLayoutSize.Minimum
+                         << " Preferred: " << rItem.maLayoutSize.Preferred
+                         << " Maximum: " << rItem.maLayoutSize.Maximum);
+            }
+
+            sal_Int32 nWidth = xPanel->getMinimalWidth();
+
+            uno::Reference<frame::XDesktop2> xDesktop
+                = frame::Desktop::create(comphelper::getProcessComponentContext());
+            uno::Reference<frame::XFrame> xFrame = xDesktop->getActiveFrame();
+            if (xFrame.is())
+            {
+                SidebarController* pController
+                    = SidebarController::GetSidebarControllerForFrame(xFrame);
+                if (pController && pController->getMaximumWidth() < nWidth)
+                {
+                    // Add 100 extra pixels to still have the sidebar resizable
+                    // (See also documentation of XSidebarPanel::getMinimalWidth)
+                    pController->setMaximumWidth(nWidth + 100);
+                }
+            }
+
+            if (nWidth > rMinimalWidth)
+                rMinimalWidth = nWidth;
+        }
+        else
+            rItem.maLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
     }
 }
 
