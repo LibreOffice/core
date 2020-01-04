@@ -46,6 +46,8 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual bool DrivesHighdpiScaling() override { return true; };
+    virtual double HighdpiScalingFactor() override { return 2; };
 
     virtual OUString getRenderBackendName() const override { return "qt5svp"; }
 };

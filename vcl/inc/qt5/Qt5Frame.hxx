@@ -106,6 +106,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     bool m_bFullScreenSpanAll;
     sal_uInt32 m_nRestoreScreen;
     QRect m_aRestoreGeometry;
+    qreal m_scaling;
 
 #if QT5_USING_X11
     ScreenSaverInhibitor m_ScreenSaverInhibitor;

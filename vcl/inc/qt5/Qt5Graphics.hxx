@@ -80,6 +80,8 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const override;
     virtual bool supportsOperation(OutDevSupportType) const override;
     virtual OUString getRenderBackendName() const override { return "qt5"; }
+    virtual bool DrivesHighdpiScaling() { return true; }
+    virtual double HighdpiScalingFactor() { return 2; }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool SupportsCairo() const override;
