@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_INC_EMFPLUSHELPER_HXX
-#define INCLUDED_DRAWINGLAYER_INC_EMFPLUSHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <memory>
@@ -49,7 +48,5 @@ namespace emfplushelper
             const drawinglayer::geometry::ViewInformation2D& rViewInformation);
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
