@@ -559,6 +559,10 @@ protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
 
+    virtual void                DrawOutDevDirectCheck( const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics );
+
+    virtual void                DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics );
+
     SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
     SAL_DLLPRIVATE bool         is_double_buffered_window() const;

@@ -532,41 +532,9 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate
 void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
 {
     SalGraphics* pSrcGraphics;
+    SalGraphics*& pSrcGraphicsRef = pSrcGraphics;
 
-    if ( this == pSrcDev )
-        pSrcGraphics = nullptr;
-    else
-    {
-        if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
-             (GetOutDevType() != OUTDEV_WINDOW) )
-        {
-            if ( !pSrcDev->mpGraphics )
-            {
-                if ( !pSrcDev->AcquireGraphics() )
-                    return;
-            }
-            pSrcGraphics = pSrcDev->mpGraphics;
-        }
-        else
-        {
-            if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow )
-                pSrcGraphics = nullptr;
-            else
-            {
-                if ( !pSrcDev->mpGraphics )
-                {
-                    if ( !pSrcDev->AcquireGraphics() )
-                        return;
-                }
-                pSrcGraphics = pSrcDev->mpGraphics;
-
-                if ( !mpGraphics && !AcquireGraphics() )
-                    return;
-                SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl.gdi",
-                            "OutputDevice::DrawOutDev(): We need more than one Graphics" );
-            }
-        }
-    }
+    DrawOutDevDirectCheck(pSrcDev, pSrcGraphicsRef);
 
     // #102532# Offset only has to be pseudo window offset
     const tools::Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
@@ -580,15 +548,35 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         // mirroring may be required
         // because only windows have a SalGraphicsLayout
         // mirroring is performed here
-        if( (GetOutDevType() != OUTDEV_WINDOW) && pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
-        {
-            SalTwoRect aPosAry2 = rPosAry;
-            pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
-            mpGraphics->CopyBits( aPosAry2, pSrcGraphics, this, pSrcDev );
-        }
-        else
-            mpGraphics->CopyBits( rPosAry, pSrcGraphics, this, pSrcDev );
+        DrawOutDevDirectProcess( pSrcDev, rPosAry, pSrcGraphics);
     }
+}
+
+void OutputDevice::DrawOutDevDirectCheck( const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics )
+{
+    if ( this == pSrcDev )
+        pSrcGraphics = nullptr;
+    else
+    {
+        if ( !pSrcDev->mpGraphics )
+        {
+            if ( !pSrcDev->AcquireGraphics() )
+                return;
+        }
+        pSrcGraphics = pSrcDev->mpGraphics;
+    }
+}
+
+void OutputDevice::DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+{
+    if( pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
+    {
+        SalTwoRect aPosAry2 = rPosAry;
+        pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
+        mpGraphics->CopyBits( aPosAry2, pSrcGraphics, this, pSrcDev );
+    }
+    else
+        mpGraphics->CopyBits( rPosAry, pSrcGraphics, this, pSrcDev );
 }
 
 // Layout public functions
