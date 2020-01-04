@@ -1244,6 +1244,15 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
     OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
 }
 
+void Window::drawOutDevDirectCheck(const OutputDevice* pSrcDev, SalGraphics **pSrcGraphics){
+    if ( !pSrcDev->mpGraphics )
+    {
+        if ( !pSrcDev->AcquireGraphics() )
+            return;
+    }
+    *pSrcGraphics = pSrcDev->mpGraphics;
+}
+
 SalGraphics* Window::ImplGetFrameGraphics() const
 {
     if ( mpWindowImpl->mpFrameWindow->mpGraphics )

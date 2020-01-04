@@ -527,6 +527,25 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate
     mpGraphics->CopyBits(aPosAry, nullptr, this, nullptr);
 }
 
+void OutputDevice::drawOutDevDirectCheck(const OutputDevice* pSrcDev,  SalGraphics** pSrcGraphics){
+    if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow )
+        *pSrcGraphics = nullptr;
+    else
+    {
+        if ( !pSrcDev->mpGraphics )
+        {
+            if ( !pSrcDev->AcquireGraphics() )
+                return;
+        }
+        *pSrcGraphics = pSrcDev->mpGraphics;
+
+        if ( !mpGraphics && !AcquireGraphics() )
+            return;
+        SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl.gdi",
+                    "OutputDevice::DrawOutDev(): We need more than one Graphics" );
+    }
+}
+
 // Direct OutputDevice drawing private function
 
 void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
@@ -536,37 +555,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
     if ( this == pSrcDev )
         pSrcGraphics = nullptr;
     else
-    {
-        if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
-             (GetOutDevType() != OUTDEV_WINDOW) )
-        {
-            if ( !pSrcDev->mpGraphics )
-            {
-                if ( !pSrcDev->AcquireGraphics() )
-                    return;
-            }
-            pSrcGraphics = pSrcDev->mpGraphics;
-        }
-        else
-        {
-            if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow )
-                pSrcGraphics = nullptr;
-            else
-            {
-                if ( !pSrcDev->mpGraphics )
-                {
-                    if ( !pSrcDev->AcquireGraphics() )
-                        return;
-                }
-                pSrcGraphics = pSrcDev->mpGraphics;
-
-                if ( !mpGraphics && !AcquireGraphics() )
-                    return;
-                SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl.gdi",
-                            "OutputDevice::DrawOutDev(): We need more than one Graphics" );
-            }
-        }
-    }
+        drawOutDevDirectCheck(pSrcDev, &pSrcGraphics);
 
     // #102532# Offset only has to be pseudo window offset
     const tools::Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
