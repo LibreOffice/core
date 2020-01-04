@@ -2585,8 +2585,8 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
         setProperty( aGroup, TARGET_DIR_URL, makeAny( pGroup->getTargetURL() ) );
         pGroup->setHierarchyURL( aNewGroupURL );
 
-        sal_uIntPtr nCount = pGroup->count();
-        for ( sal_uIntPtr i=0; i<nCount; i++ )
+        size_t nCount = pGroup->count();
+        for ( size_t i = 0; i < nCount; i++ )
         {
             DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
             addToHierarchy( pGroup, pData ); // add entry to hierarchy

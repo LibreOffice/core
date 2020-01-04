@@ -255,7 +255,7 @@ void SdrObjEditView::ModelHasChanged()
         SdrTextObj* pTextObj = mxTextEditObj.get();
         if (pTextObj != nullptr)
         {
-            sal_uIntPtr nOutlViewCnt = pTextEditOutliner->GetViewCount();
+            size_t nOutlViewCnt = pTextEditOutliner->GetViewCount();
             bool bAreaChg = false;
             bool bAnchorChg = false;
             bool bColorChg = false;
@@ -315,7 +315,7 @@ void SdrObjEditView::ModelHasChanged()
                         pTextObj->TakeTextAnchorRect(aAnchorRect);
                         pTextObj->ImpSetContourPolygon(*pTextEditOutliner, aAnchorRect, true);
                     }
-                    for (sal_uIntPtr nOV = 0; nOV < nOutlViewCnt; nOV++)
+                    for (size_t nOV = 0; nOV < nOutlViewCnt; nOV++)
                     {
                         OutlinerView* pOLV = pTextEditOutliner->GetView(nOV);
                         EVControlBits nStat0 = pOLV->GetControlWord();
@@ -358,7 +358,7 @@ void SdrObjEditView::ModelHasChanged()
             // again on ModelHasChanged().
             if (bContourFrame || bAreaChg || bAnchorChg || bColorChg)
             {
-                for (sal_uIntPtr nOV = 0; nOV < nOutlViewCnt; nOV++)
+                for (size_t nOV = 0; nOV < nOutlViewCnt; nOV++)
                 {
                     OutlinerView* pOLV = pTextEditOutliner->GetView(nOV);
                     { // invalidate old OutlinerView area
@@ -1253,7 +1253,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             }
 
             // check if this view is already inserted
-            sal_uIntPtr i2, nCount = pTextEditOutliner->GetViewCount();
+            size_t i2, nCount = pTextEditOutliner->GetViewCount();
             for (i2 = 0; i2 < nCount; i2++)
             {
                 if (pTextEditOutliner->GetView(i2) == pTextEditOutlinerView)
@@ -1594,7 +1594,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             AdjustMarkHdl();
         }
         // delete all OutlinerViews
-        for (sal_uIntPtr i = pTEOutliner->GetViewCount(); i > 0;)
+        for (size_t i = pTEOutliner->GetViewCount(); i > 0;)
         {
             i--;
             OutlinerView* pOLV = pTEOutliner->GetView(i);
@@ -1672,8 +1672,8 @@ OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window const* pWin) const
     if (pTextEditOutliner == nullptr)
         return nullptr;
     OutlinerView* pNewView = nullptr;
-    sal_uIntPtr nWinCount = pTextEditOutliner->GetViewCount();
-    for (sal_uIntPtr i = 0; i < nWinCount && pNewView == nullptr; i++)
+    size_t nWinCount = pTextEditOutliner->GetViewCount();
+    for (size_t i = 0; i < nWinCount && pNewView == nullptr; i++)
     {
         OutlinerView* pView = pTextEditOutliner->GetView(i);
         if (pView->GetWindow() == pWin)
@@ -2321,7 +2321,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 
     if (mxTextEditObj.is() && !bTextEditOnlyOneView && pOldWin->GetOutDevType() == OUTDEV_WINDOW)
     {
-        for (sal_uIntPtr i = pTextEditOutliner->GetViewCount(); i > 0;)
+        for (size_t i = pTextEditOutliner->GetViewCount(); i > 0;)
         {
             i--;
             OutlinerView* pOLV = pTextEditOutliner->GetView(i);

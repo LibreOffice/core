@@ -358,7 +358,7 @@ int SvxShowCharSet::FirstInView() const
 
 int SvxShowCharSet::LastInView() const
 {
-    sal_uIntPtr nIndex = FirstInView();
+    sal_uInt32 nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
     sal_uIntPtr nCompare = sal::static_int_cast<sal_uIntPtr>(mxFontCharMap->GetCharCount() - 1);
     if (nIndex > nCompare)
