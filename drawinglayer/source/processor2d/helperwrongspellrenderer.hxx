@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_HELPERWRONGSPELLRENDERER_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_HELPERWRONGSPELLRENDERER_HXX
+#pragma once
 
 
 // predefines
@@ -47,8 +46,5 @@ namespace drawinglayer
         const basegfx::BColorModifierStack& rBColorModifierStack);
 
 } // end of namespace drawinglayer
-
-
-#endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_HELPERWRONGSPELLRENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
