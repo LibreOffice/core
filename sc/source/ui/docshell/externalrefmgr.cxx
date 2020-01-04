@@ -457,7 +457,7 @@ ScExternalRefCache::CellFormat::CellFormat() :
 }
 
 ScExternalRefCache::ScExternalRefCache()
- : mpFakeDoc(new ScDocument())
+ : mxFakeDoc(new ScDocument())
 {}
 
 ScExternalRefCache::~ScExternalRefCache() {}
@@ -687,7 +687,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
             ScMatrixToken aToken(xMat);
             if (!pArray)
-                pArray.reset(new ScTokenArray(mpFakeDoc));
+                pArray.reset(new ScTokenArray(mxFakeDoc.get()));
             pArray->AddToken(aToken);
 
             bFirstTab = false;
