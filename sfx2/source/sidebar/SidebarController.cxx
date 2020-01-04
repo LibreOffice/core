@@ -716,6 +716,7 @@ void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rCo
         Panel *const pPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
         if (pPanel != nullptr)
         {
+            pPanel->SetLurkMode(false);
             aNewPanels[nWriteIndex] = pPanel;
             pPanel->SetExpanded( rPanelContexDescriptor.mbIsInitiallyVisible );
             ++nWriteIndex;
