@@ -2650,6 +2650,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 
     // ask NWF what if it has an opinion, too
     ImplControlValue aControlValue;
+    aControlValue.setFontHeight(GetTextHeight());
     tools::Rectangle aRect( Point( 0, 0 ), aSize );
     tools::Rectangle aContent, aBound;
     if (GetNativeControlRegion(eCtrlType, ControlPart::Entire, aRect, ControlState::NONE,

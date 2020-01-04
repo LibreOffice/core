@@ -101,6 +101,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
             IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
         {
                 ImplControlValue aControlValue;
+                aControlValue.setFontHeight(GetTextHeight());
                 tools::Rectangle aCtrlRegion( Point( 0, 0 ), Size( 20, mnDDHeight ) );
                 tools::Rectangle aBoundingRgn( aCtrlRegion );
                 tools::Rectangle aContentRgn( aCtrlRegion );
@@ -1217,6 +1218,7 @@ Size ListBox::CalcMinimumSize() const
     if (IsDropDownBox()) // Check minimum height of dropdown box
     {
         ImplControlValue aControlValue;
+        aControlValue.setFontHeight(GetTextHeight());
         tools::Rectangle aRect( Point( 0, 0 ), aSz );
         tools::Rectangle aContent, aBound;
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aRect, ControlState::NONE,
