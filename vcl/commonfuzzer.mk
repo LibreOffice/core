@@ -45,10 +45,12 @@ fuzzer_core_libraries = \
     basctl \
     avmedia \
     basegfx \
+    bib \
     canvastools \
     configmgr \
     cppcanvas \
     ctl \
+    dba \
     dbtools \
     deployment \
     deploymentmisc \
