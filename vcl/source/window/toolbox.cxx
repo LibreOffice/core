@@ -1380,6 +1380,7 @@ bool ToolBox::ImplCalcItem()
         tools::Rectangle aRect( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         tools::Rectangle aReg( aRect );
         ImplControlValue aVal;
+        aVal.setFontHeight(GetTextHeight());
         tools::Rectangle aNativeBounds, aNativeContent;
         if( IsNativeControlSupported( ControlType::Toolbar, ControlPart::Button ) )
         {

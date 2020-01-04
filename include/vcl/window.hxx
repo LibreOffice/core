@@ -582,6 +582,7 @@ public:
                    void                 DecModalCount();
 
     SAL_DLLPRIVATE static void          ImplCalcSymbolRect( tools::Rectangle& rRect );
+    SAL_DLLPRIVATE sal_Int32            CountDPIScaleFactor(sal_Int32 nDPI);
 
 protected:
 

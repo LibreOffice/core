@@ -387,6 +387,9 @@ public:
      */
     inline bool UpdateSettings(AllSettings&);
 
+    virtual inline bool DrivesHighdpiScaling();
+    virtual inline double HighdpiScalingFactor();
+
     bool                        BlendBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
@@ -629,6 +632,10 @@ bool SalGraphics::UpdateSettings(AllSettings& rSettings)
 {
     return forWidget()->updateSettings(rSettings);
 }
+
+bool SalGraphics::DrivesHighdpiScaling() { return false; }
+
+double SalGraphics::HighdpiScalingFactor() { return 0; }
 
 void SalGraphics::handleDamage(const tools::Rectangle&) {}
 

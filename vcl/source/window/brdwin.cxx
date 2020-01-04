@@ -484,6 +484,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             if( mbNWFBorder )
             {
                 ImplControlValue aControlValue;
+                aControlValue.setFontHeight(mpOutDev->GetFont().GetFontHeight());
                 Size aMinSize( mnWidth - mnLeftBorder - mnRightBorder, mnHeight - mnTopBorder - mnBottomBorder );
                 if( aMinSize.Width() < 10 ) aMinSize.setWidth( 10 );
                 if( aMinSize.Height() < 10 ) aMinSize.setHeight( 10 );
@@ -661,6 +662,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
     if (aCtrlType != ControlType::Generic && pCtrl->IsNativeControlSupported(aCtrlType, aCtrlPart))
     {
         ImplControlValue aControlValue;
+        aControlValue.setFontHeight(mpOutDev->GetFont().GetFontHeight());
         ControlState nState = ControlState::ENABLED;
 
         if (!mpBorderWindow->IsEnabled())
