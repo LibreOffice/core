@@ -27,12 +27,15 @@
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QRegion>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QStyleOption>
 #include <QtWidgets/QPushButton>
 
 class Qt5Graphics_Controls final : public vcl::WidgetDrawInterface
 {
     std::unique_ptr<QImage> m_image;
     QRect m_lastPopupRect;
+    qreal m_scaling;
 
 public:
     Qt5Graphics_Controls();
@@ -51,6 +54,28 @@ public:
                                 const ImplControlValue& aValue, const OUString& aCaption,
                                 tools::Rectangle& rNativeBoundingRegion,
                                 tools::Rectangle& rNativeContentRegion) override;
+
+private:
+    void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
+              QStyle::State const state = QStyle::State_None, QRect rect = QRect());
+    void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
+              QStyle::State const state = QStyle::State_None, QRect rect = QRect());
+    void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
+              QStyle::State const state = QStyle::State_None);
+    void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const& state,
+                       bool bClip = true,
+                       QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth);
+    void lcl_fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot);
+    void lcl_fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option, bool doDownscale);
+
+
+private:
+    int downscale(int value, bool ceiling);
+    int upscale(int value, bool ceiling);
+    QRect downscale(const QRect& rect);
+    QRect upscale(const QRect& rect);
+    QSize downscale(const QSize& size, bool ceiling);
+    QSize upscale(const QSize& size, bool ceiling);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
