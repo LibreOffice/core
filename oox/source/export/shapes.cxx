@@ -562,6 +562,7 @@ static bool lcl_IsOnBlacklist(OUString const & rShapeType)
         "cube",
         "paper",
         "frame",
+        "forbidden",
         "smiley",
         "sun",
         "flower",
@@ -620,7 +621,6 @@ static bool lcl_IsOnBlacklist(OUString const & rShapeType)
 static bool lcl_IsOnWhitelist(OUString const & rShapeType)
 {
     static const std::initializer_list<OUStringLiteral> vWhitelist = {
-        "forbidden",
         "heart",
         "puzzle"
     };
