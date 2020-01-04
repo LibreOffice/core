@@ -2093,7 +2093,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrPageView* pPV=pM->GetPageView();
         SdrObjList*  pOL=pObj->getParentSdrObjListFromSdrObject();
         const size_t nInsPos=pObj->GetOrdNum()+1;
-        sal_uIntPtr      nInsCnt=0;
+        size_t      nInsCnt=0;
         tools::Rectangle aLogicRect;
 
         SdrGrafObj*  pGraf = dynamic_cast<SdrGrafObj*>( pObj );
@@ -2142,7 +2142,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             if (aGeoStat.nRotationAngle)
                 aGeoStat.RecalcSinCos();
 
-            for (sal_uIntPtr i = 0; i < nInsCnt; i++)
+            for (size_t i = 0; i < nInsCnt; i++)
             {
                 if (bUndo)
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
