@@ -908,27 +908,6 @@ void Window::ReleaseGraphics( bool bRelease )
     mpNextGraphics  = nullptr;
 }
 
-static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
-{
-#ifndef MACOSX
-    // Setting of HiDPI is unfortunately all only a heuristic; and to add
-    // insult to an injury, the system is constantly lying to us about
-    // the DPI and whatnot
-    // eg. fdo#77059 - set the value from which we do consider the
-    // screen HiDPI to greater than 168
-    if (nDPI > 216)      // 96 * 2   + 96 / 4
-        return 250;
-    else if (nDPI > 168) // 96 * 2   - 96 / 4
-        return 200;
-    else if (nDPI > 120) // 96 * 1.5 - 96 / 4
-        return 150;
-#else
-    (void)nDPI;
-#endif
-
-    return 100;
-}
-
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WindowType::FIXEDIMAGE, "vcl.window",
@@ -3618,6 +3597,30 @@ void Window::DecModalCount()
         }
         pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : nullptr;
     }
+}
+
+sal_Int32 Window::CountDPIScaleFactor(sal_Int32 nDPI)
+{
+#ifndef MACOSX
+    // Setting of HiDPI is unfortunately all only a heuristic; and to add
+    // insult to an injury, the system is constantly lying to us about
+    // the DPI and whatnot
+    // eg. fdo#77059 - set the value from which we do consider the
+    // screen HiDPI to greater than 168
+    if (mpGraphics)
+        if (mpGraphics->DrivesHighdpiScaling())
+            return static_cast<int>(mpGraphics->HighdpiScalingFactor()*100);
+    if (nDPI > 216)      // 96 * 2   + 96 / 4
+        return 250;
+    else if (nDPI > 168) // 96 * 2   - 96 / 4
+        return 200;
+    else if (nDPI > 120) // 96 * 1.5 - 96 / 4
+        return 150;
+#else
+    (void)nDPI;
+#endif
+
+    return 100;
 }
 
 void Window::ImplIsInTaskPaneList( bool mbIsInTaskList )

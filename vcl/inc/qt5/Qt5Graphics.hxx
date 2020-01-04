@@ -26,6 +26,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
+#include <QtWidgets/QApplication>
 
 #include "Qt5Data.hxx"
 
@@ -80,6 +81,8 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const override;
     virtual bool supportsOperation(OutDevSupportType) const override;
     virtual OUString getRenderBackendName() const override { return "qt5"; }
+    virtual bool DrivesHighdpiScaling() override { return true; }
+    virtual double HighdpiScalingFactor() override { return static_cast<double>(qApp->devicePixelRatio()); }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool SupportsCairo() const override;
