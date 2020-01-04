@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_INC_WMFEMFHELPER_HXX
-#define INCLUDED_DRAWINGLAYER_INC_WMFEMFHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -219,7 +218,5 @@ namespace wmfemfhelper
         TargetHolders& rTargetHolders,
         PropertyHolders& rPropertyHolders);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
