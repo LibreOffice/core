@@ -289,7 +289,7 @@ sal_Int32 PlacePanels (
             }
         }
 
-        if (rPanel.IsExpanded())
+        if (rPanel.IsExpanded() && !rPanel.IsLurking())
         {
             rPanel.Show();
 
@@ -353,46 +353,51 @@ void GetRequestedSizes (
 
     for (LayoutItem& item : rLayoutItems)
     {
-        ui::LayoutSize aLayoutSize (ui::LayoutSize(0,0,0));
-        if (item.mpPanel != nullptr)
+        item.maLayoutSize = ui::LayoutSize(0,0,0);
+
+        if (item.mpPanel == nullptr)
+            continue;
+
+        if (item.mpPanel->IsLurking())
         {
-            if (rLayoutItems.size() == 1
-                && item.mpPanel->IsTitleBarOptional())
-            {
-                // There is only one panel and its title bar is
-                // optional => hide it.
-                rAvailableHeight -= nDeckSeparatorHeight;
-                item.mbShowTitleBar = false;
-            }
-            else
-            {
-                // Show the title bar and a separator above and below
-                // the title bar.
-                const sal_Int32 nPanelTitleBarHeight(
-                    Theme::GetInteger(Theme::Int_PanelTitleBarHeight)
-                    * item.mpPanel->GetDPIScaleFactor());
-
-                rAvailableHeight -= nPanelTitleBarHeight;
-                rAvailableHeight -= nDeckSeparatorHeight;
-            }
-
-            if (item.mpPanel->IsExpanded())
-            {
-                Reference<ui::XSidebarPanel> xPanel(item.mpPanel->GetPanelComponent());
-                if (xPanel.is())
-                {
-                    aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
-
-                    const sal_Int32 nWidth = xPanel->getMinimalWidth();
-                    if (nWidth > rMinimalWidth)
-                        rMinimalWidth = nWidth;
-                }
-                else
-                    aLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
-            }
+            item.mbShowTitleBar = false;
+            continue;
         }
 
-        item.maLayoutSize = aLayoutSize;
+        if (rLayoutItems.size() == 1
+            && item.mpPanel->IsTitleBarOptional())
+        {
+            // There is only one panel and its title bar is
+            // optional => hide it.
+            rAvailableHeight -= nDeckSeparatorHeight;
+            item.mbShowTitleBar = false;
+        }
+        else
+        {
+            // Show the title bar and a separator above and below
+            // the title bar.
+            const sal_Int32 nPanelTitleBarHeight(
+                Theme::GetInteger(Theme::Int_PanelTitleBarHeight)
+                * item.mpPanel->GetDPIScaleFactor());
+
+            rAvailableHeight -= nPanelTitleBarHeight;
+            rAvailableHeight -= nDeckSeparatorHeight;
+        }
+
+        if (item.mpPanel->IsExpanded())
+        {
+            Reference<ui::XSidebarPanel> xPanel(item.mpPanel->GetPanelComponent());
+            if (xPanel.is())
+            {
+                item.maLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
+
+                const sal_Int32 nWidth = xPanel->getMinimalWidth();
+                if (nWidth > rMinimalWidth)
+                    rMinimalWidth = nWidth;
+            }
+            else
+                item.maLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
+        }
     }
 }
 

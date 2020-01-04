@@ -58,6 +58,10 @@ public:
     const OUString& GetId() const { return msPanelId;}
     void TriggerDeckLayouting() { maDeckLayoutTrigger(); }
 
+    /// Set whether a panel should be present but invisible / inactive
+    void SetLurkMode(bool bLurk);
+    bool IsLurking() const { return mbLurking; }
+
     virtual void Resize() override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
@@ -70,6 +74,7 @@ private:
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
+    bool mbLurking;
     const std::function<void()> maDeckLayoutTrigger;
     const std::function<Context()> maContextAccess;
 
