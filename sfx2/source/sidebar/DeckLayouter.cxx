@@ -78,6 +78,8 @@ namespace {
         const sal_Int32 nHeightToDistribute,
         const sal_Int32 nContainerHeight,
         const bool bMinimumHeightIsBase);
+    bool MoveResizePixel(const VclPtr<vcl::Window> &pWindow,
+                         const Point &rNewPos, const Size &rNewSize);
     sal_Int32 PlacePanels (
         ::std::vector<LayoutItem>& rLayoutItems,
         const sal_Int32 nWidth,
@@ -246,6 +248,17 @@ tools::Rectangle LayoutPanels (
     return aBox;
 }
 
+bool MoveResizePixel(const VclPtr<vcl::Window> &pWindow,
+                     const Point &rNewPos, const Size &rNewSize)
+{
+    Point aCurPos = pWindow->GetPosPixel();
+    Size aCurSize = pWindow->GetSizePixel();
+    if (rNewPos == aCurPos && aCurSize == rNewSize)
+        return false;
+    pWindow->setPosSizePixel(rNewPos.X(), rNewPos.Y(), rNewSize.Width(), rNewSize.Height());
+    return true;
+}
+
 sal_Int32 PlacePanels (
     ::std::vector<LayoutItem>& rLayoutItems,
     const sal_Int32 nWidth,
@@ -255,6 +268,8 @@ sal_Int32 PlacePanels (
     ::std::vector<sal_Int32> aSeparators;
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
     sal_Int32 nY (0);
+
+    vcl::Region aInvalidRegions;
 
     // Assign heights and places.
     for(::std::vector<LayoutItem>::const_iterator iItem(rLayoutItems.begin()),
@@ -268,8 +283,11 @@ sal_Int32 PlacePanels (
         Panel& rPanel (*iItem->mpPanel);
 
         // Separator above the panel title bar.
-        aSeparators.push_back(nY);
-        nY += nDeckSeparatorHeight;
+        if (!rPanel.IsLurking())
+        {
+            aSeparators.push_back(nY);
+            nY += nDeckSeparatorHeight;
+        }
 
         // Place the title bar.
         VclPtr<PanelTitleBar> pTitleBar = rPanel.GetTitleBar();
@@ -313,8 +331,15 @@ sal_Int32 PlacePanels (
             }
 
             // Place the panel.
-            rPanel.setPosSizePixel(0, nY, nWidth, nPanelHeight);
-            rPanel.Invalidate();
+            Point aNewPos(0, nY);
+            Size  aNewSize(nWidth, nPanelHeight);
+
+            // Only invalidate if we moved
+            if (MoveResizePixel(&rPanel, aNewPos, aNewSize))
+            {
+                tools::Rectangle aRect(aNewPos, aNewSize);
+                aInvalidRegions.Union(rPanel.PixelToLogic(aRect));
+            }
 
             nY += nPanelHeight;
         }
@@ -337,6 +362,8 @@ sal_Int32 PlacePanels (
         = dynamic_cast<Deck::ScrollContainerWindow*>(&rScrollContainer);
     if (pScrollContainerWindow != nullptr)
         pScrollContainerWindow->SetSeparators(aSeparators);
+
+    rScrollContainer.Invalidate(aInvalidRegions);
 
     return nY;
 }
