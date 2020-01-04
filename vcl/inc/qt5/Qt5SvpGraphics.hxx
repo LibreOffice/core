@@ -22,6 +22,8 @@
 #include <vclpluginapi.h>
 #include <headless/svpgdi.hxx>
 
+#include <QtWidgets/QApplication>
+
 class Qt5Frame;
 
 class VCLPLUG_QT5_PUBLIC Qt5SvpGraphics : public SvpSalGraphics
@@ -46,6 +48,8 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual bool DrivesHighdpiScaling() override { return true; };
+    virtual double HighdpiScalingFactor() override { return static_cast<double>(qApp->devicePixelRatio()); };
 
     virtual OUString getRenderBackendName() const override { return "qt5svp"; }
 };

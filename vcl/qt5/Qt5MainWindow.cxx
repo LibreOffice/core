@@ -14,6 +14,7 @@
 
 #include <QtGui/QAccessible>
 #include <QtGui/QCloseEvent>
+#include <QtWidgets/QApplication>
 
 Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, Qt::WindowFlags f)
     : QMainWindow(nullptr, f)
@@ -38,7 +39,8 @@ void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
 
 void Qt5MainWindow::moveEvent(QMoveEvent* pEvent)
 {
-    m_rFrame.maGeometry.nX = pEvent->pos().x();
-    m_rFrame.maGeometry.nY = pEvent->pos().y();
+    static const qreal scaling = std::max(static_cast<qreal>(0.1), static_cast<qreal>(qApp->devicePixelRatio()));
+    m_rFrame.maGeometry.nX = round(pEvent->pos().x()*scaling);
+    m_rFrame.maGeometry.nY = round(pEvent->pos().y()*scaling);
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }

@@ -21,8 +21,6 @@
 
 #include <QtGui/QPainter>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QStyleOption>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLabel>
 
@@ -64,7 +62,8 @@ static QStyle::State vclStateValue2StateFlag(ControlState nControlState,
     return nState;
 }
 
-Qt5Graphics_Controls::Qt5Graphics_Controls() {}
+Qt5Graphics_Controls::Qt5Graphics_Controls() :
+    m_scaling(std::max(static_cast<qreal>(0.1), static_cast<qreal>(qApp->devicePixelRatio()))) {}
 
 bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
 {
@@ -116,49 +115,53 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
     return false;
 }
 
-namespace
+void Qt5Graphics_Controls::draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
+                                QStyle::State const state, QRect rect)
 {
-void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
-          QStyle::State const state = QStyle::State_None, QRect rect = QRect())
-{
+    const QRect& targetRect = !rect.isNull() ? rect : image->rect();
+
     option->state |= state;
-    option->rect = !rect.isNull() ? rect : image->rect();
+    option->rect = downscale(targetRect);
 
     QPainter painter(image);
     QApplication::style()->drawControl(element, option, &painter);
 }
 
-void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
-          QStyle::State const state = QStyle::State_None, QRect rect = QRect())
+void Qt5Graphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
+                                QStyle::State const state, QRect rect)
 {
+    const QRect& targetRect = !rect.isNull() ? rect : image->rect();
+
     option->state |= state;
-    option->rect = !rect.isNull() ? rect : image->rect();
+    option->rect = downscale(targetRect);
 
     QPainter painter(image);
     QApplication::style()->drawPrimitive(element, option, &painter);
 }
 
-void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
-          QStyle::State const state = QStyle::State_None)
+void Qt5Graphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
+                                QStyle::State const state)
 {
+    const QRect& targetRect = image->rect();
+
     option->state |= state;
-    option->rect = image->rect();
+    option->rect = downscale(targetRect);
 
     QPainter painter(image);
     QApplication::style()->drawComplexControl(element, option, &painter);
 }
 
-void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const& state,
-                   bool bClip = true,
-                   QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth)
+void Qt5Graphics_Controls::lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const& state,
+                                         bool bClip,
+                                         QStyle::PixelMetric eLineMetric)
 {
-    const int fw = QApplication::style()->pixelMetric(eLineMetric);
+    const int fw = QApplication::style()->pixelMetric(eLineMetric)*2;
     QStyleOptionFrame option;
     option.frameShape = QFrame::StyledPanel;
     option.state = QStyle::State_Sunken | state;
     option.lineWidth = fw;
 
-    QRect aRect(image->rect());
+    QRect aRect = downscale(image->rect());
     option.rect = aRect;
 
     QPainter painter(image);
@@ -167,7 +170,7 @@ void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::Stat
     QApplication::style()->drawPrimitive(element, &option, &painter);
 }
 
-void lcl_fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot)
+void Qt5Graphics_Controls::lcl_fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot)
 {
     const TabitemValue& rValue = static_cast<const TabitemValue&>(value);
     if (rValue.isFirst())
@@ -178,15 +181,15 @@ void lcl_fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot
         sot.position = QStyleOptionTab::Middle;
 }
 
-void lcl_fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option)
+void Qt5Graphics_Controls::lcl_fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option, bool doDownscale)
 {
     option.state = QStyle::State_Enabled;
     option.rightCornerWidgetSize = QSize(0, 0);
     option.leftCornerWidgetSize = QSize(0, 0);
     option.lineWidth = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    option.lineWidth = doDownscale ? std::max(1, downscale(option.lineWidth, true)) : option.lineWidth;
     option.midLineWidth = 0;
     option.shape = QTabBar::RoundedNorth;
-}
 }
 
 bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
@@ -214,6 +217,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     {
         m_image.reset(new QImage(widgetRect.width(), widgetRect.height(),
                                  QImage::Format_ARGB32_Premultiplied));
+        m_image->setDevicePixelRatio(m_scaling);
     }
 
     // Default image color - just once
@@ -632,7 +636,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             = QApplication::style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap);
 
         QStyleOptionTabWidgetFrame option;
-        lcl_fullQStyleOptionTabWidgetFrame(option);
+        lcl_fullQStyleOptionTabWidgetFrame(option, false);
         option.tabBarRect = toQRect(rValue.m_aTabHeaderRect);
         option.selectedTabRect
             = rValue.m_aSelectedTabRect.IsEmpty() ? QRect() : toQRect(rValue.m_aSelectedTabRect);
@@ -673,8 +677,8 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
 
                 if (controlState & ControlState::DEFAULT)
                 {
-                    int size = QApplication::style()->pixelMetric(QStyle::PM_ButtonDefaultIndicator,
-                                                                  &styleOption);
+                    int size = upscale(QApplication::style()->pixelMetric(QStyle::PM_ButtonDefaultIndicator,
+                                                                          &styleOption), true);
                     boundingRect.adjust(-size, -size, size, size);
                     retVal = true;
                 }
@@ -686,9 +690,9 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
             QStyleOptionFrame fo;
             fo.frameShape = QFrame::StyledPanel;
             fo.state = QStyle::State_Sunken;
-            fo.lineWidth = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            QSize aMinSize = QApplication::style()->sizeFromContents(QStyle::CT_LineEdit, &fo,
-                                                                     contentRect.size());
+            fo.lineWidth = upscale(QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth), true);
+            QSize aMinSize = upscale(QApplication::style()->sizeFromContents(QStyle::CT_LineEdit, &fo,
+                                                                             downscale(contentRect.size(), true)), true);
             if (aMinSize.height() > boundingRect.height())
             {
                 int nHeight = (aMinSize.height() - boundingRect.height()) / 2;
@@ -710,17 +714,17 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 styleOption.state = vclStateValue2StateFlag(controlState, val);
 
                 contentRect.setWidth(
-                    QApplication::style()->pixelMetric(QStyle::PM_IndicatorWidth, &styleOption));
+                    upscale(QApplication::style()->pixelMetric(QStyle::PM_IndicatorWidth, &styleOption), true));
                 contentRect.setHeight(
-                    QApplication::style()->pixelMetric(QStyle::PM_IndicatorHeight, &styleOption));
+                    upscale(QApplication::style()->pixelMetric(QStyle::PM_IndicatorHeight, &styleOption), true));
 
                 contentRect.adjust(0, 0,
                                    2
-                                       * QApplication::style()->pixelMetric(
-                                             QStyle::PM_FocusFrameHMargin, &styleOption),
+                                       * upscale(QApplication::style()->pixelMetric(
+                                             QStyle::PM_FocusFrameHMargin, &styleOption), true),
                                    2
-                                       * QApplication::style()->pixelMetric(
-                                             QStyle::PM_FocusFrameVMargin, &styleOption));
+                                       * upscale(QApplication::style()->pixelMetric(
+                                             QStyle::PM_FocusFrameVMargin, &styleOption), true));
 
                 boundingRect = contentRect;
 
@@ -732,7 +736,7 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         {
             QStyleOptionComboBox cbo;
 
-            cbo.rect = QRect(0, 0, contentRect.width(), contentRect.height());
+            cbo.rect = downscale(QRect(0, 0, contentRect.width(), contentRect.height()));
             cbo.state = vclStateValue2StateFlag(controlState, val);
 
             switch (part)
@@ -741,26 +745,35 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 {
                     // find out the minimum size that should be used
                     // assume contents is a text line
-                    int nHeight = QApplication::fontMetrics().height();
-                    QSize aContentSize(contentRect.width(), nHeight);
-                    QSize aMinSize = QApplication::style()->sizeFromContents(QStyle::CT_ComboBox,
-                                                                             &cbo, aContentSize);
+                    const int nHeight = val.getFontHeight();
+                    const int margin = 5;
+                    QSize aContentSize = downscale(QSize(contentRect.width() + 2*margin,
+                                                         nHeight + 2*margin), true);
+                    QSize aMinSize = upscale(QApplication::style()->sizeFromContents(QStyle::CT_ComboBox,
+                                                                                     &cbo, aContentSize), true);
                     if (aMinSize.height() > contentRect.height())
                         contentRect.adjust(0, 0, 0, aMinSize.height() - contentRect.height());
                     boundingRect = contentRect;
                     retVal = true;
                     break;
                 }
-                case ControlPart::ButtonDown:
-                    contentRect = QApplication::style()->subControlRect(QStyle::CC_ComboBox, &cbo,
-                                                                        QStyle::SC_ComboBoxArrow);
+                case ControlPart::ButtonDown: {
+                    QRect scRect = QApplication::style()->subControlRect(QStyle::CC_ComboBox, &cbo,
+                                                                         QStyle::SC_ComboBoxArrow);
+                    contentRect = upscale(QRect(scRect.x(),
+                                                scRect.y(),
+                                                scRect.width(),
+                                                scRect.height()));
                     contentRect.translate(boundingRect.left(), boundingRect.top());
+                    boundingRect = QRect();
                     retVal = true;
                     break;
+                }
                 case ControlPart::SubEdit:
                 {
-                    contentRect = QApplication::style()->subControlRect(
+                    QRect scRect = QApplication::style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxEditField);
+                    contentRect = upscale(QRect(scRect.x(), scRect.y(), scRect.width(), scRect.height()));
                     contentRect.translate(boundingRect.left(), boundingRect.top());
                     retVal = true;
                     break;
@@ -775,17 +788,18 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
             QStyleOptionSpinBox sbo;
             sbo.frame = true;
 
-            sbo.rect = QRect(0, 0, contentRect.width(), contentRect.height());
+            sbo.rect = upscale(QRect(0, 0, contentRect.width(), contentRect.height()));
             sbo.state = vclStateValue2StateFlag(controlState, val);
 
             switch (part)
             {
                 case ControlPart::Entire:
                 {
-                    int nHeight = QApplication::fontMetrics().height();
-                    QSize aContentSize(contentRect.width(), nHeight);
-                    QSize aMinSize = QApplication::style()->sizeFromContents(QStyle::CT_SpinBox,
-                                                                             &sbo, aContentSize);
+                    const int nHeight = val.getFontHeight();
+                    const int margin = 5;
+                    QSize aContentSize = downscale(QSize(contentRect.width() + 2*margin, nHeight + 2*margin), true);
+                    QSize aMinSize = upscale(QApplication::style()->sizeFromContents(QStyle::CT_SpinBox,
+                                                                                     &sbo, aContentSize), true);
                     if (aMinSize.height() > contentRect.height())
                         contentRect.adjust(0, 0, 0, aMinSize.height() - contentRect.height());
                     boundingRect = contentRect;
@@ -793,27 +807,34 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                     break;
                 }
                 case ControlPart::ButtonUp:
-                    contentRect = QApplication::style()->subControlRect(QStyle::CC_SpinBox, &sbo,
+                {
+                    QRect scRect = QApplication::style()->subControlRect(QStyle::CC_SpinBox, &sbo,
                                                                         QStyle::SC_SpinBoxUp);
+                    contentRect = upscale(QRect(scRect.x(), scRect.y(), scRect.width(), scRect.height()));
                     contentRect.translate(boundingRect.left(), boundingRect.top());
                     retVal = true;
                     boundingRect = QRect();
                     break;
-
+                }
                 case ControlPart::ButtonDown:
-                    contentRect = QApplication::style()->subControlRect(QStyle::CC_SpinBox, &sbo,
+                {
+                    QRect scRect = QApplication::style()->subControlRect(QStyle::CC_SpinBox, &sbo,
                                                                         QStyle::SC_SpinBoxDown);
-                    retVal = true;
+                    contentRect = upscale(QRect(scRect.x(), scRect.y(), scRect.width(), scRect.height()));
                     contentRect.translate(boundingRect.left(), boundingRect.top());
+                    retVal = true;
                     boundingRect = QRect();
                     break;
-
+                }
                 case ControlPart::SubEdit:
-                    contentRect = QApplication::style()->subControlRect(
+                {
+                    QRect scRect = QApplication::style()->subControlRect(
                         QStyle::CC_SpinBox, &sbo, QStyle::SC_SpinBoxEditField);
-                    retVal = true;
+                    contentRect = upscale(QRect(scRect.x(), scRect.y(), scRect.width(), scRect.height()));
                     contentRect.translate(boundingRect.left(), boundingRect.top());
+                    retVal = true;
                     break;
+                }
                 default:
                     break;
             }
@@ -825,13 +846,13 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
             switch (part)
             {
                 case ControlPart::MenuItemCheckMark:
-                    h = QApplication::style()->pixelMetric(QStyle::PM_IndicatorHeight);
-                    w = QApplication::style()->pixelMetric(QStyle::PM_IndicatorWidth);
+                    h = upscale(QApplication::style()->pixelMetric(QStyle::PM_IndicatorHeight), false);
+                    w = upscale(QApplication::style()->pixelMetric(QStyle::PM_IndicatorWidth), false);
                     retVal = true;
                     break;
                 case ControlPart::MenuItemRadioMark:
-                    h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
-                    w = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
+                    h = upscale(QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight), false);
+                    w = upscale(QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth), false);
                     retVal = true;
                     break;
                 default:
@@ -852,7 +873,7 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 if (nStyle & DrawFrameFlags::NoDraw)
                 {
                     const int nFrameWidth
-                        = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+                        = upscale(QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth), true);
                     contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 }
                 retVal = true;
@@ -861,14 +882,14 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         }
         case ControlType::Radiobutton:
         {
-            const int h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
-            const int w = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
+            const int h = upscale(QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight), true);
+            const int w = upscale(QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth), true);
 
             contentRect = QRect(boundingRect.left(), boundingRect.top(), w, h);
             contentRect.adjust(
                 0, 0,
-                2 * QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin, &styleOption),
-                2 * QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin, &styleOption));
+                2 * upscale(QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin, &styleOption), true),
+                2 * upscale(QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin, &styleOption), true));
             boundingRect = contentRect;
 
             retVal = true;
@@ -876,7 +897,7 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         }
         case ControlType::Slider:
         {
-            const int w = QApplication::style()->pixelMetric(QStyle::PM_SliderLength);
+            const int w = upscale(QApplication::style()->pixelMetric(QStyle::PM_SliderLength), true);
             if (part == ControlPart::ThumbHorz)
             {
                 contentRect
@@ -895,7 +916,7 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         }
         case ControlType::Toolbar:
         {
-            const int nWorH = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+            const int nWorH = upscale(QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent), true);
             if (part == ControlPart::ThumbHorz)
             {
                 contentRect
@@ -907,6 +928,12 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
             {
                 contentRect
                     = QRect(boundingRect.left(), boundingRect.top(), nWorH, boundingRect.height());
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            else if (part == ControlPart::Button) {
+                contentRect
+                    = QRect(boundingRect.left(), boundingRect.top(), upscale(30, true), upscale(30, true));
                 boundingRect = contentRect;
                 retVal = true;
             }
@@ -934,13 +961,12 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 // widget and screen coordinates the same. QStyle functions should use screen
                 // coordinates but at least QPlastiqueStyle::subControlRect() is buggy
                 // and sometimes uses widget coordinates.
-                QRect rect = contentRect;
-                rect.moveTo(0, 0);
-                option.rect = rect;
-                rect = QApplication::style()->subControlRect(QStyle::CC_ScrollBar, &option,
-                                                             QStyle::SC_ScrollBarGroove);
-                rect.translate(contentRect.topLeft()); // reverse the workaround above
-                contentRect = boundingRect = rect;
+                option.rect = downscale(QRect(0, 0, contentRect.width(), contentRect.height()));
+                QRect scRect = QApplication::style()->subControlRect(QStyle::CC_ScrollBar, &option,
+                                                                     QStyle::SC_ScrollBarGroove);
+                contentRect = upscale(QRect(scRect.x(), scRect.y(), scRect.width(), scRect.height()));
+                contentRect.translate(boundingRect.left() - (contentRect.width() - boundingRect.width()), boundingRect.top());
+                boundingRect = contentRect;
                 retVal = true;
             }
             break;
@@ -949,8 +975,8 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         {
             QStyleOptionTab sot;
             lcl_fillQStyleOptionTab(val, sot);
-            QSize aMinSize = QApplication::style()->sizeFromContents(QStyle::CT_TabBarTab, &sot,
-                                                                     contentRect.size());
+            QSize aMinSize = upscale(QApplication::style()->sizeFromContents(QStyle::CT_TabBarTab, &sot,
+                                                                             downscale(contentRect.size(), true)), true);
             contentRect.setSize(aMinSize);
             boundingRect = contentRect;
             retVal = true;
@@ -960,11 +986,11 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
         {
             const TabPaneValue& rValue = static_cast<const TabPaneValue&>(val);
             QStyleOptionTabWidgetFrame sotwf;
-            lcl_fullQStyleOptionTabWidgetFrame(sotwf);
-            QSize aMinSize = QApplication::style()->sizeFromContents(
-                QStyle::CT_TabWidget, &sotwf,
-                QSize(std::max(rValue.m_aTabHeaderRect.GetWidth(), controlRegion.GetWidth()),
-                      rValue.m_aTabHeaderRect.GetHeight() + controlRegion.GetHeight()));
+            lcl_fullQStyleOptionTabWidgetFrame(sotwf, true);
+            QSize contentSize(std::max(rValue.m_aTabHeaderRect.GetWidth(), controlRegion.GetWidth()),
+                rValue.m_aTabHeaderRect.GetHeight() + controlRegion.GetHeight());
+            QSize aMinSize = upscale(QApplication::style()->sizeFromContents(
+                QStyle::CT_TabWidget, &sotwf, downscale(contentSize, true)), true);
             contentRect.setSize(aMinSize);
             boundingRect = contentRect;
             retVal = true;
@@ -1029,6 +1055,42 @@ bool Qt5Graphics_Controls::hitTestNativeControl(ControlType nType, ControlPart n
         return true;
     }
     return false;
+}
+
+inline int Qt5Graphics_Controls::downscale(int size, bool ceiling)
+{
+    return static_cast<int>(ceiling ? ceil(size/m_scaling) : floor(size/m_scaling));
+}
+
+inline int Qt5Graphics_Controls::upscale(int size, bool ceiling)
+{
+    return static_cast<int>(ceiling ? ceil(size*m_scaling) : floor(size*m_scaling));
+}
+
+inline QRect Qt5Graphics_Controls::downscale(const QRect& rect)
+{
+    return QRect(downscale(rect.x(), false),
+                 downscale(rect.y(), false),
+                 downscale(rect.width(), true),
+                 downscale(rect.height(), true));
+}
+
+inline QRect Qt5Graphics_Controls::upscale(const QRect& rect)
+{
+    return QRect(upscale(rect.x(), false),
+                 upscale(rect.y(), false),
+                 upscale(rect.width(), true),
+                 upscale(rect.height(), true));
+}
+
+inline QSize Qt5Graphics_Controls::downscale(const QSize& size, bool ceiling)
+{
+    return QSize(downscale(size.width(), ceiling), downscale(size.height(), ceiling));
+}
+
+inline QSize Qt5Graphics_Controls::upscale(const QSize& size, bool ceiling)
+{
+    return QSize(upscale(size.width(), ceiling), upscale(size.height(), ceiling));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
