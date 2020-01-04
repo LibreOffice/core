@@ -218,16 +218,24 @@ bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
  */
 void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
 {
-    // First dispose old panels we no longer need.
+    SharedPanelContainer aHiddens;
+
+    // First hide old panels we don't need just now.
     for (VclPtr<Panel> & rpPanel : maPanels)
     {
         bool bFound = false;
         for (const auto & i : rPanelContainer)
             bFound = bFound || (rpPanel.get() == i.get());
         if (!bFound) // this one didn't survive.
-            rpPanel.disposeAndClear();
+        {
+            rpPanel->SetLurkMode(true);
+            aHiddens.push_back(rpPanel);
+        }
     }
     maPanels = rPanelContainer;
+
+    // Hidden ones always at the end
+    maPanels.insert(std::end(maPanels), std::begin(aHiddens), std::end(aHiddens));
 
     RequestLayoutInternal();
 }
