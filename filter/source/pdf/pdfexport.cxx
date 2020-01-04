@@ -612,6 +612,13 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 break;
             }
 
+            // PDF/UA support
+            aContext.UniversalAccessibilityCompliance = mbPDFUACompliance;
+            if (mbPDFUACompliance)
+            {
+                mbUseTaggedPDF = true;
+            }
+
             // copy in context the values default in the constructor or set by the FilterData sequence of properties
             aContext.Tagged     = mbUseTaggedPDF;
 
