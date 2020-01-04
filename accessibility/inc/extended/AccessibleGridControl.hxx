@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROL_HXX
+#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROL_HXX
 
 #include <extended/AccessibleGridControlBase.hxx>
 #include <extended/AccessibleGridControlTable.hxx>
@@ -227,5 +228,6 @@ private:
 } // namespace accessibility
 
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

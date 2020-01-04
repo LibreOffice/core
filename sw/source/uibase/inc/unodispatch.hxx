@@ -119,7 +119,7 @@ public:
     //XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    static const char* GetDBChangeURL();
+    static const sal_Char* GetDBChangeURL();
 };
 
 #endif

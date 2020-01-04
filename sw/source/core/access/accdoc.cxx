@@ -54,8 +54,8 @@
 #include <dview.hxx>
 #include <dcontact.hxx>
 #include <svx/svdmark.hxx>
-const char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
-const char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentView";
+const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentView";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

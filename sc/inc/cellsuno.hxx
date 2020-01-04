@@ -25,7 +25,6 @@
 
 #include <formula/grammar.hxx>
 #include <rtl/ref.hxx>
-#include <sal/types.h>
 #include <tools/link.hxx>
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
@@ -764,7 +763,7 @@ public:
     virtual sal_Int16 SAL_CALL resetActionLocks() override;
 };
 
-class SAL_DLLPUBLIC_RTTI ScTableSheetObj : public ScCellRangeObj,
+class ScTableSheetObj : public ScCellRangeObj,
                         public css::sheet::XSpreadsheet,
                         public css::container::XNamed,
                         public css::sheet::XSheetPageBreak,

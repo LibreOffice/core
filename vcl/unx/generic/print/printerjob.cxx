@@ -828,7 +828,7 @@ void PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
     // JobPatchFile feature needs to be emitted at begin of prolog
     writeJobPatch( pFile, rJobData );
 
-    static const char pProlog[] = {
+    static const sal_Char pProlog[] = {
         "%%BeginResource: procset PSPrint-Prolog 1.0 0\n"
         "/ISO1252Encoding [\n"
         "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"

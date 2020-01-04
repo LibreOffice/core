@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEHEADERBARITEM_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEHEADERBARITEM_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -96,5 +97,6 @@ public:
     virtual OUString SAL_CALL getToolTipText(  ) override;
 };
 
+#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEHEADERBARITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

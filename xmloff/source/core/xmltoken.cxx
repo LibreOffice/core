@@ -30,7 +30,7 @@ namespace xmloff { namespace token {
         struct XMLTokenEntry
         {
             sal_Int32 const nLength;
-            const char* pChar;
+            const sal_Char* pChar;
             OUString* pOUString;
 #if OSL_DEBUG_LEVEL > 0
             XMLTokenEnum const eToken;
@@ -552,7 +552,6 @@ namespace xmloff { namespace token {
         TOKEN( "data-bar",                        XML_DATA_BAR ),
         TOKEN( "data-bar-entry",                  XML_DATA_BAR_ENTRY ),
         TOKEN( "data-cell-range-address",         XML_DATA_CELL_RANGE_ADDRESS ),
-        TOKEN( "data-label",                      XML_DATA_LABEL ),
         TOKEN( "data-label-number",               XML_DATA_LABEL_NUMBER ),
         TOKEN( "data-label-symbol",               XML_DATA_LABEL_SYMBOL ),
         TOKEN( "data-label-text",                 XML_DATA_LABEL_TEXT ),

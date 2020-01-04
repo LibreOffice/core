@@ -32,7 +32,6 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 
 
@@ -83,7 +82,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "SubmissionHelper::canTriggerSubmissions" );
+            OSL_FAIL( "SubmissionHelper::canTriggerSubmissions: caught an exception!" );
         }
         return false;
     }
@@ -160,7 +159,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "SubmissionPropertyHandler::getPropertyValue" );
+            OSL_FAIL( "SubmissionPropertyHandler::getPropertyValue: caught an exception!" );
         }
 
         return aReturn;
@@ -205,7 +204,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "SubmissionPropertyHandler::setPropertyValue" );
+            OSL_FAIL( "SubmissionPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 

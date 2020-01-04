@@ -56,7 +56,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         }
         catch(Exception&)
         {
-            TOOLS_WARN_EXCEPTION("dbaccess", "OContainerMediator::OContainerMediator");
+            OSL_FAIL("OContainerMediator::OContainerMediator: caught an exception!");
         }
         osl_atomic_decrement( &m_refCount );
     }

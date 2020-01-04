@@ -214,13 +214,13 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "svx", "lcl_getDataSourceIndirectProperties" );
+                OSL_FAIL( "lcl_getDataSourceIndirectProperties: caught an exception!" );
             }
             return aInfo;
         }
 
 
-        static const char* aCharacterAndParagraphProperties[] =
+        static const sal_Char* aCharacterAndParagraphProperties[] =
         {
             "CharFontName",
             "CharFontStyleName",
@@ -363,7 +363,7 @@ namespace svxform
                 Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo(), UNO_SET_THROW );
 
                 OUString sPropertyName;
-                const char** pCharacterProperty = aCharacterAndParagraphProperties;
+                const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
                 while ( *pCharacterProperty )
                 {
                     sPropertyName = OUString::createFromAscii( *pCharacterProperty );

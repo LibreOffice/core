@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef INCLUDED_XMLSCRIPT_SOURCE_INC_XML_IMPORT_HXX
+#define INCLUDED_XMLSCRIPT_SOURCE_INC_XML_IMPORT_HXX
 
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -46,5 +47,6 @@ createDocumentHandler(
 
 }
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

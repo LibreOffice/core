@@ -21,8 +21,6 @@
 #define INCLUDED_SC_INC_DOCUNO_HXX
 
 #include "address.hxx"
-
-#include <sal/types.h>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/lstner.hxx>
 #include <svx/fmdmod.hxx>
@@ -656,7 +654,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class SAL_DLLPUBLIC_RTTI ScAnnotationsObj final : public cppu::WeakImplHelper<
+class ScAnnotationsObj final : public cppu::WeakImplHelper<
                                 css::sheet::XSheetAnnotations,
                                 css::container::XEnumerationAccess,
                                 css::lang::XServiceInfo>,
@@ -674,8 +672,6 @@ public:
     virtual                 ~ScAnnotationsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    ScDocShell*             GetDocShell() const { return pDocShell; }
 
                             /// XSheetAnnotations
     virtual void SAL_CALL   insertNew( const css::table::CellAddress& aPosition,

@@ -495,13 +495,6 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     }
 }
 
-void SidebarController::SyncUpdate()
-{
-    maPropertyChangeForwarder.Sync();
-    maContextChangeUpdate.Sync();
-    maAsynchronousDeckSwitch.Sync();
-}
-
 void SidebarController::UpdateConfigurations()
 {
     if (maCurrentContext == maRequestedContext

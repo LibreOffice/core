@@ -252,7 +252,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
 

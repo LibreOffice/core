@@ -227,14 +227,14 @@ bool StgWriter::IsStgWriter() const { return true; }
 </FilterFlags>
 */
 
-SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const char** ppNames,
+SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                 sal_uInt64* pValues )
     : ConfigItem( "Office.Writer/FilterFlags" )
 {
     GetValues( nCnt, ppNames, pValues );
 }
 
-void SwFilterOptions::GetValues( sal_uInt16 nCnt, const char** ppNames,
+void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                         sal_uInt64* pValues )
 {
     Sequence<OUString> aNames( nCnt );
@@ -399,7 +399,7 @@ namespace
 struct CharSetNameMap
 {
     rtl_TextEncoding const eCode;
-    const char* pName;
+    const sal_Char* pName;
 };
 
 const CharSetNameMap *GetCharSetNameMap()

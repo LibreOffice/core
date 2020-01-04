@@ -361,9 +361,6 @@ public:
     void testTdf51223();
     void testTdf108423();
     void testTdf106164();
-    void testTdf54409();
-    void testTdf38394();
-    void testTdf59666();
     void testInconsistentBookmark();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -568,9 +565,6 @@ public:
     CPPUNIT_TEST(testInconsistentBookmark);
     CPPUNIT_TEST(testTdf108423);
     CPPUNIT_TEST(testTdf106164);
-    CPPUNIT_TEST(testTdf54409);
-    CPPUNIT_TEST(testTdf38394);
-    CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -970,7 +964,7 @@ void SwUiWriterTest::testImportRTF()
 
     // Insert the RTF at the cursor position.
     OString aData = "{\\rtf1 Hello world!\\par}";
-    SvMemoryStream aStream(const_cast<char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
+    SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCursor());
     Reader* pRTFReader = SwReaderWriter::GetRtfReader();
     CPPUNIT_ASSERT(pRTFReader != nullptr);
@@ -1002,7 +996,7 @@ void SwUiWriterTest::testExportRTF()
     SwWriter aWrt(aStream, *xClpDoc);
     aWrt.Write(xWrt);
 
-    OString aData(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
+    OString aData(static_cast<const sal_Char*>(aStream.GetData()), aStream.GetSize());
 
     //Amusingly eventually there was a commit id with "ccc" in it, and so the rtf contained
     //{\*\generator LibreOfficeDev/4.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/f70664ccc6837f2cc21a29bb4f44e41e100efe6b}
@@ -7043,60 +7037,8 @@ void SwUiWriterTest::testTdf106164()
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"We\u2019re ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-}
-
-void SwUiWriterTest::testTdf54409()
-{
-    SwDoc* pDoc = createDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    // testing autocorrect of "tset -> "test with typographical double quotation mark U+201C
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"\u201Ctset");
-    const sal_Unicode cChar = ' ';
-    pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"\u201Ctest ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    // testing autocorrect of test" -> test" with typographical double quotation mark U+201D
-    pWrtShell->Insert(u"and tset\u201D");
-    pWrtShell->AutoCorrect(corr, cChar);
-    OUString sReplaced2(sReplaced + u"and test\u201D ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    // testing autocorrect of "tset" -> "test" with typographical double quotation mark U+201C and U+201D
-    pWrtShell->Insert(u"\u201Ctset\u201D");
-    pWrtShell->AutoCorrect(corr, cChar);
-    OUString sReplaced3(sReplaced2 + u"\u201Ctest\u201D ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced3, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-}
-
-void SwUiWriterTest::testTdf38394()
-{
-    SwDoc* pDoc = createDoc("tdf38394.fodt");
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    // testing autocorrect of French l'" -> l'« (instead of l'»)
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"l\u2019");
-    const sal_Unicode cChar = '"';
-    pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"l\u2019« ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-}
-
-void SwUiWriterTest::testTdf59666()
-{
-    SwDoc* pDoc = createDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    // testing missing autocorrect of single Greek letters
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"\u03C0");
-    const sal_Unicode cChar = ' ';
-    pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"\u03C0 ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    OUString sIApostrophe(u"We\u2019re ");
+    CPPUNIT_ASSERT_EQUAL(sIApostrophe, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

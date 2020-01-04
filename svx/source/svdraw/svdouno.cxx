@@ -195,7 +195,7 @@ SdrUnoObj::~SdrUnoObj()
     }
     catch( const uno::Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "svx", "SdrUnoObj::~SdrUnoObj" );
+        OSL_FAIL( "SdrUnoObj::~SdrUnoObj: caught an exception!" );
     }
 }
 

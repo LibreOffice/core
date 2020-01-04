@@ -488,7 +488,7 @@ namespace
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "dbaccess", "lcl_ensureName: caught an exception while obtaining the current name!" );
+            OSL_FAIL( "lcl_ensureName: caught an exception while obtaining the current name!" );
         }
 
         // set the new name
@@ -503,7 +503,7 @@ namespace
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "dbaccess", "lcl_ensureName" );
+            OSL_FAIL( "lcl_ensureName: caught an exception!" );
         }
         return false;
     }

@@ -642,7 +642,7 @@ namespace
                 }
                 catch ( const Exception& )
                 {
-                    TOOLS_WARN_EXCEPTION( "dbaccess", "PreserveVisualAreaSize::PreserveVisualAreaSize" );
+                    OSL_FAIL( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
                 }
             }
         }
@@ -657,7 +657,7 @@ namespace
                 }
                 catch ( const Exception& )
                 {
-                    TOOLS_WARN_EXCEPTION( "dbaccess", "PreserveVisualAreaSize::~PreserveVisualAreaSize" );
+                    OSL_FAIL( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
                 }
             }
         }
@@ -687,7 +687,7 @@ namespace
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "dbaccess", "LayoutManagerLock::LayoutManagerLock" );
+                OSL_FAIL( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
             }
         }
 
@@ -701,7 +701,7 @@ namespace
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "dbaccess", "LayoutManagerLock::~LayoutManagerLock" );
+                OSL_FAIL( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
             }
         }
     };

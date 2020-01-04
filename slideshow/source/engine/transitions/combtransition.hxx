@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_COMBTRANSITION_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_COMBTRANSITION_HXX
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "slidechangebase.hxx"
 
 namespace slideshow {

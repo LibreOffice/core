@@ -144,7 +144,7 @@ namespace svxform
 
                 // depending on this script type, use the right property from the document's style which controls the
                 // default locale for document content
-                const char* pCharLocalePropertyName = "CharLocale";
+                const sal_Char* pCharLocalePropertyName = "CharLocale";
                 switch ( eSysLocaleScriptType )
                 {
                 case ScriptType::LATIN:
@@ -280,7 +280,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "ControlLayouter::initializeControlLayout" );
+            OSL_FAIL( "ControlLayouter::initializeControlLayout: caught an exception!" );
         }
     }
 

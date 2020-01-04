@@ -1230,7 +1230,10 @@ void Test::testCheckBoxFormField()
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
         // We have two check box form fields
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(2), pMarkAccess->getAllMarksCount());
+        if(rFilterName == "Office Open XML Text")
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(4), pMarkAccess->getAllMarksCount());
+        else
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(2), pMarkAccess->getAllMarksCount());
 
         int nIndex = 0;
         for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)

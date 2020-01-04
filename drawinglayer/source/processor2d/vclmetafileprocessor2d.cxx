@@ -20,7 +20,6 @@
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
 #include <tools/gen.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
@@ -1087,7 +1086,7 @@ namespace drawinglayer
                 }
                 catch(const uno::Exception&)
                 {
-                    TOOLS_WARN_EXCEPTION("drawinglayer", "VclMetafileProcessor2D: No access to printable flag of Control");
+                    OSL_FAIL("VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
                 }
             }
 
@@ -1164,7 +1163,7 @@ namespace drawinglayer
                     }
                     catch( const uno::Exception& )
                     {
-                        TOOLS_WARN_EXCEPTION("drawinglayer", "VclMetafileProcessor2D: Printing of Control failed");
+                        OSL_FAIL("VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
                     }
                 }
 
@@ -1804,7 +1803,7 @@ namespace drawinglayer
                     aTransform,
                     false,
                     eHatch,
-                    Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
+                    Color(rFillHatchAttribute.getColor()),
                     SvtGraphicFill::GradientType::Linear,
                     Color(),
                     Color(),
@@ -1825,7 +1824,7 @@ namespace drawinglayer
 
             mpOutputDevice->DrawHatch(aToolsPolyPolygon,
                 Hatch(aHatchStyle,
-                    Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
+                    Color(rFillHatchAttribute.getColor()),
                     basegfx::fround(rFillHatchAttribute.getDistance()),
                     basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
 

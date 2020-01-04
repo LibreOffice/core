@@ -37,6 +37,7 @@ class SVT_DLLPUBLIC SvtURLBox : public ComboBox
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
     Link<SvtURLBox*,void>           aOpenHdl;
+    OUString                        aPlaceHolder;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
@@ -56,6 +57,7 @@ protected:
 
 public:
                                     SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
+                                    SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     virtual ~SvtURLBox() override;
     virtual void                    dispose() override;
 
@@ -63,8 +65,14 @@ public:
     const Link<SvtURLBox*,void>&    GetOpenHdl() const { return aOpenHdl; }
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     OUString                        GetURL();
+    void                            DisableHistory();
+
+    void                            UpdatePickList( );
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
+
+    bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
+                                        { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
 };
 
 class SVT_DLLPUBLIC URLBox

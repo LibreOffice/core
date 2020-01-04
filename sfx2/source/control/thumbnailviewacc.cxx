@@ -27,7 +27,6 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -635,7 +634,7 @@ sal_Int32 SAL_CALL SfxThumbnailViewAcc::getAccessibleIndexInParent()
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "sfx", "OAccessibleContextHelper::getAccessibleIndexInParent" );
+        OSL_FAIL( "OAccessibleContextHelper::getAccessibleIndexInParent: caught an exception!" );
     }
 
     return nRet;

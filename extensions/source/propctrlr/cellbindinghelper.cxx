@@ -183,7 +183,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingHelper::doConvertAddressRepresentations" );
+                OSL_FAIL( "CellBindingHelper::doConvertAddressRepresentations: caught an exception!" );
             }
         }
 
@@ -310,7 +310,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingHelper::getAddressFromCellBinding" );
+            OSL_FAIL( "CellBindingHelper::getAddressFromCellBinding: caught an exception!" );
         }
 
         return bReturn;
@@ -360,7 +360,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingHelper::getStringAddressFromCellListSource" );
+            OSL_FAIL( "CellBindingHelper::getStringAddressFromCellListSource: caught an exception!" );
         }
 
         return sAddress;
@@ -432,7 +432,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingHelper::isCellIntegerBindingAllowed" );
+                OSL_FAIL( "CellBindingHelper::isCellIntegerBindingAllowed: caught an exception!" );
                     // are there really control models which survive isCellBindingAllowed, but don't have a ClassId
                     // property?
                 bAllow = false;
@@ -469,7 +469,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "CellBindingHelper::isCellBindingAllowed" );
+                OSL_FAIL( "CellBindingHelper::isCellBindingAllowed: caught an exception!" );
                 bAllow = false;
             }
         }

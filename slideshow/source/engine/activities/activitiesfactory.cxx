@@ -24,7 +24,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <activitiesfactory.hxx>
-#include <slideshowexceptions.hxx>
 #include <smilfunctionparser.hxx>
 #include "accumulation.hxx"
 #include "activityparameters.hxx"
@@ -38,6 +37,7 @@
 #include <o3tl/optional.hxx>
 
 #include <memory>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 

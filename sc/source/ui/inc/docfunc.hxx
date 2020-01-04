@@ -46,7 +46,6 @@ class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScUndoRemoveMerge;
 class ScRangeName;
-class ScPostIt;
 
 enum class TransliterationFlags;
 enum class CreateNameFlags;
@@ -115,11 +114,10 @@ public:
         const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
         const formula::FormulaGrammar::Grammar eGrammar );
 
-    SC_DLLPUBLIC bool ShowNote( const ScAddress& rPos, bool bShow );
+    bool            ShowNote( const ScAddress& rPos, bool bShow );
 
     void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
-    SC_DLLPUBLIC ScPostIt* ImportNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate );
 
     bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                            bool bApi );

@@ -44,6 +44,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <rtl/strbuf.hxx>
 
 
 using namespace ::com::sun::star;

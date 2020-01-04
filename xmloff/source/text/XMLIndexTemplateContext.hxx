@@ -39,23 +39,23 @@ template<typename EnumT> struct SvXMLEnumMapEntry;
 
 // TOC and user defined index:
 extern const SvXMLEnumMapEntry<sal_uInt16> aSvLevelNameTOCMap[];
-extern const char* aLevelStylePropNameTOCMap[];
+extern const sal_Char* aLevelStylePropNameTOCMap[];
 extern const bool aAllowedTokenTypesTOC[];
 extern const bool aAllowedTokenTypesUser[];
 
 // alphabetical index:
 extern const SvXMLEnumMapEntry<sal_uInt16> aLevelNameAlphaMap[];
-extern const char* aLevelStylePropNameAlphaMap[];
+extern const sal_Char* aLevelStylePropNameAlphaMap[];
 extern const bool aAllowedTokenTypesAlpha[];
 
 // bibliography:
 extern const SvXMLEnumMapEntry<sal_uInt16> aLevelNameBibliographyMap[];
-extern const char* aLevelStylePropNameBibliographyMap[];
+extern const sal_Char* aLevelStylePropNameBibliographyMap[];
 extern const bool aAllowedTokenTypesBibliography[];
 
 // table, illustration and object tables:
 extern const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameTableMap; // NULL: no outline-level
-extern const char* aLevelStylePropNameTableMap[];
+extern const sal_Char* aLevelStylePropNameTableMap[];
 extern const bool aAllowedTokenTypesTable[];
 
 
@@ -71,7 +71,7 @@ class XMLIndexTemplateContext : public SvXMLImportContext
 
     const SvXMLEnumMapEntry<sal_uInt16>* pOutlineLevelNameMap;
     enum ::xmloff::token::XMLTokenEnum const eOutlineLevelAttrName;
-    const char** pOutlineLevelStylePropMap;
+    const sal_Char** pOutlineLevelStylePropMap;
     const bool* pAllowedTokenTypesMap;
 
     sal_Int32 nOutlineLevel;
@@ -91,7 +91,7 @@ public:
         const OUString& rLocalName,
         const SvXMLEnumMapEntry<EnumT>* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
-        const char** aLevelStylePropNameMap,
+        const sal_Char** aLevelStylePropNameMap,
         const bool* aAllowedTokenTypes,
         bool bTOC_=false)
         : XMLIndexTemplateContext(rImport,rPropSet,nPrfx,rLocalName,
@@ -104,7 +104,7 @@ public:
         const OUString& rLocalName,
         const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
-        const char** aLevelStylePropNameMap,
+        const sal_Char** aLevelStylePropNameMap,
         const bool* aAllowedTokenTypes,
         bool bTOC);
 

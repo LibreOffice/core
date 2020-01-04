@@ -21,6 +21,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sorgitm.hxx>
 #include <osl/diagnose.h>
+#include <typeinfo>
 
 SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
 

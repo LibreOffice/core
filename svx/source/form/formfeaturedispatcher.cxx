@@ -91,7 +91,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "svx", "OSingleFeatureDispatcher::notifyStatus" );
+                OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught an exception!" );
             }
         }
         else

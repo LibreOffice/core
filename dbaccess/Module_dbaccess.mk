@@ -9,22 +9,15 @@
 
 $(eval $(call gb_Module_Module,dbaccess))
 
-$(eval $(call gb_Module_add_targets,dbaccess,\
-	Library_dba \
-	Library_dbahsql \
-))
-
-$(eval $(call gb_Module_add_l10n_targets,dbaccess,\
-	AllLangMoTarget_dba \
-))
-
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
 	$(if $(filter WNT,$(OS)),Executable_odbcconfig) \
+	Library_dba \
 	Library_dbaxml \
 	Library_dbu \
 	Library_sdbt \
+	Library_dbahsql \
 	UIConfig_dbaccess \
 	UIConfig_dbapp \
 	UIConfig_dbbrowser \
@@ -32,6 +25,10 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	UIConfig_dbrelation \
 	UIConfig_dbtable \
 	UIConfig_dbtdata \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,dbaccess,\
+	AllLangMoTarget_dba \
 ))
 
 ifneq ($(OS),iOS)

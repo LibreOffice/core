@@ -172,10 +172,6 @@ static bool lcl_IsSymbolChar( CharClass const & rCC, const OUString& rTxt,
 
 static bool lcl_IsInAsciiArr( const char* pArr, const sal_Unicode c )
 {
-    // tdf#54409 check also typographical quotation marks in the case of skipped ASCII quotation marks
-    if ( 0x2018 <= c && c <= 0x201F && (pArr == sImplSttSkipChars || pArr == sImplEndSkipChars) )
-        return true;
-
     bool bRet = false;
     for( ; *pArr; ++pArr )
         if( *pArr == c )
@@ -890,10 +886,6 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         lcl_IsInAsciiArr( ".-)>", *pDelim ) )
         return;
 
-    // tdf#59666 don't capitalize single Greek letters (except in Greek texts)
-    if ( 1 == pDelim - pWordStt && 0x03B1 <= *pWordStt && *pWordStt <= 0x03C9 && eLang != LANGUAGE_GREEK )
-        return;
-
     if( !bAtStart ) // Still no beginning of a paragraph?
     {
         if (NonFieldWordDelim(*pStr))
@@ -1286,15 +1278,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash == cPrev ) ||
                         ( cEnDash == cPrev );
-                    // tdf#38394 use opening quotation mark << in French l'<<word>>
-                    if ( !bSingle && !bSttQuote && cPrev == cApostrophe &&
-                        (nInsPos == 2 || (nInsPos > 2 && IsWordDelim( rTxt[ nInsPos-3 ] ))) )
-                    {
-                        const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
-                        if ( primary(eLang) == primary(LANGUAGE_FRENCH) )
-                            bSttQuote = true;
-                    }
-                    // tdf#108423 for capitalization of English i'm
                     b_iApostrophe = bSingle && ( cPrev == 'i' ) &&
                         (( nInsPos == 1 ) || IsWordDelim( rTxt[ nInsPos-2 ] ));
                 }

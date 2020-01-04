@@ -59,7 +59,7 @@ private:
     weld::Window*       m_pWindow;
     SfxItemPool*        m_pPool;
 
-    svx::DialControl m_aDC_Dial;
+    svx::SvxDialControl m_aDC_Dial;
 
     std::unique_ptr<weld::CheckButton> m_xCBNumber;
     std::unique_ptr<weld::Button> m_xPB_NumberFormatForValue;

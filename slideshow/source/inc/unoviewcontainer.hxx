@@ -22,6 +22,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <vector>
+#include <memory>
+
 #include "unoview.hxx"
 
 

@@ -45,7 +45,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/datetime.hxx>
-#include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
@@ -60,30 +59,6 @@ using namespace desktop;
 
 class DesktopLOKTest : public UnoApiTest
 {
-    class Resetter
-    {
-    private:
-        std::function<void ()> m_Func;
-
-    public:
-        Resetter(std::function<void ()> const& rFunc)
-            : m_Func(rFunc)
-        {
-        }
-        ~Resetter()
-        {
-            try
-            {
-                m_Func();
-            }
-            catch (...) // has to be reliable
-            {
-                fprintf(stderr, "resetter failed with exception\n");
-                abort();
-            }
-        }
-    };
-
 public:
     DesktopLOKTest() : UnoApiTest("/desktop/qa/data/"),
     m_nSelectionBeforeSearchResult(0),
@@ -100,6 +75,7 @@ public:
         comphelper::LibreOfficeKit::setActive(true);
 
         UnoApiTest::setUp();
+
         mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
         SfxApplication::GetOrCreate();
     };
@@ -109,13 +85,11 @@ public:
         if (m_pDocument)
             m_pDocument->pClass->registerCallback(m_pDocument.get(), nullptr, nullptr);
         closeDoc();
-
         UnoApiTest::tearDown();
 
         comphelper::LibreOfficeKit::setActive(false);
     };
 
-    LibLODocument_Impl* loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType);
     LibLODocument_Impl* loadDoc(const char* pName, LibreOfficeKitDocumentType eType = LOK_DOCTYPE_TEXT);
     void closeDoc();
     static void callback(int nType, const char* pPayload, void* pData);
@@ -170,11 +144,9 @@ public:
     void testSignDocument_PEM_PDF();
     void testTextSelectionHandles();
     void testComplexSelection();
-    void testSpellcheckerMultiView();
     void testDialogPaste();
     void testShowHideDialog();
     void testDialogInput();
-    void testCalcSaveAs();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -229,11 +201,9 @@ public:
 #endif
     CPPUNIT_TEST(testTextSelectionHandles);
     CPPUNIT_TEST(testComplexSelection);
-    CPPUNIT_TEST(testSpellcheckerMultiView);
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testShowHideDialog);
     CPPUNIT_TEST(testDialogInput);
-    CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -279,8 +249,10 @@ static Control* GetFocusControl(vcl::Window const * pParent)
     return nullptr;
 }
 
-LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOfficeKitDocumentType eType)
+LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
 {
+    OUString aFileURL;
+    createFileURL(OUString::createFromAscii(pName), aFileURL);
     OUString aService;
     switch (eType)
     {
@@ -297,20 +269,13 @@ LibLODocument_Impl* DesktopLOKTest::loadDocUrl(const OUString& rFileURL, LibreOf
         CPPUNIT_ASSERT(false);
         break;
     }
-    mxComponent = loadFromDesktop(rFileURL, aService);
+    mxComponent = loadFromDesktop(aFileURL, aService);
     if (!mxComponent.is())
     {
         CPPUNIT_ASSERT(false);
     }
     m_pDocument.reset(new LibLODocument_Impl(mxComponent));
     return m_pDocument.get();
-}
-
-LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
-{
-    OUString aFileURL;
-    createFileURL(OUString::createFromAscii(pName), aFileURL);
-    return loadDocUrl(aFileURL, eType);
 }
 
 void DesktopLOKTest::closeDoc()
@@ -1868,7 +1833,6 @@ class ViewCallback
     LibLODocument_Impl* mpDocument;
     int mnView;
 public:
-    OString m_aCellFormula;
     bool m_bTilesInvalidated;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
@@ -1930,11 +1894,6 @@ public:
             boost::property_tree::read_json(aStream, m_aCallbackWindowResult);
         }
         break;
-        case LOK_CALLBACK_CELL_FORMULA:
-        {
-            m_aCellFormula = aPayload;
-        }
-        break;
         }
     }
 };
@@ -1944,6 +1903,7 @@ public:
 void DesktopLOKTest::testPaintPartTile()
 {
     // Load an impress doc of 2 slides.
+
 //    ViewCallback aView1;
 //    ViewCallback aView2;
     LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
@@ -2727,89 +2687,6 @@ void DesktopLOKTest::testComplexSelection()
 
     // We expect this to be complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_COMPLEX), pDocument->pClass->getSelectionType(pDocument));
-}
-
-void DesktopLOKTest::testCalcSaveAs()
-{
-    comphelper::LibreOfficeKit::setActive();
-
-    LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
-    CPPUNIT_ASSERT(pDocument);
-
-    // Enter some text, but don't commit.
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'X', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'X', 0);
-    Scheduler::ProcessEventsToIdle();
-
-    // Save as a new file.
-    OUString aNewFileUrl = "file:///tmp/saveas.ods";
-    pDocument->pClass->saveAs(pDocument, aNewFileUrl.toUtf8().getStr(), nullptr, nullptr);
-    closeDoc();
-
-    // Load the new document and verify that the in-flight changes are saved.
-    pDocument = loadDocUrl(aNewFileUrl, LOK_DOCTYPE_SPREADSHEET);
-    CPPUNIT_ASSERT(pDocument);
-
-    ViewCallback aView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView);
-
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(OString("X"), aView.m_aCellFormula);
-}
-
-void DesktopLOKTest::testSpellcheckerMultiView()
-{
-    static const OUString aLangISO("en-US");
-    SvtSysLocaleOptions aSysLocaleOptions;
-    aSysLocaleOptions.SetLocaleConfigString(aLangISO);
-    aSysLocaleOptions.SetUILocaleConfigString(aLangISO);
-    comphelper::LibreOfficeKit::setLanguageTag(aLangISO, true);
-
-    auto aSavedSettings = Application::GetSettings();
-    std::unique_ptr<Resetter> pResetter(
-            new Resetter([&]() { Application::SetSettings(aSavedSettings); }));
-    AllSettings aSettings(aSavedSettings);
-    aSettings.SetLanguageTag(aLangISO, true);
-    Application::SetSettings(aSettings);
-
-    LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", LOK_DOCTYPE_SPREADSHEET);
-    pDocument->pClass->setViewLanguage(pDocument, 0, "en-US"); // For spellchecking.
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
-
-    // Start spellchecking.
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:SpellDialog", nullptr, false);
-
-    // Uncommenting this will result in a deadlock.
-    // Because the language configuration above is not effective, and no
-    // language is actually set, the spell-dialog finds no misspelled
-    // words, and displays a message box, which must be dismissed to
-    // continue.
-    // Need to fix the language configuration issue to enable this.
-    // Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
-
-    // Now create another view.
-    const int nViewId = pDocument->m_pDocumentClass->createView(pDocument);
-    CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViewsCount(pDocument));
-
-    // And destroy it.
-    pDocument->m_pDocumentClass->destroyView(pDocument, nViewId);
-
-    // We should survive the destroyed view.
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 }
 
 namespace {

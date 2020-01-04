@@ -79,7 +79,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "ToolboxAccess::toggleToolbox" );
+            OSL_FAIL( "ToolboxAccess::toggleToolbox: caught an exception!" );
         }
     }
 

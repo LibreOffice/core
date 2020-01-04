@@ -25,10 +25,11 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <cppcanvas/spritecanvas.hxx>
 
 #include <memory>
 
-#include <tools.hxx>
+#include "gdimtftools.hxx"
 #include <viewlayer.hxx>
 
 

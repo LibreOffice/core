@@ -116,8 +116,8 @@ namespace DOM
             return OUString();
         }
 
-        char const*const pName =
-            reinterpret_cast<char const*>(m_aNodePtr->name);
+        sal_Char const*const pName =
+            reinterpret_cast<sal_Char const*>(m_aNodePtr->name);
         OUString const ret(pName, strlen(pName), RTL_TEXTENCODING_UTF8);
         return ret;
     }

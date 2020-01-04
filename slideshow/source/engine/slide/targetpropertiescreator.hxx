@@ -21,7 +21,9 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_TARGETPROPERTIESCREATOR_HXX
 
 #include <com/sun/star/animations/TargetProperties.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
+
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 using namespace ::com::sun::star;
 

@@ -2669,7 +2669,6 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         return false;
     }
 
-
     const SfxBoolItem* pCopyStreamItem = rItemSet.GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
     if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
     {
@@ -2831,12 +2830,6 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         SetError(pNewFile->GetError());
         delete pNewFile;
         return false;
-    }
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Before saving, commit in-flight changes.
-        TerminateEditing();
     }
 
     // check if a "SaveTo" is wanted, no "SaveAs"
@@ -3095,7 +3088,7 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
         try {
             // no notification is required the storage is set the first time
             pImpl->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-            OSL_ENSURE( pImpl->m_xDocStorage.is(), "The method must either return storage or throw exception!" );
+            OSL_ENSURE( pImpl->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
 
             SetupStorage( pImpl->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImpl->m_bCreateTempStor = false;

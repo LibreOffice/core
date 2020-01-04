@@ -1621,7 +1621,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause,
     catch (const sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "reportdesign", "GeometryHandler::impl_dialogFilter_nothrow" );
+        OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
     }
 
     if ( aErrorInfo.isValid() )
@@ -2079,7 +2079,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
     }
     catch (uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "reportdesign", "GeometryHandler::impl_initFieldList_nothrow" );
+        OSL_FAIL( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" );
     }
 }
 

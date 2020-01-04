@@ -340,11 +340,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	configmgr \
 	ctl \
 	cui \
-	dba \
-	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dba \
 		dbase \
-		dbaxml) \
+		dbaxml \
+		dbahsql) \
 	dbtools \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
@@ -385,7 +385,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	localebe1 \
 	log \
 	lng \
-	$(if $(filter-out iOS,$(OS)),lnth) \
+	lnth \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
@@ -419,7 +419,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
-	$(if $(filter-out iOS,$(OS)),spell) \
+	spell \
 	$(if $(DISABLE_GUI),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
@@ -1100,7 +1100,7 @@ $(eval $(call gb_Helper_register_mos,\
 	chart \
 	cnr \
 	cui \
-	dba \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	dkt \
 	editeng \
 	flt \

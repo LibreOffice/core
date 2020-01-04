@@ -79,7 +79,7 @@ namespace svxform
 
         struct ModuleInfo
         {
-            const char* pAsciiModuleOrServiceName;
+            const sal_Char* pAsciiModuleOrServiceName;
             DocumentType const    eType;
         };
 
@@ -159,7 +159,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "DocumentClassification::classifyHostDocument" );
+            OSL_FAIL( "DocumentClassification::classifyHostDocument: caught an exception!" );
         }
 
         return eType;

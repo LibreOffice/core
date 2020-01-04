@@ -636,7 +636,7 @@ namespace toolkitform
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "toolkit", "describePDFControl" );
+            OSL_FAIL( "describePDFControl: caught an exception!" );
         }
         return Descriptor;
     }

@@ -32,7 +32,7 @@ namespace DOM { namespace events {
 typedef ::cppu::ImplInheritanceHelper< CUIEvent, css::xml::dom::events::XMouseEvent >
     CMouseEvent_Base;
 
-class CMouseEvent final
+class CMouseEvent
     : public CMouseEvent_Base
 {
     sal_Int32 m_screenX;

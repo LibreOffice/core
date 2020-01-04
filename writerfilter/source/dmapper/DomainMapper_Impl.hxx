@@ -566,6 +566,7 @@ private:
     bool                            m_bRemoveThisParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
+    css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
 
     //annotation import
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
@@ -575,7 +576,7 @@ private:
     void GetCurrentLocale(css::lang::Locale& rLocale);
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
     /// @throws css::uno::Exception
-    css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
+    css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const sal_Char* pFieldMasterService, const OUString& rFieldMasterName);
     css::uno::Reference<css::beans::XPropertySet> const & GetDocumentSettings();
 
     std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
@@ -980,6 +981,9 @@ public:
 
     /// If we're importing autotext.
     bool IsReadGlossaries() const { return m_bIsReadGlossaries;}
+
+    /// If we're inside <w:rPr>, inside <w:style w:type="table">
+    bool m_bInTableStyleRunProps;
 
     tools::SvRef<SdtHelper> m_pSdtHelper;
 

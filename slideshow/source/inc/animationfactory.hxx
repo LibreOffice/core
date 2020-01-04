@@ -28,6 +28,8 @@
 #include "boolanimation.hxx"
 #include "pairanimation.hxx"
 
+#include "shape.hxx"
+#include "shapeattributelayer.hxx"
 #include "shapemanager.hxx"
 
 /* Definition of AnimationFactory class */

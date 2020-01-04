@@ -27,12 +27,12 @@
 namespace unodevtools {
 
 
-bool readOption( OUString * pValue, const char * pOpt,
+bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg);
     // throws CannotDumpException
 
 
-bool readOption( const char * pOpt,
+bool readOption( const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg);
 
 } // end of namespace unodevtools

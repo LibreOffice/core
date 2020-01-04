@@ -18,7 +18,8 @@
  */
 
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXBASE_HXX
+#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXBASE_HXX
 
 #include <sal/config.h>
 
@@ -404,5 +405,6 @@ inline void AccessibleBrowseBoxBase::implSetName(
 } // namespace accessibility
 
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

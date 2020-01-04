@@ -159,12 +159,12 @@ static uno::Reference<xml::dom::XDocument> loadFragment(
 
 static void importFragment( core::XmlFilterBase& rFilter,
                      const uno::Reference<xml::dom::XDocument>& rXDom,
-                     const OUString& rDocName,
+                     const char* pDocName,
                      const DiagramPtr& pDiagram,
                      const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
     DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
-    rMainDomMap[rDocName] = rXDom;
+    rMainDomMap[OUString::createFromAscii(pDocName)] = rXDom;
 
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);

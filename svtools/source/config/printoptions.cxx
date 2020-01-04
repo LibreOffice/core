@@ -27,8 +27,6 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
 #include "itemholder2.hxx"
 
 #include <sal/macros.h>
@@ -71,6 +69,18 @@ class SvtPrintOptions_Impl
 public:
     explicit SvtPrintOptions_Impl( const OUString& rConfigRoot );
     ~SvtPrintOptions_Impl();
+
+    bool        IsReduceTransparency() const ;
+    sal_Int16   GetReducedTransparencyMode() const ;
+    bool        IsReduceGradients() const ;
+    sal_Int16   GetReducedGradientMode() const ;
+    sal_Int16   GetReducedGradientStepCount() const ;
+    bool        IsReduceBitmaps() const ;
+    sal_Int16   GetReducedBitmapMode() const ;
+    sal_Int16   GetReducedBitmapResolution() const ;
+    bool        IsReducedBitmapIncludesTransparency() const ;
+    bool        IsConvertToGreyscales() const;
+    bool        IsPDFAsStandardPrintJobFormat() const;
 
     void        SetReduceTransparency( bool bState ) ;
     void        SetReducedTransparencyMode( sal_Int16 nMode ) ;
@@ -123,6 +133,245 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
         m_xNode.clear();
         m_xCfg.clear();
     }
+}
+
+bool SvtPrintOptions_Impl::IsReduceTransparency() const
+{
+    bool bRet = false;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference< css::beans::XPropertySet > xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+                xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bRet;
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return bRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedTransparencyMode() const
+{
+    sal_Int16 nRet = 0;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference< css::beans::XPropertySet > xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nRet;
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return  nRet;
+}
+
+bool SvtPrintOptions_Impl::IsReduceGradients() const
+{
+    bool bRet = false;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEGRADIENTS) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return bRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedGradientMode() const
+{
+    sal_Int16 nRet = 0;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTMODE) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedGradientStepCount() const
+{
+    sal_Int16 nRet = 64;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return nRet;
+}
+
+bool SvtPrintOptions_Impl::IsReduceBitmaps() const
+{
+    bool bRet = false;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return bRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapMode() const
+{
+    sal_Int16 nRet = 1;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPMODE) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapResolution() const
+{
+    sal_Int16 nRet = 3;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return  nRet;
+}
+
+bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
+{
+    bool bRet = true;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return  bRet;
+}
+
+bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
+{
+    bool bRet = false;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return  bRet;
+
+}
+
+bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
+{
+    bool bRet = true;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return  bRet;
 }
 
 void SvtPrintOptions_Impl::SetReduceTransparency(bool bState)
@@ -257,70 +506,70 @@ Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
     return ourMutex;
 }
 
-bool SvtBasePrintOptions::IsReduceTransparency()
+bool SvtBasePrintOptions::IsReduceTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReduceTransparency::get();
+    return m_pDataContainer->IsReduceTransparency();
 }
 
-sal_Int16 SvtBasePrintOptions::GetReducedTransparencyMode()
+sal_Int16 SvtBasePrintOptions::GetReducedTransparencyMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReducedTransparencyMode::get();
+    return m_pDataContainer->GetReducedTransparencyMode();
 }
 
-bool SvtBasePrintOptions::IsReduceGradients()
+bool SvtBasePrintOptions::IsReduceGradients() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReduceGradients::get();
+    return m_pDataContainer->IsReduceGradients();
 }
 
-sal_Int16 SvtBasePrintOptions::GetReducedGradientMode()
+sal_Int16 SvtBasePrintOptions::GetReducedGradientMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReducedGradientMode::get();
+    return m_pDataContainer->GetReducedGradientMode();
 }
 
-sal_Int16 SvtBasePrintOptions::GetReducedGradientStepCount()
+sal_Int16 SvtBasePrintOptions::GetReducedGradientStepCount() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReducedGradientStepCount::get();
+    return m_pDataContainer->GetReducedGradientStepCount();
 }
 
-bool SvtBasePrintOptions::IsReduceBitmaps()
+bool SvtBasePrintOptions::IsReduceBitmaps() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReduceBitmaps::get();
+    return m_pDataContainer->IsReduceBitmaps();
 }
 
-sal_Int16 SvtBasePrintOptions::GetReducedBitmapMode()
+sal_Int16 SvtBasePrintOptions::GetReducedBitmapMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReducedBitmapMode::get();
+    return m_pDataContainer->GetReducedBitmapMode();
 }
 
-sal_Int16 SvtBasePrintOptions::GetReducedBitmapResolution()
+sal_Int16 SvtBasePrintOptions::GetReducedBitmapResolution() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReducedBitmapResolution::get();
+    return m_pDataContainer->GetReducedBitmapResolution();
 }
 
-bool SvtBasePrintOptions::IsReducedBitmapIncludesTransparency()
+bool SvtBasePrintOptions::IsReducedBitmapIncludesTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ReducedBitmapIncludesTransparency::get();
+    return m_pDataContainer->IsReducedBitmapIncludesTransparency();
 }
 
-bool SvtBasePrintOptions::IsConvertToGreyscales()
+bool SvtBasePrintOptions::IsConvertToGreyscales() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::ConvertToGreyscales::get();
+    return m_pDataContainer->IsConvertToGreyscales();
 }
 
-bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat()
+bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get();
+    return m_pDataContainer->IsPDFAsStandardPrintJobFormat();
 }
 
 void SvtBasePrintOptions::SetReduceTransparency( bool bState )
@@ -389,7 +638,7 @@ void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( bool bState )
     m_pDataContainer->SetPDFAsStandardPrintJobFormat( bState );
 }
 
-void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions )
+void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
 {
     rOptions.SetReduceTransparency( IsReduceTransparency() );
     rOptions.SetReducedTransparencyMode( static_cast<PrinterTransparencyMode>(GetReducedTransparencyMode()) );

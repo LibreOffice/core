@@ -1,0 +1,57 @@
+From c955b1041b9e3ebe7ee8a620340b78bddc820682 Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Fri, 1 Feb 2019 13:37:59 +0100
+Subject: [PATCH] Unconditionally use C++11 [[noreturn]]
+
+This helps avoid issues like <https://gerrit.libreoffice.org/plugins/gitiles/
+core/+/9808486a89c6368f836579f8d8c0dda63fd0063c%5E%21> "Avoid
+-Werror,-Wimplicit-fallthrough with clang-cl ...where CPPUNIT_FAIL is marked as
+noreturn only for __GNUC__".
+
+Change-Id: Idb33af7375f103f2dd7a7b4c3dbf20ce731b17ad
+---
+ include/cppunit/Asserter.h | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/include/cppunit/Asserter.h b/include/cppunit/Asserter.h
+index 3321b87..dd39ead 100644
+--- a/include/cppunit/Asserter.h
++++ b/include/cppunit/Asserter.h
+@@ -43,23 +43,17 @@ class Message;
+  * \endcode
+  */
+ 
+-#if defined __GNUC__
+-#   define NORETURN __attribute__((noreturn))
+-#else
+-#   define NORETURN
+-#endif
+-
+ struct Asserter
+ {
+   /*! \brief Throws a Exception with the specified message and location.
+    */
+-  NORETURN static void CPPUNIT_API fail( const Message &message, 
++  [[noreturn]] static void CPPUNIT_API fail( const Message &message, 
+                                 const SourceLine &sourceLine = SourceLine() );
+ 
+   /*! \brief Throws a Exception with the specified message and location.
+    * \deprecated Use fail( Message, SourceLine ) instead.
+    */
+-  NORETURN static void CPPUNIT_API fail( std::string message, 
++  [[noreturn]] static void CPPUNIT_API fail( std::string message, 
+                                 const SourceLine &sourceLine = SourceLine() );
+ 
+   /*! \brief Throws a Exception with the specified message and location.
+@@ -165,7 +159,7 @@ struct Asserter
+    *                          what are the differences between the expected and actual value.
+    * \param shortDescription Short description for the failure message.
+    */
+-  NORETURN static void CPPUNIT_API failNotEqual( std::string expected, 
++  [[noreturn]] static void CPPUNIT_API failNotEqual( std::string expected, 
+                                         std::string actual, 
+                                         const SourceLine &sourceLine,
+                                         const AdditionalMessage &additionalMessage = AdditionalMessage(),
+-- 
+2.20.1
+

@@ -89,7 +89,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
         //!! since this function may be called within the ctor of
         //!! SwView (during formatting) where the WrtShell is not yet
         //!! created, we have to check for the WrtShellPtr to see
-        //!! if it is already available
+        //!! if it is already availbale
         while (pSwView && pSwView->GetWrtShellPtr())
         {
             pSwView->GetWrtShell().ChgHyphenation();

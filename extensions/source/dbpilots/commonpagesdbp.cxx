@@ -31,7 +31,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/stdtext.hxx>
@@ -145,7 +144,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            TOOLS_WARN_EXCEPTION("extensions.abpilot", "OTableSelectionPage::initializePage");
+            OSL_FAIL("OTableSelectionPage::initializePage: caught an exception!");
         }
     }
 
@@ -179,7 +178,7 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            TOOLS_WARN_EXCEPTION("extensions.dbpilots", "OTableSelectionPage::commitPage");
+            OSL_FAIL("OTableSelectionPage::commitPage: caught an exception!");
         }
 
         return true;

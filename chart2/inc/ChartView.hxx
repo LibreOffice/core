@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef INCLUDED_CHART2_INC_CHARTVIEW_HXX
+#define INCLUDED_CHART2_INC_CHARTVIEW_HXX
 
 #include <chartview/ExplicitValueProvider.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -251,5 +252,7 @@ private: //member
 };
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

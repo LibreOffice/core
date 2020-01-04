@@ -208,7 +208,7 @@ void OUndoContainerAction::Undo()
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "reportdesign", "OUndoContainerAction::Undo" );
+            OSL_FAIL( "OUndoContainerAction::Undo: caught an exception!" );
         }
     }
 }
@@ -236,7 +236,7 @@ void OUndoContainerAction::Redo()
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "reportdesign", "OUndoContainerAction::Redo" );
+            OSL_FAIL( "OUndoContainerAction::Redo: caught an exception!" );
         }
     }
 }
@@ -371,7 +371,7 @@ void ORptUndoPropertyAction::setProperty(bool _bOld)
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "reportdesign", "ORptUndoPropertyAction::Redo" );
+            OSL_FAIL( "ORptUndoPropertyAction::Redo: caught an exception!" );
         }
     }
 }

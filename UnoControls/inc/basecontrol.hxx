@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
+#define INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
 
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -327,5 +328,6 @@ private:
 
 }
 
+#endif // INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_DATWIN_HXX
+#define INCLUDED_SVTOOLS_SOURCE_BRWBOX_DATWIN_HXX
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
@@ -186,5 +187,6 @@ public:
 void InitSettings_Impl( vcl::Window *pWin );
 
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

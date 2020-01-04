@@ -266,7 +266,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PropertyHandler::getContextValueByName" );
+            OSL_FAIL( "PropertyHandler::getContextValueByName: caught an exception!" );
         }
         return xI;
     }

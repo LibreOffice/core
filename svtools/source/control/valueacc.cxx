@@ -22,7 +22,6 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
 #include <comphelper/servicehelper.hxx>
@@ -1588,7 +1587,7 @@ sal_Int32 SAL_CALL SvtValueSetAcc::getAccessibleIndexInParent()
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "svtools", "OAccessibleContextHelper::getAccessibleIndexInParent" );
+        OSL_FAIL( "OAccessibleContextHelper::getAccessibleIndexInParent: caught an exception!" );
     }
 
     return nRet;

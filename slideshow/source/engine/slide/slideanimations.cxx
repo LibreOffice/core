@@ -20,6 +20,10 @@
 
 #include <tools/diagnose_ex.h>
 
+#include <sal/log.hxx>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
 #include "slideanimations.hxx"
 #include <animationnodefactory.hxx>
 

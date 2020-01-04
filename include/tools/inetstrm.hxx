@@ -32,15 +32,15 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;
 
-    std::vector<char> mvBuffer;
-    char           *pRead;
-    char           *pWrite;
+    std::vector<sal_Char> mvBuffer;
+    sal_Char       *pRead;
+    sal_Char       *pWrite;
 
     std::unique_ptr<SvStream>
                     pMsgStrm;
     SvMemoryStream  maMsgBuffer;
-    char           *pMsgRead;
-    char           *pMsgWrite;
+    sal_Char       *pMsgRead;
+    sal_Char       *pMsgWrite;
 
     bool done;
 
@@ -50,15 +50,15 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) = delete;
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) = delete;
 
-    int GetHeaderLine(char *pData, sal_uInt32 nSize);
-    int GetBodyLine(char *pData, sal_uInt32 nSize);
-    int GetMsgLine(char *pData, sal_uInt32 nSize);
+    int GetHeaderLine(sal_Char *pData, sal_uInt32 nSize);
+    int GetBodyLine(sal_Char *pData, sal_uInt32 nSize);
+    int GetMsgLine(sal_Char *pData, sal_uInt32 nSize);
 
 public:
     explicit INetMIMEMessageStream(INetMIMEMessage *pMsg, bool headerGenerated);
     ~INetMIMEMessageStream();
 
-    int Read (char *pData, sal_uInt32 nSize);
+    int Read (sal_Char *pData, sal_uInt32 nSize);
 };
 
 #endif

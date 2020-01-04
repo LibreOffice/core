@@ -21,7 +21,9 @@
 #define INCLUDED_SVX_DIALCONTROL_HXX
 
 #include <memory>
+#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/field.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
 
@@ -72,7 +74,69 @@ private:
     -   Shows the value entered/modified in the numeric field.
     -   Enables/disables/shows/hides the field according to own state changes.
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl final : public weld::CustomWidgetController
+class SAL_WARN_UNUSED DialControl : public Control
+{
+public:
+    explicit            DialControl( vcl::Window* pParent, WinBits nBits );
+
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+
+    virtual void        StateChanged( StateChangedType nStateChange ) override;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void        LoseFocus() override;
+
+    virtual Size        GetOptimalSize() const override;
+    virtual void        Resize() override;
+
+    /** Returns the current rotation angle in 1/100 degrees. */
+    sal_Int32           GetRotation() const;
+    /** Sets the rotation to the passed value (in 1/100 degrees). */
+    void                SetRotation( sal_Int32 nAngle );
+
+    /** The passed handler is called whenever the rotation value changes. */
+    void                SetModifyHdl( const Link<DialControl*,void>& rLink );
+
+protected:
+    struct DialControl_Impl
+    {
+        ScopedVclPtr<DialControlBmp> mxBmpEnabled;
+        ScopedVclPtr<DialControlBmp> mxBmpDisabled;
+        ScopedVclPtr<DialControlBmp> mxBmpBuffered;
+        Link<DialControl*,void>      maModifyHdl;
+        VclPtr<NumericField>         mpLinkField;
+        sal_Int32           mnLinkedFieldValueMultiplyer;
+        Size                maWinSize;
+        vcl::Font           maWinFont;
+        sal_Int32           mnAngle;
+        sal_Int32           mnOldAngle;
+        long                mnCenterX;
+        long                mnCenterY;
+        bool                mbNoRot;
+
+        explicit            DialControl_Impl( vcl::Window& rParent );
+        void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
+        void                SetSize( const Size& rWinSize );
+    };
+    std::unique_ptr< DialControl_Impl > mpImpl;
+
+    virtual void        HandleMouseEvent( const Point& rPos, bool bInitial );
+    void                HandleEscapeEvent();
+
+    void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
+
+    void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
+    void                Init( const Size& rWinSize );
+
+private:
+    void                InvalidateControl();
+};
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDialControl final : public weld::CustomWidgetController
 {
 public:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -115,7 +179,6 @@ public:
     const OUString&     GetText() const { return mpImpl->maText; }
     void                SetText(const OUString& rText) { mpImpl->maText = rText; }
 
-    void                Init( const Size& rWinSize );
 private:
     struct DialControl_Impl
     {
@@ -144,6 +207,7 @@ private:
     void                HandleEscapeEvent();
 
     void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
+    void                Init( const Size& rWinSize );
 
     void                InvalidateControl();
 

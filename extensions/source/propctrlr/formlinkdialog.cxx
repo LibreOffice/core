@@ -24,7 +24,6 @@
 #include <strings.hrc>
 #include "formstrings.hxx"
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
@@ -315,7 +314,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormLinkDialog::initializeLinks" );
+            OSL_FAIL( "FormLinkDialog::initializeLinks: caught an exception!" );
         }
     }
 
@@ -364,7 +363,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormLinkDialog::getFormDataSourceType" );
+            OSL_FAIL( "FormLinkDialog::getFormDataSourceType: caught an exception!" );
         }
         return sReturn;
     }
@@ -401,7 +400,7 @@ namespace pcr
         catch (const SQLException& e ) { aErrorInfo = e; }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormLinkDialog::getFormFields: caught a non-SQL exception!" );
+            OSL_FAIL( "FormLinkDialog::getFormFields: caught a non-SQL exception!" );
         }
 
         if ( aErrorInfo.isValid() )
@@ -466,7 +465,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormLinkDialog::getCanonicUnderlyingTable" );
+            OSL_FAIL( "FormLinkDialog::getCanonicUnderlyingTable: caught an exception!" );
         }
         return xTable;
     }
@@ -531,7 +530,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormLinkDialog::getExistingRelation" );
+            OSL_FAIL( "FormLinkDialog::getExistingRelation: caught an exception!" );
         }
 
         return ( !_rLeftFields.empty() ) && ( !_rLeftFields[ 0 ].isEmpty() );
@@ -602,7 +601,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormLinkDialog::initializeSuggest" );
+            OSL_FAIL( "FormLinkDialog::initializeSuggest: caught an exception!" );
         }
     }
 

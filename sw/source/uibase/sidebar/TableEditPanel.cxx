@@ -53,17 +53,17 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 if (pItem)
                 {
                     long nNewHeight = pItem->GetValue();
-                    nNewHeight = m_xRowHeightEdit->normalize(nNewHeight);
-                    m_xRowHeightEdit->set_value(nNewHeight, FieldUnit::TWIP);
+                    nNewHeight = m_pRowHeightEdit->Normalize(nNewHeight);
+                    m_pRowHeightEdit->SetValue(nNewHeight, FieldUnit::TWIP);
                 }
             }
             else if (eState == SfxItemState::DISABLED)
             {
-                m_xRowHeightEdit->set_sensitive(false);
+                m_pRowHeightEdit->Disable();
             }
             else
             {
-                m_xRowHeightEdit->set_text("");
+                m_pRowHeightEdit->SetEmptyFieldValue();
             }
             break;
         }
@@ -75,17 +75,17 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 if (pItem)
                 {
                     long nNewWidth = pItem->GetValue();
-                    nNewWidth = m_xColumnWidthEdit->normalize(nNewWidth);
-                    m_xColumnWidthEdit->set_value(nNewWidth, FieldUnit::TWIP);
+                    nNewWidth = m_pColumnWidthEdit->Normalize(nNewWidth);
+                    m_pColumnWidthEdit->SetValue(nNewWidth, FieldUnit::TWIP);
                 }
             }
             else if (eState == SfxItemState::DISABLED)
             {
-                m_xColumnWidthEdit->set_sensitive(false);
+                m_pColumnWidthEdit->Disable();
             }
             else
             {
-                m_xColumnWidthEdit->set_text("");
+                m_pColumnWidthEdit->SetEmptyFieldValue();
             }
             break;
         }
@@ -95,27 +95,8 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
 TableEditPanel::TableEditPanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                SfxBindings* pBindings)
-    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui", rxFrame,
-                  true)
+    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui", rxFrame)
     , m_pBindings(pBindings)
-    , m_xRowHeightEdit(
-          new RelativeField(m_xBuilder->weld_metric_spin_button("rowheight", FieldUnit::CM)))
-    , m_xColumnWidthEdit(
-          new RelativeField(m_xBuilder->weld_metric_spin_button("columnwidth", FieldUnit::CM)))
-    , m_xInsert(m_xBuilder->weld_toolbar("insert"))
-    , m_xInsertDispatch(new ToolbarUnoDispatcher(*m_xInsert, rxFrame))
-    , m_xSelect(m_xBuilder->weld_toolbar("select"))
-    , m_xSelectDispatch(new ToolbarUnoDispatcher(*m_xSelect, rxFrame))
-    , m_xRowSizing(m_xBuilder->weld_toolbar("rowsizing"))
-    , m_xRowSizingDispatch(new ToolbarUnoDispatcher(*m_xRowSizing, rxFrame))
-    , m_xColumnSizing(m_xBuilder->weld_toolbar("columnsizing"))
-    , m_xColumnSizingDispatch(new ToolbarUnoDispatcher(*m_xColumnSizing, rxFrame))
-    , m_xDelete(m_xBuilder->weld_toolbar("delete"))
-    , m_xDeleteDispatch(new ToolbarUnoDispatcher(*m_xDelete, rxFrame))
-    , m_xSplitMerge(m_xBuilder->weld_toolbar("split_merge"))
-    , m_xSplitMergeDispatch(new ToolbarUnoDispatcher(*m_xSplitMerge, rxFrame))
-    , m_xMisc(m_xBuilder->weld_toolbar("misc"))
-    , m_xMiscDispatch(new ToolbarUnoDispatcher(*m_xMisc, rxFrame))
     , m_aRowHeightController(SID_ATTR_TABLE_ROW_HEIGHT, *pBindings, *this)
     , m_aColumnWidthController(SID_ATTR_TABLE_COLUMN_WIDTH, *pBindings, *this)
     , m_aInsertRowsBeforeController(FN_TABLE_INSERT_ROW_BEFORE, *pBindings, *this)
@@ -133,6 +114,9 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
     , m_aDistributeColumnsController(FN_TABLE_BALANCE_CELLS, *pBindings, *this)
     , m_aMergeCellsController(FN_TABLE_MERGE_CELLS, *pBindings, *this)
 {
+    get(m_pRowHeightEdit, "rowheight");
+    get(m_pColumnWidthEdit, "columnwidth");
+
     InitRowHeightToolitem();
     InitColumnWidthToolitem();
 }
@@ -141,54 +125,32 @@ TableEditPanel::~TableEditPanel() { disposeOnce(); }
 
 void TableEditPanel::InitRowHeightToolitem()
 {
-    Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, RowHeightMofiyHdl);
-    m_xRowHeightEdit->connect_value_changed(aLink);
+    Link<Edit&, void> aLink = LINK(this, TableEditPanel, RowHeightMofiyHdl);
+    m_pRowHeightEdit->SetModifyHdl(aLink);
 
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(false)->GetMetric();
-    m_xRowHeightEdit->SetFieldUnit(eFieldUnit);
+    SetFieldUnit(*m_pRowHeightEdit, eFieldUnit);
 
-    m_xRowHeightEdit->set_min(MINLAY, FieldUnit::TWIP);
-    m_xRowHeightEdit->set_max(SAL_MAX_INT32, FieldUnit::TWIP);
+    m_pRowHeightEdit->SetMin(MINLAY, FieldUnit::TWIP);
+    m_pRowHeightEdit->SetMax(SAL_MAX_INT32, FieldUnit::TWIP);
 }
 
 void TableEditPanel::InitColumnWidthToolitem()
 {
-    Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, ColumnWidthMofiyHdl);
-    m_xColumnWidthEdit->connect_value_changed(aLink);
+    Link<Edit&, void> aLink = LINK(this, TableEditPanel, ColumnWidthMofiyHdl);
+    m_pColumnWidthEdit->SetModifyHdl(aLink);
 
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(false)->GetMetric();
-    m_xColumnWidthEdit->SetFieldUnit(eFieldUnit);
+    SetFieldUnit(*m_pColumnWidthEdit, eFieldUnit);
 
-    m_xColumnWidthEdit->set_min(MINLAY, FieldUnit::TWIP);
-    m_xColumnWidthEdit->set_max(SAL_MAX_INT32, FieldUnit::TWIP);
+    m_pColumnWidthEdit->SetMin(MINLAY, FieldUnit::TWIP);
+    m_pColumnWidthEdit->SetMax(SAL_MAX_INT32, FieldUnit::TWIP);
 }
 
 void TableEditPanel::dispose()
 {
-    m_xRowHeightEdit.reset();
-    m_xColumnWidthEdit.reset();
-
-    m_xMiscDispatch.reset();
-    m_xMisc.reset();
-
-    m_xSplitMergeDispatch.reset();
-    m_xSplitMerge.reset();
-
-    m_xDeleteDispatch.reset();
-    m_xDelete.reset();
-
-    m_xColumnSizingDispatch.reset();
-    m_xColumnSizing.reset();
-
-    m_xRowSizingDispatch.reset();
-    m_xRowSizing.reset();
-
-    m_xSelectDispatch.reset();
-    m_xSelect.reset();
-
-    m_xInsertDispatch.reset();
-    m_xInsert.reset();
-
+    m_pRowHeightEdit.clear();
+    m_pColumnWidthEdit.clear();
     m_aRowHeightController.dispose();
     m_aColumnWidthController.dispose();
     m_aInsertRowsBeforeController.dispose();
@@ -209,10 +171,10 @@ void TableEditPanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, Edit&, void)
 {
     SwTwips nNewHeight = static_cast<SwTwips>(
-        m_xRowHeightEdit->denormalize(m_xRowHeightEdit->get_value(FieldUnit::TWIP)));
+        m_pRowHeightEdit->Denormalize(m_pRowHeightEdit->GetValue(FieldUnit::TWIP)));
     SfxUInt32Item aRowHeight(SID_ATTR_TABLE_ROW_HEIGHT);
     aRowHeight.SetValue(nNewHeight);
 
@@ -220,10 +182,10 @@ IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void
                                               { &aRowHeight });
 }
 
-IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, Edit&, void)
 {
     SwTwips nNewWidth = static_cast<SwTwips>(
-        m_xColumnWidthEdit->denormalize(m_xColumnWidthEdit->get_value(FieldUnit::TWIP)));
+        m_pColumnWidthEdit->Denormalize(m_pColumnWidthEdit->GetValue(FieldUnit::TWIP)));
     SfxUInt32Item aColumnWidth(SID_ATTR_TABLE_COLUMN_WIDTH);
     aColumnWidth.SetValue(nNewWidth);
 

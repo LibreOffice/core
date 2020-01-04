@@ -183,7 +183,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
 
             // determine the type by the bullet character
-            const char *pStr = nullptr;
+            const sal_Char *pStr = nullptr;
             switch( rNumFormat.GetBulletChar() )
             {
             case HTML_BULLETCHAR_DISC:
@@ -218,7 +218,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             sOut += OString(OOO_STRING_SVTOOLS_HTML_orderlist);
 
             // determine the type by the format
-            char cType = 0;
+            sal_Char cType = 0;
             switch( eType )
             {
                 case SVX_NUM_CHARS_UPPER_LETTER:

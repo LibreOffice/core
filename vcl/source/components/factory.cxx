@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 extern "C" {
 
     VCL_DLLPUBLIC void* vcl_component_getFactory(
-        const char* pImplementationName,
+        const sal_Char* pImplementationName,
         void* pXUnoSMgr,
         void* /*pXUnoKey*/
         )

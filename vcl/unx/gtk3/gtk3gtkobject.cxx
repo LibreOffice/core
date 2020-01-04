@@ -252,9 +252,9 @@ void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
 void GtkSalObjectBase::SetForwardKey( bool bEnable )
 {
     if( bEnable )
-        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
+        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );
     else
-        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
+        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
 }
 
 GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
@@ -344,25 +344,11 @@ void GtkSalObjectWidgetClip::ApplyClipRegion()
     if( m_pSocket )
     {
         GtkFixed* pContainer = GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow));
-
-        GtkAllocation allocation;
-        allocation.x = m_aRect.Left() + m_aClipRect.Left();
-        allocation.y = m_aRect.Top() + m_aClipRect.Top();
+        gtk_fixed_move(pContainer, m_pScrolledWindow, m_aRect.Left() + m_aClipRect.Left(), m_aRect.Top() + m_aClipRect.Top());
         if (m_aClipRect.IsEmpty())
-        {
-            allocation.width = m_aRect.GetWidth();
-            allocation.height = m_aRect.GetHeight();
-        }
+            gtk_widget_set_size_request(m_pScrolledWindow, m_aRect.GetWidth(), m_aRect.GetHeight());
         else
-        {
-            allocation.width = m_aClipRect.GetWidth();
-            allocation.height = m_aClipRect.GetHeight();
-        }
-
-        gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
-        gtk_widget_set_size_request(m_pScrolledWindow, allocation.width, allocation.height);
-        gtk_widget_size_allocate(m_pScrolledWindow, &allocation);
-
+            gtk_widget_set_size_request(m_pScrolledWindow, m_aClipRect.GetWidth(), m_aClipRect.GetHeight());
         gtk_adjustment_set_value(gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Left());
         gtk_adjustment_set_value(gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Top());
     }

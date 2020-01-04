@@ -380,7 +380,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "forms.runtime", "FormOperations::getState" );
+            OSL_FAIL( "FormOperations::getState: caught an exception!" );
         }
 
         return aState;
@@ -1249,7 +1249,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "forms.runtime", "FormOperations::impl_ensureInitializedParser_nothrow" );
+            OSL_FAIL( "FormOperations::impl_ensureInitializedParser_nothrow: caught an exception!" );
         }
 
         m_bInitializedParser = true;
@@ -1279,7 +1279,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "forms.runtime", "FormOperations::impl_disposeParser_nothrow" );
+            OSL_FAIL( "FormOperations::impl_disposeParser_nothrow: caught an exception!" );
         }
     }
 

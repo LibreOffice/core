@@ -578,19 +578,19 @@ void VDiagram::createShapes_3d()
             //don't set a camera at all!
             //the camera's rotation is incorporated into this matrix
 
-            ::basegfx::B3DHomMatrix aEffectiveTransformation;
-            aEffectiveTransformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);
+            ::basegfx::B3DHomMatrix aEffectiveTranformation;
+            aEffectiveTranformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);
 
             if(!m_bRightAngledAxes)
-                aEffectiveTransformation.rotate(m_fXAnglePi,m_fYAnglePi,m_fZAnglePi);
+                aEffectiveTranformation.rotate(m_fXAnglePi,m_fYAnglePi,m_fZAnglePi);
             else
-                aEffectiveTransformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
+                aEffectiveTranformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
 
             //#i98497# 3D charts are rendered with wrong size
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
 
             xDestProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
-                    uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTransformation ) ) );
+                    uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
         }
     }
     catch( const uno::Exception & )

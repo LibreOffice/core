@@ -21,7 +21,6 @@
 #include <fmtextcontrolshell.hxx>
 
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 namespace svx
 {
@@ -51,7 +50,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "FmTextControlFeature::FmTextControlFeature" );
+            OSL_FAIL( "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
         }
         osl_atomic_decrement( &m_refCount );
     }
@@ -77,7 +76,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "FmTextControlFeature::dispatch" );
+            OSL_FAIL( "FmTextControlFeature::dispatch: caught an exception!" );
         }
     }
 
@@ -107,7 +106,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "FmTextControlFeature::dispose" );
+            OSL_FAIL( "FmTextControlFeature::dispose: caught an exception!" );
         }
     }
 

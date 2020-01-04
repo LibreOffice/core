@@ -397,7 +397,7 @@ void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 
 
 void TransferDataContainer::CopyAnyData( SotClipboardFormatId nFormatId,
-                                        const char* pData, sal_uLong nLen )
+                                        const sal_Char* pData, sal_uLong nLen )
 {
     if( nLen )
     {

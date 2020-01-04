@@ -731,7 +731,7 @@ public:
 // FUNCTION PARSER
 
 
-typedef const char* StringIteratorT;
+typedef const sal_Char* StringIteratorT;
 
 struct ParserContext
 {

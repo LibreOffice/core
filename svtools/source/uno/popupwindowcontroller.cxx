@@ -20,9 +20,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weldutils.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svtools/popupwindowcontroller.hxx>
 
@@ -181,23 +180,12 @@ void SAL_CALL PopupWindowController::dispose()
 // XStatusListener
 void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
-    bool bValue = false;
-    rEvent.State >>= bValue;
-
-    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(getParent().get()))
-    {
-        auto pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
-        assert(pToolbar && "must be a toolbar");
-        OString sId = m_aCommandURL.toUtf8();
-        pToolbar->set_item_active(sId, bValue);
-        pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
-        return;
-    }
-
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nItemId = 0;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
+        bool bValue = false;
+        rEvent.State >>= bValue;
         pToolBox->CheckItem( nItemId, bValue );
         pToolBox->EnableItem( nItemId, rEvent.IsEnabled );
     }

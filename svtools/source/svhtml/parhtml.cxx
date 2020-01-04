@@ -441,7 +441,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
-                            char cEncodedChar = static_cast<char>(cChar);
+                            sal_Char cEncodedChar = static_cast<sal_Char>(cChar);
                             cChar = OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
                             if( 0U == cChar )
                             {

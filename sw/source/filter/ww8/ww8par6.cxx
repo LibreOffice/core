@@ -2931,7 +2931,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
                 {
                     //convert single byte from MS1252 to Unicode
                     m_cSymbol = OUString(
-                        reinterpret_cast<const char*>(pData+2), 1,
+                        reinterpret_cast<const sal_Char*>(pData+2), 1,
                         RTL_TEXTENCODING_MS_1252).toChar();
                 }
                 else
@@ -4996,7 +4996,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 // otherwise there is none at all!
 
                 // even if no border is set, the attribute has to be set,
-                // otherwise it's not possible to turn off the style attribute.
+                // otherwise it's not possible to turn of the style attribute hard.
                 const SvxBoxItem* pBox
                     = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_BOX ));
                 std::shared_ptr<SvxBoxItem> aBox(std::make_shared<SvxBoxItem>(RES_BOX));
@@ -5024,10 +5024,8 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 NewAttr( *aBox );
 
                 SvxShadowItem aS(RES_SHADOW);
-                // Word only allows shadows on visible borders
-                if ( aBox->CalcLineSpace( SvxBoxItemLine::RIGHT ) )
-                    SetShadow( aS, &aSizeArray[0], aBrcs[WW8_RIGHT] );
-                NewAttr( aS );
+                if( SetShadow( aS, &aSizeArray[0], aBrcs[WW8_RIGHT] ) )
+                    NewAttr( aS );
             }
         }
     }

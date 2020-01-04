@@ -20,7 +20,6 @@
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -785,59 +784,6 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
     // I.e. the 360 twips line spacing was taken from the table style, not the 220 twips one from
     // the paragraph style.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(convertTwipToMm100(220)), aLineSpacing.Height);
-}
-
-CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
-{
-    // Create a new document and add a text with several repeated sequences.
-    loadURL("private:factory/swriter", nullptr);
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, css::uno::UNO_QUERY_THROW);
-    auto xSimpleText = xTextDocument->getText();
-    xSimpleText->insertString(xSimpleText->getStart(), "Abc aBc abC", false);
-
-    // Create a search descriptor and find all occurencies of search string
-    css::uno::Reference<css::util::XSearchable> xSearchable(mxComponent, css::uno::UNO_QUERY_THROW);
-    auto xSearchDescriptor = xSearchable->createSearchDescriptor();
-    xSearchDescriptor->setPropertyValue("SearchStyles", css::uno::Any(false));
-    xSearchDescriptor->setPropertyValue("SearchCaseSensitive", css::uno::Any(false));
-    xSearchDescriptor->setPropertyValue("SearchBackwards", css::uno::Any(true));
-    xSearchDescriptor->setPropertyValue("SearchRegularExpression", css::uno::Any(false));
-    xSearchDescriptor->setSearchString("abc");
-    auto xSearchResult = xSearchable->findAll(xSearchDescriptor);
-
-    // Select them all
-    auto xController = xTextDocument->getCurrentController();
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
-        xController, css::uno::UNO_QUERY_THROW);
-    xSelectionSupplier->select(css::uno::Any(xSearchResult));
-    css::uno::Reference<css::container::XIndexAccess> xSelection(xSelectionSupplier->getSelection(),
-                                                                 css::uno::UNO_QUERY_THROW);
-    // Now check that they all are selected in the reverse order ("SearchBackwards").
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSelection->getCount());
-    css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
-                                                          css::uno::UNO_QUERY_THROW);
-    // For #0, result was empty (cursor was put before the last occurence without selection)
-    CPPUNIT_ASSERT_EQUAL(OUString("abC"), xTextRange->getString());
-    xTextRange.set(xSelection->getByIndex(1), css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("aBc"), xTextRange->getString());
-    xTextRange.set(xSelection->getByIndex(2), css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("Abc"), xTextRange->getString());
-}
-
-CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
-{
-    // Test the CharTransparence text portion property.
-
-    // Create a new document.
-    loadURL("private:factory/swriter", nullptr);
-
-    // Set a custom transparency.
-    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
-    sal_Int16 nExpected = 42;
-    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nExpected));
-
-    // Get the transparency & verify.
-    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xParagraph, "CharTransparence"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

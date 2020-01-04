@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_SLIDE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_SLIDE_HXX
 
+#include "shapemanager.hxx"
+#include "subsettableshapemanager.hxx"
 #include "unoviewcontainer.hxx"
 #include "slidebitmap.hxx"
 #include "shapemaps.hxx"

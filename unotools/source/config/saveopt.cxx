@@ -714,7 +714,7 @@ public:
 
 }
 
-const char cUserDefinedSettings[] = "UserDefinedSettings";
+const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     : ConfigItem( "Office.Common/Load" )

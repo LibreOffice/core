@@ -583,7 +583,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     }
     catch(const Exception&)
     {
-        TOOLS_WARN_EXCEPTION("svx", "FmFormPageImpl::findFormForDataSource");
+        OSL_FAIL("FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
     if (sLookupName == sFormDataSourceName)

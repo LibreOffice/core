@@ -416,7 +416,7 @@ namespace svx
             SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool();
             const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
 
-            const char* pAsciiUnoName = nullptr;
+            const sal_Char* pAsciiUnoName = nullptr;
             if ( pSlot )
             {
                 pAsciiUnoName = pSlot->GetUnoName();

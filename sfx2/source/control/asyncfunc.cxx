@@ -9,6 +9,8 @@
 
 #include <sfx2/asyncfunc.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 AsyncFunc::AsyncFunc(const std::function<void()>& rAsyncFunc)
     : m_pAsyncFunc(rAsyncFunc)
 {

@@ -20,12 +20,13 @@
 #define INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 
 #include <svtools/svtdllapi.h>
+#include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
 class SvtAccessibilityOptions_Impl;
 
 class SVT_DLLPUBLIC SvtAccessibilityOptions final :
-    public utl::detail::Options
+    public utl::detail::Options, private SfxListener
 {
 private:
     static SvtAccessibilityOptions_Impl* sm_pSingleImplConfig;
@@ -42,6 +43,8 @@ public:
     bool        GetIsAutomaticFontColor() const;
     bool        IsSelectionInReadonly() const;
 
+    //SfxListener:
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void        SetVCLSettings();
 };
 

@@ -23,6 +23,10 @@
 #include <memory>
 #include <svl/intitem.hxx>
 #include <svx/dlgutil.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/itemwin.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
@@ -32,7 +36,7 @@
 namespace sd { class ViewShellBase; }
 namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
-class ColorListBox;
+class SvxColorListBox;
 class SvxPageItem;
 class SvxLongLRSpaceItem;
 class SvxLongULSpaceItem;
@@ -74,23 +78,22 @@ private:
 
     ViewShellBase& mrBase;
 
-    std::unique_ptr<SvxPaperSizeListBox> mxPaperSizeBox;
-    std::unique_ptr<weld::ComboBox> mxPaperOrientation;
-    std::unique_ptr<weld::ComboBox> mxMasterSlide;
-    std::unique_ptr<weld::Label> mxBackgroundLabel;
-    std::unique_ptr<weld::ComboBox> mxFillStyle;
-    std::unique_ptr<ColorListBox> mxFillLB;
-    std::unique_ptr<weld::ComboBox> mxFillAttr;
-    std::unique_ptr<ColorListBox> mxFillGrad;
-    std::unique_ptr<weld::Button> mxInsertImage;
-    std::unique_ptr<weld::CheckButton> mxDspMasterBackground;
-    std::unique_ptr<weld::CheckButton> mxDspMasterObjects;
-    std::unique_ptr<weld::Button> mxCloseMaster;
-    std::unique_ptr<weld::Button> mxEditMaster;
-    std::unique_ptr<weld::Label> mxMasterLabel;
-    std::unique_ptr<weld::ComboBox> mxMarginSelectBox;
-    std::unique_ptr<weld::Label> mxCustomEntry;
-    std::unique_ptr<weld::Label> mxMarginLabel;
+    VclPtr<PaperSizeListBox> mpPaperSizeBox;
+    VclPtr<ListBox> mpPaperOrientation;
+    VclPtr<ListBox> mpMasterSlide;
+    VclPtr<FixedText> mpBackgroundLabel;
+    VclPtr<SvxFillTypeBox> mpFillStyle;
+    VclPtr<SvxColorListBox> mpFillLB;
+    VclPtr<SvxFillAttrBox> mpFillAttr;
+    VclPtr<SvxColorListBox> mpFillGrad;
+    VclPtr<Button> mpInsertImage;
+    VclPtr<CheckBox> mpDspMasterBackground;
+    VclPtr<CheckBox> mpDspMasterObjects;
+    VclPtr<Button> mpCloseMaster;
+    VclPtr<Button> mpEditMaster;
+    VclPtr<FixedText> mpMasterLabel;
+    VclPtr<ListBox> mpMarginSelectBox;
+    VclPtr<VclVBox> m_pContainer;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
@@ -138,18 +141,16 @@ private:
 
     MapUnit meUnit;
 
-    DECL_LINK(FillBackgroundHdl, weld::ComboBox&, void);
-    DECL_LINK(FillStyleModifyHdl, weld::ComboBox&, void);
-    DECL_LINK(PaperSizeModifyHdl, weld::ComboBox&, void);
-    DECL_LINK(FillColorHdl, ColorListBox&, void);
-    DECL_LINK(AssignMasterPage, weld::ComboBox&, void);
-    DECL_LINK(DspBackground, weld::Button&, void);
-    DECL_LINK(DspObjects, weld::Button&, void);
-    DECL_LINK(CloseMasterHdl, weld::Button&, void);
-    DECL_LINK(EditMasterHdl, weld::Button&, void);
-    DECL_LINK(SelectBgHdl, weld::Button&, void);
+    DECL_LINK(FillBackgroundHdl, ListBox&, void);
+    DECL_LINK(FillStyleModifyHdl, ListBox&, void);
+    DECL_LINK(PaperSizeModifyHdl, ListBox&, void);
+    DECL_LINK(FillColorHdl, SvxColorListBox&, void);
+    DECL_LINK(AssignMasterPage, ListBox&, void);
+    DECL_LINK(DspBackground, Button*, void);
+    DECL_LINK(DspObjects, Button*, void);
+    DECL_LINK(CloseMasterHdl, Button*, void);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
-    DECL_LINK( ModifyMarginHdl, weld::ComboBox&, void );
+    DECL_LINK( ModifyMarginHdl, ListBox&, void );
 
     void Initialize();
     void Update();

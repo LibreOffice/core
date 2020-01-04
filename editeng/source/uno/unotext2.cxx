@@ -46,41 +46,40 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
     if( mrText.GetEditSource() )
         mpEditSource = mrText.GetEditSource()->Clone();
     mnNextParagraph = 0;
-
-    const SvxTextForwarder* pTextForwarder = mrText.GetEditSource()->GetTextForwarder();
-    const sal_Int32 maxParaIndex = std::min( rSel.nEndPara + 1, pTextForwarder->GetParagraphCount() );
-
-    for( sal_Int32 currentPara = rSel.nStartPara; currentPara < maxParaIndex; currentPara++ )
+    for( sal_Int32 currentPara = 0; currentPara < mrText.GetEditSource()->GetTextForwarder()->GetParagraphCount(); currentPara++ )
     {
-        const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
-        SvxUnoTextContent* pContent = nullptr;
-        sal_Int32 nStartPos = 0;
-        sal_Int32 nEndPos = pTextForwarder->GetTextLen( currentPara );
-        if( currentPara == rSel.nStartPara )
-            nStartPos = std::max(nStartPos, rSel.nStartPos);
-        if( currentPara == rSel.nEndPara )
-            nEndPos = std::min(nEndPos, rSel.nEndPos);
-        ESelection aCurrentParaSel( currentPara, nStartPos, currentPara, nEndPos );
-        for (auto const& elemRange : rRanges)
+        if( currentPara>=rSel.nStartPara && currentPara<=rSel.nEndPara )
         {
-            if (pContent)
-                break;
-            SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( elemRange );
-            if( pIterContent && (pIterContent->mnParagraph == currentPara) )
+            const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
+            SvxUnoTextContent* pContent = nullptr;
+            sal_Int32 nStartPos = 0;
+            sal_Int32 nEndPos = mrText.GetEditSource()->GetTextForwarder()->GetTextLen( currentPara );
+            if( currentPara == rSel.nStartPara )
+                nStartPos = std::max(nStartPos, rSel.nStartPos);
+            if( currentPara == rSel.nEndPara )
+                nEndPos = std::min(nEndPos, rSel.nEndPos);
+            ESelection aCurrentParaSel( currentPara, nStartPos, currentPara, nEndPos );
+            for (auto const& elemRange : rRanges)
             {
-                ESelection aIterSel = pIterContent->GetSelection();
-                if( aIterSel == aCurrentParaSel )
+                if (pContent)
+                    break;
+                SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( elemRange );
+                if( pIterContent && (pIterContent->mnParagraph == currentPara) )
                 {
-                    pContent = pIterContent;
-                    maContents.emplace_back(pContent );
+                    ESelection aIterSel = pIterContent->GetSelection();
+                    if( aIterSel == aCurrentParaSel )
+                    {
+                        pContent = pIterContent;
+                        maContents.emplace_back(pContent );
+                    }
                 }
             }
-        }
-        if( pContent == nullptr )
-        {
-            pContent = new SvxUnoTextContent( mrText, currentPara );
-            pContent->SetSelection( aCurrentParaSel );
-            maContents.emplace_back(pContent );
+            if( pContent == nullptr )
+            {
+                pContent = new SvxUnoTextContent( mrText, currentPara );
+                pContent->SetSelection( aCurrentParaSel );
+                maContents.emplace_back(pContent );
+            }
         }
     }
 }

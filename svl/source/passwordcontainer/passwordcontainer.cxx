@@ -56,7 +56,7 @@ static OUString createIndex(const std::vector< OUString >& lines)
         if( i )
             aResult.append("__");
         OString line = OUStringToOString( lines[i], RTL_TEXTENCODING_UTF8 );
-        const char* pLine = line.getStr();
+        const sal_Char* pLine = line.getStr();
 
         while( *pLine )
         {
@@ -83,7 +83,7 @@ static std::vector< OUString > getInfoFromInd( const OUString& aInd )
     bool aStart = true;
 
     OString line = OUStringToOString( aInd, RTL_TEXTENCODING_ASCII_US );
-    const char* pLine = line.getStr();
+    const sal_Char* pLine = line.getStr();
     do
     {
         OUStringBuffer newItem;
@@ -508,7 +508,7 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
                     result = rtl_cipher_decode ( aEncoder, (sal_uInt8*)aSeq1.getArray(), aSeq1.getLength(),
                                                         (sal_uInt8*)resSeq1.getArray(), resSeq1.getLength() );
 
-                    OUString aPasswd( ( char* )resSeq1.getArray(), resSeq1.getLength(), RTL_TEXTENCODING_UTF8 );
+                    OUString aPasswd( ( sal_Char* )resSeq1.getArray(), resSeq1.getLength(), RTL_TEXTENCODING_UTF8 );
                 }
 */
 
@@ -1374,7 +1374,7 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * passwordcontainer_component_getFactory (
-    const char * pImplementationName,
+    const sal_Char * pImplementationName,
     SAL_UNUSED_PARAMETER void * pServiceManager,
     SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
 {

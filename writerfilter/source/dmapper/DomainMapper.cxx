@@ -32,7 +32,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -1376,12 +1375,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) );
             if(eBorderDistId)
                 rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()));
-            if ( nSprmId == NS_ooxml::LN_CT_PBdr_right )
+            if (nSprmId == NS_ooxml::LN_CT_PBdr_right && pBorderHandler->getShadow())
             {
-                table::ShadowFormat aFormat;
-                // Word only allows shadows on visible borders
-                if ( pBorderHandler->getShadow() && pBorderHandler->getBorderLine().LineStyle != table::BorderLineStyle::NONE )
-                    aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
+                table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
                 rContext->Insert(PROP_PARA_SHADOW_FORMAT, uno::makeAny(aFormat));
             }
         }
@@ -2850,6 +2846,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
 }
 
+void DomainMapper::setInTableStyleRunProps(bool bInTableStyleRunProps)
+{
+    m_pImpl->m_bInTableStyleRunProps = bInTableStyleRunProps;
+}
+
 void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
 {
     assert( m_pImpl->GetTopContextType() == CONTEXT_CHARACTER );
@@ -3040,7 +3041,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
     if (m_pImpl->m_nTableDepth > 0) //if we had a table
     {
         uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
-        sal_Int16 nCurrentHorOriRel; //A temp variable to store the current setting
+        sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
         xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
         //and the correction:
         if (nCurrentHorOriRel == text::RelOrientation::PAGE_FRAME)

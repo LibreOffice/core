@@ -19,7 +19,6 @@
 
 #include "featuredispatcher.hxx"
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 
 namespace frm
@@ -126,7 +125,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "forms.richtext", "ORichTextFeatureDispatcher::doNotify" );
+                OSL_FAIL( "ORichTextFeatureDispatcher::doNotify: caught an exception!" );
             }
         }
     }

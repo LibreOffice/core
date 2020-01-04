@@ -139,7 +139,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * ucpcmis1_component_getFactory( const char *pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * ucpcmis1_component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
     void * pRet = nullptr;

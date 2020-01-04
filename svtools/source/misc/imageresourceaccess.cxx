@@ -27,7 +27,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
-#include <tools/diagnose_ex.h>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -152,7 +151,7 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("svtools", "GraphicAccess::getImageStream");
+        OSL_FAIL("GraphicAccess::getImageStream: caught an exception!");
         pMemBuffer.reset();
     }
 

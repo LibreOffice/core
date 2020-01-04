@@ -91,7 +91,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::PushButtonNavigation" );
+            OSL_FAIL( "PushButtonNavigation::PushButtonNavigation: caught an exception!" );
         }
     }
 
@@ -130,7 +130,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::getCurrentButtonType" );
+            OSL_FAIL( "PushButtonNavigation::getCurrentButtonType: caught an exception!" );
         }
         return aReturn;
     }
@@ -162,7 +162,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::setCurrentButtonType" );
+            OSL_FAIL( "PushButtonNavigation::setCurrentButtonType: caught an exception!" );
         }
     }
 
@@ -194,7 +194,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::getCurrentButtonTypeState" );
+            OSL_FAIL( "PushButtonNavigation::getCurrentButtonTypeState: caught an exception!" );
         }
 
         return eState;
@@ -225,7 +225,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::getCurrentTargetURL" );
+            OSL_FAIL( "PushButtonNavigation::getCurrentTargetURL: caught an exception!" );
         }
         return aReturn;
     }
@@ -242,7 +242,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::setCurrentTargetURL" );
+            OSL_FAIL( "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
         }
     }
 
@@ -261,7 +261,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "PushButtonNavigation::setCurrentTargetURL" );
+            OSL_FAIL( "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
         }
 
         return eState;

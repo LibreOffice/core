@@ -271,7 +271,7 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
 
 /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */
 sal_Int32 XMLPropertySetMapper::FindEntryIndex(
-        const char* sApiName,
+        const sal_Char* sApiName,
         sal_uInt16 nNameSpace,
         const OUString& sXMLName ) const
 {

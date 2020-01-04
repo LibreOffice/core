@@ -274,8 +274,6 @@ SelectionManager::SelectionManager() :
         m_bShutDown( false )
 {
     memset(&m_aDropEnterEvent, 0, sizeof(m_aDropEnterEvent));
-    m_EndThreadPipe[0] = 0;
-    m_EndThreadPipe[1] = 0;
     m_aDragRunning.reset();
 }
 
@@ -649,7 +647,7 @@ bool SelectionManager::convertData(
                     OUString aString;
                     aValue >>= aString;
                     OString aByteString( bCompoundText ? convertToCompound( aString ) : OUStringToOString( aString, aEncoding ) );
-                    rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aByteString.getStr()), aByteString.getLength() * sizeof( char ) );
+                    rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aByteString.getStr()), aByteString.getLength() * sizeof( sal_Char ) );
                     bSuccess = true;
                 }
             }

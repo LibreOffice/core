@@ -27,7 +27,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 
 
@@ -198,7 +197,7 @@ namespace toolkit
     }
 
 
-    OUString OAccessibleControlContext::getModelStringProperty( const char* _pPropertyName )
+    OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
     {
         OUString sReturn;
         try
@@ -212,7 +211,7 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "toolkit", "OAccessibleControlContext::getModelStringProperty" );
+            OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
         }
         return sReturn;
     }

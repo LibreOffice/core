@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETEXTFIELD_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETEXTFIELD_HXX
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 
@@ -79,5 +80,6 @@ private:
     css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
 };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

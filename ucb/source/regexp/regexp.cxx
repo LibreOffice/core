@@ -234,7 +234,7 @@ OUString Regexp::getRegexp() const
 namespace {
 
 bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
-                 char const * pString, size_t nStringLength)
+                 sal_Char const * pString, size_t nStringLength)
 {
     sal_Unicode const * p = *pBegin;
 

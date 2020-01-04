@@ -22,6 +22,9 @@
 
 #include "parametricpolypolygon.hxx"
 
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+
 
 namespace slideshow {
 namespace internal {

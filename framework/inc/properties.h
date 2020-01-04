@@ -119,6 +119,7 @@ namespace framework{
 
 /** properties for office module config (Setup.xcu) */
 
+#define OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES   "ooSetupFactoryWindowAttributes"
 #define OFFICEFACTORY_PROPNAME_ASCII_UINAME             "ooSetupFactoryUIName"
 #define OFFICEFACTORY_PROPNAME_ASCII_ICON               "ooSetupFactoryIcon"
 

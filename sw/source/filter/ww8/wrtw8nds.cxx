@@ -1231,7 +1231,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
             break;
 
         case TOX_USER:
-            sText += "\" \\f \"" + OUStringChar(static_cast<char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
+            sText += "\" \\f \"" + OUStringChar(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
             [[fallthrough]];
         case TOX_CONTENT:
             {
@@ -2441,9 +2441,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             FieldFlags::Start | FieldFlags::CmdStart );
                     if ( isDropdownOrCheckbox )
                         WriteFormData( *pFieldmark );
-                    // tdf#129514 need CmdEnd for docx
-                    OutputField(nullptr, lcl_getFieldId(pFieldmark), OUString(),
-                            FieldFlags::CmdEnd | FieldFlags::Close);
+                    OutputField( nullptr, lcl_getFieldId( pFieldmark ), OUString(), FieldFlags::Close );
                     if ( isDropdownOrCheckbox )
                         AppendBookmark( pFieldmark->GetName() );
                 }

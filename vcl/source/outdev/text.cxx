@@ -1910,7 +1910,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
     return aRect;
 }
 
-static bool ImplIsCharIn( sal_Unicode c, const char* pStr )
+static bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
 {
     while ( *pStr )
     {
@@ -1977,7 +1977,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         }
         else if ( nStyle & DrawTextFlags::NewsEllipsis )
         {
-            static char const   pSepChars[] = ".";
+            static sal_Char const   pSepChars[] = ".";
             // Determine last section
             sal_Int32 nLastContent = aStr.getLength();
             while ( nLastContent )

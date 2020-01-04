@@ -1214,7 +1214,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * component_getFactory(
-    const char * pImplName, void * pServiceManager,
+    const sal_Char * pImplName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * )
 {
     void * pRet = nullptr;

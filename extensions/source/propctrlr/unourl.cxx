@@ -22,7 +22,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 
 namespace pcr
@@ -54,7 +53,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "UnoURL::UnoURL" );
+            OSL_FAIL( "UnoURL::UnoURL: caught an exception!" );
         }
     }
 

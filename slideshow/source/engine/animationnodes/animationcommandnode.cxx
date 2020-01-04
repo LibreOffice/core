@@ -22,8 +22,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "animationcommandnode.hxx"
-#include <eventmultiplexer.hxx>
 #include <delayevent.hxx>
+#include <tools.hxx>
+#include "nodetools.hxx"
 
 
 using namespace com::sun::star;

@@ -69,6 +69,7 @@ void ScNavigatorDlg::ReleaseFocus()
 
 ColumnEdit::ColumnEdit(Window* pParent, WinBits nWinBits)
     : SpinField(pParent, nWinBits)
+    , mpDoc(nullptr)
     , nCol(0)
 {
     SetMaxTextLen(SCNAV_COLDIGITS);   // 1...256...18278 or A...IV...ZZZ
@@ -162,10 +163,7 @@ void ColumnEdit::EvalText()
         if ( CharClass::isAsciiNumeric(aStrCol) )
             nCol = NumStrToAlpha( aStrCol );
         else
-        {
-            ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-            nCol = AlphaToNum( *pViewSh->GetViewData().GetDocument(), aStrCol );
-        }
+            nCol = AlphaToNum( mpDoc, aStrCol );
     }
     else
         nCol = 0;
@@ -200,7 +198,7 @@ void ColumnEdit::SetCol( SCCOL nColNo )
     }
 }
 
-SCCOL ColumnEdit::AlphaToNum( const ScDocument& rDoc, OUString& rStr )
+SCCOL ColumnEdit::AlphaToNum( const ScDocument* pDoc, OUString& rStr )
 {
     SCCOL  nColumn = 0;
 
@@ -208,7 +206,7 @@ SCCOL ColumnEdit::AlphaToNum( const ScDocument& rDoc, OUString& rStr )
     {
         rStr = rStr.toAsciiUpperCase();
 
-        if (::AlphaToCol( rDoc, nColumn, rStr))
+        if (::AlphaToCol( pDoc, nColumn, rStr))
             ++nColumn;
 
         if ( (rStr.getLength() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
@@ -462,7 +460,11 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
 {
     get(aLbDocuments, "documents");
     get(aEdCol, "column");
-    aEdCol->SetNavigatorDlg(this);
+    ScTabViewShell* pViewSh = GetTabViewShell();
+    if (pViewSh)
+    {
+        aEdCol->SetNavigatorDlg(this, pViewSh->GetViewData().GetDocument());
+    }
     get(aEdRow, "row");
     aEdRow->SetNavigatorDlg(this);
     get(aTbxCmd, "toolbox");

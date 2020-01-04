@@ -30,7 +30,6 @@
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 
 namespace pcr
 {
@@ -196,7 +195,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "TabOrderDialog::FillList" );
+            OSL_FAIL( "TabOrderDialog::FillList: caught an exception!" );
         }
 
         // select first entry
@@ -231,7 +230,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "TabOrderDialog::AutoOrderClickHdl" );
+            OSL_FAIL( "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
         }
     }
 

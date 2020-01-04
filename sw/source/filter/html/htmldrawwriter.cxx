@@ -140,7 +140,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
             SdrTextAniKind::Slide==eAniKind,
             "Text-Draw-Object not suitable for marquee" );
 
-    const char *pStr = nullptr;
+    const sal_Char *pStr = nullptr;
     switch( eAniKind )
     {
     case SdrTextAniKind::Scroll:     pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_scroll;        break;

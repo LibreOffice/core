@@ -23,9 +23,9 @@
 
 namespace
 {
-    const char **GetStiNames() throw()
+    const sal_Char **GetStiNames() throw()
     {
-        static const char *stiName[] =
+        static const sal_Char *stiName[] =
         {
             "Normal",
             "Heading 1",
@@ -128,7 +128,7 @@ namespace
 
 namespace ww
 {
-    const char* GetEnglishNameFromSti(sti eSti) throw()
+    const sal_Char* GetEnglishNameFromSti(sti eSti) throw()
     {
         if (eSti >= stiMax)
             return nullptr;

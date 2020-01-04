@@ -35,13 +35,10 @@
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <officecfg/Setup.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -918,15 +915,21 @@ bool LoadEnv::impl_furtherDocsAllowed()
 
     try
     {
-        o3tl::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
+        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                xContext,
+                                "org.openoffice.Office.Common/",
+                                "Misc",
+                                "MaxOpenDocuments",
+                                ::comphelper::EConfigurationModes::ReadOnly);
 
         // NIL means: count of allowed documents = infinite !
-        //     => return true
-        if ( !x)
+        //     => return sal_True
+        if ( ! aVal.hasValue())
             bAllowed = true;
         else
         {
-            sal_Int32 nMaxOpenDocuments(*x);
+            sal_Int32 nMaxOpenDocuments = 0;
+            aVal >>= nMaxOpenDocuments;
 
             css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
                 css::frame::Desktop::create(xContext),
@@ -1684,7 +1687,14 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         bool bForceFrontAndFocus(false);
         if ( !preview )
         {
-            bForceFrontAndFocus = officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext);
+            css::uno::Any const a =
+                ::comphelper::ConfigurationHelper::readDirectKey(
+                  xContext,
+                  "org.openoffice.Office.Common/View",
+                  "NewDocumentHandling",
+                  "ForceFocusAndToFront",
+                  ::comphelper::EConfigurationModes::ReadOnly);
+            a >>= bForceFrontAndFocus;
         }
 
         if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
@@ -1755,7 +1765,11 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_ASCII_DOCUMENTSERVICE, OUString());
 
         // get access to the configuration of this office module
-        css::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get(xContext));
+        css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
+                                                                        xContext,
+                                                                        "/org.openoffice.Setup/Office/Factories",
+                                                                        ::comphelper::EConfigurationModes::ReadOnly),
+                                                                      css::uno::UNO_QUERY_THROW);
 
         // read window state from the configuration
         // and apply it on the window.
@@ -1764,7 +1778,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
         // Don't look for persistent window attributes when used through LibreOfficeKit
         if( !comphelper::LibreOfficeKit::isActive() )
-            comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, "ooSetupFactoryWindowAttributes") >>= sWindowState;
+            comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES) >>= sWindowState;
 
         if (!sWindowState.isEmpty())
         {

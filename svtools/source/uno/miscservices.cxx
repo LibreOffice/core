@@ -57,7 +57,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * svt_component_getFactory(
-    const char * pImplementationName, void * _pServiceManager, void * pRegistryKey)
+    const sal_Char * pImplementationName, void * _pServiceManager, void * pRegistryKey)
 {
     void * pResult = nullptr;
     if (_pServiceManager)

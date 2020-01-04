@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STRINGS_HRC
+#define INCLUDED_ACCESSIBILITY_INC_STRINGS_HRC
 
 #define RID_STR_ACC_ACTION_CLICK        "press"
 #define RID_STR_ACC_ACTION_TOGGLEPOPUP  "togglePopup"
@@ -17,5 +18,6 @@
 #define RID_STR_ACC_ACTION_INCBLOCK     "incrementBlock"
 #define RID_STR_ACC_ACTION_DECBLOCK     "decrementBlock"
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

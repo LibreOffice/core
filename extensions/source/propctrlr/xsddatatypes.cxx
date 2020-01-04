@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 
 namespace pcr
@@ -46,7 +45,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType: getSave" );
+            OSL_FAIL( "XSDDataType: getSave: caught an exception!" );
         }
         return aReturn;
     }
@@ -75,7 +74,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::classify" );
+            OSL_FAIL( "XSDDataType::classify: caught an exception!" );
         }
         return nTypeClass;
     }
@@ -101,7 +100,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
+            OSL_FAIL( "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
         }
     }
 
@@ -115,7 +114,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::hasFacet" );
+            OSL_FAIL( "XSDDataType::hasFacet: caught an exception!" );
         }
         return bReturn;
     }
@@ -129,7 +128,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
+            OSL_FAIL( "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
         }
         return aReturn;
     }
@@ -175,7 +174,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDDataType::copyFacetsFrom" );
+            OSL_FAIL( "XSDDataType::copyFacetsFrom: caught an exception!" );
         }
     }
 

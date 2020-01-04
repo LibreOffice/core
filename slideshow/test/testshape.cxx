@@ -19,13 +19,17 @@
 
 #include <sal/types.h>
 #include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 
+#include <shape.hxx>
 #include "tests.hxx"
 
 namespace target = slideshow::internal;

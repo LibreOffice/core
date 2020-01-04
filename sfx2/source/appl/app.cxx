@@ -24,6 +24,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
+#include <basic/basrdll.hxx>
 #include <basic/sberrors.hxx>
 #include <tools/svlibrary.h>
 
@@ -63,6 +64,8 @@
 using namespace ::com::sun::star;
 
 static SfxApplication* g_pSfxApplication = nullptr;
+
+static BasicDLL*       pBasic   = nullptr;
 
 #if HAVE_FEATURE_DESKTOP
 static SfxHelp*        pSfxHelp = nullptr;
@@ -157,6 +160,8 @@ SfxApplication::SfxApplication()
     pSfxHelp = new SfxHelp;
 #endif
 
+    pBasic   = new BasicDLL;
+
 #if HAVE_FEATURE_SCRIPTING
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
 #endif
@@ -184,6 +189,8 @@ SfxApplication::~SfxApplication()
 
     if ( !pImpl->bDowning )
         Deinitialize();
+
+    delete pBasic;
 
     g_pSfxApplication = nullptr;
 }

@@ -1410,7 +1410,7 @@ void FmXFormShell::ExecuteTabOrderDialog_Lock(const Reference<XTabControllerMode
     }
     catch( const Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "svx", "FmXFormShell::ExecuteTabOrderDialog" );
+        OSL_FAIL( "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
     }
 }
 
@@ -2461,7 +2461,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
         rfmscContextInfo.arrFields.clear();
         rfmscContextInfo.xCursor = nullptr;
         rfmscContextInfo.strUsedFields.clear();
-        return 0;
+        return 0L;
     }
 
     rfmscContextInfo.xCursor = xIter;

@@ -676,7 +676,7 @@ OUString SwTOXPara::GetURL() const
             if( pFly )
             {
                 aText = "#" + pFly->GetName() + OUStringChar(cMarkSeparator);
-                const char* pStr;
+                const sal_Char* pStr;
                 switch( eType )
                 {
                 case SwTOXElement::Ole:       pStr = "ole"; break;

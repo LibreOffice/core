@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_HELPER_ACCRESMGR_HXX
+#define INCLUDED_ACCESSIBILITY_INC_HELPER_ACCRESMGR_HXX
 
 #include <rtl/ustring.hxx>
 
 OUString AccResId(const char* pId);
 
+#endif // INCLUDED_ACCESSIBILITY_INC_HELPER_ACCRESMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

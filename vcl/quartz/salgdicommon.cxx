@@ -1296,7 +1296,7 @@ Color AquaSalGraphics::getPixel( long nX, long nY )
     CGContextRef xOnePixelContext =
         CGBitmapContextCreate( &aPixel, 1, 1, 8, 32,
                                GetSalData()->mxRGBSpace,
-                               uint32_t(kCGImageAlphaNoneSkipFirst) | uint32_t(kCGBitmapByteOrder32Big) );
+                               kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big );
 
     // update this graphics layer
     ApplyXorContext();

@@ -20,7 +20,6 @@
 #include "Date.hxx"
 #include <services.hxx>
 #include <tools/date.hxx>
-#include <tools/diagnose_ex.h>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 
@@ -94,7 +93,7 @@ ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     }
     catch( const Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "forms.component", "ODateModel::ODateModel" );
+        OSL_FAIL( "ODateModel::ODateModel: caught an exception!" );
     }
     osl_atomic_decrement( &m_refCount );
 }

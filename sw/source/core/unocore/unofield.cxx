@@ -485,7 +485,7 @@ namespace
 
 OUString getServiceName(const SwFieldIds aId)
 {
-    const char* pEntry;
+    const sal_Char* pEntry;
     switch (aId)
     {
         case SwFieldIds::User:

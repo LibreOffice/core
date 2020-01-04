@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 
-#include <o3tl/deleter.hxx>
 #include <vcl/builderpage.hxx>
 #include "browserlistbox.hxx"
 
@@ -32,12 +31,16 @@ namespace pcr
         weld::Container* m_pParent;
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Container> m_xContainer;
-        std::unique_ptr<OBrowserListBox, o3tl::default_delete<OBrowserListBox>> m_xListBox;
+        std::unique_ptr<OBrowserListBox> m_xListBox;
+
+        OUString m_aPageTitle;
 
     public:
         // TODO inherit from BuilderPage
         explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
         ~OBrowserPage();
+
+        void SetPageTitle(const OUString& rPageTitle) { m_aPageTitle = rPageTitle; }
 
         void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
 

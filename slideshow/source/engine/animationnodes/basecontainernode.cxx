@@ -22,6 +22,7 @@
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <eventqueue.hxx>
+#include <tools.hxx>
 #include "nodetools.hxx"
 #include <delayevent.hxx>
 #include <sal/log.hxx>

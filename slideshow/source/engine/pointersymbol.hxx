@@ -12,9 +12,8 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_POINTERSYMBOL_HXX
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <cppcanvas/sprite.hxx>
+#include <cppcanvas/customsprite.hxx>
 
-#include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <vieweventhandler.hxx>

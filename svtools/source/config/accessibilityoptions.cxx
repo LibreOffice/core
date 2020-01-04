@@ -28,6 +28,8 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <svl/hint.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
@@ -382,6 +384,12 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
         DELETEZ( sm_pSingleImplConfig );
     }
 }
+
+void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint&  )
+{
+    NotifyListeners(ConfigurationHints::NONE);
+}
+
 
 bool SvtAccessibilityOptions::GetIsForPagePreviews() const
 {

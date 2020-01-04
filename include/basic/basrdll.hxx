@@ -21,12 +21,13 @@
 #define INCLUDED_BASIC_BASRDLL_HXX
 
 #include <basic/basicdllapi.h>
-#include <tools/ref.hxx>
+#include <memory>
 
 class BASIC_DLLPUBLIC BasicDLL
 {
-private:
-    tools::SvRef<SvRefBase> m_xImpl;
+public:
+    struct Impl;
+    std::unique_ptr<Impl> m_xImpl;
 
 public:
     BasicDLL();

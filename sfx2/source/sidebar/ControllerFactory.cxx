@@ -27,7 +27,6 @@
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/weldutils.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -48,7 +47,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 {
     Reference<frame::XToolbarController> xController (
         CreateToolBarController(
-            VCLUnoHelper::GetInterface(pToolBox),
+            pToolBox,
             rsCommandName,
             rxFrame, rxController,
             nWidth));
@@ -138,67 +137,8 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     return xController;
 }
 
-Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
-    weld::Toolbar& rToolbar,
-    const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
-{
-    css::uno::Reference<css::awt::XWindow> xWidget(new weld::TransportAsXWindow(&rToolbar));
-
-    Reference<frame::XToolbarController> xController(
-        CreateToolBarController(
-            xWidget,
-            rsCommandName,
-            rxFrame, rxFrame->getController(),
-            -1));
-
-    if (!xController.is())
-    {
-        xController.set(
-            static_cast<XWeak*>(new svt::GenericToolboxController(
-                    ::comphelper::getProcessComponentContext(),
-                    rxFrame,
-                    rToolbar,
-                    rsCommandName)),
-            UNO_QUERY);
-    }
-
-    // Initialize the controller with eg a service factory.
-    Reference<lang::XInitialization> xInitialization (xController, UNO_QUERY);
-    if (/*!bFactoryHasController &&*/ xInitialization.is())
-    {
-        beans::PropertyValue aPropValue;
-        std::vector<Any> aPropertyVector;
-
-        aPropValue.Name = "Frame";
-        aPropValue.Value <<= rxFrame;
-        aPropertyVector.push_back(makeAny(aPropValue));
-
-        aPropValue.Name = "ServiceManager";
-        aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
-        aPropertyVector.push_back(makeAny(aPropValue));
-
-        aPropValue.Name = "CommandURL";
-        aPropValue.Value <<= rsCommandName;
-        aPropertyVector.push_back(makeAny(aPropValue));
-
-        Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
-        xInitialization->initialize(aArgs);
-    }
-
-    if (xController.is())
-    {
-        Reference<util::XUpdatable> xUpdatable(xController, UNO_QUERY);
-        if (xUpdatable.is())
-            xUpdatable->update();
-    }
-
-    return xController;
-}
-
-
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
-    const Reference<awt::XWindow>& rxToolbar,
+    ToolBox* pToolBox,
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame,
     const Reference<frame::XController>& rxController,
@@ -228,7 +168,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             aPropValue.Name = "ParentWindow";
-            aPropValue.Value <<= rxToolbar;
+            aPropValue.Value <<= VCLUnoHelper::GetInterface(pToolBox);
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             if (nWidth > 0)

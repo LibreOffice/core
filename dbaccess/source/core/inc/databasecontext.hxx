@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <config_features.h>
-
 #include <map>
 
 #include "ModelImpl.hxx"
@@ -42,10 +40,6 @@
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-
-#if HAVE_FEATURE_SCRIPTING
-#include <basic/basrdll.hxx>
-#endif
 
 #include <basic/basicmanagerrepository.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -90,10 +84,6 @@ private:
     */
     css::uno::Reference< css::uno::XInterface >
             impl_createNewDataSource();
-
-#if HAVE_FEATURE_SCRIPTING
-    BasicDLL m_aBasicDLL;
-#endif
 
 protected:
     ::osl::Mutex                    m_aMutex;

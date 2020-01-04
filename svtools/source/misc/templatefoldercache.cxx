@@ -37,7 +37,6 @@
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <unotools/pathoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -593,7 +592,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svtools", "TemplateFolderCacheImpl::implReadFolder" );
+            OSL_FAIL( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
             return false;
         }
         return true;

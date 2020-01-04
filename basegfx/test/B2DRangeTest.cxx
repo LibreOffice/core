@@ -25,34 +25,29 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 
-class B2DRangeTest : public CppUnit::TestFixture
+namespace basegfx
 {
-    void testRange()
+class b2drange : public CppUnit::TestFixture
+{
+private:
+public:
+    void check()
     {
-        basegfx::B2DRange aRange(1.2, 2.3, 3.5, 4.8);
-        CPPUNIT_ASSERT_EQUAL(1.2, aRange.getMinX());
-        CPPUNIT_ASSERT_EQUAL(3.5, aRange.getMaxX());
-        CPPUNIT_ASSERT_EQUAL(2.3, aRange.getMinY());
-        CPPUNIT_ASSERT_EQUAL(4.8, aRange.getMaxY());
-
-        CPPUNIT_ASSERT_EQUAL(2.3, aRange.getWidth());
-        CPPUNIT_ASSERT_EQUAL(2.5, aRange.getHeight());
-
         CPPUNIT_ASSERT_EQUAL_MESSAGE("simple range rounding from double to integer",
-                                     basegfx::B2IRange(1, 2, 4, 5), fround(aRange));
+                                     B2IRange(1, 2, 4, 5), fround(B2DRange(1.2, 2.3, 3.5, 4.8)));
     }
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(B2DRangeTest);
-    CPPUNIT_TEST(testRange);
+    CPPUNIT_TEST_SUITE(b2drange);
+    CPPUNIT_TEST(check);
     CPPUNIT_TEST_SUITE_END();
 };
+}
 
-CPPUNIT_TEST_SUITE_REGISTRATION(B2DRangeTest);
-
+CPPUNIT_TEST_SUITE_REGISTRATION(basegfx::b2drange);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

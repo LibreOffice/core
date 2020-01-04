@@ -213,7 +213,7 @@ namespace abp
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.abpilot", "ODataSourceContext::ODataSourceContext" );
+            OSL_FAIL( "ODataSourceContext::ODataSourceContext: caught an exception!" );
         }
     }
     ODataSourceContext::~ODataSourceContext()

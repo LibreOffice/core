@@ -978,7 +978,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_OPEN_HYPERLINK:
             case SID_COPY_HYPERLINK_LOCATION:
             {
-                if (!URLFieldHelper::IsCursorAtURLField(pOLV))
+                if (!URLFieldHelper::IsCursorAtURLField(pOLV->GetEditView()))
                     rSet.DisableItem(nWhich);
             }
             break;

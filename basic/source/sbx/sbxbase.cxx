@@ -46,9 +46,6 @@ SbxAppData::~SbxAppData()
     SolarMutexGuard g;
 
     pBasicFormater.reset();
-    m_aGlobErr.clear();
-    // basic manager repository must be destroyed before factories
-    mrImplRepository.clear();
     m_Factories.clear();
 }
 

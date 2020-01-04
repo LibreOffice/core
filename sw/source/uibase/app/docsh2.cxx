@@ -880,7 +880,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         rtl::Reference<TransferDataContainer> pClipCntnr = new TransferDataContainer;
 
-                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<char const *>(
+                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<sal_Char const *>(
                                     pStrm->GetData()), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? &GetView()->GetEditWin() : nullptr );
@@ -1565,7 +1565,8 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         m_xDoc->getIDocumentState().ResetModified();
 }
 
-ErrCode SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall)
+ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
+                    SwgReaderOption const & rOpt, bool bUnoCall )
 {
     ErrCode nErr = ERRCODE_NONE;
 
@@ -1574,8 +1575,6 @@ ErrCode SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rO
 
     // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, StreamMode::STD_READ );
-    if (rURL == "private:stream")
-        aMed.setStreamToLoadFrom(rOpt.GetInputStream(), true);
     std::shared_ptr<const SfxFilter> pFlt;
     aMatcher.DetectFilter( aMed, pFlt );
     if(!pFlt)

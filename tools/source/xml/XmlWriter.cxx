@@ -36,13 +36,11 @@ struct XmlWriterImpl
     XmlWriterImpl(SvStream* pStream)
         : mpStream(pStream)
         , mpWriter(nullptr)
-        , mbWriteXmlHeader(true)
     {
     }
 
     SvStream* const mpStream;
     xmlTextWriterPtr mpWriter;
-    bool mbWriteXmlHeader;
 };
 
 XmlWriter::XmlWriter(SvStream* pStream)
@@ -56,24 +54,21 @@ XmlWriter::~XmlWriter()
         endDocument();
 }
 
-bool XmlWriter::startDocument(sal_Int32 nIndent, bool bWriteXmlHeader)
+bool XmlWriter::startDocument(sal_Int32 nIndent)
 {
-    mpImpl->mbWriteXmlHeader = bWriteXmlHeader;
     xmlOutputBufferPtr xmlOutBuffer
         = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback, mpImpl->mpStream, nullptr);
     mpImpl->mpWriter = xmlNewTextWriter(xmlOutBuffer);
     if (mpImpl->mpWriter == nullptr)
         return false;
     xmlTextWriterSetIndent(mpImpl->mpWriter, nIndent);
-    if (mpImpl->mbWriteXmlHeader)
-        xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
+    xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
     return true;
 }
 
 void XmlWriter::endDocument()
 {
-    if (mpImpl->mbWriteXmlHeader)
-        xmlTextWriterEndDocument(mpImpl->mpWriter);
+    xmlTextWriterEndDocument(mpImpl->mpWriter);
     xmlFreeTextWriter(mpImpl->mpWriter);
     mpImpl->mpWriter = nullptr;
 }

@@ -3226,9 +3226,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
             // zoom for each sheet
             if( rTabSett.mnNormalZoom )
-                rViewTab.aZoomX = rViewTab.aZoomY = Fraction( rTabSett.mnNormalZoom, 100 );
+                rViewTab.aZoomX = rViewTab.aZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
             if( rTabSett.mnPageZoom )
-                rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100 );
+                rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
 
             rViewTab.bShowGrid = rTabSett.mbShowGrid;
 

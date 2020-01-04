@@ -672,7 +672,6 @@ public:
     void                                    SetHelpSettings( const HelpSettings& rSet );
     const HelpSettings&                     GetHelpSettings() const;
 
-    void                                    SetLanguageTag(const OUString& rLanguage, bool bCanonicalize);
     void                                    SetLanguageTag( const LanguageTag& rLanguageTag );
     const LanguageTag&                      GetLanguageTag() const;
     const LanguageTag&                      GetUILanguageTag() const;

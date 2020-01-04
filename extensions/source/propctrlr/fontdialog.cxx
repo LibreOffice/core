@@ -270,7 +270,7 @@ namespace pcr
         }
         catch (const Exception&)
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "ControlCharacterDialog::translatePropertiesToItems");
+            OSL_FAIL("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }
 
         _pSet->DisableItem(SID_ATTR_CHAR_CJK_FONT);

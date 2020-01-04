@@ -11,8 +11,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_MEDIAFILEMANAGER_HXX
 
-#include <rtl/ustring.hxx>
-
+#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
 namespace avmedia

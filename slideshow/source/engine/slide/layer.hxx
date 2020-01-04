@@ -21,9 +21,10 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_LAYER_HXX
 
 #include <basegfx/range/b2dpolyrange.hxx>
+#include <cppcanvas/spritecanvas.hxx>
 
-#include <shape.hxx>
 #include <view.hxx>
+#include <animatableshape.hxx>
 
 #include <vector>
 #include <memory>

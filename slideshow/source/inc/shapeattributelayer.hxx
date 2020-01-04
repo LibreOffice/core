@@ -26,10 +26,12 @@
 
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include "rgbcolor.hxx"
 
+#include <stack>
 #include <memory>
 
 

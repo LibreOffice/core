@@ -103,7 +103,7 @@ PageStylesPanel::PageStylesPanel(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings
     ) :
-    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame, true),
+    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame),
     mpBindings( pBindings ),
     mpPageColumnItem( new SfxInt16Item(SID_ATTR_PAGE_COLUMN) ),
     mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
@@ -114,17 +114,18 @@ PageStylesPanel::PageStylesPanel(
     maBgGradientControl( SID_ATTR_PAGE_GRADIENT, *pBindings, *this ),
     maBgBitmapControl( SID_ATTR_PAGE_BITMAP, *pBindings, *this ),
     maBgFillStyleControl(SID_ATTR_PAGE_FILLSTYLE, *pBindings, *this),
-    mxBgColorLB(new ColorListBox(m_xBuilder->weld_menu_button("lbcolor"), GetFrameWeld())),
-    mxBgHatchingLB(m_xBuilder->weld_combo_box("lbhatching")),
-    mxBgGradientLB(new ColorListBox(m_xBuilder->weld_menu_button("lbgradient"), GetFrameWeld())),
-    mxBgBitmapLB(m_xBuilder->weld_combo_box("lbbitmap")),
-    mxLayoutSelectLB(m_xBuilder->weld_combo_box("layoutbox")),
-    mxColumnCount(m_xBuilder->weld_combo_box("columnbox")),
-    mxNumberSelectLB(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("numberbox"))),
-    mxBgFillType(m_xBuilder->weld_combo_box("bgselect")),
-    mxCustomEntry(m_xBuilder->weld_label("customlabel")),
     aCustomEntry()
 {
+    get(mpColumnCount, "columnbox");
+    get(mpNumberSelectLB, "numberbox");
+    get(mpBgFillType, "bgselect");
+    get(mpBgColorLB, "lbcolor");
+    get(mpBgHatchingLB, "lbhatching");
+    get(mpBgGradientLB, "lbgradient");
+    get(mpBgBitmapLB, "lbbitmap");
+    get(mpLayoutSelectLB, "layoutbox");
+    get(mpCustomEntry, "customlabel");
+
     Initialize();
 }
 
@@ -135,15 +136,14 @@ PageStylesPanel::~PageStylesPanel()
 
 void PageStylesPanel::dispose()
 {
-    mxColumnCount.reset();
-    mxNumberSelectLB.reset();
-    mxBgFillType.reset();
-    mxBgColorLB.reset();
-    mxBgHatchingLB.reset();
-    mxBgGradientLB.reset();
-    mxBgBitmapLB.reset();
-    mxLayoutSelectLB.reset();
-    mxCustomEntry.reset();
+    mpColumnCount.disposeAndClear();
+    mpNumberSelectLB.disposeAndClear();
+    mpBgFillType.disposeAndClear();
+    mpBgColorLB.disposeAndClear();
+    mpBgHatchingLB.disposeAndClear();
+    mpBgGradientLB.disposeAndClear();
+    mpBgBitmapLB.disposeAndClear();
+    mpLayoutSelectLB.disposeAndClear();
 
     maBgBitmapControl.dispose();
     maBgColorControl.dispose();
@@ -152,105 +152,104 @@ void PageStylesPanel::dispose()
     maBgHatchingControl.dispose();
     maPageColumnControl.dispose();
     maPageNumFormatControl.dispose();
+    mpCustomEntry.clear();
     PanelLayout::dispose();
 }
 
 void PageStylesPanel::Initialize()
 {
-    FillTypeLB::Fill(*mxBgFillType);
-
-    aCustomEntry = mxCustomEntry->get_label();
+    aCustomEntry = mpCustomEntry->GetText();
     mpBindings->Invalidate(SID_ATTR_PAGE_COLUMN);
     mpBindings->Invalidate(SID_ATTR_PAGE);
     mpBindings->Invalidate(SID_ATTR_PAGE_FILLSTYLE);
     Update();
 
-    mxColumnCount->connect_changed( LINK(this, PageStylesPanel, ModifyColumnCountHdl) );
-    SvxNumOptionsTabPageHelper::GetI18nNumbering(mxNumberSelectLB->get_widget(), ::std::numeric_limits<sal_uInt16>::max());
-    mxNumberSelectLB->connect_changed( LINK(this, PageStylesPanel, ModifyNumberingHdl) );
-    mxLayoutSelectLB->connect_changed( LINK(this, PageStylesPanel, ModifyLayoutHdl) );
-    mxBgFillType->connect_changed( LINK(this, PageStylesPanel, ModifyFillStyleHdl));
-    mxBgColorLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorListHdl));
-    mxBgGradientLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorListHdl));
-    mxBgHatchingLB->connect_changed( LINK(this, PageStylesPanel, ModifyFillColorHdl));
-    mxBgBitmapLB->connect_changed( LINK(this, PageStylesPanel, ModifyFillColorHdl));
+    mpColumnCount->SetSelectHdl( LINK(this, PageStylesPanel, ModifyColumnCountHdl) );
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *mpNumberSelectLB, ::std::numeric_limits<sal_uInt16>::max());
+    mpNumberSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyNumberingHdl) );
+    mpLayoutSelectLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyLayoutHdl) );
+    mpBgFillType->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillStyleHdl));
+    mpBgColorLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorListHdl));
+    mpBgGradientLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorListHdl));
+    mpBgHatchingLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
+    mpBgBitmapLB->SetSelectHdl( LINK(this, PageStylesPanel, ModifyFillColorHdl));
 }
 
 void PageStylesPanel::Update()
 {
-    const eFillStyle eXFS = static_cast<eFillStyle>(mxBgFillType->get_active());
+    const eFillStyle eXFS = static_cast<eFillStyle>(mpBgFillType->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(eXFS)
     {
         case NONE:
         {
-            mxBgColorLB->hide();
-            mxBgHatchingLB->hide();
-            mxBgGradientLB->hide();
-            mxBgBitmapLB->hide();
+            mpBgColorLB->Hide();
+            mpBgHatchingLB->Hide();
+            mpBgGradientLB->Hide();
+            mpBgBitmapLB->Hide();
         }
         break;
         case SOLID:
         {
-            mxBgBitmapLB->hide();
-            mxBgGradientLB->hide();
-            mxBgHatchingLB->hide();
-            mxBgColorLB->show();
+            mpBgBitmapLB->Hide();
+            mpBgGradientLB->Hide();
+            mpBgHatchingLB->Hide();
+            mpBgColorLB->Show();
             const Color aColor = GetColorSetOrDefault();
-            mxBgColorLB->SelectEntry(aColor);
+            mpBgColorLB->SelectEntry(aColor);
         }
         break;
         case GRADIENT:
         {
-            mxBgBitmapLB->hide();
-            mxBgHatchingLB->hide();
-            mxBgColorLB->show();
-            mxBgGradientLB->show();
+            mpBgBitmapLB->Hide();
+            mpBgHatchingLB->Hide();
+            mpBgColorLB->Show();
+            mpBgGradientLB->Show();
 
             const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
-            mxBgColorLB->SelectEntry(aStartColor);
+            mpBgColorLB->SelectEntry(aStartColor);
             const Color aEndColor = xGradient.GetEndColor();
-            mxBgGradientLB->SelectEntry(aEndColor);
+            mpBgGradientLB->SelectEntry(aEndColor);
         }
         break;
 
         case HATCH:
         {
-            mxBgColorLB->hide();
-            mxBgGradientLB->hide();
-            mxBgBitmapLB->hide();
-            mxBgHatchingLB->show();
-            mxBgHatchingLB->clear();
-            SvxFillAttrBox::Fill(*mxBgHatchingLB, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+            mpBgColorLB->Hide();
+            mpBgGradientLB->Hide();
+            mpBgBitmapLB->Hide();
+            mpBgHatchingLB->Show();
+            mpBgHatchingLB->Clear();
+            mpBgHatchingLB->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
 
             const OUString aHatchName = GetHatchingSetOrDefault();
-            mxBgHatchingLB->set_active_text( aHatchName );
+            mpBgHatchingLB->SelectEntry( aHatchName );
         }
         break;
 
         case BITMAP:
         case PATTERN:
         {
-            mxBgColorLB->hide();
-            mxBgGradientLB->hide();
-            mxBgHatchingLB->hide();
-            mxBgBitmapLB->show();
-            mxBgBitmapLB->clear();
+            mpBgColorLB->Hide();
+            mpBgGradientLB->Hide();
+            mpBgHatchingLB->Hide();
+            mpBgBitmapLB->Show();
+            mpBgBitmapLB->Clear();
             OUString aBitmapName;
 
             if( eXFS == BITMAP )
             {
-                SvxFillAttrBox::Fill(*mxBgBitmapLB, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+                mpBgBitmapLB->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
                 aBitmapName = GetBitmapSetOrDefault();
             }
             else
             {
-                SvxFillAttrBox::Fill(*mxBgBitmapLB, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
+                mpBgBitmapLB->Fill(pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
                 aBitmapName = GetPatternSetOrDefault();
             }
 
-            mxBgBitmapLB->set_active_text( aBitmapName );
+            mpBgBitmapLB->SelectEntry( aBitmapName );
         }
         break;
 
@@ -345,16 +344,14 @@ void PageStylesPanel::NotifyItemUpdate(
                 mpPageColumnItem.reset( static_cast<SfxInt16Item*>(pState->Clone()) );
                 if(mpPageColumnItem->GetValue() <= 5)
                 {
-                    mxColumnCount->set_active(mpPageColumnItem->GetValue() - 1);
-                    int nIndex = mxColumnCount->find_text(aCustomEntry);
-                    if (nIndex != -1)
-                        mxColumnCount->remove(nIndex);
+                    mpColumnCount->SelectEntryPos(mpPageColumnItem->GetValue() - 1);
+                    mpColumnCount->RemoveEntry(aCustomEntry);
                 }
                 else
                 {
-                    if (mxColumnCount->find_text(aCustomEntry) == -1)
-                        mxColumnCount->append_text(aCustomEntry);
-                    mxColumnCount->set_active_text(aCustomEntry);
+                    if(mpColumnCount->GetEntryPos(aCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
+                        mpColumnCount->InsertEntry(aCustomEntry);
+                    mpColumnCount->SelectEntry(aCustomEntry);
                 }
             }
         }
@@ -367,10 +364,10 @@ void PageStylesPanel::NotifyItemUpdate(
             {
                 mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
                 SvxNumType eNumType = mpPageItem->GetNumType();
-                mxNumberSelectLB->set_active_id(eNumType);
+                mpNumberSelectLB->SetSelection(eNumType);
 
                 SvxPageUsage nUse = mpPageItem->GetPageUsage();
-                mxLayoutSelectLB->set_active( PageUsageToPos_Impl( nUse ) );
+                mpLayoutSelectLB->SelectEntryPos( PageUsageToPos_Impl( nUse ) );
             }
         }
         break;
@@ -379,7 +376,7 @@ void PageStylesPanel::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxBgFillType->set_active( static_cast<sal_Int32>(SOLID) );
+                mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(SOLID) );
                 mpBgColorItem.reset(pState ? static_cast< XFillColorItem* >(pState->Clone()) : nullptr);
                 Update();
             }
@@ -390,7 +387,7 @@ void PageStylesPanel::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxBgFillType->set_active( static_cast<sal_Int32>(HATCH) );
+                mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(HATCH) );
                 mpBgHatchItem.reset(pState ? static_cast < XFillHatchItem* >(pState->Clone()) : nullptr);
                 Update();
             }
@@ -401,7 +398,7 @@ void PageStylesPanel::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxBgFillType->set_active( static_cast<sal_Int32>(GRADIENT) );
+                mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(GRADIENT) );
                 mpBgGradientItem.reset(pState ? static_cast< XFillGradientItem* >(pState->Clone()) : nullptr);
                 Update();
             }
@@ -415,9 +412,9 @@ void PageStylesPanel::NotifyItemUpdate(
                 if (mpBgBitmapItem)
                 {
                     if (mpBgBitmapItem->isPattern())
-                        mxBgFillType->set_active( static_cast<sal_Int32>(PATTERN) );
+                        mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(PATTERN) );
                     else
-                        mxBgFillType->set_active( static_cast<sal_Int32>(BITMAP) );
+                        mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(BITMAP) );
                 }
                 Update();
             }
@@ -435,22 +432,22 @@ void PageStylesPanel::NotifyItemUpdate(
                 switch(eXFS)
                 {
                     case drawing::FillStyle_NONE:
-                        mxBgFillType->set_active( static_cast<sal_Int32>(NONE) );
+                        mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(NONE) );
                         break;
                     case drawing::FillStyle_SOLID:
-                        mxBgFillType->set_active( static_cast<sal_Int32>(SOLID) );
+                        mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(SOLID) );
                         break;
                     case drawing::FillStyle_GRADIENT:
-                        mxBgFillType->set_active( static_cast<sal_Int32>(GRADIENT) );
+                        mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(GRADIENT) );
                         break;
                     case drawing::FillStyle_HATCH:
-                        mxBgFillType->set_active( static_cast<sal_Int32>(HATCH) );
+                        mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(HATCH) );
                         break;
                     case drawing::FillStyle_BITMAP:
                         if (mpBgBitmapItem->isPattern())
-                            mxBgFillType->set_active( static_cast<sal_Int32>(PATTERN) );
+                            mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(PATTERN) );
                         else
-                            mxBgFillType->set_active( static_cast<sal_Int32>(BITMAP) );
+                            mpBgFillType->SelectEntryPos( static_cast<sal_Int32>(BITMAP) );
                         break;
                     default:
                         break;
@@ -465,31 +462,31 @@ void PageStylesPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG( PageStylesPanel, ModifyColumnCountHdl, weld::ComboBox&, void )
+IMPL_LINK_NOARG( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
 {
-    sal_uInt16 nColumnType = mxColumnCount->get_active() + 1;
+    sal_uInt16 nColumnType = mpColumnCount->GetSelectedEntryPos() + 1;
     mpPageColumnItem->SetValue( nColumnType );
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
             SfxCallMode::RECORD, { mpPageColumnItem.get() });
 }
 
-IMPL_LINK_NOARG( PageStylesPanel, ModifyNumberingHdl, weld::ComboBox&, void )
+IMPL_LINK_NOARG( PageStylesPanel, ModifyNumberingHdl, ListBox&, void )
 {
-    SvxNumType nEntryData = mxNumberSelectLB->get_active_id();
+    SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(mpNumberSelectLB->GetSelectedEntryData()));
     mpPageItem->SetNumType(nEntryData);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG( PageStylesPanel, ModifyLayoutHdl, weld::ComboBox&, void )
+IMPL_LINK_NOARG( PageStylesPanel, ModifyLayoutHdl, ListBox&, void )
 {
-    sal_uInt16 nUse = mxLayoutSelectLB->get_active();
+    sal_uInt16 nUse = mpLayoutSelectLB->GetSelectedEntryPos();
     mpPageItem->SetPageUsage(PosToPageUsage_Impl(nUse));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
 {
-    const eFillStyle eXFS = static_cast<eFillStyle>(mxBgFillType->get_active());
+    const eFillStyle eXFS = static_cast<eFillStyle>(mpBgFillType->GetSelectedEntryPos());
     Update();
 
     switch (eXFS)
@@ -533,25 +530,26 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, weld::ComboBox&, void)
         default:
         break;
     }
+    mpBgFillType->Selected();
 }
 
 void PageStylesPanel::ModifyFillColor()
 {
-    const eFillStyle eXFS = static_cast<eFillStyle>(mxBgFillType->get_active());
+    const eFillStyle eXFS = static_cast<eFillStyle>(mpBgFillType->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(eXFS)
     {
         case SOLID:
         {
-            XFillColorItem aItem(OUString(), mxBgColorLB->GetSelectEntryColor());
+            XFillColorItem aItem(OUString(), mpBgColorLB->GetSelectEntryColor());
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
         }
         break;
         case GRADIENT:
         {
             XGradient aGradient;
-            aGradient.SetStartColor(mxBgColorLB->GetSelectEntryColor());
-            aGradient.SetEndColor(mxBgGradientLB->GetSelectEntryColor());
+            aGradient.SetStartColor(mpBgColorLB->GetSelectEntryColor());
+            aGradient.SetEndColor(mpBgGradientLB->GetSelectEntryColor());
 
             XFillGradientItem aItem(aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
@@ -560,7 +558,7 @@ void PageStylesPanel::ModifyFillColor()
         case HATCH:
         {
             const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
-            sal_uInt16 nPos = mxBgHatchingLB->get_active();
+            sal_uInt16 nPos = mpBgHatchingLB->GetSelectedEntryPos();
             XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetHatch();
             const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
 
@@ -571,7 +569,7 @@ void PageStylesPanel::ModifyFillColor()
         case BITMAP:
         case PATTERN:
         {
-            sal_Int16 nPos = mxBgBitmapLB->get_active();
+            sal_Int16 nPos = mpBgBitmapLB->GetSelectedEntryPos();
             GraphicObject aBitmap;
             OUString aBitmapName;
 
@@ -597,12 +595,12 @@ void PageStylesPanel::ModifyFillColor()
     }
 }
 
-IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorHdl, ListBox&, void)
 {
     ModifyFillColor();
 }
 
-IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorListHdl, ColorListBox&, void)
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorListHdl, SvxColorListBox&, void)
 {
     ModifyFillColor();
 }

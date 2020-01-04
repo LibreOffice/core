@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 
 namespace dbtools
@@ -56,7 +55,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::OAutoConnectionDisposer" );
+            OSL_FAIL( "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
         }
     }
 
@@ -70,7 +69,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::startPropertyListening" );
+            OSL_FAIL( "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
         }
     }
 
@@ -91,7 +90,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::stopPropertyListening" );
+            OSL_FAIL( "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
         }
     }
 
@@ -106,7 +105,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::startRowSetListening" );
+            OSL_FAIL( "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
         }
         m_bRSListening = true;
     }
@@ -121,7 +120,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OAutoConnectionDisposer::stopRowSetListening" );
+            OSL_FAIL( "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
         }
         m_bRSListening = false;
     }
@@ -203,7 +202,7 @@ namespace dbtools
         }
         catch(Exception&)
         {
-            TOOLS_WARN_EXCEPTION("connectivity.commontools", "OAutoConnectionDisposer::clearConnection");
+            OSL_FAIL("OAutoConnectionDisposer::clearConnection: caught an exception!");
         }
     }
 

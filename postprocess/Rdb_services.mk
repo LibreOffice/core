@@ -50,10 +50,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	i18npool/util/i18npool \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
-	$(if $(filter-out iOS,$(OS)), \
-		lingucomponent/source/spellcheck/spell/spell \
-		lingucomponent/source/thesaurus/libnth/lnth \
-	) \
+	lingucomponent/source/spellcheck/spell/spell \
+	lingucomponent/source/thesaurus/libnth/lnth \
 	lingucomponent/source/numbertext/numbertext \
 	linguistic/source/lng \
 	$(if $(ENABLE_LWP), \
@@ -231,14 +229,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 ))
 
-$(eval $(call gb_Rdb_add_components,services,\
-	extensions/source/bibliography/bib \
-	dbaccess/util/dba \
-))
-
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 
 $(eval $(call gb_Rdb_add_components,services,\
+	extensions/source/bibliography/bib \
 	extensions/source/dbpilots/dbp \
 	extensions/source/propctrlr/pcr \
 	connectivity/source/cpool/dbpool2 \
@@ -269,6 +263,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/manager/sdbc2 \
 	connectivity/source/drivers/writer/writer \
 	dbaccess/source/filter/xml/dbaxml \
+	dbaccess/util/dba \
 	dbaccess/util/dbu \
 	dbaccess/util/sdbt \
 	forms/util/frm \

@@ -170,7 +170,7 @@ uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void * fsstorage_component_getFactory (
-    const char * pImplementationName, void * pServiceManager,
+    const sal_Char * pImplementationName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
 {
     void * pResult = nullptr;

@@ -36,7 +36,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <editeng/edtdlg.hxx>
 
@@ -421,7 +420,7 @@ namespace editeng
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "editeng", "HangulHanjaConversion_Impl::implNextConvertibleUnit" );
+            OSL_FAIL( "HangulHanjaConversion_Impl::implNextConvertibleUnit: caught an exception!" );
 
             //!!! at least we want to move on in the text in order
             //!!! to avoid an endless loop...
@@ -610,7 +609,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "editeng", "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
             }
         }
 
@@ -931,7 +930,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                TOOLS_WARN_EXCEPTION( "editeng", "HangulHanjaConversion_Impl::OnFind" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
             }
         }
     }

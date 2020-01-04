@@ -26,7 +26,7 @@
 
 namespace toolkit
 {
-    class ScrollableDialog final : public Dialog
+    class ScrollableDialog : public Dialog
     {
     public:
         enum ScrollBarVisibility { None, Vert, Hori, Both };

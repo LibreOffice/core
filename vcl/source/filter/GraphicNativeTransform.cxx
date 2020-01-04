@@ -143,9 +143,9 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
         }
 
         SvMemoryStream aTargetStream;
-        JpegTransform transform(aSourceStream, aTargetStream);
-        transform.setRotate(aRotation);
-        transform.perform();
+        JpegTransform tranform(aSourceStream, aTargetStream);
+        tranform.setRotate(aRotation);
+        tranform.perform();
 
         aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
 

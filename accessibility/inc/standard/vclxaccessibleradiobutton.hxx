@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLERADIOBUTTON_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLERADIOBUTTON_HXX
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 
@@ -69,5 +70,6 @@ public:
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
 };
 
+#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLERADIOBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

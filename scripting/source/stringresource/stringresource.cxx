@@ -283,7 +283,7 @@ Sequence< Locale > StringResourceImpl::getLocales(  )
 
 // XStringResourceManager
 
-void StringResourceImpl::implCheckReadOnly( const char* pExceptionMsg )
+void StringResourceImpl::implCheckReadOnly( const sal_Char* pExceptionMsg )
 {
     if( m_bReadOnly )
     {
@@ -2694,7 +2694,7 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * stringresource_component_getFactory(
-        const char * pImplName, void * pServiceManager,
+        const sal_Char * pImplName, void * pServiceManager,
         void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper(

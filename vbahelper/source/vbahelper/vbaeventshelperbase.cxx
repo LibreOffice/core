@@ -204,7 +204,7 @@ void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno:
 // protected ------------------------------------------------------------------
 
 void VbaEventsHelperBase::registerEventHandler( sal_Int32 nEventId, sal_Int32 nModuleType,
-        const char* pcMacroName, sal_Int32 nCancelIndex, const uno::Any& rUserData )
+        const sal_Char* pcMacroName, sal_Int32 nCancelIndex, const uno::Any& rUserData )
 {
     EventHandlerInfo& rInfo = maEventInfos[ nEventId ];
     rInfo.mnEventId = nEventId;

@@ -528,11 +528,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         aTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
                         break;
                     }
-                    case DataPointCustomLabelFieldType_PERCENTAGE:
-                    {
-                        aTextList[i] = getLabelTextForValue( rDataSeries, nPointIndex, fValue, true );
-                        break;
-                    }
                     case DataPointCustomLabelFieldType_CELLREF:
                     {
                         // TODO: for now doesn't show placeholder

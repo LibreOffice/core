@@ -40,7 +40,6 @@ public:
 
     void RequestCall();
     void CancelRequest();
-    void Sync();
 
 private:
     Action const maAction;

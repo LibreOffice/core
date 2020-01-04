@@ -129,7 +129,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     {
         public:
             explicit    PrepareSaveGuard( ScDocShell & rDocShell );
-                        ~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE;
+                        ~PrepareSaveGuard();
         private:
                         ScDocShell & mrDocShell;
     };
@@ -202,8 +202,6 @@ public:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup, sal_uInt16 nAspect ) override;
 
     virtual void    SetVisArea( const tools::Rectangle & rVisArea ) override;
-
-    virtual void    TerminateEditing() override;
 
     using SfxObjectShell::GetVisArea;
     virtual tools::Rectangle GetVisArea( sal_uInt16 nAspect ) const override;

@@ -609,7 +609,7 @@ AnimationNodeContext::AnimationNodeContext(
         {
             sal_Int16 nPresetClass = EffectPresetClass::CUSTOM;
 
-            const char* pServiceName = nullptr;
+            const sal_Char* pServiceName = nullptr;
 
             sal_Int16 nNodeType = static_cast<sal_Int16>(mpHelper->getAnimationNodeTokenMap().Get( nPrfx, rLocalName ));
             switch( nNodeType )

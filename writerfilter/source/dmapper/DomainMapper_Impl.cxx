@@ -174,8 +174,8 @@ namespace {
 
 struct FieldConversion
 {
-    const char*     cFieldServiceName;
-    FieldId const   eFieldId;
+    const sal_Char*     cFieldServiceName;
+    FieldId const       eFieldId;
 };
 
 }
@@ -301,6 +301,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
+        m_bInTableStyleRunProps(false),
         m_nTableDepth(0),
         m_nTableCellDepth(0),
         m_nLastTableCellParagraphDepth(0),
@@ -1897,6 +1898,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                             throw uno::Exception("insertTextPortion failed", nullptr);
                         m_bTextInserted = true;
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
+                        mxTOCTextCursor = xTOCTextCursor;
                         if (!m_bStartGenericField)
                         {
                             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
@@ -2969,7 +2971,7 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
         //todo: might make sense to hash this list, too
         struct NumberingPairs
         {
-            const char*     cWordName;
+            const sal_Char* cWordName;
             sal_Int16 const nType;
         };
         static const NumberingPairs aNumberingPairs[] =
@@ -3478,7 +3480,7 @@ void DomainMapper_Impl::ChainTextFrames()
     }
 }
 
-uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName)
+uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const sal_Char* pFieldMasterService, const OUString& rFieldMasterName)
 {
     // query master, create if not available
     uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
@@ -3999,8 +4001,8 @@ void DomainMapper_Impl::handleAuthor
     constexpr sal_uInt8 SET_DATE = 0x04;
     struct DocPropertyMap
     {
-        const char*     pDocPropertyName;
-        const char*     pServiceName;
+        const sal_Char* pDocPropertyName;
+        const sal_Char* pServiceName;
         sal_uInt8 const nFlags;
     };
     static const DocPropertyMap aDocProperties[] =
@@ -4186,6 +4188,7 @@ DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
                 = xTextRange->getText()->createTextCursor();
             assert(xTOCTextCursor.is());
             xTOCTextCursor->gotoEnd(false);
+            mxTOCTextCursor = xTOCTextCursor;
             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
         }
         catch (const uno::Exception&)

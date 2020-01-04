@@ -6,7 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#pragma once
+#ifndef INCLUDED_CUI_INC_BORDERLINE_HRC
+#define INCLUDED_CUI_INC_BORDERLINE_HRC
 
 #include <editeng/borderline.hxx>
 
@@ -35,5 +36,6 @@ const std::pair<const char*, SvxBorderLineStyle> RID_SVXSTR_BORDERLINE[] =
     { NC_("RID_SVXSTR_BORDERLINE", "Dash Dot Dot"), SvxBorderLineStyle::DASH_DOT_DOT }
 };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

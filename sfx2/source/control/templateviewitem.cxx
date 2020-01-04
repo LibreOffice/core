@@ -16,8 +16,10 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <tools/poly.hxx>
+#include <vcl/button.hxx>
 #include <vcl/graph.hxx>
 
 #include <bitmaps.hlst>

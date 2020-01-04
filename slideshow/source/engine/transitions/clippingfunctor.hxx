@@ -20,8 +20,10 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLIPPINGFUNCTOR_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_CLIPPINGFUNCTOR_HXX
 
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <transitioninfo.hxx>
 #include "parametricpolypolygon.hxx"
 

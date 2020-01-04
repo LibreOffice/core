@@ -40,8 +40,6 @@
 
 // PaintBufferGuard
 
-namespace vcl
-{
 PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow)
     : mpFrameData(pFrameData),
     m_pWindow(pWindow),
@@ -102,7 +100,6 @@ PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWind
     mnOutOffY = pFrameData->mpBuffer->GetOutOffYPixel();
     pFrameData->mpBuffer->SetOutOffXPixel(pWindow->GetOutOffXPixel());
     pFrameData->mpBuffer->SetOutOffYPixel(pWindow->GetOutOffYPixel());
-    pFrameData->mpBuffer->EnableRTL(pWindow->IsRTLEnabled());
 }
 
 PaintBufferGuard::~PaintBufferGuard()
@@ -158,7 +155,6 @@ vcl::RenderContext* PaintBufferGuard::GetRenderContext()
         return mpFrameData->mpBuffer;
     else
         return m_pWindow;
-}
 }
 
 class PaintHelper
@@ -239,7 +235,7 @@ void PaintHelper::PaintBuffer()
     assert(pFrameData->mbInBufferedPaint);
     assert(m_bStartedBufferedPaint);
 
-    vcl::PaintBufferGuard aGuard(pFrameData, m_pWindow);
+    PaintBufferGuard aGuard(pFrameData, m_pWindow);
     aGuard.SetPaintRect(pFrameData->maBufferedRect);
 }
 
@@ -290,7 +286,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
         {
             // double-buffering
-            vcl::PaintBufferGuard g(pFrameData, m_pWindow);
+            PaintBufferGuard g(pFrameData, m_pWindow);
             m_pWindow->ApplySettings(*pFrameData->mpBuffer);
 
             m_pWindow->PushPaintHelper(this, *pFrameData->mpBuffer);

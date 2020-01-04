@@ -928,7 +928,6 @@ namespace emfplushelper
         mnHDPI(0),
         mnVDPI(0),
         mbSetTextContrast(false),
-        mnTextContrast(0),
         mnFrameLeft(0),
         mnFrameTop(0),
         mnFrameRight(0),
@@ -1049,7 +1048,7 @@ namespace emfplushelper
 
             if (bIsGetDCProcessing)
             {
-                SAL_INFO("drawinglayer", "EMF+\t reset the current clipping region for the world space to infinity.");
+                SAL_INFO("drawinglayer", "EMF+ Resets the current clipping region for the world space to infinity.");
                 wmfemfhelper::HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
                 bIsGetDCProcessing = false;
             }

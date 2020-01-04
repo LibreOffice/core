@@ -51,10 +51,6 @@
 #include <unordered_map>
 #include <memory>
 
-#ifdef ANDROID
-#include <osl/detail/android-bootstrap.h>
-#endif
-
 #if defined(_WIN32) && defined(DBG_UTIL)
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <prewin.h>
@@ -116,7 +112,7 @@ static int IgnoringCrtReportHook(int reportType, wchar_t *message, int * /* retu
 
 namespace Translate
 {
-    std::locale Create(const char* pPrefixName, const LanguageTag& rLocale)
+    std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
     {
         static std::unordered_map<OString, std::locale> aCache;
         OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
@@ -127,15 +123,11 @@ namespace Translate
         boost::locale::generator gen;
         gen.characters(boost::locale::char_facet);
         gen.categories(boost::locale::message_facet | boost::locale::information_facet);
-#if defined(ANDROID)
-        OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
-#else
         OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
         rtl::Bootstrap::expandMacros(uri);
         OUString path;
         osl::File::getSystemPathFromFileURL(uri, path);
         OString sPath(OUStringToOString(path, osl_getThreadTextEncoding()));
-#endif
         gen.add_messages_path(sPath.getStr());
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
         bindtextdomain(pPrefixName, sPath.getStr());

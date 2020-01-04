@@ -1098,7 +1098,7 @@ SfxViewShell::SfxViewShell
     if (comphelper::LibreOfficeKit::isActive())
     {
         vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
-        if (pFrameWin && !pFrameWin->GetLOKNotifier())
+        if (pFrameWin)
             pFrameWin->SetLOKNotifier(this, true);
     }
 }
@@ -1126,7 +1126,7 @@ SfxViewShell::~SfxViewShell()
     }
 
     vcl::Window* pFrameWin = GetViewFrame()->GetWindow().GetFrameWindow();
-    if (pFrameWin && pFrameWin->GetLOKNotifier() == this)
+    if (pFrameWin && pFrameWin->GetLOKNotifier())
         pFrameWin->ReleaseLOKNotifier();
 }
 
@@ -1135,7 +1135,7 @@ bool SfxViewShell::PrepareClose
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
-    if (GetViewFrame()->GetWindow().GetLOKNotifier() == this)
+    if (GetViewFrame()->GetWindow().GetLOKNotifier())
         GetViewFrame()->GetWindow().ReleaseLOKNotifier();
 
     SfxPrinter *pPrinter = GetPrinter();

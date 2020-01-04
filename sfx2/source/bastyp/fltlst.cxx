@@ -24,6 +24,8 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/docfac.hxx>
 
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>

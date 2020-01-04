@@ -33,12 +33,9 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 endif
 
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_bib \
-))
-
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extensions,\
+	Library_bib \
 	Library_dbp \
 	Library_pcr \
 	UIConfig_sbibliography \

@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "parametricpolypolygon.hxx"
+#include "transitiontools.hxx"
 
 
 namespace slideshow {

@@ -18,6 +18,7 @@
  */
 
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

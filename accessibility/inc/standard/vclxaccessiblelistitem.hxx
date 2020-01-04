@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELISTITEM_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELISTITEM_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -150,5 +151,6 @@ public:
     virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 };
 
+#endif // ACCESSIBILITY_STANDARD_ACCESSIBLELISTBOXENTRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

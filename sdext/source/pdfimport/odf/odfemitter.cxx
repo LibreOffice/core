@@ -98,7 +98,7 @@ void OdfEmitter::write( const OUString& rText )
     const OString aStr = OUStringToOString(rText,RTL_TEXTENCODING_UTF8);
     const sal_Int32 nLen( aStr.getLength() );
     m_aBuf.realloc( nLen );
-    const char* pStr = aStr.getStr();
+    const sal_Char* pStr = aStr.getStr();
     std::copy(pStr,pStr+nLen,m_aBuf.getArray());
 
     m_xOutput->writeBytes(m_aBuf);

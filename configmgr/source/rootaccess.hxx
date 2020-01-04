@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <set>
 #include <vector>
 

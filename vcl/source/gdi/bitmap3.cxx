@@ -305,15 +305,6 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BmpConversion::N32Bit:
-        {
-            if( nBitCount < 32 )
-                bRet = ImplConvertUp( 32 );
-            else
-                bRet = true;
-        }
-        break;
-
         case BmpConversion::Ghosted:
             bRet = ImplConvertGhosted();
         break;
@@ -891,11 +882,6 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             case 24:
             {
                 rNew.Convert(BmpConversion::N24Bit);
-                break;
-            }
-            case 32:
-            {
-                rNew.Convert(BmpConversion::N32Bit);
                 break;
             }
             default:

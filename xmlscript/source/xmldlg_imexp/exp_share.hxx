@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_EXP_SHARE_HXX
+#define INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_EXP_SHARE_HXX
 
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
@@ -254,5 +255,6 @@ inline bool ElementDescriptor::readProp(
 
 }
 
+#endif // INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_EXP_SHARE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

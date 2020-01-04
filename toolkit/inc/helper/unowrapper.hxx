@@ -32,7 +32,7 @@
 
 
 
-class UnoWrapper final : public UnoWrapperBase
+class UnoWrapper : public UnoWrapperBase
 {
 private:
     css::uno::Reference< css::awt::XToolkit>  mxToolkit;

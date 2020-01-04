@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

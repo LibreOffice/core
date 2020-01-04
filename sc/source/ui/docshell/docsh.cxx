@@ -1713,7 +1713,7 @@ ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
         mrDocShell.SfxObjectShell::SetVisArea( tools::Rectangle() );   // "Normally" worked on => no VisArea.
 }
 
-ScDocShell::PrepareSaveGuard::~PrepareSaveGuard() COVERITY_NOEXCEPT_FALSE
+ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
 {
     if (mrDocShell.m_aDocument.HasExternalRefManager())
     {
@@ -1761,12 +1761,6 @@ void popFileName(OUString& rPath)
     }
 }
 
-}
-
-void ScDocShell::TerminateEditing()
-{
-    // Commit any cell changes before saving.
-    SC_MOD()->InputEnterHandler();
 }
 
 bool ScDocShell::SaveAs( SfxMedium& rMedium )

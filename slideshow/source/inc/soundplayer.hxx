@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <avmedia/mediaitem.hxx>
 

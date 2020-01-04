@@ -20,7 +20,6 @@
 #include "formcontrolcontainer.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -105,7 +104,7 @@ namespace bib
         }
         catch( const Exception&)
         {
-            TOOLS_WARN_EXCEPTION( "extensions.biblio", "FormControlContainer::implSetDesignMode" );
+            OSL_FAIL( "FormControlContainer::implSetDesignMode: caught an exception!" );
         }
     }
 

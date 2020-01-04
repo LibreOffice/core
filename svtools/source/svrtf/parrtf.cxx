@@ -341,7 +341,7 @@ void SvRTFParser::ScanText()
 
                             bool bBreak = false;
                             bool bEOF = false;
-                            char nSlash = '\\';
+                            sal_Char nSlash = '\\';
                             while (!bBreak)
                             {
                                 auto next = GetNextChar();
@@ -358,9 +358,9 @@ void SvRTFParser::ScanText()
 
                                     continue;
                                 }
-                                nSlash = static_cast<char>(next);
+                                nSlash = static_cast<sal_Char>(next);
                                 while (nSlash == 0xD || nSlash == 0xA)
-                                    nSlash = static_cast<char>(GetNextChar());
+                                    nSlash = static_cast<sal_Char>(GetNextChar());
 
                                 switch (nSlash)
                                 {
@@ -580,7 +580,7 @@ void SvRTFParser::ReadBitmapData()  { SkipGroup(); }
 
 SvParserState SvRTFParser::CallParser()
 {
-    char cFirstCh;
+    sal_Char cFirstCh;
     nNextChPos = rInput.Tell();
     rInput.ReadChar( cFirstCh );
     nNextCh = static_cast<unsigned char>(cFirstCh);

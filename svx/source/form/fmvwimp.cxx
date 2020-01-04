@@ -1040,7 +1040,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
         DBG_UNHANDLED_EXCEPTION("svx");
     }
 
-    const char* pWizardAsciiName = nullptr;
+    const sal_Char* pWizardAsciiName = nullptr;
     switch ( nClassId )
     {
         case FormComponentType::GRIDCONTROL:

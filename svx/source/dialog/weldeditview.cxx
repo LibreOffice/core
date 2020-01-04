@@ -37,7 +37,6 @@
 #include <sal/log.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/weldeditview.hxx>
-#include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
@@ -594,7 +593,7 @@ public:
         }
         catch (const css::uno::Exception&)
         {
-            TOOLS_WARN_EXCEPTION("svx", "WeldEditAccessible::getAccessibleIndexInParent");
+            OSL_FAIL("WeldEditAccessible::getAccessibleIndexInParent: caught an exception!");
         }
 
         return nRet;

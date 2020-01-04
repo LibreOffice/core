@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
 
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
@@ -153,5 +154,6 @@ const ErrMsgCode RID_SO_ERRCTX[] =
     { nullptr, ERRCODE_NONE }
 };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

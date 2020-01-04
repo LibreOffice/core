@@ -17,7 +17,8 @@
  * the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_FPICKER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_FPICKER_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -41,5 +42,6 @@ css::uno::Reference<css::uno::XInterface> FolderPicker_CreateInstance(
 css::uno::Sequence<OUString> FolderPicker_getSupportedServiceNames();
 OUString FolderPicker_getImplementationName();
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

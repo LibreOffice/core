@@ -311,7 +311,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
         static const int NINSIZE = 64;
         static const int NOUTSIZE = 64;
-        char    cCharsInp[ NINSIZE ];
+        sal_Char    cCharsInp[ NINSIZE ];
         sal_Unicode cCharsOut[ NOUTSIZE ];
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
@@ -324,9 +324,9 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
                 {
                     if( cMin >= 0x0100 )
-                        cCharsInp[ j++ ] = static_cast<char>(cMin >> 8);
+                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
                     if( (cMin >= 0x0100) || (cMin < 0x00A0)  )
-                        cCharsInp[ j++ ] = static_cast<char>(cMin);
+                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin);
                 }
 
                 sal_uInt32 nCvtInfo;

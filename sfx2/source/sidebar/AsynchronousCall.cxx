@@ -57,14 +57,6 @@ void AsynchronousCall::CancelRequest()
     }
 }
 
-void AsynchronousCall::Sync()
-{
-    if (mnCallId != nullptr) {
-        maAction();
-        CancelRequest();
-    }
-}
-
 IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall, void*, void )
 {
     mnCallId = nullptr;

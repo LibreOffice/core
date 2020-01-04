@@ -16,14 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
+#define INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 #include <map>
 
@@ -48,7 +48,7 @@ namespace svt
                     }
                     catch( const css::uno::Exception& )
                     {
-                        TOOLS_WARN_EXCEPTION( "svtools", "THeaderCellMapFunctorDispose" );
+                        OSL_FAIL( "THeaderCellMapFunctorDispose: caught an exception!" );
                     }
             }
         };
@@ -76,5 +76,6 @@ namespace svt
     };
 }
 
+#endif // INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

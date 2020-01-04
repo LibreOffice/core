@@ -475,7 +475,6 @@ data
 data-bar
 data-bar-entry
 data-cell-range-address
-data-label
 data-label-number
 data-label-symbol
 data-label-text

@@ -757,7 +757,7 @@ extern "C"
      * @return a component factory
      */
     SAL_DLLPUBLIC_EXPORT void * scriptframe_component_getFactory(
-        const char * pImplName,
+        const sal_Char * pImplName,
         void * pServiceManager,
         void * pRegistryKey )
     {

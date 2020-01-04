@@ -229,7 +229,7 @@ OUString SvGlobalName::GetHexName() const
 {
     OStringBuffer aHexBuffer(36);
 
-    char buf[ 10 ];
+    sal_Char buf[ 10 ];
     sprintf( buf, "%8.8" SAL_PRIXUINT32, pImp->szData.Data1 );
     aHexBuffer.append(buf);
     aHexBuffer.append('-');

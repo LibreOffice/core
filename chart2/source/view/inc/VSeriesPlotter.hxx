@@ -58,6 +58,17 @@ public:
     {
         m_aNumberFormatMap[tFullAxisIndex(nDimIndex,nAxisIndex)] = nFormatKey;
     }
+    bool hasFormat( sal_Int32 nDimIndex, sal_Int32 nAxisIndex ) const
+    {
+        return (m_aNumberFormatMap.find(tFullAxisIndex(nDimIndex,nAxisIndex)) !=m_aNumberFormatMap.end());
+    }
+    sal_Int32 getFormat( sal_Int32 nDimIndex, sal_Int32 nAxisIndex ) const
+    {
+        tNumberFormatMap::const_iterator aIt = m_aNumberFormatMap.find(tFullAxisIndex(nDimIndex,nAxisIndex));
+        if( aIt !=m_aNumberFormatMap.end() )
+            return aIt->second;
+        return 0;
+    }
 
 private:
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex;
@@ -230,6 +241,7 @@ public:
     // Methods for number formats and color schemes
 
     void setNumberFormatsSupplier( const css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
+    void setAxesNumberFormats( const AxesNumberFormats& rAxesNumberFormats ) { m_aAxesNumberFormats = rAxesNumberFormats; };
 
     void setColorScheme( const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
 
@@ -415,6 +427,7 @@ protected:
     Date m_aNullDate;
 
     std::unique_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
+    AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead
 
     css::uno::Reference< css::chart2::XColorScheme >    m_xColorScheme;
 

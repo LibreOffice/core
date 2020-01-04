@@ -20,9 +20,19 @@
 #ifndef INCLUDED_SVX_PAGENUMBERINGHELPER_HXX
 #define INCLUDED_SVX_PAGENUMBERINGHELPER_HXX
 
-#include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
+
+class SVX_DLLPUBLIC PageNumberListBox final : public ListBox
+{
+public:
+    PageNumberListBox( vcl::Window* pParent );
+
+    void SetSelection( sal_uInt16 );
+
+    Size GetOptimalSize() const override;
+};
 
 class SVX_DLLPUBLIC SvxPageNumberListBox
 {
@@ -31,13 +41,11 @@ private:
 public:
     SvxPageNumberListBox(std::unique_ptr<weld::ComboBox> pControl);
     int get_count() const { return m_xControl->get_count(); }
-    SvxNumType get_active_id() const { return static_cast<SvxNumType>(m_xControl->get_active_id().toInt32()); }
-    void set_active_id(SvxNumType eId) const { m_xControl->set_active_id(OUString::number(static_cast<sal_Int32>(eId))); }
+    OUString get_id(int pos) const { return m_xControl->get_id(pos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_active(int pos) { m_xControl->set_active(pos); }
     void save_value() { m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
-    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     weld::ComboBox& get_widget() const { return *m_xControl; }
 };
 

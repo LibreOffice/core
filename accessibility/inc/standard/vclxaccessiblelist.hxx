@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELIST_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELIST_HXX
 
 #include <memory>
 #include <vector>
@@ -181,5 +182,6 @@ private:
     void UpdateVisibleLineCount();
 };
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

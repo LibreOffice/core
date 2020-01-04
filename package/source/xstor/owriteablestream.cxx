@@ -82,11 +82,9 @@ struct WSInternalData_Impl
 namespace package
 {
 
-bool PackageEncryptionDataLessOrEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 )
+bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 )
 {
-    // tdf#93389: aHash2 may contain more than in aHash1, if it contains also data for other package
-    // formats (as in case of autorecovery)
-    bool bResult = !aHash1.empty() && aHash1.size() <= aHash2.size();
+    bool bResult = !aHash1.empty() && aHash1.size() == aHash2.size();
     for ( ::comphelper::SequenceAsHashMap::const_iterator aIter = aHash1.begin();
           bResult && aIter != aHash1.end();
           ++aIter )
@@ -1146,7 +1144,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 
     if ( m_bHasCachedEncryptionData )
     {
-        if ( !::package::PackageEncryptionDataLessOrEqual( m_aEncryptionData, aEncryptionData ) )
+        if ( !::package::PackageEncryptionDatasEqual( m_aEncryptionData, aEncryptionData ) )
             throw packages::WrongPasswordException();
 
         // the correct key must be set already

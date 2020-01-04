@@ -75,7 +75,7 @@ enum class HTMLScriptLanguage
 template<typename EnumT>
 struct HTMLOptionEnum
 {
-    const char     *pName;  // value of an HTML option
+    const sal_Char *pName;  // value of an HTML option
     EnumT const     nValue; // and corresponding value of an enum
 };
 

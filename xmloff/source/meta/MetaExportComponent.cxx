@@ -134,7 +134,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             nPos = GetNamespaceMap().GetNextKey( nPos );
         }
 
-        const char* pVersion = nullptr;
+        const sal_Char* pVersion = nullptr;
         switch( getDefaultVersion() )
         {
         case SvtSaveOptions::ODFVER_LATEST: pVersion = "1.2"; break;

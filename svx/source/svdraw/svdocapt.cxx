@@ -654,7 +654,7 @@ void SdrCaptionObj::NbcSetTailPos(const Point& rPos)
 sal_uInt32 SdrCaptionObj::GetSnapPointCount() const
 {
     // TODO: Implementation missing.
-    return 0;
+    return 0L;
 }
 
 Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const

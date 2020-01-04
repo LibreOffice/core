@@ -32,13 +32,13 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-const char cReplacement[] = "Replacement";
-const char cFontPairs[] = "FontPairs";
+const sal_Char cReplacement[] = "Replacement";
+const sal_Char cFontPairs[] = "FontPairs";
 
-const char cReplaceFont[]   = "ReplaceFont";
-const char cSubstituteFont[]= "SubstituteFont";
-const char cOnScreenOnly[]  = "OnScreenOnly";
-const char cAlways[]        = "Always";
+const sal_Char cReplaceFont[]   = "ReplaceFont";
+const sal_Char cSubstituteFont[]= "SubstituteFont";
+const sal_Char cOnScreenOnly[]  = "OnScreenOnly";
+const sal_Char cAlways[]        = "Always";
 
 typedef std::vector<SubstitutionStruct> SubstitutionStructArr;
 

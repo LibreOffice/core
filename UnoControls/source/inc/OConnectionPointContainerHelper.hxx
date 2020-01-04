@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
+#define INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
 
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <cppuhelper/weak.hxx>
@@ -101,5 +102,6 @@ private:
 
 }
 
+#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

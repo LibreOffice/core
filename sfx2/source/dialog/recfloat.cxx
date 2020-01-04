@@ -82,10 +82,8 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
-        SfxRecordingFloat_Impl* pFloatDlg = static_cast<SfxRecordingFloat_Impl*>(GetController().get());
-        weld::Dialog* pDlg = pFloatDlg->getDialog();
-
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pDlg,
+        vcl::Window* pWin = GetWindow();
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                        SfxResId(STR_MACRO_LOSS)));
         xQueryBox->set_default_response(RET_NO);
@@ -102,7 +100,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindo
     : SfxModelessDialogController(pBind, pChildWin, pParent, "sfx/ui/floatingrecord.ui",
                                   "FloatingRecord")
     , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
-    , m_xDispatcher(new ToolbarUnoDispatcher(*m_xToolbar, pBind->GetActiveFrame()))
+    , m_aDispatcher(*m_xToolbar, pBind->GetActiveFrame())
 {
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );
@@ -112,7 +110,6 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindo
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 {
-    m_xDispatcher->dispose();
 }
 
 void SfxRecordingFloat_Impl::FillInfo( SfxChildWinInfo& rInfo ) const

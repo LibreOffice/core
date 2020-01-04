@@ -24,46 +24,33 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
 
-namespace weld
-{
-    class Toolbar;
-}
-
 namespace svt
 {
 
 class SVT_DLLPUBLIC GenericToolboxController final : public svt::ToolboxController
 {
-public:
-    GenericToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                              const css::uno::Reference< css::frame::XFrame >& rFrame,
-                              ToolBox* pToolBox,
-                              sal_uInt16   nID,
-                              const OUString& aCommand );
+    public:
+        GenericToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                  ToolBox* pToolBox,
+                                  sal_uInt16   nID,
+                                  const OUString& aCommand );
+        virtual ~GenericToolboxController() override;
 
-    GenericToolboxController(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                             const css::uno::Reference< css::frame::XFrame >& rFrame,
-                             weld::Toolbar& rToolbar,
-                             const OUString& rCommand);
+        // XComponent
+        virtual void SAL_CALL dispose() override;
 
-    virtual ~GenericToolboxController() override;
+        // XToolbarController
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
-    // XToolbarController
-    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+         DECL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, void*, void );
 
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-
-    DECL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, void*, void );
-
-private:
-    VclPtr<ToolBox>    m_xToolbox;
-    sal_uInt16         m_nID;
-
-    weld::Toolbar*     m_pToolbox;
+    private:
+        VclPtr<ToolBox>    m_pToolbox;
+        sal_uInt16         m_nID;
 };
 
 }

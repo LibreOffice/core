@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEFIXEDTEXT_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEFIXEDTEXT_HXX
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 
@@ -38,5 +39,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
+#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEFIXEDTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

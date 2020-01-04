@@ -22,10 +22,10 @@
 
 #include <sal/types.h>
 
-extern const char * aEventListenerTable[];
-extern const char * aEventMethodTable[];
-extern const char * aEventSDOptionTable[];
-extern const char * aEventOptionTable[];
+extern const sal_Char * aEventListenerTable[];
+extern const sal_Char * aEventMethodTable[];
+extern const sal_Char * aEventSDOptionTable[];
+extern const sal_Char * aEventOptionTable[];
 
 #endif
 

@@ -33,7 +33,7 @@ core_factory_list = [
     ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
-    ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
+    ("liblnthlo.a", "lnth_component_getFactory"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
@@ -57,7 +57,7 @@ core_factory_list = [
     ("libxmlscriptlo.a", "xmlscript_component_getFactory"),
     ("libmcnttype.a", "mcnttype_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
-    ("libspelllo.a", "spell_component_getFactory", "#ifndef IOS"),
+    ("libspelllo.a", "spell_component_getFactory"),
     ("libpdffilterlo.a", "pdffilter_component_getFactory"),
     ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
@@ -66,8 +66,6 @@ core_factory_list = [
     ("libcuilo.a", "cui_component_getFactory"),
     ("libproxyfaclo.a", "proxyfac_component_getFactory"),
     ("libguesslanglo.a", "guesslang_component_getFactory"),
-    ("libbiblo.a", "bib_component_getFactory"),
-    ("libdbalo.a", "dba_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -124,7 +122,6 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartFrameLoader_get_implementation",
     "com_sun_star_comp_chart2_WizardDialog_get_implementation",
-    "org_libreoffice_comp_chart2_sidebar_ChartPanelFactory",
 # comphelper/util/comphelp.component
     "com_sun_star_comp_MemoryStream",
     "com_sun_star_comp_task_OfficeRestartManager",
@@ -136,7 +133,7 @@ core_constructor_list = [
     "com_sun_star_comp_SequenceOutputStreamService",
     "com_sun_star_comp_util_OfficeInstallationDirectories",
 # dbaccess/util/dba.component
-    "com_sun_star_comp_dba_ORowSet_get_implementation",
+    ("com_sun_star_comp_dba_ORowSet_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
 # forms/util/frm.component
     ("com_sun_star_comp_forms_FormOperations_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_comp_forms_ODatabaseForm_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
@@ -170,19 +167,12 @@ core_constructor_list = [
     "com_sun_star_comp_framework_Frame_get_implementation",
     "com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation",
     "com_sun_star_comp_framework_JobExecutor_get_implementation",
-    "com_sun_star_comp_framework_jobs_JobDispatch_get_implementation",
     "com_sun_star_comp_framework_LayoutManager_get_implementation",
     "com_sun_star_comp_framework_ModuleManager_get_implementation",
     "com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation",
     "com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation",
     "com_sun_star_comp_framework_PathSettings_get_implementation",
     "com_sun_star_comp_framework_PathSubstitution_get_implementation",
-    "com_sun_star_comp_framework_ObjectMenuController_get_implementation",
-    "com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation",
-    "com_sun_star_comp_framework_ControlMenuController_get_implementation",
-    "com_sun_star_comp_framework_ThesaurusMenuController_get_implementation",
-    "com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation",
-    "com_sun_star_comp_framework_ResourceMenuController_get_implementation",
     "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
     "com_sun_star_comp_framework_TaskCreator_get_implementation",
     "com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation",
@@ -236,7 +226,6 @@ core_constructor_list = [
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
     "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
-    "com_sun_star_comp_svx_SmartTagMenuController_get_implementation",
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
     "com_sun_star_drawing_SvxShapeCollection_get_implementation",
     "com_sun_star_svx_FontHeightToolBoxController_get_implementation",
@@ -270,11 +259,9 @@ core_constructor_list = [
     "stardiv_Toolkit_UnoDateFieldControl_get_implementation",
     "stardiv_Toolkit_UnoSpinButtonModel_get_implementation",
     "stardiv_Toolkit_VCLXPointer_get_implementation",
-    "stardiv_Toolkit_VCLXPopupMenu_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
-    "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
 # xmloff/util/xo.component
     "XMLMetaExportComponent_get_implementation",
     "XMLMetaImportComponent_get_implementation",
@@ -388,8 +375,6 @@ calc_factory_list = [
 calc_constructor_list = [
 # avmedia/util/avmedia.component
     "com_sun_star_comp_framework_SoundHandler_get_implementation",
-# sc/util/sc.component
-    "ScPanelFactory_get_implementation",
 # sc/util/scd.component
     "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
     "com_sun_star_comp_calc_FormatDetector_get_implementation",
@@ -502,6 +487,8 @@ custom_widgets = [
     'IndexBox',
     'ManagedMenuButton',
     'OptionalBox',
+    'PageNumberListBox',
+    'PaperSizeListBox',
     'PriorityHBox',
     'PriorityMergedHBox',
     'PropertyControl',
@@ -510,6 +497,7 @@ custom_widgets = [
     'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',
+    'SidebarDialControl',
     'SidebarToolBox',
     'Svx3DPreviewControl',
     'SvxCharViewControl',

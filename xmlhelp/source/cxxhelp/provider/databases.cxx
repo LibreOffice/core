@@ -327,7 +327,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
         {
             sal_uInt32 pos = 0;
             sal_uInt64 nRead;
-            char buffer[2048];
+            sal_Char buffer[2048];
             sal_Unicode lineBuffer[1028];
             OUStringBuffer fileContent;
 
@@ -600,7 +600,7 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
         listAnchor[i] = anchor[i];
 
         helpdatafileproxy::HDFData aHDFData;
-        const char* pData = nullptr;
+        const sal_Char* pData = nullptr;
 
         if( pHdf )
         {
@@ -1020,7 +1020,7 @@ void Databases::setActiveText( const OUString& Module,
     helpdatafileproxy::HDFData aHDFData;
 
     int nSize = 0;
-    const char* pData = nullptr;
+    const sal_Char* pData = nullptr;
 
     bool bSuccess = false;
     if( !bFoundAsEmpty )

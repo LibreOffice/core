@@ -23,8 +23,7 @@ enum DataPointCustomLabelFieldType
     SERIESNAME,
     CATEGORYNAME,
     CELLREF,
-    NEWLINE,
-    PERCENTAGE
+    NEWLINE
 };
 
 }; }; }; };

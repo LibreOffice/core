@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLETABLISTBOXTABLE_HXX
+#define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLETABLISTBOXTABLE_HXX
 
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <comphelper/uno3.hxx>
@@ -104,5 +105,6 @@ public:
 } // namespace accessibility
 
 
+#endif // INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLETABLISTBOXTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

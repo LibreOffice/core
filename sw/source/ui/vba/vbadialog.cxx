@@ -27,7 +27,7 @@ namespace {
 struct WordDialogTable
 {
     sal_Int32 const wdDialog;
-    const char* ooDialog;
+    const sal_Char* ooDialog;
 };
 
 }

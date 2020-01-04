@@ -88,25 +88,8 @@ SlideBackground::SlideBackground(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings
      ) :
-    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame, true ),
+    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame ),
     mrBase( rBase ),
-    mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("paperformat"))),
-    mxPaperOrientation(m_xBuilder->weld_combo_box("orientation")),
-    mxMasterSlide(m_xBuilder->weld_combo_box("masterslide")),
-    mxBackgroundLabel(m_xBuilder->weld_label("label3")),
-    mxFillStyle(m_xBuilder->weld_combo_box("fillstyle")),
-    mxFillLB(new ColorListBox(m_xBuilder->weld_menu_button("fillattr"), GetFrameWeld())),
-    mxFillAttr(m_xBuilder->weld_combo_box("fillattr1")),
-    mxFillGrad(new ColorListBox(m_xBuilder->weld_menu_button("fillattr2"), GetFrameWeld())),
-    mxInsertImage(m_xBuilder->weld_button("button2")),
-    mxDspMasterBackground(m_xBuilder->weld_check_button("displaymasterbackground")),
-    mxDspMasterObjects(m_xBuilder->weld_check_button("displaymasterobjects")),
-    mxCloseMaster(m_xBuilder->weld_button("closemasterslide")),
-    mxEditMaster(m_xBuilder->weld_button("masterslidebutton")),
-    mxMasterLabel(m_xBuilder->weld_label("masterlabel")),
-    mxMarginSelectBox(m_xBuilder->weld_combo_box("marginLB")),
-    mxCustomEntry(m_xBuilder->weld_label("customlabel")),
-    mxMarginLabel(m_xBuilder->weld_label("labelmargin")),
     maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
     maPaperMarginLRController(SID_ATTR_PAGE_LRSPACE, *pBindings, *this),
@@ -147,11 +130,26 @@ SlideBackground::SlideBackground(
     maCustomEntry(),
     mpBindings(pBindings)
 {
+    get(mpPaperSizeBox,"paperformat");
+    get(mpPaperOrientation, "orientation");
+    get(mpMasterSlide, "masterslide");
     //let the listbox shrink to any size so the sidebar isn't forced to grow to
     //the size of the longest master slide name in the document
-    mxMasterSlide->set_size_request(42, -1);
+    mpMasterSlide->set_width_request(0);
+    get(mpBackgroundLabel, "label3");
+    get(mpFillAttr, "fillattr1");
+    get(mpFillGrad, "fillattr2");
+    get(mpFillStyle, "fillstyle");
+    get(mpFillLB, "fillattr");
+    get(mpInsertImage, "button2");
+    get(mpDspMasterBackground, "displaymasterbackground");
+    get(mpDspMasterObjects, "displaymasterobjects");
+    get(mpCloseMaster, "closemasterslide");
+    get(mpEditMaster, "masterslidebutton");
+    get(mpMasterLabel, "masterlabel");
+    get(mpMarginSelectBox, "marginLB");
 
-    maCustomEntry = mxCustomEntry->get_label();
+    maCustomEntry = get<FixedText>("customlabel")->GetText();
 
     addListener();
     Initialize();
@@ -190,8 +188,8 @@ FieldUnit SlideBackground::GetCurrentUnit(SfxItemState eState, const SfxPoolItem
 
 void SlideBackground::SetMarginsFieldUnit()
 {
-    auto nSelected = mxMarginSelectBox->get_active();
-    mxMarginSelectBox->clear();
+    auto nSelected = mpMarginSelectBox->GetSelectedEntryPos();
+    mpMarginSelectBox->Clear();
 
     const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
 
@@ -201,7 +199,7 @@ void SlideBackground::SetMarginsFieldUnit()
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
         {
             OUString sMeasurement = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_INCH[i].second, 2, true, false) + sSuffix;
-            mxMarginSelectBox->append_text(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sMeasurement));
+            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i].first).replaceFirst("%1", sMeasurement));
         }
     }
     else
@@ -210,33 +208,29 @@ void SlideBackground::SetMarginsFieldUnit()
         for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
         {
             OUString sMeasurement = rLocaleData.getNum(RID_PAGEFORMATPANEL_MARGINS_CM[i].second, 2, true, false) + sSuffix;
-            mxMarginSelectBox->append_text(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sMeasurement));
+            mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i].first).replaceFirst("%1", sMeasurement));
         }
     }
 
-    mxMarginSelectBox->set_active(nSelected);
+    mpMarginSelectBox->SelectEntryPos(nSelected);
 }
 
 void SlideBackground::Initialize()
 {
-    FillTypeLB::Fill(*mxFillStyle);
-
     SetMarginsFieldUnit();
 
-    mxPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Draw );
-    mxPaperSizeBox->connect_changed(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mxPaperOrientation->connect_changed(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mxEditMaster->connect_clicked(LINK(this, SlideBackground, EditMasterHdl));
-    mxCloseMaster->connect_clicked(LINK(this, SlideBackground, CloseMasterHdl));
-    mxInsertImage->connect_clicked(LINK(this, SlideBackground, SelectBgHdl));
+    mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Draw );
+    mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
+    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
+    mpCloseMaster->SetClickHdl(LINK(this, SlideBackground, CloseMasterHdl));
     meUnit = maPaperSizeController.GetCoreMetric();
 
-    mxMasterSlide->connect_changed(LINK(this, SlideBackground, AssignMasterPage));
+    mpMasterSlide->SetSelectHdl(LINK(this, SlideBackground, AssignMasterPage));
 
-    mxFillStyle->connect_changed(LINK(this, SlideBackground, FillStyleModifyHdl));
-    mxFillLB->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
-    mxFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
-    mxFillAttr->connect_changed(LINK(this, SlideBackground, FillBackgroundHdl));
+    mpFillStyle->SetSelectHdl(LINK(this, SlideBackground, FillStyleModifyHdl));
+    mpFillLB->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mpFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mpFillAttr->SetSelectHdl(LINK(this, SlideBackground, FillBackgroundHdl));
 
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
     if (pMainViewShell)
@@ -250,17 +244,17 @@ void SlideBackground::Initialize()
 
             OUString aLayoutName( mpPage->GetLayoutName() );
             aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
-            mxMasterSlide->set_active_text(aLayoutName);
+            mpMasterSlide->SelectEntry(aLayoutName);
         }
     }
 
-    mxFillStyle->set_active(static_cast< sal_Int32 >(NONE));
+    mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(NONE));
 
-    mxDspMasterBackground->connect_clicked(LINK(this, SlideBackground, DspBackground));
-    mxDspMasterObjects->connect_clicked(LINK(this,SlideBackground, DspObjects));
+    mpDspMasterBackground->SetClickHdl(LINK(this, SlideBackground, DspBackground));
+    mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
 
     //margins
-    mxMarginSelectBox->connect_changed(LINK(this, SlideBackground, ModifyMarginHdl));
+    mpMarginSelectBox->SetSelectHdl(LINK(this, SlideBackground,ModifyMarginHdl));
 
     Update();
     UpdateMarginBox();
@@ -268,7 +262,7 @@ void SlideBackground::Initialize()
 
 boost::property_tree::ptree SlideBackground::DumpAsPropertyTree()
 {
-    if (mxPaperSizeBox->get_active() == -1)
+    if (mpPaperSizeBox->GetSelectedEntryCount() == 0)
     {
         mpBindings->Update(SID_ATTR_PAGE_SIZE);
     }
@@ -285,44 +279,47 @@ void SlideBackground::HandleContextChange(
 
     if ( IsImpress() )
     {
-        mxMasterLabel->set_label(SdResId(STR_MASTERSLIDE_LABEL));
+        mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_LABEL));
 
         // margin selector is only for Draw
-        mxMarginSelectBox->hide();
-        mxMarginLabel->hide();
+        mpMarginSelectBox->Hide();
+        VclPtr<FixedText> pMarginLabel;
+        get(pMarginLabel, "labelmargin");
+        if ( pMarginLabel )
+            pMarginLabel->Hide();
 
         if ( maContext == maImpressMasterContext )
         {
-            mxCloseMaster->show();
-            mxEditMaster->hide();
-            mxMasterSlide->set_sensitive(false);
-            mxDspMasterBackground->set_sensitive(false);
-            mxDspMasterObjects->set_sensitive(false);
-            mxFillStyle->hide();
-            mxBackgroundLabel->hide();
-            mxInsertImage->show();
+            mpCloseMaster->Show();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
+            mpFillStyle->Hide();
+            mpBackgroundLabel->Hide();
+            mpInsertImage->Show();
         }
         else if ( maContext == maImpressHandoutContext  || maContext == maImpressNotesContext )
         {
-            mxCloseMaster->hide();
-            mxEditMaster->hide();
-            mxMasterSlide->set_sensitive(false);
-            mxDspMasterBackground->set_sensitive(false);
-            mxDspMasterObjects->set_sensitive(false);
-            mxFillStyle->hide();
-            mxBackgroundLabel->hide();
-            mxInsertImage->hide();
+            mpCloseMaster->Hide();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
+            mpFillStyle->Hide();
+            mpBackgroundLabel->Hide();
+            mpInsertImage->Hide();
         }
         else if (maContext == maImpressOtherContext)
         {
-            mxCloseMaster->hide();
-            mxEditMaster->show();
-            mxMasterSlide->set_sensitive(true);
-            mxDspMasterBackground->set_sensitive(true);
-            mxDspMasterObjects->set_sensitive(true);
-            mxFillStyle->show();
-            mxBackgroundLabel->show();
-            mxInsertImage->show();
+            mpCloseMaster->Hide();
+            mpEditMaster->Show();
+            mpMasterSlide->Enable();
+            mpDspMasterBackground->Enable();
+            mpDspMasterObjects->Enable();
+            mpFillStyle->Show();
+            mpBackgroundLabel->Show();
+            mpInsertImage->Show();
         }
 
         // The Insert Image button in the sidebar issues .uno:SelectBackground,
@@ -331,7 +328,7 @@ void SlideBackground::HandleContextChange(
         // Hide for now so the user will only be able to use the menu to insert
         // background image, which prompts the user for file selection in the browser.
         if (comphelper::LibreOfficeKit::isActive())
-            mxInsertImage->hide();
+            mpInsertImage->Hide();
 
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
         sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
@@ -340,25 +337,25 @@ void SlideBackground::HandleContextChange(
     }
     else if ( IsDraw() )
     {
-        mxMasterLabel->set_label(SdResId(STR_MASTERPAGE_LABEL));
+        mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_LABEL));
 
         if (maContext == maDrawOtherContext)
         {
-            mxEditMaster->hide();
-            mxFillStyle->show();
-            mxBackgroundLabel->show();
+            mpEditMaster->Hide();
+            mpFillStyle->Show();
+            mpBackgroundLabel->Show();
         }
         else if (maContext == maDrawMasterContext)
         {
-            mxFillStyle->hide();
-            mxBackgroundLabel->hide();
+            mpFillStyle->Hide();
+            mpBackgroundLabel->Hide();
         }
     }
 }
 
 void SlideBackground::Update()
 {
-    eFillStyle nPos = static_cast<eFillStyle>(mxFillStyle->get_active());
+    eFillStyle nPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
 
     if(maContext != maImpressOtherContext && maContext != maDrawOtherContext)
         nPos = NONE;
@@ -371,66 +368,66 @@ void SlideBackground::Update()
     {
         case NONE:
         {
-            mxFillLB->hide();
-            mxFillAttr->hide();
-            mxFillGrad->hide();
+            mpFillLB->Hide();
+            mpFillAttr->Hide();
+            mpFillGrad->Hide();
         }
         break;
         case SOLID:
         {
-            mxFillAttr->hide();
-            mxFillGrad->hide();
-            mxFillLB->show();
+            mpFillAttr->Hide();
+            mpFillGrad->Hide();
+            mpFillLB->Show();
             const Color aColor = GetColorSetOrDefault();
-            mxFillLB->SelectEntry(aColor);
+            mpFillLB->SelectEntry(aColor);
         }
         break;
         case GRADIENT:
         {
-            mxFillLB->show();
-            mxFillAttr->hide();
-            mxFillGrad->show();
+            mpFillLB->Show();
+            mpFillAttr->Hide();
+            mpFillGrad->Show();
 
             const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
-            mxFillLB->SelectEntry(aStartColor);
+            mpFillLB->SelectEntry(aStartColor);
             const Color aEndColor = xGradient.GetEndColor();
-            mxFillGrad->SelectEntry(aEndColor);
+            mpFillGrad->SelectEntry(aEndColor);
         }
         break;
 
         case HATCH:
         {
-            mxFillLB->hide();
-            mxFillAttr->show();
-            mxFillAttr->clear();
-            SvxFillAttrBox::Fill(*mxFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
-            mxFillGrad->hide();
+            mpFillLB->Hide();
+            mpFillAttr->Show();
+            mpFillAttr->Clear();
+            mpFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
+            mpFillGrad->Hide();
 
             const OUString aHatchName = GetHatchingSetOrDefault();
-            mxFillAttr->set_active_text( aHatchName );
+            mpFillAttr->SelectEntry( aHatchName );
         }
         break;
 
         case BITMAP:
         case PATTERN:
         {
-            mxFillLB->hide();
-            mxFillAttr->show();
-            mxFillAttr->clear();
-            mxFillGrad->hide();
+            mpFillLB->Hide();
+            mpFillAttr->Show();
+            mpFillAttr->Clear();
+            mpFillGrad->Hide();
             OUString aName;
             if(nPos == BITMAP)
             {
-                SvxFillAttrBox::Fill(*mxFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+                mpFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
                 aName = GetBitmapSetOrDefault();
             }
             else if(nPos == PATTERN)
             {
-                SvxFillAttrBox::Fill(*mxFillAttr, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
+                mpFillAttr->Fill(pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
                 aName = GetPatternSetOrDefault();
             }
-            mxFillAttr->set_active_text( aName );
+            mpFillAttr->SelectEntry( aName );
         }
         break;
         default:
@@ -445,55 +442,46 @@ void SlideBackground::UpdateMarginBox()
     m_nPageTopMargin = mpPageULMarginItem->GetUpper();
     m_nPageBottomMargin = mpPageULMarginItem->GetLower();
 
-    int nCustomIndex = mxMarginSelectBox->find_text(maCustomEntry);
-
     if( IsNone(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(0);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(0);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else if( IsNarrow(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(1);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(1);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else if( IsModerate(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(2);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(2);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else if( IsNormal075(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(3);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(3);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else if( IsNormal100(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(4);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(4);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else if( IsNormal125(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(5);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(5);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else if( IsWide(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
-        mxMarginSelectBox->set_active(6);
-        if (nCustomIndex != -1)
-            mxMarginSelectBox->remove(nCustomIndex);
+        mpMarginSelectBox->SelectEntryPos(6);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
     }
     else
     {
-        if (nCustomIndex == -1)
-            mxMarginSelectBox->append_text(maCustomEntry);
-        mxMarginSelectBox->set_active_text(maCustomEntry);
+        if(mpMarginSelectBox->GetEntryPos(maCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
+            mpMarginSelectBox->InsertEntry(maCustomEntry);
+        mpMarginSelectBox->SelectEntry(maCustomEntry);
     }
 }
 
@@ -600,8 +588,8 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
             {
                 if( IsDraw() )
                 {
-                    mxCloseMaster->hide();
-                    mxEditMaster->hide();
+                    mpCloseMaster->Hide();
+                    mpEditMaster->Hide();
                     if( maContext == maDrawMasterContext)
                         SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
                     else
@@ -616,7 +604,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 }
                 else if ( maContext == maImpressNotesContext )
                 {
-                    mxMasterLabel->set_label(SdResId(STR_MASTERSLIDE_LABEL));
+                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_LABEL));
                     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
 
                     if (pMainViewShell)
@@ -639,7 +627,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
 
 void SlideBackground::populateMasterSlideDropdown()
 {
-    mxMasterSlide->clear();
+    mpMasterSlide->Clear();
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
     sal_uInt16 nCount = pDoc ? pDoc->GetMasterPageCount() : 0;
@@ -650,7 +638,7 @@ void SlideBackground::populateMasterSlideDropdown()
         {
             OUString aLayoutName(pMaster->GetLayoutName());
             aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
-            mxMasterSlide->append_text(aLayoutName);
+            mpMasterSlide->InsertEntry(aLayoutName);
         }
     }
     updateMasterSlideSelection();
@@ -664,7 +652,7 @@ void SlideBackground::updateMasterSlideSelection()
     {
         SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
         SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
-        mxMasterSlide->set_active_text(pMasterPage->GetName());
+        mpMasterSlide->SelectEntry(pMasterPage->GetName());
     }
 }
 
@@ -672,23 +660,23 @@ void SlideBackground::dispose()
 {
     removeListener();
 
-    mxCustomEntry.reset();
-    mxMarginLabel.reset();
-    mxPaperSizeBox.reset();
-    mxPaperOrientation.reset();
-    mxMasterSlide.reset();
-    mxBackgroundLabel.reset();
-    mxFillAttr.reset();
-    mxFillGrad.reset();
-    mxFillStyle.reset();
-    mxFillLB.reset();
-    mxInsertImage.reset();
-    mxMarginSelectBox.reset();
-    mxDspMasterBackground.reset();
-    mxDspMasterObjects.reset();
-    mxMasterLabel.reset();
-    mxEditMaster.reset();
-    mxCloseMaster.reset();
+    mpPaperSizeBox.clear();
+    mpPaperOrientation.clear();
+    mpMasterSlide.clear();
+    mpBackgroundLabel.clear();
+    mpFillAttr.clear();
+    mpFillGrad.clear();
+    mpFillStyle.clear();
+    mpFillLB.clear();
+    mpInsertImage.clear();
+    mpMarginSelectBox.disposeAndClear();
+    mpDspMasterBackground.clear();
+    mpDspMasterObjects.clear();
+    mpMasterLabel.clear();
+    mpEditMaster.clear();
+    mpCloseMaster.clear();
+
+    m_pContainer.clear();
 
     maPaperSizeController.dispose();
     maPaperOrientationController.dispose();
@@ -814,7 +802,7 @@ void SlideBackground::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxFillStyle->set_active(static_cast< sal_Int32 >(SOLID));
+                mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(SOLID));
                 mpColorItem.reset(pState ? static_cast< XFillColorItem* >(pState->Clone()) : nullptr);
                 Update();
             }
@@ -825,7 +813,7 @@ void SlideBackground::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxFillStyle->set_active(static_cast< sal_Int32 >(HATCH));
+                mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(HATCH));
                 mpHatchItem.reset(pState ? static_cast < XFillHatchItem* >(pState->Clone()) : nullptr);
                 Update();
             }
@@ -836,7 +824,7 @@ void SlideBackground::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxFillStyle->set_active(static_cast< sal_Int32>(GRADIENT));
+                mpFillStyle->SelectEntryPos(static_cast< sal_Int32>(GRADIENT));
                 mpGradientItem.reset(pState ? static_cast< XFillGradientItem* >(pState->Clone()) : nullptr);
                 Update();
             }
@@ -850,12 +838,12 @@ void SlideBackground::NotifyItemUpdate(
                 if(mpBitmapItem)
                 {
                     if(mpBitmapItem->isPattern())
-                        mxFillStyle->set_active(static_cast< sal_Int32 >(PATTERN));
+                        mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(PATTERN));
                     else
-                        mxFillStyle->set_active(static_cast< sal_Int32 >(BITMAP));
+                        mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(BITMAP));
                 }
                 else
-                    mxFillStyle->set_active(static_cast< sal_Int32 >(BITMAP));
+                    mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(BITMAP));
                 Update();
             }
         }
@@ -872,23 +860,23 @@ void SlideBackground::NotifyItemUpdate(
                 switch(eXFS)
                 {
                     case drawing::FillStyle_NONE:
-                        mxFillStyle->set_active(static_cast< sal_Int32 >(NONE));
+                        mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(NONE));
                         break;
                     case drawing::FillStyle_SOLID:
-                        mxFillStyle->set_active(static_cast< sal_Int32 >(SOLID));
+                        mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(SOLID));
                         break;
                     case drawing::FillStyle_GRADIENT:
-                        mxFillStyle->set_active(static_cast< sal_Int32 >(GRADIENT));
+                        mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(GRADIENT));
                         break;
                     case drawing::FillStyle_HATCH:
-                        mxFillStyle->set_active(static_cast< sal_Int32 >(HATCH));
+                        mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(HATCH));
                         break;
                     case drawing::FillStyle_BITMAP:
                     {
                         if(mpBitmapItem->isPattern())
-                            mxFillStyle->set_active(static_cast< sal_Int32 >(PATTERN));
+                            mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(PATTERN));
                         else
-                            mxFillStyle->set_active(static_cast< sal_Int32 >(BITMAP));
+                            mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(BITMAP));
                     }
                     break;
                     default:
@@ -907,11 +895,11 @@ void SlideBackground::NotifyItemUpdate(
             if (pSizeItem)
             {
                 Size aPaperSize = pSizeItem->GetSize();
-                if (mxPaperOrientation->get_active() == 0)
+                if (mpPaperOrientation->GetSelectedEntryPos() == 0)
                    Swap(aPaperSize);
 
                 Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit);
-                mxPaperSizeBox->set_active_id( ePaper );
+                mpPaperSizeBox->SetSelection( ePaper );
             }
         }
         break;
@@ -925,7 +913,7 @@ void SlideBackground::NotifyItemUpdate(
             {
                 mpPageItem.reset(pPageItem->Clone());
                 bool bIsLandscape = mpPageItem->IsLandscape();
-                mxPaperOrientation->set_active( bIsLandscape ? 0 : 1 );
+                mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
             }
         }
         break;
@@ -962,7 +950,7 @@ void SlideBackground::NotifyItemUpdate(
             if (eState >= SfxItemState::DEFAULT)
                 pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
             if (pBoolItem)
-                mxDspMasterBackground->set_active(pBoolItem->GetValue());
+                mpDspMasterBackground->Check(pBoolItem->GetValue());
         }
         break;
         case SID_DISPLAY_MASTER_OBJECTS:
@@ -971,14 +959,14 @@ void SlideBackground::NotifyItemUpdate(
             if (eState >= SfxItemState::DEFAULT)
                 pBoolItem = dynamic_cast< const SfxBoolItem* >(pState);
             if (pBoolItem)
-                mxDspMasterObjects->set_active(pBoolItem->GetValue());
+                mpDspMasterObjects->Check(pBoolItem->GetValue());
         }
         break;
         case SID_SELECT_BACKGROUND:
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mxFillStyle->set_active(static_cast< sal_Int32 >(BITMAP));
+                mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(BITMAP));
                 Update();
             }
         }
@@ -999,9 +987,9 @@ void SlideBackground::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 {
-    const eFillStyle nPos = static_cast<eFillStyle>(mxFillStyle->get_active());
+    const eFillStyle nPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
     Update();
 
     switch (nPos)
@@ -1045,18 +1033,18 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
         default:
         break;
     }
-//TODO    mxFillStyle->Selected();
+    mpFillStyle->Selected();
 }
 
-IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
-    const Paper ePaper = mxPaperSizeBox->get_active_id();
+    const Paper ePaper = mpPaperSizeBox->GetSelection();
     Size aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
 
-    if (mxPaperOrientation->get_active() == 0)
+    if (mpPaperOrientation->GetSelectedEntryPos() == 0)
         Swap(aSize);
 
-    mpPageItem->SetLandscape(mxPaperOrientation->get_active() == 0);
+    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectedEntryPos() == 0);
     const SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     // Page/slide properties dialog (FuPage::ExecuteDialog and ::ApplyItemSet) misuses
     // SID_ATTR_PAGE_EXT1 to distinguish between Impress and Draw, as for whether to fit
@@ -1078,22 +1066,22 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
 {
-    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mxFillStyle->get_active());
+    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpFillStyle->GetSelectedEntryPos());
     switch(eXFS)
     {
         case drawing::FillStyle_SOLID:
         {
-            XFillColorItem aItem(OUString(), mxFillLB->GetSelectEntryColor());
+            XFillColorItem aItem(OUString(), mpFillLB->GetSelectEntryColor());
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
         }
         break;
         case drawing::FillStyle_GRADIENT:
         {
             XGradient aGradient;
-            aGradient.SetStartColor(mxFillLB->GetSelectEntryColor());
-            aGradient.SetEndColor(mxFillGrad->GetSelectEntryColor());
+            aGradient.SetStartColor(mpFillLB->GetSelectEntryColor());
+            aGradient.SetEndColor(mpFillGrad->GetSelectEntryColor());
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
@@ -1106,9 +1094,9 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
 {
-    const eFillStyle nFillPos = static_cast<eFillStyle>(mxFillStyle->get_active());
+    const eFillStyle nFillPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(nFillPos)
     {
@@ -1116,7 +1104,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
         case HATCH:
         {
             const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
-            sal_uInt16 nPos = mxFillAttr->get_active();
+            sal_uInt16 nPos = mpFillAttr->GetSelectedEntryPos();
             XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetHatch();
             const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
 
@@ -1128,7 +1116,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
         case BITMAP:
         case PATTERN:
         {
-            sal_Int16 nPos = mxFillAttr->get_active();
+            sal_Int16 nPos = mpFillAttr->GetSelectedEntryPos();
             GraphicObject aBitmap;
             OUString aName;
             if( nFillPos == BITMAP )
@@ -1153,7 +1141,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
     }
 }
 
-IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, ListBox&, void)
 {
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
@@ -1168,43 +1156,33 @@ IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, weld::ComboBox&, void)
             break;
         }
     }
-    OUString aLayoutName(mxMasterSlide->get_active_text());
+    OUString aLayoutName(mpMasterSlide->GetSelectedEntry());
     pDoc->SetMasterPage(nSelectedPage, aLayoutName, pDoc, false, false);
 }
 
-IMPL_LINK_NOARG(SlideBackground, EditMasterHdl, weld::Button&, void)
-{
-    GetBindings()->GetDispatcher()->Execute( SID_SLIDE_MASTER_MODE, SfxCallMode::RECORD );
-}
-
-IMPL_LINK_NOARG(SlideBackground, SelectBgHdl, weld::Button&, void)
-{
-    GetBindings()->GetDispatcher()->Execute( SID_SELECT_BACKGROUND, SfxCallMode::RECORD );
-}
-
-IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, Button*, void)
 {
     GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
 }
 
-IMPL_LINK_NOARG(SlideBackground, DspBackground, weld::Button&, void)
+IMPL_LINK_NOARG(SlideBackground, DspBackground, Button*, void)
 {
-    bool IsChecked = mxDspMasterBackground->get_active();
+    bool IsChecked = mpDspMasterBackground->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_BACKGROUND, IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::RECORD, { &aBoolItem });
 }
 
-IMPL_LINK_NOARG(SlideBackground, DspObjects, weld::Button&, void)
+IMPL_LINK_NOARG(SlideBackground, DspObjects, Button*, void)
 {
-    bool IsChecked = mxDspMasterObjects->get_active();
+    bool IsChecked = mpDspMasterObjects->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_OBJECTS, SfxCallMode::RECORD, { &aBoolItem, &aBoolItem });
 }
 
-IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, weld::ComboBox&, void )
+IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, ListBox&, void )
 {
     bool bApplyNewPageMargins = true;
-    switch ( mxMarginSelectBox->get_active() )
+    switch ( mpMarginSelectBox->GetSelectedEntryPos() )
     {
         case 0:
             SetNone(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);

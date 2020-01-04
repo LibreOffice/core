@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <tools/diagnose_ex.h>
+#include <canvas/canvastools.hxx>
 
 #include "activitybase.hxx"
 

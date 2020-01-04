@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SVTOOLS_INC_FTLCALLDIALOGPARAMETER_HXX
+#define INCLUDED_SVTOOLS_INC_FTLCALLDIALOGPARAMETER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -44,3 +45,4 @@ struct FltCallDialogParameter
         : pWindow(pW)
         , eFieldUnit(eFiUni){};
 };
+#endif

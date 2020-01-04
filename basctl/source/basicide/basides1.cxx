@@ -56,8 +56,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-constexpr sal_Int32 TAB_HEIGHT_MARGIN = 10;
-
 namespace basctl
 {
 
@@ -1331,7 +1329,7 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         return;
 
     Size aTabBarSize;
-    aTabBarSize.setHeight( GetViewFrame()->GetWindow().GetFont().GetFontHeight() + TAB_HEIGHT_MARGIN );
+    aTabBarSize.setHeight( GetViewFrame()->GetWindow().GetFont().GetFontHeight() + 4 );
     aTabBarSize.setWidth( rSize.Width() );
 
     Size aSz( rSize );

@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_XMLSCRIPT_SOURCE_INC_MISC_HXX
+#define INCLUDED_XMLSCRIPT_SOURCE_INC_MISC_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -46,5 +47,6 @@ inline T extract_throw( css::uno::Any const & a )
 
 }
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

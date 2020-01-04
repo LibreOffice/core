@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
+#define INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
 
 #include <memory>
 #include <vector>
@@ -150,5 +151,6 @@ private:
 
 }
 
+#endif // INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

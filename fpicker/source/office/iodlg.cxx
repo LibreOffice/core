@@ -27,7 +27,6 @@
 #include "PlacesListBox.hxx"
 #include <fpsofficeResMgr.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
@@ -246,7 +245,7 @@ namespace
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "fpicker", "lcl_getHomeDirectory" );
+            OSL_FAIL( "lcl_getHomeDirectory: caught an exception!" );
         }
         return !_rHomeDir.isEmpty();
     }
@@ -1419,7 +1418,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
     }
     catch( const Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "fpicker", "iodlg::displayIOException" );
+        OSL_FAIL( "iodlg::displayIOException: caught an exception!" );
     }
 }
 

@@ -22,7 +22,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "randomwipe.hxx"
-#include "transitiontools.hxx"
 #include <tools.hxx>
 
 

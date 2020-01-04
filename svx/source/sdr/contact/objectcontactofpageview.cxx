@@ -56,7 +56,7 @@ namespace sdr
         }
 
         ObjectContactOfPageView::ObjectContactOfPageView(
-                SdrPageWindow& rPageWindow, const char *pDebugName)
+                SdrPageWindow& rPageWindow, const sal_Char *pDebugName)
             : ObjectContact()
             , Idle(pDebugName)
             , mrPageWindow(rPageWindow)

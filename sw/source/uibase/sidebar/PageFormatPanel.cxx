@@ -192,7 +192,7 @@ void PageFormatPanel::NotifyItemUpdate(
                    Swap(aPaperSize);
 
                 Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit);
-                mxPaperSizeBox->set_active_id( ePaper );
+                mxPaperSizeBox->SetSelection( ePaper );
             }
         }
         break;
@@ -250,7 +250,7 @@ void PageFormatPanel::NotifyItemUpdate(
 
 IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, weld::ComboBox&, void)
 {
-    Paper ePaper = mxPaperSizeBox->get_active_id();
+    Paper ePaper = mxPaperSizeBox->GetSelection();
     Size  aSize;
 
     if(ePaper!=PAPER_USER)

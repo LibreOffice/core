@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEMENU_HXX
+#define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEMENU_HXX
 
 #include <standard/vclxaccessiblemenuitem.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -72,5 +73,6 @@ public:
     virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
 };
 
+#endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_UNOCONTROLTABLEMODEL_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_UNOCONTROLTABLEMODEL_HXX
 
 #include <svtools/table/tablemodel.hxx>
 #include <svtools/table/tablesort.hxx>
@@ -151,5 +152,6 @@ namespace svt { namespace table
 } } // svt::table
 
 
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_UNOCONTROLTABLEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

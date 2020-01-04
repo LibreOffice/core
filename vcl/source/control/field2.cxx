@@ -146,7 +146,7 @@ static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
     }
 }
 
-static bool ImplIsPatternChar( sal_Unicode cChar, char cEditMask )
+static bool ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     sal_Int32 nType = 0;
 
@@ -193,7 +193,7 @@ static bool ImplIsPatternChar( sal_Unicode cChar, char cEditMask )
     return true;
 }
 
-static sal_Unicode ImplPatternChar( sal_Unicode cChar, char cEditMask )
+static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     if ( ImplIsPatternChar( cChar, cEditMask ) )
     {
@@ -233,7 +233,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
     sal_Unicode cTempChar;
     sal_Unicode cChar;
     sal_Unicode cLiteral;
-    char    cMask;
+    sal_Char    cMask;
     sal_Int32   nStrIndex = 0;
     sal_Int32   i = 0;
     sal_Int32   n;
@@ -734,10 +734,10 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
     // Strict mode allows only the input mode if only equal characters are allowed as mask and if
     // only spaces are specified which are not allowed by the mask
     sal_Int32   i = 0;
-    char    c = 0;
+    sal_Char    c = 0;
     while ( i < rEditMask.getLength() )
     {
-        char cTemp = rEditMask[i];
+        sal_Char cTemp = rEditMask[i];
         if ( cTemp != EDITMASK_LITERAL )
         {
             if ( (cTemp == EDITMASK_ALLCHAR) ||

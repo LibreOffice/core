@@ -37,10 +37,10 @@ private:
 protected:
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nTimeNow ) const override;
 
-    Idle( bool bAuto, const char *pDebugName );
+    Idle( bool bAuto, const sal_Char *pDebugName );
 
 public:
-    Idle( const char *pDebugName = nullptr );
+    Idle( const sal_Char *pDebugName = nullptr );
 
     virtual void  Start() override;
 };
@@ -57,7 +57,7 @@ public:
 class VCL_DLLPUBLIC AutoIdle : public Idle
 {
 public:
-    AutoIdle( const char *pDebugName );
+    AutoIdle( const sal_Char *pDebugName );
 };
 
 

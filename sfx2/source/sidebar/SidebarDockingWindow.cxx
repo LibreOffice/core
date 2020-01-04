@@ -65,7 +65,7 @@ public:
 
         try
         {
-            if (pMobileNotifier && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
             {
                 // Mobile.
                 std::stringstream aStream;
@@ -79,27 +79,28 @@ public:
                     pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
                 }
             }
-
-            // Notify the sidebar is created, and its LOKWindowId, which
-            // is needed on both Mobile and Desktop.
-            const Point pos(m_rSidebarDockingWin.GetOutOffXPixel(),
-                            m_rSidebarDockingWin.GetOutOffYPixel());
-            const OString posMessage = pos.toString();
-            const OString sizeMessage = m_rSidebarDockingWin.GetSizePixel().toString();
-
-            const std::string message = OString(posMessage + sizeMessage).getStr();
-            const vcl::LOKWindowId lokWindowId = m_rSidebarDockingWin.GetLOKWindowId();
-
-            if (lokWindowId != m_LastLOKWindowId || message != m_LastNotificationMessage)
+            else
             {
-                m_LastLOKWindowId = lokWindowId;
-                m_LastNotificationMessage = message;
+                // On desktop use the classic notifications.
+                const Point pos(m_rSidebarDockingWin.GetOutOffXPixel(),
+                                m_rSidebarDockingWin.GetOutOffYPixel());
+                const OString posMessage = pos.toString();
+                const OString sizeMessage = m_rSidebarDockingWin.GetSizePixel().toString();
 
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("type", "deck");
-                aItems.emplace_back("position", posMessage);
-                aItems.emplace_back("size", sizeMessage);
-                pNotifier->notifyWindow(lokWindowId, "created", aItems);
+                const std::string message = OString(posMessage + sizeMessage).getStr();
+                const vcl::LOKWindowId lokWindowId = m_rSidebarDockingWin.GetLOKWindowId();
+
+                if (lokWindowId != m_LastLOKWindowId || message != m_LastNotificationMessage)
+                {
+                    m_LastLOKWindowId = lokWindowId;
+                    m_LastNotificationMessage = message;
+
+                    std::vector<vcl::LOKPayloadItem> aItems;
+                    aItems.emplace_back("type", "deck");
+                    aItems.emplace_back("position", posMessage);
+                    aItems.emplace_back("size", sizeMessage);
+                    pNotifier->notifyWindow(lokWindowId, "created", aItems);
+                }
             }
         }
         catch (boost::property_tree::json_parser::json_parser_error& rError)
@@ -183,12 +184,6 @@ void SidebarDockingWindow::Resize()
     SfxDockingWindow::Resize();
 
     NotifyResize();
-}
-
-void SidebarDockingWindow::SyncUpdate()
-{
-    if (mpSidebarController.is())
-        mpSidebarController->SyncUpdate();
 }
 
 void SidebarDockingWindow::NotifyResize()

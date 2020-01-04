@@ -381,7 +381,7 @@ public:
                                 //  1 = Level 2
                                 //  2 = Custom
     sal_uInt16 m_f2on1          : 1;  // 2-page-on-1 feature is turned on.
-    sal_uInt16 m_reserved1      : 4;  // in 97 it's marked as reserved BUT
+    sal_uInt16 m_reserved1      : 4;  // in 97 its marked as reserved BUT
     sal_uInt16 m_reserved2      : 6;  // reserved ?
     //we find that the following applies,
     //2 == Japanese
@@ -866,7 +866,7 @@ struct WW8_ATRDEXTRA
 
 struct WW67_ATRD                // for versions 6/7
 {
-    char xstUsrInitl[ 10 ];     // pascal-style String holding initials
+    sal_Char xstUsrInitl[ 10 ];     // pascal-style String holding initials
                                     // of annotation author
     SVBT16 ibst;                    // index into GrpXstAtnOwners
     SVBT16 ak;                      // not used

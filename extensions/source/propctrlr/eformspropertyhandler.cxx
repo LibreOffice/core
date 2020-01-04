@@ -148,7 +148,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsPropertyHandler::getPropertyValue: caught exception!"
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsPropertyHandler::getPropertyValue: caught an exception!"
                 "(have been asked for the \"" <<_rPropertyName << "\" property.)");
         }
         return aReturn;
@@ -266,7 +266,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsPropertyHandler::setPropertyValue" );
+            OSL_FAIL( "EFormsPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -523,7 +523,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsPropertyHandler::onInteractivePropertySelection" );
+            OSL_FAIL( "EFormsPropertyHandler::onInteractivePropertySelection: caught an exception!" );
         }
 
         // something went wrong here ...(but has been asserted already)

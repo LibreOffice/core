@@ -593,10 +593,10 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
 
 static struct
 {
-    const char* mpAPIName;
+    const sal_Char* mpAPIName;
     sal_uInt16 const mnAPINameLen;
 
-    const char* mpFormName;
+    const sal_Char* mpFormName;
     sal_uInt16 const mnFormNameLen;
 }
 const SvxShapeControlPropertyMapping[] =

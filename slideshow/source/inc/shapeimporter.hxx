@@ -20,13 +20,10 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_SHAPEIMPORTER_HXX
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
-
-#include <cppcanvas/canvasgraphic.hxx>
-
+#include "unoviewcontainer.hxx"
 #include "unoview.hxx"
 
 #include "shape.hxx"

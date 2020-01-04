@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_DATE_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_DATE_HXX
 
 #include "EditBase.hxx"
 #include <limitedformats.hxx>
@@ -104,5 +105,8 @@ public:
 
 
 }   // namespace frm
+
+
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_DATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

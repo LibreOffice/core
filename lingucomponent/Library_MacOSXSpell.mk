@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,MacOSXSpell,\
 
 $(eval $(call gb_Library_use_externals,MacOSXSpell,\
 	boost_headers \
+	hunspell \
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,MacOSXSpell,\

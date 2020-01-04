@@ -20,7 +20,6 @@
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <sal/log.hxx>
-
 #include "emfppen.hxx"
 #include "emfpcustomlinecap.hxx"
 
@@ -42,7 +41,7 @@ namespace emfplushelper
         PenDataDashedLineCap    = 0x00000040,
         PenDataDashedLineOffset = 0x00000080,
         PenDataDashedLine       = 0x00000100,
-        PenDataAlignment        = 0x00000200,
+        PenDataNonCenter        = 0x00000200,
         PenDataCompoundLine     = 0x00000400,
         PenDataCustomStartCap   = 0x00000800,
         PenDataCustomEndCap     = 0x00001000
@@ -103,8 +102,8 @@ namespace emfplushelper
         if (flags & EmfPlusPenDataDashedLine)
             sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataDashedLine");
 
-        if (flags & EmfPlusPenDataAlignment)
-            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataAlignment");
+        if (flags & EmfPlusPenDataNonCenter)
+            sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataNonCenter");
 
         if (flags & EmfPlusPenDataCompoundLine)
             sFlags = sFlags.concat("\nEMF+\t\t\tEmfPlusPenDataCompoundLine");
@@ -145,30 +144,6 @@ namespace emfplushelper
             case LineJoinTypeBevel: return "LineJoinTypeBevel";
             case LineJoinTypeRound: return "LineJoinTypeRound";
             case LineJoinTypeMiterClipped: return "LineJoinTypeMiterClipped";
-        }
-        return "";
-    }
-
-    static OUString DashedLineCapTypeToString(sal_uInt32 dashedlinecaptype)
-    {
-        switch (dashedlinecaptype)
-        {
-            case DashedLineCapTypeFlat: return "DashedLineCapTypeFlat";
-            case DashedLineCapTypeRound: return "DashedLineCapTypeRound";
-            case DashedLineCapTypeTriangle: return "DashedLineCapTypeTriangle";
-        }
-        return "";
-    }
-
-    static OUString PenAlignmentToString(sal_uInt32 alignment)
-    {
-        switch (alignment)
-        {
-            case PenAlignmentCenter: return "PenAlignmentCenter";
-            case PenAlignmentInset: return "PenAlignmentInset";
-            case PenAlignmentLeft: return "PenAlignmentLeft";
-            case PenAlignmentOutset: return "PenAlignmentOutset";
-            case PenAlignmentRight: return "PenAlignmentRight";
         }
         return "";
     }
@@ -270,7 +245,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataLineStyle)
         {
             s.ReadInt32(dashStyle);
-            SAL_INFO("drawinglayer", "EMF+\t\tdashStyle: " << DashedLineCapTypeToString(dashStyle) << " (0x" << std::hex << dashStyle << ")");
+            SAL_INFO("drawinglayer", "EMF+\t\tdashStyle: 0x" << std::hex << dashStyle);
         }
         else
         {
@@ -319,10 +294,10 @@ namespace emfplushelper
             }
         }
 
-        if (penDataFlags & PenDataAlignment)
+        if (penDataFlags & PenDataNonCenter)
         {
             s.ReadInt32(alignment);
-            SAL_WARN("drawinglayer", "EMF+\t\t\tTODO PenDataAlignment: " << PenAlignmentToString(alignment) << " (0x" << std::hex << alignment << ")");
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataNonCenter: 0x" << std::hex << alignment);
         }
         else
         {
@@ -331,7 +306,6 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCompoundLine)
         {
-            SAL_WARN("drawinglayer", "EMF+\t\t\tTODO PenDataCompoundLine");
             sal_Int32 compoundArrayLen;
             s.ReadInt32(compoundArrayLen);
 
@@ -345,8 +319,8 @@ namespace emfplushelper
             for (i = 0; i < compoundArrayLen; i++)
             {
                 s.ReadFloat(compoundArray[i]);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tcompoundArray[" << i << "]: " << compoundArray[i]);
             }
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataCompoundLine: 0x");
         }
 
         if (penDataFlags & PenDataCustomStartCap)

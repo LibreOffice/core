@@ -48,7 +48,6 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/meminfo.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -769,9 +768,7 @@ bool ZipPackageStream::saveChild(
                 // the full size, but it appears that at this point it usually is.
                 sal_Int64 estimatedSize = xSeek.is() ? xSeek->getLength() : xStream->available();
 
-                // ZipOutputEntryParallel/ThreadedDeflater needs to allocate ~twice the estimatedSize.
-                // Check if we can allocate that much without breaching addressable memory limits.
-                if (estimatedSize > 1000000 && comphelper::canAlloc(2*estimatedSize))
+                if (estimatedSize > 1000000)
                 {
                     // Use ThreadDeflater which will split the stream into blocks and compress
                     // them in threads, but not in background (i.e. writeStream() will block).

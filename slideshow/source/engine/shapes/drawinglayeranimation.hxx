@@ -20,7 +20,6 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWINGLAYERANIMATION_HXX
 
 #include <sal/config.h>
-#include <memory>
 
 namespace slideshow {
 namespace internal {

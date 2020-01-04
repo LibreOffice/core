@@ -63,7 +63,6 @@
 #include <strings.hrc>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -712,7 +711,7 @@ void UpdateHandler::setControlProperty( const OUString &rCtrlName,
     }
     catch( const beans::UnknownPropertyException& )
     {
-        TOOLS_WARN_EXCEPTION( "extensions.update", "UpdateHandler::setControlProperty" );
+        OSL_FAIL( "UpdateHandler::setControlProperty: caught an exception!" );
     }
 }
 

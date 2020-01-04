@@ -145,7 +145,7 @@ namespace xmloff
             property value as if the attribute was encountered.</p>
             @see encounteredAttribute
         */
-        void        simulateDefaultedAttribute(const char* _pAttributeName, const OUString& _rPropertyName, const char* _pAttributeDefault);
+        void        simulateDefaultedAttribute(const sal_Char* _pAttributeName, const OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
 
         /** to be called from within handleAttribute, checks whether the given attribute is covered by our generic
             attribute handler mechanisms
@@ -564,7 +564,7 @@ namespace xmloff
     protected:
         OContainerImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
                 const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
-                const char* _pWrapperElementName)
+                const sal_Char* _pWrapperElementName)
             :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
             ,m_sWrapperElementName(OUString::createFromAscii(_pWrapperElementName))
         {

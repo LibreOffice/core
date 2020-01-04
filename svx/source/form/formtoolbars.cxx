@@ -21,7 +21,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
 
 #include <svx/svxids.hrc>
 
@@ -66,7 +65,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "svx", "FormToolboxes::toggleToolbox" );
+            OSL_FAIL( "FormToolboxes::toggleToolbox: caught an exception!" );
         }
     }
 

@@ -240,7 +240,7 @@ void URLParameter::readHelpDataFile()
     DataBaseIterator aDbIt( *m_pDatabases, aModule, aLanguage, false );
     bool bSuccess = false;
 
-    const char* pData = nullptr;
+    const sal_Char* pData = nullptr;
 
     helpdatafileproxy::HDFData aHDFData;
     OUString aExtensionPath;

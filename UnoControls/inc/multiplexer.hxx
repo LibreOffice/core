@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
+#define INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
 
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
@@ -38,7 +39,7 @@ namespace com::sun::star::awt { struct WindowEvent; }
 
 namespace unocontrols {
 
-class OMRCListenerMultiplexerHelper final : public css::awt::XFocusListener
+class OMRCListenerMultiplexerHelper : public css::awt::XFocusListener
                                     , public css::awt::XWindowListener
                                     , public css::awt::XKeyListener
                                     , public css::awt::XMouseListener
@@ -197,7 +198,9 @@ public:
 
     virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) override;
 
-private:
+//  protected methods
+
+protected:
 
     /**
         @short      Remove the listener from the peer.
@@ -229,5 +232,6 @@ private:
 
 }
 
+#endif // INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

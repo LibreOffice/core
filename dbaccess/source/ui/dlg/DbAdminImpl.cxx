@@ -623,7 +623,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
     }
     catch(Exception&)
     {
-        TOOLS_WARN_EXCEPTION("dbaccess", "IsReadOnly throws");
+        OSL_FAIL("IsReadOnly throws an exception!");
     }
 }
 

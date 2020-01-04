@@ -51,7 +51,7 @@ class SwASCIIParser
     SwDoc* pDoc;
     std::unique_ptr<SwPaM> pPam;
     SvStream& rInput;
-    std::unique_ptr<char[]> pArr;
+    std::unique_ptr<sal_Char[]> pArr;
     const SwAsciiOptions& rOpt;
     std::unique_ptr<SfxItemSet> pItemSet;
     long nFileSize;
@@ -98,7 +98,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     , bNewDoc(bReadNewDoc)
 {
     pPam.reset( new SwPaM( *rCursor.GetPoint() ) );
-    pArr.reset( new char [ ASC_BUFFLEN + 2 ] );
+    pArr.reset( new sal_Char [ ASC_BUFFLEN + 2 ] );
 
     pItemSet = std::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
                 svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
@@ -351,10 +351,10 @@ ErrCode SwASCIIParser::ReadChars()
 
                 if( bSwapUnicode )
                 {
-                    char* pF = pArr.get(), *pN = pArr.get() + 1;
+                    sal_Char* pF = pArr.get(), *pN = pArr.get() + 1;
                     for( sal_uLong n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
                     {
-                        char c = *pF;
+                        sal_Char c = *pF;
                         *pF = *pN;
                         *pN = c;
                     }

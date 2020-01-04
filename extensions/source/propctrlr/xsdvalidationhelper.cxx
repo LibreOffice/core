@@ -91,7 +91,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::getAvailableDataTypeNames" );
+            OSL_FAIL( "XSDValidationHelper::getAvailableDataTypeNames: caught an exception!" );
         }
     }
 
@@ -148,7 +148,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::getValidatingDataTypeName" );
+            OSL_FAIL( "XSDValidationHelper::getValidatingDataTypeName: caught an exception!" );
         }
         return sDataTypeName;
     }
@@ -170,7 +170,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::getDataTypeByName" );
+            OSL_FAIL( "XSDValidationHelper::getDataTypeByName: caught an exception!" );
         }
 
         return pReturn;
@@ -205,7 +205,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::cloneDataType" );
+            OSL_FAIL( "XSDValidationHelper::cloneDataType: caught an exception!" );
         }
         return true;
     }
@@ -230,7 +230,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::removeDataTypeFromRepository" );
+            OSL_FAIL( "XSDValidationHelper::removeDataTypeFromRepository: caught an exception!" );
             return false;
         }
         return true;
@@ -312,7 +312,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::copyDataType" );
+            OSL_FAIL( "XSDValidationHelper::copyDataType: caught an exception!" );
         }
     }
 
@@ -364,7 +364,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::findDefaultFormatForIntrospectee" );
+            OSL_FAIL( "XSDValidationHelper::findDefaultFormatForIntrospectee: caught an exception!" );
         }
     }
 
@@ -391,7 +391,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "XSDValidationHelper::getBasicTypeNameForClass" );
+            OSL_FAIL( "XSDValidationHelper::getBasicTypeNameForClass: caught an exception!" );
         }
 
         return sReturn;

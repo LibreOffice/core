@@ -376,7 +376,7 @@ void PPDParser::scanPPDDir( const OUString& rDir )
 {
     static struct suffix_t
     {
-        const char* pSuffix;
+        const sal_Char* pSuffix;
         const sal_Int32 nSuffixLen;
     } const pSuffixes[] =
     { { ".PS", 3 },  { ".PPD", 4 }, { ".PS.GZ", 6 }, { ".PPD.GZ", 7 } };
@@ -896,7 +896,7 @@ bool PPDParser::hasKey( const PPDKey* pKey ) const
     return pKey && ( m_aKeys.find( pKey->getKey() ) != m_aKeys.end() );
 }
 
-static sal_uInt8 getNibble( char cChar )
+static sal_uInt8 getNibble( sal_Char cChar )
 {
     sal_uInt8 nRet = 0;
     if( cChar >= '0' && cChar <= '9' )
@@ -912,14 +912,14 @@ OUString PPDParser::handleTranslation(const OString& i_rString, bool bIsGlobaliz
 {
     sal_Int32 nOrigLen = i_rString.getLength();
     OStringBuffer aTrans( nOrigLen );
-    const char* pStr = i_rString.getStr();
-    const char* pEnd = pStr + nOrigLen;
+    const sal_Char* pStr = i_rString.getStr();
+    const sal_Char* pEnd = pStr + nOrigLen;
     while( pStr < pEnd )
     {
         if( *pStr == '<' )
         {
             pStr++;
-            char cChar;
+            sal_Char cChar;
             while( *pStr != '>' && pStr < pEnd-1 )
             {
                 cChar = getNibble( *pStr++ ) << 4;

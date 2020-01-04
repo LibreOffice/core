@@ -23,7 +23,6 @@
 #include <strings.hrc>
 #include "formstrings.hxx"
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
 
 namespace pcr
 {
@@ -87,7 +86,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "ListSelectionDialog::initialize" );
+            OSL_FAIL( "ListSelectionDialog::initialize: caught an exception!" );
         }
     }
 
@@ -105,7 +104,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "ListSelectionDialog::commitSelection" );
+            OSL_FAIL( "ListSelectionDialog::commitSelection: caught an exception!" );
         }
     }
 

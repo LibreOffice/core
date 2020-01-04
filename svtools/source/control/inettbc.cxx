@@ -1382,6 +1382,16 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaul
 }
 
 
+SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart,
+    bool bSetDefaultHelpID )
+    :   ComboBox( pParent, _nStyle ),
+        eSmartProtocol( eSmart ),
+        bAutoCompleteMode( false ),
+        bHistoryDisabled( false )
+{
+    Init(bSetDefaultHelpID);
+}
+
 void SvtURLBox::Init(bool bSetDefaultHelpID)
 {
     pImpl.reset( new SvtURLBox_Impl );
@@ -1413,6 +1423,23 @@ void SvtURLBox::dispose()
 
     pImpl.reset();
     ComboBox::dispose();
+}
+
+void SvtURLBox::UpdatePickList( )
+{
+    if( pCtx.is() )
+    {
+        pCtx->Stop();
+        pCtx->join();
+        pCtx.clear();
+    }
+
+    OUString sText = GetText();
+    if ( !sText.isEmpty() )
+    {
+        pCtx = new SvtMatchContext_Impl( this, sText );
+        pCtx->launch();
+    }
 }
 
 void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
@@ -1561,6 +1588,13 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
             SetSelection( Selection( nLen, GetText().getLength() ) );
             return true;
         }
+
+        if ( MatchesPlaceHolder( GetText() ) )
+        {
+            // set the selection so a key stroke will overwrite
+            // the placeholder rather than edit it
+            SetSelection( Selection( 0, GetText().getLength() ) );
+        }
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -1609,6 +1643,8 @@ OUString SvtURLBox::GetURL()
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     OUString aText( GetText() );
+    if ( MatchesPlaceHolder( aText ) )
+        return aPlaceHolder;
 
     // try to get the right case preserving URL from the list of URLs
     for(std::vector<OUString>::iterator i = pImpl->aCompletions.begin(), j = pImpl->aURLs.begin(); i != pImpl->aCompletions.end() && j != pImpl->aURLs.end(); ++i, ++j)
@@ -1677,6 +1713,12 @@ OUString SvtURLBox::GetURL()
     }
 
     return aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+}
+
+void SvtURLBox::DisableHistory()
+{
+    bHistoryDisabled = true;
+    UpdatePicklistForSmartProtocol_Impl();
 }
 
 /** Parse leading ~ for Unix systems,

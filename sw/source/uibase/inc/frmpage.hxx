@@ -203,7 +203,7 @@ class SwGrfExtPage : public SfxTabPage
 
     // mirror
     BmpWindow m_aBmpWin;
-    svx::DialControl m_aCtlAngle;
+    svx::SvxDialControl m_aCtlAngle;
     std::unique_ptr<weld::Widget> m_xMirror;
     std::unique_ptr<weld::CheckButton> m_xMirrorVertBox;
     std::unique_ptr<weld::CheckButton> m_xMirrorHorzBox;

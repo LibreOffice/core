@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
 
 #include "unocontroltablemodel.hxx"
 #include <table/tablecontrol.hxx>
@@ -106,5 +107,6 @@ private:
     bool                                                    m_bTableModelInitCompleted;
     SelectionListenerMultiplexer                            m_aSelectionListeners;
 };
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

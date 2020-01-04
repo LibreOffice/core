@@ -400,7 +400,7 @@ void XMLStyleExport::exportDefaultStyle(
 }
 
 void XMLStyleExport::exportStyleFamily(
-    const char *pFamily,
+    const sal_Char *pFamily,
     const OUString& rXMLFamily,
     const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
     bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)

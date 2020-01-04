@@ -103,8 +103,7 @@ dialogs = [
         # tested in sc/qa/uitest/validity/validity.py
     # {"command": ".uno:DataSubTotals", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests2/subtotals.py
-    # {"command": ".uno:DataForm", "closeButton": "close"},
-        # tested in sc/qa/uitest/calc_tests2/dataform.py
+    {"command": ".uno:DataForm", "closeButton": "close"},
     # {"command": ".uno:DataConsolidate", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests2/consolidate.py
     {"command": ".uno:Group", "closeButton": "cancel"},

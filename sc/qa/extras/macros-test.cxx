@@ -11,13 +11,11 @@
 #include <test/unoapi_test.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <unotools/tempfile.hxx>
+
 #include <vcl/svapp.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
-
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -28,15 +26,12 @@ class ScMacrosTest : public UnoApiTest
 {
 public:
     ScMacrosTest();
-    void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                       const OUString& rFilter);
 
     void testStarBasic();
     void testVba();
     void testMSP();
     void testPasswordProtectedStarBasic();
     void testRowColumn();
-    void testPasswordProtectedUnicodeString();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -44,26 +39,9 @@ public:
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
     CPPUNIT_TEST(testRowColumn);
-    CPPUNIT_TEST(testPasswordProtectedUnicodeString);
 
     CPPUNIT_TEST_SUITE_END();
 };
-
-void ScMacrosTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                                 const OUString& rFilter)
-{
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= rFilter;
-    css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
-    xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
-
-    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
-}
 
 // I suppose you could say this test doesn't really belong here, OTOH
 // we need a full document to run the test ( it related originally to an
@@ -303,10 +281,10 @@ void ScMacrosTest::testVba()
     sTempDir += OUStringChar(SAL_PATHDELIMITER);
     OUString sTestFileName("My Test WorkBook.xls");
     Sequence< uno::Any > aParams;
-    for (const auto& rTestInfo : testInfo)
+    for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         OUString aFileName;
-        createFileURL(rTestInfo.sFileBaseName + "xls", aFileName);
+        createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
         OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
@@ -319,7 +297,7 @@ void ScMacrosTest::testVba()
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
-        bool bWorkbooksHandling = rTestInfo.sFileBaseName == "Workbooks." && !sTempDir.isEmpty() ;
+        bool bWorkbooksHandling = testInfo[i].sFileBaseName == "Workbooks." && !sTempDir.isEmpty() ;
 
         if ( bWorkbooksHandling )
         {
@@ -331,15 +309,15 @@ void ScMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url " << rTestInfo.sMacroUrl);
+        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url " << testInfo[i].sMacroUrl);
 
         SfxObjectShell::CallXScript(
-            xComponent, rTestInfo.sMacroUrl, aParams, aRet, aOutParamIndex,
+            xComponent, testInfo[i].sMacroUrl, aParams, aRet, aOutParamIndex,
             aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            OUString("script reported failure in file " + rTestInfo.sFileBaseName + "xls")
+            OUString("script reported failure in file " + testInfo[i].sFileBaseName + "xls")
                 .toUtf8()
                 .getStr(),
             OUString("OK"), aStringRes);
@@ -391,66 +369,6 @@ void ScMacrosTest::testRowColumn()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
 
     pDocSh->DoClose();
-}
-
-void ScMacrosTest::testPasswordProtectedUnicodeString()
-{
-    const OUString sCorrectString(u"English Русский 中文");
-    const OUString sMacroURL(
-        "vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
-    const OUString sLibName("Protected");
-
-    OUString aFileName;
-    createFileURL("tdf57113.ods", aFileName);
-    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
-
-    // Check that loading password-protected macro image correctly loads Unicode strings
-    {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
-        SfxObjectShell::CallXScript(xComponent, sMacroURL, aParams, aRet, aOutParamIndex,
-                                    aOutParam);
-
-        OUString aReturnValue;
-        aRet >>= aReturnValue;
-        CPPUNIT_ASSERT_EQUAL(sCorrectString, aReturnValue);
-    }
-
-    // Unlock and load the library, to regenerate the image on save
-    css::uno::Reference<css::document::XEmbeddedScripts> xES(xComponent, UNO_QUERY_THROW);
-    css::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
-                                                            UNO_QUERY_THROW);
-    css::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xPasswd->isLibraryPasswordProtected(sLibName));
-    CPPUNIT_ASSERT(!xPasswd->isLibraryPasswordVerified(sLibName));
-    CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, "password"));
-    xLC->loadLibrary(sLibName);
-    CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
-
-    // Now check that saving stores Unicode data correctly in image's string pool
-    saveAndReload(xComponent, "calc8");
-    CPPUNIT_ASSERT(xComponent);
-
-    {
-        Any aRet;
-        Sequence<sal_Int16> aOutParamIndex;
-        Sequence<Any> aOutParam;
-        Sequence<uno::Any> aParams;
-
-        SfxObjectShell::CallXScript(xComponent, sMacroURL, aParams, aRet, aOutParamIndex,
-                                    aOutParam);
-
-        OUString aReturnValue;
-        aRet >>= aReturnValue;
-        CPPUNIT_ASSERT_EQUAL(sCorrectString, aReturnValue);
-    }
-
-    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(true);
 }
 
 ScMacrosTest::ScMacrosTest()

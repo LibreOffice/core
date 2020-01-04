@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
+#define INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <cppuhelper/propshlp.hxx>
@@ -179,5 +180,6 @@ private:
 
 }
 
+#endif // INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

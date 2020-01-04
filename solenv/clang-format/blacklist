@@ -3758,6 +3758,7 @@ drawinglayer/source/geometry/viewinformation2d.cxx
 drawinglayer/source/geometry/viewinformation3d.cxx
 drawinglayer/source/primitive2d/animatedprimitive2d.cxx
 drawinglayer/source/primitive2d/backgroundcolorprimitive2d.cxx
+drawinglayer/source/primitive2d/baseprimitive2d.cxx
 drawinglayer/source/primitive2d/bitmapprimitive2d.cxx
 drawinglayer/source/primitive2d/borderlineprimitive2d.cxx
 drawinglayer/source/primitive2d/controlprimitive2d.cxx
@@ -6066,6 +6067,7 @@ include/drawinglayer/geometry/viewinformation2d.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
 include/drawinglayer/primitive2d/animatedprimitive2d.hxx
 include/drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx
+include/drawinglayer/primitive2d/baseprimitive2d.hxx
 include/drawinglayer/primitive2d/bitmapprimitive2d.hxx
 include/drawinglayer/primitive2d/borderlineprimitive2d.hxx
 include/drawinglayer/primitive2d/controlprimitive2d.hxx
@@ -7239,6 +7241,7 @@ include/svx/sidebar/LineWidthPopup.hxx
 include/svx/sidebar/PanelLayout.hxx
 include/svx/sidebar/SelectionAnalyzer.hxx
 include/svx/sidebar/SelectionChangeHandler.hxx
+include/svx/sidebar/SidebarDialControl.hxx
 include/svx/sidebar/ValueSetWithTextControl.hxx
 include/svx/spacinglistbox.hxx
 include/svx/sphere3d.hxx
@@ -14298,6 +14301,7 @@ svx/source/sidebar/paragraph/ParaSpacingWindow.cxx
 svx/source/sidebar/paragraph/ParaSpacingWindow.hxx
 svx/source/sidebar/possize/PosSizePropertyPanel.cxx
 svx/source/sidebar/possize/PosSizePropertyPanel.hxx
+svx/source/sidebar/possize/SidebarDialControl.cxx
 svx/source/sidebar/shadow/ShadowPropertyPanel.cxx
 svx/source/sidebar/shadow/ShadowPropertyPanel.hxx
 svx/source/sidebar/shapes/DefaultShapesPanel.cxx

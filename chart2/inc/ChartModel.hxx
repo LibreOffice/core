@@ -16,7 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+#ifndef INCLUDED_CHART2_INC_CHARTMODEL_HXX
+#define INCLUDED_CHART2_INC_CHARTMODEL_HXX
 
 #include <LifeTime.hxx>
 
@@ -471,5 +472,7 @@ private:
 };
 
 }  // namespace chart
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

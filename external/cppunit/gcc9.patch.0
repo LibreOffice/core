@@ -1,0 +1,11 @@
+--- include/cppunit/extensions/TestSuiteBuilderContext.h
++++ include/cppunit/extensions/TestSuiteBuilderContext.h
+@@ -37,6 +37,8 @@
+   TestSuiteBuilderContextBase( TestSuite &suite,
+                                const TestNamer &namer,
+                                TestFixtureFactory &factory );
++
++  TestSuiteBuilderContextBase(TestSuiteBuilderContextBase const &) = default;
+ 
+   virtual ~TestSuiteBuilderContextBase();
+ 

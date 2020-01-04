@@ -11,8 +11,6 @@ $(eval $(call gb_UIConfig_UIConfig,svx))
 
 $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/acceptrejectchangesdialog \
-	svx/uiconfig/ui/accessibilitycheckdialog \
-	svx/uiconfig/ui/accessibilitycheckentry \
 	svx/uiconfig/ui/addconditiondialog \
 	svx/uiconfig/ui/adddataitemdialog \
 	svx/uiconfig/ui/addinstancedialog \
@@ -26,7 +24,6 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/chinesedictionary \
 	svx/uiconfig/ui/classificationdialog \
 	svx/uiconfig/ui/colorwindow \
-	svx/uiconfig/ui/currencywindow \
 	svx/uiconfig/ui/colsmenu \
 	svx/uiconfig/ui/compressgraphicdialog \
 	svx/uiconfig/ui/convertmenu \

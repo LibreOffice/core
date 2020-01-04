@@ -75,7 +75,6 @@
 #include <sfx2/bindings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 
@@ -184,7 +183,7 @@ sal_Int32 getElementPos(const Reference< css::container::XIndexAccess>& xCont, c
             }
             catch(Exception&)
             {
-                TOOLS_WARN_EXCEPTION( "svx", "getElementPos" );
+                OSL_FAIL( "getElementPos: caught an exception!" );
             }
 
         }

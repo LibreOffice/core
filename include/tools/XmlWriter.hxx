@@ -40,7 +40,7 @@ public:
 
     ~XmlWriter();
 
-    bool startDocument(sal_Int32 nIndent = 2, bool bWriteXmlHeader = true);
+    bool startDocument(sal_Int32 nIndent = 2);
     void endDocument();
 
     void startElement(const OString& sName);

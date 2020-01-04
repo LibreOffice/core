@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 
 #include <vcl/wizardmachine.hxx>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
@@ -58,5 +59,6 @@ namespace svt { namespace uno
 } } // namespace svt::uno
 
 
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

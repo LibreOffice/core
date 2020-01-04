@@ -7252,7 +7252,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             LDFLAGS=""
             AC_MSG_CHECKING([for clang libraries to use])
             if test -z "$CLANGTOOLLIBS"; then
-                LIBS="-lclangTooling -lclangFrontend -lclangDriver -lclangParse -lclangSema -lclangEdit \
+                LIBS="-lclangTooling -lclangDriver -lclangFrontend -lclangParse -lclangSema -lclangEdit \
  -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
                     AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
@@ -10172,9 +10172,7 @@ dnl ===================================================================
 dnl Check for system hunspell
 dnl ===================================================================
 AC_MSG_CHECKING([which libhunspell to use])
-if test "$_os" = iOS; then
-   AC_MSG_RESULT([none])
-elif test "$with_system_hunspell" = "yes"; then
+if test "$with_system_hunspell" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_HUNSPELL=TRUE
     AC_LANG_PUSH([C++])
@@ -10273,9 +10271,7 @@ dnl ===================================================================
 dnl Checking for mythes
 dnl ===================================================================
 AC_MSG_CHECKING([which mythes to use])
-if test "$_os" = iOS; then
-   AC_MSG_RESULT([none])
-elif test "$with_system_mythes" = "yes"; then
+if test "$with_system_mythes" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_MYTHES=TRUE
     AC_LANG_PUSH([C++])

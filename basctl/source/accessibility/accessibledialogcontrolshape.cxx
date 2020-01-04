@@ -32,7 +32,6 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -193,7 +192,7 @@ OUString AccessibleDialogControlShape::GetModelStringProperty( OUString const & 
     }
     catch ( const Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "basctl", "AccessibleDialogControlShape::GetModelStringProperty" );
+        OSL_FAIL( "AccessibleDialogControlShape::GetModelStringProperty: caught an exception!" );
     }
 
     return sReturn;

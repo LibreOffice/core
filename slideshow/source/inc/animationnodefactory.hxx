@@ -21,12 +21,17 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODEFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
-#include <basegfx/vector/b2dvector.hxx>
-
+#include "subsettableshapemanager.hxx"
 #include "animationnode.hxx"
 #include "slideshowcontext.hxx"
+#include "eventqueue.hxx"
+#include "activitiesqueue.hxx"
+#include "usereventqueue.hxx"
+
+#include <vector>
 
 
 namespace slideshow
