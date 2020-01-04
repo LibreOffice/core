@@ -562,6 +562,7 @@ static bool lcl_IsOnBlacklist(OUString const & rShapeType)
         "cube",
         "paper",
         "frame",
+        "forbidden",
         "smiley",
         "sun",
         "flower",
@@ -620,7 +621,6 @@ static bool lcl_IsOnBlacklist(OUString const & rShapeType)
 static bool lcl_IsOnWhitelist(OUString const & rShapeType)
 {
     static const std::initializer_list<OUStringLiteral> vWhitelist = {
-        "forbidden",
         "heart",
         "puzzle"
     };
@@ -985,6 +985,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             case mso_sptDonut:
             case mso_sptSun:
             case mso_sptMoon:
+            case mso_sptNoSmoking:
             case mso_sptHorizontalScroll:
             case mso_sptBevel:
             case mso_sptBracketPair:
