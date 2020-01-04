@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ddb31ca0_4e2ba659",
+        "filename": "sd/source/core/CustomAnimationEffect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-04T00:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "363e4ffa_cfc6f5de",
+      "revId": "5f3904e0fcf89128c480eef61c1873f0d0b04dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26489504_39c5cf96",
         "filename": "sd/source/core/CustomAnimationEffect.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-02T18:31:33Z",
       "side": 1,
       "message": "however, you could convert this std::accumulate to a range-based for loop, and exit the loop as soon as you see a true value\n\nyou could also run over the enumeration in this method and build a map of \u003cnPara, NumberingLevel\u003e and pass that map down, which should fix the O(n^2) problem here",
+      "revId": "5f3904e0fcf89128c480eef61c1873f0d0b04dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd10a932_39c4cac3",
+        "filename": "sd/source/core/CustomAnimationEffect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-04T00:05:23Z",
+      "side": 1,
+      "message": "not addressed, but a minor micro-opt fwict",
+      "parentUuid": "26489504_39c5cf96",
       "revId": "5f3904e0fcf89128c480eef61c1873f0d0b04dab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
