@@ -296,7 +296,7 @@ namespace svxform
 
     void DataTreeListBox::DeleteAndClear()
     {
-        sal_uIntPtr i, nCount = GetEntryCount();
+        sal_uInt64 i, nCount = GetEntryCount();
         for ( i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = GetEntry(i);
