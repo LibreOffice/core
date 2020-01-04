@@ -65,18 +65,25 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
         cairo_surface_t* pSurface = m_rFrame.m_pSurface.get();
         cairo_surface_flush(pSurface);
 
-        QImage aImage(cairo_image_surface_get_data(pSurface), size().width(), size().height(),
-                      Qt5_DefaultFormat32);
-        p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
+        const qreal ratio = qApp->devicePixelRatio();
+        QImage aImage(cairo_image_surface_get_data(pSurface),
+                      cairo_image_surface_get_width(pSurface),
+                      cairo_image_surface_get_height(pSurface), Qt5_DefaultFormat32);
+        aImage.setDevicePixelRatio(ratio);
+        QSize size = pEvent->rect().size();
+        QSize mappedSize(ceil(size.width() * ratio), ceil(size.height() * ratio));
+        QRect mappedRect(pEvent->rect().topLeft() * ratio, size * ratio);
+        p.drawImage(pEvent->rect(), aImage, mappedRect);
     }
     else
-        p.drawImage(pEvent->rect().topLeft(), *m_rFrame.m_pQImage, pEvent->rect());
+        p.drawImage(rect(), *m_rFrame.m_pQImage, pEvent->rect());
 }
 
 void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
     const int nWidth = pEvent->size().width();
     const int nHeight = pEvent->size().height();
+    const qreal ratio = qApp->devicePixelRatio();
 
     m_rFrame.maGeometry.nWidth = nWidth;
     m_rFrame.maGeometry.nHeight = nHeight;
@@ -85,10 +92,11 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
     {
         if (m_rFrame.m_pSvpGraphics)
         {
-            cairo_surface_t* pSurface
-                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+            cairo_surface_t* pSurface = cairo_image_surface_create(
+                CAIRO_FORMAT_ARGB32, ceil(nWidth * ratio), ceil(nHeight * ratio));
             cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
                                         &m_rFrame.m_aDamageHandler, nullptr);
+            cairo_surface_set_device_scale(pSurface, ratio, ratio);
             m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
             UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
             m_rFrame.m_pSurface.reset(pSurface);
