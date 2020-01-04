@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f6daa27_0c231374",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-04T07:29:30Z",
+      "side": 1,
+      "message": "we don\u0027t actually need it here, but the logic is a little more convoluted",
+      "revId": "911202bb652f536bdb377022c0d621a8c371c19d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "979c0fef_1af3de11",
+        "filename": "svx/source/table/accessiblecell.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-04T07:29:30Z",
+      "side": 1,
+      "message": "dont need it here either",
+      "revId": "911202bb652f536bdb377022c0d621a8c371c19d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
