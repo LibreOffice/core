@@ -258,7 +258,6 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
 #if HAVE_FEATURE_SCRIPTING
     else if ( SbiRuntime::isVBAEnabled() )
     {
-        SAL_WARN("basic", "Reporting error converting");
         return ERRCODE_BASIC_CONVERSION;
     }
 #endif
