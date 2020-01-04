@@ -751,6 +751,7 @@ protected:
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
     virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
+    virtual void                        Yusuf(const OutputDevice* pSrcDev, SalGraphics **pSrcGraphics)override;
     virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
     virtual bool                        UsePolyPolygonForComplexGradient() override;
 
