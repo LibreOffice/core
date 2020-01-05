@@ -1484,19 +1484,25 @@ void FormulaCompiler::Factor()
         if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         {
             pFacToken = mpToken;
+            const bool bMaySkipPair = eOp == ocTrue || eOp == ocFalse;
             eOp = NextToken();
-            if (eOp != ocOpen)
+            const bool bOpen = eOp == ocOpen;
+            if (!bOpen && !bMaySkipPair)
             {
                 SetError( FormulaError::PairExpected);
                 PutCode( pFacToken );
             }
             else
             {
-                eOp = NextToken();
-                if (eOp != ocClose)
-                    SetError( FormulaError::PairExpected);
+                if (bOpen)
+                {
+                    eOp = NextToken();
+                    if (eOp != ocClose)
+                        SetError(FormulaError::PairExpected);
+                }
                 PutCode( pFacToken);
-                NextToken();
+                if (bOpen)
+                    NextToken();
             }
         }
         else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)

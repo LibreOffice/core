@@ -2785,13 +2785,15 @@ Label_MaskStateMachine:
 
 // Convert symbol to token
 
-bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
+std::tuple<bool, OpCode, OUString> ScCompiler::FindOpCode(const OUString&rName, bool bInArray)
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
     bool bFound = (iLook != mxSymbols->getHashMap().end());
+    OpCode eOp = ocNone;
+    OUString aIntName;
     if (bFound)
     {
-        OpCode eOp = iLook->second;
+        eOp = iLook->second;
         if (bInArray)
         {
             if (rName == mxSymbols->getSymbol(ocArrayColSep))
@@ -2829,7 +2831,6 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             // unassigned for import.
             eOp = ocFloor_Math;
         }
-        maRawToken.SetOpCode(eOp);
     }
     else if (mxSymbols->isODFF())
     {
@@ -2860,7 +2861,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         {
             if (rName.equalsIgnoreAsciiCaseAscii( rOdffAlias.pName))
             {
-                maRawToken.SetOpCode( rOdffAlias.eOp);
+                eOp = rOdffAlias.eOp;
                 bFound = true;
                 break;  // for
             }
@@ -2888,7 +2889,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         {
             if (rName.equalsIgnoreAsciiCaseAscii( rOoxmlAlias.pName))
             {
-                maRawToken.SetOpCode( rOoxmlAlias.eOp);
+                eOp = rOoxmlAlias.eOp;
                 bFound = true;
                 break;  // for
             }
@@ -2913,7 +2914,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         {
             if (rName.equalsIgnoreAsciiCaseAscii( rPodfAlias.pName))
             {
-                maRawToken.SetOpCode( rPodfAlias.eOp);
+                eOp = rPodfAlias.eOp;
                 bFound = true;
                 break;  // for
             }
@@ -2922,7 +2923,6 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
 
     if (!bFound)
     {
-        OUString aIntName;
         if (mxSymbols->hasExternals())
         {
             // If symbols are set by filters get mapping to exact name.
@@ -2933,21 +2933,13 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
                 if (ScGlobal::GetAddInCollection()->GetFuncData( (*iExt).second))
                     aIntName = (*iExt).second;
             }
-            if (aIntName.isEmpty())
-            {
-                // If that isn't found we might continue with rName lookup as a
-                // last resort by just falling through to FindFunction(), but
-                // it shouldn't happen if the map was setup correctly. Don't
-                // waste time and bail out.
-                return false;
-            }
         }
-        if (aIntName.isEmpty())
+        else
         {
             // Old (deprecated) addins first for legacy.
             if (ScGlobal::GetLegacyFuncCollection()->findByName(cSymbol))
             {
-                maRawToken.SetExternal( cSymbol );
+                aIntName = cSymbol;
             }
             else
                 // bLocalFirst=false for (English) upper full original name
@@ -2957,24 +2949,53 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         }
         if (!aIntName.isEmpty())
         {
-            maRawToken.SetExternal( aIntName );     // international name
             bFound = true;
         }
     }
-    OpCode eOp;
-    if (bFound && ((eOp = maRawToken.GetOpCode()) == ocSub || eOp == ocNegSub))
+    return { bFound, eOp, aIntName };
+}
+
+bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray, bool bFuncWithoutParen )
+{
+    const auto& [bFound, eOp, aIntName] = FindOpCode(rName, bInArray);
+    if (bFound)
     {
-        bool bShouldBeNegSub =
-            (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
-             (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_BIN_OP) ||
-             eLastOp == ocArrayOpen ||
-             eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
-        if (bShouldBeNegSub && eOp == ocSub)
-            maRawToken.NewOpCode( ocNegSub );
-            //TODO: if ocNegSub had ForceArray we'd have to set it here
-        else if (!bShouldBeNegSub && eOp == ocNegSub)
-            maRawToken.NewOpCode( ocSub );
+        if (aIntName.isEmpty())
+        {
+            if (bFuncWithoutParen)
+            {
+                switch (eOp)
+                {
+                case ocTrue:
+                case ocFalse:
+                    break; // allow these functions without trailing parentheses
+                default:
+                    return false;
+                };
+            }
+            maRawToken.SetOpCode(eOp);
+            if (eOp == ocSub || eOp == ocNegSub)
+            {
+                bool bShouldBeNegSub =
+                    (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
+                     (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_BIN_OP) ||
+                     eLastOp == ocArrayOpen ||
+                     eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
+                if (bShouldBeNegSub && eOp == ocSub)
+                    maRawToken.NewOpCode( ocNegSub );
+                    //TODO: if ocNegSub had ForceArray we'd have to set it here
+                else if (!bShouldBeNegSub && eOp == ocNegSub)
+                    maRawToken.NewOpCode( ocSub );
+            }
+        }
+        else
+        {
+            if (bFuncWithoutParen)
+                return false;
+            maRawToken.SetExternal(aIntName); // international name
+        }
     }
+
     return bFound;
 }
 
@@ -3011,28 +3032,7 @@ bool ScCompiler::IsValue( const OUString& rSym )
         sal_Int32 nParseEnd;
         double fVal = rtl::math::stringToDouble( rSym, '.', 0, &eStatus, &nParseEnd);
         if (nParseEnd != rSym.getLength())
-        {
-            // Not (only) a number.
-
-            if (nParseEnd > 0)
-                return false;   // partially a number => no such thing
-
-            if (lcl_ParenthesisFollows( aFormula.getStr() + nSrcPos))
-                return false;   // some function name, not a constant
-
-            // Could be TRUE or FALSE constant.
-            if (rSym.equalsIgnoreAsciiCase("TRUE"))
-            {
-                maRawToken.SetDouble( 1.0 );
-                return true;
-            }
-            if (rSym.equalsIgnoreAsciiCase("FALSE"))
-            {
-                maRawToken.SetDouble( 0.0 );
-                return true;
-            }
             return false;
-        }
         if (eStatus == rtl_math_ConversionStatus_OutOfRange)
             SetError( FormulaError::IllegalArgument );
         maRawToken.SetDouble( fVal );
@@ -4262,16 +4262,17 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if (bAsciiNonAlnum && cSymbol[1] == 0)
     {
         // Shortcut for operators and separators that need no further checks or upper.
-        if (IsOpCode( OUString( cSymbol), bInArray ))
+        if (IsOpCode( OUString( cSymbol), bInArray, false ))
             return true;
     }
+    bool bHasFuncParen = false;
     if ( bMayBeFuncName )
     {
         // a function name must be followed by a parenthesis
         const sal_Unicode* p = aFormula.getStr() + nSrcPos;
         while( *p == ' ' )
             p++;
-        bMayBeFuncName = ( *p == '(' );
+        bHasFuncParen = ( *p == '(' );
     }
 
     // Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
@@ -4318,7 +4319,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
                 break;  // do; create ocBad token or set error.
             }
-            if (IsOpCode( aUpper, bInArray ))
+            if (IsOpCode( aUpper, bInArray, false ))
                 return true;
         }
 
@@ -4326,8 +4327,11 @@ bool ScCompiler::NextNewToken( bool bInArray )
         {
             if (aUpper.isEmpty())
                 bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
-            if (IsOpCode( aUpper, bInArray ))
+            if (IsOpCode( aUpper, bInArray, !bHasFuncParen ))
                 return true;
+            // Only TRUE/FALSE (and their localized variants) may omit parentheses, checked above,
+            // so don't consider symbols without following parentheses as possible functions below
+            bMayBeFuncName = bHasFuncParen;
         }
 
         // Column 'DM' ("Deutsche Mark", German currency) couldn't be
