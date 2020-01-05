@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcc08fbe_6ba54a6e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-05T15:01:41Z",
+      "side": 1,
+      "message": "That\u0027s not relevant here, is it?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "51d4a1d15a7b2a7c488b8c02bf5c8c0b32415755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5cea13b_03f7aa6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-05T15:01:41Z",
+      "side": 1,
+      "message": "The first issue I encountered when building against the 10.12 SDK is \"fpicker/source/aqua/ControlHelper.hxx:119:78: error: use of undeclared identifier \u0027NSControlStateValueOn\u0027\".",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 62
+      },
+      "revId": "51d4a1d15a7b2a7c488b8c02bf5c8c0b32415755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
