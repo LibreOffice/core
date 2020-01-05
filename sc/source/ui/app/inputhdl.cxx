@@ -1155,7 +1155,8 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append( " : " );
                                 aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
                                 aNew = aBuf.makeStringAndClear();
-                                ShowTipBelow( aNew );
+                                //ShowTipBelow( aNew );
+                                ShowTip( aNew );  //Fixed tdf#124443
                                 bFound = true;
                             }
                         }
