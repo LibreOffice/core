@@ -39,5 +39,5 @@
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineBullet"/>
 </toolbar:toolbar>
