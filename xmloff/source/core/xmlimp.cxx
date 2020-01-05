@@ -742,7 +742,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             Sequence < OUString > aParams { rName };
 
             SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
-                      aParams, "Root element unknown", xDummyLocator );
+                      aParams, "Root element " + aLocalName + " unknown", xDummyLocator );
         }
     }
 

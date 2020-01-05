@@ -39,7 +39,7 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
@@ -84,7 +84,7 @@ static ErrCode ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const uno::Reference<XComponentContext> & rxContext,
-    const uno::Reference< XDocumentHandler >& _xFilter )
+    ODBFilter& _rFilter )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
@@ -94,26 +94,13 @@ static ErrCode ReadThroughComponent(
     InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
-    uno::Reference< XParser > xParser = Parser::create(rxContext);
-    SAL_INFO("dbaccess", "parser created" );
-
-    // get filter
-    OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
-    if( !_xFilter.is() )
-        return ErrCode(1);
-
-    // connect parser and filter
-    xParser->setDocumentHandler( _xFilter );
-
     // connect model and filter
-    uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
-    xImporter->setTargetDocument( xModelComponent );
+    _rFilter.setTargetDocument( xModelComponent );
 
     // finally, parser the stream
     try
     {
-        xParser->parseStream( aParserInput );
+        _rFilter.parseStream( aParserInput );
     }
     catch (const SAXParseException&)
     {
@@ -147,7 +134,7 @@ static ErrCode ReadThroughComponent(
     const char* pStreamName,
     const char* pCompatibilityStreamName,
     const uno::Reference<XComponentContext> & rxContext,
-    const uno::Reference< XDocumentHandler >& _xFilter)
+    ODBFilter& _rFilter)
 {
     OSL_ENSURE( xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
@@ -192,7 +179,7 @@ static ErrCode ReadThroughComponent(
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,rxContext
-                                    ,_xFilter );
+                                    ,_rFilter );
     }
 
     // TODO/LATER: better error handling
@@ -371,7 +358,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,"settings.xml"
                                     ,"Settings.xml"
                                     ,GetComponentContext()
-                                    ,this
+                                    ,*this
                                     );
 
         if ( nRet == ERRCODE_NONE )
@@ -380,7 +367,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,"content.xml"
                                     ,"Content.xml"
                                     ,GetComponentContext()
-                                    ,this
+                                    ,*this
                                     );
 
         bRet = nRet == ERRCODE_NONE;
@@ -413,10 +400,8 @@ namespace {
 class DBXMLDocumentSettingsContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentSettingsContext(SvXMLImport & rImport,
-           sal_uInt16 const nPrefix,
-           const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentSettingsContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
@@ -438,10 +423,8 @@ public:
 class DBXMLDocumentStylesContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentStylesContext(SvXMLImport & rImport,
-            sal_uInt16 const nPrefix,
-            const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentStylesContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
@@ -505,10 +488,8 @@ public:
 class DBXMLDocumentContentContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentContentContext(SvXMLImport & rImport,
-            sal_uInt16 const nPrefix,
-            const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentContentContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
@@ -545,31 +526,32 @@ public:
 
 }
 
-SvXMLImportContext* ODBFilter::CreateDocumentContext(sal_uInt16 const nPrefix,
-                                      const OUString& rLocalName,
-                                      const uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+SvXMLImportContext* ODBFilter::CreateFastContext(sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetDocElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_DOC_SETTINGS:
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_SETTINGS):
+        case XML_ELEMENT(OOO, XML_DOCUMENT_SETTINGS):
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new DBXMLDocumentSettingsContext(*this, nPrefix, rLocalName);
+            pContext = new DBXMLDocumentSettingsContext(*this);
             break;
-        case XML_TOK_DOC_STYLES:
-            pContext = new DBXMLDocumentStylesContext(*this, nPrefix, rLocalName);
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_STYLES):
+        case XML_ELEMENT(OOO, XML_DOCUMENT_STYLES):
+            pContext = new DBXMLDocumentStylesContext(*this);
             break;
-        case XML_TOK_DOC_CONTENT:
-            pContext = new DBXMLDocumentContentContext(*this, nPrefix, rLocalName);
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT):
+        case XML_ELEMENT(OOO, XML_DOCUMENT_CONTENT):
+            pContext = new DBXMLDocumentContentContext(*this);
             break;
         default:
             break;
     }
 
     if ( !pContext )
-        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateFastContext( nElement, xAttrList );
 
     return pContext;
 }
@@ -624,26 +606,6 @@ void ODBFilter::fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap)
         _rMap.emplace( pIter->Name,aValue );
     }
 
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
-{
-    if (!m_pDocElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OOO,    XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OOO,    XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
-            { XML_NAMESPACE_OOO,    XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
-            XML_TOKEN_MAP_END
-        };
-        m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDocElemTokenMap;
 }
 
 const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
