@@ -225,6 +225,7 @@ public:
     void testPivotCacheAfterExportXLSX();
     void testTdf114969XLSX();
     void testTdf128976();
+    void testTdf83779();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -345,6 +346,7 @@ public:
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf128976);
+    CPPUNIT_TEST(testTdf83779);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4340,6 +4342,24 @@ void ScExportTest::testTdf128976()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(45), nColumn0Width);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf83779()
+{
+    // Roundtripping TRUE/FALSE constants (not functions) must convert them to functions
+    ScDocShellRef xShell = loadDoc("tdf83779.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    const xmlDocPtr pVmlDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pVmlDrawing);
+
+    assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[1]/x:c/x:f", "FALSE()");
+    assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
+
+    xShell->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
