@@ -48,6 +48,12 @@ void AccessibilityIssue::gotoIssue() const
             pWrtShell->GotoFly(m_sObjectID, FLYCNTTYPE_ALL, true);
         }
         break;
+        case IssueObject::TABLE:
+        {
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            pWrtShell->GotoTable(m_sObjectID);
+        }
+        break;
         default:
             break;
     }

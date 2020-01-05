@@ -142,9 +142,13 @@ private:
         SwTable const& rTable = pTableNode->GetTable();
         if (rTable.IsTableComplex())
         {
-            OUString sName = rTable.GetTableStyleName();
+            const SwTableFormat* pFormat = rTable.GetFrameFormat();
+            OUString sName = pFormat->GetName();
             OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-            lclAddIssue(m_rIssueCollection, sIssueText);
+            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
+            pIssue->setDoc(pTableNode->GetDoc());
+            pIssue->setIssueObject(IssueObject::TABLE);
+            pIssue->setObjectID(sName);
         }
         else
         {
@@ -172,9 +176,13 @@ private:
                 }
                 if (!bAllColumnsSameSize)
                 {
-                    OUString sName = rTable.GetTableStyleName();
+                    const SwTableFormat* pFormat = rTable.GetFrameFormat();
+                    OUString sName = pFormat->GetName();
                     OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-                    lclAddIssue(m_rIssueCollection, sIssueText);
+                    auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
+                    pIssue->setDoc(pTableNode->GetDoc());
+                    pIssue->setIssueObject(IssueObject::TABLE);
+                    pIssue->setObjectID(sName);
                 }
             }
         }
