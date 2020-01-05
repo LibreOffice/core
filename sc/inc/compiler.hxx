@@ -323,7 +323,10 @@ private:
     virtual void SetError(FormulaError nError) override;
     sal_Int32 NextSymbol(bool bInArray);
     bool IsValue( const OUString& );
-    bool IsOpCode( const OUString&, bool bInArray );
+    // OpCode and international name are mutually exclusive
+    std::tuple<bool /*found?*/, OpCode, OUString /*international name*/> FindOpCode(const OUString&,
+                                                                                    bool bInArray);
+    bool IsOpCode( const OUString&, bool bInArray, bool bFuncWithoutParen );
     bool IsOpCode2( const OUString& );
     bool IsString();
     bool IsReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
