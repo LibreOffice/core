@@ -21,6 +21,7 @@ enum class IssueObject
     UNKNOWN,
     GRAPHIC,
     OLE,
+    TABLE,
 };
 
 class SW_DLLPUBLIC AccessibilityIssue final : public svx::AccessibilityIssue
