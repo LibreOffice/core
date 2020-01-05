@@ -1156,8 +1156,16 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append( " : " );
                                 aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
                                 aNew = aBuf.makeStringAndClear();
-                                ShowTipBelow( aNew );
-                                bFound = true;
+                                if(eMode!=SC_INPUT_TOP)
+                                {
+                                    ShowTipBelow( aNew );
+                                    bFound = true;
+                                }
+                                else
+                                {
+                                    ShowTip(aNew);
+                                    bFound = true;
+                                }
                             }
                         }
                         else
