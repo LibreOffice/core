@@ -45,6 +45,7 @@ OUString sTextContrast("Text contrast is too low.");
 OUString sTextBlinking("Blinking text.");
 OUString sAvoidFootnotes("Avoid footnotes.");
 OUString sAvoidEndnotes("Avoid endnotes.");
+OUString sHeadingsOrder("Headings not in order.");
 
 std::shared_ptr<sw::AccessibilityIssue>
 lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
@@ -465,6 +466,37 @@ public:
     }
 };
 
+class HeaderCheck : public NodeCheck
+{
+private:
+    int nPreviousLevel;
+
+public:
+    HeaderCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+        , nPreviousLevel(0)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->IsTextNode())
+        {
+            SwTextNode* pTextNode = pCurrent->GetTextNode();
+            SwTextFormatColl* pCollection = pTextNode->GetTextColl();
+            int nLevel = pCollection->GetAssignedOutlineStyleLevel();
+            if (nLevel < 0)
+                return;
+
+            if (nLevel > nPreviousLevel && std::abs(nLevel - nPreviousLevel) > 1)
+            {
+                lclAddIssue(m_rIssueCollection, sHeadingsOrder);
+            }
+            nPreviousLevel = nLevel;
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -606,6 +638,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<HyperlinkCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextContrastCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<BlinkingTextCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<HeaderCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
