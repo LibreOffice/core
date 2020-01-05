@@ -413,10 +413,8 @@ namespace {
 class DBXMLDocumentSettingsContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentSettingsContext(SvXMLImport & rImport,
-           sal_uInt16 const nPrefix,
-           const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentSettingsContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
@@ -438,10 +436,8 @@ public:
 class DBXMLDocumentStylesContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentStylesContext(SvXMLImport & rImport,
-            sal_uInt16 const nPrefix,
-            const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentStylesContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
@@ -505,10 +501,8 @@ public:
 class DBXMLDocumentContentContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentContentContext(SvXMLImport & rImport,
-            sal_uInt16 const nPrefix,
-            const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentContentContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
@@ -545,31 +539,32 @@ public:
 
 }
 
-SvXMLImportContext* ODBFilter::CreateDocumentContext(sal_uInt16 const nPrefix,
-                                      const OUString& rLocalName,
-                                      const uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+SvXMLImportContext* ODBFilter::CreateFastContext(sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetDocElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_DOC_SETTINGS:
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_SETTINGS):
+        case XML_ELEMENT(OOO, XML_DOCUMENT_SETTINGS):
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new DBXMLDocumentSettingsContext(*this, nPrefix, rLocalName);
+            pContext = new DBXMLDocumentSettingsContext(*this);
             break;
-        case XML_TOK_DOC_STYLES:
-            pContext = new DBXMLDocumentStylesContext(*this, nPrefix, rLocalName);
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_STYLES):
+        case XML_ELEMENT(OOO, XML_DOCUMENT_STYLES):
+            pContext = new DBXMLDocumentStylesContext(*this);
             break;
-        case XML_TOK_DOC_CONTENT:
-            pContext = new DBXMLDocumentContentContext(*this, nPrefix, rLocalName);
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT):
+        case XML_ELEMENT(OOO, XML_DOCUMENT_CONTENT):
+            pContext = new DBXMLDocumentContentContext(*this);
             break;
         default:
             break;
     }
 
     if ( !pContext )
-        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
+        pContext = SvXMLImport::CreateFastContext( nElement, xAttrList );
 
     return pContext;
 }
@@ -624,26 +619,6 @@ void ODBFilter::fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap)
         _rMap.emplace( pIter->Name,aValue );
     }
 
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
-{
-    if (!m_pDocElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OOO,    XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OOO,    XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
-            { XML_NAMESPACE_OOO,    XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
-            XML_TOKEN_MAP_END
-        };
-        m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDocElemTokenMap;
 }
 
 const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
