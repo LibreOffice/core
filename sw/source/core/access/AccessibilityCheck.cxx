@@ -134,21 +134,27 @@ public:
 class TableNodeMergeSplitCheck : public NodeCheck
 {
 private:
+    void addTableIssue(SwTable const& rTable, SwDoc* pDoc)
+    {
+        const SwTableFormat* pFormat = rTable.GetFrameFormat();
+        OUString sName = pFormat->GetName();
+        OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+        auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
+        pIssue->setDoc(pDoc);
+        pIssue->setIssueObject(IssueObject::TABLE);
+        pIssue->setObjectID(sName);
+    }
+
     void checkTableNode(SwTableNode* pTableNode)
     {
         if (!pTableNode)
             return;
 
         SwTable const& rTable = pTableNode->GetTable();
+        SwDoc* pDoc = pTableNode->GetDoc();
         if (rTable.IsTableComplex())
         {
-            const SwTableFormat* pFormat = rTable.GetFrameFormat();
-            OUString sName = pFormat->GetName();
-            OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
-            pIssue->setDoc(pTableNode->GetDoc());
-            pIssue->setIssueObject(IssueObject::TABLE);
-            pIssue->setObjectID(sName);
+            addTableIssue(rTable, pDoc);
         }
         else
         {
@@ -157,6 +163,7 @@ private:
                 int i = 0;
                 size_t nFirstLineSize = 0;
                 bool bAllColumnsSameSize = true;
+                bool bCellSpansOverMoreRows = false;
 
                 for (SwTableLine const* pTableLine : rTable.GetTabLines())
                 {
@@ -173,16 +180,17 @@ private:
                         }
                     }
                     i++;
+
+                    // Check for row span in each table box (cell)
+                    for (SwTableBox const* pBox : pTableLine->GetTabBoxes())
+                    {
+                        if (pBox->getRowSpan() > 1)
+                            bCellSpansOverMoreRows = true;
+                    }
                 }
-                if (!bAllColumnsSameSize)
+                if (!bAllColumnsSameSize || bCellSpansOverMoreRows)
                 {
-                    const SwTableFormat* pFormat = rTable.GetFrameFormat();
-                    OUString sName = pFormat->GetName();
-                    OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
-                    auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
-                    pIssue->setDoc(pTableNode->GetDoc());
-                    pIssue->setIssueObject(IssueObject::TABLE);
-                    pIssue->setObjectID(sName);
+                    addTableIssue(rTable, pDoc);
                 }
             }
         }
