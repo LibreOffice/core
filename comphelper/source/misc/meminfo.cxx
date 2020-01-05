@@ -56,7 +56,8 @@ static sal_Int64 getMemUsedBySelf()
     if (host_page_size(mach_host_self(), &pageSize) != KERN_SUCCESS)
         return -1;
 
-    if (task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&tInfo, &tInfoCount)
+    if (task_info(mach_task_self(), TASK_BASIC_INFO, reinterpret_cast<task_info_t>(&tInfo),
+                  &tInfoCount)
         != KERN_SUCCESS)
         return -1;
 
