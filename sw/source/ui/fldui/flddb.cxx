@@ -70,6 +70,7 @@ SwFieldDBPage::SwFieldDBPage(TabPageParent pParent, const SfxItemSet *const pCor
 
 SwFieldDBPage::~SwFieldDBPage()
 {
+<<<<<<< HEAD   (a08d63 tdf#123206 Add test: import custom-label-field)
     disposeOnce();
 }
 
@@ -84,6 +85,16 @@ void SwFieldDBPage::dispose()
         pDbManager->RevokeLastRegistrations();
 
     SwFieldPage::dispose();
+=======
+    // If we have no stored SwWrtShell, it means we didn't do anything useful - no need to revoke.
+    if (SwWrtShell* pSh = GetWrtShell())
+    {
+        // This would cleanup in the case of cancelled dialog
+        SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
+        if (pDbManager)
+            pDbManager->RevokeLastRegistrations();
+    }
+>>>>>>> CHANGE (016c69 tdf#129798: store SwWrtShell when it's available)
 }
 
 // initialise TabPage
@@ -144,9 +155,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         }
         else
         {
-            SwWrtShell *pSh = GetWrtShell();
-            if(!pSh)
-                pSh = ::GetActiveWrtShell();
+            SwWrtShell *pSh = CheckAndGetWrtShell();
             if(pSh)
             {
                 SwDBData aTmp(pSh->GetDBData());
@@ -199,9 +208,8 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     aData.sDataSource = m_xDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;
-    SwWrtShell *pSh = GetWrtShell();
-    if(!pSh)
-        pSh = ::GetActiveWrtShell();
+    SwWrtShell *pSh = CheckAndGetWrtShell();
+    assert(pSh);
 
     SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
     if (pDbManager)
@@ -294,9 +302,8 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
     if (nOld == GetTypeSel())
         return;
 
-    SwWrtShell *pSh = GetWrtShell();
-    if(!pSh)
-        pSh = ::GetActiveWrtShell();
+    SwWrtShell *pSh = CheckAndGetWrtShell();
+    assert(pSh);
     bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
     const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
@@ -488,6 +495,7 @@ IMPL_LINK(SwFieldDBPage, TreeSelectHdl, weld::TreeView&, rBox, void)
 
 IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, weld::Button&, void)
 {
+<<<<<<< HEAD   (a08d63 tdf#123206 Add test: import custom-label-field)
     SwWrtShell* pSh = GetWrtShell();
     if (!pSh)
         pSh = ::GetActiveWrtShell();
@@ -495,8 +503,16 @@ IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, weld::Button&, void)
     OUString sNewDB
         = SwDBManager::LoadAndRegisterDataSource(GetDialogFrameWeld(), pSh->GetDoc()->GetDocShell());
     if(!sNewDB.isEmpty())
+=======
+    if (SwWrtShell* pSh = CheckAndGetWrtShell())
+>>>>>>> CHANGE (016c69 tdf#129798: store SwWrtShell when it's available)
     {
-        m_xDatabaseTLB->AddDataSource(sNewDB);
+        OUString sNewDB
+            = SwDBManager::LoadAndRegisterDataSource(GetFrameWeld(), pSh->GetDoc()->GetDocShell());
+        if (!sNewDB.isEmpty())
+        {
+            m_xDatabaseTLB->AddDataSource(sNewDB);
+        }
     }
 }
 
@@ -524,7 +540,21 @@ void SwFieldDBPage::ActivateMailMergeAddress()
 
 void SwFieldDBPage::SetWrtShell(SwWrtShell& rSh)
 {
+    // We need to remember the shell to be able to call correct SwDBManager
+    SwFieldPage::SetWrtShell(&rSh);
     m_xDatabaseTLB->SetWrtShell(rSh);
+}
+
+SwWrtShell* SwFieldDBPage::CheckAndGetWrtShell()
+{
+    SwWrtShell* pSh = GetWrtShell();
+    if (!pSh)
+    {
+        pSh = ::GetActiveWrtShell();
+        if (pSh) // this is not guaranteed: e.g., activating print preview with dialog active
+            SetWrtShell(*pSh);
+    }
+    return pSh;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
