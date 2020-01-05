@@ -265,7 +265,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pNumRuleInfo( new SwHTMLNumRuleInfo ),
     m_xDoc( pD ),
     m_pActionViewShell( nullptr ),
-    m_pSttNdIdx( nullptr ),
     m_pFormImpl( nullptr ),
     m_pMarquee( nullptr ),
     m_pImageMap( nullptr ),
@@ -489,8 +488,6 @@ SwHTMLParser::~SwHTMLParser()
         }
     }
 
-    delete m_pSttNdIdx;
-
     if( !m_aSetAttrTab.empty() )
     {
         OSL_ENSURE( m_aSetAttrTab.empty(),"There are still attributes on the stack" );
@@ -542,7 +539,7 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
 SvParserState SwHTMLParser::CallParser()
 {
     // create temporary index on position 0, so it won't be moved!
-    m_pSttNdIdx = new SwNodeIndex( m_xDoc->GetNodes() );
+    m_pSttNdIdx.reset(new SwNodeIndex( m_xDoc->GetNodes() ));
     if( !IsNewDoc() )       // insert into existing document ?
     {
         const SwPosition* pPos = m_pPam->GetPoint();
@@ -897,8 +894,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
     if( SvParserState::Pending != GetStatus() )
     {
-        delete m_pSttNdIdx;
-        m_pSttNdIdx = nullptr;
+        m_pSttNdIdx.reset();
     }
 
     // should the parser be the last one who hold the document, then nothing
