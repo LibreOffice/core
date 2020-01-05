@@ -2933,21 +2933,13 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
                 if (ScGlobal::GetAddInCollection()->GetFuncData( (*iExt).second))
                     aIntName = (*iExt).second;
             }
-            if (aIntName.isEmpty())
-            {
-                // If that isn't found we might continue with rName lookup as a
-                // last resort by just falling through to FindFunction(), but
-                // it shouldn't happen if the map was setup correctly. Don't
-                // waste time and bail out.
-                return false;
-            }
         }
-        if (aIntName.isEmpty())
+        else
         {
             // Old (deprecated) addins first for legacy.
             if (ScGlobal::GetLegacyFuncCollection()->findByName(cSymbol))
             {
-                maRawToken.SetExternal( cSymbol );
+                aIntName = cSymbol;
             }
             else
                 // bLocalFirst=false for (English) upper full original name
