@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb3e3ac8_cee21c23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-01-05T20:57:41Z",
+      "side": 1,
+      "message": "Now, that Gerrit was upgraded to 2.16.x, Work-In-Progress workflow is supported out of the box in Gerit. You could remove that prefix and hit WIP button to mark the change as work in progress (and ready, to mark it ready again).\n\nOne of most important implications for WIP changes is the notification firehose: no mails are sent to the reviewers for any events for the WIP changes (e.g. new patch set is uploaded etc, p.p.).",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "f7869f01e16cb523941403e7b26bd9cb41ebbe53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3a555fa_1a312d73",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-01-05T20:57:41Z",
+      "side": 1,
+      "message": "Add here _sha3 module:\n\n \n LO_lib/_sha3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \\\n\n\nAfter adding it and rebuilding LO, importing hashlib works as expected:\n\n  $ ./instdir/program/python\n  Python 3.7.6 (default, Jan  5 2020, 18:17:11) \n  [GCC 9.2.1 20191209 [gcc-9-branch revision 279114]] on linux\n  \u003e\u003e\u003e import hashlib\n  \u003e\u003e\u003e hashlib.algorithms_available\n{\u0027sha512\u0027, \u0027md5\u0027, \u0027sha256\u0027, \u0027sha224\u0027, \u0027sha3_512\u0027, \u0027sha3_224\u0027, \u0027shake_256\u0027, \u0027sha3_256\u0027, \u0027sha3_384\u0027, \u0027sha384\u0027, \u0027sha1\u0027, \u0027shake_128\u0027, \u0027blake2s\u0027, \u0027blake2b\u0027}\n\nHowever hashlib.algorithms_available is still reporting less hashing methods, as python3 available on my system:\n\n  $ python3\n  [...]\n  \u003e\u003e\u003e hashlib.algorithms_available\n{\u0027md4\u0027, \u0027sha512-256\u0027, \u0027whirlpool\u0027, \u0027sha512\u0027, \u0027md5-sha1\u0027, \u0027blake2s256\u0027, \u0027sha3-384\u0027, \u0027shake128\u0027, \u0027sha3_384\u0027, \u0027sha512-224\u0027, \u0027shake_256\u0027, \u0027shake256\u0027, \u0027blake2s\u0027, \u0027sha3_256\u0027, \u0027mdc2\u0027, \u0027sha3-256\u0027, \u0027md5\u0027, \u0027sha3_512\u0027, \u0027shake_128\u0027, \u0027ripemd160\u0027, \u0027blake2b\u0027, \u0027sm3\u0027, \u0027sha3-512\u0027, \u0027sha1\u0027, \u0027sha256\u0027, \u0027sha224\u0027, \u0027blake2b512\u0027, \u0027sha384\u0027, \u0027sha3-224\u0027, \u0027sha3_224\u0027}",
+      "range": {
+        "startLine": 101,
+        "startChar": 1,
+        "endLine": 101,
+        "endChar": 77
+      },
+      "revId": "f7869f01e16cb523941403e7b26bd9cb41ebbe53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57931ece_9aba7fb7",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-01-05T20:57:41Z",
+      "side": 1,
+      "message": "Add here _uuid module?\n\n  LO_lib/_uuid.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \\",
+      "range": {
+        "startLine": 115,
+        "startChar": 1,
+        "endLine": 115,
+        "endChar": 81
+      },
+      "revId": "f7869f01e16cb523941403e7b26bd9cb41ebbe53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
