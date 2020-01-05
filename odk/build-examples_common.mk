@@ -7,10 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-define odk_build-examples_test
-
-$(eval $(call gb_CustomTarget_CustomTarget,$(1)))
-
 # System-provided shells on macOS are known to unset DYLD_LIBRARY_PATH, so we need some sort of hack
 # to provided the invocation of make below with a shell that preserves DYLD_LIBRARY_PATH.  Until
 # macOS 10.14, what apparently worked is to use a copy of /bin/sh in some temp dir.  However, with
@@ -27,6 +23,10 @@ $(eval $(call gb_CustomTarget_CustomTarget,$(1)))
 # a default SHELL setting is, somewhat unintuitively, reported as "file" rather than "default".  To
 # avoid surprises, use an explicit check for an origin of "command line" here.)
 MACOSX_SHELL_HACK := $(and $(filter MACOSX,$(OS)),$(filter-out command line,$(origin SHELL)))
+
+define odk_build-examples_test
+
+$(eval $(call gb_CustomTarget_CustomTarget,$(1)))
 
 $(call gb_CustomTarget_get_target,$(1)): \
 	$(call gb_CustomTarget_get_workdir,$(1))/setsdkenv
