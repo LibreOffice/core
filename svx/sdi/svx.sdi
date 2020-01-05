@@ -5905,8 +5905,8 @@ SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Format;
 ]

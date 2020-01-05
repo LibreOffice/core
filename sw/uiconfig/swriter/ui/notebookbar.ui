@@ -788,7 +788,7 @@
       <object class="GtkMenuItem" id="MenuHome-BulletsAndNumberingDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:BulletsAndNumberingDialog</property>
+        <property name="action_name">.uno:OutlineBullet</property>
       </object>
     </child>
     <child>
