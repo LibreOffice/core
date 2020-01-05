@@ -3021,14 +3021,17 @@ bool ScCompiler::IsValue( const OUString& rSym )
                 return false;   // some function name, not a constant
 
             // Could be TRUE or FALSE constant.
+            OpCode eOpFunc = ocNone;
             if (rSym.equalsIgnoreAsciiCase("TRUE"))
+                eOpFunc = ocTrue;
+            else if (rSym.equalsIgnoreAsciiCase("FALSE"))
+                eOpFunc = ocFalse;
+            if (eOpFunc != ocNone)
             {
-                maRawToken.SetDouble( 1.0 );
-                return true;
-            }
-            if (rSym.equalsIgnoreAsciiCase("FALSE"))
-            {
-                maRawToken.SetDouble( 0.0 );
+                maRawToken.SetOpCode(eOpFunc);
+                // add missing trailing parentheses
+                maPendingOpCodes.push(ocOpen);
+                maPendingOpCodes.push(ocClose);
                 return true;
             }
             return false;
@@ -4176,6 +4179,13 @@ static bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, Formul
 
 bool ScCompiler::NextNewToken( bool bInArray )
 {
+    if (!maPendingOpCodes.empty())
+    {
+        maRawToken.SetOpCode(maPendingOpCodes.front());
+        maPendingOpCodes.pop();
+        return true;
+    }
+
     bool bAllowBooleans = bInArray;
     sal_Int32 nSpaces = NextSymbol(bInArray);
 
