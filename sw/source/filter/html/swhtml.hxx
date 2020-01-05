@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
 
 #include <config_java.h>
+#include <sal/config.h>
 
 #include <sfx2/sfxhtml.hxx>
 #include <svl/listener.hxx>
@@ -375,7 +376,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     rtl::Reference<SwDoc> m_xDoc;
     SwPaM           *m_pPam;      // SwPosition should be enough, or ??
     SwViewShell       *m_pActionViewShell;  // SwViewShell, where StartAction was called
-    SwNodeIndex     *m_pSttNdIdx;
+    std::unique_ptr<SwNodeIndex> m_pSttNdIdx;
 
     std::vector<HTMLTable*> m_aTables;
     std::shared_ptr<HTMLTable> m_xTable; // current "outermost" table
