@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
+#include <queue>
 #include <vector>
 #include <memory>
 #include <set>
@@ -281,6 +282,8 @@ private:
     OUString    aFormula;                           // formula source code
     sal_Int32   nSrcPos;                            // tokenizer position (source code)
     mutable ScRawToken maRawToken;
+
+    std::queue<OpCode> maPendingOpCodes; // additional opcodes generated from a single symbol
 
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
