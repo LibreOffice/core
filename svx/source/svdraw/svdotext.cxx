@@ -1111,7 +1111,7 @@ void SdrTextObj::RecalcSnapRect()
 
 sal_uInt32 SdrTextObj::GetSnapPointCount() const
 {
-    return 4L;
+    return 4;
 }
 
 Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const

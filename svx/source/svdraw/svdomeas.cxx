@@ -749,7 +749,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::TakeXorPoly() const
 
 sal_uInt32 SdrMeasureObj::GetHdlCount() const
 {
-    return 6L;
+    return 6;
 }
 
 void SdrMeasureObj::AddToHdlList(SdrHdlList& rHdlList) const
@@ -1079,7 +1079,7 @@ void SdrMeasureObj::RecalcSnapRect()
 
 sal_uInt32 SdrMeasureObj::GetSnapPointCount() const
 {
-    return 2L;
+    return 2;
 }
 
 Point SdrMeasureObj::GetSnapPoint(sal_uInt32 i) const
@@ -1095,7 +1095,7 @@ bool SdrMeasureObj::IsPolyObj() const
 
 sal_uInt32 SdrMeasureObj::GetPointCount() const
 {
-    return 2L;
+    return 2;
 }
 
 Point SdrMeasureObj::GetPoint(sal_uInt32 i) const

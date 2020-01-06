@@ -35,7 +35,7 @@
 
 sal_uInt32 SdrTextObj::GetHdlCount() const
 {
-    return 8L;
+    return 8;
 }
 
 void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const

@@ -767,7 +767,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
 
 sal_uInt32 SdrGrafObj::GetHdlCount() const
 {
-    return 8L;
+    return 8;
 }
 
 void SdrGrafObj::AddToHdlList(SdrHdlList& rHdlList) const

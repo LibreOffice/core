@@ -1702,7 +1702,7 @@ std::size_t SvMemoryStream::GetData( void* pData, std::size_t nCount )
 std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
 {
     if( GetError() )
-        return 0L;
+        return 0;
 
     std::size_t nMaxCount = nSize-nPos;
 
