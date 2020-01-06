@@ -97,6 +97,7 @@ void NotebookBar::dispose()
         m_pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
     m_pSystemWindow.clear();
     disposeBuilder();
+    assert(m_alisteningControllers.empty());
     m_pEventListener.clear();
     Control::dispose();
 }
@@ -180,22 +181,39 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
     }
 }
 
-void NotebookBar::ControlListener(bool bListen)
+void NotebookBar::ControlListenerForCurrentController(bool bListen)
 {
+    auto xController = mxFrame->getController();
     if(bListen)
     {
-        // remove listeners
-        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (css::ui::ContextChangeEventMultiplexer::get(
+        // add listeners
+        if (m_alisteningControllers.count(xController) == 0)
+        {
+            auto xMultiplexer(css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
-        xMultiplexer->removeContextChangeEventListener(getContextChangeEventListener(),mxFrame->getController());
+            xMultiplexer->addContextChangeEventListener(m_pEventListener, xController);
+            m_alisteningControllers.insert(xController);
+        }
     }
     else
     {
-        // add listeners
-        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (css::ui::ContextChangeEventMultiplexer::get(
+        // remove listeners
+        if (m_alisteningControllers.count(xController))
+        {
+            auto xMultiplexer(css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
-        xMultiplexer->addContextChangeEventListener(getContextChangeEventListener(),mxFrame->getController());
+            xMultiplexer->removeContextChangeEventListener(m_pEventListener, xController);
+            m_alisteningControllers.erase(xController);
+        }
     }
+}
+
+void NotebookBar::StopListeningAllControllers()
+{
+    auto xMultiplexer(
+        css::ui::ContextChangeEventMultiplexer::get(comphelper::getProcessComponentContext()));
+    xMultiplexer->removeAllContextChangeEventListeners(m_pEventListener);
+    m_alisteningControllers.clear();
 }
 
 void SAL_CALL NotebookBarContextChangeEventListener::disposing(const ::css::lang::EventObject&)
