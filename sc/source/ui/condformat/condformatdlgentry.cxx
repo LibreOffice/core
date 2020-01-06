@@ -1332,8 +1332,6 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     , mxLbEntryType(mxBuilder->weld_combo_box("listbox"))
     , mpContainer(pParent)
 {
-    mxLbEntryType->set_size_request(CommonWidgetWidth, -1);
-
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
     {
