@@ -203,11 +203,15 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
     return aLevelProps;
 }
 
-static bool IgnoreForCharStyle(const OUString& aStr)
+static bool IgnoreForCharStyle(const OUString& aStr, const bool bIsSymbol)
 {
     //Names found in PropertyIds.cxx, Lines 56-396
     return (aStr=="Adjust" || aStr=="IndentAt" || aStr=="FirstLineIndent"
-            || aStr=="FirstLineOffset" || aStr=="LeftMargin" || aStr=="CharFontName"
+            || aStr=="FirstLineOffset" || aStr=="LeftMargin"
+            || aStr=="CharInteropGrabBag" || aStr=="ParaInteropGrabBag" ||
+            // We need font names when they are different for the bullet and for the text.
+            // But leave symbols alone, we only want to keep the font style for letters and numbers.
+            (bIsSymbol && aStr=="CharFontName")
         );
 }
 uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
@@ -217,13 +221,10 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
     beans::PropertyValue* aValIter = vPropVals.begin();
     beans::PropertyValue* aEndIter = vPropVals.end();
+    const bool bIsSymbol(m_sBulletChar.getLength() <= 1);
     for( ; aValIter != aEndIter; ++aValIter )
-    {
-        if (IgnoreForCharStyle(aValIter->Name))
-            continue;
-        else if ( aValIter->Name != "CharInteropGrabBag" && aValIter->Name != "ParaInteropGrabBag" )
+        if (! IgnoreForCharStyle(aValIter->Name, bIsSymbol))
             rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
-    }
 
     return comphelper::containerToSequence(rProperties);
 }
