@@ -1,0 +1,32 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#ifndef INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
+#define INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#define STR_NO_ALT                      NC_("STR_NO_ALT", "No alt text for graphic '%OBJECT_NAME%'")
+#define STR_TABLE_MERGE_SPLIT           NC_("STR_TABLE_MERGE_SPLIT", "Table '%OBJECT_NAME%' contains merges or splits")
+#define STR_FAKE_NUMBERING              NC_("STR_FAKE_NUMBERING", "Fake numbering '%NUMBERING%'")
+#define STR_HYPERLINK_TEXT_IS_LINK      NC_("STR_HYPERLINK_TEXT_IS_LINK", "Hyperlink text is the same as the link address '%LINK%'")
+#define STR_TEXT_CONTRAST               NC_("STR_TEXT_CONTRAST", "Text contrast is too low.")
+#define STR_TEXT_BLINKING               NC_("STR_TEXT_BLINKING", "Blinking text.")
+#define STR_AVOID_FOOTNOTES             NC_("STR_AVOID_FOOTNOTES", "Avoid footnotes.")
+#define STR_AVOID_ENDNOTES              NC_("STR_AVOID_ENDNOTES", "Avoid endnotes.")
+#define STR_HEADINGS_NOT_IN_ORDER       NC_("STR_HEADINGS_NOT_IN_ORDER", "Headings not in order.")
+
+#define STR_DOCUMENT_DEFAULT_LANGUAGE   NC_("STR_DOCUMENT_DEFAULT_LANGUAGE", "Document default language is not set")
+#define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style '%STYLE_NAME%' has no language set")
+#define STR_DOCUMENT_TITLE              NC_("STR_DOCUMENT_TITLE", "Document title is not set")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
