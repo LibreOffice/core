@@ -166,7 +166,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
         if (pFocusDescriptor->msCurrentApplicationName.isEmpty() && pFocusDescriptor->msCurrentContextName.isEmpty()
                 && rxEventFocus.is())
         {
-            Reference< lang::XServiceInfo > xServInfo( rxEventFocus, uno::UNO_QUERY_THROW );
+            Reference< lang::XServiceInfo > xServInfo( rxEventFocus, uno::UNO_QUERY );
             if( xServInfo.is() && xServInfo->getImplementationName() == "com.sun.star.comp.chart2.ChartController")
             {
                 css::ui::ContextChangeEventObject aEvent (
