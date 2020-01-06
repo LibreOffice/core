@@ -336,9 +336,8 @@ namespace sw { namespace mark
         }
     }
 
-    // TODO: everything else uses MarkBase::GenerateNewName ?
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, "__NavigatorReminder__")
+        : MarkBase(rPaM, MarkBase::GenerateNewName("__NavigatorReminder__"))
     { }
 
     UnoMark::UnoMark(const SwPaM& aPaM)
