@@ -27,7 +27,7 @@ namespace
 {
     const unsigned char nTopBitInt7 = 0x80;
     const unsigned char nSignBitInt7 = 0x40;
-    // include the sign bit so if its negative we get
+    // include the sign bit so if it's negative we get
     // that "missing" bit pre-set to 1
     const unsigned char nValueMaskInt7 = 0x7F;
 }
