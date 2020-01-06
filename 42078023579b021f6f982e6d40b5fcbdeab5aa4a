@@ -16,6 +16,24 @@
       "revId": "42078023579b021f6f982e6d40b5fcbdeab5aa4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a960ab8a_ca1bc8e8",
+        "filename": "filter/source/graphicfilter/icgm/class7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-01-06T11:19:27Z",
+      "side": 1,
+      "message": "if nZoneEnum is 0 then due to line 81 mpChart-\u003emDataNode[0] already contains *pAppData",
+      "parentUuid": "179383f7_1fb47098",
+      "revId": "42078023579b021f6f982e6d40b5fcbdeab5aa4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
