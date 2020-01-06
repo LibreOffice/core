@@ -288,7 +288,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
     // MSP then delete to the language provider controlled by this MSP
     // ** Special case is BASIC, all calls to getScript will be handled
     // by the language script provider in the current location context
-    // even if its different
+    // even if it's different
     if  (   (   location == "document"
             &&  m_xModel.is()
             )
