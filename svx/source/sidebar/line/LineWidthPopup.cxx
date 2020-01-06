@@ -30,9 +30,8 @@
 
 namespace svx { namespace sidebar {
 
-LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
-    : FloatingWindow(&rParent, "FloatingLineProperty", "svx/ui/floatinglineproperty.ui")
-    , m_rParent(rParent)
+LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent)
+    : m_rParent(rParent)
     , m_sPt(SvxResId(RID_SVXSTR_PT))
     , m_eMapUnit(MapUnit::MapTwip)
     , m_bVSFocus(true)
@@ -40,17 +39,18 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     , m_nCustomWidth(0)
     , m_aIMGCus(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM)
     , m_aIMGCusGray(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM_GRAY)
+    , m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/floatinglineproperty.ui"))
+    , m_xTopLevel(m_xBuilder->weld_container("FloatingLineProperty"))
+    , m_xMFWidth(m_xBuilder->weld_metric_spin_button("spin", FieldUnit::POINT))
+    , m_xVSWidth(new LineWidthValueSet())
+    , m_xVSWidthWin(new weld::CustomWeld(*m_xBuilder, "lineset", *m_xVSWidth))
 {
-    get(m_xMFWidth, "spin");
-
-    get(m_xBox, "box");
-
-    m_xVSWidth = VclPtr<LineWidthValueSet>::Create(m_xBox);
-
+#if 0
     // Avoid flicker when hovering over the menu items.
     if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
         // If NWF renders the focus rects itself, that breaks double-buffering.
         m_xMFWidth->RequestDoubleBuffering(true);
+#endif
 
     m_xVSWidth->SetStyle(m_xVSWidth->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
 
@@ -94,32 +94,23 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     m_xVSWidth->SetSelItem(0);
 
     m_xVSWidth->SetSelectHdl(LINK(this, LineWidthPopup, VSSelectHdl));
-    m_xMFWidth->SetModifyHdl(LINK(this, LineWidthPopup, MFModifyHdl));
+    m_xMFWidth->connect_value_changed(LINK(this, LineWidthPopup, MFModifyHdl));
 
-    m_xVSWidth->StartSelection();
-    m_xVSWidth->Show();
-}
-
-void LineWidthPopup::dispose()
-{
-    m_xVSWidth.disposeAndClear();
-    m_xBox.clear();
-    m_xMFWidth.clear();
-    FloatingWindow::dispose();
+//TODO    m_xVSWidth->StartSelection();
+//TODO    m_xVSWidth->Show();
 }
 
 LineWidthPopup::~LineWidthPopup()
 {
-    disposeOnce();
 }
 
-IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
+IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, SvtValueSet*, void)
 {
     sal_uInt16 iPos = m_xVSWidth->GetSelectedItemId();
     if (iPos >= 1 && iPos <= 8)
     {
-        sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData( iPos )), MapUnit::MapPoint, m_eMapUnit);
-        nVal = m_xMFWidth->Denormalize(nVal);
+        sal_IntPtr nVal = OutputDevice::LogicToLogic(reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData( iPos )), MapUnit::MapPoint, m_eMapUnit);
+        nVal = m_xMFWidth->denormalize(nVal);
         XLineWidthItem aWidthItem( nVal );
         m_rParent.setLineWidth(aWidthItem);
         m_rParent.SetWidthIcon(iPos);
@@ -130,8 +121,8 @@ IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
         //modified
         if (m_bCustom)
         {
-            long nVal = LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, m_eMapUnit);
-            nVal = m_xMFWidth->Denormalize(nVal);
+            long nVal = OutputDevice::LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, m_eMapUnit);
+            nVal = m_xMFWidth->denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             m_rParent.setLineWidth(aWidthItem);
             m_rParent.SetWidth(nVal);
@@ -141,30 +132,30 @@ IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
             m_xVSWidth->SetNoSelection();     //add , set no selection and keep the last select item
             m_xVSWidth->SetFormat();
             m_xVSWidth->Invalidate();
-            Invalidate();
-            m_xVSWidth->StartSelection();
+//TODO            m_xVSWidth->StartSelection();
         }
         //modify end
     }
+#if 0 //TODO
     if ((iPos >= 1 && iPos <= 8) || (iPos == 9 && m_bCustom)) //add
     {
         EndPopupMode();
     }
+#endif
 }
 
-IMPL_LINK(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
+IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 {
     if (m_xVSWidth->GetSelItem())
     {
         m_xVSWidth->SetSelItem(0);
         m_xVSWidth->SetFormat();
         m_xVSWidth->Invalidate();
-        Invalidate();
-        m_xVSWidth->StartSelection();
+//TODO        m_xVSWidth->StartSelection();
     }
-    long nTmp = static_cast<long>(m_xMFWidth->GetValue());
-    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
-    sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->Denormalize( nVal ));
+    long nTmp = static_cast<long>(m_xMFWidth->get_value(FieldUnit::NONE));
+    long nVal = OutputDevice::LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
+    sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize( nVal ));
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
 }
@@ -203,15 +194,15 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
     if (bValuable)
     {
         sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, eMapUnit, MapUnit::Map100thMM );
-        nVal = m_xMFWidth->Normalize(nVal);
-        m_xMFWidth->SetValue( nVal, FieldUnit::MM_100TH );
+        nVal = m_xMFWidth->normalize(nVal);
+        m_xMFWidth->set_value( nVal, FieldUnit::MM_100TH );
     }
     else
     {
-        m_xMFWidth->SetText( "" );
+        m_xMFWidth->set_text( "" );
     }
 
-    OUString strCurrValue = m_xMFWidth->GetText();
+    OUString strCurrValue = m_xMFWidth->get_text();
     sal_uInt16 i = 0;
     for(; i < 8; i++)
     {
@@ -230,12 +221,12 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
 
     m_xVSWidth->SetFormat();
     m_xVSWidth->Invalidate();
-    m_xVSWidth->StartSelection();
+//TODO    m_xVSWidth->StartSelection();
 
     if (m_bVSFocus)
         m_xVSWidth->GrabFocus();
     else
-        m_xMFWidth->GrabFocus();
+        m_xMFWidth->grab_focus();
 }
 
 } } // end of namespace svx::sidebar

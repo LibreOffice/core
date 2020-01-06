@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="step_increment">10</property>
     <property name="page_increment">20</property>
+  </object>
+  <object class="GtkListStore" id="liststore5">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
   </object>
   <object class="GtkGrid" id="LinePropertyPanel">
     <property name="visible">True</property>
@@ -52,13 +63,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="linestyle">
-                    <property name="width_request">105</property>
+                  <object class="GtkComboBox" id="linestyle">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">liststore5</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <property name="width_request">105</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the line.</property>
                     <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
+                      <attributes>
+                        <attribute name="surface">3</attribute>
+                      </attributes>
+                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="linestyle-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarline|linestyle-atkobject">Style</property>
@@ -112,13 +138,12 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="sidebarline|widthlabel">_Width:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -128,28 +153,26 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|width|tooltip_text">Select the width of the line.</property>
+                    <property name="halign">start</property>
+                    <property name="toolbar_style">icons</property>
+                    <property name="show_arrow">False</property>
+                    <property name="icon_size">2</property>
                     <child>
-                      <object class="GtkMenuToolButton" id="setwidth">
+                      <object class="GtkMenuToolButton" id="SelectWidth">
                         <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="action_name">.uno:SelectWidth</property>
                         <property name="use_underline">True</property>
                       </object>
-                      <accessibility>
-                        <relation type="labelled-by" target="widthlabel"/>
-                      </accessibility>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="homogeneous">True</property>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -158,43 +181,43 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="sidebarline|colorlabel">_Color:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">color</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-SidebarToolBox" id="color">
+                  <object class="GtkToolbar" id="color">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|color|tooltip_text">Select the color of the line.</property>
+                    <property name="halign">start</property>
+                    <property name="toolbar_style">icons</property>
+                    <property name="show_arrow">False</property>
+                    <property name="icon_size">2</property>
                     <child>
-                      <object class="GtkMenuToolButton" id="setcolor">
+                      <object class="GtkMenuToolButton" id=".uno:XLineColor">
                         <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarline|setcolor|tooltip_text">Select the color of the line.</property>
                         <property name="margin_left">20</property>
-                        <property name="action_name">.uno:XLineColor</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="homogeneous">True</property>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -203,28 +226,24 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="sidebarline|translabel">_Transparency:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">linetransparency</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="linetransparency:0%">
+                  <object class="GtkSpinButton" id="linetransparency">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|linetransparency|tooltip_text">Specify the transparency of the line.</property>
                     <property name="halign">start</property>
                     <property name="adjustment">adjustment1</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="translabel"/>
-                    </accessibility>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="linetransparency:0%-atkobject">
+                      <object class="AtkObject" id="linetransparency-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarline|linetransparency-atkobject">Transparency</property>
                       </object>
                     </child>
@@ -232,8 +251,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -265,8 +282,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -290,8 +305,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -306,8 +319,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -330,8 +341,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -352,16 +361,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>

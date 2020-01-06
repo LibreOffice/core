@@ -19,17 +19,16 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEPROPERTYPANELBASE_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEPROPERTYPANELBASE_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 #include <svl/poolitem.hxx>
+#include <svx/dlgctrl.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sidebar/LineWidthPopup.hxx>
 #include <svx/svxdllapi.h>
 
-
+class ToolbarUnoDispatcher;
 class XLineStyleItem;
 class XLineDashItem;
 class XLineStartItem;
@@ -40,15 +39,6 @@ class XLineJointItem;
 class XLineCapItem;
 class XLineTransparenceItem;
 class XDashList;
-class ListBox;
-class ToolBox;
-class FloatingWindow;
-
-namespace sfx2 { namespace sidebar {
-
-class SidebarToolBox;
-
-} }
 
 namespace svx
 {
@@ -107,23 +97,26 @@ protected:
 
 protected:
 
-    VclPtr<sfx2::sidebar::SidebarToolBox> mpTBColor;
+    std::unique_ptr<weld::Toolbar> mxTBColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxColorDispatch;
 
 private:
     //ui controls
-    VclPtr<FixedText>   mpFTWidth;
-    VclPtr<ToolBox>     mpTBWidth;
-    VclPtr<ListBox>     mpLBStyle;
-    VclPtr<FixedText>   mpFTTransparency;
-    VclPtr<MetricField> mpMFTransparent;
-    VclPtr<ListBox>     mpLBStart;
-    VclPtr<ListBox>     mpLBEnd;
-    VclPtr<FixedText>   mpFTEdgeStyle;
-    VclPtr<ListBox>     mpLBEdgeStyle;
-    VclPtr<FixedText>   mpFTCapStyle;
-    VclPtr<ListBox>     mpLBCapStyle;
-    VclPtr<VclGrid>     mpGridLineProps;
-    VclPtr<VclVBox>     mpBoxArrowProps;
+    std::unique_ptr<weld::Label> mxFTWidth;
+    std::unique_ptr<weld::Toolbar> mxTBWidth;
+    std::unique_ptr<SvxLineLB> mxLBStyle;
+    std::unique_ptr<weld::Label> mxFTTransparency;
+    std::unique_ptr<weld::MetricSpinButton> mxMFTransparent;
+    std::unique_ptr<SvxLineEndLB> mxLBStart;
+    std::unique_ptr<SvxLineEndLB> mxLBEnd;
+    std::unique_ptr<weld::Label> mxFTEdgeStyle;
+    std::unique_ptr<weld::ComboBox> mxLBEdgeStyle;
+    std::unique_ptr<weld::Label> mxFTCapStyle;
+    std::unique_ptr<weld::ComboBox> mxLBCapStyle;
+    std::unique_ptr<weld::Widget> mxGridLineProps;
+    std::unique_ptr<weld::Widget> mxBoxArrowProps;
+    //popup windows
+    std::unique_ptr<LineWidthPopup> mxLineWidthPopup;
 
     std::unique_ptr<XLineStyleItem> mpStyleItem;
     std::unique_ptr<XLineDashItem>  mpDashItem;
@@ -136,27 +129,24 @@ private:
     std::unique_ptr<XLineStartItem> mpStartItem;
     std::unique_ptr<XLineEndItem>   mpEndItem;
 
-    //popup windows
-    VclPtr<LineWidthPopup> mxLineWidthPopup;
-
     // images from resource
-    Image const maIMGNone;
+    OUString maIMGNone;
 
     // multi-images
-    std::unique_ptr<Image[]> mpIMGWidthIcon;
+    OUString maIMGWidthIcon[8];
 
     bool                mbWidthValuable : 1;
     bool mbArrowSupported;
 
     void Initialize();
 
-    DECL_LINK(ChangeLineStyleHdl, ListBox&, void);
-    DECL_LINK(ToolboxWidthSelectHdl, ToolBox*, void);
-    DECL_LINK(ChangeTransparentHdl, Edit&, void );
-    DECL_LINK(ChangeStartHdl, ListBox&, void);
-    DECL_LINK(ChangeEndHdl, ListBox&, void);
-    DECL_LINK(ChangeEdgeStyleHdl, ListBox&, void);
-    DECL_LINK(ChangeCapStyleHdl, ListBox&, void);
+    DECL_LINK(ChangeLineStyleHdl, weld::ComboBox&, void);
+    DECL_LINK(ToolboxWidthSelectHdl, const OString&, void);
+    DECL_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void );
+    DECL_LINK(ChangeStartHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangeEndHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
+    DECL_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
 };
 
 } } // end of namespace svx::sidebar
