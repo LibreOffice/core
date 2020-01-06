@@ -3659,7 +3659,8 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
             break;
             case RES_VERT_ORIENT:
             {
-                std::shared_ptr<SfxPoolItem> aVertOrient;
+                std::shared_ptr<SfxPoolItem> aVertOrient(
+                    std::make_shared<SwFormatVertOrient>(RES_VERT_ORIENT));
                 if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aVertOrient))
                 {
                     aVertOrient->QueryValue( aRet, pEntry->nMemberId );
