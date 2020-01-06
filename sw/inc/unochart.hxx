@@ -123,11 +123,11 @@ class SwChartDataProvider final :
     // data-source) by this object. Since there is only one object of this type
     // for each document it should hold references to all used data-sequences for
     // all tables of the document.
-    mutable Map_Set_DataSequenceRef_t       aDataSequences;
+    mutable Map_Set_DataSequenceRef_t       m_aDataSequences;
 
-    ::comphelper::OInterfaceContainerHelper2      aEvtListeners;
-    const SwDoc *                           pDoc;
-    bool                                    bDisposed;
+    ::comphelper::OInterfaceContainerHelper2      m_aEventListeners;
+    const SwDoc *                           m_pDoc;
+    bool                                    m_bDisposed;
 
     SwChartDataProvider( const SwChartDataProvider & ) = delete;
     SwChartDataProvider & operator = ( const SwChartDataProvider & ) = delete;
@@ -194,7 +194,7 @@ class SwChartDataSource final :
     public SwChartDataSourceBaseClass
 {
     css::uno::Sequence<
-        css::uno::Reference< css::chart2::data::XLabeledDataSequence > > aLDS;
+        css::uno::Reference< css::chart2::data::XLabeledDataSequence > > m_aLDS;
 
     SwChartDataSource( const SwChartDataSource & ) = delete;
     SwChartDataSource & operator = ( const SwChartDataSource & ) = delete;

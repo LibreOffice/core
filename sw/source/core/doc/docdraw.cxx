@@ -462,12 +462,12 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
 }
 
 ZSortFly::ZSortFly(const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAn, sal_uInt32 nArrOrdNum)
-    : pFormat(pFrameFormat)
-    , pAnchor(pFlyAn)
-    , nOrdNum(nArrOrdNum)
+    : m_pFormat(pFrameFormat)
+    , m_pAnchor(pFlyAn)
+    , m_nOrdNum(nArrOrdNum)
 {
-    SAL_WARN_IF(pFormat->Which() != RES_FLYFRMFMT && pFormat->Which() != RES_DRAWFRMFMT, "sw.core", "What kind of format is this?");
-    pFormat->CallSwClientNotify(sw::GetZOrderHint(nOrdNum));
+    SAL_WARN_IF(m_pFormat->Which() != RES_FLYFRMFMT && m_pFormat->Which() != RES_DRAWFRMFMT, "sw.core", "What kind of format is this?");
+    m_pFormat->CallSwClientNotify(sw::GetZOrderHint(m_nOrdNum));
 }
 
 /// In the Outliner, set a link to the method for field display in edit objects.
