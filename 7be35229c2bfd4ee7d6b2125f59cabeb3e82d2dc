@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d22d233_555342bd",
+        "filename": "svx/sdi/svx.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-06T10:02:36Z",
+      "side": 1,
+      "message": "Is this really needed?",
+      "range": {
+        "startLine": 5908,
+        "startChar": 0,
+        "endLine": 5910,
+        "endChar": 0
+      },
+      "revId": "7be35229c2bfd4ee7d6b2125f59cabeb3e82d2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
