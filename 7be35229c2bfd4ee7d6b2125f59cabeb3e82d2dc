@@ -22,6 +22,30 @@
       "revId": "7be35229c2bfd4ee7d6b2125f59cabeb3e82d2dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92264e34_dc08f495",
+        "filename": "svx/sdi/svx.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 5910,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-06T10:08:15Z",
+      "side": 1,
+      "message": "Of course. Although current implementation doesn\u0027t differentiate if only one is TRUE or all are, the idea behind the parameters is to define which customization categories have it. And this command must be available for all the categories.",
+      "parentUuid": "2d22d233_555342bd",
+      "range": {
+        "startLine": 5908,
+        "startChar": 0,
+        "endLine": 5910,
+        "endChar": 0
+      },
+      "revId": "7be35229c2bfd4ee7d6b2125f59cabeb3e82d2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
