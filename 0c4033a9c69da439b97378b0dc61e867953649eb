@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86a7053c_e1509d72",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-01-06T12:57:45Z",
+      "side": 0,
+      "message": "Dunno how often `submit-draft` was used but AFAICT this is now passed verbatim to Gerrit which fails.  I guess it\u0027d be better to alias that to `submit-wip` for backward compatibility?  Or error out and show logerrit\u0027s help text instead?",
+      "revId": "0c4033a9c69da439b97378b0dc61e867953649eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

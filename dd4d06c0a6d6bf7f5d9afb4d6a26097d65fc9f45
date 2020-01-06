@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f5d5ae4_98267cf5",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-01-06T12:57:45Z",
+      "side": 1,
+      "message": "Nitpick: the lack of quoting in positional arguments and other variables is unfortunate, but that\u0027s not a regression and can be solved later.",
+      "revId": "dd4d06c0a6d6bf7f5d9afb4d6a26097d65fc9f45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "760d6580_400d0589",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-01-06T12:57:45Z",
+      "side": 1,
+      "message": "Could you add a pointer to https://gerrit.libreoffice.org/Documentation/intro-user.html#private-changes here?",
+      "revId": "dd4d06c0a6d6bf7f5d9afb4d6a26097d65fc9f45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
