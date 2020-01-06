@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_text, \
     test \
     unotest \
     utl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_core_text,\

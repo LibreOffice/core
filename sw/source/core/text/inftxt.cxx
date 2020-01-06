@@ -64,6 +64,9 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>
+#include <vcl/gdimtf.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/gradient.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -552,6 +555,71 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
     return pCol->IsDark();
 }
 
+namespace
+{
+/**
+ * Context class that captures the draw operations on rDrawInf's output device for transparency
+ * purposes.
+ */
+class SwTransparentTextGuard
+{
+    ScopedVclPtrInstance<VirtualDevice> m_aContentVDev;
+    GDIMetaFile m_aContentMetafile;
+    MapMode m_aNewMapMode;
+    SwRect m_aPorRect;
+    SwTextPaintInfo& m_rPaintInf;
+    SwDrawTextInfo& m_rDrawInf;
+
+public:
+    SwTransparentTextGuard(const SwLinePortion& rPor, SwTextPaintInfo& rPaintInf,
+                           SwDrawTextInfo& rDrawInf);
+    ~SwTransparentTextGuard();
+};
+
+SwTransparentTextGuard::SwTransparentTextGuard(const SwLinePortion& rPor,
+                                               SwTextPaintInfo& rPaintInf, SwDrawTextInfo& rDrawInf)
+    : m_aNewMapMode(rPaintInf.GetOut()->GetMapMode())
+    , m_rPaintInf(rPaintInf)
+    , m_rDrawInf(rDrawInf)
+{
+    rPaintInf.CalcRect(rPor, &m_aPorRect);
+    rDrawInf.SetOut(*m_aContentVDev);
+    m_aContentVDev->SetMapMode(rPaintInf.GetOut()->GetMapMode());
+    m_aContentMetafile.Record(m_aContentVDev.get());
+    m_aContentVDev->SetLineColor(rPaintInf.GetOut()->GetLineColor());
+    m_aContentVDev->SetFillColor(rPaintInf.GetOut()->GetFillColor());
+    m_aContentVDev->SetFont(rPaintInf.GetOut()->GetFont());
+    m_aContentVDev->SetDrawMode(rPaintInf.GetOut()->GetDrawMode());
+    m_aContentVDev->SetSettings(rPaintInf.GetOut()->GetSettings());
+    m_aContentVDev->SetRefPoint(rPaintInf.GetOut()->GetRefPoint());
+}
+
+SwTransparentTextGuard::~SwTransparentTextGuard()
+{
+    m_aContentMetafile.Stop();
+    m_aContentMetafile.WindStart();
+    m_aNewMapMode.SetOrigin(m_aPorRect.TopLeft());
+    m_aContentMetafile.SetPrefMapMode(m_aNewMapMode);
+    m_aContentMetafile.SetPrefSize(m_aPorRect.SSize());
+    m_rDrawInf.SetOut(*m_rPaintInf.GetOut());
+    Gradient aVCLGradient;
+    sal_uInt8 nTransPercentVcl = m_rPaintInf.GetFont()->GetColor().GetTransparency();
+    const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
+    aVCLGradient.SetStyle(GradientStyle::Linear);
+    aVCLGradient.SetStartColor(aTransColor);
+    aVCLGradient.SetEndColor(aTransColor);
+    aVCLGradient.SetAngle(0);
+    aVCLGradient.SetBorder(0);
+    aVCLGradient.SetOfsX(0);
+    aVCLGradient.SetOfsY(0);
+    aVCLGradient.SetStartIntensity(100);
+    aVCLGradient.SetEndIntensity(100);
+    aVCLGradient.SetSteps(2);
+    m_rPaintInf.GetOut()->DrawTransparent(m_aContentMetafile, m_aPorRect.TopLeft(),
+                                          m_aPorRect.SSize(), aVCLGradient);
+}
+}
+
 void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPor,
                                 TextFrameIndex const nStart, TextFrameIndex const nLength,
                                 const bool bKern, const bool bWrong,
@@ -676,6 +744,13 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
             aFontPos.setX( 0 );
         if( aFontPos.Y() < 0 )
             aFontPos.setY( 0 );
+    }
+
+    // Handle semi-transparent text if necessary.
+    std::unique_ptr<SwTransparentTextGuard> pTransparentText;
+    if (m_pFnt->GetColor() != COL_AUTO && m_pFnt->GetColor().GetTransparency() != 0)
+    {
+        pTransparentText.reset(new SwTransparentTextGuard(rPor, *this, aDrawInf));
     }
 
     if( GetTextFly().IsOn() )
