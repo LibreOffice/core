@@ -633,7 +633,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // OK - it's not a valid URL. But may it's a simple
                 // system path directly. It will be supported for historical
                 // reasons. Otherwise we break too much external code...
-                // We try to convert it to a file URL. If its possible
+                // We try to convert it to a file URL. If it's possible
                 // we put the system path to the item set and let vcl work with it.
                 // No ucb or thread will be necessary then. In case it couldn't be
                 // converted it's not a URL nor a system path. Then we can't accept
