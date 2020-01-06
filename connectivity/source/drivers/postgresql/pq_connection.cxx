@@ -44,13 +44,10 @@
 #include "pq_statement.hxx"
 #include "pq_preparedstatement.hxx"
 #include "pq_databasemetadata.hxx"
-#include "pq_xcontainer.hxx"
-#include "pq_statics.hxx"
 #include "pq_xtables.hxx"
 #include "pq_xviews.hxx"
 #include "pq_xusers.hxx"
 
-#include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>

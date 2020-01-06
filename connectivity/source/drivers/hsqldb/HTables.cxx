@@ -22,14 +22,9 @@
 #include <hsqldb/HTable.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <hsqldb/HCatalog.hxx>
 #include <connectivity/dbtools.hxx>
-#include <connectivity/dbexception.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/types.hxx>
 #include <TConnection.hxx>
 

@@ -40,18 +40,12 @@
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
 
-#include <osl/thread.h>
 #include <osl/time.h>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-
 #include <comphelper/sequence.hxx>
-
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

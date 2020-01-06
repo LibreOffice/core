@@ -29,12 +29,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>

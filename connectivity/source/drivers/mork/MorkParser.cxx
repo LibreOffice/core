@@ -35,13 +35,10 @@
 #include "MorkParser.hxx"
 #include <boost/io/ios_state.hpp>
 #include <stdlib.h>
-#include <sstream>
 #include <string>
 #include <string.h>
-#include <stdexcept>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
 
 std::string const g_Empty = "";
 

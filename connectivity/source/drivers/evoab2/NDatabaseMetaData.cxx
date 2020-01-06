@@ -19,16 +19,12 @@
 
 #include "NDatabaseMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 
 #include <cstddef>
-#include <vector>
 #include <string.h>
 #include "EApi.h"
 

@@ -32,11 +32,9 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <TConnection.hxx>

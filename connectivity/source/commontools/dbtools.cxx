@@ -48,7 +48,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -61,7 +60,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>

@@ -37,7 +37,6 @@
 #include "pq_sequenceresultsetmetadata.hxx"
 
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <rtl/ustrbuf.hxx>
 
 using com::sun::star::uno::Any;
 

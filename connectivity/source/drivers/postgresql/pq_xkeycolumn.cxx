@@ -34,8 +34,6 @@
  *
  ************************************************************************/
 
-#include <cppuhelper/typeprovider.hxx>
-
 #include "pq_xkeycolumn.hxx"
 
 using com::sun::star::uno::Reference;

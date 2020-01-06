@@ -17,17 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <mysql/YTable.hxx>
 #include <mysql/YTables.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -36,8 +29,6 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/TKeys.hxx>
 #include <connectivity/TIndexes.hxx>
-#include <connectivity/TColumnsHelper.hxx>
-#include <mysql/YCatalog.hxx>
 #include <mysql/YColumns.hxx>
 #include <TConnection.hxx>
 

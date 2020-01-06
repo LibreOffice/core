@@ -19,7 +19,6 @@
 
 #include <java/sql/ResultSetMetaData.hxx>
 #include <java/sql/Connection.hxx>
-#include <java/tools.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

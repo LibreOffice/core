@@ -30,7 +30,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

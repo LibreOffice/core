@@ -27,8 +27,6 @@
 #include <sal/log.hxx>
 
 #include <string.h>
-#include <string>
-#include <algorithm>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;

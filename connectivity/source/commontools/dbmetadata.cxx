@@ -36,7 +36,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 #include <o3tl/optional.hxx>

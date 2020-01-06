@@ -35,7 +35,6 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>

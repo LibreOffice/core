@@ -20,7 +20,6 @@
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <flat/EResultSet.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

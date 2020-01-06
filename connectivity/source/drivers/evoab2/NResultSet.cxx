@@ -23,23 +23,17 @@
 #include "NResultSet.hxx"
 #include <propertyids.hxx>
 #include <strings.hrc>
-#include <TSortIndex.hxx>
-#include <algorithm>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -48,7 +42,6 @@
 #include <unotools/collatorwrapper.hxx>
 
 #include <cstring>
-#include <vector>
 
 namespace connectivity { namespace evoab {
 

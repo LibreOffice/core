@@ -29,7 +29,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 

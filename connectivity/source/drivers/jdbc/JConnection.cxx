@@ -29,10 +29,8 @@
 #include <java/sql/PreparedStatement.hxx>
 #include <java/sql/CallableStatement.hxx>
 #include <java/sql/SQLWarning.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <connectivity/sqlparse.hxx>
 #include <connectivity/dbexception.hxx>
 #include <java/util/Property.hxx>
 #include <java/LocalRef.hxx>
@@ -40,7 +38,6 @@
 #include <jvmaccess/classpath.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <jni.h>
 #include <strings.hrc>
 #include <unotools/confignode.hxx>

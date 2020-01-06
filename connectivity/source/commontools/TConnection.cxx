@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <TConnection.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>

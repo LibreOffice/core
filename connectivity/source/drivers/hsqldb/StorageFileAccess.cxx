@@ -21,12 +21,10 @@
 #if defined(HAVE_CONFIG_H) && HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <hsqldb/HStorageMap.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::container;

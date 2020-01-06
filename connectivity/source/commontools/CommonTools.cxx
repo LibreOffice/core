@@ -21,17 +21,12 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/interfacecontainer.h>
-#include <TConnection.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
 #if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
+#include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/process.h>
 

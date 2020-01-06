@@ -34,7 +34,6 @@
  *
  ************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include "Driver.hxx"
-#include "ResultSet.hxx"
 #include "StatementCommonBase.hxx"
 #include "Util.hxx"
 

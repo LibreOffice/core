@@ -22,24 +22,19 @@
 #include "Util.hxx"
 
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <propertyids.hxx>
-#include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <time.h>
 #include <TConnection.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 
 using namespace ::comphelper;
 using namespace ::connectivity;

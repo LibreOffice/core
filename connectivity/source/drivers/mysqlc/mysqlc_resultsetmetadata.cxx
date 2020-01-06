@@ -18,12 +18,10 @@
  */
 
 #include "mysqlc_resultsetmetadata.hxx"
-#include "mysqlc_resultset.hxx"
 #include "mysqlc_general.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 
 using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;

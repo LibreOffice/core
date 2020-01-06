@@ -34,10 +34,7 @@
  *
  ************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 
 #include "pq_tools.hxx"

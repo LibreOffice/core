@@ -19,10 +19,7 @@
 
 #include "ZPooledConnection.hxx"
 #include "ZConnectionWrapper.hxx"
-#include <connectivity/ConnectionWrapper.hxx>
-#include <com/sun/star/sdbc/XCloseable.hpp>
 #include <comphelper/types.hxx>
-#include <cppuhelper/component.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -20,7 +20,6 @@
 #include "mysqlc_driver.hxx"
 
 #include <cppuhelper/factory.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <uno/lbnames.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 

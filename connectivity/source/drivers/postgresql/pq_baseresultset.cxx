@@ -34,22 +34,12 @@
  *
  ************************************************************************/
 
-#include <osl/thread.h>
-
-#include <rtl/ustrbuf.hxx>
-
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-
 #include <comphelper/sequence.hxx>
 
 #include "pq_tools.hxx"
 #include "pq_array.hxx"
-#include "pq_statement.hxx"
 #include "pq_baseresultset.hxx"
-#include "pq_resultsetmetadata.hxx"
 
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbconversion.hxx>

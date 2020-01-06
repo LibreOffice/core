@@ -21,7 +21,6 @@
 #include <dbase/DTable.hxx>
 #include <connectivity/sdbcx/VIndexColumn.hxx>
 #include <comphelper/types.hxx>
-#include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;
 

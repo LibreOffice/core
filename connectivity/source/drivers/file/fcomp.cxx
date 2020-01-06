@@ -19,7 +19,6 @@
 
 #include <file/fcomp.hxx>
 #include <tools/debug.hxx>
-#include <TConnection.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <file/fanalyzer.hxx>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>

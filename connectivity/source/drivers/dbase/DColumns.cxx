@@ -20,7 +20,6 @@
 #include <dbase/DColumns.hxx>
 #include <dbase/DTable.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace connectivity::dbase;
 using namespace connectivity;

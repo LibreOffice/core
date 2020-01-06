@@ -20,7 +20,6 @@
 #include <file/FDriver.hxx>
 #include <file/FConnection.hxx>
 #include <file/fcode.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>

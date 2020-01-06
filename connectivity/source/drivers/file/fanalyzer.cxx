@@ -21,7 +21,6 @@
 #include <connectivity/sqlparse.hxx>
 #include <tools/debug.hxx>
 #include <connectivity/sqlnode.hxx>
-#include <connectivity/dbexception.hxx>
 #include <file/FConnection.hxx>
 #include <strings.hrc>
 

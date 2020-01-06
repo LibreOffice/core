@@ -24,7 +24,6 @@
 #include <cppuhelper/typeprovider.hxx>
 
 #include <algorithm>
-#include <string.h>
 
 namespace connectivity
 {

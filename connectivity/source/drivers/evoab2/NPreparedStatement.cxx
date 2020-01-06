@@ -19,10 +19,6 @@
 
 
 #include "NPreparedStatement.hxx"
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <propertyids.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>

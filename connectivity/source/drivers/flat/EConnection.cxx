@@ -21,7 +21,6 @@
 #include <flat/EDatabaseMetaData.hxx>
 #include <flat/ECatalog.hxx>
 #include <flat/EDriver.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <flat/EPreparedStatement.hxx>
 #include <flat/EStatement.hxx>
 #include <connectivity/dbexception.hxx>

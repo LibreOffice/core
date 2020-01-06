@@ -24,7 +24,6 @@
 #include <odbc/OResultSet.hxx>
 #include <comphelper/property.hxx>
 #include <odbc/OTools.hxx>
-#include <osl/thread.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>

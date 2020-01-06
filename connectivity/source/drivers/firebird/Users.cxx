@@ -10,10 +10,6 @@
 #include "User.hxx"
 #include "Users.hxx"
 
-#include <connectivity/dbtools.hxx>
-
-#include <com/sun/star/sdbc/XRow.hpp>
-
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;

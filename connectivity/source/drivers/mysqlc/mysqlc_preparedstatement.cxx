@@ -25,9 +25,7 @@
 
 #include <sal/log.hxx>
 
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <cppuhelper/typeprovider.hxx>
 
 #include <stdio.h>
 

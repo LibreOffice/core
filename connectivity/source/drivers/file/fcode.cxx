@@ -22,10 +22,7 @@
 #include <sal/log.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <sqlbison.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <TConnection.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include <comphelper/types.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

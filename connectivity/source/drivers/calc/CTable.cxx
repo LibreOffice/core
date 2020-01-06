@@ -21,7 +21,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -35,20 +34,13 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <svl/converter.hxx>
 #include <calc/CConnection.hxx>
-#include <component/CColumns.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <osl/thread.h>
-#include <cppuhelper/queryinterface.hxx>
-#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <connectivity/dbexception.hxx>
-#include <connectivity/dbconversion.hxx>
+#include <tools/time.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 using namespace connectivity;

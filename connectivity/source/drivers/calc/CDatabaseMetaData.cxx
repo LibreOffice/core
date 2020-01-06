@@ -19,22 +19,15 @@
 
 #include <calc/CDatabaseMetaData.hxx>
 #include <calc/CConnection.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <FDatabaseMetaDataResultSet.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 using namespace connectivity::calc;
 using namespace connectivity::file;

@@ -19,12 +19,8 @@
 
 #include <hsqldb/HUsers.hxx>
 #include <hsqldb/HUser.hxx>
-#include <hsqldb/HTable.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <comphelper/types.hxx>
-#include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <TConnection.hxx>
 

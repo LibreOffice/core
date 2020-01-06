@@ -20,15 +20,10 @@
 #include <flat/EDatabaseMetaData.hxx>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <FDatabaseMetaDataResultSet.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;

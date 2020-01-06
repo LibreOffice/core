@@ -24,9 +24,7 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

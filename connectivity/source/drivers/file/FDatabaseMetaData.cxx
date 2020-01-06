@@ -19,14 +19,9 @@
 
 #include <file/FDatabaseMetaData.hxx>
 #include <FDatabaseMetaDataResultSet.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/ucb/SearchRecursion.hpp>
-#include <com/sun/star/ucb/SearchCommandArgument.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
 #include <file/FDriver.hxx>

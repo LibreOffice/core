@@ -34,12 +34,8 @@
  *
  ************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
-
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include "pq_xindex.hxx"
 #include "pq_xindexcolumns.hxx"

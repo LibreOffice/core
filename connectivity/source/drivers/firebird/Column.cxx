@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "Columns.hxx"
 #include "Column.hxx"
 
 #include <TConnection.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <java/lang/Throwable.hxx>
-#include <java/tools.hxx>
+
 using namespace connectivity;
 
 //************ Class: java.lang.Throwable

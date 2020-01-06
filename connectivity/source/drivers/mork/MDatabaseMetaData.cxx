@@ -13,11 +13,9 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <sal/log.hxx>
-#include <strings.hrc>
 #include <vector>
 
 #include "MDatabaseMetaDataHelper.hxx"
-#include <connectivity/dbtools.hxx>
 
 using namespace connectivity::mork;
 using namespace connectivity;

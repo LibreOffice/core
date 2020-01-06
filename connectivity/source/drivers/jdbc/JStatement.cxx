@@ -34,7 +34,6 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
 
 #include <strings.hxx>
 

@@ -35,16 +35,13 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xcolumn.hxx"

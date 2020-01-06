@@ -21,15 +21,7 @@
 #include <ParameterSubstitution.hxx>
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <FDatabaseMetaDataResultSetMetaData.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbc/ProcedureResult.hpp>
-#include <com/sun/star/sdbc/IndexType.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
@@ -37,7 +29,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
-#include <strings.hrc>
 #include <TConnection.hxx>
 
 using namespace connectivity;

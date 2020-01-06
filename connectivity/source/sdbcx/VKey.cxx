@@ -18,12 +18,10 @@
  */
 
 #include <connectivity/sdbcx/VKey.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <TConnection.hxx>
 

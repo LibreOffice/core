@@ -18,32 +18,8 @@
  */
 
 #include <component/CTable.hxx>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangesQuery.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/sheet/XUsedAreaCursor.hpp>
-#include <com/sun/star/sheet/CellFlags.hpp>
-#include <com/sun/star/sheet/FormulaResult.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <svl/converter.hxx>
 #include <component/CColumns.hxx>
-#include <connectivity/sdbcx/VColumn.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/thread.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <svl/zforlist.hxx>
-#include <rtl/math.hxx>
-#include <connectivity/dbexception.hxx>
-#include <connectivity/dbconversion.hxx>
 
 using namespace connectivity;
 using namespace connectivity::component;
@@ -57,8 +33,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 
 

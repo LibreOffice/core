@@ -34,9 +34,7 @@
  *
  ************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbc/XArray.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/sequence.hxx>
 

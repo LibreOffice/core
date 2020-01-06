@@ -22,11 +22,8 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <svl/converter.hxx>
 #include <flat/EConnection.hxx>
 #include <flat/EColumns.hxx>
-#include <osl/thread.h>
-#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <tools/solar.h>
@@ -34,18 +31,15 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/types.hxx>
-#include <flat/EDriver.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
-#include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <file/quotedstring.hxx>
+#include <file/FDriver.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 
@@ -54,7 +48,6 @@ using namespace connectivity;
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ::cppu;
-using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;

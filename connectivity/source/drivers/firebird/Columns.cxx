@@ -10,8 +10,6 @@
 #include "Columns.hxx"
 #include "Column.hxx"
 
-#include <com/sun/star/sdbc/XRow.hpp>
-
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
