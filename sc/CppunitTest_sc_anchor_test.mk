@@ -70,9 +70,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_anchor_test,\
 $(eval $(call gb_CppunitTest_use_ure,sc_anchor_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_anchor_test))
 
-$(eval $(call gb_CppunitTest_use_components,sc_anchor_test,\
-    $(sc_unoapi_common_components) \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sc_anchor_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_anchor_test))
 
