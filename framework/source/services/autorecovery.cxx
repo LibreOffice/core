@@ -624,9 +624,9 @@ private:
     /** @short  validate new detected document and add it into the internal
                 document list.
 
-        @descr  This method should be called only, if its clear that a new
+        @descr  This method should be called only if it's clear that a new
                 document was opened/created during office runtime.
-                This method checks, if it's a top level document (means not an embedded one).
+                This method checks if it's a top level document (means not an embedded one).
                 Only such top level documents can be recognized by this auto save mechanism.
 
         @param  xDocument
