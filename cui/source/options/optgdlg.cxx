@@ -23,7 +23,9 @@
 #include <svl/currencytable.hxx>
 #include <svtools/langhelp.hxx>
 #include <unotools/lingucfg.hxx>
+#if defined(_WIN32)
 #include <unotools/resmgr.hxx>
+#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -52,7 +54,9 @@
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
 #include <tools/diagnose_ex.h>
+#if HAVE_FEATURE_BREAKPAD
 #include <desktop/crashreport.hxx>
+#endif
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
