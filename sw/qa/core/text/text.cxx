@@ -8,6 +8,9 @@
  */
 
 #include <swmodeltestbase.hxx>
+
+#include <vcl/gdimtf.hxx>
+
 #include <wrtsh.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/text/data/";
@@ -44,6 +47,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFootnoteConnect)
     // Without the accompanying fix in place, this test would have crashed due to a use-after-free
     // in SwFootnoteFrame::GetRef().
     pWrtShell->DelLeft();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
+{
+    // Create an in-memory empty document.
+    loadURL("private:factory/swriter", nullptr);
+
+    // Set text to half-transparent and type a character.
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+    sal_Int16 nTransparence = 50;
+    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nTransparence));
+    uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextRange.is());
+    xTextRange->setString("x");
+
+    // Render the document to a metafile.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+    CPPUNIT_ASSERT(xMetaFile);
+
+    // Make sure that DrawTransparent() was used during rendering.
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//floattransparent");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
