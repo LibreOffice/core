@@ -31,13 +31,11 @@
 #include <boost/spirit/include/classic_core.hpp>
 #include <RowFunctionParser.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/fract.hxx>
 
 
 #if (OSL_DEBUG_LEVEL > 0)
 #include <iostream>
 #endif
-#include <functional>
 #include <algorithm>
 #include <stack>
 

@@ -24,8 +24,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace connectivity;

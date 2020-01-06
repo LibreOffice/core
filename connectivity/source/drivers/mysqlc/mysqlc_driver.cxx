@@ -18,7 +18,6 @@
  */
 #include "mysqlc_driver.hxx"
 #include "mysqlc_connection.hxx"
-#include "mysqlc_general.hxx"
 
 using namespace css::uno;
 using namespace css::lang;
@@ -27,7 +26,6 @@ using namespace css::sdbc;
 using namespace connectivity::mysqlc;
 
 #include <cppuhelper/supportsservice.hxx>
-#include <stdio.h>
 
 MysqlCDriver::MysqlCDriver(const Reference<XMultiServiceFactory>& _rxFactory)
     : ODriver_BASE(m_aMutex)

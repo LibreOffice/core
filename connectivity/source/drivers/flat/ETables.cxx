@@ -19,13 +19,7 @@
 
 #include <flat/ETables.hxx>
 #include <flat/ETable.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <file/FCatalog.hxx>
-#include <file/FConnection.hxx>
 
 using namespace connectivity;
 using namespace ::comphelper;

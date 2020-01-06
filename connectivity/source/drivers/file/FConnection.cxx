@@ -27,9 +27,6 @@
 #include <file/FDriver.hxx>
 #include <file/FStatement.hxx>
 #include <file/FPreparedStatement.hxx>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -42,7 +39,6 @@
 #include <connectivity/dbexception.hxx>
 #include <o3tl/any.hxx>
 #include <osl/thread.h>
-#include <osl/nlsupport.h>
 #include <strings.hrc>
 
 using namespace connectivity::file;

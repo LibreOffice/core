@@ -18,7 +18,6 @@
  */
 
 #include <java/lang/Class.hxx>
-#include <java/tools.hxx>
 #include <rtl/ustring.hxx>
 
 using namespace connectivity;

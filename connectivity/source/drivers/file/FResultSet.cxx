@@ -18,23 +18,15 @@
  */
 
 
-#ifdef __GNUC__
-#include <iostream>
-#endif
-#include <connectivity/sdbcx/VColumn.hxx>
 #include <file/FResultSet.hxx>
 #include <sqlbison.hxx>
 #include <file/FResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <comphelper/property.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <sal/log.hxx>

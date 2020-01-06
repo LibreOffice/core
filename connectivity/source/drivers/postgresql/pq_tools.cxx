@@ -42,6 +42,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -51,7 +52,6 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 
-#include "pq_xcontainer.hxx"
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
 

@@ -25,17 +25,13 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <odbc/OTools.hxx>
-#include <odbc/ODriver.hxx>
 #include <odbc/OResultSet.hxx>
 #include <odbc/OResultSetMetaData.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/FValue.hxx>
 #include <strings.hrc>
-#include <connectivity/sqlparse.hxx>
 #include <memory>
 #include <type_traits>
 

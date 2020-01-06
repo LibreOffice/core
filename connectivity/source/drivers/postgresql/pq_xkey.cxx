@@ -34,16 +34,11 @@
  *
  ************************************************************************/
 
-#include <rtl/ustrbuf.hxx>
-
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-
 #include "pq_xkey.hxx"
 #include "pq_xkeycolumns.hxx"
-#include "pq_tools.hxx"
 #include "pq_statics.hxx"
 
 using com::sun::star::container::XNameAccess;

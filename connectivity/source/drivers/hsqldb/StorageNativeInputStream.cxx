@@ -22,15 +22,10 @@
 #include <config.h>
 #endif
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <hsqldb/HStorageAccess.hxx>
 #include <hsqldb/HStorageMap.hxx>
 
-#include <jvmaccess/virtualmachine.hxx>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <osl/diagnose.h>
 #include "accesslog.hxx"
 

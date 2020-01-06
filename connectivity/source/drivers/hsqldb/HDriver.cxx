@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
-
 #include <hsqldb/HDriver.hxx>
 #include <hsqldb/HConnection.hxx>
 #include <osl/diagnose.h>
@@ -26,7 +24,6 @@
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
@@ -37,7 +34,6 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include "HTerminateListener.hxx"
 #include <hsqldb/HCatalog.hxx>

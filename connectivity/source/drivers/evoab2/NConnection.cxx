@@ -20,7 +20,6 @@
 #include "NConnection.hxx"
 #include "NDatabaseMetaData.hxx"
 #include "NCatalog.hxx"
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include "NPreparedStatement.hxx"
 #include "NStatement.hxx"

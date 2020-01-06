@@ -19,7 +19,6 @@
 
 #include <component/CColumns.hxx>
 #include <file/FTable.hxx>
-#include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::component;
 using namespace connectivity;

@@ -9,10 +9,6 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <MColumnAlias.hxx>
-#include <MQueryHelper.hxx>
-#include <MConnection.hxx>
-
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 

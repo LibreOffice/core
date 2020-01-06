@@ -18,7 +18,6 @@
  */
 
 
-#include <connectivity/sdbcx/VColumn.hxx>
 #include <osl/diagnose.h>
 #include <file/FPreparedStatement.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -26,7 +25,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

@@ -23,8 +23,6 @@
 #include "mysqlc_resultsetmetadata.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -33,12 +31,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/seqstream.hxx>
 
-#include <sal/log.hxx>
-
 using namespace rtl;
-#include <comphelper/string.hxx>
-
-#include <cstdlib>
 
 using namespace connectivity::mysqlc;
 using namespace cppu;
@@ -53,8 +46,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace ::comphelper;
 using ::osl::MutexGuard;
-
-#include <stdio.h>
 
 namespace
 {

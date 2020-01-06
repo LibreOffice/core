@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <resource/sharedresources.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
 namespace connectivity

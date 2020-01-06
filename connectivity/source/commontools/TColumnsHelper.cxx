@@ -19,13 +19,8 @@
 
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <TConnection.hxx>

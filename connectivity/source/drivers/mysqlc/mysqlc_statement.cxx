@@ -19,24 +19,15 @@
 
 #include <sal/config.h>
 
-#include <memory>
-#include <stdio.h>
-
 #include "mysqlc_connection.hxx"
 #include "mysqlc_propertyids.hxx"
 #include "mysqlc_resultset.hxx"
 #include "mysqlc_statement.hxx"
 #include "mysqlc_general.hxx"
 
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/thread.h>
 
 using namespace connectivity::mysqlc;
 

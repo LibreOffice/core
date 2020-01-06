@@ -13,11 +13,9 @@
 
 #include "Clob.hxx"
 #include "Blob.hxx"
-#include "Connection.hxx"
-#include "Util.hxx"
 
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::connectivity::firebird;
 

@@ -22,7 +22,6 @@
 #include <dbase/DDatabaseMetaData.hxx>
 #include <dbase/DCatalog.hxx>
 #include <dbase/DDriver.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <dbase/DPreparedStatement.hxx>
 #include <dbase/DStatement.hxx>
 #include <connectivity/dbexception.hxx>

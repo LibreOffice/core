@@ -26,18 +26,14 @@
 #include <svl/converter.hxx>
 #include <dbase/DConnection.hxx>
 #include <dbase/DColumns.hxx>
-#include <osl/thread.h>
 #include <tools/config.hxx>
 #include <dbase/DIndex.hxx>
 #include <dbase/DIndexes.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svl/zforlist.hxx>
-#include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <connectivity/dbexception.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -48,13 +44,14 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <connectivity/PColumn.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <strings.hrc>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/date.hxx>
 
 #include <algorithm>
 #include <cassert>

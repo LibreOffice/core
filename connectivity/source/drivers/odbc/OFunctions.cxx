@@ -18,7 +18,6 @@
  */
 
 #include <odbc/OFunctions.hxx>
-#include <osl/process.h>
 
 // Implib definitions for ODBC-DLL/shared library:
 

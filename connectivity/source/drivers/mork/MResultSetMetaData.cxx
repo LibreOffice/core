@@ -18,10 +18,8 @@
  */
 
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include "MResultSetMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>

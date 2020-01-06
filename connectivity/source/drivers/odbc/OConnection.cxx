@@ -24,11 +24,7 @@
 #include <odbc/ODriver.hxx>
 #include <odbc/OStatement.hxx>
 #include <odbc/OPreparedStatement.hxx>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbcharset.hxx>
-#include <connectivity/FValue.hxx>
 #include <connectivity/dbexception.hxx>
 
 #include <sal/log.hxx>

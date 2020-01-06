@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "mysqlc_general.hxx"
-#include "mysqlc_resultsetmetadata.hxx"
 
 #include <sal/log.hxx>
 #include <rtl/ustring.hxx>
+
+#include <com/sun/star/sdbc/DataType.hpp>
 
 using com::sun::star::sdbc::SQLException;
 

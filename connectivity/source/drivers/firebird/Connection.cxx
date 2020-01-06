@@ -25,26 +25,21 @@
 #include "Driver.hxx"
 #include "PreparedStatement.hxx"
 #include "Statement.hxx"
-#include "Tables.hxx"
 #include "Util.hxx"
 
 #include <stdexcept>
 
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <connectivity/dbexception.hxx>
-#include <connectivity/sqlparse.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 

@@ -19,7 +19,6 @@
 
 #include <flat/EColumns.hxx>
 #include <flat/ETable.hxx>
-#include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::flat;
 using namespace connectivity;

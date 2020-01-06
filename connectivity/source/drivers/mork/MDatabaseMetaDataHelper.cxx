@@ -13,15 +13,6 @@
 // do we need it?
 static ::osl::Mutex m_aMetaMutex;
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-
 #include <sal/log.hxx>
 
 #include "MorkParser.hxx"

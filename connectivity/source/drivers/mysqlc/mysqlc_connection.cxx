@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include "mysqlc_connection.hxx"
 #include "mysqlc_databasemetadata.hxx"
 
@@ -26,24 +25,12 @@
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_general.hxx"
 
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <osl/module.hxx>
-#include <osl/thread.h>
-#include <osl/file.h>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace connectivity::mysqlc;
-
-#include <stdio.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;

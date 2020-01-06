@@ -18,7 +18,7 @@
  */
 
 #include <java/sql/Ref.hxx>
-#include <java/tools.hxx>
+
 using namespace connectivity;
 
 //************ Class: java.sql.Ref

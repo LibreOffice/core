@@ -19,8 +19,6 @@
 
 
 #include "ZConnectionPool.hxx"
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include "ZPooledConnection.hxx"
 #include "ZPoolCollection.hxx"

@@ -35,7 +35,6 @@
  ************************************************************************/
 
 #include "pq_preparedstatement.hxx"
-#include "pq_resultset.hxx"
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
 #include "pq_statement.hxx"
@@ -44,10 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 
 
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>

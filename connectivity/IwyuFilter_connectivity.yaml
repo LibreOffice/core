@@ -1,2 +1,73 @@
 ---
 assumeFilename: connectivity/source/commontools/dbtools.cxx
+blacklist:
+    connectivity/source/commontools/ConnectionWrapper.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/sdbc/XConnection.hpp
+    connectivity/source/commontools/RowFunctionParser.cxx:
+    # Boost header needed
+    - boost/spirit/include/classic_core.hpp
+    connectivity/source/commontools/conncleanup.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XRowSet.hpp
+    - com/sun/star/sdbc/XConnection.hpp
+    connectivity/source/commontools/dbconversion.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    connectivity/source/commontools/dbexception.cxx:
+    # Actually used
+    - com/sun/star/sdb/SQLErrorEvent.hpp
+    connectivity/source/commontools/paramwrapper.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XParameters.hpp
+    connectivity/source/commontools/warningscontainer.cxx:
+    # Actually used
+    - com/sun/star/sdb/SQLContext.hpp
+    - com/sun/star/sdbc/XWarningsSupplier.hpp
+    connectivity/source/commontools/predicateinput.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    connectivity/source/commontools/statementcomposer.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    connectivity/source/commontools/parameters.cxx:
+    # Actually used
+    - com/sun/star/form/XDatabaseParameterListener.hpp
+    - com/sun/star/sdbc/XParameters.hpp
+    - com/sun/star/task/XInteractionHandler.hpp
+    connectivity/source/cpool/ZPoolCollection.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    connectivity/source/parse/PColumn.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XResultSetMetaData.hpp
+    connectivity/source/drivers/file/FCatalog.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XRow.hpp
+    connectivity/source/drivers/hsqldb/HStorageAccess.cxx:
+    # Needed for HSQLDB_DBG
+    - accesslog.hxx
+    connectivity/source/drivers/hsqldb/StorageNativeInputStream.cxx:
+    # Needed for HSQLDB_DBG
+    - accesslog.hxx
+    connectivity/source/drivers/hsqldb/StorageNativeOutputStream.cxx:
+    # Needed for HSQLDB_DBG
+    - accesslog.hxx
+    connectivity/source/drivers/jdbc/ConnectionLog.cxx:
+    # Actually used
+    - com/sun/star/util/Date.hpp
+    - com/sun/star/util/Time.hpp
+    - com/sun/star/util/DateTime.hpp
+    connectivity/source/drivers/mork/MorkParser.cxx:
+    # Needed for std::ifstream
+    - fstream
+    connectivity/source/drivers/mork/MDriver.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    connectivity/source/drivers/mysql_jdbc/YDriver.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    connectivity/source/drivers/odbc/OTools.cxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h

@@ -20,8 +20,6 @@
 #include "MNSFolders.hxx"
 
 #ifdef UNIX
-#include <sys/types.h>
-#include <strings.h>
 #include <string.h>
 #endif // End UNIX
 

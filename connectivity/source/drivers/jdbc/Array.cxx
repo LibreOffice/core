@@ -19,7 +19,7 @@
 
 #include <java/sql/Array.hxx>
 #include <java/tools.hxx>
-#include <java/sql/ResultSet.hxx>
+#include <osl/diagnose.h>
 
 using namespace connectivity;
 

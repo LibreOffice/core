@@ -23,7 +23,6 @@
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>

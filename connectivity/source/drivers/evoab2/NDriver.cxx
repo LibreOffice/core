@@ -21,13 +21,8 @@
 #include "NConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
-#include <osl/file.hxx>
-#include <osl/security.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <ucbhelper/content.hxx>
-#include <signal.h>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 

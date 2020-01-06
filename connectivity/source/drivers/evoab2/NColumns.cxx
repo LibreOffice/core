@@ -20,8 +20,6 @@
 
 #include "NColumns.hxx"
 #include "NTable.hxx"
-#include "NTables.hxx"
-#include "NCatalog.hxx"
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 

@@ -39,7 +39,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include "pq_xusers.hxx"

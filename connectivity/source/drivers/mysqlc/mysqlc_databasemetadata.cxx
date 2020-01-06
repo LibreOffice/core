@@ -17,28 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "mysqlc_databasemetadata.hxx"
-#include <memory>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/Deferrability.hpp>
-#include <com/sun/star/sdbc/IndexType.hpp>
-#include <com/sun/star/sdbc/BestRowScope.hpp>
-#include <com/sun/star/sdbc/ColumnType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/sequence.hxx>
 
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "mysqlc_general.hxx"
-#include "mysqlc_statement.hxx"
 #include "mysqlc_driver.hxx"
 #include "mysqlc_preparedstatement.hxx"
-
-#include <stdio.h>
-#include <sal/macros.h>
 
 using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;

@@ -9,7 +9,6 @@
 
 #include "Util.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>

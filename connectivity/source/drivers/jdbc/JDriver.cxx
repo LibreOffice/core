@@ -18,12 +18,7 @@
  */
 
 #include <java/sql/Driver.hxx>
-#include <java/lang/Object.hxx>
-#include <java/lang/Class.hxx>
-#include <java/sql/DriverPropertyInfo.hxx>
 #include <java/sql/Connection.hxx>
-#include <java/util/Property.hxx>
-#include <java/tools.hxx>
 #include <sal/log.hxx>
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>

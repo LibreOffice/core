@@ -19,9 +19,7 @@
 
 
 #include "NTable.hxx"
-#include "NTables.hxx"
 #include "NColumns.hxx"
-#include "NCatalog.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
 

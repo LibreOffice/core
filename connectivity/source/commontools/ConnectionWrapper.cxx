@@ -19,10 +19,7 @@
 
 #include <connectivity/ConnectionWrapper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -31,7 +28,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <algorithm>
-#include <string.h>
 
 using namespace connectivity;
 

@@ -18,14 +18,9 @@
  */
 
 #include <java/sql/DriverPropertyInfo.hxx>
-#include <java/lang/Boolean.hxx>
-#include <java/tools.hxx>
-#include <java/lang/String.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 

@@ -8,7 +8,6 @@
  */
 
 #include "Blob.hxx"
-#include "Connection.hxx"
 #include "Util.hxx"
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
@@ -17,9 +16,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::connectivity::firebird;

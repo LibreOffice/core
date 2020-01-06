@@ -31,7 +31,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <TConnection.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 

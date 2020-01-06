@@ -40,8 +40,6 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
