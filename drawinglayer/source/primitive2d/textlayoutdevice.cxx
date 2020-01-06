@@ -48,7 +48,7 @@ namespace
 
     //The ImpTimerRefDev itself, if the timeout ever gets hit, will call
     //reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
-    //if its unused for a few minutes
+    //if it's unused for a few minutes
     class scoped_timed_RefDev : public comphelper::unique_disposing_ptr<ImpTimedRefDev>
     {
     public:
