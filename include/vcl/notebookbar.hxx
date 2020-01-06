@@ -14,6 +14,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/settings.hxx>
+#include <set>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace ui { class XContextChangeEventListener; } } } }
@@ -39,17 +40,17 @@ public:
 
     void SetSystemWindow(SystemWindow* pSystemWindow);
 
-    const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
-
     void StateChanged(const StateChangedType nStateChange ) override;
 
     void DataChanged(const DataChangedEvent& rDCEvt) override;
 
-    void ControlListener(bool bListen);
+    void ControlListenerForCurrentController(bool bListen);
+    void StopListeningAllControllers();
 
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
+    std::set<css::uno::Reference<css::frame::XController>> m_alisteningControllers;
     std::vector<NotebookbarContextControl*> m_pContextContainers;
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
