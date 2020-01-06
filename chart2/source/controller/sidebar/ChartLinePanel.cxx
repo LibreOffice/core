@@ -20,7 +20,7 @@
 #include <svx/unomid.hxx>
 
 #include <svx/tbcontrl.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/weldutils.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -31,9 +31,9 @@ namespace chart { namespace sidebar {
 
 namespace {
 
-SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pToolBoxColor)
+SvxColorToolBoxControl* getColorToolBoxControl(ToolbarUnoDispatcher& rToolBoxColor)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = pToolBoxColor->GetFirstController();
+    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineColor");
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
     return pToolBoxColorControl;
 }
@@ -137,7 +137,7 @@ ChartLinePanel::ChartLinePanel(vcl::Window* pParent,
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
     mbModelValid(true),
-    maLineColorWrapper(mxModel, getColorToolBoxControl(mpTBColor.get()), "LineColor")
+    maLineColorWrapper(mxModel, getColorToolBoxControl(*mxColorDispatch), "LineColor")
 {
     disableArrowHead();
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM,
@@ -174,7 +174,7 @@ void ChartLinePanel::Initialize()
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
 
-    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mpTBColor.get());
+    SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(*mxColorDispatch);
     pToolBoxColor->setColorSelectFunction(maLineColorWrapper);
 
     setMapUnit(MapUnit::Map100thMM);
