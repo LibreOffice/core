@@ -10,6 +10,7 @@
 
 #include <AccessibilityCheck.hxx>
 #include <AccessibilityIssue.hxx>
+#include <AccessibilityCheckStrings.hrc>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
@@ -33,20 +34,6 @@ namespace sw
 {
 namespace
 {
-// TODO move these to string file and look for a better name.
-OUString sNoAlt("No alt text for graphic '%OBJECT_NAME%'");
-OUString sTableMergeSplit("Table '%OBJECT_NAME%' contains merges or splits");
-OUString sFakeNumbering("Fake numbering '%NUMBERING%'");
-OUString sHyperlinkTextIsLink("Hyperlink text is the same as the link address '%LINK%'");
-OUString sDocumentDefaultLanguage("Document default language is not set");
-OUString sStyleNoLanguage("Style '%STYLE_NAME%' has no language set");
-OUString sDocumentTitle("Document title is not set");
-OUString sTextContrast("Text contrast is too low.");
-OUString sTextBlinking("Blinking text.");
-OUString sAvoidFootnotes("Avoid footnotes.");
-OUString sAvoidEndnotes("Avoid endnotes.");
-OUString sHeadingsOrder("Headings not in order.");
-
 std::shared_ptr<sw::AccessibilityIssue>
 lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
             svx::AccessibilityIssueID eIssue = svx::AccessibilityIssueID::UNSPECIFIED)
@@ -94,7 +81,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
         {
             OUString sName = pNoTextNode->GetFlyFormat()->GetName();
 
-            OUString sIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+            OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
 
             auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
 
@@ -138,7 +125,7 @@ private:
     {
         const SwTableFormat* pFormat = rTable.GetFrameFormat();
         OUString sName = pFormat->GetName();
-        OUString sIssueText = sTableMergeSplit.replaceAll("%OBJECT_NAME%", sName);
+        OUString sIssueText = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName);
         auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
         pIssue->setDoc(pDoc);
         pIssue->setIssueObject(IssueObject::TABLE);
@@ -242,7 +229,8 @@ public:
                         && pPreviousTextNode->GetText().startsWith(rPair.first))
                     {
                         OUString sNumbering = rPair.first + " " + rPair.second + "...";
-                        OUString sIssueText = sFakeNumbering.replaceAll("%NUMBERING%", sNumbering);
+                        OUString sIssueText
+                            = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
                         lclAddIssue(m_rIssueCollection, sIssueText);
                     }
                 }
@@ -267,7 +255,8 @@ private:
                 OUString sText = xTextRange->getString();
                 if (INetURLObject(sText) == INetURLObject(sHyperlink))
                 {
-                    OUString sIssueText = sHyperlinkTextIsLink.replaceFirst("%LINK%", sHyperlink);
+                    OUString sIssueText
+                        = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
                     lclAddIssue(m_rIssueCollection, sIssueText);
                 }
             }
@@ -399,7 +388,7 @@ private:
             double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
             if (fContrastRatio < 4.5)
             {
-                lclAddIssue(m_rIssueCollection, sTextContrast);
+                lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
             }
         }
     }
@@ -447,7 +436,7 @@ private:
 
             if (bBlinking)
             {
-                lclAddIssue(m_rIssueCollection, sTextBlinking);
+                lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_BLINKING));
             }
         }
     }
@@ -506,7 +495,7 @@ public:
 
             if (nLevel > nPreviousLevel && std::abs(nLevel - nPreviousLevel) > 1)
             {
-                lclAddIssue(m_rIssueCollection, sHeadingsOrder);
+                lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
             }
             nPreviousLevel = nLevel;
         }
@@ -540,7 +529,7 @@ public:
         LanguageType eLanguage = rLang.GetLanguage();
         if (eLanguage == LANGUAGE_NONE)
         {
-            lclAddIssue(m_rIssueCollection, sDocumentDefaultLanguage,
+            lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_DEFAULT_LANGUAGE),
                         svx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
         }
         else
@@ -551,7 +540,8 @@ public:
                 if (rAttrSet.GetLanguage(false).GetLanguage() == LANGUAGE_NONE)
                 {
                     OUString sName = pTextFormatCollection->GetName();
-                    OUString sIssueText = sStyleNoLanguage.replaceAll("%STYLE_NAME%", sName);
+                    OUString sIssueText
+                        = SwResId(STR_STYLE_NO_LANGUAGE).replaceAll("%STYLE_NAME%", sName);
                     lclAddIssue(m_rIssueCollection, sIssueText,
                                 svx::AccessibilityIssueID::STYLE_LANGUAGE);
                 }
@@ -580,7 +570,7 @@ public:
             OUString sTitle = xDocumentProperties->getTitle();
             if (sTitle.isEmpty())
             {
-                lclAddIssue(m_rIssueCollection, sDocumentTitle,
+                lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
                             svx::AccessibilityIssueID::DOCUMENT_TITLE);
             }
         }
@@ -602,11 +592,11 @@ public:
             SwFormatFootnote const& rFootnote = pTextFootnote->GetFootnote();
             if (rFootnote.IsEndNote())
             {
-                lclAddIssue(m_rIssueCollection, sAvoidEndnotes);
+                lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_ENDNOTES));
             }
             else
             {
-                lclAddIssue(m_rIssueCollection, sAvoidFootnotes);
+                lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FOOTNOTES));
             }
         }
     }
@@ -626,7 +616,7 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         if (sAlternative.isEmpty())
         {
             OUString sName = pObject->GetName();
-            OUString sIssueText = sNoAlt.replaceAll("%OBJECT_NAME%", sName);
+            OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
             lclAddIssue(m_aIssueCollection, sIssueText);
         }
     }
