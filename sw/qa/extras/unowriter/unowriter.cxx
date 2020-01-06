@@ -11,6 +11,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
@@ -624,6 +625,26 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     CPPUNIT_ASSERT(pListener->GetString().isEmpty());
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
+{
+    // Create a new document and add a table
+    loadURL("private:factory/swriter", nullptr);
+    css::uno::Reference<css::text::XTextDocument> xTextDocument(mxComponent,
+                                                                css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
+                                                              css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::text::XTextTable> xTable(
+        xFac->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+    xTable->initialize(4, 4);
+    auto xSimpleText = xTextDocument->getText();
+    xSimpleText->insertTextContent(xSimpleText->createTextCursor(), xTable, true);
+    css::uno::Reference<css::table::XCellRange> xTableCellRange(xTable, css::uno::UNO_QUERY_THROW);
+    // Get instance of SwXCellRange
+    css::uno::Reference<css::beans::XPropertySet> xCellRange(
+        xTableCellRange->getCellRangeByPosition(0, 0, 1, 1), css::uno::UNO_QUERY_THROW);
+    // Test retrieval of VertOrient property - this crashed
+    css::uno::Any aOrient = xCellRange->getPropertyValue("VertOrient");
+    CPPUNIT_ASSERT_EQUAL(css::uno::Any(css::text::VertOrientation::NONE), aOrient);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
