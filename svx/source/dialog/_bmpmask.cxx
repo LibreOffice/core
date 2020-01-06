@@ -580,21 +580,21 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     {
         pSrcCols[nCount] = m_pQSet1->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor1->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp1->GetValue());
+        pTols[nCount++] = static_cast<sal_uInt8>(m_pSp1->GetValue());
     }
 
     if ( m_pCbx2->IsChecked() )
     {
         pSrcCols[nCount] = m_pQSet2->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor2->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp2->GetValue());
+        pTols[nCount++] = static_cast<sal_uInt8>(m_pSp2->GetValue());
     }
 
     if ( m_pCbx3->IsChecked() )
     {
         pSrcCols[nCount] = m_pQSet3->GetItemColor( 1 );
         pDstCols[nCount] = m_pLbColor3->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp3->GetValue());
+        pTols[nCount++] = static_cast<sal_uInt8>(m_pSp3->GetValue());
     }
 
     if ( m_pCbx4->IsChecked() )

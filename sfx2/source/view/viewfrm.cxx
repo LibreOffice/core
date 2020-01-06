@@ -2694,8 +2694,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                     aOUSource = pModule->GetSource32();
                     sal_uInt16 nStart, nEnd;
                     pMethod->GetLineRange( nStart, nEnd );
-                    sal_uIntPtr nlStart = nStart;
-                    sal_uIntPtr nlEnd = nEnd;
+                    sal_uInt16 nlStart = nStart;
+                    sal_uInt16 nlEnd = nEnd;
                     CutLines( aOUSource, nlStart-1, nlEnd-nlStart+1 );
                 }
             }

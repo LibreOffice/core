@@ -538,10 +538,10 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
                 static_cast< sal_uInt16 >( maDateTime.Month ),
                 static_cast< sal_uInt16 >( maDateTime.Year ) ),
             tools::Time(
-                static_cast< sal_uIntPtr >( maDateTime.Hours ),
-                static_cast< sal_uIntPtr >( maDateTime.Minutes ),
-                static_cast< sal_uIntPtr >( maDateTime.Seconds ),
-                static_cast< sal_uIntPtr >( maDateTime.NanoSeconds ) ) );
+                static_cast< sal_uInt16 >( maDateTime.Hours ),
+                static_cast< sal_uInt16 >( maDateTime.Minutes ),
+                static_cast< sal_uInt16 >( maDateTime.Seconds ),
+                static_cast< sal_uInt32 >( maDateTime.NanoSeconds ) ) );
     // invalid time stamp is not converted to UTC
     // heuristic to detect editing durations (which we assume to be < 1 year):
     // check only the year, not the entire date
