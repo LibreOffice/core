@@ -400,15 +400,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             if(pView)
             {
-                Reference<XContextChangeEventMultiplexer> xMultiplexer
-                            = ContextChangeEventMultiplexer::get( xContext );
-
-                if(xFrame.is())
-                {
-                    xMultiplexer->addContextChangeEventListener(
-                                        pNotebookBar->getContextChangeEventListener(),
-                                        xFrame->getController());
-                }
+                pNotebookBar->ControlListenerForCurrentController(true);
             }
         }
 
@@ -430,10 +422,9 @@ void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
                         = ContextChangeEventMultiplexer::get(
                                 ::comphelper::getProcessComponentContext());
 
-    if (pSysWindow->GetNotebookBar())
+    if (auto pNotebookBar = pSysWindow->GetNotebookBar())
     {
-        xMultiplexer->removeAllContextChangeEventListeners(
-                           pSysWindow->GetNotebookBar()->getContextChangeEventListener());
+        pNotebookBar->StopListeningAllControllers();
     }
 }
 
