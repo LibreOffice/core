@@ -219,7 +219,11 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     beans::PropertyValue* aEndIter = vPropVals.end();
     for( ; aValIter != aEndIter; ++aValIter )
     {
-        if (IgnoreForCharStyle(aValIter->Name))
+        // We need font names when they are different for the bullet and for the text.
+        // But leave symbols alone, we only want to keep the font style for letters and numbers.
+        if (aValIter->Name == "CharFontName" && m_sBulletChar.getLength() > 1)
+            rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
+        else if (IgnoreForCharStyle(aValIter->Name))
             continue;
         else if ( aValIter->Name != "CharInteropGrabBag" && aValIter->Name != "ParaInteropGrabBag" )
             rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
