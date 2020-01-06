@@ -731,6 +731,8 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry(ScCondFormatList* pParent, ScDocu
     mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
     mxLbEntryTypeMin->set_size_request(CommonWidgetWidth, -1);
     mxLbEntryTypeMax->set_size_request(CommonWidgetWidth, -1);
+    mxLbColMin->get_widget().set_size_request(CommonWidgetWidth, -1);
+    mxLbColMax->get_widget().set_size_request(CommonWidgetWidth, -1);
 
     mxFtMin->show();
     mxFtMax->show();
@@ -868,6 +870,9 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry(ScCondFormatList* pParent, ScDocu
     mxLbEntryTypeMin->set_size_request(CommonWidgetWidth, -1);
     mxLbEntryTypeMiddle->set_size_request(CommonWidgetWidth, -1);
     mxLbEntryTypeMax->set_size_request(CommonWidgetWidth, -1);
+    mxLbColMin->get_widget().set_size_request(CommonWidgetWidth, -1);
+    mxLbColMiddle->get_widget().set_size_request(CommonWidgetWidth, -1);
+    mxLbColMax->get_widget().set_size_request(CommonWidgetWidth, -1);
     mxFtMin->show();
     mxFtMax->show();
 
