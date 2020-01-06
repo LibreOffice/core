@@ -686,8 +686,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_SET_REMINDER:
         {
-            static sal_uInt16 m_nAutoMarkIdx = 0;
-
             // collect and sort navigator reminder names
             IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
             std::vector< OUString > vNavMarkNames;
@@ -700,17 +698,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
-            // we are maxed out and delete one
-            // nAutoMarkIdx rotates through the available MarkNames
+            // we are maxed out so delete the first one
             // this assumes that IDocumentMarkAccess generates Names in ascending order
             if(vNavMarkNames.size() == MAX_MARKS)
-                pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[m_nAutoMarkIdx]));
+                pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[0]));
 
             rWrtSh.SetBookmark(vcl::KeyCode(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
-            SwView::SetActMark( m_nAutoMarkIdx );
-
-            if(++m_nAutoMarkIdx == MAX_MARKS)
-                m_nAutoMarkIdx = 0;
+            SwView::SetActMark(vNavMarkNames.size() < MAX_MARKS ? vNavMarkNames.size() : MAX_MARKS-1);
 
             break;
         }
