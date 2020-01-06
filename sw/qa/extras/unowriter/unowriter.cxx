@@ -11,6 +11,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
@@ -624,6 +625,210 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     CPPUNIT_ASSERT(pListener->GetString().isEmpty());
 }
 
+<<<<<<< HEAD   (2bcd3e tdf#126795 docx export: do not output tab stops twice)
+=======
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
+{
+    // Load a document with an at-char image in it (and a comment on the image).
+    load(mpTestDocumentPath, "image-comment-at-char.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // Verify that we have an annotation mark (comment with a text range) in the document.
+    // Without the accompanying fix in place, this test would have failed, as comments lost their
+    // ranges on load when their range only covered the placeholder character of the comment (which
+    // is also the anchor position of the image).
+    IDocumentMarkAccess* pMarks = pDoc->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pMarks->getAnnotationMarksCount());
+
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // Annotation; Actual: Frame', i.e. the comment-start portion was after the commented image.
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
+                         getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"),
+                         getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
+
+    // Without the accompanying fix in place, this test would have failed with 'Expected:
+    // 5892; Actual: 1738', i.e. the anchor pos was between the "aaa" and "bbb" portions, not at the
+    // center of the page (horizontally) where the image is.  On macOS, though, with the fix in
+    // place the actual value consistently is even greater with 6283 now instead of 5892, for
+    // whatever reason.
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    for (const auto& pItem : *pPostItMgr)
+    {
+        const SwRect& rAnchor = pItem->pPostIt->GetAnchorRect();
+        CPPUNIT_ASSERT_GREATEREQUAL(static_cast<long>(5892), rAnchor.Left());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testViewCursorPageStyle)
+{
+    // Load a document with 2 pages, but a single paragraph.
+    load(mpTestDocumentPath, "view-cursor-page-style.fodt");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(),
+                                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<text::XPageCursor> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xViewCursor.is());
+
+    // Go to the first page, which has an explicit page style.
+    xViewCursor->jumpToPage(1);
+    OUString aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aActualPageStyleName);
+
+    // Go to the second page, which is still the first paragraph, but the page style is different,
+    // as the explicit 'First Page' page style has a next style defined (Standard).
+    xViewCursor->jumpToPage(2);
+    aActualPageStyleName = getProperty<OUString>(xViewCursor, "PageStyleName");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Standard
+    // - Actual  : First Page
+    // i.e. the cursor position was determined only based on the node index, ignoring the content
+    // index.
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aActualPageStyleName);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
+{
+    // Create a new document, type a character, pass a set of property/value pairs consisting of one
+    // unknown property and CharStyleName, assert that it threw UnknownPropertyException (actually
+    // wrapped into WrappedTargetException), and assert the style was set, not discarded.
+    loadURL("private:factory/swriter", nullptr);
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XSimpleText> xBodyText = xTextDocument->getText();
+    xBodyText->insertString(xBodyText->getStart(), "x", false);
+
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    xCursor->goLeft(1, true);
+
+    uno::Reference<beans::XMultiPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    uno::Sequence<OUString> aPropNames = { "OneUnknownProperty", "CharStyleName" };
+    uno::Sequence<uno::Any> aPropValues = { uno::Any(), uno::Any(OUString("Emphasis")) };
+    CPPUNIT_ASSERT_THROW(xCursorProps->setPropertyValues(aPropNames, aPropValues),
+                         lang::WrappedTargetException);
+    CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"),
+                         getProperty<OUString>(xCursorProps, "CharStyleName"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
+{
+    // Test the AllowOverlap frame/shape property.
+
+    // Create a new document and insert a rectangle.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    awt::Point aPoint(1000, 1000);
+    awt::Size aSize(10000, 10000);
+    uno::Reference<drawing::XShape> xShape(
+        xDocument->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setPosition(aPoint);
+    xShape->setSize(aSize);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // The property is on by default, turn it off & verify.
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, "AllowOverlap"));
+
+    // Turn it back to on & verify.
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(true));
+    CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
+{
+    // Create a new document and add a table
+    loadURL("private:factory/swriter", nullptr);
+    css::uno::Reference<css::text::XTextDocument> xTextDocument(mxComponent,
+                                                                css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
+                                                              css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::text::XTextTable> xTable(
+        xFac->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+    xTable->initialize(4, 4);
+    auto xSimpleText = xTextDocument->getText();
+    xSimpleText->insertTextContent(xSimpleText->createTextCursor(), xTable, true);
+    // Get SwXTextTableCursor
+    css::uno::Reference<css::beans::XPropertySet> xTableCursor(xTable->createCursorByCellName("A1"),
+                                                               css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::table::XCellRange> xTableCellRange(xTable, css::uno::UNO_QUERY_THROW);
+    // Get SwXCellRange for the same cell
+    css::uno::Reference<css::beans::XPropertySet> xCellRange(
+        xTableCellRange->getCellRangeByName("A1:A1"), css::uno::UNO_QUERY_THROW);
+    const OUString sBackColor = "BackColor";
+    // Apply background color to table cursor, and read background color from cell range
+    css::uno::Any aRefColor(sal_Int32(0x00FF0000));
+    xTableCursor->setPropertyValue(sBackColor, aRefColor);
+    css::uno::Any aColor = xCellRange->getPropertyValue(sBackColor);
+    // This failed
+    CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
+    // Now the other way round
+    aRefColor <<= sal_Int32(0x0000FF00);
+    xCellRange->setPropertyValue(sBackColor, aRefColor);
+    aColor = xTableCursor->getPropertyValue(sBackColor);
+    CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
+{
+    // Load a document which has a table with a single cell.
+    // The cell has both a table style and a paragraph style, with different line spacing
+    // heights.
+    load(mpTestDocumentPath, "table-line-spacing.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    uno::Reference<text::XText> xCellText(xCell, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCellText);
+    style::LineSpacing aLineSpacing
+        = getProperty<style::LineSpacing>(xParagraph, "ParaLineSpacing");
+    // Make sure that we take the line spacing from the paragraph style, not from the table style.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 388
+    // - Actual  : 635
+    // I.e. the 360 twips line spacing was taken from the table style, not the 220 twips one from
+    // the paragraph style.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(convertTwipToMm100(220)), aLineSpacing.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129839)
+{
+    // Create a new document and add a table
+    loadURL("private:factory/swriter", nullptr);
+    css::uno::Reference<css::text::XTextDocument> xTextDocument(mxComponent,
+                                                                css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
+                                                              css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::text::XTextTable> xTable(
+        xFac->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+    xTable->initialize(4, 4);
+    auto xSimpleText = xTextDocument->getText();
+    xSimpleText->insertTextContent(xSimpleText->createTextCursor(), xTable, true);
+    css::uno::Reference<css::table::XCellRange> xTableCellRange(xTable, css::uno::UNO_QUERY_THROW);
+    // Get instance of SwXCellRange
+    css::uno::Reference<css::beans::XPropertySet> xCellRange(
+        xTableCellRange->getCellRangeByPosition(0, 0, 1, 1), css::uno::UNO_QUERY_THROW);
+    // Test retrieval of VertOrient property - this crashed
+    css::uno::Any aOrient = xCellRange->getPropertyValue("VertOrient");
+    CPPUNIT_ASSERT_EQUAL(css::uno::Any(css::text::VertOrientation::NONE), aOrient);
+}
+
+>>>>>>> CHANGE (ed7dc3 tdf#129839: pass initialized shared_ptr to SwDoc::GetBoxAttr)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
