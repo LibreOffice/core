@@ -971,13 +971,13 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextTableCursorProp
         TABSTOPS_MAP_ENTRY
 
         // attributes from PROPERTY_MAP_TABLE_CELL:
-        { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE , MID_BACK_COLOR       },
+        { OUString(UNO_NAME_BACK_COLOR), FN_UNO_TABLE_CELL_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE , MID_BACK_COLOR       },
         { OUString(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
         { OUString(UNO_NAME_BACK_GRAPHIC), RES_BACKGROUND, cppu::UnoType<graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC },
         { OUString(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-        { OUString(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+        { OUString(UNO_NAME_BACK_GRAPHIC_LOCATION), FN_UNO_TABLE_CELL_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
         { OUString(UNO_NAME_NUMBER_FORMAT), RES_BOXATR_FORMAT,  cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID ,0             },
-        { OUString(UNO_NAME_BACK_TRANSPARENT), RES_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE , MID_GRAPHIC_TRANSPARENT      },
+        { OUString(UNO_NAME_BACK_TRANSPARENT), FN_UNO_TABLE_CELL_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE , MID_GRAPHIC_TRANSPARENT      },
         { OUString(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, cppu::UnoType<css::text::XTextSection>::get(),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         { OUString(UNO_NAME_IS_PROTECTED), RES_PROTECT,            cppu::UnoType<bool>::get(), 0, MID_PROTECT_CONTENT},
