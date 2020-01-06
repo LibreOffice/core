@@ -324,7 +324,7 @@ public:
 
         @param  pParent
                 can point to a parent window.
-                If its set to 0, the defmodal-dialog-parent
+                If it's set to 0, the defmodal-dialog-parent
                 is used automatically.
 
         @param  pCore
@@ -359,7 +359,7 @@ class SaveProgressDialog : public weld::GenericDialogController
 
             @param  pParent
                     can point to a parent window.
-                    If its set to 0, the defmodal-dialog-parent
+                    If it's set to 0, the defmodal-dialog-parent
                     is used automatically.
 
             @param  pCore
