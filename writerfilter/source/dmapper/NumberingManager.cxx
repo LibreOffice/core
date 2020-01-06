@@ -207,7 +207,7 @@ static bool IgnoreForCharStyle(const OUString& aStr)
 {
     //Names found in PropertyIds.cxx, Lines 56-396
     return (aStr=="Adjust" || aStr=="IndentAt" || aStr=="FirstLineIndent"
-            || aStr=="FirstLineOffset" || aStr=="LeftMargin" || aStr=="CharFontName"
+            || aStr=="FirstLineOffset" || aStr=="LeftMargin"
         );
 }
 uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
