@@ -682,7 +682,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
-    applyColor(cr, aColor, 0.0);
+    applyColor(cr, nSalColor);
     cairo_fill(cr);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
