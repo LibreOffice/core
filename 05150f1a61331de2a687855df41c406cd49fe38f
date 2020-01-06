@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "725f55c1_78aaed2d",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-01-06T09:30:33Z",
+      "side": 0,
+      "message": "Looks sensible - thanks \u003d)",
+      "revId": "05150f1a61331de2a687855df41c406cd49fe38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
