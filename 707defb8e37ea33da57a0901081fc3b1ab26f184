@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e6452cea_b0538b79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-06T20:30:46Z",
+      "side": 1,
+      "message": "Yes, ok it is better. Great!",
+      "parentUuid": "0b54c077_85eca9a2",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 59
+      },
+      "revId": "707defb8e37ea33da57a0901081fc3b1ab26f184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0be70318_e14fdb4b",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-06T20:09:31Z",
       "side": 1,
       "message": "Maybe drop ImplSetMinimumNWFSize and include the code here directly? IMO that function becomes obsoleted, and additionally is not needed in public section of class...",
+      "range": {
+        "startLine": 2647,
+        "startChar": 4,
+        "endLine": 2647,
+        "endChar": 28
+      },
+      "revId": "707defb8e37ea33da57a0901081fc3b1ab26f184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ccd05f_30742001",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-06T20:30:46Z",
+      "side": 1,
+      "message": "Yes you are right too. Same thing for Checkbox::ImplAjustNWFSizes()? So I will also remove the public declarations of ImplAdjustNWFSizes for both CheckBox and RadioButton.",
+      "parentUuid": "0be70318_e14fdb4b",
       "range": {
         "startLine": 2647,
         "startChar": 4,
