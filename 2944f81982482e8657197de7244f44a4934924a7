@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6a382b9_5e2cf5f6",
+        "filename": "drawinglayer/source/processor2d/helperwrongspellrenderer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-06T18:59:10Z",
+      "side": 1,
+      "message": "Removing the empty excess line here would be cool.",
+      "revId": "2944f81982482e8657197de7244f44a4934924a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
