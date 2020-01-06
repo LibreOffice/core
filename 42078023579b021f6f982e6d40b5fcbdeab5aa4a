@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "179383f7_1fb47098",
+        "filename": "filter/source/graphicfilter/icgm/class7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-06T11:10:03Z",
+      "side": 1,
+      "message": "we are indexing into a zero-based array, which makes me think this condition might need to be \"\u003e\u003d0\" ?",
+      "revId": "42078023579b021f6f982e6d40b5fcbdeab5aa4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
