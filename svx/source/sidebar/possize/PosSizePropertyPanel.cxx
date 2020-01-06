@@ -31,6 +31,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/dlgutil.hxx>
 #include <unotools/localedatawrapper.hxx>
