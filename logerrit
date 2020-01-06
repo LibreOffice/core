@@ -9,8 +9,8 @@ get_SHA_for_change() {
 }
 
 submit() {
-        TYPE=$1
-        BRANCH=$2
+        BRANCH=$1
+        TYPE=${2:-''}
         if test -z "$BRANCH"
         then
             BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
@@ -22,7 +22,7 @@ submit() {
             fi
             echo "no branch specified, guessing current branch $BRANCH"
         fi
-        git push $GERRITURL HEAD:refs/$TYPE/$BRANCH
+        git push $GERRITURL HEAD:refs/for/$BRANCH$TYPE
 }
 
 logerrit() {
@@ -45,10 +45,12 @@ case "$1" in
         echo
         echo " --- for submitters:"
         echo "             submit [BRANCH]         submit your change for review"
-        echo "             submit-draft [BRANCH]   submit your change as draft"
+        echo "             submit-private [BRANCH] submit your change as private"
+        echo "             submit-wip [BRANCH]     submit your change as work-in-progress"
         echo "             nextchange [BRANCH]     reset branch to the remote to start with the next change"
         echo "             testfeature [BRANCH]    trigger a test of a feature branch on gerrit"
-        echo "Note: drafts are only visibly to yourself and those that you explicitly add as reviewers."
+        echo "Note: private changes are only visibly to yourself and those that you explicitly add as reviewers."
+        echo "For full documentation, see https://gerrit.libreoffice.org/Documentation/intro-user.html#private-changes"
         echo
         echo " --- for reviewers:"
         echo "             checkout CHANGEID       checkout the changes for review"
@@ -134,10 +136,17 @@ case "$1" in
         fi
     ;;
     submit)
-        submit 'for' $2
+        submit $2
+    ;;
+    submit-private)
+        submit $2 '%private'
+    ;;
+    submit-wip)
+        submit $2 '%wip'
     ;;
     submit-draft)
-        submit drafts $2
+        echo "Please use submit-private instead of submit-draft."
+        exit 1
     ;;
     nextchange)
         if test -n "$(git status -s -uno)"
