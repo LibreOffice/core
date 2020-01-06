@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4421dd_75ea50bf",
+        "filename": "basctl/source/basicide/linenumberwindow.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-06T18:55:03Z",
+      "side": 1,
+      "message": "Removing excess empty line here would be cool.",
+      "revId": "7d50b15e125accf641174a8d0c154c47c2288609",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
