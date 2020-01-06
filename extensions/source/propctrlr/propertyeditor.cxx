@@ -302,12 +302,11 @@ namespace pcr
 
     void OPropertyEditor::ShowPropertyPage(sal_uInt16 nPageId, bool bShow)
     {
+        assert((m_aHiddenPages.find(nPageId) != m_aHiddenPages.end() ||
+                m_aShownPages.find(nPageId) != m_aShownPages.end()) && "page doesn't exist");
         OString sIdent(OString::number(nPageId));
         if (!bShow)
         {
-            assert(m_aHiddenPages.find(nPageId) == m_aHiddenPages.end() && "OPropertyEditor::ShowPropertyPage: page already hidden!");
-            assert(m_aShownPages.find(nPageId) != m_aShownPages.end() && "OPropertyEditor::ShowPropertyPage: page not shown to hide!");
-
             auto aPagePos = m_aShownPages.find(nPageId);
             if (aPagePos != m_aShownPages.end())
             {
@@ -320,9 +319,6 @@ namespace pcr
         }
         else
         {
-            assert(m_aShownPages.find(nPageId) == m_aShownPages.end() && "OPropertyEditor::ShowPropertyPage: page already shown!");
-            assert(m_aHiddenPages.find(nPageId) != m_aHiddenPages.end() && "OPropertyEditor::ShowPropertyPage: page not hidden to show!");
-
             auto aPagePos = m_aHiddenPages.find(nPageId);
             if (aPagePos != m_aHiddenPages.end())
             {
