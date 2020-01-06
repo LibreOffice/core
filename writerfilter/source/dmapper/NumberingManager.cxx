@@ -223,6 +223,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
             continue;
         else if ( aValIter->Name != "CharInteropGrabBag" && aValIter->Name != "ParaInteropGrabBag" )
             rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
+        else if (aValIter->Name == "CharFontName" && aValIter->Value.getValue())
+            rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
     }
 
     return comphelper::containerToSequence(rProperties);
