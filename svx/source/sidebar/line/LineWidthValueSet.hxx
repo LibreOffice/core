@@ -25,10 +25,10 @@
 
 namespace svx { namespace sidebar {
 
-class LineWidthValueSet final : public ValueSet
+class LineWidthValueSet final : public SvtValueSet
 {
 public:
-    explicit LineWidthValueSet(vcl::Window* pParent);
+    explicit LineWidthValueSet();
     virtual ~LineWidthValueSet() override;
 
     void SetUnit(std::array<OUString,9> const & strUnits);
@@ -39,7 +39,7 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
     virtual void    Resize() override;
-    virtual Size    GetOptimalSize() const override;
+    virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 private:
     sal_uInt16          nSelItem;
