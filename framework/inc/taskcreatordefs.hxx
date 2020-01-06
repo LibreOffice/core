@@ -28,7 +28,7 @@ const char ARGUMENT_PARENTFRAME[] = "ParentFrame"; // XFrame
  */
 const char ARGUMENT_FRAMENAME[] = "FrameName"; // OUString
 
-/// [sal_Bool] If its set to sal_True we will make the new created frame visible.
+/// [sal_Bool] If it's set to sal_True we will make the new created frame visible.
 const char ARGUMENT_MAKEVISIBLE[] = "MakeVisible"; // sal_Bool
 
 /** [sal_Bool] If not "ContainerWindow" property is set it force creation of a
