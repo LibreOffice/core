@@ -35,11 +35,10 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 else
 	$$(call gb_Output_announce,$(subst $(WORKDIR)/,,$(1)),$(true),CHK,1)
 	rm -fr $(call gb_CustomTarget_get_workdir,$(1))/{out,user}
-ifneq ($(MACOSX_SHELL_HACK),)
-	$(eval ODK_BUILD_SHELL := $(shell $(gb_MKTEMP)))
-	cp /bin/sh "$(ODK_BUILD_SHELL)"
-	chmod 0700 "$(ODK_BUILD_SHELL)"
-endif
+	$(if $(MACOSX_SHELL_HACK), \
+	    ODK_BUILD_SHELL=$$$$($(gb_MKTEMP)) && \
+	    cp /bin/sh "$$$$ODK_BUILD_SHELL" && \
+	    chmod 0700 "$$$$ODK_BUILD_SHELL" &&) \
 	(saved_library_path=$$$${$(gb_Helper_LIBRARY_PATH_VAR)} && . $$< \
 	$(if $(filter MACOSX,$(OS)),, \
 	    && $(gb_Helper_LIBRARY_PATH_VAR)=$$$$saved_library_path) \
@@ -49,15 +48,13 @@ endif
 	    && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
 		&& printf 'yes\n' | LC_ALL=C make \
 			CC="$(CXX)" LINK="$(CXX)" LIB="$(CXX)" \
-		    $(if $(MACOSX_SHELL_HACK), SHELL=$(ODK_BUILD_SHELL), )))) \
+		    $(if $(MACOSX_SHELL_HACK), SHELL="$$$$ODK_BUILD_SHELL", ))) \
+	$(if $(MACOSX_SHELL_HACK),&& rm -f "$$$$ODK_BUILD_SHELL")) \
 	    >$(call gb_CustomTarget_get_workdir,$(1))/log 2>&1 \
 	|| (RET=$$$$? \
-	    $(if $(MACOSX_SHELL_HACK), && rm -f $(ODK_BUILD_SHELL) , ) \
+	    $(if $(MACOSX_SHELL_HACK), && rm -f "$$$$ODK_BUILD_SHELL" , ) \
 	    && cat $(call gb_CustomTarget_get_workdir,$(1))/log \
 	    && exit $$$$RET)
-ifneq ($(MACOSX_SHELL_HACK),)
-	-rm -f $(ODK_BUILD_SHELL)
-endif
 endif
 
 $(call gb_CustomTarget_get_workdir,$(1))/setsdkenv: \
