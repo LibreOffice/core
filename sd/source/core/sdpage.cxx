@@ -279,7 +279,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
     SdrObject* pSdrObj = nullptr;
 
-    bool bForceText = false;    // forces the shape text to be set even if its empty
+    bool bForceText = false;    // forces the shape text to be set even if it's empty
     bool bEmptyPresObj = true;
 
     switch( eObjKind )
