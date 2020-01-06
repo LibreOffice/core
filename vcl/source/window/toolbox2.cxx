@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/svapp.hxx>
@@ -424,7 +425,12 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
     OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(rCommand, aModuleName));
     OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
+
+#ifdef ANDROID
+    Image aImage; // Loading redundant icons for sidebars shows in profiles.
+#else
     Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame, GetImageSize()));
+#endif
 
     sal_uInt16 nItemId = GetItemCount() + 1;
         //TODO: ImplToolItems::size_type -> sal_uInt16!
