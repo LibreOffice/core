@@ -1548,8 +1548,11 @@ namespace sw { namespace mark
         // is a map m_aMarkBasenameMapUniqueOffset which holds the next possible offset (XXX) for
         // rName (so there is no need to test for nCnt-values smaller than the offset).
         sal_Int32 nCnt = 1;
-        MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
-        if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
+        if (rName != "__NavigatorReminder__")
+        {
+            MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
+            if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
+        }
         while(nCnt < SAL_MAX_INT32)
         {
             sTmp = rName + OUString::number(nCnt);
@@ -1559,7 +1562,8 @@ namespace sw { namespace mark
                 break;
             }
         }
-        m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
+        if (rName != "__NavigatorReminder__")
+            m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
 
         return sTmp;
     }
