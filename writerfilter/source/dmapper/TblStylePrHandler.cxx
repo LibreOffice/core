@@ -18,6 +18,7 @@
  */
 
 #include "TblStylePrHandler.hxx"
+#include "CellMarginHandler.hxx"
 #include "PropertyMap.hxx"
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequence.hxx>
@@ -167,6 +168,27 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             aValue.Name = "tblHeader";
             aValue.Value <<= true;
             m_aInteropGrabBag.push_back(aValue);
+        }
+            break;
+        case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if ( pProperties.get() )
+            {
+                std::shared_ptr<CellMarginHandler> pCellMarginHandler(new CellMarginHandler);
+                pCellMarginHandler->enableInteropGrabBag("tblCellMar");
+                pProperties->resolve( *pCellMarginHandler );
+                m_aInteropGrabBag.push_back(pCellMarginHandler->getInteropGrabBag());
+
+                if( pCellMarginHandler->m_bTopMarginValid )
+                    m_pProperties->Insert( META_PROP_CELL_MAR_TOP, uno::makeAny(pCellMarginHandler->m_nTopMargin) );
+                if( pCellMarginHandler->m_bBottomMarginValid )
+                    m_pProperties->Insert( META_PROP_CELL_MAR_BOTTOM, uno::makeAny(pCellMarginHandler->m_nBottomMargin) );
+                if( pCellMarginHandler->m_bLeftMarginValid )
+                    m_pProperties->Insert( META_PROP_CELL_MAR_LEFT, uno::makeAny(pCellMarginHandler->m_nLeftMargin) );
+                if( pCellMarginHandler->m_bRightMarginValid )
+                    m_pProperties->Insert( META_PROP_CELL_MAR_RIGHT, uno::makeAny(pCellMarginHandler->m_nRightMargin) );
+            }
         }
         break;
         default:

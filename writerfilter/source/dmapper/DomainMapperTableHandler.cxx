@@ -464,6 +464,32 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             m_aTableProperties->Erase( aTblLook->first );
         }
 
+        // apply cell margin settings of the table style
+        const o3tl::optional<PropertyMap::Property> oLeftMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_LEFT);
+        if (oLeftMargin)
+        {
+            oLeftMargin->second >>= rInfo.nLeftBorderDistance;
+            m_aTableProperties->Erase(oLeftMargin->first);
+        }
+        const o3tl::optional<PropertyMap::Property> oRightMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_RIGHT);
+        if (oRightMargin)
+        {
+            oRightMargin->second >>= rInfo.nRightBorderDistance;
+            m_aTableProperties->Erase(oRightMargin->first);
+        }
+        const o3tl::optional<PropertyMap::Property> oTopMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_TOP);
+        if (oTopMargin)
+        {
+            oTopMargin->second >>= rInfo.nTopBorderDistance;
+            m_aTableProperties->Erase(oTopMargin->first);
+        }
+        const o3tl::optional<PropertyMap::Property> oBottomMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_BOTTOM);
+        if (oBottomMargin)
+        {
+            oBottomMargin->second >>= rInfo.nBottomBorderDistance;
+            m_aTableProperties->Erase(oBottomMargin->first);
+        }
+
         // Set the table default attributes for the cells
         rInfo.pTableDefaults->InsertProps(m_aTableProperties.get());
 
