@@ -169,7 +169,7 @@ void CGM::ImplDoClass1()
             {
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (static_cast<sal_uInt32>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 pElement->aFontList.InsertName( mpSource + mnParaSize, nSize );
