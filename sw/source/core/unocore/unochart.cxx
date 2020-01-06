@@ -504,10 +504,10 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByCol
 }
 
 SwChartDataProvider::SwChartDataProvider( const SwDoc* pSwDoc ) :
-    aEvtListeners( GetChartMutex() ),
-    pDoc( pSwDoc )
+    m_aEventListeners( GetChartMutex() ),
+    m_pDoc( pSwDoc )
 {
-    bDisposed = false;
+    m_bDisposed = false;
 }
 
 SwChartDataProvider::~SwChartDataProvider()
@@ -518,12 +518,12 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         const uno::Sequence< beans::PropertyValue >& rArguments, bool bTestOnly )
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     uno::Reference< chart2::data::XDataSource > xRes;
 
-    if (!pDoc)
+    if (!m_pDoc)
         throw uno::RuntimeException("Not connected to a document.");
 
     // get arguments
@@ -578,13 +578,13 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // get sub-ranges and check that they all are from the very same table
     bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
 
-    if (!bOk && pDoc && !aChartOleObjectName.isEmpty() )
+    if (!bOk && m_pDoc && !aChartOleObjectName.isEmpty() )
     {
         //try to correct the range here
         //work around wrong writer ranges ( see Issue 58464 )
         OUString aChartTableName;
 
-        const SwNodes& rNodes = pDoc->GetNodes();
+        const SwNodes& rNodes = m_pDoc->GetNodes();
         for( sal_uLong nN = rNodes.Count(); nN--; )
         {
             SwNodePtr pNode = rNodes[nN];
@@ -636,7 +636,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     SwFrameFormat    *pTableFormat  = nullptr;      // pointer to table format
     std::shared_ptr<SwUnoCursor> pUnoCursor;      // here required to check if the cells in the range do actually exist
     if (aSubRanges.hasElements())
-        GetFormatAndCreateCursorFromRangeRep( pDoc, aSubRanges[0], &pTableFormat, pUnoCursor );
+        GetFormatAndCreateCursorFromRangeRep( m_pDoc, aSubRanges[0], &pTableFormat, pUnoCursor );
 
     if (!pTableFormat || !pUnoCursor)
         throw lang::IllegalArgumentException();
@@ -840,8 +840,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         // get cursors spanning the cell ranges for label and data
         std::shared_ptr<SwUnoCursor> pLabelUnoCursor;
         std::shared_ptr<SwUnoCursor> pDataUnoCursor;
-        GetFormatAndCreateCursorFromRangeRep(pDoc, aLabelRange, &pTableFormat, pLabelUnoCursor);
-        GetFormatAndCreateCursorFromRangeRep(pDoc, aDataRange, &pTableFormat, pDataUnoCursor);
+        GetFormatAndCreateCursorFromRangeRep(m_pDoc, aLabelRange, &pTableFormat, pLabelUnoCursor);
+        GetFormatAndCreateCursorFromRangeRep(m_pDoc, aDataRange, &pTableFormat, pDataUnoCursor);
 
         // create XDataSequence's from cursors
         if (pLabelUnoCursor)
@@ -962,7 +962,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         const uno::Reference< chart2::data::XDataSource >& xDataSource )
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     uno::Sequence< beans::PropertyValue > aResult;
@@ -1098,7 +1098,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
             // build data used to determine 'CellRangeRepresentation' later on
 
-            GetTableByName( *pDoc, aTableName, &pTableFormat, &pTable );
+            GetTableByName( *m_pDoc, aTableName, &pTableFormat, &pTable );
             if (!pTable || pTable->IsTableComplex())
                 return aResult; // failed -> return empty property sequence
             nTableRows = pTable->GetTabLines().size();
@@ -1293,12 +1293,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDataSequenceByRangeRepresentation(
         const OUString& rRangeRepresentation, bool bTestOnly )
 {
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     SwFrameFormat    *pTableFormat    = nullptr;    // pointer to table format
     std::shared_ptr<SwUnoCursor> pUnoCursor;    // pointer to new created cursor spanning the cell range
-    GetFormatAndCreateCursorFromRangeRep( pDoc, rRangeRepresentation,
+    GetFormatAndCreateCursorFromRangeRep( m_pDoc, rRangeRepresentation,
                                           &pTableFormat, pUnoCursor );
     if (!pTableFormat || !pUnoCursor)
         throw lang::IllegalArgumentException();
@@ -1361,23 +1361,23 @@ void SAL_CALL SwChartDataProvider::dispose(  )
     bool bMustDispose( false );
     {
         osl::MutexGuard  aGuard( GetChartMutex() );
-        bMustDispose = !bDisposed;
-        if (!bDisposed)
-            bDisposed = true;
+        bMustDispose = !m_bDisposed;
+        if (!m_bDisposed)
+            m_bDisposed = true;
     }
     if (bMustDispose)
     {
         // dispose all data-sequences
-        for (const auto& rEntry : aDataSequences)
+        for (const auto& rEntry : m_aDataSequences)
         {
             DisposeAllDataSequences( rEntry.first );
         }
         // release all references to data-sequences
-        aDataSequences.clear();
+        m_aDataSequences.clear();
 
         // require listeners to release references to this object
         lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataProvider * >(this) );
-        aEvtListeners.disposeAndClear( aEvtObj );
+        m_aEventListeners.disposeAndClear( aEvtObj );
     }
 }
 
@@ -1385,16 +1385,16 @@ void SAL_CALL SwChartDataProvider::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    if (!bDisposed && rxListener.is())
-        aEvtListeners.addInterface( rxListener );
+    if (!m_bDisposed && rxListener.is())
+        m_aEventListeners.addInterface( rxListener );
 }
 
 void SAL_CALL SwChartDataProvider::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    if (!bDisposed && rxListener.is())
-        aEvtListeners.removeInterface( rxListener );
+    if (!m_bDisposed && rxListener.is())
+        m_aEventListeners.removeInterface( rxListener );
 }
 
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
@@ -1414,12 +1414,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
 
 void SwChartDataProvider::AddDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > const &rxDataSequence )
 {
-    aDataSequences[ &rTable ].insert( rxDataSequence );
+    m_aDataSequences[ &rTable ].insert( rxDataSequence );
 }
 
 void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > const &rxDataSequence )
 {
-    aDataSequences[ &rTable ].erase( rxDataSequence );
+    m_aDataSequences[ &rTable ].erase( rxDataSequence );
 }
 
 void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
@@ -1427,10 +1427,10 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
     OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
-        if (!bDisposed)
+        if (!m_bDisposed)
            pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
-        const Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
+        const Set_DataSequenceRef_t &rSet = m_aDataSequences[ pTable ];
         for (const auto& rItem : rSet)
         {
             uno::Reference< chart2::data::XDataSequence > xTemp(rItem);  // temporary needed for g++ 3.3.5
@@ -1449,10 +1449,10 @@ void SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
     OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
-        if (!bDisposed)
+        if (!m_bDisposed)
             pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
-        Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
+        Set_DataSequenceRef_t &rSet = m_aDataSequences[ pTable ];
 
         // iterate over all data-sequences for that table...
         Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
@@ -1503,14 +1503,14 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
     OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
-        if (!bDisposed)
+        if (!m_bDisposed)
             pTable->GetFrameFormat()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
         //! make a copy of the STL container!
         //! This is necessary since calling 'dispose' will implicitly remove an element
         //! of the original container, and thus any iterator in the original container
         //! would become invalid.
-        const Set_DataSequenceRef_t aSet( aDataSequences[ pTable ] );
+        const Set_DataSequenceRef_t aSet( m_aDataSequences[ pTable ] );
 
         for (const auto& rItem : aSet)
         {
@@ -1582,7 +1582,7 @@ void SwChartDataProvider::AddRowCols(
             }
 
             // iterate over all data-sequences for the table
-            const Set_DataSequenceRef_t &rSet = aDataSequences[ &rTable ];
+            const Set_DataSequenceRef_t &rSet = m_aDataSequences[ &rTable ];
             for (const auto& rItem : rSet)
             {
                 uno::Reference< chart2::data::XDataSequence > xTemp(rItem);  // temporary needed for g++ 3.3.5
@@ -1624,7 +1624,7 @@ void SwChartDataProvider::AddRowCols(
 OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRangeRepresentation )
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     if (rRangeRepresentation.isEmpty())
@@ -1640,7 +1640,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         const OUString aRange( rRangeRepresentation.getToken(0, ';', nPos) );
         SwFrameFormat    *pTableFormat  = nullptr; // pointer to table format
         std::shared_ptr<SwUnoCursor> pCursor;
-        GetFormatAndCreateCursorFromRangeRep( pDoc, aRange, &pTableFormat, pCursor );
+        GetFormatAndCreateCursorFromRangeRep( m_pDoc, aRange, &pTableFormat, pCursor );
         if (!pTableFormat)
             throw lang::IllegalArgumentException();
         SwTable* pTable = SwTable::FindTable( pTableFormat );
@@ -1694,7 +1694,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
 OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXMLRange )
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     if (rXMLRange.isEmpty())
@@ -1741,7 +1741,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
 
 SwChartDataSource::SwChartDataSource(
         const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > &rLDS ) :
-    aLDS( rLDS )
+    m_aLDS( rLDS )
 {
 }
 
@@ -1752,7 +1752,7 @@ SwChartDataSource::~SwChartDataSource()
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
 {
     SolarMutexGuard aGuard;
-    return aLDS;
+    return m_aLDS;
 }
 
 OUString SAL_CALL SwChartDataSource::getImplementationName(  )

@@ -126,17 +126,17 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
 class SwDataChanged
 {
-    const SwPaM* pPam;
-    const SwPosition* pPos;
-    SwDoc* pDoc;
-    sal_Int32 nContent;
+    const SwPaM* m_pPam;
+    const SwPosition* m_pPos;
+    SwDoc* m_pDoc;
+    sal_Int32 m_nContent;
 
 public:
     SwDataChanged( const SwPaM& rPam );
     SwDataChanged( SwDoc* pDoc, const SwPosition& rPos );
     ~SwDataChanged();
 
-    sal_Int32 GetContent() const { return nContent; }
+    sal_Int32 GetContent() const { return m_nContent; }
 };
 
 /**
@@ -158,9 +158,9 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
  */
 class ZSortFly
 {
-    const SwFrameFormat* pFormat;
-    const SwFormatAnchor* pAnchor;
-    sal_uInt32 nOrdNum;
+    const SwFrameFormat* m_pFormat;
+    const SwFormatAnchor* m_pAnchor;
+    sal_uInt32 m_nOrdNum;
 
 public:
     ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAnchor,
@@ -168,10 +168,10 @@ public:
 
     bool operator==( const ZSortFly& ) const { return false; }
     bool operator<( const ZSortFly& rCmp ) const
-        { return nOrdNum < rCmp.nOrdNum; }
+        { return m_nOrdNum < rCmp.m_nOrdNum; }
 
-    const SwFrameFormat* GetFormat() const              { return pFormat; }
-    const SwFormatAnchor* GetAnchor() const        { return pAnchor; }
+    const SwFrameFormat* GetFormat() const              { return m_pFormat; }
+    const SwFormatAnchor* GetAnchor() const        { return m_pAnchor; }
 };
 
 class SwTableNumFormatMerge

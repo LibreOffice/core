@@ -275,23 +275,23 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 }
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
-    : pPam( &rPam ), pPos( nullptr ), pDoc( rPam.GetDoc() )
+    : m_pPam( &rPam ), m_pPos( nullptr ), m_pDoc( rPam.GetDoc() )
 {
-    nContent = rPam.GetPoint()->nContent.GetIndex();
+    m_nContent = rPam.GetPoint()->nContent.GetIndex();
 }
 
 SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
-    : pPam( nullptr ), pPos( &rPos ), pDoc( pDc )
+    : m_pPam( nullptr ), m_pPos( &rPos ), m_pDoc( pDc )
 {
-    nContent = rPos.nContent.GetIndex();
+    m_nContent = rPos.nContent.GetIndex();
 }
 
 SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: Only if the Layout is available (thus during input)
-    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        const ::sfx2::SvLinkSources& rServers = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
+        const ::sfx2::SvLinkSources& rServers = m_pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
 
         ::sfx2::SvLinkSources aTemp(rServers);
         for( const auto& rpLinkSrc : aTemp )
@@ -301,17 +301,17 @@ SwDataChanged::~SwDataChanged()
             if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
             {
                 SwServerObject& rObj = *static_cast<SwServerObject*>( refObj.get() );
-                if( pPos )
-                    rObj.SendDataChanged( *pPos );
+                if( m_pPos )
+                    rObj.SendDataChanged( *m_pPos );
                 else
-                    rObj.SendDataChanged( *pPam );
+                    rObj.SendDataChanged( *m_pPam );
             }
 
             // We shouldn't have a connection anymore
             if( !refObj->HasDataLinks() )
             {
                 // Then remove from the list
-                pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( rpLinkSrc );
+                m_pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( rpLinkSrc );
             }
         }
     }
