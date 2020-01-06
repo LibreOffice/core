@@ -19,13 +19,14 @@
 #include "LineWidthValueSet.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace svx { namespace sidebar {
 
-LineWidthValueSet::LineWidthValueSet(vcl::Window* pParent)
-    : ValueSet(pParent, WB_TABSTOP)
+LineWidthValueSet::LineWidthValueSet()
+    : SvtValueSet(nullptr)
     , nSelItem(0)
     , bCusEnable(false)
 {
@@ -35,12 +36,11 @@ void LineWidthValueSet::Resize()
 {
     SetColCount();
     SetLineCount(9);
-    ValueSet::Resize();
+    SvtValueSet::Resize();
 }
 
 LineWidthValueSet::~LineWidthValueSet()
 {
-    disposeOnce();
 }
 
 void LineWidthValueSet::SetUnit(std::array<OUString,9> const & strUnits)
@@ -97,19 +97,19 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     Point aLineStart(aBLPos.X() + 5,            aBLPos.Y() + ( nRectHeight - nItemId )/2);
     Point aLineEnd(aBLPos.X() + nRectWidth * 7 / 9 - 10, aBLPos.Y() + ( nRectHeight - nItemId )/2);
-    if(nItemId == 9)
+    if (nItemId == 9)
     {
         Point aImgStart(aBLPos.X() + 5,         aBLPos.Y() + ( nRectHeight - 23 ) / 2);
         pDev->DrawImage(aImgStart, imgCus);
-    //  Point aStart(aImgStart.X() + 14 + 20 , aBLPos.Y() + nRectHeight/6);
+
         tools::Rectangle aStrRect = aRect;
         aStrRect.AdjustTop(nRectHeight/6 );
         aStrRect.AdjustBottom( -(nRectHeight/6) );
         aStrRect.AdjustLeft(imgCus.GetSizePixel().Width() + 20 );
         if(bCusEnable)
-            aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
+            aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
         else
-            aFont.SetColor(GetSettings().GetStyleSettings().GetDisableColor());
+            aFont.SetColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
 
         pDev->SetFont(aFont);
         pDev->DrawText(aStrRect, maStrUnits[ nItemId - 1 ], DrawTextFlags::EndEllipsis);
@@ -134,7 +134,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         if(nSelItem ==  nItemId )
             aFont.SetColor(COL_WHITE);
         else
-            aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
+            aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
         pDev->SetFont(aFont);
         Point aStart(aBLPos.X() + nRectWidth * 7 / 9 , aBLPos.Y() + nRectHeight/6);
         pDev->DrawText(aStart, maStrUnits[ nItemId - 1 ]);  //can't set DrawTextFlags::EndEllipsis here ,or the text will disappear
@@ -143,7 +143,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         if( nSelItem ==  nItemId )
             pDev->SetLineColor(COL_WHITE);
         else
-            pDev->SetLineColor(GetSettings().GetStyleSettings().GetFieldTextColor());
+            pDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
 
         for(sal_uInt16 i = 1; i <= nItemId; i++)
         {
@@ -159,9 +159,12 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetFont(aOldFont);
 }
 
-Size LineWidthValueSet::GetOptimalSize() const
+void LineWidthValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(80, 12 * 9), MapMode(MapUnit::MapAppFont));
+    SvtValueSet::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(80, 12 * 9), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
 }
 
 } } // end of namespace svx::sidebar

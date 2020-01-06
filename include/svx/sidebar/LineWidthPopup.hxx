@@ -19,27 +19,28 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 
-#include <vcl/floatwin.hxx>
-#include <vcl/layout.hxx>
+#include <tools/mapunit.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/image.hxx>
+#include <vcl/weld.hxx>
 #include <array>
 
-class Edit;
-class MetricField;
-class ValueSet;
+class SvtValueSet;
 
 namespace svx { namespace sidebar {
 
 class LinePropertyPanelBase;
 class LineWidthValueSet;
 
-class LineWidthPopup final : public FloatingWindow
+class LineWidthPopup final
 {
 public:
-    LineWidthPopup(LinePropertyPanelBase& rParent);
-    virtual void dispose() override;
-    virtual ~LineWidthPopup() override;
+    LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent);
+    ~LineWidthPopup();
 
     void SetWidthSelect (long lValue, bool bValuable, MapUnit eMapUnit);
+
+    weld::Container* getTopLevel() const { return m_xTopLevel.get(); }
 
 private:
     LinePropertyPanelBase& m_rParent;
@@ -49,14 +50,17 @@ private:
     bool m_bVSFocus;
     bool m_bCustom;
     long m_nCustomWidth;
-    VclPtr<MetricField> m_xMFWidth;
-    VclPtr<VclContainer> m_xBox;
-    VclPtr<LineWidthValueSet> m_xVSWidth;
     Image const m_aIMGCus;
     Image const m_aIMGCusGray;
 
-    DECL_LINK(VSSelectHdl, ValueSet*, void);
-    DECL_LINK(MFModifyHdl, Edit&, void);
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xTopLevel;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFWidth;
+    std::unique_ptr<LineWidthValueSet> m_xVSWidth;
+    std::unique_ptr<weld::CustomWeld> m_xVSWidthWin;
+
+    DECL_LINK(VSSelectHdl, SvtValueSet*, void);
+    DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
 };
 
 } } // end of namespace svx::sidebar
