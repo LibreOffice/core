@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "303b0bad_39876d3d",
+        "filename": "include/oox/ole/vbaproject.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-06T09:05:58Z",
+      "side": 1,
+      "message": "an enum would look more suitable",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 12
+      },
+      "revId": "52fd283b4ed6c2597d21d6f4a34efd97bd7035a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
