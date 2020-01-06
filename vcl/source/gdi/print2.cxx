@@ -748,16 +748,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         if( rBackground != COL_TRANSPARENT )
         {
             aBackgroundComponent.aBgColor = rBackground;
-            if( meOutDevType == OUTDEV_PRINTER )
-            {
-                Printer* pThis = dynamic_cast<Printer*>(this);
-                assert(pThis);
-                Point aPageOffset = Point( 0, 0 ) - pThis->GetPageOffsetPixel();
-                Size aSize  = pThis->GetPaperSizePixel();
-                aBackgroundComponent.aBounds = tools::Rectangle( aPageOffset, aSize );
-            }
-            else
-                aBackgroundComponent.aBounds = tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+            aBackgroundComponent.aBounds = SetBackgroundComponentBounds();
         }
         while( pCurrAct && bStillBackground )
         {
