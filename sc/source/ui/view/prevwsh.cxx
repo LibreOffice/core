@@ -160,7 +160,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
     auto& pNotebookBar = pViewFrame->GetWindow().GetSystemWindow()->GetNotebookBar();
     if (pNotebookBar)
-        pNotebookBar->ControlListener(true);
+        pNotebookBar->ControlListenerForCurrentController(false); // stop listening
 
     if ( auto pTabViewShell = dynamic_cast<ScTabViewShell*>( pOldSh) )
     {
@@ -189,7 +189,7 @@ ScPreviewShell::~ScPreviewShell()
         mpFrameWindow->SetCloseHdl(Link<SystemWindow&,void>()); // Remove close handler.
 
     if (auto& pBar = GetViewFrame()->GetWindow().GetSystemWindow()->GetNotebookBar())
-        pBar->ControlListener(false);
+        pBar->ControlListenerForCurrentController(true); // let it start listening now
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxHint( SfxHintId::Dying ) );
