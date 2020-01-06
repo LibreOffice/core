@@ -23,6 +23,7 @@
 #include <svl/currencytable.hxx>
 #include <svtools/langhelp.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/resmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -51,6 +52,7 @@
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
 #include <tools/diagnose_ex.h>
+#include <desktop/crashreport.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
