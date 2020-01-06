@@ -66,12 +66,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     m_xNewStartNumberCB->set_state(TRISTATE_FALSE);
     m_xCountParaCB->set_state(TRISTATE_FALSE);
     m_xRestartParaCountCB->set_state(TRISTATE_FALSE);
-
-    int numSelectPos = m_xNumberStyleLB->get_active();
-    if (numSelectPos == 0)
-        m_xEditNumStyleBtn->set_sensitive(false);
-    else
-        m_xEditNumStyleBtn->set_sensitive(true);
+    m_xEditNumStyleBtn->set_sensitive(false);
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pObjSh;
@@ -213,6 +208,8 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
         m_xNumberStyleLB->set_active(-1);
     }
 
+    EditNumStyleSelectHdl_Impl(*m_xNumberStyleLB);
+
     m_xNumberStyleLB->save_value();
 
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART );
@@ -301,7 +298,8 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, weld::ToggleButton&, v
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBox&, void)
 {
     int numSelectPos = m_xNumberStyleLB->get_active();
-    if (numSelectPos == 0)
+    // 0 is "None" and -1 is unselected state
+    if (numSelectPos == 0 || numSelectPos == -1)
         m_xEditNumStyleBtn->set_sensitive(false);
     else
         m_xEditNumStyleBtn->set_sensitive(true);
