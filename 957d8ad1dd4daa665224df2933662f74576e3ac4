@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2d0eaf_f996f9b2",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-01-06T16:54:14Z",
+      "side": 1,
+      "message": "Thanks, having the pointer can\u0027t hurt to clarify drafts vs. wip/private. Last nitpick from me, please add a linefeed somewhere so that line doesn\u0027t get so long :-)",
+      "revId": "957d8ad1dd4daa665224df2933662f74576e3ac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
