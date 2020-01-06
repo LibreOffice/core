@@ -800,6 +800,8 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_grid_attach(pGrid, mpMenuBarContainerWidget, 0, 0, 1, 1);
 
     mpMenuAllowShrinkWidget = gtk_scrolled_window_new(nullptr, nullptr);
+    // tdf#129634 don't allow this scrolled window as a candidate to tab into
+    gtk_widget_set_can_focus(GTK_WIDGET(mpMenuAllowShrinkWidget), false);
     gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_SHADOW_NONE);
     // tdf#116290 external policy on scrolledwindow will not show a scrollbar,
     // but still allow scrolled window to not be sized to the child content.
