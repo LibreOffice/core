@@ -93,6 +93,30 @@
       "revId": "707defb8e37ea33da57a0901081fc3b1ab26f184",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea24bfbd_0ea3a543",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2647,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-06T20:41:47Z",
+      "side": 1,
+      "message": "Yes, same for checkbox.",
+      "parentUuid": "f0ccd05f_30742001",
+      "range": {
+        "startLine": 2647,
+        "startChar": 4,
+        "endLine": 2647,
+        "endChar": 28
+      },
+      "revId": "707defb8e37ea33da57a0901081fc3b1ab26f184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
