@@ -559,6 +559,8 @@ protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
 
+    virtual tools::Rectangle   SetBackgroundComponentBounds();
+
     SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
     SAL_DLLPRIVATE bool         is_double_buffered_window() const;
