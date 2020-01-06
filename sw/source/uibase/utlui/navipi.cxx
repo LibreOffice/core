@@ -608,7 +608,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     , m_pFloatingWindow(nullptr)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
     , m_rBindings(*_pBindings)
-    , m_nAutoMarkIdx(1)
+    , m_nAutoMarkIdx(0)
     , m_nRegionMode(RegionMode::NONE)
     , m_bIsZoomedIn(false)
     , m_bGlobalMode(false)

@@ -469,26 +469,25 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             rSh.MoveCursor();
             rSh.EnterStdMode();
 
-            // collect navigator reminders
+            // collect and sort navigator reminder names
             IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-            std::vector< const ::sw::mark::IMark* > vNavMarks;
-            for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+            std::vector< OUString > vNavMarkNames;
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
-            {
                 if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
-                    vNavMarks.push_back(*ppMark);
-            }
+                    vNavMarkNames.push_back((*ppMark)->GetName());
+            std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
             // move
-            if(!vNavMarks.empty())
+            if(!vNavMarkNames.empty())
             {
                 SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
                 if(bNext)
                 {
                     m_nActMark++;
-                    if (m_nActMark >= MAX_MARKS || m_nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                    if (m_nActMark >= MAX_MARKS || m_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
                     {
                         m_nActMark = 0;
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
@@ -497,13 +496,13 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 else
                 {
                     m_nActMark--;
-                    if (m_nActMark < 0 || m_nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                    if (m_nActMark < 0 || m_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
                     {
-                        m_nActMark = vNavMarks.size()-1;
+                        m_nActMark = vNavMarkNames.size()-1;
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
                     }
                 }
-                rSh.GotoMark(vNavMarks[m_nActMark]);
+                rSh.GotoMark(vNavMarkNames[m_nActMark]);
             }
             else
                 SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
