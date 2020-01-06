@@ -591,6 +591,11 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
     }
 }
 
+tools::Rectangle OutputDevice::SetBackgroundComponentBounds()
+{
+    return tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+}
+
 // Layout public functions
 
 void OutputDevice::EnableRTL( bool bEnable )
