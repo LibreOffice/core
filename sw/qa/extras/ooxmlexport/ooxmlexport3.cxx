@@ -1057,6 +1057,23 @@ DECLARE_OOXMLEXPORT_TEST(testBottomBorder, "tdf129450_BottomBorder.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFontTypes, "tdf120344_FontTypes.docx")
+{
+    // tdf#120344: Font type of numbering symbols can be different than the font type of the text.
+
+    // Check the font type of the text, should be Consolas.
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/w:rPr/w:rFonts [@w:ascii='Consolas']", 1);
+
+    // Now the font type of the numbering symbols, should be Arial Black.
+    xmlDocPtr qXmlDocument = parseExport("word/numbering.xml");
+    if (!qXmlDocument)
+        return;
+    assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
