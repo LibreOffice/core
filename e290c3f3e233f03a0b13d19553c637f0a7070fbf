@@ -52,6 +52,24 @@
       "revId": "e290c3f3e233f03a0b13d19553c637f0a7070fbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e50b61f6_382ca4a8",
+        "filename": "chart2/source/controller/sidebar/ChartColorWrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-06T12:57:42Z",
+      "side": 1,
+      "message": "seen addressed with \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/8a3ed4d2835bf441c578d480a8cc8f2c31231996%5E!/\u003e \"Restore mxModel invariant in ChartColorWrapper::operator()\"",
+      "parentUuid": "5f7c97a3_e6909e98",
+      "revId": "e290c3f3e233f03a0b13d19553c637f0a7070fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
