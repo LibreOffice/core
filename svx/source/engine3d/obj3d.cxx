@@ -520,7 +520,7 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TakeXorPoly() const
 sal_uInt32 E3dCompoundObject::GetHdlCount() const
 {
     // 8 corners + 1 E3dVolumeMarker (= Wireframe representation)
-    return 9L;
+    return 9;
 }
 
 void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const

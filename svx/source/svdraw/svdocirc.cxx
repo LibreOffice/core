@@ -424,11 +424,11 @@ sal_uInt32 SdrCircObj::GetHdlCount() const
 {
     if(SdrCircKind::Full != meCircleKind)
     {
-        return 10L;
+        return 10;
     }
     else
     {
-        return 8L;
+        return 8;
     }
 }
 
