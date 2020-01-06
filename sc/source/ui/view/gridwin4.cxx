@@ -575,7 +575,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         {
             ScDocShell* pDocSh = pViewData->GetDocShell();
             ScPrintFunc aPrintFunc(pDocSh, pDocSh->GetPrinter(), nTab);
-            aPrintFunc.UpdatePages();
+            if (aPrintFunc.HasPrintRange())
+            {
+                // We have a non-empty print range, so we can assume that calling UpdatePages() will
+                // result in non-empty col/row breaks next time we get here.
+                aPrintFunc.UpdatePages();
+            }
         }
     }
 
