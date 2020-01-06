@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e819edb8_4cf2a022",
+        "filename": "vcl/source/control/notebookbar.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-06T06:48:53Z",
+      "side": 1,
+      "message": "It would be nice to add some comments.\nThe method signature suggests that when ControlListener is called with bListen\u003dtrue, it would start listening; when bListen\u003dfalse, it will stop. But actually it\u0027s the other way round. Either method signature (e.g. argument name) should be changed, or a description what\u0027s happening. And also at the places of its use (why should it be removed here? why should it be added?)\n\nThe commit message also doesn\u0027t help.",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 15
+      },
+      "revId": "d05b7b32d9ecb6fcb4a268eb68cdcee09bafa6dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
