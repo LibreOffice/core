@@ -1128,7 +1128,7 @@ SwContentFrame* SwFrame::FindPrevCnt_()
                     // handling for environments 'page header' and 'page footer':
                     // Assure that found previous frame is also in the same
                     // page header respectively page footer as <pCurrContentFrame>
-                    // Note: At this point its clear, that <pCurrContentFrame> has
+                    // Note: At this point it's clear that <pCurrContentFrame> has
                     //       to be inside a page header or page footer and that
                     //       neither <pCurrContentFrame> nor <pPrevContentFrame> are
                     //       inside a fly frame.
