@@ -733,7 +733,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // consider, that drawing object has
             // no user call. E.g.: a 'virtual' drawing object is disconnected by
             // the anchor type change of the 'master' drawing object.
-            // Continue with next selected object and assert, if this isn't excepted.
+            // Continue with next selected object and assert, if this isn't expected.
             if ( !pContact )
             {
 #if OSL_DEBUG_LEVEL > 0
