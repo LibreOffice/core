@@ -215,7 +215,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
     SvxClipBoardControl::RegisterControl( SID_PASTE_UNFORMATTED, pMod );
 
-    svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
     svx::TextCharacterSpacingPopup::RegisterControl(SID_ATTR_CHAR_KERNING, pMod);
     svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
 

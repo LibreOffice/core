@@ -104,4 +104,8 @@
       constructor="com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.LineSpacingToolBoxControl"
+    constructor="com_sun_star_comp_svx_LineSpacingToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>
