@@ -324,7 +324,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         if ( bSuccess )
         {
             // format of as-character anchored floating screen objects - no failure
-            // excepted on the format of these objects.
+            // expected on the format of these objects.
             bSuccess = FormatObjsAtFrame_();
         }
     }
