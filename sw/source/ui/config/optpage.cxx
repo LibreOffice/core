@@ -105,7 +105,6 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
     , m_xTableCB(m_xBuilder->weld_check_button("tables"))
     , m_xDrwCB(m_xBuilder->weld_check_button("drawings"))
-    , m_xFieldNameCB(m_xBuilder->weld_check_button("fieldcodes"))
     , m_xPostItCB(m_xBuilder->weld_check_button("comments"))
     , m_xSettingsFrame(m_xBuilder->weld_frame("settingsframe"))
     , m_xSettingsLabel(m_xBuilder->weld_label("settingslabel"))
@@ -205,7 +204,6 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xTableCB->set_active(pElemAttr->m_bTable);
         m_xGrfCB->set_active(pElemAttr->m_bGraphic);
         m_xDrwCB->set_active(pElemAttr->m_bDrawing);
-        m_xFieldNameCB->set_active(pElemAttr->m_bFieldName);
         m_xPostItCB->set_active(pElemAttr->m_bNotes);
         m_xCrossCB->set_active(pElemAttr->m_bCrosshair);
         m_xVRulerCBox->set_active(pElemAttr->m_bVertRuler);
@@ -230,7 +228,6 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.m_bTable                = m_xTableCB->get_active();
     aElem.m_bGraphic              = m_xGrfCB->get_active();
     aElem.m_bDrawing              = m_xDrwCB->get_active();
-    aElem.m_bFieldName            = m_xFieldNameCB->get_active();
     aElem.m_bNotes                = m_xPostItCB->get_active();
     aElem.m_bCrosshair            = m_xCrossCB->get_active();
     aElem.m_bVertRuler            = m_xVRulerCBox->get_active();
