@@ -1272,6 +1272,17 @@
           <value>com.sun.star.comp.svx.LineEndToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="LineSpacingToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineSpacing</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.LineSpacingToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="BorderStyleToolBoxControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SetBorderStyle</value>

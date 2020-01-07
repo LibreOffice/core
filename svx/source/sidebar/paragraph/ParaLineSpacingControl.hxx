@@ -19,18 +19,22 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 
-#include <svtools/ctrlbox.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
 
 class SvxLineSpacingItem;
 class Button;
 
 namespace svx {
 
-class ParaLineSpacingControl : public SfxPopupWindow
+class SvxLineSpacingToolBoxControl;
+
+class ParaLineSpacingControl : public svtools::ToolbarPopup
 {
 public:
-    explicit ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pParent);
+    explicit ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pControl, vcl::Window* pParent);
     virtual ~ParaLineSpacingControl() override;
     virtual void dispose() override;
 

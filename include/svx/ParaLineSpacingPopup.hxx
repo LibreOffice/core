@@ -19,20 +19,26 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 
 namespace svx {
 
-class SVX_DLLPUBLIC ParaLineSpacingPopup final : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
+    explicit SvxLineSpacingToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+    virtual ~SvxLineSpacingToolBoxControl() override;
 
-    ParaLineSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~ParaLineSpacingPopup() override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 }
