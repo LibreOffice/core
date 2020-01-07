@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3e870f5_0dc6fe32",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2737,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-07T13:33:55Z",
+      "side": 1,
+      "message": "correct place, but please use a simple comment (line starting with \"//\" is enough here)",
+      "range": {
+        "startLine": 2737,
+        "startChar": 4,
+        "endLine": 2737,
+        "endChar": 44
+      },
+      "revId": "91356bf6024ac2d81443f81544d6572c1d79b501",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
