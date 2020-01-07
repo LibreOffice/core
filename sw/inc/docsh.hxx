@@ -252,6 +252,7 @@ public:
                                    bool bTemplate = false ) const override;
 
     virtual std::set<Color> GetDocColors() override;
+    svx::AccessibilityIssueCollection runAccessibilityCheck() override;
 
     virtual void LoadStyles( SfxObjectShell& rSource ) override;
 

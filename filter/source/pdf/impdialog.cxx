@@ -26,6 +26,8 @@
 #include <sfx2/passwd.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/diagnose_ex.h>
+#include <sfx2/objsh.hxx>
+#include <svx/AccessibilityCheckDialog.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -55,6 +57,8 @@ using namespace ::com::sun::star::uno;
 ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
     : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog"),
+    mrDoc(rxDoc),
+    mpParent(pParent),
     maConfigItem( "Office.Common/Filter/PDF/Export/", &rFilterData ),
     maConfigI18N( "Office.Common/I18N/CTL/" ),
     mbIsPresentation( false ),
@@ -345,6 +349,20 @@ short ImpPDFTabDialog::Ok( )
 {
     // here the whole mechanism of the base class is not used
     // when Ok is hit, the user means 'convert to PDF', so simply close with ok
+
+    if (getGeneralPage()->IsPdfUaSelected())
+    {
+        SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mrDoc);
+        if (pShell)
+        {
+            svx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
+            if (!aCollection.getIssues().empty())
+            {
+                svx::AccessibilityCheckDialog aDialog(mpParent, aCollection);
+                return aDialog.run();
+            }
+        }
+    }
     return RET_OK;
 }
 
