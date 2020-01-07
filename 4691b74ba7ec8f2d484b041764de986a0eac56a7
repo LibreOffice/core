@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fefdf443_4575809a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:12:57Z",
+      "side": 1,
+      "message": "see commit message of patch set 9",
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78fa5863_cb3bd894",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:12:57Z",
+      "side": 1,
+      "message": "bIsColumn",
+      "range": {
+        "startLine": 163,
+        "startChar": 8,
+        "endLine": 163,
+        "endChar": 16
+      },
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d74d3928_a2acad97",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:12:57Z",
+      "side": 1,
+      "message": "bIsColumn",
+      "range": {
+        "startLine": 837,
+        "startChar": 21,
+        "endLine": 837,
+        "endChar": 29
+      },
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da787384_eac3b5a6",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:12:57Z",
+      "side": 1,
+      "message": "\u0026\u0026 bIsColumn",
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ce3bac_2e1613ed",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:12:57Z",
+      "side": 1,
+      "message": "nRowSize",
+      "range": {
+        "startLine": 845,
+        "startChar": 30,
+        "endLine": 845,
+        "endChar": 37
+      },
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
