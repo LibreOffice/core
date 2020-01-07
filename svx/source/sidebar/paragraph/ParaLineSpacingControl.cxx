@@ -29,8 +29,11 @@
 #include <svtools/unitconv.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 
 #include <svl/itempool.hxx>
+
+#include <svx/ParaLineSpacingPopup.hxx>
 
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283
@@ -53,8 +56,8 @@
 
 using namespace svx;
 
-ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pParent)
-    : SfxPopupWindow(nId, pParent, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui"),
+ParaLineSpacingControl::ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pControl, vcl::Window* pParent)
+    : ToolbarPopup( pControl->getFrameInterface(), pParent, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui"),
       meLNSpaceUnit(MapUnit::Map100thMM),
       mpSpacing1Button(get<PushButton>("spacing_1")),
       mpSpacing115Button(get<PushButton>("spacing_115")),
@@ -108,7 +111,7 @@ void ParaLineSpacingControl::dispose()
     mpLineDistLabel.clear();
     mpLineDistAtPercentBox.clear();
     mpLineDistAtMetricBox.clear();
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void ParaLineSpacingControl::Initialize()
@@ -208,39 +211,6 @@ void ParaLineSpacingControl::Initialize()
     }
 
     mpLineDist->SaveValue();
-
-    /* TODO
-    const sal_uInt16 uCount = mpLineDist->GetEntryCount();
-    if( uCount == LLINESPACE_FIX + 1 )
-    {
-        switch (currentContext.GetCombinedContext_DI())
-        {
-        case CombinedEnumContext(Application::DrawImpress, Context::Table):
-        case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
-        case CombinedEnumContext(Application::DrawImpress, Context::Draw):
-        case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
-        case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
-        case CombinedEnumContext(Application::Calc, Context::DrawText):
-        case CombinedEnumContext(Application::WriterVariants, Context::DrawText):
-        case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
-            {
-                mpLineDist->RemoveEntry(LLINESPACE_FIX);
-            }
-        }
-    }
-    else if( uCount == LLINESPACE_FIX)
-    {
-        switch (currentContext.GetCombinedContext_DI())
-        {
-            case CombinedEnumContext(Application::WriterVariants, Context::Default):
-            case CombinedEnumContext(Application::WriterVariants, Context::Text):
-            case CombinedEnumContext(Application::WriterVariants, Context::Table):
-            {
-                mpLineDist->InsertEntry(OUString("Fixed"), LLINESPACE_FIX);
-            }
-        }
-    }
-    */
 }
 
 void ParaLineSpacingControl::UpdateMetricFields()
