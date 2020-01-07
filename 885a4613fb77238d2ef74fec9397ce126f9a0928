@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d3c2a15_a01f3c65",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-07T14:51:03Z",
+      "side": 1,
+      "message": "Please don\u0027t comment out old code. You need to remove it. What would be its purpose later?",
+      "range": {
+        "startLine": 1158,
+        "startChar": 32,
+        "endLine": 1158,
+        "endChar": 55
+      },
+      "revId": "885a4613fb77238d2ef74fec9397ce126f9a0928",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63a24915_61b1fa88",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-07T14:51:03Z",
+      "side": 1,
+      "message": "This comment doesn\u0027t make sense. If we kept every piece of code that we change commented out, with additional comment \"fixed bug XXX\", the code would quickly become unreadable. A reference to a bug is needed when you want to describe something not obvious, like why is this processing needed here, which could seem unnecessary; and usually that also requires that you add some explanation aside. In this case, the decision to change below to above is only relevant to commit message - where you will explain why do you do the change itself (and bug # is fine there as part of explanation); in the code, the decision to *show* tip does not need an explanation.",
+      "range": {
+        "startLine": 1159,
+        "startChar": 50,
+        "endLine": 1159,
+        "endChar": 68
+      },
+      "revId": "885a4613fb77238d2ef74fec9397ce126f9a0928",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
