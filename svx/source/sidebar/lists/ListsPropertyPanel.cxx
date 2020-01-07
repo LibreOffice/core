@@ -43,18 +43,22 @@ ListsPropertyPanel::Create(vcl::Window* pParent,
 
 ListsPropertyPanel::ListsPropertyPanel(vcl::Window* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "ListsPropertyPanel", "svx/ui/sidebarlists.ui", rxFrame)
+    : PanelLayout(pParent, "ListsPropertyPanel", "svx/ui/sidebarlists.ui", rxFrame, true)
+    , mxTBxNumBullet(m_xBuilder->weld_toolbar("numberbullet"))
+    , mxNumBulletDispatcher(new ToolbarUnoDispatcher(*mxTBxNumBullet, rxFrame))
+    , mxTBxOutline(m_xBuilder->weld_toolbar("outline"))
+    , mxOutlineDispatcher(new ToolbarUnoDispatcher(*mxTBxOutline, rxFrame))
 {
-    get(mpTBxNumBullet, "numberbullet");
-    get(mpTBxOutline, "outline");
 }
 
 ListsPropertyPanel::~ListsPropertyPanel() { disposeOnce(); }
 
 void ListsPropertyPanel::dispose()
 {
-    mpTBxOutline.clear();
-    mpTBxNumBullet.clear();
+    mxOutlineDispatcher.reset();
+    mxTBxOutline.reset();
+    mxNumBulletDispatcher.reset();
+    mxTBxNumBullet.reset();
 
     PanelLayout::dispose();
 }

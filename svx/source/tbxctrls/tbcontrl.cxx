@@ -49,6 +49,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/weldutils.hxx>
 #include <unotools/fontoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/mnemonic.hxx>
@@ -3797,26 +3798,7 @@ SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
 
 namespace
 {
-
-    class ToolbarPopup : public svtools::ToolbarPopupBase
-    {
-    protected:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Container> m_xTopLevel;
-    public:
-        ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, weld::Widget* pParent, const OUString& rUIFile, const OString& rId)
-            : ToolbarPopupBase(rFrame)
-            , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
-            , m_xTopLevel(m_xBuilder->weld_container(rId))
-        {
-        }
-        weld::Container* getTopLevel()
-        {
-            return m_xTopLevel.get();
-        }
-    };
-
-    class CurrencyList_Impl : public ToolbarPopup
+    class CurrencyList_Impl : public WeldToolbarPopup
     {
     private:
         rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
@@ -3834,7 +3816,7 @@ namespace
 
     public:
         CurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
-            : ToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/currencywindow.ui", "CurrencyWindow")
+            : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/currencywindow.ui", "CurrencyWindow")
             , m_xControl(pControl)
             , m_xLabel(m_xBuilder->weld_label("label"))
             , m_xCurrencyLb(m_xBuilder->weld_tree_view("currency"))
@@ -3887,7 +3869,6 @@ namespace
             m_xCurrencyLb->select( nSelectedPos );
             m_xOkBtn->connect_clicked(LINK(this, CurrencyList_Impl, OKHdl));
         }
-
     };
 
     IMPL_LINK_NOARG(CurrencyList_Impl, FocusHdl, weld::Widget&, void)
