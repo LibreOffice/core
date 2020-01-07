@@ -34,11 +34,6 @@
             <property name="hexpand">True</property>
             <property name="text">0</property>
             <property name="adjustment">adjustment1</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="rowheight-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebartableedit|rowheight-atkobject">Row Height</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -51,6 +46,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="sidebartableedit|insert_label">Insert:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">insert</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -120,6 +117,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="sidebartableedit|select_label">Select:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">select</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -204,11 +203,6 @@
             <property name="hexpand">True</property>
             <property name="text">0</property>
             <property name="adjustment">adjustment2</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="columnwidth-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="sidebatableedit|columnwidth-atkobject">Column Width</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -222,6 +216,8 @@
             <property name="halign">start</property>
             <property name="valign">center</property>
             <property name="label" translatable="yes" context="sidebartableedit|row_height_label">Row height:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">rowheight</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -235,6 +231,8 @@
             <property name="halign">start</property>
             <property name="valign">center</property>
             <property name="label" translatable="yes" context="sidebartableedit|column_width_label">Column width:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">columnwidth</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -248,6 +246,8 @@
             <property name="halign">start</property>
             <property name="valign">center</property>
             <property name="label" translatable="yes" context="sidebartableedit|opt_row_size_label">Optimize a row:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">rowsizing</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -261,6 +261,8 @@
             <property name="halign">start</property>
             <property name="valign">center</property>
             <property name="label" translatable="yes" context="sidebartableedit|opt_column_size_label">Optimize a column:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">columnsizing</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -317,7 +319,7 @@
           <object class="GtkToolbar" id="columnsizing">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="toolbar_style">text</property>
+            <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
             <property name="icon_size">2</property>
             <child>
@@ -365,6 +367,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="sidebartableedit|delete_label">Delete:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">delete</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -423,6 +427,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="sidebartableedit|split_merge_label">Split/Merge:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">split_merge</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -538,6 +544,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="sidebartableedit|misc_label">Miscellaneous:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">misc</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
