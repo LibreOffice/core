@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "d9c7a9c2_15493cd0",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:33:38Z",
+      "side": 1,
+      "message": "or bIsMergedVertically is more readable",
+      "parentUuid": "78fa5863_cb3bd894",
+      "range": {
+        "startLine": 163,
+        "startChar": 8,
+        "endLine": 163,
+        "endChar": 16
+      },
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d74d3928_a2acad97",
         "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
         "patchSetId": 11
@@ -76,6 +100,24 @@
       "writtenOn": "2020-01-07T11:12:57Z",
       "side": 1,
       "message": "\u0026\u0026 bIsColumn",
+      "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c8d54a_ac13bedc",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-07T11:33:38Z",
+      "side": 1,
+      "message": "you can remove the previous getProperty call, too, cleaning up this loop",
+      "parentUuid": "da787384_eac3b5a6",
       "revId": "4691b74ba7ec8f2d484b041764de986a0eac56a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
