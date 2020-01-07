@@ -446,13 +446,14 @@ void Test::testBigStruct() {
 //This is a very platform specific test.
 #if defined __GNUC__ // see CPPU_GCC3_ALIGN
 #if defined(LINUX) && (defined (X86_64) || defined(X86) || defined(PPC))
-    CPPUNIT_ASSERT_EQUAL(
+    static_assert(
+        sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct) ==
 #if defined X86_64 || defined PPC
-        static_cast< std::size_t >(24),
+        24
 #else
-        static_cast< std::size_t >(16),
+        16
 #endif
-        sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct));
+        );
 #endif
 #endif
 
