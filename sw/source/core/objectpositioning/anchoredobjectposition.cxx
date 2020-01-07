@@ -53,7 +53,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
       mbDoNotCaptureAnchoredObj( false )
 {
 #if OSL_DEBUG_LEVEL > 0
-    // assert, if object isn't of excepted type
+    // assert, if object isn't of expected type
     const bool bObjOfExceptedType =
             dynamic_cast<const SwVirtFlyDrawObj*>( &mrDrawObj) !=  nullptr || // object representing fly frame
             dynamic_cast<const SwDrawVirtObj*>( &mrDrawObj) !=  nullptr    || // 'virtual' drawing object
