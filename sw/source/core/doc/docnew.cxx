@@ -262,6 +262,7 @@ SwDoc::SwDoc()
     mbDtor(false),
     mbCopyIsMove(false),
     mbInReading(false),
+    mbInWriting(false),
     mbInMailMerge(false),
     mbInXMLImport(false),
     mbUpdateTOX(false),
