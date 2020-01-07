@@ -60,9 +60,6 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
         pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( *this );
-
     return pContext;
 }
 

@@ -109,10 +109,6 @@ SvXMLImportContextRef XMLSymbolImageContext::CreateChildContext(
                                                        mxBase64Stream );
         }
     }
-    if( ! pContext )
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }

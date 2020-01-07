@@ -67,10 +67,10 @@ SvXMLImportContext* SchemaContext::HandleChild(
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
-    return ( nToken == XML_SIMPLETYPE )
-        ? new SchemaSimpleTypeContext( GetImport(), nPrefix, rLocalName,
-                                       mxRepository )
-        : new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    if ( nToken == XML_SIMPLETYPE )
+        return new SchemaSimpleTypeContext( GetImport(), nPrefix, rLocalName,
+                                       mxRepository );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

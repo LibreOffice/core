@@ -78,9 +78,6 @@ uno::Reference<xml::sax::XFastContextHandler>
         break;
     }
 
-    if (!pContext)
-        pContext = new SvXMLImportContext(GetImport());
-
     return pContext;
 }
 

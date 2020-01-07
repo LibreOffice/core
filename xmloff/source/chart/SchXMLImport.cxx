@@ -86,7 +86,7 @@ SchXMLImportHelper::SchXMLImportHelper() :
 
 SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix, const OUString& rLocalName,
+    sal_uInt16 /*nPrefix*/, const OUString& rLocalName,
     const Reference< frame::XModel >& rChartModel,
     const Reference< xml::sax::XAttributeList >& )
 {
@@ -101,7 +101,6 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     else
     {
         SAL_WARN("xmloff.chart", "No valid XChartDocument given as XModel" );
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
     }
 
     return pContext;
@@ -552,8 +551,7 @@ SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
             }
         }
         break;
-        default:
-            pContext = new SvXMLImportContext( *this );
+        default: break;
     }
     return pContext;
 }

@@ -34,10 +34,6 @@ SvXMLImportContext *SwXMLImport::CreateScriptContext(
         pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
-                                            rLocalName );
-
     return pContext;
 }
 

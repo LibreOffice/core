@@ -164,9 +164,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidations
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -236,9 +233,6 @@ SvXMLImportContextRef ScXMLContentValidationContext::CreateChildContext( sal_uIn
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return pContext;
 }
 
@@ -261,9 +255,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
         pContext = new ScXMLErrorMacroContext( GetScImport(), pAttribList, this);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -483,9 +474,6 @@ SvXMLImportContextRef ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nP
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return pContext;
 }
 
@@ -544,9 +532,6 @@ SvXMLImportContextRef ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 n
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return pContext;
 }
 
@@ -588,8 +573,6 @@ SvXMLImportContextRef ScXMLErrorMacroContext::CreateChildContext( sal_uInt16 nPr
     {
         pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName);
     }
-    if (!pContext)
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
 }

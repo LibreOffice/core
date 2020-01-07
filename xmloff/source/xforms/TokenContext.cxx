@@ -107,7 +107,6 @@ SvXMLImportContextRef TokenContext::CreateChildContext(
     if( pContext == nullptr )
     {
         GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, rLocalName );
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
     return pContext;
 }

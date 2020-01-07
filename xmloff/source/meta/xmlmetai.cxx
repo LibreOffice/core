@@ -218,8 +218,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContex
     if ( nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_META ) )
         return new XMLDocumentBuilderContext(
                 GetImport(), nElement, xAttrList, mxDocBuilder);
-    else
-        return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )

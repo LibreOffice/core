@@ -70,10 +70,7 @@ SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
         return CreateChildContext( nPrefix, rLocalName, xAttrList,
                                    mrProperties, aProp );
     }
-    else
-    {
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
+    return nullptr;
 }
 
 /** This method is called from this instance implementation of
@@ -81,13 +78,13 @@ SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
 */
 SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
+    sal_uInt16 /*nPrefix*/,
+    const OUString& /*rLocalName*/,
     const uno::Reference< xml::sax::XAttributeList >&,
     ::std::vector< XMLPropertyState > &,
     const XMLPropertyState& )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 

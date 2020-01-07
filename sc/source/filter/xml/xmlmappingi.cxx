@@ -54,9 +54,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -137,9 +134,6 @@ uno::Reference<xml::sax::XFastContextHandler>
         }
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

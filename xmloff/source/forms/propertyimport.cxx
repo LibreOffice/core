@@ -363,13 +363,7 @@ SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _n
     {
         return new OListPropertyContext( GetImport(), _nPrefix, _rLocalName, m_xPropertyImporter );
     }
-    else
-    {
-        OSL_FAIL(OStringBuffer("OPropertyElementsContext::CreateChildContext: unknown child element (\"").
-            append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
-            append("\")!").getStr());
-        return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
-    }
+    return nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -395,13 +389,10 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 {
 }
 
-SvXMLImportContextRef OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
+SvXMLImportContextRef OSinglePropertyContext::CreateChildContext(sal_uInt16 /*_nPrefix*/, const OUString& /*_rLocalName*/,
         const Reference< XAttributeList >&)
 {
-    OSL_FAIL(OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
-        append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
-        append("\")!").getStr());
-    return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
+    return nullptr;
 }
 
 void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
@@ -531,12 +522,7 @@ SvXMLImportContextRef OListPropertyContext::CreateChildContext( sal_uInt16 _nPre
         m_aListValues.emplace_back();
         return new OListValueContext( GetImport(), _nPrefix, _rLocalName, *m_aListValues.rbegin() );
     }
-    else
-    {
-        SAL_WARN( "xmloff", "OListPropertyContext::CreateChildContext: unknown child element (\""
-                    << _rLocalName << "\")!" );
-        return new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
-    }
+    return nullptr;
 }
 
 //= OListValueContext

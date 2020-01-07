@@ -647,9 +647,6 @@ SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
         }
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -846,9 +843,6 @@ SvXMLImportContextRef SwXMLTableColsContext_Impl::CreateChildContext(
                                                   rLocalName, xAttrList,
                                                   GetTable() );
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -966,9 +960,6 @@ SvXMLImportContextRef SwXMLTableRowContext_Impl::CreateChildContext(
                                                rLocalName );
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -1023,9 +1014,6 @@ SvXMLImportContextRef SwXMLTableRowsContext_Impl::CreateChildContext(
                                                   rLocalName, xAttrList,
                                                   GetTable(),
                                                   bHeader );
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -1461,9 +1449,6 @@ SvXMLImportContextRef SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         }
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

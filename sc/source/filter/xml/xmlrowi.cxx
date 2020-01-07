@@ -127,9 +127,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -281,9 +278,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         pContext = new ScXMLTableRowContext( GetScImport(), pAttribList );
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

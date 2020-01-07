@@ -163,8 +163,6 @@ SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
             }
         }
     }
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -228,8 +226,6 @@ SvXMLImportContextRef XMLHeaderFooterRegionContext::CreateChildContext(
                                                                     rLocalName,
                                                                     xAttrList);
     }
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

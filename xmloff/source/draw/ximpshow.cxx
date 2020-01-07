@@ -250,7 +250,7 @@ SvXMLImportContextRef SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefi
         }
     }
 
-    return new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

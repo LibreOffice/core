@@ -244,9 +244,6 @@ SvXMLImportContextRef SchXMLTableContext::CreateChildContext(
         case XML_TOK_TABLE_ROW:
             pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), rLocalName, mrTable );
             break;
-
-        default:
-            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 
     return pContext;
@@ -413,8 +410,6 @@ SvXMLImportContextRef SchXMLTableColumnsContext::CreateChildContext(
     {
         pContext = new SchXMLTableColumnContext( GetImport(), rLocalName, mrTable );
     }
-    else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -507,10 +502,6 @@ SvXMLImportContextRef SchXMLTableRowsContext::CreateChildContext(
     {
         pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), rLocalName, mrTable );
     }
-    else
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }
@@ -553,7 +544,7 @@ SvXMLImportContextRef SchXMLTableRowContext::CreateChildContext(
     }
     else
     {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        assert(false);
     }
 
     return pContext;
@@ -682,10 +673,6 @@ SvXMLImportContextRef SchXMLTableCellContext::CreateChildContext(
         //#i113950# previously the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore
         //so we need to find an alternative to save that range info for copy/paste scenario ... -> use description at an empty group element for now
         pContext = new SchXMLRangeSomewhereContext( GetImport(), nPrefix, rLocalName, maRangeId );
-    }
-    else
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 
     return pContext;
@@ -1076,7 +1063,7 @@ SvXMLImportContextRef SchXMLRangeSomewhereContext::CreateChildContext(
         return new XMLStringBufferImportContext(
             GetImport(), nPrefix, rLocalName, maRangeStringBuffer );
     }
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 void SchXMLRangeSomewhereContext::EndElement()

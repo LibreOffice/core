@@ -50,8 +50,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext
             pContext = new ScXMLLabelRangeContext( GetScImport(), pAttribList );
         break;
     }
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

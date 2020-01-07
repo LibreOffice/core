@@ -323,17 +323,17 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper maInterfaceToIdentifierMapper;
 };
 
-SvXMLImportContext *SvXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix,
-                                         const OUString& rLocalName,
+SvXMLImportContext *SvXMLImport::CreateDocumentContext(sal_uInt16 /*nPrefix*/,
+                                         const OUString& /*rLocalName*/,
                                          const uno::Reference< xml::sax::XAttributeList >& )
 {
-    return new SvXMLImportContext( *this, nPrefix, rLocalName );
+    return nullptr;
 }
 
 SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 /*Element*/,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( *this );
+    return nullptr;
 }
 
 void SvXMLImport::InitCtor_()
@@ -729,12 +729,14 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     if(!maContexts.empty())
     {
         xContext = maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList);
+        SAL_WARN_IF( !xContext.is(), "xmloff.core", "CreateChildContext returned nullptr for root element " << aLocalName);
         SAL_WARN_IF( xContext.is() && xContext->IsPrefixFilledIn() && (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
     else
     {
         xContext.set(CreateDocumentContext(nPrefix, aLocalName, xAttrList));
+        SAL_WARN_IF( !xContext.is(), "xmloff.core", "CreateDocumentContext returned nullptr for root element " << aLocalName);
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
             dynamic_cast< const SvXMLImportContext*>(xContext.get()) !=  nullptr )
         {
@@ -746,7 +748,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         }
     }
 
-    SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context" );
+    SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << aLocalName );
     if( !xContext.is() )
         xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
 
@@ -875,6 +877,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     else
         xContext.set( CreateFastContext( Element, Attribs ) );
 
+    SAL_WARN_IF(!xContext.is(), "xmloff.core", "No fast context for element " << getNameFromToken(Element));
     if ( !xContext.is() )
         xContext.set( new SvXMLImportContext( *this ) );
 
@@ -916,6 +919,7 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
     else
         xContext.set( CreateFastContext( -1, Attribs ) );
 
+    SAL_WARN_IF(!xContext.is(), "xmloff.core", "No context for element " << rLocalName);
     if ( !xContext.is() )
         xContext.set( new SvXMLImportContext( *this ) );
 

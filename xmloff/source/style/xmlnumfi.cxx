@@ -604,11 +604,11 @@ SvXMLNumFmtMapContext::SvXMLNumFmtMapContext( SvXMLImport& rImport,
 }
 
 SvXMLImportContextRef SvXMLNumFmtMapContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const OUString& rLName,
+                                    sal_uInt16 /*nPrfx*/, const OUString& /*rLName*/,
                                     const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
-    return new SvXMLImportContext( GetImport(), nPrfx, rLName );
+    return nullptr;
 }
 
 void SvXMLNumFmtMapContext::Characters( const OUString& )
@@ -1055,8 +1055,7 @@ SvXMLImportContextRef SvXMLNumFmtElementContext::CreateChildContext(
     {
         return new SvXMLNumFmtEmbeddedTextContext( GetImport(), nPrfx, rLName, *this, xAttrList );
     }
-    else
-        return new SvXMLImportContext( GetImport(), nPrfx, rLName );
+    return nullptr;
 }
 
 void SvXMLNumFmtElementContext::Characters( const OUString& rChars )
@@ -1551,8 +1550,6 @@ SvXMLImportContextRef SvXMLNumFormatContext::CreateChildContext(
             break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrfx, rLName );
     return pContext;
 }
 

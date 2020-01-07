@@ -142,7 +142,7 @@ SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLDocContext::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(

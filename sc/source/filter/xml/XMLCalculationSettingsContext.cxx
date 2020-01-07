@@ -104,9 +104,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSetting
     else if (nElement == XML_ELEMENT( TABLE, XML_ITERATION ))
         pContext = new ScXMLIterationContext(GetScImport(), pAttribList, this);
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 

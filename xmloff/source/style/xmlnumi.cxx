@@ -390,10 +390,6 @@ SvXMLImportContextRef SvxXMLListLevelStyleContext_Impl::CreateChildContext(
                                                     xBase64Stream );
         }
     }
-    if( !pContext )
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }
@@ -912,10 +908,6 @@ SvXMLImportContextRef SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
                                                              xAttrList,
                                                              rListLevel );
     }
-    if( !pContext )
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }
@@ -1069,10 +1061,6 @@ SvXMLImportContextRef SvxXMLListStyleContext::CreateChildContext(
         pLevelStyles->push_back( xLevelStyle );
 
         xContext = xLevelStyle.get();
-    }
-    else
-    {
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 
     return xContext;

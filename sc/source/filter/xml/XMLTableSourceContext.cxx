@@ -79,7 +79,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableSourceContext::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 void SAL_CALL ScXMLTableSourceContext::endFastElement( sal_Int32 /*nElement*/ )

@@ -696,9 +696,6 @@ SvXMLImportContextRef XMLImpRubyContext_Impl::CreateChildContext(
                                                        rLocalName,
                                                        xAttrList,
                                                        *this );
-        else
-            xContext = new SvXMLImportContext(
-                GetImport(), nPrefix, rLocalName );
     }
     else
         xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
@@ -1769,12 +1766,6 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
                 rImport.GetTextImport()->GetCursor()->getStart();
             rHints.push_back(
                 std::make_unique<XMLDrawHint_Impl>(pShapeContext, xAnchorPos));
-        }
-        if( !pContext )
-        {
-            // ignore unknown content
-            pContext =
-                new SvXMLImportContext( rImport, nPrefix, rLocalName );
         }
         // Behind fields, shapes and any unknown content blanks aren't ignored
         rIgnoreLeadingSpace = false;

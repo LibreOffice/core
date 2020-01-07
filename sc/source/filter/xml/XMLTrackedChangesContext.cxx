@@ -400,9 +400,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTrackedChangesCont
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -449,9 +446,6 @@ SvXMLImportContextRef ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPr
         ++nParagraphCount;
         pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLocalName, sCommentBuffer);
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -572,9 +566,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellContentDeletio
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -625,9 +616,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDependingsContext:
         pContext = new ScXMLDependenceContext(GetScImport(), pAttribList, pChangeTrackingImportHelper);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -670,9 +658,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionsContext::
         pContext = new ScXMLCellContentDeletionContext(GetScImport(), pAttribList, pChangeTrackingImportHelper);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -736,9 +721,6 @@ SvXMLImportContextRef ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nT
             xContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
         }
     }
-
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return xContext;
 }
@@ -862,9 +844,6 @@ SvXMLImportContextRef ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPr
         }
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -968,9 +947,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLPreviousContext::c
         pContext = new ScXMLChangeCellContext(GetScImport(), pAttribList,
             maOldCell, sFormulaAddress, sFormula, sFormulaNmsp, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows);
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -1042,9 +1018,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentChangeConte
         pContext = new ScXMLPreviousContext(GetScImport(), pAttribList, pChangeTrackingImportHelper);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -1132,9 +1105,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLInsertionContext::
         pContext = new ScXMLDeletionsContext(GetScImport(), pChangeTrackingImportHelper);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -1256,9 +1226,6 @@ SvXMLImportContextRef ScXMLCutOffsContext::CreateChildContext( sal_uInt16 nPrefi
             pContext = new ScXMLMovementCutOffContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -1336,14 +1303,7 @@ SvXMLImportContextRef ScXMLDeletionContext::CreateChildContext( sal_uInt16 nPref
     {
         if (IsXMLToken(rLocalName, XML_CUT_OFFS) || rLocalName == "cut_offs")
             pContext = new ScXMLCutOffsContext(GetScImport(), nPrefix, rLocalName, pChangeTrackingImportHelper);
-        else
-        {
-            OSL_FAIL("don't know this");
-        }
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -1367,9 +1327,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionContext::c
         pContext = new ScXMLDeletionsContext(GetScImport(), pChangeTrackingImportHelper);
         break;
     }
-
-    if ( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -1443,9 +1400,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMovementContext::c
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -1512,9 +1466,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLRejectionContext::
         pContext = new ScXMLDeletionsContext(GetScImport(), pChangeTrackingImportHelper);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

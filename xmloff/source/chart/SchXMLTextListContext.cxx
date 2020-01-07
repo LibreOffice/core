@@ -74,8 +74,6 @@ SvXMLImportContextRef SchXMLListItemContext::CreateChildContext(
     if( (nPrefix == XML_NAMESPACE_TEXT ||
                 nPrefix == XML_NAMESPACE_LO_EXT) && IsXMLToken( rLocalName, XML_P ) )
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, m_rText );
-    else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return pContext;
 }
 
@@ -115,8 +113,6 @@ SvXMLImportContextRef SchXMLTextListContext::CreateChildContext(
         m_aTextVector.emplace_back( );
         pContext = new SchXMLListItemContext( GetImport(), rLocalName, m_aTextVector.back() );
     }
-    else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return pContext;
 }
 

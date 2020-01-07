@@ -138,9 +138,6 @@ SvXMLImportContextRef ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPr
     if( !xContext && pShapeContext )
         xContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);
 
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return xContext;
 }
 

@@ -171,8 +171,7 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChil
 {
     if ( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
         return new ConvDicXMLDictionaryContext_Impl( GetConvDicImport() );
-    else
-        return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 
@@ -210,8 +209,7 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLDictionaryContext_Impl::creat
 {
     if ( Element == ConvDicXMLToken::ENTRY )
         return new ConvDicXMLEntryTextContext_Impl( GetConvDicImport() );
-    else
-        return new SvXMLImportContext(GetImport());
+    return nullptr;
 }
 
 css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::createFastChildContext(
@@ -220,8 +218,7 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::create
 {
     if ( Element == ConvDicXMLToken::RIGHT_TEXT )
         return new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), *this );
-    else
-        return new SvXMLImportContext(GetImport());
+    return nullptr;
 }
 
 void ConvDicXMLEntryTextContext_Impl::startFastElement(

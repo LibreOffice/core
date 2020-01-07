@@ -123,9 +123,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLFilterContext::cre
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -223,9 +220,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLAndContext::create
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -270,9 +264,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLOrContext::createF
         }
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -351,9 +342,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionContext::
         }
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -552,9 +540,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPFilterContext::c
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -609,9 +594,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPAndContext::crea
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -652,9 +634,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPOrContext::creat
         }
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
