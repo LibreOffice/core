@@ -909,6 +909,12 @@ void LinePropertyPanelBase::disableArrowHead()
     ActivateControls();
 }
 
+void LinePropertyPanelBase::enableArrowHead()
+{
+    mbArrowSupported = true;
+    ActivateControls();
+}
+
 }} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
