@@ -22,6 +22,7 @@ else
 ifeq ($(COM_IS_CLANG),TRUE)
 
 compilerplugins:
+	$(SRCDIR)/hang.sh
 	$(MAKE) $(PARALLELISM_OPTION) -f $(SRCDIR)/compilerplugins/Makefile-clang.mk compilerplugins
 
 compilerplugins-clean:
