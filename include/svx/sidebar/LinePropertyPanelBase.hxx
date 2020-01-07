@@ -105,6 +105,7 @@ protected:
 
     void setMapUnit(MapUnit eMapUnit);
 
+    void enableArrowHead();
     void disableArrowHead();
 
 protected:

@@ -193,8 +193,10 @@ void LinePropertyPanel::HandleContextChange(
             break;
     }
 
-    if(!bShowArrows)
+    if (!bShowArrows)
         disableArrowHead();
+    else
+        enableArrowHead();
 }
 
 void LinePropertyPanel::setLineStyle(const XLineStyleItem& rItem)
