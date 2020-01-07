@@ -3187,7 +3187,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     DBG_ASSERT( pPage && pPage->IsMasterPage(), "SdMasterPage is not masterpage?");
 
     if( !pPage || !pPage->IsMasterPage() || (mpModel->mpDoc->GetMasterPageUserCount(pPage) > 0))
-        return; //Todo: this should be excepted
+        return; //Todo: this should be expected
 
     // only standard pages can be removed directly
     if( pPage->GetPageKind() != PageKind::Standard )
