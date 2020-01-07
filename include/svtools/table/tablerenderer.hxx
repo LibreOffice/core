@@ -61,7 +61,7 @@ namespace svt { namespace table
             First, there might be less columns than fit into the view - in this case, right
             beside the right-most column, there's still room which belongs to the column header
             area, but is not occupied by any particular column header.<br/>
-            An equivalent statement holds for the row header area, if there are less rows than
+            An equivalent statement holds for the row header area, if there are fewer rows than
             fit into the view.
 
             Second, if the table control has both a row header and a column header,

@@ -748,7 +748,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
             {   // since version 3 there is a "skippable" block at this position
                 OStreamSection aDownCompat(_rxInStream);
                 _rxInStream->readShort(); // sub-version
-                // version 0 and higher : the "effective value" property
+                // version 0 and higher: the "effective value" property
                 Any aEffectiveValue;
                 {
                     OStreamSection aDownCompat2(_rxInStream);
@@ -763,10 +763,10 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
                         case 2:
                             break;
                         case 3:
-                            OSL_FAIL("FmXFormattedModel::read : unknown effective value type !");
+                            OSL_FAIL("FmXFormattedModel::read : unknown effective value type!");
                     }
                 }
-                // this property is only to be set if we have no control source : in all other cases the base class did a
+                // this property is only to be set if we have no control source: in all other cases the base class made a
                 // reset after it's read and this set the effective value to a default value
                 if ( m_xAggregateSet.is() && getControlSource().isEmpty() )
                 {

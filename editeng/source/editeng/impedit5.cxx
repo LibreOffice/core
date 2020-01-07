@@ -395,7 +395,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
 
 SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags ) const
 {
-    // Optimized function with less Puts(), which cause unnecessary cloning from default items.
+    // Optimized function with fewer Puts(), which cause unnecessary cloning from default items.
     // If this works, change GetAttribs( EditSelection ) to use this for each paragraph and merge the results!
 
 

@@ -1808,7 +1808,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 
         // (I'm not sure if the problem isn't deeper: The scenario: a large table displayed by a grid with a
         // thread-safe cursor (dBase). On loading the sdb-cursor started a counting thread. While this counting progress
-        // was running, I tried do delete 3 records from within the grid. Deletion caused a SeekCursor, which did a
+        // was running, I tried do delete 3 records from within the grid. Deletion caused a SeekCursor, which made a
         // m_pSeekCursor->moveRelative and a m_pSeekCursor->getPosition.
         // Unfortunately the first call caused a propertyChanged(RECORDCOUNT) which resulted in a repaint of the
         // navigation bar and the grid. The latter itself will result in SeekRow calls. So after (successfully) returning

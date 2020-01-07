@@ -414,7 +414,7 @@ Cell::Cell(
     ,mnColSpan( 1 )
     ,mxTable( rTableObj.getTable() )
 {
-    // Caution: Old SetModel() indirectly did a very necessary thing here,
+    // Caution: Old SetModel() indirectly made a very necessary thing here,
     // it created a valid SvxTextEditSource which is needed to bind contained
     // Text to the UNO API and thus to save/load and more. Added version without
     // model change.

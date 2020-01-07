@@ -124,7 +124,7 @@ public:
 
     /** Add months skipping year 0 and truncating at limits. If the original
         date was on Feb-29 or day 31 and the resulting date is not a leap year
-        or a month with less days, the result is adjusted to Feb-28 or day 30.
+        or a month with fewer days, the result is adjusted to Feb-28 or day 30.
     */
     void            AddMonths( sal_Int32 nAddMonths );
 
