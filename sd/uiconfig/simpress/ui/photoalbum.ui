@@ -161,7 +161,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="photoalbum|rem_btn|tooltip_text">Remove Image from List</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -177,7 +176,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="photoalbum|up_btn|tooltip_text">Move Image Up</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -193,7 +191,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="photoalbum|down_btn|tooltip_text">Move Image Down</property>
                         <property name="use_stock">True</property>
                       </object>

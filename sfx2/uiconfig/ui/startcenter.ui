@@ -265,7 +265,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="margin_left">6</property>
                             <property name="margin_right">6</property>
                             <property name="image">writer_all_image</property>
@@ -285,7 +284,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="margin_left">6</property>
                             <property name="margin_right">6</property>
                             <property name="image">calc_all_image</property>
@@ -305,7 +303,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="margin_left">6</property>
                             <property name="margin_right">6</property>
                             <property name="image">impress_all_image</property>
@@ -325,7 +322,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="margin_left">6</property>
                             <property name="margin_right">6</property>
                             <property name="image">draw_all_image</property>
@@ -345,7 +341,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="margin_left">6</property>
                             <property name="margin_right">6</property>
                             <property name="image">math_all_image</property>
@@ -365,7 +360,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="margin_left">6</property>
                             <property name="margin_right">6</property>
                             <property name="image">database_all_image</property>
@@ -438,7 +432,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
@@ -455,7 +448,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                           </object>

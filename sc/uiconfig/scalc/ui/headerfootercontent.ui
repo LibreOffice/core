@@ -298,8 +298,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TEXT|tooltip_text">Text Attributes</property>
                 <property name="image">imageBTN_TEXT</property>
               </object>
               <packing>
@@ -313,7 +311,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_FILE|tooltip_text">Title</property>
                 <property name="image">imageBTN_FILE</property>
                 <property name="draw_indicator">True</property>
@@ -332,7 +329,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TABLE|tooltip_text">Sheet Name</property>
                 <property name="image">imageBTN_TABLE</property>
               </object>
@@ -347,7 +343,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGE|tooltip_text">Page</property>
                 <property name="image">imageBTN_PAGE</property>
               </object>
@@ -362,7 +357,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGES|tooltip_text">Pages</property>
                 <property name="image">imageBTN_PAGES</property>
               </object>
@@ -377,7 +371,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_DATE|tooltip_text">Date</property>
                 <property name="image">imageBTN_DATE</property>
               </object>
@@ -392,7 +385,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TIME|tooltip_text">Time</property>
                 <property name="image">imageBTN_TIME</property>
               </object>

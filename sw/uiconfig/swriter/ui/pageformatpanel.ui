@@ -71,7 +71,6 @@
           <object class="GtkSpinButton" id="paperwidth">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes" context="pageformatpanel|paperwidth|tooltip_text">Paper Width</property>
             <property name="hexpand">True</property>
             <property name="text">0</property>
@@ -85,7 +84,6 @@
           <object class="GtkSpinButton" id="paperheight">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes" context="pageformatpanel|paperheight|tooltip_text">Paper Height</property>
             <property name="hexpand">True</property>
             <property name="text">0</property>
