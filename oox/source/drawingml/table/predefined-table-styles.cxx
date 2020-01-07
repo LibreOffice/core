@@ -22,7 +22,7 @@ using namespace oox::drawingml::table;
  * 74 style properties. And table styles were coded according
  * to that map. You can see that map in
  * oox/documentation/predefined-styles-map.ods. We should
- * define all of these variables to keep the code readeable
+ * define all of these variables to keep the code readable
  * and change something easily when some styles change.
  */
 
@@ -208,7 +208,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     std::unique_ptr<TableStyle> pTableStyle;
     pTableStyle.reset(new TableStyle());
 
-    // Text Color definations for table parts
+    // Text Color definitions for table parts
 
     ::oox::drawingml::Color wholeTblTextColor;
     ::oox::drawingml::Color firstRowTextColor;
@@ -220,7 +220,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     ::oox::drawingml::Color band2HTextColor;
     ::oox::drawingml::Color band2VTextColor;
 
-    // Fill properties definations for table parts
+    // Fill properties definitions for table parts
 
     oox::drawingml::FillPropertiesPtr pWholeTblFillProperties(new oox::drawingml::FillProperties);
     oox::drawingml::FillPropertiesPtr pFirstRowFillProperties(new oox::drawingml::FillProperties);
@@ -233,7 +233,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     oox::drawingml::FillPropertiesPtr pBand2VFillProperties(new oox::drawingml::FillProperties);
     oox::drawingml::FillPropertiesPtr pTblBgFillProperties(new oox::drawingml::FillProperties);
 
-    // Start table border line properties definations for table parts
+    // Start table border line properties definitions for table parts
 
     oox::drawingml::LinePropertiesPtr pWholeTblLeftBorder(new oox::drawingml::LineProperties);
     oox::drawingml::LinePropertiesPtr pWholeTblRightBorder(new oox::drawingml::LineProperties);
@@ -298,7 +298,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     oox::drawingml::LinePropertiesPtr pBand2VInsideHBorder(new oox::drawingml::LineProperties);
     oox::drawingml::LinePropertiesPtr pBand2VInsideVBorder(new oox::drawingml::LineProperties);
 
-    // End table border line properties definations for table parts
+    // End table border line properties definitions for table parts
 
     // Start to set fill types.
 
