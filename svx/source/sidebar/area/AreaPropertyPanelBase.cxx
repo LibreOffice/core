@@ -112,6 +112,8 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mpTransparanceItem()
 {
     mpPanel = dynamic_cast<sfx2::sidebar::Panel*>(pParent);
+
+    Initialize();
 }
 
 AreaPropertyPanelBase::~AreaPropertyPanelBase()
