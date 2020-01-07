@@ -261,7 +261,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="remotefilesdialog|list_view|tooltip_text">List view</property>
                 <property name="image">image2</property>
                 <property name="active">True</property>
@@ -277,7 +276,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="remotefilesdialog|icon_view|tooltip_text">Icon view</property>
                 <property name="image">image1</property>
               </object>
@@ -294,7 +292,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="remotefilesdialog|new_folder|tooltip_text">Create New Folder</property>
                 <property name="margin_left">6</property>
                 <property name="image">image3</property>

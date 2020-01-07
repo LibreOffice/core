@@ -81,7 +81,6 @@
               <object class="GtkSpinButton" id="setbrightness">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setbrightness|tooltip_text">Specify the luminance of the graphic.</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <child internal-child="accessible">
@@ -113,7 +112,6 @@
               <object class="GtkSpinButton" id="setcontrast">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setcontrast|tooltip_text">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="adjustment">plusminus100adjustment1</property>
                 <child internal-child="accessible">
@@ -174,7 +172,6 @@
               <object class="GtkSpinButton" id="setgraphtransparency">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgraphtransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="adjustment">0to100adjustment</property>
                 <child internal-child="accessible">
@@ -211,7 +208,6 @@
                   <object class="GtkSpinButton" id="setred">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setred|tooltip_text">Red</property>
                     <property name="adjustment">plusminus100adjustment2</property>
                     <child internal-child="accessible">
@@ -255,7 +251,6 @@
                   <object class="GtkSpinButton" id="setgreen">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgreen|tooltip_text">Green</property>
                     <property name="adjustment">plusminus100adjustment3</property>
                     <child internal-child="accessible">
@@ -300,7 +295,6 @@
                   <object class="GtkSpinButton" id="setblue">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setblue|tooltip_text">Blue</property>
                     <property name="adjustment">plusminus100adjustment4</property>
                     <child internal-child="accessible">
@@ -344,7 +338,6 @@
                   <object class="GtkSpinButton" id="setgamma">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgamma|tooltip_text">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="adjustment">gammaadjustment</property>
                     <property name="digits">2</property>

@@ -132,7 +132,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="explorerfiledialog|connect_to_server|tooltip_text">Connect To Server</property>
                         <property name="valign">center</property>
                         <child internal-child="accessible">
@@ -194,7 +193,6 @@
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="explorerfiledialog|new_folder|tooltip_text">Create New Folder</property>
                         <property name="valign">center</property>
                         <property name="image">image4</property>

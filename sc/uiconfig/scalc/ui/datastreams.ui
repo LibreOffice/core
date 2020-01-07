@@ -121,7 +121,6 @@
                               <object class="GtkComboBoxText" id="url">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes" context="datastreams|url|tooltip_text">Enter the URL of the source document in the local file system or Internet here.</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>

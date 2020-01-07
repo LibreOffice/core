@@ -70,7 +70,6 @@
                   <object class="GtkSpinButton" id="horizontalpos">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|horizontalpos|tooltip_text">Enter the value for the horizontal position.</property>
                     <property name="adjustment">adjustmentPOS</property>
                     <property name="digits">2</property>
@@ -104,7 +103,6 @@
                   <object class="GtkSpinButton" id="verticalpos">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|verticalpos|tooltip_text">Enter the value for the vertical position.</property>
                     <property name="adjustment">adjustmentPOS1</property>
                     <child internal-child="accessible">
@@ -138,7 +136,6 @@
                     <property name="width_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|selectwidth|tooltip_text">Enter a width for the selected object.</property>
                     <property name="adjustment">adjustmentSIZE</property>
                     <property name="digits">2</property>
@@ -173,7 +170,6 @@
                     <property name="width_request">120</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|selectheight|tooltip_text">Enter a height for the selected object.</property>
                     <property name="adjustment">adjustmentSIZE1</property>
                     <property name="digits">2</property>
@@ -201,7 +197,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarpossize|ratio|tooltip_text">Maintain proportions when you resize the selected object.</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
@@ -284,7 +279,6 @@
                       <object class="GtkSpinButton" id="rotation">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarpossize|rotation|tooltip_text">Select the angle for rotation.</property>
                         <property name="halign">start</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
@@ -331,7 +325,6 @@
                               <object class="GtkToolButton" id=".uno:FlipVertical">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes" context="sidebarpossize|flipvertical|tooltip_text">Flip the selected object vertically.</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -344,7 +337,6 @@
                               <object class="GtkToolButton" id=".uno:FlipHorizontal">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes" context="sidebarpossize|fliphorizontal|tooltip_text">Flip the selected object horizontally.</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -404,7 +396,6 @@
                   <object class="GtkToolbar" id="arrangetoolbar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|arrangetoolbar">Arrange</property>
                     <property name="halign">start</property>
                     <property name="toolbar_style">icons</property>
