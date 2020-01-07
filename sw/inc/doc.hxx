@@ -299,6 +299,7 @@ private:
                                                frames need deletion. */
     bool mbCopyIsMove            : 1;    //< TRUE: Copy is a hidden Move.
     bool mbInReading             : 1;    //< TRUE: Document is in the process of being read.
+    bool mbInWriting : 1; //< TRUE: Document is in the process of being written.
     bool mbInMailMerge           : 1;    //< TRUE: Document is in the process of being written by mail merge.
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
     bool mbInWriterfilterImport  : 1;    //< TRUE: writerfilter import (DOCX,RTF)
@@ -950,6 +951,9 @@ public:
 
     bool IsInReading() const                    { return mbInReading; }
     void SetInReading( bool bNew )              { mbInReading = bNew; }
+
+    bool IsInWriting() const { return mbInWriting; }
+    void SetInWriting(bool bNew) { mbInWriting = bNew; }
 
     bool IsInMailMerge() const                  { return mbInMailMerge; }
     void SetInMailMerge( bool bNew )            { mbInMailMerge = bNew; }
