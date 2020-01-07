@@ -66,9 +66,6 @@ SvXMLImportContextRef OXMLTableFilterList::CreateChildContext(
             pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 

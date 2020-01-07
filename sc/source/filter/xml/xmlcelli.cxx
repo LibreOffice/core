@@ -680,9 +680,6 @@ SvXMLImportContextRef ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 n
         }
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return pContext;
 }
 
@@ -728,9 +725,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
         }
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

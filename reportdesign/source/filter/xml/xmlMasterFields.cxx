@@ -96,9 +96,6 @@ SvXMLImportContextRef OXMLMasterFields::CreateChildContext(
             break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
-
     return pContext;
 }
 

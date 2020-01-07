@@ -99,7 +99,7 @@ SvXMLImportContextRef SchXMLParagraphContext::CreateChildContext(
         }
     }
 
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 void SchXMLParagraphContext::Characters( const OUString& rChars )

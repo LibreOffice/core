@@ -50,9 +50,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::c
     if ( nElement == XML_ELEMENT( TABLE, XML_DDE_LINK) )
         pContext = new ScXMLDDELinkContext(GetScImport());
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -91,9 +88,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::cr
             pContext = new ScXMLDDETableContext(GetScImport(), this);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -251,9 +245,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
         break;
     }
 
-    if (!pContext)
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -307,9 +298,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::cre
 
     if (nElement == XML_ELEMENT( TABLE, XML_TABLE_CELL ))
         pContext = new ScXMLDDECellContext(GetScImport(), pAttribList, pDDELink);
-
-    if (!pContext)
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

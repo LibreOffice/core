@@ -83,9 +83,6 @@ SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nP
         pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
     }
 
-    if( nullptr == pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -117,9 +114,6 @@ SvXMLImportContext *SvxXMLXTextImportComponent::CreateDocumentContext(
     {
         pContext = new SvxXMLTextImportContext( *this, nPrefix, rLocalName, mxText );
     }
-
-    if( nullptr == pContext )
-        pContext = new SvXMLImportContext( *this, nPrefix, rLocalName );
 
     return pContext;
 }

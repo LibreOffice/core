@@ -697,12 +697,10 @@ SvXMLImportContextRef SchXMLAxisContext::CreateChildContext(
             CreateGrid( sAutoStyleName, bIsMajor );
 
             // don't create a context => use default context. grid elements are empty
-            pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
         }
         break;
 
         default:
-            pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
             break;
     }
 

@@ -358,12 +358,7 @@ SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
             XMLTextType::Section );
 
         // if that fails, default context
-        if (nullptr == pContext)
-        {
-            pContext = new SvXMLImportContext( GetImport(),
-                                               nPrefix, rLocalName );
-        }
-        else
+        if (pContext)
             bHasContent = true;
     }
 

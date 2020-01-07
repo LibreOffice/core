@@ -203,7 +203,7 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 namespace {
@@ -704,11 +704,6 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 /*nElement*/,
         uno::Reference<document::XDocumentProperties> const xDocProps(
             !mbLoadDoc ? nullptr : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
-    }
-
-    if(!pContext)
-    {
-        pContext = new SvXMLImportContext(*this);
     }
 
     return pContext;

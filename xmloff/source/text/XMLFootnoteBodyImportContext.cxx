@@ -48,8 +48,6 @@ SvXMLImportContextRef XMLFootnoteBodyImportContext::CreateChildContext(
                                                        rLocalName,
                                                        xAttrList,
                                                        XMLTextType::Footnote);
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

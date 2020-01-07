@@ -75,9 +75,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionsCo
             break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 

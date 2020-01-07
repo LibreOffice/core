@@ -772,11 +772,6 @@ SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix
             mpImpl->AddStyle( pStyle );
         pContext = pStyle;
     }
-    else
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix,
-                                           rLocalName );
-    }
 
     return pContext;
 }

@@ -147,10 +147,6 @@ XMLVersionListContext::createFastChildContext(sal_Int32 nElement,
     {
         pContext = new XMLVersionContext( GetImport(), xAttrList );
     }
-    else
-    {
-        pContext = new SvXMLImportContext( GetImport() );
-    }
 
     return pContext;
 }

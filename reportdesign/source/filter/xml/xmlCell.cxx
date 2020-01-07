@@ -174,9 +174,6 @@ SvXMLImportContextRef OXMLCell::CreateChildContext(
     if ( m_xComponent.is() )
         m_pContainer->addCell(m_xComponent);
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
-
     return pContext;
 }
 

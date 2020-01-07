@@ -84,8 +84,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::
             pContext = new ScXMLDetectiveOperationContext( GetScImport(), pAttribList );
         break;
     }
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

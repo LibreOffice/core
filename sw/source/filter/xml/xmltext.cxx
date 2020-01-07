@@ -58,8 +58,6 @@ SvXMLImportContextRef SwXMLBodyContentContext_Impl::CreateChildContext(
     SvXMLImportContext *pContext = GetSwImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
                XMLTextType::Body );
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -77,9 +75,6 @@ SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
 
     if( !IsStylesOnlyMode() )
          pContext = new SwXMLBodyContentContext_Impl( *this, rLocalName );
-    else
-        pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
-                                           rLocalName );
 
     return pContext;
 }

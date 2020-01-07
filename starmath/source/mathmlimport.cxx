@@ -1994,8 +1994,6 @@ SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPr
                                     XML_NAMESPACE_OFFICE, rLocalName,
                                     xAttrList );
     }
-    else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -2003,7 +2001,7 @@ SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPr
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLOfficeContext_Impl::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 namespace {
@@ -2915,8 +2913,6 @@ SvXMLImportContext *SmXMLImport::CreateFastContext(sal_Int32 nElement,
         default:
             if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE))
                 pContext = new SmXMLOfficeContext_Impl(*this);
-            else
-                pContext = new SvXMLImportContext(*this);
     }
     return pContext;
 }

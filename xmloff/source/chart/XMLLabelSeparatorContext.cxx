@@ -45,7 +45,7 @@ void XMLLabelSeparatorContext::StartElement( const uno::Reference< xml::sax::XAt
 }
 
 SvXMLImportContextRef XMLLabelSeparatorContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
+    sal_uInt16 /*nPrefix*/, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = nullptr;
@@ -54,8 +54,6 @@ SvXMLImportContextRef XMLLabelSeparatorContext::CreateChildContext(
         pContext = new SchXMLParagraphContext( GetImport(),
                             rLocalName, m_aSeparator );
     }
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

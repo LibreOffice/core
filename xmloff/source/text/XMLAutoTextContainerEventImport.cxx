@@ -61,8 +61,7 @@ SvXMLImportContextRef XMLAutoTextContainerEventImport::CreateChildContext(
         return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName,
                                           rEvents);
     }
-    else
-        return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

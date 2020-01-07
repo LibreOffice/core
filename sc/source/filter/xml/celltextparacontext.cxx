@@ -64,7 +64,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContex
             ;
     }
 
-    return new SvXMLImportContext(GetImport());
+    return nullptr;
 }
 
 void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan, const OUString& rStyleName)
@@ -180,7 +180,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextSpanContex
             ;
     }
 
-    return new SvXMLImportContext(GetImport());
+    return nullptr;
 }
 
 ScXMLCellFieldSheetNameContext::ScXMLCellFieldSheetNameContext(
@@ -343,7 +343,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellFieldSContext:
         mnCount = 0;
     }
 
-    return new SvXMLImportContext(GetImport());
+    return nullptr;
 }
 
 void ScXMLCellFieldSContext::PushSpaces()

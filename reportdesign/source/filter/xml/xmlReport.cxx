@@ -192,9 +192,6 @@ SvXMLImportContextRef OXMLReport::CreateChildContext(
             break;
     }
 
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return xContext;
 }
 

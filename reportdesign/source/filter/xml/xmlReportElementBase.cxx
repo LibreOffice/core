@@ -54,8 +54,6 @@ SvXMLImportContextRef OXMLReportElementBase::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContextRef xContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return xContext;
 }
 

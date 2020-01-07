@@ -77,7 +77,6 @@ SvXMLImportContextRef XFormsInstanceContext::CreateChildContext(
     if( mxInstance.is() )
     {
         GetImport().SetError( XMLERROR_XFORMS_ONLY_ONE_INSTANCE_ELEMENT, rLocalName );
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
     else
     {

@@ -67,9 +67,6 @@ SvXMLImportContextRef PageHeaderFooterContext::CreateChildContext( sal_uInt16 nP
                                                 rMap,  nStartIndex, nEndIndex, aType);
     }
 
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return xContext;
 }
 

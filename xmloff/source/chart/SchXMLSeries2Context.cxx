@@ -696,9 +696,6 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
                     GetImport(), rLocalName,
                     mrLSequencesPerIndex, m_xSeries );
             break;
-
-        default:
-            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 
     return pContext;

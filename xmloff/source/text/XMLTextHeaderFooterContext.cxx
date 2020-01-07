@@ -172,8 +172,6 @@ SvXMLImportContextRef XMLTextHeaderFooterContext::CreateChildContext(
                 GetImport(), nPrefix, rLocalName, xAttrList,
                 XMLTextType::HeaderFooter );
     }
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

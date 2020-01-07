@@ -142,7 +142,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFas
         default:
             ;
     }
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
@@ -187,7 +187,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowContext::createFast
     if (nToken == XML_TOK_TABLE_ROW_CELL || nToken == XML_TOK_TABLE_ROW_COVERED_CELL)
         return new ScXMLExternalRefCellContext(mrScImport, pAttribList, mrExternalRefInfo);
 
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 void SAL_CALL ScXMLExternalRefRowContext::endFastElement( sal_Int32 /* nElement */ )
@@ -331,7 +331,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefCellContext::createFas
     if (nToken == XML_TOK_TABLE_ROW_CELL_P)
         return new ScXMLExternalRefCellTextContext(mrScImport, *this);
 
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 void SAL_CALL ScXMLExternalRefCellContext::endFastElement( sal_Int32 /*nElement*/ )

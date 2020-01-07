@@ -234,8 +234,7 @@ SvXMLImportContextRef XMLEmbeddedObjectImportContext::CreateChildContext(
         return new XMLEmbeddedObjectImportContext_Impl( GetImport(),
                                                         nPrefix, rLocalName,
                                                         xHandler );
-    else
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 void XMLEmbeddedObjectImportContext::StartElement(

@@ -458,7 +458,7 @@ SvXMLImportContext *SvxXMLXTableImport::CreateDocumentContext(
         }
     }
 
-    return new SvXMLImportContext( *this, nPrefix, rLocalName );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

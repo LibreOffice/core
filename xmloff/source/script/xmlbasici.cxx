@@ -53,9 +53,6 @@ SvXMLImportContextRef XMLBasicImportContext::CreateChildContext(
         pContext = new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName,
                           Reference<xml::sax::XDocumentHandler>(m_xHandler, UNO_QUERY_THROW) );
 
-    if ( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
