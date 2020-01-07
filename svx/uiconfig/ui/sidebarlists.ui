@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="ListsPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -15,41 +14,41 @@
         <property name="column_spacing">6</property>
         <property name="column_homogeneous">True</property>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="numberbullet">
+          <object class="GtkToolbar" id="numberbullet">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarlists|numberbullet|tooltip_text">Bullets and Numbering</property>
+            <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
-              <object class="GtkMenuToolButton" id="bullet">
+              <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="is_important">True</property>
-                <property name="action_name">.uno:DefaultBullet</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkMenuToolButton" id="number">
+              <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="is_important">True</property>
-                <property name="action_name">.uno:DefaultNumbering</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
@@ -57,58 +56,54 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="sfxlo-SidebarToolBox" id="outline">
+              <object class="GtkToolbar" id="outline">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="toolbar_style">icons</property>
+                <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id="demote">
+                  <object class="GtkToolButton" id=".uno:OutlineRight">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:OutlineRight</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="promote">
+                  <object class="GtkToolButton" id=".uno:OutlineLeft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:OutlineLeft</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="movedown">
+                  <object class="GtkToolButton" id=".uno:OutlineDown">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:OutlineDown</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="moveup">
+                  <object class="GtkToolButton" id=".uno:OutlineUp">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:OutlineUp</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -122,7 +117,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
       </object>

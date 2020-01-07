@@ -132,4 +132,15 @@ void ToolbarUnoDispatcher::dispose()
 
 ToolbarUnoDispatcher::~ToolbarUnoDispatcher() { dispose(); }
 
+WeldToolbarPopup::WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                   weld::Widget* pParent, const OUString& rUIFile,
+                                   const OString& rId)
+    : ToolbarPopupBase(rFrame)
+    , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+    , m_xTopLevel(m_xBuilder->weld_container(rId))
+{
+}
+
+WeldToolbarPopup::~WeldToolbarPopup() {}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
