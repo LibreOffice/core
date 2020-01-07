@@ -16,6 +16,24 @@
       "revId": "40fe5b93bc0838e04b46bfc7942d1ee6a2482ce0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a58f627d_b1cb3311",
+        "filename": "include/svx/sidebar/AreaPropertyPanelBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-01-07T15:36:37Z",
+      "side": 1,
+      "message": "In the normal case it gets filled in AreaPropertyPanelBase::Initialize, it seems the chart version that inherits from AreaPropertyPanelBase doesn\u0027t call the Base Initialize. I think I see where that came unstuck",
+      "parentUuid": "fb84b3c5_768e04b2",
+      "revId": "40fe5b93bc0838e04b46bfc7942d1ee6a2482ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
