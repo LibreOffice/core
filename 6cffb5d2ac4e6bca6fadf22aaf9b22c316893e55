@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "449243d7_fd9163e7",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "this is a bit pointless - if the assert triggers the SAL_WARN will never be reached; i don\u0027t think we have any easily configured compilation mode where asserts are disabled but SAL_WARN is enabled.\n\nif there are no test failures, it\u0027s probably best to use assert here.",
+      "revId": "6cffb5d2ac4e6bca6fadf22aaf9b22c316893e55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c12a0b5a_19ccee8a",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "same",
+      "revId": "6cffb5d2ac4e6bca6fadf22aaf9b22c316893e55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa34da26_1b739dae",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "it\u0027s a bug if there is no hint at the anchor pos - better use assert().",
+      "revId": "6cffb5d2ac4e6bca6fadf22aaf9b22c316893e55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b901fc3_ec799fbb",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "not sure about this one - the format could be deleted and re-created by undo, then it won\u0027t match? then it can\u0027t be assert().\n\nmaybe it\u0027s better to check the name instead of the pointer?",
+      "revId": "6cffb5d2ac4e6bca6fadf22aaf9b22c316893e55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d9e6ebc_7c8756cc",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "this should be assert, as it\u0027s unconditionally dereferenced.",
+      "revId": "6cffb5d2ac4e6bca6fadf22aaf9b22c316893e55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
