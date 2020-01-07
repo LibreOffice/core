@@ -45,6 +45,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -53,6 +54,8 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+
+#include <unicode/uchar.h>
 
 #include <vcl/edit.hxx>
 
@@ -733,7 +736,31 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes()[  mpImpl->maSelection.GetEnd().GetPara() ].get();
                 css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
                 css::i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
-                TextSelection aNewSel( mpImpl->maSelection );
+                // tdf#57879 - expand selection to the left to include connector punctuations and search for additional word boundaries
+                if (aBoundary.startPos > 0 && u_charType(pNode->GetText()[aBoundary.startPos]) == U_CONNECTOR_PUNCTUATION)
+                {
+                    aBoundary.startPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.startPos - 1,
+                        mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).startPos;
+                }
+                while (aBoundary.startPos > 0 && u_charType(pNode->GetText()[aBoundary.startPos - 1]) == U_CONNECTOR_PUNCTUATION)
+                {
+                    aBoundary.startPos = std::min(aBoundary.startPos,
+                        xBI->getWordBoundary( pNode->GetText(), aBoundary.startPos - 2,
+                            mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).startPos);
+                }
+                // tdf#57879 - expand selection to the right to include connector punctuations and search for additional word boundaries
+                if (aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos - 1]) == U_CONNECTOR_PUNCTUATION)
+                {
+                    aBoundary.endPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.endPos,
+                        mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).endPos;
+                }
+                while (aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos]) == U_CONNECTOR_PUNCTUATION)
+                {
+                    aBoundary.endPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.endPos + 1,
+                        mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).endPos;
+                }
+                // tdf#57879 - expand selection to found boundaries
+                TextSelection aNewSel(mpImpl->maSelection);
                 aNewSel.GetStart().GetIndex() = aBoundary.startPos;
                 aNewSel.GetEnd().GetIndex() = aBoundary.endPos;
                 ImpSetSelection( aNewSel );
@@ -1256,6 +1283,17 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
         css::i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
         if ( aBoundary.startPos >= rPaM.GetIndex() )
             aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+        // tdf#57879 - expand selection to the left to include connector punctuations and search for additional word boundaries
+        if (aBoundary.startPos > 0 && u_charType(pNode->GetText()[aBoundary.startPos]) == U_CONNECTOR_PUNCTUATION)
+        {
+            aBoundary.startPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.startPos - 1,
+                mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).startPos;
+        }
+        while (aBoundary.startPos > 0 && u_charType(pNode->GetText()[aBoundary.startPos - 1]) == U_CONNECTOR_PUNCTUATION)
+        {
+            aBoundary.startPos = std::min(aBoundary.startPos, xBI->getWordBoundary( pNode->GetText(), aBoundary.startPos - 2,
+                mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).startPos);
+        }
         aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0;
     }
     else if ( aPaM.GetPara() )
@@ -1276,7 +1314,18 @@ TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
     {
         css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         css::i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-        aPaM.GetIndex() = aBoundary.startPos;
+        // // tdf#57879 - expand selection to the right to include connector punctuations and search for additional word boundaries
+        if (aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos - 1]) == U_CONNECTOR_PUNCTUATION)
+        {
+            aBoundary.endPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.endPos,
+                mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).endPos;
+        }
+        while (aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos]) == U_CONNECTOR_PUNCTUATION)
+        {
+            aBoundary.endPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.endPos + 1,
+                mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).endPos;
+        }
+        aPaM.GetIndex() = aBoundary.endPos;
     }
     else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().size()-1) )
     {
