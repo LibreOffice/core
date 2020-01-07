@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "660946a0_e8aaafd2",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T10:38:30Z",
+      "side": 1,
+      "message": "yes, somehow i didn\u0027t notice this one was new...",
+      "parentUuid": "b3a555fa_1a312d73",
+      "range": {
+        "startLine": 101,
+        "startChar": 1,
+        "endLine": 101,
+        "endChar": 77
+      },
+      "revId": "f7869f01e16cb523941403e7b26bd9cb41ebbe53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57931ece_9aba7fb7",
         "filename": "external/python3/ExternalPackage_python3.mk",
         "patchSetId": 5
@@ -59,6 +83,30 @@
       "writtenOn": "2020-01-05T20:57:41Z",
       "side": 1,
       "message": "Add here _uuid module?\n\n  LO_lib/_uuid.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \\",
+      "range": {
+        "startLine": 115,
+        "startChar": 1,
+        "endLine": 115,
+        "endChar": 81
+      },
+      "revId": "f7869f01e16cb523941403e7b26bd9cb41ebbe53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26267daf_17fa22a8",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T10:38:30Z",
+      "side": 1,
+      "message": "i was a bit concerned about the dependency on libuuid.so.1 but apparently it\u0027s relatively stable so shouldn\u0027t be a problem...",
+      "parentUuid": "57931ece_9aba7fb7",
       "range": {
         "startLine": 115,
         "startChar": 1,
