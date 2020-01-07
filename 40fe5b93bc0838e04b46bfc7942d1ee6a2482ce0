@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb84b3c5_768e04b2",
+        "filename": "include/svx/sidebar/AreaPropertyPanelBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-07T14:08:22Z",
+      "side": 1,
+      "message": "Could it be that filling that ComboBox with entries is missing now (SvxFillTypeBox fills itself in its ctor)?  That would explain \u003chttps://ci.libreoffice.org/job/lo_ubsan/1498/console\u003e, where mxLbFillType-\u003eget_active() in AreaPropertyPanelBase::Update now returns -1 even though\n\n  mxLbFillType-\u003eset_active(static_cast\u003c sal_Int32 \u003e(nPos));\n\nin AreaPropertyPanelBase::updateFillStyle one frame down tried to select an entry (but which silently fails if nPos is out of range, which it always is for an empty box).",
+      "revId": "40fe5b93bc0838e04b46bfc7942d1ee6a2482ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
