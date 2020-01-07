@@ -22,7 +22,6 @@
           <object class="sfxlo-SidebarToolBox" id="numberbullet">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
             <property name="show_arrow">False</property>
             <child>
@@ -67,7 +66,6 @@
               <object class="sfxlo-SidebarToolBox" id="horizontalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
                 <property name="show_arrow">False</property>
@@ -168,7 +166,6 @@
               <object class="sfxlo-SidebarToolBox" id="verticalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|verticalalignment|tooltip_text">Vertical Alignment</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
@@ -250,7 +247,6 @@
               <object class="sfxlo-SidebarToolBox" id="paraspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|paraspacing|tooltip_text">Spacing</property>
                 <property name="show_arrow">False</property>
                 <child>
@@ -309,7 +305,6 @@
                   <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
@@ -358,7 +353,6 @@
                   <object class="svxlo-SvxRelativeField" id="belowparaspacing">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
@@ -386,14 +380,12 @@
               <object class="sfxlo-SidebarToolBox" id="linespacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="margin_left">1</property>
                 <property name="hexpand">True</property>
                 <child>
                   <object class="GtkMenuToolButton" id="setlinespacing">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
                     <property name="action_name">.uno:LineSpacing</property>
                     <property name="use_underline">True</property>
@@ -442,14 +434,12 @@
               <object class="sfxlo-SidebarToolBox" id="indent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|indent|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="increaseindent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
                     <property name="action_name">.uno:IncrementIndent</property>
                     <property name="use_underline">True</property>
@@ -463,7 +453,6 @@
                   <object class="GtkToolButton" id="decreaseindent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
                     <property name="action_name">.uno:DecrementIndent</property>
                     <property name="use_underline">True</property>
@@ -477,7 +466,6 @@
                   <object class="GtkToolButton" id="hangingindent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
                     <property name="action_name">.uno:HangingIndent</property>
                     <property name="use_underline">True</property>
@@ -652,7 +640,6 @@
               <object class="sfxlo-SidebarToolBox" id="backgroundcolor">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
                 <property name="halign">end</property>
                 <child>

@@ -41,7 +41,6 @@
               <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="paraulspacing|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
                 <property name="text">0</property>
                 <property name="adjustment">adjustment1</property>
@@ -81,7 +80,6 @@
               <object class="svxlo-SvxRelativeField" id="belowparaspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="paraulspacing|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
                 <property name="text">0</property>
                 <property name="adjustment">adjustment1</property>

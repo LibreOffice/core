@@ -132,7 +132,6 @@
                   <object class="GtkSpinButton" id="anim_duration">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="customanimationtimingtab|anim_duration|tooltip_text">Select the speed of the Animation.</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>

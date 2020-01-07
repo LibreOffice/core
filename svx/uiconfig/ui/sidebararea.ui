@@ -52,7 +52,6 @@
               <object class="GtkLabel" id="filllabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|filllabel|tooltip_text">Fill:</property>
                 <property name="label" translatable="yes" context="sidebararea|filllabel">_Fill:</property>
                 <property name="use_underline">True</property>
@@ -80,7 +79,6 @@
                       <object class="GtkMenuToolButton" id=".uno:FillColor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebararea|color|tooltip_text">Select the color to apply.</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -100,7 +98,6 @@
                   <object class="GtkComboBox" id="fillattr">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|fillattr|tooltip_text">Select the effect to apply.</property>
                     <property name="hexpand">True</property>
                     <property name="model">liststore4</property>
@@ -135,7 +132,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|fillgrad1|tooltip_text">Fill gradient from.</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
@@ -161,7 +157,6 @@
               <object class="GtkComboBoxText" id="fillstyle">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|fillstyle|tooltip_text">Select the fill type to apply.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fillstyle-atkobject">
@@ -179,7 +174,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|fillgrad2|tooltip_text">Fill gradient to.</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
@@ -262,7 +256,6 @@
               <object class="GtkLabel" id="transparencylabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|transparencylabel|tooltip_text">Transparency</property>
                 <property name="label" translatable="yes" context="sidebararea|transparencylabel">_Transparency:</property>
                 <property name="use_underline">True</property>
@@ -277,7 +270,6 @@
               <object class="GtkComboBoxText" id="transtype">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|transtype|tooltip_text">Select the type of transparency to apply.</property>
                 <items>
                   <item translatable="yes" context="sidebararea|transtype">None</item>
@@ -312,7 +304,6 @@
                   <object class="GtkMenuToolButton" id="sidebargradient">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|gradient|tooltip_text">Specify the variation of gradient transparency.</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -362,7 +353,6 @@
               <object class="GtkSpinButton" id="settransparency">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|settransparency|tooltip_text">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">

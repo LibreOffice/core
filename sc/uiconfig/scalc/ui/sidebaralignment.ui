@@ -47,7 +47,6 @@
               <object class="GtkToolbar" id="horizontalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebaralignment|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
                 <property name="toolbar_style">icons</property>
@@ -279,7 +278,6 @@
                   <object class="GtkSpinButton" id="leftindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|leftindent|tooltip_text">Indents from the left edge.</property>
                     <property name="adjustment">adjustmentIndent</property>
                     <child internal-child="accessible">
@@ -313,7 +311,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|mergecells|tooltip_text">Joins the selected cells into one.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -333,7 +330,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|wraptext|tooltip_text">Wrap texts automatically.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
@@ -385,7 +381,6 @@
               <object class="GtkSpinButton" id="orientationdegrees">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebaralignment|orientationdegrees|tooltip_text">Select the angle for rotation.</property>
                 <property name="adjustment">adjustmentSpinDegrees</property>
                 <property name="wrap">True</property>

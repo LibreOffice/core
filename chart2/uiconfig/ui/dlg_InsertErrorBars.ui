@@ -520,7 +520,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes" context="dlg_InsertErrorBars|IB_RANGE_NEGATIVE|tooltip_text">Select data range</property>
                                 <property name="image">imageRANGE_SELECT_NEG</property>
                               </object>

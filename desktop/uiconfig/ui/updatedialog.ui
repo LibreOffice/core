@@ -270,7 +270,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="relief">none</property>
                       </object>
                       <packing>
@@ -298,7 +297,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="has_tooltip">True</property>
                         <property name="relief">none</property>
                       </object>
                       <packing>
