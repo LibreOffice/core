@@ -45,7 +45,6 @@ class SwContentOptPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xGrfCB;
     std::unique_ptr<weld::CheckButton> m_xTableCB;
     std::unique_ptr<weld::CheckButton> m_xDrwCB;
-    std::unique_ptr<weld::CheckButton> m_xFieldNameCB;
     std::unique_ptr<weld::CheckButton> m_xPostItCB;
 
     std::unique_ptr<weld::Frame> m_xSettingsFrame;

@@ -96,7 +96,6 @@ SwElemItem::SwElemItem() :
     m_bTable              =
     m_bGraphic            =
     m_bDrawing            =
-    m_bFieldName          =
     m_bNotes              = false;
     m_bShowInlineTooltips = true;
     m_bFieldHiddenText =
@@ -113,7 +112,6 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     m_bTable              = rVOpt.IsTable();
     m_bGraphic            = rVOpt.IsGraphic();
     m_bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
-    m_bFieldName          = rVOpt.IsFieldName();
     m_bNotes              = rVOpt.IsPostIts();
     m_bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
     m_bFieldHiddenText = rVOpt.IsShowHiddenField();
@@ -138,7 +136,6 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 m_bTable                == rItem.m_bTable              &&
                 m_bGraphic              == rItem.m_bGraphic            &&
                 m_bDrawing              == rItem.m_bDrawing            &&
-                m_bFieldName            == rItem.m_bFieldName          &&
                 m_bNotes                == rItem.m_bNotes              &&
                 m_bShowInlineTooltips   == rItem.m_bShowInlineTooltips &&
                 m_bFieldHiddenText == rItem.m_bFieldHiddenText &&
@@ -155,7 +152,6 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetGraphic    (m_bGraphic           );
     rVOpt.SetDraw       (m_bDrawing           );
     rVOpt.SetControl    (m_bDrawing           );
-    rVOpt.SetFieldName  (m_bFieldName         );
     rVOpt.SetPostIts    (m_bNotes             );
     rVOpt.SetShowInlineTooltips( m_bShowInlineTooltips );
     rVOpt.SetShowHiddenField(m_bFieldHiddenText );

@@ -74,7 +74,6 @@ class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
     bool m_bTable             :1;
     bool m_bGraphic           :1;
     bool m_bDrawing           :1;
-    bool m_bFieldName         :1;
     bool m_bNotes             :1;
     bool m_bShowInlineTooltips :1;
     bool m_bFieldHiddenText   :1;
