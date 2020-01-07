@@ -864,6 +864,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     const bool bOrigPurgeOle = pOutDoc->getIDocumentSettingAccess().get(DocumentSettingId::PURGE_OLE);
     pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, false);
 
+    pOutDoc->SetInWriting(true);
     ErrCode nError = ERRCODE_NONE;
     if( pMedium )
         nError = rxWriter->Write( *pPam, *pMedium, pRealFileName );
@@ -871,6 +872,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );
     else if( xStg.is() )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
+    pOutDoc->SetInWriting(false);
 
     pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, bOrigPurgeOle );
 
