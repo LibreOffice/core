@@ -2,8 +2,27 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -19,35 +38,35 @@
         <property name="column_spacing">6</property>
         <property name="column_homogeneous">True</property>
         <child>
-          <object class="sfxlo-SidebarToolBox" id="numberbullet">
+          <object class="GtkToolbar" id="numberbullet">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
+            <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
-              <object class="GtkMenuToolButton" id="bullet">
+              <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="is_important">True</property>
-                <property name="action_name">.uno:DefaultBullet</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkMenuToolButton" id="number">
+              <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="is_important">True</property>
-                <property name="action_name">.uno:DefaultNumbering</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
           </object>
@@ -63,58 +82,56 @@
             <property name="margin_bottom">6</property>
             <property name="spacing">6</property>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="horizontalalignment">
+              <object class="GtkToolbar" id="horizontalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
+                <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id="leftpara">
+                  <object class="GtkToggleToolButton" id=".uno:LeftPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:LeftPara</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="centerpara">
+                  <object class="GtkToggleToolButton" id=".uno:CenterPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:CenterPara</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="rightpara">
+                  <object class="GtkToggleToolButton" id=".uno:RightPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:RightPara</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="substjustify">
+                  <object class="GtkToggleToolButton" id=".uno:JustifyPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:JustifyPara</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -125,34 +142,34 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="writedirection">
+              <object class="GtkToolbar" id="writedirection">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id="lefttoright">
+                  <object class="GtkToggleToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
-                    <property name="action_name">.uno:ParaLeftToRight</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="righttoleft">
+                  <object class="GtkToggleToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="is_important">True</property>
-                    <property name="action_name">.uno:ParaRightToLeft</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -163,47 +180,46 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="verticalalignment">
+              <object class="GtkToolbar" id="verticalalignment">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|verticalalignment|tooltip_text">Vertical Alignment</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
+                <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id="cellverttop">
+                  <object class="GtkToggleToolButton" id=".uno:CellVertTop">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:CellVertTop</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="cellvertcenter">
+                  <object class="GtkToggleToolButton" id=".uno:CellVertCenter">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:CellVertCenter</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="cellvertbottom">
+                  <object class="GtkToggleToolButton" id=".uno:CellVertBottom">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:CellVertBottom</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -244,33 +260,33 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="paraspacing">
+              <object class="GtkToolbar" id="paraspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|paraspacing|tooltip_text">Spacing</property>
+                <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id="paraspaceinc">
+                  <object class="GtkToolButton" id=".uno:ParaspaceIncrease">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:ParaspaceIncrease</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="paraspacedec">
+                  <object class="GtkToolButton" id=".uno:ParaspaceDecrease">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:ParaspaceDecrease</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -293,7 +309,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/spacing1.png</property>
+                    <property name="icon_name">svx/res/symphony/spacing1.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -302,7 +318,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
+                  <object class="GtkSpinButton" id="aboveparaspacing">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
@@ -341,7 +357,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/spacing2.png</property>
+                    <property name="icon_name">svx/res/symphony/spacing2.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -350,13 +366,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxRelativeField" id="belowparaspacing">
+                  <object class="GtkSpinButton" id="belowparaspacing">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="adjustment">adjustment2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="belowparaspacing-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|belowparaspacing-atkobject">Below Paragraph Spacing</property>
@@ -377,22 +393,24 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="linespacing">
+              <object class="GtkToolbar" id="linespacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="margin_left">1</property>
                 <property name="hexpand">True</property>
+                <property name="toolbar_style">icons</property>
+                <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkMenuToolButton" id="setlinespacing">
+                  <object class="GtkMenuToolButton" id=".uno:LineSpacing">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
-                    <property name="action_name">.uno:LineSpacing</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -431,48 +449,47 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="indent">
+              <object class="GtkToolbar" id="indent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|indent|tooltip_text">Indent</property>
+                <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id="increaseindent">
+                  <object class="GtkToolButton" id=".uno:IncrementIndent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
-                    <property name="action_name">.uno:IncrementIndent</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="decreaseindent">
+                  <object class="GtkToolButton" id=".uno:DecrementIndent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
-                    <property name="action_name">.uno:DecrementIndent</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="hangingindent">
+                  <object class="GtkToolButton" id=".uno:HangingIndent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
-                    <property name="action_name">.uno:HangingIndent</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -495,7 +512,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/Indent4.png</property>
+                    <property name="icon_name">svx/res/symphony/Indent4.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -504,13 +521,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxRelativeField" id="beforetextindent">
+                  <object class="GtkSpinButton" id="beforetextindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|beforetextindent|tooltip_text">Before Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="adjustment">adjustment3</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="beforetextindent-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|beforetextindent-atkobject">Before Text Indent</property>
@@ -543,7 +560,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/Indent3.png</property>
+                    <property name="icon_name">svx/res/symphony/Indent3.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -552,13 +569,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxRelativeField" id="aftertextindent">
+                  <object class="GtkSpinButton" id="aftertextindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aftertextindent|tooltip_text">After Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="adjustment">adjustment4</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="aftertextindent-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aftertextindent-atkobject">After Text Indent</property>
@@ -591,7 +608,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="pixbuf">svx/res/symphony/Indent2.png</property>
+                    <property name="icon_name">svx/res/symphony/Indent2.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -600,13 +617,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxRelativeField" id="firstlineindent">
+                  <object class="GtkSpinButton" id="firstlineindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|firstlineindent|tooltip_text">First Line Indent</property>
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="adjustment">adjustment5</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="firstlineindent-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|firstlineindent-atkobject">First Line Indent</property>
@@ -637,22 +654,24 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="sfxlo-SidebarToolBox" id="backgroundcolor">
+              <object class="GtkToolbar" id="backgroundcolor">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
                 <property name="halign">end</property>
+                <property name="toolbar_style">icons</property>
+                <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkMenuToolButton" id="parabkcolor">
+                  <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
                     <property name="width_request">105</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="action_name">.uno:BackgroundColor</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
