@@ -19,10 +19,9 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LISTS_LISTSPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LISTS_LISTSPROPERTYPANEL_HXX
 
+#include <sfx2/weldutils.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-
-class ToolBox;
 
 namespace svx
 {
@@ -41,8 +40,10 @@ public:
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
-    VclPtr<ToolBox> mpTBxNumBullet;
-    VclPtr<ToolBox> mpTBxOutline;
+    std::unique_ptr<weld::Toolbar> mxTBxNumBullet;
+    std::unique_ptr<ToolbarUnoDispatcher> mxNumBulletDispatcher;
+    std::unique_ptr<weld::Toolbar> mxTBxOutline;
+    std::unique_ptr<ToolbarUnoDispatcher> mxOutlineDispatcher;
 };
 }
 } // end of namespace svx::sidebar
