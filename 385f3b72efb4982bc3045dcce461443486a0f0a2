@@ -16,6 +16,24 @@
       "revId": "385f3b72efb4982bc3045dcce461443486a0f0a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5ff3986_b5bb6684",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:52:54Z",
+      "side": 1,
+      "message": "does that actually work? don\u0027t you need a corresponding atomic load when bComplete is read?\n\nchanging bComplete to std::atomic would be simple except that the struct typelib_TypeDescription is public API so can\u0027t be changed...",
+      "parentUuid": "5f7c97a3_ca46cf50",
+      "revId": "385f3b72efb4982bc3045dcce461443486a0f0a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
