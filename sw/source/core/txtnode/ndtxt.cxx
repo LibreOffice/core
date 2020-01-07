@@ -4638,7 +4638,7 @@ namespace {
                 const SfxStringItem& rListIdItem =
                                         dynamic_cast<const SfxStringItem&>(pItem);
                 OSL_ENSURE( rListIdItem.GetValue().getLength() > 0,
-                        "<HandleSetAttrAtTextNode(..)> - empty list id attribute not excepted. Serious defect." );
+                        "<HandleSetAttrAtTextNode(..)> - empty list id attribute not expected. Serious defect." );
                 const OUString sListIdOfTextNode = rTextNode.GetListId();
                 if ( rListIdItem.GetValue() != sListIdOfTextNode )
                 {
