@@ -2734,6 +2734,7 @@ void SwContentTree::Paint( vcl::RenderContext& rRenderContext,
 
 void SwContentTree::HideTree()
 {
+    // folded together will not be idled
     m_aUpdTimer.Stop();
     SvTreeListBox::Hide();
 }
