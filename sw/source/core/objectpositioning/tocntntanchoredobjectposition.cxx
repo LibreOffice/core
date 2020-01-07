@@ -122,7 +122,7 @@ static bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
     else if ( _pUpperOfOrientFrame->IsInTab() && _bGrowInTable )
     {
         // #i45085# - check, if upper frame would grow the
-        // excepted amount of twips.
+        // expected amount of twips.
         const SwTwips nTwipsGrown = const_cast<SwLayoutFrame*>(_pUpperOfOrientFrame)->
                                         Grow( _nRelPosY - _nAvail, true );
         bVertPosFits = ( nTwipsGrown == ( _nRelPosY - _nAvail ) );
