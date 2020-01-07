@@ -494,7 +494,7 @@ numbering and text:</property>
                   <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
-            </child>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
