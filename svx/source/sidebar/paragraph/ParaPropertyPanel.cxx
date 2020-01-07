@@ -21,6 +21,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/weldutils.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/toolbox.hxx>
@@ -81,9 +82,9 @@ void ParaPropertyPanel::HandleContextChange (
     {
         case CombinedEnumContext(Application::Calc, Context::DrawText):
         case CombinedEnumContext(Application::WriterVariants, Context::DrawText):
-            mpTBxVertAlign->Show();
-            mpTBxBackColor->Hide();
-            mpTBxNumBullet->Hide();
+            mxTBxVertAlign->show();
+            mxTBxBackColor->hide();
+            mxTBxNumBullet->hide();
             ReSize();
             break;
 
@@ -92,31 +93,31 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
         case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
         case CombinedEnumContext(Application::DrawImpress, Context::Table):
-            mpTBxVertAlign->Show();
-            mpTBxBackColor->Hide();
-            mpTBxNumBullet->Hide();
+            mxTBxVertAlign->show();
+            mxTBxBackColor->hide();
+            mxTBxNumBullet->hide();
             ReSize();
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Default):
         case CombinedEnumContext(Application::WriterVariants, Context::Text):
-            mpTBxVertAlign->Hide();
-            mpTBxBackColor->Show();
-            mpTBxNumBullet->Show();
+            mxTBxVertAlign->hide();
+            mxTBxBackColor->show();
+            mxTBxNumBullet->show();
             ReSize();
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Table):
-            mpTBxVertAlign->Show();
-            mpTBxBackColor->Show();
-            mpTBxNumBullet->Show();
+            mxTBxVertAlign->show();
+            mxTBxBackColor->show();
+            mxTBxNumBullet->show();
             ReSize();
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
-            mpTBxVertAlign->Hide();
-            mpTBxBackColor->Hide();
-            mpTBxNumBullet->Hide();
+            mxTBxVertAlign->hide();
+            mxTBxBackColor->hide();
+            mxTBxNumBullet->hide();
             ReSize();
             break;
 
@@ -142,37 +143,39 @@ void ParaPropertyPanel::ReSize()
 
 void ParaPropertyPanel::InitToolBoxIndent()
 {
-    Link<Edit&,void> aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
-    mpLeftIndent->SetModifyHdl( aLink );
-    mpRightIndent->SetModifyHdl( aLink );
-    mpFLineIndent->SetModifyHdl( aLink );
+    Link<weld::MetricSpinButton&,void> aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
+    mxLeftIndent->connect_value_changed( aLink );
+    mxRightIndent->connect_value_changed( aLink );
+    mxFLineIndent->connect_value_changed( aLink );
 
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
 
 void ParaPropertyPanel::InitToolBoxSpacing()
 {
-    Link<Edit&,void> aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
-    mpTopDist->SetModifyHdl(aLink);
-    mpBottomDist->SetModifyHdl( aLink );
+    Link<weld::MetricSpinButton&,void> aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
+    mxTopDist->connect_value_changed(aLink);
+    mxBottomDist->connect_value_changed( aLink );
 
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
 }
 
 void ParaPropertyPanel::initial()
 {
+    limitMetricWidths();
+
     //toolbox
     InitToolBoxIndent();
     InitToolBoxSpacing();
 }
 
 // for Paragraph Indent
-IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, weld::MetricSpinButton&, void)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-    aMargin.SetTextLeft( GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
-    aMargin.SetRight( GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-    aMargin.SetTextFirstLineOfst( static_cast<short>(GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit )) );
+    aMargin.SetTextLeft(mxLeftIndent->GetCoreValue(m_eLRSpaceUnit));
+    aMargin.SetRight(mxRightIndent->GetCoreValue(m_eLRSpaceUnit));
+    aMargin.SetTextFirstLineOfst(static_cast<short>(mxFLineIndent->GetCoreValue(m_eLRSpaceUnit)));
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
@@ -180,11 +183,11 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
 
 
 // for Paragraph Spacing
-IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, weld::MetricSpinButton&, void)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
-    aMargin.SetUpper( static_cast<sal_uInt16>(GetCoreValue( *mpTopDist, m_eULSpaceUnit )) );
-    aMargin.SetLower( static_cast<sal_uInt16>(GetCoreValue( *mpBottomDist, m_eULSpaceUnit )) );
+    aMargin.SetUpper( static_cast<sal_uInt16>(mxTopDist->GetCoreValue(m_eULSpaceUnit)));
+    aMargin.SetLower( static_cast<sal_uInt16>(mxBottomDist->GetCoreValue(m_eULSpaceUnit)));
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, { &aMargin });
@@ -203,11 +206,13 @@ void ParaPropertyPanel::NotifyItemUpdate(
             m_eMetricUnit = GetCurrentUnit(eState,pState);
             if( m_eMetricUnit!=m_last_eMetricUnit )
             {
-                SetFieldUnit( *mpLeftIndent, m_eMetricUnit );
-                SetFieldUnit( *mpRightIndent, m_eMetricUnit );
-                SetFieldUnit( *mpFLineIndent, m_eMetricUnit );
-                SetFieldUnit( *mpTopDist, m_eMetricUnit );
-                SetFieldUnit( *mpBottomDist, m_eMetricUnit );
+                mxLeftIndent->SetFieldUnit(m_eMetricUnit);
+                mxRightIndent->SetFieldUnit(m_eMetricUnit);
+                mxFLineIndent->SetFieldUnit(m_eMetricUnit);
+                mxTopDist->SetFieldUnit(m_eMetricUnit);
+                mxBottomDist->SetFieldUnit(m_eMetricUnit);
+
+                limitMetricWidths();
             }
             m_last_eMetricUnit = m_eMetricUnit;
         }
@@ -237,18 +242,18 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
     case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
     case CombinedEnumContext(Application::DrawImpress, Context::Table):
         {
-            mpLeftIndent->SetMin( DEFAULT_VALUE );
-            mpRightIndent->SetMin( DEFAULT_VALUE );
-            mpFLineIndent->SetMin( DEFAULT_VALUE );
+            mxLeftIndent->set_min( DEFAULT_VALUE, FieldUnit::NONE );
+            mxRightIndent->set_min( DEFAULT_VALUE, FieldUnit::NONE );
+            mxFLineIndent->set_min( DEFAULT_VALUE, FieldUnit::NONE );
         }
         break;
     case CombinedEnumContext(Application::WriterVariants, Context::Default):
     case CombinedEnumContext(Application::WriterVariants, Context::Text):
     case CombinedEnumContext(Application::WriterVariants, Context::Table):
         {
-            mpLeftIndent->SetMin( NEGA_MAXVALUE, FieldUnit::MM_100TH );
-            mpRightIndent->SetMin( NEGA_MAXVALUE, FieldUnit::MM_100TH );
-            mpFLineIndent->SetMin( NEGA_MAXVALUE, FieldUnit::MM_100TH );
+            mxLeftIndent->set_min( NEGA_MAXVALUE, FieldUnit::MM_100TH );
+            mxRightIndent->set_min( NEGA_MAXVALUE, FieldUnit::MM_100TH );
+            mxFLineIndent->set_min( NEGA_MAXVALUE, FieldUnit::MM_100TH );
         }
         break;
     }
@@ -269,17 +274,17 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::Map100thMM, MapUnit::MapTwip );
 
         long nVal = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nVal = static_cast<long>(mpLeftIndent->Normalize( nVal ));
+        nVal = static_cast<long>(mxLeftIndent->normalize( nVal ));
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Table))
         {
-            mpFLineIndent->SetMin( nVal*-1, FieldUnit::MM_100TH );
+            mxFLineIndent->set_min( nVal*-1, FieldUnit::MM_100TH );
         }
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nrVal = static_cast<long>(mpRightIndent->Normalize( nrVal ));
+        nrVal = static_cast<long>(mxRightIndent->normalize( nrVal ));
 
         switch (maContext.GetCombinedContext_DI())
         {
@@ -289,9 +294,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         case CombinedEnumContext(Application::WriterVariants, Context::Table):
         case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
             {
-                mpLeftIndent->SetMax( MAX_SW - nrVal, FieldUnit::MM_100TH );
-                mpRightIndent->SetMax( MAX_SW - nVal, FieldUnit::MM_100TH );
-                mpFLineIndent->SetMax( MAX_SW - nVal - nrVal, FieldUnit::MM_100TH );
+                mxLeftIndent->set_max( MAX_SW - nrVal, FieldUnit::MM_100TH );
+                mxRightIndent->set_max( MAX_SW - nVal, FieldUnit::MM_100TH );
+                mxFLineIndent->set_max( MAX_SW - nVal - nrVal, FieldUnit::MM_100TH );
             }
             break;
         case CombinedEnumContext(Application::DrawImpress, Context::DrawText):
@@ -300,37 +305,39 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
         case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
             {
-                mpLeftIndent->SetMax( MAX_SC_SD - nrVal, FieldUnit::MM_100TH );
-                mpRightIndent->SetMax( MAX_SC_SD - nVal, FieldUnit::MM_100TH );
-                mpFLineIndent->SetMax( MAX_SC_SD - nVal - nrVal, FieldUnit::MM_100TH );
+                mxLeftIndent->set_max( MAX_SC_SD - nrVal, FieldUnit::MM_100TH );
+                mxRightIndent->set_max( MAX_SC_SD - nVal, FieldUnit::MM_100TH );
+                mxFLineIndent->set_max( MAX_SC_SD - nVal - nrVal, FieldUnit::MM_100TH );
             }
         }
 
-        mpLeftIndent->SetValue( nVal, FieldUnit::MM_100TH );
-        mpRightIndent->SetValue( nrVal, FieldUnit::MM_100TH );
+        mxLeftIndent->set_value( nVal, FieldUnit::MM_100TH );
+        mxRightIndent->set_value( nrVal, FieldUnit::MM_100TH );
 
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nfVal = static_cast<long>(mpFLineIndent->Normalize( nfVal ));
-        mpFLineIndent->SetValue( nfVal, FieldUnit::MM_100TH );
+        nfVal = static_cast<long>(mxFLineIndent->normalize( nfVal ));
+        mxFLineIndent->set_value( nfVal, FieldUnit::MM_100TH );
     }
     else if( eState == SfxItemState::DISABLED )
     {
-        mpLeftIndent-> Disable();
-        mpRightIndent->Disable();
-        mpFLineIndent->Disable();
+        mxLeftIndent->set_sensitive(false);
+        mxRightIndent->set_sensitive(false);
+        mxFLineIndent->set_sensitive(false);
     }
     else
     {
-        mpLeftIndent->SetEmptyFieldValue();
-        mpRightIndent->SetEmptyFieldValue();
-        mpFLineIndent->SetEmptyFieldValue();
+        mxLeftIndent->set_text("");
+        mxRightIndent->set_text("");
+        mxFLineIndent->set_text("");
     }
+
+    limitMetricWidths();
 }
 
 void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolItem* pState )
 {
-    mpTopDist->SetMax( mpTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
-    mpBottomDist->SetMax( mpBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
+    mxTopDist->set_max( mxTopDist->normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
+    mxBottomDist->set_max( mxBottomDist->normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
 
     if( pState && eState >= SfxItemState::DEFAULT )
     {
@@ -345,23 +352,24 @@ void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolIt
         maLower = OutputDevice::LogicToLogic( maLower, MapUnit::Map100thMM, MapUnit::MapTwip );
 
         sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nVal = mpTopDist->Normalize( nVal );
-        mpTopDist->SetValue( nVal, FieldUnit::MM_100TH );
+        nVal = mxTopDist->normalize( nVal );
+        mxTopDist->set_value( nVal, FieldUnit::MM_100TH );
 
         nVal = OutputDevice::LogicToLogic( maLower, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nVal = mpBottomDist->Normalize( nVal );
-        mpBottomDist->SetValue( nVal, FieldUnit::MM_100TH );
+        nVal = mxBottomDist->normalize( nVal );
+        mxBottomDist->set_value( nVal, FieldUnit::MM_100TH );
     }
     else if(eState == SfxItemState::DISABLED )
     {
-        mpTopDist->Disable();
-        mpBottomDist->Disable();
+        mxTopDist->set_sensitive(false);
+        mxBottomDist->set_sensitive(false);
     }
     else
     {
-        mpTopDist->SetEmptyFieldValue();
-        mpBottomDist->SetEmptyFieldValue();
+        mxTopDist->set_text("");
+        mxBottomDist->set_text("");
     }
+    limitMetricWidths();
 }
 
 FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
@@ -395,12 +403,47 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
+namespace
+{
+    void limitWidth(RelativeField& rMetricSpinButton)
+    {
+        // space is limited in the sidebar, so limit MetricSpinButtons to a width of 4 digits
+        const int nMaxDigits = 4;
+
+        weld::SpinButton& rSpinButton = rMetricSpinButton.get_widget();
+        rSpinButton.set_width_chars(std::min(rSpinButton.get_width_chars(), nMaxDigits));
+    }
+}
+
 ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui", rxFrame),
-
+    : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui", rxFrame, true),
+      //Alignment
+      mxTBxHorzAlign(m_xBuilder->weld_toolbar("horizontalalignment")),
+      mxHorzAlignDispatch(new ToolbarUnoDispatcher(*mxTBxHorzAlign, rxFrame)),
+      mxTBxVertAlign(m_xBuilder->weld_toolbar("verticalalignment")),
+      mxVertAlignDispatch(new ToolbarUnoDispatcher(*mxTBxVertAlign, rxFrame)),
+      //NumBullet&Backcolor
+      mxTBxNumBullet(m_xBuilder->weld_toolbar("numberbullet")),
+      mxNumBulletDispatch(new ToolbarUnoDispatcher(*mxTBxNumBullet, rxFrame)),
+      mxTBxBackColor(m_xBuilder->weld_toolbar("backgroundcolor")),
+      mxBackColorDispatch(new ToolbarUnoDispatcher(*mxTBxBackColor, rxFrame)),
+      mxTBxWriteDirection(m_xBuilder->weld_toolbar("writedirection")),
+      mxWriteDirectionDispatch(new ToolbarUnoDispatcher(*mxTBxWriteDirection, rxFrame)),
+      mxTBxParaSpacing(m_xBuilder->weld_toolbar("paraspacing")),
+      mxParaSpacingDispatch(new ToolbarUnoDispatcher(*mxTBxParaSpacing, rxFrame)),
+      mxTBxLineSpacing(m_xBuilder->weld_toolbar("linespacing")),
+      mxLineSpacingDispatch(new ToolbarUnoDispatcher(*mxTBxLineSpacing, rxFrame)),
+      mxTBxIndent(m_xBuilder->weld_toolbar("indent")),
+      mxIndentDispatch(new ToolbarUnoDispatcher(*mxTBxIndent, rxFrame)),
+      //Paragraph spacing
+      mxTopDist(new RelativeField(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM))),
+      mxBottomDist(new RelativeField(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM))),
+      mxLeftIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM))),
+      mxRightIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM))),
+      mxFLineIndent(new RelativeField(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM))),
       maTxtLeft (0),
       maUpper (0),
       maLower (0),
@@ -415,25 +458,25 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       mpBindings(pBindings),
       mxSidebar(rxSidebar)
 {
-    //Alignment
-    get(mpTBxVertAlign, "verticalalignment");
-    //NumBullet&Backcolor
-    get(mpTBxNumBullet, "numberbullet");
-    get(mpTBxBackColor, "backgroundcolor");
-    //Paragraph spacing
-    get(mpTopDist,      "aboveparaspacing");
-    mpTopDist->set_width_request(mpTopDist->get_preferred_size().Width());
-    get(mpBottomDist,   "belowparaspacing");
-    mpBottomDist->set_width_request(mpBottomDist->get_preferred_size().Width());
-    get(mpLeftIndent,   "beforetextindent");
-    mpLeftIndent->set_width_request(mpLeftIndent->get_preferred_size().Width());
-    get(mpRightIndent,  "aftertextindent");
-    mpRightIndent->set_width_request(mpRightIndent->get_preferred_size().Width());
-    get(mpFLineIndent,  "firstlineindent");
-    mpFLineIndent->set_width_request(mpFLineIndent->get_preferred_size().Width());
+#if 0
+    mxTopDist->set_size_request(mxTopDist->get_preferred_size().Width(), -1);
+    mxBottomDist->set_size_request(mxBottomDist->get_preferred_size().Width(), -1);
+    mxLeftIndent->set_size_request(mxLeftIndent->get_preferred_size().Width(), -1);
+    mxRightIndent->set_size_request(mxRightIndent->get_preferred_size().Width(), -1);
+    mxFLineIndent->set_size_request(mxFLineIndent->get_preferred_size().Width(), -1);
+#endif
 
     initial();
     m_aMetricCtl.RequestUpdate();
+}
+
+void ParaPropertyPanel::limitMetricWidths()
+{
+    limitWidth(*mxTopDist);
+    limitWidth(*mxBottomDist);
+    limitWidth(*mxLeftIndent);
+    limitWidth(*mxRightIndent);
+    limitWidth(*mxFLineIndent);
 }
 
 ParaPropertyPanel::~ParaPropertyPanel()
@@ -443,14 +486,35 @@ ParaPropertyPanel::~ParaPropertyPanel()
 
 void ParaPropertyPanel::dispose()
 {
-    mpTBxVertAlign.clear();
-    mpTBxNumBullet.clear();
-    mpTBxBackColor.clear();
-    mpTopDist.clear();
-    mpBottomDist.clear();
-    mpLeftIndent.clear();
-    mpRightIndent.clear();
-    mpFLineIndent.clear();
+    mxHorzAlignDispatch.reset();
+    mxTBxHorzAlign.reset();
+
+    mxVertAlignDispatch.reset();
+    mxTBxVertAlign.reset();
+
+    mxNumBulletDispatch.reset();
+    mxTBxNumBullet.reset();
+
+    mxBackColorDispatch.reset();
+    mxTBxBackColor.reset();
+
+    mxWriteDirectionDispatch.reset();
+    mxTBxWriteDirection.reset();
+
+    mxParaSpacingDispatch.reset();
+    mxTBxParaSpacing.reset();
+
+    mxLineSpacingDispatch.reset();
+    mxTBxLineSpacing.reset();
+
+    mxIndentDispatch.reset();
+    mxTBxIndent.reset();
+
+    mxTopDist.reset();
+    mxBottomDist.reset();
+    mxLeftIndent.reset();
+    mxRightIndent.reset();
+    mxFLineIndent.reset();
 
     maLRSpaceControl.dispose();
     maULSpaceControl.dispose();
