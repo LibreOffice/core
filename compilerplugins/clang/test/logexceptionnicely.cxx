@@ -17,7 +17,7 @@ void func1();
 
 int main()
 {
-    // no warning excepted
+    // no warning expected
     try
     {
         func1();
