@@ -11,6 +11,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>
@@ -109,6 +110,7 @@ public:
     void testDeleteNodeRedlineCallback();
     void testVisCursorInvalidation();
     void testDeselectCustomShape();
+    void testRedlineNotificationDuringSave();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -165,6 +167,7 @@ public:
     CPPUNIT_TEST(testDeleteNodeRedlineCallback);
     CPPUNIT_TEST(testVisCursorInvalidation);
     CPPUNIT_TEST(testDeselectCustomShape);
+    CPPUNIT_TEST(testRedlineNotificationDuringSave);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2377,6 +2380,24 @@ void SwTiledRenderingTest::testDeselectCustomShape()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testRedlineNotificationDuringSave()
+{
+    // Load a document with redlines which are hidden at a layout level.
+    // It's an empty document, just settings.xml and content.xml are custom.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("redline-notification-during-save.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // Save the document.
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have never returned due to an infinite
+    // loop while sending not needed LOK notifications for redline changes during save.
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
