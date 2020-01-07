@@ -56,7 +56,6 @@ AreaPropertyPanel::AreaPropertyPanel(
       maFillFloatTransparenceController(SID_ATTR_FILL_FLOATTRANSPARENCE, *pBindings, *this),
       mpBindings(pBindings)
 {
-    Initialize();
 }
 
 AreaPropertyPanel::~AreaPropertyPanel()

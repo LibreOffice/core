@@ -97,6 +97,9 @@ public:
     void updateFillColor(bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillBitmap(bool BDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
 
+private:
+    void Initialize();
+
 protected:
     sal_uInt16                                          meLastXFS;
 
@@ -158,7 +161,6 @@ protected:
     DECL_LINK(ClickImportBitmapHdl, weld::Button&, void);
     DECL_LINK(ToolbarHdl_Impl, const OString&, void);
 
-    void Initialize();
     void Update();
     void ImpUpdateTransparencies();
     void SetTransparency(sal_uInt16 nVal);
