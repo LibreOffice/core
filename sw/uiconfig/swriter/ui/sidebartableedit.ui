@@ -173,6 +173,7 @@
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
@@ -198,7 +199,7 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebatableedit|rowheight|tooltip_text">Row Height</property>
-                    <property name="hexpand">True</property>
+                    <property name="hexpand">False</property>
                     <property name="text">0</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="rowheight-atkobject">
@@ -244,7 +245,7 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebatableedit|columnwidth|tooltip_text">Column Width</property>
-                    <property name="hexpand">True</property>
+                    <property name="hexpand">False</property>
                     <property name="text">0</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="columnwidth-atkobject">
