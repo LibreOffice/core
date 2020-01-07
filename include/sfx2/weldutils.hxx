@@ -16,6 +16,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>
+#include <svtools/toolbarmenu.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <map>
 
@@ -48,6 +51,19 @@ public:
 
     void dispose();
     ~ToolbarUnoDispatcher();
+};
+
+class SFX2_DLLPUBLIC WeldToolbarPopup : public svtools::ToolbarPopupBase
+{
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xTopLevel;
+
+public:
+    WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, weld::Widget* pParent,
+                     const OUString& rUIFile, const OString& rId);
+    virtual ~WeldToolbarPopup() override;
+    weld::Container* getTopLevel() { return m_xTopLevel.get(); }
 };
 
 #endif

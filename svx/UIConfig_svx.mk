@@ -65,6 +65,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/linkwarndialog \
 	svx/uiconfig/ui/mediaplayback \
 	svx/uiconfig/ui/namespacedialog \
+	svx/uiconfig/ui/numberingwindow \
 	svx/uiconfig/ui/oldcolorwindow \
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/paralinespacingcontrol \

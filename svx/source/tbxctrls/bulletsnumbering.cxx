@@ -15,6 +15,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/numvset.hxx>
@@ -39,6 +40,23 @@ public:
                     vcl::Window* pParent, NumberingPageType ePageType );
     virtual ~NumberingPopup() override;
     virtual void dispose() override;
+
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+};
+
+class SvxNumberingPopup : public WeldToolbarPopup
+{
+    NumberingPageType const mePageType;
+    NumberingToolBoxControl& mrController;
+    std::unique_ptr<NumValueSet> mxValueSet;
+    std::unique_ptr<weld::CustomWeld> mxValueSetWin;
+    std::unique_ptr<weld::Button> mxMoreButton;
+    DECL_LINK(VSSelectValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(VSButtonClickSetHdl, weld::Button&, void);
+    DECL_LINK(FocusHdl, weld::Widget&, void);
+
+public:
+    SvxNumberingPopup(NumberingToolBoxControl& rController, weld::Toolbar* pParent, NumberingPageType ePageType);
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
@@ -129,6 +147,77 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
     SetSelectHdl( LINK( this, NumberingPopup, VSSelectToolbarMenuHdl ) );
 }
 
+SvxNumberingPopup::SvxNumberingPopup(NumberingToolBoxControl& rController,
+                                     weld::Toolbar* pParent, NumberingPageType ePageType)
+    : WeldToolbarPopup(rController.getFrameInterface(), pParent, "svx/ui/numberingwindow.ui", "NumberingWindow")
+    , mePageType(ePageType)
+    , mrController(rController)
+    , mxValueSet(new NumValueSet(nullptr))
+    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
+    , mxMoreButton(m_xBuilder->weld_button("more"))
+{
+    m_xTopLevel->connect_focus_in(LINK(this, SvxNumberingPopup, FocusHdl));
+
+    mxValueSet->SetStyle(WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT);
+    mxValueSet->init(mePageType);
+
+    if ( mePageType != NumberingPageType::BULLET )
+    {
+        css::uno::Reference< css::text::XDefaultNumberingProvider > xDefNum = css::text::DefaultNumberingProvider::create( mrController.getContext() );
+        if ( xDefNum.is() )
+        {
+            css::lang::Locale aLocale = Application::GetSettings().GetLanguageTag().getLocale();
+            css::uno::Reference< css::text::XNumberingFormatter > xFormat( xDefNum, css::uno::UNO_QUERY );
+
+            if ( mePageType == NumberingPageType::SINGLENUM )
+            {
+                css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aNumberings(
+                    xDefNum->getDefaultContinuousNumberingLevels( aLocale ) );
+                mxValueSet->SetNumberingSettings( aNumberings, xFormat, aLocale );
+            }
+            else if ( mePageType == NumberingPageType::OUTLINE )
+            {
+                css::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > aOutline(
+                    xDefNum->getDefaultOutlineNumberings( aLocale ) );
+                mxValueSet->SetOutlineNumberingSettings( aOutline, xFormat, aLocale );
+            }
+        }
+    }
+
+    weld::DrawingArea* pDrawingArea = mxValueSet->GetDrawingArea();
+    OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
+    Size aItemSize(rRefDevice.LogicToPixel(Size(30, 42), MapMode(MapUnit::MapAppFont)));
+    mxValueSet->SetExtraSpacing( 2 );
+    Size aSize(mxValueSet->CalcWindowSizePixel(aItemSize));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    mxValueSet->SetOutputSizePixel(aSize);
+    mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFieldColor());
+
+    OUString aMoreItemText;
+    if ( mePageType == NumberingPageType::BULLET )
+    {
+        aMoreItemText = SvxResId( RID_SVXSTR_MOREBULLETS );
+        AddStatusListener( ".uno:CurrentBulletListType" );
+    }
+    else if ( mePageType == NumberingPageType::SINGLENUM )
+    {
+        aMoreItemText = SvxResId( RID_SVXSTR_MORENUMBERING );
+        AddStatusListener( ".uno:CurrentNumListType" );
+    }
+    else
+    {
+        aMoreItemText = SvxResId( RID_SVXSTR_MORE );
+        AddStatusListener( ".uno:CurrentOutlineType" );
+    }
+
+    auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:OutlineBullet", mrController.getFrameInterface());
+    mxMoreButton->set_image(xImage);
+    mxMoreButton->set_label(aMoreItemText);
+    mxMoreButton->connect_clicked(LINK(this, SvxNumberingPopup, VSButtonClickSetHdl));
+
+    mxValueSet->SetSelectHdl(LINK(this, SvxNumberingPopup, VSSelectValueSetHdl));
+}
+
 NumberingPopup::~NumberingPopup()
 {
     disposeOnce();
@@ -149,10 +238,55 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         mpValueSet->SelectItem( nSelItem );
 }
 
+void SvxNumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+{
+    mxValueSet->SetNoSelection();
+
+    sal_Int32 nSelItem;
+    if ( rEvent.State >>= nSelItem )
+        mxValueSet->SelectItem( nSelItem );
+}
+
 IMPL_LINK( NumberingPopup, VSSelectValueSetHdl, ValueSet*, pControl, void )
 {
     VSSelectHdl(pControl);
 }
+
+IMPL_LINK_NOARG(SvxNumberingPopup, VSSelectValueSetHdl, SvtValueSet*, void)
+{
+    mrController.EndPopupMode();
+
+    sal_uInt16 nSelItem = mxValueSet->GetSelectedItemId();
+    if ( mePageType == NumberingPageType::BULLET )
+    {
+        auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::makeAny( nSelItem ) } } ) );
+        mrController.dispatchCommand( ".uno:SetBullet", aArgs );
+    }
+    else if ( mePageType == NumberingPageType::SINGLENUM )
+    {
+        auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", css::uno::makeAny( nSelItem ) } } ) );
+        mrController.dispatchCommand( ".uno:SetNumber", aArgs );
+    }
+    else
+    {
+        auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::makeAny( nSelItem ) } } ) );
+        mrController.dispatchCommand( ".uno:SetOutline", aArgs );
+    }
+}
+
+IMPL_LINK_NOARG(SvxNumberingPopup, FocusHdl, weld::Widget&, void)
+{
+    mxValueSet->GrabFocus();
+}
+
+IMPL_LINK_NOARG(SvxNumberingPopup, VSButtonClickSetHdl, weld::Button&, void)
+{
+    mrController.EndPopupMode();
+
+    auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) } } ) );
+    mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
+}
+
 IMPL_LINK( NumberingPopup, VSSelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
 {
     VSSelectHdl(pControl);
@@ -209,6 +343,17 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
         mePageType = NumberingPageType::BULLET;
     else if ( m_aCommandURL == ".uno:SetOutline" )
         mePageType = NumberingPageType::OUTLINE;
+
+    if (m_pToolbar)
+    {
+        const OString aId(m_aCommandURL.toUtf8());
+
+        auto xPopover = std::make_unique<SvxNumberingPopup>(*this, m_pToolbar, mePageType);
+
+        m_pToolbar->set_item_popover(aId, xPopover->getTopLevel());
+        mxPopover = std::move(xPopover);
+        return;
+    }
 
     ToolBoxItemBits nBits = ( mePageType == NumberingPageType::OUTLINE ) ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN;
     ToolBox* pToolBox = nullptr;
