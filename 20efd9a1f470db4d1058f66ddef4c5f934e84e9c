@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0962662c_47586bd4",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "this is a bit pointless - if the assert triggers the SAL_WARN will never be reached; i don\u0027t think we have any easily configured compilation mode where asserts are disabled but SAL_WARN is enabled.\n\nif there are no test failures, it\u0027s probably best to use assert here.",
+      "revId": "20efd9a1f470db4d1058f66ddef4c5f934e84e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35ebf44_87273bfa",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "it\u0027s a bug if there is no hint at the anchor pos - better use assert().",
+      "revId": "20efd9a1f470db4d1058f66ddef4c5f934e84e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4adcd0c9_bc66a9b5",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "not sure about this one - the format could be deleted and re-created by undo, then it won\u0027t match? then it can\u0027t be assert().\n\nmaybe it\u0027s better to check the name instead of the pointer?",
+      "revId": "20efd9a1f470db4d1058f66ddef4c5f934e84e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8f329c7_f5290267",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-07T17:42:24Z",
+      "side": 1,
+      "message": "this should be assert, as it\u0027s unconditionally dereferenced.",
+      "revId": "20efd9a1f470db4d1058f66ddef4c5f934e84e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
