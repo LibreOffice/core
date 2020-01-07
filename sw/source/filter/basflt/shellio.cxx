@@ -847,6 +847,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
 
     auto xGuard = std::make_unique<PurgeGuard>(*pOutDoc);
 
+    pOutDoc->SetInWriting(true);
     ErrCode nError = ERRCODE_NONE;
     if( pMedium )
         nError = rxWriter->Write( *pPam, *pMedium, pRealFileName );
@@ -854,6 +855,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );
     else if( xStg.is() )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
+    pOutDoc->SetInWriting(false);
 
     xGuard.reset();
 
