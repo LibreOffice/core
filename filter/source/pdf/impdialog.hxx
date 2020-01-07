@@ -58,6 +58,9 @@ class ImpPDFTabLinksPage;
 /// Class tabbed dialog
 class ImpPDFTabDialog final : public SfxTabDialogController
 {
+    css::uno::Reference<css::lang::XComponent> mrDoc;
+    weld::Window* mpParent;
+
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 
@@ -238,6 +241,7 @@ public:
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
     bool                        IsPdfaSelected() const { return mxCbPDFA->get_active(); }
+    bool IsPdfUaSelected() const { return mxCbPDFUA->get_active(); }
 };
 
 /// Class tab page viewer
