@@ -33,7 +33,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
 
-class ToolBox;
+class ToolbarUnoDispatcher;
 
 namespace svx { namespace sidebar {
 
@@ -74,16 +74,31 @@ public:
 private:
     // UI controls
     //Alignment
-    VclPtr<ToolBox>            mpTBxVertAlign;
+    std::unique_ptr<weld::Toolbar> mxTBxHorzAlign;
+    std::unique_ptr<ToolbarUnoDispatcher> mxHorzAlignDispatch;
+    std::unique_ptr<weld::Toolbar> mxTBxVertAlign;
+    std::unique_ptr<ToolbarUnoDispatcher> mxVertAlignDispatch;
     //NumBullet&Backcolor
-    VclPtr<ToolBox>            mpTBxNumBullet;
-    VclPtr<ToolBox>            mpTBxBackColor;
+    std::unique_ptr<weld::Toolbar> mxTBxNumBullet;
+    std::unique_ptr<ToolbarUnoDispatcher> mxNumBulletDispatch;
+    std::unique_ptr<weld::Toolbar> mxTBxBackColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxBackColorDispatch;
+
+    std::unique_ptr<weld::Toolbar> mxTBxWriteDirection;
+    std::unique_ptr<ToolbarUnoDispatcher> mxWriteDirectionDispatch;
+    std::unique_ptr<weld::Toolbar> mxTBxParaSpacing;
+    std::unique_ptr<ToolbarUnoDispatcher> mxParaSpacingDispatch;
+    std::unique_ptr<weld::Toolbar> mxTBxLineSpacing;
+    std::unique_ptr<ToolbarUnoDispatcher> mxLineSpacingDispatch;
+    std::unique_ptr<weld::Toolbar> mxTBxIndent;
+    std::unique_ptr<ToolbarUnoDispatcher> mxIndentDispatch;
+
     //Paragraph spacing
-    VclPtr<SvxRelativeField>   mpTopDist;
-    VclPtr<SvxRelativeField>   mpBottomDist;
-    VclPtr<SvxRelativeField>   mpLeftIndent;
-    VclPtr<SvxRelativeField>   mpRightIndent;
-    VclPtr<SvxRelativeField>   mpFLineIndent;
+    std::unique_ptr<RelativeField> mxTopDist;
+    std::unique_ptr<RelativeField> mxBottomDist;
+    std::unique_ptr<RelativeField> mxLeftIndent;
+    std::unique_ptr<RelativeField> mxRightIndent;
+    std::unique_ptr<RelativeField> mxFLineIndent;
 
     // Data Member
     long                maTxtLeft;
@@ -103,8 +118,8 @@ private:
     SfxBindings* const mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-    DECL_LINK(ModifyIndentHdl_Impl, Edit&, void);
-    DECL_LINK(ULSpaceHdl_Impl, Edit&, void);
+    DECL_LINK(ModifyIndentHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ULSpaceHdl_Impl, weld::MetricSpinButton&, void);
 
     void StateChangedIndentImpl( SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( SfxItemState eState, const SfxPoolItem* pState );
@@ -113,6 +128,7 @@ private:
     void ReSize();
     void InitToolBoxIndent();
     void InitToolBoxSpacing();
+    void limitMetricWidths();
 };
 
 } } // end of namespace svx::sidebar
