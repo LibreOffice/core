@@ -72,21 +72,16 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
-    SvXMLImportContext* pContext = nullptr;
     switch( nToken )
     {
     case XML_RESTRICTION:
-        pContext = new SchemaRestrictionContext( GetImport(),
+        return new SchemaRestrictionContext( GetImport(),
                                                  nPrefix, rLocalName,
                                                  mxRepository, msTypeName );
         break;
-    default:
-        OSL_FAIL( "Booo!" );
     }
 
-    return ( pContext != nullptr )
-        ? pContext
-        : new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

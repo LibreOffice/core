@@ -49,11 +49,11 @@ SvXMLImportContext::~SvXMLImportContext()
 {
 }
 
-SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 /*nPrefix*/,
+        const OUString& /*rLocalName*/,
         const uno::Reference<xml::sax::XAttributeList>& )
 {
-    return new SvXMLImportContext(mrImport, nPrefix, rLocalName);
+    return nullptr;
 }
 
 void SvXMLImportContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& )
@@ -134,8 +134,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
     // Call CreateFastContext only if it's the first element of the document
     if ( mrImport.maFastContexts.empty() )
         return mrImport.CreateFastContext( Element, Attribs );
-    else
-        return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext

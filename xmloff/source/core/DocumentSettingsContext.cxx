@@ -248,9 +248,6 @@ static SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt1
             pContext = new XMLConfigItemMapIndexedContext(rImport, p_nPrefix, rLocalName, xAttrList, rProp.Value, rProp.Name, pBaseContext);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( rImport, p_nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -342,9 +339,6 @@ SvXMLImportContextRef XMLDocumentSettingsContext::CreateChildContext( sal_uInt16
             }
         }
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
 
     return pContext;
 }

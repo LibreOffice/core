@@ -111,7 +111,7 @@ SvXMLImportContext* OXMLRow::CreateChildContext(
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = xxx( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

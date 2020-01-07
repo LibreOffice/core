@@ -383,9 +383,6 @@ SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPref
         break;
     }
 
-    if(!pContext)
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -403,12 +400,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
 
         //TODO: handle all other cases
-        default:
-           pContext = new SvXMLImportContext( GetImport() );
     }
-
-    if(!pContext)
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -658,8 +650,6 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
         break;
     }
 
-    default:
-        pContext = new SvXMLImportContext( *this );
     }
 
     return pContext;
@@ -795,9 +785,6 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
         pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( *this );
-
     return pContext;
 }
 
@@ -810,10 +797,6 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext(
     {
         pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
-        rLocalName );
 
     return pContext;
 }

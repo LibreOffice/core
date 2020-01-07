@@ -1201,8 +1201,7 @@ SvXMLImportContextRef AnimationNodeContext::CreateChildContext( sal_uInt16 nPref
 {
     if( mxNode.is())
         return new AnimationNodeContext( mxNode, GetImport(), nPrefix, rLocalName, xAttrList, mpHelper );
-    else
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 namespace {

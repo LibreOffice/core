@@ -428,10 +428,7 @@ public:
         {
             return new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList);
         }
-        else
-        {
-            return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-        }
+        return nullptr;
     }
 };
 
@@ -467,9 +464,6 @@ public:
                 break;
         }
 
-        if (!pContext)
-            pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-
         return pContext;
     }
 };
@@ -495,10 +489,7 @@ public:
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             return new OXMLDatabase(rImport, nPrefix, rLocalName );
         }
-        else
-        {
-            return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-        }
+        return nullptr;
     }
 };
 
@@ -535,9 +526,6 @@ public:
             default:
                 break;
         }
-
-        if (!pContext)
-            pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 
         return pContext;
     }

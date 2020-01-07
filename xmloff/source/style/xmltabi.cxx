@@ -181,10 +181,6 @@ SvXMLImportContextRef SvxXMLTabStopImportContext::CreateChildContext(
 
         pContext = xTabStopContext.get();
     }
-    else
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }

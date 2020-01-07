@@ -77,9 +77,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTablesCon
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -242,9 +239,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTableCont
             pContext = new ScXMLDataPilotFieldContext(GetScImport(), pAttribList, this);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -782,9 +776,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceCellRangeCon
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -884,9 +875,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotFieldCont
             pContext = new ScXMLDataPilotGroupsContext(GetScImport(), pAttribList, this);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -1087,9 +1075,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotLevelCont
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -1239,9 +1224,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotSubTotals
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -1314,9 +1296,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotMembersCo
             pContext = new ScXMLDataPilotMemberContext(GetScImport(), pAttribList, pDataPilotField);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -1489,9 +1468,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupsCon
         pContext = new ScXMLDataPilotGroupContext(GetScImport(), pAttribList, pDataPilotField);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 
@@ -1525,9 +1501,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupCont
     {
         pContext = new ScXMLDataPilotGroupMemberContext(GetScImport(), pAttribList, this);
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }

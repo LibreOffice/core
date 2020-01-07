@@ -494,9 +494,6 @@ SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
             pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
                                                SchXMLStockContext::CONTEXT_TYPE_RANGE );
             break;
-
-        default:
-            pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 
     return pContext;

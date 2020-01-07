@@ -123,8 +123,6 @@ SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
         pContext = pTextFrameContext;
         xFrameContext = pContext;
     }
-    else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

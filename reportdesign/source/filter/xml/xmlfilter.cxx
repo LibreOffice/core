@@ -600,10 +600,7 @@ public:
         {
             return new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList);
         }
-        else
-        {
-            return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-        }
+        return nullptr;
     }
 };
 
@@ -650,9 +647,6 @@ public:
                 break;
         }
 
-        if (!pContext)
-            pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-
         return pContext;
     }
 };
@@ -680,10 +674,7 @@ SvXMLImportContextRef RptXMLDocumentBodyContext::CreateChildContext(
         }
         return new OXMLReport(rImport, nPrefix, rLocalName, xAttrList, rImport.getReportDefinition());
     }
-    else
-    {
-        return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-    }
+    return nullptr;
 }
 
 namespace {
@@ -722,9 +713,6 @@ public:
             default:
                 break;
         }
-
-        if (!pContext)
-            pContext = new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 
         return pContext;
     }
@@ -772,8 +760,6 @@ SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = CreateMetaContext( nElement );
             break;
-        default:
-            pContext = new SvXMLImportContext(*this);
     }
     return pContext;
 }

@@ -185,8 +185,7 @@ SwXMLBlockListContext::createFastChildContext( sal_Int32 Element,
 {
     if ( Element == SwXMLBlockListToken::BLOCK )
         return new SwXMLBlockContext( rLocalRef, xAttrList );
-    else
-        return new SvXMLImportContext( rLocalRef );
+    return nullptr;
 }
 
 SwXMLBlockContext::SwXMLBlockContext(
@@ -230,8 +229,7 @@ SwXMLTextBlockDocumentContext::createFastChildContext( sal_Int32 Element,
 {
     if ( Element == SwXMLTextBlockToken::OFFICE_BODY )
         return new SwXMLTextBlockBodyContext( rLocalRef );
-    else
-        return new SvXMLImportContext( rLocalRef );
+    return nullptr;
 }
 
 SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
@@ -247,8 +245,7 @@ SwXMLTextBlockTextContext::createFastChildContext( sal_Int32 Element,
 {
     if ( Element == SwXMLTextBlockToken::TEXT_P )
         return new SwXMLTextBlockParContext( rLocalRef );
-    else
-        return new SvXMLImportContext( rLocalRef );
+    return nullptr;
 }
 
 SwXMLTextBlockBodyContext::SwXMLTextBlockBodyContext(
@@ -266,8 +263,7 @@ SwXMLTextBlockBodyContext::createFastChildContext( sal_Int32 Element,
         return new SwXMLTextBlockTextContext( rLocalRef );
     else if( Element == SwXMLTextBlockToken::TEXT_P )
         return new SwXMLTextBlockParContext( rLocalRef );
-    else
-        return new SvXMLImportContext( rLocalRef );
+    return nullptr;
 }
 
 SwXMLTextBlockParContext::SwXMLTextBlockParContext(

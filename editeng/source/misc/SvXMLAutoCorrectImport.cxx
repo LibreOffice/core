@@ -61,8 +61,7 @@ css::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFa
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
         return new SvXMLWordContext (rLocalRef, xAttrList);
-    else
-        return new SvXMLImportContext( rLocalRef );
+    return nullptr;
 }
 
 SvXMLWordListContext::~SvXMLWordListContext()
@@ -135,8 +134,7 @@ css::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListCo
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
         return new SvXMLExceptionContext (rLocalRef, xAttrList);
-    else
-        return new SvXMLImportContext( rLocalRef );
+    return nullptr;
 }
 
 SvXMLExceptionListContext::~SvXMLExceptionListContext()

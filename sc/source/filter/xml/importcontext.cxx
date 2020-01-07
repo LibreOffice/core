@@ -45,7 +45,7 @@ void SAL_CALL ScXMLImportContext::characters(const OUString &)
 css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLImportContext::createFastChildContext(
     sal_Int32/* nElement */, const css::uno::Reference< css::xml::sax::XFastAttributeList >&/* xAttrList */ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

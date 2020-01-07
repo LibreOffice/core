@@ -320,10 +320,6 @@ SvXMLImportContextRef XMLTextColumnsContext::CreateChildContext(
 
         pContext = mxColumnSep.get();
     }
-    else
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }

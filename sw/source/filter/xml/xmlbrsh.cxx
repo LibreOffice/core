@@ -122,10 +122,6 @@ SvXMLImportContextRef SwXMLBrushItemImportContext::CreateChildContext(
                 pContext = new XMLBase64ImportContext(GetImport(), nPrefix, rLocalName, xAttrList, m_xBase64Stream);
         }
     }
-    if (!pContext)
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }

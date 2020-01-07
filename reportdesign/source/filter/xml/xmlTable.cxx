@@ -150,9 +150,6 @@ SvXMLImportContextRef OXMLTable::CreateChildContext(
                 break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( rImport, _nPrefix, _rLocalName );
-
     return pContext;
 }
 

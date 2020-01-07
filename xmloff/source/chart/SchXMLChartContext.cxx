@@ -1121,9 +1121,6 @@ SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
             break;
     }
 
-    if( ! pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 
@@ -1238,8 +1235,6 @@ SvXMLImportContextRef SchXMLTitleContext::CreateChildContext(
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, mrTitle );
     }
-    else
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }

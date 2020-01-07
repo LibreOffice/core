@@ -121,9 +121,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::creat
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 

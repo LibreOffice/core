@@ -54,21 +54,21 @@ SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefi
         return CreateChildContext( nPrefix, rLocalName, xAttrList,
                                    rItemSet, *pEntry, rUnitConv );
     }
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 /** This method is called from this instance implementation of
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT
 */
-SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
+SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 /*nPrefix*/,
+                                   const OUString& /*rLocalName*/,
                                    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/,
                                     SfxItemSet&  /*rItemSet*/,
                                    const SvXMLItemMapEntry& /*rEntry*/,
                                    const SvXMLUnitConverter& /*rUnitConv*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

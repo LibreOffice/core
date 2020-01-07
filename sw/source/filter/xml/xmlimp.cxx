@@ -220,7 +220,7 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport ) :
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport() );
+    return nullptr;
 }
 
 SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
@@ -273,9 +273,6 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         pContext = createXFormsModelContext(GetImport(), nPrefix, rLocalName);
         break;
     }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -412,8 +409,6 @@ SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
             pContext = new SwXMLOfficeDocContext_Impl( *this, xDocProps );
         }
         break;
-        default:
-            pContext = new SvXMLImportContext( *this );
     }
     return pContext;
 }

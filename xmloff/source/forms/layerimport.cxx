@@ -461,13 +461,6 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
         pContext = createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
     }
 
-    if ( !pContext )
-    {
-        OSL_FAIL( "unknown element" );
-        pContext =
-            new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
-    }
-
     return pContext;
 }
 

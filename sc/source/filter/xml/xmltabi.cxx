@@ -243,9 +243,6 @@ SvXMLImportContextRef ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         ;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return pContext;
 }
 
@@ -277,7 +274,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             default:
                 ;
         }
-        return new SvXMLImportContext( GetImport() );
+        return nullptr;
     }
 
     SvXMLImportContext *pContext(nullptr);
@@ -339,11 +336,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMATS ):
         pContext = new ScXMLConditionalFormatsContext( GetScImport() );
         break;
-    default:
-        pContext = new SvXMLImportContext( GetImport() );
     }
-
-    assert(pContext);
 
     return pContext;
 }

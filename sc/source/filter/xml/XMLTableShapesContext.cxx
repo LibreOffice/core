@@ -49,9 +49,6 @@ SvXMLImportContextRef ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nP
             rXMLImport, nPrefix, rLName, xAttrList, xShapes);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
     return pContext;
 }
 

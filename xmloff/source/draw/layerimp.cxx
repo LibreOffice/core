@@ -106,10 +106,7 @@ SvXMLImportContextRef SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix,
     {
         return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
     }
-    else
-    {
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
+    return nullptr;
 }
 
 void SdXMLLayerContext::EndElement()

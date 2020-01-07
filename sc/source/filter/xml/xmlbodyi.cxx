@@ -190,9 +190,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
     return pContext;
 }
 

@@ -148,10 +148,6 @@ SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPre
                                                     mxBase64Stream );
         }
     }
-    if( !pContext )
-    {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
 
     return pContext;
 }

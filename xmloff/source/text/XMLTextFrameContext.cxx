@@ -1203,8 +1203,6 @@ SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,
                             XMLTextType::TextBox );
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
 }
@@ -1695,9 +1693,6 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         xContext = XMLShapeImportHelper::CreateFrameChildContext(
                                     m_xImplContext.get(), p_nPrefix, rLocalName, xAttrList );
     }
-
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
 
     return xContext;
 }

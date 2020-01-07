@@ -99,9 +99,6 @@ SvXMLImportContextRef OXMLQuery::CreateChildContext(
         }
     }
 
-    if (!xContext)
-        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return xContext;
 }
 
