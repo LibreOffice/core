@@ -12,6 +12,7 @@
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <swmodeltestbase.hxx>
 #include <test/helper/transferable.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -121,6 +122,7 @@ public:
     void testSemiTransparent();
     void testAnchorTypes();
     void testLanguageStatus();
+    void testRedlineNotificationDuringSave();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -182,6 +184,7 @@ public:
     CPPUNIT_TEST(testSemiTransparent);
     CPPUNIT_TEST(testAnchorTypes);
     CPPUNIT_TEST(testLanguageStatus);
+    CPPUNIT_TEST(testRedlineNotificationDuringSave);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2455,6 +2458,24 @@ void SwTiledRenderingTest::testLanguageStatus()
     uno::Sequence< OUString > aList;
     pStringListItem->GetStringList(aList);
     CPPUNIT_ASSERT_EQUAL(OUString("English (USA);en-US"), aList[0]);
+}
+
+void SwTiledRenderingTest::testRedlineNotificationDuringSave()
+{
+    // Load a document with redlines which are hidden at a layout level.
+    // It's an empty document, just settings.xml and content.xml are custom.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("redline-notification-during-save.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // Save the document.
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have never returned due to an infinite
+    // loop while sending not needed LOK notifications for redline changes during save.
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
