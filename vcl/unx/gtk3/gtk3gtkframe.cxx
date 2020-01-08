@@ -1302,7 +1302,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
 
             if (isFloatGrabWindow() && !getDisplay()->GetCaptureFrame())
             {
-                m_pParent->grabPointer(true, true);
+                m_pParent->grabPointer(true, true, true);
                 m_pParent->addGrabLevel();
             }
 
@@ -1333,7 +1333,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 m_nFloats++;
                 if (!getDisplay()->GetCaptureFrame())
                 {
-                    grabPointer(true, true);
+                    grabPointer(true, true, true);
                     addGrabLevel();
                 }
                 // #i44068# reset parent's IM context
@@ -1349,9 +1349,9 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 if (!getDisplay()->GetCaptureFrame())
                 {
                     removeGrabLevel();
-                    grabPointer(false);
+                    grabPointer(false, true, false);
                     m_pParent->removeGrabLevel();
-                    m_pParent->grabPointer(false);
+                    m_pParent->grabPointer(false, true, false);
                 }
             }
             gtk_widget_hide( m_pWindow );
@@ -1955,13 +1955,13 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
         // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
         if( getDisplay()->MouseCaptured( this ) )
-            grabPointer( true );
+            grabPointer( true, false, false );
         else if( m_nFloats > 0 )
-            grabPointer( true, true );
+            grabPointer( true, false, true );
     }
 }
 
-void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
+void GtkSalFrame::grabPointer( bool bGrab, bool bKeyboardAlso, bool bOwnerEvents )
 {
     static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
     if (pEnv && *pEnv)
@@ -1976,7 +1976,8 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
         GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
         if (bGrab)
         {
-            gdk_seat_grab(pSeat, gtk_widget_get_window(getMouseEventWidget()), GDK_SEAT_CAPABILITY_ALL_POINTING,
+            GdkSeatCapabilities eCapability = bKeyboardAlso ? GDK_SEAT_CAPABILITY_ALL : GDK_SEAT_CAPABILITY_ALL_POINTING;
+            gdk_seat_grab(pSeat, gtk_widget_get_window(getMouseEventWidget()), eCapability,
                           bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
         }
         else
@@ -1988,18 +1989,23 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
 #endif
 
     //else older gtk3
-    const int nMask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
-
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+    GdkDevice* pKeyboard = bKeyboardAlso ? gdk_device_get_associated_device(pPointer) : nullptr;
+    GdkWindow* pWindow = gtk_widget_get_window(getMouseEventWidget());
+    guint32 nCurrentTime = gtk_get_current_event_time();
     if (bGrab)
     {
-        gdk_device_grab(pPointer, gtk_widget_get_window(getMouseEventWidget()), GDK_OWNERSHIP_NONE,
-                        bOwnerEvents, GdkEventMask(nMask), m_pCurrentCursor, gtk_get_current_event_time());
+        gdk_device_grab(pPointer, pWindow, GDK_OWNERSHIP_NONE,
+                        bOwnerEvents, GDK_ALL_EVENTS_MASK, m_pCurrentCursor, nCurrentTime);
+        if (pKeyboard)
+            gdk_device_grab(pKeyboard, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
     }
     else
     {
-        gdk_device_ungrab(pPointer, gtk_get_current_event_time());
+        gdk_device_ungrab(pPointer, nCurrentTime);
+        if (pKeyboard)
+            gdk_device_ungrab(pKeyboard, nCurrentTime);
     }
 }
 
