@@ -11,12 +11,12 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
 
-#include <svx/AccessibilityCheck.hxx>
+#include <sfx2/AccessibilityCheck.hxx>
 #include <doc.hxx>
 
 namespace sw
 {
-class SW_DLLPUBLIC AccessibilityCheck final : public svx::AccessibilityCheck
+class SW_DLLPUBLIC AccessibilityCheck final : public sfx::AccessibilityCheck
 {
 private:
     SwDoc* m_pDoc;
