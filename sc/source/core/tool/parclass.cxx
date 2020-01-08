@@ -99,7 +99,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocTableOp,         {{ Value, Value, Value, Value, Value                    }, 0, Value }},
     // Operators and functions.
     { ocAdd,             {{ Array, Array                                         }, 0, Value }},
-    { ocAggregate,       {{ Value, Value, ReferenceOrRefArray                    }, 1, Value }},
+    { ocAggregate,       {{ Value, Value, ReferenceOrForceArray                  }, 1, Value }},
     { ocAmpersand,       {{ Array, Array                                         }, 0, Value }},
     { ocAnd,             {{ Reference                                            }, 1, Value }},
     { ocAreas,           {{ Reference                                            }, 0, Value }},

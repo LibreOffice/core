@@ -3943,6 +3943,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 {
     ScAddress aAdr;
     ScRange aRange;
+    const bool bIgnoreErrVal = bool(mnSubTotalFlags & SubtotalFlags::IgnoreErrVal);
     short nParam = nParamCount;
     size_t nRefInList = 0;
     ReverseStack( nParamCount );
@@ -3958,7 +3959,9 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
-                if (aCell.hasNumeric())
+                if (bIgnoreErrVal && aCell.hasError())
+                    ;   // nothing
+                else if (aCell.hasNumeric())
                     rArray.push_back(GetCellValue(aAdr, aCell));
             }
             break;
@@ -3979,11 +3982,24 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
-                    rArray.push_back( fCellVal);
-                    SetError(nErr);
-                    while ((nErr == FormulaError::NONE) && aValIter.GetNext( fCellVal, nErr))
+                    if (bIgnoreErrVal)
+                    {
+                        if (nErr == FormulaError::NONE)
+                            rArray.push_back( fCellVal);
+                        while (aValIter.GetNext( fCellVal, nErr))
+                        {
+                            if (nErr == FormulaError::NONE)
+                                rArray.push_back( fCellVal);
+                        }
+                    }
+                    else
+                    {
                         rArray.push_back( fCellVal);
-                    SetError(nErr);
+                        SetError(nErr);
+                        while ((nErr == FormulaError::NONE) && aValIter.GetNext( fCellVal, nErr))
+                            rArray.push_back( fCellVal);
+                        SetError(nErr);
+                    }
                 }
             }
             break;
@@ -3999,15 +4015,40 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 rArray.reserve( rArray.size() + nCount);
                 if (pMat->IsNumeric())
                 {
-                    for (SCSIZE i = 0; i < nCount; ++i)
-                        rArray.push_back( pMat->GetDouble(i));
+                    if (bIgnoreErrVal)
+                    {
+                        for (SCSIZE i = 0; i < nCount; ++i)
+                        {
+                            const double fVal = pMat->GetDouble(i);
+                            if (nGlobalError == FormulaError::NONE)
+                                rArray.push_back( fVal);
+                            else
+                                nGlobalError = FormulaError::NONE;
+                        }
+                    }
+                    else
+                    {
+                        for (SCSIZE i = 0; i < nCount; ++i)
+                            rArray.push_back( pMat->GetDouble(i));
+                    }
                 }
                 else if (bConvertTextInArray && eStackType == svMatrix)
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
                     {
                         if ( pMat->IsValue( i ) )
-                            rArray.push_back( pMat->GetDouble(i));
+                        {
+                            if (bIgnoreErrVal)
+                            {
+                                const double fVal = pMat->GetDouble(i);
+                                if (nGlobalError == FormulaError::NONE)
+                                    rArray.push_back( fVal);
+                                else
+                                    nGlobalError = FormulaError::NONE;
+                            }
+                            else
+                                rArray.push_back( pMat->GetDouble(i));
+                        }
                         else
                         {
                             // tdf#88547 try to convert string to (date)value
@@ -4024,13 +4065,17 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                                 }
                                 else
                                 {
-                                    rArray.push_back( CreateDoubleError( FormulaError::NoValue));
+                                    if (!bIgnoreErrVal)
+                                        rArray.push_back( CreateDoubleError( FormulaError::NoValue));
                                     // Propagate previous error if any, else
-                                    // the current #VALUE! error.
+                                    // the current #VALUE! error, unless
+                                    // ignoring error values.
                                     if (nErr != FormulaError::NONE)
                                         nGlobalError = nErr;
-                                    else
+                                    else if (!bIgnoreErrVal)
                                         nGlobalError = FormulaError::NoValue;
+                                    else
+                                        nGlobalError = FormulaError::NONE;
                                 }
                             }
                         }
@@ -4038,10 +4083,27 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 }
                 else
                 {
-                    for (SCSIZE i = 0; i < nCount; ++i)
+                    if (bIgnoreErrVal)
                     {
-                        if ( pMat->IsValue( i ) )
-                            rArray.push_back( pMat->GetDouble(i));
+                        for (SCSIZE i = 0; i < nCount; ++i)
+                        {
+                            if (pMat->IsValue(i))
+                            {
+                                const double fVal = pMat->GetDouble(i);
+                                if (nGlobalError == FormulaError::NONE)
+                                    rArray.push_back( fVal);
+                                else
+                                    nGlobalError = FormulaError::NONE;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (SCSIZE i = 0; i < nCount; ++i)
+                        {
+                            if (pMat->IsValue(i))
+                                rArray.push_back( pMat->GetDouble(i));
+                        }
                     }
                 }
             }

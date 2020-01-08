@@ -3721,7 +3721,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 if (pMat)
                 {
                     nFuncFmtType = SvNumFormatType::NUMBER;
-                    nVal = pMat->GetMinValue(bTextAsZero);
+                    nVal = pMat->GetMinValue(bTextAsZero, bool(mnSubTotalFlags & SubtotalFlags::IgnoreErrVal));
                     if (nMin > nVal)
                         nMin = nVal;
                 }
@@ -3879,7 +3879,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 if (pMat)
                 {
                     nFuncFmtType = SvNumFormatType::NUMBER;
-                    nVal = pMat->GetMaxValue(bTextAsZero);
+                    nVal = pMat->GetMaxValue(bTextAsZero, bool(mnSubTotalFlags & SubtotalFlags::IgnoreErrVal));
                     if (nMax < nVal)
                         nMax = nVal;
                 }
@@ -4069,6 +4069,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
+                    const bool bIgnoreErrVal = bool(mnSubTotalFlags & SubtotalFlags::IgnoreErrVal);
                     SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
@@ -4083,6 +4084,8 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                                     values.push_back(fVal);
                                     fSum += fVal;
                                 }
+                                else if (bIgnoreErrVal)
+                                    nGlobalError = FormulaError::NONE;
                             }
                             else if ( bTextAsZero )
                             {
@@ -7565,6 +7568,9 @@ void ScInterpreter::ScAggregate()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 3 ) )
     {
+        const FormulaError nErr = nGlobalError;
+        nGlobalError = FormulaError::NONE;
+
         // fish the 1st parameter from the stack and push it on top.
         const FormulaToken* p = pStack[ sp - nParamCount ];
         PushWithoutError( *p );
@@ -7575,7 +7581,10 @@ void ScInterpreter::ScAggregate()
         sal_Int32 nOption = GetInt32();
 
         if ( nGlobalError != FormulaError::NONE || nFunc < 1 || nFunc > 19 )
+        {
+            nGlobalError = nErr;
             PushIllegalArgument();
+        }
         else
         {
             switch ( nOption)
@@ -7605,9 +7614,13 @@ void ScInterpreter::ScAggregate()
                     mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal ;
                     break;
                 default :
+                    nGlobalError = nErr;
                     PushIllegalArgument();
                     return;
             }
+
+            if ((mnSubTotalFlags & SubtotalFlags::IgnoreErrVal) == SubtotalFlags::NONE)
+                nGlobalError = nErr;
 
             cPar = nParamCount - 2;
             switch ( nFunc )
@@ -7631,7 +7644,10 @@ void ScInterpreter::ScAggregate()
                 case AGGREGATE_FUNC_QRTINC  : ScQuartile( true );    break;
                 case AGGREGATE_FUNC_PERCEXC : ScPercentile( false ); break;
                 case AGGREGATE_FUNC_QRTEXC  : ScQuartile( false );   break;
-                default : PushIllegalArgument();       break;
+                default:
+                    nGlobalError = nErr;
+                    PushIllegalArgument();
+                break;
             }
             mnSubTotalFlags = SubtotalFlags::NONE;
         }

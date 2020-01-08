@@ -404,20 +404,20 @@ public:
 }
 
 static void IterateMatrix(
-    const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,
+    const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero, SubtotalFlags nSubTotalFlags,
     sal_uLong& rCount, SvNumFormatType& rFuncFmtType, double& fRes, double& fMem )
 {
     if (!pMat)
         return;
 
-    // TODO fdo73148 take mnSubTotalFlags into account
+    const bool bIgnoreErrVal = bool(nSubTotalFlags & SubtotalFlags::IgnoreErrVal);
     rFuncFmtType = SvNumFormatType::NUMBER;
     switch (eFunc)
     {
         case ifAVERAGE:
         case ifSUM:
         {
-            ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero);
+            ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero, bIgnoreErrVal);
             // If the first value is a NaN, it probably means it was an empty cell,
             // and should be treated as zero.
             if ( !rtl::math::isFinite(aRes.mfFirst) )
@@ -442,11 +442,12 @@ static void IterateMatrix(
             rCount += pMat->Count(bTextAsZero, false);  // do not count error values
         break;
         case ifCOUNT2:
+            /* TODO: what is this supposed to be with bIgnoreErrVal? */
             rCount += pMat->Count(true, true);          // do count error values
         break;
         case ifPRODUCT:
         {
-            ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero);
+            ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero, bIgnoreErrVal);
             fRes *= aRes.mfFirst;
             fRes *= aRes.mfRest;
             rCount += aRes.mnCount;
@@ -454,7 +455,7 @@ static void IterateMatrix(
         break;
         case ifSUMSQ:
         {
-            ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero);
+            ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero, bIgnoreErrVal);
             fRes += aRes.mfFirst;
             fRes += aRes.mfRest;
             rCount += aRes.mnCount;
@@ -979,14 +980,14 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 if ( nGlobalError != FormulaError::NONE && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                     break;
 
-                IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
+                IterateMatrix( pMat, eFunc, bTextAsZero, mnSubTotalFlags, nCount, nFuncFmtType, fRes, fMem );
             }
             break;
             case svMatrix :
             {
                 ScMatrixRef pMat = PopMatrix();
 
-                IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
+                IterateMatrix( pMat, eFunc, bTextAsZero, mnSubTotalFlags, nCount, nFuncFmtType, fRes, fMem );
             }
             break;
             case svError:

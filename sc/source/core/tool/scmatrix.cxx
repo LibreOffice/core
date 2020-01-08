@@ -308,15 +308,15 @@ public:
     double Or() const;
     double Xor() const;
 
-    ScMatrix::IterateResult Sum(bool bTextAsZero) const;
-    ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
-    ScMatrix::IterateResult Product(bool bTextAsZero) const;
+    ScMatrix::IterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::IterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    ScMatrix::IterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     size_t Count(bool bCountStrings, bool bCountErrors) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
 
-    double GetMaxValue( bool bTextAsZero ) const;
-    double GetMinValue( bool bTextAsZero ) const;
+    double GetMaxValue( bool bTextAsZero, bool bIgnoreErrorValues ) const;
+    double GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     double GetGcd() const;
     double GetLcm() const;
 
@@ -1120,8 +1120,12 @@ class WalkElementBlocks
     ScMatrix::IterateResult maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
+    bool mbIgnoreErrorValues:1;
 public:
-    WalkElementBlocks(bool bTextAsZero) : maRes(Op::InitVal, Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
+    WalkElementBlocks(bool bTextAsZero, bool bIgnoreErrorValues) :
+        maRes(Op::InitVal, Op::InitVal, 0), mbFirst(true),
+        mbTextAsZero(bTextAsZero), mbIgnoreErrorValues(bIgnoreErrorValues)
+    {}
 
     const ScMatrix::IterateResult& getResult() const { return maRes; }
 
@@ -1133,10 +1137,17 @@ public:
             {
                 typedef MatrixImplType::numeric_block_type block_type;
 
+                size_t nIgnored = 0;
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
+                    if (mbIgnoreErrorValues && !rtl::math::isFinite(*it))
+                    {
+                        ++nIgnored;
+                        continue;
+                    }
+
                     if (mbFirst)
                     {
                         maOp(maRes.mfFirst, *it);
@@ -1147,7 +1158,7 @@ public:
                         maOp(maRes.mfRest, *it);
                     }
                 }
-                maRes.mnCount += node.size;
+                maRes.mnCount += node.size - nIgnored;
             }
             break;
             case mdds::mtm::element_boolean:
@@ -1535,11 +1546,13 @@ class CalcMaxMinValue
 {
     double mfVal;
     bool mbTextAsZero;
+    bool mbIgnoreErrorValues;
     bool mbHasValue;
 public:
-    CalcMaxMinValue( bool bTextAsZero ) :
+    CalcMaxMinValue( bool bTextAsZero, bool bIgnoreErrorValues ) :
         mfVal(Op::init()),
         mbTextAsZero(bTextAsZero),
+        mbIgnoreErrorValues(bIgnoreErrorValues),
         mbHasValue(false) {}
 
     double getValue() const { return mbHasValue ? mfVal : 0.0; }
@@ -1555,8 +1568,19 @@ public:
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
-                for (; it != itEnd; ++it)
-                    mfVal = Op::compare(mfVal, *it);
+                if (mbIgnoreErrorValues)
+                {
+                    for (; it != itEnd; ++it)
+                    {
+                        if (rtl::math::isFinite(*it))
+                            mfVal = Op::compare(mfVal, *it);
+                    }
+                }
+                else
+                {
+                    for (; it != itEnd; ++it)
+                        mfVal = Op::compare(mfVal, *it);
+                }
 
                 mbHasValue = true;
             }
@@ -2069,28 +2093,28 @@ public:
 namespace {
 
 template<typename TOp>
-ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, const MatrixImplType& maMat)
+ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, bool bIgnoreErrorValues, const MatrixImplType& maMat)
 {
-    WalkElementBlocks<TOp> aFunc(bTextAsZero);
+    WalkElementBlocks<TOp> aFunc(bTextAsZero, bIgnoreErrorValues);
     aFunc = maMat.walk(aFunc);
     return aFunc.getResult();
 }
 
 }
 
-ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return GetValueWithCount<sc::op::Sum>(bTextAsZero, maMat);
+    return GetValueWithCount<sc::op::Sum>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return GetValueWithCount<sc::op::SumSquare>(bTextAsZero, maMat);
+    return GetValueWithCount<sc::op::SumSquare>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return GetValueWithCount<sc::op::Product>(bTextAsZero, maMat);
+    return GetValueWithCount<sc::op::Product>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
 size_t ScMatrixImpl::Count(bool bCountStrings, bool bCountErrors) const
@@ -2114,16 +2138,16 @@ size_t ScMatrixImpl::MatchStringInColumns(const svl::SharedString& rStr, size_t 
     return aFunc.getMatching();
 }
 
-double ScMatrixImpl::GetMaxValue( bool bTextAsZero ) const
+double ScMatrixImpl::GetMaxValue( bool bTextAsZero, bool bIgnoreErrorValues ) const
 {
-    CalcMaxMinValue<MaxOp> aFunc(bTextAsZero);
+    CalcMaxMinValue<MaxOp> aFunc(bTextAsZero, bIgnoreErrorValues);
     aFunc = maMat.walk(aFunc);
     return aFunc.getValue();
 }
 
-double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
+double ScMatrixImpl::GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues ) const
 {
-    CalcMaxMinValue<MinOp> aFunc(bTextAsZero);
+    CalcMaxMinValue<MinOp> aFunc(bTextAsZero, bIgnoreErrorValues);
     aFunc = maMat.walk(aFunc);
     return aFunc.getValue();
 }
@@ -3194,19 +3218,19 @@ double ScMatrix::Xor() const
     return pImpl->Xor();
 }
 
-ScMatrix::IterateResult ScMatrix::Sum(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrix::Sum(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return pImpl->Sum(bTextAsZero);
+    return pImpl->Sum(bTextAsZero, bIgnoreErrorValues);
 }
 
-ScMatrix::IterateResult ScMatrix::SumSquare(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrix::SumSquare(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return pImpl->SumSquare(bTextAsZero);
+    return pImpl->SumSquare(bTextAsZero, bIgnoreErrorValues);
 }
 
-ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero, bool bIgnoreErrorValues) const
 {
-    return pImpl->Product(bTextAsZero);
+    return pImpl->Product(bTextAsZero, bIgnoreErrorValues);
 }
 
 size_t ScMatrix::Count(bool bCountStrings, bool bCountErrors) const
@@ -3224,14 +3248,14 @@ size_t ScMatrix::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol
     return pImpl->MatchStringInColumns(rStr, nCol1, nCol2);
 }
 
-double ScMatrix::GetMaxValue( bool bTextAsZero ) const
+double ScMatrix::GetMaxValue( bool bTextAsZero, bool bIgnoreErrorValues ) const
 {
-    return pImpl->GetMaxValue(bTextAsZero);
+    return pImpl->GetMaxValue(bTextAsZero, bIgnoreErrorValues);
 }
 
-double ScMatrix::GetMinValue( bool bTextAsZero ) const
+double ScMatrix::GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues ) const
 {
-    return pImpl->GetMinValue(bTextAsZero);
+    return pImpl->GetMinValue(bTextAsZero, bIgnoreErrorValues);
 }
 
 double ScMatrix::GetGcd() const
