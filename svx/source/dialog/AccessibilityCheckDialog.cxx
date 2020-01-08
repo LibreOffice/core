@@ -9,13 +9,14 @@
  */
 
 #include <svx/AccessibilityCheckDialog.hxx>
-#include <svx/AccessibilityIssue.hxx>
+
+#include <sfx2/AccessibilityIssue.hxx>
 #include <vcl/svapp.hxx>
 
 namespace svx
 {
 AccessibilityCheckEntry::AccessibilityCheckEntry(
-    weld::Container* pParent, std::shared_ptr<AccessibilityIssue> const& rAccessibilityIssue)
+    weld::Container* pParent, std::shared_ptr<sfx::AccessibilityIssue> const& rAccessibilityIssue)
     : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/accessibilitycheckentry.ui"))
     , m_xContainer(m_xBuilder->weld_container("accessibilityCheckEntryBox"))
     , m_xLabel(m_xBuilder->weld_label("accessibilityCheckEntryLabel"))
@@ -34,7 +35,7 @@ IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::Button&, void)
 }
 
 AccessibilityCheckDialog::AccessibilityCheckDialog(
-    weld::Window* pParent, AccessibilityIssueCollection const& rIssueCollection)
+    weld::Window* pParent, sfx::AccessibilityIssueCollection const& rIssueCollection)
     : GenericDialogController(pParent, "svx/ui/accessibilitycheckdialog.ui",
                               "AccessibilityCheckDialog")
     , m_aIssueCollection(rIssueCollection)
@@ -48,7 +49,7 @@ short AccessibilityCheckDialog::run()
 {
     sal_Int32 i = 0;
 
-    for (std::shared_ptr<AccessibilityIssue> const& pIssue : m_aIssueCollection.getIssues())
+    for (std::shared_ptr<sfx::AccessibilityIssue> const& pIssue : m_aIssueCollection.getIssues())
     {
         auto xEntry
             = std::make_unique<AccessibilityCheckEntry>(m_xAccessibilityCheckBox.get(), pIssue);

@@ -8,18 +8,18 @@
  *
  */
 
-#ifndef INCLUDED_SVX_ACCESSIBILITYCHECK_HXX
-#define INCLUDED_SVX_ACCESSIBILITYCHECK_HXX
+#ifndef INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
+#define INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
 
-#include <svx/svxdllapi.h>
+#include <sfx2/dllapi.h>
 #include <vector>
 #include <memory>
 #include <rtl/ustring.hxx>
-#include <svx/AccessibilityIssue.hxx>
+#include <sfx2/AccessibilityIssue.hxx>
 
-namespace svx
+namespace sfx
 {
-class SVX_DLLPUBLIC AccessibilityCheck
+class SFX2_DLLPUBLIC AccessibilityCheck
 {
 protected:
     AccessibilityIssueCollection m_aIssueCollection;
@@ -32,8 +32,8 @@ public:
     AccessibilityIssueCollection& getIssueCollecton() { return m_aIssueCollection; }
 };
 
-} // end svx namespace
+} // end sfx namespace
 
-#endif // INCLUDED_SVX_ACCESSIBILITYCHECKDIALOG_HXX
+#endif // INCLUDED_SFX2_ACCESSIBILITYCHECKDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

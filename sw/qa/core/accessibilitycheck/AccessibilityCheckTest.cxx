@@ -31,8 +31,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheck)
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollecton().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(svx::AccessibilityIssueID::DOCUMENT_LANGUAGE, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(svx::AccessibilityIssueID::DOCUMENT_TITLE, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_TITLE, aIssues[1]->m_eIssueID);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
