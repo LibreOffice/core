@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff723270_8825ff96",
+        "filename": "svx/source/dialog/imapdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T14:32:05Z",
+      "side": 1,
+      "message": "all these IMAP_FORMAT_* are unsigned 32-bit constants so sal_uInt32 looks better",
+      "revId": "197893045182592ba9a64e5b8ee5b8d720ec906d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
