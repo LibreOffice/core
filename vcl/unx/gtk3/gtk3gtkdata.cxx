@@ -279,7 +279,7 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     if( !pFrame )
     {
         if( m_pCapture )
-            static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false );
+            static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false, false, false );
         m_pCapture = nullptr;
         return 0;
     }
@@ -288,11 +288,11 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     {
         if( pFrame == m_pCapture )
             return 1;
-        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false );
+        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false, false, false );
     }
 
     m_pCapture = pFrame;
-    pFrame->grabPointer( true );
+    pFrame->grabPointer( true, false, false );
     return 1;
 }
 
@@ -760,7 +760,7 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
 {
     if( m_pCapture == pFrame )
     {
-        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false );
+        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false, false, false );
         m_pCapture = nullptr;
     }
     SalGenericDisplay::deregisterFrame( pFrame );

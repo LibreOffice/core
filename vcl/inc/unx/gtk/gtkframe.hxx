@@ -334,7 +334,7 @@ public:
     guint                           m_nHudAwarenessId;
     std::vector<gulong>             m_aMouseSignalIds;
 
-    void grabPointer(bool bGrab, bool bOwnerEvents = false);
+    void grabPointer(bool bGrab, bool bKeyboardAlso, bool bOwnerEvents);
 
     static GtkSalDisplay*  getDisplay();
     static GdkDisplay*     getGdkDisplay();
