@@ -631,27 +631,6 @@ public:
     virtual void dispose() override { m_aLineStyleLb.disposeAndClear(); ToolbarPopup::dispose(); }
 };
 
-class SvxCurrencyList_Impl : public svtools::ToolbarPopup
-{
-private:
-    VclPtr<ListBox> m_pCurrencyLb;
-    rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
-    OUString&       m_rSelectedFormat;
-    LanguageType&   m_eSelectedLanguage;
-
-    std::vector<OUString> m_aFormatEntries;
-    LanguageType          m_eFormatLanguage;
-    DECL_LINK( SelectHdl, ListBox&, void );
-
-public:
-    SvxCurrencyList_Impl( SvxCurrencyToolBoxControl* pControl,
-                          vcl::Window* pParentWindow,
-                          OUString&     rSelectFormat,
-                          LanguageType& eSelectLanguage );
-    virtual ~SvxCurrencyList_Impl() override { disposeOnce(); }
-    virtual void dispose() override;
-};
-
 }
 
 class SvxStyleToolBoxControl;
@@ -2647,68 +2626,6 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
     return SvxBorderLine::threeDMediumColor( aMain );
 }
 
-SvxCurrencyList_Impl::SvxCurrencyList_Impl(
-    SvxCurrencyToolBoxControl* pControl,
-    vcl::Window* pParentWindow,
-    OUString& rSelectedFormat,
-    LanguageType& eSelectedLanguage ) :
-    ToolbarPopup( pControl->getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
-    m_pCurrencyLb( VclPtr<ListBox>::Create(this) ),
-    m_xControl( pControl ),
-    m_rSelectedFormat( rSelectedFormat ),
-    m_eSelectedLanguage( eSelectedLanguage )
-{
-    m_pCurrencyLb->setPosSizePixel( 2, 2, 300, 140 );
-    SetOutputSizePixel( Size( 304, 144 ) );
-
-    std::vector< OUString > aList;
-    std::vector< sal_uInt16 > aCurrencyList;
-    const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
-    sal_uInt16 nLen = rCurrencyTable.size();
-
-    SvNumberFormatter aFormatter( m_xControl->getContext(), LANGUAGE_SYSTEM );
-    m_eFormatLanguage = aFormatter.GetLanguage();
-
-    SvxCurrencyToolBoxControl::GetCurrencySymbols( aList, true, aCurrencyList );
-
-    sal_uInt16 nPos = 0, nCount = 0;
-    sal_Int32 nSelectedPos = -1;
-    bool bIsSymbol;
-    NfWSStringsDtor aStringsDtor;
-
-    for( const auto& rItem : aList )
-    {
-        sal_uInt16& rCurrencyIndex = aCurrencyList[ nCount ];
-        if ( rCurrencyIndex < nLen )
-        {
-            m_pCurrencyLb->InsertEntry( rItem );
-            const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
-
-            bIsSymbol = nPos >= nLen;
-
-            sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol );
-            const OUString& rFormatStr = aStringsDtor[ nDefaultFormat ];
-            m_aFormatEntries.push_back( rFormatStr );
-            if( rFormatStr == m_rSelectedFormat )
-                nSelectedPos = nPos;
-            ++nPos;
-        }
-        ++nCount;
-    }
-    m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
-    SetText( SvxResId( RID_SVXSTR_TBLAFMT_CURRENCY ) );
-    if ( nSelectedPos >= 0 )
-        m_pCurrencyLb->SelectEntryPos( nSelectedPos );
-    m_pCurrencyLb->Show();
-}
-
-void SvxCurrencyList_Impl::dispose()
-{
-    m_xControl.clear();
-    m_pCurrencyLb.disposeAndClear();
-    ToolbarPopup::dispose();
-}
-
 SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow ) :
     ToolbarPopup( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
     m_aLineStyleLb( VclPtr<LineListBox>::Create(this) ),
@@ -2762,22 +2679,6 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl
     SetHelpId( HID_POPUP_LINE );
     SetText( SvxResId(RID_SVXSTR_FRAME_STYLE) );
     m_aLineStyleLb->Show();
-}
-
-IMPL_LINK_NOARG(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
-{
-    VclPtr<SvxCurrencyList_Impl> xThis(this);
-
-    if ( IsInPopupMode() )
-        EndPopupMode();
-
-    if (!m_xControl.is())
-        return;
-
-    m_rSelectedFormat = m_aFormatEntries[ m_pCurrencyLb->GetSelectedEntryPos() ];
-    m_eSelectedLanguage = m_eFormatLanguage;
-
-    m_xControl->execute( m_pCurrencyLb->GetSelectedEntryPos() + 1 );
 }
 
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
@@ -3796,7 +3697,7 @@ SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
 
 namespace
 {
-    class CurrencyList_Impl : public WeldToolbarPopup
+    class SvxCurrencyList_Impl : public WeldToolbarPopup
     {
     private:
         rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
@@ -3814,7 +3715,7 @@ namespace
         virtual void GrabFocus() override;
 
     public:
-        CurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
+        SvxCurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
             : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/currencywindow.ui", "CurrencyWindow")
             , m_xControl(pControl)
             , m_xLabel(m_xBuilder->weld_label("label"))
@@ -3823,8 +3724,6 @@ namespace
             , m_rSelectedFormat(rSelectedFormat)
             , m_eSelectedLanguage(eSelectedLanguage)
         {
-            m_xCurrencyLb->set_size_request(-1, m_xCurrencyLb->get_height_rows(12));
-
             std::vector< OUString > aList;
             std::vector< sal_uInt16 > aCurrencyList;
             const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
@@ -3840,12 +3739,19 @@ namespace
             bool bIsSymbol;
             NfWSStringsDtor aStringsDtor;
 
+            OUString sLongestString;
+
+            m_xCurrencyLb->freeze();
             for( const auto& rItem : aList )
             {
                 sal_uInt16& rCurrencyIndex = aCurrencyList[ nCount ];
                 if ( rCurrencyIndex < nLen )
                 {
                     m_xCurrencyLb->append_text(rItem);
+
+                    if (rItem.getLength() > sLongestString.getLength())
+                        sLongestString = rItem;
+
                     const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
 
                     bIsSymbol = nPos >= nLen;
@@ -3859,26 +3765,33 @@ namespace
                 }
                 ++nCount;
             }
+            m_xCurrencyLb->thaw();
             // enable multiple selection enabled so we can start with nothing selected
             m_xCurrencyLb->set_selection_mode(SelectionMode::Multiple);
-            m_xCurrencyLb->connect_row_activated( LINK( this, CurrencyList_Impl, RowActivatedHdl ) );
+            m_xCurrencyLb->connect_row_activated( LINK( this, SvxCurrencyList_Impl, RowActivatedHdl ) );
             m_xLabel->set_label(SvxResId(RID_SVXSTR_TBLAFMT_CURRENCY));
             m_xCurrencyLb->select( nSelectedPos );
-            m_xOkBtn->connect_clicked(LINK(this, CurrencyList_Impl, OKHdl));
+            m_xOkBtn->connect_clicked(LINK(this, SvxCurrencyList_Impl, OKHdl));
+
+            // gtk will initially make a best guess depending on the first few entries, so copy the probable
+            // longest entry to the start temporarily and force in the width at this point
+            m_xCurrencyLb->insert_text(0, sLongestString);
+            m_xCurrencyLb->set_size_request(m_xCurrencyLb->get_preferred_size().Width(), m_xCurrencyLb->get_height_rows(12));
+            m_xCurrencyLb->remove(0);
         }
     };
 
-    void CurrencyList_Impl::GrabFocus()
+    void SvxCurrencyList_Impl::GrabFocus()
     {
         m_xCurrencyLb->grab_focus();
     }
 
-    IMPL_LINK_NOARG(CurrencyList_Impl, OKHdl, weld::Button&, void)
+    IMPL_LINK_NOARG(SvxCurrencyList_Impl, OKHdl, weld::Button&, void)
     {
         RowActivatedHdl(*m_xCurrencyLb);
     }
 
-    IMPL_LINK_NOARG(CurrencyList_Impl, RowActivatedHdl, weld::TreeView&, bool)
+    IMPL_LINK_NOARG(SvxCurrencyList_Impl, RowActivatedHdl, weld::TreeView&, bool)
     {
         if (!m_xControl.is())
             return true;
@@ -3906,23 +3819,33 @@ void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::
 {
     PopupWindowController::initialize(rArguments);
 
-    if (m_pToolbar)
-    {
-        auto xPopover = std::make_unique<CurrencyList_Impl>(this, m_pToolbar, m_aFormatString, m_eLanguage);
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), xPopover->getTopLevel());
-        mxPopover = std::move(xPopover);
-        return;
-    }
-
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+    bool bVcl = getToolboxId(nId, &pToolBox);
+
+    weld::Widget* pParent;
+    if (pToolBox)
+        pParent = pToolBox->GetFrameWeld();
+    else
+        pParent = m_pToolbar;
+    mxPopover = std::make_unique<SvxCurrencyList_Impl>(this, pParent, m_aFormatString, m_eLanguage);
+
+    if (bVcl && pToolBox->GetItemCommand(nId) == m_aCommandURL)
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
+    else if (m_pToolbar)
+    {
+        const OString aId(m_aCommandURL.toUtf8());
+        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
+    }
 }
 
 VclPtr<vcl::Window> SvxCurrencyToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<SvxCurrencyList_Impl>::Create(this, pParent, m_aFormatString, m_eLanguage);
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent, mxPopover.get());
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
