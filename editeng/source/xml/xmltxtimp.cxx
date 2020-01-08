@@ -50,9 +50,11 @@ namespace {
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XText >& xText );
+    SvxXMLTextImportContext( SvXMLImport& rImport, const uno::Reference< XText >& xText );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
 private:
     const uno::Reference< XText > mxText;
@@ -60,8 +62,8 @@ private:
 
 }
 
-SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XText >& xText )
-: SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
+SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, const uno::Reference< XText >& xText )
+: SvXMLImportContext( rImport ), mxText( xText )
 {
 }
 
@@ -70,7 +72,7 @@ SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nP
     SvXMLImportContext* pContext = nullptr;
     if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )
     {
-        pContext = new SvxXMLTextImportContext( GetImport(), nPrefix, rLocalName, mxText );
+        pContext = new SvxXMLTextImportContext( GetImport(), mxText );
     }
     else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
     {
@@ -95,8 +97,8 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const uno::Reference< XText > & rText );
 
-    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )  override;
+    virtual SvXMLImportContext* CreateFastContext(sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     const uno::Reference< XText > mxText;
@@ -104,15 +106,15 @@ private:
 
 }
 
-SvXMLImportContext *SvxXMLXTextImportComponent::CreateDocumentContext(
-        sal_uInt16 const nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/)
+SvXMLImportContext *SvxXMLXTextImportComponent::CreateFastContext(
+        sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) )
+    if(nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT ) )
     {
-        pContext = new SvxXMLTextImportContext( *this, nPrefix, rLocalName, mxText );
+        pContext = new SvxXMLTextImportContext( *this, mxText );
     }
 
     return pContext;
