@@ -979,9 +979,11 @@ PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
     // note: *may* be called recursively, with PyThreadDetach between  - in
     // that case, don't create *new* PyThreadState but reuse!
 #ifndef NDEBUG
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 7
     PyThreadState const*const current = _PyThreadState_UncheckedGet();
     // dereference isn't safe but let's hope it's tolerable for debugging purpose
     assert((current == nullptr || current->thread_id != PyThread_get_thread_ident()) && "recursive PyThreadAttach");
+#endif
 #endif
     tstate = PyGILState_GetThisThreadState(); // from TLS, possibly detached
     if (!tstate)
