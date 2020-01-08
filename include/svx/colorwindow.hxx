@@ -126,11 +126,9 @@ public:
     weld::Widget* get_widget() const;
 };
 
-class SVX_DLLPUBLIC ColorWindow final : public svtools::ToolbarPopupBase
+class SVX_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-
     const sal_uInt16    theSlotId;
     OUString            maCommand;
     weld::Window* const mpParentWindow;
@@ -141,7 +139,6 @@ private:
 
     std::unique_ptr<ColorValueSet> mxColorSet;
     std::unique_ptr<ColorValueSet> mxRecentColorSet;
-    std::unique_ptr<weld::Container> mxTopLevel;
     std::unique_ptr<weld::ComboBox> mxPaletteListBox;
     std::unique_ptr<weld::Button> mxButtonAutoColor;
     std::unique_ptr<weld::Button> mxButtonNoneColor;
@@ -169,7 +166,6 @@ public:
                 const css::uno::Reference< css::frame::XFrame >& rFrame,
                 weld::Window* pParentWindow, const MenuOrToolMenuButton &rMenuButton,
                 ColorSelectFunction const& rColorSelectFunction);
-    weld::Container* getTopLevel() { return mxTopLevel.get(); }
     virtual ~ColorWindow() override;
     void                ShowNoneButton();
     void                SetNoSelection();
@@ -178,11 +174,11 @@ public:
     void                SelectEntry(const Color& rColor);
     NamedColor          GetSelectEntryColor() const;
 
-    DECL_LINK(FocusHdl, weld::Widget&, void);
-
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
+
+    virtual void GrabFocus() override;
 };
 
 #endif

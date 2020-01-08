@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
 {
     if (!isLayoutEnabled())
     {
-        SAL_WARN("vcl.layout", "DockingWindow has become non-layout because extra children have been added directly to it.");
+        SAL_WARN_IF(GetWindow(GetWindowType::FirstChild), "vcl.layout", "DockingWindow has become non-layout because extra children have been added directly to it.");
         return;
     }
     setPosSizeOnContainee();
