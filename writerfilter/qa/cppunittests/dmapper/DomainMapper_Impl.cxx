@@ -54,6 +54,33 @@ void Test::tearDown()
 
 char const DATA_DIRECTORY[] = "/writerfilter/qa/cppunittests/dmapper/data/";
 
+CPPUNIT_TEST_FIXTURE(Test, testPageBreakFooterTable)
+{
+    // Load a document which refers to a footer which ends with a table, and there is a page break
+    // in the body text right after the footer reference.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "page-break-footer-table.docx";
+    getComponent() = loadFromDesktop(aURL);
+
+    // Check the last paragraph.
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPara;
+    while (xParaEnum->hasMoreElements())
+    {
+        xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    }
+    style::BreakType eType = style::BreakType_NONE;
+    xPara->getPropertyValue("BreakType") >>= eType;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 0
+    // i.e. there was no page break before the last paragraph.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, eType);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "num-restart-style-parent.docx";
