@@ -32,10 +32,8 @@
 
 namespace vcl { class Window; }
 
-namespace svtools
-{
-    class ToolbarPopupBase;
-}
+class InterimToolbarPopup;
+class WeldToolbarPopup;
 
 namespace svt
 {
@@ -69,7 +67,8 @@ public:
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
 
 protected:
-    std::unique_ptr<svtools::ToolbarPopupBase> mxPopover;
+    std::unique_ptr<WeldToolbarPopup> mxPopover;
+    VclPtr<InterimToolbarPopup> mxInterimPopover;
 
 private:
     std::unique_ptr<PopupWindowControllerImpl, o3tl::default_delete<PopupWindowControllerImpl>>  mxImpl;

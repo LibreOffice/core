@@ -26,6 +26,7 @@
 
 #include <rtl/ref.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/weld.hxx>
 
 namespace com :: sun :: star :: frame { class XFrame; }
 namespace com :: sun :: star :: frame { struct FeatureStateEvent; }
@@ -151,6 +152,45 @@ private:
 };
 
 } // namespace svtools
+
+class SVT_DLLPUBLIC WeldToolbarPopup : public svtools::ToolbarPopupBase
+{
+private:
+    DECL_LINK(FocusHdl, weld::Widget&, void);
+
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xTopLevel;
+    std::unique_ptr<weld::Container> m_xContainer;
+
+public:
+    WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                     weld::Widget* pParent, const OUString& rUIFile, const OString& rId);
+    virtual ~WeldToolbarPopup() override;
+    weld::Container* getTopLevel() { return m_xTopLevel.get(); }
+    weld::Container* getContainer() { return m_xContainer.get(); }
+
+    virtual void GrabFocus() = 0;
+};
+
+class SVT_DLLPUBLIC InterimToolbarPopup : public svtools::ToolbarPopup
+{
+protected:
+    VclPtr<vcl::Window> m_xBox;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+
+    WeldToolbarPopup* m_pPopup;
+public:
+    InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent, WeldToolbarPopup* pPopup);
+    weld::Container* getContainer() { return m_xContainer.get(); }
+    virtual void dispose() override;
+    virtual ~InterimToolbarPopup() override;
+
+    virtual void GetFocus() override;
+
+    using ToolbarPopup::EndPopupMode;
+};
 
 #endif
 
