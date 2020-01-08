@@ -713,6 +713,34 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             break;
         }
+        case FN_SET_REMINDER:
+        {
+            static sal_uInt16 m_nAutoMarkIdx = 0;
+
+            // collect and sort navigator reminder names
+            IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
+            std::vector< OUString > vNavMarkNames;
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+                ppMark != pMarkAccess->getAllMarksEnd();
+                ++ppMark)
+                if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
+                    vNavMarkNames.push_back((*ppMark)->GetName());
+            std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
+
+            // we are maxed out and delete one
+            // nAutoMarkIdx rotates through the available MarkNames
+            // this assumes that IDocumentMarkAccess generates Names in ascending order
+            if(vNavMarkNames.size() == MAX_MARKS)
+                pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[m_nAutoMarkIdx]));
+
+            rWrtSh.SetBookmark(vcl::KeyCode(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
+            SwView::SetActMark( m_nAutoMarkIdx );
+
+            if(++m_nAutoMarkIdx == MAX_MARKS)
+                m_nAutoMarkIdx = 0;
+
+            break;
+        }
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
             SvxSwAutoFormatFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
@@ -1825,7 +1853,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, pApply && pApply->nColor == nWhich));
             }
             break;
-
+        case FN_SET_REMINDER:
         case FN_INSERT_BOOKMARK:
             if( rSh.IsTableMode()
                 || rSh.CursorInsideInputField() )
