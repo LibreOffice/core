@@ -46,7 +46,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, SdrGrafOb
     m_aGraphic        ( pGraphicObj->GetGraphicObject().GetGraphic() ),
     m_aViewSize100mm  ( pGraphicObj->GetLogicRect().GetSize() ),
     m_rBindings       ( rBindings ),
-    m_dResolution     ( 96.0 )
+    m_dResolution     ( 300 )
 {
     const SdrGrafCropItem& rCrop = m_xGraphicObj->GetMergedItem(SDRATTR_GRAFCROP);
     m_aCropRectangle = tools::Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
@@ -61,7 +61,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic c
     m_aViewSize100mm  ( rViewSize100mm ),
     m_aCropRectangle  ( rCropRectangle ),
     m_rBindings       ( rBindings ),
-    m_dResolution     ( 96.0 )
+    m_dResolution     ( 300 )
 {
     Initialize();
 }
