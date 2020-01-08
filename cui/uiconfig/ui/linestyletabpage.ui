@@ -293,9 +293,6 @@
                             </child>
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                              <attributes>
-                                <attribute name="surface">3</attribute>
-                              </attributes>
                             </child>
                           </object>
                           <packing>
@@ -385,6 +382,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="linestyletabpage|BTN_LOAD|tooltip_text">Load Line Styles</property>
                             <property name="halign">center</property>
                             <property name="image">image1</property>
@@ -399,6 +397,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="linestyletabpage|BTN_SAVE|tooltip_text">Save Line Styles</property>
                             <property name="halign">center</property>
                             <property name="image">image2</property>

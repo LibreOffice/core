@@ -191,9 +191,6 @@
                             </child>
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
-                              <attributes>
-                                <attribute name="surface">3</attribute>
-                              </attributes>
                             </child>
                           </object>
                           <packing>
@@ -414,9 +411,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkCellRendererPixbuf" id="cellrenderertext2"/>
-                                  <attributes>
-                                    <attribute name="surface">3</attribute>
-                                  </attributes>
                                 </child>
                               </object>
                               <packing>
@@ -437,7 +431,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
-                                    <property name="halign">start</property>
+                                    <property name="halign">Start</property>
                                     <property name="inconsistent">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -480,7 +474,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
-                                    <property name="halign">start</property>
+                                    <property name="halign">Start</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -529,9 +523,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
-                                  <attributes>
-                                    <attribute name="surface">3</attribute>
-                                  </attributes>
                                 </child>
                               </object>
                               <packing>
@@ -593,7 +584,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_underline">True</property>
-                                    <property name="halign">start</property>
+                                    <property name="halign">Start</property>
                                     <property name="inconsistent">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>

@@ -62,7 +62,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label7">Category:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">category</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -76,7 +76,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|numberingft">_Numbering:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numbering</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -90,7 +90,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|numseparatorft">Numbering separator:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numseparator</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -104,7 +104,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|separatorft">Separator:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">separator</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -118,7 +118,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label18">Position:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">position</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -243,7 +243,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label4">Level:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">level</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -257,7 +257,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label6">Separator:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">chapseparator</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -340,7 +340,7 @@
                             <property name="label" translatable="yes" context="optcaptionpage|label3">Character style:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">charstyle</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -501,7 +501,6 @@ when inserting:</property>
                 <property name="can_focus">True</property>
                 <property name="halign">center</property>
                 <property name="valign">start</property>
-                <property name="margin_left">12</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="vscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>

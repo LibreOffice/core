@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -12,30 +12,16 @@
     <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">100</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment4">
-    <property name="upper">100</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">100</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment6">
-    <property name="upper">100</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkPopover" id="FloatingAreaStyle">
+  <object class="GtkWindow" id="FloatingAreaStyle">
     <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">4</property>
+    <property name="resizable">False</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">popup-menu</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
     <child>
       <object class="GtkGrid">
         <property name="visible">True</property>
@@ -56,7 +42,7 @@
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="floatingareastyle|label1">_Angle:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">angle</property>
+                <property name="mnemonic_widget">angle:0degrees</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -70,7 +56,7 @@
                 <property name="column_spacing">12</property>
                 <property name="column_homogeneous">True</property>
                 <child>
-                  <object class="GtkSpinButton" id="angle">
+                  <object class="GtkSpinButton" id="angle:0degrees">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="floatingareastyle|angle|tooltip_text">Specify the angle of rotation for the gradient shading style.</property>
@@ -89,9 +75,6 @@
                       <object class="GtkToolbar" id="lefttoolbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <property name="icon_size">2</property>
                         <child>
                           <object class="GtkToolButton" id="left">
                             <property name="visible">True</property>
@@ -101,7 +84,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="homogeneous">True</property>
                           </packing>
                         </child>
                       </object>
@@ -114,9 +97,6 @@
                       <object class="GtkToolbar" id="righttoolbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <property name="icon_size">2</property>
                         <child>
                           <object class="GtkToolButton" id="right">
                             <property name="visible">True</property>
@@ -126,7 +106,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="homogeneous">True</property>
                           </packing>
                         </child>
                       </object>
@@ -166,7 +146,7 @@
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="floatingareastyle|label4">_Start value:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">start</property>
+                <property name="mnemonic_widget">start:0%</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -180,7 +160,7 @@
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="floatingareastyle|label5">_End value:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">end</property>
+                <property name="mnemonic_widget">end:0%</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -188,11 +168,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="start">
+              <object class="GtkSpinButton" id="start:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|start|tooltip_text">Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
-                <property name="adjustment">adjustment4</property>
+                <property name="adjustment">adjustment2</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -200,11 +180,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="end">
+              <object class="GtkSpinButton" id="end:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|end|tooltip_text">Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
-                <property name="adjustment">adjustment5</property>
+                <property name="adjustment">adjustment2</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -229,7 +209,7 @@
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="floatingareastyle|label6">_Border:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">border</property>
+                <property name="mnemonic_widget">border:0%</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -237,11 +217,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="border">
+              <object class="GtkSpinButton" id="border:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|border|tooltip_text">Specify the border value of gradient transparency.</property>
-                <property name="adjustment">adjustment6</property>
+                <property name="adjustment">adjustment2</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -267,7 +247,7 @@
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="floatingareastyle|label2">Center _X:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">centerx</property>
+                <property name="mnemonic_widget">centerx:0%</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -281,7 +261,7 @@
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="floatingareastyle|label3">Center _Y:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">centery</property>
+                <property name="mnemonic_widget">centery:0%</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -289,7 +269,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="centerx">
+              <object class="GtkSpinButton" id="centerx:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|centerx|tooltip_text">Specify the horizontal offset percentage from the center for the gradient shading style. 50% is the horizontal center.</property>
@@ -301,11 +281,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="centery">
+              <object class="GtkSpinButton" id="centery:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|centery|tooltip_text">Specify the vertical offset percentage from the center for the gradient shading style.  50% is the vertical center.</property>
-                <property name="adjustment">adjustment3</property>
+                <property name="adjustment">adjustment2</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -320,15 +300,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkSizeGroup">
-    <widgets>
-      <widget name="angle"/>
-      <widget name="start"/>
-      <widget name="end"/>
-      <widget name="border"/>
-      <widget name="centerx"/>
-      <widget name="centery"/>
-    </widgets>
   </object>
 </interface>

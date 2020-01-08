@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.16.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkListStore" id="liststore4">
+  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkListStore" id="liststorePageLayout">
     <columns>
-      <!-- column-name text -->
+      <!-- column-name gchararray1 -->
       <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
+      <!-- column-name gint1 -->
+      <column type="gint"/>
     </columns>
-  </object>
-  <object class="GtkListStore" id="liststore5">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
-    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" context="pagestylespanel|liststorePageLayout">Right and left</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="pagestylespanel|liststorePageLayout">Mirrored</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="pagestylespanel|liststorePageLayout">Only right</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="pagestylespanel|liststorePageLayout">Only left</col>
+        <col id="1">0</col>
+      </row>
+    </data>
   </object>
   <object class="GtkGrid" id="PageStylesPanel">
     <property name="visible">True</property>
@@ -34,6 +37,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
+        <property name="margin_right">12</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="border_width">6</property>
@@ -43,91 +47,92 @@
           <object class="GtkLabel" id="numberslabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="pagestylespanel|numberslabel">Number:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">numberbox</property>
             <property name="xalign">1</property>
+            <property name="label" translatable="yes" context="pagestylespanel|numberslabel">Number:</property>
+            <property name="mnemonic_widget">numberbox</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="backgroundlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="pagestylespanel|backgroundlabel">Background:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">bgselect</property>
             <property name="xalign">1</property>
+            <property name="label" translatable="yes" context="pagestylespanel|backgroundlabel">Background:</property>
+            <property name="mnemonic_widget">bgselect</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="numberbox">
+          <object class="svxcorelo-PageNumberListBox" id="numberbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="layoutlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="pagestylespanel|layoutlabel">Layout:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">layoutbox</property>
             <property name="xalign">1</property>
+            <property name="label" translatable="yes" context="pagestylespanel|layoutlabel">Layout:</property>
+            <property name="mnemonic_widget">layoutbox</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="layoutbox">
+          <object class="GtkComboBox" id="layoutbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <items>
-              <item translatable="yes" context="pagestylespanel|liststorePageLayout">Right and left</item>
-              <item translatable="yes" context="pagestylespanel|liststorePageLayout">Mirrored</item>
-              <item translatable="yes" context="pagestylespanel|liststorePageLayout">Only right</item>
-              <item translatable="yes" context="pagestylespanel|liststorePageLayout">Only left</item>
-            </items>
+            <property name="model">liststorePageLayout</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="columnlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="pagestylespanel|columnlabel">Columns:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">columnbox</property>
             <property name="xalign">1</property>
+            <property name="label" translatable="yes" context="pagestylespanel|columnlabel">Columns:</property>
+            <property name="mnemonic_widget">columnbox</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBoxText" id="columnbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="can_focus">True</property>
             <items>
               <item translatable="yes" context="pagestylespanel|columnbox">1 Column</item>
               <item translatable="yes" context="pagestylespanel|columnbox">2 Columns</item>
@@ -139,118 +144,84 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="lbhatching">
+          <object class="svxlo-SvxFillAttrBox" id="lbhatching">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="model">liststore4</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext3"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
-            </child>
-            <child>
-              <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-              <attributes>
-                <attribute name="surface">3</attribute>
-              </attributes>
-            </child>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="lbbitmap">
+          <object class="svxlo-SvxFillAttrBox" id="lbbitmap">
+            <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="model">liststore5</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext5"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
-            </child>
-            <child>
-              <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
-              <attributes>
-                <attribute name="surface">3</attribute>
-              </attributes>
-            </child>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkMenuButton" id="lbcolor">
+          <object class="svxcorelo-SvxColorListBox" id="lbcolor">
             <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="valign">center</property>
-            <property name="hexpand">True</property>
-            <property name="draw_indicator">True</property>
-            <property name="label" translatable="no"></property>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkMenuButton" id="lbgradient">
+          <object class="svxcorelo-SvxColorListBox" id="lbgradient">
             <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="valign">center</property>
-            <property name="hexpand">True</property>
-            <property name="draw_indicator">True</property>
-            <property name="label" translatable="no"></property>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="bgselect">
+          <object class="svxlo-SvxFillTypeBox" id="bgselect">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="customlabel">
             <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
             <property name="label" translatable="yes" context="pagestylespanel|customlabel">Custom</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -272,6 +243,8 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
       </packing>
     </child>
   </object>

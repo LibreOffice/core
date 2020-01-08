@@ -17,6 +17,7 @@
           <object class="GtkToolbar" id="numberbullet">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarlists|numberbullet|tooltip_text">Bullets and Numbering</property>
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
