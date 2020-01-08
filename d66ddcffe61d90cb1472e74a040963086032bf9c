@@ -34,6 +34,108 @@
       "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18950cc4_ce76fd5e",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T16:15:57Z",
+      "side": 1,
+      "message": "see my comment in filter/source/graphicfilter/icgm/class1.cxx",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b582a75c_218b54a4",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T16:15:57Z",
+      "side": 1,
+      "message": "see my comment in filter/source/graphicfilter/icgm/class1.cxx",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "746fae8e_5faf0b1e",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T16:15:57Z",
+      "side": 1,
+      "message": "see my comment in filter/source/graphicfilter/icgm/class1.cxx",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b32cf03d_ec09c21a",
+        "filename": "sfx2/source/doc/oleprops.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T16:15:57Z",
+      "side": 1,
+      "message": "These four static_cast should all be redundant: of the corresponding css.util.DateTime fields, Hours, Minutes, and Seconds are of UNO type \u0027unsigned short\u0027 (i.e., sal_uInt16) and NanoSeconds is of UNO type \u0027unsigned long\u0027 (i.e., sal_uInt32).  (And the relevant tools::Time ctor in include/tools/time.hxx takes sal_uInt32/sal_uInt32/sal_uInt32/sal_uInt64 parameters since \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/5df981a2a26106e6283a88fb27e6c6659fe1259d%5E!/\u003e \"tools ::Time: change constructor to fixed-length integers\", so the values would automatically be promoted to the larger types anyway, making it look dubious that those static_casts should be here in the first place.)",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27bcc8c7_85badb6a",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2698,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T16:15:57Z",
+      "side": 1,
+      "message": "Why?  If these shall really be of type sal_uInt16, why introduce the variables in the first place, instead of using nStart, nEnd directly?  CutLines takes parameters of type sal_Int32 these days; I assume the sal_uIntPtr intermediary variables were once introduced to avoid some sort of overflow in the below calculations.",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04a03a20_9a48f4dc",
+        "filename": "svx/source/dialog/_bmpmask.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T16:15:57Z",
+      "side": 1,
+      "message": "Are these three static_cast even necessary?  m_pSp1, m_pSp2, and m_pSp3 apparently correspond to the GtkSpinButton \"tol1:0%\", \"tol2:0%\", and \"tol3:0%\" in svx/uiconfig/ui/dockingcolorreplace.ui, which each references\n\n\u003e   \u003cobject class\u003d\"GtkAdjustment\" id\u003d\"adjustment1\"\u003e\n\u003e     \u003cproperty name\u003d\"upper\"\u003e99\u003c/property\u003e\n\u003e     \u003cproperty name\u003d\"value\"\u003e10\u003c/property\u003e\n\u003e     \u003cproperty name\u003d\"step_increment\"\u003e1\u003c/property\u003e\n\u003e     \u003cproperty name\u003d\"page_increment\"\u003e10\u003c/property\u003e\n\u003e   \u003c/object\u003e\n\nso GetValue() can presumably only take on values in the range 0--99 anyway?  (For tools like -fsanitize\u003dimplicit-signed-integer-truncation it is often beneficial to not hide any potentially unexpected such truncations behind a static_cast, where that -fsanitize would ignore them.)",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
