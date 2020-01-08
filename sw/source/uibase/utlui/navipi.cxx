@@ -308,7 +308,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
     }
     else if (sCommand == "reminder")
     {
-        MakeMark();
+        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SET_REMINDER, SfxCallMode::ASYNCHRON);
     }
     else if (sCommand == "down" ||
              sCommand == "up" ||
@@ -491,36 +491,6 @@ IMPL_LINK( SwNavigationPI, EditGetFocus, Control&, rControl, void )
     pEdit->SetLast(nPageCnt);
 }
 
-// Setting of an automatic mark
-void SwNavigationPI::MakeMark()
-{
-    SwView *pView = GetCreateView();
-    if (!pView) return;
-    SwWrtShell &rSh = pView->GetWrtShell();
-    IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-
-    // collect and sort navigator reminder names
-    std::vector< OUString > vNavMarkNames;
-    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
-        ppMark != pMarkAccess->getAllMarksEnd();
-        ++ppMark)
-        if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
-            vNavMarkNames.push_back((*ppMark)->GetName());
-    std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
-
-    // we are maxed out and delete one
-    // nAutoMarkIdx rotates through the available MarkNames
-    // this assumes that IDocumentMarkAccess generates Names in ascending order
-    if(vNavMarkNames.size() == MAX_MARKS)
-        pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[m_nAutoMarkIdx]));
-
-    rSh.SetBookmark(vcl::KeyCode(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
-    SwView::SetActMark( m_nAutoMarkIdx );
-
-    if(++m_nAutoMarkIdx == MAX_MARKS)
-        m_nAutoMarkIdx = 0;
-}
-
 void SwNavigationPI::ZoomOut()
 {
     if (!IsZoomedIn())
@@ -608,7 +578,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     , m_pFloatingWindow(nullptr)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
     , m_rBindings(*_pBindings)
-    , m_nAutoMarkIdx(1)
     , m_nRegionMode(RegionMode::NONE)
     , m_bIsZoomedIn(false)
     , m_bGlobalMode(false)
