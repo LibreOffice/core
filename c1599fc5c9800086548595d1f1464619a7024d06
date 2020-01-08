@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10ae6369_d8052d3e",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3662,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T17:35:55Z",
+      "side": 1,
+      "message": "If we change the RHS from \u0027sal_uInt16 * (long - sal_uInt16)\u0027 to \u0027sal_uInt16 * (int - sal_uInt16)\u0027 (with the assumption that this will not cause new overflows, which is a tad fishy given that, even assuming that sal_uInt16 will always be a typedef matching std::uint16_t, the value will be at most 65535 * 99 \u003d 6487965, which exceeds the guaranteed minimum of both INT_MAX of 32767 and UINT_MAX of 65535; the latter would be relevant as for a 16-bit int the expression would promote to unsigned int), we should arguably also change the LHS to int.",
+      "revId": "c1599fc5c9800086548595d1f1464619a7024d06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
