@@ -49,6 +49,7 @@
 #include <postithelper.hxx>
 #include <fmtcntnt.hxx>
 #include <shellio.hxx>
+#include <editeng/fontitem.hxx>
 
 namespace
 {
@@ -2469,4 +2470,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
+{
+    SwDoc* pDoc = createDoc("tdf90069.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    lcl_dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    pWrtShell->Down(false);
+    pWrtShell->Insert("foo");
+
+    SwTextNode* pTextNodeA1 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT(pTextNodeA1->GetText().startsWith("Insert"));
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNodeA2 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pTextNodeA2->GetText());
+    CPPUNIT_ASSERT_EQUAL(true, pTextNodeA2->GetSwAttrSet().HasItem(RES_CHRATR_FONT));
+    OUString sFontName = pTextNodeA2->GetSwAttrSet().GetItem(RES_CHRATR_FONT)->GetFamilyName();
+    CPPUNIT_ASSERT_EQUAL(OUString("Lohit Devanagari"), sFontName);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
