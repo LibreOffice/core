@@ -35,8 +35,8 @@ namespace sw
 namespace
 {
 std::shared_ptr<sw::AccessibilityIssue>
-lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
-            svx::AccessibilityIssueID eIssue = svx::AccessibilityIssueID::UNSPECIFIED)
+lclAddIssue(sfx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
+            sfx::AccessibilityIssueID eIssue = sfx::AccessibilityIssueID::UNSPECIFIED)
 {
     auto pIssue = std::make_shared<sw::AccessibilityIssue>(eIssue);
     pIssue->m_aIssueText = rText;
@@ -47,10 +47,10 @@ lclAddIssue(svx::AccessibilityIssueCollection& rIssueCollection, OUString const&
 class BaseCheck
 {
 protected:
-    svx::AccessibilityIssueCollection& m_rIssueCollection;
+    sfx::AccessibilityIssueCollection& m_rIssueCollection;
 
 public:
-    BaseCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    BaseCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : m_rIssueCollection(rIssueCollection)
     {
     }
@@ -60,7 +60,7 @@ public:
 class NodeCheck : public BaseCheck
 {
 public:
-    NodeCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    NodeCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : BaseCheck(rIssueCollection)
     {
     }
@@ -101,7 +101,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
     }
 
 public:
-    NoTextNodeAltTextCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    NoTextNodeAltTextCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -184,7 +184,7 @@ private:
     }
 
 public:
-    TableNodeMergeSplitCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    TableNodeMergeSplitCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -211,7 +211,7 @@ private:
     };
 
 public:
-    NumberingCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    NumberingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
         , pPreviousTextNode(nullptr)
     {
@@ -264,7 +264,7 @@ private:
     }
 
 public:
-    HyperlinkCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    HyperlinkCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -394,7 +394,7 @@ private:
     }
 
 public:
-    TextContrastCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    TextContrastCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -442,7 +442,7 @@ private:
     }
 
 public:
-    BlinkingTextCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    BlinkingTextCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
     {
     }
@@ -477,7 +477,7 @@ private:
     int nPreviousLevel;
 
 public:
-    HeaderCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    HeaderCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
         , nPreviousLevel(0)
     {
@@ -505,7 +505,7 @@ public:
 class DocumentCheck : public BaseCheck
 {
 public:
-    DocumentCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    DocumentCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : BaseCheck(rIssueCollection)
     {
     }
@@ -517,7 +517,7 @@ public:
 class DocumentDefaultLanguageCheck : public DocumentCheck
 {
 public:
-    DocumentDefaultLanguageCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    DocumentDefaultLanguageCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : DocumentCheck(rIssueCollection)
     {
     }
@@ -530,7 +530,7 @@ public:
         if (eLanguage == LANGUAGE_NONE)
         {
             lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_DEFAULT_LANGUAGE),
-                        svx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
+                        sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
         }
         else
         {
@@ -543,7 +543,7 @@ public:
                     OUString sIssueText
                         = SwResId(STR_STYLE_NO_LANGUAGE).replaceAll("%STYLE_NAME%", sName);
                     lclAddIssue(m_rIssueCollection, sIssueText,
-                                svx::AccessibilityIssueID::STYLE_LANGUAGE);
+                                sfx::AccessibilityIssueID::STYLE_LANGUAGE);
                 }
             }
         }
@@ -553,7 +553,7 @@ public:
 class DocumentTitleCheck : public DocumentCheck
 {
 public:
-    DocumentTitleCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    DocumentTitleCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : DocumentCheck(rIssueCollection)
     {
     }
@@ -571,7 +571,7 @@ public:
             if (sTitle.isEmpty())
             {
                 lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
-                            svx::AccessibilityIssueID::DOCUMENT_TITLE);
+                            sfx::AccessibilityIssueID::DOCUMENT_TITLE);
             }
         }
     }
@@ -580,7 +580,7 @@ public:
 class FootnoteEndnoteCheck : public DocumentCheck
 {
 public:
-    FootnoteEndnoteCheck(svx::AccessibilityIssueCollection& rIssueCollection)
+    FootnoteEndnoteCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : DocumentCheck(rIssueCollection)
     {
     }
