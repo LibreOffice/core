@@ -607,11 +607,11 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
 
     if (m_bSdt && !m_aTextAppendStack.empty())
     {
-        m_xStdEntryStart = GetTopTextAppend()->getEnd();
+        m_xSdtEntryStart = GetTopTextAppend()->getEnd();
     }
     else
     {
-        m_xStdEntryStart = uno::Reference< text::XTextRange >();
+        m_xSdtEntryStart.clear();
     }
 }
 
@@ -4114,7 +4114,7 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
 /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
 OUString DomainMapper_Impl::extractTocTitle()
 {
-    if (!m_xStdEntryStart.is())
+    if (!m_xSdtEntryStart.is())
         return OUString();
 
     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -4124,7 +4124,7 @@ OUString DomainMapper_Impl::extractTocTitle()
     // try-catch was added in the same way as inside appendTextSectionAfter()
     try
     {
-        uno::Reference< text::XParagraphCursor > xCursor( xTextAppend->createTextCursorByRange( m_xStdEntryStart ), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XParagraphCursor> xCursor(xTextAppend->createTextCursorByRange(m_xSdtEntryStart), uno::UNO_QUERY_THROW);
         if (!xCursor.is())
             return OUString();
 
@@ -4310,7 +4310,7 @@ void DomainMapper_Impl::handleToc
         if (aTocTitle.isEmpty() || bTableOfFigures)
         {
             // reset marker of the TOC title
-            m_xStdEntryStart.clear();
+            m_xSdtEntryStart.clear();
 
             // Create section before setting m_bStartTOC: finishing paragraph
             // inside StartIndexSectionChecked could do the wrong thing otherwise
@@ -4326,7 +4326,7 @@ void DomainMapper_Impl::handleToc
         {
             // create TOC section
             css::uno::Reference<css::text::XTextRange> xTextRangeEndOfTocHeader = GetTopTextAppend()->getEnd();
-            xTOC = createSectionForRange(m_xStdEntryStart, xTextRangeEndOfTocHeader, sTOCServiceName, false);
+            xTOC = createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, sTOCServiceName, false);
 
             // init [xTOCMarkerCursor]
             uno::Reference< text::XText > xText = xTextAppend->getText();
@@ -4335,7 +4335,7 @@ void DomainMapper_Impl::handleToc
 
             // create header of the TOC with the TOC title inside
             const OUString aObjectType("com.sun.star.text.IndexHeaderSection");
-            uno::Reference<beans::XPropertySet> xIfc = createSectionForRange(m_xStdEntryStart, xTextRangeEndOfTocHeader, aObjectType, true);
+            uno::Reference<beans::XPropertySet> xIfc = createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, aObjectType, true);
         }
     }
 
@@ -5670,8 +5670,8 @@ void DomainMapper_Impl::PopFieldContext()
                 {
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
-                        // inside Std, last empty paragraph is also part of index
-                        if (!m_bParaChanged && !m_xStdEntryStart)
+                        // inside SDT, last empty paragraph is also part of index
+                        if (!m_bParaChanged && !m_xSdtEntryStart)
                         {
                             // End of index is the first item on a new paragraph - this paragraph
                             // should not be part of index

@@ -581,7 +581,7 @@ private:
     SmartTagHandler m_aSmartTagHandler;
 
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
-    css::uno::Reference<css::text::XTextRange> m_xStdEntryStart;
+    css::uno::Reference<css::text::XTextRange> m_xSdtEntryStart;
 
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
