@@ -24,6 +24,8 @@
 #include <xmloff/odffields.hxx>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <fmtornt.hxx>
+#include <editeng/fontitem.hxx>
+#include <ndtxt.hxx>
 
 namespace
 {
@@ -45,6 +47,7 @@ public:
     void testDropDownFormFieldInsertion();
     void testMixedFormFieldInsertion();
     void testTdf122942();
+    void testTdf90069();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
@@ -57,6 +60,7 @@ public:
     CPPUNIT_TEST(testDropDownFormFieldInsertion);
     CPPUNIT_TEST(testMixedFormFieldInsertion);
     CPPUNIT_TEST(testTdf122942);
+    CPPUNIT_TEST(testTdf90069);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -473,6 +477,35 @@ void SwUiWriterTest2::testTdf122942()
     const tools::Rectangle& rOutRect2 = pObject2->GetLastBoundRect();
     CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
 #endif
+}
+
+void SwUiWriterTest2::testTdf90069()
+{
+    SwDoc* pDoc = createDoc("tdf90069.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    lcl_dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    pWrtShell->Down(false);
+    pWrtShell->Insert("foo");
+
+    SwTextNode* pTextNodeA1 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT(pTextNodeA1->GetText().startsWith("Insert"));
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNodeA2 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pTextNodeA2->GetText());
+    CPPUNIT_ASSERT_EQUAL(true, pTextNodeA2->GetSwAttrSet().HasItem(RES_CHRATR_FONT));
+    OUString sFontName = pTextNodeA2->GetSwAttrSet().GetItem(RES_CHRATR_FONT)->GetFamilyName();
+    CPPUNIT_ASSERT_EQUAL(OUString("Lohit Devanagari"), sFontName);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
