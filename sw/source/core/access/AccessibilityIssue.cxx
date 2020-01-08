@@ -14,8 +14,8 @@
 
 namespace sw
 {
-AccessibilityIssue::AccessibilityIssue(svx::AccessibilityIssueID eIssueID)
-    : svx::AccessibilityIssue(eIssueID)
+AccessibilityIssue::AccessibilityIssue(sfx::AccessibilityIssueID eIssueID)
+    : sfx::AccessibilityIssue(eIssueID)
     , m_eIssueObject(IssueObject::UNKNOWN)
     , m_pDoc(nullptr)
 {
