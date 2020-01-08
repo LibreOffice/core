@@ -237,7 +237,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
 {
     SolarMutexGuard g;
     if (m_xAggregate.is())
-    {   //  we already did a decision if we're an EditModel or a FormattedModel
+    {   //  we already made a decision if we're an EditModel or a FormattedModel
 
         // if we act as formatted, we have to read the edit part first
         if (m_xFormattedPart.is())

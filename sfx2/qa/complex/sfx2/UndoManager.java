@@ -663,9 +663,9 @@ public class UndoManager
         m_currentTestCase.verifyInitialDocumentState();
 
         // redo the modification, ensure the listener got the proper notifications
-        assertEquals( "did not yet do a redo!", 0, m_undoListener.getRedoActionCount() );
+        assertEquals( "not yet made a redo!", 0, m_undoListener.getRedoActionCount() );
         i_undoManager.redo();
-        assertEquals( "did a redo, but got no notification of it!", 1, m_undoListener.getRedoActionCount() );
+        assertEquals( "made a redo, but got no notification of it!", 1, m_undoListener.getRedoActionCount() );
         // ensure the document is in the proper state, again
         m_currentTestCase.verifySingleModificationDocumentState();
 

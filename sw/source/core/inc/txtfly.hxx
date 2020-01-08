@@ -282,7 +282,7 @@ public:
     bool IsAnyFrame() const;
 
     /**
-        true when a frame or DrawObj must to be taken in account. The optimizations
+        true when a frame or DrawObj must be taken in account. The optimizations
         like Paint/FormatEmpty for empty sentences or the virtual OutputDevice can
         be used only when false is returned.
 

@@ -1695,7 +1695,7 @@ void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive
     if ( !rFactory.isEmpty() )
     {
         GetIndexPage()->SetFactory( rFactory );
-        // the index page did a check if rFactory is valid,
+        // the index page made a check if rFactory is valid,
         // so the index page always returns a valid factory
         GetSearchPage()->SetFactory( GetIndexPage()->GetFactory() );
         if ( bActive )

@@ -214,7 +214,7 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 bool FmFormShell::PrepareClose(bool bUI)
 {
     if (GetImpl()->didPrepareClose_Lock())
-        // we already did a PrepareClose for the current modifications of the current form
+        // we already made a PrepareClose for the current modifications of the current form
         return true;
 
     bool bResult = true;
