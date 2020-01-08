@@ -256,6 +256,8 @@
 #define FN_INSERT_FLD_AUTHOR    (FN_INSERT + 98)
 #define FN_INSERT_FOOTNOTE      (FN_INSERT + 99)
 
+#define FN_SET_REMINDER         (FN_INSERT + 100)
+
 // Region: Paste (Part 2)
 #define FN_MAILMERGE_SENDMAIL_CHILDWINDOW (FN_INSERT2 + 5)  /* child window provided by mailmerge */
 
