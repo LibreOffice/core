@@ -269,7 +269,6 @@
                       <object class="GtkComboBoxText" id="notebookbariconsize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="optviewpage|notebookbariconsize">Automatic</item>
                           <item translatable="yes" context="optviewpage|notebookbariconsize">Small</item>
@@ -299,7 +298,6 @@
                       <object class="GtkComboBoxText" id="sidebariconsize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="optviewpage|sidebariconsize">Automatic</item>
                           <item translatable="yes" context="optviewpage|sidebariconsize">Small</item>
@@ -329,7 +327,6 @@
                       <object class="GtkComboBoxText" id="iconsize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="optviewpage|iconsize">Automatic</item>
                           <item translatable="yes" context="optviewpage|iconsize">Small</item>
@@ -777,5 +774,12 @@
       <widget name="mousepos"/>
       <widget name="mousemiddle"/>
     </widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">10</property>
+    <property name="upper">90</property>
+    <property name="value">75</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>

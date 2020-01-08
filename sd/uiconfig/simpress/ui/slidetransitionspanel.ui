@@ -120,6 +120,7 @@
                       <object class="GtkSpinButton" id="transition_duration">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="slidetransitionspanel|transition_duration|tooltip_text">Select the speed of Slide Transition.</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">adjustment2</property>

@@ -4693,6 +4693,7 @@
                                           <object class="GtkToolButton" id="InsertColumnsBefore1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="is_important">True</property>
                                             <property name="action_name">.uno:InsertColumnsBefore</property>
                                             <property name="use_underline">True</property>
@@ -4706,6 +4707,7 @@
                                           <object class="GtkToolButton" id="InsertRowsBefore1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="is_important">True</property>
                                             <property name="action_name">.uno:InsertRowsBefore</property>
                                             <property name="use_underline">True</property>
@@ -4769,6 +4771,7 @@
                                           <object class="GtkToolButton" id="DeleteColumns1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="is_important">True</property>
                                             <property name="action_name">.uno:DeleteColumns</property>
                                             <property name="use_underline">True</property>
@@ -4782,6 +4785,7 @@
                                           <object class="GtkToolButton" id="DeleteRows1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="is_important">True</property>
                                             <property name="action_name">.uno:DeleteRows</property>
                                             <property name="use_underline">True</property>
@@ -5123,6 +5127,7 @@
                                           <object class="GtkToolButton" id="DataFilterAutoFilter">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="action_name">.uno:DataFilterAutoFilter</property>
                                           </object>
                                           <packing>
@@ -5134,6 +5139,7 @@
                                           <object class="GtkToolButton" id="DataFilterStandardFilter">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="action_name">.uno:DataFilterStandardFilter</property>
                                           </object>
                                           <packing>
@@ -5145,6 +5151,7 @@
                                           <object class="GtkToolButton" id="SortAscending">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
                                             <property name="action_name">.uno:SortAscending</property>
                                           </object>
                                           <packing>

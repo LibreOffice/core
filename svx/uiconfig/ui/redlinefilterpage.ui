@@ -205,6 +205,7 @@
             <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="has_tooltip">True</property>
             <property name="tooltip_text" translatable="yes" context="redlinefilterpage|dotdotdot|tooltip_text">Set reference</property>
           </object>
           <packing>
@@ -323,6 +324,7 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="redlinefilterpage|startclock|tooltip_text">Set current time and date</property>
                 <property name="image">image1</property>
               </object>
@@ -378,6 +380,7 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="redlinefilterpage|endclock|tooltip_text">Set current time and date</property>
                 <property name="image">image2</property>
               </object>

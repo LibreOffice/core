@@ -38,12 +38,14 @@
               <object class="sfxlo-SidebarToolBox" id="cellbackgroundcolor">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|cellbackgroundcolor|tooltip_text">Select the background color of the selected cells.</property>
                 <child>
                   <object class="GtkMenuToolButton" id="cellbackground">
                     <property name="width_request">105</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|cellbackground|tooltip_text">Select the background color of the selected cells.</property>
                     <property name="halign">start</property>
                     <property name="action_name">.uno:BackgroundColor</property>
@@ -83,6 +85,7 @@
                   <object class="GtkMenuToolButton" id="bordertype">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|bordertype|tooltip_text">Specify the borders of the selected cells.</property>
                     <property name="halign">start</property>
                     <property name="action_name">.uno:SetBorderStyle</property>
@@ -116,6 +119,7 @@
                         <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|linestyle|tooltip_text">Select the line style of the borders.</property>
                         <property name="halign">end</property>
                         <property name="action_name">.uno:LineStyle</property>
@@ -143,12 +147,14 @@
                   <object class="sfxlo-SidebarToolBox" id="borderlinecolor">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|borderlinecolor|tooltip_text">Select the line color of the borders.</property>
                     <child>
                       <object class="GtkMenuToolButton" id="linecolor">
                         <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|linecolor|tooltip_text">Select the line color of the borders.</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>

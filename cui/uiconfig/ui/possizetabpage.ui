@@ -86,7 +86,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_POS_X">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPOS</property>
                         <property name="digits">2</property>
@@ -100,10 +99,9 @@
                       <object class="GtkSpinButton" id="MTR_FLD_POS_Y">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPOS1</property>
-                        <property name="digits">4</property>
+                        <property name="digits">2</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -134,7 +132,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -163,7 +161,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
@@ -251,7 +249,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_WIDTH">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSIZE</property>
                         <property name="digits">2</property>
@@ -265,7 +262,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_HEIGHT">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSIZE1</property>
                         <property name="digits">2</property>
@@ -315,7 +311,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -344,7 +340,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>

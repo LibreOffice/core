@@ -750,6 +750,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="has_tooltip">True</property>
                                         <property name="tooltip_text" translatable="yes" context="solverdlg|del2|tooltip_text">Remove</property>
                                       </object>
                                       <packing>
@@ -762,6 +763,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="has_tooltip">True</property>
                                         <property name="tooltip_text" translatable="yes" context="solverdlg|del1|tooltip_text">Remove</property>
                                       </object>
                                       <packing>
@@ -774,6 +776,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="has_tooltip">True</property>
                                         <property name="tooltip_text" translatable="yes" context="solverdlg|del3|tooltip_text">Remove</property>
                                       </object>
                                       <packing>
@@ -786,6 +789,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="has_tooltip">True</property>
                                         <property name="tooltip_text" translatable="yes" context="solverdlg|del4|tooltip_text">Remove</property>
                                       </object>
                                       <packing>

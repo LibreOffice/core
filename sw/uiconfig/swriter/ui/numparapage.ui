@@ -19,7 +19,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frameFL_OUTLINE_START">
         <property name="visible">True</property>
@@ -36,7 +36,7 @@
               <object class="GtkBox" id="boxOUTLINE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="labelFT_OUTLINE_LEVEL">
                     <property name="visible">True</property>
@@ -119,11 +119,13 @@
                   <object class="GtkBox" id="boxNUMBER_STYLE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="labelFT_NUMBER_STYLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE">_Numbering style:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_NUMBER_STYLE</property>
@@ -139,7 +141,7 @@
                       <object class="GtkBox" id="boxSubNumber_Style">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkComboBoxText" id="comboLB_NUMBER_STYLE">
                             <property name="visible">True</property>
@@ -204,7 +206,7 @@
                   <object class="GtkBox" id="boxNEW_START">
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
@@ -338,7 +340,7 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
@@ -410,7 +412,7 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroupLabel">
+  <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
       <widget name="labelFT_OUTLINE_LEVEL"/>
       <widget name="labelFT_NUMBER_STYLE"/>
@@ -418,10 +420,18 @@
       <widget name="box3"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroupWidget">
+  <object class="GtkSizeGroup" id="sizegroup3">
     <widgets>
       <widget name="comboLB_OUTLINE_LEVEL"/>
       <widget name="boxSubNumber_Style"/>
     </widgets>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup4">
+    <widgets>
+      <widget name="comboLB_NUMBER_STYLE"/>
+      <widget name="spinNF_NEW_START"/>
+      <widget name="spinNF_RESTART_PARA"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>

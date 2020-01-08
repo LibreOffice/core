@@ -87,6 +87,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|add_effect|tooltip_text">Add Effect</property>
                 <property name="image">image_add</property>
               </object>
@@ -101,6 +102,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|remove_effect|tooltip_text">Remove Effect</property>
                 <property name="image">image_remove</property>
               </object>
@@ -115,6 +117,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_up|tooltip_text">Move Up</property>
                 <property name="image">image_up</property>
               </object>
@@ -129,6 +132,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_down|tooltip_text">Move Down</property>
                 <property name="image">image_down</property>
               </object>
@@ -330,6 +334,7 @@
                   <object class="VclComboBoxNumeric" id="anim_duration:0.00sec">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -443,6 +448,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="customanimationspanel|play|tooltip_text">Preview Effect</property>
                     <property name="image">image_play</property>
                     <property name="image_position">right</property>
