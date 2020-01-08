@@ -39,13 +39,33 @@ void SvxLineSpacingToolBoxControl::initialize( const css::uno::Sequence< css::un
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+    bool bVcl = getToolboxId(nId, &pToolBox);
+
+    weld::Widget* pParent;
+    if (pToolBox)
+        pParent = pToolBox->GetFrameWeld();
+    else
+        pParent = m_pToolbar;
+    mxPopover = std::make_unique<ParaLineSpacingControl>(this, pParent);
+
+    if (bVcl && pToolBox->GetItemCommand(nId) == m_aCommandURL)
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
+    else if (m_pToolbar)
+    {
+        const OString aId(m_aCommandURL.toUtf8());
+        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
+    }
 }
 
 VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ParaLineSpacingControl>::Create(this, pParent);
+    dynamic_cast<ParaLineSpacingControl&>(*mxPopover).SyncFromDocument();
+
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent, mxPopover.get());
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString SvxLineSpacingToolBoxControl::getImplementationName()

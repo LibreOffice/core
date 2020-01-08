@@ -42,7 +42,7 @@
 #define LINESPACE_2           200
 #define LINESPACE_115         115
 
-// values of the mpLineDist listbox
+// values of the mxLineDist listbox
 #define LLINESPACE_1          0
 #define LLINESPACE_115        1
 #define LLINESPACE_15         2
@@ -56,72 +56,65 @@
 
 using namespace svx;
 
-ParaLineSpacingControl::ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pControl, vcl::Window* pParent)
-    : ToolbarPopup( pControl->getFrameInterface(), pParent, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui"),
-      meLNSpaceUnit(MapUnit::Map100thMM),
-      mpSpacing1Button(get<PushButton>("spacing_1")),
-      mpSpacing115Button(get<PushButton>("spacing_115")),
-      mpSpacing15Button(get<PushButton>("spacing_15")),
-      mpSpacing2Button(get<PushButton>("spacing_2")),
-      mpLineDist(get<ListBox>("line_dist")),
-      mpLineDistLabel(get<FixedText>("value_label")),
-      mpLineDistAtPercentBox(get<MetricField>("percent_box")),
-      mpLineDistAtMetricBox(get<MetricField>("metric_box")),
-      mpActLineDistFld(mpLineDistAtPercentBox.get())
+ParaLineSpacingControl::ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/paralinespacingcontrol.ui", "ParaLineSpacingControl")
+    , mxControl(pControl)
+    , meLNSpaceUnit(MapUnit::Map100thMM)
+    , mxSpacing1Button(m_xBuilder->weld_button("spacing_1"))
+    , mxSpacing115Button(m_xBuilder->weld_button("spacing_115"))
+    , mxSpacing15Button(m_xBuilder->weld_button("spacing_15"))
+    , mxSpacing2Button(m_xBuilder->weld_button("spacing_2"))
+    , mxLineDist(m_xBuilder->weld_combo_box("line_dist"))
+    , mxLineDistLabel(m_xBuilder->weld_label("value_label"))
+    , mxLineDistAtPercentBox(m_xBuilder->weld_metric_spin_button("percent_box", FieldUnit::PERCENT))
+    , mxLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("metric_box", FieldUnit::CM))
+    , mpActLineDistFld(mxLineDistAtPercentBox.get())
 {
-    Link<Button*,void> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
-    mpSpacing1Button->SetClickHdl(aLink);
-    mpSpacing115Button->SetClickHdl(aLink);
-    mpSpacing15Button->SetClickHdl(aLink);
-    mpSpacing2Button->SetClickHdl(aLink);
+    Link<weld::Button&,void> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
+    mxSpacing1Button->connect_clicked(aLink);
+    mxSpacing115Button->connect_clicked(aLink);
+    mxSpacing15Button->connect_clicked(aLink);
+    mxSpacing2Button->connect_clicked(aLink);
 
-    Link<ListBox&,void> aLink3 = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
-    mpLineDist->SetSelectHdl(aLink3);
+    Link<weld::ComboBox&,void> aLink3 = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
+    mxLineDist->connect_changed(aLink3);
     SelectEntryPos(LLINESPACE_1);
 
-    Link<Edit&,void> aLink2 = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
-    mpLineDistAtPercentBox->SetModifyHdl( aLink2 );
-    mpLineDistAtMetricBox->SetModifyHdl( aLink2 );
+    Link<weld::MetricSpinButton&,void> aLink2 = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
+    mxLineDistAtPercentBox->connect_value_changed( aLink2 );
+    mxLineDistAtMetricBox->connect_value_changed( aLink2 );
 
     FieldUnit eUnit = FieldUnit::INCH;
     const SfxPoolItem* pItem = nullptr;
-    if (SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) >= SfxItemState::DEFAULT)
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    if (pCurrent && pCurrent->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) >= SfxItemState::DEFAULT)
         eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
     else
         eUnit = SfxModule::GetCurrentFieldUnit();
 
-    SetFieldUnit(*mpLineDistAtMetricBox, eUnit);
+    SetFieldUnit(*mxLineDistAtMetricBox, eUnit);
 
-    Initialize();
+    SyncFromDocument();
+}
+
+void ParaLineSpacingControl::GrabFocus()
+{
+    mxSpacing1Button->grab_focus();
 }
 
 ParaLineSpacingControl::~ParaLineSpacingControl()
 {
-    disposeOnce();
 }
 
-void ParaLineSpacingControl::dispose()
+void ParaLineSpacingControl::SyncFromDocument()
 {
-    mpActLineDistFld.clear();
-    mpSpacing1Button.clear();
-    mpSpacing115Button.clear();
-    mpSpacing15Button.clear();
-    mpSpacing2Button.clear();
-    mpLineDist.clear();
-    mpLineDistLabel.clear();
-    mpLineDistAtPercentBox.clear();
-    mpLineDistAtMetricBox.clear();
-    ToolbarPopup::dispose();
-}
-
-void ParaLineSpacingControl::Initialize()
-{
-    const SfxPoolItem* pItem;
-    SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem);
+    const SfxPoolItem* pItem(nullptr);
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    SfxItemState eState = pCurrent ? pCurrent->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem) : SfxItemState::UNKNOWN;
 
     const SvxLineSpacingItem* currSPItem = static_cast<const SvxLineSpacingItem*>(pItem);
 
-    mpLineDist->Enable();
+    mxLineDist->set_sensitive(true);
 
     if( eState >= SfxItemState::DEFAULT )
     {
@@ -161,7 +154,7 @@ void ParaLineSpacingControl::Initialize()
                         else
                         {
                             SelectEntryPos(LLINESPACE_PROP);
-                            mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(currSPItem->GetPropLineSpace()));
+                            mxLineDistAtPercentBox->set_value(mxLineDistAtPercentBox->normalize(currSPItem->GetPropLineSpace()), FieldUnit::PERCENT);
                         }
                     }
                     break;
@@ -169,7 +162,7 @@ void ParaLineSpacingControl::Initialize()
                 case SvxInterLineSpaceRule::Fix:
                     {
                         SelectEntryPos(LLINESPACE_DURCH);
-                        SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetInterLineSpace(), eUnit);
+                        SetMetricValue(*mxLineDistAtMetricBox, currSPItem->GetInterLineSpace(), eUnit);
                     }
                     break;
                 default:
@@ -180,14 +173,14 @@ void ParaLineSpacingControl::Initialize()
         case SvxLineSpaceRule::Fix:
             {
                 SelectEntryPos(LLINESPACE_FIX);
-                SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
+                SetMetricValue(*mxLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
             }
             break;
 
         case SvxLineSpaceRule::Min:
             {
                 SelectEntryPos(LLINESPACE_MIN);
-                SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
+                SetMetricValue(*mxLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
             }
             break;
         default:
@@ -196,123 +189,123 @@ void ParaLineSpacingControl::Initialize()
     }
     else if( eState == SfxItemState::DISABLED )
     {
-        mpLineDist->Disable();
-        mpLineDistLabel->Disable();
-        mpActLineDistFld->Disable();
-        mpActLineDistFld->SetText("");
+        mxLineDist->set_sensitive(false);
+        mxLineDistLabel->set_sensitive(false);
+        mpActLineDistFld->set_sensitive(false);
+        mpActLineDistFld->set_text("");
 
     }
     else
     {
-        mpLineDistLabel->Disable();
-        mpActLineDistFld->Disable();
-        mpActLineDistFld->SetText("");
-        mpLineDist->SetNoSelection();
+        mxLineDistLabel->set_sensitive(false);
+        mpActLineDistFld->set_sensitive(false);
+        mpActLineDistFld->set_text("");
+        mxLineDist->set_active(-1);
     }
 
-    mpLineDist->SaveValue();
+    mxLineDist->save_value();
 }
 
 void ParaLineSpacingControl::UpdateMetricFields()
 {
-    switch (mpLineDist->GetSelectedEntryPos())
+    switch (mxLineDist->get_active())
     {
         case LLINESPACE_1:
         case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            if (mpActLineDistFld == mpLineDistAtPercentBox)
-                mpLineDistAtMetricBox->Hide();
+            if (mpActLineDistFld == mxLineDistAtPercentBox.get())
+                mxLineDistAtMetricBox->hide();
             else
-                mpLineDistAtPercentBox->Hide();
+                mxLineDistAtPercentBox->hide();
 
-            mpLineDistLabel->Disable();
-            mpActLineDistFld->Show();
-            mpActLineDistFld->Disable();
-            mpActLineDistFld->SetText("");
+            mxLineDistLabel->set_sensitive(false);
+            mpActLineDistFld->show();
+            mpActLineDistFld->set_sensitive(false);
+            mpActLineDistFld->set_text("");
             break;
 
         case LLINESPACE_DURCH:
-            mpLineDistAtPercentBox->Hide();
+            mxLineDistAtPercentBox->hide();
 
-            mpActLineDistFld = mpLineDistAtMetricBox.get();
-            mpLineDistAtMetricBox->SetMin(0);
+            mpActLineDistFld = mxLineDistAtMetricBox.get();
+            mxLineDistAtMetricBox->set_min(0, FieldUnit::NONE);
 
-            if (mpLineDistAtMetricBox->GetText().isEmpty())
-                mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0));
+            if (mxLineDistAtMetricBox->get_text().isEmpty())
+                mxLineDistAtMetricBox->set_value(mxLineDistAtMetricBox->normalize(0), FieldUnit::NONE);
 
-            mpLineDistLabel->Enable();
-            mpActLineDistFld->Show();
-            mpActLineDistFld->Enable();
+            mxLineDistLabel->set_sensitive(true);
+            mpActLineDistFld->show();
+            mpActLineDistFld->set_sensitive(true);
             break;
 
         case LLINESPACE_MIN:
-            mpLineDistAtPercentBox->Hide();
+            mxLineDistAtPercentBox->hide();
 
-            mpActLineDistFld = mpLineDistAtMetricBox.get();
-            mpLineDistAtMetricBox->SetMin(0);
+            mpActLineDistFld = mxLineDistAtMetricBox.get();
+            mxLineDistAtMetricBox->set_min(0, FieldUnit::NONE);
 
-            if (mpLineDistAtMetricBox->GetText().isEmpty())
-                mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0), FieldUnit::TWIP);
+            if (mxLineDistAtMetricBox->get_text().isEmpty())
+                mxLineDistAtMetricBox->set_value(mxLineDistAtMetricBox->normalize(0), FieldUnit::TWIP);
 
-            mpLineDistLabel->Enable();
-            mpActLineDistFld->Show();
-            mpActLineDistFld->Enable();
+            mxLineDistLabel->set_sensitive(true);
+            mpActLineDistFld->show();
+            mpActLineDistFld->set_sensitive(true);
             break;
 
         case LLINESPACE_PROP:
-            mpLineDistAtMetricBox->Hide();
+            mxLineDistAtMetricBox->hide();
 
-            mpActLineDistFld = mpLineDistAtPercentBox.get();
+            mpActLineDistFld = mxLineDistAtPercentBox.get();
 
-            if (mpLineDistAtPercentBox->GetText().isEmpty())
-                mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(100), FieldUnit::TWIP);
+            if (mxLineDistAtPercentBox->get_text().isEmpty())
+                mxLineDistAtPercentBox->set_value(mxLineDistAtPercentBox->normalize(100), FieldUnit::TWIP);
 
-            mpLineDistLabel->Enable();
-            mpActLineDistFld->Show();
-            mpActLineDistFld->Enable();
+            mxLineDistLabel->set_sensitive(true);
+            mpActLineDistFld->show();
+            mpActLineDistFld->set_sensitive(true);
             break;
 
         case LLINESPACE_FIX:
-            mpLineDistAtPercentBox->Hide();
+            mxLineDistAtPercentBox->hide();
 
-            mpActLineDistFld = mpLineDistAtMetricBox.get();
-            sal_Int64 nTemp = mpLineDistAtMetricBox->GetValue();
-            mpLineDistAtMetricBox->SetMin(mpLineDistAtMetricBox->Normalize(MIN_FIXED_DISTANCE), FieldUnit::TWIP);
+            mpActLineDistFld = mxLineDistAtMetricBox.get();
+            sal_Int64 nTemp = mxLineDistAtMetricBox->get_value(FieldUnit::NONE);
+            mxLineDistAtMetricBox->set_min(mxLineDistAtMetricBox->normalize(MIN_FIXED_DISTANCE), FieldUnit::TWIP);
 
-            if (mpLineDistAtMetricBox->GetValue() != nTemp)
-                SetMetricValue(*mpLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip);
+            if (mxLineDistAtMetricBox->get_value(FieldUnit::NONE) != nTemp)
+                SetMetricValue(*mxLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip);
 
-            mpLineDistLabel->Enable();
-            mpActLineDistFld->Show();
-            mpActLineDistFld->Enable();
+            mxLineDistLabel->set_sensitive(true);
+            mpActLineDistFld->show();
+            mpActLineDistFld->set_sensitive(true);
             break;
     }
 }
 
 void ParaLineSpacingControl::SelectEntryPos(sal_Int32 nPos)
 {
-    mpLineDist->SelectEntryPos(nPos);
+    mxLineDist->set_active(nPos);
     UpdateMetricFields();
 }
 
-IMPL_LINK_NOARG(ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(ParaLineSpacingControl, LineSPDistHdl_Impl, weld::ComboBox&, void)
 {
     UpdateMetricFields();
     ExecuteLineSpace();
 }
 
-IMPL_LINK_NOARG( ParaLineSpacingControl, LineSPDistAtHdl_Impl, Edit&, void )
+IMPL_LINK_NOARG( ParaLineSpacingControl, LineSPDistAtHdl_Impl, weld::MetricSpinButton&, void )
 {
     ExecuteLineSpace();
 }
 
 void ParaLineSpacingControl::ExecuteLineSpace()
 {
-    mpLineDist->SaveValue();
+    mxLineDist->save_value();
 
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
-    const sal_Int32 nPos = mpLineDist->GetSelectedEntryPos();
+    const sal_Int32 nPos = mxLineDist->get_active();
 
     switch ( nPos )
     {
@@ -324,13 +317,13 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             break;
 
         case LLINESPACE_PROP:
-            SetLineSpace(aSpacing, nPos, mpLineDistAtPercentBox->Denormalize(static_cast<long>(mpLineDistAtPercentBox->GetValue())));
+            SetLineSpace(aSpacing, nPos, mxLineDistAtPercentBox->denormalize(static_cast<long>(mxLineDistAtPercentBox->get_value(FieldUnit::PERCENT))));
             break;
 
         case LLINESPACE_MIN:
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
-            SetLineSpace(aSpacing, nPos, GetCoreValue(*mpLineDistAtMetricBox, meLNSpaceUnit));
+            SetLineSpace(aSpacing, nPos, GetCoreValue(*mxLineDistAtMetricBox, meLNSpaceUnit));
             break;
 
         default:
@@ -388,21 +381,21 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
     }
 }
 
-IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, Button*, pControl, void)
+IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, weld::Button&, rControl, void)
 {
-    if (pControl == mpSpacing1Button)
+    if (&rControl == mxSpacing1Button.get())
     {
         ExecuteLineSpacing(LLINESPACE_1);
     }
-    else if (pControl == mpSpacing115Button)
+    else if (&rControl == mxSpacing115Button.get())
     {
         ExecuteLineSpacing(LLINESPACE_115);
     }
-    else if (pControl == mpSpacing15Button)
+    else if (&rControl == mxSpacing15Button.get())
     {
         ExecuteLineSpacing(LLINESPACE_15);
     }
-    else if (pControl == mpSpacing2Button)
+    else if (&rControl == mxSpacing2Button.get())
     {
         ExecuteLineSpacing(LLINESPACE_2);
     }
@@ -418,7 +411,7 @@ void ParaLineSpacingControl::ExecuteLineSpacing(sal_Int32 nEntry)
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
 
     // close when the user used the buttons
-    EndPopupMode();
+    mxControl->EndPopupMode();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

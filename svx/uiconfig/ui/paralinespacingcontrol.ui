@@ -1,64 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">6</property>
-    <property name="upper">65535</property>
-    <property name="value">100</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">0.01</property>
-    <property name="upper">9999</property>
-    <property name="value">0.5</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_1">
-    <property name="visible">True</property>
+  <object class="GtkPopover" id="ParaLineSpacingControl">
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_spacepara1.png</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_115">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">cmd/lc_spacepara1.png</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_15">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">cmd/lc_spacepara15.png</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">cmd/lc_spacepara2.png</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkWindow" id="ParaLineSpacingControl">
-    <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="no_show_all">True</property>
     <property name="border_width">4</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <child>
-      <object class="GtkGrid" id="grid2">
+      <object class="GtkGrid" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <child>
@@ -75,8 +26,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -93,8 +42,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -111,8 +58,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -129,15 +74,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">3</property>
             <property name="margin_top">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
@@ -159,16 +101,14 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="paralinespacingcontrol|label3">Line Spacing:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">line_dist</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -176,8 +116,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                         <items>
                           <item translatable="yes" context="paralinespacingcontrol|line_dist">Single</item>
                           <item translatable="yes" context="paralinespacingcontrol|line_dist">1.15 Lines</item>
@@ -192,24 +130,20 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="value_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="paralinespacingcontrol|value_label">Value:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">grid1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -219,7 +153,7 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkSpinButton" id="percent_box:0%">
+                          <object class="GtkSpinButton" id="percent_box">
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="adjustment">adjustment1</property>
@@ -227,12 +161,10 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="metric_box:0.00cm">
+                          <object class="GtkSpinButton" id="metric_box">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -242,16 +174,12 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -272,11 +200,46 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">4</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">6</property>
+    <property name="upper">65535</property>
+    <property name="value">100</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">0.01</property>
+    <property name="upper">9999</property>
+    <property name="value">0.5</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/lc_spacepara1.png</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_115">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/lc_spacepara1.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_15">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/lc_spacepara15.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/lc_spacepara2.png</property>
+    <property name="icon_size">1</property>
   </object>
 </interface>
