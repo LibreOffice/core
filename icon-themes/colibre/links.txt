@@ -1409,6 +1409,7 @@ cmd/sc_selectmode.png cmd/sc_selectobject.png
 cmd/32/reportnavigator.png cmd/32/navigator.png
 cmd/lc_reportnavigator.png cmd/lc_navigator.png
 cmd/sc_reportnavigator.png cmd/sc_navigator.png
+cmd/sc_setreminder.png cmd/sc_timefield.png
 
 # Database
 cmd/32/dbdtableedit.png cmd/32/dbtableedit.png

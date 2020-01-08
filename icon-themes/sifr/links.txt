@@ -844,6 +844,7 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 # navigator
 cmd/lc_dsbdocumentdatasource.png cmd/lc_sbaexecutesql.png
 cmd/sc_dsbdocumentdatasource.png cmd/sc_sbaexecutesql.png
+cmd/sc_setreminder.png cmd/sc_timefield.png
 
 cmd/lc_showbrowser.png cmd/lc_controlproperties.png
 cmd/sc_showbrowser.png cmd/sc_controlproperties.png
