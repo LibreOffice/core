@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb0dccb5_9194d951",
+        "filename": "svx/source/dialog/searchcharmap.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T08:38:51Z",
+      "side": 1,
+      "message": "What is the rationale for choosing sal_uInt32 here?  (The return type of base-class SvxShowCharSet::FirstInView in svx/source/dialog/charmap.cxx is int, so that might be a more obvious choice?  Especially as the return type of this virtual LastInView function is also int?  If sal_uInt32 was chosen because there are tricks involved here that guarantee to avoid overflow, please document that.)",
+      "revId": "1a5832e8340a2502f24d7fea98c656e629887d2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
