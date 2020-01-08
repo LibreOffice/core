@@ -999,9 +999,7 @@ PyThreadAttach::~PyThreadAttach()
     if (m_isNewState)
     {   // Clear needs GIL!
         PyThreadState_Clear( tstate );
-    }
-    if (m_isNewState)
-    {   // note: PyThreadState_Delete(tstate) cannot be called, it will assert
+        // note: PyThreadState_Delete(tstate) cannot be called, it will assert
         // because it requires a PyThreadState to be set, but not the tstate!
         PyThreadState_DeleteCurrent();
     }
@@ -1015,6 +1013,7 @@ PyThreadDetach::PyThreadDetach()
 {
     tstate = PyThreadState_Get();
     PyEval_ReleaseThread( tstate );
+    // tstate must not be deleted here! lots of pointers to it on the stack
 }
 
     /** Acquires the global interpreter lock again
