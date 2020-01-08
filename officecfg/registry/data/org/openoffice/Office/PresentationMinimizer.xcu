@@ -76,13 +76,19 @@
             <value xml:lang="en-US">0;&lt;no change&gt;</value>
         </prop>
         <prop oor:name="STR_IMAGE_RESOLUTION_1">
-            <value xml:lang="en-US">90;90 DPI (screen resolution)</value>
+            <value xml:lang="en-US">96;96 DPI (screen resolution)</value>
         </prop>
         <prop oor:name="STR_IMAGE_RESOLUTION_2">
             <value xml:lang="en-US">150;150 DPI (projector resolution)</value>
         </prop>
         <prop oor:name="STR_IMAGE_RESOLUTION_3">
+            <value xml:lang="en-US">250;250 DPI (print resolution)</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION_4">
             <value xml:lang="en-US">300;300 DPI (print resolution)</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION_5">
+            <value xml:lang="en-US">600;600 DPI (print resolution)</value>
         </prop>
         <prop oor:name="STR_EMBED_LINKED_GRAPHICS">
             <value xml:lang="en-US">~Embed external images</value>
@@ -248,7 +254,7 @@ The current presentation contains no OLE objects.</value>
         <node oor:name="Templates">
             <node oor:name="template1" oor:op="replace">
                 <prop oor:name="Name">
-                    <value xml:lang="en-US">Screen optimized (smallest file size)</value>
+                    <value xml:lang="en-US">E-Mail (96 DPI): minimize document size for sharing</value>
                 </prop>
                 <prop oor:name="JPEGCompression">
                     <value>true</value>
@@ -260,7 +266,7 @@ The current presentation contains no OLE objects.</value>
                     <value>true</value>
                 </prop>
                 <prop oor:name="ImageResolution">
-                    <value>90</value>
+                    <value>96</value>
                 </prop>
                 <prop oor:name="EmbedLinkedGraphics">
                     <value>true</value>
@@ -289,7 +295,7 @@ The current presentation contains no OLE objects.</value>
             </node>
             <node oor:name="template2" oor:op="replace">
                 <prop oor:name="Name">
-                    <value xml:lang="en-US">Projector optimized</value>
+                    <value xml:lang="en-US">Web (150 DPI): good for web pages and projectors</value>
                 </prop>
                 <prop oor:name="JPEGCompression">
                     <value>true</value>
@@ -330,7 +336,7 @@ The current presentation contains no OLE objects.</value>
             </node>
             <node oor:name="template3" oor:op="replace">
                 <prop oor:name="Name">
-                    <value xml:lang="en-US">Print optimized</value>
+                    <value xml:lang="en-US">Print (300 DPI): excellent quality on most printers and screens</value>
                 </prop>
                 <prop oor:name="JPEGCompression">
                     <value>true</value>
@@ -343,6 +349,47 @@ The current presentation contains no OLE objects.</value>
                 </prop>
                 <prop oor:name="ImageResolution">
                     <value>300</value>
+                </prop>
+                <prop oor:name="EmbedLinkedGraphics">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimization">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimizationType">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="DeleteUnusedMasterPages">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteHiddenSlides">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteNotesPages">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="SaveAs">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OpenNewDocument">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="template4" oor:op="replace">
+                <prop oor:name="Name">
+                    <value xml:lang="en-US">High fidelity: preserves quality of the original picture</value>
+                </prop>
+                <prop oor:name="JPEGCompression">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="JPEGQuality">
+                    <value>80</value>
+                </prop>
+                <prop oor:name="RemoveCropArea">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ImageResolution">
+                    <value>0</value>
                 </prop>
                 <prop oor:name="EmbedLinkedGraphics">
                     <value>true</value>
