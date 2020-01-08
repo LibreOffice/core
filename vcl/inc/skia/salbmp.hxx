@@ -24,7 +24,7 @@
 
 #include <SkImage.h>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap
 {
