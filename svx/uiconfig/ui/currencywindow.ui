@@ -15,7 +15,7 @@
     <property name="no_show_all">True</property>
     <property name="border_width">4</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
