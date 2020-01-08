@@ -1410,6 +1410,7 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 cmd/32/savesimple.png cmd/32/save.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
+cmd/sc_setreminder.png cmd/sc_timefield.png
 
 # Locale language support
 cmd/32/underlinesimple.png cmd/32/underline.png
@@ -2340,7 +2341,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu 
+# Edit menu
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png

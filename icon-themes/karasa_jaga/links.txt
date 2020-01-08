@@ -1237,6 +1237,7 @@ cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 cmd/sc_modifyfield.png cmd/sc_fields.png
 cmd/sc_namegroup.png cmd/sc_renameobject.png
 cmd/sc_navigatemenu.png cmd/sc_navigator.png
+cmd/sc_setreminder.png cmd/sc_timefield.png
 cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
 cmd/sc_newglobaldoc.png res/odm_16_8.png
 cmd/sc_no.png cmd/sc_cancel.png

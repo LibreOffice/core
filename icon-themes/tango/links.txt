@@ -192,6 +192,7 @@ cmd/lc_selectmode.png cmd/lc_selectobject.png
 cmd/lc_drawselect.png cmd/lc_selectobject.png
 cmd/sc_selectmode.png cmd/sc_selectobject.png
 cmd/sc_drawselect.png cmd/sc_selectobject.png
+cmd/sc_setreminder.png cmd/sc_timefield.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
 sfx2/res/symphony/sidebar-style-large.png cmd/lc_designerdialog.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_insertformula.png

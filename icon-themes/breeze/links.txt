@@ -1770,6 +1770,7 @@ cmd/sc_selectmode.png cmd/sc_selectobject.png
 # Navigator
 cmd/32/navigationbar.png cmd/32/navigator.png
 cmd/32/reportnavigator.png cmd/32/navigator.png
+cmd/sc_setreminder.png cmd/sc_timefield.png
 
 cmd/lc_navigationbar.png cmd/lc_navigator.png
 cmd/lc_reportnavigator.png cmd/lc_navigator.png
@@ -1800,7 +1801,7 @@ cmd/sc_browseforward.png cmd/sc_nextrecord.png
 cmd/32/donation.png cmd/32/currencyfield.png
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
- 
+
 # Math
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
