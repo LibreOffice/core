@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cb31030_4ffa6f48",
+        "filename": "svx/source/dialog/charmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T15:22:43Z",
+      "side": 1,
+      "message": "so FirstInView returns int and GetCharCount() too - why is this being casted to sal_uIntPtr here?\n\nperhaps better to just convert nIndex and nCompare to int and get rid of the cast.",
+      "revId": "89b685c970fae8684bc379ef0ba1c3fd3d417898",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ddd33ab_e540c187",
+        "filename": "svx/source/dialog/searchcharmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T15:22:43Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "89b685c970fae8684bc379ef0ba1c3fd3d417898",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
