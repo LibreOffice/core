@@ -76,6 +76,7 @@
 #include <sfx2/watermarkitem.hxx>
 #include <SwUndoFmt.hxx>
 #include <strings.hrc>
+#include <AccessibilityCheck.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1466,6 +1467,13 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
         default: break;
     }
+}
+
+sfx::AccessibilityIssueCollection SwDocShell::runAccessibilityCheck()
+{
+    sw::AccessibilityCheck aCheck(m_xDoc.get());
+    aCheck.check();
+    return aCheck.getIssueCollecton();
 }
 
 std::set<Color> SwDocShell::GetDocColors()

@@ -295,6 +295,12 @@ std::set<Color> SfxObjectShell::GetDocColors()
     return empty;
 }
 
+sfx::AccessibilityIssueCollection SfxObjectShell::runAccessibilityCheck()
+{
+    sfx::AccessibilityIssueCollection aCollection;
+    return aCollection;
+}
+
 SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 {
     return nullptr;
