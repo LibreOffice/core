@@ -54,6 +54,8 @@
 #include <string.h>
 #include <o3tl/make_unique.hxx>
 
+#include <jni.h>
+
 using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
@@ -62,6 +64,34 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+namespace
+{
+/// List of locales that we have got via the initSpellCheckingNative JNI call.
+std::vector<OUString> gLocales;
+
+/// The gLocales converted to a Sequence of Locales - we cannot do that right away.
+Sequence<Locale> gLocalesSequence;
+}
+
+/// This has to be called from the Java code before the AndroidSpellChecker
+/// initialization - namely to have the JNIEnv to be able to perform calls
+/// back to the Java code.
+extern "C" JNIEXPORT void JNICALL libreofficekit_spell_checking_initialize(JNIEnv* env,
+                                                                           jobject /*instance*/,
+                                                                           jobjectArray locales)
+{
+    int count = env->GetArrayLength(locales);
+    for (int i = 0; i < count; ++i)
+    {
+        jstring jstr = (jstring)(env->GetObjectArrayElement(locales, i));
+        const char* localeUtf8 = env->GetStringUTFChars(jstr, nullptr);
+
+        gLocales.push_back(OUString::fromUtf8(localeUtf8).replace('_', '-'));
+
+        env->ReleaseStringUTFChars(jstr, localeUtf8);
+    }
+}
 
 AndroidSpellChecker::AndroidSpellChecker()
     : m_aEvtListeners(GetLinguMutex())
@@ -90,19 +120,27 @@ PropertyHelper_Spelling& AndroidSpellChecker::GetPropHelper_Impl()
 
 Sequence<Locale> SAL_CALL AndroidSpellChecker::getLocales()
 {
+    //SAL-DEBUG("AndroidSpellChecker::getLocales()");
+    if (gLocales.empty())
+        return Sequence<Locale>();
+
+    if (gLocalesSequence.hasElements())
+        return gLocalesSequence;
+
     MutexGuard aGuard(GetLinguMutex());
 
-    //SAL-DEBUG("AndroidSpellChecker::getLocales()");
+    gLocalesSequence.realloc(gLocales.size());
+    int i = 0;
+    for (OUString aLocale : gLocales)
+    {
+        //SAL-DEBUG("Spell locale: " << aLocale);
+        // FIXME don't store invalid locales
+        // FIXME make sure we 'languagetag' dir content is added to assets
+        gLocalesSequence[i++] = LanguageTag::convertToLocale(aLocale);
+        //SAL-DEBUG("Spell locale stored as: " << gLocalesSequence[i - 1].Language << '-' << gLocalesSequence[i - 1].Country);
+    }
 
-    // FIXME TODO do the real stuff here
-    Sequence<Locale> aSequence(5);
-    aSequence[0] = Locale("en", "", "");
-    aSequence[1] = Locale("en", "US", "");
-    aSequence[2] = Locale("de", "", "");
-    aSequence[3] = Locale("de", "DE", "");
-    aSequence[4] = Locale("cs", "", "");
-
-    return aSequence;
+    return gLocalesSequence;
 }
 
 sal_Bool SAL_CALL AndroidSpellChecker::hasLocale(const Locale& /*rLocale*/)
