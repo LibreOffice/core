@@ -34,6 +34,24 @@
       "revId": "385f3b72efb4982bc3045dcce461443486a0f0a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9627c7f2_52c75856",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1002273
+      },
+      "writtenOn": "2020-01-08T09:58:02Z",
+      "side": 1,
+      "message": "At least on x86 the atomic_store is sufficient, no atomic load needed.\n\nIt could be possible to use \n(reinterpret_cast\u003cstd::atomic_flag\u003e(\u0026bComplete))-\u003etest_and_set();\n\nto atomically set bComplete. std::atomic_flag is guaranteed to be lock-free, so it should work on all architectures.",
+      "parentUuid": "e5ff3986_b5bb6684",
+      "revId": "385f3b72efb4982bc3045dcce461443486a0f0a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
