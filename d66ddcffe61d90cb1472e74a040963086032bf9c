@@ -16,6 +16,24 @@
       "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c6e4dce_dff12825",
+        "filename": "filter/source/graphicfilter/icgm/class1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T15:47:33Z",
+      "side": 1,
+      "message": "see https://gerrit.libreoffice.org/c/core/+/86310/4/filter/source/graphicfilter/icgm/class4.cxx#189",
+      "parentUuid": "883d491d_e6fc8a63",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
