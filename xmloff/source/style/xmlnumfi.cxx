@@ -1550,6 +1550,12 @@ SvXMLImportContextRef SvXMLNumFormatContext::CreateChildContext(
             break;
     }
 
+    if( !pContext )
+    {
+        SAL_WARN("xmloff.core", "No context for unknown-element " << rLName);
+        pContext = new SvXMLImportContext(GetImport(), nPrfx, rLName);
+    }
+
     return pContext;
 }
 
