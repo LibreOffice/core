@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1e518555_7c9468ab",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T16:27:55Z",
+      "side": 1,
+      "message": "IMHO it doesn\u0027t matter to narrow this because the difference is going to fit anyway and this isn\u0027t going to change because it\u0027s presumably a constraint of the file format.\n\noh and the worst that will happen if it doesn\u0027t fit is we throw an exception and reject the input file.",
+      "parentUuid": "18950cc4_ce76fd5e",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b582a75c_218b54a4",
         "filename": "filter/source/graphicfilter/icgm/class4.cxx",
         "patchSetId": 5
@@ -105,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "3015b5bf_f79c09c4",
+        "filename": "sfx2/source/doc/oleprops.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T16:27:55Z",
+      "side": 1,
+      "message": "these are unsigned? i was thinking that like everything in an IDL file they\u0027re signed, but i guess it\u0027s not the case.... indeed only \"Day\" is signed",
+      "parentUuid": "b32cf03d_ec09c21a",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27bcc8c7_85badb6a",
         "filename": "sfx2/source/view/viewfrm.cxx",
         "patchSetId": 5
@@ -116,6 +152,24 @@
       "writtenOn": "2020-01-08T16:15:57Z",
       "side": 1,
       "message": "Why?  If these shall really be of type sal_uInt16, why introduce the variables in the first place, instead of using nStart, nEnd directly?  CutLines takes parameters of type sal_Int32 these days; I assume the sal_uIntPtr intermediary variables were once introduced to avoid some sort of overflow in the below calculations.",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9986cdb_2f26ec66",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2698,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T16:27:55Z",
+      "side": 1,
+      "message": "agree, but i thought the variables weren\u0027t *introduced* by the patch so i\u0027ll leave it to Noel to remove them with some future compiler plugin :)",
+      "parentUuid": "27bcc8c7_85badb6a",
       "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
