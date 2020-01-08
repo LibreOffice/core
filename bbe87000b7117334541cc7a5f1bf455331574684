@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a76e561_947c971a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-08T15:04:33Z",
+      "side": 1,
+      "message": "not 96?",
+      "range": {
+        "startLine": 257,
+        "startChar": 52,
+        "endLine": 257,
+        "endChar": 54
+      },
+      "revId": "bbe87000b7117334541cc7a5f1bf455331574684",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e51cb9e_993a48e8",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/PresentationMinimizer.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-08T15:04:33Z",
+      "side": 1,
+      "message": "shouldnt it be 96?",
+      "range": {
+        "startLine": 204,
+        "startChar": 11,
+        "endLine": 204,
+        "endChar": 13
+      },
+      "revId": "bbe87000b7117334541cc7a5f1bf455331574684",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
