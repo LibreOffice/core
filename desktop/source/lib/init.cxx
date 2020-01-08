@@ -1880,9 +1880,8 @@ void CallbackFlushHandler::Invoke()
         {
             const int type = rCallbackData.Type;
             const auto& payload = rCallbackData.PayloadString;
-            const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(rCallbackData) : -1;
 
-            if (viewId == -1)
+            if (!lcl_isViewCallbackType(type))
             {
                 const auto stateIt = m_states.find(type);
                 if (stateIt != m_states.end())
@@ -1899,6 +1898,7 @@ void CallbackFlushHandler::Invoke()
             }
             else
             {
+                const int viewId = lcl_getViewId(rCallbackData);
                 const auto statesIt = m_viewStates.find(viewId);
                 if (statesIt != m_viewStates.end())
                 {
