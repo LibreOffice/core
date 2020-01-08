@@ -3035,14 +3035,6 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         }
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    if (rInfo.bThousand) // [] format
-    {
-        if (fNumber > 1.0E10) // Too large
-        {
-            sBuff = ImpSvNumberformatScan::GetErrorString();
-            return false;
-        }
-    }
     bool bInputLine;
     sal_Int32 nCntPost;
     if ( rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION &&
