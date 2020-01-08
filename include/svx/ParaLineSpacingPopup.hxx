@@ -30,6 +30,8 @@ public:
     explicit SvxLineSpacingToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxLineSpacingToolBoxControl() override;
 
+    virtual void SAL_CALL execute(sal_Int16 KeyModifier) override;
+
     using svt::ToolboxController::createPopupWindow;
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
