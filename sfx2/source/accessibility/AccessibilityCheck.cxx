@@ -8,31 +8,14 @@
  *
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
-#define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYCHECK_HXX
-
 #include <sfx2/AccessibilityCheck.hxx>
-#include <doc.hxx>
 
-namespace sw
+namespace sfx
 {
-class SW_DLLPUBLIC AccessibilityCheck final : public sfx::AccessibilityCheck
-{
-private:
-    SwDoc* m_pDoc;
+AccessibilityCheck::~AccessibilityCheck() {}
 
-public:
-    AccessibilityCheck(SwDoc* pDoc)
-        : m_pDoc(pDoc)
-    {
-    }
+AccessibilityIssueCollection& AccessibilityCheck::getIssueCollecton() { return m_aIssueCollection; }
 
-    void check() override;
-    void checkObject(SdrObject* pObject);
-};
-
-} // end sw namespace
-
-#endif
+} // end sfx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

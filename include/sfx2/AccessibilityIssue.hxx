@@ -8,15 +8,15 @@
  *
  */
 
-#ifndef INCLUDED_SVX_ACCESSIBILITYISSUE_HXX
-#define INCLUDED_SVX_ACCESSIBILITYISSUE_HXX
+#ifndef INCLUDED_SFX2_ACCESSIBILITYISSUE_HXX
+#define INCLUDED_SFX2_ACCESSIBILITYISSUE_HXX
 
-#include <svx/svxdllapi.h>
+#include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <memory>
 
-namespace svx
+namespace sfx
 {
 enum class AccessibilityIssueID
 {
@@ -26,14 +26,12 @@ enum class AccessibilityIssueID
     STYLE_LANGUAGE
 };
 
-class SVX_DLLPUBLIC AccessibilityIssue
+class SFX2_DLLPUBLIC AccessibilityIssue
 {
 public:
-    AccessibilityIssue(AccessibilityIssueID eIssueID = AccessibilityIssueID::UNSPECIFIED)
-        : m_eIssueID(eIssueID)
-    {
-    }
-    virtual ~AccessibilityIssue() {}
+    AccessibilityIssue(AccessibilityIssueID eIssueID = AccessibilityIssueID::UNSPECIFIED);
+    virtual ~AccessibilityIssue();
+
     virtual bool canGotoIssue() const = 0;
     virtual void gotoIssue() const = 0;
 
@@ -41,17 +39,20 @@ public:
     OUString m_aIssueText;
 };
 
-class SVX_DLLPUBLIC AccessibilityIssueCollection
+class SFX2_DLLPUBLIC AccessibilityIssueCollection
 {
 private:
     std::vector<std::shared_ptr<AccessibilityIssue>> m_aIssues;
 
 public:
-    std::vector<std::shared_ptr<AccessibilityIssue>>& getIssues() { return m_aIssues; }
+    AccessibilityIssueCollection();
+    ~AccessibilityIssueCollection();
+
+    std::vector<std::shared_ptr<AccessibilityIssue>>& getIssues();
 };
 
-} // end svx namespace
+} // end sfx namespace
 
-#endif // INCLUDED_SVX_ACCESSIBILITYISSUE_HXX
+#endif // INCLUDED_SFX2_ACCESSIBILITYISSUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
