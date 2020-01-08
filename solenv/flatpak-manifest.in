@@ -573,6 +573,12 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/skia-m80-0af13b3caf0384981f50e073ebc7bd0f3f751711.tar.xz",
+                    "sha256": "f1b3be9d9468c20a84fa21aea44b19daa48bca8fd2c7f9ea6fe76d6e31f54530",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/skia-m80-0af13b3caf0384981f50e073ebc7bd0f3f751711.tar.xz"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf",
                     "sha256": "884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc",
                     "type": "file",
