@@ -131,7 +131,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         if ( !xDataModel.is() )
             xDataModel = lcl_getDefaultDataModel_throw( m_xContext );
         UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_DATAMODEL, makeAny( xDataModel ) );
-            // do *not* use setFastPropertyValue here: The UnoControlModel ctor did a simple copy of all property values,
+            // do *not* use setFastPropertyValue here: The UnoControlModel ctor made a simple copy of all property values,
             // so before this call here, we share our data model with the own of the clone source. setFastPropertyValue,
             // then, disposes the old data model - which means the data model which in fact belongs to the clone source.
             // so, call the UnoControlModel's impl-method for setting the value.

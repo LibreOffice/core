@@ -307,7 +307,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO74106, "FDO74106.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO74215, "FDO74215.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
-    // tdf#106849 NumPicBullet xShape should not to be resized.
+    // tdf#106849 NumPicBullet xShape should not be resized.
 
     // This is dependent on the running system: see MSWordExportBase::BulletDefinitions
     // FIXME: the size of a bullet is defined by GraphicSize property

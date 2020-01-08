@@ -875,7 +875,7 @@ void ORowSetCache::moveWindow()
             bool bCheck;
             bCheck = m_xCacheSet->absolute(nNewStartPos + 1);
 
-            // m_nEndPos < nNewEndPos when window not filled (e.g. there are less rows in total than window size)
+            // m_nEndPos < nNewEndPos when window not filled (e.g. there are fewer rows in total than window size)
             m_nEndPos = std::min(nNewEndPos, m_nEndPos);
             const sal_Int32 nOverlapSize = m_nEndPos - m_nStartPos;
             const sal_Int32 nStartPosOffset = m_nStartPos - nNewStartPos; // by how much m_nStartPos moves
