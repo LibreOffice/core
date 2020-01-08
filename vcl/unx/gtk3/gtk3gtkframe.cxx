@@ -60,9 +60,6 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
-#define IS_WIDGET_REALIZED gtk_widget_get_realized
-#define IS_WIDGET_MAPPED   gtk_widget_get_mapped
-
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
@@ -1741,7 +1738,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     }
 
     bool bResize = false;
-    bool bVisible = IS_WIDGET_MAPPED( m_pWindow );
+    bool bVisible = gtk_widget_get_mapped( m_pWindow );
     if( bVisible )
         Show( false );
 
@@ -1838,7 +1835,7 @@ void GtkSalFrame::updateWMClass()
 
     display = GDK_DISPLAY_XDISPLAY(getGdkDisplay());
 
-    if( IS_WIDGET_REALIZED( m_pWindow ) )
+    if( gtk_widget_get_realized( m_pWindow ) )
     {
         XClassHint* pClass = XAllocClassHint();
         OString aResName = SalGenericSystem::getFrameResName();
@@ -1932,7 +1929,7 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
             gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
             gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
         }
-        else if( IS_WIDGET_MAPPED( m_pWindow ) )
+        else if( gtk_widget_get_mapped( m_pWindow ) )
         {
             if (!(nFlags & SalFrameToTop::GrabFocusOnly))
                 gtk_window_present_with_time(GTK_WINDOW(m_pWindow), GetLastInputEventTime());
