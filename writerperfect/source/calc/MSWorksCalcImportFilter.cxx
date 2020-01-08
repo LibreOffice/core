@@ -38,24 +38,28 @@ namespace MSWorksCalcImportFilterInternal
 {
 /// returns the list of stream name present in a folder
 static uno::Reference<sdbc::XResultSet>
-getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent) try
+getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent)
 {
-    if (xPackageContent.is())
+    try
     {
-        ucbhelper::Content packageContent(xPackageContent,
-                                          uno::Reference<ucb::XCommandEnvironment>(),
-                                          comphelper::getProcessComponentContext());
-        uno::Sequence<OUString> lPropNames{ "Title" };
-        uno::Reference<sdbc::XResultSet> xResultSet(
-            packageContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
-        return xResultSet;
+        if (xPackageContent.is())
+        {
+            ucbhelper::Content packageContent(xPackageContent,
+                                              uno::Reference<ucb::XCommandEnvironment>(),
+                                              comphelper::getProcessComponentContext());
+            uno::Sequence<OUString> lPropNames{ "Title" };
+            uno::Reference<sdbc::XResultSet> xResultSet(
+                packageContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
+            return xResultSet;
+        }
+        return uno::Reference<sdbc::XResultSet>();
     }
-    return uno::Reference<sdbc::XResultSet>();
-}
-catch (...)
-{
-    SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilterInternal:getResultSet");
-    return uno::Reference<sdbc::XResultSet>();
+    catch (...)
+    {
+        SAL_WARN("writerperfect",
+                 "ignoring Exception in MSWorksCalcImportFilterInternal:getResultSet");
+        return uno::Reference<sdbc::XResultSet>();
+    }
 }
 
 namespace
