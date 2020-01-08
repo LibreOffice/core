@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "883d491d_e6fc8a63",
+        "filename": "filter/source/graphicfilter/icgm/class1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-08T15:42:03Z",
+      "side": 1,
+      "message": "why cripple a value of std::ptrdiff_t to sal_uInt32 when the intent apparently (see \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/67bf8ecc6fb0018bf196bc59df736d2cbda7d053%5E!/\u003e \"signed/unsigned comparison warnings\") is to just make it unsigned?",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
