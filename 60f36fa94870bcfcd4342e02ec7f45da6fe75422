@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b246785d_98120c6e",
+        "filename": "offapi/com/sun/star/embed/XTransactionListener.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T13:05:35Z",
+      "side": 1,
+      "message": "this is published API that needs to remain compatible, we can\u0027t change it for aesthetic reasons",
+      "revId": "60f36fa94870bcfcd4342e02ec7f45da6fe75422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
