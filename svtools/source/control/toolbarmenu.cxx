@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 
 #include <svtools/framestatuslistener.hxx>
 #include <svtools/valueset.hxx>
@@ -1514,8 +1515,57 @@ void ToolbarMenu::SetSelectHdl( const Link<ToolbarMenu*,void>& rLink )
     mpImpl->maSelectHdl = rLink;
 }
 
-
 }
 
+WeldToolbarPopup::WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                   weld::Widget* pParent, const OUString& rUIFile,
+                                   const OString& rId)
+    : ToolbarPopupBase(rFrame)
+    , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+    , m_xTopLevel(m_xBuilder->weld_container(rId))
+    , m_xContainer(m_xBuilder->weld_container("container"))
+{
+    m_xTopLevel->connect_focus_in(LINK(this, WeldToolbarPopup, FocusHdl));
+}
+
+WeldToolbarPopup::~WeldToolbarPopup()
+{
+}
+
+IMPL_LINK_NOARG(WeldToolbarPopup, FocusHdl, weld::Widget&, void)
+{
+    GrabFocus();
+}
+
+InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent, WeldToolbarPopup* pPopup)
+    : ToolbarPopup(rFrame, pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+    , m_xBox(get<vcl::Window>("box"))
+    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui"))
+    , m_xContainer(m_xBuilder->weld_container("container"))
+    , m_pPopup(pPopup)
+{
+    // move the WeldToolbarPopup contents into this interim toolbar so welded contents can appear as a dropdown in an unwelded toolbar
+    m_pPopup->getTopLevel()->move(m_pPopup->getContainer(), m_xContainer.get());
+}
+
+void InterimToolbarPopup::GetFocus()
+{
+    ToolbarPopup::GetFocus();
+    m_pPopup->GrabFocus();
+}
+
+void InterimToolbarPopup::dispose()
+{
+    // move the contents back where it belongs
+    m_xContainer->move(m_pPopup->getContainer(), m_pPopup->getTopLevel());
+    m_xContainer.reset();
+    m_xBox.clear();
+    ToolbarPopup::dispose();
+}
+
+InterimToolbarPopup::~InterimToolbarPopup()
+{
+    disposeOnce();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

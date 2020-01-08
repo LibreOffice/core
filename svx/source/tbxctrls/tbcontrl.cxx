@@ -1783,8 +1783,7 @@ ColorWindow::ColorWindow(const OUString& rCommand,
                          weld::Window*              pParentWindow,
                          const MenuOrToolMenuButton& rMenuButton,
                          ColorSelectFunction const & aFunction)
-    : ToolbarPopupBase(rFrame)
-    , m_xBuilder(Application::CreateBuilder(rMenuButton.get_widget(), "svx/ui/colorwindow.ui"))
+    : WeldToolbarPopup(rFrame, rMenuButton.get_widget(), "svx/ui/colorwindow.ui", "palette_popup_window")
     , theSlotId(nSlotId)
     , maCommand(rCommand)
     , mpParentWindow(pParentWindow)
@@ -1794,7 +1793,6 @@ ColorWindow::ColorWindow(const OUString& rCommand,
     , maColorSelectFunction(aFunction)
     , mxColorSet(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
     , mxRecentColorSet(new ColorValueSet(nullptr))
-    , mxTopLevel(m_xBuilder->weld_container("palette_popup_window"))
     , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
     , mxButtonAutoColor(m_xBuilder->weld_button("auto_color_button"))
     , mxButtonNoneColor(m_xBuilder->weld_button("none_color_button"))
@@ -1865,8 +1863,7 @@ ColorWindow::ColorWindow(const OUString& rCommand,
 
     mxColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
     mxRecentColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
-    mxTopLevel->set_help_id(HID_POPUP_COLOR);
-    mxTopLevel->connect_focus_in(LINK(this, ColorWindow, FocusHdl));
+    m_xTopLevel->set_help_id(HID_POPUP_COLOR);
     mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
 
     mxPaletteManager->ReloadColorSet(*mxColorSet);
@@ -1887,7 +1884,7 @@ ColorWindow::ColorWindow(const OUString& rCommand,
     }
 }
 
-IMPL_LINK_NOARG(ColorWindow, FocusHdl, weld::Widget&, void)
+void ColorWindow::GrabFocus()
 {
     if (mxColorSet->IsNoSelection() && mpDefaultButton)
         mpDefaultButton->grab_focus();
@@ -3502,8 +3499,9 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
         if ( m_bSplitButton )
             xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
 
-        m_pToolbar->set_item_popover(aId, xPopover->getTopLevel());
         mxPopover = std::move(xPopover);
+
+        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
 
         m_xBtnUpdater.reset(new svx::ToolboxButtonColorUpdater(m_nSlotId, aId, m_pToolbar, !m_bSplitButton, aCommandLabel, m_xFrame));
         return;
@@ -3811,8 +3809,9 @@ namespace
         std::vector<OUString> m_aFormatEntries;
         LanguageType          m_eFormatLanguage;
         DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
-        DECL_LINK(FocusHdl, weld::Widget&, void);
         DECL_LINK(OKHdl, weld::Button&, void);
+
+        virtual void GrabFocus() override;
 
     public:
         CurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
@@ -3824,8 +3823,6 @@ namespace
             , m_rSelectedFormat(rSelectedFormat)
             , m_eSelectedLanguage(eSelectedLanguage)
         {
-            m_xTopLevel->connect_focus_in(LINK(this, CurrencyList_Impl, FocusHdl));
-
             m_xCurrencyLb->set_size_request(-1, m_xCurrencyLb->get_height_rows(12));
 
             std::vector< OUString > aList;
@@ -3871,7 +3868,7 @@ namespace
         }
     };
 
-    IMPL_LINK_NOARG(CurrencyList_Impl, FocusHdl, weld::Widget&, void)
+    void CurrencyList_Impl::GrabFocus()
     {
         m_xCurrencyLb->grab_focus();
     }
@@ -4302,7 +4299,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Win
 IMPL_LINK(ColorListBox, ToggleHdl, weld::ToggleButton&, rButton, void)
 {
     if (rButton.get_active())
-        getColorWindow()->FocusHdl(*m_xButton);
+        getColorWindow()->GrabFocus();
 }
 
 ColorListBox::~ColorListBox()
