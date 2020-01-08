@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3931750_5f6e82d2",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "this comment is useless - better remove it",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64dc1077_c33bda87",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "this comment is useless - better remove it",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4eb9d97_4cd8da00",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "without the issue references this 2 line comment doesn\u0027t add any value :( better remove it completely",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8214965_6579e3e1",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "this comment is pointless",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2a63488_7427177a",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "these comments are useful",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eec89c61_2c35ac3f",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "this comment is pointless",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "501c353c_29a74a86",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "this comment is pointless",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a703dfe_2657f877",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "its impossible to see what code this comment refers to \u003d\u003e pointless",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d88a049f_88f84f40",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "useless comment",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7e1e446_12e87a76",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:28:45Z",
+      "side": 1,
+      "message": "these comments are also useless without the issues",
+      "revId": "bf6cf5aaf39a56504d9af6398f52ccb5f5b9444f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
