@@ -121,6 +121,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
                 <child>
                   <object class="GtkRadioButton" id="alwaysrb">
                     <property name="label" translatable="yes" context="scgeneralpage|alwaysrb">_Always (from trusted locations)</property>
