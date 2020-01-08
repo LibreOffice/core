@@ -6459,12 +6459,13 @@ private:
         }
 #endif
         //else older gtk3
-        const int nMask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
-
         GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
         GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-        gdk_device_grab(pPointer, gtk_widget_get_window(GTK_WIDGET(m_pMenuHack)), GDK_OWNERSHIP_NONE,
-                        true, GdkEventMask(nMask), nullptr, gtk_get_current_event_time());
+        GdkWindow* pWindow = gtk_widget_get_window(GTK_WIDGET(m_pMenuHack));
+        guint32 nCurrentTime = gtk_get_current_event_time();
+        gdk_device_grab(pPointer, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
+        if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
+            gdk_device_grab(pKeyboard, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
     }
 
     void do_ungrab()
@@ -6481,7 +6482,10 @@ private:
         //else older gtk3
         GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
         GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-        gdk_device_ungrab(pPointer, gtk_get_current_event_time());
+        guint32 nCurrentTime = gtk_get_current_event_time();
+        gdk_device_ungrab(pPointer, nCurrentTime);
+        if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
+            gdk_device_ungrab(pKeyboard, nCurrentTime);
     }
 
     void toggle_menu()
