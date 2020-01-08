@@ -362,15 +362,15 @@ public:
     double Or() const ;        // logical OR of all matrix values, or NAN
     double Xor() const ;       // logical XOR of all matrix values, or NAN
 
-    IterateResult Sum(bool bTextAsZero) const ;
-    IterateResult SumSquare(bool bTextAsZero) const ;
-    IterateResult Product(bool bTextAsZero) const ;
+    IterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    IterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     size_t Count(bool bCountStrings, bool bCountErrors) const ;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const ;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const ;
 
-    double GetMaxValue( bool bTextAsZero ) const ;
-    double GetMinValue( bool bTextAsZero ) const ;
+    double GetMaxValue( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
+    double GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     double GetGcd() const ;
     double GetLcm() const ;
 
