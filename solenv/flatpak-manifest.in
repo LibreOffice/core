@@ -171,10 +171,10 @@
                     "dest-filename": "external/tarballs/CoinMP-1.7.6.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz",
-                    "sha256": "3d569869d27b48860210c758c4f313082103a5e58219a7669b52bfd29d674780",
+                    "url": "https://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz",
+                    "sha256": "89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7",
                     "type": "file",
-                    "dest-filename": "external/tarballs/cppunit-1.14.0.tar.gz"
+                    "dest-filename": "external/tarballs/cppunit-1.15.1.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/Firebird-3.0.0.32483-0.tar.bz2",
