@@ -997,8 +997,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
         CPPUNIT_ASSERT_MESSAGE("The table is clipped in a fly frame.", nFlyPrtHeight >= nTableHeight);
     }
 
-    // check how much pages we have
-    CPPUNIT_ASSERT_EQUAL(10, getPages());
+    // check how much pages we have: it should match the Word layout result
+    CPPUNIT_ASSERT_EQUAL(11, getPages());
 
     // check content of the first page
     {

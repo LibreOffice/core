@@ -2171,8 +2171,9 @@ void DomainMapper_Impl::appendGlossaryEntry()
 
 void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
-    m_aHeaderFooterStack.push(HeaderFooterContext(m_bTextInserted));
+    m_aHeaderFooterStack.push(HeaderFooterContext(m_bTextInserted, m_nTableDepth));
     m_bTextInserted = false;
+    m_nTableDepth = 0;
 
     const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
@@ -2261,6 +2262,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     if (!m_aHeaderFooterStack.empty())
     {
         m_bTextInserted = m_aHeaderFooterStack.top().getTextInserted();
+        m_nTableDepth = m_aHeaderFooterStack.top().getTableDepth();
         m_aHeaderFooterStack.pop();
     }
 }
@@ -3566,8 +3568,9 @@ void DomainMapper_Impl::SetFieldLocked()
         m_aFieldStack.back()->SetFieldLocked();
 }
 
-HeaderFooterContext::HeaderFooterContext(bool bTextInserted)
+HeaderFooterContext::HeaderFooterContext(bool bTextInserted, sal_Int32 nTableDepth)
     : m_bTextInserted(bTextInserted)
+    , m_nTableDepth(nTableDepth)
 {
 }
 
@@ -3575,6 +3578,8 @@ bool HeaderFooterContext::getTextInserted() const
 {
     return m_bTextInserted;
 }
+
+sal_Int32 HeaderFooterContext::getTableDepth() const { return m_nTableDepth; }
 
 FieldContext::FieldContext(uno::Reference< text::XTextRange > const& xStart)
     : m_bFieldCommandCompleted(false)
