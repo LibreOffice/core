@@ -65,7 +65,7 @@
                     <property name="label" translatable="yes" context="optfonttabpage|default_label">De_fault:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">standardbox</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -79,7 +79,7 @@
                     <property name="label" translatable="yes" context="optfonttabpage|heading_label">Headin_g:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">titlebox</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -93,7 +93,7 @@
                     <property name="label" translatable="yes" context="optfonttabpage|list_label">_List:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">listbox</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -107,7 +107,7 @@
                     <property name="label" translatable="yes" context="optfonttabpage|caption_label">C_aption:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">labelbox</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -121,7 +121,7 @@
                     <property name="label" translatable="yes" context="optfonttabpage|index_label">_Index:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">idxbox</property>
-                    <property name="xalign">1</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
