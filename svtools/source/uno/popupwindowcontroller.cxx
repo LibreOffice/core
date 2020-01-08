@@ -176,6 +176,7 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
 // XComponent
 void SAL_CALL PopupWindowController::dispose()
 {
+    mxInterimPopover.clear();
     mxPopover.reset();
     mxImpl.reset();
     svt::ToolboxController::dispose();
@@ -238,7 +239,10 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
 
 void PopupWindowController::EndPopupMode()
 {
-    m_pToolbar->set_menu_item_active(m_aCommandURL.toUtf8(), false);
+    if (m_pToolbar)
+        m_pToolbar->set_menu_item_active(m_aCommandURL.toUtf8(), false);
+    else if (mxInterimPopover)
+        mxInterimPopover->EndPopupMode();
 }
 
 }

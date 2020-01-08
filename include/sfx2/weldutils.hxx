@@ -53,18 +53,6 @@ public:
     ~ToolbarUnoDispatcher();
 };
 
-class SFX2_DLLPUBLIC WeldToolbarPopup : public svtools::ToolbarPopupBase
-{
-protected:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Container> m_xTopLevel;
-
-public:
-    WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, weld::Widget* pParent,
-                     const OUString& rUIFile, const OString& rId);
-    weld::Container* getTopLevel() { return m_xTopLevel.get(); }
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
