@@ -5,7 +5,7 @@
   <object class="GtkAdjustment" id="compression-adjustment">
     <property name="lower">1</property>
     <property name="upper">9</property>
-    <property name="value">9</property>
+    <property name="value">6</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
   </object>
@@ -19,9 +19,9 @@
   <object class="GtkAdjustment" id="quality-adjustment">
     <property name="lower">1</property>
     <property name="upper">99</property>
-    <property name="value">90</property>
+    <property name="value">80</property>
     <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="page_increment">5</property>
   </object>
   <object class="GtkAdjustment" id="width-adjustment">
     <property name="lower">1</property>
@@ -203,10 +203,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
-                                    <property name="text">90</property>
                                     <property name="adjustment">quality-adjustment</property>
                                     <property name="numeric">True</property>
-                                    <property name="value">90</property>
                                     <accessibility>
                                       <relation type="labelled-by" target="radio-jpeg"/>
                                     </accessibility>
@@ -257,10 +255,10 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
-                                    <property name="text">9</property>
+                                    <property name="text">6</property>
                                     <property name="adjustment">compression-adjustment</property>
                                     <property name="numeric">True</property>
-                                    <property name="value">9</property>
+                                    <property name="value">6</property>
                                     <accessibility>
                                       <relation type="labelled-by" target="radio-lossless"/>
                                     </accessibility>
@@ -434,7 +432,9 @@
                               <item>96</item>
                               <item>150</item>
                               <item>200</item>
+                              <item>250</item>
                               <item>300</item>
+                              <item>400</item>
                               <item>600</item>
                             </items>
                             <child internal-child="entry">
