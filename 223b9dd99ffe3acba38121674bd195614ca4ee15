@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e54943fc_600c76d8",
+        "filename": "solenv/gbuild/Jar.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T10:28:39Z",
+      "side": 1,
+      "message": "gb_Jar_URE should contain ridl?",
+      "revId": "223b9dd99ffe3acba38121674bd195614ca4ee15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

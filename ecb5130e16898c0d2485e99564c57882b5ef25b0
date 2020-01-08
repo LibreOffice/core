@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f4a6f51_4af2266c",
+        "filename": "bean/test/makefile.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T10:28:39Z",
+      "side": 0,
+      "message": "why do we need to change these ancient unused dmakefiles?\n\n... half the files changed here are unused?",
+      "revId": "ecb5130e16898c0d2485e99564c57882b5ef25b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
