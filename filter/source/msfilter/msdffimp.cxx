@@ -4419,7 +4419,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     {
                         OUString            aObjectText;
                         OUString            aFontName;
-                        MSO_GeoTextAlign    eGeoTextAlign;
 
                         if ( SeekToContent( DFF_Prop_gtextFont, rSt ) )
                         {
@@ -4454,7 +4453,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             ReadObjText( aObjectText, pRet );
                         }
 
-                        eGeoTextAlign = static_cast<MSO_GeoTextAlign>(GetPropertyValue( DFF_Prop_gtextAlign, mso_alignTextCenter ));
+                        auto eGeoTextAlign = GetPropertyValue(DFF_Prop_gtextAlign, mso_alignTextCenter);
                         {
                             SdrTextHorzAdjust eHorzAdjust;
                             switch( eGeoTextAlign )
