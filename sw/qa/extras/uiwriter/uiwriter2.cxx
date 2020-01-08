@@ -53,6 +53,7 @@
 #include <AnnotationWin.hxx>
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
+#include <editeng/fontitem.hxx>
 
 namespace
 {
@@ -97,6 +98,7 @@ public:
     void testDateFormFieldInsertion();
     void testDateFormFieldContentOperations();
     void testDateFormFieldCurrentDateHandling();
+    void testTdf90069();
 #if !defined(_WIN32)
     void testDateFormFieldCurrentDateInvalidation();
 #endif
@@ -135,6 +137,7 @@ public:
     CPPUNIT_TEST(testDateFormFieldInsertion);
     CPPUNIT_TEST(testDateFormFieldContentOperations);
     CPPUNIT_TEST(testDateFormFieldCurrentDateHandling);
+    CPPUNIT_TEST(testTdf90069);
 #if !defined(_WIN32)
     CPPUNIT_TEST(testDateFormFieldCurrentDateInvalidation);
 #endif
@@ -1541,6 +1544,35 @@ void SwUiWriterTest2::testDateFormFieldCurrentDateHandling()
         pResult->second >>= sCurrentDate;
     }
     CPPUNIT_ASSERT_EQUAL(OUString("2031-06-01"), sCurrentDate);
+}
+
+void SwUiWriterTest2::testTdf90069()
+{
+    SwDoc* pDoc = createDoc("tdf90069.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    lcl_dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    pWrtShell->Down(false);
+    pWrtShell->Insert("foo");
+
+    SwTextNode* pTextNodeA1 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT(pTextNodeA1->GetText().startsWith("Insert"));
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNodeA2 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pTextNodeA2->GetText());
+    CPPUNIT_ASSERT_EQUAL(true, pTextNodeA2->GetSwAttrSet().HasItem(RES_CHRATR_FONT));
+    OUString sFontName = pTextNodeA2->GetSwAttrSet().GetItem(RES_CHRATR_FONT)->GetFamilyName();
+    CPPUNIT_ASSERT_EQUAL(OUString("Lohit Devanagari"), sFontName);
 }
 
 #if !defined(_WIN32)
