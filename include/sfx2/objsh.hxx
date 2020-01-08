@@ -39,6 +39,7 @@
 #include <set>
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
+#include <sfx2/AccessibilityIssue.hxx>
 
 class SbxValue;
 class SbxArray;
@@ -552,6 +553,9 @@ public:
     StarBASIC*                  GetBasic() const;
 
     virtual std::set<Color>     GetDocColors();
+
+    // Accessibility Check
+    virtual sfx::AccessibilityIssueCollection runAccessibilityCheck();
 
                                 // Documents, for which to format the view size
 
