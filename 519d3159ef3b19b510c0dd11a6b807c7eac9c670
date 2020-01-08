@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e9da0b4_5642dffe",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T14:03:01Z",
+      "side": 1,
+      "message": "the difference between mpEndValidSource and mpSource should fit into 32 seeing how mpEndValidSource is inited so this should be okay",
+      "revId": "519d3159ef3b19b510c0dd11a6b807c7eac9c670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
