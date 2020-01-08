@@ -1567,6 +1567,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         }
                     }
                 }
+
+                // tdf#90069 in tables, apply paragraph level character style also on
+                // paragraph level to support its copy during insertion of new table rows
+                if ( xParaProps && m_nTableDepth > 0 )
+                {
+                    uno::Sequence< beans::PropertyValue > aValues = pParaContext->GetPropertyValues(false);
+
+                    for( const auto& rProp : aValues )
+                    {
+                        if ( rProp.Name.startsWith("Char") && rProp.Name != "CharStyleName" && rProp.Name != "CharInteropGrabBag" )
+                            xParaProps->setPropertyValue( rProp.Name, rProp.Value );
+                    }
+                }
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
