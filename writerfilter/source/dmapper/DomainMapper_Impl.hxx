@@ -125,9 +125,12 @@ enum BreakType
 class HeaderFooterContext
 {
     bool const m_bTextInserted;
+    sal_Int32 m_nTableDepth;
+
 public:
-    explicit HeaderFooterContext(bool bTextInserted);
+    explicit HeaderFooterContext(bool bTextInserted, sal_Int32 nTableDepth);
     bool getTextInserted();
+    sal_Int32 getTableDepth() const;
 };
 
 /// field stack element
