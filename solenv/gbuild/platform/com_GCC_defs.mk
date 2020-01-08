@@ -62,6 +62,7 @@ gb_CFLAGS_COMMON := \
 	-Wundef \
 	-Wunreachable-code \
 	$(if $(and $(COM_IS_CLANG),$(or $(findstring icecc,$(CC)),$(findstring icecc,$(CCACHE_PREFIX)))),,-Wunused-macros) \
+	$(if $(COM_IS_CLANG),-Wembedded-directive) \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \
 	-fno-common \
@@ -78,6 +79,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wundef \
 	-Wunreachable-code \
 	$(if $(and $(COM_IS_CLANG),$(or $(findstring icecc,$(CC)),$(findstring icecc,$(CCACHE_PREFIX)))),,-Wunused-macros) \
+	$(if $(COM_IS_CLANG),-Wembedded-directive) \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \
 	-fno-common \
