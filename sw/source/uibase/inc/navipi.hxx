@@ -92,7 +92,6 @@ class SwNavigationPI : public PanelLayout,
     SwNavigationConfig  *m_pConfig;
     SfxBindings         &m_rBindings;
 
-    sal_uInt16  m_nAutoMarkIdx;
     RegionMode  m_nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
     Size        m_aExpandedSize;
 
@@ -104,7 +103,6 @@ class SwNavigationPI : public PanelLayout,
     void ZoomIn();
 
     void FillBox();
-    void MakeMark();
 
     DECL_LINK( DocListBoxSelectHdl, ListBox&, void );
     DECL_LINK( ToolBoxSelectHdl, ToolBox *, void );
