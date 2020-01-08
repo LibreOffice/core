@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50794fc3_aad3d7bb",
+        "filename": "sfx2/qa/complex/sfx2/UndoManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-01-08T02:43:30Z",
+      "side": 1,
+      "message": "… then this line should be changed accordingly as well.",
+      "revId": "6ea6248e88d690f78bc41dab407ddd09f9835523",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75b53757_17d800f6",
+        "filename": "svx/source/table/cell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-01-08T02:43:30Z",
+      "side": 1,
+      "message": "“Did” sounded okay to me in this particular occurrence.",
+      "revId": "6ea6248e88d690f78bc41dab407ddd09f9835523",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
