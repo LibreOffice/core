@@ -325,7 +325,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
             // In case the frame is not a top one, is not based on system window and has a parent,
-            // the parent frame should to be queried for the correct dispatcher.
+            // the parent frame should be queried for the correct dispatcher.
             // See i93473
             if (
                 !WindowHelper::isTopWindow(xFrame->getContainerWindow()) &&

@@ -77,7 +77,7 @@ namespace
 OUString lcl_normalizeSubStreamPath(const OUString& rPath)
 {
     // accept paths which begin by '/'
-    // TODO: maybe this should to a full normalization
+    // TODO: maybe this should do a full normalization
     if (rPath.startsWith("/") && rPath.getLength() >= 2)
         return rPath.copy(1);
     return rPath;
