@@ -75,6 +75,8 @@ $(eval $(call gb_Library_use_externals,sfx,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/accessibility/AccessibilityCheck \
+    sfx2/source/accessibility/AccessibilityIssue \
     sfx2/source/appl/app \
     sfx2/source/appl/appbas \
     sfx2/source/appl/appbaslib \

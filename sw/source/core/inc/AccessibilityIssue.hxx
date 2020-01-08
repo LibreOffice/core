@@ -11,7 +11,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYISSUE_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESSIBILITYISSUE_HXX
 
-#include <svx/AccessibilityIssue.hxx>
+#include <sfx2/AccessibilityIssue.hxx>
 #include <doc.hxx>
 
 namespace sw
@@ -24,7 +24,7 @@ enum class IssueObject
     TABLE,
 };
 
-class SW_DLLPUBLIC AccessibilityIssue final : public svx::AccessibilityIssue
+class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue
 {
 private:
     IssueObject m_eIssueObject;
@@ -32,7 +32,7 @@ private:
     OUString m_sObjectID;
 
 public:
-    AccessibilityIssue(svx::AccessibilityIssueID eIssueID = svx::AccessibilityIssueID::UNSPECIFIED);
+    AccessibilityIssue(sfx::AccessibilityIssueID eIssueID = sfx::AccessibilityIssueID::UNSPECIFIED);
 
     void setIssueObject(IssueObject eIssueObject);
     void setDoc(SwDoc* pDoc);
