@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1662a97e_3cf7b6ad",
+        "filename": "sw/source/uibase/uiview/viewmdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-08T12:59:00Z",
+      "side": 0,
+      "message": "why remove these braces? it\u0027s unreadable without them, with for condition and if statement at the same indentation level.",
+      "revId": "444f0d256957544d26b9af9a0898364e829df1b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
