@@ -310,8 +310,8 @@ void dumpFillHatchAsElement(const drawing::Hatch& rHatch, xmlTextWriterPtr xmlWr
             break;
     }
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%06x", static_cast<unsigned int>(rHatch.Color));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rHatch.Distance));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rHatch.Angle));
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, rHatch.Distance);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, rHatch.Angle);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -486,10 +486,10 @@ void dumpLineDashAsElement(const drawing::LineDash& rLineDash, xmlTextWriterPtr 
             break;
     }
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dots"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Dots));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.DotLen));
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, rLineDash.DotLen);
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashes"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Dashes));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.DashLen));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Distance));
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, rLineDash.DashLen);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, rLineDash.Distance);
     xmlTextWriterEndElement( xmlWriter );
 }
 

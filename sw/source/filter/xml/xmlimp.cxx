@@ -1643,7 +1643,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         // filters and Word defaults to our new default as well.
         xProps->setPropertyValue(
             "PrinterIndependentLayout",
-            uno::Any(static_cast<sal_Int16>(document::PrinterIndependentLayout::HIGH_RESOLUTION)));
+            uno::Any(document::PrinterIndependentLayout::HIGH_RESOLUTION));
 
     if (!bPropLineSpacingShrinksFirstLine)
         xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", makeAny(false));

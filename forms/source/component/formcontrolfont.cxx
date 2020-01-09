@@ -57,11 +57,11 @@ namespace frm
                 break;
 
             case PROPERTY_ID_FONT_FAMILY:
-                aValue <<= static_cast<sal_Int16>(_rFont.Family);
+                aValue <<= _rFont.Family;
                 break;
 
             case PROPERTY_ID_FONT_CHARSET:
-                aValue <<= static_cast<sal_Int16>(_rFont.CharSet);
+                aValue <<= _rFont.CharSet;
                 break;
 
             case PROPERTY_ID_FONT_CHARWIDTH:
@@ -101,11 +101,11 @@ namespace frm
                 break;
 
             case PROPERTY_ID_FONT_UNDERLINE:
-                aValue <<= static_cast<sal_Int16>(_rFont.Underline);
+                aValue <<= _rFont.Underline;
                 break;
 
             case PROPERTY_ID_FONT_STRIKEOUT:
-                aValue <<= static_cast<sal_Int16>(_rFont.Strikeout);
+                aValue <<= _rFont.Strikeout;
                 break;
 
             case PROPERTY_ID_FONT_WORDLINEMODE:
@@ -287,11 +287,11 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_FAMILY:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.Family) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Family );
             break;
 
         case PROPERTY_ID_FONT_CHARSET:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.CharSet) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.CharSet );
             break;
 
         case PROPERTY_ID_FONT_CHARWIDTH:
@@ -307,15 +307,15 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_PITCH:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.Pitch) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Pitch );
             break;
 
         case PROPERTY_ID_FONT_TYPE:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.Type) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Type );
             break;
 
         case PROPERTY_ID_FONT_WIDTH:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.Width) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Width );
             break;
 
         case PROPERTY_ID_FONT_HEIGHT:
@@ -331,11 +331,11 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_UNDERLINE:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.Underline) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Underline );
             break;
 
         case PROPERTY_ID_FONT_STRIKEOUT:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, static_cast<sal_Int16>(m_aFont.Strikeout) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Strikeout );
             break;
 
         case PROPERTY_ID_FONT_WORDLINEMODE:

@@ -564,9 +564,9 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                     {
                         Locale aApplicationLocale = Application::GetSettings().GetUILanguageTag().getLocale();
                         if (m_bOriginalNumeric)
-                            aFmtKey <<= static_cast<sal_Int32>(xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale));
+                            aFmtKey <<= xTypes->getStandardFormat(NumberFormat::NUMBER, aApplicationLocale);
                         else
-                            aFmtKey <<= static_cast<sal_Int32>(xTypes->getStandardFormat(NumberFormat::TEXT, aApplicationLocale));
+                            aFmtKey <<= xTypes->getStandardFormat(NumberFormat::TEXT, aApplicationLocale);
                     }
                 }
                 aSupplier >>= m_xOriginalFormatter;

@@ -892,7 +892,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     long nEntries = InStream->readLong();
                     css::uno::Sequence<sal_Int16> aSeq( nEntries );
                     for ( long n = 0; n < nEntries; n++ )
-                        aSeq.getArray()[n] = static_cast<sal_Int16>(InStream->readShort());
+                        aSeq.getArray()[n] = InStream->readShort();
                     aValue <<= aSeq;
                 }
                 else if ( pType->getTypeClass() == TypeClass_ENUM )

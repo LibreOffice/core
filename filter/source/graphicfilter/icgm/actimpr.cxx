@@ -768,7 +768,7 @@ void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & r
 
         if ( nOrientation )
         {
-            maXPropSet->setPropertyValue( "RotationPointX", uno::Any(static_cast<sal_Int32>( aTextPos.X )) );
+            maXPropSet->setPropertyValue( "RotationPointX", uno::Any(aTextPos.X) );
             maXPropSet->setPropertyValue( "RotationPointY", uno::Any(static_cast<sal_Int32>( aTextPos.Y + nHeight )) );
             maXPropSet->setPropertyValue( "RotateAngle", uno::Any(static_cast<sal_Int32>( nOrientation * 100 )) );
         }

@@ -463,7 +463,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     {
         pOwnProps->Name = rProp.aProperty.Name;
         pOwnProps->Handle = rProp.aProperty.Handle;
-        pOwnProps->Attributes = static_cast<sal_Int16>(rProp.aProperty.Attributes);
+        pOwnProps->Attributes = rProp.aProperty.Attributes;
         pOwnProps->Type = rProp.aProperty.Type;
         ++pOwnProps;
     }

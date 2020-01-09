@@ -105,7 +105,7 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
 
     {
         SvxUnderlineItem aUnderlineItem( LINESTYLE_NONE, EE_CHAR_UNDERLINE );
-        aTemp <<= static_cast<sal_Int16>(rDesc.Underline);
+        aTemp <<= rDesc.Underline;
         static_cast<SfxPoolItem*>(&aUnderlineItem)->PutValue( aTemp, MID_TL_STYLE );
         rSet.Put( aUnderlineItem );
     }
