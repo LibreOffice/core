@@ -738,6 +738,15 @@ bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap
 
     assert(dynamic_cast<const SkiaSalBitmap*>(&rBitmap));
     const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rBitmap);
+    // This is used by VirtualDevice in the alpha mode for the "alpha" layer which
+    // is actually one-minus-alpha (opacity). Therefore white=0xff=transparent,
+    // black=0x00=opaque. So the result is transparent only if both the inputs
+    // are transparent. Since for blending operations white=1.0 and black=0.0,
+    // kMultiply should handle exactly that (transparent*transparent=transparent,
+    // opaque*transparent=opaque). And guessing from the "floor" in TYPE_BLEND in opengl's
+    // combinedTextureFragmentShader.glsl, the layer is not even alpha values but
+    // simply yes-or-no mask.
+    // See also blendAlphaBitmap().
     drawImage(rPosAry, rSkiaBitmap.GetSkImage(), SkBlendMode::kMultiply);
     return true;
 }
@@ -762,17 +771,25 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     const SkiaSalBitmap& rSkiaMaskBitmap = static_cast<const SkiaSalBitmap&>(rMaskBitmap);
     const SkiaSalBitmap& rSkiaAlphaBitmap = static_cast<const SkiaSalBitmap&>(rAlphaBitmap);
 
+    // This was originally implemented for the OpenGL drawing method and it is poorly documented.
+    // The source and mask bitmaps are the usual data and alpha bitmaps, and 'alpha'
+    // is the "alpha" layer of the VirtualDevice (the alpha in VirtualDevice is also stored
+    // as a separate bitmap). Now I understand it correctly these two alpha masks first need
+    // to be combined into the actual alpha mask to be used. The formula for TYPE_BLEND
+    // in opengl's combinedTextureFragmentShader.glsl is
+    // "result_alpha = 1.0 - (1.0 - floor(alpha)) * mask".
+    // See also blendBitmap().
     SkCanvas* aCanvas = tmpSurface->getCanvas();
     SkPaint aPaint;
-
+    // First copy the mask as is.
     aPaint.setBlendMode(SkBlendMode::kSrc);
-    aCanvas->drawImage(rSkiaSourceBitmap.GetSkImage(), 0, 0, &aPaint);
-
-    // Apply cumulatively both the bitmap alpha and the device alpha.
-    aPaint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
     aCanvas->drawImage(rSkiaMaskBitmap.GetAlphaSkImage(), 0, 0, &aPaint);
-    aPaint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
+    // Do the "1 - alpha" (no idea how to do "floor", but hopefully not needed in practice).
+    aPaint.setBlendMode(SkBlendMode::kDstOut);
     aCanvas->drawImage(rSkiaAlphaBitmap.GetAlphaSkImage(), 0, 0, &aPaint);
+    // And now draw the bitmap with "1 - x", where x is the "( 1 - alpha ) * mask".
+    aPaint.setBlendMode(SkBlendMode::kSrcOut);
+    aCanvas->drawImage(rSkiaSourceBitmap.GetSkImage(), 0, 0, &aPaint);
 
     drawImage(rPosAry, tmpSurface->makeImageSnapshot());
     return true;
