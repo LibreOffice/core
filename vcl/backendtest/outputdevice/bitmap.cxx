@@ -133,10 +133,13 @@ BitmapEx OutputDeviceTestBitmap::setupDrawBlend()
         aWriteAccess->DrawRect(tools::Rectangle(3, 3, 5, 5));
     }
 
-    initialSetup(13, 13, constBackgroundColor, false, true);
+    initialSetup(13, 13, COL_TRANSPARENT, false, true);
     mpVirtualDevice->SetFillColor(constBackgroundColor);
     mpVirtualDevice->SetLineColor(constBackgroundColor);
-    mpVirtualDevice->DrawRect(maVDRectangle);
+    // Leave the outer part of the device transparent, the inner part set to the background color.
+    // This will test blending of VirtualDevice's "alpha" device (outer yellow rectangle
+    // will be blended with transparent background, inner with the grey one).
+    mpVirtualDevice->DrawRect( tools::Rectangle( Point( 3, 3 ), Size( 7, 7 )));
 
     Point aPoint(alignToCenter(maVDRectangle, tools::Rectangle(Point(), aBitmapSize)).TopLeft());
 
@@ -179,9 +182,8 @@ TestResult OutputDeviceTestBitmap::checkBlend(BitmapEx& rBitmapEx)
 
     std::vector<Color> aExpected
     {
-        constBackgroundColor, constBackgroundColor,
-        aBlendedColor, constBackgroundColor, constBackgroundColor,
-        aBlendedColor, constBackgroundColor
+        COL_WHITE, COL_WHITE, COL_YELLOW, constBackgroundColor,
+        constBackgroundColor, aBlendedColor, constBackgroundColor
     };
     Bitmap aBitmap(rBitmapEx.GetBitmap());
     return checkRectangles(aBitmap, aExpected);
