@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e96cd9c_fbd140aa",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-01-09T08:36:36Z",
+      "side": 1,
+      "message": "good question. The string was reused from an other office application.",
+      "parentUuid": "a316c115_9d488e55",
+      "range": {
+        "startLine": 257,
+        "startChar": 44,
+        "endLine": 257,
+        "endChar": 50
+      },
+      "revId": "2b55fc308659cccb0411cb050e3520d33d5af6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cdfb8ff8_3ca17e53",
         "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-09T08:16:53Z",
       "side": 1,
       "message": "How about false here (lossless compression)? But question remains what\u0027s the point of high-fi when you run the presentation minimizer.",
+      "range": {
+        "startLine": 383,
+        "startChar": 27,
+        "endLine": 383,
+        "endChar": 31
+      },
+      "revId": "2b55fc308659cccb0411cb050e3520d33d5af6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef06f18e_b4bb9b02",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-01-09T08:36:36Z",
+      "side": 1,
+      "message": "you can save your own settings and when I save it, there was for JPEGCompression true and for ImageResolution 0 as setting for no compression.",
+      "parentUuid": "cdfb8ff8_3ca17e53",
       "range": {
         "startLine": 383,
         "startChar": 27,
