@@ -3631,7 +3631,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         }
         aAnchor.SetAnchor( &newPos );
 
-        // Check recursion: copy content in its own frame, then don't copy it.
+        // Check recursion: if copying content inside the same frame, then don't copy the format.
         if( pDest == &m_rDoc )
         {
             const SwFormatContent& rContent = (*it).GetFormat()->GetContent();
