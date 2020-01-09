@@ -154,6 +154,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,LIBASSUAN,LIBASSUAN_TARBALL) \
 		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 		$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
+		$(call fetch_Optional,LIBFFI,LIBFFI_TARBALL) \
 		$(call fetch_Optional,LIBGPGERROR,LIBGPGERROR_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
