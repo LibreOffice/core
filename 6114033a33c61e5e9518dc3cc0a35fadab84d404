@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c50ab467_f59cedd4",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-01-09T08:32:25Z",
+      "side": 1,
+      "message": "NO better quality 9 mean more compression\nhttps://cimage.se/doc/png-compression-settings\n\nthe \"problem\" is that you can\u0027t compress png files that good so there is no real difference in file size, but 0 mean no compression and 9 full compression. So I prefer 6 like most image editors do (gimp, krita, PS, ...)\nhttps://user-images.githubusercontent.com/42266842/44339433-015b4180-a48a-11e8-9c3f-1b9c3b0f2327.png",
+      "parentUuid": "2a5c9460_b4f6b2b6",
+      "range": {
+        "startLine": 8,
+        "startChar": 27,
+        "endLine": 8,
+        "endChar": 28
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e19720f1_bec73638",
         "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e4edb991_945ee804",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-01-09T08:32:25Z",
+      "side": 1,
+      "message": "definitiv yes, the difference between 80 and 90 are around 100 % smaler size AND you don\u0027t see visual issues with 80. Visual issues will come \u003c 60 so I take 70 as lowest number.\n\nfor the tests see the bug report attachment\nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d157005",
+      "parentUuid": "e19720f1_bec73638",
+      "range": {
+        "startLine": 22,
+        "startChar": 27,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "003d6a49_a81be5bc",
         "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-01-09T08:05:06Z",
       "side": 1,
       "message": "What benefit come with the two new entries? (Drawback is the longer list, for my taste too long)",
+      "range": {
+        "startLine": 435,
+        "startChar": 36,
+        "endLine": 435,
+        "endChar": 39
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4436b085_647b684c",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-01-09T08:32:25Z",
+      "side": 1,
+      "message": "If wanted I can remove them. I add the two elements cause MSO use 220 DPI for print and there is a large gap between 300 and 600.",
+      "parentUuid": "003d6a49_a81be5bc",
       "range": {
         "startLine": 435,
         "startChar": 36,
