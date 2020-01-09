@@ -739,33 +739,33 @@ css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::un
 void ExecuteMarginLRChange(
     const long nPageLeftMargin,
     const long nPageRightMargin,
-    std::shared_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem)
+    SvxLongLRSpaceItem* pPageLRMarginItem)
 {
-    mpPageLRMarginItem->SetLeft( nPageLeftMargin );
-    mpPageLRMarginItem->SetRight( nPageRightMargin );
+    pPageLRMarginItem->SetLeft( nPageLeftMargin );
+    pPageLRMarginItem->SetRight( nPageRightMargin );
     SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
-            SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
+            SfxCallMode::RECORD, { pPageLRMarginItem });
 }
 
 // Adjusts page margins for Writer doc. Needed by ToggleOrientation
 void ExecuteMarginULChange(
         const long nPageTopMargin,
         const long nPageBottomMargin,
-        std::shared_ptr<SvxLongULSpaceItem> mpPageULMarginItem)
+        SvxLongULSpaceItem* pPageULMarginItem)
 {
-    mpPageULMarginItem->SetUpper( nPageTopMargin );
-    mpPageULMarginItem->SetLower( nPageBottomMargin );
+    pPageULMarginItem->SetUpper( nPageTopMargin );
+    pPageULMarginItem->SetLower( nPageBottomMargin );
     SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
-                                                          SfxCallMode::RECORD, { mpPageULMarginItem.get() });
+                                                          SfxCallMode::RECORD, { pPageULMarginItem });
 }
 
 // Main function which toggles page orientation of the Writer doc. Needed by ToggleOrientation
 void ExecuteOrientationChange()
 {
-    std::unique_ptr<SvxPageItem> mpPageItem(new SvxPageItem(SID_ATTR_PAGE));
-    std::unique_ptr<SvxSizeItem> mpPageSizeItem(new SvxSizeItem(SID_ATTR_PAGE_SIZE));
-    std::shared_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem(new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ));
-    std::shared_ptr<SvxLongULSpaceItem> mpPageULMarginItem(new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ));
+    std::unique_ptr<SvxPageItem> pPageItem(new SvxPageItem(SID_ATTR_PAGE));
+    std::unique_ptr<SvxSizeItem> pPageSizeItem(new SvxSizeItem(SID_ATTR_PAGE_SIZE));
+    std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem(new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ));
+    std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ));
     // 1mm in twips rounded
     // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
     const long MINBODY = 56;
@@ -782,38 +782,38 @@ void ExecuteOrientationChange()
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
-    mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pItem->Clone()) );
+    pPageSizeItem.reset( static_cast<SvxSizeItem*>(pItem->Clone()) );
 
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
-    mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pItem->Clone()) );
+    pPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pItem->Clone()) );
 
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pItem);
-    mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pItem->Clone()) );
+    pPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pItem->Clone()) );
 
 
     {
-        if ( mpPageSizeItem->GetSize().Width() > mpPageSizeItem->GetSize().Height())
+        if ( pPageSizeItem->GetSize().Width() > pPageSizeItem->GetSize().Height())
             bIsLandscape = true;
 
         // toggle page orientation
-        mpPageItem->SetLandscape(!bIsLandscape);
+        pPageItem->SetLandscape(!bIsLandscape);
 
 
         // swap the width and height of the page size
-        const long nRotatedWidth = mpPageSizeItem->GetSize().Height();
-        const long nRotatedHeight = mpPageSizeItem->GetSize().Width();
-        mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
+        const long nRotatedWidth = pPageSizeItem->GetSize().Height();
+        const long nRotatedHeight = pPageSizeItem->GetSize().Width();
+        pPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
 
 
         // apply changed attributes
         if (SfxViewShell::Current())
         {
             SfxViewShell::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-                SfxCallMode::RECORD, { mpPageSizeItem.get(), mpPageItem.get() });
+                SfxCallMode::RECORD, { pPageSizeItem.get(), pPageItem.get() });
         }
     }
 
@@ -821,39 +821,39 @@ void ExecuteOrientationChange()
     // check, if margin values still fit to the changed page size.
     // if not, adjust margin values
     {
-        const long nML = mpPageLRMarginItem->GetLeft();
-        const long nMR = mpPageLRMarginItem->GetRight();
+        const long nML = pPageLRMarginItem->GetLeft();
+        const long nMR = pPageLRMarginItem->GetRight();
         const long nTmpPW = nML + nMR + MINBODY;
 
-        const long nPW  = mpPageSizeItem->GetSize().Width();
+        const long nPW  = pPageSizeItem->GetSize().Width();
 
         if ( nTmpPW > nPW )
         {
             if ( nML <= nMR )
             {
-                ExecuteMarginLRChange( mpPageLRMarginItem->GetLeft(), nMR - (nTmpPW - nPW ), mpPageLRMarginItem );
+                ExecuteMarginLRChange( pPageLRMarginItem->GetLeft(), nMR - (nTmpPW - nPW ), pPageLRMarginItem.get() );
             }
             else
             {
-                ExecuteMarginLRChange( nML - (nTmpPW - nPW ), mpPageLRMarginItem->GetRight(), mpPageLRMarginItem );
+                ExecuteMarginLRChange( nML - (nTmpPW - nPW ), pPageLRMarginItem->GetRight(), pPageLRMarginItem.get() );
             }
         }
 
-        const long nMT = mpPageULMarginItem->GetUpper();
-        const long nMB = mpPageULMarginItem->GetLower();
+        const long nMT = pPageULMarginItem->GetUpper();
+        const long nMB = pPageULMarginItem->GetLower();
         const long nTmpPH = nMT + nMB + MINBODY;
 
-        const long nPH  = mpPageSizeItem->GetSize().Height();
+        const long nPH  = pPageSizeItem->GetSize().Height();
 
         if ( nTmpPH > nPH )
         {
             if ( nMT <= nMB )
             {
-                ExecuteMarginULChange( mpPageULMarginItem->GetUpper(), nMB - ( nTmpPH - nPH ), mpPageULMarginItem );
+                ExecuteMarginULChange( pPageULMarginItem->GetUpper(), nMB - ( nTmpPH - nPH ), pPageULMarginItem.get() );
             }
             else
             {
-                ExecuteMarginULChange( nMT - ( nTmpPH - nPH ), mpPageULMarginItem->GetLower(), mpPageULMarginItem );
+                ExecuteMarginULChange( nMT - ( nTmpPH - nPH ), pPageULMarginItem->GetLower(), pPageULMarginItem.get() );
             }
         }
     }
