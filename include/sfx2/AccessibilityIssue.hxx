@@ -23,7 +23,11 @@ enum class AccessibilityIssueID
     UNSPECIFIED, // TODO: remove - temporary
     DOCUMENT_TITLE,
     DOCUMENT_LANGUAGE,
-    STYLE_LANGUAGE
+    STYLE_LANGUAGE,
+    NO_ALT_OLE,
+    NO_ALT_GRAPHIC,
+    NO_ALT_SHAPE,
+    TABLE_MERGE_SPLIT,
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssue

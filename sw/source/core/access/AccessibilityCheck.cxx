@@ -83,16 +83,18 @@ class NoTextNodeAltTextCheck : public NodeCheck
 
             OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
 
-            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
-
             if (pNoTextNode->IsOLENode())
             {
+                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                          sfx::AccessibilityIssueID::NO_ALT_OLE);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::OLE);
                 pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
             }
             else if (pNoTextNode->IsGrfNode())
             {
+                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                          sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::GRAPHIC);
                 pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
@@ -126,7 +128,8 @@ private:
         const SwTableFormat* pFormat = rTable.GetFrameFormat();
         OUString sName = pFormat->GetName();
         OUString sIssueText = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName);
-        auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText);
+        auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                  sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT);
         pIssue->setDoc(pDoc);
         pIssue->setIssueObject(IssueObject::TABLE);
         pIssue->setObjectID(sName);
@@ -617,7 +620,7 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
         {
             OUString sName = pObject->GetName();
             OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
-            lclAddIssue(m_aIssueCollection, sIssueText);
+            lclAddIssue(m_aIssueCollection, sIssueText, sfx::AccessibilityIssueID::NO_ALT_SHAPE);
         }
     }
 }
