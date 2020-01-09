@@ -113,9 +113,6 @@ local file="$1"
             # skip the majority of files, no ELF binaries here
             skip=1
         ;;
-        */_ctypes.cpython-*.so)
-            whitelist="${whitelist} libffi.so.6" # TODO dubious?
-        ;;
         */_uuid.cpython-*.so)
             whitelist="${whitelist} libuuid.so.1"
         ;;

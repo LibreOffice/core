@@ -8756,6 +8756,9 @@ internal)
     fi
     AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
+    if test "$OS" = LINUX; then
+        BUILD_TYPE="$BUILD_TYPE LIBFFI"
+    fi
     # Embedded Python dies without Home set
     if test "$HOME" = ""; then
         export HOME=""
