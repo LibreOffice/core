@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e0888e5_6742026e",
+        "filename": "framework/source/uielement/toolbarsmenucontroller.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-09T18:09:35Z",
+      "side": 1,
+      "message": "This kind of change is undesirable: you added several spaces where they should not be :-)",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 8
+      },
+      "revId": "ba4bbfadd79e0765db01bb70bfd97fa0a959ce24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
