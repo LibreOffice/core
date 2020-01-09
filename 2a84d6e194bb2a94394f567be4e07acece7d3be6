@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e35716eb_0c681a52",
+        "filename": "offapi/com/sun/star/embed/XTransactionListener.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-09T08:31:37Z",
+      "side": 1,
+      "message": "this must remain mis-spelled, for compatibility",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "2a84d6e194bb2a94394f567be4e07acece7d3be6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
