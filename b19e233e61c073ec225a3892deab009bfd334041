@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2880d6c9_34b8c2d7",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5072,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-09T12:49:45Z",
+      "side": 0,
+      "message": "Yes, this was pointless, perhaps git history would tell you that there was something else after the first closing brace in the past, and when that got removed, nobody cleaned up the additional nesting.. until you came. :-)",
+      "revId": "b19e233e61c073ec225a3892deab009bfd334041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
