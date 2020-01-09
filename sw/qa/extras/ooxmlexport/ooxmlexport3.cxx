@@ -1033,6 +1033,15 @@ DECLARE_OOXMLEXPORT_TEST(testInsideBorders, "tdf129242_InsideBorders.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCorrectXMLtagExport, "tdf107683_XMLtagExport.odt")
+{
+    // tdf#107683: Don't export ilvl and numId when there is an outline rule.
+
+    xmlDocPtr pXmlDocument = parseExport("word/styles.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:style[2]/w:pPr/w:numPr", 0);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
