@@ -19,7 +19,7 @@
 
 #include "XMLAutoTextEventImport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -84,20 +84,17 @@ void XMLAutoTextEventImport::initialize(
 }
 
 
-SvXMLImportContext* XMLAutoTextEventImport::CreateDocumentContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList > & xAttrList )
+SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
+    sal_Int32 nElement,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList )
 {
-    if ( xEvents.is() && (XML_NAMESPACE_OOO == nPrefix) &&
-         IsXMLToken( rLocalName, XML_AUTO_TEXT_EVENTS) )
+    if ( xEvents.is() && nElement == XML_ELEMENT(OOO, XML_AUTO_TEXT_EVENTS) )
     {
-        return new XMLAutoTextContainerEventImport(
-            *this, nPrefix, rLocalName, xEvents);
+        return new XMLAutoTextContainerEventImport(*this, xEvents);
     }
     else
     {
-        return SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
+        return SvXMLImport::CreateFastContext(nElement, xAttrList);
     }
 }
 

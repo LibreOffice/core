@@ -38,10 +38,8 @@ using ::xmloff::token::XML_EVENT_LISTENERS;
 
 XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
     const Reference<XNameReplace> & rEvnts ) :
-        SvXMLImportContext(rImport, nPrfx, rLName),
+        SvXMLImportContext(rImport),
         rEvents(rEvnts)
 {
 }
