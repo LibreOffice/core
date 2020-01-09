@@ -7908,7 +7908,8 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32
         const bool bOutlineRule = pRule && pRule->IsOutlineRule();
 
         // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
-        if ( !pTextNd || !bOutlineRule )
+        // Also don't export ilvl and numId when there is an outline rule.
+        if ( !bOutlineRule )
         {
             m_pSerializer->startElementNS(XML_w, XML_numPr);
             m_pSerializer->singleElementNS(XML_w, XML_ilvl,
