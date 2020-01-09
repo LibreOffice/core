@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47029c07_73dc4f9a",
+        "filename": "offapi/com/sun/star/chart2/DataSeries.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-09T13:18:18Z",
+      "side": 1,
+      "message": "Use @since LibreOffice 6.5, as above, according to the policy of UNO API extension",
+      "revId": "96a05fe8e7418e861d79f9ffc6035cbd470e1486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83fefd36_860f1ecd",
+        "filename": "oox/source/drawingml/chart/titleconverter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-09T13:18:18Z",
+      "side": 1,
+      "message": "try to use ContainerHelper::vectorToSequence",
+      "range": {
+        "startLine": 329,
+        "startChar": 1,
+        "endLine": 333,
+        "endChar": 25
+      },
+      "revId": "96a05fe8e7418e861d79f9ffc6035cbd470e1486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
