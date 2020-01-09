@@ -66,6 +66,8 @@ public:
     virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual void Resize() override;
 
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+
     static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
