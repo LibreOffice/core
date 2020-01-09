@@ -34,6 +34,24 @@
       "revId": "b19e233e61c073ec225a3892deab009bfd334041",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "237674c0_e824f406",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5072,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-09T13:11:22Z",
+      "side": 0,
+      "message": "Just to be sure, you can always use the \"-w\" option of git diff, git log, git show, etc. to filter out whitespace changes, as long as it\u0027s indeed just indentation, not wrapping a single long line to multiple ones.",
+      "parentUuid": "24ad6308_4b620c9b",
+      "revId": "b19e233e61c073ec225a3892deab009bfd334041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
