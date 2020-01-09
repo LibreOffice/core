@@ -36,7 +36,9 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/svborder.hxx>
+#include <boost/property_tree/ptree.hpp>
 #include <sal/log.hxx>
 
 using namespace css;
@@ -187,6 +189,42 @@ void Deck::Resize()
         aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
     }
+}
+
+/*
+ * Get the ordering as is shown in the layout, and our type as 'deck'
+ * also elide nested panel windows.
+ */
+boost::property_tree::ptree Deck::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("id", get_id());  // TODO could be missing - sort out
+    aTree.put("type", "deck");
+    aTree.put("text", GetText());
+    aTree.put("enabled", IsEnabled());
+
+    boost::property_tree::ptree aChildren;
+    for (auto &it : maPanels)
+    {
+        if (it->IsLurking())
+            continue;
+
+        // collapse the panel itself out
+        auto xContent = it->GetElementWindow();
+        if (!xContent.is())
+            continue;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContent);
+        if (!pWindow)
+            continue;
+
+        boost::property_tree::ptree aChild = pWindow->DumpAsPropertyTree();
+        aChild.put("text", it->GetText());
+        aChild.put("type", "panel");
+        aChildren.push_back(std::make_pair("", aChild));
+    }
+
+    aTree.add_child("children", aChildren);
+    return aTree;
 }
 
 bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
