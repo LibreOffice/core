@@ -618,7 +618,7 @@ SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rName, co
     if (!writeString(rName, false, false))
         eRet = SAX_ERROR;
 
-    sal_Int16 nAttribCount = xAttribs.is() ? static_cast<sal_Int16>(xAttribs->getLength()) : 0;
+    sal_Int16 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
     for(sal_Int16 i = 0 ; i < nAttribCount ; i++ )
     {
         mp_Sequence[nCurrentPos] = ' ';

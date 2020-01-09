@@ -7,7 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
 #include <cstddef>
+
+#include <sal/types.h>
 
 #include "redundantcast.hxx"
 
@@ -418,6 +422,15 @@ auto testNullFunctionPointer(int i, F p) {
     }
 }
 
+void testSalIntTypes() {
+    sal_Int16 const n = 0;
+    (void) static_cast<sal_Int16>(n); // expected-error-re {{static_cast from 'const sal_Int16' (aka 'const {{.+}}') lvalue to 'sal_Int16' (aka '{{.+}}') prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
+    (void) static_cast<::sal_Int16>(n); // expected-error-re {{static_cast from 'const sal_Int16' (aka 'const {{.+}}') lvalue to '::sal_Int16' (aka '{{.+}}') prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
+    (void) static_cast<short>(n); // doesn't warn, even if 'sal_Int16' is 'short'
+    using Other = sal_Int16;
+    (void) static_cast<Other>(n); // doesn't warn either
+}
+
 int main() {
     testConstCast();
     testStaticCast();
@@ -428,6 +441,7 @@ int main() {
     testDynamicCast();
     testIntermediaryStaticCast();
     testArrayDecay();
+    testSalIntTypes();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

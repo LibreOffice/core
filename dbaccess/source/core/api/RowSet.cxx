@@ -225,7 +225,7 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
     switch( _nHandle )
     {
         case PROPERTY_ID_COMMAND_TYPE:
-            _rDefault <<= static_cast<sal_Int32>(CommandType::COMMAND);
+            _rDefault <<= CommandType::COMMAND;
             break;
         case PROPERTY_ID_IGNORERESULT:
             _rDefault <<= false;

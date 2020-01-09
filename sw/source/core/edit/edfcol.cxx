@@ -1555,8 +1555,8 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nHeight));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
     xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGH));
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
+    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA));
+    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(sFont));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::makeAny(WATERMARK_AUTO_SIZE));
     xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
@@ -1588,8 +1588,8 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
     xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
 
-    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
-    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
+    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(text::HoriOrientation::CENTER));
+    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(text::VertOrientation::CENTER));
 
     uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
     xNamed->setName(sWatermark);

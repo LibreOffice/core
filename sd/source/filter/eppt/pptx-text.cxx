@@ -1138,7 +1138,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
             case css::style::LineSpacingMode::PROP :
             default:
-                mnLineSpacing = static_cast<sal_Int16>( aLineSpacing.Height );
+                mnLineSpacing = aLineSpacing.Height;
             break;
         }
     }

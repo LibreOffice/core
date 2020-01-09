@@ -305,7 +305,7 @@ void Chart2ImportTest::Fdo60083()
             xErrorBarYProps->getPropertyValue("ErrorBarStyle")
             >>= nErrorBarStyle);
         CPPUNIT_ASSERT_EQUAL(
-            static_cast<sal_Int32>(chart::ErrorBarStyle::RELATIVE),
+            chart::ErrorBarStyle::RELATIVE,
             nErrorBarStyle);
 
         double nVal = 0.0;
@@ -354,7 +354,7 @@ void Chart2ImportTest::testErrorBarRange()
             xErrorBarYProps->getPropertyValue("ErrorBarStyle")
             >>= nErrorBarStyle);
     CPPUNIT_ASSERT_EQUAL(
-            static_cast<sal_Int32>(chart::ErrorBarStyle::FROM_DATA),
+            chart::ErrorBarStyle::FROM_DATA,
             nErrorBarStyle);
 
     OUString aRangePos;

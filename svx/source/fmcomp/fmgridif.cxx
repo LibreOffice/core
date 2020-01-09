@@ -1281,7 +1281,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 // everything else is requested in the DatabaseVariant
                 case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
                 case TypeClass_DOUBLE           : pReturnArray[i] <<= xFieldContent->getDouble(); break;
-                case TypeClass_SHORT            : pReturnArray[i] <<= static_cast<sal_Int16>(xFieldContent->getShort()); break;
+                case TypeClass_SHORT            : pReturnArray[i] <<= xFieldContent->getShort(); break;
                 case TypeClass_LONG             : pReturnArray[i] <<= static_cast<sal_Int32>(xFieldContent->getLong()); break;
                 case TypeClass_UNSIGNED_SHORT   : pReturnArray[i] <<= static_cast<sal_uInt16>(xFieldContent->getShort()); break;
                 case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= static_cast<sal_uInt32>(xFieldContent->getLong()); break;

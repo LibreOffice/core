@@ -273,6 +273,19 @@ bool isExtraWarnUnusedType(clang::QualType type) {
 
 namespace {
 
+// Make sure Foo and ::Foo are considered equal:
+bool areSameSugaredType(clang::QualType type1, clang::QualType type2) {
+    auto t1 = type1.getLocalUnqualifiedType();
+    if (auto const et = llvm::dyn_cast<clang::ElaboratedType>(t1)) {
+        t1 = et->getNamedType();
+    }
+    auto t2 = type2.getLocalUnqualifiedType();
+    if (auto const et = llvm::dyn_cast<clang::ElaboratedType>(t2)) {
+        t2 = et->getNamedType();
+    }
+    return t1 == t2;
+}
+
 bool isArithmeticOp(clang::Expr const * expr) {
     expr = expr->IgnoreParenImpCasts();
     if (auto const e = llvm::dyn_cast<clang::BinaryOperator>(expr)) {
@@ -311,7 +324,7 @@ bool isOkToRemoveArithmeticCast(
     // suffix like L it could still be either long or long long):
     if ((t1->isIntegralType(context)
          || t1->isRealFloatingType())
-        && ((t1.getLocalUnqualifiedType() != t2.getLocalUnqualifiedType()
+        && ((!areSameSugaredType(t1, t2)
              && (loplugin::TypeCheck(t1).Typedef()
                  || loplugin::TypeCheck(t2).Typedef()
                  || llvm::isa<clang::DecltypeType>(t1) || llvm::isa<clang::DecltypeType>(t2)))

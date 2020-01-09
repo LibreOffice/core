@@ -411,7 +411,7 @@ OUString ScAccessibleCellBase::getShadowAttrs() const
         OUString::number( static_cast<int>(aShadowFmt.IsTransparent) ) +
         sInnerSplit +
         "Color=" +
-        OUString::number( static_cast<sal_Int32>(aShadowFmt.Color) ) +
+        OUString::number( aShadowFmt.Color ) +
         sOuterSplit;
     return sShadowAttrs;
 }
@@ -489,7 +489,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     else//add all the border properties to the return string.
     {
         sBorderAttrs += "TopBorder:Color=" +
-            OUString::number( static_cast<sal_Int32>(aTopBorder.Color) ) +
+            OUString::number( aTopBorder.Color ) +
             sInnerSplit +
             "InnerLineWidth=" +
             OUString::number( static_cast<sal_Int32>(aTopBorder.InnerLineWidth) ) +
@@ -509,7 +509,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     else
     {
         sBorderAttrs += "BottomBorder:Color=" +
-            OUString::number( static_cast<sal_Int32>(aBottomBorder.Color) ) +
+            OUString::number( aBottomBorder.Color ) +
             sInnerSplit +
             "InnerLineWidth=" +
             OUString::number( static_cast<sal_Int32>(aBottomBorder.InnerLineWidth) ) +
@@ -529,7 +529,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     else
     {
         sBorderAttrs += "LeftBorder:Color=" +
-            OUString::number( static_cast<sal_Int32>(aLeftBorder.Color) ) +
+            OUString::number( aLeftBorder.Color ) +
             sInnerSplit +
             "InnerLineWidth=" +
             OUString::number( static_cast<sal_Int32>(aLeftBorder.InnerLineWidth) ) +
@@ -549,7 +549,7 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     else
     {
         sBorderAttrs += "RightBorder:Color=" +
-            OUString::number( static_cast<sal_Int32>(aRightBorder.Color) ) +
+            OUString::number( aRightBorder.Color ) +
             sInnerSplit +
             "InnerLineWidth=" +
             OUString::number( static_cast<sal_Int32>(aRightBorder.InnerLineWidth) ) +

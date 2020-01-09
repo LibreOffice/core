@@ -192,8 +192,8 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
     const OUString sLogicalHeight("LogicalHeight");
     if ( mbIsPixelFormat )
     {
-        pFilterOptions->WriteInt32("PixelWidth", static_cast< sal_Int32 >( maSize.Width ) );
-        pFilterOptions->WriteInt32("PixelHeight", static_cast< sal_Int32 >( maSize.Height ) );
+        pFilterOptions->WriteInt32("PixelWidth", maSize.Width );
+        pFilterOptions->WriteInt32("PixelHeight", maSize.Height );
         if ( maResolution.Width && maResolution.Height )
         {
             const double f100thmmPerPixelX = 100000.0 / maResolution.Width;
@@ -209,8 +209,8 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
     }
     else
     {
-        pFilterOptions->WriteInt32( sLogicalWidth, static_cast< sal_Int32 >( maSize.Width ) );
-        pFilterOptions->WriteInt32( sLogicalHeight, static_cast< sal_Int32 >( maSize.Height ) );
+        pFilterOptions->WriteInt32( sLogicalWidth, maSize.Width );
+        pFilterOptions->WriteInt32( sLogicalHeight, maSize.Height );
     }
     switch ( mnFormat )
     {

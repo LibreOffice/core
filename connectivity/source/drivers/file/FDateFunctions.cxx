@@ -219,7 +219,7 @@ ORowSetValue OOp_Year::operate(const ORowSetValue& lhs) const
         return lhs;
 
     css::util::Date aD = lhs;
-    return static_cast<sal_Int16>(aD.Year);
+    return aD.Year;
 }
 
 ORowSetValue OOp_Hour::operate(const ORowSetValue& lhs) const
