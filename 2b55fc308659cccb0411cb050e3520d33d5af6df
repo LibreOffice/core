@@ -22,6 +22,29 @@
       "revId": "2b55fc308659cccb0411cb050e3520d33d5af6df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdfb8ff8_3ca17e53",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T08:16:53Z",
+      "side": 1,
+      "message": "How about false here (lossless compression)? But question remains what\u0027s the point of high-fi when you run the presentation minimizer.",
+      "range": {
+        "startLine": 383,
+        "startChar": 27,
+        "endLine": 383,
+        "endChar": 31
+      },
+      "revId": "2b55fc308659cccb0411cb050e3520d33d5af6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
