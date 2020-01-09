@@ -11,6 +11,7 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \
+	$(if $(filter LINUX,$(OS)),libffi) \
 	openssl \
 	zlib \
 ))
@@ -52,8 +53,12 @@ else
 # OPENSSL_INCLUDES OPENSSL_LDFLAGS OPENSSL_LIBS cannot be set via commandline!
 # use --with-openssl instead, which requires include/ and lib/ subdirs.
 
-# TODO: libffi has different SONAME on CentOS 6 vs. 7, so we better use
-# --without-system-ffi. However, that doesn't actually do anything on Linux :(
+# libffi is not all that stable, with 3 different SONAMEs currently, so we
+# have to bundle it; --without-system-ffi does not work any more on Linux.
+# Unfortuantely (as of 3.7) pkg-config is used to locate libffi so we do some
+# hacks to find the libffi.pc in workdir by overriding PKG_CONFIG_LIBDIR.
+# Also, pkg-config is only used to find the headers, the libdir needs to be
+# passed extra.
 
 # create a symlink "LO_lib" because the .so are in a directory with platform
 # specific name like build/lib.linux-x86_64-3.3
@@ -91,6 +96,9 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(SYSTEM_OPENSSL)$(DISABLE_OPENSSL),,\
 			--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl) \
 		) \
+		$(if $(filter LINUX,$(OS)), \
+			PKG_CONFIG_LIBDIR="$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
+		) \
 		CC="$(strip $(CC) \
 			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
@@ -98,6 +106,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
 		LDFLAGS="$(strip $(LDFLAGS) \
+			$(if $(filter LINUX,$(OS)),-L$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
