@@ -137,7 +137,7 @@ endif
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LO_lib/_sysconfigdata_m_$(python3_MACHDEP)_$(subst -pc,,$(HOST_PLATFORM)).py \
+	LO_lib/_sysconfigdata_m_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
 endif
 
