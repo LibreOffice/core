@@ -1066,8 +1066,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         const ::osl::MutexGuard guard( getMutex() );
         return getDeployedPackage_( id, fileName, xCmdEnv );
     }
-    catch (const lang::IllegalArgumentException & exc) {
-        logIntern( Any(exc) );
+    catch (const lang::IllegalArgumentException &) {
         throw;
     }
     catch (const RuntimeException &) {
