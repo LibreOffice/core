@@ -250,10 +250,10 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
     m_xFootnoteCharTextTemplBox->clear();
     m_xFootnoteCharAnchorTemplBox->clear();
     ::FillCharStyleListBox(*m_xFootnoteCharTextTemplBox,
-                        pSh->GetView().GetDocShell());
+                        pSh->GetView().GetDocShell(), true);
 
     ::FillCharStyleListBox(*m_xFootnoteCharAnchorTemplBox,
-                        pSh->GetView().GetDocShell());
+                        pSh->GetView().GetDocShell(), true);
 }
 
 // Handler behind the button to collect the footnote at the page. In this case
