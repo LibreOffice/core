@@ -100,9 +100,14 @@ public:
     {
         return m_nType;
     }
-    inline LeaderType GetLeaderType() const;
-    inline sal_uInt16 GetAlignChar() const;
-
+    sal_uInt8 GetLeaderType() const
+    {
+        return m_nLeader;
+    }
+    sal_uInt16 GetAlignChar() const
+    {
+        return m_nAlignChar;
+    }
 private:
     sal_uInt32      m_nX;
     sal_uInt8       m_nType;
@@ -114,16 +119,6 @@ private:
 inline sal_uInt32 LwpTab::GetPosition() const
 {
     return m_nX;
-}
-
-inline LwpTab::LeaderType LwpTab::GetLeaderType() const
-{
-    return static_cast<LwpTab::LeaderType>(m_nLeader);
-}
-
-inline sal_uInt16 LwpTab::GetAlignChar() const
-{
-    return m_nAlignChar;
 }
 
 class   LwpTabRack : public LwpObject
