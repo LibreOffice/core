@@ -1160,7 +1160,10 @@ IMPL_LINK_NOARG(SalInstanceToolbar, ClickHdl, ToolBox*, void)
 IMPL_LINK_NOARG(SalInstanceToolbar, DropdownClick, ToolBox*, void)
 {
     sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
-    set_menu_item_active(m_xToolBox->GetItemCommand(nItemId).toUtf8(), true);
+
+    OString sIdent = m_xToolBox->GetItemCommand(nItemId).toUtf8();
+    signal_show_menu(sIdent);
+    set_menu_item_active(sIdent, true);
 }
 
 namespace {

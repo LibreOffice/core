@@ -7116,7 +7116,10 @@ private:
         OString id(pStr, pStr ? strlen(pStr) : 0);
         m_aMap[id] = pToolItem;
         if (pMenuButton)
+        {
             m_aMenuButtonMap[id] = std::make_unique<GtkInstanceMenuButton>(pMenuButton, m_pBuilder, false);
+            g_signal_connect(pToolItem, "show-menu", G_CALLBACK(signalItemShowMenu), this);
+        }
         g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
     }
 
@@ -7131,6 +7134,19 @@ private:
     {
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
         signal_clicked(OString(pStr, pStr ? strlen(pStr) : 0));
+    }
+
+    static void signalItemShowMenu(GtkMenuToolButton* pItem, gpointer widget)
+    {
+        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_item_show_menu(pItem);
+    }
+
+    void signal_item_show_menu(GtkMenuToolButton* pItem)
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        signal_show_menu(OString(pStr, pStr ? strlen(pStr) : 0));
     }
 
     static void set_item_image(GtkToolButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
@@ -7171,13 +7187,19 @@ public:
     void disable_item_notify_events()
     {
         for (auto& a : m_aMap)
+        {
             g_signal_handlers_block_by_func(a.second, reinterpret_cast<void*>(signalItemClicked), this);
+            g_signal_handlers_block_by_func(a.second, reinterpret_cast<void*>(signalItemShowMenu), this);
+        }
     }
 
     void enable_item_notify_events()
     {
         for (auto& a : m_aMap)
+        {
+            g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalItemShowMenu), this);
             g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalItemClicked), this);
+        }
     }
 
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
