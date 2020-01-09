@@ -16,6 +16,24 @@
       "revId": "444f0d256957544d26b9af9a0898364e829df1b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e451411d_c601ead0",
+        "filename": "sw/source/uibase/uiview/viewmdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-01-09T07:43:55Z",
+      "side": 0,
+      "message": "This is a cut and past from SwNavigationPI::MakeMark(). To improve code readability I\u0027ve added braces here and also to related patch https://gerrit.libreoffice.org/c/core/+/86389 use.",
+      "parentUuid": "1662a97e_3cf7b6ad",
+      "revId": "444f0d256957544d26b9af9a0898364e829df1b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
