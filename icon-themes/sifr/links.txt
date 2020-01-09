@@ -27,21 +27,30 @@ chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
 chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
 chart2/res/selectrange.png formula/res/refinp1.png
-
-cmd/sc_insertmenulegend.png cmd/sc_legend.png
-cmd/sc_togglelegend.png cmd/sc_legend.png
-cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
-cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
-cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
-cmd/lc_insertmenulegend.png cmd/lc_legend.png
-cmd/lc_togglelegend.png cmd/lc_legend.png
+cmd/32/charttitlemenu.png cmd/32/toggletitle.png
+cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
+cmd/32/diagramaxismenu.png cmd/32/diagramaxis.png
+cmd/32/diagramgridmenu.png cmd/32/togglegridhorizontal.png
+cmd/32/formatselection.png cmd/32/configuredialog.png
+cmd/32/insertmenuaxes.png cmd/32/diagramaxis.png
+cmd/32/insertmenugrids.png cmd/32/togglegridhorizontal.png
+cmd/32/insertmenulegend.png cmd/32/legend.png
+cmd/lc_charttitlemenu.png cmd/lc_toggletitle.png
+cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
+cmd/lc_diagramaxismenu.png cmd/lc_diagramaxis.png
+cmd/lc_diagramgridmenu.png cmd/lc_togglegridhorizontal.png
+cmd/lc_formatselection.png cmd/lc_configuredialog.png
 cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
 cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
-cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
-
+cmd/lc_insertmenulegend.png cmd/lc_legend.png
 cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
 cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
+cmd/sc_formatselection.png cmd/sc_configuredialog.png
+cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
+cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
+cmd/sc_insertmenulegend.png cmd/sc_legend.png
 
 # cmd
 # ==============================================
@@ -64,7 +73,6 @@ cmd/lc_fieldmenu.png cmd/lc_addfield.png
 cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_indexesmenu.png cmd/lc_insertindexesentry.png
 cmd/lc_insobjctrl.png cmd/lc_adddirect.png
-cmd/lc_insert.png cmd/lc_togglesheetgrid.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/lc_insertcolumnsmenu.png cmd/lc_insertcolumns.png
 cmd/lc_insertcurrencyfield.png cmd/lc_currencyfield.png
@@ -76,6 +84,7 @@ cmd/lc_insertfilecontrol.png cmd/lc_open.png
 cmd/lc_insertformattedfield.png cmd/lc_formattedfield.png
 cmd/lc_insertformcheck.png cmd/lc_checkbox.png
 cmd/lc_insertformcombo.png cmd/lc_combobox.png
+cmd/lc_insertformhscroll.png cmd/lc_hscrollbar.png
 cmd/lc_insertformlist.png cmd/lc_listbox.png
 cmd/lc_insertformmenu.png cmd/lc_controlproperties.png
 cmd/lc_insertformradio.png cmd/lc_radiobutton.png
@@ -98,7 +107,7 @@ cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
 cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/lc_insertrowsmenu.png cmd/lc_insertrows.png
-cmd/lc_insertspreadsheet.png cmd/lc_togglesheetgrid.png
+cmd/lc_insertspreadsheet.png cmd/lc_insert.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
 
@@ -108,7 +117,6 @@ cmd/sc_fieldmenu.png cmd/sc_addfield.png
 cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_indexesmenu.png cmd/sc_insertindexesentry.png
 cmd/sc_insobjctrl.png cmd/sc_adddirect.png
-cmd/sc_insert.png cmd/sc_togglesheetgrid.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_insertcurrencyfield.png cmd/sc_currencyfield.png
@@ -119,6 +127,7 @@ cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 cmd/sc_insertformattedfield.png cmd/sc_formattedfield.png
 cmd/sc_insertformcheck.png cmd/sc_checkbox.png
 cmd/sc_insertformcombo.png cmd/sc_combobox.png
+cmd/sc_insertformhscroll.png cmd/sc_hscrollbar.png
 cmd/sc_insertformlist.png cmd/sc_listbox.png
 cmd/sc_insertformmenu.png cmd/sc_controlproperties.png
 cmd/sc_insertformradio.png cmd/sc_radiobutton.png
@@ -142,7 +151,7 @@ cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
 cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
-cmd/sc_insertspreadsheet.png cmd/sc_togglesheetgrid.png
+cmd/sc_insertspreadsheet.png cmd/sc_insert.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 
@@ -154,20 +163,27 @@ cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 
 # Zoom
+cmd/32/adjust.png cmd/32/zoomoptimal.png
+cmd/32/previewzoom.png cmd/32/zoomprevious.png
+cmd/32/view100.png cmd/32/zoom100percent.png
+cmd/32/zoommenu.png cmd/32/zoomoptimal.png
+cmd/32/zoomminus.png cmd/32/zoomout.png
+cmd/32/zoomplus.png cmd/32/zoomin.png
+cmd/32/zoomtoolbox.png cmd/32/zoom.png
+cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
+cmd/lc_view100.png cmd/lc_zoom100percent.png
 cmd/lc_zoommenu.png cmd/lc_zoomoptimal.png
 cmd/lc_zoomminus.png cmd/lc_zoomout.png
-cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
 cmd/lc_zoomplus.png cmd/lc_zoomin.png
-cmd/lc_adjust.png cmd/lc_zoomoptimal.png
-cmd/lc_zoom100percent.png cmd/lc_view100.png
+cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
+cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_previewzoom.png cmd/sc_zoomprevious.png
+cmd/sc_view100.png cmd/sc_zoom100percent.png
 cmd/sc_zoommenu.png cmd/sc_zoomoptimal.png
 cmd/sc_zoomminus.png cmd/sc_zoomout.png
-cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 cmd/sc_zoomplus.png cmd/sc_zoomin.png
-cmd/sc_adjust.png cmd/sc_zoomoptimal.png
-cmd/sc_zoom100percent.png cmd/sc_view100.png
+cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 
 # Save
 cmd/lc_savebasicas.png cmd/lc_saveas.png
@@ -220,10 +236,15 @@ cmd/sc_webhtml.png cmd/sc_browseview.png
 cmd/sc_openurl.png cmd/sc_browseview.png
 
 # Formula
+cmd/32/insertformhscroll.png cmd/32/hscrollbar.png
+cmd/32/vscroll.png cmd/32/scrollbar.png
+cmd/32/vscrollbar.png cmd/32/scrollbar.png
+cmd/lc_insertformhscroll.png cmd/lc_hscrollbar.png
+cmd/lc_vscroll.png cmd/lc_scrollbar.png
 cmd/lc_vscrollbar.png cmd/lc_scrollbar.png
+cmd/sc_insertformhscroll.png cmd/sc_hscrollbar.png
+cmd/sc_vscroll.png cmd/sc_scrollbar.png
 cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
-cmd/lc_hscrollbar.png cmd/lc_insertformhscroll.png
-cmd/sc_hscrollbar.png cmd/sc_insertformhscroll.png
 
 # Annotations
 cmd/sc_insertannotation.png cmd/sc_shownote.png
@@ -844,6 +865,7 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 # navigator
 cmd/lc_dsbdocumentdatasource.png cmd/lc_sbaexecutesql.png
 cmd/sc_dsbdocumentdatasource.png cmd/sc_sbaexecutesql.png
+cmd/lc_setreminder.png cmd/lc_timefield.png
 cmd/sc_setreminder.png cmd/sc_timefield.png
 
 cmd/lc_showbrowser.png cmd/lc_controlproperties.png
@@ -1008,9 +1030,6 @@ res/oleobj.png cmd/lc_insertobject.png
 res/lx03256.png cmd/lc_insertplugin.png
 res/plugin.png cmd/lc_insertplugin.png
 res/sx10144.png cmd/sc_checkbox.png
-res/sx10593.png cmd/sc_switchxformsdesignmode.png
-res/sx10597.png cmd/sc_color.png
-res/sx10598.png cmd/sc_formatgroup.png
 
 res/sc05500.png cmd/sc_adddirect.png
 res/sc05678.png cmd/sc_inserthyperlink.png
@@ -1071,26 +1090,30 @@ res/sc_helperdialog.png cmd/sc_helpindex.png
 res/sx03189.png cmd/sc_open.png
 res/sx03202.png cmd/sc_viewdatasourcebrowser.png
 res/sx03256.png cmd/sc_insertplugin.png
+res/sx10593.png cmd/sc_switchxformsdesignmode.png
 res/sx10594.png cmd/sc_pushbutton.png
 res/sx10595.png cmd/sc_radiobutton.png
 res/sx10596.png cmd/sc_checkbox.png
-res/sx10599.png cmd/sc_text.png
-res/sx10600.png cmd/lc_listbox.png
+res/sx10597.png cmd/sc_label.png
+res/sx10598.png cmd/sc_groupbox.png
+res/sx10599.png cmd/sc_edit.png
+res/sx10600.png cmd/sc_listbox.png
 res/sx10601.png cmd/sc_combobox.png
 res/sx10603.png cmd/sc_grid.png
-
-res/sx10605.png cmd/sc_open.png
+res/sx10604.png cmd/sc_imagebutton.png
+res/sx10605.png cmd/sc_filecontrol.png
+res/sx10607.png cmd/sc_navigationbar.png
 res/sx10704.png cmd/sc_datefield.png
 res/sx10705.png cmd/sc_timefield.png
-res/sx10706.png cmd/sc_text.png
-res/sx10707.png cmd/sc_formattedfield.png
+res/sx10706.png cmd/sc_numericfield.png
+res/sx10707.png cmd/sc_currencyfield.png
+res/sx10708.png cmd/sc_patternfield.png
 res/sx10710.png cmd/sc_imagecontrol.png
 res/sx10715.png cmd/sc_datafilterstandardfilter.png
 res/sx10728.png cmd/sc_formattedfield.png
 res/sx10757.png cmd/sc_timefield.png
-
 res/sx10768.png cmd/sc_scrollbar.png
-res/sx10769.png cmd/sc_scrollbar.png
+res/sx10769.png cmd/sc_spinbutton.png
 res/sx18002.png res/plus.png
 res/sx18003.png res/minus.png
 
@@ -1221,8 +1244,8 @@ sfx2/res/symphony/sidebar-gallery-large.png cmd/lc_gallery.png
 sfx2/res/symphony/sidebar-gallery-small.png cmd/sc_gallery.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
 sfx2/res/symphony/sidebar-navigator-small.png cmd/sc_navigator.png
-sfx2/res/symphony/sidebar-property-large.png cmd/lc_formproperties.png
-sfx2/res/symphony/sidebar-property-small.png cmd/sc_formproperties.png
+sfx2/res/symphony/sidebar-property-large.png cmd/lc_configuredialog.png
+sfx2/res/symphony/sidebar-property-small.png cmd/sc_configuredialog.png
 sfx2/res/symphony/sidebar-style-large.png cmd/lc_formdesigntools.png
 sfx2/res/symphony/sidebar-style-small.png cmd/sc_formdesigntools.png
 sfx2/res/symphony/sidebar-template-large.png cmd/lc_slidemasterpage.png
