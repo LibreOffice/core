@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
+
 #include "bundles.hxx"
 #include "cgm.hxx"
 #include "elements.hxx"
@@ -169,7 +173,7 @@ void CGM::ImplDoClass1()
             {
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (static_cast<sal_uInt32>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 pElement->aFontList.InsertName( mpSource + mnParaSize, nSize );

@@ -23,6 +23,9 @@
 #include "chart.hxx"
 #include "elements.hxx"
 #include "outact.hxx"
+
+#include <o3tl/safeint.hxx>
+
 #include <math.h>
 #include <memory>
 
@@ -186,7 +189,7 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
-                if (static_cast<sal_uInt32>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
@@ -223,7 +226,7 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (static_cast<sal_uInt32>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
@@ -240,7 +243,7 @@ void CGM::ImplDoClass4()
                 (void)ImplGetUI16(); // nType
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
-                if (static_cast<sal_uInt32>(mpEndValidSource - (mpSource + mnParaSize)) <= nSize)
+                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) <= nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 mpSource[ mnParaSize + nSize ] = 0;

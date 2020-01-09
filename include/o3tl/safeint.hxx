@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <limits>
 #include <type_traits>
 
@@ -225,6 +226,13 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
 }
 
 #endif
+
+template<typename T> constexpr std::enable_if_t<std::is_signed_v<T>, std::make_unsigned_t<T>>
+make_unsigned(T value)
+{
+    assert(value >= 0);
+    return value;
+}
 
 }
 
