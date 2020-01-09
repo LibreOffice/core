@@ -131,7 +131,7 @@ Sequence<Locale> SAL_CALL AndroidSpellChecker::getLocales()
 
     gLocalesSequence.realloc(gLocales.size());
     int i = 0;
-    for (OUString aLocale : gLocales)
+    for (const OUString& aLocale : gLocales)
     {
         //SAL-DEBUG("Spell locale: " << aLocale);
         // FIXME don't store invalid locales
@@ -143,13 +143,20 @@ Sequence<Locale> SAL_CALL AndroidSpellChecker::getLocales()
     return gLocalesSequence;
 }
 
-sal_Bool SAL_CALL AndroidSpellChecker::hasLocale(const Locale& /*rLocale*/)
+sal_Bool SAL_CALL AndroidSpellChecker::hasLocale(const Locale& rLocale)
 {
+    if (!gLocalesSequence.hasElements())
+        return false;
+
     MutexGuard aGuard(GetLinguMutex());
 
-    //SAL-DEBUG("AndroidSpellChecker::hasLocale()");
+    for (const Locale& locale : gLocalesSequence)
+    {
+        if (locale == rLocale)
+            return true;
+    }
 
-    return true;
+    return false;
 }
 
 sal_Bool SAL_CALL AndroidSpellChecker::isValid(const OUString& rWord, const Locale& /*rLocale*/,
