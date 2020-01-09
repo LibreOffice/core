@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "629fd8ea_8ac70183",
+        "filename": "filter/source/graphicfilter/icgm/class1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-09T18:47:01Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/86502/\u003e \"Introduce o3tl::make_unsigned to cast from signed to unsigned type\"",
+      "parentUuid": "7c6e4dce_dff12825",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18950cc4_ce76fd5e",
         "filename": "filter/source/graphicfilter/icgm/class4.cxx",
         "patchSetId": 5
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "cb2da354_ef8ccc2a",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-09T18:47:01Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/86502/\u003e \"Introduce o3tl::make_unsigned to cast from signed to unsigned type\"",
+      "parentUuid": "1e518555_7c9468ab",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b582a75c_218b54a4",
         "filename": "filter/source/graphicfilter/icgm/class4.cxx",
         "patchSetId": 5
@@ -89,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "922a6767_2c0a0439",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-09T18:47:01Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/86502/\u003e \"Introduce o3tl::make_unsigned to cast from signed to unsigned type\"",
+      "parentUuid": "b582a75c_218b54a4",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "746fae8e_5faf0b1e",
         "filename": "filter/source/graphicfilter/icgm/class4.cxx",
         "patchSetId": 5
@@ -103,6 +157,24 @@
       "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8455c53_4deb5a0a",
+        "filename": "filter/source/graphicfilter/icgm/class4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-09T18:47:01Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/86502/\u003e \"Introduce o3tl::make_unsigned to cast from signed to unsigned type\"",
+      "parentUuid": "746fae8e_5faf0b1e",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -138,6 +210,24 @@
       "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a81e528_5754d8c6",
+        "filename": "sfx2/source/doc/oleprops.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-09T18:47:01Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/86501/\u003e \"Improve loplugin:redundantcast for sal_Int... vs. ::sal_Int...\"",
+      "parentUuid": "3015b5bf_f79c09c4",
+      "revId": "d66ddcffe61d90cb1472e74a040963086032bf9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
