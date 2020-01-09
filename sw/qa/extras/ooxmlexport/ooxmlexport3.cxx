@@ -1061,6 +1061,16 @@ DECLARE_OOXMLEXPORT_TEST(testFontTypes, "tdf120344_FontTypes.docx")
     assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCorrectXMLtagExport, "tdf107683_XMLtagExport.odt")
+{
+    // tdf#107683: Don't export ilvl and numId when there is an outline rule.
+
+    xmlDocPtr pXmlDocument = parseExport("word/styles.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:style[2]/w:pPr/w:numPr", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
