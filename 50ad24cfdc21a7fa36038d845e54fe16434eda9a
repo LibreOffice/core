@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e5ac844_d59f6260",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3036,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-01-09T12:08:38Z",
+      "side": 1,
+      "message": "This seems dangerous to me - to indent multiple lines without braces. Of course, compilers are now issuing warnings (aka errors) if multiple REAL commands are indented.\n\nI\u0027m not intending to do a whole-sale grep for this situation - it just bothered me during a code-read so I added it to my cleanup patch.",
+      "range": {
+        "startLine": 3036,
+        "startChar": 4,
+        "endLine": 3036,
+        "endChar": 5
+      },
+      "revId": "50ad24cfdc21a7fa36038d845e54fe16434eda9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
