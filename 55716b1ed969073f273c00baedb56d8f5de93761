@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69cae6c8_b9d37d54",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-01-09T22:47:45Z",
+      "side": 1,
+      "message": "Looks nice - but in general code like this that needs to cope with a wide variety of performance in hardware terms - should have an aspirational timer - like every 40ms is fine - but it should be aware that these could happen every 500ms quite easily on slow / loaded hardware \u003d)\n\nAs such - we should track the time since the start of the fade - and calculate the opacity and whether we continue to do the work based on the real-world time-offset of when we get to do the work - and not calculate via \u0027timeout * some-count\u0027 - otherwise it can take far, far longer on a slow machine.\n\nDoes that make sense ? \u003d)\n\nThanks !",
+      "revId": "55716b1ed969073f273c00baedb56d8f5de93761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
