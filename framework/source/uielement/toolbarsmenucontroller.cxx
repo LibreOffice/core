@@ -416,8 +416,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-             addCommand( m_xPopupMenu, ".uno:InputLineVisible", "" );
 
         bool          bAddCommand( true );
         SvtCommandOptions aCmdOptions;
