@@ -54,7 +54,7 @@
 #include <string.h>
 #include <o3tl/make_unique.hxx>
 
-#include <jni.h>
+#include <osl/detail/android-bootstrap.h>
 
 using namespace utl;
 using namespace osl;
@@ -72,15 +72,57 @@ std::vector<OUString> gLocales;
 
 /// The gLocales converted to a Sequence of Locales - we cannot do that right away.
 Sequence<Locale> gLocalesSequence;
+
+/// The LOActivity class - for calling back.
+jclass loActivityClz = nullptr;
+
+/// The LOActivity object - for calling back.
+jobject loActivityObj = nullptr;
+
+/// To manage attaching and detaching the thread.
+// FIXME TODO some management / remembering of the env maybe? OTOH - this is
+// called from the main thread anyway, so we are never doing the
+// AttachCurrentThread()...
+JNIEnv* getEnv()
+{
+    JNIEnv* env;
+
+    assert(lo_get_javavm() != nullptr);
+    jint res = lo_get_javavm()->GetEnv((void**)&env, JNI_VERSION_1_6);
+    if (res == JNI_EDETACHED)
+    {
+        SAL_INFO("lingucomponent.android", "Attach worker thread");
+        res = lo_get_javavm()->AttachCurrentThread(&env, nullptr);
+        if (JNI_OK == res)
+            m_bAttached = true;
+        else
+            SAL_INFO("lingucomponent.android", "Failed to AttachCurrentThread");
+    }
+    else if (res == JNI_EVERSION)
+    {
+        SAL_INFO("lingucomponent.android", "GetEnv version not supported");
+        return nullptr;
+    }
+    else if (res != JNI_OK)
+    {
+        SAL_INFO("lingucomponent.android", "GetEnv another error " << res);
+        return nullptr;
+    }
+
+    return env;
+}
 }
 
 /// This has to be called from the Java code before the AndroidSpellChecker
 /// initialization - namely to have the JNIEnv to be able to perform calls
 /// back to the Java code.
 extern "C" JNIEXPORT void JNICALL libreofficekit_spell_checking_initialize(JNIEnv* env,
-                                                                           jobject /*instance*/,
+                                                                           jobject instance,
                                                                            jobjectArray locales)
 {
+    //SAL-DEBUG("AndroidSpellChecker - libreoffice_spell_checking_initialize() called");
+    MutexGuard aGuard(GetLinguMutex());
+
     int count = env->GetArrayLength(locales);
     for (int i = 0; i < count; ++i)
     {
@@ -90,6 +132,33 @@ extern "C" JNIEXPORT void JNICALL libreofficekit_spell_checking_initialize(JNIEn
         gLocales.push_back(OUString::fromUtf8(localeUtf8).replace('_', '-'));
 
         env->ReleaseStringUTFChars(jstr, localeUtf8);
+    }
+
+    // trigger re-generation
+    gLocalesSequence.realloc(0);
+
+    // remember these for calling back later
+    jclass clz = env->GetObjectClass(instance);
+    loActivityClz = (jclass)env->NewGlobalRef(clz);
+    loActivityObj = env->NewGlobalRef(instance);
+}
+
+/// We have to switch to the new LOActivity instance when another document is loaded.
+extern "C" JNIEXPORT void JNICALL libreofficekit_spell_checking_destroy(JNIEnv* env)
+{
+    //SAL-DEBUG("AndroidSpellChecker - libreoffice_spell_checking_destroy() called");
+    MutexGuard aGuard(GetLinguMutex());
+
+    if (loActivityClz)
+    {
+        env->DeleteGlobalRef(loActivityClz);
+        loActivityClz = nullptr;
+    }
+
+    if (loActivityObj)
+    {
+        env->DeleteGlobalRef(loActivityObj);
+        loActivityObj = nullptr;
     }
 }
 
@@ -121,13 +190,13 @@ PropertyHelper_Spelling& AndroidSpellChecker::GetPropHelper_Impl()
 Sequence<Locale> SAL_CALL AndroidSpellChecker::getLocales()
 {
     //SAL-DEBUG("AndroidSpellChecker::getLocales()");
+    MutexGuard aGuard(GetLinguMutex());
+
     if (gLocales.empty())
         return Sequence<Locale>();
 
     if (gLocalesSequence.hasElements())
         return gLocalesSequence;
-
-    MutexGuard aGuard(GetLinguMutex());
 
     gLocalesSequence.realloc(gLocales.size());
     int i = 0;
@@ -145,10 +214,10 @@ Sequence<Locale> SAL_CALL AndroidSpellChecker::getLocales()
 
 sal_Bool SAL_CALL AndroidSpellChecker::hasLocale(const Locale& rLocale)
 {
+    MutexGuard aGuard(GetLinguMutex());
+
     if (!gLocalesSequence.hasElements())
         return false;
-
-    MutexGuard aGuard(GetLinguMutex());
 
     for (const Locale& locale : gLocalesSequence)
     {
@@ -159,16 +228,29 @@ sal_Bool SAL_CALL AndroidSpellChecker::hasLocale(const Locale& rLocale)
     return false;
 }
 
-sal_Bool SAL_CALL AndroidSpellChecker::isValid(const OUString& rWord, const Locale& /*rLocale*/,
+sal_Bool SAL_CALL AndroidSpellChecker::isValid(const OUString& rWord, const Locale& rLocale,
                                                const PropertyValues& /*rProperties*/)
 {
     MutexGuard aGuard(GetLinguMutex());
 
-    //SAL-DEBUG("AndroidSpellChecker::isValid()");
+    //SAL-DEBUG("AndroidSpellChecker::isValid(): " << rWord);
 
-    // FIXME TODO do the real stuff here
-    if (rWord == "hello" || rWord == "Hello")
-        return true;
+    if (rLocale == Locale() || rWord.isEmpty() || !loActivityClz || !loActivityObj)
+        return false;
+
+    JNIEnv* env = getEnv();
+    if (!env)
+        return false;
+
+    jstring jstr = env->NewStringUTF(rWord.toUtf8().getStr());
+    jmethodID getSpellCheckingSuggestions
+        = env->GetMethodID(loActivityClz, "getSpellCheckingSuggestions", "(Ljava/lang/String;)V");
+    env->CallVoidMethod(loActivityObj, getSpellCheckingSuggestions, jstr);
+
+    if (env->ExceptionCheck())
+        env->ExceptionDescribe();
+
+    // FIXME TODO wait for the suggestions coming back
 
     return false;
 }

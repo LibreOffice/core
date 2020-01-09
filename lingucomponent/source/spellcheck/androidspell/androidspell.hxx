@@ -41,6 +41,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
+/// Perform the actual spell checking.
 class AndroidSpellChecker
     : public cppu::WeakImplHelper<XSpellChecker, XLinguServiceEventBroadcaster, XInitialization,
                                   XComponent, XServiceInfo, XServiceDisplayName>
