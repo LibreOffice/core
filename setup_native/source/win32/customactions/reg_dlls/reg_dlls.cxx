@@ -128,7 +128,7 @@ std::wstring MsiGetPropertyW(MSIHANDLE hInst, LPCWSTR szName)
 {
     std::wstring sResult;
     DWORD nSz = 0;
-    UINT nRet = ::MsiGetPropertyW(hInst, szName, L"", &nSz);
+    UINT nRet = ::MsiGetPropertyW(hInst, szName, const_cast<wchar_t*>(L""), &nSz);
     if (nRet == ERROR_MORE_DATA)
     {
         ++nSz;
@@ -284,7 +284,8 @@ extern "C" __declspec(dllexport) UINT __stdcall PrepRegUnregDLLs(MSIHANDLE hInst
                 throw std::exception("MsiCreateRecord failed!");
             MsiRecordSetStringW(hRec, 0, sVal.c_str());
             DWORD nSz = 0;
-            if (MsiFormatRecordW(hInstall, hRec, L"", &nSz) == ERROR_MORE_DATA)
+            if (MsiFormatRecordW(hInstall, hRec, const_cast<wchar_t*>(L""), &nSz)
+                == ERROR_MORE_DATA)
             {
                 ++nSz;
                 auto buf = std::make_unique<wchar_t[]>(nSz);
