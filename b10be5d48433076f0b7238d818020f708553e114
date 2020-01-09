@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c65eb768_c38894ef",
+        "filename": "bin/check-elf-dynamic-objects",
+        "patchSetId": 12
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T09:57:43Z",
+      "side": 1,
+      "message": "this turned out to be a bad idea - we already have a newer version on one tinderbox:\n/lo/home/tdf/lode/jenkins/workspace/lo_daily_update_gandalf/instdir/program/python-core-3.7.6/lib/lib-dynload/_ctypes.cpython-3.7m.so has suspicious NEEDED: libffi.so.7",
+      "revId": "b10be5d48433076f0b7238d818020f708553e114",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
