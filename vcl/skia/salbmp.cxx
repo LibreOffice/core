@@ -111,15 +111,19 @@ bool SkiaSalBitmap::CreateBitmapData()
     }
     if (colorType != kUnknown_SkColorType)
     {
-        // If vcl::BackendCapabilities::mbSupportsBitmap32 is set,
-        // BitmapReadAccess::ImplSetAccessPointers() uses functions that use premultiplied
-        // alpha. If not set, it would use functions that would read just RGB, so using
-        // premultiplied alpha here would change those values.
-        // Using kPremul_SkAlphaType should be better for performance, so ensure
-        // the flag is set.
+    // If vcl::BackendCapabilities::mbSupportsBitmap32 is set,
+    // BitmapReadAccess::ImplSetAccessPointers() uses functions that use premultiplied
+    // alpha. If not set, it would use functions that would read just RGB, so using
+    // premultiplied alpha here would change those values.
+#if SKIA_USE_BITMAP32
         assert(ImplGetSVData()->mpDefInst->GetBackendCapabilities()->mbSupportsBitmap32);
         if (!mBitmap.tryAllocPixels(
                 SkImageInfo::Make(mSize.Width(), mSize.Height(), colorType, kPremul_SkAlphaType)))
+#else
+        assert(!ImplGetSVData()->mpDefInst->GetBackendCapabilities()->mbSupportsBitmap32);
+        if (!mBitmap.tryAllocPixels(
+                SkImageInfo::Make(mSize.Width(), mSize.Height(), colorType, kUnpremul_SkAlphaType)))
+#endif
         {
             return false;
         }

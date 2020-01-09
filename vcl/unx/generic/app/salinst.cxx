@@ -34,6 +34,7 @@
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <config_skia.h>
 
 // plugin factory function
 extern "C"
@@ -228,8 +229,10 @@ std::shared_ptr<vcl::BackendCapabilities> X11SalInstance::GetBackendCapabilities
 {
     auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
 #if HAVE_FEATURE_SKIA
+#if SKIA_USE_BITMAP32
     if( SkiaHelper::isVCLSkiaEnabled())
         pBackendCapabilities->mbSupportsBitmap32 = true;
+#endif
 #endif
     return pBackendCapabilities;
 }
