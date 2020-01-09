@@ -70,6 +70,7 @@
 
 using namespace ::std;
 using namespace ::cppu;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -86,16 +87,6 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XInitialization;
-
-Sequence< OUString > AnimationsImport_getSupportedServiceNames() throw()
-{
-    return Sequence< OUString > { "com.sun.star.comp.Xmloff.AnimationsImport" };
-}
-
-OUString AnimationsImport_getImplementationName() throw()
-{
-    return "xmloff::AnimationsImport";
-}
 
 static OUString
 lcl_GetMediaReference(SvXMLImport const& rImport, OUString const& rURL)
@@ -1228,7 +1219,7 @@ private:
 }
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
-: SvXMLImport( rxContext, AnimationsImport_getImplementationName(), SvXMLImportFlags::META )
+: SvXMLImport( rxContext, "xmloff::AnimationsImport", SvXMLImportFlags::META )
     //FIXME: the above "IMPORT_META" used to be a nonsensical "true", question
     // remains whether this should be IMPORT_META (same numerical value as
     // true) or default IMPORT_ALL
@@ -1379,9 +1370,11 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
 
 } // namespace xmloff
 
-Reference< XInterface > AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Xmloff_AnimationsImport(uno::XComponentContext* pCtx,
+                                          uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return static_cast<cppu::OWeakObject*>(new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) ));
+    return cppu::acquire(new xmloff::AnimationsImport(pCtx));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

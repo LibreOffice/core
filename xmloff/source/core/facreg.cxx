@@ -54,10 +54,8 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * 
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
-        SINGLEFACTORY( AnimationsImport )
-
         // drawing layer export
-        else SINGLEFACTORY( XMLDrawingLayerExport )
+        SINGLEFACTORY( XMLDrawingLayerExport )
 
         // impress xml clipboard export
         else SINGLEFACTORY( XMLImpressClipboardExport )

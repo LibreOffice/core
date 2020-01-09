@@ -31,13 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
 } } }
 
-// impress animation import
-OUString AnimationsImport_getImplementationName() throw();
-css::uno::Sequence<OUString> AnimationsImport_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> AnimationsImport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
 // drawing layer export
 OUString XMLDrawingLayerExport_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLDrawingLayerExport_getSupportedServiceNames() throw();
