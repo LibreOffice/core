@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847bb61c_a41f2b73",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7915,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T17:02:55Z",
+      "side": 1,
+      "message": "this if ... else if ... looks equivalent to just \"if (!bOutlineRule)\"",
+      "revId": "3ff19202b860818d73f13d809d915ed0d23332c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
