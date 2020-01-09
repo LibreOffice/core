@@ -212,6 +212,30 @@
       "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ed776f_e38fd718",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-01-09T10:10:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cc4b702_b4fea963",
+      "range": {
+        "startLine": 435,
+        "startChar": 36,
+        "endLine": 435,
+        "endChar": 39
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
