@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a5c9460_b4f6b2b6",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T08:05:06Z",
+      "side": 1,
+      "message": "less quality?",
+      "range": {
+        "startLine": 8,
+        "startChar": 27,
+        "endLine": 8,
+        "endChar": 28
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e19720f1_bec73638",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T08:05:06Z",
+      "side": 1,
+      "message": "you go down to 80?",
+      "range": {
+        "startLine": 22,
+        "startChar": 27,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "003d6a49_a81be5bc",
+        "filename": "svx/uiconfig/ui/compressgraphicdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T08:05:06Z",
+      "side": 1,
+      "message": "What benefit come with the two new entries? (Drawback is the longer list, for my taste too long)",
+      "range": {
+        "startLine": 435,
+        "startChar": 36,
+        "endLine": 435,
+        "endChar": 39
+      },
+      "revId": "6114033a33c61e5e9518dc3cc0a35fadab84d404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
