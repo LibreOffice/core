@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb4fa8eb_06c84635",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T16:32:41Z",
+      "side": 1,
+      "message": "thanks for adding braces :)",
+      "revId": "f31accb05a1c7064a7e586ffec8f283b6ff4787e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25eedfa2_0c179a8e",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T16:32:41Z",
+      "side": 1,
+      "message": "i dont\u0027t think this works: the counter m_nAutoMarkIdx always increases but both this call here and user\u0027s text delete actions may delete marks, so there is no guarantee that the index corresponds to the expected mark, and neither is there a guarantee that the index is smaller than the size of the vector.\n\nif we want to delete the oldest set mark, why not number the marks consecutively (this is already done?) and then always delete the lexicographically first one?\n\nalthough, since we\u0027re sorting strings, the sort function needs to sort e.g. __Mark__10 after __Mark__9...",
+      "revId": "f31accb05a1c7064a7e586ffec8f283b6ff4787e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
