@@ -168,100 +168,90 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     m_aLong = m_aNames[nIdx]->aLong;
     aPackageName = m_aNames[nIdx]->aPackageName;
 
-    ErrCode nRet = ERRCODE_NONE;
-
     // open stream in proper sub-storage
     CloseFile();
-    nRet = OpenFile();
-    if ( ERRCODE_NONE == nRet )
+    if ( OpenFile() != ERRCODE_NONE )
+        return ERR_SWG_READ_ERROR;
+
+    try
     {
+        xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::READ );
+        bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
+
+        uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
+            "atevent.xml", embed::ElementModes::READ );
+        OSL_ENSURE(xDocStream.is(), "Can't create stream");
+        if ( !xDocStream.is() )
+            return ERR_SWG_READ_ERROR;
+
+        uno::Reference<io::XInputStream> xInputStream = xDocStream->getInputStream();
+
+        // prepare ParserInputSrouce
+        xml::sax::InputSource aParserInput;
+        aParserInput.sSystemId = m_aName;
+        aParserInput.aInputStream = xInputStream;
+
+        // get service factory
+        uno::Reference< uno::XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
+
+        // get parser
+        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
+
+        // create descriptor and reference to it. Either
+        // both or neither must be kept because of the
+        // reference counting!
+        SvMacroTableEventDescriptor* pDescriptor =
+            new SvMacroTableEventDescriptor(aAutotextEvents);
+        uno::Reference<XNameReplace> xReplace = pDescriptor;
+        Sequence<Any> aFilterArguments( 1 );
+        aFilterArguments[0] <<= xReplace;
+
+        // get filter
+        OUString sFilterComponent = bOasis
+            ? OUString("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter")
+            : OUString("com.sun.star.comp.Writer.XMLAutotextEventsImporter");
+        uno::Reference< xml::sax::XDocumentHandler > xFilter(
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                sFilterComponent, aFilterArguments, xContext),
+            UNO_QUERY );
+        OSL_ENSURE( xFilter.is(), "can't instantiate autotext-events filter");
+        if ( !xFilter.is() )
+            return ERR_SWG_READ_ERROR;
+
+        // connect parser and filter
+        xParser->setDocumentHandler( xFilter );
+
+        // parse the stream
         try
         {
-            xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::READ );
-            bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
-
-            uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
-                "atevent.xml", embed::ElementModes::READ );
-            OSL_ENSURE(xDocStream.is(), "Can't create stream");
-            if ( xDocStream.is() )
-            {
-                uno::Reference<io::XInputStream> xInputStream = xDocStream->getInputStream();
-
-                // prepare ParserInputSrouce
-                xml::sax::InputSource aParserInput;
-                aParserInput.sSystemId = m_aName;
-                aParserInput.aInputStream = xInputStream;
-
-                // get service factory
-                uno::Reference< uno::XComponentContext > xContext =
-                    comphelper::getProcessComponentContext();
-
-                // get parser
-                uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-
-                // create descriptor and reference to it. Either
-                // both or neither must be kept because of the
-                // reference counting!
-                SvMacroTableEventDescriptor* pDescriptor =
-                    new SvMacroTableEventDescriptor(aAutotextEvents);
-                uno::Reference<XNameReplace> xReplace = pDescriptor;
-                Sequence<Any> aFilterArguments( 1 );
-                aFilterArguments[0] <<= xReplace;
-
-                // get filter
-                OUString sFilterComponent = bOasis
-                    ? OUString("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter")
-                    : OUString("com.sun.star.comp.Writer.XMLAutotextEventsImporter");
-                uno::Reference< xml::sax::XDocumentHandler > xFilter(
-                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        sFilterComponent, aFilterArguments, xContext),
-                    UNO_QUERY );
-                OSL_ENSURE( xFilter.is(),
-                            "can't instantiate atevent filter");
-                if ( xFilter.is() )
-                {
-                    // connect parser and filter
-                    xParser->setDocumentHandler( xFilter );
-
-                    // parse the stream
-                    try
-                    {
-                        xParser->parseStream( aParserInput );
-                    }
-                    catch( xml::sax::SAXParseException& )
-                    {
-                        // workaround for #83452#: SetSize doesn't work
-                        // nRet = ERR_SWG_READ_ERROR;
-                    }
-                    catch( xml::sax::SAXException& )
-                    {
-                        nRet = ERR_SWG_READ_ERROR;
-                    }
-                    catch( io::IOException& )
-                    {
-                        nRet = ERR_SWG_READ_ERROR;
-                    }
-
-                    // and finally, copy macro into table
-                    if (ERRCODE_NONE == nRet)
-                        pDescriptor->copyMacrosIntoTable(rMacroTable);
-                }
-                else
-                    nRet = ERR_SWG_READ_ERROR;
-            }
-            else
-                nRet = ERR_SWG_READ_ERROR;
+            xParser->parseStream( aParserInput );
         }
-        catch( uno::Exception& )
+        catch( xml::sax::SAXParseException& )
         {
-            nRet = ERR_SWG_READ_ERROR;
+            // workaround for #83452#: SetSize doesn't work
+            // nRet = ERR_SWG_READ_ERROR;
         }
+        catch( xml::sax::SAXException& )
+        {
+            return ERR_SWG_READ_ERROR;
+        }
+        catch( io::IOException& )
+        {
+            return ERR_SWG_READ_ERROR;
+        }
+
+        // and finally, copy macro into table
+        pDescriptor->copyMacrosIntoTable(rMacroTable);
     }
-    else
-        nRet = ERR_SWG_READ_ERROR;
+    catch( uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("sw", "");
+        return ERR_SWG_READ_ERROR;
+    }
 
     // success!
-    return nRet;
+    return ERRCODE_NONE;
 }
 
 ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
