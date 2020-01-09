@@ -16,6 +16,24 @@
       "revId": "b19e233e61c073ec225a3892deab009bfd334041",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ad6308_4b620c9b",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5072,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-01-09T12:55:16Z",
+      "side": 0,
+      "message": "No - this one was ME in this series of bug fixes leaving the flattening until later - in order to not muddle up the code change with \"whitespace\" changes. I hate going through other people\u0027s changes trying to figure out if they made any changes, or whether they just moved things around...",
+      "parentUuid": "2880d6c9_34b8c2d7",
+      "revId": "b19e233e61c073ec225a3892deab009bfd334041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
