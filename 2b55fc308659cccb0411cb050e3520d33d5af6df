@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5de9b863_3b0afb5a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T10:46:30Z",
+      "side": 1,
+      "message": "Added \"e-mail\" to our UIWriting guideline https://wiki.documentfoundation.org/Design/Guidelines/UIWriting\n@Andreas: please use \"E-mail\"",
+      "parentUuid": "7e96cd9c_fbd140aa",
+      "range": {
+        "startLine": 257,
+        "startChar": 44,
+        "endLine": 257,
+        "endChar": 50
+      },
+      "revId": "2b55fc308659cccb0411cb050e3520d33d5af6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdfb8ff8_3ca17e53",
         "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
         "patchSetId": 6
