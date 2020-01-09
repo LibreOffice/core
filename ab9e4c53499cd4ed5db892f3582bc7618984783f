@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96492376_3ffbcc21",
+        "filename": "extras/source/autocorr/lang/de/DocumentList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T15:19:11Z",
+      "side": 1,
+      "message": "German is not English and has to be with both combined nouns in uppercase \u003d E-Mail.",
+      "range": {
+        "startLine": 557,
+        "startChar": 50,
+        "endLine": 557,
+        "endChar": 57
+      },
+      "revId": "ab9e4c53499cd4ed5db892f3582bc7618984783f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

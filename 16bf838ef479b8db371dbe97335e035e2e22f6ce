@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "385fa7df_69d4a6ef",
+        "filename": "wizards/source/resources/resources_en_US.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-09T15:19:11Z",
+      "side": 0,
+      "message": "I would be careful with those changes. Maybe the space is needed.",
+      "range": {
+        "startLine": 200,
+        "startChar": 19,
+        "endLine": 200,
+        "endChar": 20
+      },
+      "revId": "16bf838ef479b8db371dbe97335e035e2e22f6ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
