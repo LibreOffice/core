@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0289e521_03da5a1f",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "this is better than before, although it could be further improved to an enum with the 4 PS_* values, in a follow-up patch...",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df48cc51_85e2f2a7",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "This nSize...",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11b24bb1_70e97c4f",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "...and nParseThis...",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3713367d_18bb9915",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2585,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "..and nComp and nSize...",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df791888_c838c053",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2602,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "...and nSize...",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b0c751b_389457d0",
+        "filename": "filter/source/graphicfilter/eps/eps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": ".. and nBytesRead all should to use the same type.\n\nthe only non-constant input is apparently from GfxLink::GetDataSize and is sal_uInt32, so why not use that.",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b38e58_c396e733",
+        "filename": "filter/source/graphicfilter/etiff/etiff.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "x and y are bounded by mnHeight/mnWidth which are sal_uInt32 so that should be enough.\n\nj can\u0027t grow larger than 0x100 (or at least that\u0027s the largest value that is checked) so 32 bits should be enough for j too.",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3d25995_c179d6b6",
+        "filename": "filter/source/graphicfilter/idxf/dxf2mtf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "if we use sal_uInt16 for n*Percent the casts can be removed",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "625b45e9_cd0df68d",
+        "filename": "filter/source/graphicfilter/idxf/dxf2mtf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "all of these are initialised from sal_uInt16 vars so that should be sufficient for them",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42f45c20_917b4fc5",
+        "filename": "filter/source/graphicfilter/idxf/dxfgrprd.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "this one is funny, the only real use of it is commented out, it\u0027s just a debug counter to generate an error message apparently, so the type doesn\u0027t matter\n\n... might be best to just remove it altogether",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f5c271_0584ff8f",
+        "filename": "filter/source/graphicfilter/ieps/ieps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "the value for nComp typically comes from ReadBytes() which returns std::size_t",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fff901a_050d05e1",
+        "filename": "filter/source/graphicfilter/ieps/ieps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "i should be same type as nSize",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7493d2d9_aefef3be",
+        "filename": "filter/source/graphicfilter/ipbm/ipbm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "looks like mnCol is capped at 256 in line 113 so sal_uInt16 should suffice",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1458909f_618f783b",
+        "filename": "filter/source/graphicfilter/ipbm/ipbm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "see mnCol",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "597e48e3_cc8aae00",
+        "filename": "filter/source/graphicfilter/ipbm/ipbm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "255*256 is going to fit into 16 bits so sal_uInt16 is enough for both intermediate and result",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "173ecbdb_ca83d6a0",
+        "filename": "filter/source/graphicfilter/ipbm/ipbm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-09T18:06:01Z",
+      "side": 1,
+      "message": "hmm... there doesn\u0027t appear to be a limit for these numbers, they are created from strings of arbitrary length in line 518.\n\nprobably better to use sal_uInt64 here.",
+      "revId": "58921353f3699f0e4318d5d1a26706a5903c9bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
