@@ -11908,7 +11908,7 @@
           <value>notSpecified</value>
           <!-- Letter -->
           <value>letter</value>
-          <!-- E-Mail Message -->
+          <!-- E-mail Message -->
           <value>eMail</value>
         </choice>
       </define>
