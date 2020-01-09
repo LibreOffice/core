@@ -35,7 +35,7 @@ public:
     virtual ~ParaLineSpacingControl() override;
 
     /// Setup the widgets with values from the document.
-    void SyncFromDocument();
+    void Initialize();
 
     virtual void GrabFocus() override;
 

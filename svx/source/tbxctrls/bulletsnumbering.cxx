@@ -53,6 +53,7 @@ class NumberingToolBoxControl : public svt::PopupWindowController
 public:
     explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -185,9 +186,15 @@ NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css
 {
 }
 
+std::unique_ptr<WeldToolbarPopup> NumberingToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<NumberingPopup>(*this, m_pToolbar, mePageType);
+}
+
 VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent, mxPopover.get());
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<NumberingPopup>(*this, pParent->GetFrameWeld(), mePageType));
 
     mxInterimPopover->Show();
 
@@ -203,24 +210,19 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
     else if ( m_aCommandURL == ".uno:SetOutline" )
         mePageType = NumberingPageType::OUTLINE;
 
-    ToolBoxItemBits nBits = ( mePageType == NumberingPageType::OUTLINE ) ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN;
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        return;
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    bool bVcl = getToolboxId(nId, &pToolBox);
-
-    weld::Widget* pParent;
-    if (pToolBox)
-        pParent = pToolBox->GetFrameWeld();
-    else
-        pParent = m_pToolbar;
-    mxPopover = std::make_unique<NumberingPopup>(*this, pParent, mePageType);
-
-    if (bVcl)
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | nBits );
-    else if (m_pToolbar)
+    if (getToolboxId(nId, &pToolBox))
     {
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
+        ToolBoxItemBits nBits = ( mePageType == NumberingPageType::OUTLINE ) ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN;
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | nBits );
     }
 }
 

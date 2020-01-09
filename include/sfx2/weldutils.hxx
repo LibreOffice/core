@@ -33,6 +33,7 @@ private:
     weld::Toolbar* m_pToolbar;
 
     DECL_LINK(SelectHdl, const OString&, void);
+    DECL_LINK(ToggleMenuHdl, const OString&, void);
 
     void CreateController(const OUString& rCommand);
 

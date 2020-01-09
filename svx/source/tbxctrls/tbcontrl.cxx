@@ -3378,32 +3378,12 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(getCommandURL(), getModuleName());
     OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
+    OString aId(m_aCommandURL.toUtf8());
+
     if (m_pToolbar)
     {
-        EnsurePaletteManager();
-
-        const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
-        weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
-
-        const OString aId(m_aCommandURL.toUtf8());
-
-        auto xPopover = std::make_unique<ColorWindow>(
-                            m_aCommandURL,
-                            m_xPaletteManager,
-                            m_aColorStatus,
-                            m_nSlotId,
-                            m_xFrame,
-                            pParentFrame,
-                            MenuOrToolMenuButton(m_pToolbar, aId),
-                            m_aColorSelectFunction);
-
-        if ( m_bSplitButton )
-            xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
-
-        mxPopover = std::move(xPopover);
-
-        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
-
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(aId, mxPopoverContainer->getTopLevel());
         m_xBtnUpdater.reset(new svx::ToolboxButtonColorUpdater(m_nSlotId, aId, m_pToolbar, !m_bSplitButton, aCommandLabel, m_xFrame));
         return;
     }
@@ -3458,6 +3438,31 @@ void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& a
     m_aColorSelectFunction = aColorSelectFunction;
     if (m_xPaletteManager)
         m_xPaletteManager->SetColorSelectFunction(aColorSelectFunction);
+}
+
+std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
+{
+    EnsurePaletteManager();
+
+    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
+    weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
+
+    const OString aId(m_aCommandURL.toUtf8());
+
+    auto xPopover = std::make_unique<ColorWindow>(
+                        m_aCommandURL,
+                        m_xPaletteManager,
+                        m_aColorStatus,
+                        m_nSlotId,
+                        m_xFrame,
+                        pParentFrame,
+                        MenuOrToolMenuButton(m_pToolbar, aId),
+                        m_aColorSelectFunction);
+
+    if ( m_bSplitButton )
+        xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
+
+    return xPopover;
 }
 
 VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pParent )
@@ -3819,29 +3824,28 @@ void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::
 {
     PopupWindowController::initialize(rArguments);
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        return;
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    bool bVcl = getToolboxId(nId, &pToolBox);
-
-    weld::Widget* pParent;
-    if (pToolBox)
-        pParent = pToolBox->GetFrameWeld();
-    else
-        pParent = m_pToolbar;
-    mxPopover = std::make_unique<SvxCurrencyList_Impl>(this, pParent, m_aFormatString, m_eLanguage);
-
-    if (bVcl && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
-    else if (m_pToolbar)
-    {
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
-    }
+}
+
+std::unique_ptr<WeldToolbarPopup> SvxCurrencyToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<SvxCurrencyList_Impl>(this, m_pToolbar, m_aFormatString, m_eLanguage);
 }
 
 VclPtr<vcl::Window> SvxCurrencyToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent, mxPopover.get());
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<SvxCurrencyList_Impl>(this, pParent->GetFrameWeld(), m_aFormatString, m_eLanguage));
 
     mxInterimPopover->Show();
 

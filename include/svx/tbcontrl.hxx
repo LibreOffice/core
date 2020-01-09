@@ -231,6 +231,7 @@ public:
 
     using svt::ToolboxController::createPopupWindow;
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XSubToolbarController
     virtual sal_Bool SAL_CALL opensSubToolbar() override;
@@ -279,6 +280,7 @@ public:
 
     using svt::ToolboxController::createPopupWindow;
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -1537,27 +1537,65 @@ IMPL_LINK_NOARG(WeldToolbarPopup, FocusHdl, weld::Widget&, void)
     GrabFocus();
 }
 
-InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent, WeldToolbarPopup* pPopup)
+ToolbarPopupContainer::ToolbarPopupContainer(weld::Widget* pParent)
+    : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/toolbarpopover.ui"))
+    , m_xTopLevel(m_xBuilder->weld_container("ToolbarPopover"))
+    , m_xContainer(m_xBuilder->weld_container("container"))
+{
+    m_xTopLevel->connect_focus_in(LINK(this, ToolbarPopupContainer, FocusHdl));
+}
+
+void ToolbarPopupContainer::setPopover(std::unique_ptr<WeldToolbarPopup> xPopup)
+{
+    m_xPopup = std::move(xPopup);
+    // move the WeldToolbarPopup contents into this toolbar so on-demand contents can appear inside a preexisting gtk popover
+    // because the arrow for the popover is only enabled if there's a popover set
+    m_xPopup->getTopLevel()->move(m_xPopup->getContainer(), m_xContainer.get());
+    m_xPopup->GrabFocus();
+}
+
+void ToolbarPopupContainer::unsetPopover()
+{
+    if (!m_xPopup)
+        return;
+    m_xContainer->move(m_xPopup->getContainer(), m_xPopup->getTopLevel());
+    m_xPopup.reset();
+}
+
+ToolbarPopupContainer::~ToolbarPopupContainer()
+{
+    unsetPopover();
+}
+
+IMPL_LINK_NOARG(ToolbarPopupContainer, FocusHdl, weld::Widget&, void)
+{
+    if (m_xPopup)
+        m_xPopup->GrabFocus();
+}
+
+InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
+                                         std::unique_ptr<WeldToolbarPopup> xPopup)
     : ToolbarPopup(rFrame, pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
     , m_xBox(get<vcl::Window>("box"))
     , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui"))
     , m_xContainer(m_xBuilder->weld_container("container"))
-    , m_pPopup(pPopup)
+    , m_xPopup(std::move(xPopup))
 {
     // move the WeldToolbarPopup contents into this interim toolbar so welded contents can appear as a dropdown in an unwelded toolbar
-    m_pPopup->getTopLevel()->move(m_pPopup->getContainer(), m_xContainer.get());
+    m_xPopup->getTopLevel()->move(m_xPopup->getContainer(), m_xContainer.get());
 }
 
 void InterimToolbarPopup::GetFocus()
 {
     ToolbarPopup::GetFocus();
-    m_pPopup->GrabFocus();
+    m_xPopup->GrabFocus();
 }
 
 void InterimToolbarPopup::dispose()
 {
     // move the contents back where it belongs
-    m_xContainer->move(m_pPopup->getContainer(), m_pPopup->getTopLevel());
+    m_xContainer->move(m_xPopup->getContainer(), m_xPopup->getTopLevel());
+    m_xPopup.reset();
     m_xContainer.reset();
     m_xBox.clear();
     ToolbarPopup::dispose();

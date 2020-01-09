@@ -177,7 +177,7 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
 void SAL_CALL PopupWindowController::dispose()
 {
     mxInterimPopover.clear();
-    mxPopover.reset();
+    mxPopoverContainer.reset();
     mxImpl.reset();
     svt::ToolboxController::dispose();
 }
@@ -207,8 +207,20 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
     }
 }
 
+std::unique_ptr<WeldToolbarPopup> PopupWindowController::weldPopupWindow()
+{
+    return nullptr;
+}
+
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
 {
+    if (m_pToolbar)
+    {
+        mxPopoverContainer->unsetPopover();
+        mxPopoverContainer->setPopover(weldPopupWindow());
+        return Reference<awt::XWindow>();
+    }
+
     VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if( pToolBox )
     {
@@ -235,6 +247,19 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
         }
     }
     return Reference< awt::XWindow >();
+}
+
+void SAL_CALL PopupWindowController::click()
+{
+    if (m_pToolbar)
+    {
+        if (m_pToolbar->get_menu_item_active(m_aCommandURL.toUtf8()))
+            createPopupWindow();
+        else
+            mxPopoverContainer->unsetPopover();
+    }
+
+    svt::ToolboxController::click();
 }
 
 void PopupWindowController::EndPopupMode()
