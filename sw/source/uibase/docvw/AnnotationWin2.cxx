@@ -756,7 +756,7 @@ void SwAnnotationWin::SetPosAndSize()
         }
     }
 
-    if (bChange)
+    if (mpShadow && bChange)
     {
         Point aStart = EditWin().PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
         Point aEnd = EditWin().PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
