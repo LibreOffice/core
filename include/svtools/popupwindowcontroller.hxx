@@ -33,6 +33,7 @@
 namespace vcl { class Window; }
 
 class InterimToolbarPopup;
+class ToolbarPopupContainer;
 class WeldToolbarPopup;
 
 namespace svt
@@ -46,11 +47,13 @@ public:
     PopupWindowController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                            const css::uno::Reference< css::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
+
     virtual ~PopupWindowController() override;
 
     void EndPopupMode();
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) = 0;
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
@@ -65,9 +68,10 @@ public:
 
     // XToolbarController
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+    virtual void SAL_CALL click() override;
 
 protected:
-    std::unique_ptr<WeldToolbarPopup> mxPopover;
+    std::unique_ptr<ToolbarPopupContainer> mxPopoverContainer;
     VclPtr<InterimToolbarPopup> mxInterimPopover;
 
 private:

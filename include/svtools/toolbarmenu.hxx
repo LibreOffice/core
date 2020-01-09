@@ -173,16 +173,41 @@ public:
     virtual void GrabFocus() = 0;
 };
 
+// we want to create WeldToolbarPopup on-demand when a toolbar dropdown is
+// clicked, but the widget to be shown must exist before the dropdown
+// is activated, so ToolbarPopupContainer is that widget and the
+// contents of the on-demand created WeldToolbarPopup is placed
+// within the ToolbarPopupContainer
+class SVT_DLLPUBLIC ToolbarPopupContainer
+{
+private:
+    DECL_LINK(FocusHdl, weld::Widget&, void);
+
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xTopLevel;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<WeldToolbarPopup> m_xPopup;
+public:
+    ToolbarPopupContainer(weld::Widget* pParent);
+    ~ToolbarPopupContainer();
+    weld::Container* getTopLevel() { return m_xTopLevel.get(); }
+    weld::Container* getContainer() { return m_xContainer.get(); }
+
+    void setPopover(std::unique_ptr<WeldToolbarPopup> xPopup);
+    void unsetPopover();
+};
+
 class SVT_DLLPUBLIC InterimToolbarPopup : public svtools::ToolbarPopup
 {
 protected:
     VclPtr<vcl::Window> m_xBox;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
-
-    WeldToolbarPopup* m_pPopup;
+    std::unique_ptr<WeldToolbarPopup> m_xPopup;
 public:
-    InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent, WeldToolbarPopup* pPopup);
+    InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
+                        std::unique_ptr<WeldToolbarPopup> xPopup);
     weld::Container* getContainer() { return m_xContainer.get(); }
     virtual void dispose() override;
     virtual ~InterimToolbarPopup() override;

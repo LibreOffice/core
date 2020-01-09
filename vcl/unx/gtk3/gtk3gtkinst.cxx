@@ -7118,7 +7118,7 @@ private:
         if (pMenuButton)
         {
             m_aMenuButtonMap[id] = std::make_unique<GtkInstanceMenuButton>(pMenuButton, m_pBuilder, false);
-            g_signal_connect(pToolItem, "show-menu", G_CALLBACK(signalItemShowMenu), this);
+            g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
         }
         g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
     }
@@ -7136,17 +7136,23 @@ private:
         signal_clicked(OString(pStr, pStr ? strlen(pStr) : 0));
     }
 
-    static void signalItemShowMenu(GtkMenuToolButton* pItem, gpointer widget)
+    static void signalItemToggled(GtkToggleButton* pItem, gpointer widget)
     {
         GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_item_show_menu(pItem);
+        pThis->signal_item_toggled(pItem);
     }
 
-    void signal_item_show_menu(GtkMenuToolButton* pItem)
+    void signal_item_toggled(GtkToggleButton* pItem)
     {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        signal_show_menu(OString(pStr, pStr ? strlen(pStr) : 0));
+        for (auto& a : m_aMenuButtonMap)
+        {
+            if (a.second->getWidget() == GTK_WIDGET(pItem))
+            {
+                signal_toggle_menu(a.first);
+                break;
+            }
+        }
     }
 
     static void set_item_image(GtkToolButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
@@ -7189,7 +7195,6 @@ public:
         for (auto& a : m_aMap)
         {
             g_signal_handlers_block_by_func(a.second, reinterpret_cast<void*>(signalItemClicked), this);
-            g_signal_handlers_block_by_func(a.second, reinterpret_cast<void*>(signalItemShowMenu), this);
         }
     }
 
@@ -7197,7 +7202,6 @@ public:
     {
         for (auto& a : m_aMap)
         {
-            g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalItemShowMenu), this);
             g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalItemClicked), this);
         }
     }

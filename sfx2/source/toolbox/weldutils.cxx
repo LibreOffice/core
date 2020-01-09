@@ -58,6 +58,7 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
     , m_pToolbar(&rToolbar)
 {
     rToolbar.connect_clicked(LINK(this, ToolbarUnoDispatcher, SelectHdl));
+    rToolbar.connect_menu_toggled(LINK(this, ToolbarUnoDispatcher, ToggleMenuHdl));
 
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
     vcl::ImageType eSize = rToolbar.get_icon_size();
@@ -109,6 +110,15 @@ IMPL_LINK(ToolbarUnoDispatcher, SelectHdl, const OString&, rCommand, void)
 
     if (xController.is())
         xController->execute(0);
+}
+
+IMPL_LINK(ToolbarUnoDispatcher, ToggleMenuHdl, const OString&, rCommand, void)
+{
+    css::uno::Reference<css::frame::XToolbarController> xController(
+        GetControllerForCommand(OUString::fromUtf8(rCommand)));
+
+    if (xController.is())
+        xController->click();
 }
 
 void ToolbarUnoDispatcher::dispose()

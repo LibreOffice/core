@@ -950,8 +950,11 @@ private:
     std::map<sal_uInt16, VclPtr<vcl::Window>> m_aFloats;
     std::map<sal_uInt16, VclPtr<PopupMenu>> m_aMenus;
 
+    OString m_sStartShowIdent;
+
     DECL_LINK(ClickHdl, ToolBox*, void);
     DECL_LINK(DropdownClick, ToolBox*, void);
+    DECL_LINK(MenuToggleListener, VclWindowEvent&, void);
 
 public:
     SalInstanceToolbar(ToolBox* pToolBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -1024,6 +1027,9 @@ public:
         sal_uInt16 nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
         assert (m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN);
 
+        if (rIdent == m_sStartShowIdent)
+            return true;
+
         auto aFloat = m_aFloats.find(nItemId);
         if (aFloat != m_aFloats.end())
         {
@@ -1045,9 +1051,17 @@ public:
 
         vcl::Window* pFloat = pPopoverWidget ? pPopoverWidget->getWidget() : nullptr;
         if (pFloat)
+        {
+            pFloat->AddEventListener(LINK(this, SalInstanceToolbar, MenuToggleListener));
             pFloat->EnableDocking();
+        }
 
         sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+        auto xOldFloat = m_aFloats[nId];
+        if (xOldFloat)
+        {
+            xOldFloat->RemoveEventListener(LINK(this, SalInstanceToolbar, MenuToggleListener));
+        }
         m_aFloats[nId] = pFloat;
         m_aMenus[nId] = nullptr;
     }
@@ -1161,9 +1175,26 @@ IMPL_LINK_NOARG(SalInstanceToolbar, DropdownClick, ToolBox*, void)
 {
     sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
 
-    OString sIdent = m_xToolBox->GetItemCommand(nItemId).toUtf8();
-    signal_show_menu(sIdent);
-    set_menu_item_active(sIdent, true);
+    m_sStartShowIdent = m_xToolBox->GetItemCommand(nItemId).toUtf8();
+    signal_toggle_menu(m_sStartShowIdent);
+    set_menu_item_active(m_sStartShowIdent, true);
+    m_sStartShowIdent.clear();
+}
+
+IMPL_LINK(SalInstanceToolbar, MenuToggleListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::WindowEndPopupMode)
+    {
+        for (auto& rFloat : m_aFloats)
+        {
+            if (rEvent.GetWindow() == rFloat.second)
+            {
+                sal_uInt16 nItemId = rFloat.first;
+                signal_toggle_menu(m_xToolBox->GetItemCommand(nItemId).toUtf8());
+                break;
+            }
+        }
+    }
 }
 
 namespace {

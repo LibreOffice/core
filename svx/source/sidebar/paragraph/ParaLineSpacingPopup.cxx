@@ -37,24 +37,16 @@ void SvxLineSpacingToolBoxControl::initialize( const css::uno::Sequence< css::un
 {
     PopupWindowController::initialize(rArguments);
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    bool bVcl = getToolboxId(nId, &pToolBox);
-
-    weld::Widget* pParent;
-    if (pToolBox)
-        pParent = pToolBox->GetFrameWeld();
-    else
-        pParent = m_pToolbar;
-    mxPopover = std::make_unique<ParaLineSpacingControl>(this, pParent);
-
-    if (bVcl && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
-    else if (m_pToolbar)
-    {
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_item_popover(aId, mxPopover->getTopLevel());
-    }
 }
 
 void SAL_CALL SvxLineSpacingToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
@@ -72,11 +64,15 @@ void SAL_CALL SvxLineSpacingToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
+std::unique_ptr<WeldToolbarPopup> SvxLineSpacingToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<ParaLineSpacingControl>(this, m_pToolbar);
+}
+
 VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    dynamic_cast<ParaLineSpacingControl&>(*mxPopover).SyncFromDocument();
-
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent, mxPopover.get());
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<ParaLineSpacingControl>(this, pParent->GetFrameWeld()));
 
     mxInterimPopover->Show();
 

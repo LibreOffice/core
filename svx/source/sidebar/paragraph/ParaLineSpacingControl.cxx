@@ -94,7 +94,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pCo
 
     SetFieldUnit(*mxLineDistAtMetricBox, eUnit);
 
-    SyncFromDocument();
+    Initialize();
 }
 
 void ParaLineSpacingControl::GrabFocus()
@@ -106,7 +106,7 @@ ParaLineSpacingControl::~ParaLineSpacingControl()
 {
 }
 
-void ParaLineSpacingControl::SyncFromDocument()
+void ParaLineSpacingControl::Initialize()
 {
     const SfxPoolItem* pItem(nullptr);
     SfxViewFrame* pCurrent = SfxViewFrame::Current();
