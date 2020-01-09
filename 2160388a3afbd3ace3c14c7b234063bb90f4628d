@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ba03326_23859b01",
+        "filename": "unoxml/source/xpath/xpathobject.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-09T09:33:14Z",
+      "side": 1,
+      "message": "This is ugly, in general we try to avoid ../foo-style includes and instead move such headers to /module/inc/. If interested, feel free to do that in a follow-up commit.",
+      "revId": "2160388a3afbd3ace3c14c7b234063bb90f4628d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c2011bc_17a15aee",
+        "filename": "unoxml/source/xpath/xpathobject.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-09T09:33:14Z",
+      "side": 1,
+      "message": "And then this forward-declaration is unnecessary, now that you do the actual include?",
+      "revId": "2160388a3afbd3ace3c14c7b234063bb90f4628d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
