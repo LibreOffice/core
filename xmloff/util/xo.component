@@ -204,7 +204,8 @@
       name="com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter">
     <service name="com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"/>
   </implementation>
-  <implementation name="xmloff::AnimationsImport">
+  <implementation name="xmloff::AnimationsImport"
+      constructor="com_sun_star_comp_Xmloff_AnimationsImport">
     <service name="com.sun.star.comp.Xmloff.AnimationsImport"/>
   </implementation>
 </component>
