@@ -415,7 +415,8 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     bool bSupportsVaryColorsByPoint = mrModel.maTypeGroups.size() == 1;
 
     // convert all axes sets, and check which axis is attached to the first maTypeGroups
-    sal_Int32 nStartAxesSetIdx = (rValAxisIds.size() > 1 && aAxesSets[0]->maAxes[1]->mnAxisId != rValAxisIds[0] ) ? 1 : 0;
+    sal_Int32 nStartAxesSetIdx = (rValAxisIds.size() > 1 && aAxesSets.size() > 0 && aAxesSets[0]->maAxes.count( API_Y_AXIS )
+            && aAxesSets[0]->maAxes[ API_Y_AXIS ]->mnAxisId != rValAxisIds[0] ) ? 1 : 0;
     sal_Int32 nAxesSetIdx = nStartAxesSetIdx;
 
     for (auto const& axesSet : aAxesSets)
