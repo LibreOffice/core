@@ -621,7 +621,7 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
 
         //get leader type
         sal_Unicode cLeader = 0x00;
-        LwpTab::LeaderType leader= pTab->GetLeaderType();
+        auto leader= pTab->GetLeaderType();
         switch(leader)
         {
         case LwpTab::TL_NONE:
