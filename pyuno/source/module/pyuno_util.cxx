@@ -68,7 +68,7 @@ OUString pyString2ustring( PyObject *pystr )
         reinterpret_cast<sal_Unicode const *>(PyUnicode_AS_UNICODE( pystr )) );
 #else
     Py_ssize_t size(0);
-    char *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
+    char const *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
     ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
 #endif
     }
