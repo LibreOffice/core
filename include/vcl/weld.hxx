@@ -1956,8 +1956,10 @@ class VCL_DLLPUBLIC Toolbar : virtual public Widget
 {
 protected:
     Link<const OString&, void> m_aClickHdl;
+    Link<const OString&, void> m_aShowMenuHdl;
 
     void signal_clicked(const OString& rIdent) { m_aClickHdl.Call(rIdent); }
+    void signal_show_menu(const OString& rIdent) { m_aShowMenuHdl.Call(rIdent); }
 
 public:
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
@@ -1995,6 +1997,9 @@ public:
     virtual vcl::ImageType get_icon_size() const = 0;
 
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
+    // m_aShowMenuHdl is called before the menu is shown.
+    // It can be used to populate the menu on demand with set_item_popover/set_item_menu
+    void connect_show_menu(const Link<const OString&, void>& rLink) { m_aShowMenuHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC SizeGroup
