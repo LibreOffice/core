@@ -50,6 +50,7 @@
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
+#include <config_skia.h>
 #include <skia/salbmp.hxx>
 #include <skia/win/gdiimpl.hxx>
 #endif
@@ -1078,8 +1079,10 @@ std::shared_ptr<vcl::BackendCapabilities> WinSalInstance::GetBackendCapabilities
 {
     auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
 #if HAVE_FEATURE_SKIA
+#if SKIA_USE_BITMAP32
     if( SkiaHelper::isVCLSkiaEnabled())
         pBackendCapabilities->mbSupportsBitmap32 = true;
+#endif
 #endif
     return pBackendCapabilities;
 }
