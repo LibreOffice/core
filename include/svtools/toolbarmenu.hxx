@@ -195,6 +195,7 @@ public:
     weld::Container* getContainer() { return m_xContainer.get(); }
 
     void setPopover(std::unique_ptr<WeldToolbarPopup> xPopup);
+    WeldToolbarPopup* getPopover() const { return m_xPopup.get(); }
     void unsetPopover();
 };
 

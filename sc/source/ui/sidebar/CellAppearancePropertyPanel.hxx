@@ -27,6 +27,9 @@
 #include "CellBorderStyleControl.hxx"
 #include "CellLineStyleControl.hxx"
 
+class ToolbarUnoDispatcher;
+class ToolbarPopupContainer;
+
 namespace sc { namespace sidebar {
 
 class CellAppearancePropertyPanel
@@ -68,9 +71,17 @@ public:
 private:
     //ui controls
 
-    VclPtr<ToolBox>                                mpTBCellBorder;
-    VclPtr<ToolBox>                                mpTBLineStyle;
-    VclPtr<ToolBox>                                mpTBLineColor;
+    std::unique_ptr<ToolbarPopupContainer> mxCellBorderPopoverContainer;
+    std::unique_ptr<weld::Toolbar> mxTBCellBorder;
+    std::unique_ptr<weld::Toolbar> mxTBCellBackground;
+    std::unique_ptr<ToolbarUnoDispatcher> mxBackColorDispatch;
+    std::unique_ptr<ToolbarPopupContainer> mxLinePopoverContainer;
+    std::unique_ptr<weld::Toolbar> mxTBLineStyle;
+    std::unique_ptr<weld::Toolbar> mxTBLineColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxLineColorDispatch;
+
+    bool mbCellBorderPopoverCreated;
+    bool mbLinePopoverCreated;
 
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -80,16 +91,17 @@ private:
     ::sfx2::sidebar::ControllerItem         maBorderBLTRControl;
 
     // images
-    Image const                             maIMGCellBorder;
-    Image const                             maIMGLineStyle1;
-    Image const                             maIMGLineStyle2;
-    Image const                             maIMGLineStyle3;
-    Image const                             maIMGLineStyle4;
-    Image const                             maIMGLineStyle5;
-    Image const                             maIMGLineStyle6;
-    Image const                             maIMGLineStyle7;
-    Image const                             maIMGLineStyle8;
-    Image const                             maIMGLineStyle9;
+    Image                                   maIMGCellBorder;
+    OUString                                msIMGCellBorder;
+    OUString                                msIMGLineStyle1;
+    OUString                                msIMGLineStyle2;
+    OUString                                msIMGLineStyle3;
+    OUString                                msIMGLineStyle4;
+    OUString                                msIMGLineStyle5;
+    OUString                                msIMGLineStyle6;
+    OUString                                msIMGLineStyle7;
+    OUString                                msIMGLineStyle8;
+    OUString                                msIMGLineStyle9;
 
     // BorderStyle defines
     sal_uInt16                              mnInWidth;
@@ -118,15 +130,13 @@ private:
     bool                                    mbDiagTLBR : 1;
     bool                                    mbDiagBLTR : 1;
 
-    // popups
-    VclPtr<CellLineStylePopup>              mxCellLineStylePopup;
-    VclPtr<CellBorderStylePopup>            mxCellBorderStylePopup;
-
     vcl::EnumContext                        maContext;
     SfxBindings* const                      mpBindings;
 
-    DECL_LINK(TbxCellBorderSelectHdl, ToolBox*, void);
-    DECL_LINK(TbxLineStyleSelectHdl, ToolBox*, void);
+    DECL_LINK(TbxCellBorderSelectHdl, const OString&, void);
+    DECL_LINK(TbxCellBorderMenuHdl, const OString&, void);
+    DECL_LINK(TbxLineStyleSelectHdl, const OString&, void);
+    DECL_LINK(TbxLineStyleMenuHdl, const OString&, void);
 
     void Initialize();
     void SetStyleIcon();
