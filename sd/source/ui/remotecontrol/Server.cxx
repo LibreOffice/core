@@ -128,10 +128,10 @@ void RemoteServer::execute()
             pSocket->getPeerAddr( aClientAddr );
 
             MutexGuard aGuard( sDataMutex );
-            std::shared_ptr< ClientInfoInternal > pClient(
-                new ClientInfoInternal(
+            std::shared_ptr< ClientInfoInternal > pClient =
+                std::make_shared<ClientInfoInternal>(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
-                    pSocket, OStringToOUString( aPin, RTL_TEXTENCODING_UTF8 ) ) );
+                    pSocket, OStringToOUString( aPin, RTL_TEXTENCODING_UTF8 ) );
             mAvailableClients.push_back( pClient );
 
             // Read off any additional non-empty lines

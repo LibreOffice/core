@@ -1745,15 +1745,14 @@ private:
             if ( CheckForFrontBackPages( nIndex ) )
             {
                 maPrinterPages.push_back(
-                std::shared_ptr<PrinterPage>(
-                    new OutlinerPrinterPage(
+                    std::make_shared<OutlinerPrinterPage>(
                         pOutliner->CreateParaObject(),
                         aMap,
                         rInfo.msTimeDate,
                         aPageOfs,
                         rInfo.mnDrawMode,
                         rInfo.meOrientation,
-                        rInfo.mpPrinter->GetPaperBin())));
+                        rInfo.mpPrinter->GetPaperBin()));
             }
         }
 
@@ -1863,8 +1862,7 @@ private:
                 && (aPageIndices.size() == nShapeCount || bLastLoop) )
             {
                 maPrinterPages.push_back(
-                    std::shared_ptr<PrinterPage>(
-                        new HandoutPrinterPage(
+                    std::make_shared<HandoutPrinterPage>(
                             nPrinterPageIndex++,
                             aPageIndices,
                             aMap,
@@ -1872,7 +1870,7 @@ private:
                             aPageOfs,
                             rInfo.mnDrawMode,
                             rInfo.meOrientation,
-                            nPaperBin)));
+                            nPaperBin));
                 aPageIndices.clear();
             }
         }
@@ -2090,8 +2088,7 @@ private:
                 else
                     aSecondOffset.AdjustY( aAdjustedPrintSize.Height() / 2 );
                 maPrinterPages.push_back(
-                    std::shared_ptr<PrinterPage>(
-                        new BookletPrinterPage(
+                    std::make_shared<BookletPrinterPage>(
                             aPair.first,
                             aPair.second,
                             aOffset,
@@ -2101,7 +2098,7 @@ private:
                             rInfo.mbPrintMarkedOnly,
                             rInfo.mnDrawMode,
                             rInfo.meOrientation,
-                            rInfo.mpPrinter->GetPaperBin())));
+                            rInfo.mpPrinter->GetPaperBin()));
 
             }
         }
@@ -2126,8 +2123,7 @@ private:
             return;
 
         maPrinterPages.push_back(
-        std::shared_ptr<PrinterPage>(
-            new TiledPrinterPage(
+            std::make_shared<TiledPrinterPage>(
                 sal::static_int_cast<sal_uInt16>(nPageIndex),
                 ePageKind,
                 rInfo.mbPrintMarkedOnly,
@@ -2135,7 +2131,7 @@ private:
                 rInfo.mpPrinter->GetPageOffset(),
                 rInfo.mnDrawMode,
                 rInfo.meOrientation,
-                nPaperBin)));
+                nPaperBin));
     }
 
     /** Print one standard slide or notes page on one to many printer
@@ -2173,8 +2169,7 @@ private:
             // if CutPage is set then do not move it, otherwise move the
             // scaled page to printable area
             maPrinterPages.push_back(
-                std::shared_ptr<PrinterPage>(
-                    new RegularPrinterPage(
+                std::make_shared<RegularPrinterPage>(
                         sal::static_int_cast<sal_uInt16>(nPageIndex),
                         ePageKind,
                         aMap,
@@ -2183,7 +2178,7 @@ private:
                         aPageOffset,
                         rInfo.mnDrawMode,
                         rInfo.meOrientation,
-                        nPaperBin)));
+                        nPaperBin));
         }
         else
         {
@@ -2211,8 +2206,7 @@ private:
                     {
                         aMap.SetOrigin(aPageOrigin);
                         maPrinterPages.push_back(
-                            std::shared_ptr<PrinterPage>(
-                                new RegularPrinterPage(
+                            std::make_shared<RegularPrinterPage>(
                                     sal::static_int_cast<sal_uInt16>(nPageIndex),
                                     ePageKind,
                                     aMap,
@@ -2221,7 +2215,7 @@ private:
                                     aPageOffset,
                                     rInfo.mnDrawMode,
                                     rInfo.meOrientation,
-                                    nPaperBin)));
+                                    nPaperBin));
                     }
                 }
             }

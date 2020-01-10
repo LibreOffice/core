@@ -63,7 +63,7 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     if ( _nPos >= m_aCategoryIndex.size() )
     {
         uno::Reference< report::meta::XFunctionCategory> xCategory = m_xMgr->getCategory(_nPos);
-        std::shared_ptr< FunctionCategory > pCategory(new FunctionCategory(this,_nPos + 1,xCategory));
+        auto pCategory = std::make_shared<FunctionCategory>(this,_nPos + 1,xCategory);
         m_aCategoryIndex.push_back( m_aCategories.emplace(xCategory->getName(),pCategory).first );
     }
     return m_aCategoryIndex[_nPos]->second.get();

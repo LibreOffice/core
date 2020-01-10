@@ -109,7 +109,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     if (!pDlg)
         return;
 
-    std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+    auto pRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
     pDlg->StartExecuteAsync([bWelded, pDlg, pRequest, this](sal_Int32 nResult){

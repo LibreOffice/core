@@ -763,7 +763,7 @@ public:
     }
     void operator()( double n ) const
     {
-        mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( n ) ) );
+        mxContext->maOperandStack.push( std::make_shared<ConstantValueExpression>( n ) );
     }
 };
 
@@ -787,17 +787,17 @@ public:
             case ExpressionFunct::EnumAdjustment :
             {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-                mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new AdjustmentExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
+                mxContext->maOperandStack.push( std::make_shared<AdjustmentExpression>( *mxContext->mpCustoShape, aVal.toInt32() ) );
             }
             break;
             case ExpressionFunct::EnumEquation :
                 {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-                mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new EquationExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
+                mxContext->maOperandStack.push( std::make_shared<EquationExpression>( *mxContext->mpCustoShape, aVal.toInt32() ) );
             }
             break;
             default:
-                mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new EnumValueExpression( *mxContext->mpCustoShape, meFunct ) ) );
+                mxContext->maOperandStack.push( std::make_shared<EnumValueExpression>( *mxContext->mpCustoShape, meFunct ) );
         }
     }
 };
@@ -826,9 +826,9 @@ public:
         rNodeStack.pop();
 
         if( pArg->isConstant() )    // check for constness
-            rNodeStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( UnaryFunctionExpression::getValue( meFunct, pArg ) ) ) );
+            rNodeStack.push( std::make_shared<ConstantValueExpression>( UnaryFunctionExpression::getValue( meFunct, pArg ) ) );
         else                        // push complex node, that calcs the value on demand
-            rNodeStack.push( std::shared_ptr<ExpressionNode>( new UnaryFunctionExpression( meFunct, pArg ) ) );
+            rNodeStack.push( std::make_shared<UnaryFunctionExpression>( meFunct, pArg ) );
     }
 };
 
@@ -866,10 +866,10 @@ public:
         rNodeStack.pop();
 
         // create combined ExpressionNode
-        std::shared_ptr<ExpressionNode> pNode( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
+        auto pNode = std::make_shared<BinaryFunctionExpression>( meFunct, pFirstArg, pSecondArg );
         // check for constness
         if( pFirstArg->isConstant() && pSecondArg->isConstant() )   // call the operator() at pNode, store result in constant value ExpressionNode.
-            rNodeStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( (*pNode)() ) ) );
+            rNodeStack.push( std::make_shared<ConstantValueExpression>( (*pNode)() ) );
         else                                                        // push complex node, that calcs the value on demand
             rNodeStack.push( pNode );
     }
@@ -901,10 +901,10 @@ public:
         rNodeStack.pop();
 
         // create combined ExpressionNode
-        std::shared_ptr<ExpressionNode> pNode( new IfExpression( pFirstArg, pSecondArg, pThirdArg ) );
+        auto pNode = std::make_shared<IfExpression>( pFirstArg, pSecondArg, pThirdArg );
         // check for constness
         if( pFirstArg->isConstant() && pSecondArg->isConstant() && pThirdArg->isConstant() )
-            rNodeStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( (*pNode)() ) ) );    // call the operator() at pNode, store result in constant value ExpressionNode.
+            rNodeStack.push( std::make_shared<ConstantValueExpression>( (*pNode)() ) );    // call the operator() at pNode, store result in constant value ExpressionNode.
         else
             rNodeStack.push( pNode );                                       // push complex node, that calcs the value on demand
     }

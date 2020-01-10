@@ -146,7 +146,7 @@ std::shared_ptr<utl::TempFile>
 ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range)
 {
     // create temp file name
-    std::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());
+    auto pTempFile = std::make_shared<utl::TempFile>();
     pTempFile->EnableKillingFile();
     OUString sFileURL = pTempFile->GetURL();
     // Note: under Windows path path should be with "/" delimiters instead of "\\"

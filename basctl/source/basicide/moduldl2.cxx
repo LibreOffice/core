@@ -595,8 +595,8 @@ void LibPage::InsertLib()
     // file URLs
     Sequence< OUString > aFiles = xFP->getSelectedFiles();
     INetURLObject aURLObj( aFiles[0] );
-    std::shared_ptr<INetURLObject> xModURLObj(new INetURLObject(aURLObj));
-    std::shared_ptr<INetURLObject> xDlgURLObj(new INetURLObject(aURLObj));
+    auto xModURLObj = std::make_shared<INetURLObject>(aURLObj);
+    auto xDlgURLObj = std::make_shared<INetURLObject>(aURLObj);
 
     OUString aBase = aURLObj.getBase();
     OUString aModBase( "script" );

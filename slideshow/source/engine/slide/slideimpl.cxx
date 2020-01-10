@@ -1087,15 +1087,15 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             bool                                                bIntrinsicAnimationsAllowed,
                             bool                                                bDisableAnimationZOrder )
 {
-    std::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
-                                                      rEventMultiplexer, rScreenUpdater,
-                                                      rActivitiesQueue, rUserEventQueue,
-                                                      rCursorManager, rMediaFileManager, rViewContainer,
-                                                      xComponentContext, rShapeListenerMap,
-                                                      rShapeCursorMap, rPolyPolygonVector, rUserPaintColor,
-                                                      dUserPaintStrokeWidth, bUserPaintEnabled,
-                                                      bIntrinsicAnimationsAllowed,
-                                                      bDisableAnimationZOrder ));
+    auto pRet = std::make_shared<SlideImpl>( xDrawPage, xDrawPages, xRootNode, rEventQueue,
+                                             rEventMultiplexer, rScreenUpdater,
+                                             rActivitiesQueue, rUserEventQueue,
+                                             rCursorManager, rMediaFileManager, rViewContainer,
+                                             xComponentContext, rShapeListenerMap,
+                                             rShapeCursorMap, rPolyPolygonVector, rUserPaintColor,
+                                             dUserPaintStrokeWidth, bUserPaintEnabled,
+                                             bIntrinsicAnimationsAllowed,
+                                             bDisableAnimationZOrder );
 
     rEventMultiplexer.addViewHandler( pRet );
 

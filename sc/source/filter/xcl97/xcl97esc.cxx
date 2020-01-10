@@ -85,7 +85,7 @@ SvStream* XclEscherExGlobal::ImplQueryPictureStream()
 }
 
 XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr, SvStream& rStrm, const XclEscherEx* pParent ) :
-    EscherEx( pParent ? pParent->mxGlobal : std::shared_ptr<EscherExGlobal>( new XclEscherExGlobal( rRoot ) ), &rStrm ),
+    EscherEx( pParent ? pParent->mxGlobal : std::make_shared<XclEscherExGlobal>( rRoot ), &rStrm ),
     XclExpRoot( rRoot ),
     mrObjMgr( rObjMgr ),
     pCurrXclObj( nullptr ),

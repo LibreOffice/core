@@ -142,7 +142,7 @@ public:
 
             return xMtf;
         }
-        return GDIMetaFileSharedPtr(new GDIMetaFile(aGraphic.GetGDIMetaFile()));
+        return std::make_shared<GDIMetaFile>(aGraphic.GetGDIMetaFile());
     }
 
 private:

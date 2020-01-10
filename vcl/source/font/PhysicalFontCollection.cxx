@@ -870,7 +870,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
 
 std::shared_ptr<PhysicalFontCollection> PhysicalFontCollection::Clone() const
 {
-    std::shared_ptr<PhysicalFontCollection> xClonedCollection(new PhysicalFontCollection);
+    auto xClonedCollection = std::make_shared<PhysicalFontCollection>();
     xClonedCollection->mpPreMatchHook = mpPreMatchHook;
     xClonedCollection->mpFallbackHook = mpFallbackHook;
 

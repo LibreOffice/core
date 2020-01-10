@@ -573,11 +573,11 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
     sal_uIntPtr nFilterVersion, const OUString* pPassword )
 {
-    std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
+    auto pFilter = std::make_shared<SfxFilter>(
         rFilter,
         OUString(), nFilterFlags, nClipboardID, rTypeName, OUString(),
-        rUserData, "private:factory/scalc"));
-    const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
+        rUserData, "private:factory/scalc");
+    pFilter->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
     xDocShRef->GetDocument().EnableUserInteraction(false);
@@ -668,11 +668,11 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
-    std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
+    auto pExportFilter = std::make_shared<SfxFilter>(
         rFilter,
         OUString(), nFormatType, nExportFormat, rTypeName, OUString(),
-        rUserData, "private:factory/scalc*" ));
-    const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        rUserData, "private:factory/scalc*" );
+    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
@@ -707,18 +707,18 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell* pShell, s
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    std::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());
+    auto pTempFile = std::make_shared<utl::TempFile>();
     pTempFile->EnableKillingFile();
     SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
-    std::shared_ptr<SfxFilter> pExportFilter(new SfxFilter(
+    auto pExportFilter = std::make_shared<SfxFilter>(
         aFilterName,
         OUString(), nFormatType, nExportFormat, aFilterType, OUString(),
-        OUString(), "private:factory/scalc*" ));
-    pExportFilter.get()->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        OUString(), "private:factory/scalc*" );
+    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
     pShell->DoSaveAs( aStoreMedium );
 

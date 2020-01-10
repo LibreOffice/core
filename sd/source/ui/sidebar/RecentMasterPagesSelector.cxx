@@ -37,7 +37,7 @@ VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
     if (pDocument == nullptr)
         return nullptr;
 
-    std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+    auto pContainer = std::make_shared<MasterPageContainer>();
 
     VclPtrInstance<RecentMasterPagesSelector> pSelector(
             pParent,

@@ -1243,7 +1243,7 @@ void ScTable::FillFormulaVertical(
     aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans);
 
-    std::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
+    auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(*pDocument);
     sc::StartListeningContext aStartCxt(*pDocument, pSet);
     sc::EndListeningContext aEndCxt(*pDocument, pSet);
 

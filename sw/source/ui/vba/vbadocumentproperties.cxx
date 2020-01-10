@@ -401,8 +401,8 @@ class BuiltInIndexHelper
 public:
     explicit BuiltInIndexHelper( const uno::Reference< frame::XModel >& xModel )
     {
-        std::shared_ptr< PropertGetSetHelper > aStandardHelper( new BuiltinPropertyGetSetHelper( xModel ) );
-        std::shared_ptr< PropertGetSetHelper > aUsingStatsHelper( new StatisticPropertyGetSetHelper( xModel ) );
+        auto aStandardHelper = std::make_shared<BuiltinPropertyGetSetHelper>( xModel );
+        auto aUsingStatsHelper = std::make_shared<StatisticPropertyGetSetHelper>( xModel );
 
         m_docPropInfoMap[ word::WdBuiltInProperty::wdPropertyTitle ] = DocPropInfo::createDocPropInfo( "Title", "Title", aStandardHelper );
         m_docPropInfoMap[ word::WdBuiltInProperty::wdPropertySubject ] = DocPropInfo::createDocPropInfo( "Subject", "Subject", aStandardHelper );

@@ -1077,7 +1077,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
         uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext("org.libreoffice.report.pentaho.SOFunctionManager",_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
         {
-            std::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
+            auto pFormulaManager = std::make_shared<FunctionManager>(xMgr);
             ReportFormula aFormula( _in_out_rFormula );
 
             LanguageTag aLangTag(LANGUAGE_SYSTEM);

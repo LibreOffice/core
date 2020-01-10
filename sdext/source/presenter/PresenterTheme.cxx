@@ -339,11 +339,10 @@ std::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyl
         return std::shared_ptr<PresenterConfigurationAccess>();
 
     // Open configuration for writing.
-    std::shared_ptr<PresenterConfigurationAccess> pConfiguration (
-        new PresenterConfigurationAccess(
+    auto pConfiguration = std::make_shared<PresenterConfigurationAccess>(
             mxContext,
             "/org.openoffice.Office.PresenterScreen/",
-            PresenterConfigurationAccess::READ_WRITE));
+            PresenterConfigurationAccess::READ_WRITE);
 
     // Get configuration node for the view style container of the current
     // theme.
@@ -700,8 +699,7 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
     const Reference<beans::XPropertySet>& rxProperties,
     const PresenterTheme::SharedFontDescriptor& rpDefault)
 {
-    std::shared_ptr<PresenterTheme::FontDescriptor> pDescriptor (
-        new PresenterTheme::FontDescriptor(rpDefault));
+    auto pDescriptor = std::make_shared<PresenterTheme::FontDescriptor>(rpDefault);
 
     PresenterConfigurationAccess::GetProperty(rxProperties, "FamilyName") >>= pDescriptor->msFamilyName;
     PresenterConfigurationAccess::GetProperty(rxProperties, "Style") >>= pDescriptor->msStyleName;
@@ -831,7 +829,7 @@ void PaneStyleContainer::ProcessPaneStyle(
     if (rValues.size() != 6)
         return;
 
-    std::shared_ptr<PaneStyle> pStyle (new PaneStyle());
+    auto pStyle = std::make_shared<PaneStyle>();
 
     rValues[0] >>= pStyle->msStyleName;
 
@@ -946,7 +944,7 @@ void ViewStyleContainer::ProcessViewStyle(
     ReadContext const & rReadContext,
     const Reference<beans::XPropertySet>& rxProperties)
 {
-    std::shared_ptr<ViewStyle> pStyle (new ViewStyle());
+    auto pStyle = std::make_shared<ViewStyle>();
 
     PresenterConfigurationAccess::GetProperty(rxProperties, "StyleName")
         >>= pStyle->msStyleName;

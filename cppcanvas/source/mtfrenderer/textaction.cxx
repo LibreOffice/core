@@ -2075,8 +2075,7 @@ namespace cppcanvas
 
                 if( rParms.maTextTransformation )
                 {
-                    return std::shared_ptr<Action>(
-                        new OutlineAction(
+                    return std::make_shared<OutlineAction>(
                             rStartPoint,
                             rReliefOffset,
                             rReliefColor,
@@ -2088,12 +2087,11 @@ namespace cppcanvas
                             rVDev,
                             rCanvas,
                             rState,
-                            *rParms.maTextTransformation ) );
+                            *rParms.maTextTransformation );
                 }
                 else
                 {
-                    return std::shared_ptr<Action>(
-                        new OutlineAction(
+                    return std::make_shared<OutlineAction>(
                             rStartPoint,
                             rReliefOffset,
                             rReliefColor,
@@ -2104,7 +2102,7 @@ namespace cppcanvas
                             aCharWidthSeq,
                             rVDev,
                             rCanvas,
-                            rState  ) );
+                            rState  );
                 }
             }
 
@@ -2192,31 +2190,31 @@ namespace cppcanvas
                     // nope
                     if( rParms.maTextTransformation )
                     {
-                        ret = std::shared_ptr<Action>( new TextAction(
+                        ret = std::make_shared<TextAction>(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
                                                     nLen,
                                                     rCanvas,
                                                     rState,
-                                                    *rParms.maTextTransformation ) );
+                                                    *rParms.maTextTransformation );
                     }
                     else
                     {
-                        ret = std::shared_ptr<Action>( new TextAction(
+                        ret = std::make_shared<TextAction>(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
                                                     nLen,
                                                     rCanvas,
-                                                    rState ) );
+                                                    rState );
                     }
                 }
                 else
                 {
                     // at least one of the effects requested
                     if( rParms.maTextTransformation )
-                        ret = std::shared_ptr<Action>( new EffectTextAction(
+                        ret = std::make_shared<EffectTextAction>(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2229,9 +2227,9 @@ namespace cppcanvas
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
-                                                    *rParms.maTextTransformation ) );
+                                                    *rParms.maTextTransformation );
                     else
-                        ret = std::shared_ptr<Action>( new EffectTextAction(
+                        ret = std::make_shared<EffectTextAction>(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2243,7 +2241,7 @@ namespace cppcanvas
                                                     nLen,
                                                     rVDev,
                                                     rCanvas,
-                                                    rState ) );
+                                                    rState );
                 }
             }
             else
@@ -2258,7 +2256,7 @@ namespace cppcanvas
                 {
                     // nope
                     if( rParms.maTextTransformation )
-                        ret = std::shared_ptr<Action>( new TextArrayAction(
+                        ret = std::make_shared<TextArrayAction>(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
@@ -2266,22 +2264,22 @@ namespace cppcanvas
                                                     aCharWidths,
                                                     rCanvas,
                                                     rState,
-                                                    *rParms.maTextTransformation ) );
+                                                    *rParms.maTextTransformation );
                     else
-                        ret = std::shared_ptr<Action>( new TextArrayAction(
+                        ret = std::make_shared<TextArrayAction>(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
                                                     nLen,
                                                     aCharWidths,
                                                     rCanvas,
-                                                    rState ) );
+                                                    rState );
                 }
                 else
                 {
                     // at least one of the effects requested
                     if( rParms.maTextTransformation )
-                        ret = std::shared_ptr<Action>( new EffectTextArrayAction(
+                        ret = std::make_shared<EffectTextArrayAction>(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2295,9 +2293,9 @@ namespace cppcanvas
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
-                                                    *rParms.maTextTransformation ) );
+                                                    *rParms.maTextTransformation );
                     else
-                        ret = std::shared_ptr<Action>( new EffectTextArrayAction(
+                        ret = std::make_shared<EffectTextArrayAction>(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2310,7 +2308,7 @@ namespace cppcanvas
                                                     aCharWidths,
                                                     rVDev,
                                                     rCanvas,
-                                                    rState ) );
+                                                    rState );
                 }
             }
             return ret;

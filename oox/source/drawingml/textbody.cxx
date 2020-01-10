@@ -45,7 +45,7 @@ TextBody::TextBody( const TextBodyPtr& pBody )
 
 TextParagraph& TextBody::addParagraph()
 {
-    std::shared_ptr< TextParagraph > xPara( new TextParagraph );
+    auto xPara = std::make_shared<TextParagraph>();
     maParagraphs.push_back( xPara );
     return *xPara;
 }

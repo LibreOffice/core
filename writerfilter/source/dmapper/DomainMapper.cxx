@@ -1345,7 +1345,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         {
-            std::shared_ptr<BorderHandler> pBorderHandler( new BorderHandler( true ) );
+            auto pBorderHandler = std::make_shared<BorderHandler>( true );
             pProperties->resolve(*pBorderHandler);
             PropertyIds eBorderId = PropertyIds( 0 );
             PropertyIds eBorderDistId = PropertyIds( 0 );
@@ -1400,7 +1400,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         {
-            std::shared_ptr<CellColorHandler> pCellColorHandler( new CellColorHandler );
+            auto pCellColorHandler = std::make_shared<CellColorHandler>();
             pCellColorHandler->setOutputFormat( CellColorHandler::Paragraph );
             bool bEnableTempGrabBag = !pCellColorHandler->isInteropGrabBagEnabled();
             if( bEnableTempGrabBag )
@@ -1797,7 +1797,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
             {
-                std::shared_ptr<CellColorHandler> pCellColorHandler( new CellColorHandler );
+                auto pCellColorHandler = std::make_shared<CellColorHandler>();
                 pCellColorHandler->setOutputFormat( CellColorHandler::Character );
                 pProperties->resolve(*pCellColorHandler);
                 rContext->InsertProps(pCellColorHandler->getProperties().get());
@@ -1900,7 +1900,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
             {
-                std::shared_ptr<BorderHandler> pBorderHandler( new BorderHandler( true ) );
+                auto pBorderHandler = std::make_shared<BorderHandler>( true );
                 pProperties->resolve(*pBorderHandler);
 
                 rContext->Insert( PROP_CHAR_TOP_BORDER, uno::makeAny( pBorderHandler->getBorderLine()));
@@ -2397,7 +2397,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get( ) )
         {
-            std::shared_ptr<OLEHandler> pOLEHandler( new OLEHandler(*this) );
+            auto pOLEHandler = std::make_shared<OLEHandler>(*this);
             pProperties->resolve(*pOLEHandler);
             if ( pOLEHandler->isOLEObject( ) )
             {

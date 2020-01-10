@@ -213,7 +213,7 @@ namespace internal
 
     ::std::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock()
     {
-        return ::std::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this));
+        return ::std::make_shared<::UpdateLock>(*this);
     }
 
 

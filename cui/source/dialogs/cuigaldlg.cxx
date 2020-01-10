@@ -793,7 +793,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, weld::ComboBox&, vo
 
 void TPGalleryThemeProperties::SearchFiles()
 {
-    std::shared_ptr<SearchProgress> xProgress(new SearchProgress(GetFrameWeld(), this, aURL));
+    auto xProgress = std::make_shared<SearchProgress>(GetFrameWeld(), this, aURL);
 
     aFoundList.clear();
     m_xLbxFound->clear();
@@ -846,7 +846,7 @@ void TPGalleryThemeProperties::TakeFiles()
 {
     if (m_xLbxFound->count_selected_rows() || (bTakeAll && bEntriesFound))
     {
-        std::shared_ptr<TakeProgress> xTakeProgress(new TakeProgress(GetFrameWeld(), this));
+        auto xTakeProgress = std::make_shared<TakeProgress>(GetFrameWeld(), this);
         xTakeProgress->LaunchThread();
         weld::DialogController::runAsync(xTakeProgress, [=](sal_Int32 /*nResult*/) {
             /* no postprocessing needed, pTakeProgress

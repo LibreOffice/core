@@ -2109,7 +2109,7 @@ namespace emfio
     void MtfTools::Push()                       // !! to be able to access the original ClipRegion it
     {                                               // is not allowed to use the MetaPushAction()
         UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
-        std::shared_ptr<SaveStruct> pSave( new SaveStruct );
+        auto pSave = std::make_shared<SaveStruct>();
 
         pSave->aLineStyle = maLineStyle;
         pSave->aFillStyle = maFillStyle;
@@ -2149,7 +2149,7 @@ namespace emfio
         if( !mvSaveStack.empty() )
         {
             // Backup the current data on the stack
-            std::shared_ptr<SaveStruct> pSave( mvSaveStack.back() );
+            std::shared_ptr<SaveStruct>& pSave( mvSaveStack.back() );
 
             maLineStyle = pSave->aLineStyle;
             maFillStyle = pSave->aFillStyle;

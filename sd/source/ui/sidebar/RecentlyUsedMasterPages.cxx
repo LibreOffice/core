@@ -144,10 +144,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                     OUString(),
                     sName,
                     false,
-                    std::shared_ptr<PageObjectProvider>(
-                        new TemplatePageObjectProvider(sURL)),
-                    std::shared_ptr<PreviewProvider>(
-                        new TemplatePreviewProvider(sURL))));
+                    std::make_shared<TemplatePageObjectProvider>(sURL),
+                    std::make_shared<TemplatePreviewProvider>(sURL)));
                 // For user supplied templates we use a different
                 // preview provider: The preview in the document shows
                 // not only shapes on the master page but also shapes on
@@ -155,8 +153,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                 // these previews are discarded and created directly
                 // from the page objects.
                 if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
-                    pDescriptor->mpPreviewProvider = std::shared_ptr<PreviewProvider>(
-                        new PagePreviewProvider());
+                    pDescriptor->mpPreviewProvider = std::make_shared<PagePreviewProvider>();
                 MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
                 mvMasterPages.emplace_back(aToken,sURL,sName);
             }

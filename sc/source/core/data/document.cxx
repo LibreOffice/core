@@ -2576,8 +2576,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & InsertDeleteFlags::CONTENTS)
     {
-        std::shared_ptr<sc::ColumnBlockPositionSet> pSet(
-            new sc::ColumnBlockPositionSet(*this));
+        auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
 
         sc::StartListeningContext aStartCxt(*this, pSet);
         sc::EndListeningContext aEndCxt(*this, pSet, nullptr);
@@ -2701,7 +2700,7 @@ void ScDocument::CopyBlockFromClip(
                             /* TODO: holding the ColumnSet in a shared_ptr at
                              * RefUpdateContext would eliminate the need of
                              * copying it here. */
-                            std::shared_ptr<const sc::ColumnSet> pColSet( new sc::ColumnSet( aRefCxt.maRegroupCols));
+                            auto pColSet = std::make_shared<sc::ColumnSet>( aRefCxt.maRegroupCols);
                             StartNeededListeners( pColSet);
                         }
 

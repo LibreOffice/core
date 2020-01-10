@@ -320,9 +320,9 @@ svx::PropertyChangeNotifier& SvxShape::getShapePropertyChangeNotifier()
 void SvxShape::impl_construct()
 {
     mpImpl->maPropertyNotifier.registerProvider( svx::ShapeProperty::Position,
-        std::shared_ptr<svx::IPropertyValueProvider>( new ShapePositionProvider( *mpImpl ) ) );
+        std::make_shared<ShapePositionProvider>( *mpImpl ) );
     mpImpl->maPropertyNotifier.registerProvider( svx::ShapeProperty::Size,
-        std::shared_ptr<svx::IPropertyValueProvider>( new ShapeSizeProvider( *mpImpl ) ) );
+        std::make_shared<ShapeSizeProvider>( *mpImpl ) );
 
     if ( HasSdrObject() )
     {

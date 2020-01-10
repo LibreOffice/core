@@ -891,8 +891,8 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
     if( SIZE_MAX == nRet )
     {
         // Create copy of ItemSet
-        std::shared_ptr<SfxItemSet> pSet( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-            bIsLine ? aTableLineSetRange : aTableBoxSetRange ) );
+        auto pSet = std::make_shared<SfxItemSet>( *pFormat->GetAttrSet().GetPool(),
+            bIsLine ? aTableLineSetRange : aTableBoxSetRange );
         pSet->Put( pFormat->GetAttrSet() );
         // When a formula is set, never save the value. It possibly must be
         // recalculated.
@@ -1418,8 +1418,7 @@ SwUndoTableAutoFormat::~SwUndoTableAutoFormat()
 
 void SwUndoTableAutoFormat::SaveBoxContent( const SwTableBox& rBox )
 {
-    std::shared_ptr<SwUndoTableNumFormat> const p(new SwUndoTableNumFormat(rBox));
-    m_Undos.push_back(p);
+    m_Undos.push_back(std::make_shared<SwUndoTableNumFormat>(rBox));
 }
 
 void

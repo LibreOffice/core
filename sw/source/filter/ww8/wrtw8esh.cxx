@@ -1513,7 +1513,7 @@ SvStream* SwEscherExGlobal::ImplQueryPictureStream()
 }
 
 SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
-    : EscherEx( std::shared_ptr<EscherExGlobal>( new SwEscherExGlobal ), pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm)
+    : EscherEx( std::make_shared<SwEscherExGlobal>(), pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm)
 {
     Init();
 }

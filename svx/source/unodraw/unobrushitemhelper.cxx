@@ -189,7 +189,7 @@ static std::shared_ptr<SvxBrushItem> getSvxBrushItemForSolid(const SfxItemSet& r
         aFillColor.SetTransparency(aTargetTrans);
     }
 
-    return std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aFillColor, nBackgroundID));
+    return std::make_shared<SvxBrushItem>(aFillColor, nBackgroundID);
 }
 
 std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
@@ -207,10 +207,10 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
 
         aFillColor.SetTransparency(0xff);
 
-        return std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aFillColor, nBackgroundID));
+        return std::make_shared<SvxBrushItem>(aFillColor, nBackgroundID);
     }
 
-    std::shared_ptr<SvxBrushItem> aRetval(new SvxBrushItem(nBackgroundID));
+    auto aRetval = std::make_shared<SvxBrushItem>(nBackgroundID);
 
     switch(pXFillStyleItem->GetValue())
     {
@@ -249,7 +249,7 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 aMixedColor.SetTransparency(aTargetTrans);
             }
 
-            aRetval = std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aMixedColor, nBackgroundID));
+            aRetval = std::make_shared<SvxBrushItem>(aMixedColor, nBackgroundID);
             break;
         }
         case drawing::FillStyle_HATCH:
@@ -281,7 +281,7 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
                 aHatchColor.SetTransparency(aTargetTrans);
-                aRetval = std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aHatchColor, nBackgroundID));
+                aRetval = std::make_shared<SvxBrushItem>(aHatchColor, nBackgroundID);
             }
 
             break;
@@ -324,7 +324,7 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
             }
 
             // create with given graphic and position
-            aRetval = std::shared_ptr<SvxBrushItem>(new SvxBrushItem(aGraphic, aSvxGraphicPosition, nBackgroundID));
+            aRetval = std::make_shared<SvxBrushItem>(aGraphic, aSvxGraphicPosition, nBackgroundID);
 
             // get evtl. mixed transparence
             const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));

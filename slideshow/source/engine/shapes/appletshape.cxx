@@ -275,15 +275,12 @@ namespace slideshow
             std::size_t                              nNumPropEntries,
             const SlideShowContext&                  rContext )
         {
-            std::shared_ptr< AppletShape > pAppletShape(
-                new AppletShape(xShape,
+            return std::make_shared<AppletShape>(xShape,
                                 nPrio,
                                 rServiceName,
                                 pPropCopyTable,
                                 nNumPropEntries,
-                                rContext) );
-
-            return pAppletShape;
+                                rContext);
         }
     }
 }

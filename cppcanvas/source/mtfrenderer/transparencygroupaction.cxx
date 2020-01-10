@@ -465,12 +465,12 @@ namespace cppcanvas
                                                                                        const CanvasSharedPtr&       rCanvas,
                                                                                        const OutDevState&           rState )
         {
-            return std::shared_ptr<Action>( new TransparencyGroupAction(std::move(rGroupMtf),
-                                                                std::move(rAlphaGradient),
-                                                                rDstPoint,
-                                                                rDstSize,
-                                                                rCanvas,
-                                                                rState ) );
+            return std::make_shared<TransparencyGroupAction>(std::move(rGroupMtf),
+                                                             std::move(rAlphaGradient),
+                                                             rDstPoint,
+                                                             rDstSize,
+                                                             rCanvas,
+                                                             rState );
         }
 
     }

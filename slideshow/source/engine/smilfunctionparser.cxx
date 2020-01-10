@@ -247,10 +247,9 @@ namespace slideshow
                     {
                         // push complex node, that calcs the value on demand
                         rNodeStack.push(
-                            std::shared_ptr<ExpressionNode>(
-                                new UnaryFunctionExpression(
+                            std::make_shared<UnaryFunctionExpression>(
                                     maFunctor,
-                                    pArg ) ) );
+                                    pArg ) );
                     }
                 }
 

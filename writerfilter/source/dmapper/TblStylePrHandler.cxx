@@ -175,7 +175,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if ( pProperties.get() )
             {
-                std::shared_ptr<CellMarginHandler> pCellMarginHandler(new CellMarginHandler);
+                auto pCellMarginHandler = std::make_shared<CellMarginHandler>();
                 pCellMarginHandler->enableInteropGrabBag("tblCellMar");
                 pProperties->resolve( *pCellMarginHandler );
                 m_aInteropGrabBag.push_back(pCellMarginHandler->getInteropGrabBag());

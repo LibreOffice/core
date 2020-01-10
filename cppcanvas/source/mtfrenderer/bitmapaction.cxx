@@ -201,10 +201,7 @@ namespace cppcanvas
                                                                  const CanvasSharedPtr&     rCanvas,
                                                                  const OutDevState&         rState )
         {
-            return std::shared_ptr<Action>( new BitmapAction(rBmpEx,
-                                                     rDstPoint,
-                                                     rCanvas,
-                                                     rState ) );
+            return std::make_shared<BitmapAction>(rBmpEx, rDstPoint, rCanvas, rState );
         }
 
         std::shared_ptr<Action> BitmapActionFactory::createBitmapAction( const ::BitmapEx&           rBmpEx,
@@ -213,11 +210,11 @@ namespace cppcanvas
                                                                  const CanvasSharedPtr&      rCanvas,
                                                                  const OutDevState&          rState )
         {
-            return std::shared_ptr<Action>( new BitmapAction(rBmpEx,
-                                                     rDstPoint,
-                                                     rDstSize,
-                                                     rCanvas,
-                                                     rState ) );
+            return std::make_shared<BitmapAction>(rBmpEx,
+                                                  rDstPoint,
+                                                  rDstSize,
+                                                  rCanvas,
+                                                  rState );
         }
     }
 }

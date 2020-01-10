@@ -796,7 +796,7 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
     const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getColumnFields();
     for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : aPivotFieldEntries)
     {
-        std::shared_ptr<VButton> pButton(new VButton);
+        auto pButton = std::make_shared<VButton>();
         aButtons.push_back(pButton);
         pButton->init(xLegendContainer, xShapeFactory);
         awt::Point aNewPosition(x, y);

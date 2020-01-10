@@ -431,7 +431,7 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     }
 
     // WSBOOL needs data from page settings, create it here, add it later
-    std::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    auto xPageSett = std::make_shared<XclExpPageSettings>( GetRoot() );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     if( eBiff <= EXC_BIFF5 )
@@ -572,7 +572,7 @@ void ExcTable::FillAsTableXml()
     }
 
     // WSBOOL needs data from page settings, create it here, add it later
-    std::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    auto xPageSett = std::make_shared<XclExpPageSettings>( GetRoot() );
     XclExtLstRef xExtLst( new XclExtLst( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 

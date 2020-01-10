@@ -1122,7 +1122,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     {
         XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
         ChartExport aChartExport(XML_xdr, pDrawing, mxChartDoc, &rStrm, drawingml::DOCUMENT_XLSX);
-        std::shared_ptr<oox::drawingml::URLTransformer> pURLTransformer(new ScURLTransformer(*mpDoc));
+        auto pURLTransformer = std::make_shared<ScURLTransformer>(*mpDoc);
         aChartExport.SetURLTranslator(pURLTransformer);
         static sal_Int32 nChartCount = 0;
         nChartCount++;
@@ -1489,7 +1489,7 @@ XclExpDffAnchorBase* XclExpObjectManager::CreateDffAnchor() const
 
 std::shared_ptr< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
 {
-    return std::shared_ptr< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
+    return std::make_shared<XclExpMsoDrawingGroup>( *mxEscherEx );
 }
 
 void XclExpObjectManager::StartSheet()

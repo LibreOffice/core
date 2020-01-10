@@ -275,7 +275,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<std::unique_ptr<Sw
 /*static*/ std::shared_ptr<SfxItemSet>
 ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& pool)
 {
-    std::shared_ptr<SfxItemSet> retval(new SfxItemSet(pool));
+    auto retval = std::make_shared<SfxItemSet>(pool);
     if (hint.Which() != RES_TXTATR_AUTOFMT) {
         return retval;
     }

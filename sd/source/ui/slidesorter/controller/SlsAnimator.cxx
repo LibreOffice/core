@@ -104,14 +104,14 @@ Animator::AnimationId Animator::AddAnimation (
     if (mbIsDisposed)
         return -1;
 
-    std::shared_ptr<Animation> pAnimation (
-        new Animation(
+    std::shared_ptr<Animation> pAnimation =
+        std::make_shared<Animation>(
             rAnimation,
             0,
             300 / 1000.0,
             maElapsedTime.getElapsedTime(),
             ++mnNextAnimationId,
-            rFinishFunctor));
+            rFinishFunctor);
     maAnimations.push_back(pAnimation);
 
     RequestNextFrame();

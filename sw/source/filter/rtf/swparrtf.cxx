@@ -60,7 +60,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
     // the end position.
     const uno::Reference<text::XTextRange> xInsertPosition
         = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
-    std::shared_ptr<SwNodeIndex> pSttNdIdx(new SwNodeIndex(rDoc.GetNodes()));
+    auto pSttNdIdx = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
     const SwPosition* pPos = rPam.GetPoint();
 
     // Step 2: Split once and remember the node that has been split.
@@ -69,7 +69,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
 
     // Step 3: Split again.
     rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
-    std::shared_ptr<SwNodeIndex> pSttNdIdx2(new SwNodeIndex(rDoc.GetNodes()));
+    auto pSttNdIdx2 = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
     *pSttNdIdx2 = pPos->nNode.GetIndex();
 
     // Step 4: Insert all content into the new node

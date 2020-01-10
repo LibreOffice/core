@@ -113,7 +113,7 @@ static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,
 {
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-    std::shared_ptr<SfxItemSet> pCoreSet(new SfxItemSet(
+    auto pCoreSet = std::make_shared<SfxItemSet>(
         rWrtSh.GetView().GetPool(),
         svl::Items<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
@@ -123,7 +123,7 @@ static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_HTML_MODE, SID_HTML_MODE,
             SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-            FN_PARAM_SELECTION, FN_PARAM_SELECTION>{}));
+            FN_PARAM_SELECTION, FN_PARAM_SELECTION>{});
     rWrtSh.GetCurAttr(*pCoreSet);
 
     bool bSel = rWrtSh.HasSelection();
@@ -1069,7 +1069,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else if (pDlg)
             {
-                std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+                auto pRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
                 pDlg->StartExecuteAsync([pDlg, &rWrtSh, pRequest, nDefDist](sal_Int32 nResult){

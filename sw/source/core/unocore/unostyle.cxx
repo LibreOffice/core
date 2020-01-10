@@ -3782,7 +3782,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
             std::pair< sal_uInt16, text::RubyAdjust > aPair( pRubyItem->GetPosition(), pRubyItem->GetAdjustment() );
             if ( aRubyMap.insert( aPair ).second )
             {
-                std::shared_ptr<SfxItemSet> pItemSet( new SfxItemSet( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} ) );
+                auto pItemSet = std::make_shared<SfxItemSet>( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} );
                 pItemSet->Put( *pRubyItem );
                 mAutoStyles.push_back( pItemSet );
             }

@@ -478,13 +478,13 @@ namespace sax_fastparser {
     {
         if (rOrder.hasElements())
         {
-            std::shared_ptr< ForMerge > pSort( new ForSort(nTag, rOrder) );
+            auto pSort = std::make_shared<ForSort>(nTag, rOrder);
             maMarkStack.push( pSort );
             maCachedOutputStream.setOutput( pSort );
         }
         else
         {
-            std::shared_ptr< ForMerge > pMerge( new ForMerge(nTag) );
+            auto pMerge = std::make_shared<ForMerge>(nTag);
             maMarkStack.push( pMerge );
             maCachedOutputStream.setOutput( pMerge );
         }

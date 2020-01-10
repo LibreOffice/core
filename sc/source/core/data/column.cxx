@@ -2278,8 +2278,7 @@ class UpdateRefOnNonCopy
 
             // Make sure that the start and end listening contexts share the
             // same block position set, else an invalid iterator may ensue.
-            std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(
-                new sc::ColumnBlockPositionSet(mpCxt->mrDoc));
+            auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(mpCxt->mrDoc);
 
             sc::StartListeningContext aStartCxt(mpCxt->mrDoc, pPosSet);
             sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pPosSet, pOldCode.get());

@@ -405,8 +405,8 @@ std::shared_ptr<SvNumberFormatter> SbiInstance::PrepareNumberFormatter( sal_uInt
         eDate = aSysLocale.GetLocaleData().getDateOrder();
     }
 
-    std::shared_ptr<SvNumberFormatter> pNumberFormatter(
-            new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
+    std::shared_ptr<SvNumberFormatter> pNumberFormatter =
+            std::make_shared<SvNumberFormatter>( comphelper::getProcessComponentContext(), eLangType );
 
     // Several parser methods pass SvNumberFormatter::IsNumberFormat() a number
     // format index to parse against. Tell the formatter the proper date

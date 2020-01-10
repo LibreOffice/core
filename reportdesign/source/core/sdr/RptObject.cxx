@@ -251,7 +251,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
-                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
+                    auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
                     tmp.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
                     tmp.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
@@ -265,7 +265,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
-                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
+                    auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
                     tmp.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
                     tmp.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
@@ -277,7 +277,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     tmp.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
                     tmp.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
 
-                    std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust);
+                    auto aParaAdjust = std::make_shared<ParaAdjust>();
                     tmp.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
                     return tmp;
                 }();
@@ -287,7 +287,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
-                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
+                    auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
                     tmp.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
                     tmp.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
@@ -298,7 +298,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     tmp.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
                     tmp.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
                     tmp.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
-                    std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust);
+                    auto aParaAdjust = std::make_shared<ParaAdjust>();
                     tmp.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
                     return tmp;
                 }();
@@ -309,7 +309,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
             {
                 static TPropertyNamePair s_aNameMap = [&]()
                 {
-                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
+                    auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
                     tmp.emplace(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter));
                     tmp.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter));

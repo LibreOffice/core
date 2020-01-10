@@ -295,11 +295,11 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         else
         {
             ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
-            std::shared_ptr<ScImportExport> pObj(new ScImportExport(GetViewData().GetDocument(), aCellPos));
+            auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
             pObj->SetOverwriting( true );
 
 
-            std::shared_ptr<OUString> pStrBuffer(new OUString());
+            auto pStrBuffer = std::make_shared<OUString>();
             tools::SvRef<SotStorageStream> xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
             {
@@ -341,7 +341,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 {
                     vcl::Window* pParent = GetActiveWin();
 
-                    std::shared_ptr<ScImportStringStream> pStrm(new ScImportStringStream(*pStrBuffer));
+                    auto pStrm = std::make_shared<ScImportStringStream>(*pStrBuffer);
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScImportAsciiDlg> pDlg(

@@ -4962,8 +4962,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     // otherwise, just finalize here
     if (size_t(nCalledByGroup) > maPendingGroupData.size())
     {
-        std::shared_ptr<DffRecordHeader> rHdClone(new DffRecordHeader(aObjData.rSpHd));
-        maPendingGroupData.emplace_back(DffObjData(rHdClone, aObjData), rHdClone );
+        auto xHdClone = std::make_shared<DffRecordHeader>(aObjData.rSpHd);
+        maPendingGroupData.emplace_back(DffObjData(xHdClone, aObjData), xHdClone );
     }
     else
     {
@@ -5374,8 +5374,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // the object with a frame, otherwise
             if( bTextFrame )
             {
-                std::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
-                    new SvxMSDffShapeInfo(0, pImpRec->nShapeId));
+                auto const pTmpRec = std::make_shared<SvxMSDffShapeInfo>(0, pImpRec->nShapeId);
 
                 SvxMSDffShapeInfos_ById::const_iterator const it =
                     m_xShapeInfosById->find(pTmpRec);
@@ -6374,8 +6373,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
                                           SvxMSDffImportData& rData)
 {
-    std::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
-        new SvxMSDffShapeInfo(0, nId));
+    auto const pTmpRec = std::make_shared<SvxMSDffShapeInfo>(0, nId);
 
     SvxMSDffShapeInfos_ById::const_iterator const it =
         m_xShapeInfosById->find(pTmpRec);

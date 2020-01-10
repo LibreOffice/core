@@ -123,9 +123,8 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
                                      *rFragmentHandler,
                                      xShape,
                                      pMasterShape,
-                                     ShapePtr(
-                                         new oox::drawingml::Shape(
-                                             "com.sun.star.drawing.CustomShape"))));
+                                     std::make_shared<oox::drawingml::Shape>(
+                                             "com.sun.star.drawing.CustomShape")));
                 break;
             default:
                 break;
@@ -160,8 +159,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
     if (! mxGraphicShapeContext.is())
     {
-        std::shared_ptr<ContextHandler2Helper> pFragmentHandler
-            (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxFilterBase, msRelationFragmentPath);
         ShapePtr pMasterShape;
 
         switch (Element & 0xffff)
@@ -216,7 +214,7 @@ ShapeContextHandler::getDiagramShapeContext()
 {
     if (!mxDiagramShapeContext.is())
     {
-        std::shared_ptr<ContextHandler2Helper> pFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxFilterBase, msRelationFragmentPath);
         mpShape.reset(new Shape());
         mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
     }

@@ -217,7 +217,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners()
 
     if( rSanes.empty() )
     {
-        std::shared_ptr<SaneHolder> pSaneHolder(new SaneHolder);
+        auto pSaneHolder = std::make_shared<SaneHolder>();
         if( Sane::IsSane() )
             rSanes.push_back( pSaneHolder );
     }

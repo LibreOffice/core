@@ -789,7 +789,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 {
     // show progress dialog
 
-    std::shared_ptr<ScSolverProgressDialog> xProgress(new ScSolverProgressDialog(m_xDialog.get()));
+    auto xProgress = std::make_shared<ScSolverProgressDialog>(m_xDialog.get());
     sal_Int32 nTimeout = 0;
     if ( FindTimeout( nTimeout ) )
         xProgress->SetTimeLimit( nTimeout );

@@ -218,7 +218,7 @@ std::shared_ptr<editeng::SharedVclResources> EditDLL::GetSharedVclResources()
     SolarMutexGuard g;
     auto pLocked(pSharedVcl.lock());
     if(!pLocked)
-        pSharedVcl = pLocked = std::shared_ptr<editeng::SharedVclResources>(new editeng::SharedVclResources());
+        pSharedVcl = pLocked = std::make_shared<editeng::SharedVclResources>();
     return pLocked;
 }
 

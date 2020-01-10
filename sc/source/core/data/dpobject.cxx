@@ -717,7 +717,7 @@ ScDPTableData* ScDPObject::GetTableData()
         // grouping (for cell or database data)
         if (pData && pDimData)
         {
-            shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pData, pDoc));
+            auto pGroupData = std::make_shared<ScDPGroupTableData>(pData, pDoc);
             pDimData->WriteToData(*pGroupData);
             pData = pGroupData;
         }
@@ -839,14 +839,14 @@ void ScDPObject::ReloadGroupTableData()
         // This is already a group table data. Salvage the source data and
         // re-create a new group data.
         const shared_ptr<ScDPTableData>& pSource = pData->GetSourceTableData();
-        shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pSource, pDoc));
+        auto pGroupData = std::make_shared<ScDPGroupTableData>(pSource, pDoc);
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;
     }
     else
     {
         // This is a source data.  Create a group data based on it.
-        shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(mpTableData, pDoc));
+        auto pGroupData = std::make_shared<ScDPGroupTableData>(mpTableData, pDoc);
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;
     }

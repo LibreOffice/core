@@ -78,8 +78,7 @@ struct UnoRc : public rtl::StaticWithInit<
     std::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
         ::rtl::Bootstrap::expandMacros( unorc );
-        std::shared_ptr< ::rtl::Bootstrap > ret(
-            new ::rtl::Bootstrap( unorc ) );
+        auto ret = std::make_shared<::rtl::Bootstrap>( unorc );
         OSL_ASSERT( ret->getHandle() != nullptr );
         return ret;
     }

@@ -404,8 +404,8 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
     if ( aFind == m_aItems.end() )
     {
         OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
-        std::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
-            m_xAccessible.get(), sal::static_int_cast< sal_uInt16 >(_nPos)));
+        auto xItem = std::make_shared<svx::SvxShowCharSetItem>(*this,
+            m_xAccessible.get(), sal::static_int_cast< sal_uInt16 >(_nPos));
         aFind = m_aItems.emplace(_nPos, xItem).first;
         OUStringBuffer buf;
         std::unordered_map<sal_Int32,sal_UCS4>::const_iterator got = m_aItemList.find (_nPos);

@@ -3760,7 +3760,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     if ( !m_pData->m_pObjectShell.is() )
         throw io::IOException(); // TODO:
 
-    std::shared_ptr<SfxAllItemSet> xSet( new SfxAllItemSet(m_pData->m_pObjectShell->GetPool()) );
+    auto xSet = std::make_shared<SfxAllItemSet>(m_pData->m_pObjectShell->GetPool());
     TransformParameters( SID_SAVEASDOC, aMediaDescriptor, *xSet );
 
     // TODO/LATER: maybe a special URL "private:storage" should be used

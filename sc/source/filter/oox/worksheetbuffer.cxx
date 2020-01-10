@@ -221,7 +221,7 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
 {
     sal_Int32 nWorksheet = static_cast< sal_Int32 >( maSheetInfos.size() );
     IndexNamePair aIndexName = createSheet( rModel.maName, nWorksheet );
-    std::shared_ptr< SheetInfo > xSheetInfo( new SheetInfo( rModel, aIndexName.first, aIndexName.second ) );
+    auto xSheetInfo = std::make_shared<SheetInfo>( rModel, aIndexName.first, aIndexName.second );
     maSheetInfos.push_back( xSheetInfo );
     maSheetInfosByName[ rModel.maName ] = xSheetInfo;
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;

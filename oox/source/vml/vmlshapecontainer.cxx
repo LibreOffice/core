@@ -61,7 +61,7 @@ ShapeContainer::~ShapeContainer()
 
 std::shared_ptr<ShapeType> ShapeContainer::createShapeType()
 {
-    std::shared_ptr< ShapeType > xShape( new ShapeType( mrDrawing ) );
+    auto xShape = std::make_shared<ShapeType>( mrDrawing );
     maTypes.push_back( xShape );
     return xShape;
 }

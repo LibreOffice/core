@@ -46,7 +46,7 @@ VclPtr<vcl::Window> CurrentMasterPagesSelector::Create (
     if (pDocument == nullptr)
         return nullptr;
 
-    std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+    auto pContainer = std::make_shared<MasterPageContainer>();
 
     VclPtrInstance<CurrentMasterPagesSelector> pSelector(
             pParent,
@@ -137,8 +137,8 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
                 pMasterPage->GetName(),
                 OUString(),
                 pMasterPage->IsPrecious(),
-                std::shared_ptr<PageObjectProvider>(new ExistingPageProvider(pMasterPage)),
-                std::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
+                std::make_shared<ExistingPageProvider>(pMasterPage),
+                std::make_shared<PagePreviewProvider>()));
             aToken = mpContainer->PutMasterPage(pDescriptor);
         }
 
