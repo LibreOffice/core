@@ -4530,7 +4530,7 @@ namespace osl_Directory
                 }
                 else
                     break;
-            };
+            }
             fd = std::remove(strLinkFileName.getStr());
             CPPUNIT_ASSERT_EQUAL_MESSAGE("remove link file failed", static_cast<sal_Int32>(0), fd);
             CPPUNIT_ASSERT_MESSAGE("test for getNextItem function: check if can retrieve the link file name",
