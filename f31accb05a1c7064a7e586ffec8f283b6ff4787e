@@ -33,6 +33,24 @@
       "revId": "f31accb05a1c7064a7e586ffec8f283b6ff4787e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d1ada6a_43d5c11a",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-01-10T07:05:11Z",
+      "side": 1,
+      "message": "No it doesn\u0027t work, didn\u0027t work in SwNavigationPI::MakeMark() either :(\n\nI follow you with numbering the marks consecutively and always deleting the first one. I tried this approach before but for some reason abandoned it. Here is another go at it in Patch Set 4 https://gerrit.libreoffice.org/c/core/+/86256 - It makes for no need of m_nAutoMarkIdx and works correctly when reminders are deleted when maximum reminders are reached and for user text delete actions that include reminders.\n\nThe wrapping messages need to be made specific to reminder navigation which follows the order set, not document position order.",
+      "parentUuid": "25eedfa2_0c179a8e",
+      "revId": "f31accb05a1c7064a7e586ffec8f283b6ff4787e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
