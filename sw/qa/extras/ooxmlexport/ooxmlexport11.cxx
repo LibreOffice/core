@@ -450,6 +450,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
     assertXPath(pDump, "/root/page[2]/body/txt[1]/Text", 0);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf128207, "tdf128207.docx")
+{
+    //There was the charts on each other, because their horizontal and vertical position was 0!
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

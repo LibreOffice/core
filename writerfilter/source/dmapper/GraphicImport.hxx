@@ -94,6 +94,8 @@ public:
     const css::uno::Reference<css::drawing::XShape>& GetXShapeObject() { return m_xShape;}
     bool IsGraphic() const;
 
+    com::sun::star::awt::Point GetGraphicObjectPosition();
+
  private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;
