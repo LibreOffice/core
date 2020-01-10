@@ -19,33 +19,35 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/floatwin.hxx>
+#include <svtools/toolbarmenu.hxx>
+#include <svx/colorwindow.hxx>
 #include "CellLineStyleValueSet.hxx"
 
 class SfxDispatcher;
 
 namespace sc { namespace sidebar {
 
-class CellLineStylePopup : public FloatingWindow
+class CellLineStylePopup : public WeldToolbarPopup
 {
-    SfxDispatcher*                     mpDispatcher;
-    VclPtr<PushButton>                 maPushButtonMoreOptions;
-    VclPtr<CellLineStyleValueSet>      maCellLineStyleValueSet;
-    OUString                           maStr[CELL_LINE_STYLE_ENTRIES];
+private:
+    MenuOrToolMenuButton maToolButton;
+    SfxDispatcher* mpDispatcher;
+    std::unique_ptr<CellLineStyleValueSet> mxCellLineStyleValueSet;
+    std::unique_ptr<weld::CustomWeld> mxCellLineStyleValueSetWin;
+    std::unique_ptr<weld::Button> mxPushButtonMoreOptions;
+    OUString maStr[CELL_LINE_STYLE_ENTRIES];
 
     void Initialize();
     void SetAllNoSel();
 
-    DECL_LINK(VSSelectHdl, ValueSet*, void);
-    DECL_LINK(PBClickHdl, Button*, void);
-
+    DECL_LINK(VSSelectHdl, SvtValueSet*, void);
+    DECL_LINK(PBClickHdl, weld::Button&, void);
 
 public:
-    explicit CellLineStylePopup(SfxDispatcher* pDispatcher);
+    CellLineStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher);
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
+    virtual void GrabFocus() override;
     virtual ~CellLineStylePopup() override;
-    virtual void dispose() override;
 };
 
 } } // end of namespace svx::sidebar

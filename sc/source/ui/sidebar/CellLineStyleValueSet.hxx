@@ -25,18 +25,18 @@
 
 namespace sc { namespace sidebar {
 
-class CellLineStyleValueSet : public ValueSet
+class CellLineStyleValueSet : public SvtValueSet
 {
 private:
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
 public:
-    explicit CellLineStyleValueSet(vcl::Window* pParent);
+    CellLineStyleValueSet();
     virtual ~CellLineStyleValueSet() override;
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
 

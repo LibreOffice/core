@@ -19,31 +19,33 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERSTYLECONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERSTYLECONTROL_HXX
 
-#include <vcl/floatwin.hxx>
-#include <vcl/toolbox.hxx>
+#include <svtools/toolbarmenu.hxx>
+#include <svx/colorwindow.hxx>
 
 class SfxDispatcher;
 
 namespace sc { namespace sidebar {
 
-class CellBorderStylePopup : public FloatingWindow
+class CellBorderStylePopup : public WeldToolbarPopup
 {
 private:
-    SfxDispatcher*                  mpDispatcher;
-    VclPtr<ToolBox>                 maTBBorder1;
-    VclPtr<ToolBox>                 maTBBorder2;
-    VclPtr<ToolBox>                 maTBBorder3;
+    MenuOrToolMenuButton maToolButton;
+    SfxDispatcher* mpDispatcher;
+    std::unique_ptr<weld::Toolbar> mxTBBorder1;
+    std::unique_ptr<weld::Toolbar> mxTBBorder2;
+    std::unique_ptr<weld::Toolbar> mxTBBorder3;
+    std::unique_ptr<weld::Toolbar> mxTBBorder4;
 
     void Initialize();
 
-    DECL_LINK(TB1SelectHdl, ToolBox *, void);
-    DECL_LINK(TB2SelectHdl, ToolBox *, void);
-    DECL_LINK(TB3SelectHdl, ToolBox *, void);
+    DECL_LINK(TB1SelectHdl, const OString&, void);
+    DECL_LINK(TB2and3SelectHdl, const OString&, void);
+    DECL_LINK(TB4SelectHdl, const OString&, void);
 
 public:
-    explicit CellBorderStylePopup(SfxDispatcher* pDispatcher);
+    CellBorderStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher);
+    virtual void GrabFocus() override;
     virtual ~CellBorderStylePopup() override;
-    virtual void dispose() override;
 };
 
 } } // end of namespace svx::sidebar
