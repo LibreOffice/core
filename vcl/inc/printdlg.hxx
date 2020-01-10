@@ -186,6 +186,8 @@ namespace vcl
         std::unique_ptr<weld::CustomWeld>       mxNupOrderWin;
         /// border around each page
         std::unique_ptr<weld::CheckButton>      mxBorderCB;
+        std::unique_ptr<weld::Expander>         mxRangeExpander;
+        std::unique_ptr<weld::Expander>         mxLayoutExpander;
         std::unique_ptr<weld::Widget>           mxCustom;
 
         OUString const                          maPrintToFileText;
@@ -233,6 +235,8 @@ namespace vcl
         DECL_LINK( UIOption_SelectHdl, weld::ComboBox&, void );
         DECL_LINK( UIOption_SpinModifyHdl, weld::SpinButton&, void );
         DECL_LINK( UIOption_EntryModifyHdl, weld::Entry&, void );
+
+        DECL_LINK( ExpandHdl, weld::Expander&, void );
 
         css::beans::PropertyValue* getValueForWindow(weld::Widget*) const;
 
