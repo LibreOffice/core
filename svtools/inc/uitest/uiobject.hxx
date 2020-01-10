@@ -12,7 +12,7 @@
 
 class ValueSet;
 
-class ValueSetUIObject : public WindowUIObject
+class ValueSetUIObject final : public WindowUIObject
 {
 private:
     VclPtr<ValueSet> mxValueSet;
@@ -29,7 +29,7 @@ public:
 
     virtual OUString get_action(VclEventId nEvent) const override;
 
-protected:
+private:
     virtual OUString get_name() const override;
 };
 
