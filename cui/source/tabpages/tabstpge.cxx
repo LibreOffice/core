@@ -520,7 +520,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl, weld::Button&, void)
 {
     if ( aNewTabs->Count() )
     {
-        aNewTabs = std::make_unique<SvxTabStopItem>( 0 );
+        aNewTabs = std::make_unique<SvxTabStopItem>(GetWhich(SID_ATTR_TABSTOP));
         InitTabPos_Impl();
     }
 }
