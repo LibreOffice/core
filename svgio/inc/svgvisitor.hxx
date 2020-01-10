@@ -19,7 +19,7 @@ namespace svgio
 {
 namespace svgreader
 {
-class SvgDrawVisitor : public Visitor
+class SvgDrawVisitor final : public Visitor
 {
 private:
     std::shared_ptr<gfx::DrawRoot> mpDrawRoot;
