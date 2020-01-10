@@ -101,7 +101,7 @@ FileFormat aFileFormats[] =
 #define PPTM 9
 #define POTX 10
 
-/// Base class for filter tests loading or roundtriping a document, and asserting the document model.
+/// Base class for filter tests loading or roundtripping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
 {
 private:
