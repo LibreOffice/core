@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fb226c3_d38e9da2",
+        "filename": "basctl/inc/iderdll.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-10T08:01:43Z",
+      "side": 0,
+      "message": "there are now two empty lines at the bottom, please remove one of them.",
+      "revId": "d48fb4716624766063792a5c16018b5a129618e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
