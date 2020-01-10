@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01ddb015_d3dc0e06",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T19:05:21Z",
+      "side": 1,
+      "message": "I see very many occurrences of this warning, in all kinds of usage scenarios.  Is that as intended?",
+      "revId": "e1383444c6d00f5d0b1d507670517f45988b9cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
