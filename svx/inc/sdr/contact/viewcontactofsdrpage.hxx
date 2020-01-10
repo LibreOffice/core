@@ -41,9 +41,8 @@ public:
     const SdrPage& getPage() const;
 };
 
-class ViewContactOfPageBackground : public ViewContactOfPageSubObject
+class ViewContactOfPageBackground final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
@@ -52,9 +51,8 @@ public:
     virtual ~ViewContactOfPageBackground() override;
 };
 
-class ViewContactOfPageShadow : public ViewContactOfPageSubObject
+class ViewContactOfPageShadow final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
@@ -63,9 +61,8 @@ public:
     virtual ~ViewContactOfPageShadow() override;
 };
 
-class ViewContactOfPageFill : public ViewContactOfPageSubObject
+class ViewContactOfPageFill final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
@@ -74,9 +71,8 @@ public:
     virtual ~ViewContactOfPageFill() override;
 };
 
-class ViewContactOfMasterPage : public ViewContactOfPageSubObject
+class ViewContactOfMasterPage final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
@@ -85,9 +81,8 @@ public:
     virtual ~ViewContactOfMasterPage() override;
 };
 
-class ViewContactOfOuterPageBorder : public ViewContactOfPageSubObject
+class ViewContactOfOuterPageBorder final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
@@ -96,9 +91,8 @@ public:
     virtual ~ViewContactOfOuterPageBorder() override;
 };
 
-class ViewContactOfInnerPageBorder : public ViewContactOfPageSubObject
+class ViewContactOfInnerPageBorder final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 
@@ -114,9 +108,8 @@ public:
  * view contact of the SdrObject instance associated with the identifier
  * passed to the method.
  */
-class ViewContactOfPageHierarchy : public ViewContactOfPageSubObject
+class ViewContactOfPageHierarchy final : public ViewContactOfPageSubObject
 {
-protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 

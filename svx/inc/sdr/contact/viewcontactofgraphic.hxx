@@ -31,7 +31,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfGraphic : public ViewContactOfTextObj
+        class ViewContactOfGraphic final : public ViewContactOfTextObj
         {
         private:
             // helpers for constructing various primitive visualisations in various states
@@ -42,7 +42,6 @@ namespace sdr
                 const basegfx::B2DHomMatrix& rObjectMatrix,
                 const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const;
 
-        protected:
             // Create an Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something.
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
@@ -66,7 +65,7 @@ namespace sdr
             bool visualisationUsesPresObj() const;
             bool visualisationUsesDraft() const;
 
-        protected:
+        private:
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
             virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

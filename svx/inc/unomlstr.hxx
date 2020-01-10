@@ -25,7 +25,7 @@
 
 class SdrObject;
 
-class SvxUnoShapeModifyListener : public ::cppu::WeakAggImplHelper1< css::util::XModifyListener >
+class SvxUnoShapeModifyListener final : public ::cppu::WeakAggImplHelper1< css::util::XModifyListener >
 {
     SdrObject*  mpObj;
 

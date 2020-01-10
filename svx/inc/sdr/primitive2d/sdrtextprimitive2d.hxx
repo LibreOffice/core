@@ -105,7 +105,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrContourTextPrimitive2D : public SdrTextPrimitive2D
+        class SdrContourTextPrimitive2D final : public SdrTextPrimitive2D
         {
         private:
             // unit contour polygon (scaled to [0.0 .. 1.0])
@@ -114,7 +114,6 @@ namespace drawinglayer
             // complete contour polygon transform (scale, rotate, shear, translate)
             basegfx::B2DHomMatrix const               maObjectTransform;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -146,7 +145,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrPathTextPrimitive2D : public SdrTextPrimitive2D
+        class SdrPathTextPrimitive2D final : public SdrTextPrimitive2D
         {
         private:
             // the path to use. Each paragraph will use one Polygon.
@@ -155,7 +154,6 @@ namespace drawinglayer
             // the Fontwork parameters
             attribute::SdrFormTextAttribute const     maSdrFormTextAttribute;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -187,7 +185,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrBlockTextPrimitive2D : public SdrTextPrimitive2D
+        class SdrBlockTextPrimitive2D final : public SdrTextPrimitive2D
         {
         private:
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
@@ -203,7 +201,6 @@ namespace drawinglayer
             bool const                                    mbWordWrap : 1;         // for CustomShapes text layout
             bool const                                    mbClipOnBounds : 1;     // for CustomShapes text layout
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -247,7 +244,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrStretchTextPrimitive2D : public SdrTextPrimitive2D
+        class SdrStretchTextPrimitive2D final : public SdrTextPrimitive2D
         {
         private:
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
@@ -255,7 +252,6 @@ namespace drawinglayer
 
             bool const                                    mbFixedCellHeight : 1;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -287,14 +283,13 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrAutoFitTextPrimitive2D : public SdrTextPrimitive2D
+        class SdrAutoFitTextPrimitive2D final : public SdrTextPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix const                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
 
             bool const                                    mbWordWrap : 1;         // for CustomShapes text layout
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -325,13 +320,13 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrChainedTextPrimitive2D : public SdrTextPrimitive2D
+        class SdrChainedTextPrimitive2D final : public SdrTextPrimitive2D
         {
         private:
             // XXX: might have position of overflowing text
 
             ::basegfx::B2DHomMatrix const maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
-        protected:
+
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

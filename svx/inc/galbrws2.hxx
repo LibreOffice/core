@@ -58,7 +58,7 @@ namespace o3tl
 }
 
 
-class GalleryToolBox : public ToolBox
+class GalleryToolBox final : public ToolBox
 {
 private:
 

@@ -38,7 +38,6 @@ namespace drawinglayer
             ::basegfx::B2DHomMatrix const                     maTransform;
             attribute::SdrLineFillShadowTextAttribute const   maSdrLFSTAttribute;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -65,7 +64,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrEllipseSegmentPrimitive2D : public SdrEllipsePrimitive2D
+        class SdrEllipseSegmentPrimitive2D final : public SdrEllipsePrimitive2D
         {
         private:
             double const                                      mfStartAngle;
@@ -74,7 +73,6 @@ namespace drawinglayer
             bool const                                        mbCloseSegment : 1;
             bool const                                        mbCloseUsingCenter : 1;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

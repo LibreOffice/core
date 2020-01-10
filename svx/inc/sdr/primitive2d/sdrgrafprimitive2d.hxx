@@ -33,7 +33,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrGrafPrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrGrafPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix const                     maTransform;
@@ -41,7 +41,6 @@ namespace drawinglayer
             GraphicObject const                               maGraphicObject;
             GraphicAttr                                 maGraphicAttr;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

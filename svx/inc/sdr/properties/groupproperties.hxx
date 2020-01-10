@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class GroupProperties : public DefaultProperties
+        class GroupProperties final : public DefaultProperties
         {
-        protected:
             // create a new itemset
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 

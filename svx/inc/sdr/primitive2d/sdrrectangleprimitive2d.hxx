@@ -32,7 +32,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrRectanglePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix const                       maTransform;
@@ -43,7 +43,6 @@ namespace drawinglayer
             // flag which decides if the HitArea should be the filled geometry
             bool const                                        mbForceFillForHitTest : 1;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

@@ -36,7 +36,7 @@ class Splitter;
 namespace svx { namespace sidebar {
 
 
-class SVX_DLLPUBLIC GalleryControl : public vcl::Window
+class SVX_DLLPUBLIC GalleryControl final : public vcl::Window
 {
 public:
     GalleryControl( vcl::Window* pParentWindow );
@@ -57,7 +57,6 @@ private:
 
     DECL_LINK(SplitHdl, Splitter*, void);
 
-protected:
     virtual ~GalleryControl() override;
     virtual void dispose() override;
 };

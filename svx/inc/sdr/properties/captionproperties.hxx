@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class CaptionProperties : public RectangleProperties
+        class CaptionProperties final : public RectangleProperties
         {
-        protected:
             // create a new itemset
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 

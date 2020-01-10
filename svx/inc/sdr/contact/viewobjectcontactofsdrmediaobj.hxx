@@ -34,7 +34,7 @@ namespace sdr
     {
         class SdrMediaWindow;
 
-        class ViewObjectContactOfSdrMediaObj : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfSdrMediaObj final : public ViewObjectContactOfSdrObj
         {
         public:
 

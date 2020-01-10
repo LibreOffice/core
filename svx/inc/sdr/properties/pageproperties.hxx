@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class PageProperties : public EmptyProperties
+        class PageProperties final : public EmptyProperties
         {
-        protected:
             // create a new object specific itemset with object specific ranges.
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
 

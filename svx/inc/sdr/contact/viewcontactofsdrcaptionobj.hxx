@@ -28,14 +28,14 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfSdrCaptionObj : public ViewContactOfSdrRectObj
+        class ViewContactOfSdrCaptionObj final : public ViewContactOfSdrRectObj
         {
         public:
             // basic constructor, used from SdrObject.
             explicit ViewContactOfSdrCaptionObj(SdrCaptionObj& rCaptionObj);
             virtual ~ViewContactOfSdrCaptionObj() override;
 
-        protected:
+        private:
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
             virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

@@ -27,12 +27,11 @@ namespace sdr
 {
     namespace properties
     {
-        class CustomShapeProperties : public TextProperties
+        class CustomShapeProperties final : public TextProperties
         {
         private:
             void UpdateTextFrameStatus(bool bInvalidateRenderGeometry);
 
-        protected:
             // create a new itemset
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 

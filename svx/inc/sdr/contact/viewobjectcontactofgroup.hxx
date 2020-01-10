@@ -26,7 +26,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfGroup : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfGroup final : public ViewObjectContactOfSdrObj
         {
         public:
             // basic constructor.

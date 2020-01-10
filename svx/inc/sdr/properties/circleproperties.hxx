@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class CircleProperties : public RectangleProperties
+        class CircleProperties final : public RectangleProperties
         {
-        protected:
             // create a new itemset
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
