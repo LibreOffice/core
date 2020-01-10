@@ -236,11 +236,20 @@ extern "C" __declspec(dllexport) UINT __stdcall PrepRegUnregDLLs(MSIHANDLE hInst
         CheckWin32Error("MsiGetFeatureStateW",
                         MsiGetFeatureStateW(hInstall, L"gm_SharePointSupport_SubstMSO",
                                             &current_state_SubstMSO, &future_state_SubstMSO));
+
+        WriteLog(hInstall, "gm_SharePointSupport_SubstMSO state:", //
+                 "current", std::to_string(current_state_SubstMSO), //
+                 "future", std::to_string(future_state_SubstMSO)); //
+
         INSTALLSTATE current_state_Main;
         INSTALLSTATE future_state_Main;
         CheckWin32Error("MsiGetFeatureStateW",
                         MsiGetFeatureStateW(hInstall, L"gm_o_SharePointSupport",
                                             &current_state_Main, &future_state_Main));
+
+        WriteLog(hInstall, "gm_o_SharePointSupport state:", //
+                 "current", std::to_string(current_state_Main), //
+                 "future", std::to_string(future_state_Main)); //
 
         const bool bUnregSubstMSO = current_state_SubstMSO == INSTALLSTATE_LOCAL
                                     && future_state_SubstMSO == INSTALLSTATE_ABSENT;
