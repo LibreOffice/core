@@ -806,7 +806,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bNestedTable )
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
                 --aIndexBefore;
-                pClpDoc->getIDocumentContentOperations().CopyRange( rCopy, rInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
+                pClpDoc->getIDocumentContentOperations().CopyRange( rCopy, rInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
                 {
                     ++aIndexBefore;
                     SwPaM aPaM(SwPosition(aIndexBefore),
@@ -1045,7 +1045,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bNestedTable )
 
                     --aIndexBefore;
 
-                    pClpDoc->getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
+                    pClpDoc->getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
                     // Note: aCpyPam is invalid now
 
                     ++aIndexBefore;
