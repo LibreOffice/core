@@ -431,6 +431,11 @@ GraphicImport::~GraphicImport()
 {
 }
 
+com::sun::star::awt::Point GraphicImport::GetGraphicObjectPosition()
+{
+    return (com::sun::star::awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+}
+
 void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 {
     switch (nVal)
