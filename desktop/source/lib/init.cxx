@@ -1112,6 +1112,57 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 #endif
 
+void setupSidebar(bool bShow)
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
+    if (pViewFrame)
+    {
+        if (bShow && !pViewFrame->GetChildWindow(SID_SIDEBAR))
+            pViewFrame->SetChildWindow(SID_SIDEBAR, false /* create it */, true /* focus */);
+
+        pViewFrame->ShowChildWindow(SID_SIDEBAR, bShow);
+
+        if (!bShow)
+            return;
+
+        // Force synchronous population of panels
+        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
+        if (!pChild)
+            return;
+
+        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pChild->GetWindow());
+        if (!pDockingWin)
+            return;
+        pDockingWin->SyncUpdate();
+    }
+    else
+        SetLastExceptionMsg("No view shell or sidebar");
+}
+
+VclPtr<Window> getSidebarWindow()
+{
+    VclPtr<Window> xRet;
+
+    setupSidebar(true);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
+    if (!pViewFrame)
+        return xRet;
+
+    // really a SidebarChildWindow
+    SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
+    if (!pChild)
+        return xRet;
+
+    // really a SidebarDockingWindow
+    vcl::Window *pWin = pChild->GetWindow();
+    if (!pWin)
+        return xRet;
+    xRet = pWin;
+    return xRet;
+}
+
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
@@ -3453,57 +3504,6 @@ public:
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
-
-static void setupSidebar(bool bShow)
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
-    if (pViewFrame)
-    {
-        if (bShow && !pViewFrame->GetChildWindow(SID_SIDEBAR))
-            pViewFrame->SetChildWindow(SID_SIDEBAR, false /* create it */, true /* focus */);
-
-        pViewFrame->ShowChildWindow(SID_SIDEBAR, bShow);
-
-        if (!bShow)
-            return;
-
-        // Force synchronous population of panels
-        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
-        if (!pChild)
-            return;
-
-        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pChild->GetWindow());
-        if (!pDockingWin)
-            return;
-        pDockingWin->SyncUpdate();
-    }
-    else
-        SetLastExceptionMsg("No view shell or sidebar");
-}
-
-static VclPtr<Window> getSidebarWindow()
-{
-    VclPtr<Window> xRet;
-
-    setupSidebar(true);
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
-    if (!pViewFrame)
-        return xRet;
-
-    // really a SidebarChildWindow
-    SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
-    if (!pChild)
-        return xRet;
-
-    // really a SidebarDockingWindow
-    vcl::Window *pWin = pChild->GetWindow();
-    if (!pWin)
-        return xRet;
-    xRet = pWin;
-    return xRet;
-}
 
 static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWindowId, const char* pArguments)
 {
