@@ -256,6 +256,22 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
 
                 AttrOutput().OutputItem( fontHeight );
              }
+             else if (nWhich == RES_CHRATR_COLOR)
+             {
+                const SvxBrushItem& rBrushColor = static_cast<const SvxBrushItem&>(*pItem);
+                const SfxPoolItem* pBackgroundItem = SearchPoolItems(rItems, RES_CHRATR_BACKGROUND);
+                if (rBrushColor.GetColor() == COL_AUTO && pBackgroundItem)
+                {
+                    const SvxBrushItem& rBrushBackground = static_cast<const SvxBrushItem&>(*pBackgroundItem);
+                    SvxBrushItem aForeground(rBrushBackground.GetColor().IsDark() ? COL_WHITE : COL_BLACK, RES_CHRATR_COLOR);
+                    AttrOutput().OutputItem(aForeground);
+                }
+                else
+                {
+                    // default
+                    AttrOutput().OutputItem( *pItem );
+                }
+             }
              else
              {
                 AttrOutput().OutputItem( *pItem );
