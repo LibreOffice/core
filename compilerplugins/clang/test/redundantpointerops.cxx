@@ -56,6 +56,11 @@ void function6(std::shared_ptr<int> x)
     (void) *x.get(); // expected-error-re {{'*' followed by '.get()' operating on '{{.*}}shared_ptr{{.*}}', just use '*' [loplugin:redundantpointerops]}}
 }
 
+void function6b(std::shared_ptr<Struct1> x)
+{
+    x.get()->x = 1; // expected-error-re {{'get()' followed by '->' operating on '{{.*}}shared_ptr{{.*}}', just use '->' [loplugin:redundantpointerops]}}
+}
+
 void function7(rtl::Reference<css::uno::XInterface> x)
 {
     (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'rtl::Reference<css::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
