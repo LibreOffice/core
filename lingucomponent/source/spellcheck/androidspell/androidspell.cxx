@@ -160,6 +160,33 @@ extern "C" JNIEXPORT void JNICALL libreofficekit_spell_checking_destroy(JNIEnv* 
     }
 }
 
+namespace
+{
+/// Guard the access to the isValid-related variables.
+std::mutex gIsValidMutex;
+
+/// Condition variable to make it possible to wait in isValid() for the response.
+std::condition_variable gIsValidCV;
+
+/// Identification of the word that is being checked.
+int gCurrentSequenceNumber;
+
+/// Was the word identified by gCurrentSequenceNumber valid?
+bool gIsValid;
+}
+
+/// Callback announcing if the spelling of the word identified by
+/// sequenceNumber was valid (or not).
+extern "C" JNIEXPORT void libreofficekit_spell_checking_is_valid(int sequenceNumber, int isValid)
+{
+    std::unique_lock<std::mutex> lock(gIsValidMutex);
+    gCurrentSequenceNumber = sequenceNumber;
+    gIsValid = isValid;
+    lock.unlock();
+
+    gIsValidCV.notify_one();
+}
+
 AndroidSpellChecker::AndroidSpellChecker()
     : m_aEvtListeners(GetLinguMutex())
     , m_bDisposing(false)
@@ -226,31 +253,49 @@ sal_Bool SAL_CALL AndroidSpellChecker::hasLocale(const Locale& rLocale)
     return false;
 }
 
-sal_Bool SAL_CALL AndroidSpellChecker::isValid(const OUString& rWord, const Locale& rLocale,
+sal_Bool SAL_CALL AndroidSpellChecker::isValid(const OUString& rWord, const Locale& /*rLocale*/,
                                                const PropertyValues& /*rProperties*/)
 {
     MutexGuard aGuard(GetLinguMutex());
 
     //SAL-DEBUG("AndroidSpellChecker::isValid(): " << rWord);
 
-    if (rLocale == Locale() || rWord.isEmpty() || !loActivityClz || !loActivityObj)
+    if (rWord.isEmpty() || !loActivityClz || !loActivityObj)
         return false;
 
     JNIEnv* env = getEnv();
     if (!env)
         return false;
 
+    // prepare for the callback
+    std::unique_lock<std::mutex> lock(gIsValidMutex);
+    gCurrentSequenceNumber = -1;
+    gIsValid = false;
+
     jstring jstr = env->NewStringUTF(rWord.toUtf8().getStr());
-    jmethodID getSpellCheckingSuggestions
-        = env->GetMethodID(loActivityClz, "getSpellCheckingSuggestions", "(Ljava/lang/String;)V");
-    env->CallVoidMethod(loActivityObj, getSpellCheckingSuggestions, jstr);
+    static int sequenceNumber = 0;
+    int currentSequenceNumber = ++sequenceNumber;
+
+    jmethodID isSpellingValid
+        = env->GetMethodID(loActivityClz, "isSpellingValid", "(Ljava/lang/String;I)V");
+    env->CallVoidMethod(loActivityObj, isSpellingValid, jstr, currentSequenceNumber);
 
     if (env->ExceptionCheck())
         env->ExceptionDescribe();
 
-    // FIXME TODO wait for the suggestions coming back
+    // wait until we get the response from the spell checking
+    // (but at most 1 second)
+    gIsValidCV.wait_for(lock, std::chrono::seconds(1), [] { return gCurrentSequenceNumber != -1; });
 
-    return false;
+    if (gCurrentSequenceNumber != currentSequenceNumber)
+    {
+        //SAL-DEBUG("AndroidSpellChecker::isValid() '" << rWord << "': timed out");
+        return false; // apparently failed to get the spell checking response in time (or some mismatch)
+    }
+
+    //SAL-DEBUG("AndroidSpellChecker::isValid() '" << rWord << "': " << gIsValid);
+
+    return gIsValid;
 }
 
 Reference<XSpellAlternatives>
