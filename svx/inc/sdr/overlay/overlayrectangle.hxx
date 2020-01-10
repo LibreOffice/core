@@ -27,7 +27,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayRectangle : public OverlayObjectWithBasePosition
+        class OverlayRectangle final : public OverlayObjectWithBasePosition
         {
             // geometric definitions
             basegfx::B2DPoint const         maSecondPosition;

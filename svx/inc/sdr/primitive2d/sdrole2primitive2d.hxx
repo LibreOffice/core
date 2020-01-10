@@ -32,7 +32,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrOle2Primitive2D : public BasePrimitive2D
+        class SdrOle2Primitive2D final : public BasePrimitive2D
         {
         private:
             Primitive2DContainer const                        maOLEContent;

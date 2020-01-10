@@ -103,7 +103,7 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& ) = delete;
     };
 
-    class UnoControlPrintOrPreviewContact : public ViewObjectContactOfUnoControl
+    class UnoControlPrintOrPreviewContact final : public ViewObjectContactOfUnoControl
     {
     public:
         UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );

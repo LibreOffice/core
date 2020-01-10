@@ -33,7 +33,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrPathPrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrPathPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix const                       maTransform;
@@ -51,7 +51,6 @@ namespace drawinglayer
             // when applying the also given transformation (maTransform)
             basegfx::B2DPolyPolygon const                     maUnitDefinitionPolyPolygon;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

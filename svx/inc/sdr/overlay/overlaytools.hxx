@@ -26,7 +26,7 @@
 
 namespace drawinglayer { namespace primitive2d {
 
-class OverlayStaticRectanglePrimitive : public DiscreteMetricDependentPrimitive2D
+class OverlayStaticRectanglePrimitive final : public DiscreteMetricDependentPrimitive2D
 {
 private:
     basegfx::B2DPoint const maPosition;
@@ -40,7 +40,6 @@ private:
     // the rotation of the primitive itself
     double const mfRotation;
 
-protected:
     virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -68,7 +67,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class OverlayBitmapExPrimitive : public DiscreteMetricDependentPrimitive2D
+        class OverlayBitmapExPrimitive final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // The BitmapEx to use, PixelSize is used
@@ -86,7 +85,6 @@ namespace drawinglayer
             double const                                  mfShearX;
             double const                                  mfRotation;
 
-        protected:
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -120,7 +118,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class OverlayCrosshairPrimitive : public ViewportDependentPrimitive2D
+        class OverlayCrosshairPrimitive final : public ViewportDependentPrimitive2D
         {
         private:
             // The logic position
@@ -131,7 +129,6 @@ namespace drawinglayer
             basegfx::BColor const                         maRGBColorB;
             double const                                  mfDiscreteDashLength;
 
-        protected:
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -162,7 +159,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class OverlayRectanglePrimitive : public DiscreteMetricDependentPrimitive2D
+        class OverlayRectanglePrimitive final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // the logic rectangle definition
@@ -179,7 +176,6 @@ namespace drawinglayer
             // the rotation of the primitive itself
             double const                          mfRotation;
 
-        protected:
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -221,7 +217,7 @@ namespace drawinglayer
             HELPLINESTYLE_HORIZONTAL
         };
 
-        class OverlayHelplineStripedPrimitive : public ViewportDependentPrimitive2D
+        class OverlayHelplineStripedPrimitive final : public ViewportDependentPrimitive2D
         {
         private:
             // The logic position
@@ -235,7 +231,6 @@ namespace drawinglayer
             basegfx::BColor const                         maRGBColorB;
             double const                                  mfDiscreteDashLength;
 
-        protected:
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -269,7 +264,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class OverlayRollingRectanglePrimitive : public ViewportDependentPrimitive2D
+        class OverlayRollingRectanglePrimitive final : public ViewportDependentPrimitive2D
         {
         private:
             // The logic range
@@ -280,7 +275,6 @@ namespace drawinglayer
             basegfx::BColor const                         maRGBColorB;
             double const                                  mfDiscreteDashLength;
 
-        protected:
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:

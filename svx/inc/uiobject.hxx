@@ -15,7 +15,7 @@
 
 class SvxShowCharSet;
 
-class SvxShowCharSetUIObject : public WindowUIObject
+class SvxShowCharSetUIObject final : public WindowUIObject
 {
     SvxShowCharSet* mpCharSet;
 
@@ -27,7 +27,7 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
+private:
 
     OUString get_name() const override;
 };

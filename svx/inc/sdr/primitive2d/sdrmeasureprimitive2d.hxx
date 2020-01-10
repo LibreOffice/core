@@ -45,7 +45,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrMeasurePrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrMeasurePrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             attribute::SdrLineShadowTextAttribute const       maSdrLSTAttribute;
@@ -72,7 +72,6 @@ namespace drawinglayer
                 bool bLeftActive,
                 bool bRightActive) const;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

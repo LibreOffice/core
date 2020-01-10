@@ -34,7 +34,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrOleContentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrOleContentPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             tools::WeakReference<SdrOle2Obj>            mpSdrOle2Obj;
@@ -45,7 +45,6 @@ namespace drawinglayer
             // be expensive, e.g. triggering chart creation)
             sal_uInt32 const                            mnGraphicVersion;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

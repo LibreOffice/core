@@ -83,7 +83,7 @@ public:
 };
 
 // Derivative of SdrDragMethod for spinning 3D objects
-class E3dDragRotate : public E3dDragMethod
+class E3dDragRotate final : public E3dDragMethod
 {
     basegfx::B3DPoint                   maGlobalCenter;
 
@@ -99,7 +99,7 @@ public:
 };
 
 // Derivative of SdrDragMethod for moving 3D sub-objects
-class E3dDragMove : public E3dDragMethod
+class E3dDragMove final : public E3dDragMethod
 {
     SdrHdlKind              meWhatDragHdl;
     Point                   maScaleFixPos;

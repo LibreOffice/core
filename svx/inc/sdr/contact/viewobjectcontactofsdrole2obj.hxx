@@ -26,9 +26,8 @@ class SdrOle2Obj;
 
 namespace sdr { namespace contact {
 
-class ViewObjectContactOfSdrOle2Obj : public ViewObjectContactOfSdrObj
+class ViewObjectContactOfSdrOle2Obj final : public ViewObjectContactOfSdrObj
 {
-protected:
     // This method is responsible for creating the graphical visualisation data
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 

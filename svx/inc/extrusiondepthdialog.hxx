@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class ExtrusionDepthDialog : public weld::GenericDialogController
+class ExtrusionDepthDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDepth;
 

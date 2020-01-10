@@ -28,7 +28,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfE3dLathe : public ViewContactOfE3d
+        class ViewContactOfE3dLathe final : public ViewContactOfE3d
         {
         public:
             // basic constructor, used from SdrObject.
@@ -41,7 +41,7 @@ namespace sdr
                 return static_cast<const E3dLatheObj&>(GetE3dObject());
             }
 
-        protected:
+        private:
             // This method is responsible for creating the graphical visualisation data which is
             // stored in the local primitive list. Default creates a yellow replacement rectangle.
             virtual drawinglayer::primitive3d::Primitive3DContainer createViewIndependentPrimitive3DContainer() const override;

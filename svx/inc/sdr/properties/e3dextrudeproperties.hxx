@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class E3dExtrudeProperties : public E3dCompoundProperties
+        class E3dExtrudeProperties final : public E3dCompoundProperties
         {
-        protected:
             // Called after ItemChange() is done for all items.
             virtual void PostItemChange(const sal_uInt16 nWhich) override;
 

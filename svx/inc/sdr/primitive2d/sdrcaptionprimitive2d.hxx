@@ -33,7 +33,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCaptionPrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrCaptionPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix const               maTransform;
@@ -42,7 +42,6 @@ namespace drawinglayer
             double const                                mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
             double const                                mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

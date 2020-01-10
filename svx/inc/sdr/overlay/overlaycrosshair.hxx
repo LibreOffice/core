@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayCrosshairStriped : public OverlayObjectWithBasePosition
+        class OverlayCrosshairStriped final : public OverlayObjectWithBasePosition
         {
-        protected:
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 

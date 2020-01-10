@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfE3dScene : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfE3dScene final : public ViewObjectContactOfSdrObj
         {
-        protected:
             // 2d primitive creator
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 

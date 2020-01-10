@@ -84,7 +84,7 @@ public:
     BitmapEx createPreviewBitmapEx(const Size& rSizePixel) const;
 };
 
-class SgaObjectSound : public SgaObject
+class SgaObjectSound final : public SgaObject
 {
 private:
 
@@ -107,7 +107,7 @@ public:
 
 class FmFormModel;
 
-class SgaObjectSvDraw : public SgaObject
+class SgaObjectSvDraw final : public SgaObject
 {
     using SgaObject::CreateThumb;
 
@@ -159,7 +159,7 @@ public:
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Animation; }
 };
 
-class SgaObjectINet : public SgaObjectAnim
+class SgaObjectINet final : public SgaObjectAnim
 {
 public:
 

@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class ConnectorProperties : public TextProperties
+        class ConnectorProperties final : public TextProperties
         {
-        protected:
             // create a new itemset
             virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 

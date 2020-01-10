@@ -30,7 +30,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfMasterPageDescriptor : public ViewObjectContact
+        class ViewObjectContactOfMasterPageDescriptor final : public ViewObjectContact
         {
         public:
             ViewObjectContactOfMasterPageDescriptor(ObjectContact& rObjectContact, ViewContact& rViewContact);

@@ -32,13 +32,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrConnectorPrimitive2D : public BufferedDecompositionPrimitive2D
+        class SdrConnectorPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             attribute::SdrLineShadowTextAttribute const       maSdrLSTAttribute;
             ::basegfx::B2DPolygon const                       maUnitPolygon;
 
-        protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 

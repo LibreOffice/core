@@ -47,9 +47,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfPageBackground : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageBackground final : public ViewObjectContactOfPageSubObject
         {
-        protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
@@ -65,7 +64,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfMasterPage : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfMasterPage final : public ViewObjectContactOfPageSubObject
         {
         protected:
         public:
@@ -81,9 +80,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfPageFill : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageFill final : public ViewObjectContactOfPageSubObject
         {
-        protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
@@ -99,7 +97,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfPageShadow : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageShadow final : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfPageShadow(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -114,7 +112,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfOuterPageBorder : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfOuterPageBorder final : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfOuterPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -129,7 +127,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfInnerPageBorder : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfInnerPageBorder final : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfInnerPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -144,7 +142,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfPageHierarchy : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageHierarchy final : public ViewObjectContactOfPageSubObject
         {
         public:
             ViewObjectContactOfPageHierarchy(ObjectContact& rObjectContact, ViewContact& rViewContact);
@@ -159,9 +157,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfPageGrid : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageGrid final : public ViewObjectContactOfPageSubObject
         {
-        protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
@@ -177,9 +174,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfPageHelplines : public ViewObjectContactOfPageSubObject
+        class ViewObjectContactOfPageHelplines final : public ViewObjectContactOfPageSubObject
         {
-        protected:
             virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const override;
 
         public:
@@ -195,7 +191,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfSdrPage : public ViewObjectContact
+        class ViewObjectContactOfSdrPage final : public ViewObjectContact
         {
         public:
             ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact);

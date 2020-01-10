@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace properties
     {
-        class GraphicProperties : public RectangleProperties
+        class GraphicProperties final : public RectangleProperties
         {
-        protected:
             // apply the correct SfyStyleSheet from SdrObject's SdrModel
             virtual void applyDefaultStyleSheetFromSdrModel() override;
 
