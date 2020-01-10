@@ -109,6 +109,8 @@ public:
     void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
+class SvxColorToolBoxControl;
+
 class SVX_DLLPUBLIC MenuOrToolMenuButton
 {
 private:
@@ -117,12 +119,18 @@ private:
     // or
     weld::Toolbar* m_pToolbar;
     OString m_aIdent;
+    // or
+    SvxColorToolBoxControl* m_pControl;
+    VclPtr<ToolBox> m_xToolBox;
+    sal_uInt16 m_nId;
 public:
     MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
     MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent);
+    MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId);
+    ~MenuOrToolMenuButton();
 
     bool get_active() const;
-    void set_active(bool bActive) const;
+    void set_inactive() const;
     weld::Widget* get_widget() const;
 };
 
