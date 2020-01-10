@@ -1001,6 +1001,12 @@ public:
         sal_uInt16 nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
         assert (m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN);
 
+        if (bActive)
+        {
+            m_sStartShowIdent = m_xToolBox->GetItemCommand(nItemId).toUtf8();
+            signal_toggle_menu(m_sStartShowIdent);
+        }
+
         auto pFloat = m_aFloats[nItemId];
         if (pFloat)
         {
@@ -1020,6 +1026,8 @@ public:
             else
                 pPopup->EndExecute();
         }
+
+        m_sStartShowIdent.clear();
     }
 
     bool get_menu_item_active(const OString& rIdent) const override
@@ -1174,11 +1182,7 @@ IMPL_LINK_NOARG(SalInstanceToolbar, ClickHdl, ToolBox*, void)
 IMPL_LINK_NOARG(SalInstanceToolbar, DropdownClick, ToolBox*, void)
 {
     sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
-
-    m_sStartShowIdent = m_xToolBox->GetItemCommand(nItemId).toUtf8();
-    signal_toggle_menu(m_sStartShowIdent);
-    set_menu_item_active(m_sStartShowIdent, true);
-    m_sStartShowIdent.clear();
+    set_menu_item_active(m_xToolBox->GetItemCommand(nItemId).toUtf8(), true);
 }
 
 IMPL_LINK(SalInstanceToolbar, MenuToggleListener, VclWindowEvent&, rEvent, void)
