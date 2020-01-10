@@ -279,13 +279,13 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
     if (bInternal)
     {
         if (rDataProvider == "org.libreoffice.calc.csv")
-            return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rDataSource));
+            return std::make_shared<CSVDataProvider>(pDoc, rDataSource);
         else if (rDataProvider == "org.libreoffice.calc.html")
-            return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rDataSource));
+            return std::make_shared<HTMLDataProvider>(pDoc, rDataSource);
         else if (rDataProvider == "org.libreoffice.calc.xml")
-            return std::shared_ptr<DataProvider>(new XMLDataProvider(pDoc, rDataSource));
+            return std::make_shared<XMLDataProvider>(pDoc, rDataSource);
         else if (rDataProvider == "org.libreoffice.calc.sql")
-            return std::shared_ptr<DataProvider>(new SQLDataProvider(pDoc, rDataSource));
+            return std::make_shared<SQLDataProvider>(pDoc, rDataSource);
     }
     else
     {

@@ -890,7 +890,7 @@ void SwDocShell::Edit(
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         VclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetFrameWeld(),
                                                     *xTmp, nFamily, sPage, pCurrShell, bNew));
-        std::shared_ptr<ApplyStyle> pApplyStyleHelper(new ApplyStyle(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified));
+        auto pApplyStyleHelper = std::make_shared<ApplyStyle>(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
         pDlg->SetApplyHdl(LINK(pApplyStyleHelper.get(), ApplyStyle, ApplyHdl));
 
         std::shared_ptr<SfxRequest> pRequest;

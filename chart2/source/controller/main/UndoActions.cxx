@@ -65,7 +65,7 @@ OUString SAL_CALL UndoElement::getTitle()
 void UndoElement::impl_toggleModelState()
 {
     // get a snapshot of the current state of our model
-    std::shared_ptr< ChartModelClone > pNewClone( new ChartModelClone( m_xDocumentModel, m_pModelClone->getFacet() ) );
+    auto pNewClone = std::make_shared<ChartModelClone>( m_xDocumentModel, m_pModelClone->getFacet() );
     // apply the previous snapshot to our model
     m_pModelClone->applyToModel( m_xDocumentModel );
     // remember the new snapshot, for the next toggle

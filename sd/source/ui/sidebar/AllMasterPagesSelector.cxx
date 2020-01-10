@@ -83,7 +83,7 @@ VclPtr<vcl::Window> AllMasterPagesSelector::Create (
     if (pDocument == nullptr)
         return nullptr;
 
-    std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+    auto pContainer = std::make_shared<MasterPageContainer>();
 
     VclPtrInstance<AllMasterPagesSelector> pSelector(
             pParent,

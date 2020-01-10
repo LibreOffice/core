@@ -655,8 +655,7 @@ static bool Match (
 void SelectionFunction::SwitchToNormalMode()
 {
     if (mpModeHandler->GetMode() != NormalMode)
-        SwitchMode(std::shared_ptr<ModeHandler>(
-            new NormalModeHandler(mrSlideSorter, *this)));
+        SwitchMode(std::make_shared<NormalModeHandler>(mrSlideSorter, *this));
 }
 
 void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
@@ -664,8 +663,7 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
     if (mpModeHandler->GetMode() == DragAndDropMode)
         return;
 
-    SwitchMode(std::shared_ptr<ModeHandler>(
-        new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow)));
+    SwitchMode(std::make_shared<DragAndDropModeHandler>(mrSlideSorter, *this, rMousePosition, mpWindow));
 }
 
 void SelectionFunction::SwitchToMultiSelectionMode (
@@ -673,8 +671,7 @@ void SelectionFunction::SwitchToMultiSelectionMode (
     const sal_uInt32 nEventCode)
 {
     if (mpModeHandler->GetMode() != MultiSelectionMode)
-        SwitchMode(std::shared_ptr<ModeHandler>(
-            new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition, nEventCode)));
+        SwitchMode(std::make_shared<MultiSelectionModeHandler>(mrSlideSorter, *this, rMousePosition, nEventCode));
 }
 
 void SelectionFunction::SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler)

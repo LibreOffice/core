@@ -593,7 +593,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 if (pItem)
                     pDlg->SetCurPageId(OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
 
-                std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+                auto pRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
                 pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh](sal_Int32 nResult){

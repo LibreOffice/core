@@ -97,7 +97,7 @@ shared_ptr<RVNGInputStream> lcl_createStreamForURL(const OUString& rURL)
     const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL),
                                                    css::uno::UNO_SET_THROW);
 
-    return shared_ptr<RVNGInputStream>(new WPXSvInputStream(xInputStream));
+    return std::make_shared<WPXSvInputStream>(xInputStream);
 }
 
 void lcl_testSubStreams(const shared_ptr<RVNGInputStream>& pInput)

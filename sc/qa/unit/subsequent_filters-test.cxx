@@ -1628,13 +1628,13 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
+    auto pFilter = std::make_shared<SfxFilter>(
         aFilterName,
         OUString(), getFileFormats()[0].nFormatType,
         SotClipboardFormatId::STARCALC_8,
         aFilterType, OUString(),
-        OUString(), "private:factory/scalc*" ));
-    const_cast<SfxFilter*>(pFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        OUString(), "private:factory/scalc*" );
+    pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocSh = new ScDocShell;
     SfxMedium* pMedium = new SfxMedium(aFileName, StreamMode::STD_READWRITE);

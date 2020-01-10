@@ -157,7 +157,7 @@ public:
     void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
     {
         OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-        mpContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( new ORowSetValueDecorator( sVal ) ) ) );
+        mpContext->maOperandStack.push( std::make_shared<ConstantValueExpression>( new ORowSetValueDecorator( sVal ) ) );
     }
 };
 
@@ -174,7 +174,7 @@ public:
     }
     void operator()( sal_Int32 n ) const
     {
-        mpContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( new ORowSetValueDecorator( n ) ) ) );
+        mpContext->maOperandStack.push( std::make_shared<ConstantValueExpression>( new ORowSetValueDecorator( n ) ) );
     }
 };
 
@@ -212,7 +212,7 @@ public:
         rNodeStack.pop();
 
         // create combined ExpressionNode
-        std::shared_ptr<ExpressionNode> pNode( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
+        auto pNode = std::make_shared<BinaryFunctionExpression>( meFunct, pFirstArg, pSecondArg );
         // check for constness
         rNodeStack.push( pNode );
     }
@@ -260,7 +260,7 @@ public:
         std::shared_ptr<ExpressionNode> pArg( std::move(rNodeStack.top()) );
         rNodeStack.pop();
 
-        rNodeStack.push( std::shared_ptr<ExpressionNode>( new UnaryFunctionExpression( pArg ) ) );
+        rNodeStack.push( std::make_shared<UnaryFunctionExpression>( pArg ) );
     }
 };
 

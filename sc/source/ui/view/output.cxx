@@ -1022,7 +1022,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
     Color aProtectedColor( rColorCfg.GetColorValue( svtools::CALCPROTECTEDBACKGROUND ).nColor );
-    std::shared_ptr<SvxBrushItem> pProtectedBackground( new SvxBrushItem( aProtectedColor, ATTR_BACKGROUND ) );
+    auto pProtectedBackground = std::make_shared<SvxBrushItem>( aProtectedColor, ATTR_BACKGROUND );
 
     // iterate through the rows to show
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)

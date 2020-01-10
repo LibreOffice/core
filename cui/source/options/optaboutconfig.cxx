@@ -577,7 +577,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
         OUString sPropertyType = m_xPrefBox->get_text(*m_xScratchIter, 2);
         OUString sPropertyValue = m_xPrefBox->get_text(*m_xScratchIter, 3);
 
-        std::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( pUserData->sPropertyPath, sPropertyName, Any( sPropertyValue ) ) );
+        auto pProperty  = std::make_shared<Prop_Impl>( pUserData->sPropertyPath, sPropertyName, Any( sPropertyValue ) );
         bool bSaveChanges = false;
 
         bool bOpenDialog = true;

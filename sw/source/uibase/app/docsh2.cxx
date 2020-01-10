@@ -1211,7 +1211,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_CLASSIFICATION_DIALOG:
         {
-            std::shared_ptr<svx::ClassificationDialog> xDialog(new svx::ClassificationDialog(GetView()->GetFrameWeld(), false));
+            auto xDialog = std::make_shared<svx::ClassificationDialog>(GetView()->GetFrameWeld(), false);
 
             SwWrtShell* pShell = GetWrtShell();
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
@@ -1226,10 +1226,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
         {
             SwWrtShell* pShell = GetWrtShell();
-            std::shared_ptr<svx::ClassificationDialog> xDialog(new svx::ClassificationDialog(GetView()->GetFrameWeld(), true, [pShell]()
+            auto xDialog = std::make_shared<svx::ClassificationDialog>(GetView()->GetFrameWeld(), true, [pShell]()
             {
                 pShell->SignParagraph();
-            }));
+            });
 
             std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
             xDialog->setupValues(aInput);
@@ -1265,8 +1265,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SfxViewShell* pViewShell = GetView() ? GetView() : SfxViewShell::Current();
                     SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
-                    std::shared_ptr<SwWatermarkDialog> xDlg(new SwWatermarkDialog(pViewShell->GetViewFrame()->GetWindow().GetFrameWeld(),
-                                                                                  rBindings));
+                    auto xDlg = std::make_shared<SwWatermarkDialog>(pViewShell->GetViewFrame()->GetWindow().GetFrameWeld(),
+                                                                                  rBindings);
                     weld::DialogController::runAsync(xDlg, [](sal_Int32 /*nResult*/){});
                 }
             }

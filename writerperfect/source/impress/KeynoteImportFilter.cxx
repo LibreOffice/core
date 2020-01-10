@@ -105,7 +105,8 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     if (!xInputStream.is())
         return OUString();
 
-    std::shared_ptr<librevenge::RVNGInputStream> input(new WPXSvInputStream(xInputStream));
+    std::shared_ptr<librevenge::RVNGInputStream> input
+        = std::make_shared<WPXSvInputStream>(xInputStream);
 
     /* Apple Keynote documents come in two variants:
      * * actual files (zip), only produced by Keynote 5 (at least with

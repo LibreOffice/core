@@ -938,7 +938,7 @@ private:
 template< typename ModelType >
 inline ModelType& EmbeddedControl::createModel()
 {
-    std::shared_ptr< ModelType > xModel( new ModelType );
+    auto xModel = std::make_shared<ModelType>();
     mxModel = xModel;
     xModel->setFormComponentMode();
     return *xModel;
@@ -947,7 +947,7 @@ inline ModelType& EmbeddedControl::createModel()
 template< typename ModelType, typename ParamType >
 inline ModelType& EmbeddedControl::createModel( const ParamType& rParam )
 {
-    std::shared_ptr< ModelType > xModel( new ModelType( rParam ) );
+    auto xModel = std::make_shared<ModelType>( rParam );
     mxModel = xModel;
     xModel->setFormComponentMode();
     return *xModel;

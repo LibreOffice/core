@@ -910,9 +910,8 @@ std::shared_ptr<Activity> createDrawingLayerAnimActivity(
 
     try
     {
-        std::shared_ptr<WakeupEvent> const pWakeupEvent(
-            new WakeupEvent( rContext.mrEventQueue.getTimer(),
-                             rContext.mrActivitiesQueue ) );
+        auto const pWakeupEvent = std::make_shared<WakeupEvent>( rContext.mrEventQueue.getTimer(),
+                             rContext.mrActivitiesQueue );
         pActivity.reset( new ActivityImpl( rContext, pWakeupEvent, pDrawShape ) );
         pWakeupEvent->setActivity( pActivity );
     }

@@ -237,7 +237,7 @@ SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx,
 
 void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
 {
-    std::shared_ptr< XMLTableTemplate > xPtr( new XMLTableTemplate );
+    auto xPtr = std::make_shared<XMLTableTemplate>();
     xPtr->swap( xTableTemplate );
     maTableTemplates[rsStyleName] = xPtr;
 }
@@ -370,7 +370,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, c
 {
     if( mxColumns.is() && (mnCurrentRow == -1) ) try
     {
-        std::shared_ptr< ColumnInfo > xInfo ( new ColumnInfo );
+        auto xInfo = std::make_shared<ColumnInfo>();
 
         sal_Int32 nRepeated = 1;
 

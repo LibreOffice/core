@@ -823,11 +823,11 @@ ViewLayerSharedPtr SlideView::createViewLayer( const basegfx::B2DRange& rLayerBo
     if( nNumLayers > LAYER_ULLAGE )
         pruneLayers();
 
-    std::shared_ptr<SlideViewLayer> xViewLayer( new SlideViewLayer(mpCanvas,
-                                                                     getTransformation(),
-                                                                     rLayerBounds,
-                                                                     maUserSize,
-                                                                     this) );
+    auto xViewLayer = std::make_shared<SlideViewLayer>(mpCanvas,
+                                                       getTransformation(),
+                                                       rLayerBounds,
+                                                       maUserSize,
+                                                       this);
     maViewLayers.push_back(xViewLayer);
 
     return xViewLayer;

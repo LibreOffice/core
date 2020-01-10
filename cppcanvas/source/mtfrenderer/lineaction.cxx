@@ -145,10 +145,10 @@ namespace cppcanvas
                                                              const CanvasSharedPtr&     rCanvas,
                                                              const OutDevState&         rState  )
         {
-            return std::shared_ptr<Action>( new LineAction( rStartPoint,
-                                                    rEndPoint,
-                                                    rCanvas,
-                                                    rState) );
+            return std::make_shared<LineAction>( rStartPoint,
+                                                 rEndPoint,
+                                                 rCanvas,
+                                                 rState);
         }
 
     }

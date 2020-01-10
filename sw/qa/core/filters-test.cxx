@@ -75,11 +75,11 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
-    std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
+    auto pFilter = std::make_shared<SfxFilter>(
         rFilter, OUString(), nFilterFlags,
         nClipboardID, OUString(), OUString(),
-        rUserData, OUString()));
-    const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
+        rUserData, OUString());
+    pFilter->SetVersion(nFilterVersion);
 
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);

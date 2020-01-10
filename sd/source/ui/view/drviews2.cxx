@@ -1608,7 +1608,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_CLASSIFICATION_DIALOG:
         {
-            std::shared_ptr<svx::ClassificationDialog> xDialog(new svx::ClassificationDialog(GetFrameWeld(), false, [](){} ));
+            auto xDialog = std::make_shared<svx::ClassificationDialog>(GetFrameWeld(), false, [](){} );
             ClassificationCollector aCollector(*this);
             aCollector.collect();
 

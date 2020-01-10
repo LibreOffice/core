@@ -124,7 +124,7 @@ void ScDPResultTree::add(
         if (itMem == rMembersValueNames.end())
         {
             // New member.  Insert it.
-            std::shared_ptr<MemberNode> pNode( new MemberNode);
+            auto pNode = std::make_shared<MemberNode>();
             std::pair<MembersType::iterator, bool> r =
                 rMembersValueNames.emplace(aUpperName, pNode);
 

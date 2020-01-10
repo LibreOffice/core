@@ -2137,12 +2137,12 @@ librdf_TypeConverter::extractResource_NoLock(
         const OString label(
             OUStringToOString(xBlankNode->getStringValue(),
             RTL_TEXTENCODING_UTF8) );
-        return std::shared_ptr<Resource>(new BlankNode(label));
+        return std::make_shared<BlankNode>(label);
     } else { // assumption: everything else is URI
         const OString uri(
             OUStringToOString(i_xResource->getStringValue(),
             RTL_TEXTENCODING_UTF8) );
-        return std::shared_ptr<Resource>(new URI(uri));
+        return std::make_shared<URI>(uri);
     }
 }
 
@@ -2225,7 +2225,7 @@ librdf_TypeConverter::extractNode_NoLock(
         type =
             OUStringToOString(xType->getStringValue(), RTL_TEXTENCODING_UTF8);
     }
-    return std::shared_ptr<Node>(new Literal(val, lang, type));
+    return std::make_shared<Literal>(val, lang, type);
 }
 
 // extract blank or URI or literal node - call without Mutex locked

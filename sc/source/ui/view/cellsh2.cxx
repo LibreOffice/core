@@ -888,13 +888,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     // cell range picker
                     vcl::Window* pWin = GetViewData()->GetActiveWin();
                     weld::Window* pParentWin = pWin ? pWin->GetFrameWeld() : nullptr;
-                    std::shared_ptr<SfxDialogController> xDlg(new ScValidationDlg(pParentWin, &aArgSet, pTabViewShell));
+                    auto xDlg = std::make_shared<ScValidationDlg>(pParentWin, &aArgSet, pTabViewShell);
                     ScValidationRegisteredDlg aRegisterThatDlgExists(pParentWin, xDlg);
 
                     short nResult = xDlg->run();
                     if ( nResult == RET_OK )
                     {
-                        const SfxItemSet* pOutSet = static_cast<ScValidationDlg*>(xDlg.get())->GetOutputItemSet();
+                        const SfxItemSet* pOutSet = xDlg->GetOutputItemSet();
 
                         if ( pOutSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
                             eMode = static_cast<ScValidationMode>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());

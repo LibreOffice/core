@@ -801,8 +801,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             // with a Frame, else
             if( bIsSimpleDrawingTextBox )
             {
-                std::shared_ptr<SvxMSDffShapeInfo> const xTmpRec(
-                        new SvxMSDffShapeInfo(0, pImpRec->nShapeId));
+                std::shared_ptr<SvxMSDffShapeInfo> const xTmpRec =
+                        std::make_shared<SvxMSDffShapeInfo>(0, pImpRec->nShapeId);
 
                 SvxMSDffShapeInfos_ById::const_iterator const it =
                     GetShapeInfos()->find(xTmpRec);

@@ -46,8 +46,8 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
         OUString(),
         OUString(),
         false,
-        std::shared_ptr<PageObjectProvider>(new DefaultPageObjectProvider()),
-        std::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
+        std::make_shared<DefaultPageObjectProvider>(),
+        std::make_shared<PagePreviewProvider>()));
     mrContainerAdapter.PutMasterPage(pDescriptor);
 }
 
@@ -147,18 +147,15 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate()
             mpLastAddedEntry->msTitle,
             OUString(),
             false,
-            std::shared_ptr<PageObjectProvider>(
-                new TemplatePageObjectProvider(mpLastAddedEntry->msPath)),
-            std::shared_ptr<PreviewProvider>(
-                new TemplatePreviewProvider(mpLastAddedEntry->msPath))));
+            std::make_shared<TemplatePageObjectProvider>(mpLastAddedEntry->msPath),
+            std::make_shared<TemplatePreviewProvider>(mpLastAddedEntry->msPath)));
         // For user supplied templates we use a different preview provider:
         // The preview in the document shows not only shapes on the master
         // page but also shapes on the foreground.  This is misleading and
         // therefore these previews are discarded and created directly from
         // the page objects.
         if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
-            pDescriptor->mpPreviewProvider = std::shared_ptr<PreviewProvider>(
-                new PagePreviewProvider());
+            pDescriptor->mpPreviewProvider = std::make_shared<PagePreviewProvider>();
 
         mrContainerAdapter.PutMasterPage(pDescriptor);
         ++mnIndex;

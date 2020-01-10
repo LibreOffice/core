@@ -563,8 +563,7 @@ std::shared_ptr<RendererPaneStyle>
             sPaneStyleName = sStyleName;
 
         // Create a new pane style object and initialize it with bitmaps.
-        std::shared_ptr<RendererPaneStyle> pStyle (
-            new RendererPaneStyle(mpTheme,sPaneStyleName));
+        auto pStyle = std::make_shared<RendererPaneStyle>(mpTheme,sPaneStyleName);
         iStyle = maRendererPaneStyles.emplace(rsResourceURL, pStyle).first;
     }
     if (iStyle != maRendererPaneStyles.end())

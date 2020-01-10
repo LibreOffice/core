@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         }
 
         SwView* pSourceView = xConfigItem->GetSourceView();
-        std::shared_ptr<SaveMonitor> xSaveMonitor(new SaveMonitor(m_xDialog.get()));
+        auto xSaveMonitor = std::make_shared<SaveMonitor>(m_xDialog.get());
         xSaveMonitor->m_xDocName->set_label(pSourceView->GetDocShell()->GetTitle(22));
         xSaveMonitor->m_xPrinter->set_label( INetURLObject( sPath ).getFSysPath( FSysStyle::Detect ) );
         m_bCancelSaving = false;

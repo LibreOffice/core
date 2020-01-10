@@ -471,8 +471,7 @@ namespace dxcanvas
             ::basegfx::B2IVector aPageSize(maPageSize);
             while(true)
             {
-                mpTexture = std::shared_ptr<canvas::ISurface>(
-                    new DXSurface(*this,aPageSize));
+                mpTexture = std::make_shared<DXSurface>(*this,aPageSize);
                 if(mpTexture->isValid())
                     break;
 
@@ -950,7 +949,7 @@ namespace dxcanvas
             if(mpTexture.use_count() == 1)
                 return mpTexture;
 
-            return std::shared_ptr<canvas::ISurface>( new DXSurface(*this,aSize) );
+            return std::make_shared<DXSurface>(*this,aSize);
         }
 
 

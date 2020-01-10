@@ -927,7 +927,7 @@ bool OTableController::checkColumns(bool _bNew)
         {
         case RET_YES:
         {
-            std::shared_ptr<OTableRow>  pNewRow(new OTableRow());
+            auto pNewRow = std::make_shared<OTableRow>();
             TOTypeInfoSP pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
             if ( !pTypeInfo.get() )
                 break;
@@ -1503,7 +1503,7 @@ sal_Int32 OTableController::getFirstEmptyRowPosition()
     if (!bFoundElem)
     {
         bool bReadRow = !isAddAllowed();
-        std::shared_ptr<OTableRow> pTabEdRow(new OTableRow());
+        auto pTabEdRow = std::make_shared<OTableRow>();
         pTabEdRow->SetReadOnly(bReadRow);
         nRet = m_vRowList.size();
         m_vRowList.push_back( pTabEdRow);

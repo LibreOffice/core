@@ -44,7 +44,7 @@ public:
 
 std::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const BitmapEx& rBitmap) const
 {
-    return std::shared_ptr<BitmapReplacement>(new DummyReplacement(rBitmap));
+    return std::make_shared<DummyReplacement>(rBitmap);
 }
 
 BitmapEx NoBitmapCompression::Decompress (const BitmapReplacement& rBitmapData) const

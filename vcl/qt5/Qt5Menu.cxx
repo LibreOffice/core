@@ -195,7 +195,7 @@ void Qt5Menu::ReinitializeActionGroup(unsigned nPos)
             && (pPrevItem->mpActionGroup == pNextItem->mpActionGroup))
         {
             std::shared_ptr<QActionGroup> pFirstActionGroup = pPrevItem->mpActionGroup;
-            std::shared_ptr<QActionGroup> pSecondActionGroup(new QActionGroup(nullptr));
+            auto pSecondActionGroup = std::make_shared<QActionGroup>(nullptr);
             pSecondActionGroup->setExclusive(true);
 
             auto actions = pFirstActionGroup->actions();

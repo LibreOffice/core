@@ -4204,7 +4204,7 @@ void XclImpSheetDrawing::ReadNote( XclImpStream& rStrm )
 void XclImpSheetDrawing::ReadTabChart( XclImpStream& rStrm )
 {
     OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF5 );
-    std::shared_ptr< XclImpChartObj > xChartObj( new XclImpChartObj( GetRoot(), true ) );
+    auto xChartObj = std::make_shared<XclImpChartObj>( GetRoot(), true );
     xChartObj->ReadChartSubStream( rStrm );
     // insert the chart as raw object without connected DFF data
     AppendRawObject( xChartObj );

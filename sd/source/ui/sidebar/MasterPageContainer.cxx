@@ -521,7 +521,7 @@ void MasterPageContainer::Implementation::LateInit()
         std::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
 
     mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
-        std::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
+        std::make_shared<MasterPageContainerFiller>(*this),
         5,
         50);
 

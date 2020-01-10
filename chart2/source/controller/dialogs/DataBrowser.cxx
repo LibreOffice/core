@@ -652,7 +652,7 @@ void DataBrowser::RenewTable()
 
     for (auto const& elemHeader : aHeaders)
     {
-        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( m_pColumnsWin, m_pColorsWin ));
+        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
         Reference< beans::XPropertySet > xSeriesProp( elemHeader.m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
@@ -1287,7 +1287,7 @@ void DataBrowser::RenewSeriesHeaders()
 
     for (auto const& elemHeader : aHeaders)
     {
-        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( m_pColumnsWin, m_pColorsWin ));
+        auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
         Reference< beans::XPropertySet > xSeriesProp(elemHeader.m_xDataSeries, uno::UNO_QUERY);
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&

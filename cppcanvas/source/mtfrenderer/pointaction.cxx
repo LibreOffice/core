@@ -160,7 +160,7 @@ namespace cppcanvas
                                                                const CanvasSharedPtr&     rCanvas,
                                                                const OutDevState&         rState )
         {
-            return std::shared_ptr<Action>( new PointAction( rPoint, rCanvas, rState ) );
+            return std::make_shared<PointAction>( rPoint, rCanvas, rState );
         }
 
         std::shared_ptr<Action> PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
@@ -168,7 +168,7 @@ namespace cppcanvas
                                                                const OutDevState&         rState,
                                                                const ::Color&             rColor    )
         {
-            return std::shared_ptr<Action>( new PointAction( rPoint, rCanvas, rState, rColor ) );
+            return std::make_shared<PointAction>( rPoint, rCanvas, rState, rColor );
         }
     }
 }

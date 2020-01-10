@@ -130,7 +130,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
          pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
          return std::shared_ptr<GDIMetaFile>();
 
-    std::shared_ptr<GDIMetaFile> xFile(new GDIMetaFile);
+    auto xFile = std::make_shared<GDIMetaFile>();
 
     ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->EnableOutput( false );

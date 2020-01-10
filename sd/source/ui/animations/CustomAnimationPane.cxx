@@ -1636,7 +1636,7 @@ void CustomAnimationPane::showOptions(const OString& rPage)
 {
     std::unique_ptr<STLPropertySet> xSet = createSelectionSet();
 
-    std::shared_ptr<CustomAnimationDialog> xDlg(new CustomAnimationDialog(GetFrameWeld(), std::move(xSet), rPage));
+    auto xDlg = std::make_shared<CustomAnimationDialog>(GetFrameWeld(), std::move(xSet), rPage);
 
     weld::DialogController::runAsync(xDlg, [xDlg, this](sal_Int32 nResult){
         if (nResult )

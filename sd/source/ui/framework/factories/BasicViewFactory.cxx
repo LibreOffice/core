@@ -275,7 +275,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
     FrameView* pFrameView,
     const bool bIsCenterPane)
 {
-    std::shared_ptr<ViewDescriptor> pDescriptor (new ViewDescriptor);
+    auto pDescriptor = std::make_shared<ViewDescriptor>();
 
     pDescriptor->mpViewShell = CreateViewShell(
         rxViewId,

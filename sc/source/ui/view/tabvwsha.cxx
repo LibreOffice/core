@@ -475,7 +475,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
-    std::shared_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+    auto pOldSet = std::make_shared<SfxItemSet>(pOldAttrs->GetItemSet());
     std::shared_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
@@ -542,7 +542,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
 
-    std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+    auto pRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
     pDlg->StartExecuteAsync([pDlg, pOldSet, pRequest, this](sal_Int32 nResult){

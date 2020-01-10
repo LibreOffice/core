@@ -227,8 +227,7 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
                             const OUString&                          rFilterOptions )
 {
     // container for metaformat
-    std::shared_ptr<PDFIProcessor> pSink(
-        new PDFIProcessor(xStatus, m_xContext));
+    auto pSink = std::make_shared<PDFIProcessor>(xStatus, m_xContext);
 
     bool bSuccess=false;
 

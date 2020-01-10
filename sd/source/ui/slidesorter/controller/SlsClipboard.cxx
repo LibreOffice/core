@@ -539,10 +539,10 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
         rOtherClipboard.maPagesToRemove.push_back(pDescriptor->GetPage());
 
         // Create the new transferable.
-        std::shared_ptr<SdTransferable::UserData> pNewTransferable (
-            new TransferableData(
+        std::shared_ptr<SdTransferable::UserData> pNewTransferable =
+            std::make_shared<TransferableData>(
                 pSlideSorterViewShell,
-                aRepresentatives));
+                aRepresentatives);
         pTransferable->SetWorkDocument(pTreeListBoxTransferable->GetSourceDoc()->AllocSdDrawDocument());
         //        pTransferable->SetView(&mrSlideSorter.GetView());
 

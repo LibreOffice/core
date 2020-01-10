@@ -125,7 +125,7 @@ private:
 template< typename ShapeT >
 std::shared_ptr<ShapeT> ShapeContainer::createShape()
 {
-    std::shared_ptr< ShapeT > xShape( new ShapeT( mrDrawing ) );
+    auto xShape = std::make_shared<ShapeT>( mrDrawing );
     maShapes.push_back( xShape );
     return xShape;
 }

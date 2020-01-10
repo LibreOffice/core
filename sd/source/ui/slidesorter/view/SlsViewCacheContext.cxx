@@ -77,7 +77,7 @@ const SdrPage* ViewCacheContext::GetPage (cache::CacheKey aKey)
 
 std::shared_ptr<std::vector<cache::CacheKey> > ViewCacheContext::GetEntryList (bool bVisible)
 {
-    std::shared_ptr<std::vector<cache::CacheKey> > pKeys (new std::vector<cache::CacheKey>);
+    auto pKeys = std::make_shared<std::vector<cache::CacheKey>>();
 
     model::PageEnumeration aPageEnumeration (
         bVisible

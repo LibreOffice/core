@@ -1616,8 +1616,8 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
 
                         const SwStartNode* pPrevStartNd =
                             GetPrevBoxStartNode( nTopRow, nStartCol );
-                        std::shared_ptr<HTMLTableCnts> xCnts(new HTMLTableCnts(
-                            m_pParser->InsertTableSection(pPrevStartNd)));
+                        auto xCnts = std::make_shared<HTMLTableCnts>(
+                            m_pParser->InsertTableSection(pPrevStartNd));
                         const std::shared_ptr<SwHTMLTableLayoutCnts> xCntsLayoutInfo =
                             xCnts->CreateLayoutInfo();
 

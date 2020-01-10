@@ -176,7 +176,7 @@ int MasterPageDescriptor::UpdatePageObject (
             // will create the real one.
             maSmallPreview = Image();
             maLargePreview = Image();
-            mpPreviewProvider = std::shared_ptr<PreviewProvider>(new PagePreviewProvider());
+            mpPreviewProvider = std::make_shared<PagePreviewProvider>();
         }
         else
         {

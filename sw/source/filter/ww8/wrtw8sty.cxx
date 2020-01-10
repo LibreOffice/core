@@ -1792,7 +1792,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
 
     for (const WW8_SepInfo & rSepInfo : aSects)
     {
-        std::shared_ptr<WW8_PdAttrDesc> const pAttrDesc(new WW8_PdAttrDesc);
+        auto pAttrDesc = std::make_shared<WW8_PdAttrDesc>();
         m_SectionAttributes.push_back(pAttrDesc);
 
         rWrt.SectionProperties( rSepInfo, pAttrDesc.get() );

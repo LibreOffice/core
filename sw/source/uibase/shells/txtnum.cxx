@@ -185,7 +185,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         if ( pPageItem )
             pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
 
-        std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+        auto pRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
 
         pDlg->StartExecuteAsync([aSet, pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){

@@ -317,7 +317,7 @@ void OTableHelper::refreshPrimaryKeys(::std::vector< OUString>& _rNames)
 
     if ( xResult.is() )
     {
-        std::shared_ptr<sdbcx::KeyProperties> pKeyProps(new sdbcx::KeyProperties(OUString(),KeyType::PRIMARY,0,0));
+        auto pKeyProps = std::make_shared<sdbcx::KeyProperties>(OUString(),KeyType::PRIMARY,0,0);
         OUString aPkName;
         bool bAlreadyFetched = false;
         const Reference< XRow > xRow(xResult,UNO_QUERY);

@@ -450,7 +450,7 @@ namespace
         void testXPDFParser()
         {
 #if HAVE_FEATURE_POPPLER
-            std::shared_ptr<TestSink> pSink( new TestSink() );
+            auto pSink = std::make_shared<TestSink>();
             CPPUNIT_ASSERT(
                 pdfi::xpdf_ImportFromFile(
                     m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),

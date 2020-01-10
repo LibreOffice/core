@@ -1391,11 +1391,11 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
         assert(implKey.getName().match("/IMPLEMENTATIONS/"));
         OUString name(
             implKey.getName().copy(RTL_CONSTASCII_LENGTH("/IMPLEMENTATIONS/")));
-        std::shared_ptr< Data::Implementation > impl(
-            new Data::Implementation(
+        std::shared_ptr< Data::Implementation > impl =
+            std::make_shared<Data::Implementation>(
                 name, readLegacyRdbString(uri, implKey, "UNO/ACTIVATOR"),
                 readLegacyRdbString(uri, implKey, "UNO/LOCATION"), "", "", "",
-                css::uno::Reference< css::uno::XComponentContext >(), uri));
+                css::uno::Reference< css::uno::XComponentContext >(), uri);
         if (!data_.namedImplementations.emplace(name, impl).second)
         {
             throw css::registry::InvalidRegistryException(
@@ -1520,8 +1520,8 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
     }
     css::uno::Reference< css::lang::XComponent > comp(
         factoryInfo, css::uno::UNO_QUERY);
-    std::shared_ptr< Data::Implementation > impl(
-        new Data::Implementation(name, f1, f2, comp));
+    std::shared_ptr< Data::Implementation > impl =
+        std::make_shared<Data::Implementation>(name, f1, f2, comp);
     Data extra;
     if (!name.isEmpty()) {
         extra.namedImplementations.emplace(name, impl);
