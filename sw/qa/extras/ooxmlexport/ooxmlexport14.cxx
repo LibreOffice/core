@@ -35,6 +35,14 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
+{
+    //There was the charts on each other, because their horizontal and vertical position was 0!
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPathContent(p_XmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor/wp:positionH/wp:posOffset", "4445");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
 {
     //the original tdf87569 sample has vml shapes...

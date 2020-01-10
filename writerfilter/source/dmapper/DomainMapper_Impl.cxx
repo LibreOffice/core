@@ -6171,6 +6171,10 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
 
     // Update the shape properties if it is embedded object.
     if(m_xEmbedded.is()){
+        if (m_pGraphicImport->GetXShapeObject())
+                m_pGraphicImport->GetXShapeObject()->setPosition(
+                    m_pGraphicImport->GetGraphicObjectPosition());
+
         uno::Reference<drawing::XShape> xShape = m_pGraphicImport->GetXShapeObject();
         UpdateEmbeddedShapeProps(xShape);
         if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
