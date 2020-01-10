@@ -68,7 +68,7 @@ SmViewShell * SmGetActiveView();
 bool    IsItalic( const vcl::Font &rFont );
 bool    IsBold( const vcl::Font &rFont );
 
-class SmFace : public vcl::Font
+class SmFace final : public vcl::Font
 {
     long    nBorderWidth;
 

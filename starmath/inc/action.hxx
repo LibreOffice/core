@@ -25,7 +25,7 @@
 class SmDocShell;
 
 
-class SmFormatAction: public SfxUndoAction
+class SmFormatAction final : public SfxUndoAction
 {
     SmDocShell  *pDoc;
     SmFormat const    aOldFormat;

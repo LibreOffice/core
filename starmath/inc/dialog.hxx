@@ -38,7 +38,7 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont);
 
 /**************************************************************************/
 
-class SmPrintOptionsTabPage : public SfxTabPage
+class SmPrintOptionsTabPage final : public SfxTabPage
 {
     std::unique_ptr<weld::CheckButton>      m_xTitle;
     std::unique_ptr<weld::CheckButton>      m_xText;
@@ -65,7 +65,7 @@ public:
 
 /**************************************************************************/
 
-class SmShowFont : public weld::CustomWidgetController
+class SmShowFont final : public weld::CustomWidgetController
 {
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
@@ -105,7 +105,7 @@ public:
 
 /**************************************************************************/
 
-class SmFontSizeDialog : public weld::GenericDialogController
+class SmFontSizeDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::MetricSpinButton> m_xBaseSize;
     std::unique_ptr<weld::MetricSpinButton> m_xTextSize;
@@ -127,7 +127,7 @@ public:
 
 /**************************************************************************/
 
-class SmFontTypeDialog : public weld::GenericDialogController
+class SmFontTypeDialog final : public weld::GenericDialogController
 {
     VclPtr<OutputDevice> pFontListDev;
 
@@ -182,7 +182,7 @@ public:
     }
 };
 
-class SmDistanceDialog : public weld::GenericDialogController
+class SmDistanceDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Frame> m_xFrame;
     std::unique_ptr<weld::Label> m_xFixedText1;
@@ -222,7 +222,7 @@ public:
 /**************************************************************************/
 
 
-class SmAlignDialog : public weld::GenericDialogController
+class SmAlignDialog final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xLeft;
     std::unique_ptr<weld::RadioButton> m_xCenter;
@@ -241,7 +241,7 @@ public:
 
 /**************************************************************************/
 
-class SmShowSymbolSet : public weld::CustomWidgetController
+class SmShowSymbolSet final : public weld::CustomWidgetController
 {
     Size m_aOldSize;
     SymbolPtrVec_t aSymbolSet;
@@ -284,7 +284,7 @@ public:
     void SetDblClickHdl(const Link<SmShowSymbolSet&,void>& rLink) { aDblClickHdlLink = rLink; }
 };
 
-class SmShowSymbol : public weld::CustomWidgetController
+class SmShowSymbol final : public weld::CustomWidgetController
 {
 private:
     vcl::Font m_aFont;
@@ -317,7 +317,7 @@ public:
     void    SetDblClickHdl(const Link<SmShowSymbol&,void> &rLink) { aDblClickHdlLink = rLink; }
 };
 
-class SmSymbolDialog : public weld::GenericDialogController
+class SmSymbolDialog final : public weld::GenericDialogController
 {
     SmViewShell        &rViewSh;
     SmSymbolManager    &rSymbolMgr;
@@ -357,7 +357,7 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbolPos);
 };
 
-class SmShowChar : public weld::CustomWidgetController
+class SmShowChar final : public weld::CustomWidgetController
 {
 private:
     OUString m_aText;
@@ -386,7 +386,7 @@ public:
     const vcl::Font& GetFont() const { return m_aFont; }
 };
 
-class SmSymDefineDialog : public weld::GenericDialogController
+class SmSymDefineDialog final : public weld::GenericDialogController
 {
     VclPtr<VirtualDevice> m_xVirDev;
     SmSymbolManager m_aSymbolMgrCopy;

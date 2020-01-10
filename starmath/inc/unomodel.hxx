@@ -43,7 +43,7 @@ public:
 };
 
 
-class SmModel : public SfxBaseModel,
+class SmModel final : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public css::lang::XServiceInfo,
                 public css::view::XRenderable,
@@ -51,7 +51,7 @@ class SmModel : public SfxBaseModel,
                 public oox::FormulaImportBase
 {
     std::unique_ptr<SmPrintUIOptions> m_pPrintUIOptions;
-protected:
+
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
 public:
