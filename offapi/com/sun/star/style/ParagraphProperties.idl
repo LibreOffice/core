@@ -334,13 +334,15 @@ published service ParagraphProperties
          */
         [optional, property] short ParaHyphenationMaxHyphens;
 
-        /** specifies the maximum number of characters to remain before the
+        /** specifies the minimum number of characters to remain before the
             hyphen character (when hyphenation is applied).
+            @note Confusingly it is named Max but specifies a minimum.
          */
         [optional, property] short ParaHyphenationMaxLeadingChars;
 
-        /** specifies the maximum number of characters to remain after the
+        /** specifies the minimum number of characters to remain after the
             hyphen character (when hyphenation is applied).
+            @note Confusingly it is named Max but specifies a minimum.
          */
         [optional, property] short ParaHyphenationMaxTrailingChars;
 
