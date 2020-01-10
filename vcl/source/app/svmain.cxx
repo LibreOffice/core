@@ -484,6 +484,15 @@ void DeInitVCL()
     pSVData->maCtrlData.mpDisclosureMinus.reset();
     pSVData->mpDefaultWin.disposeAndClear();
 
+#if defined _WIN32
+    // See GetSystemClipboard (vcl/source/treelist/transfer2.cxx):
+    if (auto const comp = css::uno::Reference<css::lang::XComponent>(
+            pSVData->m_xSystemClipboard, css::uno::UNO_QUERY))
+    {
+        comp->dispose();
+    }
+#endif
+
 #ifndef NDEBUG
     DbgGUIDeInitSolarMutexCheck();
 #endif

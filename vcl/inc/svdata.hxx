@@ -102,6 +102,8 @@ class UITestLogger;
 #define SV_ICON_ID_DATABASE                            12
 #define SV_ICON_ID_FORMULA                             13
 
+namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
+
 namespace vcl
 {
     class DisplayConnectionDispatch;
@@ -371,6 +373,10 @@ struct ImplSVData
     std::unordered_map< int, OUString > maPaperNames;
 
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
+
+#if defined _WIN32
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_xSystemClipboard;
+#endif
 
     Link<LinkParamNone*,void> maDeInitHook;
 

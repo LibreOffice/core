@@ -21,6 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
@@ -32,6 +33,7 @@
 #include <svl/urlbmk.hxx>
 #include <vcl/transfer.hxx>
 
+#include <svdata.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -462,6 +464,26 @@ void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 
 Reference<XClipboard> GetSystemClipboard()
 {
+    // On Windows, the css.datatransfer.clipboard.SystemClipboard UNO service is implemented as a
+    // single-instance service (sysdtrans_component_getFactory,
+    // dtrans/source/win32/clipb/wcbentry.cxx) that needs timely disposing to join a spawned thread
+    // (done in DeInitVCL, vcl/source/app/svmain.cxx), while on other platforms it is implemented as
+    // a mutli-instance service (ClipboardFactory, vcl/source/components/dtranscomp.cxx) so we
+    // should not hold on to a single instance here:
+#if defined _WIN32
+    DBG_TESTSOLARMUTEX();
+    auto const data = ImplGetSVData();
+    if (!data->m_xSystemClipboard.is())
+    {
+        try
+        {
+            data->m_xSystemClipboard = css::datatransfer::clipboard::SystemClipboard::create(
+                comphelper::getProcessComponentContext());
+        }
+        catch (DeploymentException const &) {}
+    }
+    return data->m_xSystemClipboard;
+#else
     Reference<XClipboard> xClipboard;
     try
     {
@@ -470,6 +492,7 @@ Reference<XClipboard> GetSystemClipboard()
     }
     catch (DeploymentException const &) {}
     return xClipboard;
+#endif
 }
 
 Reference<XClipboard> GetSystemPrimarySelection()
