@@ -1530,12 +1530,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 sal_Int32 nColor = 0;
                 if( getColorFromId(nIntValue, nColor) )
+                {
                     rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
+                    rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
+                }
             }
             // RTF import uses the actual color value
             else if( IsRTFImport() )
             {
                 rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nIntValue ));
+                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nIntValue ));
             }
         }
         break;
