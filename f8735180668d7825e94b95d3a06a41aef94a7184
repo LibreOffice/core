@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cba2331_df05d08e",
+        "filename": "desktop/scripts/unopkg.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T14:31:58Z",
+      "side": 1,
+      "message": "\"$@\"",
+      "range": {
+        "startLine": 59,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 13
+      },
+      "revId": "f8735180668d7825e94b95d3a06a41aef94a7184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d8bbde5_44ae4296",
+        "filename": "desktop/scripts/unopkg.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T14:31:58Z",
+      "side": 1,
+      "message": "Better use\n\n  printf \u0027%s\u0027 \"$*\"\n\n(in case $@ starts off with strings that could be mistaken as options by echo(1)).  Even better, use some\n\n  for arg in \"$@\"\n\nloop and check for an \"-env:UserInstallation\u003d\" prefix, to avoid unintentional mismatches.",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 11
+      },
+      "revId": "f8735180668d7825e94b95d3a06a41aef94a7184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2650ab85_c17b1548",
+        "filename": "desktop/scripts/unopkg.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T14:31:58Z",
+      "side": 1,
+      "message": "Any specific reason to explicitly use a qualified /bin/... here?",
+      "range": {
+        "startLine": 68,
+        "startChar": 27,
+        "endLine": 68,
+        "endChar": 38
+      },
+      "revId": "f8735180668d7825e94b95d3a06a41aef94a7184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "555752e9_bb423ced",
+        "filename": "desktop/scripts/unopkg.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T14:31:58Z",
+      "side": 1,
+      "message": "* \"$@\"\n\n* the \u0027...\u0027 should be redundant, but $temp_user_profile should be quoted with \"...\"",
+      "range": {
+        "startLine": 69,
+        "startChar": 15,
+        "endLine": 69,
+        "endChar": 67
+      },
+      "revId": "f8735180668d7825e94b95d3a06a41aef94a7184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31183e09_9854de92",
+        "filename": "desktop/scripts/unopkg.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T14:31:58Z",
+      "side": 1,
+      "message": "\"$temp_user_profile\"",
+      "range": {
+        "startLine": 117,
+        "startChar": 11,
+        "endLine": 117,
+        "endChar": 29
+      },
+      "revId": "f8735180668d7825e94b95d3a06a41aef94a7184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b0e216f_a93b2d14",
+        "filename": "desktop/scripts/unopkg.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-10T14:31:58Z",
+      "side": 1,
+      "message": "add back newline at end of file",
+      "revId": "f8735180668d7825e94b95d3a06a41aef94a7184",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
