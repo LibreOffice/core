@@ -163,6 +163,7 @@ private:
     DECL_LINK(BackHdl_Impl, weld::Button&, void);
     DECL_LINK(ApplyHdl_Impl, weld::Button&, void);
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(HelpHdl_Impl, weld::Widget&, bool);
     void SelectHdl_Impl();
 
     virtual short run() override;

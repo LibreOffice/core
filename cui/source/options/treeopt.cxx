@@ -683,6 +683,22 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, void)
     }
 }
 
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, HelpHdl_Impl, weld::Widget&, bool)
+{
+    Help* pHelp = Application::GetHelp();
+    if (pHelp && xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
+    {
+        OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
+        if (pPageInfo->m_xPage)
+        {
+            OString sHelpId(pPageInfo->m_xPage->GetHelpId());
+            pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), m_xDialog.get());
+            return false;
+        }
+    }
+    return true;
+}
+
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, weld::Button&, void)
 {
     if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
@@ -748,6 +764,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     xBackPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
     xApplyPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, ApplyHdl_Impl ) );
     xOkPB->connect_clicked( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
+    m_xDialog->connect_help( LINK( this, OfaTreeOptionsDialog, HelpHdl_Impl ) );
 }
 
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
