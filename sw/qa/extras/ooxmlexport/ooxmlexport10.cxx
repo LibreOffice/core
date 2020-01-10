@@ -215,11 +215,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400Percen
     CPPUNIT_ASSERT_DOUBLES_EQUAL( -400.f, getProperty<float>(getRun(xPara, 2, "Subscript"), "CharEscapement"), 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFontEsc, "test_tdf120412.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontEsc, "test_tdf120412.docx")
 {
     xmlDocPtr pXmlDoc =parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
     // Superscript should be raised by 100% (11pt). Was 110% (12pt)
@@ -372,13 +370,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     CPPUNIT_ASSERT(aTocString.startsWithIgnoreAsciiCase( "15" ) );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo73389,"fdo73389.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
 {
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The recent fix uses variable width.
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
+
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","pct");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","5000");
 }
@@ -595,12 +592,10 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf116194, "tdf116194.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
 {
     // The problem was that the importer lost consecutive tables with w:gridBefore
     xmlDocPtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
 }
 
