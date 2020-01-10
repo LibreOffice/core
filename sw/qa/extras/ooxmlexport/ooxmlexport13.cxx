@@ -452,12 +452,11 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
                              getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
     // We need to make sure we don't export the text itself next to the input list field
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 5);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
 }
@@ -472,12 +471,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(24188), frameRect.Width);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
 {
     // Make sure the table width is 4000
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tblPr/w:tblW", "w", "4000");
 }
 
@@ -505,11 +502,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
                 "Er horte leise Schritte hinter sich. Das bedeutete nichts Gutes. Wer wurde ihm ");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextInput, "textinput.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+
 
     // test the exported DOCX
 
@@ -597,11 +593,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")
 }
 
 //tdf#125298: fix charlimit restrictions in bookmarknames and field references if they contain non-ascii characters
-DECLARE_OOXMLEXPORT_TEST(testTdf125298, "tdf125298_crossreflink_nonascii_charlimit.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125298, "tdf125298_crossreflink_nonascii_charlimit.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
     // check whether test file keeps non-ascii values or not
     OUString bookmarkName1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name");
     CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8("\u00e1rv\u00edzt\u0171r\u0151_t\u00fck\u00f6rf\u00far\u00f3g\u00e9p"), bookmarkName1);
@@ -709,11 +703,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
                          aGeometry["TextPreRotateAngle"].get<sal_Int32>());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf125518, "tdf125518.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125518, "tdf125518.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+
 
     // First diagram is anchored
     OUString anchorName = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:drawing/wp:anchor/wp:docPr", "name");
@@ -860,11 +853,10 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(u"őőőőőőőőőőőűűűű"), getProperty<OUString>(xPropertySet, "Label"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127116, "tdf127116.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127116, "tdf127116.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink", "anchor");
@@ -880,11 +872,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
     assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='#bookmark']", "TargetMode");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127362, "tdf127362.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     xmlDocPtr pXmlRels = parseExport("word/_rels/document.xml.rels");
     if (!pXmlRels)
@@ -895,66 +885,55 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127362, "tdf127362.odt")
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127605, "tdf127605.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", "anchor");
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127732, "internal_hyperlink_frame.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", "anchor");
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127733, "internal_hyperlink_ole.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127733, "internal_hyperlink_ole.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", "anchor");
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127734, "internal_hyperlink_region.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127734, "internal_hyperlink_region.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", "anchor");
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127735, "internal_hyperlink_table.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127735, "internal_hyperlink_table.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", "anchor");
     CPPUNIT_ASSERT_EQUAL(anchor, bookmarkName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123628, "tdf123628.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123628, "tdf123628.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
 
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
@@ -983,12 +962,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='VisitedInternetLink']/w:name", "val", "FollowedHyperlink");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127579, "tdf127579.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127579, "tdf127579.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
 }
 
