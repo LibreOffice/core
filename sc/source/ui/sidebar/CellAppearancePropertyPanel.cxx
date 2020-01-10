@@ -21,6 +21,8 @@
 #include <sc.hrc>
 #include <bitmaps.hlst>
 #include <sfx2/bindings.hxx>
+#include <sfx2/weldutils.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -34,8 +36,8 @@
 using namespace css;
 using namespace css::uno;
 
-const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
-const char UNO_LINESTYLE[] = ".uno:LineStyle";
+const char SETBORDERSTYLE[] = "SetBorderStyle";
+const char LINESTYLE[] = "LineStyle";
 
 // namespace open
 
@@ -45,7 +47,17 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
+:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame, true),
+
+    mxTBCellBorder(m_xBuilder->weld_toolbar("cellbordertype")),
+    mxTBCellBackground(m_xBuilder->weld_toolbar("cellbackgroundcolor")),
+    mxBackColorDispatch(new ToolbarUnoDispatcher(*mxTBCellBackground, rxFrame)),
+    mxTBLineStyle(m_xBuilder->weld_toolbar("borderlinestyle")),
+    mxTBLineColor(m_xBuilder->weld_toolbar("borderlinecolor")),
+    mxLineColorDispatch(new ToolbarUnoDispatcher(*mxTBLineColor, rxFrame)),
+
+    mbCellBorderPopoverCreated(false),
+    mbLinePopoverCreated(false),
 
     maLineStyleControl(SID_FRAME_LINESTYLE, *pBindings, *this),
     maBorderOuterControl(SID_ATTR_BORDER_OUTER, *pBindings, *this),
@@ -55,15 +67,16 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maBorderBLTRControl(SID_ATTR_BORDER_DIAG_BLTR, *pBindings, *this),
 
     maIMGCellBorder(StockImage::Yes, RID_BMP_CELL_BORDER),
-    maIMGLineStyle1(StockImage::Yes, RID_BMP_LINE_STYLE1),
-    maIMGLineStyle2(StockImage::Yes, RID_BMP_LINE_STYLE2),
-    maIMGLineStyle3(StockImage::Yes, RID_BMP_LINE_STYLE3),
-    maIMGLineStyle4(StockImage::Yes, RID_BMP_LINE_STYLE4),
-    maIMGLineStyle5(StockImage::Yes, RID_BMP_LINE_STYLE5),
-    maIMGLineStyle6(StockImage::Yes, RID_BMP_LINE_STYLE6),
-    maIMGLineStyle7(StockImage::Yes, RID_BMP_LINE_STYLE7),
-    maIMGLineStyle8(StockImage::Yes, RID_BMP_LINE_STYLE8),
-    maIMGLineStyle9(StockImage::Yes, RID_BMP_LINE_STYLE9),
+    msIMGCellBorder(RID_BMP_CELL_BORDER),
+    msIMGLineStyle1(RID_BMP_LINE_STYLE1),
+    msIMGLineStyle2(RID_BMP_LINE_STYLE2),
+    msIMGLineStyle3(RID_BMP_LINE_STYLE3),
+    msIMGLineStyle4(RID_BMP_LINE_STYLE4),
+    msIMGLineStyle5(RID_BMP_LINE_STYLE5),
+    msIMGLineStyle6(RID_BMP_LINE_STYLE6),
+    msIMGLineStyle7(RID_BMP_LINE_STYLE7),
+    msIMGLineStyle8(RID_BMP_LINE_STYLE8),
+    msIMGLineStyle9(RID_BMP_LINE_STYLE9),
 
     mnInWidth(0),
     mnOutWidth(0),
@@ -85,15 +98,9 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mbInnerBorder(false),
     mbDiagTLBR(false),
     mbDiagBLTR(false),
-    mxCellLineStylePopup(),
-    mxCellBorderStylePopup(),
     maContext(),
     mpBindings(pBindings)
 {
-    get(mpTBCellBorder, "cellbordertype");
-    get(mpTBLineStyle,  "borderlinestyle");
-    get(mpTBLineColor,  "borderlinecolor");
-
     Initialize();
 }
 
@@ -104,12 +111,15 @@ CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 
 void CellAppearancePropertyPanel::dispose()
 {
-    mpTBCellBorder.clear();
-    mpTBLineStyle.clear();
-    mpTBLineColor.clear();
+    mxCellBorderPopoverContainer.reset();
+    mxTBCellBorder.reset();
+    mxBackColorDispatch.reset();
+    mxTBCellBackground.reset();
+    mxLinePopoverContainer.reset();
+    mxTBLineStyle.reset();
+    mxLineColorDispatch.reset();
+    mxTBLineColor.reset();
 
-    mxCellBorderStylePopup.disposeAndClear();
-    mxCellLineStylePopup.disposeAndClear();
     maLineStyleControl.dispose();
     maBorderOuterControl.dispose();
     maBorderInnerControl.dispose();
@@ -122,47 +132,56 @@ void CellAppearancePropertyPanel::dispose()
 
 void CellAppearancePropertyPanel::Initialize()
 {
-    const sal_uInt16 nIdBorderType  = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
-    mpTBCellBorder->SetItemImage( nIdBorderType, maIMGCellBorder );
-    mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | ToolBoxItemBits::DROPDOWNONLY );
-    Link<ToolBox *, void> aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
-    mpTBCellBorder->SetDropdownClickHdl ( aLink );
-    mpTBCellBorder->SetSelectHdl ( aLink );
+    mxTBCellBorder->set_item_icon_name(SETBORDERSTYLE, msIMGCellBorder);
+    mxCellBorderPopoverContainer.reset(new ToolbarPopupContainer(mxTBCellBorder.get()));
+    mxTBCellBorder->set_item_popover(SETBORDERSTYLE, mxCellBorderPopoverContainer->getTopLevel());
+    mxTBCellBorder->connect_clicked(LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl));
+    mxTBCellBorder->connect_menu_toggled(LINK(this, CellAppearancePropertyPanel, TbxCellBorderMenuHdl));
 
-    const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
-    mpTBLineStyle->SetItemImage( nIdBorderLineStyle, maIMGLineStyle1 );
-    mpTBLineStyle->SetItemBits( nIdBorderLineStyle, mpTBLineStyle->GetItemBits( nIdBorderLineStyle ) | ToolBoxItemBits::DROPDOWNONLY );
-    aLink = LINK(this, CellAppearancePropertyPanel, TbxLineStyleSelectHdl);
-    mpTBLineStyle->SetDropdownClickHdl ( aLink );
-    mpTBLineStyle->SetSelectHdl ( aLink );
-    mpTBLineStyle->Disable();
+    mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle1);
+    mxLinePopoverContainer.reset(new ToolbarPopupContainer(mxTBLineStyle.get()));
+    mxTBLineStyle->set_item_popover(LINESTYLE, mxLinePopoverContainer->getTopLevel());
+    mxTBLineStyle->connect_clicked(LINK(this, CellAppearancePropertyPanel, TbxLineStyleSelectHdl));
+    mxTBLineStyle->connect_menu_toggled(LINK(this, CellAppearancePropertyPanel, TbxLineStyleMenuHdl));
+    mxTBLineStyle->set_sensitive(false);
 
-    mpTBLineColor->Disable();
+    mxTBLineColor->set_sensitive(false);
 }
 
-IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, const OString&, void)
 {
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if (aCommand == UNO_SETBORDERSTYLE)
-    {
-        if (!mxCellBorderStylePopup)
-            mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(GetBindings()->GetDispatcher());
-        mxCellBorderStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
-    }
+    mxTBCellBorder->set_menu_item_active(SETBORDERSTYLE, !mxTBCellBorder->get_menu_item_active(SETBORDERSTYLE));
 }
 
-IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderMenuHdl, const OString&, void)
 {
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if (aCommand == UNO_LINESTYLE)
+    if (!mxTBCellBorder->get_menu_item_active(SETBORDERSTYLE))
+        return;
+    if (!mbCellBorderPopoverCreated)
     {
-        if (!mxCellLineStylePopup)
-            mxCellLineStylePopup = VclPtr<CellLineStylePopup>::Create(GetBindings()->GetDispatcher());
-        mxCellLineStylePopup->SetLineStyleSelect(mnOutWidth, mnInWidth, mnDistance);
-        mxCellLineStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
+        mxCellBorderPopoverContainer->setPopover(std::make_unique<CellBorderStylePopup>(mxTBCellBorder.get(), SETBORDERSTYLE, GetBindings()->GetDispatcher()));
+        mbCellBorderPopoverCreated = true;
     }
+    mxCellBorderPopoverContainer->getPopover()->GrabFocus();
+}
+
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, const OString&, void)
+{
+    mxTBLineStyle->set_menu_item_active(LINESTYLE, !mxTBLineStyle->get_menu_item_active(LINESTYLE));
+}
+
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleMenuHdl, const OString&, void)
+{
+    if (!mxTBLineStyle->get_menu_item_active(LINESTYLE))
+        return;
+    if (!mbLinePopoverCreated)
+    {
+        mxLinePopoverContainer->setPopover(std::make_unique<CellLineStylePopup>(mxTBLineStyle.get(), LINESTYLE, GetBindings()->GetDispatcher()));
+        mbLinePopoverCreated = true;
+    }
+    auto pPopup = static_cast<CellLineStylePopup*>(mxLinePopoverContainer->getPopover());
+    pPopup->SetLineStyleSelect(mnOutWidth, mnInWidth, mnDistance);
+    pPopup->GrabFocus();
 }
 
 VclPtr<vcl::Window> CellAppearancePropertyPanel::Create (
@@ -363,37 +382,35 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
 void CellAppearancePropertyPanel::SetStyleIcon()
 {
-    const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
-
     //FIXME: update for new line border possibilities
     if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == 0 && mnDistance == 0)    //1
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle1);
     else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == 0 && mnDistance == 0) //2
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle2);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle2);
     else if(mnOutWidth == DEF_LINE_WIDTH_3 && mnInWidth == 0 && mnDistance == 0) //3
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle3);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle3);
     else if(mnOutWidth == DEF_LINE_WIDTH_4 && mnInWidth == 0 && mnDistance == 0) //4
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle4);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle4);
     else if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_1) //5
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle5);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle5);
     else if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_2) //6
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle6);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle6);
     else if(mnOutWidth == DEF_LINE_WIDTH_1 && mnInWidth == DEF_LINE_WIDTH_2 && mnDistance == DEF_LINE_WIDTH_1) //7
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle7);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle7);
     else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_2) //8
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle8);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle8);
     else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == DEF_LINE_WIDTH_2 && mnDistance == DEF_LINE_WIDTH_2) //9
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle9);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle9);
     else
-        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
+        mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle1);
 }
 
 void CellAppearancePropertyPanel::UpdateControlState()
 {
     if(mbOuterBorder || mbInnerBorder || mbDiagTLBR || mbDiagBLTR)
     {
-        mpTBLineColor->Enable();
-        mpTBLineStyle->Enable();
+        mxTBLineColor->set_sensitive(true);
+        mxTBLineStyle->set_sensitive(true);
 
         //set line style state
         if( mbBorderStyleAvailable && !mbDiagTLBR && !mbDiagBLTR )
@@ -454,8 +471,8 @@ void CellAppearancePropertyPanel::UpdateControlState()
     }
     else
     {
-        mpTBLineColor->Disable();
-        mpTBLineStyle->Disable();
+        mxTBLineColor->set_sensitive(false);
+        mxTBLineStyle->set_sensitive(false);
     }
 }
 
@@ -463,18 +480,13 @@ void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bL
 {
     const Size aBmpSize = maIMGCellBorder.GetBitmapEx().GetSizePixel();
 
-    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
-            DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
-    pVirDev->SetOutputSizePixel(aBmpSize);
-    pVirDev->SetBackground(COL_TRANSPARENT);
-    pVirDev->Erase();
-    pVirDev->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
-    pVirDev->SetFillColor(COL_BLACK);
-
-    const int btnId = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
-
-    if(aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
+    if (aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
     {
+        ScopedVclPtr<VirtualDevice> pVirDev(mxTBCellBorder->create_virtual_device());
+        pVirDev->SetOutputSizePixel(aBmpSize);
+        pVirDev->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
+        pVirDev->SetFillColor(COL_BLACK);
+        pVirDev->DrawImage(Point(0, 0), maIMGCellBorder);
         Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
         if(bLeft)
             pVirDev->DrawLine( aTL,aBL );
@@ -488,10 +500,10 @@ void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bL
             pVirDev->DrawLine( aVT,aVB );
         if(bHor)
             pVirDev->DrawLine( aHL,aHR );
-        mpTBCellBorder->SetItemOverlayImage( btnId, Image( pVirDev->GetBitmapEx(Point(0,0), aBmpSize) ) );
+        mxTBCellBorder->set_item_image(SETBORDERSTYLE, pVirDev);
     }
-
-    mpTBCellBorder->SetItemImage( btnId, maIMGCellBorder );
+    else
+        mxTBCellBorder->set_item_icon_name(SETBORDERSTYLE, msIMGCellBorder);
 }
 // namespace close
 
