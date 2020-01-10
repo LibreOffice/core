@@ -1712,6 +1712,21 @@ DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSw
 {
 }
 
+/**
+ * Checks if rStart..rEnd mark a range that makes sense to copy.
+ *
+ * bCopyText means that an empty range is OK, since paragraph-anchored objects may present.
+ */
+static bool IsEmptyRange(const SwPosition& rStart, const SwPosition& rEnd, bool bCopyText)
+{
+    bool bEmptyRange = rStart >= rEnd;
+    if (bCopyText)
+    {
+        bEmptyRange = rStart > rEnd;
+    }
+    return bEmptyRange;
+}
+
 // Copy an area into this document or into another document
 bool
 DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos, bool bCopyText ) const
@@ -1722,7 +1737,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
     // Catch if there's no copy to do
-    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) )
+    if (!rPam.HasMark() || (IsEmptyRange(*pStt, *pEnd, bCopyText) && !bColumnSel))
         return false;
 
     // Prevent copying in Flys that are anchored in the area
@@ -4417,7 +4432,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwPosition *const pEnd = rPam.End();
 
     // Catch when there's no copy to do.
-    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
+    if (!rPam.HasMark() || (IsEmptyRange(*pStt, *pEnd, bCopyText) && !bColumnSel) ||
         //JP 29.6.2001: 88963 - don't copy if inspos is in region of start to end
         //JP 15.11.2001: don't test inclusive the end, ever exclusive
         ( pDoc == &m_rDoc && *pStt <= rPos && rPos < *pEnd ))

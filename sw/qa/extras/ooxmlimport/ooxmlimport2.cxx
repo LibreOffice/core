@@ -255,6 +255,7 @@ DECLARE_OOXMLIMPORT_TEST(testTextCopy, "text-copy.docx")
 {
     // The document has a header on the second page that is copied as part of the import process.
     // The header has a single paragraph: make sure shapes anchored to it are not lost.
+    // Note that the single paragraph itself has no text portions.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
