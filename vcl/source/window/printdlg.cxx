@@ -566,6 +566,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     , mxNupOrder(new ShowNupOrderWindow)
     , mxNupOrderWin(new weld::CustomWeld(*m_xBuilder, "orderpreview", *mxNupOrder))
     , mxBorderCB(m_xBuilder->weld_check_button("bordercb"))
+    , mxRangeExpander(m_xBuilder->weld_expander("exRangeExpander"))
+    , mxLayoutExpander(m_xBuilder->weld_expander("exLayoutExpander"))
     , mxCustom(m_xBuilder->weld_widget("customcontents"))
     , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ) )
     , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ) )
@@ -695,9 +697,16 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxPageMarginEdt->connect_value_changed( LINK( this, PrintDialog, MetricSpinModifyHdl ) );
     mxSheetMarginEdt->connect_value_changed( LINK( this, PrintDialog, MetricSpinModifyHdl ) );
 
+    mxRangeExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
+    mxLayoutExpander->connect_expanded(LINK( this, PrintDialog, ExpandHdl));
+
     updateNupFromPages();
 }
 
+IMPL_LINK_NOARG(PrintDialog, ExpandHdl, weld::Expander&, void)
+{
+    m_xDialog->resize_to_request();
+}
 
 PrintDialog::~PrintDialog()
 {
