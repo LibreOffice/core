@@ -53,7 +53,7 @@ public:
     virtual bool isSeparator() const { return false; }
 };
 
-class SmElementSeparator : public SmElement
+class SmElementSeparator final : public SmElement
 {
 public:
     SmElementSeparator();
@@ -160,7 +160,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
-class SmElementsDockingWindow : public SfxDockingWindow
+class SmElementsDockingWindow final : public SfxDockingWindow
 {
     VclPtr<SmElementsControl>  mpElementsControl;
     VclPtr<ListBox>            mpElementListBox;

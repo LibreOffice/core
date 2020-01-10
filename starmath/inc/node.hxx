@@ -318,7 +318,7 @@ public:
  *
  * Used for drawing the line in the OVER and OVERSTRIKE commands.
  */
-class SmRectangleNode : public SmGraphicNode
+class SmRectangleNode final : public SmGraphicNode
 {
     Size maToSize;
 
@@ -341,7 +341,7 @@ public:
  *
  * Used to draw the slash of the WIDESLASH command by SmBinDiagonalNode.
  */
-class SmPolyLineNode : public SmGraphicNode
+class SmPolyLineNode final : public SmGraphicNode
 {
     tools::Polygon maPoly;
     Size maToSize;
@@ -458,7 +458,7 @@ public:
  * For these commands an instance of SmGlyphSpecialNode is used for the
  * operator token, following the command.
  */
-class SmGlyphSpecialNode : public SmSpecialNode
+class SmGlyphSpecialNode final : public SmSpecialNode
 {
 public:
     explicit SmGlyphSpecialNode(const SmToken &rNodeToken)
@@ -504,7 +504,7 @@ public:
  * represent math symbols that should be exported as <mi> elements rather than
  * <mo> elements.
  */
-class SmMathIdentifierNode : public SmMathSymbolNode
+class SmMathIdentifierNode final : public SmMathSymbolNode
 {
 public:
     explicit SmMathIdentifierNode(const SmToken &rNodeToken)
@@ -518,7 +518,7 @@ public:
  * the line with the line above. I don't think this node should be used for
  * anything else.
  */
-class SmRootSymbolNode : public SmMathSymbolNode
+class SmRootSymbolNode final : public SmMathSymbolNode
 {
     sal_uLong mnBodyWidth;  // width of body (argument) of root sign
 
@@ -543,7 +543,7 @@ public:
  * written.
  * It is drawn as a square with a shadow.
  */
-class SmPlaceNode : public SmMathSymbolNode
+class SmPlaceNode final : public SmMathSymbolNode
 {
 public:
     explicit SmPlaceNode(const SmToken &rNodeToken)
@@ -563,7 +563,7 @@ public:
  * This node is used for parsing errors and draws a questionmark turned upside
  * down (inverted question mark).
  */
-class SmErrorNode : public SmMathSymbolNode
+class SmErrorNode final : public SmMathSymbolNode
 {
 public:
     explicit SmErrorNode(const SmToken &rNodeToken)
@@ -585,7 +585,7 @@ public:
  * children are instances of SmLineNode, and in some obscure cases the child
  * can be an instance of SmExpressionNode, mainly when errors occur.
  */
-class SmTableNode : public SmStructureNode
+class SmTableNode final : public SmStructureNode
 {
     long mnFormulaBaseline;
 public:
@@ -642,7 +642,7 @@ public:
  * an expression node that allows "B + C" to be the denominator of the
  * SmBinVerNode, that the OVER command creates.
  */
-class SmExpressionNode : public SmLineNode
+class SmExpressionNode final : public SmLineNode
 {
 public:
     explicit SmExpressionNode(const SmToken &rNodeToken)
@@ -659,7 +659,7 @@ public:
  *
  * The same as SmBinHorNode except this is for unary operators.
  */
-class SmUnHorNode : public SmStructureNode
+class SmUnHorNode final : public SmStructureNode
 {
 public:
     explicit SmUnHorNode(const SmToken &rNodeToken)
@@ -683,7 +683,7 @@ public:
  * 2: Body<BR>
  * Where argument is optional and may be NULL.
  */
-class SmRootNode : public SmStructureNode
+class SmRootNode final : public SmStructureNode
 {
 public:
     explicit SmRootNode(const SmToken &rNodeToken)
@@ -715,7 +715,7 @@ public:
  *
  * None of the children may be NULL.
  */
-class SmBinHorNode : public SmStructureNode
+class SmBinHorNode final : public SmStructureNode
 {
 public:
     explicit SmBinHorNode(const SmToken &rNodeToken)
@@ -747,7 +747,7 @@ public:
  * 2: Denominator<BR>
  * None of the children may be NULL.
  */
-class SmBinVerNode : public SmStructureNode
+class SmBinVerNode final : public SmStructureNode
 {
 public:
     explicit SmBinVerNode(const SmToken &rNodeToken)
@@ -773,7 +773,7 @@ public:
  * 2: Line (instance of SmPolyLineNode).<BR>
  * None of the children may be NULL.
  */
-class SmBinDiagonalNode : public SmStructureNode
+class SmBinDiagonalNode final : public SmStructureNode
 {
     bool mbAscending;
 
@@ -835,7 +835,7 @@ enum SmSubSup
  * It is recommended that you access children using GetBody() and
  * GetSubSup().
  */
-class SmSubSupNode : public SmStructureNode
+class SmSubSupNode final : public SmStructureNode
 {
     bool mbUseLimits;
 
@@ -887,7 +887,7 @@ public:
  *
  * Note that child 1 (Body) is usually SmBracebodyNode, but it can also be e.g. SmExpressionNode.
  */
-class SmBraceNode : public SmStructureNode
+class SmBraceNode final : public SmStructureNode
 {
 public:
     explicit SmBraceNode(const SmToken &rNodeToken)
@@ -917,7 +917,7 @@ public:
  * In this case SmBracebodyNode will have three children, "[body1]", "|" and
  * [body2].
  */
-class SmBracebodyNode : public SmStructureNode
+class SmBracebodyNode final : public SmStructureNode
 {
     long mnBodyHeight;
 
@@ -946,7 +946,7 @@ public:
  * 2: script<BR>
  * (None of these children are optional, e.g. they must all be not NULL).
  */
-class SmVerticalBraceNode : public SmStructureNode
+class SmVerticalBraceNode final : public SmStructureNode
 {
 public:
     explicit inline SmVerticalBraceNode(const SmToken &rNodeToken);
@@ -979,7 +979,7 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken)
  * None of the children may be NULL.
  *
  */
-class SmOperNode : public SmStructureNode
+class SmOperNode final : public SmStructureNode
 {
 public:
     explicit SmOperNode(const SmToken &rNodeToken)
@@ -1004,7 +1004,7 @@ public:
  *
  * This node has exactly one child at index 0.
  */
-class SmAlignNode : public SmStructureNode
+class SmAlignNode final : public SmStructureNode
 {
 public:
     explicit SmAlignNode(const SmToken &rNodeToken)
@@ -1026,7 +1026,7 @@ public:
  * 1: Body<BR>
  * None of these may be NULL.
  */
-class SmAttributNode : public SmStructureNode
+class SmAttributNode final : public SmStructureNode
 {
 public:
     explicit SmAttributNode(const SmToken &rNodeToken)
@@ -1048,7 +1048,7 @@ public:
  *
  * Used to change the font of its children.
  */
-class SmFontNode : public SmStructureNode
+class SmFontNode final : public SmStructureNode
 {
     FontSizeType meSizeType;
     Fraction     maFontSize;
@@ -1077,7 +1077,7 @@ public:
  * Used to implement the MATRIX command, example:
  * "matrix{ 1 # 2 ## 3 # 4}".
  */
-class SmMatrixNode : public SmStructureNode
+class SmMatrixNode final : public SmStructureNode
 {
     sal_uInt16 mnNumRows,
                mnNumCols;
@@ -1106,7 +1106,7 @@ public:
  *
  * Used to implement the commands "~" and "`". This node is just a blank space.
  */
-class SmBlankNode : public SmGraphicNode
+class SmBlankNode final : public SmGraphicNode
 {
     sal_uInt16 mnNum;
 

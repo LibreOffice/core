@@ -42,7 +42,7 @@ namespace svtools { class ColorConfig; }
 
 void SmGetLeftSelectionPart(const ESelection &rSelection, sal_Int32 &nPara, sal_uInt16 &nPos);
 
-class SmEditWindow : public vcl::Window, public DropTargetHelper
+class SmEditWindow final : public vcl::Window, public DropTargetHelper
 {
     rtl::Reference<SmEditAccessible> mxAccessible;
 
