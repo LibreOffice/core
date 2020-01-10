@@ -203,7 +203,7 @@ boost::property_tree::ptree Deck::DumpAsPropertyTree()
     aTree.put("text", GetText());
     aTree.put("enabled", IsEnabled());
 
-    boost::property_tree::ptree aChildren;
+    boost::property_tree::ptree aPanelNodes;
     for (auto &it : maPanels)
     {
         if (it->IsLurking())
@@ -217,13 +217,20 @@ boost::property_tree::ptree Deck::DumpAsPropertyTree()
         if (!pWindow)
             continue;
 
-        boost::property_tree::ptree aChild = pWindow->DumpAsPropertyTree();
-        aChild.put("text", it->GetText());
-        aChild.put("type", "panel");
-        aChildren.push_back(std::make_pair("", aChild));
-    }
+        boost::property_tree::ptree aPanel;
+        aPanel.put("id", it->GetId());
+        aPanel.put("type", "panel");
+        aPanel.put("text", it->GetText());
+        aPanel.put("enabled", it->IsEnabled());
 
-    aTree.add_child("children", aChildren);
+        boost::property_tree::ptree aChildren;
+        aChildren.push_back(std::make_pair("", pWindow->DumpAsPropertyTree()));
+        aPanel.add_child("children", aChildren);
+
+        aPanelNodes.push_back(std::make_pair("", aPanel));
+    }
+    aTree.add_child("children", aPanelNodes);
+
     return aTree;
 }
 
