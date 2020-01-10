@@ -1404,12 +1404,14 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_WINDOW:
         case LOK_CALLBACK_CALC_FUNCTION_LIST:
         {
-            const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
-                    [type] (const queue_type::value_type& elem) { return (elem.Type == type); });
-
-            if (pos != m_queue.rend() && pos->PayloadString == payload)
+            const auto& pos
+                = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                               [type, &payload](const queue_type::value_type& elem) {
+                                   return (elem.Type == type && elem.PayloadString == payload);
+                               });
+            if (pos != m_queue.rend())
             {
-                SAL_INFO("lok", "Skipping queue duplicate [" << type << + "]: [" << payload << "].");
+                SAL_INFO("lok", "Skipping queue duplicate [" << type << "]: [" << payload << "].");
                 return;
             }
         }
