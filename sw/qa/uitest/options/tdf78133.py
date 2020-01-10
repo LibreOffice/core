@@ -47,7 +47,7 @@ class tdf78133(UITestCase):
         docboundaries = xDialog.getChild("docboundaries")
         self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
         xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        #self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
