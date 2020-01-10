@@ -698,7 +698,7 @@ struct WW8_DPHEAD
 {
     SVBT16 dpk;         //  0   Drawn Primitive Kind  REVIEW davebu
   //        0=start of grouping, 1=line, 2=textbox, 3=rectangle,
-  //        4=arc, 5=elipse, 6=polyline, 7=callout textbox,
+  //        4=arc, 5=ellipse, 6=polyline, 7=callout textbox,
   //        8=end of grouping, 9=sample primitive holding default values
     SVBT16 cb;          // 2    size (count of bytes) of this DP
     SVBT16 xa;          // 4    These 2 points describe the rectangle
@@ -788,7 +788,7 @@ struct WW8_DP_ARC
 //  sal_uInt16 fUp : 8;     // 0x24 ff00    REVIEW davebu
 };
 
-struct WW8_DP_ELIPSE
+struct WW8_DP_ELLIPSE
 {
     WW8_DP_LINETYPE aLnt;
     WW8_DP_FILL aFill;
