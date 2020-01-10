@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8138c4a_bf3be4c6",
+        "filename": "extensions/source/logging/consolehandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-10T08:57:06Z",
+      "side": 1,
+      "message": "Possibly just #include \u003cprewin.h\u003e (and postwin.h)?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 20
+      },
+      "revId": "2dd0ba99fa0a0475ea7940d9f80283ac7fa55c29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
