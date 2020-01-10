@@ -120,13 +120,13 @@ namespace
         return aDamageRect;
     }
 
-    // The caching logic is surprsingly expensive - so avoid it sometimes.
+    // The caching logic is surprisingly expensive - so avoid it sometimes.
     inline bool isTrivial(const basegfx::B2DPolyPolygon& rPolyPolygon)
     {
         return rPolyPolygon.count() == 1 && rPolyPolygon.begin()->count() <= 4;
     }
 
-    // The caching logic is surprsingly expensive - so avoid it sometimes.
+    // The caching logic is surprisingly expensive - so avoid it sometimes.
     inline bool isTrivial(const basegfx::B2DPolygon& rPolyLine)
     {
         return rPolyLine.count() <= 4;
