@@ -128,7 +128,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgCharacterNode : public SvgNode
+        class SvgCharacterNode final : public SvgNode
         {
         private:
             /// the string data

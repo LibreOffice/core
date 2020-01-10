@@ -27,7 +27,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgSvgNode : public SvgNode
+        class SvgSvgNode final : public SvgNode
         {
         private:
             /// use styles

@@ -29,7 +29,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgCircleNode : public SvgNode
+        class SvgCircleNode final : public SvgNode
         {
         private:
             /// use styles

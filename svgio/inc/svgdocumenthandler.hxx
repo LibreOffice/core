@@ -30,7 +30,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgDocHdl : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
+        class SvgDocHdl final : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
         {
         private:
             // the complete SVG Document
