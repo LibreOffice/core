@@ -1220,6 +1220,10 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
     if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
         return;
 
+    Size aSize = GetSizePixel();
+    if (aSize.getWidth() <= 0 || aSize.getHeight() <= 0)
+        return;
+
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         // In case we are routing the window, notify the client
@@ -1228,7 +1232,7 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
             aPayload.emplace_back("rectangle", pRectangle->toString());
         else
         {
-            const tools::Rectangle aRect(Point(0, 0), GetSizePixel());
+            const tools::Rectangle aRect(Point(0, 0), aSize);
             aPayload.emplace_back("rectangle", aRect.toString());
         }
 
