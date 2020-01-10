@@ -143,7 +143,7 @@ using namespace css;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-/// Base class for filter tests loading or roundtriping a document, then asserting the document model.
+/// Base class for filter tests loading or roundtripping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 private:
