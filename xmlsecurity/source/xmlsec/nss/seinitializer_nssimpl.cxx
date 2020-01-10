@@ -100,8 +100,7 @@ sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServi
 }
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> seqServiceNames{ "com.sun.star.xml.crypto.SEInitializer" };
-    return seqServiceNames;
+    return { "com.sun.star.xml.crypto.SEInitializer" };
 }
 
 namespace {
@@ -128,8 +127,7 @@ OUString NSSInitializer_NssImpl::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> seqServiceNames{ "com.sun.star.xml.crypto.NSSInitializer" };
-    return seqServiceNames;
+    return { "com.sun.star.xml.crypto.NSSInitializer" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
