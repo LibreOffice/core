@@ -406,8 +406,7 @@ OUString SAL_CALL Content::getImplementationName()
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSNS { WEBDAV_CONTENT_SERVICE_NAME };
-    return aSNS;
+    return { WEBDAV_CONTENT_SERVICE_NAME };
 }
 
 

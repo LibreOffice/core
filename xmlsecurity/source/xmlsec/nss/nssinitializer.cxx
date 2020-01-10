@@ -569,8 +569,7 @@ sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName
 
 cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
 {
-    cssu::Sequence<OUString> aRet { NSS_SERVICE_NAME };
-    return aRet;
+    return { NSS_SERVICE_NAME };
 }
 
 #ifndef XMLSEC_CRYPTO_NSS
