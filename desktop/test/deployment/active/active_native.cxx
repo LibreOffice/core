@@ -107,7 +107,8 @@ rtl::OUString Provider::static_getImplementationName() {
 
 css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
 {
-    return { "com.sun.star.test.deployment.active_native" };
+    rtl::OUString name("com.sun.star.test.deployment.active_native");
+    return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
 css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
