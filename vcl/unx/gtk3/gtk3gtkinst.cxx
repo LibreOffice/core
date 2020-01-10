@@ -12213,7 +12213,6 @@ private:
     {
         GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_expanded();
 
         GtkWidget *pToplevel = gtk_widget_get_toplevel(GTK_WIDGET(pExpander));
 
@@ -12236,6 +12235,8 @@ private:
 
             gtk_window_resize(GTK_WINDOW(pToplevel), nToplevelWidth, nToplevelHeight);
         }
+
+        pThis->signal_expanded();
     }
 
 public:
