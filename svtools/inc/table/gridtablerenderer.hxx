@@ -39,7 +39,7 @@ namespace svt { namespace table
         This class is able to paint a table grid, table headers, and cell
         backgrounds according to the selected/active state of cells.
     */
-    class GridTableRenderer : public ITableRenderer
+    class GridTableRenderer final : public ITableRenderer
     {
     private:
         ::std::unique_ptr< GridTableRenderer_Impl >   m_pImpl;

@@ -51,7 +51,7 @@ namespace svt { namespace table
         cell).
         The control supports accessibility, this is encapsulated in IAccessibleTable
     */
-    class TableControl : public Control, public vcl::table::IAccessibleTable
+    class TableControl final : public Control, public vcl::table::IAccessibleTable
     {
     private:
         std::shared_ptr<TableControl_Impl>            m_pImpl;
