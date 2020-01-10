@@ -25,7 +25,7 @@
 
 #include <sal/types.h>
 
-class xml_parser_exception : public std::runtime_error
+class xml_parser_exception final : public std::runtime_error
 {
 public:
 

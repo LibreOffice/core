@@ -88,7 +88,7 @@ enum class SmHorAlign {
     Right
 };
 
-class SmFormat : public SfxBroadcaster
+class SmFormat final : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
     bool        bDefaultFont[FNT_END + 1];
