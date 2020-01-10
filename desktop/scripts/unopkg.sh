@@ -55,6 +55,21 @@ AIX)
     ;;
 esac
 
+isshared=0
+for arg in $@
+do
+    if [ "$arg" = "--shared" ]; then
+        isshared=1
+fi
+done
+if [ $isshared -eq 1 ]; then
+    echo $@ | grep -q env:UserInstallation
+    if [ $? -ne 0 ]; then
+        temp_user_profile=`/bin/mktemp -d --tmpdir unoinstall.XXXXXX`
+        set -- $@ '-env:UserInstallation=file://'$temp_user_profile
+    fi
+fi
+
 for arg in "$@"
 do
   case "$arg" in
@@ -95,5 +110,9 @@ unset XENVIRONMENT
 # SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
 # execute binary
-exec "$sd_prog/unopkg.bin" "$@" \
+"$sd_prog/unopkg.bin" "$@" \
     "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"
+
+if [ -n "$temp_user_profile" ]; then
+    rm -rf $temp_user_profile
+fi
