@@ -16,6 +16,24 @@
       "revId": "3ff19202b860818d73f13d809d915ed0d23332c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b79ff19_f6c775b1",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7915,
+      "author": {
+        "id": 1002200
+      },
+      "writtenOn": "2020-01-10T09:51:17Z",
+      "side": 1,
+      "message": "That\u0027s right, thanks. :)",
+      "parentUuid": "847bb61c_a41f2b73",
+      "revId": "3ff19202b860818d73f13d809d915ed0d23332c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
