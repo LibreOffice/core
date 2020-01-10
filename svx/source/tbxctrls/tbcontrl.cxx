@@ -2017,12 +2017,11 @@ IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
             mxPaletteManager->ReloadRecentColorSet(*mxRecentColorSet);
     }
 
-    if (maMenuButton.get_active())
-        maMenuButton.set_active(false);
-
     maSelectedLink.Call(aNamedColor);
 
     maColorSelectFunction(maCommand, aNamedColor);
+
+    maMenuButton.set_inactive();
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
@@ -2075,8 +2074,7 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
     mxRecentColorSet->SetNoSelection();
     mpDefaultButton = &rButton;
 
-    if (maMenuButton.get_active())
-        maMenuButton.set_active(false);
+    maMenuButton.set_inactive();
 
     maSelectedLink.Call(aNamedColor);
 
@@ -2105,8 +2103,7 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 
 IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
 {
-    if (maMenuButton.get_active())
-        maMenuButton.set_active(false);
+    maMenuButton.set_inactive();
     mxPaletteManager->PopupColorPicker(mpParentWindow, maCommand, GetSelectEntryColor().first);
 }
 
@@ -3469,23 +3466,34 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 {
     EnsurePaletteManager();
 
-    VclPtrInstance<SvxColorWindow> pColorWin(
-                            m_aCommandURL,
-                            m_xPaletteManager,
-                            m_aColorStatus,
-                            m_nSlotId,
-                            m_xFrame,
-                            pParent,
-                            false,
-                            m_aColorSelectFunction);
+    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
+    weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
 
-    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(m_aCommandURL, m_sModuleName);
-    OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-    pColorWin->SetText( aWindowTitle );
-    pColorWin->StartSelection();
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    getToolboxId(nId, &pToolBox);
+
+    auto xPopover = std::make_unique<ColorWindow>(
+                        m_aCommandURL,
+                        m_xPaletteManager,
+                        m_aColorStatus,
+                        m_nSlotId,
+                        m_xFrame,
+                        pParentFrame,
+                        MenuOrToolMenuButton(this, pToolBox, nId),
+                        m_aColorSelectFunction);
+
     if ( m_bSplitButton )
-        pColorWin->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
-    return pColorWin;
+        xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
+
+    EnsurePaletteManager();
+
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::move(xPopover));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
@@ -4349,6 +4357,7 @@ void ColorListBox::ShowPreview(const NamedColor &rColor)
 MenuOrToolMenuButton::MenuOrToolMenuButton(weld::MenuButton* pMenuButton)
     : m_pMenuButton(pMenuButton)
     , m_pToolbar(nullptr)
+    , m_pControl(nullptr)
 {
 }
 
@@ -4356,6 +4365,20 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OStrin
     : m_pMenuButton(nullptr)
     , m_pToolbar(pToolbar)
     , m_aIdent(rIdent)
+    , m_pControl(nullptr)
+{
+}
+
+MenuOrToolMenuButton::MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId)
+    : m_pMenuButton(nullptr)
+    , m_pToolbar(nullptr)
+    , m_pControl(pControl)
+    , m_xToolBox(pToolbar)
+    , m_nId(nId)
+{
+}
+
+MenuOrToolMenuButton::~MenuOrToolMenuButton()
 {
 }
 
@@ -4363,24 +4386,35 @@ bool MenuOrToolMenuButton::get_active() const
 {
     if (m_pMenuButton)
         return m_pMenuButton->get_active();
-    return m_pToolbar->get_menu_item_active(m_aIdent);
+    if (m_pToolbar)
+        return m_pToolbar->get_menu_item_active(m_aIdent);
+    return m_xToolBox->GetDownItemId() == m_nId;
 }
 
-void MenuOrToolMenuButton::set_active(bool bActive) const
+void MenuOrToolMenuButton::set_inactive() const
 {
     if (m_pMenuButton)
     {
-        m_pMenuButton->set_active(bActive);
+        if (m_pMenuButton->get_active())
+            m_pMenuButton->set_active(false);
         return;
     }
-    m_pToolbar->set_menu_item_active(m_aIdent, bActive);
+    if (m_pToolbar)
+    {
+        if (m_pToolbar->get_menu_item_active(m_aIdent))
+            m_pToolbar->set_menu_item_active(m_aIdent, false);
+        return;
+    }
+    m_pControl->EndPopupMode();
 }
 
 weld::Widget* MenuOrToolMenuButton::get_widget() const
 {
     if (m_pMenuButton)
         return m_pMenuButton;
-    return m_pToolbar;
+    if (m_pToolbar)
+        return m_pToolbar;
+    return m_xToolBox->GetFrameWeld();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
