@@ -31,8 +31,14 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/thread.hxx>
 
 #include <stdio.h>
+
+#ifdef _WIN32
+#include <prewin.h>
+#include <postwin.h>
+#endif
 
 namespace logging
 {
@@ -215,10 +221,38 @@ namespace logging
     void SAL_CALL ConsoleHandler::flush(  )
     {
         MethodGuard aGuard( *this );
+#ifndef _WIN32
         fflush( stdout );
         fflush( stderr );
+#endif
     }
 
+    namespace
+    {
+    void lcl_printConsole(const OString& sText)
+    {
+#ifdef _WIN32
+        DWORD nWrittenChars = 0;
+        OUString s = OStringToOUString(sText, RTL_TEXTENCODING_ASCII_US);
+        WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), s.getStr(), s.getLength() * 2,
+                  &nWrittenChars, nullptr);
+#else
+        fprintf(stdout, "%s\n", sText.getStr());
+#endif
+    }
+
+    void lcl_printConsoleError(const OString& sText)
+    {
+#ifdef _WIN32
+        DWORD nWrittenChars = 0;
+        OUString s = OStringToOUString(sText, RTL_TEXTENCODING_ASCII_US);
+        WriteFile(GetStdHandle(STD_ERROR_HANDLE), s.getStr(), s.getLength() * 2,
+                  &nWrittenChars, nullptr);
+#else
+        fprintf(stderr, "%s\n", sText.getStr());
+#endif
+    }
+    } // namespace
 
     sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord )
     {
@@ -229,10 +263,9 @@ namespace logging
             return false;
 
         if ( _rRecord.Level >= m_nThreshold )
-            fprintf( stderr, "%s\n", sEntry.getStr() );
+            lcl_printConsoleError(sEntry);
         else
-            fprintf( stdout, "%s\n", sEntry.getStr() );
-
+            lcl_printConsole(sEntry);
         return true;
     }
 
