@@ -737,7 +737,7 @@ void SwUiWriterTest::testBookmarkCopy()
     aPaM.SttEndDoc(true/*start*/);
     aPaM.Move(fnMoveForward, GoInContent); // partially select 1st para
 
-    rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true);
+    rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
 
     // check bookmark was copied to correct position
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rIDMA.getBookmarksCount());
@@ -753,7 +753,7 @@ void SwUiWriterTest::testBookmarkCopy()
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
     aPaM.SttEndDoc(true/*start*/);
 
-    rIDCO.CopyRange(aCopyPaM, *aPaM.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true);
+    rIDCO.CopyRange(aCopyPaM, *aPaM.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
 
     // check bookmark was copied to correct position
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getBookmarksCount());

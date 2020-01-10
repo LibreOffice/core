@@ -37,7 +37,7 @@ public:
     DocumentContentOperationsManager( SwDoc& i_rSwdoc );
 
     //Interface methods:
-    bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll, bool bCheckPos ) const override;
+    bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll, bool bCheckPos, bool bCopyText ) const override;
 
     void DeleteSection(SwNode* pNode) override;
 
@@ -106,11 +106,13 @@ public:
                             const std::pair<const SwPaM&, const SwPosition&> * pCopiedPaM = nullptr,
                             bool bMakeNewFrames = true,
                             bool bDelRedlines = true,
-                            bool bCopyFlyAtFly = false ) const;
+                            bool bCopyFlyAtFly = false,
+                            bool bCopyText = false ) const;
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
                             SwPaM const*const pCopiedPaM,
                             const SwNodeIndex& rStartIdx,
-                            const bool bCopyFlyAtFly = false ) const;
+                            const bool bCopyFlyAtFly = false,
+                            bool bCopyText = false ) const;
 
     /// Parameters for _Rst and lcl_SetTextFormatColl
     //originallyfrom docfmt.cxx
@@ -167,7 +169,7 @@ private:
     /* Copy a range within the same or to another document.
      Position may not lie within range! */
     bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrames /*= true */,
-            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
+            const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/, bool bCopyText ) const;
 
     DocumentContentOperationsManager(DocumentContentOperationsManager const&) = delete;
     DocumentContentOperationsManager& operator=(DocumentContentOperationsManager const&) = delete;

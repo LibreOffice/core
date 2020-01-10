@@ -1320,7 +1320,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                             pCpyPam->Start()->nNode > rInsPos ||
                             rInsPos >= pCpyPam->End()->nNode )
                         {
-                            pSrcDoc->getIDocumentContentOperations().CopyRange( *pCpyPam, *pPam->GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true );
+                            pSrcDoc->getIDocumentContentOperations().CopyRange( *pCpyPam, *pPam->GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
                         }
                         delete pCpyPam;
                     }
