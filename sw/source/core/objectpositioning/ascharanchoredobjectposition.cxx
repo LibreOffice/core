@@ -77,6 +77,9 @@ const SwTextFrame& SwAsCharAnchoredObjectPosition::GetAnchorTextFrame() const
 */
 void SwAsCharAnchoredObjectPosition::CalcPosition()
 {
+    if (!&GetAnchorFrame())
+        return;
+
     const SwTextFrame& rAnchorFrame = GetAnchorTextFrame();
     // swap anchor frame, if swapped. Note: destructor takes care of the 'undo'
     SwFrameSwapper aFrameSwapper( &rAnchorFrame, false );
