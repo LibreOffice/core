@@ -26,7 +26,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgTitleDescNode : public SvgNode
+        class SvgTitleDescNode final : public SvgNode
         {
         private:
             /// contained chars

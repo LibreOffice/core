@@ -27,7 +27,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgGradientStopNode : public SvgNode
+        class SvgGradientStopNode final : public SvgNode
         {
         private:
             /// use styles
