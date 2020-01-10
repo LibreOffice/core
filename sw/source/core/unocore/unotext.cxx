@@ -2249,7 +2249,10 @@ SwXText::copyText(
             {
                 pNode->MakeEndIndex(&temp.GetPoint()->nContent);
             }
-            m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, /*bCopyAll=*/false, /*bCheckPos=*/true);
+            // Explicitly request copy text mode, so
+            // sw::DocumentContentOperationsManager::CopyFlyInFlyImpl() will copy shapes anchored to
+            // us, even if we have only a single paragraph.
+            m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/true);
         }
         if (!pFirstNode)
         {   // the node at rPos was split; get rid of the first empty one so
@@ -2260,7 +2263,7 @@ SwXText::copyText(
     }
     else
     {
-        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true);
+        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/true);
     }
 
 }

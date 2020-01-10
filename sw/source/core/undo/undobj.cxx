@@ -1592,6 +1592,11 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
             && (rStart.nNode <= rAnchorPos.nNode);
     }
 
+    if (nDelContentType == DelContentType::CopyText)
+    {
+        return (rStart.nNode <= rAnchorPos.nNode) && (rAnchorPos.nNode <= rEnd.nNode);
+    }
+
     if (rAnchorPos.GetDoc()->IsInReading())
     {   // FIXME hack for writerfilter RemoveLastParagraph(); can't test file format more specific?
         // but it MUST NOT be done during the SetRedlineFlags at the end of ODF
