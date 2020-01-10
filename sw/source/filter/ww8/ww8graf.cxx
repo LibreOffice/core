@@ -363,11 +363,11 @@ SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadEllipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
-    WW8_DP_ELIPSE aElipse;
+    WW8_DP_ELLIPSE aEllipse;
 
-    if( !ReadGrafStart( static_cast<void*>(&aElipse), sizeof( aElipse ), pHd, rSet ) )
+    if( !ReadGrafStart( static_cast<void*>(&aEllipse), sizeof( aEllipse ), pHd, rSet ) )
         return nullptr;
 
     Point aP0( static_cast<sal_Int16>(SVBT16ToUInt16( pHd->xa )) + m_nDrawXOfs2,
@@ -381,8 +381,8 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rS
         SdrCircKind::Full,
         tools::Rectangle(aP0, aP1));
 
-    SetStdAttr( rSet, aElipse.aLnt, aElipse.aShd );
-    SetFill( rSet, aElipse.aFill );
+    SetStdAttr( rSet, aEllipse.aLnt, aEllipse.aShd );
+    SetFill( rSet, aEllipse.aFill );
 
     return pObj;
 }
@@ -1397,7 +1397,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
                 pRet = ReadRect(&aHd, rSet);
                 break;
             case 4:
-                pRet = ReadElipse(&aHd, rSet);
+                pRet = ReadEllipse(&aHd, rSet);
                 break;
             case 5:
                 pRet = ReadArc(&aHd, rSet);

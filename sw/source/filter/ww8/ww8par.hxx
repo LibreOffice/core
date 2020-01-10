@@ -1581,7 +1581,7 @@ private:
         SfxAllItemSet &rSet);
     SdrObject *ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadEllipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
