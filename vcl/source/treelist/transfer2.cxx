@@ -21,6 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
@@ -32,6 +33,7 @@
 #include <svl/urlbmk.hxx>
 #include <vcl/transfer.hxx>
 
+#include <svdata.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -462,14 +464,18 @@ void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 
 Reference<XClipboard> GetSystemClipboard()
 {
-    Reference<XClipboard> xClipboard;
-    try
+    DBG_TESTSOLARMUTEX();
+    auto const data = ImplGetSVData();
+    if (!data->m_xSystemClipboard.is())
     {
-        xClipboard = css::datatransfer::clipboard::SystemClipboard::create(
-            comphelper::getProcessComponentContext());
+        try
+        {
+            data->m_xSystemClipboard = css::datatransfer::clipboard::SystemClipboard::create(
+                comphelper::getProcessComponentContext());
+        }
+        catch (DeploymentException const &) {}
     }
-    catch (DeploymentException const &) {}
-    return xClipboard;
+    return data->m_xSystemClipboard;
 }
 
 Reference<XClipboard> GetSystemPrimarySelection()

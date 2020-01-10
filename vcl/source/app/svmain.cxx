@@ -484,6 +484,12 @@ void DeInitVCL()
     pSVData->maCtrlData.mpDisclosureMinus.reset();
     pSVData->mpDefaultWin.disposeAndClear();
 
+    if (auto const comp = css::uno::Reference<css::lang::XComponent>(
+            pSVData->m_xSystemClipboard, css::uno::UNO_QUERY))
+    {
+        comp->dispose();
+    }
+
 #ifndef NDEBUG
     DbgGUIDeInitSolarMutexCheck();
 #endif
