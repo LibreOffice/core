@@ -39,50 +39,46 @@ namespace sc { namespace sidebar {
 #define FRM_VALID_OUTER     0x0f
 #define FRM_VALID_ALL       0xff
 
-CellBorderStylePopup::CellBorderStylePopup(SfxDispatcher* pDispatcher)
-    : FloatingWindow(SfxGetpApp()->GetTopWindow(), "FloatingBorderStyle", "modules/scalc/ui/floatingborderstyle.ui")
+CellBorderStylePopup::CellBorderStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher)
+    : WeldToolbarPopup(nullptr, pParent, "modules/scalc/ui/floatingborderstyle.ui", "FloatingBorderStyle")
+    , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)
+    , mxTBBorder1(m_xBuilder->weld_toolbar("border1"))
+    , mxTBBorder2(m_xBuilder->weld_toolbar("border2"))
+    , mxTBBorder3(m_xBuilder->weld_toolbar("border3"))
+    , mxTBBorder4(m_xBuilder->weld_toolbar("border4"))
 {
-    get(maTBBorder1, "border1");
-    get(maTBBorder2, "border2");
-    get(maTBBorder3, "border3");
     Initialize();
+}
+
+void CellBorderStylePopup::GrabFocus()
+{
+    mxTBBorder1->grab_focus();
 }
 
 CellBorderStylePopup::~CellBorderStylePopup()
 {
-    disposeOnce();
-}
-
-void CellBorderStylePopup::dispose()
-{
-    maTBBorder1.clear();
-    maTBBorder2.clear();
-    maTBBorder3.clear();
-    FloatingWindow::dispose();
 }
 
 void CellBorderStylePopup::Initialize()
 {
-    maTBBorder1->SetSelectHdl ( LINK(this, CellBorderStylePopup, TB1SelectHdl) );
+    mxTBBorder1->connect_clicked ( LINK(this, CellBorderStylePopup, TB1SelectHdl) );
 
-    maTBBorder2->SetLineCount(2);
-    maTBBorder2->InsertBreak(4);
-    maTBBorder2->SetSelectHdl ( LINK(this, CellBorderStylePopup, TB2SelectHdl) );
+    mxTBBorder2->connect_clicked ( LINK(this, CellBorderStylePopup, TB2and3SelectHdl) );
+    mxTBBorder3->connect_clicked ( LINK(this, CellBorderStylePopup, TB2and3SelectHdl) );
 
-    maTBBorder3->SetSelectHdl ( LINK(this, CellBorderStylePopup, TB3SelectHdl) );
+    mxTBBorder4->connect_clicked ( LINK(this, CellBorderStylePopup, TB4SelectHdl) );
 }
 
-IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OString&, rId, void)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     editeng::SvxBorderLine theDefLine(nullptr, 1);
     editeng::SvxBorderLine *pLeft = nullptr, *pRight = nullptr, *pTop = nullptr, *pBottom = nullptr;
     sal_uInt8 nValidFlags = 0;
 
-    if (nId == maTBBorder1->GetItemId("none"))
+    if (rId == "none")
     {
         nValidFlags |= FRM_VALID_ALL;
         SvxLineItem     aLineItem1( SID_ATTR_BORDER_DIAG_BLTR );
@@ -94,19 +90,19 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, ToolBox*, pToolBox, void)
         mpDispatcher->ExecuteList(
             SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, { &aLineItem2 });
     }
-    else if (nId == maTBBorder1->GetItemId("all"))
+    else if (rId == "all")
     {
         pLeft = pRight = pTop = pBottom = &theDefLine;
         aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
         aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
         nValidFlags |= FRM_VALID_ALL;
     }
-    else if (nId == maTBBorder1->GetItemId("outside"))
+    else if (rId == "outside")
     {
         pLeft = pRight = pTop = pBottom = &theDefLine;
         nValidFlags |= FRM_VALID_OUTER;
     }
-    else if (nId == maTBBorder1->GetItemId("thickbox"))
+    else if (rId == "thickbox")
     {
         theDefLine.SetWidth(DEF_LINE_WIDTH_2);
         pLeft = pRight = pTop = pBottom = &theDefLine;
@@ -129,14 +125,13 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, ToolBox*, pToolBox, void)
 
     mpDispatcher->ExecuteList(
         SID_ATTR_BORDER, SfxCallMode::RECORD, { &aBorderOuter, &aBorderInner });
-    EndPopupMode();
+
+    maToolButton.set_inactive();
 }
 
-IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
+IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OString&, rId, void)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-
-    if (nId == pToolBox->GetItemId("diagup"))
+    if (rId == "diagup")
     {
         editeng::SvxBorderLine aTmp( nullptr, 1 );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_BLTR );
@@ -144,7 +139,7 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
         mpDispatcher->ExecuteList(
             SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, { &aLineItem });
     }
-    else if (nId == pToolBox->GetItemId("diagdown"))
+    else if (rId == "diagdown")
     {
         editeng::SvxBorderLine aTmp( nullptr, 1 );
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_TLBR );
@@ -162,12 +157,12 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
                             *pTop = nullptr,
                             *pBottom = nullptr;
         sal_uInt8               nValidFlags = 0;
-        if (nId == pToolBox->GetItemId("left"))
+        if (rId == "left")
         {
             pLeft = &theDefLine;
             nValidFlags |= FRM_VALID_LEFT;
         }
-        else if (nId == pToolBox->GetItemId("right"))
+        else if (rId == "right")
         {
             if(!AllSettings::GetLayoutRTL())
             {
@@ -180,22 +175,22 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
                 nValidFlags |= FRM_VALID_LEFT;
             }
         }
-        else if (nId == pToolBox->GetItemId("top"))
+        else if (rId == "top")
         {
             pTop = &theDefLine;
             nValidFlags |= FRM_VALID_TOP;
         }
-        else if (nId == pToolBox->GetItemId("bottom"))
+        else if (rId == "bottom")
         {
             pBottom = &theDefLine;
             nValidFlags |= FRM_VALID_BOTTOM;
         }
-        else if (nId == pToolBox->GetItemId("topbottom"))
+        else if (rId == "topbottom")
         {
             pTop =  pBottom = &theDefLine;
             nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
         }
-        else if (nId == pToolBox->GetItemId("leftright"))
+        else if (rId == "leftright")
         {
             pLeft = pRight = &theDefLine;
             nValidFlags |=  FRM_VALID_RIGHT|FRM_VALID_LEFT;
@@ -218,13 +213,11 @@ IMPL_LINK(CellBorderStylePopup, TB2SelectHdl, ToolBox *, pToolBox, void)
             SID_ATTR_BORDER, SfxCallMode::RECORD, { &aBorderOuter, &aBorderInner});
     }
 
-    EndPopupMode();
+    maToolButton.set_inactive();
 }
 
-IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
+IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OString&, rId, void)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     std::unique_ptr<editeng::SvxBorderLine> pTop;
@@ -234,24 +227,24 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
 
     //FIXME: properly adapt to new line border model
 
-    if (nId == maTBBorder3->GetItemId("thickbottom"))
+    if (rId == "thickbottom")
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
         nValidFlags |= FRM_VALID_BOTTOM;
     }
-    else if (nId == maTBBorder3->GetItemId("doublebottom"))
+    else if (rId == "doublebottom")
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
         pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
         nValidFlags |= FRM_VALID_BOTTOM;
     }
-    else if (nId == maTBBorder3->GetItemId("topthickbottom"))
+    else if (rId == "topthickbottom")
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
         pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }
-    else if (nId == maTBBorder3->GetItemId("topdoublebottom"))
+    else if (rId == "topdoublebottom")
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
         pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
@@ -279,7 +272,7 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
     pTop.reset();
     pBottom.reset();
 
-    EndPopupMode();
+    maToolButton.set_inactive();
 }
 
 } } // end of namespace svx::sidebar
