@@ -45,6 +45,30 @@
       "revId": "2dd0ba99fa0a0475ea7940d9f80283ac7fa55c29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b934459_7718631d",
+        "filename": "extensions/source/logging/consolehandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-10T09:05:07Z",
+      "side": 1,
+      "message": "Ah right, I was doing the same as https://opengrok.libreoffice.org/xref/core/desktop/source/deployment/misc/dp_misc.cxx?r\u003d0f874472#469, but I missed that the other place uses OUString, not OString.",
+      "parentUuid": "964ed25c_22670cfe",
+      "range": {
+        "startLine": 236,
+        "startChar": 85,
+        "endLine": 236,
+        "endChar": 88
+      },
+      "revId": "2dd0ba99fa0a0475ea7940d9f80283ac7fa55c29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
