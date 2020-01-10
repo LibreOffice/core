@@ -317,7 +317,7 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
             }
         }
         if (!pPam) { return false; }
-        bRet = pDoc->getIDocumentContentOperations().CopyRange( *pPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true ) || bRet;
+        bRet = pDoc->getIDocumentContentOperations().CopyRange( *pPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false ) || bRet;
     }
 
     pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
