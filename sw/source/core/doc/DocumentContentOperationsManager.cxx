@@ -1714,7 +1714,7 @@ DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSw
 
 // Copy an area into this document or into another document
 bool
-DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos ) const
+DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos, bool bCopyText ) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -1762,7 +1762,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
 
     if( pDoc != &m_rDoc )
     {   // ordinary copy
-        bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange );
+        bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange, bCopyText );
     }
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
             ( pStt->nNode != pEnd->nNode ||
@@ -1770,7 +1770,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     {
         // Copy to a position outside of the area, or copy a single TextNode
         // Do an ordinary copy
-        bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange );
+        bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange, bCopyText );
     }
     else
     {
@@ -1800,7 +1800,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
                                 SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ));
             aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
             // copy without Frames
-            pDoc->GetDocumentContentOperationsManager().CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, nullptr );
+            pDoc->GetDocumentContentOperationsManager().CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, nullptr, bCopyText );
 
             aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
             aPam.SetMark();
@@ -3313,7 +3313,8 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     const std::pair<const SwPaM&, const SwPosition&>* pCopiedPaM /*and real insert pos*/,
     const bool bMakeNewFrames,
     const bool bDelRedlines,
-    const bool bCopyFlyAtFly ) const
+    const bool bCopyFlyAtFly,
+    bool bCopyText ) const
 {
     assert(!pCopiedPaM || pCopiedPaM->first.End()->nNode == rRg.aEnd);
     assert(!pCopiedPaM || pCopiedPaM->second.nNode <= rInsPos);
@@ -3363,7 +3364,8 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
                 ? pCopiedPaM->second.nNode
                 : aSavePos,
-            bCopyFlyAtFly);
+            bCopyFlyAtFly,
+            bCopyText);
     }
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
@@ -3401,7 +3403,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     SwPaM const*const pCopiedPaM,
     const SwNodeIndex& rStartIdx,
-    const bool bCopyFlyAtFly ) const
+    const bool bCopyFlyAtFly,
+    bool bCopyText ) const
 {
     assert(!pCopiedPaM || pCopiedPaM->End()->nNode == rRg.aEnd);
 
@@ -3438,6 +3441,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 // FIXME TODO why exclude start node, this seems very questionable and causes data loss on export
                 if(m_rDoc.getIDocumentRedlineAccess().IsRedlineMove())
                     ++nStart;
+                (void) bCopyText;
             break;
             case RndStdIds::FLY_AT_CHAR:
                 {
@@ -4404,7 +4408,7 @@ static void lcl_PopNumruleState(
 
 bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         const bool bMakeNewFrames, const bool bCopyAll,
-        SwPaM *const pCpyRange ) const
+        SwPaM *const pCpyRange, bool bCopyText ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
     const bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
@@ -4737,13 +4741,13 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
                 assert(pStt->nNode != pEnd->nNode);
                 pEnd->nContent = 0; // TODO why this?
-                CopyWithFlyInFly( aRg, aInsPos, &tmp, bMakeNewFrames, false );
+                CopyWithFlyInFly( aRg, aInsPos, &tmp, bMakeNewFrames, false, /*bCopyFlyAtFly=*/false, bCopyText );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, aInsPos, &tmp, bMakeNewFrames, false );
+                CopyWithFlyInFly( aRg, aInsPos, &tmp, bMakeNewFrames, false, /*bCopyFlyAtFly=*/false, bCopyText );
 
             bCopyBookmarks = false;
         }
