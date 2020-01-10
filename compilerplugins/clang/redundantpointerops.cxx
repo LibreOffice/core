@@ -53,13 +53,16 @@ public:
     bool VisitFunctionDecl(FunctionDecl const *);
     bool VisitMemberExpr(MemberExpr const *);
     bool VisitUnaryOperator(UnaryOperator const *);
+private:
+    bool isSmartPointerType(const Expr* e);
 };
 
 bool RedundantPointerOps::VisitFunctionDecl(FunctionDecl const * functionDecl)
 {
     if (ignoreLocation(functionDecl))
         return true;
-    //functionDecl->dump();
+//    if (functionDecl->getIdentifier() && functionDecl->getName() == "function6b")
+//        functionDecl->dump();
     return true;
 }
 
@@ -94,6 +97,21 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
                     << memberExpr->getBase()->getType()->getPointeeType()
                     << memberExpr->getSourceRange();
 
+        }
+        else if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(base))
+        {
+            auto methodDecl = cxxMemberCallExpr->getMethodDecl();
+            if (methodDecl->getIdentifier() && methodDecl->getName() == "get")
+            {
+                auto const e = cxxMemberCallExpr->getImplicitObjectArgument();
+                if (isSmartPointerType(e))
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "'get()' followed by '->' operating on %0, just use '->'",
+                        compat::getBeginLoc(memberExpr))
+                        << e->IgnoreImpCasts()->getType().getLocalUnqualifiedType()
+                        << memberExpr->getSourceRange();
+            }
         }
     }
 //    else
@@ -132,38 +150,44 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
         if (methodDecl->getIdentifier() && methodDecl->getName() == "get")
         {
             auto const e = cxxMemberCallExpr->getImplicitObjectArgument();
-            // First check the object type as written, in case the get member function is
-            // declared at a base class of std::unique_ptr or std::shared_ptr:
-            auto const t = e->IgnoreImpCasts()->getType();
-            auto const tc1 = loplugin::TypeCheck(t);
-            if (!(tc1.ClassOrStruct("unique_ptr").StdNamespace()
-                  || tc1.ClassOrStruct("shared_ptr").StdNamespace()))
-            {
-                // Then check the object type coerced to the type of the get member function, in
-                // case the type-as-written is derived from one of these types (tools::SvRef is
-                // final, but the rest are not; but note that this will fail when the type-as-
-                // written is derived from std::unique_ptr or std::shared_ptr for which the get
-                // member function is declared at a base class):
-                auto const tc2 = loplugin::TypeCheck(e->getType());
-                if (!((tc2.ClassOrStruct("unique_ptr").StdNamespace()
-                       || tc2.ClassOrStruct("shared_ptr").StdNamespace()
-                       || (tc2.Class("Reference").Namespace("uno").Namespace("star")
-                           .Namespace("sun").Namespace("com").GlobalNamespace())
-                       || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
-                       || tc2.Class("SvRef").Namespace("tools").GlobalNamespace())))
-                {
-                    return true;
-                }
-            }
-            report(
-                DiagnosticsEngine::Warning,
-                "'*' followed by '.get()' operating on %0, just use '*'",
-                compat::getBeginLoc(unaryOperator))
-                << t.getLocalUnqualifiedType() << unaryOperator->getSourceRange();
-
+            if (isSmartPointerType(e))
+                report(
+                    DiagnosticsEngine::Warning,
+                    "'*' followed by '.get()' operating on %0, just use '*'",
+                    compat::getBeginLoc(unaryOperator))
+                    << e->IgnoreImpCasts()->getType().getLocalUnqualifiedType()
+                    << unaryOperator->getSourceRange();
         }
     }
     return true;
+}
+
+bool RedundantPointerOps::isSmartPointerType(const Expr* e)
+{
+    // First check the object type as written, in case the get member function is
+    // declared at a base class of std::unique_ptr or std::shared_ptr:
+    auto const t = e->IgnoreImpCasts()->getType();
+    auto const tc1 = loplugin::TypeCheck(t);
+    if (tc1.ClassOrStruct("unique_ptr").StdNamespace()
+          || tc1.ClassOrStruct("shared_ptr").StdNamespace())
+        return true;
+
+    // Then check the object type coerced to the type of the get member function, in
+    // case the type-as-written is derived from one of these types (tools::SvRef is
+    // final, but the rest are not; but note that this will fail when the type-as-
+    // written is derived from std::unique_ptr or std::shared_ptr for which the get
+    // member function is declared at a base class):
+    auto const tc2 = loplugin::TypeCheck(e->getType());
+    if ((tc2.ClassOrStruct("unique_ptr").StdNamespace()
+           || tc2.ClassOrStruct("shared_ptr").StdNamespace()
+           || (tc2.Class("Reference").Namespace("uno").Namespace("star")
+               .Namespace("sun").Namespace("com").GlobalNamespace())
+           || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
+           || tc2.Class("SvRef").Namespace("tools").GlobalNamespace()))
+    {
+        return true;
+    }
+    return false;
 }
 
 loplugin::Plugin::Registration< RedundantPointerOps > redundantpointerops("redundantpointerops");
