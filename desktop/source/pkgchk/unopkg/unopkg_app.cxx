@@ -188,7 +188,7 @@ Reference<deployment::XPackage> findPackage(
 extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();
-    bool bNoOtherErrorMsg = false;
+    bool bShowFailedMsg = true;
     OUString subCommand;
     bool option_shared = false;
     bool option_force = false;
@@ -595,11 +595,11 @@ extern "C" int unopkg_main()
     catch (const ucb::CommandFailedException &e)
     {
         logger->log(LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
-        bNoOtherErrorMsg = true;
     }
     catch (const ucb::CommandAbortedException &)
     {
         logger->log(LogLevel::SEVERE, "$1$ aborted.", APP_NAME);
+        bShowFailedMsg = false;
     }
     catch (const deployment::DeploymentException & exc)
     {
@@ -610,7 +610,7 @@ extern "C" int unopkg_main()
     {
         // No logger since it requires UNO which we don't have here
         dp_misc::writeConsoleError(e.Message + "\n");
-        bNoOtherErrorMsg = true;
+        bShowFailedMsg = false;
     }
     catch (const css::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
@@ -618,7 +618,7 @@ extern "C" int unopkg_main()
         logger->log(LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
         logger->log(LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc));
     }
-    if (!bNoOtherErrorMsg)
+    if (bShowFailedMsg)
         logger->log(LogLevel::SEVERE, "$1$ failed.", APP_NAME);
     dp_misc::disposeBridges(xLocalComponentContext);
     return 1;
