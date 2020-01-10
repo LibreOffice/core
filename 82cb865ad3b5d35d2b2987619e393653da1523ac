@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1fc59b0_4604b1f1",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1002273
+      },
+      "writtenOn": "2020-01-10T10:30:17Z",
+      "side": 1,
+      "message": "this seems to cause test hangs in the clang build (see jenkins report for this patchset). Reverting to the original code (setting bComplete using a normal assignment operator) fixes the test hang.\n\nI think the atomic write here is important (at least for x64 architecture). Can a windows developer please advise on how to achieve that?",
+      "revId": "82cb865ad3b5d35d2b2987619e393653da1523ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
