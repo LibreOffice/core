@@ -129,6 +129,11 @@ public:
     MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId);
     ~MenuOrToolMenuButton();
 
+    MenuOrToolMenuButton(MenuOrToolMenuButton const &) = default;
+    MenuOrToolMenuButton(MenuOrToolMenuButton &&) = default;
+    MenuOrToolMenuButton & operator =(MenuOrToolMenuButton const &) = default;
+    MenuOrToolMenuButton & operator =(MenuOrToolMenuButton &&) = default;
+
     bool get_active() const;
     void set_inactive() const;
     weld::Widget* get_widget() const;
