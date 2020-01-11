@@ -363,28 +363,18 @@ ZipOutputEntryParallel::ZipOutputEntryParallel(
 
 void ZipOutputEntryParallel::writeStream(const uno::Reference< io::XInputStream >& xInStream)
 {
-    sal_Int64 toRead = xInStream->available();
-    uno::Sequence< sal_Int8 > inBuffer( toRead );
-    sal_Int64 read = xInStream->readBytes(inBuffer, toRead);
-    if (read < toRead)
-        inBuffer.realloc( read );
-    while( xInStream->available() > 0 )
-    {   // We didn't get the full size from available().
-        uno::Sequence< sal_Int8 > buf( xInStream->available());
-        read = xInStream->readBytes( buf, xInStream->available());
-        sal_Int64 oldSize = inBuffer.getLength();
-        inBuffer.realloc( oldSize + read );
-        std::copy( buf.begin(), buf.end(), inBuffer.begin() + oldSize );
-    }
     ZipUtils::ThreadedDeflater deflater( DEFAULT_COMPRESSION );
-    totalIn = inBuffer.getLength();
-    deflater.startDeflate( inBuffer );
-    processInput( inBuffer );
-    deflater.waitForTasks();
-    uno::Sequence< sal_Int8 > outBuffer = deflater.getOutput();
-    deflater.clear(); // release memory
-    totalOut = outBuffer.getLength();
-    processDeflated(outBuffer, outBuffer.getLength());
+    deflater.deflateWrite(xInStream,
+            [this](const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nLen) {
+                if (!m_bEncryptCurrentEntry)
+                    m_aCRC.updateSegment(rBuffer, nLen);
+            },
+            [this](const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nLen) {
+                processDeflated(rBuffer, nLen);
+            }
+    );
+    totalIn = deflater.getTotalIn();
+    totalOut = deflater.getTotalOut();
     closeEntry();
 }
 
