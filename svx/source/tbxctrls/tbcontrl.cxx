@@ -4358,6 +4358,7 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::MenuButton* pMenuButton)
     : m_pMenuButton(pMenuButton)
     , m_pToolbar(nullptr)
     , m_pControl(nullptr)
+    , m_nId(0)
 {
 }
 
@@ -4366,6 +4367,7 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OStrin
     , m_pToolbar(pToolbar)
     , m_aIdent(rIdent)
     , m_pControl(nullptr)
+    , m_nId(0)
 {
 }
 
