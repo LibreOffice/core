@@ -28,13 +28,10 @@
 #include <memory>
 #include <sstream>
 
-#include <tools/contnr.hxx>
 #include <tools/fract.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 // Prevent workdir/UnpackedTarball/pdfium/public/fpdfview.h from including windows.h in a way that
 // it will define e.g. Yield as a macro:

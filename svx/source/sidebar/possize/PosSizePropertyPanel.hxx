@@ -19,11 +19,9 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/weldutils.hxx>
-#include <svx/rectenum.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>

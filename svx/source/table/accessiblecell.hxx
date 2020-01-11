@@ -22,10 +22,6 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-
-#include <rtl/ref.hxx>
 
 #include <editeng/AccessibleContextBase.hxx>
 #include <editeng/AccessibleComponentBase.hxx>
@@ -36,7 +32,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <cell.hxx>
+#include <celltypes.hxx>
 
 
 namespace accessibility

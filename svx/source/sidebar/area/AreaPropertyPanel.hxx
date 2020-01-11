@@ -19,19 +19,12 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
-#include <svl/intitem.hxx>
-#include <com/sun/star/ui/XUIElement.hpp>
 
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 

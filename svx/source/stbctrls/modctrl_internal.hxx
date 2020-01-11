@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_STBCTRLS_MODCTRL_INTERNAL_HXX
 #define INCLUDED_SVX_SOURCE_STBCTRLS_MODCTRL_INTERNAL_HXX
 
+#include <tools/gen.hxx>
+
+class Image;
+
 Point centerImage(const tools::Rectangle& rBoundingRect, const Image& rImg);
 
 #endif // INCLUDED_SVX_SOURCE_STBCTRLS_MODCTRL_INTERNAL_HXX

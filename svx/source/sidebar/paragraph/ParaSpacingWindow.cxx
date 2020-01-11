@@ -19,6 +19,7 @@
 
 #include "ParaSpacingWindow.hxx"
 #include <editeng/editids.hrc>
+#include <editeng/lrspitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>

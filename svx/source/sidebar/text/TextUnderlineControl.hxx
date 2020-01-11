@@ -20,10 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 
-#include <sfx2/bindings.hxx>
 #include <vcl/button.hxx>
-#include <vcl/vclenum.hxx>
-#include <svtools/valueset.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 namespace svx {
