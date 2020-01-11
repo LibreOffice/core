@@ -253,7 +253,7 @@ DECLARE_ODFIMPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPaddi
 
 DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Page Style"), uno::UNO_QUERY);
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
 }
@@ -363,7 +363,7 @@ DECLARE_ODFIMPORT_TEST(testTdf74524, "tdf74524.odt")
 
 DECLARE_ODFIMPORT_TEST(testPageStyleLayoutRight, "hello.odt")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Page Style"), uno::UNO_QUERY);
     // This caused a crash.
     xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
 }
@@ -424,7 +424,7 @@ DECLARE_ODFIMPORT_TEST(testFdo79269_header, "fdo79269_header.odt")
 
 DECLARE_ODFIMPORT_TEST(testPageBackground, "PageBackground.odt")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Page Style"), uno::UNO_QUERY);
     // The background image was lost
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sky"), getProperty<OUString>(xPropertySet, "FillBitmapName"));

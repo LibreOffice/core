@@ -55,7 +55,7 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 {
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
-    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName("Default Style"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName("Default Page Style"), uno::UNO_QUERY);
     bool headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
     CPPUNIT_ASSERT(headerIsOn);
 }
@@ -63,7 +63,7 @@ DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 DECLARE_WW8EXPORT_TEST(testTdf122460_header, "tdf122460_header.odt")
 {
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
-    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName("Default Style"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName("Default Page Style"), uno::UNO_QUERY);
     bool headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
     CPPUNIT_ASSERT(headerIsOn);
 }
