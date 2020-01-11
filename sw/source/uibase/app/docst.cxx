@@ -140,8 +140,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     if(pFormat)
                         aName = pFormat->GetName();
                     else
-                        aName = SwStyleNameMapper::GetTextUINameArray()[
-                            RES_POOLCOLL_STANDARD - RES_POOLCOLL_TEXT_BEGIN ];
+                        aName = SwResId(STR_POOLCHR_STANDARD);
                     rSet.Put(SfxTemplateItem(nWhich, aName));
                 }
                 break;

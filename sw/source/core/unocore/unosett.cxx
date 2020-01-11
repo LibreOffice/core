@@ -202,7 +202,7 @@ static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
     aValue >>= uTmp;
     OUString sCharFormat;
     SwStyleNameMapper::FillUIName(uTmp, sCharFormat, SwGetPoolIdFromName::ChrFmt);
-    if (sCharFormat != SwResId(STR_POOLCOLL_STANDARD))
+    if (sCharFormat != SwResId(STR_POOLCHR_STANDARD))
     {
         pRet = pDoc->FindCharFormatByName( sCharFormat );
     }
