@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca7130f1_8a87ffe3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-01-11T12:32:47Z",
+      "side": 1,
+      "message": "typo: mathmal \u003d\u003e mathml",
+      "revId": "b5b33b0054eeb28403b9cc138eb4dc63485acd4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
