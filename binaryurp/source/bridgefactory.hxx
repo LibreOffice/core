@@ -22,15 +22,12 @@
 
 #include <sal/config.h>
 
-#include <exception>
 #include <vector>
 #include <map>
 
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <sal/types.h>

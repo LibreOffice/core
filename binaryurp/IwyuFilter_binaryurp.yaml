@@ -1,0 +1,31 @@
+---
+assumeFilename: binaryurp/source/bridge.cxx
+blacklist:
+    binaryurp/source/marshal.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - rtl/byteseq.hxx
+    binaryurp/source/reader.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - rtl/byteseq.hxx
+    binaryurp/source/incomingrequest.hxx:
+    # Don't propose hxx -> h change in URE libs
+    - rtl/byteseq.hxx
+    binaryurp/source/lessoperators.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - rtl/byteseq.hxx
+    binaryurp/source/outgoingrequests.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - rtl/byteseq.hxx
+    # Actually needed
+    - lessoperators.hxx
+    binaryurp/source/bridgefactory.cxx:
+    # Actually needed
+    - com/sun/star/connection/XConnection.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    - com/sun/star/uno/XInterface.hpp
+    binaryurp/source/bridge.cxx:
+    # Actually needed
+    - com/sun/star/bridge/XInstanceProvider.hpp
+    - com/sun/star/connection/XConnection.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/uno/XInterface.hpp
