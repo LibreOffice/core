@@ -505,7 +505,7 @@ namespace
      *          - do not forget to consequently use -rX for rMyVector
      *          - definitions have to be ClockWise for the EndBorderLines, will be ensured by sorting
      *
-     *  If you take all this into account, you will gett correctly extended BorderLinePrimitive2D
+     *  If you take all this into account, you will get correctly extended BorderLinePrimitive2D
      *  representations for the new to be defined BorderLine. That extensions will overlap nicely
      *  with the corresponding BorderLines and take all multiple line definitions in the ::Style into
      *  account.
