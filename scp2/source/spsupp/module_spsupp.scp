@@ -23,10 +23,10 @@ Module gid_Module_Optional_SharePointSupport
 End
 
 /*
- * This is an *empty* feature disabled by default, that controls custom action registering
- * SharePoint.OpenDocuments class, which replaces registration of that class from MSO.
- * It is disabled to allow co-existing with MS Office. To install, a transform must be
- * used that would set its level to non-0 value, or a command line like
+ * This is a feature with a single registry item, disabled by default, that controls custom action
+ * registering SharePoint.OpenDocuments class, which replaces registration of that class from MSO.
+ * It is disabled to allow co-existing with MS Office. To install, a transform must be used that
+ * would set its level to a non-0 value below INSTALLLEVEL, or a command line like
  *
  *     msiexec.exe /i path-to-msi ADDLOCAL=gm_SharePointSupport_SubstMSO
  */
@@ -38,6 +38,17 @@ Module gid_Module_SharePointSupport_SubstMSO
     Default = NO;
     Independent = YES;
     Styles = (HIDDEN_ROOT);
+End
+
+/*
+ * Create a component for the feature, with key path in registry, to track feature installed state
+ */
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_SharePointSupport_SubstMSO_Registered
+    ModuleID = gid_Module_SharePointSupport_SubstMSO;
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME\%PRODUCTVERSION\SharePointSupport\SubstMSO";
+    Name = "Registered";
+    Value = "1";
 End
 
 #endif
