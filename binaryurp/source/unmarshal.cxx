@@ -22,13 +22,10 @@
 #include <cassert>
 #include <cstdlib>
 #include <new>
-#include <vector>
 
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ref.hxx>

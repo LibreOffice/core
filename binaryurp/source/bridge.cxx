@@ -46,12 +46,9 @@
 #include <rtl/byteseq.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <uno/dispatcher.hxx>

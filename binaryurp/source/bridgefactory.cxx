@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <exception>
 
 #include <com/sun/star/bridge/BridgeExistsException.hpp>
 #include <com/sun/star/connection/XConnection.hpp>

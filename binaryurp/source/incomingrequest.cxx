@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <list>
 #include <vector>
 
 #include <com/sun/star/bridge/XInstanceProvider.hpp>

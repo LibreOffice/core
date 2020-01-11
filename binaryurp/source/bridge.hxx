@@ -29,7 +29,6 @@
 #include <com/sun/star/bridge/XBridge.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
