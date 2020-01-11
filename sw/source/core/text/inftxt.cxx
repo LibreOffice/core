@@ -64,6 +64,7 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>
+#include <o3tl/deleter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
@@ -747,7 +748,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     }
 
     // Handle semi-transparent text if necessary.
-    std::unique_ptr<SwTransparentTextGuard> pTransparentText;
+    std::unique_ptr<SwTransparentTextGuard, o3tl::default_delete<SwTransparentTextGuard>> pTransparentText;
     if (m_pFnt->GetColor() != COL_AUTO && m_pFnt->GetColor().GetTransparency() != 0)
     {
         pTransparentText.reset(new SwTransparentTextGuard(rPor, *this, aDrawInf));
