@@ -132,8 +132,7 @@ static SwCharFormat* lcl_FindCharFormat( SwDoc& rDoc,
     if (!rName.isEmpty())
     {
         pFormat = rDoc.FindCharFormatByName( rName );
-        if( !pFormat && rName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
-                                                RES_POOLCOLL_TEXT_BEGIN ] )
+        if( !pFormat && rName == SwResId(STR_POOLCHR_STANDARD))
         {
             // Standard-Character template
             pFormat = rDoc.GetDfltCharFormat();
@@ -1881,8 +1880,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         pFormat = pCharFormat;
         if( !bCreate && !pFormat )
         {
-            if( aName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
-                                            RES_POOLCOLL_TEXT_BEGIN ] )
+            if( aName == SwResId(STR_POOLCHR_STANDARD))
                 nPoolId = 0;
             else
                 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::ChrFmt );
@@ -2737,8 +2735,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             }
 
             aLst.Append( cCHAR, pFormat == rDoc.GetDfltCharFormat()
-                        ? SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
-                                                RES_POOLCOLL_TEXT_BEGIN ]
+                        ? SwResId(STR_POOLCHR_STANDARD)
                         : pFormat->GetName() );
         }
 
