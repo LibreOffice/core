@@ -48,6 +48,7 @@
 #endif
 
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/javacontext.hxx>
@@ -2549,10 +2550,11 @@ void Desktop::CheckFirstRun( )
 
 #ifdef _WIN32
         // Check if Quickstarter should be started (on Windows only)
+        OUString sRootKey = ReplaceStringHookProc("Software\\%OOOVENDOR\\%PRODUCTNAME\\%PRODUCTVERSION");
         WCHAR szValue[8192];
         DWORD nValueSize = sizeof(szValue);
         HKEY hKey;
-        if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE, L"Software\\LibreOffice", &hKey ) )
+        if (ERROR_SUCCESS == RegOpenKeyW(HKEY_LOCAL_MACHINE, o3tl::toW(sRootKey.getStr()), &hKey))
         {
             if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"RunQuickstartAtFirstStart", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
             {

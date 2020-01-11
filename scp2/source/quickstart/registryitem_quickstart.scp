@@ -20,7 +20,7 @@
 
 RegistryItem gid_Regitem_Software_OpenOffice_RunQuickstartAtFirstStart
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\LibreOffice";
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME\%PRODUCTVERSION";
     ModuleID = gid_Module_Optional_Quickstart;
     Name = "RunQuickstartAtFirstStart";
     Value = "1";
