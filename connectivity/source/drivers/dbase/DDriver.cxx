@@ -78,34 +78,35 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 {
     if ( acceptsURL(url) )
     {
-        std::vector< DriverPropertyInfo > aDriverInfo;
-
         Sequence< OUString > aBoolean(2);
         aBoolean[0] = "0";
         aBoolean[1] = "1";
 
-        aDriverInfo.push_back(DriverPropertyInfo(
+        DriverPropertyInfo aDriverInfo[] = {
+            {
                 "CharSet"
                 ,"CharSet of the database."
                 ,false
                 ,OUString()
-                ,Sequence< OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+                ,Sequence< OUString >()
+            },
+            {
                 "ShowDeleted"
                 ,"Display inactive records."
                 ,false
                 ,"0"
-                ,aBoolean)
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
+                ,aBoolean
+            },
+            {
                 "EnableSQL92Check"
                 ,"Use SQL92 naming constraints."
                 ,false
                 ,"0"
-                ,aBoolean)
-                );
-        return Sequence< DriverPropertyInfo >(aDriverInfo.data(),aDriverInfo.size());
+                ,aBoolean
+            }
+        };
+
+        return Sequence< DriverPropertyInfo >(aDriverInfo, std::size(aDriverInfo));
     }
 
     SharedResources aResources;
