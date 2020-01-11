@@ -271,8 +271,7 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
     for (const auto& rCooSys : xCooSysSequence)
     {
         PropertySet aCooSysProp(rCooSys);
-        bool bSwapXAndY = false;
-        aCooSysProp.getProperty(bSwapXAndY, PROP_SwapXAndYAxis);
+        bool bSwapXAndY = aCooSysProp.getBoolProperty(PROP_SwapXAndYAxis);
 
         Reference<XChartTypeContainer> xChartTypeContainer(rCooSys, UNO_QUERY_THROW);
         const Sequence<Reference<XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
