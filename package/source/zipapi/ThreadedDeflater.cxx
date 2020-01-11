@@ -44,14 +44,19 @@ class ThreadedDeflater::Task : public comphelper::ThreadTask
     ThreadedDeflater* deflater;
     int sequence;
     int blockSize;
+    bool firstTask : 1;
+    bool lastTask : 1;
 
 public:
-    Task(ThreadedDeflater* deflater_, int sequence_, int blockSize_)
+    Task(ThreadedDeflater* deflater_, int sequence_, int blockSize_, bool firstTask_,
+         bool lastTask_)
         : comphelper::ThreadTask(deflater_->threadTaskTag)
         , stream()
         , deflater(deflater_)
         , sequence(sequence_)
         , blockSize(blockSize_)
+        , firstTask(firstTask_)
+        , lastTask(lastTask_)
     {
     }
 
@@ -61,58 +66,83 @@ private:
 
 ThreadedDeflater::ThreadedDeflater(sal_Int32 nSetLevel)
     : threadTaskTag(comphelper::ThreadPool::createThreadTaskTag())
+    , totalIn(0)
+    , totalOut(0)
     , zlibLevel(nSetLevel)
-    , pendingTasksCount(0)
 {
 }
 
-ThreadedDeflater::~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE
-{
-    waitForTasks();
-    clear();
-}
+ThreadedDeflater::~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE { clear(); }
 
-void ThreadedDeflater::startDeflate(const uno::Sequence<sal_Int8>& rBuffer)
+void ThreadedDeflater::deflateWrite(
+    const css::uno::Reference<css::io::XInputStream>& xInStream,
+    std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> aProcessInputFunc,
+    std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> aProcessOutputFunc)
 {
-    inBuffer = rBuffer;
-    sal_Int64 size = inBuffer.getLength();
-    int tasksCount = (size + MaxBlockSize - 1) / MaxBlockSize;
-    tasksCount = std::max(tasksCount, 1);
-    pendingTasksCount = tasksCount;
-    outBuffers.resize(pendingTasksCount);
-    for (int sequence = 0; sequence < tasksCount; ++sequence)
+    sal_Int64 nThreadCount = comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount();
+    sal_Int64 batchSize = MaxBlockSize * nThreadCount;
+    inBuffer.realloc(batchSize);
+    prevDataBlock.realloc(MaxBlockSize);
+    outBuffers.resize(nThreadCount);
+    maProcessOutputFunc = aProcessOutputFunc;
+    bool firstTask = true;
+
+    while (xInStream->available() > 0)
     {
-        sal_Int64 thisSize = std::min(MaxBlockSize, size);
-        size -= thisSize;
-        comphelper::ThreadPool::getSharedOptimalPool().pushTask(
-            std::make_unique<Task>(this, sequence, thisSize));
+        sal_Int64 inputBytes = xInStream->readBytes(inBuffer, batchSize);
+        aProcessInputFunc(inBuffer, inputBytes);
+        totalIn += inputBytes;
+        int sequence = 0;
+        bool lastBatch = xInStream->available() <= 0;
+        sal_Int64 bytesPending = inputBytes;
+        while (bytesPending > 0)
+        {
+            sal_Int64 taskSize = std::min(MaxBlockSize, bytesPending);
+            bytesPending -= taskSize;
+            bool lastTask = lastBatch && !bytesPending;
+            comphelper::ThreadPool::getSharedOptimalPool().pushTask(
+                std::make_unique<Task>(this, sequence++, taskSize, firstTask, lastTask));
+
+            if (firstTask)
+                firstTask = false;
+        }
+
+        assert(bytesPending == 0);
+
+        comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(threadTaskTag);
+
+        if (!lastBatch)
+        {
+            assert(inputBytes == batchSize);
+            std::copy_n(inBuffer.begin() + (batchSize - MaxBlockSize), MaxBlockSize,
+                        prevDataBlock.begin());
+        }
+
+        processDeflatedBuffers();
     }
-    assert(size == 0);
 }
 
-bool ThreadedDeflater::finished() const { return pendingTasksCount == 0; }
-
-css::uno::Sequence<sal_Int8> ThreadedDeflater::getOutput() const
+void ThreadedDeflater::processDeflatedBuffers()
 {
-    assert(finished());
-    sal_Int64 totalSize = 0;
+    sal_Int64 batchOutputSize = 0;
     for (const auto& buffer : outBuffers)
-        totalSize += buffer.size();
-    uno::Sequence<sal_Int8> outBuffer(totalSize);
+        batchOutputSize += buffer.size();
+
+    css::uno::Sequence<sal_Int8> outBuffer(batchOutputSize);
+
     auto pos = outBuffer.begin();
-    for (const auto& buffer : outBuffers)
+    for (auto& buffer : outBuffers)
+    {
         pos = std::copy(buffer.begin(), buffer.end(), pos);
-    return outBuffer;
-}
+        buffer.clear();
+    }
 
-void ThreadedDeflater::waitForTasks()
-{
-    comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(threadTaskTag);
+    maProcessOutputFunc(outBuffer, batchOutputSize);
+    totalOut += batchOutputSize;
 }
 
 void ThreadedDeflater::clear()
 {
-    assert(finished());
     inBuffer = uno::Sequence<sal_Int8>();
     outBuffers.clear();
 }
@@ -147,27 +177,35 @@ void ThreadedDeflater::Task::doWork()
     // zlib doesn't handle const properly
     unsigned char* inBufferPtr = reinterpret_cast<unsigned char*>(
         const_cast<signed char*>(deflater->inBuffer.getConstArray()));
-    if (sequence != 0)
+    if (!firstTask)
     {
         // the window size is 32k, so set last 32k of previous data as the dictionary
         assert(MAX_WBITS == 15);
         assert(MaxBlockSize >= 32768);
-        deflateSetDictionary(&stream, inBufferPtr + myInBufferStart - 32768, 32768);
+        if (sequence > 0)
+        {
+            deflateSetDictionary(&stream, inBufferPtr + myInBufferStart - 32768, 32768);
+        }
+        else
+        {
+            unsigned char* prevBufferPtr = reinterpret_cast<unsigned char*>(
+                const_cast<signed char*>(deflater->prevDataBlock.getConstArray()));
+            deflateSetDictionary(&stream, prevBufferPtr + MaxBlockSize - 32768, 32768);
+        }
     }
     stream.next_in = inBufferPtr + myInBufferStart;
     stream.avail_in = blockSize;
     stream.next_out = reinterpret_cast<unsigned char*>(deflater->outBuffers[sequence].data());
     stream.avail_out = outputMaxSize;
-    bool last = sequence == int(deflater->outBuffers.size() - 1); // Last block?
+
     // The trick is in using Z_SYNC_FLUSH instead of Z_NO_FLUSH. It will align the data at a byte boundary,
     // and since we use a raw stream, the data blocks then can be simply concatenated.
-    int res = deflate(&stream, last ? Z_FINISH : Z_SYNC_FLUSH);
+    int res = deflate(&stream, lastTask ? Z_FINISH : Z_SYNC_FLUSH);
     assert(stream.avail_in == 0); // Check that everything has been deflated.
-    if (last ? res == Z_STREAM_END : res == Z_OK)
+    if (lastTask ? res == Z_STREAM_END : res == Z_OK)
     { // ok
         sal_Int64 outSize = outputMaxSize - stream.avail_out;
         deflater->outBuffers[sequence].resize(outSize);
-        --deflater->pendingTasksCount;
     }
     else
     {

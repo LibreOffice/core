@@ -21,37 +21,48 @@
 #define INCLUDED_PACKAGE_THREADEDDEFLATER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <package/packagedllapi.hxx>
 #include <comphelper/threadpool.hxx>
 #include <atomic>
 #include <memory>
+#include <vector>
+#include <functional>
 
 namespace ZipUtils
 {
 /// Parallel compression a stream using the libz deflate algorithm.
 ///
-/// Almost a replacement for the Deflater class. Call startDeflate() with the data,
-/// check with finished() or waitForTasks() and retrieve result with getOutput().
-/// The class will internally split into multiple threads.
+/// Call deflateWrite() with the input stream and input/output processing functions.
+/// This will use multiple threads for compression on each batch of data from the stream.
 class ThreadedDeflater final
 {
     class Task;
     // Note: All this should be lock-less. Each task writes only to its part
-    // of the data, flags are atomic.
+    // of the data.
     std::vector<std::vector<sal_Int8>> outBuffers;
     std::shared_ptr<comphelper::ThreadTaskTag> threadTaskTag;
     css::uno::Sequence<sal_Int8> inBuffer;
+    css::uno::Sequence<sal_Int8> prevDataBlock;
+    std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> maProcessOutputFunc;
+    sal_Int64 totalIn;
+    sal_Int64 totalOut;
     int zlibLevel;
-    std::atomic<int> pendingTasksCount;
 
 public:
     // Unlike with Deflater class, bNoWrap is always true.
     ThreadedDeflater(sal_Int32 nSetLevel);
     ~ThreadedDeflater() COVERITY_NOEXCEPT_FALSE;
-    void startDeflate(const css::uno::Sequence<sal_Int8>& rBuffer);
-    void waitForTasks();
-    bool finished() const;
-    css::uno::Sequence<sal_Int8> getOutput() const;
+    void deflateWrite(
+        const css::uno::Reference<css::io::XInputStream>& xInStream,
+        std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> aProcessInputFunc,
+        std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> aProcessOutputFunc);
+    sal_Int64 getTotalIn() const { return totalIn; }
+    sal_Int64 getTotalOut() const { return totalOut; }
+
+private:
+    void processDeflatedBuffers();
     void clear();
 };
 
