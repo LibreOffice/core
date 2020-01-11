@@ -278,7 +278,7 @@ public:
 
     TextPaM             GetPaM( const Point& rDocPos );
     tools::Rectangle    PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
-    OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = nullptr );
+    OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = nullptr, TextPaM* pEndOfWord = nullptr );
 
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
