@@ -153,10 +153,10 @@
                     "dest-filename": "external/tarballs/EmojiOneColor-SVGinOT-1.3.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/boost_1_69_0.tar.bz2",
-                    "sha256": "8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406",
+                    "url": "https://dev-www.libreoffice.org/src/boost_1_71_0.tar.bz2",
+                    "sha256": "d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee",
                     "type": "file",
-                    "dest-filename": "external/tarballs/boost_1_69_0.tar.bz2"
+                    "dest-filename": "external/tarballs/boost_1_71_0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz",
