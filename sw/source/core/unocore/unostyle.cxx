@@ -639,7 +639,7 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Char>(const SwDoc& rDoc, OUString* 
         {
             // the default character format needs to be set to "Default!"
             if(rDoc.GetDfltCharFormat() == pFormat)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_STANDARD, *pString);
+                SwStyleNameMapper::FillUIName(RES_POOLCHR_STANDARD, *pString);
             else
                 *pString = pFormat->GetName();
             break;

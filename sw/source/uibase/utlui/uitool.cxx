@@ -740,7 +740,7 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
     OUString sStandard;
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_STANDARD, sStandard );
     while(pBase)
     {
         if(bWithDefault || pBase->GetName() !=  sStandard)

@@ -60,7 +60,8 @@
 #define STR_POOLFRM_WATERSIGN                   NC_("STR_POOLFRM_WATERSIGN", "Watermark")
 #define STR_POOLFRM_LABEL                       NC_("STR_POOLFRM_LABEL", "Labels")
 // Template names
-#define STR_POOLCOLL_STANDARD                   NC_("STR_POOLCOLL_STANDARD", "Default Style")
+#define STR_POOLCOLL_STANDARD                   NC_("STR_POOLCOLL_STANDARD", "Default Paragraph Style")
+#define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "Default Character Style")
 #define STR_POOLCOLL_TEXT                       NC_("STR_POOLCOLL_TEXT", "Text Body")
 #define STR_POOLCOLL_TEXT_IDENT                 NC_("STR_POOLCOLL_TEXT_IDENT", "First Line Indent")
 #define STR_POOLCOLL_TEXT_NEGIDENT              NC_("STR_POOLCOLL_TEXT_NEGIDENT", "Hanging Indent")
@@ -187,7 +188,7 @@
 #define STR_POOLCOLL_HTML_DD                    NC_("STR_POOLCOLL_HTML_DD", "List Contents")
 #define STR_POOLCOLL_HTML_DT                    NC_("STR_POOLCOLL_HTML_DT", "List Heading")
 //page style names
-#define STR_POOLPAGE_STANDARD                   NC_("STR_POOLPAGE_STANDARD", "Default Style")
+#define STR_POOLPAGE_STANDARD                   NC_("STR_POOLPAGE_STANDARD", "Default Page Style")
 #define STR_POOLPAGE_FIRST                      NC_("STR_POOLPAGE_FIRST", "First Page")
 #define STR_POOLPAGE_LEFT                       NC_("STR_POOLPAGE_LEFT", "Left Page")
 #define STR_POOLPAGE_RIGHT                      NC_("STR_POOLPAGE_RIGHT", "Right Page")
@@ -219,7 +220,7 @@
 #define STR_COLUMN_VALUESET_ITEM3               NC_("STR_COLUMN_VALUESET_ITEM3", "2 columns with different size (left > right)")
 #define STR_COLUMN_VALUESET_ITEM4               NC_("STR_COLUMN_VALUESET_ITEM4", "2 columns with different size (left < right)")
 // Table styles, Writer internal, others are taken from Svx
-#define STR_TABSTYLE_DEFAULT                    NC_("STR_TABSTYLE_DEFAULT", "Default Style")
+#define STR_TABSTYLE_DEFAULT                    NC_("STR_TABSTYLE_DEFAULT", "Default Table Style")
 
 #define STR_PARAGRAPHSTYLEFAMILY                NC_("STR_PARAGRAPHSTYLEFAMILY", "Paragraph Styles")
 #define STR_CHARACTERSTYLEFAMILY                NC_("STR_CHARACTERSTYLEFAMILY", "Character Styles")

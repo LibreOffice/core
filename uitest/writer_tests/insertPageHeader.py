@@ -15,7 +15,7 @@ class WriterInsertPageHeader(UITestCase):
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
 
         self.xUITest.executeCommand(
-            ".uno:InsertPageHeader?PageStyle:string=Default%20Style&On:bool=true")
+            ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=true")
 
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
@@ -27,7 +27,7 @@ class WriterInsertPageHeader(UITestCase):
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
 
         self.ui_test.execute_dialog_through_command(
-            ".uno:InsertPageHeader?PageStyle:string=Default%20Style&On:bool=false")
+            ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=false")
 
         xDialog = self.xUITest.getTopFocusWindow()
 

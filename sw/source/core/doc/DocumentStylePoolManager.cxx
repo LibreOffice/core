@@ -450,6 +450,7 @@ static const char* STR_POOLCOLL_HTML_ARY[] =
 
 static const char* STR_POOLCHR_ARY[] =
 {
+    STR_POOLCHR_STANDARD,
     STR_POOLCHR_FOOTNOTE,
     STR_POOLCHR_PAGENO,
     STR_POOLCHR_LABEL,
