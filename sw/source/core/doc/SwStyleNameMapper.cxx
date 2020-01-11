@@ -278,7 +278,7 @@ void SwStyleNameMapper::FillProgName(
         fillNameFromId(nId, rFillName, true);
     }
 
-    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == SwResId(STR_POOLCOLL_STANDARD))
+    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == SwResId(STR_POOLCHR_STANDARD))
         rFillName = "Standard";
 }
 
@@ -289,7 +289,7 @@ void SwStyleNameMapper::FillUIName(
 {
     OUString aName = rName;
     if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
-        aName = SwResId(STR_POOLCOLL_STANDARD);
+        aName = SwResId(STR_POOLCHR_STANDARD);
 
     sal_uInt16 nId = GetPoolIdFromProgName ( aName, eFlags );
     if ( nId == USHRT_MAX )
