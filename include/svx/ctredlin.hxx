@@ -262,6 +262,9 @@ private:
     bool bEnableRejectAll;
     bool bEnableUndo;
 
+    bool bEnableClearFormat;
+    bool bEnableClearFormatAll;
+
     weld::Window* m_pDialog;
     std::unique_ptr<weld::Button> m_xAccept;
     std::unique_ptr<weld::Button> m_xReject;
@@ -272,6 +275,7 @@ private:
 
     DECL_LINK( PbClickHdl, weld::Button&, void );
 
+    void            EnableClearFormatButton(weld::Button&, bool bFlag);
 public:
     SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Builder* pTopLevel);
     virtual ~SvxTPView() override;
@@ -282,7 +286,6 @@ public:
     void            EnableAcceptAll(bool bFlag);
     void            EnableReject(bool bFlag);
     void            EnableRejectAll(bool bFlag);
-    void            EnableClearFormatButton(weld::Button&, bool bFlag);
     void            EnableClearFormat(bool bFlag);
     void            EnableClearFormatAll(bool bFlag);
     void            EnableUndo(bool bFlag=true);

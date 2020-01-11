@@ -304,6 +304,8 @@ SvxTPView::SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Buil
     , bEnableReject(true)
     , bEnableRejectAll(true)
     , bEnableUndo(true)
+    , bEnableClearFormat(false)
+    , bEnableClearFormatAll(false)
     , m_pDialog(pDialog)
     , m_xAccept(pTopLevel->weld_button("accept"))
     , m_xReject(pTopLevel->weld_button("reject"))
@@ -313,11 +315,6 @@ SvxTPView::SvxTPView(weld::Container* pParent, weld::Window* pDialog, weld::Buil
     , m_xViewData(new SvxRedlinTable(m_xBuilder->weld_tree_view("writerchanges"),
                                      m_xBuilder->weld_tree_view("calcchanges")))
 {
-    // set wider window for the optional extending button labels
-    // eg. "Reject/Clear formatting" instead of "Reject"
-    EnableClearFormat(true);
-    EnableClearFormatAll(true);
-
     Size aControlSize(80, 65);
     m_xViewData->set_size_request(aControlSize.Width(), aControlSize.Height());
 
@@ -440,12 +437,18 @@ void SvxTPView::EnableClearFormatButton(weld::Button& rButton, bool bFlag)
 
 void SvxTPView::EnableClearFormat(bool bFlag)
 {
+    if (bEnableClearFormat == bFlag)
+        return;
     EnableClearFormatButton(*m_xReject, bFlag);
+    bEnableClearFormat = bFlag;
 }
 
 void SvxTPView::EnableClearFormatAll(bool bFlag)
 {
+    if (bEnableClearFormatAll == bFlag)
+        return;
     EnableClearFormatButton(*m_xRejectAll, bFlag);
+    bEnableClearFormatAll = bFlag;
 }
 
 void SvxTPView::ShowUndo()
