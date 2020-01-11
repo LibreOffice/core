@@ -77,7 +77,9 @@ enum class SearchLabel
     NotFound,
     StartWrapped,
     EndWrapped,
-    NavElementNotFound
+    NavElementNotFound,
+    ReminderStartWrapped,
+    ReminderEndWrapped
 };
 
 class SvxSearchDialog;
