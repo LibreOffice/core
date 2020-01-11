@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "028b5dc5_518babfc",
+        "filename": "package/inc/ThreadedDeflater.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-01-11T16:45:03Z",
+      "side": 1,
+      "message": "It is doing compression(same as deflate). (zlib deflate() is a compression routine).",
+      "parentUuid": "afb85cb3_2c63ab8f",
+      "revId": "65a3450657bccf30e8b191b3056b065eb0bb34c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94c1cc19_6ee01df7",
         "filename": "package/source/zipapi/ThreadedDeflater.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-11T11:09:56Z",
       "side": 1,
       "message": "why the extra copy here, why not just pass the buffers down individually? Or even in an array",
+      "revId": "65a3450657bccf30e8b191b3056b065eb0bb34c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa243cf5_1c9cfc96",
+        "filename": "package/source/zipapi/ThreadedDeflater.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-01-11T16:45:03Z",
+      "side": 1,
+      "message": "This is because the output processing routine needs a \"Sequence\" buffer and I don\u0027t think that changing the outBuffers to be based on \u0027Sequence\u0027 (with realloc calls across batches) is a great idea since Sequence implementation does not seem to have the latent capacity handling like std::vector does to minimize allocation/copy calls. Also, std::vector data can\u0027t be used to move-construct a Sequence, can it ?",
+      "parentUuid": "94c1cc19_6ee01df7",
       "revId": "65a3450657bccf30e8b191b3056b065eb0bb34c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
