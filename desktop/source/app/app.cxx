@@ -396,12 +396,6 @@ CommandLineArgs& Desktop::GetCommandLineArgs()
     return theCommandLineArgs::get();
 }
 
-namespace
-{
-    struct OOOVendor
-        : public rtl::Static< OUString, OOOVendor > {};
-}
-
 OUString ReplaceStringHookProc( const OUString& rStr )
 {
     const static OUString sBuildId(utl::Bootstrap::getBuildIdData("development")),
@@ -424,13 +418,7 @@ OUString ReplaceStringHookProc( const OUString& rStr )
 
     if ( sRet.indexOf( "%OOOVENDOR" ) != -1 )
     {
-        OUString sOOOVendor = OOOVendor::get();
-
-        if ( sOOOVendor.isEmpty() )
-        {
-            sOOOVendor = utl::ConfigManager::getVendor();
-        }
-
+        const static OUString sOOOVendor = utl::ConfigManager::getVendor();
         sRet = sRet.replaceAll( "%OOOVENDOR", sOOOVendor );
     }
 
