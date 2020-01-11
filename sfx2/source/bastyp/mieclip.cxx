@@ -79,7 +79,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 
     if (nFragStart > 0 && nFragEnd > 0 && nFragEnd > nFragStart)
     {
-        sal_uIntPtr nSize = static_cast<sal_uIntPtr>(nFragEnd - nFragStart + 1);
+        size_t nSize = static_cast<size_t>(nFragEnd - nFragStart + 1);
         if (nSize < 0x10000L)
         {
             rStream.Seek(nFragStart);
