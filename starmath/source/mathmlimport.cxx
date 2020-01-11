@@ -507,9 +507,8 @@ namespace {
 class SmXMLImportContext: public SvXMLImportContext
 {
 public:
-    SmXMLImportContext( SmXMLImport &rImport, sal_uInt16 nPrfx,
-        const OUString& rLName)
-        : SvXMLImportContext(rImport, nPrfx, rLName)
+    SmXMLImportContext( SmXMLImport &rImport)
+        : SvXMLImportContext(rImport)
     {
         GetSmImport().IncParseDepth();
     }
@@ -525,13 +524,13 @@ public:
     }
 
     virtual void TCharacters(const OUString & /*rChars*/);
-    virtual void Characters(const OUString &rChars) override;
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) override;
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& rAttrList) override
+    virtual void SAL_CALL characters(const OUString &rChars) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(sal_Int32 /*nElement*/, const css::uno::Reference<css::xml::sax::XFastAttributeList>& /*rAttrList*/) override
     {
         if (GetSmImport().TooDeep())
             throw std::range_error("too deep");
-        SvXMLImportContext::StartElement(rAttrList);
     }
 };
 
@@ -541,7 +540,7 @@ void SmXMLImportContext::TCharacters(const OUString & /*rChars*/)
 {
 }
 
-void SmXMLImportContext::Characters(const OUString &rChars)
+void SmXMLImportContext::characters(const OUString &rChars)
 {
     /*
     Whitespace occurring within the content of token elements is "trimmed"
@@ -555,9 +554,8 @@ void SmXMLImportContext::Characters(const OUString &rChars)
         TCharacters(rChars2/*.collapse()*/);
 }
 
-SvXMLImportContextRef SmXMLImportContext::CreateChildContext(sal_uInt16 /*nPrefix*/,
-    const OUString& /*rLocalName*/,
-    const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/)
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLImportContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     return nullptr;
 }
@@ -582,7 +580,7 @@ struct SmXMLContext_Helper
         {}
 
     bool IsFontNodeNeeded() const;
-    void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
+    void RetrieveAttrs(const uno::Reference< xml::sax::XFastAttributeList > &xAttrList );
     void ApplyAttrs();
 };
 
@@ -598,28 +596,25 @@ bool SmXMLContext_Helper::IsFontNodeNeeded() const
 }
 
 void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+    xml::sax::XFastAttributeList > & xAttrList )
 {
     bool bMvFound = false;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = rContext.GetSmImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            rContext.GetSmImport().GetPresLayoutAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        OUString sValue = aIter.toString();
+        // sometimes they have namespace, sometimes not?
+        switch(aIter.getToken() & TOKEN_MASK)
         {
-            case XML_TOK_FONTWEIGHT:
+            case XML_FONTWEIGHT:
                 nIsBold = sal_Int8(sValue == GetXMLToken(XML_BOLD));
                 break;
-            case XML_TOK_FONTSTYLE:
+            case XML_FONTSTYLE:
                 nIsItalic = sal_Int8(sValue == GetXMLToken(XML_ITALIC));
                 break;
-            case XML_TOK_FONTSIZE:
+            case XML_FONTSIZE:
+            case XML_MATHSIZE:
                 ::sax::Converter::convertDouble(nFontSize, sValue);
                 rContext.GetSmImport().GetMM100UnitConverter().
                     SetXMLMeasureUnit(util::MeasureUnit::POINT);
@@ -634,19 +629,20 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                     }
                 }
                 break;
-            case XML_TOK_FONTFAMILY:
+            case XML_FONTFAMILY:
                 sFontFamily = sValue;
                 break;
-            case XML_TOK_COLOR:
+            case XML_COLOR:
                 sColor = sValue;
                 break;
-            case XML_TOK_MATHCOLOR:
+            case XML_MATHCOLOR:
                 sColor = sValue;
                 break;
-            case XML_TOK_MATHVARIANT:
+            case XML_MATHVARIANT:
                 bMvFound = true;
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 break;
         }
     }
@@ -763,34 +759,28 @@ public:
         , mbMvFound(false)
     {}
 
-    void RetrieveAttrs(const uno::Reference<xml::sax::XAttributeList>& xAttrList);
+    void RetrieveAttrs(const uno::Reference<xml::sax::XFastAttributeList>& xAttrList);
     void ApplyAttrs(MathMLMathvariantValue eDefaultMv);
 };
 
 }
 
-void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    if (!xAttrList.is())
-        return;
-    sal_Int16 nAttrCount = xAttrList->getLength();
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = mrContext.GetSmImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName, &aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            mrContext.GetSmImport().GetPresLayoutAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_MATHVARIANT:
+            case XML_MATHVARIANT:
                 if (!GetMathMLMathvariantValue(sValue, meMv))
                     SAL_WARN("starmath", "failed to recognize mathvariant: " << sValue);
                 mbMvFound = true;
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 break;
         }
     }
@@ -881,13 +871,13 @@ namespace {
 class SmXMLDocContext_Impl : public SmXMLImportContext
 {
 public:
-    SmXMLDocContext_Impl( SmXMLImport &rImport, sal_uInt16 nPrfx,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrfx,rLName) {}
+    SmXMLDocContext_Impl( SmXMLImport &rImport)
+        : SmXMLImportContext(rImport) {}
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
@@ -898,19 +888,18 @@ protected:
     size_t const nElementCount;
 
 public:
-    SmXMLRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLDocContext_Impl(rImport,nPrefix,rLName)
+    SmXMLRowContext_Impl(SmXMLImport &rImport)
+        : SmXMLDocContext_Impl(rImport)
         , nElementCount(GetSmImport().GetNodeStack().size())
     {
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    SvXMLImportContext *StrictCreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName);
+    uno::Reference< xml::sax::XFastContextHandler > StrictCreateChildContext(sal_Int32 nElement);
 
-    void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class SmXMLEncloseContext_Impl : public SmXMLRowContext_Impl
@@ -918,16 +907,15 @@ class SmXMLEncloseContext_Impl : public SmXMLRowContext_Impl
 public:
     // TODO/LATER: convert <menclose notation="horizontalstrike"> into
     // "overstrike{}" and extend the Math syntax to support more notations
-    SmXMLEncloseContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLEncloseContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLEncloseContext_Impl::EndElement()
+void SmXMLEncloseContext_Impl::endFastElement(sal_Int32 nElement)
 {
     /*
     <menclose> accepts any number of arguments; if this number is not 1, its
@@ -935,7 +923,7 @@ void SmXMLEncloseContext_Impl::EndElement()
     arguments
     */
     if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
-        SmXMLRowContext_Impl::EndElement();
+        SmXMLRowContext_Impl::endFastElement( nElement );
 }
 
 namespace {
@@ -944,33 +932,30 @@ class SmXMLFracContext_Impl : public SmXMLRowContext_Impl
 {
 public:
     // TODO/LATER: convert <mfrac bevelled="true"> into "wideslash{}{}"
-    SmXMLFracContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLFracContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
 class SmXMLSqrtContext_Impl : public SmXMLRowContext_Impl
 {
 public:
-    SmXMLSqrtContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLSqrtContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
 class SmXMLRootContext_Impl : public SmXMLRowContext_Impl
 {
 public:
-    SmXMLRootContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLRootContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
@@ -981,24 +966,23 @@ protected:
 
 public:
     /*Right now the style tag is completely ignored*/
-    SmXMLStyleContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
+    SmXMLStyleContext_Impl(SmXMLImport &rImport) : SmXMLRowContext_Impl(rImport),
         aStyleHelper(*this) {}
 
-    void EndElement() override;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > &xAttrList ) override;
 };
 
 }
 
-void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+void SmXMLStyleContext_Impl::startFastElement( sal_Int32 /*nElement*/, const uno::Reference<
+    xml::sax::XFastAttributeList > & xAttrList )
 {
     aStyleHelper.RetrieveAttrs(xAttrList);
 }
 
 
-void SmXMLStyleContext_Impl::EndElement()
+void SmXMLStyleContext_Impl::endFastElement(sal_Int32 nElement)
 {
     /*
     <mstyle> accepts any number of arguments; if this number is not 1, its
@@ -1007,7 +991,7 @@ void SmXMLStyleContext_Impl::EndElement()
     */
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     if (rNodeStack.size() - nElementCount != 1)
-        SmXMLRowContext_Impl::EndElement();
+        SmXMLRowContext_Impl::endFastElement(nElement);
     aStyleHelper.ApplyAttrs();
 }
 
@@ -1017,16 +1001,15 @@ class SmXMLPaddedContext_Impl : public SmXMLRowContext_Impl
 {
 public:
     /*Right now the style tag is completely ignored*/
-    SmXMLPaddedContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLPaddedContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLPaddedContext_Impl::EndElement()
+void SmXMLPaddedContext_Impl::endFastElement(sal_Int32 nElement)
 {
     /*
     <mpadded> accepts any number of arguments; if this number is not 1, its
@@ -1034,7 +1017,7 @@ void SmXMLPaddedContext_Impl::EndElement()
     arguments
     */
     if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
-        SmXMLRowContext_Impl::EndElement();
+        SmXMLRowContext_Impl::endFastElement(nElement);
 }
 
 namespace {
@@ -1043,16 +1026,15 @@ class SmXMLPhantomContext_Impl : public SmXMLRowContext_Impl
 {
 public:
     /*Right now the style tag is completely ignored*/
-    SmXMLPhantomContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLPhantomContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLPhantomContext_Impl::EndElement()
+void SmXMLPhantomContext_Impl::endFastElement(sal_Int32 nElement)
 {
     /*
     <mphantom> accepts any number of arguments; if this number is not 1, its
@@ -1060,7 +1042,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     arguments
     */
     if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
-        SmXMLRowContext_Impl::EndElement();
+        SmXMLRowContext_Impl::endFastElement(nElement);
 
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -1082,40 +1064,35 @@ protected:
     sal_Unicode cEnd;
 
 public:
-    SmXMLFencedContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
+    SmXMLFencedContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport),
         cBegin('('), cEnd(')') {}
 
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
-    void EndElement() override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLFencedContext_Impl::StartElement(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+void SmXMLFencedContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
+    xml::sax::XFastAttributeList > & xAttrList )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetFencedAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
             //temp, starmath cannot handle multichar brackets (I think)
-            case XML_TOK_OPEN:
+            case XML_OPEN:
                 cBegin = sValue[0];
                 break;
-            case XML_TOK_CLOSE:
+            case XML_CLOSE:
                 cEnd = sValue[0];
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 /*Go to superclass*/
                 break;
         }
@@ -1123,7 +1100,7 @@ void SmXMLFencedContext_Impl::StartElement(const uno::Reference<
 }
 
 
-void SmXMLFencedContext_Impl::EndElement()
+void SmXMLFencedContext_Impl::endFastElement(sal_Int32 /*nElement*/)
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -1173,16 +1150,15 @@ namespace {
 class SmXMLErrorContext_Impl : public SmXMLRowContext_Impl
 {
 public:
-    SmXMLErrorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLErrorContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLErrorContext_Impl::EndElement()
+void SmXMLErrorContext_Impl::endFastElement(sal_Int32 /*nElement*/)
 {
     /*Right now the error tag is completely ignored, what
      can I do with it in starmath, ?, maybe we need a
@@ -1206,9 +1182,8 @@ protected:
     SmToken aToken;
 
 public:
-    SmXMLNumberContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName)
+    SmXMLNumberContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport)
     {
         aToken.cMathChar = '\0';
         aToken.nLevel = 5;
@@ -1217,7 +1192,7 @@ public:
 
     virtual void TCharacters(const OUString &rChars) override;
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -1227,7 +1202,7 @@ void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
     aToken.aText = rChars;
 }
 
-void SmXMLNumberContext_Impl::EndElement()
+void SmXMLNumberContext_Impl::endFastElement(sal_Int32 )
 {
     GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_NUMBER));
 }
@@ -1239,43 +1214,38 @@ class SmXMLAnnotationContext_Impl : public SmXMLImportContext
     bool bIsStarMath;
 
 public:
-    SmXMLAnnotationContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(false) {}
+    SmXMLAnnotationContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport), bIsStarMath(false) {}
 
-    virtual void Characters(const OUString &rChars) override;
+    void SAL_CALL characters(const OUString &rChars) override;
 
-    void StartElement(const uno::Reference<xml::sax::XAttributeList > & xAttrList ) override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 }
 
-void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+void SmXMLAnnotationContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
+    xml::sax::XFastAttributeList > & xAttrList )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetAnnotationAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        OUString sValue = aIter.toString();
+        // sometimes they have namespace, sometimes not?
+        switch(aIter.getToken() & TOKEN_MASK)
         {
-            case XML_TOK_ENCODING:
+            case XML_ENCODING:
                 bIsStarMath= sValue == "StarMath 5.0";
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 break;
         }
     }
 }
 
-void SmXMLAnnotationContext_Impl::Characters(const OUString &rChars)
+void SmXMLAnnotationContext_Impl::characters(const OUString &rChars)
 {
     if (bIsStarMath)
         GetSmImport().SetText( GetSmImport().GetText() + rChars );
@@ -1289,9 +1259,8 @@ protected:
     SmToken aToken;
 
 public:
-    SmXMLTextContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName)
+    SmXMLTextContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport)
     {
         aToken.cMathChar = '\0';
         aToken.nLevel = 5;
@@ -1300,7 +1269,7 @@ public:
 
     virtual void TCharacters(const OUString &rChars) override;
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -1310,7 +1279,7 @@ void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
     aToken.aText = rChars;
 }
 
-void SmXMLTextContext_Impl::EndElement()
+void SmXMLTextContext_Impl::endFastElement(sal_Int32 )
 {
     GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_TEXT));
 }
@@ -1323,9 +1292,8 @@ protected:
     SmToken aToken;
 
 public:
-    SmXMLStringContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName)
+    SmXMLStringContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport)
     {
         aToken.cMathChar = '\0';
         aToken.nLevel = 5;
@@ -1334,7 +1302,7 @@ public:
 
     virtual void TCharacters(const OUString &rChars) override;
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -1354,7 +1322,7 @@ void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
     aToken.aText = "\"" + rChars + "\"";
 }
 
-void SmXMLStringContext_Impl::EndElement()
+void SmXMLStringContext_Impl::endFastElement(sal_Int32 )
 {
     GetSmImport().GetNodeStack().push_front(std::make_unique<SmTextNode>(aToken,FNT_FIXED));
 }
@@ -1368,9 +1336,8 @@ class SmXMLIdentifierContext_Impl : public SmXMLImportContext
     SmToken aToken;
 
 public:
-    SmXMLIdentifierContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName)
+    SmXMLIdentifierContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport)
         , maTokenAttrHelper(*this)
         , aStyleHelper(*this)
     {
@@ -1380,17 +1347,17 @@ public:
     }
 
     void TCharacters(const OUString &rChars) override;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override
+    void SAL_CALL startFastElement(sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) override
     {
         maTokenAttrHelper.RetrieveAttrs(xAttrList);
         aStyleHelper.RetrieveAttrs(xAttrList);
     };
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLIdentifierContext_Impl::EndElement()
+void SmXMLIdentifierContext_Impl::endFastElement(sal_Int32 )
 {
     std::unique_ptr<SmTextNode> pNode;
     //we will handle identifier italic/normal here instead of with a standalone
@@ -1434,9 +1401,8 @@ class SmXMLOperatorContext_Impl : public SmXMLImportContext
     SmToken aToken;
 
 public:
-    SmXMLOperatorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName)
+    SmXMLOperatorContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport)
         , maTokenAttrHelper(*this)
         , bIsStretchy(false)
     {
@@ -1445,8 +1411,8 @@ public:
     }
 
     void TCharacters(const OUString &rChars) override;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
-    void EndElement() override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > &xAttrList ) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -1456,7 +1422,7 @@ void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
     aToken.cMathChar = rChars[0];
 }
 
-void SmXMLOperatorContext_Impl::EndElement()
+void SmXMLOperatorContext_Impl::endFastElement(sal_Int32 )
 {
     std::unique_ptr<SmMathSymbolNode> pNode(new SmMathSymbolNode(aToken));
     //For stretchy scaling the scaling must be retrieved from this node
@@ -1472,28 +1438,23 @@ void SmXMLOperatorContext_Impl::EndElement()
 }
 
 
-void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+void SmXMLOperatorContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
+    xml::sax::XFastAttributeList > & xAttrList )
 {
     maTokenAttrHelper.RetrieveAttrs(xAttrList);
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetOperatorAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_STRETCHY:
+            case XML_STRETCHY:
                 bIsStretchy = sValue == GetXMLToken(XML_TRUE);
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 break;
         }
     }
@@ -1504,11 +1465,10 @@ namespace {
 class SmXMLSpaceContext_Impl : public SmXMLImportContext
 {
 public:
-    SmXMLSpaceContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
+    SmXMLSpaceContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport) {}
 
-    void StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList ) override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 bool lcl_CountBlanks(const MathMLAttributeLengthValue &rLV,
@@ -1543,29 +1503,27 @@ bool lcl_CountBlanks(const MathMLAttributeLengthValue &rLV,
 
 }
 
-void SmXMLSpaceContext_Impl::StartElement(
-    const uno::Reference<xml::sax::XAttributeList > & xAttrList )
+void SmXMLSpaceContext_Impl::startFastElement(sal_Int32 /*nElement*/,
+    const uno::Reference<xml::sax::XFastAttributeList > & xAttrList )
 {
     // There is no syntax in Math to specify blank nodes of arbitrary size yet.
     MathMLAttributeLengthValue aLV;
     sal_Int32 nWide = 0, nNarrow = 0;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap = GetSmImport().GetMspaceAttrTokenMap();
-        switch (rAttrTokenMap.Get(nPrefix, aLocalName))
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            case XML_TOK_WIDTH:
+            case XML_WIDTH:
                 if ( ParseMathMLAttributeLengthValue(sValue.trim(), aLV) <= 0 ||
                      !lcl_CountBlanks(aLV, &nWide, &nNarrow) )
                     SAL_WARN("starmath", "ignore mspace's width: " << sValue);
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 break;
         }
     }
@@ -1593,11 +1551,10 @@ protected:
     void GenericEndElement(SmTokenType eType,SmSubSup aSubSup);
 
 public:
-    SmXMLSubContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLSubContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override
+    void SAL_CALL endFastElement(sal_Int32 ) override
     {
         GenericEndElement(TRSUB,RSUB);
     }
@@ -1636,11 +1593,10 @@ namespace {
 class SmXMLSupContext_Impl : public SmXMLSubContext_Impl
 {
 public:
-    SmXMLSupContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLSubContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLSupContext_Impl(SmXMLImport &rImport)
+        : SmXMLSubContext_Impl(rImport) {}
 
-    void EndElement() override
+    void SAL_CALL endFastElement(sal_Int32 ) override
     {
         GenericEndElement(TRSUP,RSUP);
     }
@@ -1653,11 +1609,10 @@ protected:
     void GenericEndElement(SmTokenType eType, SmSubSup aSub,SmSubSup aSup);
 
 public:
-    SmXMLSubSupContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLSubSupContext_Impl(SmXMLImport &rImport)
+        : SmXMLRowContext_Impl(rImport) {}
 
-    void EndElement() override
+    void SAL_CALL endFastElement(sal_Int32 ) override
     {
         GenericEndElement(TRSUB,RSUB,RSUP);
     }
@@ -1701,23 +1656,24 @@ protected:
     sal_Int16 nAttrCount;
 
 public:
-    SmXMLUnderContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-                           const OUString& rLName)
-        : SmXMLSubContext_Impl(rImport,nPrefix,rLName)
+    SmXMLUnderContext_Impl(SmXMLImport &rImport)
+        : SmXMLSubContext_Impl(rImport)
         , nAttrCount( 0 )
         {}
 
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
-    void EndElement() override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > &xAttrList ) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
     void HandleAccent();
 };
 
 }
 
-void SmXMLUnderContext_Impl::StartElement(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+void SmXMLUnderContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
+    xml::sax::XFastAttributeList > & xAttrList )
 {
-    nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    nAttrCount = pAttribList->getFastAttributeTokens().size();
 }
 
 void SmXMLUnderContext_Impl::HandleAccent()
@@ -1750,7 +1706,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
 }
 
 
-void SmXMLUnderContext_Impl::EndElement()
+void SmXMLUnderContext_Impl::endFastElement(sal_Int32 )
 {
     if (!nAttrCount)
         GenericEndElement(TCSUB,CSUB);
@@ -1766,25 +1722,26 @@ protected:
     sal_Int16 nAttrCount;
 
 public:
-    SmXMLOverContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLSubContext_Impl(rImport,nPrefix,rLName), nAttrCount(0) {}
+    SmXMLOverContext_Impl(SmXMLImport &rImport)
+        : SmXMLSubContext_Impl(rImport), nAttrCount(0) {}
 
-    void EndElement() override;
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList ) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > &xAttrList ) override;
     void HandleAccent();
 };
 
 }
 
-void SmXMLOverContext_Impl::StartElement(const uno::Reference<
-    xml::sax::XAttributeList > & xAttrList )
+void SmXMLOverContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
+    xml::sax::XFastAttributeList > & xAttrList )
 {
-    nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    nAttrCount = pAttribList->getFastAttributeTokens().size();
 }
 
 
-void SmXMLOverContext_Impl::EndElement()
+void SmXMLOverContext_Impl::endFastElement(sal_Int32 )
 {
     if (!nAttrCount)
         GenericEndElement(TCSUP,CSUP);
@@ -1820,11 +1777,10 @@ namespace {
 class SmXMLUnderOverContext_Impl : public SmXMLSubSupContext_Impl
 {
 public:
-    SmXMLUnderOverContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLSubSupContext_Impl(rImport,nPrefix,rLName) {}
+    SmXMLUnderOverContext_Impl(SmXMLImport &rImport)
+        : SmXMLSubSupContext_Impl(rImport) {}
 
-    void EndElement() override
+    void SAL_CALL endFastElement(sal_Int32 ) override
     {
         GenericEndElement(TCSUB,CSUB,CSUP);
     }
@@ -1838,31 +1794,28 @@ class SmXMLMultiScriptsContext_Impl : public SmXMLSubSupContext_Impl
     void ProcessSubSupPairs(bool bIsPrescript);
 
 public:
-    SmXMLMultiScriptsContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) :
-        SmXMLSubSupContext_Impl(rImport,nPrefix,rLName),
+    SmXMLMultiScriptsContext_Impl(SmXMLImport &rImport) :
+        SmXMLSubSupContext_Impl(rImport),
         bHasPrescripts(false) {}
 
-    void EndElement() override;
-    SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 
 class SmXMLNoneContext_Impl : public SmXMLImportContext
 {
 public:
-    SmXMLNoneContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
+    SmXMLNoneContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport) {}
 
-    void EndElement() override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-void SmXMLNoneContext_Impl::EndElement()
+void SmXMLNoneContext_Impl::endFastElement(sal_Int32 )
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -1878,47 +1831,41 @@ namespace {
 class SmXMLPrescriptsContext_Impl : public SmXMLImportContext
 {
 public:
-    SmXMLPrescriptsContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
+    SmXMLPrescriptsContext_Impl(SmXMLImport &rImport)
+        : SmXMLImportContext(rImport) {}
 };
 
 
 class SmXMLTableRowContext_Impl : public SmXMLRowContext_Impl
 {
 public:
-    SmXMLTableRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) :
-        SmXMLRowContext_Impl(rImport,nPrefix,rLName)
+    SmXMLTableRowContext_Impl(SmXMLImport &rImport) :
+        SmXMLRowContext_Impl(rImport)
         {}
 
-    SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 
 class SmXMLTableContext_Impl : public SmXMLTableRowContext_Impl
 {
 public:
-    SmXMLTableContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) :
-        SmXMLTableRowContext_Impl(rImport,nPrefix,rLName)
+    SmXMLTableContext_Impl(SmXMLImport &rImport) :
+        SmXMLTableRowContext_Impl(rImport)
         {}
 
-    void EndElement() override;
-    SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 
 class SmXMLTableCellContext_Impl : public SmXMLRowContext_Impl
 {
 public:
-    SmXMLTableCellContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) :
-        SmXMLRowContext_Impl(rImport,nPrefix,rLName)
+    SmXMLTableCellContext_Impl(SmXMLImport &rImport) :
+        SmXMLRowContext_Impl(rImport)
         {}
 };
 
@@ -1926,13 +1873,12 @@ public:
 class SmXMLAlignGroupContext_Impl : public SmXMLRowContext_Impl
 {
 public:
-    SmXMLAlignGroupContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) :
-        SmXMLRowContext_Impl(rImport,nPrefix,rLName)
+    SmXMLAlignGroupContext_Impl(SmXMLImport &rImport) :
+        SmXMLRowContext_Impl(rImport)
         {}
 
     /*Don't do anything with alignment for now*/
-    void EndElement() override
+    void SAL_CALL endFastElement(sal_Int32 ) override
     {
     }
 };
@@ -1943,14 +1889,13 @@ class SmXMLActionContext_Impl : public SmXMLRowContext_Impl
     size_t mnSelection; // 1-based
 
 public:
-    SmXMLActionContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName) :
-        SmXMLRowContext_Impl(rImport,nPrefix,rLName)
+    SmXMLActionContext_Impl(SmXMLImport &rImport) :
+        SmXMLRowContext_Impl(rImport)
       , mnSelection(1)
         {}
 
-    void StartElement(const uno::Reference<xml::sax::XAttributeList> &xAttrList) override;
-    void EndElement() override;
+    void SAL_CALL startFastElement(sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList> &xAttrList) override;
+    void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
@@ -1969,7 +1914,9 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 /*nElement*/ ) override {}
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                    const OUString& rLocalName,
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -1998,8 +1945,8 @@ SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPr
     return pContext;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLOfficeContext_Impl::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+uno::Reference< xml::sax::XFastContextHandler > SmXMLOfficeContext_Impl::createFastChildContext(sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > &/*xAttrList*/)
 {
     return nullptr;
 }
@@ -2067,91 +2014,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLFlatDocContext_Imp
     }
 }
 
-static const SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_SEMANTICS, XML_TOK_SEMANTICS },
-    { XML_NAMESPACE_MATH,   XML_MATH,      XML_TOK_MATH   },
-    { XML_NAMESPACE_MATH,   XML_MSTYLE,    XML_TOK_MSTYLE  },
-    { XML_NAMESPACE_MATH,   XML_MERROR,    XML_TOK_MERROR },
-    { XML_NAMESPACE_MATH,   XML_MPHANTOM,  XML_TOK_MPHANTOM },
-    { XML_NAMESPACE_MATH,   XML_MROW,      XML_TOK_MROW },
-    { XML_NAMESPACE_MATH,   XML_MENCLOSE,  XML_TOK_MENCLOSE },
-    { XML_NAMESPACE_MATH,   XML_MFRAC,     XML_TOK_MFRAC },
-    { XML_NAMESPACE_MATH,   XML_MSQRT,     XML_TOK_MSQRT },
-    { XML_NAMESPACE_MATH,   XML_MROOT,     XML_TOK_MROOT },
-    { XML_NAMESPACE_MATH,   XML_MSUB,      XML_TOK_MSUB },
-    { XML_NAMESPACE_MATH,   XML_MSUP,      XML_TOK_MSUP },
-    { XML_NAMESPACE_MATH,   XML_MSUBSUP,   XML_TOK_MSUBSUP },
-    { XML_NAMESPACE_MATH,   XML_MUNDER,    XML_TOK_MUNDER },
-    { XML_NAMESPACE_MATH,   XML_MOVER,     XML_TOK_MOVER },
-    { XML_NAMESPACE_MATH,   XML_MUNDEROVER,    XML_TOK_MUNDEROVER },
-    { XML_NAMESPACE_MATH,   XML_MMULTISCRIPTS, XML_TOK_MMULTISCRIPTS },
-    { XML_NAMESPACE_MATH,   XML_MTABLE,    XML_TOK_MTABLE },
-    { XML_NAMESPACE_MATH,   XML_MACTION,   XML_TOK_MACTION },
-    { XML_NAMESPACE_MATH,   XML_MFENCED,   XML_TOK_MFENCED },
-    { XML_NAMESPACE_MATH,   XML_MPADDED,   XML_TOK_MPADDED },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_FONTWEIGHT,      XML_TOK_FONTWEIGHT    },
-    { XML_NAMESPACE_MATH,   XML_FONTSTYLE,       XML_TOK_FONTSTYLE     },
-    { XML_NAMESPACE_MATH,   XML_FONTSIZE,        XML_TOK_FONTSIZE      },
-    { XML_NAMESPACE_MATH,   XML_FONTFAMILY,      XML_TOK_FONTFAMILY    },
-    { XML_NAMESPACE_MATH,   XML_COLOR,           XML_TOK_COLOR },
-    { XML_NAMESPACE_MATH,   XML_MATHCOLOR,       XML_TOK_MATHCOLOR },
-    { XML_NAMESPACE_MATH,   XML_MATHVARIANT,     XML_TOK_MATHVARIANT },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aFencedAttrTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_OPEN,       XML_TOK_OPEN },
-    { XML_NAMESPACE_MATH,   XML_CLOSE,      XML_TOK_CLOSE },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_STRETCHY,      XML_TOK_STRETCHY },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aAnnotationAttrTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_ENCODING,      XML_TOK_ENCODING },
-    XML_TOKEN_MAP_END
-};
-
-
-static const SvXMLTokenMapEntry aPresElemTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_ANNOTATION,    XML_TOK_ANNOTATION },
-    { XML_NAMESPACE_MATH,   XML_MI,    XML_TOK_MI },
-    { XML_NAMESPACE_MATH,   XML_MN,    XML_TOK_MN },
-    { XML_NAMESPACE_MATH,   XML_MO,    XML_TOK_MO },
-    { XML_NAMESPACE_MATH,   XML_MTEXT, XML_TOK_MTEXT },
-    { XML_NAMESPACE_MATH,   XML_MSPACE,XML_TOK_MSPACE },
-    { XML_NAMESPACE_MATH,   XML_MS,    XML_TOK_MS },
-    { XML_NAMESPACE_MATH,   XML_MALIGNGROUP,   XML_TOK_MALIGNGROUP },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aPresScriptEmptyElemTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_MPRESCRIPTS,   XML_TOK_MPRESCRIPTS },
-    { XML_NAMESPACE_MATH,   XML_NONE,  XML_TOK_NONE },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aPresTableElemTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_MTR,       XML_TOK_MTR },
-    { XML_NAMESPACE_MATH,   XML_MTD,       XML_TOK_MTD },
-    XML_TOKEN_MAP_END
-};
-
 static const SvXMLTokenMapEntry aColorTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
@@ -2173,76 +2035,6 @@ static const SvXMLTokenMapEntry aColorTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static const SvXMLTokenMapEntry aActionAttrTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_SELECTION,      XML_TOK_SELECTION },
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aMspaceAttrTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_WIDTH,      XML_TOK_WIDTH },
-    XML_TOKEN_MAP_END
-};
-
-
-const SvXMLTokenMap& SmXMLImport::GetPresLayoutElemTokenMap()
-{
-    if (!pPresLayoutElemTokenMap)
-        pPresLayoutElemTokenMap.reset(new SvXMLTokenMap(aPresLayoutElemTokenMap));
-    return *pPresLayoutElemTokenMap;
-}
-
-const SvXMLTokenMap& SmXMLImport::GetPresLayoutAttrTokenMap()
-{
-    if (!pPresLayoutAttrTokenMap)
-        pPresLayoutAttrTokenMap.reset(new SvXMLTokenMap(aPresLayoutAttrTokenMap));
-    return *pPresLayoutAttrTokenMap;
-}
-
-
-const SvXMLTokenMap& SmXMLImport::GetFencedAttrTokenMap()
-{
-    if (!pFencedAttrTokenMap)
-        pFencedAttrTokenMap.reset(new SvXMLTokenMap(aFencedAttrTokenMap));
-    return *pFencedAttrTokenMap;
-}
-
-const SvXMLTokenMap& SmXMLImport::GetOperatorAttrTokenMap()
-{
-    if (!pOperatorAttrTokenMap)
-        pOperatorAttrTokenMap.reset(new SvXMLTokenMap(aOperatorAttrTokenMap));
-    return *pOperatorAttrTokenMap;
-}
-
-const SvXMLTokenMap& SmXMLImport::GetAnnotationAttrTokenMap()
-{
-    if (!pAnnotationAttrTokenMap)
-        pAnnotationAttrTokenMap.reset(new SvXMLTokenMap(aAnnotationAttrTokenMap));
-    return *pAnnotationAttrTokenMap;
-}
-
-const SvXMLTokenMap& SmXMLImport::GetPresElemTokenMap()
-{
-    if (!pPresElemTokenMap)
-        pPresElemTokenMap.reset(new SvXMLTokenMap(aPresElemTokenMap));
-    return *pPresElemTokenMap;
-}
-
-const SvXMLTokenMap& SmXMLImport::GetPresScriptEmptyElemTokenMap()
-{
-    if (!pPresScriptEmptyElemTokenMap)
-        pPresScriptEmptyElemTokenMap.reset(new
-            SvXMLTokenMap(aPresScriptEmptyElemTokenMap));
-    return *pPresScriptEmptyElemTokenMap;
-}
-
-const SvXMLTokenMap& SmXMLImport::GetPresTableElemTokenMap()
-{
-    if (!pPresTableElemTokenMap)
-        pPresTableElemTokenMap.reset(new SvXMLTokenMap(aPresTableElemTokenMap));
-    return *pPresTableElemTokenMap;
-}
 
 const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
 {
@@ -2251,113 +2043,90 @@ const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
     return *pColorTokenMap;
 }
 
-const SvXMLTokenMap& SmXMLImport::GetActionAttrTokenMap()
+uno::Reference< xml::sax::XFastContextHandler > SmXMLDocContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& /*xAttrList*/)
 {
-    if (!pActionAttrTokenMap)
-        pActionAttrTokenMap.reset(new SvXMLTokenMap(aActionAttrTokenMap));
-    return *pActionAttrTokenMap;
-}
+    uno::Reference< xml::sax::XFastContextHandler > xContext;
 
-const SvXMLTokenMap& SmXMLImport::GetMspaceAttrTokenMap()
-{
-    if (!pMspaceAttrTokenMap)
-        pMspaceAttrTokenMap.reset(new SvXMLTokenMap(aMspaceAttrTokenMap));
-    return *pMspaceAttrTokenMap;
-}
-
-
-SvXMLImportContextRef SmXMLDocContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-    SvXMLImportContext* pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresLayoutElemTokenMap();
-
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(nElement)
     {
         //Consider semantics a dummy except for any starmath annotations
-        case XML_TOK_SEMANTICS:
-            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_SEMANTICS):
+            xContext = new SmXMLRowContext_Impl(GetSmImport());
             break;
         /*General Layout Schemata*/
-        case XML_TOK_MROW:
-            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MROW):
+            xContext = new SmXMLRowContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MENCLOSE:
-            pContext = GetSmImport().CreateEncloseContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MENCLOSE):
+            xContext = new SmXMLEncloseContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MFRAC:
-            pContext = GetSmImport().CreateFracContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MFRAC):
+            xContext = new SmXMLFracContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MSQRT:
-            pContext = GetSmImport().CreateSqrtContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MSQRT):
+            xContext = new SmXMLSqrtContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MROOT:
-            pContext = GetSmImport().CreateRootContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MROOT):
+            xContext = new SmXMLRootContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MSTYLE:
-            pContext = GetSmImport().CreateStyleContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MSTYLE):
+            xContext = new SmXMLStyleContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MERROR:
-            pContext = GetSmImport().CreateErrorContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MERROR):
+            xContext = new SmXMLErrorContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MPADDED:
-            pContext = GetSmImport().CreatePaddedContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MPADDED):
+            xContext = new SmXMLPaddedContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MPHANTOM:
-            pContext = GetSmImport().CreatePhantomContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MPHANTOM):
+            xContext = new SmXMLPhantomContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MFENCED:
-            pContext = GetSmImport().CreateFencedContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MFENCED):
+            xContext = new SmXMLFencedContext_Impl(GetSmImport());
             break;
         /*Script and Limit Schemata*/
-        case XML_TOK_MSUB:
-            pContext = GetSmImport().CreateSubContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MSUB):
+            xContext = new SmXMLSubContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MSUP:
-            pContext = GetSmImport().CreateSupContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MSUP):
+            xContext = new SmXMLSupContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MSUBSUP:
-            pContext = GetSmImport().CreateSubSupContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MSUBSUP):
+            xContext = new SmXMLSubSupContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MUNDER:
-            pContext = GetSmImport().CreateUnderContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MUNDER):
+            xContext = new SmXMLUnderContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MOVER:
-            pContext = GetSmImport().CreateOverContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MOVER):
+            xContext = new SmXMLOverContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MUNDEROVER:
-            pContext = GetSmImport().CreateUnderOverContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MUNDEROVER):
+            xContext = new SmXMLUnderOverContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MMULTISCRIPTS:
-            pContext = GetSmImport().CreateMultiScriptsContext(nPrefix,
-                rLocalName);
+        case XML_ELEMENT(MATH, XML_MMULTISCRIPTS):
+            xContext = new SmXMLMultiScriptsContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MTABLE:
-            pContext = GetSmImport().CreateTableContext(nPrefix,
-                rLocalName);
+        case XML_ELEMENT(MATH, XML_MTABLE):
+            xContext = new SmXMLTableContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MACTION:
-            pContext = GetSmImport().CreateActionContext(nPrefix,
-                rLocalName);
+        case XML_ELEMENT(MATH, XML_MACTION):
+            xContext = new SmXMLActionContext_Impl(GetSmImport());
             break;
         default:
             /*Basically there's an implicit mrow around certain bare
              *elements, use a RowContext to see if this is one of
              *those ones*/
-            rtl::Reference<SmXMLRowContext_Impl> aTempContext(new SmXMLRowContext_Impl(GetSmImport(),nPrefix,
-                GetXMLToken(XML_MROW)));
+            rtl::Reference<SmXMLRowContext_Impl> aTempContext(new SmXMLRowContext_Impl(GetSmImport()));
 
-            pContext = aTempContext->StrictCreateChildContext(nPrefix,
-                rLocalName);
+            xContext = aTempContext->StrictCreateChildContext(nElement);
             break;
     }
-    return pContext;
+    return xContext;
 }
 
-void SmXMLDocContext_Impl::EndElement()
+void SmXMLDocContext_Impl::endFastElement(sal_Int32)
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
@@ -2382,7 +2151,7 @@ void SmXMLDocContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode2));
 }
 
-void SmXMLFracContext_Impl::EndElement()
+void SmXMLFracContext_Impl::endFastElement(sal_Int32 )
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     const bool bNodeCheck = rNodeStack.size() - nElementCount == 2;
@@ -2401,7 +2170,7 @@ void SmXMLFracContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-void SmXMLRootContext_Impl::EndElement()
+void SmXMLRootContext_Impl::endFastElement(sal_Int32 )
 {
     /*The <mroot> element requires exactly 2 arguments.*/
     const bool bNodeCheck = GetSmImport().GetNodeStack().size() - nElementCount == 2;
@@ -2421,7 +2190,7 @@ void SmXMLRootContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-void SmXMLSqrtContext_Impl::EndElement()
+void SmXMLSqrtContext_Impl::endFastElement(sal_Int32 nElement)
 {
     /*
     <msqrt> accepts any number of arguments; if this number is not 1, its
@@ -2429,7 +2198,7 @@ void SmXMLSqrtContext_Impl::EndElement()
     arguments
     */
     if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
-        SmXMLRowContext_Impl::EndElement();
+        SmXMLRowContext_Impl::endFastElement(nElement);
 
     SmToken aToken;
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
@@ -2441,7 +2210,7 @@ void SmXMLSqrtContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-void SmXMLRowContext_Impl::EndElement()
+void SmXMLRowContext_Impl::endFastElement(sal_Int32 )
 {
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -2553,43 +2322,41 @@ void SmXMLRowContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-SvXMLImportContext* SmXMLRowContext_Impl::StrictCreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName)
+uno::Reference< xml::sax::XFastContextHandler > SmXMLRowContext_Impl::StrictCreateChildContext(
+    sal_Int32 nElement)
 {
-    SvXMLImportContext* pContext = nullptr;
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
 
-    const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresElemTokenMap();
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(nElement)
     {
         /*Note that these should accept malignmark subelements, but do not*/
-        case XML_TOK_MN:
-            pContext = GetSmImport().CreateNumberContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MN):
+            pContext = new SmXMLNumberContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MI:
-            pContext = GetSmImport().CreateIdentifierContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MI):
+            pContext = new SmXMLIdentifierContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MO:
-            pContext = GetSmImport().CreateOperatorContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MO):
+            pContext = new SmXMLOperatorContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MTEXT:
-            pContext = GetSmImport().CreateTextContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MTEXT):
+            pContext = new SmXMLTextContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MSPACE:
-            pContext = GetSmImport().CreateSpaceContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MSPACE):
+            pContext = new SmXMLSpaceContext_Impl(GetSmImport());
             break;
-        case XML_TOK_MS:
-            pContext = GetSmImport().CreateStringContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MS):
+            pContext = new SmXMLStringContext_Impl(GetSmImport());
             break;
 
         /*Note: The maligngroup should only be seen when the row
          * (or descendants) are in a table*/
-        case XML_TOK_MALIGNGROUP:
-            pContext = GetSmImport().CreateAlignGroupContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MALIGNGROUP):
+            pContext = new SmXMLAlignGroupContext_Impl(GetSmImport());
             break;
 
-        case XML_TOK_ANNOTATION:
-            pContext = GetSmImport().CreateAnnotationContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_ANNOTATION):
+            pContext = new SmXMLAnnotationContext_Impl(GetSmImport());
             break;
 
         default:
@@ -2599,47 +2366,39 @@ SvXMLImportContext* SmXMLRowContext_Impl::StrictCreateChildContext(
 }
 
 
-SvXMLImportContextRef SmXMLRowContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+uno::Reference< xml::sax::XFastContextHandler > SmXMLRowContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    SvXMLImportContextRef xContext = StrictCreateChildContext(nPrefix,
-            rLocalName);
+    uno::Reference< xml::sax::XFastContextHandler > xContext = StrictCreateChildContext(nElement);
 
     if (!xContext)
     {
         //Hmm, unrecognized for this level, check to see if its
         //an element that can have an implicit schema around it
-        xContext = SmXMLDocContext_Impl::CreateChildContext(nPrefix,
-            rLocalName,xAttrList);
+        xContext = SmXMLDocContext_Impl::createFastChildContext(nElement, xAttrList);
     }
     return xContext;
 }
 
-SvXMLImportContextRef SmXMLMultiScriptsContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+uno::Reference< xml::sax::XFastContextHandler > SmXMLMultiScriptsContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    SvXMLImportContextRef xContext;
+    uno::Reference< xml::sax::XFastContextHandler > xContext;
 
-    const SvXMLTokenMap& rTokenMap = GetSmImport().
-        GetPresScriptEmptyElemTokenMap();
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(nElement)
     {
-        case XML_TOK_MPRESCRIPTS:
+        case XML_ELEMENT(MATH, XML_MPRESCRIPTS):
             bHasPrescripts = true;
             ProcessSubSupPairs(false);
-            xContext = GetSmImport().CreatePrescriptsContext(nPrefix,
-                rLocalName);
+            xContext = new SmXMLPrescriptsContext_Impl(GetSmImport());
             break;
-        case XML_TOK_NONE:
-            xContext = GetSmImport().CreateNoneContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_NONE):
+            xContext = new SmXMLNoneContext_Impl(GetSmImport());
             break;
         default:
-            xContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
-                rLocalName,xAttrList);
+            xContext = SmXMLRowContext_Impl::createFastChildContext(nElement,xAttrList);
             break;
     }
     return xContext;
@@ -2714,7 +2473,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
 }
 
 
-void SmXMLTableContext_Impl::EndElement()
+void SmXMLTableContext_Impl::endFastElement(sal_Int32 )
 {
     SmNodeArray aExpressionArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -2774,84 +2533,70 @@ void SmXMLTableContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-SvXMLImportContextRef SmXMLTableRowContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+uno::Reference< xml::sax::XFastContextHandler > SmXMLTableRowContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    SvXMLImportContextRef xContext;
+    uno::Reference< xml::sax::XFastContextHandler > xContext;
 
-    const SvXMLTokenMap& rTokenMap = GetSmImport().
-        GetPresTableElemTokenMap();
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(nElement)
     {
-        case XML_TOK_MTD:
-            xContext = GetSmImport().CreateTableCellContext(nPrefix,
-                rLocalName);
+        case XML_ELEMENT(MATH, XML_MTD):
+            xContext = new SmXMLTableCellContext_Impl(GetSmImport());
             break;
         default:
-            xContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
-                rLocalName,xAttrList);
+            xContext = SmXMLRowContext_Impl::createFastChildContext(nElement,xAttrList);
             break;
     }
     return xContext;
 }
 
-SvXMLImportContextRef SmXMLTableContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+uno::Reference< xml::sax::XFastContextHandler > SmXMLTableContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    SvXMLImportContextRef xContext;
+    uno::Reference< xml::sax::XFastContextHandler > xContext;
 
-    const SvXMLTokenMap& rTokenMap = GetSmImport().
-        GetPresTableElemTokenMap();
-    switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(nElement)
     {
-        case XML_TOK_MTR:
-            xContext = GetSmImport().CreateTableRowContext(nPrefix,rLocalName);
+        case XML_ELEMENT(MATH, XML_MTR):
+            xContext = new SmXMLTableRowContext_Impl(GetSmImport());
             break;
         default:
-            xContext = SmXMLTableRowContext_Impl::CreateChildContext(nPrefix,
-                rLocalName,xAttrList);
+            xContext = SmXMLTableRowContext_Impl::createFastChildContext(nElement, xAttrList);
             break;
     }
     return xContext;
 }
 
-void SmXMLMultiScriptsContext_Impl::EndElement()
+void SmXMLMultiScriptsContext_Impl::endFastElement(sal_Int32 )
 {
     ProcessSubSupPairs(bHasPrescripts);
 }
 
-void SmXMLActionContext_Impl::StartElement(const uno::Reference<xml::sax::XAttributeList> & xAttrList)
+void SmXMLActionContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetActionAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_SELECTION:
+            case XML_SELECTION:
                 {
                     sal_uInt32 n = sValue.toUInt32();
                     if (n > 0) mnSelection = static_cast<size_t>(n);
                 }
                 break;
             default:
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
                 break;
         }
     }
 }
 
-void SmXMLActionContext_Impl::EndElement()
+void SmXMLActionContext_Impl::endFastElement(sal_Int32 )
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     auto nSize = rNodeStack.size();
@@ -2879,17 +2624,6 @@ void SmXMLActionContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSelected));
 }
 
-SvXMLImportContext *SmXMLImport::CreateDocumentContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
-{
-    SvXMLImportContext *pContext = nullptr;
-    if ( XML_NAMESPACE_OFFICE != nPrefix )
-        pContext = new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
-
-    return pContext;
-}
-
 SvXMLImportContext *SmXMLImport::CreateFastContext(sal_Int32 nElement,
     const uno::Reference <xml::sax::XFastAttributeList> & /*xAttrList*/)
 {
@@ -2913,193 +2647,10 @@ SvXMLImportContext *SmXMLImport::CreateFastContext(sal_Int32 nElement,
         default:
             if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE))
                 pContext = new SmXMLOfficeContext_Impl(*this);
+            else
+                pContext = new SmXMLDocContext_Impl(*this);
     }
     return pContext;
-}
-
-SvXMLImportContext *SmXMLImport::CreateRowContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-        return new SmXMLRowContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateTextContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLTextContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateAnnotationContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLAnnotationContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateStringContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLStringContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateNumberContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLNumberContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateIdentifierContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLIdentifierContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateOperatorContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLOperatorContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateSpaceContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLSpaceContext_Impl(*this,nPrefix,rLocalName);
-}
-
-
-SvXMLImportContext *SmXMLImport::CreateEncloseContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLEncloseContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateFracContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLFracContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateSqrtContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLSqrtContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateRootContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLRootContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateStyleContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLStyleContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreatePaddedContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLPaddedContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreatePhantomContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLPhantomContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateFencedContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLFencedContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateErrorContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLErrorContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateSubContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLSubContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateSubSupContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLSubSupContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateSupContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLSupContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateUnderContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-        return new SmXMLUnderContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateOverContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLOverContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateUnderOverContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLUnderOverContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateMultiScriptsContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLMultiScriptsContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateTableContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLTableContext_Impl(*this,nPrefix,rLocalName);
-}
-SvXMLImportContext *SmXMLImport::CreateTableRowContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLTableRowContext_Impl(*this,nPrefix,rLocalName);
-}
-SvXMLImportContext *SmXMLImport::CreateTableCellContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLTableCellContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateNoneContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLNoneContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreatePrescriptsContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLPrescriptsContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateAlignGroupContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLAlignGroupContext_Impl(*this,nPrefix,rLocalName);
-}
-
-SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName)
-{
-    return new SmXMLActionContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SmXMLImport::~SmXMLImport() throw ()
