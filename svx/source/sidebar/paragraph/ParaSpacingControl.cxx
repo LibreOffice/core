@@ -19,6 +19,7 @@
 
 #include "ParaSpacingWindow.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/editids.hrc>

@@ -21,6 +21,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <comphelper/accessiblewrapper.hxx>
@@ -29,6 +30,7 @@
 #include <AccessibleTableShape.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include "accessiblecell.hxx"
+#include <cell.hxx>
 
 #include <algorithm>
 #include <unordered_map>

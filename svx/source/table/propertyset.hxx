@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <rtl/ref.hxx>
-#include <functional>
 #include <unordered_map>
 #include <vector>
 

@@ -20,16 +20,13 @@
 #ifndef INCLUDED_SVX_SOURCE_TABLE_TABLELAYOUTER_HXX
 #define INCLUDED_SVX_SOURCE_TABLE_TABLELAYOUTER_HXX
 
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/table/XTable.hpp>
 #include <sal/types.h>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <vector>
-#include <map>
 
 #include <svx/svdotable.hxx>
+#include <celltypes.hxx>
 
 namespace tools { class Rectangle; }
 

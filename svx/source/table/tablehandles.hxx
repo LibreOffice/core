@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_TABLE_TABLEHANDLES_HXX
 #define INCLUDED_SVX_SOURCE_TABLE_TABLEHANDLES_HXX
 
-#include <svx/sdr/overlay/overlayobject.hxx>
-
 #include <svx/svdhdl.hxx>
 
 

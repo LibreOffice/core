@@ -21,6 +21,10 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
 
+#include <svx/imapdlg.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/imap.hxx>
 
 class IMapOwnData
 {
