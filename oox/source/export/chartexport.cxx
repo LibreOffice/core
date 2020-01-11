@@ -1124,8 +1124,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 for (const auto& rDataSeries : aDataSeriesSeq)
                 {
                     PropertySet aSeriesProp(rDataSeries);
-                    bool bVaryColorsByPoint = false;
-                    aSeriesProp.getProperty(bVaryColorsByPoint, PROP_VaryColorsByPoint);
+                    bool bVaryColorsByPoint = aSeriesProp.getBoolProperty(PROP_VaryColorsByPoint);
                     if (bVaryColorsByPoint)
                     {
                         Sequence<sal_Int32> deletedLegendEntriesSeq;
