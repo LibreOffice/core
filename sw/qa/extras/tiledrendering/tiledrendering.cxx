@@ -2035,7 +2035,7 @@ void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, 
     if (bValue)
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
-        CPPUNIT_ASSERT_EQUAL(OUString("Default Style"), aSeq[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("Default Page Style"), aSeq[0]);
     }
     else
         CPPUNIT_ASSERT(!aSeq.hasElements());
@@ -2053,7 +2053,7 @@ void SwTiledRenderingTest::testPageHeader()
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, false);
     // Insert Page Header
     {
-        SfxStringItem aStyle(FN_INSERT_PAGEHEADER, "Default Style");
+        SfxStringItem aStyle(FN_INSERT_PAGEHEADER, "Default Page Style");
         SfxBoolItem aItem(FN_PARAM_1, true);
         pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aStyle, &aItem});
     }
@@ -2062,7 +2062,7 @@ void SwTiledRenderingTest::testPageHeader()
 
     // Remove Page Header
     {
-        SfxStringItem aStyle(FN_INSERT_PAGEHEADER, "Default Style");
+        SfxStringItem aStyle(FN_INSERT_PAGEHEADER, "Default Page Style");
         SfxBoolItem aItem(FN_PARAM_1, false);
         pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aStyle, &aItem});
     }
@@ -2080,7 +2080,7 @@ void SwTiledRenderingTest::testPageFooter()
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
     // Insert Page Footer
     {
-        SfxStringItem aPageStyle(FN_INSERT_PAGEFOOTER, "Default Style");
+        SfxStringItem aPageStyle(FN_INSERT_PAGEFOOTER, "Default Page Style");
         SfxBoolItem aItem(FN_PARAM_1, true);
         pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aPageStyle, &aItem});
     }
@@ -2089,7 +2089,7 @@ void SwTiledRenderingTest::testPageFooter()
 
     // Remove Page Footer
     {
-        SfxStringItem aPageStyle(FN_INSERT_PAGEFOOTER, "Default Style");
+        SfxStringItem aPageStyle(FN_INSERT_PAGEFOOTER, "Default Page Style");
         SfxBoolItem aItem(FN_PARAM_1, false);
         pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::API | SfxCallMode::SYNCHRON, {&aPageStyle, &aItem});
     }

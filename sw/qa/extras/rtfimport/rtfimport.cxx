@@ -1448,12 +1448,12 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
     CPPUNIT_ASSERT_EQUAL(OUString("First Page Header"), aActual);
 
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Default Style"), "HeaderTextLeft");
+        getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("Header even"), aActual);
 
     uno::Reference<text::XText> xHeaderTextRight = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Default Style"), "HeaderTextRight");
+        getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextRight");
     aActual = xHeaderTextRight->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("Header uneven"), aActual);
 
@@ -1463,12 +1463,12 @@ CPPUNIT_TEST_FIXTURE(Test, testImportHeaderFooter)
     CPPUNIT_ASSERT_EQUAL(OUString("First Page Footer"), aActual);
 
     uno::Reference<text::XText> xFooterTextLeft = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Default Style"), "FooterTextLeft");
+        getStyles("PageStyles")->getByName("Default Page Style"), "FooterTextLeft");
     aActual = xFooterTextLeft->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("Footer even"), aActual);
 
     uno::Reference<text::XText> xFooterTextRight = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Default Style"), "FooterTextRight");
+        getStyles("PageStyles")->getByName("Default Page Style"), "FooterTextRight");
     aActual = xFooterTextRight->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("Footer uneven"), aActual);
 }
@@ -1478,7 +1478,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
     load(mpTestDocumentPath, "tdf108947.rtf");
     //Check if Headers/Footers contain what they should in this document
     uno::Reference<text::XText> xHeaderTextRight = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Default Style"), "HeaderTextRight");
+        getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextRight");
     OUString aActual = xHeaderTextRight->getString();
     CPPUNIT_ASSERT_EQUAL(OUString(""), aActual);
 
@@ -1486,7 +1486,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
 #if HAVE_MORE_FONTS
     OUString aExpected = SAL_NEWLINE_STRING SAL_NEWLINE_STRING "Header Page 2 ?";
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Default Style"), "HeaderTextLeft");
+        getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 #endif
