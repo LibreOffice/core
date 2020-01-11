@@ -17,7 +17,6 @@ boost_patches += boost.utility.Wundef.warnings.patch
 
 boost_patches += boost.noiconv.patch
 
-boost_patches += ubsan.patch.0
 boost_patches += rtti.patch.0
 
 # https://svn.boost.org/trac/boost/ticket/11505
@@ -37,8 +36,6 @@ boost_patches += windows-no-utf8-locales.patch.0
 boost_patches += gcc9.patch.0
 
 boost_patches += msvc2017.patch.0
-
-boost_patches += sse.patch.0
 
 boost_patches += c++20-allocator.patch.0
 
