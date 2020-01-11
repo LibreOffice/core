@@ -86,46 +86,17 @@ void MyApp::DeInit()
     comphelper::setProcessServiceFactory(nullptr);
 }
 
-namespace
-{
-    struct ProductName
-        : public rtl::Static< OUString, ProductName > {};
-    struct Version
-        : public rtl::Static< OUString, Version > {};
-    struct AboutBoxVersion
-        : public rtl::Static< OUString, AboutBoxVersion > {};
-    struct AboutBoxVersionSuffix
-        : public rtl::Static< OUString, AboutBoxVersionSuffix > {};
-    struct OOOVendor
-        : public rtl::Static< OUString, OOOVendor > {};
-    struct Extension
-        : public rtl::Static< OUString, Extension > {};
-}
-
 static OUString ReplaceProductNameHookProc( const OUString& rStr )
 {
     if (rStr.indexOf( "%PRODUCT" ) == -1)
         return rStr;
 
-    OUString sProductName = ProductName::get();
-    OUString sVersion = Version::get();
-    OUString sAboutBoxVersion = AboutBoxVersion::get();
-    OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-    OUString sExtension = Extension::get();
-    OUString sOOOVendor = OOOVendor::get();
-
-    if ( sProductName.isEmpty() )
-    {
-        sProductName = utl::ConfigManager::getProductName();
-        sVersion = utl::ConfigManager::getProductVersion();
-        sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
-        sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-        sOOOVendor = utl::ConfigManager::getVendor();
-        if ( sExtension.isEmpty() )
-        {
-            sExtension = utl::ConfigManager::getProductExtension();
-        }
-    }
+    static const OUString sProductName = utl::ConfigManager::getProductName();
+    static const OUString sVersion = utl::ConfigManager::getProductVersion();
+    static const OUString sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+    static const OUString sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
+    static const OUString sExtension = utl::ConfigManager::getProductExtension();
+    static const OUString sOOOVendor = utl::ConfigManager::getVendor();
 
     OUString sRet = rStr.replaceAll( "%PRODUCTNAME", sProductName );
     sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
