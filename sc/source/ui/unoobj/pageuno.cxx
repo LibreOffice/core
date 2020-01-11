@@ -54,8 +54,7 @@ sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
 
 uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.sheet.SpreadsheetDrawPage" };
-    return aRet;
+    return { "com.sun.star.sheet.SpreadsheetDrawPage" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

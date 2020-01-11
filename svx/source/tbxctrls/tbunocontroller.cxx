@@ -343,8 +343,7 @@ OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent

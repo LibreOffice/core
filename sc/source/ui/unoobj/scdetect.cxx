@@ -340,8 +340,7 @@ sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
 
 css::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> seqServiceNames { "com.sun.star.frame.ExtendedTypeDetection" };
-    return seqServiceNames;
+    return { "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

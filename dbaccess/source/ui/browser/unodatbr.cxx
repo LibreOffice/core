@@ -198,8 +198,7 @@ OUString SbaTableQueryBrowser::getImplementationName_Static()
 
 css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DataSourceBrowser" };
-    return aSupported;
+    return { "com.sun.star.sdb.DataSourceBrowser" };
 }
 
 Reference< XInterface > SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)

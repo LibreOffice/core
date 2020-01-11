@@ -228,8 +228,7 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceNa
 css::uno::Sequence< OUString >
     SAL_CALL ScIndexEnumeration::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aRet { sServiceName };
-    return aRet;
+    return { sServiceName };
 }
 
 ScNameToIndexAccess::ScNameToIndexAccess( const css::uno::Reference<
