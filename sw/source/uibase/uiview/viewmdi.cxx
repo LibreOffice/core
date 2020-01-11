@@ -492,7 +492,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                     if (m_nActMark >= MAX_MARKS || m_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
                     {
                         m_nActMark = 0;
-                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::ReminderEndWrapped );
                     }
                 }
                 else
@@ -501,7 +501,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                     if (m_nActMark < 0 || m_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
                     {
                         m_nActMark = vNavMarkNames.size()-1;
-                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+                        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::ReminderStartWrapped );
                     }
                 }
                 rSh.GotoMark(vNavMarkNames[m_nActMark]);

@@ -1290,6 +1290,8 @@
 #define RID_SVXSTR_SEARCH_NAV_ELEMENT_NOT_FOUND             NC_("RID_SVXSTR_SEARCH_NAV_ELEMENT_NOT_FOUND", "Navigation Element not found")
 #define RID_SVXSTR_SEARCH_START                             NC_("RID_SVXSTR_SEARCH_START", "Reached the beginning of the document")
 #define RID_SVXSTR_SEARCH_START_WRAPPED                     NC_("RID_SVXSTR_SEARCH_START_WRAPPED", "Reached the beginning of the document, continued from the end")
+#define RID_SVXSTR_SEARCH_REMINDER_START_WRAPPED            NC_("RID_SVXSTR_SEARCH_REMINDER_START_WRAPPED", "Reached the first reminder, continued from the last")
+#define RID_SVXSTR_SEARCH_REMINDER_END_WRAPPED              NC_("RID_SVXSTR_SEARCH_REMINDER_END_WRAPPED", "Reached the last reminder, continued from the first")
 
 #define RID_SVXDLG_BMPMASK_STR_PALETTE                      NC_("RID_SVXDLG_BMPMASK_STR_PALETTE", "Color Palette")
 
