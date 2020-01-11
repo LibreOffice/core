@@ -53,9 +53,9 @@ SvxSearchCharSet::SvxSearchCharSet(std::unique_ptr<weld::ScrolledWindow> pScroll
 
 int SvxSearchCharSet::LastInView() const
 {
-    sal_uInt32 nIndex = FirstInView();
+    int nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    sal_uInt32 nCompare = sal::static_int_cast<sal_uInt32>(nCount - 1);
+    int nCompare = nCount - 1;
     if (nIndex > nCompare)
         nIndex = nCompare;
     return nIndex;
