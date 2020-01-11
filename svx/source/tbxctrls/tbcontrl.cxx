@@ -3464,14 +3464,15 @@ std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
 
 VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    EnsurePaletteManager();
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (!getToolboxId(nId, &pToolBox))
+        return nullptr;
 
     const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
     weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
 
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    getToolboxId(nId, &pToolBox);
+    EnsurePaletteManager();
 
     auto xPopover = std::make_unique<ColorWindow>(
                         m_aCommandURL,
@@ -3485,8 +3486,6 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 
     if ( m_bSplitButton )
         xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
-
-    EnsurePaletteManager();
 
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::move(xPopover));
@@ -3505,7 +3504,8 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    getToolboxId(nId, &pToolBox);
+    if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
+        return;
 
     if ( rEvent.FeatureURL.Complete == m_aCommandURL )
     {
