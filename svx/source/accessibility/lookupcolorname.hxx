@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustring.hxx>
 
 namespace accessibility {
 

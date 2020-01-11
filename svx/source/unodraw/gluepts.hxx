@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;

@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
+#include <tablemodel.hxx>
 #include "tablecolumn.hxx"
 #include "tableundo.hxx"
 #include <svx/svdmodel.hxx>

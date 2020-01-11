@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGCONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGCONTROL_HXX
 
-#include <sfx2/bindings.hxx>
 #include <svtools/toolbarmenu.hxx>
 
 namespace svx {

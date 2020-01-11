@@ -23,7 +23,7 @@
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include <tablemodel.hxx>
+#include <celltypes.hxx>
 
 
 namespace sdr { namespace table {

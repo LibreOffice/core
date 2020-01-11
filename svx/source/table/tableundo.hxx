@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SOURCE_TABLE_TABLEUNDO_HXX
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/table/CellContentType.hpp>
 
 #include <svx/svdotable.hxx>
 #include <svx/svdobj.hxx>

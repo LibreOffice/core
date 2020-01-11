@@ -34,6 +34,7 @@
 #include <sfx2/weldutils.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/rectenum.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/canvastools.hxx>

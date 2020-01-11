@@ -19,13 +19,8 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEPROPERTYPANEL_HXX
 
-#include <svx/xdash.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <memory>
-#include <svx/sidebar/PanelLayout.hxx>
-#include <svx/xtable.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 
 

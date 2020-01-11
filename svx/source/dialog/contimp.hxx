@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_CONTIMP_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_CONTIMP_HXX
 
-#include <svx/contdlg.hxx>
+#include <sfx2/ctrlitem.hxx>
 #include "contwnd.hxx"
 #include <vcl/idle.hxx>
 

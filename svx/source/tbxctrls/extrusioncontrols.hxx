@@ -19,11 +19,8 @@
 #ifndef INCLUDED_SVX_SOURCE_TBXCTRLS_EXTRUSIONCONTROLS_HXX
 #define INCLUDED_SVX_SOURCE_TBXCTRLS_EXTRUSIONCONTROLS_HXX
 
-#include <svx/svxdllapi.h>
-
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
-#include <svtools/popupmenucontrollerbase.hxx>
 
 class ValueSet;
 

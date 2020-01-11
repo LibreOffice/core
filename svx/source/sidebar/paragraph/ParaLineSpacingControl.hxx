@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 
 #include <svtools/toolbarmenu.hxx>
-#include <sfx2/tbxctrl.hxx>
 
 class SvxLineSpacingItem;
 

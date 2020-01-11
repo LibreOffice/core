@@ -10,13 +10,8 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_SHADOWPROPERTYPANEL_HXX
 
 #include <vcl/vclptr.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <svl/intitem.hxx>
-#include <com/sun/star/ui/XUIElement.hpp>
-#include <sfx2/request.hxx>
-#include <svx/dlgctrl.hxx>
 
 class ColorListBox;
 

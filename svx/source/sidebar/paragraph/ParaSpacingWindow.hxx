@@ -19,15 +19,11 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARASPACINGWINDOW_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARASPACINGWINDOW_HXX
 
-#include <cppuhelper/queryinterface.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/relfld.hxx>
-#include <svtools/unitconv.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
 
 using namespace com::sun::star;
 

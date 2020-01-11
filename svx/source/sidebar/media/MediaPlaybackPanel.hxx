@@ -20,11 +20,9 @@
 #define INCLUDED_SD_SOURCE_SIDEBAR_MEDIAPLAYBACKPANEL_HXX
 
 #include <memory>
-#include <vcl/ctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/toolbox.hxx>
 #include <avmedia/mediaitem.hxx>

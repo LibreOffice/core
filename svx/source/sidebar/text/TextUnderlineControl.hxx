@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 
-#include <sfx2/bindings.hxx>
-#include <vcl/vclenum.hxx>
 #include <svtools/toolbarmenu.hxx>
 
 namespace svx {

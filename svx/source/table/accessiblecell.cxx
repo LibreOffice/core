@@ -24,6 +24,7 @@
 #include <utility>
 
 #include "accessiblecell.hxx"
+#include <cell.hxx>
 
 #include <svx/DescriptionGenerator.hxx>
 
