@@ -145,7 +145,7 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport ) :
     // into the file since it's not really a style but "no style"
     // (hence referencing it actually makes no sense except for hyperlinks
     // which default to something other than "Default")
-    OUString const sDefault(SwResId(STR_POOLCOLL_STANDARD));
+    OUString const sDefault(SwResId(STR_POOLCHR_STANDARD));
     uno::Reference<container::XNameContainer> const& xStyles(
             rImport.GetTextImport()->GetTextStyles());
     if (!xStyles->hasByName("Default"))

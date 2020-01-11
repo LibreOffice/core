@@ -462,7 +462,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    pWrtShell->ChangeHeaderOrFooter("Default Style", /*bHeader*/ true, /*bOn*/ true, false);
+    pWrtShell->ChangeHeaderOrFooter("Default Page Style", /*bHeader*/ true, /*bOn*/ true, false);
     CPPUNIT_ASSERT(
         pWrtShell
             ->IsInHeaderFooter()); // assume this is supposed to put cursor in the new header...
