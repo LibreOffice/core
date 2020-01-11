@@ -70,8 +70,16 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
     rDesc.mbStatus = true;
 
-    if (!(ImplGetDimensions(rDesc) && rDesc.mpBuf && isLegalBitsPerPixel(rDesc.mnDstBitsPerPixel)))
+    if (!ImplGetDimensions(rDesc) || !rDesc.mpBuf)
         return;
+
+    if (!isLegalBitsPerPixel(rDesc.mnDstBitsPerPixel))
+    {
+        rDesc.mbStatus = false;
+        return;
+    }
+
+    try {
 
     vcl::bitmap::RawBitmap aBitmap( Size( rDesc.mnX, rDesc.mnY ), 24 );
 
@@ -247,6 +255,10 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
     if ( rDesc.mbStatus )
         rDesc.mxBitmap = vcl::bitmap::CreateFromData(std::move(aBitmap));
+
+    } catch (const std::bad_alloc&) {
+        rDesc.mbStatus = false;
+    }
 }
 
 std::vector<Color> CGMBitmap::ImplGeneratePalette( CGMBitmapDescriptor const & rDesc )
