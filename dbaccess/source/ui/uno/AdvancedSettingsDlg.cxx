@@ -106,8 +106,7 @@ namespace dbaui
 
     css::uno::Sequence<OUString> OAdvancedSettingsDialog::getSupportedServiceNames_Static()
     {
-        css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.AdvancedDatabaseSettingsDialog" };
-        return aSupported;
+        return { "com.sun.star.sdb.AdvancedDatabaseSettingsDialog" };
     }
 
     Reference<XPropertySetInfo>  SAL_CALL OAdvancedSettingsDialog::getPropertySetInfo()

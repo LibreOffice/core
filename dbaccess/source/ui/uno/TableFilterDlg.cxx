@@ -71,8 +71,7 @@ css::uno::Sequence<OUString> SAL_CALL OTableFilterDialog::getSupportedServiceNam
 
 css::uno::Sequence<OUString> OTableFilterDialog::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.TableFilterDialog" };
-    return aSupported;
+    return { "com.sun.star.sdb.TableFilterDialog" };
 }
 
 Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo()

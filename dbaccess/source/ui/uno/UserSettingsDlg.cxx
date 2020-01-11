@@ -71,8 +71,7 @@ css::uno::Sequence<OUString> SAL_CALL OUserSettingsDialog::getSupportedServiceNa
 
 css::uno::Sequence<OUString> OUserSettingsDialog::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.UserAdministrationDialog" };
-    return aSupported;
+    return { "com.sun.star.sdb.UserAdministrationDialog" };
 }
 
 Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo()

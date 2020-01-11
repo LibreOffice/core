@@ -71,8 +71,7 @@ css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedSer
 
 css::uno::Sequence<OUString> ODataSourcePropertyDialog::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DatasourceAdministrationDialog" };
-    return aSupported;
+    return { "com.sun.star.sdb.DatasourceAdministrationDialog" };
 }
 
 Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo()
