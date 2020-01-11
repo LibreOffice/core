@@ -265,8 +265,7 @@ public:
 
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        uno::Sequence<OUString> aServiceNames{ "com.sun.star.sheet.Solver" };
-        return aServiceNames;
+        return { "com.sun.star.sheet.Solver" };
     }
 
 private:

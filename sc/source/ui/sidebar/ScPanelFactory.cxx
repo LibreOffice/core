@@ -128,8 +128,7 @@ sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aServiceNames { "com.sun.star.ui.UIElementFactory" };
-    return aServiceNames;
+    return { "com.sun.star.ui.UIElementFactory" };
 }
 
 } } // end of namespace sc::sidebar

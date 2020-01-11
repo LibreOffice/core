@@ -191,8 +191,7 @@ OUString ScSpreadsheetSettings::getImplementationName_Static()
 
 uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aRet { SCSPREADSHEETSETTINGS_SERVICE };
-    return aRet;
+    return { SCSPREADSHEETSETTINGS_SERVICE };
 }
 
 bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName)
