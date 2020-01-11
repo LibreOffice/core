@@ -130,11 +130,12 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
         long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
         bool isExperimental = comphelper::getBOOL( aModeNode.getNodeValue( "IsExperimental" ) );
+        bool hasNotebookbar = comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
 
         // Allow Notebookbar only in experimental mode
         if ( isExperimental && !aMiscOptions.IsExperimentalMode() )
             continue;
-        if(aLabel == "Sidebar" || aLabel == "Standard Toolbar" || aLabel == "Single Toolbar")
+        if (!hasNotebookbar)
             nCountToolbar++;
 
         m_xPopupMenu->insertItem( nReadIndex+1, aLabel, css::awt::MenuItemStyle::RADIOCHECK, nPosition );
