@@ -86,8 +86,7 @@ css::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceName
 
 css::uno::Sequence<OUString> OSQLMessageDialog::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.ErrorMessageDialog" };
-    return aSupported;
+    return { "com.sun.star.sdb.ErrorMessageDialog" };
 }
 
 void OSQLMessageDialog::initialize(Sequence<Any> const & args)

@@ -75,8 +75,7 @@ namespace pcr
 
     css::uno::Sequence<OUString> MasterDetailLinkDialog::getSupportedServiceNames_static()
     {
-        css::uno::Sequence<OUString> aSupported { "com.sun.star.form.MasterDetailLinkDialog" };
-        return aSupported;
+        return { "com.sun.star.form.MasterDetailLinkDialog" };
     }
 
 
