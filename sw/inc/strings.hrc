@@ -24,6 +24,7 @@
 #define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
 
 // Format names
+#define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "Default Character Style")
 #define STR_POOLCHR_FOOTNOTE                    NC_("STR_POOLCHR_FOOTNOTE", "Footnote Characters")
 #define STR_POOLCHR_PAGENO                      NC_("STR_POOLCHR_PAGENO", "Page Number")
 #define STR_POOLCHR_LABEL                       NC_("STR_POOLCHR_LABEL", "Caption Characters")
@@ -60,7 +61,7 @@
 #define STR_POOLFRM_WATERSIGN                   NC_("STR_POOLFRM_WATERSIGN", "Watermark")
 #define STR_POOLFRM_LABEL                       NC_("STR_POOLFRM_LABEL", "Labels")
 // Template names
-#define STR_POOLCOLL_STANDARD                   NC_("STR_POOLCOLL_STANDARD", "Default Style")
+#define STR_POOLCOLL_STANDARD                   NC_("STR_POOLCOLL_STANDARD", "Default Paragraph Style")
 #define STR_POOLCOLL_TEXT                       NC_("STR_POOLCOLL_TEXT", "Text Body")
 #define STR_POOLCOLL_TEXT_IDENT                 NC_("STR_POOLCOLL_TEXT_IDENT", "First Line Indent")
 #define STR_POOLCOLL_TEXT_NEGIDENT              NC_("STR_POOLCOLL_TEXT_NEGIDENT", "Hanging Indent")
@@ -188,7 +189,7 @@
 #define STR_POOLCOLL_HTML_DD                    NC_("STR_POOLCOLL_HTML_DD", "List Contents")
 #define STR_POOLCOLL_HTML_DT                    NC_("STR_POOLCOLL_HTML_DT", "List Heading")
 //page style names
-#define STR_POOLPAGE_STANDARD                   NC_("STR_POOLPAGE_STANDARD", "Default Style")
+#define STR_POOLPAGE_STANDARD                   NC_("STR_POOLPAGE_STANDARD", "Default Page Style")
 #define STR_POOLPAGE_FIRST                      NC_("STR_POOLPAGE_FIRST", "First Page")
 #define STR_POOLPAGE_LEFT                       NC_("STR_POOLPAGE_LEFT", "Left Page")
 #define STR_POOLPAGE_RIGHT                      NC_("STR_POOLPAGE_RIGHT", "Right Page")

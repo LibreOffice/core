@@ -18,7 +18,7 @@ class WriterInsertPageFooter(UITestCase):
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
 
         self.xUITest.executeCommand(
-            ".uno:InsertPageFooter?PageStyle:string=Default%20Style&On:bool=true")
+            ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=true")
 
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
@@ -30,7 +30,7 @@ class WriterInsertPageFooter(UITestCase):
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
 
         self.ui_test.execute_dialog_through_command(
-            ".uno:InsertPageFooter?PageStyle:string=Default%20Style&On:bool=false")
+            ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false")
 
         xDialog = self.xUITest.getTopFocusWindow()
 

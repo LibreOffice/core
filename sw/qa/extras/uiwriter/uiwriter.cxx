@@ -1137,7 +1137,7 @@ void SwUiWriterTest::testWatermarkPosition()
         SwDoc* pDoc = createDoc("watermark-position.odt");
         SwEditShell* pEditShell = pDoc->GetEditShell();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-        const OUString rPageStyleName = "Default Style";
+        const OUString rPageStyleName = "Default Page Style";
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
@@ -1803,7 +1803,7 @@ void SwUiWriterTest::testTextCursorInvalidation()
     // can't go right in empty header
     CPPUNIT_ASSERT(!xCursor->goRight(1, false));
 // this does not actually delete the header:    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
-    pWrtShell->ChangeHeaderOrFooter("Default Style", true, false, false);
+    pWrtShell->ChangeHeaderOrFooter("Default Page Style", true, false, false);
     // must be disposed after deleting header
     CPPUNIT_ASSERT_THROW(xCursor->goRight(1, false), uno::RuntimeException);
 }
@@ -2576,7 +2576,7 @@ void SwUiWriterTest::testTdf60967()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    pWrtShell->ChangeHeaderOrFooter("Default Style", true, true, true);
+    pWrtShell->ChangeHeaderOrFooter("Default Page Style", true, true, true);
     //Inserting table
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
@@ -6520,7 +6520,7 @@ void SwUiWriterTest::testTdf108048()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Kind", uno::makeAny(sal_Int16(3)) },
-        { "TemplateName", uno::makeAny(OUString("Default Style")) },
+        { "TemplateName", uno::makeAny(OUString("Default Page Style")) },
         { "PageNumber", uno::makeAny(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
         { "PageNumberFilled", uno::makeAny(true) },
     });

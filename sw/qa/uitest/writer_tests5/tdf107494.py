@@ -25,7 +25,7 @@ class tdf107494(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #insert header
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
-        self.xUITest.executeCommand(".uno:InsertPageHeader?PageStyle:string=Default%20Style&On:bool=true")
+        self.xUITest.executeCommand(".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=true")
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
         #insert image
         text = document.getText()
@@ -46,7 +46,7 @@ class tdf107494(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         # Delete the header
-        self.ui_test.execute_dialog_through_command(".uno:InsertPageHeader?PageStyle:string=Default%20Style&On:bool=false")
+        self.ui_test.execute_dialog_through_command(".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=false")
         xDialog = self.xUITest.getTopFocusWindow()  #question dialog
         xOption = xDialog.getChild("yes")
         xOption.executeAction("CLICK", tuple())
@@ -61,7 +61,7 @@ class tdf107494(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #insert footer
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
-        self.xUITest.executeCommand(".uno:InsertPageFooter?PageStyle:string=Default%20Style&On:bool=true")
+        self.xUITest.executeCommand(".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=true")
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
         #insert image
         text = document.getText()
@@ -82,7 +82,7 @@ class tdf107494(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         # Delete the footer
-        self.ui_test.execute_dialog_through_command(".uno:InsertPageFooter?PageStyle:string=Default%20Style&On:bool=false")
+        self.ui_test.execute_dialog_through_command(".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false")
         xDialog = self.xUITest.getTopFocusWindow()  #question dialog
         xOption = xDialog.getChild("yes")
         xOption.executeAction("CLICK", tuple())

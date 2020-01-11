@@ -2516,7 +2516,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
     ::FillCharStyleListBox(*m_xCharStyleLB, pDocSh, true, true);
-    const OUString sDefault(SwResId(STR_POOLCOLL_STANDARD));
+    const OUString sDefault(SwResId(STR_POOLCHR_STANDARD));
     for (int i = 0, nCount = m_xCharStyleLB->get_count(); i < nCount; ++i)
     {
         const OUString sEntry = m_xCharStyleLB->get_text(i);

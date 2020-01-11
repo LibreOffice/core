@@ -64,6 +64,7 @@
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <strings.hrc>
 // 50 cm 28350
 
 #define MAXHEIGHT 28350
@@ -728,8 +729,7 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     pPool->SetSearchMask(SfxStyleFamily::Char);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
-    OUString sStandard;
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
+    const OUString sStandard(SwResId(STR_POOLCHR_STANDARD));
     while(pBase)
     {
         if(bWithDefault || pBase->GetName() !=  sStandard)
