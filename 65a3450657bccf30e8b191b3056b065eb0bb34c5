@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afb85cb3_2c63ab8f",
+        "filename": "package/inc/ThreadedDeflater.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-11T11:09:56Z",
+      "side": 1,
+      "message": "compression-\u003edecompression",
+      "revId": "65a3450657bccf30e8b191b3056b065eb0bb34c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c1cc19_6ee01df7",
+        "filename": "package/source/zipapi/ThreadedDeflater.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-11T11:09:56Z",
+      "side": 1,
+      "message": "why the extra copy here, why not just pass the buffers down individually? Or even in an array",
+      "revId": "65a3450657bccf30e8b191b3056b065eb0bb34c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
