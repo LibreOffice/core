@@ -167,11 +167,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesParagraphProperties, "testTr
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMsoSpt180, "mso-spt180.docx")
 {
-    if (!mbExported)
-        return;
-
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
     OUString aType;
@@ -182,11 +179,10 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73550, "fdo73550.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
+
     // This was wrap="none".
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
 }
@@ -463,7 +459,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAbi11739, "abi11739.docx")
     CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "qFormat"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 {
     // check there are two objects and they are FrameShapes
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -474,8 +470,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 
     // check the objects are present in the exported document.xml
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
+
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:object", 2);
 
     // finally check the embedded files are present in the zipped document
@@ -954,11 +949,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.
         "Excel.Chart.8");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf83227, "tdf83227.docx")
 {
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
-    if (!mbExported)
-        return;
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.png")));
@@ -966,12 +959,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.png")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf103001, "tdf103001.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103001, "tdf103001.docx")
 {
     // The same image is featured in the header and in the body text, make sure
     // the header relation is still written, even when caching is enabled.
-    if (!mbExported)
-        return;
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: header reused the RelId of the body text, even if RelIds

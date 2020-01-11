@@ -61,11 +61,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
 {
-    if (!mbExported)
-        return;
-
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.gif")));
     // This was also true, image was written twice.
@@ -79,7 +76,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlGroupshapeRelsize, "dml-groupshape-re
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshape, "dml-textshape.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xGroup, "VertOrient"));
@@ -90,8 +87,7 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
 
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
+
     // This was wrap="none".
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", "square");
 
@@ -107,12 +103,10 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-4727), xShape->getPosition().Y);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
@@ -425,7 +419,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspaci
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableFloatingMargins, "table-floating-margins.docx")
 {
     // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -435,8 +429,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx"
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 
-    if (!mbExported)
-        return;
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocPtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
@@ -496,14 +488,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageData, "image_data.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70838, "fdo70838.docx")
 {
     // The problem was that VMLExport::Commit didn't save the correct width and height,
     // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
 
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     // Check DML document
 
@@ -682,12 +672,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70942, "fdo70942.docx")
                 "prst", "ellipse");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
 {
     // The problem was that the position of the picture was incorrect, it was shifted towards the bottom right corner.
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     OString aXPath("/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:xfrm/a:off");
     // This was 720.
@@ -696,11 +684,9 @@ DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
     assertXPath(pXmlDocument, aXPath, "y", "0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     // check shape style has been preserved
     assertXPath(pXmlDocument,
@@ -845,11 +831,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType, "LineStyle_DashType.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "sysDot");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     // check rgb colors for every step in the gradient of the first shape
     assertXPath(pXmlDocument,
