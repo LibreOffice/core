@@ -6792,7 +6792,7 @@ void SwSectionFrame::PaintSubsidiaryLines( const SwPageFrame * pPage,
                                         const SwRect & rRect ) const
 {
     const bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrame();
-    if ( bNoLowerColumn )
+    if ( bNoLowerColumn && isSubsidiaryLinesForSectionsEnabled())
     {
         SwLayoutFrame::PaintSubsidiaryLines( pPage, rRect );
     }
