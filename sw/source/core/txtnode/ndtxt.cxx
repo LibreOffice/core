@@ -1286,6 +1286,7 @@ void SwTextNode::Update(
                             }
                             else
                                 aDontExp[ nWhPos ] = true;
+                            pHint->SetDontExpand( true );
                         }
                         else if( bNoExp )
                         {
@@ -2798,6 +2799,11 @@ void SwTextNode::GCAttr()
         NotifyClients( nullptr, &aHint );
         SwFormatChg aNew( GetTextColl() );
         NotifyClients( nullptr, &aNew );
+    }
+    for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    {
+        SwTextAttr * const pHt = m_pSwpHints->Get(i);
+        pHt->SetDontExpand( true );
     }
 }
 
