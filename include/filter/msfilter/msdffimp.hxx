@@ -113,7 +113,7 @@ public:
     void SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData const & rObjData ) const;
-    void ImportGradientColor( SfxItemSet& aSet, MSO_FillType eMSO_FillType, double dTrans, double dBackTrans ) const;
+    void ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_FillType, double dTrans, double dBackTrans ) const;
 };
 
 #define COL_DEFAULT ::Color( 0xFA, 0xFB, 0xFC )

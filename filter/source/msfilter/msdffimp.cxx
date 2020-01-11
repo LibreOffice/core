@@ -1321,7 +1321,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
 
     if ( nFillFlags & 0x10 )
     {
-        MSO_FillType eMSO_FillType = static_cast<MSO_FillType>(GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ));
+        auto eMSO_FillType = GetPropertyValue(DFF_Prop_fillType, mso_fillSolid);
         drawing::FillStyle eXFill = drawing::FillStyle_NONE;
         switch( eMSO_FillType )
         {
@@ -2705,7 +2705,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
                 nFillFlags &= ~0x10;
             if ( nFillFlags & 0x10 )
             {
-                MSO_FillType eMSO_FillType = static_cast<MSO_FillType>(GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ));
+                auto eMSO_FillType = GetPropertyValue(DFF_Prop_fillType, mso_fillSolid);
                 switch( eMSO_FillType )
                 {
                     case mso_fillSolid :
@@ -2836,7 +2836,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
 }
 
 
-void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_FillType, double dTrans , double dBackTrans) const
+void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_FillType, double dTrans , double dBackTrans) const
 {
     //MS Focus prop will impact the start and end color position. And AOO does not
     //support this prop. So need some swap for the two color to keep fidelity with AOO and MS shape.
