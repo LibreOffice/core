@@ -14,6 +14,7 @@
 #include <vcl/dllapi.h>
 
 #include <skia/gdiimpl.hxx>
+#include <skia/packedsurfaceatlas.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
 #include <o3tl/lru_map.hxx>
@@ -35,6 +36,7 @@ public:
     sk_sp<SkImage> getAsMaskImage() const;
 
     struct Texture;
+    struct PackedTexture;
 };
 
 struct SkiaCompatibleDC::Texture : public CompatibleDC::Texture
@@ -43,6 +45,14 @@ struct SkiaCompatibleDC::Texture : public CompatibleDC::Texture
     virtual bool isValid() const { return image.get(); }
     virtual int GetWidth() const { return image->width(); }
     virtual int GetHeight() const { return image->height(); }
+};
+
+struct SkiaCompatibleDC::PackedTexture : public CompatibleDC::Texture
+{
+    SkiaPackedSurface packedSurface;
+    virtual bool isValid() const { return packedSurface.mSurface.get(); }
+    virtual int GetWidth() const { return packedSurface.mRect.GetWidth(); }
+    virtual int GetHeight() const { return packedSurface.mRect.GetHeight(); }
 };
 
 class WinSkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public WinSalGraphicsImplBase
