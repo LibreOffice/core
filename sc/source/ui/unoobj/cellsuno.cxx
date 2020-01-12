@@ -5748,7 +5748,7 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
                                         aRange.aStart.Col(), aRange.aStart.Row(),
                                         aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() );
                 Size aSize(aMMRect.GetSize());
-                awt::Size aAwtSize( aSize.Width(), aSize.Height() );
+                awt::Size aAwtSize( convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height()) );
                 rAny <<= aAwtSize;
             }
         }
