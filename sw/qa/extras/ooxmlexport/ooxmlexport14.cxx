@@ -446,6 +446,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128290, "tdf128290.odt")
+{
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblLayout", "type", "fixed");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
 {
     // Explicitly set hyphenation=auto on document level
