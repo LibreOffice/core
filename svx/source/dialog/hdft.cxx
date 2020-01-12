@@ -18,11 +18,7 @@
  */
 
 #include <svl/itemiter.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/module.hxx>
-#include <vcl/graph.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 
 #include <svl/intitem.hxx>
@@ -37,7 +33,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/boxitem.hxx>
 
@@ -45,10 +40,8 @@
 #include <memory>
 
 #include <svx/xdef.hxx>
-#include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/unobrushitemhelper.hxx>
-#include <sfx2/request.hxx>
 
 using namespace com::sun::star;
 

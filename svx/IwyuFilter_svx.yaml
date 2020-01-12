@@ -5,3 +5,15 @@ blacklist:
     # Needed on WIN32
     - prewin.h
     - postwin.h
+    svx/source/accessibility/ChildrenManagerImpl.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:
+    # Boost wrapper is needed
+    - boost/spirit/include/classic_core.hpp
+    svx/source/dialog/ClassificationCommon.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyContainer.hpp
+    svx/source/dialog/srchdlg.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx

@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <toolkit/helper/convert.hxx>
 #include <osl/interlck.h>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

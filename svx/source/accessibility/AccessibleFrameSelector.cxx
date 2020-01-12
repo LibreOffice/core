@@ -18,24 +18,15 @@
  */
 
 #include <AccessibleFrameSelector.hxx>
-#include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/awt/FocusChangeReason.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/dialmgr.hxx>
-#include <editeng/unolingu.hxx>
 
-#include <svx/strings.hrc>
 #include <frmsel.hrc>
 
 namespace svx::a11y {

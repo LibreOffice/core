@@ -17,42 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
-
-#include <sal/macros.h>
-
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <docrecovery.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
-#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
-
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/file.hxx>
-#include <osl/security.hxx>
-#include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
-#include <officecfg/Office/Recovery.hxx>
 
 namespace svx::DocRecovery{
 

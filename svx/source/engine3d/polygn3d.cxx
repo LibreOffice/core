@@ -18,7 +18,6 @@
  */
 
 #include <svx/polygn3d.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <sdr/contact/viewcontactofe3dpolygon.hxx>

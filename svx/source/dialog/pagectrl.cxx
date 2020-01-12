@@ -18,14 +18,13 @@
  */
 
 #include <memory>
+#include <editeng/frmdir.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <tools/fract.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/pagectrl.hxx>
-#include <editeng/boxitem.hxx>
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

@@ -22,38 +22,18 @@
 #include <svx/strings.hrc>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
-#include <svl/languageoptions.hxx>
 #include <editeng/numitem.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/gallery.hxx>
-#include <svl/urihelper.hxx>
-#include <editeng/brushitem.hxx>
-#include <svl/intitem.hxx>
-#include <sfx2/objsh.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <editeng/flstitem.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/numvset.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svtools/ctrltool.hxx>
-#include <editeng/unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/text/XNumberingTypeInfo.hpp>
 
 #include <algorithm>
-#include <sfx2/opengrf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

@@ -19,16 +19,9 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <svx/framelink.hxx>
 
-#include <math.h>
-#include <vcl/outdev.hxx>
-#include <tools/gen.hxx>
 #include <editeng/borderline.hxx>
-#include <svtools/borderhelper.hxx>
-#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 
 
 using namespace ::com::sun::star;

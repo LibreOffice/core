@@ -39,7 +39,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <helpids.h>
-#include <algorithm>
 #include <svx/dialmgr.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/settings.hxx>

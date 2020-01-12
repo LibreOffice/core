@@ -20,10 +20,8 @@
 #include "EnhancedCustomShapeFontWork.hxx"
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/metric.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <vcl/virdev.hxx>
@@ -35,16 +33,11 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include <svx/EnhancedCustomShapeTypeNames.hxx>
-#include <svx/svdorect.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdshitm.hxx>
-#include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/editeng.hxx>
 #include <o3tl/numeric.hxx>
-#include <svx/svdmodel.hxx>
 #include <vector>
 #include <numeric>
 #include <algorithm>
@@ -53,8 +46,6 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
 

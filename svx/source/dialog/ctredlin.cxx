@@ -19,15 +19,12 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/module.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <unotools/textsearch.hxx>
-#include <unotools/charclass.hxx>
 
-#include <editeng/unolingu.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

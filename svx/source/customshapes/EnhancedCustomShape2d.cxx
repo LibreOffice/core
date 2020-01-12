@@ -24,14 +24,11 @@
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdocirc.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/svdocapt.hxx>
+#include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/svdmodel.hxx>
-#include <rtl/crc.h>
 #include <rtl/math.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
@@ -58,7 +55,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>

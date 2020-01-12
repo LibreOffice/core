@@ -24,18 +24,13 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-#include <svx/xoutbmp.hxx>
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
 #include "contimp.hxx"
 #include "contwnd.hxx"
-#include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/dlgutil.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
