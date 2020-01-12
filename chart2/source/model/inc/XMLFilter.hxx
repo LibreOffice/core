@@ -41,7 +41,7 @@ namespace embed
 }
 namespace xml { namespace sax
 {
-    class XParser;
+    class XFastParser;
 }}
 namespace document
 {
@@ -104,7 +104,6 @@ private:
         const OUString & rStreamName,
         const OUString & rServiceName,
         const css::uno::Reference< css::embed::XStorage > & xStorage,
-        const css::uno::Reference< css::xml::sax::XParser > & xParser,
         const css::uno::Reference< css::lang::XMultiComponentFactory > & xFactory,
         const css::uno::Reference<css::document::XGraphicStorageHandler> & xGraphicStorageHandler,
         css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
