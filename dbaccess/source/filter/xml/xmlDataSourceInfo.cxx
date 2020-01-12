@@ -28,6 +28,7 @@
 #include <strings.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vector>
+#include <sal/log.hxx>
 
 namespace dbaxml
 {
@@ -35,59 +36,51 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
-                ,const sal_uInt16 _nToken) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+                ,sal_Int32 nElement
+                ,const Reference< XFastAttributeList > & _xAttrList) :
+    SvXMLImportContext( rImport )
 {
-
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceInfoElemTokenMap();
-
     PropertyValue aProperty;
-    sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     bool bAutoEnabled = false;
     bool bFoundField = false,bFoundThousand = false, bFoundCharset = false;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        OUString sAttrName = _xAttrList->getNameByIndex( i );
-        sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
         aProperty.Name.clear();
 
-        sal_uInt16 nToken = rTokenMap.Get( nPrefix, sLocalName );
-        switch( nToken )
+        switch( aIter.getToken() & TOKEN_MASK )
         {
-            case XML_TOK_ADDITIONAL_COLUMN_STATEMENT:
+            case XML_ADDITIONAL_COLUMN_STATEMENT:
                 aProperty.Name = PROPERTY_AUTOINCREMENTCREATION;
                 bAutoEnabled = true;
                 break;
-            case XML_TOK_ROW_RETRIEVING_STATEMENT:
+            case XML_ROW_RETRIEVING_STATEMENT:
                 aProperty.Name = INFO_AUTORETRIEVEVALUE;
                 bAutoEnabled = true;
                 break;
-            case XML_TOK_STRING:
+            case XML_STRING:
                 aProperty.Name = INFO_TEXTDELIMITER;
                 break;
-            case XML_TOK_FIELD:
+            case XML_FIELD:
                 aProperty.Name = INFO_FIELDDELIMITER;
                 bFoundField = true;
                 break;
-            case XML_TOK_DECIMAL:
+            case XML_DECIMAL:
                 aProperty.Name = INFO_DECIMALDELIMITER;
                 break;
-            case XML_TOK_THOUSAND:
+            case XML_THOUSAND:
                 aProperty.Name = INFO_THOUSANDSDELIMITER;
                 bFoundThousand = true;
                 break;
-            case XML_TOK_ENCODING:
+            case XML_ENCODING:
                 aProperty.Name = INFO_CHARSET;
                 bFoundCharset = true;
                 break;
+            default:
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
         if ( !aProperty.Name.isEmpty() )
         {
@@ -103,7 +96,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     }
     if ( rImport.isNewFormat() )
     {
-        if ( XML_TOK_DELIMITER == _nToken )
+        if ( (nElement & TOKEN_MASK) == XML_DELIMITER )
         {
             if ( !bFoundField )
             {
@@ -118,7 +111,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 rImport.addInfo(aProperty);
             }
         }
-        if ( XML_TOK_FONT_CHARSET == _nToken && !bFoundCharset )
+        if ( (nElement & TOKEN_MASK) == XML_FONT_CHARSET && !bFoundCharset )
         {
             aProperty.Name = INFO_CHARSET;
             aProperty.Value <<= OUString("utf8");

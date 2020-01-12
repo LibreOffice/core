@@ -36,63 +36,62 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& _sLocalName,
-                const Reference< XAttributeList > & _xAttrList) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+                const Reference< XFastAttributeList > & _xAttrList) :
+    SvXMLImportContext( rImport )
 {
-
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceElemTokenMap();
-
     Reference<XPropertySet> xDataSource = rImport.getDataSource();
 
     PropertyValue aProperty;
 
-    const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
     OUString sLocation,sMediaType,sFileTypeExtension;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    if (xDataSource.is())
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
-
-        aProperty.Name.clear();
-        aProperty.Value = Any();
-
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_DB_HREF:
-                {
-                    SvtPathOptions aPathOptions;
-                    OUString sFileName = aPathOptions.SubstituteVariable(sValue);
-                    if ( sValue == sFileName )
+            OUString sValue = aIter.toString();
+
+            aProperty.Name.clear();
+            aProperty.Value = Any();
+
+            switch( aIter.getToken() )
+            {
+                case XML_ELEMENT(XLINK, XML_HREF):
                     {
-                        const sal_Int32 nFileNameLength = sFileName.getLength();
-                        if ( sFileName.endsWith("/") )
-                            sFileName = sFileName.copy( 0, nFileNameLength - 1 );
+                        SvtPathOptions aPathOptions;
+                        OUString sFileName = aPathOptions.SubstituteVariable(sValue);
+                        if ( sValue == sFileName )
+                        {
+                            const sal_Int32 nFileNameLength = sFileName.getLength();
+                            if ( sFileName.endsWith("/") )
+                                sFileName = sFileName.copy( 0, nFileNameLength - 1 );
 
-                        sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );
+                            sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );
+                        }
+
+                        if ( sLocation.isEmpty() )
+                            sLocation = sValue;
                     }
-
-                    if ( sLocation.isEmpty() )
-                        sLocation = sValue;
-                }
-                break;
-            case XML_TOK_MEDIA_TYPE:
-                sMediaType = sValue;
-                break;
-            case XML_TOK_EXTENSION:
-                aProperty.Name = INFO_TEXTFILEEXTENSION;
-                sFileTypeExtension = sValue;
-                break;
-        }
-        if ( !aProperty.Name.isEmpty() )
-        {
-            if ( !aProperty.Value.hasValue() )
-                aProperty.Value <<= sValue;
-            rImport.addInfo(aProperty);
+                    break;
+                case XML_ELEMENT(DB, XML_MEDIA_TYPE):
+                case XML_ELEMENT(DB_OASIS, XML_MEDIA_TYPE):
+                    sMediaType = sValue;
+                    break;
+                case XML_ELEMENT(DB, XML_EXTENSION):
+                case XML_ELEMENT(DB_OASIS, XML_EXTENSION):
+                    aProperty.Name = INFO_TEXTFILEEXTENSION;
+                    sFileTypeExtension = sValue;
+                    break;
+                default:
+                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+            }
+            if ( !aProperty.Name.isEmpty() )
+            {
+                if ( !aProperty.Value.hasValue() )
+                    aProperty.Value <<= sValue;
+                rImport.addInfo(aProperty);
+            }
         }
     }
     if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )

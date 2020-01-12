@@ -35,10 +35,8 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 
-OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport ) :
+    SvXMLImportContext( rImport )
 {
 
 }
@@ -48,19 +46,16 @@ OXMLDataSourceSettings::~OXMLDataSourceSettings()
 
 }
 
-SvXMLImportContextRef OXMLDataSourceSettings::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDataSourceSettings::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceInfoElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement & TOKEN_MASK )
     {
-        case XML_TOK_DATA_SOURCE_SETTING:
+        case XML_DATA_SOURCE_SETTING:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList);
+            pContext = new OXMLDataSourceSetting( GetOwnImport(), xAttrList );
             break;
     }
 

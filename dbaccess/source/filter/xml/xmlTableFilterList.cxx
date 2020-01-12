@@ -38,8 +38,8 @@ namespace dbaxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
 
-OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& _sLocalName )
-    :SvXMLImportContext( rImport, nPrfx, _sLocalName )
+OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport)
+    :SvXMLImportContext( rImport )
 {
 
 }
@@ -48,22 +48,28 @@ OXMLTableFilterList::~OXMLTableFilterList()
 {
 }
 
-SvXMLImportContextRef OXMLTableFilterList::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLTableFilterList::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ( XML_NAMESPACE_DB == nPrefix )
+    if ( (nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_DB) ||
+         (nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_DB_OASIS) )
     {
         GetImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-        if ( IsXMLToken( rLocalName, XML_TABLE_FILTER_PATTERN ) )
-            pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,true,*this);
-        else if ( IsXMLToken( rLocalName, XML_TABLE_TYPE ) )
-            pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,false,*this);
-        else if ( IsXMLToken( rLocalName, XML_TABLE_INCLUDE_FILTER ) )
-            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );
+        switch (nElement & TOKEN_MASK)
+        {
+            case XML_TABLE_FILTER_PATTERN:
+                pContext = new OXMLTableFilterPattern( GetImport(), true,*this);
+                break;
+            case XML_TABLE_TYPE:
+                pContext = new OXMLTableFilterPattern( GetImport(), false,*this);
+                break;
+            case XML_TABLE_INCLUDE_FILTER:
+                pContext = new OXMLTableFilterList( GetImport() );
+                break;
+            default: break;
+        }
     }
 
     return pContext;
@@ -74,7 +80,7 @@ ODBFilter& OXMLTableFilterList::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-void OXMLTableFilterList::EndElement()
+void OXMLTableFilterList::endFastElement(sal_Int32 )
 {
     Reference<XPropertySet> xDataSource(GetOwnImport().getDataSource());
     if ( xDataSource.is() )

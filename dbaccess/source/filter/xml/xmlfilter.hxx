@@ -64,15 +64,6 @@ private:
     std::vector< css::beans::PropertyValue>         m_aInfoSequence;
 
     mutable std::unique_ptr<SvXMLTokenMap>          m_pDocContentElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
 
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
@@ -127,15 +118,6 @@ public:
     const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
 
     const SvXMLTokenMap& GetDocContentElemTokenMap() const;
-    const SvXMLTokenMap& GetDatabaseElemTokenMap() const;
-    const SvXMLTokenMap& GetDataSourceElemTokenMap() const;
-    const SvXMLTokenMap& GetLoginElemTokenMap() const;
-    const SvXMLTokenMap& GetDatabaseDescriptionElemTokenMap() const;
-    const SvXMLTokenMap& GetDataSourceInfoElemTokenMap() const;
-    const SvXMLTokenMap& GetDocumentsElemTokenMap() const;
-    const SvXMLTokenMap& GetComponentElemTokenMap() const;
-    const SvXMLTokenMap& GetQueryElemTokenMap() const;
-    const SvXMLTokenMap& GetColumnElemTokenMap() const;
 
     rtl::Reference < XMLPropertySetMapper > const & GetTableStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;

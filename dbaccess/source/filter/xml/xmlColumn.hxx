@@ -42,14 +42,14 @@ namespace dbaxml
     public:
 
         OXMLColumn( ODBFilter& rImport
-                    , sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLColumn() override;
-        virtual void EndElement() override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     };
 } // namespace dbaxml
 

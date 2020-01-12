@@ -36,12 +36,10 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
-                ,sal_uInt16 nPrfx
-                , const OUString& rLName
                 ,const Reference< XNameAccess >& _xContainer
                 ,const OUString& _sCollectionServiceName
                 ,const OUString& _sComponentServiceName) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport )
         ,m_xContainer(_xContainer)
         ,m_sCollectionServiceName(_sCollectionServiceName)
         ,m_sComponentServiceName(_sComponentServiceName)
@@ -50,12 +48,10 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
 }
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
-                ,sal_uInt16 nPrfx
-                , const OUString& rLName
                 ,const Reference< XNameAccess >& _xContainer
                 ,const OUString& _sCollectionServiceName
                 ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport )
         ,m_xContainer(_xContainer)
         ,m_sCollectionServiceName(_sCollectionServiceName)
 {
@@ -66,31 +62,29 @@ OXMLDocuments::~OXMLDocuments()
 
 }
 
-SvXMLImportContextRef OXMLDocuments::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDocuments::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDocumentsElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement & TOKEN_MASK )
     {
-        case XML_TOK_TABLE:
+        case XML_TABLE:
+        case XML_TABLE_REPRESENTATION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLTable( GetOwnImport(), nPrefix, rLocalName, xAttrList, m_xContainer, "com.sun.star.sdb.TableDefinition");
+            pContext = new OXMLTable( GetOwnImport(), xAttrList, m_xContainer, "com.sun.star.sdb.TableDefinition");
             break;
-        case XML_TOK_QUERY:
+        case XML_QUERY:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLQuery( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer );
+            pContext = new OXMLQuery( GetOwnImport(), xAttrList, m_xContainer );
             break;
-        case XML_TOK_COMPONENT:
+        case XML_COMPONENT:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLComponent( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sComponentServiceName );
+            pContext = new OXMLComponent( GetOwnImport(), xAttrList, m_xContainer,m_sComponentServiceName );
             break;
-        case XML_TOK_COMPONENT_COLLECTION:
+        case XML_COMPONENT_COLLECTION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sCollectionServiceName,m_sComponentServiceName );
+            pContext = new OXMLHierarchyCollection( GetOwnImport(), xAttrList, m_xContainer,m_sCollectionServiceName,m_sComponentServiceName );
             break;
     }
 
