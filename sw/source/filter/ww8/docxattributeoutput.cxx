@@ -3771,6 +3771,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FSNS( XML_w, XML_w ), OString::number(nPageSize),
             FSNS( XML_w, XML_type ), widthType );
 
+    // Disable layout autofit, as it does not exist in LibreOffice yet
+    m_pSerializer->singleElementNS( XML_w, XML_tblLayout,
+            FSNS( XML_w, XML_type ), "fixed" );
+
     // Look for the table style property in the table grab bag
     std::map<OUString, css::uno::Any> aGrabBag =
             pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
