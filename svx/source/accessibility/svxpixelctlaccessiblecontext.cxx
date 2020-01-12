@@ -21,27 +21,17 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
 #include <svx/dlgctrl.hxx>
 
-#include <comphelper/accessibleeventnotifier.hxx>
-
-#include <unotools/accessiblerelationsethelper.hxx>
-
 #include <svxpixelctlaccessiblecontext.hxx>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 
 using namespace ::cppu;
 using namespace ::osl;

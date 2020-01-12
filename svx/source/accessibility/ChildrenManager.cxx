@@ -19,7 +19,6 @@
 
 #include <svx/ChildrenManager.hxx>
 #include "ChildrenManagerImpl.hxx"
-#include <svx/AccessibleShape.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

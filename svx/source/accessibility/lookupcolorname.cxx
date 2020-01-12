@@ -22,15 +22,12 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/ColorTable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 #include "lookupcolorname.hxx"

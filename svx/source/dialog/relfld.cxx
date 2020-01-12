@@ -18,7 +18,7 @@
  */
 
 #include <svx/relfld.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/builder.hxx>
 
 SvxRelativeField::SvxRelativeField(
         vcl::Window *const pParent, WinBits const nBits, FieldUnit const eUnit)

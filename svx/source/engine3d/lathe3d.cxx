@@ -21,12 +21,8 @@
 #include <svx/deflt3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <tools/poly.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/lathe3d.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/svxids.hrc>
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
@@ -34,7 +30,6 @@
 #include <sdr/properties/e3dlatheproperties.hxx>
 #include <sdr/contact/viewcontactofe3dlathe.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 

@@ -25,7 +25,6 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/image.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/eitem.hxx>
@@ -42,8 +41,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <osl/diagnose.h>
-
-#include <svx/svdtrans.hxx>
 
 #include "rlrcitem.hxx"
 #include <memory>

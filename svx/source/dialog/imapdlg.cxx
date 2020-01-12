@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
 #include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -28,7 +27,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/sfxecode.hxx>
@@ -43,8 +41,6 @@
 #include <svx/svxids.hrc>
 #include "imapwnd.hxx"
 #include "imapimp.hxx"
-#include <svx/dlgutil.hxx>
-#include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
