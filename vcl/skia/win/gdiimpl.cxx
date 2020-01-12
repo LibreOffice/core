@@ -136,16 +136,24 @@ static SkColor toSkColor(Color color)
 void WinSkiaSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTexture,
                                               Color aMaskColor, const SalTwoRect& rPosAry)
 {
-    assert(dynamic_cast<const SkiaCompatibleDC::Texture*>(pTexture));
+    assert(dynamic_cast<const SkiaCompatibleDC::PackedTexture*>(pTexture));
+    const SkiaCompatibleDC::PackedTexture* texture
+        = static_cast<const SkiaCompatibleDC::PackedTexture*>(pTexture);
     preDraw();
     SkPaint paint;
     // The glyph is painted as white, modulate it to be of the appropriate color.
     // SkiaCompatibleDC::wantsTextColorWhite() ensures the glyph is white.
     // TODO maybe other black/white in WinFontInstance::CacheGlyphToAtlas() should be swapped.
     paint.setColorFilter(SkColorFilters::Blend(toSkColor(aMaskColor), SkBlendMode::kModulate));
+    // We use SkiaPackedSurface, so use also the appropriate rectangle in the source SkSurface.
+    const tools::Rectangle& rect = texture->packedSurface.mRect;
+    // The source in SalTwoRect is actually just the size.
+    assert(rPosAry.mnSrcX == 0 && rPosAry.mnSrcY == 0);
+    assert(rPosAry.mnSrcWidth == rect.GetWidth());
+    assert(rPosAry.mnSrcHeight == rect.GetHeight());
     mSurface->getCanvas()->drawImageRect(
-        static_cast<const SkiaCompatibleDC::Texture*>(pTexture)->image,
-        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        texture->packedSurface.mSurface->makeImageSnapshot(),
+        SkRect::MakeXYWH(rect.getX(), rect.getY(), rect.GetWidth(), rect.GetHeight()),
         SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                          rPosAry.mnDestHeight),
         &paint);

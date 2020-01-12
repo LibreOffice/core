@@ -24,22 +24,26 @@
 
 #include <vector>
 
+#include <skia/packedsurfaceatlas.hxx>
+
 struct SkiaGlobalWinGlyphCache : public GlobalWinGlyphCache
 {
+    SkiaGlobalWinGlyphCache()
+        : mPackedSurfaceAtlas(2048, 2048)
+    {
+    }
+    SkiaPackedSurfaceAtlasManager mPackedSurfaceAtlas;
     virtual bool AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc) override;
-    virtual void NotifyElementUsed(WinGlyphDrawElement& rElement) override;
     virtual void Prune() override;
-    // The least recently used SkImage order, identified by SkImage::uniqueID().
-    std::vector<uint32_t> mLRUOrder;
 };
 
 class SkiaWinGlyphCache : public WinGlyphCache
 {
 public:
-    void RemoveTextures(const std::vector<uint32_t>& ids);
+    void RemoveSurfaces(const std::vector<sk_sp<SkSurface>>& surfaces);
 
 private:
-    // This class just "adds" RemoveTexture() to the base class, it's never instantiatied.
+    // This class just "adds" RemoveSurfaces() to the base class, it's never instantiated.
     SkiaWinGlyphCache() = delete;
 };
 
