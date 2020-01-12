@@ -24,15 +24,12 @@
 #include <memory>
 #include <utility>
 #include <algorithm>
-#include <deque>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -40,12 +37,9 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/unohelp.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 
 
 // Project-local header
@@ -53,12 +47,8 @@
 
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/AccessibleTextHelper.hxx>
-#include <svx/unoshape.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/unotext.hxx>
 
 #include <editeng/unoedhlp.hxx>
-#include <editeng/unopracc.hxx>
 #include <editeng/unoedprx.hxx>
 #include <editeng/AccessibleParaManager.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
@@ -67,8 +57,6 @@
 #include <cell.hxx>
 #include "../table/accessiblecell.hxx"
 #include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

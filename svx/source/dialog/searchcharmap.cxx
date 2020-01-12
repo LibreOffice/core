@@ -21,23 +21,14 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/colorcfg.hxx>
 
-#include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
 #include <unordered_map>
 
 #include <svx/searchcharmap.hxx>
-#include <svx/svxdlg.hxx>
 
 #include <charmapacc.hxx>
-#include <uiobject.hxx>
 
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <svl/itemset.hxx>
-#include <unicode/uchar.h>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::accessibility;

@@ -18,7 +18,6 @@
  */
 
 #include <svx/camera3d.hxx>
-#include <tools/stream.hxx>
 
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                    double fFocalLen) :

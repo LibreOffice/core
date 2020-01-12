@@ -20,7 +20,6 @@
 #include <svl/itemset.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/uri.hxx>
 #include <config_folders.h>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>

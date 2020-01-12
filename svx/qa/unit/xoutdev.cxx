@@ -11,7 +11,7 @@
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-#include <unotest/bootstrapfixturebase.hxx>
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <sal/types.h>
 #include <sfx2/app.hxx>

@@ -19,10 +19,6 @@
 
 
 #include <svx/deflt3d.hxx>
-#include <svx/cube3d.hxx>
-#include <svx/svxids.hrc>
-#include <editeng/colritem.hxx>
-#include <svx/e3ditem.hxx>
 
 // Class to manage the 3D default attributes
 

@@ -29,7 +29,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxelditm.hxx>
-#include <sxmkitm.hxx>
 
 #include <vcl/settings.hxx>
 #include <memory>
