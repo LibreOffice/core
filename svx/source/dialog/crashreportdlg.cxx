@@ -10,13 +10,9 @@
 #include "crashreportdlg.hxx"
 
 
-#include <config_folders.h>
-
-#include <rtl/bootstrap.hxx>
 #include <desktop/crashreport.hxx>
 #include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/file.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

@@ -22,17 +22,13 @@
 #include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/sphere3d.hxx>
 
-#include <svx/svxids.hrc>
-#include <svx/svx3ditems.hxx>
 #include <sdr/properties/e3dsphereproperties.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <sdr/contact/viewcontactofe3dsphere.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
 
 // DrawContact section
 std::unique_ptr<sdr::contact::ViewContact> E3dSphereObj::CreateObjectSpecificViewContact()

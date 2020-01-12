@@ -18,10 +18,6 @@
  */
 
 #include <svx/e3dundo.hxx>
-#include <svx/svdmodel.hxx>
-#include <editeng/outlobj.hxx>
-#include <svx/view3d.hxx>
-#include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
 

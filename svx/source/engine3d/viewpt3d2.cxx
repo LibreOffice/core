@@ -18,8 +18,6 @@
  */
 
 #include <svx/viewpt3d.hxx>
-#include <basegfx/range/b3drange.hxx>
-#include <o3tl/numeric.hxx>
 
 Viewport3D::Viewport3D() :
     aVRP(0, 0, 5),

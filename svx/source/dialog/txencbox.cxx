@@ -22,18 +22,12 @@
 #include <svx/txencbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/txenctab.hxx>
-#include <svx/strings.hrc>
 #if HAVE_FEATURE_DBCONNECTIVITY
 #include <svx/dbcharsethelper.hxx>
 #endif
 #include <unotools/syslocale.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/locale.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-#include <osl/nlsupport.h>
 #include <txenctab.hrc>
 
 namespace

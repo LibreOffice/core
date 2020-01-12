@@ -24,23 +24,14 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/debug.hxx>
-#include <tools/poly.hxx>
-#include <vcl/region.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/hatch.hxx>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <svxpixelctlaccessiblecontext.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svxrectctaccessiblecontext.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/svdorect.hxx>
@@ -48,9 +39,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <svx/xbtmpit.hxx>
 
 #define OUTPUT_DRAWMODE_COLOR       (DrawModeFlags::Default)
 #define OUTPUT_DRAWMODE_CONTRAST    (DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient)

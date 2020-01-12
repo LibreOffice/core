@@ -21,14 +21,12 @@
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <vcl/svapp.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <svx/unoshape.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/unoapi.hxx>
 
 #include <svx/strings.hrc>
 

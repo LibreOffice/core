@@ -27,13 +27,12 @@
 #include <svtools/langtab.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
-#include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::linguistic2;

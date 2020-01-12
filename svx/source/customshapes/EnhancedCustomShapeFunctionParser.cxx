@@ -22,7 +22,6 @@
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 #include <tools/fract.hxx>
 
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>

@@ -22,9 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/colorcfg.hxx>
 
-#include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
 
 
@@ -32,19 +30,16 @@
 
 #include <svx/charmap.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/svxdlg.hxx>
 
 #include <charmapacc.hxx>
 #include <uiobject.hxx>
 
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svl/itemset.hxx>
 #include <unicode/uchar.h>
 #include <vcl/textview.hxx>
 #include <rtl/ustrbuf.hxx>

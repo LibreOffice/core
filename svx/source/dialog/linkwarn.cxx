@@ -18,7 +18,6 @@
  */
 
 #include <osl/file.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/linkwarn.hxx>
 #include <svtools/miscopt.hxx>
 

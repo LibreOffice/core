@@ -21,10 +21,6 @@
 #include <sfx2/dispatch.hxx>
 
 #include <svx/colorbox.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdocirc.hxx>
 #include <svx/xftadit.hxx>
 #include <svx/xftdiit.hxx>
 #include <svx/xftstit.hxx>
@@ -35,16 +31,10 @@
 #include <svx/xftshxy.hxx>
 #include <svx/xtextit0.hxx>
 
-#include <svx/dlgutil.hxx>
-
 #include <svtools/unitconv.hxx>
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <svx/fontwork.hxx>
-#include <editeng/outlobj.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <vcl/settings.hxx>
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxFontWorkChildWindow, SID_FONTWORK );
 

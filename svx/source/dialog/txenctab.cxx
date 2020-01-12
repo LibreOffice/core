@@ -18,7 +18,6 @@
  */
 
 
-#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/txenctab.hxx>
 #include <txenctab.hrc>

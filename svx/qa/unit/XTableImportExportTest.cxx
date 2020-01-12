@@ -7,21 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
-
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <unotest/bootstrapfixturebase.hxx>
 
 #include <sal/types.h>
 #include <sfx2/app.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/bitmapex.hxx>
-#include <svx/XPropertyTable.hxx>
-
-#include <xmlxtexp.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

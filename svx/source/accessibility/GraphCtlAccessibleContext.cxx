@@ -23,16 +23,12 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <svtools/colorcfg.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -43,9 +39,7 @@
 #include <svx/graphctl.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdpage.hxx>
-#include <svx/unomod.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
 // namespaces

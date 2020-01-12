@@ -22,9 +22,7 @@
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>

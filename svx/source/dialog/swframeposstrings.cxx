@@ -22,9 +22,7 @@
 #include <cassert>
 
 #include <svx/swframeposstrings.hxx>
-#include <tools/resary.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <swframeposstrings.hrc>
 
 OUString SvxSwFramePosString::GetString(StringId eId)

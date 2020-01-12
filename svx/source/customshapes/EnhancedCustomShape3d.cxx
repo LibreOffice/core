@@ -19,7 +19,6 @@
 
 #include "EnhancedCustomShape3d.hxx"
 #include <svx/deflt3d.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <tools/poly.hxx>
 #include <svx/svditer.hxx>
@@ -30,21 +29,16 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xsflclit.hxx>
-#include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/xflbmtit.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/scene3d.hxx>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>

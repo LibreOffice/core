@@ -18,8 +18,6 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <vcl/help.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <vcl/commandevent.hxx>
 #include <vcl/imaprect.hxx>
 #include <vcl/imapcirc.hxx>
@@ -27,7 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/urlbmk.hxx>
 
-#include <svx/xoutbmp.hxx>
 #include <svx/svxids.hrc>
 #include "imapwnd.hxx"
 #include <svx/svdpage.hxx>
@@ -36,7 +33,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/svdpagv.hxx>
-#include <svl/urihelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
@@ -46,7 +42,6 @@
 #include <sot/formats.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <memory>
 

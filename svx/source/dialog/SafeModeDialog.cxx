@@ -9,8 +9,6 @@
 
 #include "SafeModeDialog.hxx"
 
-#include <config_folders.h>
-#include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <sfx2/safemode.hxx>
 #include <tools/diagnose_ex.h>
@@ -18,7 +16,6 @@
 #include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ZipPackageHelper.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <unotools/configmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

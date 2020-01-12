@@ -31,7 +31,6 @@
 #include <svx/grfflt.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svxdlg.hxx>
-#include <memory>
 
 
 SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject )

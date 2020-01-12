@@ -25,7 +25,6 @@
 
 #include <svx/ruler.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/protitem.hxx>
 #include "rlrcitem.hxx"

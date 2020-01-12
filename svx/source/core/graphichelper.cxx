@@ -25,31 +25,25 @@
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <map>

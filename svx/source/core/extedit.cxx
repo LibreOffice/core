@@ -9,7 +9,6 @@
 
 #include <svx/extedit.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -19,14 +18,9 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmview.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
 #include <salhelper/thread.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
-#include <osl/thread.hxx>
-#include <osl/process.h>
-#include <osl/time.h>
 #include <svtools/filechangedchecker.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>

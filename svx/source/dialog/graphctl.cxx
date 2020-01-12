@@ -20,16 +20,11 @@
 #include <svl/itempool.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <unotools/syslocale.hxx>
-#include <rtl/math.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 
 #include <svx/graphctl.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <GraphCtlAccessibleContext.hxx>
-#include <svx/xoutbmp.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/sdrpaintwindow.hxx>

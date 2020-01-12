@@ -21,22 +21,18 @@
 #include <svx/strings.hrc>
 #include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/extrud3d.hxx>
-#include <svx/scene3d.hxx>
 
-#include <svx/svxids.hrc>
-#include <svx/xpoly.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/xlineit0.hxx>
 #include <sdr/properties/e3dextrudeproperties.hxx>
 #include <sdr/contact/viewcontactofe3dextrude.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 

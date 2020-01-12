@@ -22,11 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -37,7 +33,6 @@
 #include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 

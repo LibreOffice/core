@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdpage.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>

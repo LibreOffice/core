@@ -20,14 +20,12 @@
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/event.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -39,7 +37,6 @@
 
 #include <svx/fntctrl.hxx>
 #include <svx/svxids.hrc>
-#include <svx/sdasitm.hxx>
 
 // Item set includes
 #include <svl/itemset.hxx>
@@ -64,7 +61,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/twolinesitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/langitem.hxx>
 

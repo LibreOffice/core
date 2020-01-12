@@ -22,26 +22,13 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <vcl/svapp.hxx>
-
-#include <com/sun/star/uno/Exception.hpp>
 
 // Includes for string resources.
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-#include <svx/xdef.hxx>
-#include <svx/unoapi.hxx>
 #include "lookupcolorname.hxx"
 
 using namespace ::com::sun::star;

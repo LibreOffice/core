@@ -18,24 +18,17 @@
  */
 
 #include <svx/AccessibleShape.hxx>
-#include <svx/DescriptionGenerator.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <editeng/outlobj.hxx>
-#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>
@@ -44,10 +37,8 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 
@@ -61,7 +52,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

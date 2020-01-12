@@ -24,7 +24,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/colorcfg.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace svx {

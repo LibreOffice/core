@@ -24,7 +24,6 @@
 
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
-#include <memory>
 
 namespace svx
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include <vcl/timer.hxx>
 #include <svl/slstitm.hxx>
@@ -51,7 +50,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <svl/itempool.hxx>
-#include <svl/intitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -61,13 +59,11 @@
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <svx/svxitems.hrc>
 
 #include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include <svx/dlgutil.hxx>
 #include <editeng/brushitem.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>

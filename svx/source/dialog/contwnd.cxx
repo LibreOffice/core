@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/xoutbmp.hxx>
-#include <svx/svxids.hrc>
 #include "contwnd.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/ptrstyle.hxx>
