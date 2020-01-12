@@ -36,9 +36,8 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 
-OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& _sLocalName) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport) :
+    SvXMLImportContext( rImport )
     ,m_bFoundOne(false)
 {
     rImport.setNewFormat(true);
@@ -49,37 +48,38 @@ OXMLConnectionData::~OXMLConnectionData()
 
 }
 
-SvXMLImportContextRef OXMLConnectionData::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLConnectionData::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_LOGIN:
+        case XML_ELEMENT(DB, XML_LOGIN):
+        case XML_ELEMENT(DB_OASIS, XML_LOGIN):
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLLogin( GetOwnImport(), nPrefix, rLocalName,xAttrList );
+            pContext = new OXMLLogin( GetOwnImport(), xAttrList );
             break;
-        case XML_TOK_DATABASE_DESCRIPTION:
+        case XML_ELEMENT(DB, XML_DATABASE_DESCRIPTION):
+        case XML_ELEMENT(DB_OASIS, XML_DATABASE_DESCRIPTION):
             if ( !m_bFoundOne )
             {
                 m_bFoundOne = true;
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLDatabaseDescription( GetOwnImport(), nPrefix, rLocalName);
+                pContext = new OXMLDatabaseDescription( GetOwnImport() );
             }
             break;
-        case XML_TOK_CONNECTION_RESOURCE:
+        case XML_ELEMENT(DB, XML_CONNECTION_RESOURCE):
+        case XML_ELEMENT(DB_OASIS, XML_CONNECTION_RESOURCE):
             if ( !m_bFoundOne )
             {
                 m_bFoundOne = true;
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLConnectionResource( GetOwnImport(), nPrefix, rLocalName,xAttrList );
+                pContext = new OXMLConnectionResource( GetOwnImport(), xAttrList );
             }
             break;
-        case XML_TOK_COMPOUND_DATABASE:
+        case XML_ELEMENT(DB, XML_COMPOUND_DATABASE):
+        case XML_ELEMENT(DB_OASIS, XML_COMPOUND_DATABASE):
             if ( !m_bFoundOne )
             {
                 m_bFoundOne = true;

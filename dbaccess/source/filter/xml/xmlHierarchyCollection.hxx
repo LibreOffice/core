@@ -39,24 +39,21 @@ namespace dbaxml
     public:
 
         OXMLHierarchyCollection( ODBFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                     ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sCollectionServiceName
                     ,const OUString& _sComponentServiceName
                     );
         OXMLHierarchyCollection( ODBFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
                     ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLHierarchyCollection() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 } // namespace dbaxml
 
