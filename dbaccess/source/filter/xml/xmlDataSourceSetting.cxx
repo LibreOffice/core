@@ -40,35 +40,27 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,OXMLDataSourceSetting* _pContainer) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( rImport )
     ,m_pContainer(_pContainer)
     ,m_bIsList(false)
 {
 
     m_aPropType = cppu::UnoType<void>::get();
 
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceInfoElemTokenMap();
-
-    sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        OUString sAttrName = _xAttrList->getNameByIndex( i );
-        sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() & TOKEN_MASK )
         {
-            case XML_TOK_DATA_SOURCE_SETTING_IS_LIST:
+            case XML_DATA_SOURCE_SETTING_IS_LIST:
                 m_bIsList = sValue == "true";
                 break;
-            case XML_TOK_DATA_SOURCE_SETTING_TYPE:
+            case XML_DATA_SOURCE_SETTING_TYPE:
                 {
                     // needs to be translated into a css::uno::Type
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap = [&]()
@@ -91,9 +83,11 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         m_aPropType = aTypePos->second;
                 }
                 break;
-            case XML_TOK_DATA_SOURCE_SETTING_NAME:
+            case XML_DATA_SOURCE_SETTING_NAME:
                 m_aSetting.Name = sValue;
                 break;
+            default:
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
     }
 
@@ -103,30 +97,27 @@ OXMLDataSourceSetting::~OXMLDataSourceSetting()
 {
 }
 
-SvXMLImportContextRef OXMLDataSourceSetting::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDataSourceSetting::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceInfoElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement & TOKEN_MASK )
     {
-        case XML_TOK_DATA_SOURCE_SETTING:
+        case XML_DATA_SOURCE_SETTING:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList);
+            pContext = new OXMLDataSourceSetting( GetOwnImport(), xAttrList);
             break;
-        case XML_TOK_DATA_SOURCE_SETTING_VALUE:
+        case XML_DATA_SOURCE_SETTING_VALUE:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList,this );
+            pContext = new OXMLDataSourceSetting( GetOwnImport(), xAttrList,this );
             break;
     }
 
     return pContext;
 }
 
-void OXMLDataSourceSetting::EndElement()
+void OXMLDataSourceSetting::endFastElement(sal_Int32 )
 {
     if ( !m_aSetting.Name.isEmpty() )
     {
@@ -142,7 +133,7 @@ void OXMLDataSourceSetting::EndElement()
     }
 }
 
-void OXMLDataSourceSetting::Characters( const OUString& rChars )
+void OXMLDataSourceSetting::characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);

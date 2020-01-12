@@ -34,47 +34,44 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& _sLocalName,
-                const Reference< XAttributeList > & _xAttrList) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+                const Reference< XFastAttributeList > & _xAttrList) :
+    SvXMLImportContext( rImport )
 {
-
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceElemTokenMap();
-
     Reference<XPropertySet> xDataSource = rImport.getDataSource();
 
     PropertyValue aProperty;
 
-    const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
     OUString sType,sHostName,sPortNumber,sDatabaseName;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    if (xDataSource.is())
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
-
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_DB_TYPE:
-                sType = sValue;
-                break;
-            case XML_TOK_HOSTNAME:
-                sHostName = sValue;
-                break;
-            case XML_TOK_PORT:
-                sPortNumber = sValue;
-                break;
-            case XML_TOK_LOCAL_SOCKET:
-                aProperty.Name = "LocalSocket";
-                aProperty.Value <<= sValue;
-                rImport.addInfo(aProperty);
-                break;
-            case XML_TOK_DATABASE_NAME:
-                sDatabaseName = sValue;
-                break;
+            OUString sValue = aIter.toString();
+
+            switch( aIter.getToken() & TOKEN_MASK )
+            {
+                case XML_TYPE:
+                    sType = sValue;
+                    break;
+                case XML_HOSTNAME:
+                    sHostName = sValue;
+                    break;
+                case XML_PORT:
+                    sPortNumber = sValue;
+                    break;
+                case XML_LOCAL_SOCKET:
+                    aProperty.Name = "LocalSocket";
+                    aProperty.Value <<= sValue;
+                    rImport.addInfo(aProperty);
+                    break;
+                case XML_DATABASE_NAME:
+                    sDatabaseName = sValue;
+                    break;
+                default:
+                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+            }
         }
     }
     if ( !sType.isEmpty() )

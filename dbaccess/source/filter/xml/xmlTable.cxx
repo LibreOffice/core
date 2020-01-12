@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <sal/log.hxx>
 
 namespace dbaxml
 {
@@ -43,50 +44,43 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLTable::OXMLTable( ODBFilter& _rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const uno::Reference< XAttributeList > & _xAttrList
+                ,const uno::Reference< XFastAttributeList > & _xAttrList
                 ,const uno::Reference< css::container::XNameAccess >& _xParentContainer
                 ,const OUString& _sServiceName
                 )
-    :SvXMLImportContext( _rImport, nPrfx, _sLocalName )
+    :SvXMLImportContext( _rImport )
     ,m_xParentContainer(_xParentContainer)
     ,m_bApplyFilter(false)
     ,m_bApplyOrder(false)
 {
-
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = GetOwnImport().GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = GetOwnImport().GetQueryElemTokenMap();
-
-    sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        OUString sAttrName = _xAttrList->getNameByIndex( i );
-        sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() & TOKEN_MASK )
         {
-            case XML_TOK_QUERY_NAME:
+            case XML_NAME:
                 m_sName = sValue;
                 break;
-            case XML_TOK_CATALOG_NAME:
+            case XML_CATALOG_NAME:
                 m_sCatalog = sValue;
                 break;
-            case XML_TOK_SCHEMA_NAME:
+            case XML_SCHEMA_NAME:
                 m_sSchema = sValue;
                 break;
-            case XML_TOK_STYLE_NAME:
+            case XML_STYLE_NAME:
                 m_sStyleName = sValue;
                 break;
-            case XML_TOK_APPLY_FILTER:
+            case XML_APPLY_FILTER:
                 m_bApplyFilter = sValue == "true";
                 break;
-            case XML_TOK_APPLY_ORDER:
+            case XML_APPLY_ORDER:
                 m_bApplyOrder = sValue == "true";
                 break;
+            default:
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
     }
     uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
@@ -104,24 +98,21 @@ OXMLTable::~OXMLTable()
 
 }
 
-SvXMLImportContextRef OXMLTable::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLTable::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetQueryElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement & TOKEN_MASK )
     {
-        case XML_TOK_FILTER_STATEMENT:
+        case XML_FILTER_STATEMENT:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 OUString s1,s2,s3;
                 fillAttributes(xAttrList,m_sFilterStatement,s1,s2,s3);
             }
             break;
-        case XML_TOK_ORDER_STATEMENT:
+        case XML_ORDER_STATEMENT:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 OUString s1,s2,s3;
@@ -129,7 +120,7 @@ SvXMLImportContextRef OXMLTable::CreateChildContext(
             }
             break;
 
-        case XML_TOK_COLUMNS:
+        case XML_COLUMNS:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 uno::Reference< XColumnsSupplier > xColumnsSup(m_xTable,UNO_QUERY);
@@ -138,7 +129,7 @@ SvXMLImportContextRef OXMLTable::CreateChildContext(
                 {
                     xColumns = xColumnsSup->getColumns();
                 }
-                pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName ,xColumns,m_xTable);
+                pContext = new OXMLHierarchyCollection( GetOwnImport(), xColumns,m_xTable);
             }
             break;
     }
@@ -171,7 +162,7 @@ void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
     }
 }
 
-void OXMLTable::EndElement()
+void OXMLTable::endFastElement(sal_Int32 )
 {
     uno::Reference<XNameContainer> xNameContainer(m_xParentContainer,UNO_QUERY);
     if ( xNameContainer.is() )
@@ -206,39 +197,35 @@ void OXMLTable::EndElement()
 
 }
 
-void OXMLTable::fillAttributes(const uno::Reference< XAttributeList > & _xAttrList
+void OXMLTable::fillAttributes(const uno::Reference< XFastAttributeList > & _xAttrList
                                 ,OUString& _rsCommand
                                 ,OUString& _rsTableName
                                 ,OUString& _rsTableSchema
                                 ,OUString& _rsTableCatalog
                                 )
 {
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = GetOwnImport().GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = GetOwnImport().GetQueryElemTokenMap();
-
-    sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        OUString sAttrName = _xAttrList->getNameByIndex( i );
-        sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() & TOKEN_MASK )
         {
-            case XML_TOK_COMMAND:
+            case XML_COMMAND:
                 _rsCommand = sValue;
                 break;
-            case XML_TOK_CATALOG_NAME:
+            case XML_CATALOG_NAME:
                 _rsTableCatalog = sValue;
                 break;
-            case XML_TOK_SCHEMA_NAME:
+            case XML_SCHEMA_NAME:
                 _rsTableSchema = sValue;
                 break;
-            case XML_TOK_QUERY_NAME:
+            case XML_QUERY_NAME:
                 _rsTableName = sValue;
                 break;
+            default:
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
     }
 }

@@ -404,6 +404,9 @@ public:
     {
     }
 
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
            const OUString& rLocalName,
            const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
@@ -414,8 +417,6 @@ public:
         }
         return nullptr;
     }
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
@@ -455,8 +456,6 @@ public:
 
         return pContext;
     }
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
@@ -467,23 +466,25 @@ public:
 class DBXMLDocumentBodyContext : public SvXMLImportContext
 {
 public:
-    DBXMLDocumentBodyContext(SvXMLImport & rImport,
-           sal_uInt16 const nPrefix,
-           const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    DBXMLDocumentBodyContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
-           const OUString& rLocalName,
-           const uno::Reference<xml::sax::XAttributeList> &) override
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
-        if ((XML_NAMESPACE_OFFICE == nPrefix || XML_NAMESPACE_OOO == nPrefix)
-            && IsXMLToken(rLocalName, XML_DATABASE))
+        ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
+        switch (nElement)
         {
-            ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
-            rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            return new OXMLDatabase(rImport, nPrefix, rLocalName );
+            case XML_ELEMENT(OFFICE, XML_DATABASE):
+            case XML_ELEMENT(OOO, XML_DATABASE):
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                return new OXMLDatabase(rImport);
+            default: break;
         }
         return nullptr;
     }
@@ -514,9 +515,6 @@ public:
             case XML_TOK_CONTENT_SCRIPTS:
                 pContext = new XMLScriptContext(GetImport(), rLocalName, rImport.GetModel());
                 break;
-            case XML_TOK_CONTENT_BODY:
-                pContext = new DBXMLDocumentBodyContext(rImport, nPrefix, rLocalName);
-                break;
             default:
                 break;
         }
@@ -526,8 +524,17 @@ public:
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
+        ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
+        switch (nElement)
+        {
+            case XML_ELEMENT(OFFICE, XML_BODY):
+            case XML_ELEMENT(OOO, XML_BODY):
+                return new DBXMLDocumentBodyContext(rImport);
+                break;
+            default: break;
+        }
         return nullptr;
     }
 };
@@ -636,227 +643,6 @@ const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
     return *m_pDocContentElemTokenMap;
 }
 
-
-const SvXMLTokenMap& ODBFilter::GetDatabaseElemTokenMap() const
-{
-    if (!m_pDatabaseElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_DATASOURCE,             XML_TOK_DATASOURCE  },
-            { XML_NAMESPACE_DB, XML_FORMS,                  XML_TOK_FORMS},
-            { XML_NAMESPACE_DB, XML_REPORTS,                XML_TOK_REPORTS},
-            { XML_NAMESPACE_DB, XML_QUERIES,                XML_TOK_QUERIES},
-            { XML_NAMESPACE_DB, XML_TABLES,                 XML_TOK_TABLES},
-            { XML_NAMESPACE_DB, XML_TABLE_REPRESENTATIONS,  XML_TOK_TABLES},
-            { XML_NAMESPACE_DB, XML_SCHEMA_DEFINITION,      XML_TOK_SCHEMA_DEFINITION},
-            XML_TOKEN_MAP_END
-        };
-        m_pDatabaseElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDatabaseElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
-{
-    if (!m_pDataSourceElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB,     XML_CONNECTION_RESOURCE,            XML_TOK_CONNECTION_RESOURCE},
-            { XML_NAMESPACE_DB,     XML_SUPPRESS_VERSION_COLUMNS,       XML_TOK_SUPPRESS_VERSION_COLUMNS},
-            { XML_NAMESPACE_DB,     XML_JAVA_DRIVER_CLASS,              XML_TOK_JAVA_DRIVER_CLASS},
-            { XML_NAMESPACE_DB,     XML_EXTENSION,                      XML_TOK_EXTENSION},
-            { XML_NAMESPACE_DB,     XML_IS_FIRST_ROW_HEADER_LINE,       XML_TOK_IS_FIRST_ROW_HEADER_LINE},
-            { XML_NAMESPACE_DB,     XML_SHOW_DELETED,                   XML_TOK_SHOW_DELETED},
-            { XML_NAMESPACE_DB,     XML_IS_TABLE_NAME_LENGTH_LIMITED,   XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED},
-            { XML_NAMESPACE_DB,     XML_SYSTEM_DRIVER_SETTINGS,         XML_TOK_SYSTEM_DRIVER_SETTINGS},
-            { XML_NAMESPACE_DB,     XML_ENABLE_SQL92_CHECK,             XML_TOK_ENABLE_SQL92_CHECK},
-            { XML_NAMESPACE_DB,     XML_APPEND_TABLE_ALIAS_NAME,        XML_TOK_APPEND_TABLE_ALIAS_NAME},
-            { XML_NAMESPACE_DB,     XML_PARAMETER_NAME_SUBSTITUTION,    XML_TOK_PARAMETER_NAME_SUBSTITUTION},
-            { XML_NAMESPACE_DB,     XML_IGNORE_DRIVER_PRIVILEGES,       XML_TOK_IGNORE_DRIVER_PRIVILEGES},
-            { XML_NAMESPACE_DB,     XML_BOOLEAN_COMPARISON_MODE,        XML_TOK_BOOLEAN_COMPARISON_MODE},
-            { XML_NAMESPACE_DB,     XML_USE_CATALOG,                    XML_TOK_USE_CATALOG},
-            { XML_NAMESPACE_DB,     XML_BASE_DN,                        XML_TOK_BASE_DN},
-            { XML_NAMESPACE_DB,     XML_MAX_ROW_COUNT,                  XML_TOK_MAX_ROW_COUNT},
-            { XML_NAMESPACE_DB,     XML_LOGIN,                          XML_TOK_LOGIN},
-            { XML_NAMESPACE_DB,     XML_TABLE_FILTER,                   XML_TOK_TABLE_FILTER},
-            { XML_NAMESPACE_DB,     XML_TABLE_TYPE_FILTER,              XML_TOK_TABLE_TYPE_FILTER},
-            { XML_NAMESPACE_DB,     XML_AUTO_INCREMENT,                 XML_TOK_AUTO_INCREMENT},
-            { XML_NAMESPACE_DB,     XML_DELIMITER,                      XML_TOK_DELIMITER},
-            { XML_NAMESPACE_DB,     XML_DATA_SOURCE_SETTINGS,           XML_TOK_DATA_SOURCE_SETTINGS},
-            { XML_NAMESPACE_DB,     XML_FONT_CHARSET,                   XML_TOK_FONT_CHARSET},
-            // db odf 12
-            { XML_NAMESPACE_DB,     XML_CONNECTION_DATA,                XML_TOK_CONNECTION_DATA},
-            { XML_NAMESPACE_DB,     XML_DATABASE_DESCRIPTION,           XML_TOK_DATABASE_DESCRIPTION},
-            { XML_NAMESPACE_DB,     XML_COMPOUND_DATABASE,              XML_TOK_COMPOUND_DATABASE},
-            { XML_NAMESPACE_XLINK,  XML_HREF,                           XML_TOK_DB_HREF},
-            { XML_NAMESPACE_DB,     XML_MEDIA_TYPE,                     XML_TOK_MEDIA_TYPE},
-            { XML_NAMESPACE_DB,     XML_TYPE,                           XML_TOK_DB_TYPE},
-            { XML_NAMESPACE_DB,     XML_HOSTNAME,                       XML_TOK_HOSTNAME},
-            { XML_NAMESPACE_DB,     XML_PORT,                           XML_TOK_PORT},
-            { XML_NAMESPACE_DB,     XML_LOCAL_SOCKET,                   XML_TOK_LOCAL_SOCKET},
-            { XML_NAMESPACE_DB,     XML_DATABASE_NAME,                  XML_TOK_DATABASE_NAME},
-            { XML_NAMESPACE_DB,     XML_DRIVER_SETTINGS,                XML_TOK_DRIVER_SETTINGS},
-            { XML_NAMESPACE_DB,     XML_JAVA_CLASSPATH,                 XML_TOK_JAVA_CLASSPATH},
-            { XML_NAMESPACE_DB,     XML_CHARACTER_SET,                  XML_TOK_CHARACTER_SET},
-            { XML_NAMESPACE_DB,     XML_APPLICATION_CONNECTION_SETTINGS,XML_TOK_APPLICATION_CONNECTION_SETTINGS},
-            XML_TOKEN_MAP_END
-        };
-        m_pDataSourceElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDataSourceElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetLoginElemTokenMap() const
-{
-    if (!m_pLoginElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_USER_NAME,              XML_TOK_USER_NAME},
-            { XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,   XML_TOK_IS_PASSWORD_REQUIRED},
-            { XML_NAMESPACE_DB, XML_USE_SYSTEM_USER,        XML_TOK_USE_SYSTEM_USER},
-            { XML_NAMESPACE_DB, XML_LOGIN_TIMEOUT,          XML_TOK_LOGIN_TIMEOUT},
-            XML_TOKEN_MAP_END
-        };
-        m_pLoginElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pLoginElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetDatabaseDescriptionElemTokenMap() const
-{
-    if (!m_pDatabaseDescriptionElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE,    XML_TOK_FILE_BASED_DATABASE},
-            { XML_NAMESPACE_DB, XML_SERVER_DATABASE,        XML_TOK_SERVER_DATABASE},
-            XML_TOKEN_MAP_END
-        };
-        m_pDatabaseDescriptionElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDatabaseDescriptionElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
-{
-    if (!m_pDataSourceInfoElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,XML_TOK_ADDITIONAL_COLUMN_STATEMENT},
-            { XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,   XML_TOK_ROW_RETRIEVING_STATEMENT},
-            { XML_NAMESPACE_DB, XML_STRING,                     XML_TOK_STRING},
-            { XML_NAMESPACE_DB, XML_FIELD,                      XML_TOK_FIELD},
-            { XML_NAMESPACE_DB, XML_DECIMAL,                    XML_TOK_DECIMAL},
-            { XML_NAMESPACE_DB, XML_THOUSAND,                   XML_TOK_THOUSAND},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING,        XML_TOK_DATA_SOURCE_SETTING},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE,  XML_TOK_DATA_SOURCE_SETTING_VALUE},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,XML_TOK_DATA_SOURCE_SETTING_IS_LIST},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE,   XML_TOK_DATA_SOURCE_SETTING_TYPE},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME,   XML_TOK_DATA_SOURCE_SETTING_NAME},
-            { XML_NAMESPACE_DB, XML_FONT_CHARSET,               XML_TOK_FONT_CHARSET},
-            { XML_NAMESPACE_DB, XML_ENCODING,                   XML_TOK_ENCODING},
-            XML_TOKEN_MAP_END
-        };
-        m_pDataSourceInfoElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDataSourceInfoElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetDocumentsElemTokenMap() const
-{
-    if (!m_pDocumentsElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_COMPONENT,              XML_TOK_COMPONENT},
-            { XML_NAMESPACE_DB, XML_COMPONENT_COLLECTION,   XML_TOK_COMPONENT_COLLECTION},
-            { XML_NAMESPACE_DB, XML_QUERY_COLLECTION,       XML_TOK_QUERY_COLLECTION},
-            { XML_NAMESPACE_DB, XML_QUERY,                  XML_TOK_QUERY},
-            { XML_NAMESPACE_DB, XML_TABLE,                  XML_TOK_TABLE},
-            { XML_NAMESPACE_DB, XML_TABLE_REPRESENTATION,   XML_TOK_TABLE},
-            { XML_NAMESPACE_DB, XML_COLUMN,                 XML_TOK_COLUMN},
-            XML_TOKEN_MAP_END
-        };
-        m_pDocumentsElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDocumentsElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetComponentElemTokenMap() const
-{
-    if (!m_pComponentElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_HREF    },
-            { XML_NAMESPACE_XLINK,  XML_TYPE,           XML_TOK_TYPE    },
-            { XML_NAMESPACE_XLINK,  XML_SHOW,           XML_TOK_SHOW    },
-            { XML_NAMESPACE_XLINK,  XML_ACTUATE,        XML_TOK_ACTUATE},
-            { XML_NAMESPACE_DB, XML_AS_TEMPLATE,    XML_TOK_AS_TEMPLATE },
-            { XML_NAMESPACE_DB, XML_NAME,           XML_TOK_COMPONENT_NAME  },
-            XML_TOKEN_MAP_END
-        };
-        m_pComponentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pComponentElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetQueryElemTokenMap() const
-{
-    if (!m_pQueryElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_COMMAND,            XML_TOK_COMMAND },
-            { XML_NAMESPACE_DB, XML_ESCAPE_PROCESSING,  XML_TOK_ESCAPE_PROCESSING   },
-            { XML_NAMESPACE_DB, XML_NAME,               XML_TOK_QUERY_NAME  },
-            { XML_NAMESPACE_DB, XML_FILTER_STATEMENT,   XML_TOK_FILTER_STATEMENT    },
-            { XML_NAMESPACE_DB, XML_ORDER_STATEMENT,    XML_TOK_ORDER_STATEMENT },
-            { XML_NAMESPACE_DB, XML_CATALOG_NAME,       XML_TOK_CATALOG_NAME    },
-            { XML_NAMESPACE_DB, XML_SCHEMA_NAME,        XML_TOK_SCHEMA_NAME },
-            { XML_NAMESPACE_DB, XML_STYLE_NAME,         XML_TOK_STYLE_NAME},
-            { XML_NAMESPACE_DB, XML_APPLY_FILTER,       XML_TOK_APPLY_FILTER},
-            { XML_NAMESPACE_DB, XML_APPLY_ORDER,        XML_TOK_APPLY_ORDER},
-            { XML_NAMESPACE_DB, XML_COLUMNS,            XML_TOK_COLUMNS},
-            XML_TOKEN_MAP_END
-        };
-        m_pQueryElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pQueryElemTokenMap;
-}
-
-
-const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
-{
-    if (!m_pColumnElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_DB, XML_NAME,                       XML_TOK_COLUMN_NAME             },
-            { XML_NAMESPACE_DB, XML_STYLE_NAME,                 XML_TOK_COLUMN_STYLE_NAME       },
-            { XML_NAMESPACE_DB, XML_HELP_MESSAGE,               XML_TOK_COLUMN_HELP_MESSAGE     },
-            { XML_NAMESPACE_DB, XML_VISIBILITY,                 XML_TOK_COLUMN_VISIBILITY       },
-            { XML_NAMESPACE_DB, XML_DEFAULT_VALUE,              XML_TOK_COLUMN_DEFAULT_VALUE    },
-            { XML_NAMESPACE_DB, XML_TYPE_NAME,                  XML_TOK_COLUMN_TYPE_NAME        },
-            { XML_NAMESPACE_DB, XML_VISIBLE,                    XML_TOK_COLUMN_VISIBLE          },
-            { XML_NAMESPACE_DB, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_DEFAULT_CELL_STYLE_NAME },
-            XML_TOKEN_MAP_END
-        };
-        m_pColumnElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pColumnElemTokenMap;
-}
 
 
 SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUString& rLocalName,

@@ -42,7 +42,7 @@ namespace dbaxml
 
         ODBFilter& GetOwnImport();
 
-        void fillAttributes(     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+        static void fillAttributes(     const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                                 ,OUString& _rsCommand
                                 ,OUString& _rsTableName
                                 ,OUString& _rsTableSchema
@@ -53,18 +53,17 @@ namespace dbaxml
     public:
 
         OXMLTable( ODBFilter& rImport
-                    , sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                     ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sServiceName
                     );
         virtual ~OXMLTable() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-        virtual void EndElement() override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     };
 } // namespace dbaxml
 

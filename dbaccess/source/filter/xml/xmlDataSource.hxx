@@ -37,15 +37,15 @@ namespace dbaxml
             eAppSettings
         };
 
-        OXMLDataSource( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        OXMLDataSource( ODBFilter& rImport,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& _xAttrList,
                     const UsedFor _eUsedFor );
         virtual ~OXMLDataSource() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 } // namespace dbaxml
 

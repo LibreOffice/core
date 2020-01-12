@@ -38,25 +38,22 @@ namespace dbaxml
 
         // for forms and reports
         OXMLDocuments( ODBFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
                     ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,const OUString& _sCollectionServiceName
                     ,const OUString& _sComponentServiceName);
 
         // for queries
         OXMLDocuments( ODBFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
                     ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,const OUString& _sCollectionServiceName = OUString()
                     );
 
         virtual ~OXMLDocuments() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 } // namespace dbaxml
 
