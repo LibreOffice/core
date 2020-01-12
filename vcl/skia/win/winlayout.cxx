@@ -16,47 +16,43 @@ bool SkiaGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, Com
     assert(rElement.maTexture.get() == nullptr);
     assert(dynamic_cast<SkiaCompatibleDC*>(dc));
     SkiaCompatibleDC* sdc = static_cast<SkiaCompatibleDC*>(dc);
-    SkiaCompatibleDC::Texture* texture = new SkiaCompatibleDC::Texture;
+    SkiaCompatibleDC::PackedTexture* texture = new SkiaCompatibleDC::PackedTexture;
     rElement.maTexture.reset(texture);
-    // TODO is it possible to have an atlas?
-    texture->image = sdc->getAsImage();
-    mLRUOrder.push_back(texture->image->uniqueID());
+    texture->packedSurface
+        = mPackedSurfaceAtlas.Reserve(sdc->getBitmapWidth(), sdc->getBitmapHeight());
+    if (!texture->packedSurface.mSurface)
+        return false;
+    // Draw the dc's content to the reserved place in the atlas.
+    SkCanvas* canvas = texture->packedSurface.mSurface->getCanvas();
+    const tools::Rectangle& rect = texture->packedSurface.mRect;
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+    canvas->drawImageRect(
+        sdc->getAsImage(),
+        SkRect::MakeXYWH(rect.getX(), rect.getY(), rect.GetWidth(), rect.GetHeight()), &paint);
     return true;
 }
 
 void SkiaGlobalWinGlyphCache::Prune()
 {
-    const int MAXSIZE = 64; // TODO
-    if (mLRUOrder.size() > MAXSIZE)
+    std::vector<sk_sp<SkSurface>> aSurfaces = mPackedSurfaceAtlas.ReduceSurfaceNumber(8);
+    if (!aSurfaces.empty())
     {
-        size_t toRemove = mLRUOrder.size() - MAXSIZE;
-        std::vector<uint32_t> idsToRemove(mLRUOrder.begin(), mLRUOrder.begin() + toRemove);
-        mLRUOrder.erase(mLRUOrder.begin(), mLRUOrder.begin() + toRemove);
         for (auto& pWinGlyphCache : maWinGlyphCaches)
-            static_cast<SkiaWinGlyphCache*>(pWinGlyphCache)->RemoveTextures(idsToRemove);
+            static_cast<SkiaWinGlyphCache*>(pWinGlyphCache)->RemoveSurfaces(aSurfaces);
     }
 }
 
-void SkiaGlobalWinGlyphCache::NotifyElementUsed(WinGlyphDrawElement& rElement)
-{
-    SkiaCompatibleDC::Texture* texture
-        = static_cast<SkiaCompatibleDC::Texture*>(rElement.maTexture.get());
-    // make the most recently used
-    auto it = find(mLRUOrder.begin(), mLRUOrder.end(), texture->image->uniqueID());
-    if (it != mLRUOrder.end())
-        mLRUOrder.erase(it);
-    mLRUOrder.push_back(texture->image->uniqueID());
-}
-
-void SkiaWinGlyphCache::RemoveTextures(const std::vector<uint32_t>& idsToRemove)
+void SkiaWinGlyphCache::RemoveSurfaces(const std::vector<sk_sp<SkSurface>>& surfaces)
 {
     auto it = maWinTextureCache.begin();
     while (it != maWinTextureCache.end())
     {
-        assert(dynamic_cast<SkiaCompatibleDC::Texture*>(it->second.maTexture.get()));
-        uint32_t id = static_cast<SkiaCompatibleDC::Texture*>(it->second.maTexture.get())
-                          ->image->uniqueID();
-        if (std::find(idsToRemove.begin(), idsToRemove.end(), id) != idsToRemove.end())
+        assert(dynamic_cast<SkiaCompatibleDC::PackedTexture*>(it->second.maTexture.get()));
+        sk_sp<SkSurface> surface
+            = static_cast<SkiaCompatibleDC::PackedTexture*>(it->second.maTexture.get())
+                  ->packedSurface.mSurface;
+        if (std::find(surfaces.begin(), surfaces.end(), surface) != surfaces.end())
             it = maWinTextureCache.erase(it);
         else
             ++it;
