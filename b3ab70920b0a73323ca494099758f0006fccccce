@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93ec9e3d_b0a985b6",
+        "filename": "download.lst",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-01-12T13:29:34Z",
+      "side": 1,
+      "message": "If I am trying to upgrade to 1.72 then liborcus is failing to link against boost-filesystem: [1]. I tried demangle the symbols and I see the right methods: [2].\n\n* [1] http://paste.openstack.org/show/788291\n* [2] http://paste.openstack.org/show/788292",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "b3ab70920b0a73323ca494099758f0006fccccce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
