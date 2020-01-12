@@ -39,6 +39,24 @@
       "revId": "b3ab70920b0a73323ca494099758f0006fccccce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49420316_4e72f268",
+        "filename": "download.lst",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-01-12T19:38:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6ba0a01_3aecbec5",
+      "revId": "b3ab70920b0a73323ca494099758f0006fccccce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
