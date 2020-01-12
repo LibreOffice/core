@@ -147,8 +147,6 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
 
 IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, SvtValueSet*, void)
 {
-    mrController.EndPopupMode();
-
     sal_uInt16 nSelItem = mxValueSet->GetSelectedItemId();
     if ( mePageType == NumberingPageType::BULLET )
     {
@@ -165,6 +163,7 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, SvtValueSet*, void)
         auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::makeAny( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetOutline", aArgs );
     }
+    mrController.EndPopupMode();
 }
 
 void NumberingPopup::GrabFocus()
