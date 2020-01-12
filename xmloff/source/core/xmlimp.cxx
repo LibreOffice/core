@@ -749,6 +749,9 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     }
 
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << aLocalName );
+    if (aLocalName == "data-source")
+        SAL_WARN( "xmloff.core", "noel" );
+
     if( !xContext.is() )
         xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
 

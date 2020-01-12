@@ -28,10 +28,9 @@ namespace dbaxml
     {
     public:
 
-        OXMLDataSourceInfo( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
-                    ,const sal_uInt16 _nToken);
+        OXMLDataSourceInfo( ODBFilter& rImport,
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList);
         virtual ~OXMLDataSourceInfo() override;
     };
 } // namespace dbaxml

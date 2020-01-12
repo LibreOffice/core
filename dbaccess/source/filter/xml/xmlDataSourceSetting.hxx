@@ -38,19 +38,20 @@ namespace dbaxml
         static css::uno::Any convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
     public:
 
-        OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+        OXMLDataSourceSetting( ODBFilter& rImport
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                     ,OXMLDataSourceSetting* _pContainer = nullptr);
         virtual ~OXMLDataSourceSetting() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-        virtual void EndElement() override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
-        virtual void Characters( const OUString& rChars ) override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+
+        virtual void SAL_CALL characters( const OUString& rChars ) override;
 
         /** adds value to property
             @param  _sValue

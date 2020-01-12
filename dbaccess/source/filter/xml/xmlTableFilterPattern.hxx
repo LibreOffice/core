@@ -30,14 +30,14 @@ namespace dbaxml
         bool                m_bNameFilter;
     public:
         OXMLTableFilterPattern( SvXMLImport& rImport
-                                ,sal_uInt16 nPrfx
-                                ,const OUString& rLName
                                 ,bool _bNameFilter
                                 ,OXMLTableFilterList& _rParent);
 
         virtual ~OXMLTableFilterPattern() override;
 
-        virtual void Characters( const OUString& rChars ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL characters( const OUString& rChars ) override;
     };
 } // namespace dbaxml
 
