@@ -1593,6 +1593,13 @@ void InterimToolbarPopup::GetFocus()
 
 void InterimToolbarPopup::dispose()
 {
+    // if we have focus when disposed, pick the document window as destination
+    // for focus rather than let it go to an arbitrary windows
+    if (HasFocus())
+    {
+        if (auto xWindow = mxFrame->getContainerWindow())
+            xWindow->setFocus();
+    }
     // move the contents back where it belongs
     m_xContainer->move(m_xPopup->getContainer(), m_xPopup->getTopLevel());
     m_xPopup.reset();
