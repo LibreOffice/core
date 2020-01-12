@@ -4021,6 +4021,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 FSNS( XML_w, XML_val ), "clear" );
     }
 
+    // Disable layout autofit, as it does not exist in LibreOffice yet
+    m_pSerializer->singleElementNS( XML_w, XML_tblLayout,
+            FSNS( XML_w, XML_type ), "fixed" );
+
     // Output the table borders
     TableDefaultBorders( pTableTextNodeInfoInner );
 
