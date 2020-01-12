@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b95f2dbf_20f90729",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-12T16:04:39Z",
+      "side": 1,
+      "message": "Here and elsewhere:  Please do not introduce spurious empty lines.",
+      "revId": "1c4ab281dede39c0bbb24ee82afa513b42278b29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f1b7f26_148f1e81",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-12T16:04:39Z",
+      "side": 1,
+      "message": "Here and elsewhere:  In a case like this, you can even drop the \"uno::Sequence\u003cOUString\u003e\" constructor name.  (But the current state of your change is of course OK, too.)",
+      "revId": "1c4ab281dede39c0bbb24ee82afa513b42278b29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
