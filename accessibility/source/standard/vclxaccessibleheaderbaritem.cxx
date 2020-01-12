@@ -106,8 +106,7 @@ sal_Bool VCLXAccessibleHeaderBarItem::supportsService( const OUString& rServiceN
 
 Sequence< OUString > VCLXAccessibleHeaderBarItem::getSupportedServiceNames()
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleHeaderBarItem" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleHeaderBarItem" };
 }
 
 // XAccessible
