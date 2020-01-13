@@ -1,0 +1,548 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e577408c_6a500f6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this is somewhat useful...",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "117bf2fc_2317b293",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "the rest of this isn\u0027t really needed in the commit message of the patch, it\u0027s enough if gerrit tracks these comments, you can add it as a gerrit comment if you want...",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "422c7d4f_affc36dd",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this is a 8-bit value read in line 163 ... but then it\u0027s multiplied with nPlanes ... so it should be sal_uInt16 - that should be sufficient to ensure multiplying 2 8-bits doesn\u0027t overflow",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac47fb63_e6bb2432",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this is a 8-bit value read in line 185... should also be sal_uInt16",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33141d7c_43bdeb1c",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "sal_uInt16 should be enough for this one, see line 187",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62747b62_ecb56fb3",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "i should have same type as nWidth.\n\nny counts up to nHeight so should have the same type.\n\nnCount and nx should have the same type ... nx is inited by nBytesPerPlaneLin so use its type.\n\nnp should have same type as nPlanes.\n\nnPercent/nLastPercent should have same type as ny/nHeight.\n\n... by the way, i just remember there\u0027s a syntax for deriving the type of one variable for another, i guess it would make sense to use it here:\n\n    decltype(nWidth) i;",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05d3e5f0_f407db7d",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "should have same type as i.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddeee75_ec54933f",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "same as i.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8ed83c4_5e2fc117",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "same as i.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4eacf9e_c5ef3f72",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this is only called with literal constants so sal_uInt64 is a bit overkill but any smaller type should do... maybe \"int\" or \"unsinged int\"...",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bedc4232_73f28e03",
+        "filename": "filter/source/graphicfilter/ipcx/ipcx.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "same type as nCol",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdcc2f08_90c7822e",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "these should be sal_uInt32, they\u0027re inited with 4 bytes each.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cf210a7_3d8b5656",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "pointless to cast to 64 bit when nLen is sal_uInt32",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff549dc_64c9135e",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "all these casts look redundant and can just be removed",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bfa1b40_ea0021a2",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this cast looks redundant and can be removed",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39507b29_50c5dcd8",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "hmm here we have to cast to avoid overflow of the intermediate result, but sal_uInt32 should be enough",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cfa6b2e_cc23c0a3",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "here it\u0027s capped at 255 so the intermediate will fit into 16 bits so no cast needed",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b17b8b6_4cce3152",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "nWidth is 16 bits so sal_uInt32 is sufficient",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e184828d_bbb8a532",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "these 2 casts are redundant",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7312952f_b1ea26ba",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "nWidth is 16 bits so sal_uInt32 is sufficient",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d7e2047_79f1618a",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "nWidth is 16 bits so sal_uInt32 is sufficient",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fe29435_fc339848",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "these casts look redundant",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d50157_4d847fe9",
+        "filename": "filter/source/graphicfilter/ipict/ipict.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this should be the type returned from ReadData()",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e4e1b03_4d94b3b4",
+        "filename": "filter/source/graphicfilter/ipsd/ipsd.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "nX should be same type as PSDFileHeader::nColumns.\n\nnY should be same type as nRows.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca7821fc_078878af",
+        "filename": "filter/source/graphicfilter/iras/iras.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "the result here should fit into 8 bits.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d578f2c_907c50e1",
+        "filename": "filter/source/graphicfilter/itiff/ccidecom.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this cast is redundant",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd4b8f68_8fda6944",
+        "filename": "filter/source/graphicfilter/itiff/ccidecom.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this cast is redundant",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2846507d_19ee87a4",
+        "filename": "filter/source/graphicfilter/itiff/ccidecom.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf6e6ae_f410c565",
+        "filename": "filter/source/graphicfilter/itiff/ccidecom.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this is initalised from local sal_uInt32 nOptions; in itiff.cxx:588 so use the same type.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be1e1511_cdf24c10",
+        "filename": "filter/source/graphicfilter/itiff/ccidecom.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "this is not immediately obvious but sal_uInt32 must be sufficient here because otherwise the filter wouldn\u0027t work on a 32-bit platform....",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2f013f9_4cea04b8",
+        "filename": "filter/source/graphicfilter/itiff/lzwdecom.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "nMaxCount comes from nBytesPerRow var in itiff.cxx so sal_uInt32 should be enough.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a5f8d0a_d180529a",
+        "filename": "filter/source/graphicfilter/itiff/lzwdecom.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T13:46:50Z",
+      "side": 1,
+      "message": "nCount should have same type as nMaxCount.",
+      "revId": "809f035f86d18d3d3baccbb6f0da49df4570dba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
