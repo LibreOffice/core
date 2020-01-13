@@ -56,6 +56,7 @@ class SwFieldDBPage : public SwFieldPage
     void                CheckInsert();
 
     using SwFieldPage::SetWrtShell;
+    SwWrtShell* CheckAndGetWrtShell();
 
 protected:
     virtual sal_uInt16      GetGroup() override;

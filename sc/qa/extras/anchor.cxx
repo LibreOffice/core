@@ -20,6 +20,7 @@
 #include <drwlayer.hxx>
 #include <scitems.hxx>
 #include <svx/svdocirc.hxx>
+#include <vcl/scheduler.hxx>
 #include <tabvwsh.hxx>
 
 #include <sc.hrc>
@@ -40,6 +41,7 @@ public:
     void testODFAnchorTypes();
     void testCopyColumnWithImages();
     void testCutWithImages();
+    void testTdf129552();
 
     CPPUNIT_TEST_SUITE(ScAnchorTest);
     CPPUNIT_TEST(testUndoAnchor);
@@ -47,6 +49,7 @@ public:
     CPPUNIT_TEST(testODFAnchorTypes);
     CPPUNIT_TEST(testCopyColumnWithImages);
     CPPUNIT_TEST(testCutWithImages);
+    CPPUNIT_TEST(testTdf129552);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -364,6 +367,20 @@ void ScAnchorTest::testCutWithImages()
     }
 
     pDocSh->DoClose();
+}
+
+void ScAnchorTest::testTdf129552()
+{
+    OUString aFileURL;
+    createFileURL("tdf129552.fods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Without the accompanying fix in place, this test would have never returned due to an infinite
+    // invalidation loop, where ScGridWindow::Paint() invalidated itself.
+    Scheduler::ProcessEventsToIdle();
+
+    xComponent->dispose();
 }
 
 void ScAnchorTest::tearDown()

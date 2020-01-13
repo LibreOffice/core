@@ -114,6 +114,13 @@ enum BreakType
     COLUMN_BREAK
 };
 
+enum SkipFootnoteSeparator
+{
+    OFF,
+    ON,
+    SKIPPING
+};
+
 /**
  * Storage for state that is relevant outside a header/footer, but not inside it.
  *
@@ -512,8 +519,8 @@ private:
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
-    /// Did we get a <w:separator/> for this footnote already?
-    bool                            m_bSeenFootOrEndnoteSeparator;
+    /// Skip paragraphs from the <w:separator/> footnote
+    SkipFootnoteSeparator           m_eSkipFootnoteState;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -552,6 +559,8 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
+    /// This is a continuation of already finished paragraph - e.g., first in an index section
+    bool                            m_bRemoveThisParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
@@ -656,6 +665,7 @@ public:
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_bParaChanged;}
+    bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -781,8 +791,9 @@ public:
     void SetCheckFootnoteStyle(bool bVal) { m_bCheckFootnoteStyle = bVal; }
 
     const PropertyMapPtr& GetFootnoteContext() const { return m_pFootnoteContext; }
-    /// Got a <w:separator/>.
-    void SeenFootOrEndnoteSeparator();
+
+    SkipFootnoteSeparator GetSkipFootnoteState() const { return m_eSkipFootnoteState; }
+    void SetSkipFootnoteState(SkipFootnoteSeparator eId) { m_eSkipFootnoteState =  eId; }
 
     void PushAnnotation();
     void PopAnnotation();
@@ -992,8 +1003,6 @@ public:
     /// If the current section has a footnote separator.
     bool m_bHasFtnSep;
 
-    /// If the next newline should be ignored, used by the special footnote separator paragraph.
-    bool m_bIgnoreNextPara;
     /// If the next tab should be ignored, used for footnotes.
     bool m_bCheckFirstFootnoteTab;
     bool m_bIgnoreNextTab;
@@ -1059,6 +1068,8 @@ public:
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
+    // Start a new index section; if needed, finish current paragraph
+    css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
     /// Current paragraph had at least one field in it.
     bool m_bParaHadField;

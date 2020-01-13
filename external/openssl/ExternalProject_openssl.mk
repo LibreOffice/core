@@ -84,7 +84,9 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 			CC="$(CC) -fPIC \
 				$(if $(filter TRUE, $(ENABLE_DBGUTIL)), -DPURIFY,) \
 				$(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden)" \
+		&& ln -s . lib \
 	)
+# symlink lib dir for python3
 endif
 
 # vim: set noet sw=4 ts=4:

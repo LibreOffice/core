@@ -255,8 +255,8 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    const SfxPoolItem* pItemTransfWidth = nullptr;
-    const SfxPoolItem* pItemTransfHeight = nullptr;
+    double transfWidth = 0.0;
+    double transfHeight = 0.0;
     double fUIScale  = 1.0;
     if (mpView)
     {
@@ -266,12 +266,12 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         if (mpView->AreObjectsMarked())
         {
             SfxItemSet rGeoAttr(mpView->GetGeoAttrFromMarked());
-            pItemTransfWidth = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH );
-            pItemTransfHeight= GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT );
+            transfWidth = static_cast<double>(GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH )->GetValue());
+            transfHeight= static_cast<double>(GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT )->GetValue());
         }
     }
-    m_fObjectWidth = std::max( pItemTransfWidth ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItemTransfWidth)->GetValue()) : 0.0, 1.0 );
-    m_fObjectHeight = std::max( pItemTransfHeight ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItemTransfHeight)->GetValue()) : 0.0, 1.0 );
+    m_fObjectWidth = std::max( transfWidth, 1.0 );
+    m_fObjectHeight = std::max( transfHeight, 1.0 );
     double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectWidth), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectWidth = fTmpWidth;
 

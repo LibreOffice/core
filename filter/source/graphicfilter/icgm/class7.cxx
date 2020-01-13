@@ -80,7 +80,7 @@ void CGM::ImplDoClass7()
 
                         mpChart->mDataNode[ 0 ] = *reinterpret_cast<DataNode*>( pAppData );
                         sal_Int8 nZoneEnum = mpChart->mDataNode[ 0 ].nZoneEnum;
-                        if ( nZoneEnum && ( nZoneEnum <= 6 ) )
+                        if (nZoneEnum > 0 && nZoneEnum <= 6)
                             mpChart->mDataNode[ nZoneEnum ] = *reinterpret_cast<DataNode*>( pAppData );
                     }
                     break;

@@ -971,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82071)
 {
     load(mpTestDocumentPath, "fdo82071.rtf");
     // The problem was that in TOC, chapter names were underlined, but they should not be.
-    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(2), 1);
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
     // Make sure we test the right text portion.
     CPPUNIT_ASSERT_EQUAL(OUString("Chapter 1"), xRun->getString());
     // This was awt::FontUnderline::SINGLE.

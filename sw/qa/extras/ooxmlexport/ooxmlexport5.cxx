@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -523,6 +525,24 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Paragraph starts with W(87), not tab(9)", u'W', sFootnotePara[0] );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFootnoteSeparators.docx")
+{
+    //Everything easily fits on one page
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 1, getPages() );
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XText> xFootnoteText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+
+    // The text in the separator footnote should not be added to the footnotes
+    OUString sText = " Microsoft Office.";
+    CPPUNIT_ASSERT_EQUAL(sText, xFootnoteText->getString());
+
+    // Ensure that paragraph markers are not lost.
+    xFootnoteText.set(xFootnotes->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in second footnote", 2, getParagraphs(xFootnoteText) );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo79668,"fdo79668.docx")
 {
     // fdo#79668: Document was Crashing on DebugUtil build while Saving
@@ -674,6 +694,33 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77129, "fdo77129.docx")
 
     // Data was lost from this paragraph.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t", "Abstract");
+}
+
+// Test the same testdoc used for testFdo77129.
+DECLARE_OOXMLEXPORT_TEST(testTdf129402, "fdo77129.docx")
+{
+    // tdf#129402: ToC title must be "Contents", not "Content"; the index field must include
+    // pre-rendered element.
+
+    // Currently export drops empty paragraph after ToC, so skip getParagraphs test for now
+//    CPPUNIT_ASSERT_EQUAL(5, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("owners."), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Contents"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("How\t2"), getParagraph(3)->getString());
+//    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(4)->getString());
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aTocString(xTextCursor->getString());
+
+    // Check that the pre-rendered entry is inside the index
+    CPPUNIT_ASSERT_EQUAL(OUString("How\t2"), aTocString);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")

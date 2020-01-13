@@ -431,7 +431,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         auto pValue = new RTFValue(1);
-        m_aStates.top().getParagraphSprms().erase(NS_ooxml::LN_inTbl);
         m_aStates.top().getParagraphSprms().set(nParam, pValue);
         return RTFError::OK;
     }

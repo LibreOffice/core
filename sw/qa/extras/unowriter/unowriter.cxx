@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
@@ -760,6 +761,40 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
     // Turn it back to on & verify.
     xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(true));
     CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
+{
+    // Create a new document and add a table
+    loadURL("private:factory/swriter", nullptr);
+    css::uno::Reference<css::text::XTextDocument> xTextDocument(mxComponent,
+                                                                css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xTextDocument,
+                                                              css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::text::XTextTable> xTable(
+        xFac->createInstance("com.sun.star.text.TextTable"), css::uno::UNO_QUERY_THROW);
+    xTable->initialize(4, 4);
+    auto xSimpleText = xTextDocument->getText();
+    xSimpleText->insertTextContent(xSimpleText->createTextCursor(), xTable, true);
+    // Get SwXTextTableCursor
+    css::uno::Reference<css::beans::XPropertySet> xTableCursor(xTable->createCursorByCellName("A1"),
+                                                               css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::table::XCellRange> xTableCellRange(xTable, css::uno::UNO_QUERY_THROW);
+    // Get SwXCellRange for the same cell
+    css::uno::Reference<css::beans::XPropertySet> xCellRange(
+        xTableCellRange->getCellRangeByName("A1:A1"), css::uno::UNO_QUERY_THROW);
+    const OUString sBackColor = "BackColor";
+    // Apply background color to table cursor, and read background color from cell range
+    css::uno::Any aRefColor(sal_Int32(0x00FF0000));
+    xTableCursor->setPropertyValue(sBackColor, aRefColor);
+    css::uno::Any aColor = xCellRange->getPropertyValue(sBackColor);
+    // This failed
+    CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
+    // Now the other way round
+    aRefColor <<= sal_Int32(0x0000FF00);
+    xCellRange->setPropertyValue(sBackColor, aRefColor);
+    aColor = xTableCursor->getPropertyValue(sBackColor);
+    CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextConvertToTableLineSpacing)
