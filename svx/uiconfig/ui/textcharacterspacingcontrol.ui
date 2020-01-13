@@ -1,71 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-2</property>
-    <property name="upper">10000</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_1">
-    <property name="visible">True</property>
+  <object class="GtkPopover" id="TextCharacterSpacingControl">
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/spacing_very_tight.png</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_115">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/spacing_tight.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_15">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/spacing_normal.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/spacing_loose.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/spacing_very_loose.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/last_custom_common.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkWindow" id="TextCharacterSpacingControl">
-    <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="no_show_all">True</property>
     <property name="border_width">4</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <child>
-      <object class="GtkGrid" id="grid2">
+      <object class="GtkGrid" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <child>
@@ -168,7 +112,6 @@
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">3</property>
             <property name="margin_top">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
@@ -181,12 +124,12 @@
                 <property name="margin_top">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkSpinButton" id="kerning:0pt">
+                  <object class="GtkSpinButton" id="kerning">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="width_chars">0</property>
-                    <property name="text" translatable="yes" context="textcharacterspacingcontrol|kerning">0,0</property>
+                    <property name="text" translatable="yes" context="textcharacterspacingcontrol|kerning">0.0</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">1</property>
                   </object>
@@ -211,5 +154,46 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">-2</property>
+    <property name="upper">10000</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/symphony/spacing_very_tight.png</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_115">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/symphony/spacing_tight.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_15">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/symphony/spacing_normal.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/symphony/spacing_loose.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/symphony/spacing_very_loose.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image_spacing_4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/symphony/last_custom_common.png</property>
+    <property name="icon_size">1</property>
   </object>
 </interface>
