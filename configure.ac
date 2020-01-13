@@ -5421,8 +5421,14 @@ find_msvc_x64_dlls()
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
                 break
             fi
+<<<<<<< HEAD   (a33f4b WaE: unused pLockData.)
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"
+=======
+            echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT" >&5
+            if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"; then
+                msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"
+>>>>>>> CHANGE (a4681e Merge both x64 and x86 CRT merge modules into x64 MSI)
                 break
             fi
         done
@@ -6856,7 +6862,13 @@ if test $_os = "WINNT"; then
     MSVC_DLLS="$msvcdlls"
     MSM_PATH="$msmdir"
     # MSVC 15.3 changed it to VC141
+<<<<<<< HEAD   (a33f4b WaE: unused pLockData.)
     if echo "$MSVC_DLL_PATH" | grep -q "VC141.CRT$"; then
+=======
+    if echo "$msvcdllpath" | grep -q "VC142.CRT$"; then
+        SCPDEFS="$SCPDEFS -DWITH_VC142_REDIST"
+    elif echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
+>>>>>>> CHANGE (a4681e Merge both x64 and x86 CRT merge modules into x64 MSI)
         SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
     else
         SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
