@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40273579_c1e8a2a7",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4026,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-13T10:40:02Z",
+      "side": 1,
+      "message": "Even though the order of the elements gets modified with the call to m_pSerializer-\u003emark on line 3723, I still suppose tht putting this here after color is not optimal; what about putting it after table preferred width - somewhere in ln 3773 - where it looks more in place?",
+      "range": {
+        "startLine": 4024,
+        "startChar": 4,
+        "endLine": 4026,
+        "endChar": 47
+      },
+      "revId": "055d51cd8997a379240713e8183ef51e8565bfa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
