@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterPane =========================================================
 
@@ -165,6 +165,6 @@ void PresenterPane::UpdateBoundingBox()
         maBoundingBox = awt::Rectangle();
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

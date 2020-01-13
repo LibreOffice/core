@@ -14,9 +14,7 @@
 #include "rtfdocumentimpl.hxx"
 #include <algorithm>
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFSprm::RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue)
     : m_nKeyword(nKeyword)
@@ -438,7 +436,6 @@ void RTFSprms::clear()
     m_pSprms = tools::SvRef<RTFSprmsImpl>(new RTFSprmsImpl);
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

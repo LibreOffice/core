@@ -37,8 +37,7 @@
 using namespace com::sun::star;
 using namespace oox;
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
     TablePropertiesHandler::TablePropertiesHandler() :
         m_pCurrentInteropGrabBag(nullptr),
@@ -393,6 +392,6 @@ namespace dmapper {
     {
         m_pCurrentInteropGrabBag = &rValue;
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,9 +13,7 @@
 
 using namespace com::sun::star;
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 namespace
 {
@@ -282,7 +280,6 @@ void XMPParser::processingInstruction(const OUString& /*rTarget*/, const OUStrin
 
 void XMPParser::setDocumentLocator(const uno::Reference<xml::sax::XLocator>& /*xLocator*/) {}
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,9 +23,7 @@
 
 #include <stdio.h>
 
-namespace registry
-{
-namespace tools
+namespace registry::tools
 {
 
 Options::Options (char const * program)
@@ -141,7 +139,6 @@ bool Options::printUsage() const
     return false;
 }
 
-} // namespace tools
-} // namespace registry
+} // namespace registry::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -14,9 +14,7 @@
 
 #include <hb.h>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 OUString featureCodeAsString(uint32_t nFeature)
 {
@@ -162,7 +160,6 @@ FeatureParameterType FeatureDefinition::getType() const { return m_eType; }
 FeatureDefinition::operator bool() const { return m_nCode != 0; }
 
 uint32_t FeatureDefinition::getDefault() const { return m_nDefault; }
-} // end font namespace
-} // end vcl namespace
+} // end vcl::font namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

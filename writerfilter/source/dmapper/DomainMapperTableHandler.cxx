@@ -41,8 +41,7 @@
 #include <rtl/ustring.hxx>
 #endif
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::std;
@@ -1322,6 +1321,6 @@ DomainMapper_Impl& DomainMapperTableHandler::getDomainMapperImpl()
     return m_rDMapper_Impl;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

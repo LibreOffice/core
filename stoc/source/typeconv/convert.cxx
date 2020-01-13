@@ -41,7 +41,7 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace css::uno;
 using namespace css::lang;

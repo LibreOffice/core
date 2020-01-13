@@ -782,6 +782,5 @@ using namespace com::sun::star;
         // provide unique ID
         ImplPrimitive3DIDBlock(PolygonTubePrimitive3D, PRIMITIVE3D_ID_POLYGONTUBEPRIMITIVE3D)
 
-} // end of namespace
-
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

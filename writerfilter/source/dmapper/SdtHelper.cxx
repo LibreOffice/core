@@ -20,9 +20,7 @@
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 using namespace ::com::sun::star;
 
@@ -210,7 +208,6 @@ bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
     return false;
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

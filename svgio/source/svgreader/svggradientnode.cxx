@@ -21,10 +21,8 @@
 #include <svgdocument.hxx>
 #include <svggradientstopnode.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         void SvgGradientNode::tryToFindLink()
         {
             if(!mpXLink && !maXLink.isEmpty())
@@ -522,7 +520,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

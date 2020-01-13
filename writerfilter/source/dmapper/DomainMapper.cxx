@@ -88,9 +88,7 @@
 using namespace ::com::sun::star;
 using namespace oox;
 
-namespace writerfilter {
-
-namespace dmapper{
+namespace writerfilter::dmapper{
 
 struct
 {
@@ -3936,7 +3934,6 @@ void DomainMapper::finishParagraph(const bool bRemove)
     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove);
 }
 
-} //namespace dmapper
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

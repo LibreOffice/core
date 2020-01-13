@@ -30,9 +30,7 @@
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
 
-namespace slideshow
-{
-namespace internal
+namespace slideshow::internal
 {
     namespace
     {
@@ -366,7 +364,6 @@ namespace internal
         return aRes;
     }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

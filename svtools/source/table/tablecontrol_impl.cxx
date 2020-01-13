@@ -46,7 +46,7 @@
 #define MIN_COLUMN_WIDTH_PIXEL  4
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -2547,7 +2547,7 @@ namespace svt { namespace table
     }
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

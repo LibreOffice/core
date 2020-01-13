@@ -38,8 +38,7 @@ using namespace css::uno;
 using namespace css::drawing;
 using namespace css::system;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
                                     LayerManagerSharedPtr const& rLayerManager,
@@ -421,7 +420,6 @@ void ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 }
 
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

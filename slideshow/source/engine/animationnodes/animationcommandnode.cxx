@@ -28,8 +28,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace EffectCommands = css::presentation::EffectCommands;
 
@@ -113,7 +112,6 @@ bool AnimationCommandNode::hasPendingAnimation() const
     return mxCommandNode->getCommand() == EffectCommands::STOPAUDIO || mpShape;
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

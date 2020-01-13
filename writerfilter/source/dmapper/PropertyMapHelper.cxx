@@ -21,9 +21,7 @@
 #include "TagLogger.hxx"
 #include "PropertyMapHelper.hxx"
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 using namespace ::com::sun::star;
@@ -97,7 +95,6 @@ void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> con
 }
 #endif // DBG_UTIL
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

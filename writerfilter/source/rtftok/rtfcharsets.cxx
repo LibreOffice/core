@@ -10,9 +10,7 @@
 #include "rtfcharsets.hxx"
 #include <sal/macros.h>
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 // See RTF spec v1.9.1, page 19
 RTFEncoding const aRTFEncodings[] = {
@@ -52,7 +50,6 @@ RTFEncoding const aRTFEncodings[] = {
 
 int nRTFEncodings = SAL_N_ELEMENTS(aRTFEncodings);
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

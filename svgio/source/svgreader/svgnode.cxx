@@ -24,10 +24,8 @@
 #include <tools/urlobj.hxx>
 
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         /// #i125258#
         bool SvgNode::supportsParentStyle() const
         {
@@ -684,7 +682,6 @@ namespace svgio
         {
             rVisitor.visit(*this);
         }
-    } // end of namespace svgreader
 } // end of namespace svgio
 
 

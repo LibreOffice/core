@@ -38,8 +38,7 @@
 #include <iostream>
 #include <memory>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace com::sun::star;
 
@@ -320,6 +319,6 @@ OUString GraphicNamingHelper::NameGraphic(const OUString& rTemplate)
     return aRet;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

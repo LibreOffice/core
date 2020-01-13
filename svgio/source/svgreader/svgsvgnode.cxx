@@ -28,10 +28,8 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <svgdocument.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgSvgNode::SvgSvgNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
@@ -829,7 +827,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
 } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

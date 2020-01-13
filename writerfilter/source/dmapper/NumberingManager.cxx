@@ -45,8 +45,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 //---------------------------------------------------  Utility functions
 template <typename T>
@@ -1193,7 +1192,6 @@ void ListsManager::CreateNumberingRules( )
     }
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

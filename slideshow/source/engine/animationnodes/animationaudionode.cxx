@@ -27,8 +27,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 AnimationAudioNode::AnimationAudioNode(
     const uno::Reference< animations::XAnimationNode >& xNode,
@@ -199,7 +198,6 @@ void AnimationAudioNode::checkPlayingStatus()
             "AnimationAudioNode::deactivate with delay") );
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 const OUString PresenterConfigurationAccess::msPresenterScreenRootName =
     "/org.openoffice.Office.PresenterScreen/";
@@ -274,6 +274,6 @@ Any PresenterConfigurationAccess::GetProperty (
     return Any();
 }
 
-} } // end of namespace sdext::tools
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

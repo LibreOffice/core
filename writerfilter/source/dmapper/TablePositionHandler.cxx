@@ -15,9 +15,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 using namespace ::com::sun::star;
@@ -161,7 +159,6 @@ bool TablePositionHandler::operator== (const TablePositionHandler& rHandler) con
            m_nX == rHandler.m_nX;
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,9 +12,7 @@
 #include <sal/log.hxx>
 #include "rtflistener.hxx"
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFSkipDestination::RTFSkipDestination(RTFListener& rImport)
     : m_rImport(rImport)
@@ -40,7 +38,6 @@ void RTFSkipDestination::setParsed(bool bParsed) { m_bParsed = bParsed; }
 
 void RTFSkipDestination::setReset(bool bReset) { m_bReset = bReset; }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

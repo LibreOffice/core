@@ -28,8 +28,7 @@
 #include <comphelper/processfactory.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
                                          const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
@@ -180,7 +179,6 @@ void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEven
     // <- SAFE
 }
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 ContextChangeBroadcaster::ContextChangeBroadcaster()
     : msContextName(),
@@ -125,6 +125,6 @@ OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css:
     return OUString();
 }
 
-} } // end of namespace ::sd::sidebar
+} // end of namespace ::sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

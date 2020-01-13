@@ -27,8 +27,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <comphelper/sequence.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -456,7 +455,6 @@ void TDefTableHandler::appendGrabBag(const OUString& aKey, const OUString& aValu
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-} //namespace dmapper
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

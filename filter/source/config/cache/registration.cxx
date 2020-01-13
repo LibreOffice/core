@@ -29,8 +29,7 @@
 #include "configflush.hxx"
 
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
@@ -86,7 +85,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*
     return nullptr;
 }
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

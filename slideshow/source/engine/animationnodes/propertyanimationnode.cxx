@@ -23,8 +23,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
 {
@@ -96,7 +95,6 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
     return AnimationActivitySharedPtr();
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

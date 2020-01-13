@@ -22,8 +22,7 @@
 
 #include <sal/log.hxx>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 /*
@@ -399,6 +398,6 @@ void OOXMLHyperlinkURLHandler::sprm(Sprm & /*rSprm*/)
 {
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

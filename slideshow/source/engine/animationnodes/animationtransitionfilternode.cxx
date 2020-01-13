@@ -21,8 +21,7 @@
 #include "animationtransitionfilternode.hxx"
 #include <transitionfactory.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 void AnimationTransitionFilterNode::dispose()
 {
@@ -41,7 +40,6 @@ AnimationTransitionFilterNode::createActivity() const
         mxTransitionFilterNode );
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

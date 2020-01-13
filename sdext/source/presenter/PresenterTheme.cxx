@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 namespace {
 
@@ -1075,6 +1075,6 @@ void StyleAssociationContainer::ProcessStyleAssociation(
 
 } // end of anonymous namespace
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

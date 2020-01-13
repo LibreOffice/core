@@ -26,8 +26,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 void AnimationTransformNode::dispose()
 {
@@ -93,7 +92,6 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
     }
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

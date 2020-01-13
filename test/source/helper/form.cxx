@@ -22,11 +22,7 @@
 
 using namespace css;
 
-namespace apitest
-{
-namespace helper
-{
-namespace form
+namespace apitest::helper::form
 {
 uno::Reference<drawing::XControlShape>
     OOO_DLLPUBLIC_TEST createCommandButton(const uno::Reference<lang::XComponent>& r_xComponent,
@@ -60,8 +56,6 @@ uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
     return xControlShape;
 }
 
-} // namespace form
-} // namespace helper
-} // namespace apitest
+} // namespace apitest::helper::form
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

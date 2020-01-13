@@ -22,7 +22,7 @@
 
 #include <tools/svborder.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 void DrawHelper::DrawBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const SvBorder& rBorderSize,
                             const Paint& rHorizontalPaint, const Paint& rVerticalPaint)
@@ -122,6 +122,6 @@ void DrawHelper::DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const 
     }
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,10 +20,7 @@
 
 #include "xformsevent.hxx"
 
-namespace com {
-namespace sun {
-namespace star {
-namespace xforms {
+namespace com::sun::star::xforms {
 
 void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
     sal_Bool canBubbleArg, sal_Bool cancelableArg)
@@ -81,6 +78,6 @@ void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, sal_B
     m_cancelable = cancelableArg;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

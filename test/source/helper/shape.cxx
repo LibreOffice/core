@@ -19,11 +19,7 @@
 
 using namespace css;
 
-namespace apitest
-{
-namespace helper
-{
-namespace shape
+namespace apitest::helper::shape
 {
 uno::Reference<drawing::XShape>
     OOO_DLLPUBLIC_TEST createEllipse(const uno::Reference<lang::XComponent>& r_xComponent,
@@ -70,8 +66,6 @@ uno::Reference<drawing::XShape>
     return xShape;
 }
 
-} // namespace shape
-} // namespace helper
-} // namespace apitest
+} // namespace apitest::helper::shape
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -28,10 +28,8 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         UnoViewContainer::UnoViewContainer() :
             maViews()
         {
@@ -96,7 +94,6 @@ namespace slideshow
                 pView->_dispose();
             maViews.clear();
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

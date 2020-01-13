@@ -20,10 +20,8 @@
 #include <svgpathnode.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgPathNode::SvgPathNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
@@ -115,7 +113,6 @@ namespace svgio
                 }
             }
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

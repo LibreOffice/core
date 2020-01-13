@@ -30,7 +30,7 @@
 
 using namespace ::codemaker::java;
 
-namespace skeletonmaker { namespace java {
+namespace skeletonmaker::java {
 
 static void generatePackage(std::ostream & o, const OString & implname)
 {
@@ -914,7 +914,7 @@ void generateSkeleton(ProgramOptions const & options,
     }
 }
 
-} }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

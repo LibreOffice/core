@@ -26,10 +26,8 @@
 #include <svgtoken.hxx>
 #include <unordered_map>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         // common non-token strings
         const OUString commonStrings::aStrUserSpaceOnUse("userSpaceOnUse");
         const OUString commonStrings::aStrObjectBoundingBox("objectBoundingBox");
@@ -1687,7 +1685,6 @@ namespace svgio
             return aRetval;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

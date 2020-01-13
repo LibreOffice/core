@@ -24,9 +24,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <osl/diagnose.h>
 
-namespace com { namespace sun { namespace star {
-    namespace beans { class XPropertySet; }
-} } }
+namespace com::sun::star::beans { class XPropertySet; }
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::XPropertySet;

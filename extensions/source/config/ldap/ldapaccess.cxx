@@ -26,7 +26,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 
-namespace extensions { namespace config { namespace ldap {
+namespace extensions::config::ldap {
 
 
 typedef int LdapErrCode;
@@ -284,6 +284,6 @@ void LdapConnection::initConnection()
 }
 
 
-} } } // extensions.config.ldap
+} // extensions::config::ldap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

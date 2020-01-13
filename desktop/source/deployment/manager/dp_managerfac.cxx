@@ -160,6 +160,6 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     return xRet;
 }
 
-} // namespace
+} // namespace dp_manager::factory
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

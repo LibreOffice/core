@@ -20,10 +20,8 @@
 #include <svgtrefnode.hxx>
 #include <svgdocument.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgTrefNode::SvgTrefNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
@@ -80,7 +78,6 @@ namespace svgio
             return dynamic_cast< const SvgTextNode* >(getDocument().findSvgNodeById(maXLink));
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

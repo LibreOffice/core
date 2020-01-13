@@ -78,10 +78,7 @@
 // underruns, accuracy, etc
 
 
-namespace sca {
-namespace pricing {
-
-namespace bs {
+namespace sca::pricing::bs {
 
 
 // helper functions
@@ -937,9 +934,6 @@ double prob_in_money(double S, double vol, double mu,
     return val;
 }
 
-} // namespace bs
-
-} // namespace pricing
 } // namespace sca
 
 

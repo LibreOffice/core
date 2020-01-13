@@ -33,10 +33,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
 
         SlideBitmap::SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap ) :
             maOutputPos(),
@@ -109,7 +107,6 @@ namespace slideshow
         return mxBitmap;
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

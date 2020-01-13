@@ -20,15 +20,12 @@
 #include <frm_resource.hxx>
 #include <unotools/resmgr.hxx>
 
-namespace frm
+namespace frm::ResourceManager
 {
-    namespace ResourceManager
-    {
         OUString loadString(const char* pResId)
         {
             return Translate::get(pResId, Translate::Create("frm"));
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

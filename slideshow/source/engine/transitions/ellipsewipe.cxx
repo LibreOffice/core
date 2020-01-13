@@ -23,8 +23,7 @@
 #include "ellipsewipe.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ::basegfx::B2DPolyPolygon EllipseWipe::operator () ( double t )
 {
@@ -47,7 +46,6 @@ namespace internal {
     }
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

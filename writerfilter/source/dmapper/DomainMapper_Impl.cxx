@@ -105,8 +105,7 @@
 
 using namespace ::com::sun::star;
 using namespace oox;
-namespace writerfilter {
-namespace dmapper{
+namespace writerfilter::dmapper{
 
 //line numbering for header/footer
 static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContainer>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
@@ -6887,6 +6886,6 @@ void DomainMapper_Impl::substream(Id rName,
         assert(m_aPropertyStacks[i].size() == propSize[i]);
     }
 }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

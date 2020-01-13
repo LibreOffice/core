@@ -18,9 +18,7 @@
 
 using namespace com::sun::star;
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 namespace
 {
@@ -168,7 +166,6 @@ void XMLTextFrameContext::endElement(const OUString& /*rName*/)
     GetImport().GetGenerator().closeFrame();
 }
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

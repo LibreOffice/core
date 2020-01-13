@@ -24,8 +24,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <comphelper/sequence.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -133,7 +132,6 @@ beans::PropertyValue MeasureHandler::getInteropGrabBag()
     return aRet;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,9 +74,7 @@ sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& N
 
 } // anonymous namespace
 
-namespace xmloff
-{
-namespace chart
+namespace xmloff::chart
 {
 
 ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
@@ -154,7 +152,6 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
     return uno::Any();
 }
 
-} //  namespace chart
-} //  namespace xmloff
+} //  namespace xmloff::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

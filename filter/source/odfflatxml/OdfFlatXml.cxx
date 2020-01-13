@@ -47,8 +47,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 
-namespace filter {
-    namespace odfflatxml {
+namespace filter::odfflatxml {
         namespace {
 
         /*
@@ -103,7 +102,6 @@ namespace filter {
         };
 
         }
-    }
 }
 
 using namespace ::filter::odfflatxml;

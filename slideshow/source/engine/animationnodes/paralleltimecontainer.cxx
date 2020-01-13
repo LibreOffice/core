@@ -23,8 +23,7 @@
 
 #include <functional>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 void ParallelTimeContainer::activate_st()
 {
@@ -54,7 +53,6 @@ void ParallelTimeContainer::notifyDeactivating(
     notifyDeactivatedChild( pChildNode );
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

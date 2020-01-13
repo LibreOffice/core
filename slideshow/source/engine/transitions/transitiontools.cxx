@@ -24,8 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 // TODO(Q2): Move this to basegfx
 ::basegfx::B2DPolygon createUnitRect()
@@ -53,7 +52,6 @@ namespace internal {
     return res;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

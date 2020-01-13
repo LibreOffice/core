@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 PresenterSprite::PresenterSprite()
     : mxSpriteFactory(),
@@ -160,6 +160,6 @@ void PresenterSprite::DisposeSprite()
     }
 }
 
-} } //end of namespace sdext::presenter
+} //end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

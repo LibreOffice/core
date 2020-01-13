@@ -18,8 +18,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace msfilter {
-namespace util {
+namespace msfilter::util {
 
 rtl_TextEncoding getBestTextEncodingFromLocale(const css::lang::Locale &rLocale)
 {
@@ -1324,7 +1323,6 @@ sal_uInt8 TransColToIco( const Color& rCol )
     return nCol;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

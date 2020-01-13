@@ -10,9 +10,7 @@
 #include "DomainMapper.hxx"
 #include <unotools/mediadescriptor.hxx>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContext> const& xContext,
@@ -34,7 +32,6 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
     return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, rMediaDesc));
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,9 +13,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFValue::RTFValue(int nValue, OUString sValue, const RTFSprms& rAttributes, const RTFSprms& rSprms,
                    uno::Reference<drawing::XShape> xShape, uno::Reference<io::XInputStream> xStream,
@@ -207,7 +205,6 @@ RTFSprms& RTFValue::getAttributes() { return *m_pAttributes; }
 
 RTFSprms& RTFValue::getSprms() { return *m_pSprms; }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

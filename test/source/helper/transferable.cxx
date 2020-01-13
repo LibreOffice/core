@@ -12,11 +12,7 @@
 
 using namespace css;
 
-namespace apitest
-{
-namespace helper
-{
-namespace transferable
+namespace apitest::helper::transferable
 {
 OString OOO_DLLPUBLIC_TEST getTextSelection(
     const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable, OString mimeType)
@@ -80,8 +76,6 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     return aRet;
 }
 
-} // namespace transferable
-} // namespace helper
-} // namespace apitest
+} // namespace apitest::helper::transferable
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -146,7 +146,7 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
 }
 
 namespace sdr::properties
-    {
+{
         class CellProperties : public TextProperties
         {
         protected:
@@ -377,7 +377,7 @@ namespace sdr::properties
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
-    } // end of namespace sdr
+} // end of namespace sdr::properties
 
 namespace sdr::table {
 

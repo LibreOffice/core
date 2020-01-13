@@ -30,8 +30,7 @@
 #include <comphelper/sequence.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 CacheItem::CacheItem()
     : SequenceAsHashMap()
@@ -331,7 +330,6 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
 FlatDetectionInfo::FlatDetectionInfo() :
     bMatchByExtension(false), bMatchByPattern(false), bPreselectedByDocumentService(false) {}
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

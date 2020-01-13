@@ -353,6 +353,6 @@ sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace
+} // namespace dp_registry::backend::sfwk
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

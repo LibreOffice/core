@@ -36,7 +36,7 @@ namespace
     const sal_Int16 gnSuperSampleFactor = 2;
 }
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterSlidePreview =================================================
 
@@ -352,6 +352,6 @@ void PresenterSlidePreview::ThrowIfDisposed()
     }
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

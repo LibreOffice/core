@@ -59,6 +59,6 @@ OUString ExecutableBackendDb::getKeyElementName()
 }
 
 
-} // namespace
+} // namespace dp_registry::backend::executable
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

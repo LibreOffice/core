@@ -32,10 +32,8 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         /** Update state ids
 
             This method updates all state IDs from possible
@@ -809,7 +807,6 @@ namespace slideshow
                 mnVisibilityState;
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

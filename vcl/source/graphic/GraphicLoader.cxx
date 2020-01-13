@@ -16,9 +16,7 @@
 
 using namespace css;
 
-namespace vcl
-{
-namespace graphic
+namespace vcl::graphic
 {
 Graphic loadFromURL(OUString const& rURL, weld::Window* pParentWin)
 {
@@ -40,7 +38,6 @@ Graphic loadFromURL(OUString const& rURL, weld::Window* pParentWin)
     }
 
     return aGraphic;
-}
 }
 } // end vcl::graphic
 

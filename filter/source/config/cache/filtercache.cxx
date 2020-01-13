@@ -53,8 +53,7 @@
 #include <officecfg/Setup.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 FilterCache::FilterCache()
     : BaseLock    (                                        )
@@ -2213,7 +2212,6 @@ bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
     return false;
 }
 
-    } // namespace config
 } // namespace filter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

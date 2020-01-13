@@ -33,10 +33,8 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace {
 
         /** Represents a media shape.
@@ -244,7 +242,6 @@ namespace slideshow
             return std::make_shared<MediaShape>(xShape, nPrio, rContext);
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

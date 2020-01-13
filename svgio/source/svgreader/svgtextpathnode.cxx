@@ -28,10 +28,8 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         namespace {
 
         class pathTextBreakupHelper : public drawinglayer::primitive2d::TextBreakupHelper
@@ -235,14 +233,11 @@ namespace svgio
             return bRetval;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgTextPathNode::SvgTextPathNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
@@ -442,7 +437,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
 } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

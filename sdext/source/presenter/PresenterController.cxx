@@ -65,7 +65,7 @@ namespace {
     const sal_Int32 ConfigurationUpdateEndEventType = 2;
 }
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 IPresentationTime::~IPresentationTime()
 {
@@ -1157,6 +1157,6 @@ void PresenterController::SwitchMonitors()
     pScreen->SwitchMonitors();
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

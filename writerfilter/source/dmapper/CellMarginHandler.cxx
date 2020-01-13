@@ -24,8 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
@@ -174,7 +173,6 @@ beans::PropertyValue CellMarginHandler::getInteropGrabBag()
     return aRet;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

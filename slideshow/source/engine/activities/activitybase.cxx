@@ -26,10 +26,8 @@
 #include "activitybase.hxx"
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         // TODO(P1): Elide some virtual function calls, by templifying this
         // static hierarchy
 
@@ -231,7 +229,6 @@ namespace slideshow
 
             return nT;
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

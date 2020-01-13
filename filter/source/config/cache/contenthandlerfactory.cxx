@@ -25,8 +25,7 @@
 #include <comphelper/sequence.hxx>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
  : m_xContext(rxContext)
@@ -112,7 +111,6 @@ css::uno::Reference< css::uno::XInterface > ContentHandlerFactory::impl_createIn
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
 }
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

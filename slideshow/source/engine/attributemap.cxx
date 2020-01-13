@@ -24,10 +24,8 @@
 #include <sal/log.hxx>
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         typedef ::canvas::tools::ValueMap< AttributeType > AnimateAttributeMap;
 
         AttributeType mapAttributeName( const OUString& rAttrName )
@@ -84,7 +82,6 @@ namespace slideshow
             return eAttributeType;
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

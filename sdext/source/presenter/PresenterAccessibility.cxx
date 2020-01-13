@@ -51,7 +51,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 //===== PresenterAccessibleObject =============================================
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper <
@@ -1837,6 +1837,6 @@ void AccessibleFocusManager::FocusObject (
         rpObject->SetIsFocused(true);
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

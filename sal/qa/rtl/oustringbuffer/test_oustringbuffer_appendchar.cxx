@@ -16,7 +16,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <rtl/ustrbuf.hxx>
 
-namespace test { namespace oustringbuffer {
+namespace test::oustringbuffer {
 
 class AppendChar: public CppUnit::TestFixture {
 private:
@@ -36,7 +36,7 @@ void AppendChar::testAppendChar() {
     CPPUNIT_ASSERT_EQUAL(u'a', s[0]);
 }
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::AppendChar);
 

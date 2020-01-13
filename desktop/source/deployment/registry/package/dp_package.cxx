@@ -1591,6 +1591,6 @@ Reference<deployment::XPackageRegistry> create(
     return new BackendImpl( args, xComponentContext, xRootRegistry );
 }
 
-} // namespace
+} // namespace dp_registry
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

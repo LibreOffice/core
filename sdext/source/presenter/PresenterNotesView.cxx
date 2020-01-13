@@ -46,7 +46,7 @@ static const sal_Int32 gnSpaceBelowSeparator (10);
 static const sal_Int32 gnSpaceAboveSeparator (10);
 static const double gnLineScrollFactor (1.2);
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterNotesView ====================================================
 
@@ -656,6 +656,6 @@ void PresenterNotesView::UpdateScrollBar()
     mpScrollBar->CheckValues();
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

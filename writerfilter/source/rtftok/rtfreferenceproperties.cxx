@@ -9,9 +9,7 @@
 
 #include "rtfreferenceproperties.hxx"
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes, RTFSprms aSprms)
     : m_aAttributes(std::move(aAttributes))
@@ -37,7 +35,6 @@ void RTFReferenceProperties::resolve(Properties& rHandler)
     }
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

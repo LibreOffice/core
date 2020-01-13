@@ -23,9 +23,7 @@
 
 using namespace com::sun::star;
 
-namespace xmlsecurity
-{
-namespace pdfio
+namespace xmlsecurity::pdfio
 {
 bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature,
                        SignatureInformation& rInformation, bool bLast)
@@ -169,7 +167,6 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
                                         rInformation);
 }
 
-} // namespace pdfio
-} // namespace xmlsecurity
+} // namespace xmlsecurity::pdfio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,10 +52,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace
         {
             class NamedValueComparator
@@ -766,7 +764,6 @@ namespace slideshow
                 basegfx::fround( aTmpRect.getRange().getX() ) + 1,
                 basegfx::fround( aTmpRect.getRange().getY() ) + 1 );
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

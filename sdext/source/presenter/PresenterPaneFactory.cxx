@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 const OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
     "private:resource/pane/Presenter/Pane1");
@@ -299,6 +299,6 @@ void PresenterPaneFactory::ThrowIfDisposed() const
     }
 }
 
-} } // end of namespace sdext::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

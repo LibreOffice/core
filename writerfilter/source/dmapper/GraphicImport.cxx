@@ -84,9 +84,7 @@ bool isTopGroupObj(const uno::Reference<drawing::XShape>& xShape)
 }
 }
 
-namespace writerfilter {
-
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 namespace {
@@ -1525,7 +1523,6 @@ sal_Int32 GraphicImport::GetLeftMarginOrig() const
     return m_pImpl->nLeftMarginOrig;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

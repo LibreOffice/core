@@ -21,7 +21,7 @@ bool rtl_string_unittest_const_literal;
 bool rtl_string_unittest_const_literal_function;
 static bool rtl_string_unittest_non_const_literal_function;
 
-namespace test { namespace ostring {
+namespace test::ostring {
 
 class StringLiterals: public CppUnit::TestFixture
 {
@@ -256,7 +256,7 @@ void test::ostring::StringLiterals::checkBuffer()
 
 #undef CONST_CTOR_USED
 
-}} // namespace
+} // namespace
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::ostring::StringLiterals);
 

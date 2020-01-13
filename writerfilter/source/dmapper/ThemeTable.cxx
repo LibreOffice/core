@@ -23,8 +23,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 struct ThemeTable_Impl
@@ -557,7 +556,6 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
     }
 }
 
-}//namespace dmapper
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

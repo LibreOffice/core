@@ -31,10 +31,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         bool EventQueue::EventEntry::operator<( const EventEntry& rEvent ) const
         {
             // negate comparison, we want priority queue to be sorted
@@ -294,7 +292,6 @@ namespace slideshow
             maNextEvents.clear();
             maNextNextEvents = ImplQueueType();
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

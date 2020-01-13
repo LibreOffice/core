@@ -45,9 +45,7 @@ using namespace ::com::sun::star;
 // free support functions
 // ======================
 
-namespace slideshow
-{
-namespace internal
+namespace slideshow::internal
 {
 // TODO(E2): Detect the case when svx/drawing layer is not
 // in-process, or even not on the same machine, and
@@ -425,7 +423,6 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
     return bScrollRectSet && bPaintRectSet;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

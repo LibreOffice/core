@@ -27,8 +27,7 @@
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::sheet::NoConvergenceException;
 
-namespace sca {
-namespace analysis {
+namespace sca::analysis {
 
 const double f_PI       = 3.1415926535897932385;
 const double f_PI_DIV_2 = f_PI / 2.0;
@@ -452,7 +451,6 @@ double BesselY( double fNum, sal_Int32 nOrder )
     }
 }
 
-} // namespace analysis
-} // namespace sca
+} // namespace sca::analysis
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

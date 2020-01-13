@@ -46,10 +46,8 @@
 
 /* Implementation of SmilFunctionParser class */
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace
         {
             typedef const char*                   StringIteratorT;
@@ -604,7 +602,6 @@ namespace slideshow
 
             return pContext->maOperandStack.top();
         }
-    }
 }
 
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
