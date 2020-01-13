@@ -66,4 +66,4 @@ svx/uiconfig/ui/sidebarshadow.ui://GtkLabel[@id='transparency_label'] orphan-lab
 svx/uiconfig/ui/sidebarshadow.ui://GtkSpinButton[@id='FIELD_TRANSPARENCY'] no-labelled-by
 svx/uiconfig/ui/sidebarshadow.ui://GtkScale[@id='transparency_slider'] no-labelled-by
 svx/uiconfig/ui/sidebarline.ui://GtkMenuToolButton[@id='SelectWidth'] button-no-label
-svx/uiconfig/ui/textcharacterspacingcontrol.ui://GtkSpinButton[@id='kerning:0pt'] no-labelled-by
+svx/uiconfig/ui/textcharacterspacingcontrol.ui://GtkSpinButton[@id='kerning'] no-labelled-by
