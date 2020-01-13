@@ -85,8 +85,7 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
 
 css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  )
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.awt.RoadmapItem" };
-    return aRet;
+    return { "com.sun.star.awt.RoadmapItem" };
 }
 
 ::cppu::IPropertyArrayHelper& ORoadmapEntry::getInfoHelper()

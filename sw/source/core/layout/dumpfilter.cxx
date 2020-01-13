@@ -148,8 +148,7 @@ namespace sw
 
     uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
     {
-        uno::Sequence<OUString> aSeq { "com.sun.star.document.ExportFilter" };
-        return aSeq;
+        return { "com.sun.star.document.ExportFilter" };
     }
 
 } // Namespace sw

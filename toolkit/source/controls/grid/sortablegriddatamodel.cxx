@@ -878,8 +878,7 @@ void lcl_clear( STLCONTAINER& i_container )
 
     Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  )
     {
-        Sequence< OUString > aServiceNames { "com.sun.star.awt.grid.SortableGridDataModel" };
-        return aServiceNames;
+        return { "com.sun.star.awt.grid.SortableGridDataModel" };
     }
 
 
