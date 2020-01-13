@@ -23,15 +23,17 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/button.hxx>
 #include <vcl/vclenum.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
-#include <sfx2/tbxctrl.hxx>
 
 namespace svx {
 
-class TextUnderlineControl : public SfxPopupWindow
+class TextUnderlinePopup;
+
+class TextUnderlineControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit TextUnderlineControl(sal_uInt16 nId, vcl::Window* pParent);
+    explicit TextUnderlineControl(TextUnderlinePopup* pControl, vcl::Window* pParent);
     virtual ~TextUnderlineControl() override;
     virtual void dispose() override;
 

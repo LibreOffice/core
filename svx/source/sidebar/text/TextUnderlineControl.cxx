@@ -21,6 +21,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <svx/TextUnderlinePopup.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
 #include <vcl/button.hxx>
@@ -29,8 +30,8 @@
 
 namespace svx {
 
-TextUnderlineControl::TextUnderlineControl(sal_uInt16 nId, vcl::Window* pParent)
-:   SfxPopupWindow(nId, pParent, "TextUnderlineControl", "svx/ui/textunderlinecontrol.ui")
+TextUnderlineControl::TextUnderlineControl(TextUnderlinePopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "TextUnderlineControl", "svx/ui/textunderlinecontrol.ui")
 {
     get(maNone, "none");
     get(maSingle, "single");
@@ -82,7 +83,7 @@ void TextUnderlineControl::dispose()
     maWave.clear();
     maMoreOptions.clear();
 
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 FontLineStyle TextUnderlineControl::getLineStyle(Button const * pButton)
