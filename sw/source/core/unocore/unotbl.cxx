@@ -164,7 +164,7 @@ namespace
     }
 }
 
-#define UNO_TABLE_COLUMN_SUM 10000
+#define UNO_TABLE_COLUMN_SUM SAL_MAX_INT16
 
 
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
@@ -3057,7 +3057,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 break;
 
                 case FN_UNO_TABLE_COLUMN_RELATIVE_SUM:
-                    aRet <<= sal_Int16(UNO_TABLE_COLUMN_SUM);
+                    aRet <<= UNO_TABLE_COLUMN_SUM;
                 break;
 
                 case RES_ANCHOR:
