@@ -26,58 +26,83 @@
 
 using namespace css;
 
-SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "charmapctrl", "sfx/ui/charmapcontrol.ui")
+SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "sfx/ui/charmapcontrol.ui", "charmapctrl")
+    , m_xControl(pControl)
+    , m_xVirDev(VclPtr<VirtualDevice>::Create())
+    , m_aRecentCharView{SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev),
+                        SvxCharView(m_xVirDev)}
+    , m_aFavCharView{SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev),
+                     SvxCharView(m_xVirDev)}
+    , m_xDlgBtn(m_xBuilder->weld_button("specialchardlg"))
+    , m_xRecentCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar4", m_aRecentCharView[3]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar5", m_aRecentCharView[4]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar6", m_aRecentCharView[5]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar7", m_aRecentCharView[6]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar8", m_aRecentCharView[7]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar9", m_aRecentCharView[8]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar10", m_aRecentCharView[9]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar11", m_aRecentCharView[10]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar12", m_aRecentCharView[11]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar13", m_aRecentCharView[12]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar14", m_aRecentCharView[13]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar15", m_aRecentCharView[14]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar16", m_aRecentCharView[15])}
+    , m_xFavCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar1", m_aFavCharView[0]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar2", m_aFavCharView[1]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar3", m_aFavCharView[2]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar4", m_aFavCharView[3]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar5", m_aFavCharView[4]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar6", m_aFavCharView[5]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar7", m_aFavCharView[6]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar8", m_aFavCharView[7]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar9", m_aFavCharView[8]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar10", m_aFavCharView[9]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar11", m_aFavCharView[10]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar12", m_aFavCharView[11]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar13", m_aFavCharView[12]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar14", m_aFavCharView[13]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar15", m_aFavCharView[14]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar16", m_aFavCharView[15])}
 {
-    get( m_pRecentCharView[0], "viewchar1" );
-    get( m_pRecentCharView[1], "viewchar2" );
-    get( m_pRecentCharView[2], "viewchar3" );
-    get( m_pRecentCharView[3], "viewchar4" );
-    get( m_pRecentCharView[4], "viewchar5" );
-    get( m_pRecentCharView[5], "viewchar6" );
-    get( m_pRecentCharView[6], "viewchar7" );
-    get( m_pRecentCharView[7], "viewchar8" );
-    get( m_pRecentCharView[8], "viewchar9" );
-    get( m_pRecentCharView[9], "viewchar10" );
-    get( m_pRecentCharView[10], "viewchar11" );
-    get( m_pRecentCharView[11], "viewchar12" );
-    get( m_pRecentCharView[12], "viewchar13" );
-    get( m_pRecentCharView[13], "viewchar14" );
-    get( m_pRecentCharView[14], "viewchar15" );
-    get( m_pRecentCharView[15], "viewchar16" );
-
-    get( m_pFavCharView[0], "favchar1" );
-    get( m_pFavCharView[1], "favchar2" );
-    get( m_pFavCharView[2], "favchar3" );
-    get( m_pFavCharView[3], "favchar4" );
-    get( m_pFavCharView[4], "favchar5" );
-    get( m_pFavCharView[5], "favchar6" );
-    get( m_pFavCharView[6], "favchar7" );
-    get( m_pFavCharView[7], "favchar8" );
-    get( m_pFavCharView[8], "favchar9" );
-    get( m_pFavCharView[9], "favchar10" );
-    get( m_pFavCharView[10], "favchar11" );
-    get( m_pFavCharView[11], "favchar12" );
-    get( m_pFavCharView[12], "favchar13" );
-    get( m_pFavCharView[13], "favchar14" );
-    get( m_pFavCharView[14], "favchar15" );
-    get( m_pFavCharView[15], "favchar16" );
-
-    get( maDlgBtn, "specialchardlg");
-
     for(int i = 0; i < 16; i++)
     {
-        m_pRecentCharView[i]->SetStyle(m_pRecentCharView[i]->GetStyle() | WB_GROUP);
-        m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
-        m_pRecentCharView[i]->SetGetFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
-        m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
-        m_pFavCharView[i]->SetStyle(m_pFavCharView[i]->GetStyle() | WB_GROUP);
-        m_pFavCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
-        m_pFavCharView[i]->SetGetFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
-        m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, FocusHdl));
+        m_aRecentCharView[i].setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
+        m_aFavCharView[i].setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
     }
 
-    maDlgBtn->SetClickHdl(LINK(this, SfxCharmapCtrl, OpenDlgHdl));
+    m_xDlgBtn->connect_clicked(LINK(this, SfxCharmapCtrl, OpenDlgHdl));
 
     getRecentCharacterList();
     updateRecentCharControl();
@@ -87,130 +112,90 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, vcl::Window* pParent)
 
 SfxCharmapCtrl::~SfxCharmapCtrl()
 {
-    disposeOnce();
-}
-
-void SfxCharmapCtrl::dispose()
-{
-    for(int i = 0; i < 16; i++)
-        m_pRecentCharView[i].clear();
-
-    maRecentCharList.clear();
-    maRecentCharFontList.clear();
-    maDlgBtn.clear();
-
-    ToolbarPopup::dispose();
 }
 
 void SfxCharmapCtrl::getFavCharacterList()
 {
     //retrieve recent character list
     css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
-    std::copy(rFavCharList.begin(), rFavCharList.end(), std::back_inserter(maFavCharList));
+    std::copy(rFavCharList.begin(), rFavCharList.end(), std::back_inserter(m_aFavCharList));
 
     //retrieve recent character font list
     css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
-    std::copy(rFavCharFontList.begin(), rFavCharFontList.end(), std::back_inserter(maFavCharFontList));
+    std::copy(rFavCharFontList.begin(), rFavCharFontList.end(), std::back_inserter(m_aFavCharFontList));
 }
 
 void SfxCharmapCtrl::updateFavCharControl()
 {
     int i = 0;
-    for ( std::deque< OUString >::iterator it = maFavCharList.begin(), it2 = maFavCharFontList.begin();
-        it != maFavCharList.end() || it2 != maFavCharFontList.end();
+    for ( std::deque< OUString >::iterator it = m_aFavCharList.begin(), it2 = m_aFavCharFontList.begin();
+        it != m_aFavCharList.end() || it2 != m_aFavCharFontList.end();
         ++it, ++it2, i++)
     {
-        m_pFavCharView[i]->SetText(*it);
-        vcl::Font rFont = m_pFavCharView[i]->GetControlFont();
+        m_aFavCharView[i].SetText(*it);
+        vcl::Font rFont = m_aFavCharView[i].GetFont();
         rFont.SetFamilyName( *it2 );
-        m_pFavCharView[i]->SetFont(rFont);
-        m_pFavCharView[i]->Show();
+        m_aFavCharView[i].SetFont(rFont);
+        m_aFavCharView[i].Show();
     }
 
     for(; i < 16 ; i++)
     {
-        m_pFavCharView[i]->SetText(OUString());
-        m_pFavCharView[i]->Hide();
+        m_aFavCharView[i].SetText(OUString());
+        m_aFavCharView[i].Hide();
     }
 }
-
 
 void SfxCharmapCtrl::getRecentCharacterList()
 {
     //retrieve recent character list
     css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
-    std::copy(rRecentCharList.begin(), rRecentCharList.end(), std::back_inserter(maRecentCharList));
+    std::copy(rRecentCharList.begin(), rRecentCharList.end(), std::back_inserter(m_aRecentCharList));
 
     //retrieve recent character font list
     css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
-    std::copy(rRecentCharFontList.begin(), rRecentCharFontList.end(), std::back_inserter(maRecentCharFontList));
+    std::copy(rRecentCharFontList.begin(), rRecentCharFontList.end(), std::back_inserter(m_aRecentCharFontList));
 }
-
 
 void SfxCharmapCtrl::updateRecentCharControl()
 {
     int i = 0;
-    for ( std::deque< OUString >::iterator it = maRecentCharList.begin(), it2 = maRecentCharFontList.begin();
-        it != maRecentCharList.end() || it2 != maRecentCharFontList.end();
+    for ( std::deque< OUString >::iterator it = m_aRecentCharList.begin(), it2 = m_aRecentCharFontList.begin();
+        it != m_aRecentCharList.end() || it2 != m_aRecentCharFontList.end();
         ++it, ++it2, i++)
     {
-        m_pRecentCharView[i]->SetText(*it);
-        vcl::Font rFont = m_pRecentCharView[i]->GetControlFont();
+        m_aRecentCharView[i].SetText(*it);
+        vcl::Font rFont = m_aRecentCharView[i].GetFont();
         rFont.SetFamilyName( *it2 );
-        m_pRecentCharView[i]->SetFont(rFont);
-        m_pRecentCharView[i]->Show();
+        m_aRecentCharView[i].SetFont(rFont);
+        m_aRecentCharView[i].Show();
     }
 
     for(; i < 16 ; i++)
     {
-        m_pRecentCharView[i]->SetText(OUString());
-        m_pRecentCharView[i]->Hide();
+        m_aRecentCharView[i].SetText(OUString());
+        m_aRecentCharView[i].Hide();
     }
 }
 
-
-bool SfxCharmapCtrl::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView*, pView, void)
 {
-    if ( maDlgBtn->HasFocus() && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
-        const sal_uInt16 nCode = rKey.GetCode();
-        if ( nCode != KEY_TAB && nCode != KEY_RETURN && nCode != KEY_SPACE && nCode != KEY_ESCAPE )
-        {
-            return true;
-        }
-        if ( mbNeedsInit && nCode == KEY_TAB )
-        {
-            for(int i = 0; i < 16; i++)
-            {
-                m_pRecentCharView[i]->set_property( "can-focus", "true" );
-                m_pFavCharView[i]->set_property( "can-focus", "true" );
-            }
-            mbNeedsInit = false;
-        }
-    }
-    return ToolbarPopup::EventNotify( rNEvt );
+    m_xControl->EndPopupMode();
+
+    pView->InsertCharToDoc();
 }
 
-
-IMPL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, pItem, void)
+IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, weld::Button&, void)
 {
-    pItem.Invalidate();
-}
-
-
-IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharViewControl*, rView, void)
-{
-    rView->InsertCharToDoc();
-    Close();
-}
-
-IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, Button*, void)
-{
-    Close();
+    m_xControl->EndPopupMode();
 
     uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
     comphelper::dispatchCommand(".uno:InsertSymbol", xFrame, {});
+}
+
+void SfxCharmapCtrl::GrabFocus()
+{
+    m_aFavCharView[0].GrabFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
