@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a57b31b2_2a6a5d1f",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-13T14:24:14Z",
+      "side": 1,
+      "message": "Is it necessary to extract the input to eMode manually and then wrap it again in an Any? See how the code above just passes the Any around without assuming anything about its content.",
+      "revId": "cb308866ad97d3b72e1745c63507e2b337328657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0363a030_b7dc5d76",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-13T14:24:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "cb308866ad97d3b72e1745c63507e2b337328657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
