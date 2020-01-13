@@ -366,6 +366,8 @@ published constants Key
     /** @since LibreOffice 4.3 **/
     const short QUOTERIGHT = 1318;
 
+    /** @since LibreOffice 6.5 **/
+    const short COLON = 1319;
 
     /** The following values don't correspond to physical keys on any
         keyboard but are used in the macOS implementation of VCL. They

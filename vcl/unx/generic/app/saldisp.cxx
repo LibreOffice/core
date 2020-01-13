@@ -996,6 +996,9 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         case KEY_QUOTERIGHT:
             aCustomKeyName = "'";
             break;
+        case KEY_COLON:
+            aCustomKeyName = ":";
+            break;
         default:
             nKeySym = 0;
             break;
@@ -1341,6 +1344,10 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
         case XK_quoteright:
             nKey = KEY_QUOTERIGHT;
             *pcPrintable = '\'';
+            break;
+        case XK_colon:
+            nKey = KEY_COLON;
+            *pcPrintable = ':';
             break;
         // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
         case 0x1000FF02: // apXK_Copy
