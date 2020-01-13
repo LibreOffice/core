@@ -173,7 +173,6 @@ void ScDLL::Init()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
     EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
-    CharmapPopup::RegisterControl(SID_CHARMAP_CONTROL, pMod );
 
     // Media Controller
 #if HAVE_FEATURE_AVMEDIA

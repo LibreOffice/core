@@ -336,8 +336,6 @@ void SwDLL::RegisterControls()
         false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
                                                             : SfxChildWindowFlags::NONE);
 
-    CharmapPopup::RegisterControl(SID_CHARMAP_CONTROL, pMod );
-
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
     SvxGrafGreenToolBoxControl::RegisterControl( SID_ATTR_GRAF_GREEN, pMod );
     SvxGrafBlueToolBoxControl::RegisterControl( SID_ATTR_GRAF_BLUE, pMod );

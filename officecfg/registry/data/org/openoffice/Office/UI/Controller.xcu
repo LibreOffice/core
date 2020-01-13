@@ -1294,6 +1294,17 @@
           <value>com.sun.star.comp.svx.CharacterSpacingToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="InsertSymbolToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharmapControl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sfx2.InsertSymbolToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="BorderStyleToolBoxControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SetBorderStyle</value>
