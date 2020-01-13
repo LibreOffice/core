@@ -20,33 +20,46 @@
 #include <sfx2/charmapcontrol.hxx>
 #include <vcl/toolbox.hxx>
 
-SFX_IMPL_TOOLBOX_CONTROL(CharmapPopup, SfxVoidItem);
-
-CharmapPopup::CharmapPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
-    : SfxToolBoxControl(nSlotId, nId, rTbx)
+CharmapPopup::CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : PopupWindowController(rContext, nullptr, OUString())
 {
-    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
 CharmapPopup::~CharmapPopup()
 {
 }
 
-VclPtr<SfxPopupWindow> CharmapPopup::CreatePopupWindow()
+void CharmapPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
-    VclPtr<SfxCharmapCtrl> pControl = VclPtr<SfxCharmapCtrl>::Create(GetSlotId(), &GetToolBox(), m_xFrame);
+    PopupWindowController::initialize(rArguments);
 
-    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
-
-    SetPopupWindow(pControl);
-
-    return pControl;
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-void SAL_CALL CharmapPopup::execute( sal_Int16 /*KeyModifier*/ )
+VclPtr<vcl::Window> CharmapPopup::createPopupWindow(vcl::Window* pParent)
 {
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aArgs;
-    Dispatch(".uno:InsertSymbol", aArgs);
+    return VclPtr<SfxCharmapCtrl>::Create(this, pParent);
+}
+
+OUString CharmapPopup::getImplementationName()
+{
+    return "com.sun.star.comp.sfx2.InsertSymbolToolBoxControl";
+}
+
+css::uno::Sequence<OUString> CharmapPopup::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new CharmapPopup( rContext ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

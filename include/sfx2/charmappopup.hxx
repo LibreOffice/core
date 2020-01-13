@@ -20,19 +20,24 @@
 #ifndef INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
 #define INCLUDED_SFX2_INC_CHARMAPPOPUP_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <sfx2/dllapi.h>
 
-class SFX2_DLLPUBLIC CharmapPopup final : public SfxToolBoxControl
+class SFX2_DLLPUBLIC CharmapPopup final : public svt::PopupWindowController
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    CharmapPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~CharmapPopup() override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-    virtual void SAL_CALL execute( sal_Int16 /*KeyModifier*/ ) override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 #endif

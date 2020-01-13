@@ -24,16 +24,18 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/charwin.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <vcl/button.hxx>
 #include <deque>
 
+class CharmapPopup;
+
 namespace com::sun::star::frame { class XFrame; }
 
-class SfxCharmapCtrl final : public SfxPopupWindow
+class SfxCharmapCtrl final : public svtools::ToolbarPopup
 {
 public:
-    explicit SfxCharmapCtrl(sal_uInt16 nId, vcl::Window* pParent,
-                            const css::uno::Reference< css::frame::XFrame >& rFrame);
+    explicit SfxCharmapCtrl(CharmapPopup* pControl, vcl::Window* pParent);
 
     virtual ~SfxCharmapCtrl() override;
 
