@@ -1210,10 +1210,27 @@ bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
     // make sure all LO shared fonts are registered temporarily
-    static bool bOnce = true;
-    if( bOnce )
+    static bool bOnce = []()
     {
-        bOnce = false;
+        auto registerFontsIn = [](const OUString& dir) {
+            // collect fonts in font path that could not be registered
+            osl::Directory aFontDir(dir);
+            osl::FileBase::RC rcOSL = aFontDir.open();
+            if (rcOSL == osl::FileBase::E_None)
+            {
+                osl::DirectoryItem aDirItem;
+                SalData* pSalData = GetSalData();
+                assert(pSalData);
+
+                while (aFontDir.getNextItem(aDirItem, 10) == osl::FileBase::E_None)
+                {
+                    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
+                    rcOSL = aDirItem.getFileStatus(aFileStatus);
+                    if (rcOSL == osl::FileBase::E_None)
+                        lcl_AddFontResource(*pSalData, aFileStatus.getFileURL(), true);
+                }
+            }
+        };
 
         // determine font path
         // since we are only interested in fonts that could not be
@@ -1222,24 +1239,14 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         OUString aPath("$BRAND_BASE_DIR");
         rtl_bootstrap_expandMacros(&aPath.pData);
 
-        // collect fonts in font path that could not be registered
-        osl::Directory aFontDir(aPath + "/" LIBO_SHARE_FOLDER "/fonts/truetype");
-        osl::FileBase::RC rcOSL = aFontDir.open();
-        if( rcOSL == osl::FileBase::E_None )
-        {
-            osl::DirectoryItem aDirItem;
-            SalData* pSalData = GetSalData();
-            assert(pSalData);
+        // internal font resources, required for normal operation, like OpenSymbol
+        registerFontsIn(aPath + "/" LIBO_SHARE_RESOURCE_FOLDER "/common/fonts");
 
-            while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
-            {
-                osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
-                rcOSL = aDirItem.getFileStatus( aFileStatus );
-                if ( rcOSL == osl::FileBase::E_None )
-                    lcl_AddFontResource(*pSalData, aFileStatus.getFileURL(), true);
-            }
-        }
-    }
+        // collect fonts in font path that could not be registered
+        registerFontsIn(aPath + "/" LIBO_SHARE_FOLDER "/fonts/truetype");
+
+        return true;
+    }();
 
     ImplEnumInfo aInfo;
     aInfo.mhDC          = getHDC();

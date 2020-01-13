@@ -182,21 +182,25 @@ OUString const & psp::getFontPath()
         OUString aConfigPath( getOfficePath( whichOfficePath::ConfigPath ) );
         OUString aInstallationRootPath( getOfficePath( whichOfficePath::InstallationRootPath ) );
         OUString aUserPath( getOfficePath( whichOfficePath::UserPath ) );
+        if (!aInstallationRootPath.isEmpty())
+        {
+            // internal font resources, required for normal operation, like OpenSymbol
+            aPathBuffer.append(aInstallationRootPath
+                               + "/" LIBO_SHARE_RESOURCE_FOLDER "/common/fonts;");
+        }
         if( !aConfigPath.isEmpty() )
         {
             // #i53530# Path from CustomDataUrl will completely
-            // replace net and user paths if the path exists
-            aPathBuffer.append(aConfigPath);
-            aPathBuffer.append("/" LIBO_SHARE_FOLDER "/fonts");
+            // replace net share and user paths if the path exists
+            OUString sPath = aConfigPath + "/" LIBO_SHARE_FOLDER "/fonts";
             // check existence of config path
             struct stat aStat;
-            if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
+            if( 0 != stat( OUStringToOString( sPath, osl_getThreadTextEncoding() ).getStr(), &aStat )
                 || ! S_ISDIR( aStat.st_mode ) )
                 aConfigPath.clear();
             else
             {
-                aPathBuffer.append(aConfigPath);
-                aPathBuffer.append("/" LIBO_SHARE_FOLDER "/fonts");
+                aPathBuffer.append(sPath);
             }
         }
         if( aConfigPath.isEmpty() )
