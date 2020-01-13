@@ -687,6 +687,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             }
         }
     }
+    else if( xChartModel.is() )
+        xChartModel->unlockControllers();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
