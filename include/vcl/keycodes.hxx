@@ -154,6 +154,7 @@
 #define KEY_BRACKETRIGHT (sal_uInt16(css::awt::Key::BRACKETRIGHT))
 #define KEY_SEMICOLON   (sal_uInt16(css::awt::Key::SEMICOLON))
 #define KEY_QUOTERIGHT  (sal_uInt16(css::awt::Key::QUOTERIGHT))
+#define KEY_COLON       (sal_uInt16(css::awt::Key::COLON))
 
 #define KEY_CAPSLOCK    (sal_uInt16(css::awt::Key::CAPSLOCK))
 #define KEY_NUMLOCK     (sal_uInt16(css::awt::Key::NUMLOCK))

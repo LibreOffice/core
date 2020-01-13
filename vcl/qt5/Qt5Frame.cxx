@@ -958,6 +958,9 @@ OUString Qt5Frame::GetKeyName(sal_uInt16 nKeyCode)
             case KEY_BRACKETRIGHT:
                 nRetCode = Qt::Key_BracketRight;
                 break;
+            case KEY_COLON:
+                nRetCode = Qt::Key_Colon;
+                break;
             case KEY_SEMICOLON:
                 nRetCode = Qt::Key_Semicolon;
                 break;

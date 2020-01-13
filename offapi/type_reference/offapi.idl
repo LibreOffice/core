@@ -430,6 +430,7 @@ module com {
      const short BRACKETRIGHT = 1316;
      const short C = 514;
      const short CAPSLOCK = 1312;
+     const short COLON = 1319;
      const short COMMA = 1292;
      const short CONTEXTMENU = 1305;
      const short COPY = 1298;
