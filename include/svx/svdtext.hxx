@@ -57,7 +57,7 @@ public:
 
     // default uses GetObjectItemSet, but may be overridden to
     // return a text-specific ItemSet
-    virtual const SfxItemSet& GetItemSet() const;
+    const SfxItemSet& GetItemSet() const;
 
     // This class does not need an own SdrModel reference - always
     // has the SdrTextObj working with so can use SdrModel::getSdrModelFromSdrObject()
