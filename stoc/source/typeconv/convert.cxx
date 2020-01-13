@@ -251,8 +251,7 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames { "com.sun.star.script.Converter" };
-    return seqNames;
+    return { "com.sun.star.script.Converter" };
 }
 
 
