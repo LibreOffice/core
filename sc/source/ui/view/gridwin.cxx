@@ -5947,9 +5947,6 @@ void ScGridWindow::updateOtherKitSelections() const
         if (!pOther)
             return;
 
-        const ScGridWindow *pGrid = pOther->GetViewData().GetActiveWin();
-        assert(pGrid);
-
         // Fetch pixels & convert for each view separately.
         tools::Rectangle aBoundingBox;
         std::vector<tools::Rectangle> aPixelRects;
