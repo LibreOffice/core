@@ -178,12 +178,11 @@ public:
 // is activated, so ToolbarPopupContainer is that widget and the
 // contents of the on-demand created WeldToolbarPopup is placed
 // within the ToolbarPopupContainer
-class SVT_DLLPUBLIC ToolbarPopupContainer
+class SVT_DLLPUBLIC ToolbarPopupContainer final
 {
 private:
     DECL_LINK(FocusHdl, weld::Widget&, void);
 
-protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xTopLevel;
     std::unique_ptr<weld::Container> m_xContainer;
@@ -199,9 +198,9 @@ public:
     void unsetPopover();
 };
 
-class SVT_DLLPUBLIC InterimToolbarPopup : public svtools::ToolbarPopup
+class SVT_DLLPUBLIC InterimToolbarPopup final : public svtools::ToolbarPopup
 {
-protected:
+private:
     VclPtr<vcl::Window> m_xBox;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;

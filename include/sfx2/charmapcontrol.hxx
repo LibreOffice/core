@@ -25,37 +25,38 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/charwin.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <vcl/button.hxx>
 #include <deque>
 
 class CharmapPopup;
 
 namespace com::sun::star::frame { class XFrame; }
 
-class SfxCharmapCtrl final : public svtools::ToolbarPopup
+class SfxCharmapCtrl final : public WeldToolbarPopup
 {
 public:
-    explicit SfxCharmapCtrl(CharmapPopup* pControl, vcl::Window* pParent);
-
+    explicit SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent);
     virtual ~SfxCharmapCtrl() override;
 
-    virtual void dispose() override;
-
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void GrabFocus() override;
 
 private:
-    VclPtr<SvxCharViewControl> m_pRecentCharView[16];
-    VclPtr<SvxCharViewControl> m_pFavCharView[16];
-    std::deque<OUString>   maRecentCharList;
-    std::deque<OUString>   maRecentCharFontList;
-    std::deque<OUString>   maFavCharList;
-    std::deque<OUString>   maFavCharFontList;
-    VclPtr<Button>         maDlgBtn;
-    bool                   mbNeedsInit = true;
+    rtl::Reference<CharmapPopup> m_xControl;
 
-    DECL_LINK(CharClickHdl, SvxCharViewControl*, void);
-    DECL_STATIC_LINK(SfxCharmapCtrl, FocusHdl, Control&, void);
-    DECL_LINK(OpenDlgHdl, Button*, void);
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
+
+    std::deque<OUString>   m_aRecentCharList;
+    std::deque<OUString>   m_aRecentCharFontList;
+    std::deque<OUString>   m_aFavCharList;
+    std::deque<OUString>   m_aFavCharFontList;
+
+    SvxCharView m_aRecentCharView[16];
+    SvxCharView m_aFavCharView[16];
+    std::unique_ptr<weld::Button> m_xDlgBtn;
+    std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
+    std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];
+
+    DECL_LINK(CharClickHdl, SvxCharView*, void);
+    DECL_LINK(OpenDlgHdl, weld::Button&, void);
 
     void            getFavCharacterList();
     void            updateFavCharControl();

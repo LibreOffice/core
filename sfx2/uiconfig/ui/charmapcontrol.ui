@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkWindow" id="charmapctrl">
+  <object class="GtkPopover" id="charmapctrl">
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
+    <property name="no_show_all">True</property>
+    <property name="border_width">4</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">3</property>
-        <property name="margin_right">3</property>
-        <property name="margin_top">3</property>
-        <property name="margin_bottom">3</property>
         <property name="resize_mode">queue</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
@@ -36,12 +29,14 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">start</property>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar1">
+              <object class="GtkDrawingArea" id="favchar1">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -49,11 +44,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar2">
+              <object class="GtkDrawingArea" id="favchar2">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -61,11 +57,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar4">
+              <object class="GtkDrawingArea" id="favchar4">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -73,11 +70,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar3">
+              <object class="GtkDrawingArea" id="favchar3">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -85,11 +83,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar5">
+              <object class="GtkDrawingArea" id="favchar5">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">4</property>
@@ -97,11 +96,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar6">
+              <object class="GtkDrawingArea" id="favchar6">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">5</property>
@@ -109,11 +109,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar7">
+              <object class="GtkDrawingArea" id="favchar7">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -121,11 +122,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar8">
+              <object class="GtkDrawingArea" id="favchar8">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -133,11 +135,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar9">
+              <object class="GtkDrawingArea" id="favchar9">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -145,11 +148,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar10">
+              <object class="GtkDrawingArea" id="favchar10">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -157,11 +161,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar11">
+              <object class="GtkDrawingArea" id="favchar11">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">4</property>
@@ -169,11 +174,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar12">
+              <object class="GtkDrawingArea" id="favchar12">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">5</property>
@@ -181,11 +187,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar13">
+              <object class="GtkDrawingArea" id="favchar13">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -193,11 +200,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar14">
+              <object class="GtkDrawingArea" id="favchar14">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -205,11 +213,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar15">
+              <object class="GtkDrawingArea" id="favchar15">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -217,11 +226,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="favchar16">
+              <object class="GtkDrawingArea" id="favchar16">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -257,13 +267,14 @@
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_homogeneous">True</property>
+            <property name="halign">start</property>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar1">
+              <object class="GtkDrawingArea" id="viewchar1">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -271,11 +282,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar2">
+              <object class="GtkDrawingArea" id="viewchar2">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -283,11 +295,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar4">
+              <object class="GtkDrawingArea" id="viewchar4">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -295,11 +308,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar3">
+              <object class="GtkDrawingArea" id="viewchar3">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -307,11 +321,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar5">
+              <object class="GtkDrawingArea" id="viewchar5">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">4</property>
@@ -319,11 +334,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar6">
+              <object class="GtkDrawingArea" id="viewchar6">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">5</property>
@@ -331,11 +347,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar16">
+              <object class="GtkDrawingArea" id="viewchar16">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -343,11 +360,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar15">
+              <object class="GtkDrawingArea" id="viewchar15">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -355,11 +373,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar14">
+              <object class="GtkDrawingArea" id="viewchar14">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -367,11 +386,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar13">
+              <object class="GtkDrawingArea" id="viewchar13">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -379,11 +399,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar12">
+              <object class="GtkDrawingArea" id="viewchar12">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">5</property>
@@ -391,11 +412,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar11">
+              <object class="GtkDrawingArea" id="viewchar11">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">4</property>
@@ -403,11 +425,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar10">
+              <object class="GtkDrawingArea" id="viewchar10">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -415,11 +438,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar9">
+              <object class="GtkDrawingArea" id="viewchar9">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -427,11 +451,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar8">
+              <object class="GtkDrawingArea" id="viewchar8">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -439,11 +464,12 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-SvxCharViewControl" id="viewchar7">
+              <object class="GtkDrawingArea" id="viewchar7">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
