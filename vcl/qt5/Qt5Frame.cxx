@@ -475,17 +475,25 @@ Size Qt5Frame::CalcDefaultSize()
     if (!m_bFullScreen)
     {
         const QScreen* pScreen = screen();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         aSize = bestmaxFrameSizeForScreenSize(
             toSize(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size()));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     else
     {
         if (!m_bFullScreenSpanAll)
+        {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             aSize = toSize(
                 QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
+            SAL_WNODEPRECATED_DECLARATIONS_POP
+        }
         else
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
         }
     }
@@ -1182,14 +1190,18 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
 
                 if (!m_bFullScreenSpanAll)
                 {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     screenGeo = QApplication::desktop()->screenGeometry(nScreen);
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     pWindow->setScreen(QApplication::screens()[nScreen]);
                 }
                 else // special case: fullscreen over all available screens
                 {
                     assert(m_bFullScreen);
                     // left-most screen
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     // entire virtual desktop
                     screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
                     pWindow->setScreen(QApplication::screens()[nLeftScreen]);
