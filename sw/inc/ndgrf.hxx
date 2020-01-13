@@ -37,13 +37,13 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 
     GraphicObject maGrfObj;
     std::unique_ptr<GraphicObject> mpReplacementGraphic;
-    tools::SvRef<sfx2::SvBaseLink> refLink;       ///< If graphics only as link then pointer is set.
-    Size nGrfSize;
-    bool bInSwapIn              :1;
+    tools::SvRef<sfx2::SvBaseLink> mxLink;       ///< If graphics only as link then pointer is set.
+    Size mnGrfSize;
+    bool mbInSwapIn              :1;
 
-    bool bChgTwipSize           :1;
-    bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
-    bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
+    bool mbChangeTwipSize           :1;
+    bool mbFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
+    bool mbScaleImageMap         :1; ///< Scale image map in SetTwipSize.
 
     std::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
@@ -92,17 +92,17 @@ public:
 
     bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
 
-    bool IsChgTwipSize() const           { return bChgTwipSize; }
+    bool IsChgTwipSize() const           { return mbChangeTwipSize; }
     void SetChgTwipSize( bool b)
     {
-        bChgTwipSize = b;
+        mbChangeTwipSize = b;
     }
 
-    bool IsFrameInPaint() const          { return bFrameInPaint; }
-    void SetFrameInPaint( bool b )       { bFrameInPaint = b; }
+    bool IsFrameInPaint() const          { return mbFrameInPaint; }
+    void SetFrameInPaint( bool b )       { mbFrameInPaint = b; }
 
-    bool IsScaleImageMap() const         { return bScaleImageMap; }
-    void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
+    bool IsScaleImageMap() const         { return mbScaleImageMap; }
+    void SetScaleImageMap( bool b )      { mbScaleImageMap = b; }
 
     /// in ndcopy.cxx
     virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const override;
@@ -124,10 +124,10 @@ public:
     virtual bool RestorePersistentData() override;
 
     /// Query link-data.
-    bool IsGrfLink() const                  { return refLink.is(); }
+    bool IsGrfLink() const                  { return mxLink.is(); }
     bool IsLinkedFile() const;
     bool IsLinkedDDE() const;
-    const tools::SvRef<sfx2::SvBaseLink>& GetLink() const    { return refLink; }
+    const tools::SvRef<sfx2::SvBaseLink>& GetLink() const    { return mxLink; }
     bool GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const;
     void ReleaseLink();
 
@@ -161,12 +161,12 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 
 inline bool SwGrfNode::IsLinkedFile() const
 {
-    return refLink.is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
+    return mxLink.is() && OBJECT_CLIENT_GRF == mxLink->GetObjType();
 }
 
 inline bool SwGrfNode::IsLinkedDDE() const
 {
-    return refLink.is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
+    return mxLink.is() && OBJECT_CLIENT_DDE == mxLink->GetObjType();
 }
 
 #endif
