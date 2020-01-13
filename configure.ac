@@ -5660,11 +5660,6 @@ find_msvc_x64_dlls()
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC142.CRT"
                 break
             fi
-            echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC150.CRT" >&5
-            if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"; then
-                msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"
-                break
-            fi
         done
         ;;
     esac
@@ -7362,7 +7357,9 @@ if test $_os = "WINNT"; then
     MSVC_DLLS="$msvcdlls"
     MSM_PATH=`win_short_path_for_make "$msmdir"`
     # MSVC 15.3 changed it to VC141
-    if echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
+    if echo "$msvcdllpath" | grep -q "VC142.CRT$"; then
+        SCPDEFS="$SCPDEFS -DWITH_VC142_REDIST"
+    elif echo "$msvcdllpath" | grep -q "VC141.CRT$"; then
         SCPDEFS="$SCPDEFS -DWITH_VC141_REDIST"
     else
         SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"

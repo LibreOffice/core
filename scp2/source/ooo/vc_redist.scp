@@ -18,57 +18,34 @@
 
 #include "macros.inc"
 
-#if defined(WITH_VC140_REDIST)
+#if defined(WITH_VC142_REDIST)
+    #define WINDOWS_X64_MERGEMODULE gid_MergeModule_Microsoft_VC142_CRT_x64
+    #define WINDOWS_X64_MERGEMODULE_FILE "Microsoft_VC142_CRT_x64.msm"
+    #define WINDOWS_X86_MERGEMODULE gid_MergeModule_Microsoft_VC142_CRT_x86
+    #define WINDOWS_X86_MERGEMODULE_FILE "Microsoft_VC142_CRT_x86.msm"
+#elif defined(WITH_VC141_REDIST)
+    #define WINDOWS_X64_MERGEMODULE gid_MergeModule_Microsoft_VC141_CRT_x64
+    #define WINDOWS_X64_MERGEMODULE_FILE "Microsoft_VC141_CRT_x64.msm"
+    #define WINDOWS_X86_MERGEMODULE gid_MergeModule_Microsoft_VC141_CRT_x86
+    #define WINDOWS_X86_MERGEMODULE_FILE "Microsoft_VC141_CRT_x86.msm"
+#endif
 
-#if defined WINDOWS_X64
-MergeModule gid_MergeModule_Microsoft_VC140_CRT_x64
-#else
-MergeModule gid_MergeModule_Microsoft_VC140_CRT_x86
-#endif
+#if defined(WINDOWS_X86_MERGEMODULE)
+
+MergeModule WINDOWS_X86_MERGEMODULE
     Feature = gm_Root;
-#if defined WINDOWS_X64
-    Name = "Microsoft_VC140_CRT_x64.msm";
-#else
-    Name = "Microsoft_VC140_CRT_x86.msm";
-#endif
+    Name = WINDOWS_X86_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
     ComponentCondition = "VC_REDIST=1";
 End
 
 #endif
 
-#if defined(WITH_VC150_REDIST)
+#if defined(WINDOWS_X64) && defined(WINDOWS_X64_MERGEMODULE)
 
-#if defined WINDOWS_X64
-MergeModule gid_MergeModule_Microsoft_VC150_CRT_x64
-#else
-MergeModule gid_MergeModule_Microsoft_VC150_CRT_x86
-#endif
+MergeModule WINDOWS_X64_MERGEMODULE
     Feature = gm_Root;
-#if defined WINDOWS_X64
-    Name = "Microsoft_VC150_CRT_x64.msm";
-#else
-    Name = "Microsoft_VC150_CRT_x86.msm";
-#endif
-    RootDir = "TARGETDIR";
-    ComponentCondition = "VC_REDIST=1";
-End
-
-#endif
-
-#if defined(WITH_VC141_REDIST)
-
-#if defined WINDOWS_X64
-MergeModule gid_MergeModule_Microsoft_VC141_CRT_x64
-#else
-MergeModule gid_MergeModule_Microsoft_VC141_CRT_x86
-#endif
-    Feature = gm_Root;
-#if defined WINDOWS_X64
-    Name = "Microsoft_VC141_CRT_x64.msm";
-#else
-    Name = "Microsoft_VC141_CRT_x86.msm";
-#endif
+    Name = WINDOWS_X64_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
     ComponentCondition = "VC_REDIST=1";
 End
