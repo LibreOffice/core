@@ -878,7 +878,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     else
         xContext.set( CreateFastContext( Element, Attribs ) );
 
-    SAL_WARN_IF(!xContext.is(), "xmloff.core", "No fast context for element " << getNameFromToken(Element));
+    SAL_INFO_IF(!xContext.is(), "xmloff.core", "No fast context for element " << getNameFromToken(Element));
     if ( !xContext.is() )
         xContext.set( new SvXMLImportContext( *this ) );
 
