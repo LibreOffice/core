@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_fonts \
+	Package_resource_fonts \
 	Package_gallbullets \
 	Package_gallhtmlexpo \
 	Package_gallmytheme \
