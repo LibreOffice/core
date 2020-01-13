@@ -30,83 +30,69 @@
 
 namespace svx {
 
-TextUnderlineControl::TextUnderlineControl(TextUnderlinePopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "TextUnderlineControl", "svx/ui/textunderlinecontrol.ui")
+TextUnderlineControl::TextUnderlineControl(TextUnderlinePopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/textunderlinecontrol.ui", "TextUnderlineControl")
+    , mxNone(m_xBuilder->weld_button("none"))
+    , mxSingle(m_xBuilder->weld_button("single"))
+    , mxDouble(m_xBuilder->weld_button("double"))
+    , mxBold(m_xBuilder->weld_button("bold"))
+    , mxDot(m_xBuilder->weld_button("dot"))
+    , mxDotBold(m_xBuilder->weld_button("dotbold"))
+    , mxDash(m_xBuilder->weld_button("dash"))
+    , mxDashLong(m_xBuilder->weld_button("dashlong"))
+    , mxDashDot(m_xBuilder->weld_button("dashdot"))
+    , mxDashDotDot(m_xBuilder->weld_button("dashdotdot"))
+    , mxWave(m_xBuilder->weld_button("wave"))
+    , mxMoreOptions(m_xBuilder->weld_button("moreoptions"))
+    , mxControl(pControl)
 {
-    get(maNone, "none");
-    get(maSingle, "single");
-    get(maDouble, "double");
-    get(maBold, "bold");
-    get(maDot, "dot");
-    get(maDotBold, "dotbold");
-    get(maDash, "dash");
-    get(maDashLong, "dashlong");
-    get(maDashDot, "dashdot");
-    get(maDashDotDot, "dashdotdot");
-    get(maWave, "wave");
-    get(maMoreOptions, "moreoptions");
+    mxMoreOptions->set_help_id(HID_UNDERLINE_BTN);
 
-    maMoreOptions->SetHelpId(HID_UNDERLINE_BTN);
+    Link<weld::Button&,void> aLink = LINK(this, TextUnderlineControl, PBClickHdl);
+    mxNone->connect_clicked(aLink);
+    mxSingle->connect_clicked(aLink);
+    mxDouble->connect_clicked(aLink);
+    mxBold->connect_clicked(aLink);
+    mxDot->connect_clicked(aLink);
+    mxDotBold->connect_clicked(aLink);
+    mxDash->connect_clicked(aLink);
+    mxDashLong->connect_clicked(aLink);
+    mxDashDot->connect_clicked(aLink);
+    mxDashDotDot->connect_clicked(aLink);
+    mxWave->connect_clicked(aLink);
+    mxMoreOptions->connect_clicked(aLink);
+}
 
-    Link<Button*,void> aLink = LINK(this, TextUnderlineControl, PBClickHdl);
-    maNone->SetClickHdl(aLink);
-    maSingle->SetClickHdl(aLink);
-    maDouble->SetClickHdl(aLink);
-    maBold->SetClickHdl(aLink);
-    maDot->SetClickHdl(aLink);
-    maDotBold->SetClickHdl(aLink);
-    maDash->SetClickHdl(aLink);
-    maDashLong->SetClickHdl(aLink);
-    maDashDot->SetClickHdl(aLink);
-    maDashDotDot->SetClickHdl(aLink);
-    maWave->SetClickHdl(aLink);
-    maMoreOptions->SetClickHdl(aLink);
+void TextUnderlineControl::GrabFocus()
+{
+    mxNone->grab_focus();
 }
 
 TextUnderlineControl::~TextUnderlineControl()
 {
-    disposeOnce();
 }
 
-void TextUnderlineControl::dispose()
+FontLineStyle TextUnderlineControl::getLineStyle(const weld::Button& rButton)
 {
-    maNone.clear();
-    maSingle.clear();
-    maDouble.clear();
-    maBold.clear();
-    maDot.clear();
-    maDotBold.clear();
-    maDash.clear();
-    maDashLong.clear();
-    maDashDot.clear();
-    maDashDotDot.clear();
-    maWave.clear();
-    maMoreOptions.clear();
-
-    ToolbarPopup::dispose();
-}
-
-FontLineStyle TextUnderlineControl::getLineStyle(Button const * pButton)
-{
-    if(pButton == maSingle)
+    if (&rButton == mxSingle.get())
         return LINESTYLE_SINGLE;
-    else if(pButton == maDouble)
+    else if (&rButton == mxDouble.get())
         return LINESTYLE_DOUBLE;
-    else if(pButton == maBold)
+    else if (&rButton == mxBold.get())
         return LINESTYLE_BOLD;
-    else if(pButton == maDot)
+    else if (&rButton == mxDot.get())
         return LINESTYLE_DOTTED;
-    else if(pButton == maDotBold)
+    else if (&rButton == mxDotBold.get())
         return LINESTYLE_BOLDDOTTED;
-    else if(pButton == maDash)
+    else if (&rButton == mxDash.get())
         return LINESTYLE_DASH;
-    else if(pButton == maDashLong)
+    else if (&rButton == mxDashLong.get())
         return LINESTYLE_LONGDASH;
-    else if(pButton == maDashDot)
+    else if (&rButton == mxDashDot.get())
         return LINESTYLE_DASHDOT;
-    else if(pButton == maDashDotDot)
+    else if (&rButton == mxDashDotDot.get())
         return LINESTYLE_DASHDOTDOT;
-    else if(pButton == maWave)
+    else if (&rButton == mxWave.get())
         return LINESTYLE_WAVE;
 
     return LINESTYLE_NONE;
@@ -129,27 +115,24 @@ Color GetUnderlineColor()
 
 }
 
-IMPL_LINK(TextUnderlineControl, PBClickHdl, Button*, pButton, void)
+IMPL_LINK(TextUnderlineControl, PBClickHdl, weld::Button&, rButton, void)
 {
-    if(pButton == maMoreOptions)
+    if (&rButton == mxMoreOptions.get())
     {
         SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
         pDisp->Execute(SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON);
-
-        EndPopupMode();
     }
     else
     {
-        const FontLineStyle eUnderline = getLineStyle(pButton);
+        const FontLineStyle eUnderline = getLineStyle(rButton);
 
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
         aLineItem.SetColor(GetUnderlineColor());
 
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
                SfxCallMode::RECORD, { &aLineItem });
-
-        EndPopupMode();
     }
+    mxControl->EndPopupMode();
 }
 
 }

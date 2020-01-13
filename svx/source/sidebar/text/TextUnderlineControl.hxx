@@ -21,39 +21,39 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 
 #include <sfx2/bindings.hxx>
-#include <vcl/button.hxx>
 #include <vcl/vclenum.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svtools/valueset.hxx>
 
 namespace svx {
 
 class TextUnderlinePopup;
 
-class TextUnderlineControl final : public svtools::ToolbarPopup
+class TextUnderlineControl final : public WeldToolbarPopup
 {
 public:
-    explicit TextUnderlineControl(TextUnderlinePopup* pControl, vcl::Window* pParent);
+    explicit TextUnderlineControl(TextUnderlinePopup* pControl, weld::Widget* pParent);
+    virtual void GrabFocus() override;
     virtual ~TextUnderlineControl() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<PushButton> maNone;
-    VclPtr<PushButton> maSingle;
-    VclPtr<PushButton> maDouble;
-    VclPtr<PushButton> maBold;
-    VclPtr<PushButton> maDot;
-    VclPtr<PushButton> maDotBold;
-    VclPtr<PushButton> maDash;
-    VclPtr<PushButton> maDashLong;
-    VclPtr<PushButton> maDashDot;
-    VclPtr<PushButton> maDashDotDot;
-    VclPtr<PushButton> maWave;
-    VclPtr<PushButton> maMoreOptions;
+    std::unique_ptr<weld::Button> mxNone;
+    std::unique_ptr<weld::Button> mxSingle;
+    std::unique_ptr<weld::Button> mxDouble;
+    std::unique_ptr<weld::Button> mxBold;
+    std::unique_ptr<weld::Button> mxDot;
+    std::unique_ptr<weld::Button> mxDotBold;
+    std::unique_ptr<weld::Button> mxDash;
+    std::unique_ptr<weld::Button> mxDashLong;
+    std::unique_ptr<weld::Button> mxDashDot;
+    std::unique_ptr<weld::Button> mxDashDotDot;
+    std::unique_ptr<weld::Button> mxWave;
+    std::unique_ptr<weld::Button> mxMoreOptions;
 
-    FontLineStyle getLineStyle(Button const * pButton);
+    rtl::Reference<TextUnderlinePopup> mxControl;
 
-    DECL_LINK(PBClickHdl, Button*, void);
+    FontLineStyle getLineStyle(const weld::Button& rButton);
+
+    DECL_LINK(PBClickHdl, weld::Button&, void);
 };
 }
 

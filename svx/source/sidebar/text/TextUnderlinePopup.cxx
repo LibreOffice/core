@@ -42,9 +42,19 @@ void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& 
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-VclPtr<vcl::Window> TextUnderlinePopup::createPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> TextUnderlinePopup::weldPopupWindow()
 {
-    return VclPtr<TextUnderlineControl>::Create(this, pParent);
+    return std::make_unique<TextUnderlineControl>(this, m_pToolbar);
+}
+
+VclPtr<vcl::Window> TextUnderlinePopup::createPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<TextUnderlineControl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString TextUnderlinePopup::getImplementationName()
