@@ -21,6 +21,7 @@
 
 #include <sys/stat.h>
 #include <limits.h>
+#include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
@@ -29,51 +30,47 @@
 #include <tools/urlobj.hxx>
 #include <unx/helper.hxx>
 
+#include <tuple>
+
 using ::rtl::Bootstrap;
 
 namespace psp {
 
 OUString getOfficePath( whichOfficePath ePath )
 {
-    static OUString aInstallationRootPath;
-    static OUString aUserPath;
-    static OUString aConfigPath;
-    static bool bOnce = false;
+    static const auto aPaths = [] {
+        OUString sRoot, sUser, sConfig;
+        Bootstrap::get("BRAND_BASE_DIR", sRoot);
+        Bootstrap aBootstrap(sRoot + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap"));
+        aBootstrap.getFrom("UserInstallation", sUser);
+        aBootstrap.getFrom("CustomDataUrl", sConfig);
+        OUString aUPath = sUser + "/user/psprint";
+        if (sRoot.startsWith("file://"))
+        {
+            OUString aSysPath;
+            if (osl::FileBase::getSystemPathFromFileURL(sRoot, aSysPath) == osl::FileBase::E_None)
+                sRoot = aSysPath;
+        }
+        if (sUser.startsWith("file://"))
+        {
+            OUString aSysPath;
+            if (osl::FileBase::getSystemPathFromFileURL(sUser, aSysPath) == osl::FileBase::E_None)
+                sUser = aSysPath;
+        }
+        if (sConfig.startsWith("file://"))
+        {
+            OUString aSysPath;
+            if (osl::FileBase::getSystemPathFromFileURL(sConfig, aSysPath) == osl::FileBase::E_None)
+                sConfig = aSysPath;
+        }
 
-    if( ! bOnce )
-    {
-        bOnce = true;
-        OUString aIni;
-        Bootstrap::get( "BRAND_BASE_DIR", aInstallationRootPath );
-        aIni = aInstallationRootPath + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" );
-        Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( "CustomDataUrl", aConfigPath );
-        aBootstrap.getFrom( "UserInstallation", aUserPath );
-        OUString aUPath = aUserPath;
-
-        if( aConfigPath.startsWith( "file://" ) )
-        {
-            OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aConfigPath.pData, &aSysPath.pData ) == osl_File_E_None )
-                aConfigPath = aSysPath;
-        }
-        if( aInstallationRootPath.startsWith( "file://" ) )
-        {
-            OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aInstallationRootPath.pData, &aSysPath.pData ) == osl_File_E_None )
-                aInstallationRootPath = aSysPath;
-        }
-        if( aUserPath.startsWith( "file://" ) )
-        {
-            OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aUserPath.pData, &aSysPath.pData ) == osl_File_E_None )
-                aUserPath = aSysPath;
-        }
         // ensure user path exists
-        aUPath += "/user/psprint";
         SAL_INFO("vcl.fonts", "Trying to create: " << aUPath);
-        osl_createDirectoryPath( aUPath.pData, nullptr, nullptr );
-    }
+        osl::Directory::createPath(aUPath);
+
+        return std::make_tuple(sRoot, sUser, sConfig);
+    }();
+    const auto& [aInstallationRootPath, aUserPath, aConfigPath] = aPaths;
 
     switch( ePath )
     {
