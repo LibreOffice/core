@@ -171,6 +171,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         m_xParaTemplBox->append_text(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
+    m_xParaTemplBox->make_sorted();
 
     OUString sStr;
     SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
@@ -205,6 +206,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         if (m_xPageTemplBox->find_text(rPageDesc.GetName()) == -1)
             m_xPageTemplBox->append_text(rPageDesc.GetName());
     }
+    m_xPageTemplBox->make_sorted();
 
     m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*pSh->GetDoc())->GetName());
 }
