@@ -498,6 +498,7 @@ ShapeContextHandler::getShape()
                 pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxSavedShape = xResult;
+                mxWpgContext.clear();
             }
         }
         else if (mpShape.get() != nullptr)
