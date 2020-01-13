@@ -19,6 +19,7 @@
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/charmapcontrol.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld.hxx>
 
 CharmapPopup::CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
@@ -39,9 +40,19 @@ void CharmapPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArgum
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-VclPtr<vcl::Window> CharmapPopup::createPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> CharmapPopup::weldPopupWindow()
 {
-    return VclPtr<SfxCharmapCtrl>::Create(this, pParent);
+    return std::make_unique<SfxCharmapCtrl>(this, m_pToolbar);
+}
+
+VclPtr<vcl::Window> CharmapPopup::createPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<SfxCharmapCtrl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString CharmapPopup::getImplementationName()
