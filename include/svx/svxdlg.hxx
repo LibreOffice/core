@@ -216,12 +216,6 @@ public:
     virtual bool IsSlideScope() = 0;
 };
 
-class AbstractSvxMessDialog : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractSvxMessDialog() override = default;
-};
-
 class AbstractSvxMultiPathDialog : public VclAbstractDialog
 {
 protected:
