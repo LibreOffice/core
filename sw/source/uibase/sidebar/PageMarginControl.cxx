@@ -91,7 +91,7 @@ namespace
     }
 }
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageMarginControl::PageMarginControl( sal_uInt16 nId, vcl::Window* pParent )
     : SfxPopupWindow( nId, pParent, "PageMarginControl", "modules/swriter/ui/pagemargincontrol.ui" )
@@ -603,6 +603,6 @@ void PageMarginControl::StoreUserCustomValues()
     aWinOpt5.SetUserData( aSeq );
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

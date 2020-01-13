@@ -41,9 +41,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         namespace {
 
@@ -459,12 +457,9 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void create2DDecompositionOfGraphic(
             Primitive2DContainer& rContainer,
@@ -688,7 +683,6 @@ namespace drawinglayer
             return aRetval;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

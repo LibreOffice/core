@@ -26,9 +26,7 @@
 #include <com/sun/star/i18n/CharType.hpp>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         TextBreakupHelper::TextBreakupHelper(const TextSimplePortionPrimitive2D& rSource)
         :   mrSource(rSource),
@@ -276,7 +274,6 @@ namespace drawinglayer
             return mxResult;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

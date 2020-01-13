@@ -27,8 +27,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
@@ -285,7 +284,6 @@ void TextBoxContext::onEndElement()
     }
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

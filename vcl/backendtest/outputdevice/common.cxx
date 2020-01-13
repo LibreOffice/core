@@ -12,8 +12,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <salgdi.hxx>
 
-namespace vcl {
-namespace test {
+namespace vcl::test {
 
 namespace
 {
@@ -469,6 +468,6 @@ TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
     return checkRectangles(rBitmap, aExpected);
 }
 
-}} // end namespace vcl::test
+} // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

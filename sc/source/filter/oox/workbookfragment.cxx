@@ -73,8 +73,7 @@
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::table;
@@ -628,7 +627,6 @@ void WorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, sal_
     getPivotCaches().registerPivotCacheFragment( nCacheId, getFragmentPathFromRelId( rRelId ) );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

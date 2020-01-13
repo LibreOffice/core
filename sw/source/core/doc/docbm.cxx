@@ -530,7 +530,7 @@ void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& r
     pam.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(pam);
 }
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     MarkManager::MarkManager(SwDoc& rDoc)
         : m_vAllMarks()
@@ -1611,7 +1611,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-}} // namespace ::sw::mark
+} // namespace ::sw::mark
 
 namespace
 {

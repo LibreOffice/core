@@ -35,9 +35,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonHairlinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -82,13 +80,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonHairlinePrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonMarkerPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -146,13 +141,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONMARKERPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonStrokePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -222,13 +214,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -261,13 +250,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonColorPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -325,13 +311,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonGradientPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -395,13 +378,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonHatchPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonGraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -508,13 +488,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonGraphicPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PolyPolygonSelectionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -610,7 +587,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolyPolygonSelectionPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

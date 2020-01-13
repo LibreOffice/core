@@ -19,7 +19,7 @@
 
 #include <model/SlsVisualState.hxx>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 VisualState::VisualState (const sal_Int32 nPageId)
     : mnPageId(nPageId),
@@ -39,6 +39,6 @@ void VisualState::SetLocationOffset (const Point& rOffset)
     }
 }
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,9 +33,7 @@
 #include <vcl/settings.hxx>
 
 
-namespace drawinglayer
-{
-namespace primitive2d
+namespace drawinglayer::primitive2d
 {
 
 OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
@@ -121,11 +119,9 @@ bool OverlayStaticRectanglePrimitive::operator==(const BasePrimitive2D& rPrimiti
 
 ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
 
-}} // end of namespace drawinglayer::primitive2d
+} // end of namespace drawinglayer::primitive2d
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         OverlayBitmapExPrimitive::OverlayBitmapExPrimitive(
             const BitmapEx& rBitmapEx,
@@ -205,13 +201,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayBitmapExPrimitive, PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         OverlayCrosshairPrimitive::OverlayCrosshairPrimitive(
             const basegfx::B2DPoint& rBasePosition,
@@ -273,13 +266,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayCrosshairPrimitive, PRIMITIVE2D_ID_OVERLAYCROSSHAIRPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         OverlayRectanglePrimitive::OverlayRectanglePrimitive(
             const basegfx::B2DRange& rObjectRange,
@@ -406,13 +396,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         OverlayHelplineStripedPrimitive::OverlayHelplineStripedPrimitive(
             const basegfx::B2DPoint& rBasePosition,
@@ -517,13 +504,10 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayHelplineStripedPrimitive, PRIMITIVE2D_ID_OVERLAYHELPLINESTRIPEDPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         OverlayRollingRectanglePrimitive::OverlayRollingRectanglePrimitive(
             const basegfx::B2DRange& aRollingRectangle,
@@ -608,7 +592,6 @@ namespace drawinglayer
 
         ImplPrimitive2DIDBlock(OverlayRollingRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

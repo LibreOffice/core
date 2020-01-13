@@ -9,11 +9,7 @@
 
 #include <wrapper/EventHandler.hxx>
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 EventHandler::EventHandler()
     : ::osl::Thread()
@@ -40,8 +36,6 @@ void EventHandler::run()
 
         callback();
     } while ( true );
-}
-}
 }
 }
 

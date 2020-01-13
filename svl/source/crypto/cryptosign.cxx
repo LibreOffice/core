@@ -880,9 +880,7 @@ bool CreateSigningCertificateAttribute(void const * pDerEncoded, int nDerEncoded
 } // anonymous namespace
 #endif //_WIN32
 
-namespace svl {
-
-namespace crypto {
+namespace svl::crypto {
 
 static int AsHex(char ch)
 {
@@ -2427,8 +2425,6 @@ bool Signing::Verify(SvStream& rStream,
     (void)rInformation;
     return false;
 #endif
-}
-
 }
 
 }

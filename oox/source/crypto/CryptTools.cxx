@@ -26,8 +26,7 @@
 #include <sechash.h>
 #endif // USE_TLS_NSS
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 #if USE_TLS_OPENSSL
 struct CryptoImpl
@@ -481,7 +480,6 @@ std::vector<sal_uInt8> CryptoHash::finalize()
     return aHash;
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

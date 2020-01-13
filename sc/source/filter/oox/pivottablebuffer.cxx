@@ -57,8 +57,7 @@
 #include <documentimport.hxx>
 #include <workbooksettings.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -1454,7 +1453,6 @@ void PivotTableBuffer::finalizeImport()
     maTables.forEachMem( &PivotTable::finalizeImport );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

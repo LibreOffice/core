@@ -58,7 +58,7 @@ namespace {
     typedef std::map < FrameKey, SidebarWinContainer > FrameSidebarWinContainer_;
 }
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 class FrameSidebarWinContainer : public FrameSidebarWinContainer_
 {
@@ -167,6 +167,6 @@ void SwFrameSidebarWinContainer::getAll( const SwFrame& rFrame,
     }
 }
 
-} } // eof of namespace sw::sidebarwindows::
+} // eof of namespace sw::sidebarwindows::
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 // basic constructor.
 ViewObjectContactRedirector::ViewObjectContactRedirector()
@@ -40,6 +40,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactRedirector::cre
     return rOriginal.createPrimitive2DSequence(rDisplayInfo);
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

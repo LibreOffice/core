@@ -23,7 +23,7 @@
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/toolbox.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 VclPtr<CheckBox> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
 {
@@ -35,6 +35,6 @@ VclPtr<ImageRadioButton> ControlFactory::CreateTabItem (vcl::Window* pParentWind
     return VclPtr<TabItem>::Create(pParentWindow);
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

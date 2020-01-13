@@ -28,9 +28,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         ImplBitmapCanvas::ImplBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& rCanvas ) :
             ImplCanvas( rCanvas ),
@@ -57,6 +55,5 @@ namespace cppcanvas
             return BitmapCanvasSharedPtr( new ImplBitmapCanvas( *this ) );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

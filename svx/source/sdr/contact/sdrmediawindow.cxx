@@ -26,7 +26,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 
 SdrMediaWindow::SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact ) :
@@ -169,6 +169,6 @@ void SdrMediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

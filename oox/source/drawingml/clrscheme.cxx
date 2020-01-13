@@ -23,7 +23,7 @@
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 bool ClrMap::getColorMap( sal_Int32& nClrToken )
 {
@@ -102,6 +102,6 @@ bool ClrScheme::getColorByIndex(size_t nIndex, ::Color& rColor) const
     return true;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

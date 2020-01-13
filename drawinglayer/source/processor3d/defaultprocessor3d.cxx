@@ -41,9 +41,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         void DefaultProcessor3D::impRenderGradientTexturePrimitive3D(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence)
         {
@@ -600,7 +598,6 @@ namespace drawinglayer
         DefaultProcessor3D::~DefaultProcessor3D()
         {
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

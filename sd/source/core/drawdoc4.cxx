@@ -105,7 +105,7 @@
 #include <app.hrc>
 #include <strings.hxx>
 
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
+namespace com::sun::star::linguistic2 { class XHyphenator; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

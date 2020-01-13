@@ -27,8 +27,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::oox::drawingml;
 
@@ -288,7 +287,6 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
     return aEmuPoint;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

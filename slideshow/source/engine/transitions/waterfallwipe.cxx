@@ -25,8 +25,7 @@
 #include "transitiontools.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 WaterfallWipe::WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis )
     : m_flipOnYAxis( flipOnYAxis )
@@ -61,7 +60,6 @@ WaterfallWipe::WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis )
                          : ::basegfx::B2DPolyPolygon(poly);
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

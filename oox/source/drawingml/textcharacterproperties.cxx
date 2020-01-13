@@ -38,8 +38,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSourceProps )
 {
@@ -209,7 +208,6 @@ float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
     return moHeight.has() ? GetFontHeight( moHeight.get() ) : fDefault;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

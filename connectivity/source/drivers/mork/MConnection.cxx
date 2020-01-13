@@ -31,7 +31,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 
-namespace connectivity { namespace mork {
+namespace connectivity::mork {
 
 static const int defaultScope = 0x80;
 
@@ -372,6 +372,6 @@ void OConnection::throwSQLException( const char* pErrorResourceId, const Referen
     throwSQLException(aError, _rxContext);
 }
 
-} } // namespace connectivity::mork
+} // namespace connectivity::mork
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

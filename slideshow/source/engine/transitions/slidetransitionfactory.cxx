@@ -45,8 +45,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -1109,7 +1108,6 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
     return NumberAnimationSharedPtr();
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

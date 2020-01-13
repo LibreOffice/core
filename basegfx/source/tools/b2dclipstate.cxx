@@ -28,9 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 
-namespace basegfx
-{
-namespace utils
+namespace basegfx::utils
 {
     class ImplB2DClipState
     {
@@ -477,7 +475,6 @@ namespace utils
     }
 
 
-} // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

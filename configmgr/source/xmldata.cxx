@@ -33,9 +33,7 @@
 #include "type.hxx"
 #include "xmldata.hxx"
 
-namespace configmgr {
-
-namespace xmldata {
+namespace configmgr::xmldata {
 
 Type parseType(
     xmlreader::XmlReader const & reader, xmlreader::Span const & text)
@@ -128,8 +126,6 @@ OUString parseTemplateReference(
             "missing node-type attribute");
     }
     return Data::fullTemplateName(component, nodeType);
-}
-
 }
 
 }

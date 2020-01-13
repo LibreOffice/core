@@ -36,8 +36,8 @@
 
 #include <com/sun/star/container/XChild.hpp>
 
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XSpellChecker1; } } } }
+namespace com::sun::star::linguistic2 { class XHyphenator; }
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 
 using namespace ::com::sun::star;
 

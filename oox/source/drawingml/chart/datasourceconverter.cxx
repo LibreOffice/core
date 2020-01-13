@@ -24,9 +24,7 @@
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <oox/token/properties.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
@@ -99,8 +97,6 @@ Reference< XDataSequence > DataSourceConverter::createDataSequence( const OUStri
     return xDataSeq;
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

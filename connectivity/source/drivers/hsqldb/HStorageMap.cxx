@@ -29,10 +29,7 @@
 #include <uno/mapping.hxx>
 #include <algorithm>
 
-namespace connectivity
-{
-
-    namespace hsqldb
+namespace connectivity::hsqldb
     {
 
         using namespace ::com::sun::star::uno;
@@ -358,10 +355,7 @@ namespace connectivity
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
 
-    }   // namespace hsqldb
-
-
-}
+    }
 // namespace connectivity
 
 

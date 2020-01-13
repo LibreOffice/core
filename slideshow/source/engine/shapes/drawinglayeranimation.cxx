@@ -899,8 +899,7 @@ void ActivityImpl::end()
 
 } // anon namespace
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 std::shared_ptr<Activity> createDrawingLayerAnimActivity(
     SlideShowContext const& rContext,
@@ -928,7 +927,6 @@ std::shared_ptr<Activity> createDrawingLayerAnimActivity(
     return pActivity;
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

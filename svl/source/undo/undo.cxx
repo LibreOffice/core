@@ -189,7 +189,7 @@ struct SfxUndoManager_Data
     SfxUndoManager_Data & operator= (const SfxUndoManager_Data &) = delete;
 };
 
-namespace svl { namespace undo { namespace impl
+namespace svl::undo::impl
 {
     class LockGuard
     {
@@ -335,7 +335,7 @@ namespace svl { namespace undo { namespace impl
                 ::std::for_each( aListenersCopy.begin(), aListenersCopy.end(), notifier );
         }
     }
-} } }
+}
 
 using namespace ::svl::undo::impl;
 

@@ -40,9 +40,7 @@ static void validateInput(const std::vector<double>& rKeyStops)
 #endif
 }
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         KeyStopLerp::KeyStopLerp( const std::vector<double>& rKeyStops ) :
             maKeyStops(rKeyStops),
@@ -89,6 +87,5 @@ namespace basegfx
                 std::clamp(fRawLerp,0.0,1.0));
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

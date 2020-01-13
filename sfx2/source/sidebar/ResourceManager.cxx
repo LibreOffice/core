@@ -43,7 +43,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 namespace
 {
@@ -784,6 +784,6 @@ void ResourceManager::disposeDecks()
     }
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,7 +16,7 @@
 
 #include <svx/tbcontrl.hxx>
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 namespace {
 
@@ -104,6 +104,6 @@ void ChartColorWrapper::updateData()
     mpControl->statusChanged(aEvent);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

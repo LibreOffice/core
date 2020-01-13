@@ -24,9 +24,7 @@
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <vcl/graph.hxx>
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpFillGraphicAttribute
         {
@@ -152,7 +150,6 @@ namespace drawinglayer
             return mpFillGraphicAttribute->getOffsetY();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

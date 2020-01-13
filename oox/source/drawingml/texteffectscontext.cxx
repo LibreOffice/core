@@ -15,7 +15,7 @@
 
 #include <map>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 namespace
 {
@@ -314,6 +314,6 @@ ContextHandlerRef TextEffectsContext::onCreateContext(sal_Int32 aElementToken, c
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

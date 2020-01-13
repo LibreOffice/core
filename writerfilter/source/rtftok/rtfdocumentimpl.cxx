@@ -75,9 +75,7 @@ util::DateTime getDateTimeFromUserProp(const OUString& rString)
 }
 } // anonymous namespace
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 Id getParagraphBorder(sal_uInt32 nIndex)
 {
@@ -3830,7 +3828,6 @@ bool RTFFrame::hasProperties() const
            || m_nVertAnchor != 0;
 }
 
-} // namespace rtftok
 } // namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

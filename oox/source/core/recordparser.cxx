@@ -28,8 +28,7 @@
 #include <osl/diagnose.h>
 #include <oox/core/fragmenthandler.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -323,7 +322,6 @@ const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
     return (aIt == maEndMap.end()) ? nullptr : &aIt->second;
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

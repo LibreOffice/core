@@ -28,8 +28,8 @@
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace com::sun::star::table { class XCellRange; }
+namespace com::sun::star::util { class XNumberFormats; }
 
 class PivotChartTest : public ChartTest
 {

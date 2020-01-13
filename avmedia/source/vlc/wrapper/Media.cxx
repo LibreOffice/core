@@ -17,11 +17,7 @@
 
 struct libvlc_instance_t;
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 namespace
 {
@@ -107,8 +103,6 @@ int Media::getDuration() const
 Media::~Media()
 {
     libvlc_media_release( mMedia );
-}
-}
 }
 }
 

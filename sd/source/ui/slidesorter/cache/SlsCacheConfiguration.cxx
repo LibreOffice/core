@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 namespace
 {
@@ -140,6 +140,6 @@ void CacheConfiguration::Shutdown()
     assert(mpWeakInstance.expired()); // ensure m_ReleaseTimer is destroyed
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -642,9 +642,7 @@ namespace
     }
 }
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         SdrFrameBorderData::SdrConnectStyleData::SdrConnectStyleData(
             const svx::frame::Style& rStyle,
@@ -748,12 +746,9 @@ namespace drawinglayer
 
             return fRetval;
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SdrFrameBorderPrimitive2D::create2DDecomposition(
             Primitive2DContainer& rContainer,
@@ -925,7 +920,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrFrameBorderPrimitive2D, PRIMITIVE2D_ID_SDRFRAMEBORDERTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

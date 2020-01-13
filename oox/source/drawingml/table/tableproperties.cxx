@@ -40,7 +40,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::table;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableProperties::TableProperties()
 : mbFirstRow( false )
@@ -259,6 +259,6 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
         }
     }
 }
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

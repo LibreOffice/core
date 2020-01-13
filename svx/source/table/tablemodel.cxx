@@ -52,7 +52,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 
 // removes the given range from a vector
@@ -1112,6 +1112,6 @@ void TableModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

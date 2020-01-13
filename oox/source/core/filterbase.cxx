@@ -47,8 +47,7 @@
 #include <oox/ole/oleobjecthelper.hxx>
 #include <oox/ole/vbaproject.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -579,7 +578,6 @@ bool FilterBase::isExportTemplate() const
     return mxImpl->mbExportTemplate;
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

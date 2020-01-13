@@ -98,7 +98,7 @@ form control artifacts when scrolling a text fast
 */
 
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 
     using namespace ::com::sun::star::awt::InvalidateStyle;
@@ -1783,7 +1783,7 @@ namespace sdr { namespace contact {
     }
 
 
-} } // namespace sdr::contact
+} // namespace sdr::contact
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

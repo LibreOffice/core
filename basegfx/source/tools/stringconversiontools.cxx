@@ -20,9 +20,7 @@
 #include <stringconversiontools.hxx>
 #include <rtl/math.hxx>
 
-namespace basegfx
-{
-    namespace internal
+namespace basegfx::internal
     {
         void skipSpaces(sal_Int32&      io_rPos,
                         const OUString& rStr,
@@ -159,7 +157,6 @@ namespace basegfx
             return true;
         }
 
-    } // namespace internal
-}
+    }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

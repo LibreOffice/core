@@ -33,9 +33,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         ContourExtractor2D::ContourExtractor2D(
             const geometry::ViewInformation2D& rViewInformation,
@@ -192,7 +190,6 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

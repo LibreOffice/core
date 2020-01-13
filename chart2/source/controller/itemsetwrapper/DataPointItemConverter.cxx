@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 namespace {
 
@@ -707,6 +707,6 @@ void DataPointItemConverter::FillSpecialItem(
    }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

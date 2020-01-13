@@ -38,9 +38,7 @@ namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 namespace util = com::sun::star::util;
 
-namespace writerperfect
-{
-namespace test
+namespace writerperfect::test
 {
 WpftLoader::WpftLoader(const OUString& rURL,
                        const css::uno::Reference<css::document::XFilter>& rxFilter,
@@ -205,7 +203,6 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
     }
 
     throw container::NoSuchElementException();
-}
 }
 }
 

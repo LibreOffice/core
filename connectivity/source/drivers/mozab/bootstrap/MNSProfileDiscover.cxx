@@ -22,9 +22,7 @@
 #include "MNSFolders.hxx"
 #include "MNSINIParser.hxx"
 
-namespace connectivity
-{
-    namespace mozab
+namespace connectivity::mozab
     {
         ProfileStruct::ProfileStruct()
         {
@@ -206,7 +204,6 @@ namespace connectivity
             return rProduct.mProfileList.find(profileName) != rProduct.mProfileList.end();
         }
     }
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

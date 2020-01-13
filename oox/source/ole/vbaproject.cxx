@@ -48,8 +48,7 @@
 #include <oox/ole/vbamodule.hxx>
 #include <oox/token/properties.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -552,7 +551,6 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
     }
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

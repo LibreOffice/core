@@ -34,7 +34,7 @@ namespace
     const static sal_Int32 gnRightIconSpace (3);
 }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 TitleBar::TitleBar(const OUString& rsTitle,
                    vcl::Window* pParentWindow,
@@ -172,6 +172,6 @@ IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
     HandleToolBoxItemClick(nItemId);
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

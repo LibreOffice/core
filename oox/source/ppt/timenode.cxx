@@ -52,7 +52,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
         OUString TimeNode::getServiceName( sal_Int16 nNodeType )
         {
@@ -626,6 +626,6 @@ namespace oox { namespace ppt {
         maNodeProperties[ NP_BY ] = aBy;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

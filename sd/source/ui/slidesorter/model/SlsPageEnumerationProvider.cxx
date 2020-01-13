@@ -21,7 +21,7 @@
 #include <model/SlsPageEnumeration.hxx>
 #include <model/SlsPageDescriptor.hxx>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 namespace {
 
@@ -76,6 +76,6 @@ PageEnumeration PageEnumerationProvider::CreateVisiblePagesEnumeration (
         VisiblePagesPredicate());
 }
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

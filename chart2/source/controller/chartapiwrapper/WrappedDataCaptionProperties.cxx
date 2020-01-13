@@ -31,9 +31,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace
@@ -147,7 +145,6 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
     xSeriesPropertySet->setPropertyValue( CHART_UNONAME_LABEL, uno::Any( aLabel ) );
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

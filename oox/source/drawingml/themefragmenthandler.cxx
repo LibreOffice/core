@@ -26,8 +26,7 @@
 
 using namespace ::oox::core;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 ThemeFragmentHandler::ThemeFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rTheme ) :
     FragmentHandler2( rFilter, rFragmentPath ),
@@ -71,7 +70,6 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

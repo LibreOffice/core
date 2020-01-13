@@ -30,9 +30,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace {
@@ -120,7 +118,6 @@ void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< std:
     rList.emplace_back( new WrappedAutomaticPositionProperty() );
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

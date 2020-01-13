@@ -20,9 +20,7 @@
 #include <svgtitledescnode.hxx>
 
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgTitleDescNode::SvgTitleDescNode(
             SVGToken aType,
@@ -42,7 +40,6 @@ namespace svgio
         {
             maText += rChars;
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

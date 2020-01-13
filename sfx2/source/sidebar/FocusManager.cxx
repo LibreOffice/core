@@ -31,7 +31,7 @@
 
 #include <sfx2/app.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, const sal_Int32 nIndex)
     : meComponent(eComponent),
@@ -631,6 +631,6 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
     }
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

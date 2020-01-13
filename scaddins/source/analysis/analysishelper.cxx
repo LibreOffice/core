@@ -156,7 +156,7 @@ const FuncDataBase pFuncDatas[] =
 };
 #undef FUNCDATA
 
-namespace sca { namespace analysis {
+namespace sca::analysis {
 
 sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
@@ -2808,6 +2808,6 @@ sal_Int32 ScaAnyConverter::getInt32(
     return nResult;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

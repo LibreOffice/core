@@ -28,9 +28,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 WrappedNumberFormatProperty::WrappedNumberFormatProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
@@ -118,7 +116,6 @@ Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans:
     return uno::Any( true ); // bLink
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

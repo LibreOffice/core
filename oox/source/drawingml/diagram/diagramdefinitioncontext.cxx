@@ -28,7 +28,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 // CT_DiagramDefinition
 DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper const & rParent,
@@ -94,6 +94,6 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

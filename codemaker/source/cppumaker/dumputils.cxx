@@ -26,7 +26,7 @@
 #include <sal/types.h>
 
 
-namespace codemaker { namespace cppumaker {
+namespace codemaker::cppumaker {
 
 bool dumpNamespaceOpen(
     FileStream & out, OUString const & entityName, bool fullModuleType)
@@ -73,6 +73,6 @@ void dumpTypeIdentifier(FileStream & out, OUString const & entityName) {
     out << entityName.copy(entityName.lastIndexOf('.') + 1);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

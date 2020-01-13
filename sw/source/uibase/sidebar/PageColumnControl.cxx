@@ -28,7 +28,7 @@
 #include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageColumnControl::PageColumnControl( sal_uInt16 nId, vcl::Window* pParent )
     : SfxPopupWindow( nId, pParent, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
@@ -124,6 +124,6 @@ IMPL_LINK_NOARG( PageColumnControl, MoreButtonClickHdl_Impl, Button*, void )
     EndPopupMode();
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

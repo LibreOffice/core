@@ -17,9 +17,7 @@
 
 namespace uno = com::sun::star::uno;
 
-namespace writerperfect
-{
-namespace test
+namespace writerperfect::test
 {
 WpftFilterTestBase::WpftFilterTestBase(const OUString& rFactoryURL)
     : ::test::FiltersTest()
@@ -58,7 +56,6 @@ void WpftFilterTestBase::doTest(const OUString& rFilter, const OUString& rPath,
     m_pOptionalMap = &rOptionalMap;
     testDir(OUString(), m_directories.getURLFromSrc(rPath));
     m_pOptionalMap = nullptr;
-}
 }
 }
 

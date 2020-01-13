@@ -29,7 +29,7 @@
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableContext::TableContext( ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
@@ -87,6 +87,6 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
     return this;
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

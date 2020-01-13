@@ -26,7 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 

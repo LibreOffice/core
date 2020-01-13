@@ -22,8 +22,7 @@
 #include "veewipe.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ::basegfx::B2DPolyPolygon VeeWipe::operator () ( double t )
 {
@@ -38,7 +37,6 @@ namespace internal {
     return ::basegfx::B2DPolyPolygon( poly );
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,7 +70,7 @@ using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 using ::com::sun::star::beans::PropertyValue;
 
 
-namespace connectivity { namespace hsqldb
+namespace connectivity::hsqldb
 {
     void SAL_CALL OHsqlConnection::disposing()
     {
@@ -336,6 +336,6 @@ namespace connectivity { namespace hsqldb
         return xGraphic;
     }
 
-} } // namespace connectivity::hsqldb
+} // namespace connectivity::hsqldb
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

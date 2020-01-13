@@ -21,8 +21,7 @@
 #include <oox/token/tokens.hxx>
 #include <drawingml/textcharacterproperties.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 Theme::Theme()
 {
@@ -106,7 +105,6 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

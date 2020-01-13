@@ -25,9 +25,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         void TextAsPolygonExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
@@ -228,7 +226,6 @@ namespace drawinglayer
         TextAsPolygonExtractor2D::~TextAsPolygonExtractor2D()
         {
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

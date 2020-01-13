@@ -27,7 +27,7 @@
 #include <bitmaps.hlst>
 #include <osl/diagnose.h>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 namespace {
 const static sal_Int32 gnLeftPageNumberOffset = 2;
@@ -258,6 +258,6 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     return aSize;
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

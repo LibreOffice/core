@@ -35,7 +35,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== CenterViewFocusModule ====================================================
 
@@ -148,6 +148,6 @@ bool ShellStackGuard::IsPrinting() const
     return false;
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

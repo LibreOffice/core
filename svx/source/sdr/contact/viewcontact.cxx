@@ -28,7 +28,7 @@
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <tools/debug.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 // Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something. Default is to create
@@ -285,6 +285,6 @@ void ViewContact::flushViewObjectContacts(bool bWithHierarchy)
     deleteAllVOCs();
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

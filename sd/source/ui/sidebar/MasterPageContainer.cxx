@@ -56,7 +56,7 @@ typedef ::std::vector<sd::sidebar::SharedMasterPageDescriptor> MasterPageContain
 
 } // end of anonymous namespace
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Inner implementation class of the MasterPageContainer.
 */
@@ -969,6 +969,6 @@ void MasterPageContainer::Implementation::FillingDone()
     mpRequestQueue->ProcessAllRequests();
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 #include <oox/helper/binaryoutputstream.hxx>
 #include <oox/ole/olestorage.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace css;
 
@@ -111,7 +110,6 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
     return bResult;
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

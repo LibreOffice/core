@@ -56,7 +56,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"

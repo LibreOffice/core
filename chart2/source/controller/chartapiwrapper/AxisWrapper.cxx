@@ -356,9 +356,7 @@ struct StaticAxisWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 AxisWrapper::AxisWrapper(
@@ -660,7 +658,6 @@ css::uno::Sequence< OUString > SAL_CALL AxisWrapper::getSupportedServiceNames()
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

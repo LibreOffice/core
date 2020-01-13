@@ -46,9 +46,7 @@
 
 using namespace ::com::sun::star;
 
-namespace vcl
-{
-    namespace unotools
+namespace vcl::unotools
     {
         uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx(const ::BitmapEx& inputBitmap )
         {
@@ -620,8 +618,6 @@ namespace vcl
                           toByteColor(aARGBColor.Blue) );
         }
 
-    } // namespace vcltools
-
-} // namespace canvas
+    } // namespace canvas
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

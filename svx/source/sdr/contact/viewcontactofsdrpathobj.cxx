@@ -30,9 +30,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/canvastools.hxx>
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         ViewContactOfSdrPathObj::ViewContactOfSdrPathObj(SdrPathObj& rPathObj)
         :   ViewContactOfTextObj(rPathObj)
@@ -202,7 +200,6 @@ namespace sdr
 
             return drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

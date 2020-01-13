@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/macros.h>
 
-namespace test { namespace oustring {
+namespace test::oustring {
 
 class EndsWith: public CppUnit::TestFixture
 {
@@ -39,7 +39,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 };
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::EndsWith);
 

@@ -31,9 +31,7 @@
 
 using namespace ::com::sun::star;
 
-namespace basegfx
-{
-namespace unotools
+namespace basegfx::unotools
 {
     UnoPolyPolygon::UnoPolyPolygon( const B2DPolyPolygon& rPolyPoly ) :
         UnoPolyPolygonBase( m_aMutex ),
@@ -453,7 +451,6 @@ namespace unotools
         return aRet;
     }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

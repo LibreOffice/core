@@ -37,7 +37,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
     AnimVariantContext::AnimVariantContext( FragmentHandler2 const & rParent, sal_Int32 aElement, Any & aValue )
         : FragmentHandler2( rParent )
             , mnElement( aElement )
@@ -95,6 +95,6 @@ namespace oox { namespace ppt {
         return this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

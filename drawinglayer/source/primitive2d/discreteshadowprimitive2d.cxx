@@ -25,9 +25,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         DiscreteShadow::DiscreteShadow(const BitmapEx& rBitmapEx)
         :   maBitmapEx(rBitmapEx),
@@ -153,13 +151,10 @@ namespace drawinglayer
             return maLeft;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void DiscreteShadowPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -315,7 +310,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(DiscreteShadowPrimitive2D, PRIMITIVE2D_ID_DISCRETESHADOWPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

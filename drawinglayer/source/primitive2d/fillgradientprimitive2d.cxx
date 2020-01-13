@@ -28,9 +28,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void FillGradientPrimitive2D::generateMatricesAndColors(
             std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
@@ -330,7 +328,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(FillGradientPrimitive2D, PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

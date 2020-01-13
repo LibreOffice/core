@@ -30,7 +30,7 @@
 #include <avmedia/mediaitem.hxx>
 #include "sdrmediawindow.hxx"
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                                                 ViewContact& rViewContact,
@@ -138,6 +138,6 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
 }
 
 
-}} // end of namespace sdr::contact
+} // end of namespace sdr::contact
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

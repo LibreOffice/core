@@ -36,8 +36,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox {
-namespace docprop {
+namespace oox::docprop {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -160,7 +159,6 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     }
 }
 
-} // namespace docprop
 } // namespace oox
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

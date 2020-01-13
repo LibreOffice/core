@@ -228,9 +228,7 @@ namespace
     }
 }
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         // state stack manipulators
 
@@ -3072,6 +3070,5 @@ namespace cppcanvas
             }
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

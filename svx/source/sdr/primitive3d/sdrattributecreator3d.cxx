@@ -29,9 +29,7 @@
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         attribute::Sdr3DObjectAttribute* createNewSdr3DObjectAttribute(const SfxItemSet& rSet)
         {
@@ -142,7 +140,6 @@ namespace drawinglayer
                 aTextureKind, aTextureMode, aMaterial,
                 bInvertNormals, bDoubleSided, bShadow3D, bTextureFilter, bReducedLineGeometry);
         }
-    } // end of namespace primitive2d
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

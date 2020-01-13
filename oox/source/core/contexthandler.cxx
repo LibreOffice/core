@@ -21,8 +21,7 @@
 
 #include <oox/core/fragmenthandler.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -129,7 +128,6 @@ void ContextHandler::endRecord( sal_Int32 )
 {
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

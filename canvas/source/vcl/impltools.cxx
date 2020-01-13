@@ -43,9 +43,7 @@
 
 using namespace ::com::sun::star;
 
-namespace vclcanvas
-{
-    namespace tools
+namespace vclcanvas::tools
     {
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
@@ -219,6 +217,5 @@ namespace vclcanvas
             return vcl::bitmap::CanvasTransformBitmap(rBitmap, rTransform, aDestRect, aLocalTransform);
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

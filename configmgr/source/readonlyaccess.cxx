@@ -32,7 +32,7 @@
 #include "readonlyaccess.hxx"
 #include "rootaccess.hxx"
 
-namespace configmgr { namespace read_only_access {
+namespace configmgr::read_only_access {
 
 namespace {
 
@@ -124,6 +124,6 @@ css::uno::Sequence< OUString > getSupportedServiceNames() {
     return css::uno::Sequence< OUString > { "com.sun.star.configuration.ReadOnlyAccess" };
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

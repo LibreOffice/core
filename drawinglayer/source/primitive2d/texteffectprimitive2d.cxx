@@ -25,9 +25,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         static const double fDiscreteSize(1.1);
 
@@ -243,7 +241,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextEffectPrimitive2D, PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

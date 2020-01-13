@@ -40,7 +40,7 @@
 #include "rootaccess.hxx"
 #include "update.hxx"
 
-namespace configmgr { namespace update {
+namespace configmgr::update {
 
 namespace {
 
@@ -154,6 +154,6 @@ css::uno::Sequence< OUString > getSupportedServiceNames() {
     return css::uno::Sequence< OUString > { "com.sun.star.configuration.Update_Service" };
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

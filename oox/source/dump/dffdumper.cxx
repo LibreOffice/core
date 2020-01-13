@@ -21,8 +21,7 @@
 
 #ifdef DBG_UTIL
 
-namespace oox {
-namespace dump {
+namespace oox::dump {
 
 namespace {
 
@@ -221,7 +220,6 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }
 
-} // namespace dump
 } // namespace oox
 
 #endif

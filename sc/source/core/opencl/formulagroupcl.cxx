@@ -143,7 +143,7 @@ static const char* const publicFunc =
 
 using namespace formula;
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 namespace {
 
@@ -4417,6 +4417,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     return aRes.pushResultToDocument(rDoc, rTopPos);
 }
 
-}} // namespace sc::opencl
+} // namespace sc::opencl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

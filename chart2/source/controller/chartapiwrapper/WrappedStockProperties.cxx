@@ -32,9 +32,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace {
@@ -278,7 +276,6 @@ void WrappedStockProperties::addWrappedProperties( std::vector< std::unique_ptr<
     rList.emplace_back( new WrappedUpDownProperty( spChart2ModelContact ) );
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

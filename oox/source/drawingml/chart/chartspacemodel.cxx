@@ -20,9 +20,7 @@
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 ChartSpaceModel::ChartSpaceModel(bool bMSO2007Doc) :
     mnDispBlanksAs( bMSO2007Doc ? XML_gap : XML_zero ),  // difference between OOXML spec and MSO 2007
@@ -38,8 +36,6 @@ ChartSpaceModel::~ChartSpaceModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,9 +37,7 @@
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/properties.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::graphic;
@@ -1155,8 +1153,6 @@ bool ObjectFormatter::getTextRotation( const ModelRef< TextBody >& rxTextProp, s
     }
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

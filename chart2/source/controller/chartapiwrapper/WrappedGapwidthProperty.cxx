@@ -26,9 +26,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 const sal_Int32 DEFAULT_GAPWIDTH = 100;
@@ -168,7 +166,6 @@ WrappedBarOverlapProperty::~WrappedBarOverlapProperty()
 {
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

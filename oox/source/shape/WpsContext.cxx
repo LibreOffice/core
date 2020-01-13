@@ -28,9 +28,7 @@
 
 using namespace com::sun::star;
 
-namespace oox
-{
-namespace shape
+namespace oox::shape
 {
 WpsContext::WpsContext(ContextHandler2Helper const& rParent, uno::Reference<drawing::XShape> xShape,
                        const drawingml::ShapePtr& pMasterShapePtr,
@@ -228,7 +226,6 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             return ShapeContext::onCreateContext(nElementToken, rAttribs);
     }
     return nullptr;
-}
 }
 }
 

@@ -30,9 +30,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         ViewObjectContactOfMasterPageDescriptor::ViewObjectContactOfMasterPageDescriptor(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   ViewObjectContact(rObjectContact, rViewContact)
@@ -130,7 +128,6 @@ namespace sdr
             // return grouped primitive
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

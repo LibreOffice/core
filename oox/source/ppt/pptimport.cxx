@@ -52,7 +52,7 @@ using namespace oox::core;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::lang::XComponent;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 #if OSL_DEBUG_LEVEL > 0
 XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
@@ -326,7 +326,7 @@ OUString PowerPointImport::getImplementationName()
     return "com.sun.star.comp.oox.ppt.PowerPointImport";
 }
 
-}}
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_ppt_PowerPointImport_get_implementation(

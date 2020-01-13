@@ -11,9 +11,7 @@
 #include <matrixoperators.hxx>
 
 
-namespace sc {
-
-namespace op {
+namespace sc::op {
 
 void Sum::operator()(double& rAccum, double fVal) const
 {
@@ -36,7 +34,6 @@ void Product::operator()(double& rAccum, double fVal) const
 
 const double Product::InitVal = 1.0;
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

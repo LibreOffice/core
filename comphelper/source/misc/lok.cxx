@@ -14,10 +14,7 @@
 #include <iostream>
 #include <map>
 
-namespace comphelper
-{
-
-namespace LibreOfficeKit
+namespace comphelper::LibreOfficeKit
 {
 
 static bool g_bActive(false);
@@ -248,8 +245,6 @@ void statusIndicatorFinish()
     if (pStatusIndicatorCallback)
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
 }
-
-} // namespace LibreOfficeKit
 
 } // namespace comphelper
 

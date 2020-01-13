@@ -44,7 +44,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 // CT_Shape
 PPTShapePropertiesContext::PPTShapePropertiesContext( ContextHandler2Helper const & rParent, ::oox::drawingml::Shape& rShape )
@@ -65,6 +65,6 @@ ContextHandlerRef PPTShapePropertiesContext::onCreateContext( sal_Int32 aElement
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

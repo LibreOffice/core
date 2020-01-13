@@ -25,11 +25,7 @@ namespace
                                     void *p_user_data );
 }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 void EventManager::Handler( const libvlc_event_t *event, void *pData )
 {
@@ -82,8 +78,6 @@ void EventManager::onEndReached( const Callback& callback )
 {
     mOnEndReached = callback;
     registerSignal( libvlc_MediaPlayerEndReached, callback );
-}
-}
 }
 }
 

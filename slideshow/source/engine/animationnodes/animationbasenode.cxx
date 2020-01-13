@@ -35,8 +35,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 AnimationBaseNode::AnimationBaseNode(
     const uno::Reference< animations::XAnimationNode >&   xNode,
@@ -485,7 +484,6 @@ AttributableShapeSharedPtr const & AnimationBaseNode::getShape() const
         return mpShape; // nope, plain shape always
 }
 
-} // namespace internal
 } // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

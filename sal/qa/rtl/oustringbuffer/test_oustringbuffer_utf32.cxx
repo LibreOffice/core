@@ -26,7 +26,7 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
-namespace test { namespace oustringbuffer {
+namespace test::oustringbuffer {
 
 class Utf32: public CppUnit::TestFixture {
 private:
@@ -40,7 +40,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 };
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::Utf32);
 

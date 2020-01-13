@@ -17,9 +17,7 @@
 
 using namespace css;
 
-namespace svx
-{
-namespace classification
+namespace svx::classification
 {
 OUString convertClassificationResultToString(std::vector<svx::ClassificationResult> const& rResults)
 {
@@ -120,7 +118,6 @@ void insertCreationOrigin(uno::Reference<beans::XPropertyContainer> const& rxPro
                           ? OUString("BAF_POLICY")
                           : OUString("MANUAL");
     addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeCreationOriginKey(), sValue);
-}
 }
 } // end svx::classification namespace
 

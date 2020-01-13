@@ -66,7 +66,7 @@ namespace
     }
 }
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageSizeControl::PageSizeControl( sal_uInt16 nId, vcl::Window* pParent )
     : SfxPopupWindow( nId, pParent, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui" )
@@ -247,6 +247,6 @@ IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)
     EndPopupMode();
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

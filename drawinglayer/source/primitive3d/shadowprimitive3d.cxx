@@ -24,9 +24,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         ShadowPrimitive3D::ShadowPrimitive3D(
             const basegfx::B2DHomMatrix& rShadowTransform,
@@ -60,7 +58,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(ShadowPrimitive3D, PRIMITIVE3D_ID_SHADOWPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

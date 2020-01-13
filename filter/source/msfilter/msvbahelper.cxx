@@ -46,8 +46,7 @@
 
 using namespace ::com::sun::star;
 
-namespace ooo {
-namespace vba {
+namespace ooo::vba {
 
 const OUString sUrlPart0( "vnd.sun.star.script:" );
 const OUString sUrlPart1( "?language=Basic&location=document" );
@@ -775,7 +774,6 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
 }
 
 
-} // namespace vba
 } // namespace ooo
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

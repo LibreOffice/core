@@ -38,9 +38,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         namespace
         {
@@ -503,6 +501,5 @@ namespace cppcanvas
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -87,8 +87,7 @@ using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
@@ -1435,7 +1434,6 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     return xGroupShape;
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,9 +28,7 @@
 #include <memory>
 
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         ViewContactOfE3dPolygon::ViewContactOfE3dPolygon(E3dPolygonObj& rPolygon)
         :   ViewContactOfE3d(rPolygon)
@@ -166,7 +164,6 @@ namespace sdr
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

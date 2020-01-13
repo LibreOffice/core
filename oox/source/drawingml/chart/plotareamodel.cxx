@@ -19,9 +19,7 @@
 
 #include <drawingml/chart/plotareamodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 View3DModel::View3DModel(bool bMSO2007Doc) :
     mnDepthPercent( 100 ),
@@ -61,8 +59,6 @@ PlotAreaModel::~PlotAreaModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

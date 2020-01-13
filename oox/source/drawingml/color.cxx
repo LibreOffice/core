@@ -28,8 +28,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -769,7 +768,6 @@ void Color::toHsl() const
     }
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

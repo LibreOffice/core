@@ -9,8 +9,7 @@
 
 #include "ChartSidebarModifyListener.hxx"
 
-namespace chart {
-namespace sidebar {
+namespace chart::sidebar {
 
 ChartSidebarModifyListenerParent::~ChartSidebarModifyListenerParent()
 {
@@ -40,6 +39,6 @@ void ChartSidebarModifyListener::disposing(const css::lang::EventObject& /*rEven
     mpParent = nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

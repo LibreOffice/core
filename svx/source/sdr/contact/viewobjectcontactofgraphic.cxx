@@ -24,9 +24,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
@@ -61,7 +59,6 @@ namespace sdr
         ViewObjectContactOfGraphic::~ViewObjectContactOfGraphic()
         {
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 SlotStateListener::SlotStateListener (
     Link<const OUString&,void> const & rCallback,
@@ -150,6 +150,6 @@ void SlotStateListener::ThrowIfDisposed()
     }
 }
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

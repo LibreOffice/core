@@ -29,8 +29,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -2130,7 +2129,6 @@ const TransitionInfo* getRandomTransitionInfo()
         - 1 /* exclude random transition at end of table */ );
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

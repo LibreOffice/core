@@ -35,9 +35,7 @@ using namespace com::sun::star;
 #define MINIMUM_SQUARE_LENGTH (16.0)
 #define MINIMUM_TILES_LENGTH (3)
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void PatternFillPrimitive2D::calculateNeededDiscreteBufferSize(
             sal_uInt32& rWidth,
@@ -327,7 +325,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PatternFillPrimitive2D, PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

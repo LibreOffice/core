@@ -40,8 +40,7 @@
 #include <defnamesbuffer.hxx>
 #include <biffhelper.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -737,7 +736,6 @@ AutoFilter* AutoFilterBuffer::getActiveAutoFilter()
     return maAutoFilters.empty() ? nullptr : maAutoFilters.back().get();
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

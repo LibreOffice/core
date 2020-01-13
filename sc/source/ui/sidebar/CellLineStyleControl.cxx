@@ -29,7 +29,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher)
     : WeldToolbarPopup(nullptr, pParent, "modules/scalc/ui/floatinglinestyle.ui", "FloatingLineStyle")
@@ -219,6 +219,6 @@ void CellLineStylePopup::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_u
     mxCellLineStyleValueSet->Invalidate();
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

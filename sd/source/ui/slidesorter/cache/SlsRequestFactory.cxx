@@ -20,7 +20,7 @@
 #include "SlsRequestFactory.hxx"
 #include "SlsRequestQueue.hxx"
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 void RequestFactory::operator()(
     RequestQueue& rRequestQueue,
@@ -45,6 +45,6 @@ void RequestFactory::operator()(
     }
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

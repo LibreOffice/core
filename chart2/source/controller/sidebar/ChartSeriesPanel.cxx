@@ -37,7 +37,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 namespace {
 
@@ -465,6 +465,6 @@ IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl, weld::ComboBox&, void)
     setDataLabelPlacement(mxModel, aCID, nPos);
 }
 
-}} // end of namespace ::chart::sidebar
+} // end of namespace ::chart::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

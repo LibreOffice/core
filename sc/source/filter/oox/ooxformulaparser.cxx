@@ -25,10 +25,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <formulaparser.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -162,7 +161,6 @@ OUString SAL_CALL OOXMLFormulaParser::printFormula(
     throw RuntimeException();
 }
 
-} // namespace xls
 } // namespace oox
 
 

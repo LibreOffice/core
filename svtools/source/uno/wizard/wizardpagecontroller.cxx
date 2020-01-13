@@ -27,7 +27,7 @@
 #include <tools/diagnose_ex.h>
 
 
-namespace svt { namespace uno
+namespace svt::uno
 {
 
 
@@ -128,7 +128,7 @@ namespace svt { namespace uno
     }
 
 
-} } // namespace svt::uno
+} // namespace svt::uno
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

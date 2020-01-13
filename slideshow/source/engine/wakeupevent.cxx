@@ -24,9 +24,7 @@
 #include <wakeupevent.hxx>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         WakeupEvent::WakeupEvent(
             std::shared_ptr<canvas::tools::ElapsedTime> const & pTimeBase,
@@ -83,6 +81,5 @@ namespace slideshow
             mpActivity = rActivity;
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,7 @@ template<> struct assertion_traits<std::type_info>
 };
 } // namespace
 
-namespace test { namespace oustring {
+namespace test::oustring {
 
 class StringConcat : public CppUnit::TestFixture
 {
@@ -187,7 +187,7 @@ void test::oustring::StringConcat::checkInvalid()
 #endif
 }
 
-}} // namespace
+} // namespace
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StringConcat);
 

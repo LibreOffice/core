@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace gstreamer {
+namespace avmedia::gstreamer {
 
 Manager::Manager()
 {
@@ -66,7 +66,6 @@ uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     return { AVMEDIA_GST_MANAGER_SERVICENAME };
 }
 
-} // namespace gstreamer
 } // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

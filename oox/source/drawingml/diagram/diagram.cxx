@@ -40,7 +40,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 static void sortChildrenByZOrder(const ShapePtr& pShape)
 {
@@ -425,6 +425,6 @@ void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
         child->addShape(rFilter, rFilter.getCurrentTheme(), xShapes, aTransformation, pShape->getFillProperties());
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

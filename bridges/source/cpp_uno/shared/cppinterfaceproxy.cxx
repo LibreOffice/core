@@ -29,7 +29,7 @@
 #include <memory>
 #include <new>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
 {
@@ -138,6 +138,6 @@ CppInterfaceProxy * CppInterfaceProxy::castInterfaceToProxy(void * pInterface)
         static_cast< char * >(pInterface) - offset);
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

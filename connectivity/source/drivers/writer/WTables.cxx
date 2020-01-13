@@ -27,9 +27,7 @@
 
 using namespace ::com::sun::star;
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
 {
@@ -42,7 +40,6 @@ sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
     return xRet;
 }
 
-} // namespace writer
 } // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

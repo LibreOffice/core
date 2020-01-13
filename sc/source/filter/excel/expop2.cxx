@@ -38,7 +38,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-namespace com { namespace sun { namespace star { namespace document { class XDocumentProperties; } } } }
+namespace com::sun::star::document { class XDocumentProperties; }
 
 namespace {
 

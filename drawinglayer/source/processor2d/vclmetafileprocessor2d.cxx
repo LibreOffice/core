@@ -231,9 +231,7 @@ namespace
 
 } // end of anonymous namespace
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         ::tools::Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
             const primitive2d::Primitive2DContainer& rContent,
@@ -2288,7 +2286,6 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

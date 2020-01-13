@@ -186,9 +186,7 @@ struct StaticTitleWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
@@ -508,7 +506,6 @@ css::uno::Sequence< OUString > SAL_CALL TitleWrapper::getSupportedServiceNames()
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

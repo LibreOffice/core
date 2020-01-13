@@ -10,8 +10,7 @@
 
 #include <test/outputdevice.hxx>
 
-namespace vcl {
-namespace test {
+namespace vcl::test {
 
 Bitmap OutputDeviceTestAnotherOutDev::setupDrawOutDev()
 {
@@ -75,6 +74,6 @@ TestResult OutputDeviceTestAnotherOutDev::checkXOR(Bitmap& rBitmap)
     return checkRectangles(rBitmap, aExpected);
 }
 
-}} // end namespace vcl::test
+} // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

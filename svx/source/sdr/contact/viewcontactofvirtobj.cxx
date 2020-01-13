@@ -25,7 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewContactOfVirtObj::ViewContactOfVirtObj(SdrVirtObj& rObj)
 :   ViewContactOfSdrObj(rObj)
@@ -96,7 +96,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

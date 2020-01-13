@@ -23,9 +23,7 @@
 
 using namespace vcl;
 
-namespace vcl
-{
-namespace pdf
+namespace vcl::pdf
 {
 OString BuildinFont::getNameObject() const
 {
@@ -737,7 +735,6 @@ BuildinFontFace::CreateFontInstance(const FontSelectPattern& rFSP) const
     return new BuildinFontInstance(*this, rFSP);
 }
 
-} // namespace pdf
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,9 +35,7 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 Chart2ModelContact::Chart2ModelContact(
@@ -296,7 +294,6 @@ awt::Point Chart2ModelContact::GetAxisPosition( const uno::Reference< css::chart
     return aPoint;
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

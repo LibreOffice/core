@@ -22,8 +22,7 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 using namespace ::com::sun::star;
 using namespace ::std;
@@ -191,6 +190,6 @@ void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

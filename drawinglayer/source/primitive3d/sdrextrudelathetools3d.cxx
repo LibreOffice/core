@@ -339,9 +339,7 @@ namespace
 } // end of anonymous namespace
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         void createLatheSlices(
             Slice3DVector& rSliceVector,
@@ -979,7 +977,6 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

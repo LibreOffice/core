@@ -24,8 +24,7 @@
 #include "clockwipe.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ::basegfx::B2DPolygon ClockWipe::calcCenteredClock( double t, double e )
 {
@@ -58,7 +57,6 @@ namespace internal {
     return ::basegfx::B2DPolyPolygon(poly);
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

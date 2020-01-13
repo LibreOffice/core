@@ -29,7 +29,7 @@
 #include "defaultprovider.hxx"
 #include "lock.hxx"
 
-namespace configmgr { namespace default_provider {
+namespace configmgr::default_provider {
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -48,6 +48,6 @@ css::uno::Sequence< OUString > getSupportedServiceNames() {
     return css::uno::Sequence< OUString > { "com.sun.star.configuration.DefaultProvider" };
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

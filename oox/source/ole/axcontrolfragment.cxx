@@ -31,8 +31,7 @@
 
 #include <osl/diagnose.h>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -163,7 +162,6 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
     return nullptr;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

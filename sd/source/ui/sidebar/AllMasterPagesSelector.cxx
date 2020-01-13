@@ -65,7 +65,7 @@ public:
 
 } // end of anonymous namespace
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class AllMasterPagesSelector::SortedMasterPageDescriptorList
     : public ::std::set<SharedMasterPageDescriptor,MasterPageDescriptorOrder>
@@ -175,6 +175,6 @@ void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
         rItemList.push_back(rxDescriptor->maToken);
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

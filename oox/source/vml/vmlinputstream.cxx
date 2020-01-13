@@ -28,8 +28,7 @@
 #include <oox/helper/helper.hxx>
 #include <oox/helper/textinputstream.hxx>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -392,7 +391,6 @@ OString InputStream::readToElementEnd()
     return aText;
 }
 
-} // namespace vml
 } // namespave oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

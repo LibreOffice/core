@@ -53,7 +53,7 @@ static const OUStringLiteral gsTopPropertyName("Top");
 static const OUStringLiteral gsTopRelativePropertyName("RelativeTop");
 static const OUStringLiteral gsTotalHeightPropertyName("TotalHeight");
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 // PresenterTextView::Implementation
 class PresenterTextView::Implementation
@@ -456,7 +456,7 @@ void PresenterTextView::Implementation::CheckTop()
         mnTop = 0;
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

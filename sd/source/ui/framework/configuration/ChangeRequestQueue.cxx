@@ -19,12 +19,12 @@
 
 #include "ChangeRequestQueue.hxx"
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 ChangeRequestQueue::ChangeRequestQueue()
 {
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

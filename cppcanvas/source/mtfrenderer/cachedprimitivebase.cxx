@@ -29,9 +29,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
         CachedPrimitiveBase::CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
                                                   bool                   bOnlyRedrawWithSameTransform ) :
@@ -79,6 +77,5 @@ namespace cppcanvas
                                     rTransformation );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

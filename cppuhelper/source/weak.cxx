@@ -325,16 +325,7 @@ void OWeakAggObject::setDelegator( const Reference<XInterface > & rDelegator )
 }
 
 /** */ //for docpp
-namespace com
-{
-/** */ //for docpp
-namespace sun
-{
-/** */ //for docpp
-namespace star
-{
-/** */ //for docpp
-namespace uno
+namespace com::sun::star::uno
 {
 
 
@@ -534,9 +525,6 @@ Reference< XInterface > WeakReferenceHelper::get() const
     return Reference< XInterface >();
 }
 
-}
-}
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

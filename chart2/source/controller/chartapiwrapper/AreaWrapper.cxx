@@ -68,9 +68,7 @@ struct StaticAreaWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 AreaWrapper::AreaWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
@@ -174,7 +172,6 @@ css::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
         "com.sun.star.drawing.LineProperties" };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::tools::ConfigurationAccess;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 static const sal_uInt32 snFactoryPropertyCount (2);
 static const sal_uInt32 snStartupPropertyCount (1);
@@ -253,7 +253,7 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

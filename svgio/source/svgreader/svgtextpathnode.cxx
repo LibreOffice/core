@@ -28,9 +28,7 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         namespace {
 
@@ -235,13 +233,10 @@ namespace svgio
             return bRetval;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgTextPathNode::SvgTextPathNode(
             SvgDocument& rDocument,
@@ -442,7 +437,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

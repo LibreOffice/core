@@ -44,7 +44,7 @@ using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sw { namespace mark
+namespace sw::mark
 {
 
     SwPosition FindFieldSep(IFieldmark const& rMark)
@@ -110,7 +110,7 @@ namespace sw { namespace mark
         assert(ret); // must have found it
         return *ret;
     }
-} } // namespace sw::mark
+} // namespace sw::mark
 
 namespace
 {
@@ -240,7 +240,7 @@ namespace
     };
 }
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
         const OUString& rName)
@@ -938,6 +938,6 @@ namespace sw { namespace mark
             (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= OUString();
         }
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,9 +52,7 @@ namespace
 } // end of anonymous namespace
 
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         ViewObjectContactOfE3dScene::ViewObjectContactOfE3dScene(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
@@ -137,7 +135,6 @@ namespace sdr
             // call parent
             return ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo);
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

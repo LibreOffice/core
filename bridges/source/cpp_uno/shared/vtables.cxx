@@ -109,7 +109,7 @@ template< typename T > bridges::cpp_uno::shared::VtableSlot doGetVtableSlot(
 
 }
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 sal_Int32 getLocalFunctions(typelib_InterfaceTypeDescription const * type) {
     return type->nMembers == 0
@@ -141,6 +141,6 @@ VtableSlot getVtableSlot(
     return doGetVtableSlot(ifcMember);
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

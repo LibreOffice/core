@@ -31,7 +31,7 @@
 #include <sdtreelb.hxx>
 #include <sdmod.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     : mpTargetSlideSorter(&rSlideSorter),
@@ -115,6 +115,6 @@ void DragAndDropContext::SetTargetSlideSorter()
     mpTargetSlideSorter = nullptr;
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace utl;
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -640,7 +640,7 @@ namespace svt { namespace table
         }
     }
 
-}} // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

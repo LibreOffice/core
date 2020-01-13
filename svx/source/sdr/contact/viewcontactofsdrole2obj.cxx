@@ -38,7 +38,7 @@
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 // Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something.
@@ -208,6 +208,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createV
     return createPrimitive2DSequenceWithParameters();
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

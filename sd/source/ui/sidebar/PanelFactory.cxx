@@ -41,7 +41,7 @@ using namespace css;
 using namespace css::uno;
 using namespace ::sd::framework;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 static Reference<lang::XEventListener> mxControllerDisposeListener;
 
@@ -132,7 +132,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         aLayoutSize);
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

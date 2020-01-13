@@ -29,9 +29,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         void SdrAllFillAttributesHelper::createPrimitive2DSequence(
             const basegfx::B2DRange& rPaintRange,
@@ -253,7 +251,6 @@ namespace drawinglayer
             // color fill
             return false;
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

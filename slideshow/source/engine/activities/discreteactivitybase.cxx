@@ -23,9 +23,7 @@
 #include "discreteactivitybase.hxx"
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         DiscreteActivityBase::DiscreteActivityBase( const ActivityParameters& rParms ) :
             ActivityBase( rParms ),
@@ -190,6 +188,5 @@ namespace slideshow
             ActivityBase::dispose();
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,9 +28,7 @@
 #include <vcl/graph.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void WallpaperBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -250,7 +248,6 @@ namespace drawinglayer
 
         // provide unique ID
         ImplPrimitive2DIDBlock(WallpaperBitmapPrimitive2D, PRIMITIVE2D_ID_WALLPAPERBITMAPPRIMITIVE2D)
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

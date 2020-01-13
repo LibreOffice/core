@@ -79,8 +79,7 @@
 
 #include <memory>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -1025,7 +1024,6 @@ rtl_TextEncoding WorkbookHelper::getTextEncoding() const
     return mrBookGlob.getTextEncoding();
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

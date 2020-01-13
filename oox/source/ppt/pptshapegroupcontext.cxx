@@ -49,7 +49,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 PPTShapeGroupContext::PPTShapeGroupContext(
         FragmentHandler2 const & rParent,
@@ -178,6 +178,6 @@ void PPTShapeGroupContext::applyFontRefColor(const oox::drawingml::ShapePtr& pSh
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

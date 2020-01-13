@@ -23,7 +23,7 @@
 
 #include <rtl/instance.hxx>
 
-namespace comphelper { namespace module
+namespace comphelper::module
 {
 
 
@@ -48,7 +48,7 @@ namespace comphelper { namespace module
     }
 
 
-} } // namespace comphelper::module
+} // namespace comphelper::module
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* comphelp_component_getFactory(

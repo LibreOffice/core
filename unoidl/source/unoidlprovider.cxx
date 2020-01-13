@@ -29,7 +29,7 @@
 
 #include "unoidlprovider.hxx"
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 class MappedFile: public salhelper::SimpleReferenceObject {
 public:
@@ -1402,6 +1402,6 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
 
 UnoidlProvider::~UnoidlProvider() throw () {}
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

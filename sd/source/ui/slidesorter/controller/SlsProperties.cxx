@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 Properties::Properties()
     : mbIsHighlightCurrentSlide(false),
@@ -105,6 +105,6 @@ void Properties::SetUIReadOnly (const bool bIsUIReadOnly)
     mbIsUIReadOnly = bIsUIReadOnly;
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

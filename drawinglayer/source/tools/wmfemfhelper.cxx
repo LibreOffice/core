@@ -54,9 +54,7 @@
 #include <emfplushelper.hxx>
 #include <numeric>
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         namespace {
 
@@ -98,8 +96,7 @@ namespace drawinglayer
                 createFill(rContainer, false);
             }
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 namespace wmfemfhelper
 {

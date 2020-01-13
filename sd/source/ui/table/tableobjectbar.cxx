@@ -46,7 +46,7 @@ using namespace sd::ui::table;
 #define ShellClass_TableObjectBar
 #include <sdslots.hxx>
 
-namespace sd { namespace ui { namespace table {
+namespace sd::ui::table {
 
 /** creates a table object bar for the given ViewShell */
 SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView )
@@ -216,6 +216,6 @@ void TableObjectBar::Execute( SfxRequest& rReq )
     pBindings->Invalidate( SID_REDO );
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

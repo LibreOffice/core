@@ -26,7 +26,7 @@
 
 using namespace css;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 VclPtr<vcl::Window> TextPropertyPanel::Create (
     vcl::Window* pParent,
@@ -111,6 +111,6 @@ void TextPropertyPanel::HandleContextChange (
     mpToolBoxBackgroundColor->Show(bDrawText);
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

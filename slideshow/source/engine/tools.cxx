@@ -52,9 +52,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         namespace
         {
@@ -767,6 +765,5 @@ namespace slideshow
                 basegfx::fround( aTmpRect.getRange().getY() ) + 1 );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

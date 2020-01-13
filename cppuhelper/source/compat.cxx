@@ -26,7 +26,7 @@
 #include <osl/module.h>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XMultiComponentFactory;
         class XMultiServiceFactory;
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
         class XComponentContext;
         class XInterface;
     }
-} } }
+}
 
 // Stubs for removed functionality, to be killed when we bump cppuhelper SONAME
 

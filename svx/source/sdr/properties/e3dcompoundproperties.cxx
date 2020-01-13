@@ -23,9 +23,7 @@
 #include <svx/scene3d.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         E3dCompoundProperties::E3dCompoundProperties(SdrObject& rObj)
         :   E3dProperties(rObj)
@@ -141,7 +139,6 @@ namespace sdr
                 }
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

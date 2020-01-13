@@ -50,9 +50,7 @@ void FillStyle(const OUString& rName, std::map<OUString, librevenge::RVNGPropert
 }
 }
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 namespace
 {
@@ -627,7 +625,6 @@ void FillStyles(const OUString& rName,
     FillStyle(rName, rNamedStyles, rAutomaticStyles, rNamedStyles, rPropertyList);
 }
 
-} // namespace exp
 } // namespace writerperfect
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

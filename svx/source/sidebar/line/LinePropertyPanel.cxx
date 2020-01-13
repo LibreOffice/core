@@ -44,7 +44,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 LinePropertyPanel::LinePropertyPanel(
     vcl::Window* pParent,
@@ -247,6 +247,6 @@ void LinePropertyPanel::setLineWidth(const XLineWidthItem& rItem)
             SfxCallMode::RECORD, { &rItem });
 }
 
-}} // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

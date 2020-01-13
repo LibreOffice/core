@@ -38,7 +38,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 namespace {
 
@@ -588,6 +588,6 @@ void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bV
     }
 }
 
-}} // end of namespace ::chart::sidebar
+} // end of namespace ::chart::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

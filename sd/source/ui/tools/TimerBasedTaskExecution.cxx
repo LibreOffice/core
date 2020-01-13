@@ -24,7 +24,7 @@
 #include <sal/log.hxx>
 #include <memory>
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 /** Used by the shared_ptr instead of the private destructor.
 */
@@ -127,6 +127,6 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback, Timer *, void)
         mpSelf.reset();
 }
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

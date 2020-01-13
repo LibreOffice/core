@@ -64,7 +64,7 @@
 
 #include <memory>
 
-namespace sw { namespace annotation {
+namespace sw::annotation {
 
 SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
@@ -502,6 +502,6 @@ tools::Time SwAnnotationWin::GetTime() const
     return mpField->GetTime();
 }
 
-} } // end of namespace sw::annotation
+} // end of namespace sw::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

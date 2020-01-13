@@ -21,7 +21,7 @@
 #include <vcl/outdev.hxx>
 #include <osl/diagnose.h>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     : maTopLeft(rShadowBitmap,-1,-1),
@@ -222,6 +222,6 @@ void FramePainter::OffsetBitmap::PaintCenter (
                 maBitmap);
 }
 
-} } } // end of namespace sd::slidesorter::view
+} // end of namespace sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

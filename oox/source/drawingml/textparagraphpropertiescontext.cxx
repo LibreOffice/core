@@ -42,7 +42,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 // CT_TextParagraphProperties
 TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper const & rParent,
@@ -338,6 +338,6 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

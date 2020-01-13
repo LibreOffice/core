@@ -55,7 +55,7 @@ using namespace css::uno;
 
 const char SELECTWIDTH[] = "SelectWidth";
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 LinePropertyPanelBase::LinePropertyPanelBase(
     vcl::Window* pParent,
@@ -804,6 +804,6 @@ void LinePropertyPanelBase::enableArrowHead()
     ActivateControls();
 }
 
-}} // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

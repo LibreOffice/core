@@ -11,7 +11,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/math.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 void CommentAuthorList::setValues(const CommentAuthorList& list)
 {
@@ -81,6 +81,6 @@ const Comment& CommentList::getCommentAtIndex (int index)
 ;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,7 +47,7 @@ public:
 
 } // end of anonymous namespace
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 class Configuration::ResourceContainer
     : public ::std::set<Reference<XResourceId>, XResourceIdLess>
@@ -300,7 +300,7 @@ bool AreConfigurationsEquivalent (
         });
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

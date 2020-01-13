@@ -30,7 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/help.hxx>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 ToolTip::ToolTip (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -155,6 +155,6 @@ IMPL_LINK_NOARG(ToolTip, DelayTrigger, Timer *, void)
     DoShow();
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

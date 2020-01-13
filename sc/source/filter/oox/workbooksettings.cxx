@@ -35,8 +35,7 @@
 #include <unitconverter.hxx>
 #include <biffhelper.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sheet;
@@ -287,7 +286,6 @@ void WorkbookSettings::setDateMode( bool bDateMode1904, bool bDateCompatibility 
     getUnitConverter().finalizeNullDate( getNullDate() );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,7 @@
 #include <Window.hxx>
 #include <osl/diagnose.h>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 class Layouter::Implementation
 {
@@ -1222,6 +1222,6 @@ void InsertPosition::SetGeometricalPosition(
     maTrailingOffset = rTrailingOffset;
 }
 
-} } } // end of namespace ::sd::slidesorter::namespace
+} // end of namespace ::sd::slidesorter::namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

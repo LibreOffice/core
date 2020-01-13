@@ -27,7 +27,7 @@
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
 
-namespace sd { namespace outliner {
+namespace sd::outliner {
 
 //===== IteratorPosition ======================================================
 
@@ -794,6 +794,6 @@ void DocumentIteratorImpl::GotoNextText()
         SetPage (nPageCount);
 }
 
-} } // end of namespace ::sd::outliner
+} // end of namespace ::sd::outliner
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

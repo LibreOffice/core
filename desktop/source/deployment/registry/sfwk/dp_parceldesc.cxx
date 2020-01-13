@@ -25,11 +25,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace sfwk
+namespace dp_registry::backend::sfwk
 {
 
 
@@ -102,8 +98,6 @@ void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
 }
 
 
-}
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

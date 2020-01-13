@@ -57,7 +57,7 @@
 #include <redline.hxx>
 #include <memory>
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 SidebarTextControl::SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
                                       WinBits nBits,
@@ -442,6 +442,6 @@ css::uno::Reference< css::accessibility::XAccessible > SidebarTextControl::Creat
     return xAcc;
 }
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

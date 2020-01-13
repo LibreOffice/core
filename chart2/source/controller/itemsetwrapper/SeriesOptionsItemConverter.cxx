@@ -37,9 +37,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 SeriesOptionsItemConverter::SeriesOptionsItemConverter(
@@ -435,7 +433,6 @@ void SeriesOptionsItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

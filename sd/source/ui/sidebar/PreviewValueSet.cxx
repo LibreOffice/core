@@ -20,7 +20,7 @@
 #include "PreviewValueSet.hxx"
 #include <vcl/event.hxx>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 static const int gnBorderWidth(3);
 static const int gnBorderHeight(3);
@@ -117,6 +117,6 @@ sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
     return nRowCount * (nItemHeight + 2*gnBorderHeight);
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

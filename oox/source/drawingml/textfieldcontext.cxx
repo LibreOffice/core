@@ -29,7 +29,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 TextFieldContext::TextFieldContext( ContextHandler2Helper const & rParent,
             const AttributeList& rAttributes,
@@ -73,6 +73,6 @@ ContextHandlerRef TextFieldContext::onCreateContext( sal_Int32 aElementToken, co
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

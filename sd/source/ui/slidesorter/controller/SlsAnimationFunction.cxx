@@ -19,7 +19,7 @@
 
 #include <controller/SlsAnimationFunction.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 //===== AnimationBezierFunction ===============================================
 
@@ -121,6 +121,6 @@ double AnimationParametricFunction::operator() (const double nX)
     return maY[nIndex0]*nU + maY[nIndex1]*(1-nU);
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

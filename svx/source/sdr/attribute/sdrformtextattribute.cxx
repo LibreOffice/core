@@ -140,9 +140,7 @@ namespace
 } // end of anonymous namespace
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpSdrFormTextAttribute
         {
@@ -371,7 +369,6 @@ namespace drawinglayer
         {
             return mpSdrFormTextAttribute->getFormTextOutline();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

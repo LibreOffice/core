@@ -22,8 +22,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 
 namespace
 {
@@ -120,7 +119,6 @@ uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames()
     return { VLC_SERVICENAME };
 }
 
-} // end namespace vlc
 } // end namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,9 +26,7 @@
 
 using namespace css;
 
-namespace vcl
-{
-namespace graphic
+namespace vcl::graphic
 {
 namespace
 {
@@ -237,7 +235,6 @@ void Manager::changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSizeBy
 
     mnUsedSize -= nOldSizeBytes;
     mnUsedSize += getGraphicSizeBytes(pImpGraphic);
-}
 }
 } // end vcl::graphic
 

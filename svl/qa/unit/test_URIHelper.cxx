@@ -50,10 +50,10 @@
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     class XCommandEnvironment;
     class XContentEventListener;
-} } } }
+}
 
 namespace {
 

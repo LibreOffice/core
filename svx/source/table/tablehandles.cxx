@@ -39,7 +39,7 @@
 #include <sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 namespace {
 
@@ -312,7 +312,6 @@ void TableBorderHdl::CreateB2dIAObject()
 }
 
 
-} // end of namespace table
 } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
