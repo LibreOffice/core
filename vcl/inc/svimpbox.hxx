@@ -331,7 +331,6 @@ public:
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
-    bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16          GetCurrentTabPos() const { return m_nCurTabPos; }
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );

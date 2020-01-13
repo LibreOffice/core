@@ -153,7 +153,6 @@ private:
     DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ClickAutoHdl, weld::ToggleButton&, void );
     DECL_LINK( AngleModifiedHdl, weld::SpinButton&, void );
-    DECL_LINK( RotationHdl, svx::DialControl*, void );
     DECL_STATIC_LINK( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void );
 
     void Initialize();

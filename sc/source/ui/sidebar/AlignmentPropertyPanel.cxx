@@ -360,14 +360,6 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     }
 }
 
-void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
-{
-    while(dTmp<0)
-        dTmp += 360;
-    while (dTmp > 359)  //modify
-        dTmp = 359;
-}
-
 // namespace close
 
 }} // end of namespace ::sc::sidebar

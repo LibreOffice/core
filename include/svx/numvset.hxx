@@ -46,44 +46,6 @@ enum class NumberingPageType
     BITMAP
 };
 
-class SvxNumValueSet final : public ValueSet
-{
-    NumberingPageType ePageType;
-    tools::Rectangle       aOrgRect;
-    VclPtr<VirtualDevice> pVDev;
-
-    css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
-    css::lang::Locale aLocale;
-
-    css::uno::Sequence<
-        css::uno::Sequence<
-            css::beans::PropertyValue> > aNumSettings;
-
-    css::uno::Sequence<
-        css::uno::Reference<
-            css::container::XIndexAccess> > aOutlineSettings;
-
-public:
-    SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits);
-    void init(NumberingPageType eType);
-    virtual ~SvxNumValueSet() override;
-    virtual void dispose() override;
-
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
-
-    void            SetNumberingSettings(
-        const css::uno::Sequence<
-                  css::uno::Sequence<css::beans::PropertyValue> >& aNum,
-        css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
-        const css::lang::Locale& rLocale );
-
-    void            SetOutlineNumberingSettings(
-            css::uno::Sequence<
-                css::uno::Reference<css::container::XIndexAccess> > const & rOutline,
-            css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
-            const css::lang::Locale& rLocale);
-};
-
 class SVX_DLLPUBLIC NumValueSet : public SvtValueSet
 {
     NumberingPageType ePageType;

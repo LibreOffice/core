@@ -643,16 +643,6 @@ sal_Int64 NumericFormatter::GetValue() const
     return GetField() ? GetValueFromString(GetField()->GetText()) : 0;
 }
 
-bool NumericFormatter::IsValueModified() const
-{
-    if ( ImplGetEmptyFieldValue() )
-        return !IsEmptyFieldValue();
-    else if ( GetValue() != mnFieldValue )
-        return true;
-    else
-        return false;
-}
-
 sal_Int64 NumericFormatter::Normalize( sal_Int64 nValue ) const
 {
     return (nValue * ImplPower10( GetDecimalDigits() ) );

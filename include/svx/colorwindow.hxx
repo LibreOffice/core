@@ -96,7 +96,6 @@ public:
                    ColorSelectFunction const& rColorSelectFunction);
     virtual ~SvxColorWindow() override;
     virtual void        dispose() override;
-    void                StartSelection();
     void                SetNoSelection();
     bool                IsNoSelection() const;
     void                SelectEntry(const NamedColor& rColor);
@@ -105,8 +104,6 @@ public:
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-
-    void SetSelectedHdl( const Link<const NamedColor&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
 class SvxColorToolBoxControl;

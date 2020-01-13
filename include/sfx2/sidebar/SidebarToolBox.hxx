@@ -54,8 +54,6 @@ public:
     void SetController(const sal_uInt16 nItemId,
                        const css::uno::Reference<css::frame::XToolbarController>& rxController);
 
-    css::uno::Reference<css::frame::XToolbarController> GetFirstController();
-
     void InitToolBox(VclBuilder::stringmap& rMap);
 
 protected:

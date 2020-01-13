@@ -453,20 +453,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, weld::SpinButton&, void
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl*, void )
-{
-    sal_Int32 nTmp = mxCtrlDial->GetRotation();
-
-    // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
-
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-            SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
-}
-
 IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void )
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();

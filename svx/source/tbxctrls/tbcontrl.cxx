@@ -2107,12 +2107,6 @@ IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
     mxPaletteManager->PopupColorPicker(mpParentWindow, maCommand, GetSelectEntryColor().first);
 }
 
-void SvxColorWindow::StartSelection()
-{
-    mpColorSet->StartSelection();
-    mpRecentColorSet->StartSelection();
-}
-
 void SvxColorWindow::SetNoSelection()
 {
     mpColorSet->SetNoSelection();

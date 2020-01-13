@@ -192,14 +192,6 @@ void SidebarToolBox::SetController(const sal_uInt16 nItemId,
         RegisterHandlers();
 }
 
-css::uno::Reference<css::frame::XToolbarController> SidebarToolBox::GetFirstController()
-{
-    if (maControllers.empty())
-        return css::uno::Reference<css::frame::XToolbarController>();
-
-    return maControllers.begin()->second;
-}
-
 void SidebarToolBox::RegisterHandlers()
 {
     if ( ! mbAreHandlersRegistered)
