@@ -364,7 +364,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             }
         }
         // now remove all superfluous stylesheets
-        sal_uIntPtr nNum=GetBroadcasterCount();
+        sal_uInt16 nNum=GetBroadcasterCount();
         while (nNum>0) {
             nNum--;
             SfxBroadcaster* pBroadcast=GetBroadcasterJOE(static_cast<sal_uInt16>(nNum));
