@@ -442,6 +442,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
 Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
 {
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     const SwFormatField & rField = static_cast<const SwFormatField&>(rHt);
     const SwField* pField = rField.GetField();
     const SwFieldType* pFieldTyp = pField->GetTyp();
@@ -509,7 +510,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             // TODO: ???
             OString sOut =
-                "<" OOO_STRING_SVTOOLS_HTML_comment
+                "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_comment
                 " " +
                 OUStringToOString(sComment, static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc) +
                 " -->";
@@ -518,7 +519,6 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( SwFieldIds::Script == pFieldTyp->Which() )
     {
-        SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine( true );
 
@@ -544,7 +544,6 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         OSL_ENSURE( pTextField, "Where is the txt fld?" );
         if( pTextField )
         {
-            SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
             // ReqIF-XHTML doesn't allow specifying a background color.
             bool bFieldShadings = SwViewOption::IsFieldShadings() && !rHTMLWrt.mbReqIF;
             if (bFieldShadings)

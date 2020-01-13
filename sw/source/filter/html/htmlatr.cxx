@@ -781,7 +781,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         // The align=... attribute does behave strange in netscape
         // if there are controls in a paragraph, because the control and
         // all text behind the control does not recognize this attribute.
-        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_division;
+        OString sOut = "<" + rHWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division;
         rWrt.Strm().WriteOString( sOut );
 
         rHWrt.m_bTextAttr = false;
@@ -2648,7 +2648,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
         {
-            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
+            OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font " "
                 OOO_STRING_SVTOOLS_HTML_O_color "=";
             rWrt.Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor ).WriteChar( '>' );
@@ -2708,7 +2708,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
         {
-            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
+            OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font " "
                 OOO_STRING_SVTOOLS_HTML_O_face "=\"";
             rWrt.Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters )
@@ -2748,7 +2748,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
         {
-            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font;
+            OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font;
 
             sal_uInt32 nHeight = static_cast<const SvxFontHeightItem&>(rHt).GetHeight();
             sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
@@ -2788,7 +2788,7 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.m_bTagOn )
     {
-        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_span;
+        OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span;
         rWrt.Strm().WriteOString( sOut );
         rHTMLWrt.OutLanguage( static_cast<const SvxLanguageItem &>(rHt).GetLanguage() );
         rWrt.Strm().WriteChar( '>' );
