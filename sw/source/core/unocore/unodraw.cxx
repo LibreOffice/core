@@ -711,7 +711,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if (pFormat)
     {
         if (pFormat->GetName().isEmpty())
-            pFormat->SetName(pDoc->GetUniqueFrameName(), false);
+            pFormat->SetName(pSvxShape->GetSdrObject()->GetName(), false);
         pShape->SetFrameFormat(pFormat);
     }
     pShape->m_bDescriptor = false;
