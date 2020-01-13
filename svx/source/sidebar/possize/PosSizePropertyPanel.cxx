@@ -207,11 +207,9 @@ void PosSizePropertyPanel::Initialize()
     //Size : Keep ratio
     mxCbxScale->connect_toggled( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
 
-    //rotation:
-    mxMtrAngle->connect_value_changed(LINK( this, PosSizePropertyPanel, AngleModifiedHdl));
-
     //rotation control
     mxCtrlDial->SetLinkedField(mxMtrAngle.get());
+    mxCtrlDial->SetModifyHdl(LINK( this, PosSizePropertyPanel, RotationHdl));
 
     //use same logic as DialControl_Impl::SetSize
     weld::DrawingArea* pDrawingArea = mxCtrlDial->GetDrawingArea();
@@ -438,9 +436,9 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::ToggleButton&, void )
     aPageOpt.SetUserItem( USERITEM_NAME, css::uno::makeAny( OUString::number( int(mxCbxScale->get_active()) ) ) );
 }
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, weld::SpinButton&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
 {
-    sal_Int64 nTmp = mxMtrAngle->get_value() * 100;
+    sal_Int32 nTmp = mxCtrlDial->GetRotation();
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
@@ -451,7 +449,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, weld::SpinButton&, void
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
             SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
 }
-
 
 IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void )
 {
