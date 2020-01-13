@@ -715,6 +715,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             }
         }
     }
+    else if( xChartModel.is() )
+        xChartModel->unlockControllers();
 
     if ( bAddUndo )
     {
