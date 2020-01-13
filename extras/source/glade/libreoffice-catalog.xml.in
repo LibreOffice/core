@@ -141,9 +141,6 @@
                         generic-name="DataTreeListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
 
-    <glade-widget-class title="Char Win" name="sfxlo-SvxCharViewControl"
-                        generic-name="ShowText" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Notebook switching tabs depending on context" name="sfxlo-NotebookbarTabControl"
                         generic-name="NotebookbarTabControl" parent="GtkNotebook"
                         icon-name="widget-gtk-notebook"/>
