@@ -26,10 +26,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         ClippingFunctor::ClippingFunctor(const ParametricPolyPolygonSharedPtr&   rPolygon,
                                          const TransitionInfo&                   rTransitionInfo,
                                          bool                                    bDirectionForward,
@@ -211,7 +209,6 @@ namespace slideshow
             return aClipPoly;
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

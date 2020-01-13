@@ -23,9 +23,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 std::unordered_map<OString, RTFSymbol> RTFTokenizer::s_aRTFControlWords;
 bool RTFTokenizer::s_bControlWordsInitialised;
@@ -328,7 +326,6 @@ OUString RTFTokenizer::getPosition()
     return aRet.makeStringAndClear();
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

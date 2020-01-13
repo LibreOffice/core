@@ -15,9 +15,7 @@
 
 #include <algorithm>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 OpenTypeFeatureDefinitonListPrivate::OpenTypeFeatureDefinitonListPrivate() { init(); }
 
@@ -193,7 +191,6 @@ bool OpenTypeFeatureDefinitonListPrivate::isRequired(sal_uInt32 nFeatureCode)
            != m_aRequiredFeatures.end();
 }
 
-} // end font namespace
-} // end vcl namespace
+} // end vcl::font namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

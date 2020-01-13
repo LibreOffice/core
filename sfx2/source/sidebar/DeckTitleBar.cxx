@@ -30,7 +30,7 @@
 #include <sfx2/sidebar/Tools.hxx>
 #endif
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 namespace
 {
@@ -140,6 +140,6 @@ void DeckTitleBar::MouseMove (const MouseEvent& rMouseEvent)
     Window::MouseMove( rMouseEvent );
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

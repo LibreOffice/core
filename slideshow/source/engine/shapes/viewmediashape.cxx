@@ -51,10 +51,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         ViewMediaShape::ViewMediaShape( const ViewLayerSharedPtr&                       rViewLayer,
                                         const uno::Reference< drawing::XShape >&        rxShape,
                                         const uno::Reference< uno::XComponentContext >& rxContext ) :
@@ -469,7 +467,6 @@ namespace slideshow
                 TOOLS_WARN_EXCEPTION( "slideshow", "" );
             }
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

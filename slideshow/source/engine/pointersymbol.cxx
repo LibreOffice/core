@@ -37,8 +37,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
                                               ScreenUpdater&                            rScreenUpdater,
@@ -193,7 +192,6 @@ void PointerSymbol::viewsChanged(const geometry::RealPoint2D pos)
     }
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,10 +25,8 @@
 
 /* Implementation of ExpressionNodeFactory class */
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace
         {
             class ConstantValueExpression : public ExpressionNode
@@ -236,7 +234,6 @@ namespace slideshow
             return std::make_shared<MaxExpression>(rOuterFunction, rInnerFunction);
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4090,7 +4090,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewControl
 }
 
 
-namespace sfx { namespace intern {
+namespace sfx::intern {
 
     /** a class which, in its dtor, cleans up various objects (well, at the moment only the frame) collected during
         the creation of a document view, unless the creation was successful.
@@ -4128,7 +4128,7 @@ namespace sfx { namespace intern {
         bool             m_bSuccess;
         SfxFrameWeakRef  m_aWeakFrame;
     };
-} }
+}
 
 
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const

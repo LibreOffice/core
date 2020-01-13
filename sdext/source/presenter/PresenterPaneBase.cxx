@@ -27,7 +27,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::drawing::framework;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterPaneBase =====================================================
 
@@ -346,6 +346,6 @@ void PresenterPaneBase::ThrowIfDisposed()
     }
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

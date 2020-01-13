@@ -743,8 +743,7 @@ oslFileError osl_getAbsoluteFileURL(
     return rc;
 }
 
-namespace osl {
-namespace detail {
+namespace osl::detail {
 
     /**
      No separate error code if unicode to text conversion or getenv fails because for the
@@ -761,7 +760,6 @@ namespace detail {
 
         return bfound;
     }
-}
 }
 
 namespace

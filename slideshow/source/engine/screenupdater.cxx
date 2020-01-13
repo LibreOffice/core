@@ -40,9 +40,7 @@ namespace {
     };
 }
 
-namespace slideshow
-{
-namespace internal
+namespace slideshow::internal
 {
     typedef std::vector<
         std::pair<UnoViewSharedPtr,bool> > UpdateRequestVector;
@@ -217,8 +215,7 @@ namespace internal
     }
 
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 namespace {
 

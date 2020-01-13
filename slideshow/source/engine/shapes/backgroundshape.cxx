@@ -35,10 +35,8 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace {
 
         /** Representation of a draw document's background shape.
@@ -293,7 +291,6 @@ namespace slideshow
                     xMasterPage,
                     rContext );
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

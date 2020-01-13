@@ -47,10 +47,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         ParametricPolyPolygonSharedPtr
         ParametricPolyPolygonFactory::createClipPolyPolygon(
             sal_Int16 nType, sal_Int16 nSubType )
@@ -271,7 +269,6 @@ namespace slideshow
 
             return ParametricPolyPolygonSharedPtr();
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,9 +32,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-namespace internal
+namespace slideshow::internal
 {
 
 SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettableShapeManager,
@@ -65,7 +63,6 @@ void SlideShowContext::dispose()
     mxComponentContext.clear();
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1699,7 +1699,7 @@ sdecl::ServiceDecl const serviceDecl(
     IMPLEMENTATION_NAME,
     BACKEND_SERVICE_NAME );
 
-} // namespace
+} // namespace dp_registry
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

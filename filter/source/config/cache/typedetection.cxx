@@ -47,8 +47,7 @@ using std::endl;
 
 using namespace com::sun::star;
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
    : m_xContext(rxContext)
@@ -1218,7 +1217,6 @@ css::uno::Reference< css::uno::XInterface > TypeDetection::impl_createInstance(c
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::document::XTypeDetection* >(pNew), css::uno::UNO_QUERY);
 }
 
-    } // namespace config
 } // namespace filter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

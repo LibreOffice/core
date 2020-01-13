@@ -31,9 +31,7 @@ OUString lcl_getTypePath(OUString& rType)
 }
 }
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 using namespace ::com::sun::star;
@@ -123,7 +121,6 @@ void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
     }
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

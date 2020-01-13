@@ -18,12 +18,12 @@
  */
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 ILayoutableWindow::~ILayoutableWindow()
 {
 }
 
-} } // end of namespace ::sd::sidebar
+} // end of namespace ::sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

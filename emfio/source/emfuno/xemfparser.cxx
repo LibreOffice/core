@@ -40,10 +40,8 @@
 
 using namespace ::com::sun::star;
 
-namespace emfio
+namespace emfio::emfreader
 {
-    namespace emfreader
-    {
         namespace {
 
         class XEmfParser : public ::cppu::WeakAggImplHelper2< graphic::XEmfParser, lang::XServiceInfo >
@@ -71,14 +69,11 @@ namespace emfio
         };
 
         }
-    } // end of namespace emfreader
-} // end of namespace emfio
+} // end of namespace emfio::emfreader
 
 // uno functions
-namespace emfio
+namespace emfio::emfreader
 {
-    namespace emfreader
-    {
         uno::Sequence< OUString > XEmfParser_getSupportedServiceNames()
         {
             return uno::Sequence< OUString > { "com.sun.star.graphic.EmfTools" };
@@ -93,13 +88,10 @@ namespace emfio
         {
             return static_cast< ::cppu::OWeakObject* >(new XEmfParser(context));
         }
-    } // end of namespace emfreader
-} // end of namespace emfio
+} // end of namespace emfio::emfreader
 
-namespace emfio
+namespace emfio::emfreader
 {
-    namespace emfreader
-    {
         XEmfParser::XEmfParser(
             uno::Reference< uno::XComponentContext > const & context):
             context_(context)
@@ -229,7 +221,6 @@ namespace emfio
             return XEmfParser_getSupportedServiceNames();
         }
 
-    } // end of namespace emfreader
-} // end of namespace emfio
+} // end of namespace emfio::emfreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,8 +51,7 @@
 OUString customTarget;
 OUString embeddingsTarget;
 using namespace ::com::sun::star;
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
@@ -881,7 +880,6 @@ OOXMLDocumentFactory::createDocument
     return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor);
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,9 +9,7 @@
 #include "LatentStyleHandler.hxx"
 #include <ooxml/resourceids.hxx>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 using namespace ::com::sun::star;
@@ -71,7 +69,6 @@ const std::vector<beans::PropertyValue>& LatentStyleHandler::getAttributes() con
     return m_aAttributes;
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+} // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

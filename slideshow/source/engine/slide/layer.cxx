@@ -29,10 +29,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         Layer::Layer( Dummy                     ) :
             maViewEntries(),
             maBounds(),
@@ -269,7 +267,6 @@ namespace slideshow
             return LayerSharedPtr( new Layer );
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

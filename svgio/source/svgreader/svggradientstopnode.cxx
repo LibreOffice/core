@@ -19,10 +19,8 @@
 
 #include <svggradientstopnode.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgGradientStopNode::SvgGradientStopNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
@@ -77,7 +75,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

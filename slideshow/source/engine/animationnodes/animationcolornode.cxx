@@ -28,8 +28,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 /** Little wrapper for HSL to RGB mapping.
@@ -117,7 +116,6 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
     return AnimationActivitySharedPtr();
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

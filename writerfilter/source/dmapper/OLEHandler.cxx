@@ -50,8 +50,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -319,7 +318,6 @@ OUString OLEHandler::copyOLEOStream(
     return sRet;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

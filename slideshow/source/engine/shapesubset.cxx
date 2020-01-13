@@ -25,10 +25,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
                                   const DocTreeNode&                      rTreeNode,
                                   const SubsettableShapeManagerSharedPtr& rShapeManager ) :
@@ -118,7 +116,6 @@ namespace slideshow
             return maTreeNode;
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

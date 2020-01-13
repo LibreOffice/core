@@ -17,9 +17,7 @@
 
 using namespace com::sun::star;
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 XMLBodyContentContext::XMLBodyContentContext(XMLImport& rImport)
     : XMLImportContext(rImport)
@@ -52,7 +50,6 @@ rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, cons
     return nullptr;
 }
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

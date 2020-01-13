@@ -31,9 +31,7 @@
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase.hxx>
 
-namespace svt
-{
-namespace GraphicAccess
+namespace svt::GraphicAccess
 {
 
 using namespace ::utl;
@@ -164,7 +162,6 @@ uno::Reference<io::XInputStream> getImageXStream(uno::Reference<uno::XComponentC
     return new OSeekableInputStreamWrapper(getImageStream(rxContext, rImageResourceURL).release(), true);   // take ownership
 }
 
-} // namespace GraphicAccess
-} // namespace svt
+} // namespace svt::GraphicAccess
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

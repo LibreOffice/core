@@ -106,6 +106,6 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(OUString const & url)
     }
 }
 
-} // namespace
+} // namespace dp_registry::backend::bundle
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

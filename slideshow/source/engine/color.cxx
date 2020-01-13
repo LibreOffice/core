@@ -27,10 +27,8 @@
 #include <algorithm>
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace
         {
             // helper functions
@@ -344,7 +342,6 @@ namespace slideshow
                              (1.0-t)*rFrom.getGreen() + t*rTo.getGreen(),
                              (1.0-t)*rFrom.getBlue() + t*rTo.getBlue() );
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

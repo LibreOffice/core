@@ -9,9 +9,7 @@
 
 #include "rtfdocumentimpl.hxx"
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFDocument::Pointer_t RTFDocumentFactory::createDocument(
     css::uno::Reference<css::uno::XComponentContext> const& xContext,
@@ -25,7 +23,6 @@ RTFDocument::Pointer_t RTFDocumentFactory::createDocument(
                                rMediaDescriptor);
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

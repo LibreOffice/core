@@ -13,9 +13,7 @@
 
 using namespace com::sun::star;
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 XMLBase64ImportContext::XMLBase64ImportContext(XMLImport& rImport)
     : XMLImportContext(rImport)
@@ -62,7 +60,6 @@ const librevenge::RVNGBinaryData& XMLBase64ImportContext::getBinaryData() const
     return m_aBinaryData;
 }
 
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,10 +46,8 @@
 
 using namespace ::com::sun::star;
 
-namespace vcl
+namespace vcl::unotools
 {
-    namespace unotools
-    {
         uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx(const ::BitmapEx& inputBitmap )
         {
             SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
@@ -619,8 +617,6 @@ namespace vcl
                           toByteColor(aARGBColor.Green),
                           toByteColor(aARGBColor.Blue) );
         }
-
-    } // namespace vcltools
 
 } // namespace canvas
 

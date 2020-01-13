@@ -16,9 +16,7 @@
 
 using namespace com::sun::star;
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 namespace
 {
@@ -123,7 +121,6 @@ void XMLFootnoteImportContext::startElement(
     const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
 }
-} // namespace exp
-} // namespace writerperfect
+} // namespace writerperfect::exp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

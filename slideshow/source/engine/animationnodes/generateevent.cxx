@@ -32,8 +32,7 @@
 #include <slideshowcontext.hxx>
 #include <delayevent.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 using namespace com::sun::star;
 
@@ -228,7 +227,6 @@ EventSharedPtr generateEvent(
     return pEvent;
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,10 +37,8 @@
 
 using namespace ::com::sun::star;
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         namespace {
 
         class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >
@@ -73,14 +71,11 @@ namespace svgio
         };
 
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 // uno functions
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         uno::Sequence< OUString > XSvgParser_getSupportedServiceNames()
         {
             return uno::Sequence< OUString > { "com.sun.star.graphic.SvgTools" };
@@ -95,13 +90,10 @@ namespace svgio
         {
             return static_cast< ::cppu::OWeakObject* >(new XSvgParser(context));
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         XSvgParser::XSvgParser(
             uno::Reference< uno::XComponentContext > const & context):
             context_(context)
@@ -221,7 +213,6 @@ namespace svgio
             return XSvgParser_getSupportedServiceNames();
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

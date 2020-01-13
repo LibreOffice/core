@@ -34,10 +34,8 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         // TODO(Q3): Move the whole SoundPlayer class to avmedia.
 
         std::shared_ptr<SoundPlayer> SoundPlayer::create(
@@ -169,7 +167,6 @@ namespace slideshow
         {
             return mxPlayer->isPlaying();
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

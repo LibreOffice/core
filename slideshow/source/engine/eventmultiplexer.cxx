@@ -123,8 +123,7 @@ struct slideshow::internal::ListenerOperations<ViewEventHandlerWeakPtrWrapper>
     }
 };
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -1238,7 +1237,6 @@ void EventMultiplexer::notifyHyperlinkClicked(
         { return pHandler.getHandler()->handleHyperlink( hyperLink ); } );
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

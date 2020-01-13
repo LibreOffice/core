@@ -17,9 +17,7 @@ namespace document = com::sun::star::document;
 namespace frame = com::sun::star::frame;
 namespace uno = com::sun::star::uno;
 
-namespace writerperfect
-{
-namespace test
+namespace writerperfect::test
 {
 void WpftFilterFixture::setUp()
 {
@@ -31,7 +29,6 @@ void WpftFilterFixture::setUp()
         m_xFactory->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
         uno::UNO_QUERY_THROW);
     m_xTypeMap.set(m_xTypeDetection, uno::UNO_QUERY_THROW);
-}
 }
 }
 

@@ -13,8 +13,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <bitmapwriteaccess.hxx>
 
-namespace vcl {
-namespace test {
+namespace vcl::test {
 
 Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
 {
@@ -189,6 +188,6 @@ TestResult OutputDeviceTestBitmap::checkBlend(BitmapEx& rBitmapEx)
     return checkRectangles(aBitmap, aExpected);
 }
 
-}} // end namespace vcl::test
+} // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

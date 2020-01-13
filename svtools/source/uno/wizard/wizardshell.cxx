@@ -27,7 +27,7 @@
 
 using vcl::RoadmapWizardTypes::WizardPath;
 
-namespace svt { namespace uno
+namespace svt::uno
 {
 
 
@@ -251,7 +251,7 @@ namespace svt { namespace uno
     }
 
 
-} } // namespace svt::uno
+} // namespace svt::uno
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

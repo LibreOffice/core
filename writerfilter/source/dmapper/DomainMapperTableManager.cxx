@@ -37,8 +37,7 @@
 #include <sal/log.hxx>
 #include <numeric>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::std;
@@ -782,6 +781,6 @@ void DomainMapperTableManager::clearData()
     m_sTableStyleName.clear();
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

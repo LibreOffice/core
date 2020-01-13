@@ -9,9 +9,7 @@
 
 #include <unx/gtk/gtkprintwrapper.hxx>
 
-namespace vcl
-{
-namespace unx
+namespace vcl::unx
 {
 
 GtkPrintWrapper::GtkPrintWrapper()
@@ -150,7 +148,6 @@ void GtkPrintWrapper::print_unix_dialog_set_has_selection(GtkPrintUnixDialog* di
     gtk_print_unix_dialog_set_has_selection(dialog, has_selection);
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

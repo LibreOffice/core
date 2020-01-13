@@ -26,8 +26,7 @@
 
 using namespace css;
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
 LoggedProperties("TblStylePrHandler"),
@@ -240,6 +239,6 @@ beans::PropertyValue TblStylePrHandler::getInteropGrabBag(const OUString& aName)
     return aRet;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

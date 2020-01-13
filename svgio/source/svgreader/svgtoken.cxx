@@ -20,10 +20,8 @@
 #include <svgtoken.hxx>
 #include <unordered_map>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         static const char aSVGStrWidth[] = "width";
         static const char aSVGStrHeight[] = "height";
         static const char aSVGStrViewBox[] = "viewBox";
@@ -359,7 +357,6 @@ namespace svgio
         {
             return aSVGStrDesc;
         }
-    } // end of namespace svgreader
 } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

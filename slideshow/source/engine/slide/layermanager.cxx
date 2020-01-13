@@ -40,10 +40,8 @@ namespace
     }
 }
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         template<typename LayerFunc,
                  typename ShapeFunc> void LayerManager::manageViews(
                      LayerFunc layerFunc,
@@ -826,7 +824,6 @@ namespace slideshow
 
             mbLayerAssociationDirty = false;
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

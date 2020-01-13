@@ -22,8 +22,7 @@
 #include <osl/diagnose.h>
 
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 
 QueryTokenizer::QueryTokenizer(const OUString& sQuery)
@@ -64,7 +63,6 @@ bool QueryTokenizer::valid() const
     return m_bValid;
 }
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

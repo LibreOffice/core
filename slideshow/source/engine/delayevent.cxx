@@ -21,8 +21,7 @@
 #include <osl/diagnose.h>
 #include <delayevent.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 bool Delay::fire()
 {
@@ -54,7 +53,6 @@ void Delay::dispose()
     }
 }
 
-} // namespace internal
-} // namespace presentation
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

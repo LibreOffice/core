@@ -28,7 +28,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 TabItem::TabItem (vcl::Window* pParentWindow)
     : ImageRadioButton(pParentWindow),
@@ -104,6 +104,6 @@ void TabItem::MouseButtonUp(const MouseEvent& rMouseEvent)
     }
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

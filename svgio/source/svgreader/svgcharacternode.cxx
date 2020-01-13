@@ -25,10 +25,8 @@
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgTextPositions::SvgTextPositions()
         :   maX(),
             maY(),
@@ -145,14 +143,11 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         namespace {
 
         class localTextBreakupHelper : public drawinglayer::primitive2d::TextBreakupHelper
@@ -193,14 +188,11 @@ namespace svgio
             return true;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgCharacterNode::SvgCharacterNode(
             SvgDocument& rDocument,
             SvgNode* pParent,
@@ -575,14 +567,11 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+} // end of namespace svgio::svgreader
 
 
-namespace svgio
+namespace svgio::svgreader
 {
-    namespace svgreader
-    {
         SvgTextPosition::SvgTextPosition(
             SvgTextPosition* pParent,
             const InfoProvider& rInfoProvider,
@@ -761,7 +750,6 @@ namespace svgio
             return fRetval;
         }
 
-    } // end of namespace svgreader
 } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

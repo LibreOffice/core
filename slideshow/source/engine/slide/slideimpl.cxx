@@ -51,9 +51,7 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
-{
-namespace internal
+namespace slideshow::internal
 {
 namespace
 {
@@ -1102,7 +1100,6 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
     return pRet;
 }
 
-} // namespace internal
 } // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 #include <ooxml/resourceids.hxx>
 #include <osl/diagnose.h>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -90,7 +89,6 @@ void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
             OSL_FAIL( "SectionColumnHandler: unknown sprm");
     }
 }
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

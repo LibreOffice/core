@@ -11,9 +11,7 @@
 #include <vcl/font/FeatureParser.hxx>
 #include <vcl/font/Feature.hxx>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 OUString trimFontNameFeatures(OUString const& rFontName)
 {
@@ -66,8 +64,6 @@ std::unordered_map<uint32_t, uint32_t> FeatureParser::getFeaturesMap() const
     return aResultMap;
 }
 
-} // end font namespace
-
-} // end vcl namespace
+} // end vcl::font namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,7 @@
 #include <tools/diagnose_ex.h>
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -872,6 +872,6 @@ namespace svt { namespace table
     }
 
 
-} } // svt::table
+} // svt::table
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

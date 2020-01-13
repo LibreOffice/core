@@ -28,9 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/color.hxx>
 
-namespace writerfilter {
-
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -210,7 +208,6 @@ void BorderHandler::appendGrabBag(const OUString& aKey, const OUString& aValue)
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

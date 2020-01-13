@@ -59,6 +59,6 @@ OUString ScriptBackendDb::getKeyElementName()
 }
 
 
-} // namespace
+} // namespace dp_registry::backend::script
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

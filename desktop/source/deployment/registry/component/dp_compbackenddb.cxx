@@ -126,6 +126,6 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
 }
 
 
-} // namespace
+} // namespace dp_registry::backend::component
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,9 +13,7 @@
 #include <hb-ot.h>
 #include <hb-graphite2.h>
 
-namespace vcl
-{
-namespace font
+namespace vcl::font
 {
 bool FeatureCollector::collectGraphite()
 {
@@ -154,7 +152,6 @@ bool FeatureCollector::collect()
     }
 }
 
-} // end namespace font
-} // end namespace vcl
+} // end namespace vcl::font
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

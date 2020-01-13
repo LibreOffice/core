@@ -41,8 +41,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -747,7 +746,6 @@ const char* BaseNode::getDescription() const
 
 #endif
 
-} // namespace internal
 } // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

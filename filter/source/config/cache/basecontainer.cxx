@@ -30,8 +30,7 @@
 
 #define LOAD_IMPLICIT
 
-namespace filter{
-    namespace config{
+namespace filter::config{
 
 BaseContainer::BaseContainer()
     : BaseLock     (       )
@@ -493,7 +492,6 @@ void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css:
     m_lListener.removeInterface(cppu::UnoType<css::util::XFlushListener>::get(), xListener);
 }
 
-    } // namespace config
-} // namespace filter
+} // namespace filter::config
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

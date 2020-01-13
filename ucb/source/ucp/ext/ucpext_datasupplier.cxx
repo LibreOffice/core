@@ -37,7 +37,7 @@
 #include <vector>
 
 
-namespace ucb { namespace ucp { namespace ext
+namespace ucb::ucp::ext
 {
 
 
@@ -341,7 +341,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-} } }   // namespace ucp::ext
+} // namespace ucb::ucp::ext
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

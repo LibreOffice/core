@@ -29,10 +29,8 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace {
 
         /** Represents an applet shape.
@@ -282,7 +280,6 @@ namespace slideshow
                                 nNumPropEntries,
                                 rContext);
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

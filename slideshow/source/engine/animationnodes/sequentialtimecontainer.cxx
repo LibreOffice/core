@@ -23,8 +23,7 @@
 #include <usereventqueue.hxx>
 #include "sequentialtimecontainer.hxx"
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 void SequentialTimeContainer::activate_st()
 {
@@ -124,7 +123,6 @@ void SequentialTimeContainer::notifyDeactivating(
     }
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

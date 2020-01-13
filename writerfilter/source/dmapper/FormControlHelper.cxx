@@ -39,8 +39,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -371,6 +370,6 @@ void FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     m_pImpl->getDrawPage()->add(xShape);
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

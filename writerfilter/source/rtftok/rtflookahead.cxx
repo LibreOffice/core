@@ -12,25 +12,14 @@
 #include <tools/stream.hxx>
 #include "rtftokenizer.hxx"
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace task
+namespace com::sun::star::task
 {
 class XStatusIndicator;
-}
-}
-}
 }
 
 using namespace com::sun::star;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
     : m_rStream(rStream)
@@ -107,7 +96,6 @@ void RTFLookahead::finishSubstream() {}
 
 bool RTFLookahead::isSubstream() const { return false; }
 
-} // namespace rtftok
-} // namespace writerfilter
+} // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,8 +13,7 @@
 #include <oox/token/tokens.hxx>
 #include <osl/diagnose.h>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -91,7 +90,6 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
 
 void TrackChangesHandler::lcl_sprm(Sprm &) {}
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,7 +16,7 @@
 #include "sourcefileprovider.hxx"
 #include "sourceprovider-scanner.hxx"
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 namespace {
 
@@ -130,6 +130,6 @@ rtl::Reference<Entity> SourceFileProvider::findEntity(OUString const & name)
 
 SourceFileProvider::~SourceFileProvider() throw () {}
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

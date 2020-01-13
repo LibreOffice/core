@@ -42,10 +42,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
 
         // TODO(F2): Provide sensible setup for mtf-related attributes (fill mode,
         // char rotation etc.). Do that via mtf argument at this object
@@ -853,7 +851,6 @@ namespace slideshow
                                bIsVisible );
         }
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

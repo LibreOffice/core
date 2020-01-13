@@ -31,8 +31,7 @@
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <tools/diagnose_ex.h>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -115,7 +114,6 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent )
     }
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} //namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

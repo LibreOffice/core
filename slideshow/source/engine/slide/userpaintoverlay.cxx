@@ -39,10 +39,8 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         class PaintOverlayHandler : public MouseEventHandler,
                                     public ViewEventHandler,
                     public UserPaintEventHandler
@@ -482,7 +480,6 @@ namespace slideshow
                 TOOLS_WARN_EXCEPTION("slideshow", "");
             }
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

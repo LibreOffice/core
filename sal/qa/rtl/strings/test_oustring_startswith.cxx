@@ -12,7 +12,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <rtl/ustring.hxx>
 
-namespace test { namespace oustring {
+namespace test::oustring {
 
 class StartsWith: public CppUnit::TestFixture
 {
@@ -24,7 +24,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 };
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StartsWith);
 

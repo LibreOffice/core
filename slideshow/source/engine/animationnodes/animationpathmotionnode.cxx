@@ -21,8 +21,7 @@
 #include "animationpathmotionnode.hxx"
 #include <animationfactory.hxx>
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 void AnimationPathMotionNode::dispose()
 {
@@ -48,7 +47,6 @@ AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
         true );
 }
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

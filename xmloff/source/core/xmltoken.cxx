@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 
 
-namespace xmloff { namespace token {
+namespace xmloff::token {
 
     // keep the tokens (and their length)
     namespace
@@ -3432,7 +3432,6 @@ namespace xmloff { namespace token {
         const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
         return aIter.isString( pToken->pChar );
     }
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

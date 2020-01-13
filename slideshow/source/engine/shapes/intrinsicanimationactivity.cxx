@@ -27,10 +27,8 @@
 
 #include <memory>
 
-namespace slideshow
+namespace slideshow::internal
 {
-    namespace internal
-    {
         namespace {
 
         /** Activity for intrinsic shape animations
@@ -246,7 +244,6 @@ namespace slideshow
                                                rTimeouts,
                                                nNumLoops);
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

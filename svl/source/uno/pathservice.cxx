@@ -26,9 +26,9 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 namespace {
 

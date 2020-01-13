@@ -26,8 +26,7 @@
 #include <tools.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     : m_positions( new ::basegfx::B2DPoint[ nElements ] ),
@@ -78,7 +77,6 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     return res;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

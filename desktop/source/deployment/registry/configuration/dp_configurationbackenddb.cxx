@@ -156,6 +156,6 @@ std::vector<OUString> ConfigurationBackendDb::getAllDataUrls()
     }
 }
 
-} // namespace
+} // namespace dp_registry::backend::configuration
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

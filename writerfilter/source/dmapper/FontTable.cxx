@@ -29,8 +29,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 struct FontTable_Impl
@@ -285,7 +284,6 @@ void EmbeddedFontHandler::lcl_sprm( Sprm& )
 }
 
 
-}//namespace dmapper
-}//namespace writerfilter
+}//namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

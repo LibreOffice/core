@@ -31,8 +31,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 namespace {
 bool isRepeatIndefinite(const uno::Reference<animations::XAnimationNode>& xNode)
 {
@@ -217,7 +216,6 @@ void BaseContainerNode::showState() const
 }
 #endif
 
-} // namespace internal
-} // namespace slideshow
+} // namespace slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
