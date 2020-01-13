@@ -21,7 +21,6 @@
 #define INCLUDED_SFX2_INC_CHARWIN_HXX
 
 #include <sfx2/dllapi.h>
-#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -69,37 +68,6 @@ public:
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
 
     void ContextMenuSelect(const OString& rIdent);
-};
-
-class SvxCharViewControl final : public Control
-{
-public:
-    SvxCharViewControl(vcl::Window* pParent);
-
-    void            SetFont( const vcl::Font& rFont );
-    void            SetText( const OUString& rText ) override;
-    void            InsertCharToDoc();
-
-    void            createContextMenu();
-
-    virtual void    Resize() override;
-
-    virtual Size    GetOptimalSize() const override;
-
-    void setMouseClickHdl(const Link<SvxCharViewControl*,void> &rLink);
-
-private:
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
-
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-
-    long            mnY;
-    Point           maPosition;
-    vcl::Font       maFont;
-
-    Link<SvxCharViewControl*, void> maMouseClickHdl;
 };
 
 #endif
