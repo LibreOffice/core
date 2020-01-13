@@ -98,8 +98,7 @@ sal_Bool OColumn::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > OColumn::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSNS { SERVICE_SDBCX_COLUMN };
-    return aSNS;
+    return { SERVICE_SDBCX_COLUMN };
 }
 
 // OComponentHelper
@@ -190,8 +189,7 @@ sal_Bool OColumns::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > OColumns::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSNS { SERVICE_SDBCX_CONTAINER };
-    return aSNS;
+    return { SERVICE_SDBCX_CONTAINER };
 }
 
 void OColumns::append( const OUString& _rName, OColumn* _pColumn )

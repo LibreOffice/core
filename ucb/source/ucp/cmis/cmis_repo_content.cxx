@@ -311,8 +311,7 @@ namespace cmis
 
     uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
     {
-       uno::Sequence<OUString> aSNS { "com.sun.star.ucb.Content" };
-       return aSNS;
+       return { "com.sun.star.ucb.Content" };
     }
 
     OUString SAL_CALL RepoContent::getContentType()

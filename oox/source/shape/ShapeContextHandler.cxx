@@ -599,8 +599,7 @@ OUString ShapeContextHandler::getImplementationName()
 
 uno::Sequence< OUString > ShapeContextHandler::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > s { "com.sun.star.xml.sax.FastShapeContextHandler" };
-    return s;
+    return { "com.sun.star.xml.sax.FastShapeContextHandler" };
 }
 
 sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceName)

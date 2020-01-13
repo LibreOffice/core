@@ -414,8 +414,7 @@ OUString ZipPackageFolder::getImplementationName()
 
 uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames { "com.sun.star.packages.PackageFolder" };
-    return aNames;
+    return { "com.sun.star.packages.PackageFolder" };
 }
 
 sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )
