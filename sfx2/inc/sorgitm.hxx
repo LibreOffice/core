@@ -23,7 +23,7 @@
 
 // class SfxScriptOrganizerItem ---------------------------------------------
 
-class SfxScriptOrganizerItem : public SfxStringItem
+class SfxScriptOrganizerItem final : public SfxStringItem
 {
 private:
     OUString aLanguage;

@@ -17,7 +17,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 //  class SfxSaveAsTemplateDialog -------------------------------------------------------------------
-class SfxSaveAsTemplateDialog : public weld::GenericDialogController
+class SfxSaveAsTemplateDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::TreeView> m_xLBCategory;

@@ -107,7 +107,7 @@ protected:
 };
 
 // Class that runs the compression in a background thread.
-class ZipOutputEntryInThread : public ZipOutputEntry
+class ZipOutputEntryInThread final : public ZipOutputEntry
 {
     class Task;
     OUString m_aTempURL;
@@ -135,7 +135,7 @@ private:
 };
 
 // Class that synchronously runs the compression in multiple threads (using ThreadDeflater).
-class ZipOutputEntryParallel : public ZipOutputEntryBase
+class ZipOutputEntryParallel final : public ZipOutputEntryBase
 {
     sal_Int64 totalIn;
     sal_Int64 totalOut;
@@ -145,7 +145,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt);
     void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) override;
-protected:
+private:
     virtual void finishDeflater() override;
     virtual sal_Int64 getDeflaterTotalIn() const override;
     virtual sal_Int64 getDeflaterTotalOut() const override;

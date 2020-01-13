@@ -55,7 +55,7 @@ inline void closedialogs(SystemWindow& rTopLevel, bool bCloseRoot)
 //
 // If there are dialog children open on exit then veto termination,
 // close the topmost dialog and retry termination.
-class WarningDialogsParent :
+class WarningDialogsParent final :
     public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
 {
 private:
@@ -157,7 +157,7 @@ struct ThreadHelpBase2
         mutable ::osl::Mutex m_aLock;
 };
 
-class PreventDuplicateInteraction : private ThreadHelpBase2
+class PreventDuplicateInteraction final : private ThreadHelpBase2
                                   , public ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>
 {
 

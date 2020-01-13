@@ -45,7 +45,7 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
     };
 
     class OUnoObject;
-    class REPORTDESIGN_DLLPUBLIC DlgEdHint: public SfxHint
+    class REPORTDESIGN_DLLPUBLIC DlgEdHint final : public SfxHint
     {
     private:
         DlgEdHintKind const eHintKind;

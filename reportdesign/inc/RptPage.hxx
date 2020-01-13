@@ -32,7 +32,7 @@ namespace rptui
 
 class OReportModel;
 
-class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
+class REPORTDESIGN_DLLPUBLIC OReportPage final : public SdrPage
 {
     OReportPage& operator=(const OReportPage&) = delete;
     OReportPage(const OReportPage&) = delete;
@@ -48,7 +48,6 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 
     virtual ~OReportPage() override;
 
-protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 public:
 

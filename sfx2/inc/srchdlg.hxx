@@ -27,7 +27,7 @@ namespace sfx2 {
 // SearchDialog
 
 
-class SearchDialog : public weld::GenericDialogController
+class SearchDialog final : public weld::GenericDialogController
 {
 private:
     Link<SearchDialog&,void>   m_aFindHdl;
