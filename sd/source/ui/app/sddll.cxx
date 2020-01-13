@@ -215,8 +215,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
     SvxClipBoardControl::RegisterControl( SID_PASTE_UNFORMATTED, pMod );
 
-    svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
-
 #if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 #endif

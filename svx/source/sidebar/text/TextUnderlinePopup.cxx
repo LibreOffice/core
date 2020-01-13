@@ -23,10 +23,8 @@
 
 using namespace svx;
 
-SFX_IMPL_TOOLBOX_CONTROL(TextUnderlinePopup, SvxUnderlineItem);
-
-TextUnderlinePopup::TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
-    : SfxToolBoxControl(nSlotId, nId, rTbx)
+TextUnderlinePopup::TextUnderlinePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : PopupWindowController(rContext, nullptr, OUString())
 {
 }
 
@@ -34,21 +32,37 @@ TextUnderlinePopup::~TextUnderlinePopup()
 {
 }
 
-void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
-    SfxToolBoxControl::initialize(aArguments);
-    if (GetToolBox().GetItemCommand(GetId()) == m_aCommandURL)
-        GetToolBox().SetItemBits(GetId(), ToolBoxItemBits::DROPDOWN | GetToolBox().GetItemBits(GetId()));
+    PopupWindowController::initialize(rArguments);
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
-VclPtr<SfxPopupWindow> TextUnderlinePopup::CreatePopupWindow()
+VclPtr<vcl::Window> TextUnderlinePopup::createPopupWindow(vcl::Window* pParent)
 {
-    VclPtr<TextUnderlineControl> pControl = VclPtr<TextUnderlineControl>::Create(GetSlotId(), &GetToolBox());
-    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
-    SetPopupWindow(pControl);
-
-    return pControl;
+    return VclPtr<TextUnderlineControl>::Create(this, pParent);
 }
 
+OUString TextUnderlinePopup::getImplementationName()
+{
+    return "com.sun.star.comp.svx.UnderlineToolBoxControl";
+}
+
+css::uno::Sequence<OUString> TextUnderlinePopup::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new TextUnderlinePopup(rContext));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

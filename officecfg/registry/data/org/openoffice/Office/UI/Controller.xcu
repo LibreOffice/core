@@ -1404,6 +1404,17 @@
           <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="UnderlineToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Underline</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.UnderlineToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="XLineColorToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:XLineColor</value>
