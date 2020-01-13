@@ -47,16 +47,6 @@ namespace pcr
         m_nMaxLines = nMaxLines;
     }
 
-    long InspectorHelpWindow::impl_getMinimalTextWindowHeight()
-    {
-        return m_xHelpText->get_height_rows(m_nMinLines);
-    }
-
-    long InspectorHelpWindow::impl_getMaximalTextWindowHeight()
-    {
-        return m_xHelpText->get_height_rows(m_nMaxLines);
-    }
-
 } // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

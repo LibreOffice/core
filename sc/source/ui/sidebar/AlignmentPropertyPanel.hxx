@@ -106,7 +106,6 @@ private:
     DECL_LINK( ReferenceEdgeHdl, weld::ToggleButton&, void );
 
     void Initialize();
-    static void FormatDegrees(double& dTmp);
 };
 
 } } // end of namespace ::sc::sidebar

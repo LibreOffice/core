@@ -149,7 +149,6 @@ public:
     virtual void            SetValue( sal_Int64 nNewValue );
     sal_Int64               GetValue() const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
-    bool                    IsValueModified() const;
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;

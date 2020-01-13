@@ -43,10 +43,6 @@ namespace pcr
 
         void            Show(bool bShow) { m_xHelpFrame->set_visible(bShow); }
         bool            IsVisible() const { return m_xHelpFrame->get_visible(); }
-
-    private:
-        long            impl_getMinimalTextWindowHeight();
-        long            impl_getMaximalTextWindowHeight();
     };
 
 } // namespace pcr

@@ -211,7 +211,6 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInheritanceH
     sal_uInt16 m_nSlotId;
     ColorSelectFunction m_aColorSelectFunction;
     DECL_LINK(SelectedHdl, const NamedColor&, void);
-    DECL_LINK(ToolbarHdl_Impl, const OString&, void);
 
 public:
     explicit SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );

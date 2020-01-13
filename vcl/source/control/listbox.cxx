@@ -986,16 +986,6 @@ sal_Int32 ListBox::GetEntryPos( const OUString& rStr ) const
     return nPos;
 }
 
-sal_Int32 ListBox::GetEntryPos( const void* pData ) const
-{
-    if (!mpImplLB)
-        return LISTBOX_ENTRY_NOTFOUND;
-    sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
-    return nPos;
-}
-
 OUString ListBox::GetEntry( sal_Int32 nPos ) const
 {
     if (!mpImplLB)

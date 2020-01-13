@@ -3358,21 +3358,6 @@ void SvImpLBox::CallEventListeners( VclEventId nEvent, void* pData )
 }
 
 
-bool SvImpLBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
-{
-    bool bRet = false;
-
-    if ( m_pView && _nNewPos < ( m_pView->TabCount() - 2 ) )
-    {
-        m_nCurTabPos = _nNewPos;
-        ShowCursor( true );
-        bRet = true;
-    }
-
-    return bRet;
-}
-
-
 bool SvImpLBox::IsSelectable( const SvTreeListEntry* pEntry )
 {
     if( pEntry )
