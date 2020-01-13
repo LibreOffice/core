@@ -32,7 +32,7 @@
 #define MN_GALLERY_ENTRY 100
 
 class ColorListBox;
-class NumValueSet;
+class SvxNumValueSet;
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxBrushItem;
@@ -66,7 +66,7 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
 
     sal_uInt16              nNumItemId;
 
-    std::unique_ptr<NumValueSet> m_xExamplesVS;
+    std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
     DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
@@ -96,7 +96,7 @@ class SvxBulletPickTabPage final : public SfxTabPage
 
     OUString            sBulletCharFormatName;
 
-    std::unique_ptr<NumValueSet> m_xExamplesVS;
+    std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
     DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
@@ -133,7 +133,7 @@ class SvxNumPickTabPage final : public SfxTabPage
     bool                bModified   : 1;
     bool                bPreset     : 1;
 
-    std::unique_ptr<NumValueSet> m_xExamplesVS;
+    std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
     DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
