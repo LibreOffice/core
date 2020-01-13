@@ -35,7 +35,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
