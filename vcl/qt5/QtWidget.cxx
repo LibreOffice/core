@@ -460,6 +460,9 @@ static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
             case Qt::Key_BracketRight:
                 nCode = KEY_BRACKETRIGHT;
                 break;
+            case Qt::Key_Colon:
+                nCode = KEY_COLON;
+                break;
             case Qt::Key_Semicolon:
                 nCode = KEY_SEMICOLON;
                 break;
