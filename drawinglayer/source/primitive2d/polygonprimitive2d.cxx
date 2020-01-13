@@ -379,12 +379,8 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer::primitive2d
-{
         void PolygonWavePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getB2DPolygon().count())
@@ -604,6 +600,7 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(PolygonStrokeArrowPrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D)
 
+    }
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

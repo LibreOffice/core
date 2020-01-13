@@ -34,9 +34,7 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         // TODO(Q3): Move the whole SoundPlayer class to avmedia.
 
@@ -170,6 +168,5 @@ namespace slideshow
             return mxPlayer->isPlaying();
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

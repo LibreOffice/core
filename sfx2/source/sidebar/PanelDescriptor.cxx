@@ -19,7 +19,7 @@
 
 #include <sfx2/sidebar/PanelDescriptor.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 PanelDescriptor::PanelDescriptor()
     : msTitle(),
@@ -57,6 +57,6 @@ PanelDescriptor::~PanelDescriptor()
 {
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 
 #include <tools/diagnose_ex.h>
 
-namespace basctl { namespace docs {
+namespace basctl::docs {
 
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Reference;
@@ -164,6 +164,6 @@ namespace basctl { namespace docs {
         }
     }
 
-} } // namespace basctl::docs
+} // namespace basctl::docs
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

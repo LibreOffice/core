@@ -15,9 +15,7 @@
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
 
-namespace msfilter
-{
-namespace rtfutil
+namespace msfilter::rtfutil
 {
 OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
 {
@@ -303,7 +301,6 @@ bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, sal_uInt64& rSize)
         }
     }
     return false;
-}
 }
 }
 

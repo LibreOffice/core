@@ -41,10 +41,7 @@ using namespace css;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DReference;
 
-namespace vcl
-{
-
-namespace bitmap
+namespace vcl::bitmap
 {
 
 BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
@@ -1120,6 +1117,6 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
     return true;
 }
 
-}} // end vcl::bitmap
+} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

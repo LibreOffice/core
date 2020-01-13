@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 
 
-namespace svt { namespace table
+namespace svt::table
 {
     using ::css::uno::Any;
     using ::css::uno::Reference;
@@ -597,7 +597,7 @@ namespace svt { namespace table
     }
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

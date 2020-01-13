@@ -25,8 +25,7 @@
 #include "figurewipe.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ::basegfx::B2DPolyPolygon FigureWipe::operator () ( double t )
 {
@@ -113,7 +112,6 @@ FigureWipe * FigureWipe::createStarWipe( sal_Int32 nPoints )
     return new FigureWipe(figure);
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

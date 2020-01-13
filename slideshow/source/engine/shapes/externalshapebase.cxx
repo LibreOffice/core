@@ -32,9 +32,7 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         class ExternalShapeBase::ExternalShapeBaseListener : public ViewEventHandler,
                                                              public IntrinsicAnimationEventHandler
@@ -208,6 +206,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

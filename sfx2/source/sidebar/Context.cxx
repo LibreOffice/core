@@ -22,7 +22,7 @@
 #define AnyApplicationName "any"
 #define AnyContextName "any"
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 const sal_Int32 Context::NoMatch = 4;
 const sal_Int32 Context::ApplicationWildcardMatch = 1;
@@ -80,6 +80,6 @@ bool Context::operator!= (const Context& rOther) const
         || ( msContext != rOther.msContext);
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

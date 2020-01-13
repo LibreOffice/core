@@ -47,8 +47,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 class RehearseTimingsActivity::WakeupEvent : public Event
 {
@@ -541,7 +540,6 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseMoved(
     return false;
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

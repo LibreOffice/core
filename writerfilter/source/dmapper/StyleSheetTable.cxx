@@ -48,8 +48,7 @@
 
 using namespace ::com::sun::star;
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 typedef ::std::map< OUString, OUString> StringPairMap_t;
@@ -1567,7 +1566,6 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     return sListLabel;
 }
 
-}//namespace dmapper
 }//namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

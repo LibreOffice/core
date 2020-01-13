@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 void PresenterUIPainter::PaintHorizontalBitmapComposite (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
@@ -236,6 +236,6 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     }
 }
 
-} } // end of namespace sdext::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

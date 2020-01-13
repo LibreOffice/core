@@ -23,7 +23,7 @@
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 
-namespace test { namespace oustring {
+namespace test::oustring {
 
 class Compare: public CppUnit::TestFixture
 {
@@ -39,7 +39,7 @@ CPPUNIT_TEST(compareTo);
 CPPUNIT_TEST_SUITE_END();
 };
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Compare);
 

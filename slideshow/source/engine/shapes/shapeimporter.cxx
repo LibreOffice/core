@@ -47,8 +47,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -533,7 +532,6 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
     maShapesStack.push( XShapesEntry(xShapes) );
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

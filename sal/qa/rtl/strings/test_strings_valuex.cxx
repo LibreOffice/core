@@ -13,7 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <iostream>
 
-namespace test { namespace strings {
+namespace test::strings {
 
 class valueX : public CppUnit::TestFixture {
 public:
@@ -34,7 +34,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::strings::valueX);
 

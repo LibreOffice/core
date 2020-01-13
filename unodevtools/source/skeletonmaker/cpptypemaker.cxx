@@ -30,7 +30,7 @@
 
 using namespace ::codemaker::cpp;
 
-namespace skeletonmaker { namespace cpp {
+namespace skeletonmaker::cpp {
 
 static void printType(
     std::ostream & o, ProgramOptions const & options,
@@ -969,7 +969,7 @@ void generateDocumentation(std::ostream & o,
     }
 }
 
-} }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

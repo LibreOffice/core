@@ -46,9 +46,7 @@
 
 /* Implementation of SmilFunctionParser class */
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         namespace
         {
@@ -605,7 +603,6 @@ namespace slideshow
             return pContext->maOperandStack.top();
         }
     }
-}
 
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 

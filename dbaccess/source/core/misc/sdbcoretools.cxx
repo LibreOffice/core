@@ -142,7 +142,7 @@ namespace dbaccess
         return bSuccess;
     }
 
-    }
+    } // tools::stor
 
 }   // namespace dbaccess
 
