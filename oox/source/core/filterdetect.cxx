@@ -371,8 +371,7 @@ sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames()
 {
-    Sequence<OUString> aServiceNames { "com.sun.star.frame.ExtendedTypeDetection" };
-    return aServiceNames;
+    return { "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
 // com.sun.star.document.XExtendedFilterDetection interface -------------------

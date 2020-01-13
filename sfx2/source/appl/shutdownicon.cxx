@@ -100,8 +100,7 @@ sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aSeq { "com.sun.star.office.Quickstart" };
-    return aSeq;
+    return { "com.sun.star.office.Quickstart" };
 }
 
 bool ShutdownIcon::bModalMode = false;

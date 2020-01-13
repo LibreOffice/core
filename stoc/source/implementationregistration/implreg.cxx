@@ -1127,8 +1127,7 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames { "com.sun.star.registry.ImplementationRegistration" };
-    return seqNames;
+    return { "com.sun.star.registry.ImplementationRegistration" };
 }
 
 Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager() const
