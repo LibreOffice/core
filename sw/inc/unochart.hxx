@@ -328,13 +328,13 @@ SwChartLabeledDataSequenceBaseClass;
 class SwChartLabeledDataSequence final :
     public SwChartLabeledDataSequenceBaseClass
 {
-    ::comphelper::OInterfaceContainerHelper2                           aEvtListeners;
-    ::comphelper::OInterfaceContainerHelper2                           aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper2                           m_aEventListeners;
+    ::comphelper::OInterfaceContainerHelper2                           m_aModifyListeners;
 
-    css::uno::Reference< css::chart2::data::XDataSequence >     xData;
-    css::uno::Reference< css::chart2::data::XDataSequence >     xLabels;
+    css::uno::Reference< css::chart2::data::XDataSequence >     m_xData;
+    css::uno::Reference< css::chart2::data::XDataSequence >     m_xLabels;
 
-    bool    bDisposed;
+    bool    m_bDisposed;
 
     SwChartLabeledDataSequence( const SwChartLabeledDataSequence & ) = delete;
     SwChartLabeledDataSequence & operator = ( const SwChartLabeledDataSequence & ) = delete;
