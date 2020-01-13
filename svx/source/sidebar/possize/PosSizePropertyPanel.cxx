@@ -36,13 +36,9 @@
 #include <svx/dlgutil.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/toolbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svdpagv.hxx>
