@@ -1080,6 +1080,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_SEMICOLON ] = ";";
         aKeyMap[ KEY_QUOTERIGHT ] = "'";
         aKeyMap[ KEY_RIGHTCURLYBRACKET ] = "}";
+        aKeyMap[ KEY_COLON ] = ":";
 
         /* yet unmapped KEYCODES:
         aKeyMap[ KEY_INSERT ]   = OUString( sal_Unicode( ) );

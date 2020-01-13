@@ -369,6 +369,8 @@ published constants Key
     /** @since LibreOffice 7.5 **/
     const short RIGHTCURLYBRACKET = 1319;
 
+    /** @since LibreOffice 7.6 **/
+    const short COLON = 1320;
 
     /** The following values don't correspond to physical keys on any
         keyboard but are used in the macOS implementation of VCL. They
