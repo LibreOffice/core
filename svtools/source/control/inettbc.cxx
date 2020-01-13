@@ -1370,8 +1370,7 @@ void SvtURLBox::TryAutoComplete()
 SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaultHelpID )
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
-        bAutoCompleteMode( false ),
-        bHistoryDisabled( false )
+        bAutoCompleteMode( false )
 {
     Init(bSetDefaultHelpID);
 
@@ -1418,8 +1417,6 @@ void SvtURLBox::dispose()
 void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     Clear();
-    if ( bHistoryDisabled )
-        return;
 
     // read history pick list
     const Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );

@@ -219,7 +219,6 @@ private:
     sal_uInt16      mnSpacing;
     DrawFrameStyle  mnFrameStyle;
     Color           maColor;
-    Link<ValueSet*,void>  maDoubleClickHdl;
     Link<ValueSet*,void>  maSelectHdl;
     Link<ValueSet*,void>  maHighlightHdl;
 
