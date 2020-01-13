@@ -327,7 +327,7 @@ void SwHTMLWriter::OutFootEndNotes()
         if( m_bLFPossible )
             OutNewLine();
         OString sOut =
-            "<" OOO_STRING_SVTOOLS_HTML_division
+            "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_division
             " " OOO_STRING_SVTOOLS_HTML_O_id "=\"";
         Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
@@ -504,7 +504,7 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
 
     rHTMLWrt.OutNewLine();
     OString sOut =
-        "<" OOO_STRING_SVTOOLS_HTML_meta " "
+        "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_meta " "
         OOO_STRING_SVTOOLS_HTML_O_name "=\"" + rtl::OStringView(pName) +
         "\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"";
     rWrt.Strm().WriteOString( sOut );

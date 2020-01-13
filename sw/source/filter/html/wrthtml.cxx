@@ -418,7 +418,7 @@ ErrCode SwHTMLWriter::WriteStream()
                     &m_aNonConvertableCharacters );
 
                 aStartTags =
-                    "<" OOO_STRING_SVTOOLS_HTML_division
+                    "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_division
                     " " OOO_STRING_SVTOOLS_HTML_O_id
                     "=\"" + aName + "\">" +
                     aStartTags;
@@ -1053,7 +1053,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // and now ... the BASIC and JavaScript!
         if( m_pDoc->GetDocShell() )   // only with DocShell BASIC is possible
-            OutBasic();
+            OutBasic(*this);
 
         DecIndentLevel();   // indent content of <HEAD>
         OutNewLine();

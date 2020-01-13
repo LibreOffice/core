@@ -445,7 +445,7 @@ public:
     void OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote, const OUString& rNum,
                              sal_uInt16 nScript );
 
-    void OutBasic();
+    void OutBasic(SwHTMLWriter& rHTMLWrt);
 
     void OutAndSetDefList( sal_uInt16 nNewLvl );
 

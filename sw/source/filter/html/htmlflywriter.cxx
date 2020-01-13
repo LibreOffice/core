@@ -1657,7 +1657,7 @@ static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& r
         rHTMLWrt.OutNewLine( true );
 
     OString sOut =
-        "<" OOO_STRING_SVTOOLS_HTML_spacer " "
+        "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_spacer " "
         OOO_STRING_SVTOOLS_HTML_O_type "=\""
         OOO_STRING_SVTOOLS_HTML_SPTYPE_block "\"";
     rWrt.Strm().WriteOString( sOut );
