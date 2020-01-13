@@ -115,6 +115,8 @@ public:
     const OUString&     GetText() const { return mpImpl->maText; }
     void                SetText(const OUString& rText) { mpImpl->maText = rText; }
 
+    void                SetModifyHdl( const Link<DialControl&,void>& rLink );
+
     void                Init( const Size& rWinSize );
 private:
     struct DialControl_Impl
@@ -122,6 +124,7 @@ private:
         ScopedVclPtr<DialControlBmp> mxBmpEnabled;
         ScopedVclPtr<DialControlBmp> mxBmpDisabled;
         ScopedVclPtr<DialControlBmp> mxBmpBuffered;
+        Link<DialControl&,void>      maModifyHdl;
         OUString            maText;
         weld::SpinButton*   mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
@@ -143,12 +146,13 @@ private:
     void                HandleMouseEvent( const Point& rPos, bool bInitial );
     void                HandleEscapeEvent();
 
+    void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
+
     void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
 
     void                InvalidateControl();
 
     DECL_LINK(LinkedFieldModifyHdl, weld::SpinButton&, void);
-    void LinkedFieldModifyHdl();
 };
 
 }
