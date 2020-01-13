@@ -39,9 +39,7 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         namespace
         {
@@ -1234,6 +1232,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

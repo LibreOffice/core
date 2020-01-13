@@ -37,7 +37,7 @@
 #include <osl/security.hxx>
 
 
-namespace extensions { namespace config { namespace ldap {
+namespace extensions::config::ldap {
 
 LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContext>& xContext)
 : LdapProfileMutexHolder(),
@@ -230,7 +230,7 @@ SAL_CALL LdapUserProfileBe::getSupportedServiceNames()
     return getLdapUserProfileBeServiceNames() ;
 }
 
-}}}
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,9 +21,7 @@
 #include "continuousactivitybase.hxx"
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         ContinuousActivityBase::ContinuousActivityBase( const ActivityParameters& rParms ) :
             SimpleContinuousActivityBase( rParms )
@@ -37,6 +35,5 @@ namespace slideshow
                      nRepeatCount );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

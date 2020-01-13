@@ -22,7 +22,7 @@
 #include <cppuhelper/implementationentry.hxx>
 
 
-namespace ucb { namespace ucp { namespace ext
+namespace ucb::ucp::ext
 {
 
 
@@ -42,7 +42,7 @@ namespace ucb { namespace ucp { namespace ext
     };
 
 
-} } }   // namespace ucb::ucp::ext
+}   // namespace ucb::ucp::ext
 
 
 extern "C"

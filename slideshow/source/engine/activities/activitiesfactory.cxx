@@ -43,8 +43,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -1011,7 +1010,6 @@ AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
         return std::make_shared<SimpleActivity<0>>( aActivityParms, rAnim );
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

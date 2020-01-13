@@ -25,8 +25,7 @@
 #include "transitiontools.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ::basegfx::B2DPolyPolygon SweepWipe::operator () ( double t )
 {
@@ -68,7 +67,6 @@ namespace internal {
     return m_flipOnYAxis ? flipOnYAxis(res) : res;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

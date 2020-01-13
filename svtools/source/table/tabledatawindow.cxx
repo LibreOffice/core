@@ -27,7 +27,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 
-namespace svt { namespace table
+namespace svt::table
 {
     using css::uno::Any;
 
@@ -194,7 +194,7 @@ namespace svt { namespace table
         return bDone || Window::EventNotify( rNEvt );
     }
 
-}} // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"
 
-namespace skeletonmaker { namespace java {
+namespace skeletonmaker::java {
 
 static void printType(
     std::ostream & o, ProgramOptions const & options,
@@ -854,7 +854,7 @@ void generateDocumentation(std::ostream & o,
     }
 }
 
-} }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

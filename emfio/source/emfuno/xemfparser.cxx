@@ -40,9 +40,7 @@
 
 using namespace ::com::sun::star;
 
-namespace emfio
-{
-    namespace emfreader
+namespace emfio::emfreader
     {
         namespace {
 
@@ -71,13 +69,10 @@ namespace emfio
         };
 
         }
-    } // end of namespace emfreader
-} // end of namespace emfio
+    } // end of namespace emfio
 
 // uno functions
-namespace emfio
-{
-    namespace emfreader
+namespace emfio::emfreader
     {
         uno::Sequence< OUString > XEmfParser_getSupportedServiceNames()
         {
@@ -93,12 +88,9 @@ namespace emfio
         {
             return static_cast< ::cppu::OWeakObject* >(new XEmfParser(context));
         }
-    } // end of namespace emfreader
-} // end of namespace emfio
+    } // end of namespace emfio
 
-namespace emfio
-{
-    namespace emfreader
+namespace emfio::emfreader
     {
         XEmfParser::XEmfParser(
             uno::Reference< uno::XComponentContext > const & context):
@@ -229,7 +221,6 @@ namespace emfio
             return XEmfParser_getSupportedServiceNames();
         }
 
-    } // end of namespace emfreader
-} // end of namespace emfio
+    } // end of namespace emfio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

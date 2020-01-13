@@ -19,9 +19,7 @@
 
 #include <svganode.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgANode::SvgANode(
             SvgDocument& rDocument,
@@ -99,7 +97,6 @@ namespace svgio
                 }
             }
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

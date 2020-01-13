@@ -32,9 +32,7 @@
 
 using namespace com::sun::star;
 
-namespace writerperfect
-{
-namespace exp
+namespace writerperfect::exp
 {
 namespace
 {
@@ -614,7 +612,6 @@ void XMLImport::HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList
     }
 }
 
-} // namespace exp
 } // namespace writerperfect
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

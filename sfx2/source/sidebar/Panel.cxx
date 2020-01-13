@@ -42,7 +42,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              vcl::Window* pParentWindow,
@@ -186,6 +186,6 @@ Reference<awt::XWindow> Panel::GetElementWindow()
     return nullptr;
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

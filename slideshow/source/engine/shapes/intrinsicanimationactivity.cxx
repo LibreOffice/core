@@ -27,9 +27,7 @@
 
 #include <memory>
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         namespace {
 
@@ -247,6 +245,5 @@ namespace slideshow
                                                nNumLoops);
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

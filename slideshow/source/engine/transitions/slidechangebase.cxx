@@ -30,8 +30,7 @@
 
 using namespace com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 SlideChangeBase::SlideChangeBase( o3tl::optional<SlideSharedPtr> const & leavingSlide,
                                   const SlideSharedPtr&                   pEnteringSlide,
@@ -506,7 +505,6 @@ void SlideChangeBase::clearViewEntry( ViewEntry& rEntry )
     rEntry.mpOutSprite.reset();
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

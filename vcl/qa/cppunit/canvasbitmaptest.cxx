@@ -43,7 +43,7 @@
 using namespace ::com::sun::star;
 using namespace vcl::unotools;
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
 
 static bool operator==( const RGBColor& rLHS, const ARGBColor& rRHS )
@@ -51,7 +51,7 @@ static bool operator==( const RGBColor& rLHS, const ARGBColor& rRHS )
     return rLHS.Red == rRHS.Red && rLHS.Green == rRHS.Green && rLHS.Blue == rRHS.Blue;
 }
 
-} } } }
+}
 
 namespace
 {

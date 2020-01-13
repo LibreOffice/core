@@ -62,9 +62,9 @@
 #include <sal/macros.h>
 #include "tdoc_content.hxx"
 
-namespace com { namespace sun { namespace star { namespace embed {
+namespace com::sun::star::embed {
     class XStorage;
-} } } }
+}
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;

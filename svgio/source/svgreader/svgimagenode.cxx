@@ -33,9 +33,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <comphelper/base64.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgImageNode::SvgImageNode(
             SvgDocument& rDocument,
@@ -356,7 +354,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,9 +51,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         ViewMediaShape::ViewMediaShape( const ViewLayerSharedPtr&                       rViewLayer,
                                         const uno::Reference< drawing::XShape >&        rxShape,
@@ -470,6 +468,5 @@ namespace slideshow
             }
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

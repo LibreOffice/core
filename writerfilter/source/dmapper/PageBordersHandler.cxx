@@ -21,8 +21,7 @@
 
 #include <ooxml/resourceids.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 PgBorder::PgBorder( ) :
     m_nDistance( 0 ),
@@ -137,6 +136,6 @@ void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
     pSectContext->SetBorderOffsetFrom(m_eOffsetFrom);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

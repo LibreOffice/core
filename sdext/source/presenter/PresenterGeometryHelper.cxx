@@ -49,7 +49,7 @@ sal_Int32 Height (const sal_Int32 nTop, const sal_Int32 nBottom)
 
 } // end of anonymous namespace
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 sal_Int32 PresenterGeometryHelper::Floor (const double nValue)
 {
@@ -246,6 +246,6 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     return xPolygon;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

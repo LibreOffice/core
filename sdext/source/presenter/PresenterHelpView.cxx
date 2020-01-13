@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::std::vector;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 namespace {
     const static sal_Int32 gnHorizontalGap (20);
@@ -749,6 +749,6 @@ void Block::Update (
 
 } // end of anonymous namespace
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
