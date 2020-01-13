@@ -21,7 +21,7 @@
 
 #include "astmodule.hxx"
 
-class AstConstants : public AstModule
+class AstConstants final : public AstModule
 {
 public:
     AstConstants(const OString& name, AstScope* pScope)

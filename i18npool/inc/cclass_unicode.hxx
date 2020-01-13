@@ -63,7 +63,7 @@ namespace o3tl {
 
 namespace i18npool {
 
-class cclass_Unicode : public cppu::WeakImplHelper < css::i18n::XCharacterClassification, css::lang::XServiceInfo >
+class cclass_Unicode final : public cppu::WeakImplHelper < css::i18n::XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
     cclass_Unicode(const css::uno::Reference < css::uno::XComponentContext >& rxContext );

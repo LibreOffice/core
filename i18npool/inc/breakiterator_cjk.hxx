@@ -49,7 +49,7 @@ protected:
 };
 
 #define BREAKITERATOR_CJK( lang ) \
-class BreakIterator_##lang : public BreakIterator_CJK {\
+class BreakIterator_##lang final : public BreakIterator_CJK {\
 public:\
     BreakIterator_##lang (); \
 };

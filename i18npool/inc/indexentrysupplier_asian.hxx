@@ -28,7 +28,7 @@ namespace i18npool {
 
 
 
-class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {
+class IndexEntrySupplier_asian final : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_asian( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_asian() override;

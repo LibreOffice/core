@@ -43,7 +43,7 @@ public:
 };
 
 #define INDEXENTRYSUPPLIER_JA_PHONETIC( algorithm ) \
-class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_ja_phonetic {\
+class IndexEntrySupplier_##algorithm final : public IndexEntrySupplier_ja_phonetic {\
 public:\
     IndexEntrySupplier_##algorithm (const css::uno::Reference < css::uno::XComponentContext >& rxContext) : IndexEntrySupplier_ja_phonetic (rxContext) {\
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\

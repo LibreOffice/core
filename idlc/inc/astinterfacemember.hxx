@@ -21,7 +21,7 @@
 
 #include "astinterface.hxx"
 
-class AstInterfaceMember : public AstDeclaration
+class AstInterfaceMember final : public AstDeclaration
 {
 public:
     AstInterfaceMember(const sal_uInt32 flags, AstInterface* pRealInterface,

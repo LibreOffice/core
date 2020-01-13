@@ -29,7 +29,7 @@ class Index;
 
 
 
-class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
+class IndexEntrySupplier_Unicode final : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_Unicode( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Unicode() override;

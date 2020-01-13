@@ -70,13 +70,13 @@ public:
 
 
 /// Export strings from *.xrm and description.xml files
-class XRMResExport : public XRMResParser
+class XRMResExport final : public XRMResParser
 {
 private:
     std::unique_ptr<ResData> pResData;
     OString sPath;
     PoOfstream pOutputStream;
-protected:
+
     void WorkOnDesc(
         const OString &rOpenTag,
         OString &rText
@@ -101,7 +101,7 @@ public:
 
 
 /// Merge strings to *.xrm and description.xml files
-class XRMResMerge : public XRMResParser
+class XRMResMerge final : public XRMResParser
 {
 private:
     std::unique_ptr<MergeDataFile> pMergeDataFile;
@@ -110,7 +110,6 @@ private:
     std::ofstream pOutputStream;
     std::vector<OString> aLanguages;
 
-protected:
     void WorkOnDesc(
         const OString &rOpenTag,
         OString &rText

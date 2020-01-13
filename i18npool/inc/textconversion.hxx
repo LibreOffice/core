@@ -83,7 +83,7 @@ typedef struct {
 
 
 
-class TextConversion_ko : public TextConversionService
+class TextConversion_ko final : public TextConversionService
 {
 public:
     TextConversion_ko( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
@@ -125,7 +125,7 @@ typedef struct {
     sal_Int16 count;
 } STC_WordIndex;
 
-class TextConversion_zh : public TextConversionService
+class TextConversion_zh final : public TextConversionService
 {
 public:
     TextConversion_zh( const css::uno::Reference < css::uno::XComponentContext >& rxContext );

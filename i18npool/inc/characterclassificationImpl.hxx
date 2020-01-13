@@ -29,7 +29,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 
-class CharacterClassificationImpl : public cppu::WeakImplHelper
+class CharacterClassificationImpl final : public cppu::WeakImplHelper
 <
     css::i18n::XCharacterClassification,
     css::lang::XServiceInfo

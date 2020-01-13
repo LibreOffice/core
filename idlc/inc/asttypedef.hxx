@@ -21,7 +21,7 @@
 
 #include "asttype.hxx"
 
-class AstTypeDef : public AstType
+class AstTypeDef final : public AstType
 {
 public:
     AstTypeDef(

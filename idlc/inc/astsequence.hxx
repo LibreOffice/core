@@ -21,7 +21,7 @@
 
 #include "asttype.hxx"
 
-class AstSequence : public AstType
+class AstSequence final : public AstType
 {
 public:
     AstSequence(AstType const * pMemberType, AstScope* pScope)

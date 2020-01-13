@@ -39,7 +39,7 @@ namespace linguistic
 
 class SpellCache;
 
-class FlushListener :
+class FlushListener final :
     public cppu::WeakImplHelper
     <
         css::linguistic2::XDictionaryListEventListener,

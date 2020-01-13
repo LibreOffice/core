@@ -21,7 +21,7 @@
 
 #include "astservice.hxx"
 
-class AstServiceMember : public AstDeclaration
+class AstServiceMember final : public AstDeclaration
 {
 public:
     AstServiceMember(const sal_uInt32 flags, AstService* pRealService,

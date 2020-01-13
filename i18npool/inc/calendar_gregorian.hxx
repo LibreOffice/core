@@ -146,7 +146,7 @@ private:
 
 
 
-class Calendar_hanja : public Calendar_gregorian
+class Calendar_hanja final : public Calendar_gregorian
 {
 public:
     // Constructors
@@ -157,7 +157,7 @@ public:
 
 
 
-class Calendar_gengou : public Calendar_gregorian
+class Calendar_gengou final : public Calendar_gregorian
 {
 public:
     // Constructors
@@ -166,7 +166,7 @@ public:
 
 
 
-class Calendar_ROC : public Calendar_gregorian
+class Calendar_ROC final : public Calendar_gregorian
 {
 public:
     // Constructors
@@ -175,7 +175,7 @@ public:
 
 
 
-class Calendar_dangi : public Calendar_gregorian
+class Calendar_dangi final : public Calendar_gregorian
 {
 public:
     // Constructors
@@ -184,7 +184,7 @@ public:
 
 
 
-class Calendar_buddhist : public Calendar_gregorian
+class Calendar_buddhist final : public Calendar_gregorian
 {
 public:
     // Constructors

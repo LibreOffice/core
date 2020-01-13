@@ -31,7 +31,7 @@ namespace i18npool {
 //      ----------------------------------------------------
 //      class NativeNumberSupplierService
 //      ----------------------------------------------------
-class NativeNumberSupplierService : public cppu::WeakImplHelper
+class NativeNumberSupplierService final : public cppu::WeakImplHelper
 <
         css::i18n::XNativeNumberSupplier2,
         css::lang::XServiceInfo

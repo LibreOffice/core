@@ -25,7 +25,7 @@
 namespace i18npool {
 
 #define TRANSLITERATION_TEXTTONUM( name ) \
-class TextToNum##name : public transliteration_Numeric \
+class TextToNum##name final : public transliteration_Numeric \
 { \
 public: \
         TextToNum##name (); \

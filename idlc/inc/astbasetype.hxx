@@ -23,7 +23,7 @@
 #include "astexpression.hxx"
 
 
-class AstBaseType : public AstType
+class AstBaseType final : public AstType
 {
 public:
     AstBaseType(const ExprType type, const OString& name, AstScope* pScope)

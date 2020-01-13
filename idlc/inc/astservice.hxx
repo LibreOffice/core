@@ -22,7 +22,7 @@
 #include "astdeclaration.hxx"
 #include "astscope.hxx"
 
-class AstService : public AstDeclaration
+class AstService final : public AstDeclaration
                  , public AstScope
 {
 public:

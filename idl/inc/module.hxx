@@ -23,7 +23,7 @@
 #include "slot.hxx"
 #include "object.hxx"
 
-class SvMetaModule : public SvMetaObject
+class SvMetaModule final : public SvMetaObject
 {
 public:
     SvRefMemberList<SvMetaClass *>  aClassList;

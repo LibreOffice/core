@@ -21,7 +21,7 @@
 
 #include "aststruct.hxx"
 
-class AstException : public AstStruct
+class AstException final : public AstStruct
 {
 public:
     AstException(const OString& name, AstException const * pBaseType, AstScope* pScope)

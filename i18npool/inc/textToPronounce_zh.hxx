@@ -57,7 +57,7 @@ public:
 };
 
 #define TRANSLITERATION_TextToPronounce_zh( name ) \
-class name : public TextToPronounce_zh \
+class name final : public TextToPronounce_zh \
 { \
 public: \
         name (); \

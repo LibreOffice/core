@@ -26,7 +26,7 @@
 
 
 
-class UnoScriptTypeDetector : public cppu::WeakImplHelper
+class UnoScriptTypeDetector final : public cppu::WeakImplHelper
 <
     css::i18n::XScriptTypeDetector,
     css::lang::XServiceInfo

@@ -24,7 +24,7 @@
 
 enum Direction { DIR_IN, DIR_OUT, DIR_INOUT };
 
-class AstParameter: public AstMember {
+class AstParameter final : public AstMember {
 public:
     AstParameter(
         Direction direction, bool rest, AstType const * type,

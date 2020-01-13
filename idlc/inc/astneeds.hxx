@@ -21,7 +21,7 @@
 
 #include "astservice.hxx"
 
-class AstNeeds : public AstDeclaration
+class AstNeeds final : public AstDeclaration
 {
 public:
     AstNeeds(AstService* pRealService, const OString& name, AstScope* pScope)
