@@ -290,8 +290,7 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
             for (const auto& rDataSeries : aDataSeriesSeq)
             {
                 PropertySet aSeriesProp(rDataSeries);
-                bool bVaryColorsByPoint = false;
-                aSeriesProp.getProperty(bVaryColorsByPoint, PROP_VaryColorsByPoint);
+                bool bVaryColorsByPoint = aSeriesProp.getBoolProperty(PROP_VaryColorsByPoint);
 
                 if (bVaryColorsByPoint)
                 {
