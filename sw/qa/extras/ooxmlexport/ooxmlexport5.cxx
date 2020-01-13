@@ -148,8 +148,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76586, "fdo76586.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
 
     // there is only one table in the test file
-    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[1]", "w", "1601");
-    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[1]", "w", "1602");
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7842");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76587 , "fdo76587.docx")

@@ -321,7 +321,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     // Contains unit and value, but unit is not interesting for
                     // us, later we'll just distribute these values in a
-                    // 0..10000 scale.
+                    // 0..SAL_MAX_INT16 scale.
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if( pProperties.get())
                     {
@@ -685,7 +685,7 @@ void DomainMapperTableManager::endOfRowAction()
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid)[nBorderGridIndex++];
 
-                double nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
+                double nRelPos = (fGridWidth * SAL_MAX_INT16) / nFullWidthRelative;
 
                 pSeparators[nBorder].Position = rtl::math::round(nRelPos + nLastRelPos);
                 pSeparators[nBorder].IsVisible = true;
@@ -734,7 +734,7 @@ void DomainMapperTableManager::endOfRowAction()
             for (size_t i = 0; i < nWidthsBound; ++i)
             {
                 nSum += (*pCellWidths)[i];
-                pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
+                pSeparators[nPos].Position = (nSum * SAL_MAX_INT16) / nFullWidthRelative; // Relative position
                 pSeparators[nPos].IsVisible = true;
                 nPos++;
             }
