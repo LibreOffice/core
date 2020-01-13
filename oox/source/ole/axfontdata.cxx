@@ -22,8 +22,7 @@
 #include <oox/ole/axbinaryreader.hxx>
 #include <oox/ole/axbinarywriter.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 AxFontData::AxFontData() :
     mnFontEffects( AxFontFlags::NONE ),
@@ -113,7 +112,6 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
     return false;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,9 +46,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-namespace ooo {
-namespace vba {
-namespace excel {
+namespace ooo::vba::excel {
 
 uno::Reference< sheet::XUnnamedDatabaseRanges >
 GetUnnamedDataBaseRanges( const ScDocShell* pShell )
@@ -396,8 +394,6 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
     return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : nullptr;
 }
 
-} // namespace excel
-} // namespace vba
 } // namespace ooo
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,9 +37,7 @@
 #include <strings.hrc>
 #include <algorithm>
 
-namespace connectivity
-{
-    namespace file
+namespace connectivity::file
     {
 
 
@@ -705,9 +703,7 @@ void OStatement_Base::parseParamterElem(const OUString& /*_sColumnName*/,OSQLPar
     // do nothing here
 }
 
-    } // namespace file
-
-}// namespace connectivity
+    }// namespace connectivity
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 extern bool rtl_string_unittest_const_literal;
 bool rtl_string_unittest_invalid_conversion;
 
-namespace test { namespace oustring {
+namespace test::oustring {
 
 class StringLiterals: public CppUnit::TestFixture
 {
@@ -424,7 +424,7 @@ void test::oustring::StringLiterals::checkUtf16() {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), b.lastIndexOf(u"ab"));
 }
 
-}} // namespace
+} // namespace
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StringLiterals);
 

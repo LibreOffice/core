@@ -37,9 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
-namespace dp_registry {
-namespace backend {
-namespace script {
+namespace dp_registry::backend::script {
 
 namespace {
     OUString StrCannotDetermineLibName() { return DpResId(RID_STR_CANNOT_DETERMINE_LIBNAME); }
@@ -61,8 +59,6 @@ OUString LibraryContainer::get_libname(
     return import.aName;
 }
 
-}
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

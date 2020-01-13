@@ -184,10 +184,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
 
 } // anonymous namespace
 
-namespace chart
-{
-
-namespace DataSeriesHelper
+namespace chart::DataSeriesHelper
 {
 
 OUString getRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xLabeledDataSequence )
@@ -844,7 +841,6 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
     }
 }
 
-} //  namespace DataSeriesHelper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

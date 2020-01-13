@@ -111,7 +111,7 @@ extern "C" {
 //
 // TODO: support "mandatory" and "external"?
 
-namespace configmgr { namespace dconf {
+namespace configmgr::dconf {
 
 namespace {
 
@@ -1590,6 +1590,6 @@ void writeModifications(Components & components, Data & data) {
     data.modifications.clear();
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

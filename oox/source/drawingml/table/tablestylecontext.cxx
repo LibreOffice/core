@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableStyleContext::TableStyleContext( ContextHandler2Helper const & rParent,
     const AttributeList& rAttribs, TableStyle& rTableStyle )
@@ -84,6 +84,6 @@ TableStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLi
     return this;
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

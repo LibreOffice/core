@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 const static double gnScrollBarGap (10);
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterScrollBar::MousePressRepeater ================================
 
@@ -833,6 +833,6 @@ void PresenterScrollBar::MousePressRepeater::Execute()
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

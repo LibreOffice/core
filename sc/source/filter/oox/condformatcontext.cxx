@@ -24,8 +24,7 @@
 #include <condformatbuffer.hxx>
 #include <oox/token/namespaces.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using ::oox::core::ContextHandlerRef;
 
@@ -260,7 +259,6 @@ void CondFormatContext::onEndRecord()
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

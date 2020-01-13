@@ -25,7 +25,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 void ConfigurationTracer::TraceConfiguration (
     const Reference<XConfiguration>& rxConfiguration,
@@ -68,6 +68,6 @@ void ConfigurationTracer::TraceBoundResources (
 }
 #endif
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

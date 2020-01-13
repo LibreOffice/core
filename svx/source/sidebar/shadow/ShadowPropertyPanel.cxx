@@ -34,7 +34,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 ShadowPropertyPanel::ShadowPropertyPanel(
     vcl::Window* pParent,
@@ -338,8 +338,6 @@ VclPtr<vcl::Window> ShadowPropertyPanel::Create (
 
     return VclPtr<ShadowPropertyPanel>::Create(pParent, rxFrame, pBindings);
 }
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

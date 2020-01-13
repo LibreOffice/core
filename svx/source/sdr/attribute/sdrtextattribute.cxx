@@ -28,9 +28,7 @@
 #include <rtl/instance.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpSdrTextAttribute
         {
@@ -420,7 +418,6 @@ namespace drawinglayer
                 getSdrText().GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
             }
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

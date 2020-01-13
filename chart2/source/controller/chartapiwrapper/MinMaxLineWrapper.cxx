@@ -113,9 +113,7 @@ struct StaticMinMaxLineWrapperInfo : public rtl::StaticAggregate< uno::Reference
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 MinMaxLineWrapper::MinMaxLineWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
@@ -394,7 +392,6 @@ css::uno::Sequence< OUString > SAL_CALL MinMaxLineWrapper::getSupportedServiceNa
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 const convert_subtype* convert_subtype::getList()
 {
@@ -666,6 +666,6 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
         return this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

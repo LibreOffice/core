@@ -40,7 +40,7 @@ namespace {
     static const sal_Int32 ResourceDeactivationRequestEvent = 1;
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== SlideSorterModule ==================================================
 
@@ -306,6 +306,6 @@ void SAL_CALL SlideSorterModule::disposing (
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,8 +29,7 @@
 #include <richstringcontext.hxx>
 #include <sal/log.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using ::oox::core::ContextHandlerRef;
 
@@ -572,7 +571,6 @@ void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

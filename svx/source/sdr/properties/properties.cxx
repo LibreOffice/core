@@ -31,9 +31,7 @@
 
 using namespace com::sun::star;
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         BaseProperties::BaseProperties(SdrObject& rObj)
         :   mrObject(rObj)
@@ -190,7 +188,6 @@ namespace sdr
             }
         }
 
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

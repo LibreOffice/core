@@ -33,8 +33,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, PropertyMap& aProperties )
@@ -164,7 +163,6 @@ ContextHandlerRef HyperLinkContext::onCreateContext(
     return this;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

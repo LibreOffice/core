@@ -78,7 +78,7 @@
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::frame { class XModel; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

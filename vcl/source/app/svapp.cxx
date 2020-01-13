@@ -1639,7 +1639,7 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     pSVData->maAppData.mbInAppMain = true;
 }
 
-namespace vcl { namespace lok {
+namespace vcl::lok {
 
 void registerPollCallbacks(
     LibreOfficeKitPollCallback pPollCallback,
@@ -1679,6 +1679,6 @@ bool isUnipoll()
     return pSVData && pSVData->mpPollCallback != nullptr;
 }
 
-} } // namespace lok, namespace vcl
+} // namespace lok, namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

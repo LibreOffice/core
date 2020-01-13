@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 SlideTimingContext::SlideTimingContext( FragmentHandler2 const & rParent, TimeNodePtrList & aTimeNodeList ) throw()
     : FragmentHandler2( rParent )
@@ -72,6 +72,6 @@ SlideTimingContext::~SlideTimingContext() throw()
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

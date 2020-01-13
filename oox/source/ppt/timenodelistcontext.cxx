@@ -96,7 +96,7 @@ namespace {
     }
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     namespace {
 
@@ -1036,6 +1036,6 @@ namespace oox { namespace ppt {
         return pContext ? pContext : this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

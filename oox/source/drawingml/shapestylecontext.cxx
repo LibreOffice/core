@@ -28,7 +28,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 // CT_ShapeStyle
 
@@ -65,6 +65,6 @@ ContextHandlerRef ShapeStyleContext::onCreateContext( sal_Int32 aElementToken, c
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

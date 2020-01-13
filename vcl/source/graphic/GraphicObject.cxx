@@ -47,9 +47,7 @@ using com::sun::star::beans::XPropertySet;
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
 
-namespace vcl
-{
-namespace graphic
+namespace vcl::graphic
 {
 
 void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
@@ -93,7 +91,7 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
     }
 }
 
-}} // end namespace vcl::graphic
+} // end namespace vcl::graphic
 
 namespace
 {

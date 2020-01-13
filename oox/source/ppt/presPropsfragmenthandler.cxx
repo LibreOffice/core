@@ -15,9 +15,7 @@
 #include <oox/ppt/presPropsfragmenthandler.hxx>
 #include <oox/token/namespaces.hxx>
 
-namespace oox
-{
-namespace ppt
+namespace oox::ppt
 {
 PresPropsFragmentHandler::PresPropsFragmentHandler(core::XmlFilterBase& rFilter,
                                                    const OUString& rFragmentPath)
@@ -49,7 +47,6 @@ core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aEle
     }
     return this;
 }
-} // namespace ppt
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

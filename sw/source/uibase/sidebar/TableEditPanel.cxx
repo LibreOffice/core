@@ -21,9 +21,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-namespace sw
-{
-namespace sidebar
+namespace sw::sidebar
 {
 VclPtr<vcl::Window> TableEditPanel::Create(vcl::Window* pParent,
                                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -228,7 +226,6 @@ IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, weld::MetricSpinButton&, vo
 
     m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_COLUMN_WIDTH, SfxCallMode::RECORD,
                                               { &aColumnWidth });
-}
 }
 } // end of namespace ::sw::sidebar
 

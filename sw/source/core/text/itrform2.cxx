@@ -832,7 +832,7 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-namespace sw { namespace mark {
+namespace sw::mark {
     OUString ExpandFieldmark(IFieldmark* pBM)
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
@@ -853,7 +853,7 @@ namespace sw { namespace mark {
         static const sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
         return OUString(vEnSpaces, ODF_FORMFIELD_DEFAULT_LENGTH);
     }
-} }
+}
 
 SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
 {

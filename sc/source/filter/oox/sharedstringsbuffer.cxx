@@ -19,8 +19,7 @@
 
 #include <sharedstringsbuffer.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 SharedStringsBuffer::SharedStringsBuffer( const WorkbookHelper& rHelper ) :
      WorkbookHelper( rHelper )
@@ -44,7 +43,6 @@ RichStringRef SharedStringsBuffer::getString( sal_Int32 nStringId ) const
     return maStrings.get( nStringId );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

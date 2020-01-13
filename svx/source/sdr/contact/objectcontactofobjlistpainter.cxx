@@ -32,7 +32,7 @@
 #include <vcl/gdimtf.hxx>
 #include <memory>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ObjectContactPainter::ObjectContactPainter()
 {
@@ -185,6 +185,6 @@ OutputDevice* ObjectContactOfPagePainter::TryToGetOutputDevice() const
     return mrOriginalObjectContact.TryToGetOutputDevice();
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,7 @@
 #include <connectionsbuffer.hxx>
 #include <defnamesbuffer.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -279,7 +278,6 @@ void QueryTableBuffer::finalizeImport()
     maQueryTables.forEachMem( &QueryTable::finalizeImport );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

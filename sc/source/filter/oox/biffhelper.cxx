@@ -23,8 +23,7 @@
 #include <osl/diagnose.h>
 #include <oox/helper/binaryinputstream.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 namespace {
 
@@ -105,7 +104,6 @@ union DecodedDouble
     return aString;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,9 +33,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         // as tooling, the process() implementation takes over API handling and calls this
         // virtual render method when the primitive implementation is BasePrimitive3D-based.
@@ -150,7 +148,6 @@ namespace drawinglayer
             maBColorModifierStack()
         {
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

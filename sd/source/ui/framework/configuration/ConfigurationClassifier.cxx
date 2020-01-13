@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 ConfigurationClassifier::ConfigurationClassifier (
     const Reference<XConfiguration>& rxConfiguration1,
@@ -164,6 +164,6 @@ void ConfigurationClassifier::TraceResourceIdVector (
 
 #endif
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,9 +20,7 @@
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         SdrLineFillShadowAttribute3D::SdrLineFillShadowAttribute3D(
             const SdrLineAttribute& rLine,
@@ -55,7 +53,6 @@ namespace drawinglayer
                 && getShadow() == rCandidate.getShadow()
                 && getFillFloatTransGradient() == rCandidate.getFillFloatTransGradient());
         }
-    } // end of namespace overlay
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

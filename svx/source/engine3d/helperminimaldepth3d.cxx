@@ -30,9 +30,7 @@
 #include <svx/scene3d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         namespace {
 
@@ -138,8 +136,7 @@ namespace drawinglayer
                 }
             }
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
 // changed to create values using VCs, Primitive3DContainer and ViewInformation3D to allow

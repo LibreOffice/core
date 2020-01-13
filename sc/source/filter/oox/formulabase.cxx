@@ -73,8 +73,7 @@ namespace o3tl {
     template<> struct typed_flags<FuncFlags> : is_typed_flags<FuncFlags, 0x77ff> {};
 }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -1703,7 +1702,6 @@ void FormulaProcessorBase::convertStringToStringList(
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

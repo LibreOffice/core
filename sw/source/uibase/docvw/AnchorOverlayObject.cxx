@@ -31,7 +31,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 namespace {
 
@@ -377,6 +377,6 @@ void AnchorOverlayObject::SetAnchorState( const AnchorState aState)
   }
 }
 
-} } // end of namespace sw::annotation
+} // end of namespace sw::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

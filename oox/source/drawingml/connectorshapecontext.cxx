@@ -39,7 +39,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 ConnectorShapeContext::ConnectorShapeContext( ContextHandler2Helper const & rParent,
         const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr )
@@ -65,6 +65,6 @@ ContextHandlerRef ConnectorShapeContext::onCreateContext( sal_Int32 aElementToke
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

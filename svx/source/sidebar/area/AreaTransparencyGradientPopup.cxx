@@ -23,7 +23,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xgrad.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(AreaPropertyPanelBase& rPanel, weld::Widget* pParent)
     : mrAreaPropertyPanel(rPanel)
@@ -170,6 +170,6 @@ IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, const OString
     ExecuteValueModify(nStartCol, nEndCol);
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

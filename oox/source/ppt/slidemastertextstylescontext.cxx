@@ -27,7 +27,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2 const & rParent, SlidePersistPtr const & pSlidePersistPtr )
 : FragmentHandler2( rParent )
@@ -75,6 +75,6 @@ SlideMasterTextStylesContext::~SlideMasterTextStylesContext()
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

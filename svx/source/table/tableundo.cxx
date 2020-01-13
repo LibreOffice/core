@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 CellUndo::CellUndo( const tools::WeakReference<SdrObject>& xObjRef, const CellRef& xCell )
 :   SdrUndoAction(xCell->GetObject().getSdrModelFromSdrObject())
@@ -513,6 +513,6 @@ void TableStyleUndo::getData( Data& rData )
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

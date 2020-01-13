@@ -30,7 +30,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
     const std::function<OUString()>& rSelectionChangeCallback,
@@ -99,6 +99,6 @@ void SelectionChangeHandler::Disconnect()
 }
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,7 +78,7 @@ using namespace ::sd::slidesorter::view;
 using namespace ::sd::slidesorter::controller;
 using namespace ::basegfx;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -916,6 +916,6 @@ void SlideSorterController::ModelChangeLock::Release()
     }
 }
 
-} } } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

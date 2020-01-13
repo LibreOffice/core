@@ -40,8 +40,7 @@
 #include <document.hxx>
 #include <ftools.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -2085,7 +2084,6 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

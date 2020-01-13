@@ -22,7 +22,7 @@
 #include <unordered_map>
 #include <memory>
 
-namespace xmloff { namespace EnhancedCustomShapeToken {
+namespace xmloff::EnhancedCustomShapeToken {
 
 typedef std::unordered_map< const char*, EnhancedCustomShapeTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = nullptr;
@@ -204,7 +204,6 @@ OUString EASGet( const EnhancedCustomShapeTokenEnum eToken )
     return OUString::createFromAscii( pTokenTableArray[ i ].pS );
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

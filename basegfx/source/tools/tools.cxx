@@ -22,9 +22,7 @@
 
 #include <algorithm>
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         namespace
         {
@@ -109,6 +107,5 @@ namespace basegfx
             moveLineOutsideRect( io_rLeftBottom, io_rRightBottom, aNormalBottom, rFitTarget );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

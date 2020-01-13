@@ -47,7 +47,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 namespace {
 
@@ -504,6 +504,6 @@ void SdrTableObj::ImportAsRTF( SvStream& rStream, SdrTableObj& rObj )
     aParser.Read( rStream );
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

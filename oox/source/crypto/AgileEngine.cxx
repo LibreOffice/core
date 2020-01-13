@@ -42,8 +42,7 @@ using namespace css::uno;
 using namespace css::xml::sax;
 using namespace css::xml;
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 namespace {
 
@@ -820,7 +819,6 @@ void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputS
     encryptHmacValue();
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,7 @@ static const sal_Int32 ResourceDeactivationEvent = 1;
 static const sal_Int32 ConfigurationUpdateEvent = 2;
 }
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 typedef cppu::WeakComponentImplHelper<
       css::beans::XPropertyChangeListener,
@@ -656,6 +656,6 @@ EventMultiplexerEvent::EventMultiplexerEvent (
 {
 }
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

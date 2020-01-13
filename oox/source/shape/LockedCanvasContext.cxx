@@ -18,9 +18,7 @@
 
 using namespace com::sun::star;
 
-namespace oox
-{
-namespace shape
+namespace oox::shape
 {
 
 LockedCanvasContext::LockedCanvasContext(FragmentHandler2 const& rParent)
@@ -59,7 +57,6 @@ LockedCanvasContext::~LockedCanvasContext() = default;
     return nullptr;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

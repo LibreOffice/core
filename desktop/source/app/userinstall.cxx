@@ -35,7 +35,7 @@
 
 #include "userinstall.hxx"
 
-namespace desktop { namespace userinstall {
+namespace desktop::userinstall {
 
 namespace {
 
@@ -170,6 +170,6 @@ Status finalize() {
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,9 +40,7 @@
 #include <comphelper/processfactory.hxx>
 
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 namespace cssc = ::com::sun::star::chart;
 
@@ -437,8 +435,6 @@ void LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
     }
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

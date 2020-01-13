@@ -40,7 +40,7 @@ using namespace ::com::sun::star::drawing::framework;
 */
 #define USE_OPTIMIZATIONS
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== ResourceId ============================================================
 
@@ -498,7 +498,7 @@ void ResourceId::ParseResourceURL()
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

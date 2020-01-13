@@ -37,9 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace dp_misc;
 
-namespace dp_registry {
-namespace backend {
-namespace executable {
+namespace dp_registry::backend::executable {
 namespace {
 
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -311,8 +309,6 @@ sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.executable.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace component
-} // namespace backend
 } // namespace dp_registry
 
 

@@ -45,9 +45,9 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     struct SearchOptions2;
-} } } }
+}
 
 using namespace ::com::sun::star::util;
 

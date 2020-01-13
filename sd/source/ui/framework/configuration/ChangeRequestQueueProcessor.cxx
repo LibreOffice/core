@@ -48,7 +48,7 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 
 } // end of anonymous namespace
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
     const std::shared_ptr<ConfigurationUpdater>& rpConfigurationUpdater)
@@ -180,6 +180,6 @@ void ChangeRequestQueueProcessor::Clear()
     maQueue.swap(aEmpty);
 }
 
-} } // end of namespace sd::framework::configuration
+} // end of namespace sd::framework::configuration
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

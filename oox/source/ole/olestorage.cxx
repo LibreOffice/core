@@ -38,8 +38,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/helper.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -378,7 +377,6 @@ void OleStorage::implCommit() const
     }
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

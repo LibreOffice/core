@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
@@ -243,6 +243,6 @@ void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
     // stop processing
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

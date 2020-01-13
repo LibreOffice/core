@@ -28,7 +28,7 @@
 
 #include <sfx2/docfile.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 namespace {
 
@@ -212,6 +212,6 @@ void StylePresetsPanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
 {
 }
 
-}} // end of namespace ::sw::sidebar
+} // end of namespace ::sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

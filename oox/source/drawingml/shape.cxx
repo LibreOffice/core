@@ -113,7 +113,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 : mpLinePropertiesPtr( new LineProperties )
@@ -1916,6 +1916,6 @@ void Shape::cloneFillProperties()
     pFillProperties->assignUsed(*mpFillPropertiesPtr);
     mpFillPropertiesPtr = pFillProperties;
 }
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

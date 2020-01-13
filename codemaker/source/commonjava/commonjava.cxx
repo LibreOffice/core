@@ -34,7 +34,7 @@
 
 #include <vector>
 
-namespace codemaker { namespace java {
+namespace codemaker::java {
 
 OString translateUnoToJavaType(
     codemaker::UnoType::Sort sort, OString const & nucleus, bool referenceType)
@@ -130,6 +130,6 @@ OString translateUnoToJavaIdentifier(
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

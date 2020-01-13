@@ -148,8 +148,7 @@ sal_Int32 GetAlphaFromTransparenceGradient(const awt::Gradient& rGradient, bool 
 }
 }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 URLTransformer::~URLTransformer()
 {
@@ -4461,7 +4460,6 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
     }
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

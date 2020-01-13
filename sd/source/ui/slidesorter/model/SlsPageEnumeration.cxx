@@ -69,7 +69,7 @@ private:
 
 } // end of anonymous namespace
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 PageEnumeration PageEnumeration::Create (
     const SlideSorterModel& rModel,
@@ -123,7 +123,7 @@ void PageEnumeration::Rewind()
     return mpImpl->Rewind();
 }
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 namespace {
 

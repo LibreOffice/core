@@ -24,7 +24,7 @@
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-namespace connectivity { namespace commontools {
+namespace connectivity::commontools {
 
 class FValueTest: public test::BootstrapFixture
 {
@@ -359,7 +359,7 @@ void FValueTest::test_bool_creation()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FValueTest);
 
-}}
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

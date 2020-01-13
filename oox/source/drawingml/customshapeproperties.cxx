@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 CustomShapeProperties::CustomShapeProperties()
 : mnShapePresetType ( -1 )
@@ -397,6 +397,6 @@ void CustomShapeProperties::pushToPropSet(
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

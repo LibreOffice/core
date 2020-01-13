@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star::text;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
     /** menu entry that is executed as default action when the left mouse button is
         clicked over a master page.
@@ -648,6 +648,6 @@ css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth (const sal_Int32 nWid
     return css::ui::LayoutSize(nHeight,nHeight,nHeight);
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

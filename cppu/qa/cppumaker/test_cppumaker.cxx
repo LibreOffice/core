@@ -365,7 +365,7 @@
 
 #include <cstddef>
 
-namespace test { namespace codemaker { namespace cppumaker {
+namespace test::codemaker::cppumaker {
 
 static bool operator ==(
     test::codemaker::cppumaker::TestException1 const & e1,
@@ -376,7 +376,7 @@ static bool operator ==(
         && e1.m4.member1 == e2.m4.member1 && e1.m4.member2 == e2.m4.member2;
 }
 
-} } }
+}
 
 namespace {
 

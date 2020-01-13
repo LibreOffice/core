@@ -33,7 +33,7 @@
 #include <string.h>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using ::cppu::OWeakObject;
 using ::cppu::WeakImplHelper;

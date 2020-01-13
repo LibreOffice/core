@@ -24,9 +24,7 @@
 
 using namespace ::com::sun::star;
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 OWriterDatabaseMetaData::OWriterDatabaseMetaData(file::OConnection* pConnection)
     : OComponentDatabaseMetaData(pConnection)
@@ -108,7 +106,6 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     return xRef;
 }
 
-} // namespace writer
 } // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

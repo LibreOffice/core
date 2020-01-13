@@ -85,9 +85,7 @@ uno::Sequence< uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const uno::Se
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 struct lcl_Operator
@@ -692,7 +690,6 @@ css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNam
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

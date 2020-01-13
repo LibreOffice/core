@@ -35,7 +35,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdhdl.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 // Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something.
@@ -194,6 +194,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObje
     return aSource;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TablePartStyleContext::TablePartStyleContext( ContextHandler2Helper const & rParent, TableStylePart& rTableStylePart )
 : ContextHandler2( rParent )
@@ -56,6 +56,6 @@ TablePartStyleContext::onCreateContext( ::sal_Int32 aElementToken, const Attribu
     return this;
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

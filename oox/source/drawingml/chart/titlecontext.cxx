@@ -32,9 +32,7 @@
 #include <osl/diagnose.h>
 
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
@@ -177,8 +175,6 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
     return nullptr;
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,8 +20,7 @@
 #include <oox/ole/vbainputstream.hxx>
 #include <osl/diagnose.h>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 namespace {
 
@@ -204,7 +203,6 @@ bool VbaInputStream::updateChunk()
     return !mbEof;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

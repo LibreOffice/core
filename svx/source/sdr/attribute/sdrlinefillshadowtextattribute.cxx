@@ -21,9 +21,7 @@
 #include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(
             const SdrLineAttribute& rLine,
@@ -74,7 +72,6 @@ namespace drawinglayer
                 && getFill() == rCandidate.getFill()
                 && getFillFloatTransGradient() == rCandidate.getFillFloatTransGradient());
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

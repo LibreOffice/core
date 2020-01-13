@@ -38,8 +38,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 
 namespace
 {
@@ -127,7 +126,6 @@ sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const OUString& serviceName 
     return { AVMEDIA_VLC_GRABBER_SERVICENAME };
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

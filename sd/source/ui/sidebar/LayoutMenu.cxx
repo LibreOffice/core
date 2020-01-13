@@ -66,7 +66,7 @@ using namespace ::com::sun::star::drawing::framework;
 using namespace ::sd::slidesorter;
 using ::sd::framework::FrameworkHelper;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 namespace {
 
@@ -759,6 +759,6 @@ void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
     SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
 }
 
-} } // end of namespace ::sd::sidebar
+} // end of namespace ::sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,9 +34,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         AnimatedSprite::AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
                                         const ::basegfx::B2DSize&   rSpriteSizePixel,
@@ -197,6 +195,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

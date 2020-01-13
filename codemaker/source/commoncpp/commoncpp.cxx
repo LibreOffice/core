@@ -32,7 +32,7 @@
 
 #include <vector>
 
-namespace codemaker { namespace cpp {
+namespace codemaker::cpp {
 
 OString scopedCppName(OString const & type, bool ns_alias)
 {
@@ -293,6 +293,6 @@ OString translateUnoToCppIdentifier(
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

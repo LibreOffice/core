@@ -9,9 +9,7 @@
 
 #include <basegfx/utils/zoomtools.hxx>
 
-namespace basegfx
-{
-namespace zoomtools
+namespace basegfx::zoomtools
 {
 
 /** 2^(1/6) as the default step
@@ -110,7 +108,6 @@ long zoomOut(long nCurrent)
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
-} // namespace zoomtools
 } // namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

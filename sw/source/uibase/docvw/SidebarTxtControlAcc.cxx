@@ -35,7 +35,7 @@
 #include <editeng/outliner.hxx>
 #include <vcl/vclevent.hxx>
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 namespace {
 
@@ -266,6 +266,6 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SidebarTextControl
     return xAcc;
 }
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

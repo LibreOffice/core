@@ -24,7 +24,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-namespace sd {  namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 PageDescriptor::PageDescriptor (
     const Reference<drawing::XDrawPage>& rxPage,
@@ -222,6 +222,6 @@ void PageDescriptor::SetBoundingBox (const ::tools::Rectangle& rBoundingBox)
     maBoundingBox = rBoundingBox;
 }
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

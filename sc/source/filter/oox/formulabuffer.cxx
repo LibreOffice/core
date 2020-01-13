@@ -28,7 +28,7 @@ using namespace ::com::sun::star::sheet;
 
 #include <memory>
 
-namespace oox { namespace xls {
+namespace oox::xls {
 
 namespace {
 
@@ -461,6 +461,6 @@ void FormulaBuffer::setCellFormulaValue(
     maCellFormulaValues[rAddress.Tab()].push_back(aVal);
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

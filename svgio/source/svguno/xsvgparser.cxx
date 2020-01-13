@@ -37,9 +37,7 @@
 
 using namespace ::com::sun::star;
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         namespace {
 
@@ -73,13 +71,10 @@ namespace svgio
         };
 
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 // uno functions
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         uno::Sequence< OUString > XSvgParser_getSupportedServiceNames()
         {
@@ -95,12 +90,9 @@ namespace svgio
         {
             return static_cast< ::cppu::OWeakObject* >(new XSvgParser(context));
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         XSvgParser::XSvgParser(
             uno::Reference< uno::XComponentContext > const & context):
@@ -221,7 +213,6 @@ namespace svgio
             return XSvgParser_getSupportedServiceNames();
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     SoundActionContext::SoundActionContext( FragmentHandler2 const & rParent, PropertyMap & aProperties ) throw()
     : FragmentHandler2( rParent )
@@ -106,6 +106,6 @@ namespace oox { namespace ppt {
         return this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

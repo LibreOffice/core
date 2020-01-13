@@ -31,7 +31,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 TableRows::TableRows( const TableModelRef& xTableModel )
 : mxTableModel( xTableModel )
@@ -109,6 +109,6 @@ sal_Bool SAL_CALL TableRows::hasElements()
 }
 
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 TextBody::TextBody()
 {
@@ -134,6 +134,6 @@ void TextBody::ApplyStyleEmpty(
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

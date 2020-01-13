@@ -28,9 +28,7 @@
 
 using namespace ::com::sun::star;
 
-namespace chart
-{
-namespace impl
+namespace chart::impl
 {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::frame::XModel;
@@ -120,7 +118,6 @@ void SAL_CALL ShapeUndoElement::disposing()
 {
 }
 
-} // namespace impl
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

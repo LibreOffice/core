@@ -35,9 +35,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace
@@ -288,7 +286,6 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
     return uno::Any(aInnerValue);
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

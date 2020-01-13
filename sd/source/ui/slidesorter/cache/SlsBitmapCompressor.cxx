@@ -24,7 +24,7 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 //===== NoBitmapCompression ===================================================
 
@@ -192,6 +192,6 @@ bool PngCompression::IsLossless() const
     return true;
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

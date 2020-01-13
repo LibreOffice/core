@@ -52,7 +52,7 @@ sal_Int32 RoundToInt (const double nValue) { return sal_Int32(::rtl::math::round
 
 } // end of anonymous namespace
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 //=====  InsertionIndicatorOverlay  ===========================================
 
@@ -355,6 +355,6 @@ Size InsertionIndicatorOverlay::GetSize() const
         maIcon.GetSizePixel().Height() + 10);
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

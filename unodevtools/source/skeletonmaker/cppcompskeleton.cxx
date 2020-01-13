@@ -29,7 +29,7 @@
 
 using namespace ::codemaker::cpp;
 
-namespace skeletonmaker { namespace cpp {
+namespace skeletonmaker::cpp {
 
 static void generateIncludes(std::ostream & o,
          const std::set< OUString >& interfaces,
@@ -1218,7 +1218,7 @@ void generateCalcAddin(ProgramOptions const & options,
     }
 }
 
-} }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

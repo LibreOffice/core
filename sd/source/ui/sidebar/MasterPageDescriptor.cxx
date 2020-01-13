@@ -27,7 +27,7 @@
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 //===== MasterPageDescriptor ==================================================
 
@@ -338,6 +338,6 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
     }
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

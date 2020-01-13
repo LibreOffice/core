@@ -57,7 +57,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::awt::FontDescriptor;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 BulletList::BulletList( )
 : maBulletColorPtr( new Color() )
@@ -523,6 +523,6 @@ void TextParagraphProperties::dump() const
     aPropSet.dump();
 }
 #endif
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

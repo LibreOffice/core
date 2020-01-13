@@ -26,8 +26,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <comphelper/storagehelper.hxx>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 using namespace com::sun::star;
@@ -441,6 +440,6 @@ OOXMLDocumentFactory::createStream
     return pRet;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

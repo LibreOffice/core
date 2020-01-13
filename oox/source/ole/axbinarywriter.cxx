@@ -10,8 +10,7 @@
 
 #include <oox/ole/olehelper.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 namespace {
 
@@ -199,7 +198,6 @@ void AxBinaryPropertyWriter::startNextProperty( bool bSkip )
     mnNextProp <<= 1;
 }
 
-} // namespace exp
 } // namespace ole
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

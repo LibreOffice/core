@@ -25,7 +25,7 @@
 #include <controller/SlsFocusManager.hxx>
 #include <sdpage.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 SelectionObserver::Context::Context (SlideSorter const & rSlideSorter)
     : mpSelectionObserver(
@@ -133,6 +133,6 @@ void SelectionObserver::EndObservation()
 
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

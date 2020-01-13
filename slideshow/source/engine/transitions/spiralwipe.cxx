@@ -27,8 +27,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
     : m_elements(nElements),
@@ -116,7 +115,6 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
     return m_flipOnYAxis ? flipOnYAxis(res) : res;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

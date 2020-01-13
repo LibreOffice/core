@@ -7,7 +7,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 VclPtr<vcl::Window> StylesPropertyPanel::Create (
     vcl::Window* pParent,
@@ -37,4 +37,4 @@ void StylesPropertyPanel::DataChanged( const DataChangedEvent& /*rEvent*/)
 
 }
 
-}}
+}

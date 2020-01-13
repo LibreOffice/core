@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertyState; } } } }
+namespace com::sun::star::beans { class XPropertyState; }
 
 using namespace ::com::sun::star;
 

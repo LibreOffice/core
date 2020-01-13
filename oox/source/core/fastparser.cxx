@@ -31,8 +31,7 @@
 
 #include <sax/fastparser.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -137,7 +136,6 @@ void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName
     parseStream( rStorage.openInputStream( rStreamName ), rStreamName );
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

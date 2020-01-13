@@ -38,8 +38,7 @@ using namespace com::sun::star;
 
 /* Implementation of UserEventQueue class */
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -792,7 +791,6 @@ void UserEventQueue::callSkipEffectEventHandler()
         pHandler->skipEffect();
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

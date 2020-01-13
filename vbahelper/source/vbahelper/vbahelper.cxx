@@ -81,9 +81,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 
-namespace ooo
-{
-namespace vba
+namespace ooo::vba
 {
 
 namespace { const double factor =  2540.0 / 72.0; }
@@ -1128,7 +1126,6 @@ SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel )
     return pFoundShell;
 }
 
-} // openoffice
 } //org
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@ using namespace css::uno;
 
 const char SIDEBARGRADIENT[] = "sidebargradient";
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 namespace {
 
@@ -1438,6 +1438,6 @@ sal_Int32 AreaPropertyPanelBase::GetSelectedTransparencyTypeIndex() const
     return mxLBTransType->get_active();
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 
 using namespace com::sun::star;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 bool ObjectContact::supportsGridOffsets() const
 {
@@ -213,6 +213,6 @@ void ObjectContact::resetAllGridOffsets()
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

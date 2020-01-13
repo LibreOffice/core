@@ -26,9 +26,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
@@ -1229,7 +1227,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     return RTFError::OK;
 }
 
-} // namespace rtftok
 } // namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

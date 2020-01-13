@@ -28,7 +28,7 @@
 #include <CustomAnimationEffect.hxx>
 #include <drawdoc.hxx>
 
-namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
+namespace com::sun::star::animations { class XAnimationNode; }
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;

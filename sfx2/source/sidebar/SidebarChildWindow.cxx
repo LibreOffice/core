@@ -26,7 +26,7 @@
 #include <sfx2/dockwin.hxx>
 #include <comphelper/lok.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
 
@@ -91,6 +91,6 @@ sal_Int32 SidebarChildWindow::GetDefaultWidth(vcl::Window const* pWindow)
         return 0;
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

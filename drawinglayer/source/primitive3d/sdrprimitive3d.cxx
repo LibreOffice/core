@@ -25,9 +25,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         basegfx::B3DRange SdrPrimitive3D::getStandard3DRange() const
         {
@@ -104,7 +102,6 @@ namespace drawinglayer
             return false;
         }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

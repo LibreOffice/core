@@ -15,7 +15,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 
-namespace basegfx { namespace utils
+namespace basegfx::utils
 {
     B2DPolyPolygon number2PolyPolygon(double fValue, sal_Int32 nTotalDigits, sal_Int32 nDecPlaces, bool bLitSegments)
     {
@@ -53,6 +53,6 @@ namespace basegfx { namespace utils
         return aRes;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

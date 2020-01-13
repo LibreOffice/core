@@ -24,9 +24,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         BitmapPrimitive2D::BitmapPrimitive2D(
             const BitmapEx& rBitmapEx,
@@ -65,7 +63,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

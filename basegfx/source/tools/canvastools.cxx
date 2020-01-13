@@ -42,10 +42,7 @@
 
 using namespace ::com::sun::star;
 
-namespace basegfx
-{
-
-    namespace unotools
+namespace basegfx::unotools
     {
         namespace
         {
@@ -473,8 +470,6 @@ namespace basegfx
                                         ceil(rRange.getMaxY()) );
         }
 
-    } // namespace bgfxtools
-
-} // namespace canvas
+    } // namespace canvas
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

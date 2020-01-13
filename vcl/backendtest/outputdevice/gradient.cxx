@@ -11,8 +11,7 @@
 #include <test/outputdevice.hxx>
 #include <vcl/gradient.hxx>
 
-namespace vcl {
-namespace test {
+namespace vcl::test {
 
 Bitmap OutputDeviceTestGradient::setupLinearGradient()
 {
@@ -39,6 +38,6 @@ Bitmap OutputDeviceTestGradient::setupRadialGradient()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-}} // end namespace vcl::test
+} // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,7 +57,7 @@ namespace {
     }
 }
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterTextView =====================================================
 
@@ -1198,6 +1198,6 @@ void PresenterTextParagraph::Line::ProvideLayoutedLine (
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

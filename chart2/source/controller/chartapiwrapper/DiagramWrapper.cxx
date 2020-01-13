@@ -567,9 +567,7 @@ OUString lcl_getOldChartTypeName( const OUString & rNewChartTypeName )
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 DiagramWrapper::DiagramWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
@@ -1927,7 +1925,6 @@ css::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

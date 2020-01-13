@@ -462,10 +462,10 @@ void ContentIdxStoreImpl::RestoreShellCursors(updater_t const & rUpdater)
     }
 }
 
-namespace sw { namespace mark {
+namespace sw::mark {
     std::shared_ptr<ContentIdxStore> ContentIdxStore::Create()
     {
        return std::make_shared<ContentIdxStoreImpl>();
     }
-}}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

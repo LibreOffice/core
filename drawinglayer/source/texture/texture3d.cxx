@@ -27,9 +27,7 @@
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 #include <sal/log.hxx>
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxMono::GeoTexSvxMono(
             const basegfx::BColor& rSingleColor,
@@ -57,13 +55,10 @@ namespace drawinglayer
         {
             rfOpacity = mfOpacity;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxBitmapEx::GeoTexSvxBitmapEx(
             const BitmapEx& rBitmapEx,
@@ -241,13 +236,10 @@ namespace drawinglayer
                 rfOpacity = 0.0;
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         basegfx::B2DPoint GeoTexSvxBitmapExTiled::impGetCorrected(const basegfx::B2DPoint& rUV) const
         {
@@ -317,13 +309,10 @@ namespace drawinglayer
                 GeoTexSvxBitmapEx::modifyOpacity(impGetCorrected(rUV), rfOpacity);
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxMultiHatch::GeoTexSvxMultiHatch(
             const primitive3d::HatchTexturePrimitive3D& rPrimitive,
@@ -407,7 +396,6 @@ namespace drawinglayer
                 rfOpacity = 0.0;
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

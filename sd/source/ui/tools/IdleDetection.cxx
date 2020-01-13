@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 IdleState IdleDetection::GetIdleState (const vcl::Window* pWindow)
 {
@@ -98,6 +98,6 @@ IdleState IdleDetection::CheckWindowPainting (const vcl::Window& rWindow)
         return IdleState::Idle;
 }
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,8 +39,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox {
-namespace docprop {
+namespace oox::docprop {
 
 OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentContext >& xContext,
                                           const uno::Reference< document::XDocumentProperties >& rDocProp )
@@ -685,7 +684,6 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     }
 }
 
-} // namespace docprop
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

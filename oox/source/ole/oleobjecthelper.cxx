@@ -34,8 +34,7 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/properties.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -174,7 +173,6 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     return bRet;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

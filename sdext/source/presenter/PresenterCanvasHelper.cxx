@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 PresenterCanvasHelper::PresenterCanvasHelper()
     : maDefaultViewState(
@@ -283,6 +283,6 @@ css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
     return css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
 }
 
-} } // end of namespace sdext::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

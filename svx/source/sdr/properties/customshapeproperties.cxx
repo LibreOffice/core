@@ -29,9 +29,7 @@
 #include <svl/hint.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         void CustomShapeProperties::UpdateTextFrameStatus(bool bInvalidateRenderGeometry)
         {
@@ -225,7 +223,6 @@ namespace sdr
                 // update bTextFrame and RenderGeometry
             UpdateTextFrameStatus(bRemoveRenderGeometry);
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

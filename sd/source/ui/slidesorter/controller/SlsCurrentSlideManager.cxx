@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 
 using namespace ::sd::slidesorter::model;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -250,6 +250,6 @@ IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback, Timer *, void)
     }
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

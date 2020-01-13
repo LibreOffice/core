@@ -49,8 +49,7 @@
 #include <biffhelper.hxx>
 #include <filter/msfilter/util.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -1049,7 +1048,6 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     return nHeight;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

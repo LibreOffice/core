@@ -27,7 +27,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 objectDefaultContext::objectDefaultContext( ContextHandler2Helper const & rParent, Theme& rTheme )
 : ContextHandler2( rParent )
@@ -49,6 +49,6 @@ ContextHandlerRef objectDefaultContext::onCreateContext( sal_Int32 aElementToken
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

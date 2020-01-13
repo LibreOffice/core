@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 //===== PresenterHelper =======================================================
 
@@ -439,7 +439,7 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
         return awt::Rectangle();
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

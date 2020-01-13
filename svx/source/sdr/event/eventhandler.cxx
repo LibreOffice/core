@@ -22,11 +22,4 @@
 #include <algorithm>
 #include <tools/debug.hxx>
 
-namespace sdr
-{
-    namespace event
-    {
-    } // end of namespace mixer
-} // end of namespace sdr
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

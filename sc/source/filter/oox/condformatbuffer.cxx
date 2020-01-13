@@ -43,8 +43,7 @@
 #include <tokenuno.hxx>
 #include <extlstcontext.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
@@ -1395,7 +1394,6 @@ const std::vector< std::unique_ptr<ScFormatEntry> >& ExtCfCondFormat::getEntries
     return maEntries;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

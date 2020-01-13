@@ -44,8 +44,7 @@
 #include <viewsettings.hxx>
 #include <worksheetsettings.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::oox::core;
 
@@ -902,7 +901,6 @@ void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedDat
         getBaseFilter().importBinaryData( orEmbeddedData, aFragmentPath );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

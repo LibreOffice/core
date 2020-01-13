@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 Scene3DPropertiesContext::Scene3DPropertiesContext( ContextHandler2Helper const & rParent, Shape3DProperties& r3DProperties ) throw()
 : ContextHandler2( rParent )
@@ -132,6 +132,6 @@ ContextHandlerRef Scene3DRotationPropertiesContext::onCreateContext( sal_Int32 a
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

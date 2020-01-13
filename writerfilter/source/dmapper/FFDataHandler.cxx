@@ -20,8 +20,7 @@
 
 #include <ooxml/resourceids.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 /************************
  * class: FFDataHandler *
@@ -185,6 +184,6 @@ void FFDataHandler::lcl_attribute(Id name, Value & val)
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

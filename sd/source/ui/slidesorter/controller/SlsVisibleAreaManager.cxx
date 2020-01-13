@@ -28,7 +28,7 @@
 #include <SlideSorter.hxx>
 #include <view/SlideSorterView.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 namespace {
     class VisibleAreaScroller
@@ -231,6 +231,6 @@ void VisibleAreaScroller::operator() (const double nTime)
 
 } // end of anonymous namespace
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

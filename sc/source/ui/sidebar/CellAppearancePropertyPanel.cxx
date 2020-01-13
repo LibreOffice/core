@@ -41,7 +41,7 @@ const char LINESTYLE[] = "LineStyle";
 
 // namespace open
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     vcl::Window* pParent,
@@ -507,6 +507,6 @@ void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bL
 }
 // namespace close
 
-}} // end of namespace ::sc::sidebar
+} // end of namespace ::sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

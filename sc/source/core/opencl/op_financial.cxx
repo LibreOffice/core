@@ -14,7 +14,7 @@
 
 using namespace formula;
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 // Definitions of inline functions
 #include "opinlinefun_finacial.cxx"
 
@@ -4786,6 +4786,6 @@ void OpDB::GenSlidingWindowFunction(std::stringstream& ss,
     ss <<"    return tmp;\n";
     ss <<"}";
 }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 ValueSetWithTextControl::ValueSetWithTextControl(Window* pParent, WinBits nBits)
     : ValueSet( pParent, nBits )
@@ -109,6 +109,6 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->Pop();
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

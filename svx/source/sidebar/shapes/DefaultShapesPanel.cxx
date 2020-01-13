@@ -23,7 +23,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 DefaultShapesPanel::DefaultShapesPanel (
     vcl::Window* pParent,
@@ -155,6 +155,6 @@ void DefaultShapesPanel::populateShapes()
     }
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

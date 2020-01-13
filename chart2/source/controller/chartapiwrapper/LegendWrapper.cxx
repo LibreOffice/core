@@ -258,9 +258,7 @@ struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence<
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 LegendWrapper::LegendWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
@@ -420,7 +418,6 @@ css::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames(
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #include <drawingml/textliststyle.hxx>
 #include <sal/log.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 TextListStyle::TextListStyle()
 {
@@ -94,6 +94,6 @@ void TextListStyle::dump() const
     }
 }
 #endif
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,8 +24,7 @@
 
 #include <osl/diagnose.h>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 namespace {
 
@@ -287,7 +286,6 @@ bool AxBinaryPropertyReader::startNextProperty()
     return ensureValid() && bHasProp;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

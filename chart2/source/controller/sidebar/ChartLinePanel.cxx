@@ -27,7 +27,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 namespace {
 
@@ -324,6 +324,6 @@ void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
     xPropSet->setPropertyValue("LineWidth", css::uno::Any(rItem.GetValue()));
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,8 +30,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
@@ -120,7 +119,6 @@ void ExcelVbaProject::prepareImport()
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 //===== CanvasUpdateRequester::Deleter ========================================
 
@@ -126,6 +126,6 @@ IMPL_LINK_NOARG(CanvasUpdateRequester, Callback, void*, void)
     m_pThis.reset(); // possibly delete "this"
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

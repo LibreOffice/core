@@ -55,9 +55,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
 
-namespace sd
-{
-namespace impl
+namespace sd::impl
 {
 struct TransitionEffect
 {
@@ -210,7 +208,6 @@ struct TransitionEffect
     bool mbLoopSoundAmbiguous;
 };
 
-} // namespace impl
 } // namespace sd
 
 // Local Helper Functions

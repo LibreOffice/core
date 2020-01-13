@@ -20,9 +20,7 @@
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "DataSeriesPointWrapper.hxx"
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 WrappedSeriesAreaOrLineProperty::WrappedSeriesAreaOrLineProperty(
@@ -48,7 +46,6 @@ OUString WrappedSeriesAreaOrLineProperty::getInnerName() const
     return m_aInnerAreaTypeName;
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

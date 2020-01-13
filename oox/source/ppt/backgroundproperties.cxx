@@ -28,7 +28,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 BackgroundPropertiesContext::BackgroundPropertiesContext( FragmentHandler2 const & rParent, ::oox::drawingml::FillProperties& rFillProperties )
 : FragmentHandler2( rParent )
@@ -47,6 +47,6 @@ BackgroundPropertiesContext::BackgroundPropertiesContext( FragmentHandler2 const
     return ::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrFillProperties ).get();
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

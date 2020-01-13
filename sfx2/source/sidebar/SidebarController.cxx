@@ -103,7 +103,7 @@ namespace
     }
 }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 namespace {
     enum MenuId
@@ -1615,6 +1615,6 @@ void SidebarController::saveDeckState()
     }
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

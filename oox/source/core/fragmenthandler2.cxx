@@ -23,8 +23,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -217,7 +216,6 @@ void FragmentHandler2::finalizeImport()
 {
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

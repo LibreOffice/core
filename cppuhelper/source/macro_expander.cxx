@@ -55,7 +55,7 @@ static Bootstrap const & get_unorc()
 
 }
 
-namespace cppuhelper { namespace detail {
+namespace cppuhelper::detail {
 
 OUString expandMacros(OUString const & text) {
     OUString t(text);
@@ -64,7 +64,7 @@ OUString expandMacros(OUString const & text) {
     return t;
 }
 
-} }
+}
 
 namespace
 {
@@ -157,7 +157,7 @@ Reference< XInterface > service_create(
 
 }
 
-namespace cppuhelper { namespace detail {
+namespace cppuhelper::detail {
 
 Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_factory()
 {
@@ -177,6 +177,6 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
         SAL_NO_ACQUIRE);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

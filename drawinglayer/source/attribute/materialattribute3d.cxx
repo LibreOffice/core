@@ -22,9 +22,7 @@
 #include <rtl/instance.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpMaterialAttribute3D
         {
@@ -131,7 +129,6 @@ namespace drawinglayer
         {
             return mpMaterialAttribute3D->getSpecularIntensity();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@
 
 using namespace ::drawinglayer::primitive2d;
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 //===== PageObjectPainter =====================================================
 
@@ -461,6 +461,6 @@ void PageObjectPainter::PaintBorder (
     }
 }
 
-} } } // end of namespace sd::slidesorter::view
+} // end of namespace sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

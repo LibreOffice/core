@@ -510,13 +510,13 @@ bool Base::v_isValid(OUString * pReason)
     return m_pEnterable->isValid(pReason);
 }
 
-namespace cppu { namespace helper { namespace purpenv {
+namespace cppu::helper::purpenv {
 
 void Environment_initWithEnterable(uno_Environment * pEnvironment, cppu::Enterable * pEnterable)
 {
     new Base(pEnvironment, pEnterable);
 }
 
-}}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

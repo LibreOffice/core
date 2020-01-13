@@ -32,7 +32,7 @@ using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 
-namespace DOM { namespace events {
+namespace DOM::events {
 
     void CEventDispatcher::addListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)
     {
@@ -245,6 +245,6 @@ namespace DOM { namespace events {
             }
         }
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,9 +50,7 @@ using editeng::SvxBorderLine;
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         namespace {
 
@@ -146,12 +144,9 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrCellPrimitive2D, PRIMITIVE2D_ID_SDRCELLPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         static svx::frame::Style impGetLineStyle(
             const sdr::table::TableLayouter& rLayouter,
@@ -421,7 +416,6 @@ namespace sdr
         ViewContactOfTableObj::~ViewContactOfTableObj()
         {
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

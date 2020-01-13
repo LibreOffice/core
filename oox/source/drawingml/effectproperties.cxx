@@ -16,8 +16,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
@@ -92,7 +91,6 @@ css::beans::PropertyValue Effect::getEffect()
     return aRet;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

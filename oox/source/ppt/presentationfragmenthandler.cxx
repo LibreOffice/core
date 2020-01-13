@@ -64,7 +64,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 static std::map<PredefinedClrSchemeId, sal_Int32> PredefinedClrTokens =
 {
@@ -615,6 +615,6 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     getFilter().importFragment( rxSlideFragmentHandler );
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

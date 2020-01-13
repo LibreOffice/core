@@ -46,7 +46,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 namespace {
     bool PrintModel (const SlideSorterModel& rModel)
@@ -672,6 +672,6 @@ SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
         return nullptr;
 }
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,9 +27,7 @@
 #include <algorithm>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         BorderLine::BorderLine(
             const drawinglayer::attribute::LineAttribute& rLineAttribute,
@@ -430,7 +428,6 @@ namespace drawinglayer
                     aMergedBorderLines,
                     pCandidateA->getStrokeAttribute()));
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

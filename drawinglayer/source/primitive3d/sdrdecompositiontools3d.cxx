@@ -38,9 +38,7 @@
 #include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
+namespace drawinglayer::primitive3d
     {
         basegfx::B3DRange getRangeFrom3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
@@ -320,7 +318,6 @@ namespace drawinglayer
             return { aHidden };
         }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

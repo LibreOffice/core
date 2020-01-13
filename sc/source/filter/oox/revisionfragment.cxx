@@ -35,7 +35,7 @@
 
 using namespace com::sun::star;
 
-namespace oox { namespace xls {
+namespace oox::xls {
 
 namespace {
 
@@ -448,6 +448,6 @@ void RevisionLogFragment::pushRevision()
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

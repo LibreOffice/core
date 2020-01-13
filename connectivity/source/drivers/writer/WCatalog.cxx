@@ -29,9 +29,7 @@
 
 using namespace ::com::sun::star;
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 OWriterCatalog::OWriterCatalog(OWriterConnection* pConnection)
     : file::OFileCatalog(pConnection)
@@ -57,7 +55,6 @@ void OWriterCatalog::refreshTables()
         m_pTables = std::make_unique<OWriterTables>(m_xMetaData, *this, m_aMutex, aVector);
 }
 
-} // namespace writer
 } // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

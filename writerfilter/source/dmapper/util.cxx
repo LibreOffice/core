@@ -21,9 +21,7 @@
 #include <string>
 #include "util.hxx"
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 using namespace com::sun::star;
 
@@ -67,8 +65,6 @@ void resolveSprmProps(Properties & rHandler, Sprm & rSprm)
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
     if( pProperties.get())
         pProperties->resolve(rHandler);
-}
-
 }
 
 }

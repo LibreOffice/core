@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapter)
     : mrContainerAdapter(rpAdapter),
@@ -164,6 +164,6 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate()
     return SCAN_TEMPLATE;
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

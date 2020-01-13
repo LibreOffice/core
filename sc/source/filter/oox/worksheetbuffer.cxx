@@ -33,8 +33,7 @@
 #include <documentimport.hxx>
 #include <biffhelper.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -241,7 +240,6 @@ void WorksheetBuffer::finalizeImport( sal_Int16 nActiveSheet )
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

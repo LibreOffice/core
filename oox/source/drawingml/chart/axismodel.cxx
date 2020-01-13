@@ -19,9 +19,7 @@
 
 #include <drawingml/chart/axismodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 AxisDispUnitsModel::AxisDispUnitsModel() :
     mfCustomUnit( 0.0 )
@@ -59,8 +57,6 @@ AxisModel::~AxisModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

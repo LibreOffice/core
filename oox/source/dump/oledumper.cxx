@@ -31,8 +31,7 @@
 
 #ifdef DBG_UTIL
 
-namespace oox {
-namespace dump {
+namespace oox::dump {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -2081,7 +2080,6 @@ void ActiveXStorageObject::implDumpBaseStream( const BinaryInputStreamRef& rxStr
     FormControlStreamObject( *this, rxStrm, rSysFileName ).dump();
 }
 
-} // namespace dump
 } // namespace oox
 
 #endif

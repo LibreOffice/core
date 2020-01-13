@@ -37,9 +37,7 @@
 #include <oox/token/tokens.hxx>
 #include <tools/helpers.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -478,8 +476,6 @@ void PlotAreaConverter::convertPositionFromModel()
     }
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

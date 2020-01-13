@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 // helper SwPostItShadowPrimitive
 
@@ -232,6 +232,6 @@ void ShadowOverlayObject::SetPosition( const basegfx::B2DPoint& rPoint1,
     }
 }
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

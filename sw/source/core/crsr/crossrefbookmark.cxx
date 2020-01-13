@@ -30,7 +30,7 @@ namespace
     const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
 }
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
@@ -88,6 +88,6 @@ namespace sw { namespace mark
     {
         return rName.match(CrossRefNumItemBookmark_NamePrefix);
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

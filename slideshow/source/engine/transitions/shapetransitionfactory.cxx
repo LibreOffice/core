@@ -33,8 +33,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 /***************************************************
  ***                                             ***
@@ -367,7 +366,6 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                                   xTransition->getSubtype() );
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

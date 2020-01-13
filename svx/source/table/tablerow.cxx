@@ -35,7 +35,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::beans;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 const sal_Int32 Property_Height = 0;
 const sal_Int32 Property_OptimalHeight = 1;
@@ -346,6 +346,6 @@ rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 }
 
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

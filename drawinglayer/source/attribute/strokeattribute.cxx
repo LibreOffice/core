@@ -22,9 +22,7 @@
 #include <numeric>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpStrokeAttribute
         {
@@ -120,7 +118,6 @@ namespace drawinglayer
         {
             return mpStrokeAttribute->getFullDotDashLen();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

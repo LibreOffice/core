@@ -28,7 +28,7 @@
 #include <editeng/lineitem.hxx>
 #include <memory>
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 #define FRM_VALID_LEFT      0x01
 #define FRM_VALID_RIGHT     0x02
@@ -275,6 +275,6 @@ IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OString&, rId, void)
     maToolButton.set_inactive();
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -122,9 +122,7 @@ sal_Int32 SAL_CALL MysqlCDriver::getMajorVersion() { return MARIADBC_VERSION_MAJ
 
 sal_Int32 SAL_CALL MysqlCDriver::getMinorVersion() { return MARIADBC_VERSION_MINOR; }
 
-namespace connectivity
-{
-namespace mysqlc
+namespace connectivity::mysqlc
 {
 Reference<XInterface> MysqlCDriver_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -139,7 +137,6 @@ void checkDisposed(bool _bThrow)
     }
 }
 
-} /* mysqlc */
 } /* connectivity */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

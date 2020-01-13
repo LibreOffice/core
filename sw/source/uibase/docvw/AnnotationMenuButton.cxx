@@ -33,7 +33,7 @@
 #include <AnnotationWin.hxx>
 #include <swtypes.hxx>
 
-namespace sw { namespace annotation {
+namespace sw::annotation {
 
 static Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, const Color& aBack)
 {
@@ -200,6 +200,6 @@ void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
     }
 }
 
-}} // end of namespace sw::annotation
+} // end of namespace sw::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
