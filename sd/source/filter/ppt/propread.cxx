@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include "propread.hxx"
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <osl/diagnose.h>
+#include <memory>
 
 PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize ) :
     mnId        ( nId ),
@@ -348,7 +349,9 @@ void Section::Read( SotStorageStream *pStrm )
 
             bool bVariant = ( nPropType == VT_VARIANT );
 
-            for (sal_uInt32 i = 0; nPropSize && ( i < nVectorCount ); ++i)
+            o3tl::sorted_vector<sal_uInt64> aVisitedOffsets;
+
+            for (sal_uInt32 i = 0; nPropSize && i < nVectorCount && pStrm->good(); ++i)
             {
                 if ( bVariant )
                 {
@@ -427,6 +430,12 @@ void Section::Read( SotStorageStream *pStrm )
                         nOffset = nPropOfs + nSecOfs + nPropSize;
                         if (!checkSeek(*pStrm, nOffset))
                             break;
+                        // inserts returns false if an equivalent element already existed
+                        if (!aVisitedOffsets.insert(nOffset).second)
+                        {
+                            SAL_WARN("sd.filter", "loop in Section::Read property list");
+                            break;
+                        }
                     }
                 }
                 else
