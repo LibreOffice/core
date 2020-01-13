@@ -19,20 +19,26 @@
 #ifndef INCLUDED_SVX_TEXTCHARACTERSPACINGPOPUP_HXX
 #define INCLUDED_SVX_TEXTCHARACTERSPACINGPOPUP_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 
 namespace svx {
 
-class SVX_DLLPUBLIC TextCharacterSpacingPopup final : public SfxToolBoxControl
+class SVX_DLLPUBLIC TextCharacterSpacingPopup final : public svt::PopupWindowController
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    TextCharacterSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    TextCharacterSpacingPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~TextCharacterSpacingPopup() override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 } // end of namespace svx
