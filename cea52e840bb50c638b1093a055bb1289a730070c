@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bd9d25c_96b864a5",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5746,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-13T11:16:09Z",
+      "side": 1,
+      "message": "This comment seem to imply that the result should be already properly converted... maybe the problem is actually here - for some reason, it doesn\u0027t on macOS and Linux?",
+      "range": {
+        "startLine": 5746,
+        "startChar": 20,
+        "endLine": 5746,
+        "endChar": 81
+      },
+      "revId": "cea52e840bb50c638b1093a055bb1289a730070c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
