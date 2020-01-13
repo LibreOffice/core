@@ -16,6 +16,24 @@
       "revId": "e1383444c6d00f5d0b1d507670517f45988b9cc7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca5e60e3_8eeb5dd8",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-13T06:32:16Z",
+      "side": 1,
+      "message": "For my purposes, in helping me debug conversion to fast-parser APIs, it is very useful.\nEventually, all of the relevant code will be converted to fast-parser and this warning will go away.\nBut I can see how it is annoying for everybody else right now, and it will take me quite some time to get there, so I\u0027ll remove it for now.",
+      "parentUuid": "01ddb015_d3dc0e06",
+      "revId": "e1383444c6d00f5d0b1d507670517f45988b9cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
