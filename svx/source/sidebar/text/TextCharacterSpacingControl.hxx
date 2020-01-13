@@ -20,8 +20,6 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGCONTROL_HXX
 
 #include <sfx2/bindings.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
 #include <svtools/toolbarmenu.hxx>
 
 namespace svx {
@@ -33,35 +31,39 @@ namespace svx {
 
 class TextCharacterSpacingPopup;
 
-class TextCharacterSpacingControl final : public svtools::ToolbarPopup
+class TextCharacterSpacingControl final : public WeldToolbarPopup
 {
 public:
-    explicit TextCharacterSpacingControl(TextCharacterSpacingPopup* pControl, vcl::Window* pParent);
+    explicit TextCharacterSpacingControl(TextCharacterSpacingPopup* pControl, weld::Widget* pParent);
+
+    virtual void GrabFocus() override;
+
     virtual ~TextCharacterSpacingControl() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<MetricField> maEditKerning;
-
-    VclPtr<PushButton> maNormal;
-    VclPtr<PushButton> maVeryTight;
-    VclPtr<PushButton> maTight;
-    VclPtr<PushButton> maVeryLoose;
-    VclPtr<PushButton> maLoose;
-    VclPtr<PushButton> maLastCustom;
-
     sal_uInt16          mnId;
     long                mnCustomKern;
     short               mnLastCus;
 
+    std::unique_ptr<weld::MetricSpinButton> mxEditKerning;
+    std::unique_ptr<weld::Button> mxTight;
+    std::unique_ptr<weld::Button> mxVeryTight;
+    std::unique_ptr<weld::Button> mxNormal;
+    std::unique_ptr<weld::Button> mxLoose;
+    std::unique_ptr<weld::Button> mxVeryLoose;
+    std::unique_ptr<weld::Button> mxLastCustom;
+
+    rtl::Reference<TextCharacterSpacingPopup> mxControl;
+
     void Initialize();
     void ExecuteCharacterSpacing(long nValue, bool bClose = true);
 
-    DECL_LINK(PredefinedValuesHdl, Button*, void);
-    DECL_LINK(KerningModifyHdl, Edit&, void);
+    DECL_LINK(PredefinedValuesHdl, weld::Button&, void);
+    DECL_LINK(KerningModifyHdl, weld::MetricSpinButton&, void);
 
     MapUnit GetCoreMetric() const;
 };
+
 }
 
 #endif
