@@ -1,5 +1,5 @@
-basic/source/comp/codegen.cxx:464
-    void OffSetAccumulator::start(const unsigned char *,)
+basic/source/comp/codegen.cxx:478
+    void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/canvas/base/bufferedgraphicdevicebase.hxx:108
@@ -8,12 +8,16 @@ include/canvas/base/graphicdevicebase.hxx:306
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
 include/canvas/base/graphicdevicebase.hxx:319
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
-sc/source/core/opencl/formulagroupcl.cxx:1059
-    void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
-slideshow/source/engine/animationfactory.cxx:441
+sc/source/core/opencl/formulagroupcl.cxx:1062
+    void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
+slideshow/source/engine/animationfactory.cxx:439
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
+vcl/inc/salinst.hxx:202
+    void SalInstance::releaseMainThread()
+vcl/inc/salmenu.hxx:71
+    void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
 vcl/inc/salmenu.hxx:81
     void SalMenu::RemoveMenuBarButton(unsigned short,)
 vcl/inc/salobj.hxx:49
