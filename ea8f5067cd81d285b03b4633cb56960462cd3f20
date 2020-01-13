@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f76d2b34_01dff80e",
+        "filename": "sd/source/filter/ppt/propread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-13T16:44:08Z",
+      "side": 1,
+      "message": "o3tl::sorted_vector would probably be faster and use less memory",
+      "revId": "ea8f5067cd81d285b03b4633cb56960462cd3f20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
