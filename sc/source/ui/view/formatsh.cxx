@@ -1784,10 +1784,32 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 break;
             case SID_ATTR_CHAR_COLOR:
             case SID_SCATTR_PROTECTION :
-                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot) ), false);
+            {
+                const SfxPoolItem* pColorStringItem = nullptr;
+                if ( SfxItemState::SET == pNewAttrs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
+                {
+                    Color aColor;
+                    OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                    if ( sColor == "transparent" )
+                        aColor = COL_TRANSPARENT;
+                    else
+                        aColor = Color( sColor.toInt32( 16 ) );
+
+                    SvxColorItem aColorItem(pTabViewShell->GetSelectionPattern()->
+                                                GetItem( ATTR_FONT_COLOR ) );
+                    aColorItem.SetValue(aColor);
+                    pTabViewShell->ApplyAttr(aColorItem, false);
+                }
+                else
+                {
+                    pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot) ), false);
+                }
+
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
-                break;
+            }
+
+            break;
 
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
