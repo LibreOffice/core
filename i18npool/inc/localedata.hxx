@@ -48,7 +48,7 @@ struct LocaleDataLookupTableItem;
 
 namespace i18npool {
 
-class LocaleDataImpl : public cppu::WeakImplHelper
+class LocaleDataImpl final : public cppu::WeakImplHelper
 <
     css::i18n::XLocaleData5,
     css::lang::XServiceInfo

@@ -25,7 +25,7 @@
 namespace i18npool {
 
 #define TRANSLITERATION_CHARTONUM( name ) \
-class CharToNum##name : public transliteration_Numeric \
+class CharToNum##name final : public transliteration_Numeric \
 { \
 public: \
         CharToNum##name (); \

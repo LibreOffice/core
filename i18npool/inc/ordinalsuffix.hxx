@@ -28,7 +28,7 @@ namespace com::sun::star::lang { struct Locale; }
 
 namespace i18npool {
 
-class OrdinalSuffixService : public cppu::WeakImplHelper
+class OrdinalSuffixService final : public cppu::WeakImplHelper
 <
     css::i18n::XOrdinalSuffix,
     css::lang::XServiceInfo

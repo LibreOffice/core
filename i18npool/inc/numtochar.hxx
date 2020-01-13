@@ -25,7 +25,7 @@
 namespace i18npool {
 
 #define TRANSLITERATION_NUMTOCHAR( name ) \
-class NumToChar##name : public transliteration_Numeric \
+class NumToChar##name final : public transliteration_Numeric \
 { \
 public: \
         NumToChar##name (); \

@@ -23,7 +23,7 @@
 #include "astscope.hxx"
 #include "astconstant.hxx"
 
-class AstEnum : public AstType
+class AstEnum final : public AstType
               , public AstScope
 {
 public:

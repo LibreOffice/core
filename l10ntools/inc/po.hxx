@@ -129,7 +129,7 @@ private:
 
 public:
 
-    class Exception : public std::exception { };
+    class Exception final : public std::exception { };
 
             PoIfstream();
             PoIfstream( const OString& rFileName );

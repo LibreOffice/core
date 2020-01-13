@@ -46,7 +46,7 @@ public:
     bool            IsError() const { return nLine != 0; }
 };
 
-class SvParseException : public std::exception
+class SvParseException final : public std::exception
 {
 public:
     SvIdlError aError;

@@ -25,7 +25,7 @@
 
 class AstScope;
 
-class AstStructInstance: public AstType {
+class AstStructInstance final : public AstType {
 public:
     AstStructInstance(
         AstType const * typeTemplate, DeclList const * typeArguments,

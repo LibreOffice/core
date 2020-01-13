@@ -26,14 +26,14 @@
 
 namespace i18npool {
 
-class Calendar_hijri : public Calendar_gregorian
+class Calendar_hijri final : public Calendar_gregorian
 {
 public:
 
     // Constructors
     Calendar_hijri();
 
-protected:
+private:
     void mapToGregorian() override;
     void mapFromGregorian() override;
 

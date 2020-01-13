@@ -265,7 +265,7 @@ public:
 
 /** Holds comments
  */
-class XMLComment : public XMLChildNode
+class XMLComment final : public XMLChildNode
 {
 private:
     OString m_sComment;
@@ -288,7 +288,7 @@ public:
 
 /** Holds additional file content like those for which no handler exists
  */
-class XMLDefault : public XMLChildNode
+class XMLDefault final : public XMLChildNode
 {
 private:
     OString m_sDefault;

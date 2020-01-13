@@ -71,7 +71,7 @@ protected:
 };
 
 #define TRANSLITERATION_IGNORE( name ) \
-class ignore##name : public transliteration_Ignore {\
+class ignore##name final : public transliteration_Ignore {\
 public:\
         ignore##name ();\
 };
@@ -89,7 +89,7 @@ TRANSLITERATION_IGNORE(TraditionalKanji_ja_JP)
 TRANSLITERATION_IGNORE(ZiZu_ja_JP)
 TRANSLITERATION_IGNORE(Kashida_CTL)
 
-class ignoreDiacritics_CTL : public transliteration_Ignore
+class ignoreDiacritics_CTL final : public transliteration_Ignore
 {
     icu::Transliterator* m_transliterator;
 
@@ -106,7 +106,7 @@ public:
 #undef TRANSLITERATION_IGNORE
 
 #define TRANSLITERATION_IGNORE( name ) \
-class ignore##name : public transliteration_Ignore {\
+class ignore##name final : public transliteration_Ignore {\
 public:\
         ignore##name () {\
             func = nullptr;\
@@ -127,7 +127,7 @@ TRANSLITERATION_IGNORE(ProlongedSoundMark_ja_JP)
 #undef TRANSLITERATION_IGNORE
 
 #define TRANSLITERATION_IGNORE( name ) \
-class ignore##name : public transliteration_Ignore {\
+class ignore##name final : public transliteration_Ignore {\
 public:\
         ignore##name () {\
             func = nullptr;\

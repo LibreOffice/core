@@ -33,7 +33,7 @@ namespace com::sun::star::i18n { class XLocaleData5; }
 namespace com::sun::star::i18n { struct FormatElement; }
 namespace com::sun::star::uno { class XComponentContext; }
 
-class NumberFormatCodeMapper : public cppu::WeakImplHelper
+class NumberFormatCodeMapper final : public cppu::WeakImplHelper
 <
     css::i18n::XNumberFormatCode,
     css::lang::XServiceInfo

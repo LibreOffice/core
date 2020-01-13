@@ -29,7 +29,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace i18npool {
 
-class TransliterationImpl : public cppu::WeakImplHelper
+class TransliterationImpl final : public cppu::WeakImplHelper
 <
     css::i18n::XExtendedTransliteration,
     css::lang::XServiceInfo

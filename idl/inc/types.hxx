@@ -87,19 +87,19 @@ public:
                                         SvTokenStream & rInStm );
 };
 
-class SvMetaTypeString : public SvMetaType
+class SvMetaTypeString final : public SvMetaType
 {
 public:
             SvMetaTypeString();
 };
 
-class SvMetaEnumValue : public SvMetaObject
+class SvMetaEnumValue final : public SvMetaObject
 {
 public:
     SvMetaEnumValue();
 };
 
-class SvMetaTypeEnum : public SvMetaType
+class SvMetaTypeEnum final : public SvMetaType
 {
 public:
     SvRefMemberList<SvMetaEnumValue *> aEnumValueList;
@@ -107,7 +107,7 @@ public:
             SvMetaTypeEnum();
 };
 
-class SvMetaTypevoid : public SvMetaType
+class SvMetaTypevoid final : public SvMetaType
 {
 public:
             SvMetaTypevoid();

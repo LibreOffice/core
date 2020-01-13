@@ -25,7 +25,7 @@ namespace i18npool {
 
 
 
-class BreakIterator_th : public BreakIterator_Unicode
+class BreakIterator_th final : public BreakIterator_Unicode
 {
 public:
     BreakIterator_th();

@@ -26,7 +26,7 @@
 
 namespace i18npool {
 
-class Calendar_jewish : public Calendar_gregorian
+class Calendar_jewish final : public Calendar_gregorian
 {
 public:
     // Constructors
@@ -35,7 +35,7 @@ public:
     // Methods in XExtendedCalendar
     virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
 
-protected:
+private:
     void mapToGregorian() override;
     void mapFromGregorian() override;
 };

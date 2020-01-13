@@ -24,7 +24,7 @@
 
 namespace typereg { class Writer; }
 
-class AstConstant : public AstDeclaration
+class AstConstant final : public AstDeclaration
 {
 public:
     AstConstant(const ExprType type, const NodeType nodeType,

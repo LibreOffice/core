@@ -21,7 +21,7 @@
 
 #include "astinterface.hxx"
 
-class AstObserves : public AstDeclaration
+class AstObserves final : public AstDeclaration
 {
 public:
     AstObserves(AstInterface* pRealInterface, const OString& name, AstScope* pScope)

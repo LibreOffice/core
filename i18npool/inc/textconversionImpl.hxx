@@ -29,7 +29,7 @@ namespace i18npool {
 
 
 
-class TextConversionImpl : public cppu::WeakImplHelper
+class TextConversionImpl final : public cppu::WeakImplHelper
 <
     css::i18n::XExtendedTextConversion,
     css::lang::XServiceInfo

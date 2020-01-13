@@ -37,7 +37,7 @@ namespace i18npool {
 
 namespace i18npool {
 
-class DefaultNumberingProvider : public cppu::WeakImplHelper
+class DefaultNumberingProvider final : public cppu::WeakImplHelper
 <
     css::text::XDefaultNumberingProvider,
     css::text::XNumberingFormatter,

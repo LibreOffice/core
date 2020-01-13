@@ -25,7 +25,7 @@
 namespace i18npool {
 
 #define TRANSLITERATION_NUMTOTEXT_CJK( name ) \
-class NumToText##name : public transliteration_Numeric \
+class NumToText##name final : public transliteration_Numeric \
 { \
 public: \
         NumToText##name (); \

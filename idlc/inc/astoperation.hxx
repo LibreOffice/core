@@ -26,7 +26,7 @@ namespace typereg { class Writer; }
 
 class AstType;
 
-class AstOperation : public AstDeclaration
+class AstOperation final : public AstDeclaration
                    , public AstScope
 {
 public:

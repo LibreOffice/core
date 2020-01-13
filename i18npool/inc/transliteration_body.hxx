@@ -55,32 +55,32 @@ protected:
     MappingType nMappingType;
 };
 
-class Transliteration_u2l : public Transliteration_body
+class Transliteration_u2l final : public Transliteration_body
 {
 public:
     Transliteration_u2l();
 };
 
-class Transliteration_l2u : public Transliteration_body
+class Transliteration_l2u final : public Transliteration_body
 {
 public:
     Transliteration_l2u();
 };
 
-class Transliteration_casemapping : public Transliteration_body
+class Transliteration_casemapping final : public Transliteration_body
 {
 public:
     Transliteration_casemapping();
     void setMappingType(const MappingType rMappingType, const css::lang::Locale& rLocale );
 };
 
-class Transliteration_togglecase : public Transliteration_body
+class Transliteration_togglecase final : public Transliteration_body
 {
 public:
     Transliteration_togglecase();
 };
 
-class Transliteration_titlecase : public Transliteration_body
+class Transliteration_titlecase final : public Transliteration_body
 {
 public:
     Transliteration_titlecase();
@@ -89,7 +89,7 @@ public:
                                         css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
 
-class Transliteration_sentencecase : public Transliteration_body
+class Transliteration_sentencecase final : public Transliteration_body
 {
 public:
     Transliteration_sentencecase();

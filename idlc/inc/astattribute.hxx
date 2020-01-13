@@ -27,7 +27,7 @@
 
 namespace typereg { class Writer; }
 
-class AstAttribute: public AstDeclaration, public AstScope {
+class AstAttribute final : public AstDeclaration, public AstScope {
 public:
     AstAttribute(
         sal_uInt32 flags, AstType const * type, OString const & name,

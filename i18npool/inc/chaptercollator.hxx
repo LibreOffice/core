@@ -28,7 +28,7 @@ namespace i18npool {
 //      ----------------------------------------------------
 //      class ChapterCollator
 //      ----------------------------------------------------
-class ChapterCollator : public CollatorImpl
+class ChapterCollator final : public CollatorImpl
 {
 public:
     // Constructors

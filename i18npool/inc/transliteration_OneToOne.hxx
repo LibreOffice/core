@@ -55,7 +55,7 @@ protected:
 };
 
 #define TRANSLITERATION_ONETOONE( name ) \
-class name : public transliteration_OneToOne \
+class name final : public transliteration_OneToOne \
 { \
 public: \
     name (); \
@@ -71,21 +71,21 @@ TRANSLITERATION_ONETOONE( fullwidthToHalfwidth )
 TRANSLITERATION_ONETOONE( fullwidthKatakanaToHalfwidthKatakana )
 TRANSLITERATION_ONETOONE( fullwidthToHalfwidthLikeASC )
 
-class halfwidthToFullwidth : public transliteration_OneToOne
+class halfwidthToFullwidth final : public transliteration_OneToOne
 {
 public:
     halfwidthToFullwidth();
     OUString
     transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
-class halfwidthKatakanaToFullwidthKatakana : public transliteration_OneToOne
+class halfwidthKatakanaToFullwidthKatakana final : public transliteration_OneToOne
 {
 public:
     halfwidthKatakanaToFullwidthKatakana();
     OUString
     transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
 };
-class halfwidthToFullwidthLikeJIS : public transliteration_OneToOne
+class halfwidthToFullwidthLikeJIS final : public transliteration_OneToOne
 {
 public:
     halfwidthToFullwidthLikeJIS();
@@ -96,7 +96,7 @@ public:
 #undef TRANSLITERATION_ONETOONE
 
 #define TRANSLITERATION_ONETOONE( name ) \
-class name : public transliteration_OneToOne \
+class name final : public transliteration_OneToOne \
 { \
 public: \
     name (); \
