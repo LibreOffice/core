@@ -1104,8 +1104,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         for (const auto& rCooSys : xCooSysSequence)
         {
             PropertySet aCooSysProp(rCooSys);
-            bool bSwapXAndY = false;
-            aCooSysProp.getProperty(bSwapXAndY, PROP_SwapXAndYAxis);
+            bool bSwapXAndY = aCooSysProp.getBoolProperty(PROP_SwapXAndYAxis);
 
             Reference<chart2::XChartTypeContainer> xChartTypeContainer(rCooSys, UNO_QUERY_THROW);
             const Sequence<Reference<chart2::XChartType>> xChartTypeSequence(xChartTypeContainer->getChartTypes());
@@ -1154,7 +1153,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     }
                     else
                     {
-                        aSeriesProp.getProperty(bShowLegendEntry, PROP_ShowLegendEntry);
+                        bShowLegendEntry = aSeriesProp.getBoolProperty(PROP_ShowLegendEntry);
                         if (!bShowLegendEntry)
                         {
                             pFS->startElement(FSNS(XML_c, XML_legendEntry));
