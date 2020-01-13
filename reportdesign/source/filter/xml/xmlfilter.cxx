@@ -130,20 +130,14 @@ static ErrCode ReadThroughComponent(
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rContext.is(), "factory missing");
 
-    // prepare ParserInputSrouce
+    // prepare Parser InputSource
     InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
-    uno::Reference< XParser > xParser = xml::sax::Parser::create(rContext);
-    SAL_INFO( "reportdesign", "parser created" );
     // get filter
-    OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
+    SAL_WARN_IF( !_xFilter.is(), "reportdesign", "Can't instantiate filter component." );
     if( !_xFilter.is() )
         return ErrCode(1);
-
-    // connect parser and filter
-    xParser->setDocumentHandler( _xFilter );
 
     // connect model and filter
     uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
@@ -152,11 +146,20 @@ static ErrCode ReadThroughComponent(
     // finally, parser the stream
     try
     {
-        xParser->parseStream( aParserInput );
+        uno::Reference < XFastParser > xFastParser( _xFilter, UNO_QUERY );\
+        if (xFastParser.is())
+            xFastParser->parseStream( aParserInput );
+        else
+        {
+            uno::Reference< XParser > xParser = xml::sax::Parser::create(rContext);
+            // connect parser and filter
+            xParser->setDocumentHandler( _xFilter );
+            xParser->parseStream( aParserInput );
+        }
     }
     catch (const SAXParseException&)
     {
-        TOOLS_WARN_EXCEPTION( "reportdesign", "SAX parse exception caught while importing");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
         return ErrCode(1);
     }
     catch (const SAXException&)
@@ -169,10 +172,12 @@ static ErrCode ReadThroughComponent(
     }
     catch (const IOException&)
     {
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
         return ErrCode(1);
     }
     catch (const Exception&)
     {
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
         return ErrCode(1);
     }
 
