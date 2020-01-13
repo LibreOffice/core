@@ -164,7 +164,7 @@ namespace
     }
 }
 
-#define UNO_TABLE_COLUMN_SUM 10000
+#define UNO_TABLE_COLUMN_SUM SAL_MAX_INT16
 
 
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
