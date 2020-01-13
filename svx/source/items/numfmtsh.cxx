@@ -375,7 +375,7 @@ void SvxNumberFormatShell::MakePreviewString(const OUString& rFormatStr, OUStrin
 {
     rpFontColor = nullptr;
 
-    sal_uIntPtr nExistingFormat = pFormatter->GetEntryKey(rFormatStr, eCurLanguage);
+    sal_uInt32 nExistingFormat = pFormatter->GetEntryKey(rFormatStr, eCurLanguage);
     if (nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         //  real preview - not implemented in NumberFormatter for text formats
