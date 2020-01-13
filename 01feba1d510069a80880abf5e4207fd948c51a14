@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ee00ce7_fdf507f5",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 13
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-01-13T08:24:21Z",
+      "side": 1,
+      "message": "I think this one is also used for character styles, so we\u0027ll need to separate them into 2 strings.",
+      "revId": "01feba1d510069a80880abf5e4207fd948c51a14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
