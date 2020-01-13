@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -698,7 +699,7 @@ namespace basegfx
             double fMiterMinimumAngle,
             basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
-            assert((fHalfLineWidth > 0.0) && "createAreaGeometryForJoin: LineWidth too small (!)");
+            SAL_WARN_IF(fHalfLineWidth <= 0.0,"basegfx","createAreaGeometryForJoin: LineWidth too small (!)");
             assert((eJoin != B2DLineJoin::NONE) && "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
 
             // LineJoin from tangent rPerpendPrev to tangent rPerpendEdge in rPoint
