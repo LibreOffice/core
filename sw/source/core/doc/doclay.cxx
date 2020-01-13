@@ -1343,7 +1343,10 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, s
         const SwFrameFormat* pFlyFormat = rFormats[ n ];
         if (eType != pFlyFormat->Which())
             continue;
-        if (eType == RES_DRAWFRMFMT)
+
+        OUString sName = pFlyFormat->GetName();
+
+        if (sName.isEmpty() && eType == RES_DRAWFRMFMT)
         {
             const SdrObject *pObj = pFlyFormat->FindSdrObject();
             if (pObj)
@@ -1351,7 +1354,6 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, s
         }
         else
         {
-            OUString sName = pFlyFormat->GetName();
             lcl_collectUsedNums(aUsedNums, nNmLen, sName, aName);
         }
     }
