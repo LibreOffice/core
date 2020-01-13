@@ -39,7 +39,7 @@ namespace rptui
      * Identical properties will be set at the other propertyset.
      * \ingroup reportdesign_source_ui_misc
      */
-    class REPORTDESIGN_DLLPUBLIC OPropertyMediator : public ::cppu::BaseMutex
+    class REPORTDESIGN_DLLPUBLIC OPropertyMediator final : public ::cppu::BaseMutex
                             ,public OPropertyForward_Base
     {
         TPropertyNamePair                                     m_aNameMap;
@@ -50,7 +50,7 @@ namespace rptui
         bool                                                  m_bInChange;
         OPropertyMediator(OPropertyMediator const &) = delete;
         void operator =(OPropertyMediator const &) = delete;
-    protected:
+
         virtual ~OPropertyMediator() override;
 
         /** this function is called upon disposing the component

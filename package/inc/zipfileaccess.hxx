@@ -37,7 +37,7 @@
 
 #include <memory>
 
-class OZipFileAccess : public ::cppu::WeakImplHelper<
+class OZipFileAccess final : public ::cppu::WeakImplHelper<
                         css::packages::zip::XZipFileAccess2,
                         css::lang::XInitialization,
                         css::lang::XComponent,

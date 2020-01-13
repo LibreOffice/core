@@ -24,7 +24,7 @@
 
 // Because some stuff needs this info, and those objects lifetimes sometimes exceeds the lifetime
 // of the ScDocument.
-struct ScSheetLimits : public salhelper::SimpleReferenceObject
+struct ScSheetLimits final : public salhelper::SimpleReferenceObject
 {
     const SCCOL mnMaxCol; /// Maximum addressable column
     const SCROW mnMaxRow; /// Maximum addressable row

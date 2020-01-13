@@ -38,7 +38,7 @@
 
 class ZipPackage;
 struct ZipEntry;
-class ZipPackageStream : public cppu::ImplInheritanceHelper
+class ZipPackageStream final : public cppu::ImplInheritanceHelper
 <
     ZipPackageEntry,
     css::io::XActiveDataSink,

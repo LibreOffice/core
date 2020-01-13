@@ -26,7 +26,7 @@
 
 class SvtURLBox;
 
-class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
+class SfxURLToolBoxControl_Impl final : public SfxToolBoxControl
 {
 private:
 

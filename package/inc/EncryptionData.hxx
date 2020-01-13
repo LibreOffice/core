@@ -42,7 +42,7 @@ public:
     {}
 };
 
-class EncryptionData : public BaseEncryptionData
+class EncryptionData final : public BaseEncryptionData
 {
 public:
     css::uno::Sequence < sal_Int8 > m_aKey;

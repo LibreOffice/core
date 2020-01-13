@@ -191,7 +191,7 @@ namespace rptui
 
     // OUndoReportSectionAction
 
-    class OUndoReportSectionAction : public OUndoContainerAction
+    class OUndoReportSectionAction final : public OUndoContainerAction
     {
         OReportHelper                               m_aReportHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OReportHelper *)> m_pMemberFunction;
@@ -203,14 +203,14 @@ namespace rptui
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,const char* pCommentId);
 
-    protected:
+    private:
         virtual void    implReInsert( ) override;
         virtual void    implReRemove( ) override;
     };
 
 
     // OUndoGroupSectionAction
-    class OUndoGroupSectionAction : public OUndoContainerAction
+    class OUndoGroupSectionAction final : public OUndoContainerAction
     {
         OGroupHelper                                m_aGroupHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> m_pMemberFunction;
@@ -222,7 +222,7 @@ namespace rptui
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,const char* pCommentId);
 
-    protected:
+    private:
         virtual void    implReInsert( ) override;
         virtual void    implReRemove( ) override;
     };
@@ -255,11 +255,11 @@ namespace rptui
 
     // OUndoPropertyReportSectionAction
 
-    class OUndoPropertyReportSectionAction : public ORptUndoPropertyAction
+    class OUndoPropertyReportSectionAction final : public ORptUndoPropertyAction
     {
         OReportHelper                               m_aReportHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OReportHelper *)> m_pMemberFunction;
-    protected:
+
         virtual css::uno::Reference< css::beans::XPropertySet> getObject() override;
     public:
         OUndoPropertyReportSectionAction(SdrModel& rMod
@@ -272,11 +272,11 @@ namespace rptui
 
     // OUndoPropertyGroupSectionAction
 
-    class OUndoPropertyGroupSectionAction : public ORptUndoPropertyAction
+    class OUndoPropertyGroupSectionAction final : public ORptUndoPropertyAction
     {
         OGroupHelper                                m_aGroupHelper;
         ::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> m_pMemberFunction;
-    protected:
+
         virtual css::uno::Reference< css::beans::XPropertySet> getObject() override;
     public:
         OUndoPropertyGroupSectionAction(SdrModel& rMod

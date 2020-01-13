@@ -83,16 +83,14 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class REPORTDESIGN_DLLPUBLIC OReportDefinition  :public ::cppu::BaseMutex
+    class REPORTDESIGN_DLLPUBLIC OReportDefinition  final :public ::cppu::BaseMutex
                                                     ,public ReportDefinitionBase
                                                     ,public ReportDefinitionPropertySet
                                                     ,public ::comphelper::IEmbeddedHelper
     {
-    private:
         std::shared_ptr<OReportComponentProperties>                             m_aProps;
         std::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
 
-    private:
         OReportDefinition(const OReportDefinition&) = delete;
         OReportDefinition& operator=(const OReportDefinition&) = delete;
 
@@ -165,7 +163,6 @@ namespace reportdesign
             const css::uno::Sequence< css::beans::PropertyValue >& _rArguments
         );
 
-    protected:
         virtual ~OReportDefinition() override;
 
         /** this function is called upon disposing the component
@@ -186,7 +183,7 @@ namespace reportdesign
 
         css::uno::Reference< css::uno::XComponentContext > getContext();
 
-    protected:
+    private:
         /** abstract SdrModel provider */
         virtual SdrModel& getSdrModelFromUnoModel() const override;
 

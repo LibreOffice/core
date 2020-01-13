@@ -96,7 +96,7 @@ enum class StartFileDialogType
     SaveAs
 };
 
-class SfxAutoRedactDialog : public SfxDialogController
+class SfxAutoRedactDialog final : public SfxDialogController
 {
     SfxObjectShellLock m_xDocShell;
     std::vector<std::pair<RedactionTarget*, OUString>> m_aTableTargets;
@@ -142,7 +142,7 @@ public:
     bool getTargets(std::vector<std::pair<RedactionTarget*, OUString>>& r_aTargets);
 };
 
-class SfxAddTargetDialog : public weld::GenericDialogController
+class SfxAddTargetDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xName;
