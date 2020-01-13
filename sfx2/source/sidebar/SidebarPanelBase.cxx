@@ -30,7 +30,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 Reference<ui::XUIElement> SidebarPanelBase::Create (
     const OUString& rsResourceURL,
@@ -195,6 +195,6 @@ void SAL_CALL SidebarPanelBase::updateModel(const css::uno::Reference<css::frame
     pModelUpdate->updateModel(xModel);
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

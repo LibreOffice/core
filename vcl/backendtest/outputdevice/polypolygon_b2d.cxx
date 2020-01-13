@@ -10,9 +10,7 @@
 
 #include <test/outputdevice.hxx>
 
-namespace vcl
-{
-namespace test
+namespace vcl::test
 {
 namespace
 {
@@ -66,7 +64,6 @@ Bitmap OutputDeviceTestPolyPolygonB2D::setupFilledRectangle(bool useLineColor)
     mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
-}
 }
 } // end namespace vcl::test
 

@@ -53,7 +53,7 @@ namespace {
     }
 }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
@@ -344,6 +344,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeNotebookbarToolBox(VclPtr<vcl::Window> 
     rRet = pBox;
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

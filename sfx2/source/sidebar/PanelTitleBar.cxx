@@ -35,7 +35,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 static const sal_Int32 gaLeftIconPadding (5);
 static const sal_Int32 gaRightIconPadding (5);
@@ -202,6 +202,6 @@ void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
     TitleBar::DataChanged(rEvent);
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

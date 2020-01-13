@@ -24,8 +24,7 @@
 
 #include <sal/log.hxx>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 /*
   class OOXMLParserState
@@ -278,6 +277,6 @@ void OOXMLParserState::endTxbxContent()
     inTxbxContent = false;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

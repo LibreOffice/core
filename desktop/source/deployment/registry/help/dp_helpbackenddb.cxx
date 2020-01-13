@@ -126,6 +126,6 @@ std::vector<OUString> HelpBackendDb::getAllDataUrls()
     return getOneChildFromAllEntries("data-url");
 }
 
-} // namespace
+} // namespace dp_registry
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

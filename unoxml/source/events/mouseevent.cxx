@@ -23,7 +23,7 @@ using namespace css::uno;
 using namespace css::xml::dom::events;
 using namespace css::xml::dom::views;
 
-namespace DOM { namespace events
+namespace DOM::events
 {
     CMouseEvent::CMouseEvent()
         : CMouseEvent_Base()
@@ -191,6 +191,6 @@ namespace DOM { namespace events
         // base initializer
         CUIEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

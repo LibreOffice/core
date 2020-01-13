@@ -24,9 +24,7 @@
 #include <tools/urlobj.hxx>
 
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         /// #i125258#
         bool SvgNode::supportsParentStyle() const
@@ -684,8 +682,7 @@ namespace svgio
         {
             rVisitor.visit(*this);
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

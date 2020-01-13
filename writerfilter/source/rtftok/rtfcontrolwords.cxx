@@ -10,9 +10,7 @@
 #include "rtfcontrolwords.hxx"
 #include <oox/token/namespaces.hxx>
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFSymbol const aRTFControlWords[] = {
     // sKeyword nControlType nIndex
@@ -1897,7 +1895,6 @@ bool RTFMathSymbol::operator<(const RTFMathSymbol& rOther) const
     return m_eKeyword < rOther.m_eKeyword;
 }
 
-} // namespace rtftok
 } // namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

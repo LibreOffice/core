@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 namespace {
 class TimerTask
@@ -575,6 +575,6 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

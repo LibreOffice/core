@@ -59,6 +59,7 @@ namespace drawinglayer::primitive2d
         ImplPrimitive2DIDBlock(TextHierarchyParagraphPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D)
 
 
+
         TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
