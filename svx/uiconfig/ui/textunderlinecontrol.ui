@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkWindow" id="TextUnderlineControl">
+  <object class="GtkPopover" id="TextUnderlineControl">
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="no_show_all">True</property>
     <property name="border_width">4</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <child>
-      <object class="GtkBox" id="box">
+      <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
@@ -231,51 +224,51 @@
   <object class="GtkImage" id="image_spacing_1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line1.png</property>
+    <property name="icon_name">svx/res/symphony/line1.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_10">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line10.png</property>
+    <property name="icon_name">svx/res/symphony/line10.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line2.png</property>
+    <property name="icon_name">svx/res/symphony/line2.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line3.png</property>
+    <property name="icon_name">svx/res/symphony/line3.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line4.png</property>
+    <property name="icon_name">svx/res/symphony/line4.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line5.png</property>
+    <property name="icon_name">svx/res/symphony/line5.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_6">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line6.png</property>
+    <property name="icon_name">svx/res/symphony/line6.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line7.png</property>
+    <property name="icon_name">svx/res/symphony/line7.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line8.png</property>
+    <property name="icon_name">svx/res/symphony/line8.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_9">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/line9.png</property>
+    <property name="icon_name">svx/res/symphony/line9.png</property>
   </object>
 </interface>
