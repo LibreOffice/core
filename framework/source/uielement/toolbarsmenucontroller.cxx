@@ -779,7 +779,6 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                     if ( xUIConfigurationManagerSupplier.is() )
                         m_xDocCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
                 }
-                m_aModuleIdentifier = aModuleIdentifier;
             }
             catch ( const Exception& )
             {

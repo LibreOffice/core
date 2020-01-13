@@ -1097,8 +1097,6 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
                     ImplHighlightItem( pItem->mnId );
                     StartTracking( StartTrackingFlags::ScrollRepeat );
                 }
-                else if ( rMouseEvent.GetClicks() == 2 )
-                    maDoubleClickHdl.Call( this );
 
                 return;
             }

@@ -86,7 +86,6 @@ namespace framework
             css::uno::Reference< css::container::XNameAccess >        m_xPersistentWindowState;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xDocCfgMgr;
-            OUString                                                  m_aModuleIdentifier;
             bool                                                      m_bResetActive;
             std::vector< OUString >                                   m_aCommandVector;
             IntlWrapper                                               m_aIntlWrapper;

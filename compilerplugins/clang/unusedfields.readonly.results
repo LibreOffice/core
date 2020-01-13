@@ -146,6 +146,8 @@ cppu/source/uno/check.cxx:107
     (anonymous namespace)::P p2 double
 cppu/source/uno/check.cxx:115
     (anonymous namespace)::second a int
+cppu/source/uno/check.cxx:120
+    (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cppu/source/uno/check.cxx:126
     (anonymous namespace)::Char1 c1 char
 cppu/source/uno/check.cxx:130
@@ -154,9 +156,9 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/options/optcolor.cxx:257
+cui/source/options/optcolor.cxx:255
     (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
-cui/source/options/optpath.cxx:67
+cui/source/options/optpath.cxx:65
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
 dbaccess/source/core/api/RowSetBase.hxx:85
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
@@ -318,10 +320,10 @@ include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
-include/svtools/inettbc.hxx:40
-    SvtURLBox aPlaceHolder class rtl::OUString
-include/svx/dialcontrol.hxx:112
-    svx::DialControl::DialControl_Impl mnLinkedFieldValueMultiplyer sal_Int32
+include/svtools/inettbc.hxx:44
+    SvtURLBox bHistoryDisabled _Bool
+include/svtools/valueset.hxx:222
+    ValueSet maDoubleClickHdl Link<class ValueSet *, void>
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
@@ -337,7 +339,7 @@ include/svx/svdoedge.hxx:160
 include/svx/svdpntv.hxx:160
     SdrPaintView maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -360,12 +362,6 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/field.hxx:229
-    MetricFormatter mnBaseValue sal_Int64
-include/vcl/field.hxx:231
-    MetricFormatter maCustomConvertLink Link<class MetricFormatter &, void>
-include/vcl/headbar.hxx:226
-    HeaderBar maDragHdl Link<class HeaderBar *, void>
 include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
@@ -421,14 +417,14 @@ sal/rtl/uuid.cxx:67
 sc/inc/compiler.hxx:128
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:129
-    ScRawToken::(anonymous) table const struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:126:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/disk2/libo4/sc/inc/compiler.hxx:126:9)
 sc/inc/compiler.hxx:134
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **const
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
-sc/qa/extras/anchor.cxx:54
+sc/qa/extras/anchor.cxx:57
     sc_apitest::ScAnchorTest mxComponent uno::Reference<lang::XComponent>
 sc/qa/unit/scshapetest.cxx:43
     sc_apitest::ScShapeTest mxComponent uno::Reference<lang::XComponent>
@@ -518,7 +514,7 @@ sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:99
     sfx2::(anonymous namespace)::ImplDdeItem pLink class sfx2::SvBaseLink *
-slideshow/source/engine/slideshowimpl.cxx:156
+slideshow/source/engine/slideshowimpl.cxx:132
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey const class rtl::OString
@@ -558,15 +554,15 @@ svtools/source/table/gridtablerenderer.cxx:71
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending class BitmapEx
 svtools/source/table/gridtablerenderer.cxx:72
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending class BitmapEx
-svx/inc/sdr/overlay/overlayrectangle.hxx:44
+svx/inc/sdr/overlay/overlayrectangle.hxx:43
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
-svx/source/inc/datanavi.hxx:215
+svx/source/inc/datanavi.hxx:213
     svxform::XFormsPage m_aMethodString const class svxform::MethodString
-svx/source/inc/datanavi.hxx:216
+svx/source/inc/datanavi.hxx:214
     svxform::XFormsPage m_aReplaceString const class svxform::ReplaceString
-svx/source/inc/datanavi.hxx:526
+svx/source/inc/datanavi.hxx:524
     svxform::AddSubmissionDialog m_aMethodString const class svxform::MethodString
-svx/source/inc/datanavi.hxx:527
+svx/source/inc/datanavi.hxx:525
     svxform::AddSubmissionDialog m_aReplaceString const class svxform::ReplaceString
 svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
@@ -580,7 +576,7 @@ sw/inc/calc.hxx:197
     SwCalc m_aSysLocale const class SvtSysLocale
 sw/inc/hints.hxx:230
     SwAttrSetChg m_bDelSet const _Bool
-sw/inc/shellio.hxx:146
+sw/inc/shellio.hxx:153
     SwReader pStg const tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
@@ -602,17 +598,19 @@ sw/source/core/doc/swstylemanager.cxx:61
     (anonymous namespace)::SwStyleManager aAutoParaPool class StylePool
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
+sw/source/core/text/inftxt.cxx:567
+    (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<class VirtualDevice>
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(anonymous) nVal sal_uInt8
 sw/source/ui/dbui/dbinsdlg.cxx:120
     DB_Column::(anonymous) pText class rtl::OUString *const
 sw/source/ui/dbui/dbinsdlg.cxx:122
     DB_Column::(anonymous) nFormat const sal_uInt32
-sw/source/uibase/dbui/mmconfigitem.cxx:113
+sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
-sw/source/uibase/dbui/mmconfigitem.cxx:115
+sw/source/uibase/dbui/mmconfigitem.cxx:113
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
-sw/source/uibase/dbui/mmconfigitem.cxx:117
+sw/source/uibase/dbui/mmconfigitem.cxx:115
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource const css::uno::Any
@@ -706,8 +704,16 @@ vcl/inc/salwtype.hxx:205
     SalSurroundingTextSelectionChangeEvent mnEnd const sal_uLong
 vcl/inc/salwtype.hxx:211
     SalQueryCharPositionEvent mnCharPos sal_uLong
+vcl/inc/svdata.hxx:272
+    ImplSVNWFData mnMenuFormatBorderX int
+vcl/inc/svdata.hxx:273
+    ImplSVNWFData mnMenuFormatBorderY int
 vcl/inc/svdata.hxx:276
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
+vcl/inc/svdata.hxx:277
+    ImplSVNWFData mbDockingAreaSeparateTB _Bool
+vcl/inc/svdata.hxx:294
+    ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
 vcl/inc/unx/saldisp.hxx:282
@@ -934,8 +940,8 @@ vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:119
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:278
-    vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
+vcl/source/gdi/pdfwriter_impl.hxx:257
+    vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:40
     ImplHeadItem maHelpId const class rtl::OString
 vcl/source/treelist/headbar.cxx:41
