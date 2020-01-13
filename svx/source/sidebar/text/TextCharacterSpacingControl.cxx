@@ -26,7 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <vcl/button.hxx>
+#include <svx/TextCharacterSpacingPopup.hxx>
 #include <vcl/settings.hxx>
 #include <svl/itempool.hxx>
 #include <helpids.h>
@@ -41,11 +41,11 @@
 
 namespace svx {
 
-TextCharacterSpacingControl::TextCharacterSpacingControl(sal_uInt16 nId, vcl::Window* pParent)
-    : SfxPopupWindow(nId, pParent, "TextCharacterSpacingControl", "svx/ui/textcharacterspacingcontrol.ui")
-,   mnId(nId)
-,   mnCustomKern(0)
-,   mnLastCus(SPACING_NOCUSTOM)
+TextCharacterSpacingControl::TextCharacterSpacingControl(TextCharacterSpacingPopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "TextCharacterSpacingControl", "svx/ui/textcharacterspacingcontrol.ui")
+    , mnId(SID_ATTR_CHAR_KERNING)
+    , mnCustomKern(0)
+    , mnLastCus(SPACING_NOCUSTOM)
 {
     get(maEditKerning, "kerning");
 
@@ -94,7 +94,7 @@ void TextCharacterSpacingControl::dispose()
     maLoose.clear();
     maLastCustom.clear();
 
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void TextCharacterSpacingControl::Initialize()

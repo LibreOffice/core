@@ -22,7 +22,7 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 
 namespace svx {
 #define SPACING_NOCUSTOM                0
@@ -31,10 +31,12 @@ namespace svx {
 
 #define SIDEBAR_SPACING_GLOBAL_VALUE   "PopupPanel_Spacing"
 
-class TextCharacterSpacingControl : public SfxPopupWindow
+class TextCharacterSpacingPopup;
+
+class TextCharacterSpacingControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit TextCharacterSpacingControl(sal_uInt16 nId, vcl::Window* pParent);
+    explicit TextCharacterSpacingControl(TextCharacterSpacingPopup* pControl, vcl::Window* pParent);
     virtual ~TextCharacterSpacingControl() override;
     virtual void dispose() override;
 
@@ -48,7 +50,7 @@ private:
     VclPtr<PushButton> maLoose;
     VclPtr<PushButton> maLastCustom;
 
-    sal_uInt16 const    mnId;
+    sal_uInt16          mnId;
     long                mnCustomKern;
     short               mnLastCus;
 
