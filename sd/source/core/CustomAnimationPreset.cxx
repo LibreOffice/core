@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -39,6 +39,7 @@
 #include <comphelper/lok.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/stream.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -231,41 +232,17 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         aParserInput.sSystemId = rPath;
         aParserInput.aInputStream = xInputStream;
 
-        // get parser
-        Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xServiceFactory) );
-
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY );
+        Reference< xml::sax::XFastParser > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY_THROW );
 
-        DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
-        if( !xFilter.is() )
-            return xRootNode;
+        xFilter->parseStream( aParserInput );
 
-        // connect parser and filter
-        xParser->setDocumentHandler( xFilter );
-
-        // finally, parser the stream
-        xParser->parseStream( aParserInput );
-
-        Reference< XAnimationNodeSupplier > xAnimationNodeSupplier( xFilter, UNO_QUERY );
-        if( xAnimationNodeSupplier.is() )
-            xRootNode = xAnimationNodeSupplier->getAnimationNode();
-    }
-    catch (const xml::sax::SAXParseException&)
-    {
-        OSL_FAIL( "sd::implImportEffects(), SAXParseException caught!" );
-    }
-    catch (const xml::sax::SAXException&)
-    {
-        OSL_FAIL( "sd::implImportEffects(), SAXException caught!" );
-    }
-    catch (const io::IOException&)
-    {
-        OSL_FAIL( "sd::implImportEffects(), IOException caught!" );
+        Reference< XAnimationNodeSupplier > xAnimationNodeSupplier( xFilter, UNO_QUERY_THROW );
+        xRootNode = xAnimationNodeSupplier->getAnimationNode();
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::importEffects(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION("sd", "");
     }
 
     return xRootNode;
