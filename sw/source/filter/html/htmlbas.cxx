@@ -254,7 +254,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
                            pDocSh );
 }
 
-void SwHTMLWriter::OutBasic()
+void SwHTMLWriter::OutBasic(SwHTMLWriter & rHTMLWrt)
 {
 #if HAVE_FEATURE_SCRIPTING
     if( !m_bCfgStarBasic )
@@ -285,6 +285,7 @@ void SwHTMLWriter::OutBasic()
                 OutNewLine();
                 OStringBuffer sOut;
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta)
+                    .append(rHTMLWrt.GetNamespace())
                     .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_httpequiv)
                     .append("=\"")
                     .append(OOO_STRING_SVTOOLS_HTML_META_content_script_type)

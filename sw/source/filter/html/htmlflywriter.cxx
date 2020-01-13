@@ -1659,7 +1659,7 @@ static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& r
         rHTMLWrt.OutNewLine( true );
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
+    sOut.append('<').append(rHTMLWrt.GetNamespace()).append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"")
         .append(OOO_STRING_SVTOOLS_HTML_SPTYPE_block).append("\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );

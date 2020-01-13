@@ -420,7 +420,7 @@ sal_uLong SwHTMLWriter::WriteStream()
                     &m_aNonConvertableCharacters );
 
                 OStringBuffer sOut;
-                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
+                sOut.append('<').append(GetNamespace()).append(OOO_STRING_SVTOOLS_HTML_division)
                     .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id)
                     .append("=\"").append(aName).append('\"').append('>')
                     .append(aStartTags);
@@ -1072,7 +1072,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // and now ... the BASIC and JavaScript!
         if( pDoc->GetDocShell() )   // only with DocShell BASIC is possible
-            OutBasic();
+            OutBasic(*this);
 
         DecIndentLevel();   // indent content of <HEAD>
         OutNewLine();

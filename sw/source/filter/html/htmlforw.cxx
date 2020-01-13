@@ -449,7 +449,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     // die neue Form wird geoeffnet
     if( m_bLFPossible )
         OutNewLine();
-    OString sOut = "<" OOO_STRING_SVTOOLS_HTML_form;
+    OString sOut = "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_form;
 
     uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
 
@@ -578,7 +578,7 @@ void SwHTMLWriter::OutHiddenControls(
         {
             if( m_bLFPossible )
                 OutNewLine( true );
-            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_input " "
+            OString sOut = "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_input " "
                 OOO_STRING_SVTOOLS_HTML_O_type "=\""
                 OOO_STRING_SVTOOLS_HTML_IT_hidden "\"";
 
@@ -1207,7 +1207,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     nSel++;
 
                 rHTMLWrt.OutNewLine(); // jede Option bekommt eine eigene Zeile
-                sOut = "<" OOO_STRING_SVTOOLS_HTML_option;
+                sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option;
                 if( !sVal.isEmpty() || bEmptyVal )
                 {
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
