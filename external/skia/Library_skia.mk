@@ -208,6 +208,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkNormalFlatSource \
     UnpackedTarball/skia/src/core/SkNormalMapSource \
     UnpackedTarball/skia/src/core/SkNormalSource \
+    UnpackedTarball/skia/src/core/SkOpts \
     UnpackedTarball/skia/src/core/SkOverdrawCanvas \
     UnpackedTarball/skia/src/core/SkPaint \
     UnpackedTarball/skia/src/core/SkPaintPriv \
@@ -813,15 +814,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) \
-))
-
-# Compile this file with the best intrinsics available.
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/core/SkOpts, \
-    $(CXXFLAGS_INTRINSICS_SSSE3) \
-    $(CXXFLAGS_INTRINSICS_SSE41) $(CXXFLAGS_INTRINSICS_SSE42) \
-    $(CXXFLAGS_INTRINSICS_AVX) \
-    $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
