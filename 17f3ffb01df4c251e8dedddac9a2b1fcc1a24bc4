@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d8e13bb_fcf6f505",
+        "filename": "svx/source/dialog/charmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T10:44:20Z",
+      "side": 1,
+      "message": "why not use int here?",
+      "revId": "17f3ffb01df4c251e8dedddac9a2b1fcc1a24bc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41d12bce_5266b037",
+        "filename": "svx/source/dialog/charmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-13T10:44:20Z",
+      "side": 1,
+      "message": "and here?",
+      "revId": "17f3ffb01df4c251e8dedddac9a2b1fcc1a24bc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
