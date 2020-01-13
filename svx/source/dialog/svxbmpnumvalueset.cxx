@@ -147,7 +147,7 @@ static const char* RID_SVXSTR_OUTLINENUM_DESCRIPTIONS[] =
     RID_SVXSTR_OUTLINENUM_DESCRIPTION_7
 };
 
-void NumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     static const sal_uInt16 aLinesArr[] =
     {
@@ -411,14 +411,14 @@ void NumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
 }
 
-NumValueSet::NumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
+SvxNumValueSet::SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : SvtValueSet(std::move(pScrolledWindow))
     , ePageType(NumberingPageType::BULLET)
     , pVDev(nullptr)
 {
 }
 
-void NumValueSet::init(NumberingPageType eType)
+void SvxNumValueSet::init(NumberingPageType eType)
 {
     ePageType = eType;
     pVDev = nullptr;
@@ -436,11 +436,11 @@ void NumValueSet::init(NumberingPageType eType)
     }
 }
 
-NumValueSet::~NumValueSet()
+SvxNumValueSet::~SvxNumValueSet()
 {
 }
 
-void NumValueSet::SetNumberingSettings(
+void SvxNumValueSet::SetNumberingSettings(
     const Sequence<Sequence<PropertyValue> >& aNum,
     Reference<XNumberingFormatter> const & xFormat,
     const Locale& rLocale   )
@@ -458,7 +458,7 @@ void NumValueSet::SetNumberingSettings(
     }
 }
 
-void NumValueSet::SetOutlineNumberingSettings(
+void SvxNumValueSet::SetOutlineNumberingSettings(
             Sequence<Reference<XIndexAccess> > const & rOutline,
             Reference<XNumberingFormatter> const & xFormat,
             const Locale& rLocale)
@@ -477,7 +477,7 @@ void NumValueSet::SetOutlineNumberingSettings(
 }
 
 SvxBmpNumValueSet::SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-    : NumValueSet(std::move(pScrolledWindow))
+    : SvxNumValueSet(std::move(pScrolledWindow))
     , aFormatIdle("SvxBmpNumValueSet FormatIdle")
     , bGrfNotFound(false)
 {
@@ -485,7 +485,7 @@ SvxBmpNumValueSet::SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScro
 
 void SvxBmpNumValueSet::init()
 {
-    NumValueSet::init(NumberingPageType::BITMAP);
+    SvxNumValueSet::init(NumberingPageType::BITMAP);
     bGrfNotFound = false;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
@@ -503,7 +503,7 @@ SvxBmpNumValueSet::~SvxBmpNumValueSet()
 
 void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 {
-    NumValueSet::UserDraw(rUDEvt);
+    SvxNumValueSet::UserDraw(rUDEvt);
 
     tools::Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();

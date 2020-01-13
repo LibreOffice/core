@@ -46,7 +46,7 @@ enum class NumberingPageType
     BITMAP
 };
 
-class SVX_DLLPUBLIC NumValueSet : public SvtValueSet
+class SVX_DLLPUBLIC SvxNumValueSet : public SvtValueSet
 {
     NumberingPageType ePageType;
     tools::Rectangle       aOrgRect;
@@ -64,9 +64,9 @@ class SVX_DLLPUBLIC NumValueSet : public SvtValueSet
             css::container::XIndexAccess> > aOutlineSettings;
 
 public:
-    NumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
+    SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
     void init(NumberingPageType eType);
-    virtual ~NumValueSet() override;
+    virtual ~SvxNumValueSet() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
 
@@ -84,7 +84,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SvxBmpNumValueSet final : public NumValueSet
+class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
 {
     Idle        aFormatIdle;
     bool        bGrfNotFound;
