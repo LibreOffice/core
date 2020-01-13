@@ -2119,6 +2119,19 @@ void WatchTreeListBox::SetTabs()
     }
 }
 
+static sal_uInt32 getCorrectedPropCount(SbxArray* p)
+{
+    sal_uInt32 nPropCount = p->Count32();
+    if (nPropCount >= 3
+        && p->Get32(nPropCount - 1)->GetName().equalsIgnoreAsciiCase("Dbg_Methods")
+        && p->Get32(nPropCount - 2)->GetName().equalsIgnoreAsciiCase("Dbg_Properties")
+        && p->Get32(nPropCount - 3)->GetName().equalsIgnoreAsciiCase("Dbg_SupportedInterfaces"))
+    {
+        nPropCount -= 3;
+    }
+    return nPropCount;
+}
+
 void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
 {
     if( !StarBASIC::IsRunning() )
@@ -2144,14 +2157,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
     {
         createAllObjectProperties( pObj );
         SbxArray* pProps = pObj->GetProperties();
-        sal_uInt32 nPropCount = pProps->Count32();
-        if ( nPropCount >= 3 &&
-             pProps->Get32( nPropCount -1 )->GetName().equalsIgnoreAsciiCase( "Dbg_Methods" ) &&
-             pProps->Get32( nPropCount -2 )->GetName().equalsIgnoreAsciiCase( "Dbg_Properties" ) &&
-             pProps->Get32( nPropCount -3 )->GetName().equalsIgnoreAsciiCase( "Dbg_SupportedInterfaces" ) )
-        {
-            nPropCount -= 3;
-        }
+        const sal_uInt32 nPropCount = getCorrectedPropCount(pProps);
         pItem->maMemberList.reserve(nPropCount);
 
         for( sal_uInt32 i = 0 ; i < nPropCount ; ++i )
@@ -2488,8 +2494,8 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         {
                             bool bObjChanged = false; // Check if member list has changed
                             SbxArray* pProps = pObj->GetProperties();
-                            sal_uInt32 nPropCount = pProps->Count32();
-                            for( sal_uInt32 i = 0 ; i < nPropCount - 3 ; i++ )
+                            const sal_uInt32 nPropCount = getCorrectedPropCount(pProps);
+                            for( sal_uInt32 i = 0 ; i < nPropCount ; i++ )
                             {
                                 SbxVariable* pVar_ = pProps->Get32( i );
                                 if( pItem->maMemberList[i] != pVar_->GetName() )
