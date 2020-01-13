@@ -24,6 +24,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <formula/errorcodes.hxx>
 #include <svx/algitem.hxx>
@@ -1289,9 +1290,21 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     return true;
 }
 
+namespace {
+    /// Rid ourselves of unwanted " quoted json characters.
+    OString escapeJSON(const OUString &aStr)
+    {
+        OUString aEscaped = aStr;
+        aEscaped = aEscaped.replaceAll("\n", " ");
+        aEscaped = aEscaped.replaceAll("\"", "'");
+        return OUStringToOString(aEscaped, RTL_TEXTENCODING_UTF8);
+    }
+}
+
 void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() &&
+        comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
     {
         SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell && rFuncStrVec.size())
@@ -1323,12 +1336,10 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                     {
                         aPayload.append("{");
                         aPayload.append("\"signature\": \"");
-                        OUString aSignature = ppFDesc->getSignature();
-                        aPayload.append(OUStringToOString(aSignature, RTL_TEXTENCODING_UTF8));
+                        aPayload.append(escapeJSON(ppFDesc->getSignature()));
                         aPayload.append("\", ");
                         aPayload.append("\"description\": \"");
-                        OUString aFuncDescr = ppFDesc->getDescription();
-                        aPayload.append(OUStringToOString(aFuncDescr, RTL_TEXTENCODING_UTF8));
+                        aPayload.append(escapeJSON(ppFDesc->getDescription()));
                         aPayload.append("\"}, ");
                     }
                 }
