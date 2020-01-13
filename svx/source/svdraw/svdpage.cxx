@@ -212,7 +212,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                     SdrEdgeObj* pDstEdge=dynamic_cast<SdrEdgeObj*>( pEdgeObjTmp );
                     if (pDstEdge!=nullptr) {
                         if (pSrcNode1!=nullptr) {
-                            sal_uIntPtr nDstNode1=pSrcNode1->GetOrdNum();
+                            sal_uInt32 nDstNode1=pSrcNode1->GetOrdNum();
                             SdrObject* pDstNode1=GetObj(nDstNode1);
                             if (pDstNode1!=nullptr) { // else we get an error!
                                 pDstEdge->ConnectToNode(true,pDstNode1);
@@ -221,7 +221,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
                             }
                         }
                         if (pSrcNode2!=nullptr) {
-                            sal_uIntPtr nDstNode2=pSrcNode2->GetOrdNum();
+                            sal_uInt32 nDstNode2=pSrcNode2->GetOrdNum();
                             SdrObject* pDstNode2=GetObj(nDstNode2);
                             if (pDstNode2!=nullptr) { // else the node was probably not selected
                                 pDstEdge->ConnectToNode(false,pDstNode2);
