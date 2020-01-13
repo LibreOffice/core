@@ -36,7 +36,7 @@
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">3</property>
+                    <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="all">
@@ -46,6 +46,7 @@
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -64,6 +65,7 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">all</property>
                         <accessibility>
@@ -83,6 +85,7 @@
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">all</property>
                       </object>
@@ -96,7 +99,6 @@
                       <object class="GtkEntry" id="pages">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">5</property>
                         <accessibility>
@@ -195,29 +197,13 @@
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="jpegcompress">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|jpegcompress">_JPEG compression</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">losslesscompress</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
                         <property name="width">2</property>
                       </packing>
                     </child>
@@ -229,6 +215,7 @@
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <accessibility>
                           <relation type="label-for" target="resolution"/>
@@ -236,7 +223,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -264,42 +251,20 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkGrid" id="qualityframe">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkSpinButton" id="quality">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="qualalign">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="left_padding">18</property>
-                            <child>
-                              <object class="GtkLabel" id="label5">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">quality</property>
-                              </object>
-                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -308,9 +273,56 @@
                         </child>
                       </object>
                       <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">3</property>
+                        <child>
+                          <object class="GtkRadioButton" id="jpegcompress">
+                            <property name="label" translatable="yes" context="pdfgeneralpage|jpegcompress">_JPEG compression</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">losslesscompress</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="qualalign">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkLabel" id="label5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">quality</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">2</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
@@ -360,6 +372,7 @@
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -855,26 +868,21 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroupLabel1">
+  <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
-      <widget name="qualalign"/>
+      <widget name="all"/>
       <widget name="range"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroupLabel2">
-    <widgets>
+      <widget name="selection"/>
+      <widget name="losslesscompress"/>
+      <widget name="box3"/>
       <widget name="reduceresolution"/>
       <widget name="watermark"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroupWidget1">
+  <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
       <widget name="pages"/>
-      <widget name="quality"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroupWidget2">
-    <widgets>
+      <widget name="qualityframe"/>
       <widget name="resolution"/>
       <widget name="watermarkentry"/>
     </widgets>
