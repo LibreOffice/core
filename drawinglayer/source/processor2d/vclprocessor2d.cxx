@@ -87,9 +87,7 @@ namespace
     }
 }
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         // rendering support
 
@@ -1434,6 +1432,5 @@ namespace drawinglayer
         {
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

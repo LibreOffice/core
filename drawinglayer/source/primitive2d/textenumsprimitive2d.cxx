@@ -20,9 +20,7 @@
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         TextLine mapFontLineStyleToTextLine(FontLineStyle eLineStyle)
         {
@@ -102,7 +100,6 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

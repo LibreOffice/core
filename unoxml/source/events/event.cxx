@@ -22,7 +22,7 @@
 using namespace css::uno;
 using namespace css::xml::dom::events;
 
-namespace DOM { namespace events
+namespace DOM::events
 {
 
     CEvent::CEvent()
@@ -103,6 +103,6 @@ namespace DOM { namespace events
         m_cancelable = cancelableArg;
     }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

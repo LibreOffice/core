@@ -38,7 +38,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace vcl { namespace CommandInfoProvider {
+namespace vcl::CommandInfoProvider {
 
 static Reference<container::XNameAccess> GetCommandDescription()
 {
@@ -467,6 +467,6 @@ OUString GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
     return OUString();
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 namespace {
     class BorderSize
@@ -895,6 +895,6 @@ SharedBitmapDescriptor RendererPaneStyle::GetBitmap(
 
 } // end of anonymous namespace
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,9 +19,7 @@
 
 #include <svgtspannode.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgTspanNode::SvgTspanNode(
             SvgDocument& rDocument,
@@ -73,7 +71,6 @@ namespace svgio
             return getCurrentFontSizeInherited();
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

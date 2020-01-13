@@ -45,9 +45,7 @@
 
 const int nStyleDepthLimit = 1024;
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         static basegfx::B2DLineJoin StrokeLinejoinToB2DLineJoin(StrokeLinejoin aStrokeLinejoin)
         {
@@ -3008,8 +3006,7 @@ namespace svgio
 
             return maBaselineShiftNumber;
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

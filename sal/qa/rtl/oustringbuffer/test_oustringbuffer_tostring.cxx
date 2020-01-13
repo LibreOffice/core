@@ -24,7 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-namespace test { namespace oustringbuffer {
+namespace test::oustringbuffer {
 
 class ToString: public CppUnit::TestFixture {
 private:
@@ -35,7 +35,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 };
 
-} }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::ToString);
 

@@ -26,8 +26,7 @@
 #include <sax/tools/converter.hxx>
 #include <tools/color.hxx>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 using namespace ::std;
 using namespace com::sun::star;
@@ -856,6 +855,6 @@ void OOXMLPropertySetEntryToBool::attribute(Id nId, Value & rValue)
         mValue = (rValue.getInt() != 0);
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

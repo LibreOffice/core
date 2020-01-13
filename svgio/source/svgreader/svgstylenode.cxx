@@ -20,9 +20,7 @@
 #include <svgstylenode.hxx>
 #include <svgdocument.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgStyleNode::SvgStyleNode(
             SvgDocument& rDocument,
@@ -226,7 +224,6 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

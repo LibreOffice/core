@@ -90,7 +90,7 @@ void request(
 
 }
 
-namespace shell { namespace sessioninstall
+namespace shell::sessioninstall
 {
     SyncDbusSessionHelper::SyncDbusSessionHelper(Reference<XComponentContext> const&)
     {
@@ -181,6 +181,6 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
         o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

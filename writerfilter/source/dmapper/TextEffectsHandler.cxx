@@ -20,8 +20,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 using namespace com::sun::star;
@@ -799,7 +798,6 @@ sal_uInt8 TextEffectsHandler::GetTextFillSolidFillAlpha(const css::beans::Proper
     return nVal / oox::drawingml::PER_PERCENT;
 }
 
-}//namespace dmapper
-} //namespace writerfilter
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

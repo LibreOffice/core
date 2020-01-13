@@ -18,9 +18,7 @@
 
 #include <svgvisitor.hxx>
 
-namespace svgio
-{
-namespace svgreader
+namespace svgio::svgreader
 {
 SvgDrawVisitor::SvgDrawVisitor()
     : mpDrawRoot(std::make_shared<gfx::DrawRoot>())
@@ -161,7 +159,6 @@ void SvgDrawVisitor::goToChildren(svgio::svgreader::SvgNode const& rNode)
     {
         rChild->accept(*this);
     }
-}
 }
 } // end of namespace svgio::svgreader
 

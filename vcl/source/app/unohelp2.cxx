@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star;
 
-namespace vcl { namespace unohelper {
+namespace vcl::unohelper {
 
     TextDataObject::TextDataObject( const OUString& rText ) : maText( rText )
     {
@@ -93,6 +93,6 @@ namespace vcl { namespace unohelper {
         return ( nT == SotClipboardFormatId::STRING );
     }
 
-}}  // namespace vcl::unohelper
+}  // namespace vcl::unohelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

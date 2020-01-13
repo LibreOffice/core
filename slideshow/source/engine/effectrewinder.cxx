@@ -34,7 +34,7 @@
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
-namespace slideshow { namespace internal {
+namespace slideshow::internal {
 
 
 namespace {
@@ -436,6 +436,6 @@ void EffectRewinder::asynchronousRewindToPreviousSlide (
 }
 
 
-} } // end of namespace ::slideshow::internal
+} // end of namespace ::slideshow::internal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

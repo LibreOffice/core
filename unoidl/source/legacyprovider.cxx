@@ -22,7 +22,7 @@
 
 #include "legacyprovider.hxx"
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 namespace {
 
@@ -822,6 +822,6 @@ rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
 
 LegacyProvider::~LegacyProvider() throw () {}
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

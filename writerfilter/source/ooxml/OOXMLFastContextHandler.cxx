@@ -46,8 +46,7 @@ static const sal_Unicode uSoftHyphen = 0xAD;
 static const sal_uInt8 cFtnEdnCont = 0x4;
 static const sal_uInt8 cFieldLock = 0x8;
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 using namespace ::com::sun::star;
 using namespace oox;
@@ -2149,6 +2148,6 @@ void OOXMLFastContextHandlerMath::process()
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,9 +29,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace geometry
+namespace drawinglayer::geometry
     {
         /** Implementation class for ViewInformation3D
         */
@@ -414,13 +412,10 @@ namespace drawinglayer
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
         };
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace geometry
+namespace drawinglayer::geometry
     {
         namespace
         {
@@ -510,7 +505,6 @@ namespace drawinglayer
         {
             return mpViewInformation3D->getExtendedInformationSequence();
         }
-    } // end of namespace geometry
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

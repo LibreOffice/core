@@ -11,9 +11,7 @@
 #include <test/outputdevice.hxx>
 #include <vcl/bitmapex.hxx>
 
-namespace vcl
-{
-namespace test
+namespace vcl::test
 {
 namespace
 {
@@ -123,7 +121,6 @@ Bitmap OutputDeviceTestPolyLineB2D::setupAABezier()
     mpVirtualDevice->DrawPolyLine(aPolygon);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
-}
 }
 } // end namespace vcl::test
 

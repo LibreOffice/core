@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 //===== PresenterSlideShowView ================================================
 
@@ -964,6 +964,6 @@ void PresenterSlideShowView::impl_addAndConfigureView()
     mxSlideShow->setProperty(aProperty);
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

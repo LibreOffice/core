@@ -22,9 +22,7 @@
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-namespace drawinglayer
-{
-    namespace animation
+namespace drawinglayer::animation
     {
 
 
@@ -344,7 +342,6 @@ namespace drawinglayer
 
             return fNewTime;
         }
-    } // end of namespace animation
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

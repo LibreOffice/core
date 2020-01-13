@@ -414,9 +414,7 @@ public:
     bool getIsLine() const { return mbIsLine; }
 };
 
-namespace drawinglayer
-{
-    namespace processor3d
+namespace drawinglayer::processor3d
     {
         void ZBufferProcessor3D::rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const
         {
@@ -649,7 +647,6 @@ namespace drawinglayer
                 mpRasterPrimitive3Ds.reset();
             }
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

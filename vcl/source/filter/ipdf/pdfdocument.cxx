@@ -29,9 +29,7 @@
 
 using namespace com::sun::star;
 
-namespace vcl
-{
-namespace filter
+namespace vcl::filter
 {
 const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
 
@@ -3007,7 +3005,6 @@ bool PDFEndArrayElement::Read(SvStream& rStream)
 
 sal_uInt64 PDFEndArrayElement::GetOffset() const { return m_nOffset; }
 
-} // namespace filter
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

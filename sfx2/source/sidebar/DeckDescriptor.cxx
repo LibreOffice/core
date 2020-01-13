@@ -19,7 +19,7 @@
 
 #include <sfx2/sidebar/DeckDescriptor.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 DeckDescriptor::DeckDescriptor()
     : msTitle(),
@@ -57,6 +57,6 @@ DeckDescriptor::~DeckDescriptor()
 {
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

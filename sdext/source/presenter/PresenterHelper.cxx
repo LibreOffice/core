@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 const OUString PresenterHelper::msPaneURLPrefix( "private:resource/pane/");
 const OUString PresenterHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
@@ -62,6 +62,6 @@ Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowContr
     return xSlideShowController;
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

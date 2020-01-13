@@ -19,8 +19,7 @@
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
 
-namespace writerfilter {
-namespace dmapper{
+namespace writerfilter::dmapper{
 
 OUString getPropertyName( PropertyIds eId )
 {
@@ -365,7 +364,6 @@ bool isCharacterProperty( const PropertyIds eId )
     return eId > PROP_CHARACTER_STYLES && eId < PROP_CHARACTER_END;
 }
 
-} //namespace dmapper
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

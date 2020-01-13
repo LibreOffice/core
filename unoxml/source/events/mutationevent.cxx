@@ -23,7 +23,7 @@ using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 
-namespace DOM { namespace events
+namespace DOM::events
 {
     CMutationEvent::CMutationEvent()
         : CMutationEvent_Base()
@@ -132,6 +132,6 @@ namespace DOM { namespace events
         // base initializer
         CEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

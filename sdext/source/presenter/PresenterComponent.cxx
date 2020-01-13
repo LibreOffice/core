@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 static const struct ImplementationEntry gServiceEntries[] =
 {
@@ -53,6 +53,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * presenter_component_getFactory(
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , gServiceEntries);
 }
 
-} } // end of namespace sdext::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 #include "OOXMLFactory.hxx"
 #include "OOXMLFastHelper.hxx"
 
-namespace writerfilter {
-namespace ooxml {
+namespace writerfilter::ooxml {
 
 using namespace com::sun::star;
 
@@ -214,7 +213,6 @@ void OOXMLFactory_ns::attributeAction(OOXMLFastContextHandler *, Token_t, const 
 {
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

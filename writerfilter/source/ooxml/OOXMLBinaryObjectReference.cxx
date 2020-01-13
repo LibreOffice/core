@@ -19,8 +19,7 @@
 #include "OOXMLBinaryObjectReference.hxx"
 #include <string.h>
 
-namespace writerfilter {
-namespace ooxml
+namespace writerfilter::ooxml
 {
 
 using namespace ::com::sun::star;
@@ -67,6 +66,6 @@ void OOXMLBinaryObjectReference::resolve(BinaryObj & rHandler)
                   mSequence.size());
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,9 +24,7 @@
 #include <sal/log.hxx>
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         typedef ::canvas::tools::ValueMap< AttributeType > AnimateAttributeMap;
 
@@ -85,6 +83,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

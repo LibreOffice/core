@@ -22,9 +22,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgEllipseNode::SvgEllipseNode(
             SvgDocument& rDocument,
@@ -155,7 +153,6 @@ namespace svgio
                 pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
             }
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

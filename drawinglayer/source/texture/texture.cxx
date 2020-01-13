@@ -28,9 +28,7 @@
 
 #include <converters.hxx>
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvx::GeoTexSvx()
         {
@@ -61,13 +59,10 @@ namespace drawinglayer
             modifyBColor(rUV, aBaseColor, rfOpacity);
             rfOpacity = 1.0 - aBaseColor.luminance();
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradient::GeoTexSvxGradient(
             const basegfx::B2DRange& rDefinitionRange,
@@ -96,13 +91,10 @@ namespace drawinglayer
                 && maDefinitionRange == pCompare->maDefinitionRange
                 && mfBorder == pCompare->mfBorder);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(
             const basegfx::B2DRange& rDefinitionRange,
@@ -191,13 +183,10 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(
             const basegfx::B2DRange& rDefinitionRange,
@@ -275,13 +264,10 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(
             const basegfx::B2DRange& rDefinitionRange,
@@ -331,13 +317,10 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(
             const basegfx::B2DRange& rDefinitionRange,
@@ -407,13 +390,10 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(
             const basegfx::B2DRange& rDefinitionRange,
@@ -465,13 +445,10 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(
             const basegfx::B2DRange& rDefinitionRange,
@@ -541,13 +518,10 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxHatch::GeoTexSvxHatch(
             const basegfx::B2DRange& rDefinitionRange,
@@ -688,13 +662,10 @@ namespace drawinglayer
 
             return maBackTextureTransform;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
+namespace drawinglayer::texture
     {
         GeoTexSvxTiled::GeoTexSvxTiled(
             const basegfx::B2DRange& rRange,
@@ -833,7 +804,6 @@ namespace drawinglayer
 
             return nTiles;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,9 +24,7 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         GroupPrimitive2D::GroupPrimitive2D( const Primitive2DContainer& rChildren )
         :   BasePrimitive2D(),
@@ -73,7 +71,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(GroupPrimitive2D, PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

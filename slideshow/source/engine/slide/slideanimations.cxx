@@ -25,9 +25,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         SlideAnimations::SlideAnimations( const SlideShowContext&     rContext,
                                           const ::basegfx::B2DVector& rSlideSize ) :
@@ -104,6 +102,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

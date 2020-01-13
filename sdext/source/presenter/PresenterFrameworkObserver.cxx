@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 PresenterFrameworkObserver::PresenterFrameworkObserver (
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
@@ -104,6 +104,6 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
     dispose();
 }
 
-} }  // end of namespace ::sdext::presenter
+}  // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

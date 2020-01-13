@@ -49,9 +49,7 @@
 using namespace ::com::sun::star;
 
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 
 
@@ -1198,6 +1196,5 @@ namespace slideshow
             return maSubsetting.getSubsetTreeNode( rParentNode, nNodeIndex, eNodeType );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

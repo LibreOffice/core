@@ -23,9 +23,7 @@
 #include <rtl/instance.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpLineStartEndAttribute
         {
@@ -127,7 +125,6 @@ namespace drawinglayer
                 && 0 != getB2DPolyPolygon().count()
                 && 0 != getB2DPolyPolygon().getB2DPolygon(0).count());
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

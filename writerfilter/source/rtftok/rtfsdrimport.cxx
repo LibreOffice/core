@@ -53,9 +53,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter
-{
-namespace rtftok
+namespace writerfilter::rtftok
 {
 RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
                            uno::Reference<lang::XComponent> const& xDstDoc)
@@ -1148,7 +1146,6 @@ void RTFSdrImport::appendGroupProperty(const OUString& aKey, const OUString& aVa
         applyProperty(xShape, aKey, aValue);
 }
 
-} // namespace rtftok
 } // namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

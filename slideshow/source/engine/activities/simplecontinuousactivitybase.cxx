@@ -24,9 +24,7 @@
 
 #include <sal/log.hxx>
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         SimpleContinuousActivityBase::SimpleContinuousActivityBase(
             const ActivityParameters& rParms ) :
@@ -245,6 +243,5 @@ namespace slideshow
             return isActive();
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

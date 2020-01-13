@@ -25,9 +25,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
 #if defined(DBG_UTIL)
         static sal_Int32 lcl_nOffset = 0;
@@ -82,6 +80,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

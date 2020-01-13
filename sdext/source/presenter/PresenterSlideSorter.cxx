@@ -61,7 +61,7 @@ namespace {
     const static sal_Int32 gnVerticalButtonPadding (gnVerticalGap);
 }
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 namespace {
     sal_Int32 round (const double nValue) { return sal::static_int_cast<sal_Int32>(0.5 + nValue); }
@@ -1955,6 +1955,6 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapTiled(
         }
 }
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,8 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/color.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
 
@@ -329,7 +328,6 @@ bool CellColorHandler::isInteropGrabBagEnabled() const
     return !(m_aInteropGrabBagName.isEmpty());
 }
 
-} //namespace dmapper
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

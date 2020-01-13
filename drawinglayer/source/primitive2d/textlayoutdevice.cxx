@@ -130,9 +130,7 @@ namespace
 
 // access to one global ImpTimedRefDev incarnation in namespace drawinglayer::primitive
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         // static methods here
         static VirtualDevice& acquireGlobalVirtualDevice()
@@ -358,15 +356,12 @@ namespace drawinglayer
             return aRetval;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
 // helper methods for vcl font handling
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         vcl::Font getVclFontFromFontAttribute(
             const attribute::FontAttribute& rFontAttribute,
@@ -486,7 +481,6 @@ namespace drawinglayer
 #endif
             return aRetval;
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

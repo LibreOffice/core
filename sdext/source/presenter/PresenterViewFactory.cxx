@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 const OUString PresenterViewFactory::msCurrentSlidePreviewViewURL(
     "private:resource/view/Presenter/CurrentSlidePreview");
@@ -514,6 +514,6 @@ void CachablePresenterView::ReleaseView()
 {
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

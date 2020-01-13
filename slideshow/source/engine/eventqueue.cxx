@@ -31,9 +31,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         bool EventQueue::EventEntry::operator<( const EventEntry& rEvent ) const
         {
@@ -295,6 +293,5 @@ namespace slideshow
             maNextNextEvents = ImplQueueType();
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

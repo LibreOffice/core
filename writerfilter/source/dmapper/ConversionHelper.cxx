@@ -32,9 +32,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace dmapper{
-namespace ConversionHelper{
+namespace writerfilter::dmapper::ConversionHelper{
 
 /// Convert OOXML border style to WW8 that editeng can handle.
 static sal_Int32 lcl_convertBorderStyleFromToken(sal_Int32 nOOXMLType)
@@ -647,8 +645,6 @@ util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
 }
 
 
-} // namespace ConversionHelper
-} //namespace dmapper
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

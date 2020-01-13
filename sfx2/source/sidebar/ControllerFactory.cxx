@@ -35,7 +35,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     ToolBox* pToolBox,
@@ -258,6 +258,6 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     return nullptr;
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

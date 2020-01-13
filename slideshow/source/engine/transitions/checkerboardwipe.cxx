@@ -22,8 +22,7 @@
 #include "checkerboardwipe.hxx"
 
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 ::basegfx::B2DPolyPolygon CheckerBoardWipe::operator () ( double t )
 {
@@ -50,7 +49,6 @@ namespace internal {
     return res;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

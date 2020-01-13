@@ -29,7 +29,7 @@
 #include <osl/thread.h>
 #endif
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 namespace {
 
@@ -205,6 +205,6 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
 
 SourceTreeProvider::~SourceTreeProvider() throw () {}
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

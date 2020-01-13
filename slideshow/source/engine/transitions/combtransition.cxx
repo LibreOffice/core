@@ -25,8 +25,7 @@
 
 #include "combtransition.hxx"
 
-namespace slideshow {
-namespace internal {
+namespace slideshow::internal {
 
 namespace {
 
@@ -174,7 +173,6 @@ bool CombTransition::operator()( double t )
     return true;
 }
 
-} // namespace internal
 } // namespace presentation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

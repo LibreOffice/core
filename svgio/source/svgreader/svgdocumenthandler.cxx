@@ -131,9 +131,7 @@ namespace
 }
 
 
-namespace svgio
-{
-    namespace svgreader
+namespace svgio::svgreader
     {
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
@@ -640,7 +638,6 @@ namespace svgio
         void SvgDocHdl::setDocumentLocator(const uno::Reference< xml::sax::XLocator >& /*xLocator*/)
         {
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } // end of namespace svgio
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

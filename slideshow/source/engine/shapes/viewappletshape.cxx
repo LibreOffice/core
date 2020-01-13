@@ -49,9 +49,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         ViewAppletShape::ViewAppletShape( const ViewLayerSharedPtr&                       rViewLayer,
                                           const uno::Reference< drawing::XShape >&        rxShape,
@@ -256,6 +254,5 @@ namespace slideshow
             return true;
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

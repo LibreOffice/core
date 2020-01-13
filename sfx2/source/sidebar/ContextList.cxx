@@ -19,7 +19,7 @@
 #include <sfx2/sidebar/ContextList.hxx>
 #include <sfx2/sidebar/Context.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 ContextList::ContextList()
     : maEntries()
@@ -99,6 +99,6 @@ void ContextList::ToggleVisibilityForContext( const Context &rContext, const boo
         pEntry->mbIsInitiallyVisible = bVisible;
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

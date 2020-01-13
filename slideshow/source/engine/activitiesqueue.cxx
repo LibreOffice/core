@@ -32,9 +32,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         ActivitiesQueue::ActivitiesQueue(
           const std::shared_ptr< ::canvas::tools::ElapsedTime >& pPresTimer ) :
@@ -179,6 +177,5 @@ namespace slideshow
             ActivityQueue().swap( maCurrentActivitiesReinsert );
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

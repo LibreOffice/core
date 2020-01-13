@@ -24,9 +24,7 @@
 
 #include <tools/diagnose_ex.h>
 
-namespace writerfilter
-{
-namespace dmapper
+namespace writerfilter::dmapper
 {
 
 void TableManager::clearData()
@@ -483,8 +481,6 @@ TableManager::TableManager()
 }
 
 TableManager::~TableManager() = default;
-
-}
 
 }
 

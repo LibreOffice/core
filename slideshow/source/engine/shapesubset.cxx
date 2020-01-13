@@ -25,9 +25,7 @@
 
 using namespace ::com::sun::star;
 
-namespace slideshow
-{
-    namespace internal
+namespace slideshow::internal
     {
         ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
                                   const DocTreeNode&                      rTreeNode,
@@ -119,6 +117,5 @@ namespace slideshow
         }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

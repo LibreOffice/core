@@ -49,7 +49,7 @@ template< typename T > void checkEqual(T const & value, T const & argument) {
 
 }
 
-namespace testtools { namespace bridgetest {
+namespace testtools::bridgetest {
 
 OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi )
 {
@@ -219,6 +219,6 @@ OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti > 
     return OUString();
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

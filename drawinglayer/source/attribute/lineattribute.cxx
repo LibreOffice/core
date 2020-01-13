@@ -22,9 +22,7 @@
 #include <rtl/instance.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         class ImpLineAttribute
         {
@@ -148,7 +146,6 @@ namespace drawinglayer
             return mpLineAttribute->getMiterMinimumAngle();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

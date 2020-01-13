@@ -59,8 +59,7 @@
 
 using namespace com::sun::star;
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter::dmapper {
 
 uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bCharGrabBag )
 {
@@ -1992,7 +1991,6 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap, const boo
 #endif
 }
 
-} // namespace dmapper
 } // namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

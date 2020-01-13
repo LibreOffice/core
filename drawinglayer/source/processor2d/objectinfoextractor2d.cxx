@@ -23,9 +23,7 @@
 
 using namespace com::sun::star;
 
-namespace drawinglayer
-{
-    namespace processor2d
+namespace drawinglayer::processor2d
     {
         void ObjectInfoPrimitiveExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
@@ -73,7 +71,6 @@ namespace drawinglayer
         ObjectInfoPrimitiveExtractor2D::~ObjectInfoPrimitiveExtractor2D()
         {
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
