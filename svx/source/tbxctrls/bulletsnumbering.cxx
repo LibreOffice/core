@@ -32,7 +32,7 @@ class NumberingPopup : public WeldToolbarPopup
 {
     NumberingPageType const mePageType;
     NumberingToolBoxControl& mrController;
-    std::unique_ptr<NumValueSet> mxValueSet;
+    std::unique_ptr<SvxNumValueSet> mxValueSet;
     std::unique_ptr<weld::CustomWeld> mxValueSetWin;
     std::unique_ptr<weld::Button> mxMoreButton;
     DECL_LINK(VSSelectValueSetHdl, SvtValueSet*, void);
@@ -72,7 +72,7 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     : WeldToolbarPopup(rController.getFrameInterface(), pParent, "svx/ui/numberingwindow.ui", "NumberingWindow")
     , mePageType(ePageType)
     , mrController(rController)
-    , mxValueSet(new NumValueSet(nullptr))
+    , mxValueSet(new SvxNumValueSet(nullptr))
     , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
     , mxMoreButton(m_xBuilder->weld_button("more"))
 {
