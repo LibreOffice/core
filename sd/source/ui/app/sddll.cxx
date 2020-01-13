@@ -224,7 +224,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 
     EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
-    CharmapPopup::RegisterControl(SID_CHARMAP_CONTROL, pMod );
 }
 
 void SdDLL::Init()

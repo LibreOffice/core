@@ -20,13 +20,14 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/charmapcontrol.hxx>
+#include <sfx2/charmappopup.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/event.hxx>
 
 using namespace css;
 
-SfxCharmapCtrl::SfxCharmapCtrl(sal_uInt16 nId, vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame)
-    : SfxPopupWindow(nId, pParent, "charmapctrl", "sfx/ui/charmapcontrol.ui", rFrame)
+SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "charmapctrl", "sfx/ui/charmapcontrol.ui")
 {
     get( m_pRecentCharView[0], "viewchar1" );
     get( m_pRecentCharView[1], "viewchar2" );
@@ -89,7 +90,6 @@ SfxCharmapCtrl::~SfxCharmapCtrl()
     disposeOnce();
 }
 
-
 void SfxCharmapCtrl::dispose()
 {
     for(int i = 0; i < 16; i++)
@@ -99,9 +99,8 @@ void SfxCharmapCtrl::dispose()
     maRecentCharFontList.clear();
     maDlgBtn.clear();
 
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
-
 
 void SfxCharmapCtrl::getFavCharacterList()
 {
@@ -113,7 +112,6 @@ void SfxCharmapCtrl::getFavCharacterList()
     css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
     std::copy(rFavCharFontList.begin(), rFavCharFontList.end(), std::back_inserter(maFavCharFontList));
 }
-
 
 void SfxCharmapCtrl::updateFavCharControl()
 {
@@ -191,7 +189,7 @@ bool SfxCharmapCtrl::EventNotify( NotifyEvent& rNEvt )
             mbNeedsInit = false;
         }
     }
-    return SfxPopupWindow::EventNotify( rNEvt );
+    return ToolbarPopup::EventNotify( rNEvt );
 }
 
 
