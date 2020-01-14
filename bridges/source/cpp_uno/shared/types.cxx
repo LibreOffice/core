@@ -23,7 +23,7 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 bool isSimpleType(typelib_TypeClass typeClass) {
     return typeClass <= typelib_TypeClass_DOUBLE
@@ -112,6 +112,6 @@ bool relatesToInterfaceType(typelib_TypeDescription const * type) {
     return false;
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
