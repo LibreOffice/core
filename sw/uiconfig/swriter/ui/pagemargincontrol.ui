@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -7,71 +7,84 @@
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">9999</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">9999</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">9999</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">9999</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkImage" id="lastImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/format_L_copy_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/format_L_copy_24x24.png</property>
   </object>
   <object class="GtkImage" id="lastLImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/formatcopy_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/formatcopy_24x24.png</property>
   </object>
   <object class="GtkImage" id="mirrore">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/format_L_mirror_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/format_L_mirror_24x24.png</property>
   </object>
   <object class="GtkImage" id="mirroredLImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/formatmirror_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/formatmirror_24x24.png</property>
   </object>
   <object class="GtkImage" id="narrowImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/format_L_narrow_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/format_L_narrow_24x24.png</property>
   </object>
   <object class="GtkImage" id="narrowLImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/formatnarrow_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/formatnarrow_24x24.png</property>
   </object>
   <object class="GtkImage" id="normalImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/format_L_nomal_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/format_L_nomal_24x24.png</property>
   </object>
   <object class="GtkImage" id="normalLImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/formatnormal_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/formatnormal_24x24.png</property>
   </object>
   <object class="GtkImage" id="wideImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/format_L_wide_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/format_L_wide_24x24.png</property>
   </object>
   <object class="GtkImage" id="wideLImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/formatwide_24x24.png</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/formatwide_24x24.png</property>
   </object>
-  <object class="GtkWindow" id="PageMarginControl">
+  <object class="GtkPopover" id="PageMarginControl">
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="no_show_all">True</property>
     <property name="border_width">4</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <child>
-      <object class="GtkBox" id="box">
+      <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
@@ -83,7 +96,9 @@
             <property name="receives_default">True</property>
             <property name="image">narrowImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -98,6 +113,7 @@
             <property name="receives_default">True</property>
             <property name="image">normalImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="always_show_image">True</property>
           </object>
@@ -114,7 +130,9 @@
             <property name="receives_default">True</property>
             <property name="image">wideImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -129,7 +147,9 @@
             <property name="receives_default">True</property>
             <property name="image">mirrore</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -144,7 +164,9 @@
             <property name="receives_default">True</property>
             <property name="image">lastImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -159,7 +181,9 @@
             <property name="receives_default">True</property>
             <property name="image">narrowLImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -174,6 +198,7 @@
             <property name="receives_default">True</property>
             <property name="image">normalLImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="always_show_image">True</property>
           </object>
@@ -190,7 +215,9 @@
             <property name="receives_default">True</property>
             <property name="image">wideLImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -205,7 +232,9 @@
             <property name="receives_default">True</property>
             <property name="image">mirroredLImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -220,7 +249,9 @@
             <property name="receives_default">True</property>
             <property name="image">lastLImg</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -251,6 +282,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="pagemargincontrol|label4">_Top</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">top</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -264,6 +296,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="pagemargincontrol|label5">_Bottom</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">bottom</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -281,6 +314,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pagemargincontrol|leftLabel">_Left</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">left</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -319,6 +353,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pagemargincontrol|rightLabel">_Right</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">right</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -333,6 +368,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="pagemargincontrol|outerLabel">O_uter</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">right</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -348,7 +384,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="left:0cm">
+                      <object class="GtkSpinButton" id="left">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
@@ -361,11 +397,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="right:0cm">
+                      <object class="GtkSpinButton" id="right">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -374,11 +410,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="top:0cm">
+                      <object class="GtkSpinButton" id="top">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -387,11 +423,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="bottom:0cm">
+                      <object class="GtkSpinButton" id="bottom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -418,13 +454,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="container">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
+          <object class="GtkSpinButton" id="hidden">
+            <property name="can_focus">True</property>
+            <property name="no_show_all">True</property>
+            <property name="hexpand">True</property>
+            <property name="adjustment">adjustment5</property>
+            <property name="digits">2</property>
           </object>
           <packing>
             <property name="expand">False</property>
