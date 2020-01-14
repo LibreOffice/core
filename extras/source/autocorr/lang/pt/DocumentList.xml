@@ -270,6 +270,8 @@
 <block-list:block block-list:abbreviated-name="augumas" block-list:name="algumas"/>
 <block-list:block block-list:abbreviated-name="augun" block-list:name="algum"/>
 <block-list:block block-list:abbreviated-name="auje" block-list:name="auge"/>
+<block-list:block block-list:abbreviated-name="autoculante" block-list:name="autocolante"/>
+<block-list:block block-list:abbreviated-name="autoculantes" block-list:name="autocolantes"/>
 <block-list:block block-list:abbreviated-name="autodromo" block-list:name="autódromo"/>
 <block-list:block block-list:abbreviated-name="autodromos" block-list:name="autódromos"/>
 <block-list:block block-list:abbreviated-name="automátcio" block-list:name="automático"/>
@@ -399,6 +401,8 @@
 <block-list:block block-list:abbreviated-name="capitões" block-list:name="capitães"/>
 <block-list:block block-list:abbreviated-name="capueira" block-list:name="capoeira"/>
 <block-list:block block-list:abbreviated-name="cara à cara" block-list:name="cara a cara"/>
+<block-list:block block-list:abbreviated-name="caracteristica" block-list:name="característica"/>
+<block-list:block block-list:abbreviated-name="caracteristicas" block-list:name="características"/>
 <block-list:block block-list:abbreviated-name="carangueijo" block-list:name="caranguejo"/>
 <block-list:block block-list:abbreviated-name="carangueijos" block-list:name="caranguejos"/>
 <block-list:block block-list:abbreviated-name="carateristica" block-list:name="caraterística"/>
@@ -609,8 +613,10 @@
 <block-list:block block-list:abbreviated-name="credivel" block-list:name="credível"/>
 <block-list:block block-list:abbreviated-name="créfitos" block-list:name="créditos"/>
 <block-list:block block-list:abbreviated-name="crespuscular" block-list:name="crepuscular"/>
+<block-list:block block-list:abbreviated-name="criádo" block-list:name="criado"/>
 <block-list:block block-list:abbreviated-name="criacem" block-list:name="criassem"/>
 <block-list:block block-list:abbreviated-name="criansisse" block-list:name="criancice"/>
+<block-list:block block-list:abbreviated-name="criármos" block-list:name="criarmos"/>
 <block-list:block block-list:abbreviated-name="cristamente" block-list:name="cristãmente"/>
 <block-list:block block-list:abbreviated-name="culmatar" block-list:name="colmatar"/>
 <block-list:block block-list:abbreviated-name="cumer" block-list:name="comer"/>
@@ -1250,6 +1256,8 @@
 <block-list:block block-list:abbreviated-name="idiólogos" block-list:name="ideólogos"/>
 <block-list:block block-list:abbreviated-name="idoniedade" block-list:name="idoneidade"/>
 <block-list:block block-list:abbreviated-name="ilucidar" block-list:name="elucidar"/>
+<block-list:block block-list:abbreviated-name="imaginaveis" block-list:name="imagináveis"/>
+<block-list:block block-list:abbreviated-name="imaginavel" block-list:name="imaginável"/>
 <block-list:block block-list:abbreviated-name="ímans" block-list:name="ímanes"/>
 <block-list:block block-list:abbreviated-name="implatação" block-list:name="implantação"/>
 <block-list:block block-list:abbreviated-name="impôr" block-list:name="impor"/>
@@ -1493,6 +1501,8 @@
 <block-list:block block-list:abbreviated-name="meios-claros" block-list:name="meio-claros"/>
 <block-list:block block-list:abbreviated-name="melho" block-list:name="melhor"/>
 <block-list:block block-list:abbreviated-name="melhó" block-list:name="melhor"/>
+<block-list:block block-list:abbreviated-name="melitante" block-list:name="militante"/>
+<block-list:block block-list:abbreviated-name="melitantes" block-list:name="militantes"/>
 <block-list:block block-list:abbreviated-name="mema" block-list:name="mesma"/>
 <block-list:block block-list:abbreviated-name="menas" block-list:name="menos"/>
 <block-list:block block-list:abbreviated-name="mensão" block-list:name="menção"/>
@@ -1912,6 +1922,8 @@
 <block-list:block block-list:abbreviated-name="porta voz" block-list:name="porta-voz"/>
 <block-list:block block-list:abbreviated-name="portarretrato" block-list:name="porta-retratos"/>
 <block-list:block block-list:abbreviated-name="portarretratos" block-list:name="porta-retratos"/>
+<block-list:block block-list:abbreviated-name="portateis" block-list:name="portáteis"/>
+<block-list:block block-list:abbreviated-name="portatil" block-list:name="portátil"/>
 <block-list:block block-list:abbreviated-name="portugu6es" block-list:name="português"/>
 <block-list:block block-list:abbreviated-name="Portugual" block-list:name="Portugal"/>
 <block-list:block block-list:abbreviated-name="portugueis" block-list:name="português"/>
@@ -2200,6 +2212,8 @@
 <block-list:block block-list:abbreviated-name="simplismente" block-list:name="simplesmente"/>
 <block-list:block block-list:abbreviated-name="simulaçãu" block-list:name="simulação"/>
 <block-list:block block-list:abbreviated-name="sinceranete" block-list:name="sinceramente"/>
+<block-list:block block-list:abbreviated-name="sinosite" block-list:name="sinusite"/>
+<block-list:block block-list:abbreviated-name="sinozite" block-list:name="sinusite"/>
 <block-list:block block-list:abbreviated-name="sinpatica" block-list:name="simpática"/>
 <block-list:block block-list:abbreviated-name="sinpática" block-list:name="simpática"/>
 <block-list:block block-list:abbreviated-name="sinpaticas" block-list:name="simpáticas"/>
@@ -2392,6 +2406,7 @@
 <block-list:block block-list:abbreviated-name="voçê" block-list:name="você"/>
 <block-list:block block-list:abbreviated-name="voceis" block-list:name="vocês"/>
 <block-list:block block-list:abbreviated-name="voces" block-list:name="vocês"/>
+<block-list:block block-list:abbreviated-name="voçes" block-list:name="vocês"/>
 <block-list:block block-list:abbreviated-name="voçês" block-list:name="vocês"/>
 <block-list:block block-list:abbreviated-name="volei" block-list:name="vólei"/>
 <block-list:block block-list:abbreviated-name="vôo" block-list:name="voo"/>
