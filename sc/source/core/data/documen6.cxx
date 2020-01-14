@@ -120,7 +120,7 @@ SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 n
     if( pCell )
         ScCellFormat::GetString(*pCell, nNumberFormat, aStr, &pColor, *mxPoolHelper->GetFormTable(), this);
     else
-        ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *mxPoolHelper->GetFormTable());
+        aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *mxPoolHelper->GetFormTable());
 
     SvtScriptType nRet = GetStringScriptType( aStr );
 
