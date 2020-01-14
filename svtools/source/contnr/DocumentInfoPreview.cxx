@@ -28,7 +28,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
-#include <svtools/svmedit2.hxx>
+#include <svmedit2.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

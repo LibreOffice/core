@@ -6952,7 +6952,6 @@ include/svtools/soerr.hxx
 include/svtools/statusbarcontroller.hxx
 include/svtools/stringtransfer.hxx
 include/svtools/svmedit.hxx
-include/svtools/svmedit2.hxx
 include/svtools/svparser.hxx
 include/svtools/svtdllapi.h
 include/svtools/svtresid.hxx
@@ -13612,6 +13611,7 @@ svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/pch/precompiled_svt.cxx
 svtools/inc/pch/precompiled_svt.hxx
 svtools/inc/strings.hxx
+svtools/inc/svmedit2.hxx
 svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
 svtools/inc/table/tablecontrol.hxx
