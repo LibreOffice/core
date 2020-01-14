@@ -27,7 +27,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/button.hxx>
 #include <cmdid.h>
 
 namespace {
@@ -50,36 +49,27 @@ namespace {
 
 namespace sw { namespace sidebar {
 
-PageOrientationControl::PageOrientationControl(PageOrientationPopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageOrientationControl", "modules/swriter/ui/pageorientationcontrol.ui" )
+PageOrientationControl::PageOrientationControl(PageOrientationPopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pageorientationcontrol.ui", "PageOrientationControl")
+    , m_xPortrait(m_xBuilder->weld_button("portrait"))
+    , m_xLandscape(m_xBuilder->weld_button("landscape"))
+    , m_xControl(pControl)
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) )
     , mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) )
     , mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) )
 {
-    get(m_pPortrait, "portrait");
-    get(m_pLandscape, "landscape");
+    m_xPortrait->connect_clicked( LINK( this, PageOrientationControl,ImplOrientationHdl ) );
+    m_xLandscape->connect_clicked( LINK( this, PageOrientationControl,ImplOrientationHdl ) );
+}
 
-    m_pPortrait->SetClickHdl( LINK( this, PageOrientationControl,ImplOrientationHdl ) );
-    m_pLandscape->SetClickHdl( LINK( this, PageOrientationControl,ImplOrientationHdl ) );
+void PageOrientationControl::GrabFocus()
+{
+    m_xPortrait->grab_focus();
 }
 
 PageOrientationControl::~PageOrientationControl()
 {
-    disposeOnce();
-}
-
-void PageOrientationControl::dispose()
-{
-    m_pPortrait.disposeAndClear();
-    m_pLandscape.disposeAndClear();
-
-    mpPageItem.reset();
-    mpPageLRMarginItem.reset();
-    mpPageULMarginItem.reset();
-    mpPageSizeItem.reset();
-
-    ToolbarPopup::dispose();
 }
 
 void PageOrientationControl::ExecuteMarginLRChange(
@@ -189,14 +179,14 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
         mxUndoManager->leaveUndoContext();
 }
 
-IMPL_LINK(PageOrientationControl, ImplOrientationHdl, Button*, pControl, void)
+IMPL_LINK(PageOrientationControl, ImplOrientationHdl, weld::Button&, rControl, void)
 {
-    if ( pControl == m_pPortrait.get() )
+    if (&rControl == m_xPortrait.get())
         ExecuteOrientationChange( false );
     else
         ExecuteOrientationChange( true );
 
-    EndPopupMode();
+    m_xControl->EndPopupMode();
 }
 
 } } // end of namespace sw::sidebar

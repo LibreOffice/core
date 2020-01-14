@@ -25,21 +25,21 @@
 #include <svx/rulritem.hxx>
 #include <editeng/sizeitem.hxx>
 
-class Button;
 class PageOrientationPopup;
 
 namespace sw { namespace sidebar {
 
-class PageOrientationControl final : public svtools::ToolbarPopup
+class PageOrientationControl final : public WeldToolbarPopup
 {
 public:
-    explicit PageOrientationControl(PageOrientationPopup* pControl, vcl::Window* pParent);
+    explicit PageOrientationControl(PageOrientationPopup* pControl, weld::Widget* pParent);
+    virtual void GrabFocus() override;
     virtual ~PageOrientationControl() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<PushButton> m_pPortrait;
-    VclPtr<PushButton> m_pLandscape;
+    std::unique_ptr<weld::Button> m_xPortrait;
+    std::unique_ptr<weld::Button> m_xLandscape;
+    rtl::Reference<PageOrientationPopup> m_xControl;
 
     std::unique_ptr<SvxPageItem> mpPageItem;
     std::unique_ptr<SvxSizeItem> mpPageSizeItem;
@@ -50,7 +50,7 @@ private:
     void ExecuteMarginLRChange(const long nPageLeftMargin, const long nPageRightMargin);
     void ExecuteOrientationChange(const bool bLandscape);
 
-    DECL_LINK(ImplOrientationHdl, Button*, void);
+    DECL_LINK(ImplOrientationHdl, weld::Button&, void);
 };
 
 } } // end of namespace sw::sidebar
