@@ -49,13 +49,11 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <osl/diagnose.h>
-#include <fmtanchr.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unomid.h>
 #include <cmdid.h>
 #include <unofldmid.h>
-#include <fmtruby.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/memberids.h>
 #include <editeng/unoprnms.hxx>

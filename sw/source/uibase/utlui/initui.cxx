@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
 #include <initui.hxx>
@@ -31,10 +29,7 @@
 #include <strings.hrc>
 #include <utlui.hrc>
 #include <authfld.hxx>
-#include <dbmgr.hxx>
 #include <unotools/syslocale.hxx>
-
-#include <unomid.h>
 
 // Global Pointer
 

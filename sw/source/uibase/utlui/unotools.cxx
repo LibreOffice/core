@@ -18,7 +18,6 @@
  */
 
 #include <swtypes.hxx>
-#include <globals.hrc>
 
 #include <strings.hrc>
 #include <unotools.hxx>
@@ -38,27 +37,18 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
-#include <shellio.hxx>
 #include <docsh.hxx>
-#include <view.hxx>
-#include <wrtsh.hxx>
+#include <editsh.hxx>
 #include <swmodule.hxx>
 #include <TextCursorHelper.hxx>
-#include <unocrsr.hxx>
 #include <doc.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

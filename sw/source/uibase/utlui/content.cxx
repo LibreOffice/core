@@ -43,7 +43,6 @@
 #include <content.hxx>
 #include <frmfmt.hxx>
 #include <fldbas.hxx>
-#include <txtatr.hxx>
 #include <IMark.hxx>
 #include <section.hxx>
 #include <tox.hxx>
@@ -54,7 +53,6 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
-#include <unotools.hxx>
 #include <unotxvw.hxx>
 #include <cmdid.h>
 #include <helpids.h>
@@ -68,28 +66,20 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <dcontact.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>
 #include <SwRewriter.hxx>
 #include <hints.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
-#include <fmtcntnt.hxx>
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
-#include <redline.hxx>
-#include <docary.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <swabstdlg.hxx>
-#include <globals.hrc>
 #include <bitmaps.hlst>
-#include <unomid.h>
 
 #include <navmgr.hxx>
 #include <AnnotationWin.hxx>

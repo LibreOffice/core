@@ -18,42 +18,32 @@
  */
 
 #include <memory>
-#include <config_features.h>
 
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <officecfg/Office/Common.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/objitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/svxids.hrc>
-#include <editeng/protitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <editeng/unolingu.hxx>
-#include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <tox.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/app.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <basesh.hxx>
 #include <uitool.hxx>
 #include <viewopt.hxx>
-#include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <wview.hxx>
 #include <globdoc.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svl/visitem.hxx>

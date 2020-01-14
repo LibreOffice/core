@@ -64,7 +64,6 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include <numrule.hxx>
-#include <fmtflcnt.hxx>
 #include <IDocumentMarkAccess.hxx>
 
 #include <vcl/graphicfilter.hxx>

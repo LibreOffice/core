@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <string>
 
 #include <memory>
@@ -31,19 +29,12 @@
 #include <svl/ctloptions.hxx>
 #include <svx/pageitem.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/stritem.hxx>
-#include <unotools/textsearch.hxx>
-#include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/srchitem.hxx>
-#include <sal/macros.h>
+#include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
-#include <editeng/unolingu.hxx>
 #include <edtwin.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
@@ -54,16 +45,12 @@
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>
-#include <doc.hxx>
-#include <unocrsr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 
 #include <strings.hrc>
 #include <SwRewriter.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <drawdoc.hxx>
 
 #include <PostItMgr.hxx>
 

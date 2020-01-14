@@ -24,7 +24,6 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <linguistic/lngprops.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -33,26 +32,16 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/ehdl.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/svxids.hrc>
-#include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>
-#include <editeng/unolingu.hxx>
 #include <svx/svxdlg.hxx>
-#include <editeng/SpellPortions.hxx>
-#include <swmodule.hxx>
 #include <swwait.hxx>
-#include <initui.hxx>
 #include <uitool.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <basesh.hxx>
-#include <docsh.hxx>
 #include <viewopt.hxx>
 #include <swundo.hxx>
 #include <hyp.hxx>
@@ -62,7 +51,6 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <hhcwrp.hxx>
 
@@ -86,11 +74,7 @@
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <svx/dialogs.hrc>
 #include <svtools/langtab.hxx>
-#include <unomid.h>
-#include <IMark.hxx>
-#include <xmloff/odffields.hxx>
 
 #include <editeng/editerr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

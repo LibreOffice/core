@@ -20,9 +20,7 @@
 #include <SwXFilterOptions.hxx>
 #include <shellio.hxx>
 #include <swdll.hxx>
-#include <unoprnms.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>

@@ -29,22 +29,19 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
-#include <officecfg/Office/Common.hxx>
-#include <svl/aeitem.hxx>
+#include <SwCapObjType.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
 #include <hintids.hxx>
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
-#include <caption.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
@@ -55,7 +52,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <editeng/lrspitem.hxx>
-#include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/weld.hxx>
@@ -68,7 +64,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/ptitem.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
@@ -100,24 +95,15 @@
 #include <frmmgr.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
-#include <usrpref.hxx>
-#include <IMark.hxx>
-#include <navipi.hxx>
 #include <tox.hxx>
-#include <workctrl.hxx>
-#include <scroll.hxx>
 #include <edtwin.hxx>
 #include <wview.hxx>
-#include <textsh.hxx>
-#include <tabsh.hxx>
-#include <listsh.hxx>
 #include <cmdid.h>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <strings.hrc>
 #include <swerror.h>
 #include <globals.hrc>
-#include <app.hrc>
 #include <fmtclds.hxx>
 #include <sfx2/templatedlg.hxx>
 #include <dbconfig.hxx>
@@ -127,17 +113,12 @@
 
 #include <PostItMgr.hxx>
 
-#include <ndtxt.hxx>
-
 #include <comphelper/processfactory.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
-#include <svx/ofaitem.hxx>
-#include <unomid.h>
 #include <unotextrange.hxx>
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>

@@ -19,14 +19,12 @@
 
 #include <hintids.hxx>
 #include <uitool.hxx>
-#include <sfx2/app.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -45,10 +43,8 @@
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
-#include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <basesh.hxx>
 #include <cmdid.h>
 #include <viewopt.hxx>
 #include <tabcol.hxx>
@@ -57,15 +53,10 @@
 #include <wview.hxx>
 #include <fmtcol.hxx>
 #include <section.hxx>
-#include <swruler.hxx>
-#include <cntfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <comphelper/lok.hxx>
 
 #include <IDocumentSettingAccess.hxx>
-
-#include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;
 

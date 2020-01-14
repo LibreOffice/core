@@ -22,14 +22,11 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/help.hxx>
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
-#include <svl/urlbmk.hxx>
-#include <svx/svxids.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 
@@ -37,26 +34,19 @@
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
 
-#include <sfx2/app.hxx>
-#include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
-#include <content.hxx>
 #include <edglbldc.hxx>
 #include <section.hxx>
 #include <tox.hxx>
-#include <cnttab.hxx>
 #include <navipi.hxx>
-#include <navicont.hxx>
 #include <edtwin.hxx>
-#include <uitool.hxx>
 #include <toxmgr.hxx>
 
 #include <cmdid.h>
 #include <helpids.h>
 #include <strings.hrc>
-#include <globals.hrc>
 #include <bitmaps.hlst>
 #include <swabstdlg.hxx>
 #include <memory>

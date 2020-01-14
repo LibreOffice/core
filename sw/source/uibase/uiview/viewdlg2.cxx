@@ -18,15 +18,12 @@
  */
 
 #include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svxids.hrc>
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
-#include <com/sun/star/drawing/QRCode.hpp>
 
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -38,7 +35,6 @@
 #include <edtwin.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#include <initui.hxx>
 #include <swabstdlg.hxx>
 
 #include <strings.hrc>

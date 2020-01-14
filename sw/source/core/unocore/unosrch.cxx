@@ -18,10 +18,8 @@
  */
 
 #include <hintids.hxx>
-#include <fmtinfmt.hxx>
 #include <unosrch.hxx>
 #include <unomap.hxx>
-#include <fchrfmt.hxx>
 #include <swtypes.hxx>
 
 #include <osl/diagnose.h>

@@ -74,13 +74,8 @@
 #include <unoprnms.hxx>
 #include <unomid.h>
 #include <cmdid.h>
-#include <fchrfmt.hxx>
-#include <fmtruby.hxx>
-#include <fmtinfmt.hxx>
-#include <fmtautofmt.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/memberids.h>
-#include <editeng/rsiditem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/xdef.hxx>

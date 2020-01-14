@@ -21,25 +21,18 @@
 
 #include <osl/diagnose.h>
 #include <tools/datetime.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <unotools/syslocale.hxx>
-#include <sfx2/app.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <editeng/pmdlitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -51,11 +44,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <fmtornt.hxx>
 #include <tabcol.hxx>
-#include <edtwin.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
-#include <wview.hxx>
 #include <uiitems.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -69,12 +60,10 @@
 #include <usrpref.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <editsh.hxx>
 // 50 cm 28350
 
 #define MAXHEIGHT 28350

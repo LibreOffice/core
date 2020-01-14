@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <editeng/unolingu.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zformat.hxx>
 #include <svl/eitem.hxx>
@@ -35,8 +32,6 @@
 #include <numfmtlb.hxx>
 #include <strings.hrc>
 #include <swabstdlg.hxx>
-#include <unomid.h>
-#include <sfx2/viewfrm.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

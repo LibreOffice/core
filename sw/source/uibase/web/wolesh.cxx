@@ -18,15 +18,10 @@
  */
 
 #include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx>
 
-#include <wrtsh.hxx>
 #include <view.hxx>
-#include <globals.hrc>
 #include <wolesh.hxx>
-#include <cmdid.h>
 
 #define ShellClass_SwWebOleShell
 #include <swslots.hxx>

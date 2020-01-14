@@ -19,7 +19,6 @@
 
 #include <osl/diagnose.h>
 #include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>

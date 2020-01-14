@@ -17,22 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
 #include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/dockwin.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/settings.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -40,21 +37,16 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <actctrl.hxx>
-#include <IMark.hxx>
 #include <navipi.hxx>
-#include <content.hxx>
 #include <workctrl.hxx>
-#include <section.hxx>
 #include <edtwin.hxx>
 #include <sfx2/app.hxx>
 #include <cmdid.h>
 #include <helpids.h>
 
 #include <strings.hrc>
-#include <globals.hrc>
 #include <bitmaps.hlst>
 
-#include <unomid.h>
 #include <memory>
 
 #include <uiobject.hxx>

@@ -49,8 +49,6 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <acorrect.hxx>
-#include <fmtautofmt.hxx>
-#include <fchrfmt.hxx>
 
 #include <strings.hrc>
 

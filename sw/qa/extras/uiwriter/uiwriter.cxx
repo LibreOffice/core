@@ -62,7 +62,6 @@
 #include <editeng/protitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/rsiditem.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <reffld.hxx>

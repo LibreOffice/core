@@ -51,8 +51,6 @@
 #include <grfatr.hxx>
 #include <pagedesc.hxx>
 #include <charfmt.hxx>
-#include <fmtcol.hxx>
-#include <tox.hxx>
 #include <strings.hrc>
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>

@@ -21,13 +21,11 @@
 #include <uiitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <basesh.hxx>
 
 void SwView::ExecColl(SfxRequest const &rReq)
 {

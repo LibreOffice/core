@@ -17,23 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/app.hxx>
-#include <svl/srchitem.hxx>
-#include <basic/sbxvar.hxx>
-#include <svx/svxids.hrc>
 
-#include <swtypes.hxx>
 #include <cmdid.h>
 #include <view.hxx>
 #include <wtextsh.hxx>
 #include <basesh.hxx>
 #include <globals.hrc>
 
-#include <unomid.h>
-
-#include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define ShellClass_SwWebTextShell
