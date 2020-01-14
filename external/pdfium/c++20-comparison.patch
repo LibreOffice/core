@@ -1,0 +1,13 @@
+--- core/fxcrt/fx_memory_wrappers.h
++++ core/fxcrt/fx_memory_wrappers.h
+@@ -70,8 +70,8 @@
+   }
+ 
+   // There's no state, so they are all the same,
+-  bool operator==(const FxAllocAllocator& that) { return true; }
+-  bool operator!=(const FxAllocAllocator& that) { return false; }
++  bool operator==(const FxAllocAllocator& that) const { return true; }
++  bool operator!=(const FxAllocAllocator& that) const { return false; }
+ };
+ 
+ #endif  // CORE_FXCRT_FX_MEMORY_WRAPPERS_H_
