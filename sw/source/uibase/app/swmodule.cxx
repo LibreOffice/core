@@ -282,7 +282,6 @@ void SwDLL::RegisterControls()
     PageMarginPopup::RegisterControl(SID_ATTR_PAGE_MARGIN, pMod);
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
     PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);
-    PageSizePopup::RegisterControl(SID_ATTR_PAGE_SIZE, pMod);
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );

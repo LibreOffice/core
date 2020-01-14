@@ -1162,6 +1162,17 @@
           <value>lo.writer.MMExcludeEntryController</value>
         </prop>
       </node>
+      <node oor:name="PageSizeToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AttributePageSize</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageSizeToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FindText</value>
