@@ -15,11 +15,18 @@
 #include <Qt5System.hxx>
 #include <Qt5Tools.hxx>
 
-unsigned int Qt5System::GetDisplayScreenCount() { return QApplication::desktop()->screenCount(); }
+unsigned int Qt5System::GetDisplayScreenCount()
+{
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    return QApplication::desktop()->screenCount();
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+}
 
 tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     QRect qRect = QApplication::desktop()->screenGeometry(nScreen);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     return toRectangle(qRect);
 }
 
