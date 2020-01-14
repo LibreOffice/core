@@ -40,7 +40,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
     SdDrawDocument& rTargetDocument,
@@ -528,6 +528,6 @@ SdPage* DocumentHelper::ProvideMasterPage (
     return pMasterPageInDocument;
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

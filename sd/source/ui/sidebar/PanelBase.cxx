@@ -19,7 +19,7 @@
 
 #include "PanelBase.hxx"
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 PanelBase::PanelBase (
     vcl::Window* pParentWindow,
@@ -80,6 +80,6 @@ IDisposable::~IDisposable()
 {
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

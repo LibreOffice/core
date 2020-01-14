@@ -24,7 +24,7 @@
 #include <navigatr.hxx>
 
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 NavigatorWrapper::NavigatorWrapper (
     vcl::Window* pParent,
@@ -78,6 +78,6 @@ void NavigatorWrapper::GetFocus()
         Control::GetFocus();
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

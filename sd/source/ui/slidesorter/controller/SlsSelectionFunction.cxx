@@ -86,7 +86,7 @@ static const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIF
     case code|SHIFT_MODIFIER:               \
     case code|CONTROL_MODIFIER
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 //===== SelectionFunction::EventDescriptor ====================================
 
@@ -1484,6 +1484,6 @@ bool DragAndDropModeHandler::ProcessDragEvent (SelectionFunction::EventDescripto
     return true;
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

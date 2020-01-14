@@ -82,7 +82,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 namespace {
 
@@ -1283,6 +1283,6 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 
 } // end of anonymous namespace
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

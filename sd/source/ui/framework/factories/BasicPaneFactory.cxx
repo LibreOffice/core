@@ -52,7 +52,7 @@ namespace {
     static const sal_Int32 gnConfigurationUpdateEndEvent(1);
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** Store URL, XPane reference and (local) PaneId for every pane factory
     that is registered at the PaneController.
@@ -422,7 +422,7 @@ void BasicPaneFactory::ThrowIfDisposed() const
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

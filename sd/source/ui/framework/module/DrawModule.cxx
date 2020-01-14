@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 void DrawModule::Initialize (Reference<frame::XController> const & rxController)
 {
@@ -38,6 +38,6 @@ void DrawModule::Initialize (Reference<frame::XController> const & rxController)
     new ToolBarModule(rxController);
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

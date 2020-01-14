@@ -30,7 +30,7 @@
 #include <tools/IdleDetection.hxx>
 #include <svx/svdpage.hxx>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 ViewCacheContext::ViewCacheContext (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
@@ -112,6 +112,6 @@ css::uno::Reference<css::uno::XInterface> ViewCacheContext::GetModel()
         return mrModel.GetDocument()->getUnoModel();
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

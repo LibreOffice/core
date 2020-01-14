@@ -77,7 +77,7 @@ private:
 
 } // end of anonymous namespace
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 ::std::unique_ptr<CacheCompactor> CacheCompactor::Create (
     BitmapCache& rCache,
@@ -148,7 +148,7 @@ IMPL_LINK_NOARG(CacheCompactor, CompactionCallback, Timer *, void)
     mbIsCompactionRunning = false;
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 namespace {
 

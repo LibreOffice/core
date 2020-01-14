@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //----- ConfigurationController::Implementation -------------------------------
 
@@ -528,7 +528,7 @@ ConfigurationController::Implementation::Implementation (
     mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

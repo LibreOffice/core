@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 void ImpressModule::Initialize (Reference<frame::XController> const & rxController)
 {
@@ -46,6 +46,6 @@ void ImpressModule::Initialize (Reference<frame::XController> const & rxControll
     new ShellStackGuard(rxController);
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,12 +23,12 @@
 #include <sdpage.hxx>
 #include <vcl/bitmapex.hxx>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 class SlideSorterView;
 class PageObjectViewObjectContact;
-} } }
+}
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 BitmapFactory::BitmapFactory()
     : maRenderer(false)
@@ -66,6 +66,6 @@ BitmapEx BitmapFactory::CreateBitmap (
     return aPreview;
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

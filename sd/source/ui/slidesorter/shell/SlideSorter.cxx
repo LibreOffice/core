@@ -42,7 +42,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-namespace sd { namespace slidesorter {
+namespace sd::slidesorter {
 
 namespace {
 class ContentWindow : public ::sd::Window
@@ -460,6 +460,6 @@ bool ContentWindow::EventNotify(NotifyEvent&)
 
 } // end of anonymous namespace
 
-} } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

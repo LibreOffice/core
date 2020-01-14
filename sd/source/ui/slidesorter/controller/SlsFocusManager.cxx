@@ -31,7 +31,7 @@
 #include <Window.hxx>
 #include <sdpage.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 FocusManager::FocusManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -237,6 +237,6 @@ FocusManager::FocusHider::~FocusHider() COVERITY_NOEXCEPT_FALSE
         mrManager.ShowFocus();
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

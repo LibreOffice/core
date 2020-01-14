@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 //===== PagePreviewProvider ===================================================
 
@@ -202,6 +202,6 @@ int ExistingPageProvider::GetCostIndex()
     return 0;
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 namespace {
 
@@ -192,7 +192,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
 
 } // end of anonymous namespace.
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

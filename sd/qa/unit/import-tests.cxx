@@ -103,7 +103,7 @@
 
 using namespace ::com::sun::star;
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
 
 template<class T>
 static std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
@@ -112,7 +112,7 @@ static std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xR
     return rStrm;
 }
 
-} } } }
+}
 
 
 /// Impress import filters tests.

@@ -36,7 +36,7 @@ namespace {
     static const sal_Int32 gnResourceDeactivationRequestEvent(3);
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== ToolBarModule =========================================================
 
@@ -188,6 +188,6 @@ void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

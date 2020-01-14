@@ -32,7 +32,7 @@
 
 #include <vcl/scrbar.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 static constexpr double gnHorizontalScrollFactor(0.15);
 static constexpr double gnVerticalScrollFactor(0.25);
@@ -603,6 +603,6 @@ void ScrollBarManager::Scroll(
     SetTopLeft(aNewTopLeft);
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

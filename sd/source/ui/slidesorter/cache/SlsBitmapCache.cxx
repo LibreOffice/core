@@ -35,7 +35,7 @@ static const sal_Int32 MAXIMAL_CACHE_SIZE = 4*1024L*1024L;
 
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class BitmapCache::CacheEntry
 {
@@ -551,6 +551,6 @@ inline bool BitmapCache::CacheEntry::HasLosslessReplacement() const
     return mpReplacement != nullptr && mpCompressor != nullptr && mpCompressor->IsLossless();
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 PropertySet::PropertySet()
     : PropertySetInterfaceBase(m_aMutex),
@@ -153,6 +153,6 @@ void PropertySet::ThrowIfDisposed()
     }
 }
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

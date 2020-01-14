@@ -35,7 +35,7 @@ using namespace ::com::sun::star::drawing::framework;
 #undef VERBOSE
 //#define VERBOSE 1
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManager>& rxManager)
     : maMutex(),
@@ -196,6 +196,6 @@ Reference<XResourceFactory> ResourceFactoryManager::FindFactory (const OUString&
     return nullptr;
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

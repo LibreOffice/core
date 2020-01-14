@@ -29,7 +29,7 @@
 
 #include <functional>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 namespace {
 static const sal_Int32 gnMaximumLayerCount = 8;
@@ -488,6 +488,6 @@ void Layer::Dispose()
     maPainters.clear();
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

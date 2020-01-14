@@ -80,8 +80,8 @@
 #include <vcl/svapp.hxx>
 #include <unokywds.hxx>
 
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XSpellChecker1; } } } }
+namespace com::sun::star::linguistic2 { class XHyphenator; }
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 
 using namespace ::sd;
 using namespace ::com::sun::star;

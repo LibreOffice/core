@@ -45,7 +45,7 @@ static const sal_Int32 snShortTimeoutCountThreshold (1);
 static const sal_Int32 snNormalTimeoutCountThreshold (5);
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== ConfigurationUpdaterLock ==============================================
 
@@ -373,6 +373,6 @@ IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler, Timer *, void)
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

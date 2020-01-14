@@ -50,7 +50,7 @@ using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 using namespace ::sd::slidesorter::controller;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -302,6 +302,6 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
         mnInsertionPosition = nInsertionPosition;
 }
 
-} } } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
