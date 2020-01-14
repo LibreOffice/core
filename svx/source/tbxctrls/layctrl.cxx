@@ -50,11 +50,12 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 
 namespace {
 
-class TableWindow final : public svtools::ToolbarPopup
+class TableWindow final : public WeldToolbarPopup
 {
 private:
-    VclPtr<PushButton>  aTableButton;
-    VclPtr<VclDrawingArea> aDrawingArea;
+    std::unique_ptr<weld::Button> mxTableButton;
+    std::unique_ptr<weld::DrawingArea> mxDrawingArea;
+    ::Color             aFontColor;
     ::Color             aLineColor;
     ::Color             aFillColor;
     ::Color             aHighlightFillColor;
@@ -73,21 +74,23 @@ private:
     long mnTableWidth;
     long mnTableHeight;
 
-    DECL_LINK( SelectHdl, Button*, void );
+    DECL_LINK(SelectHdl, weld::Button&, void);
 
 public:
-    TableWindow( SvxTableToolBoxControl* pControl, vcl::Window* pParent,
-                 const OUString&            rCmd,
-                 const OUString&            rText );
-    virtual ~TableWindow() override;
-    virtual void            dispose() override;
+    TableWindow( SvxTableToolBoxControl* pControl, weld::Widget* pParent,
+                 const OUString& rCmd);
+    virtual void GrabFocus() override
+    {
+        mxDrawingArea->grab_focus();
+    }
 
     DECL_LINK(KeyInputHdl, const KeyEvent& rKEvt, bool);
     DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
     DECL_LINK(MouseButtonUpHdl, const MouseEvent&, bool);
+    DECL_STATIC_LINK(TableWindow, MouseButtonDownHdl, const MouseEvent&, bool);
+    DECL_LINK(ResizeHdl, const Size&, void);
     typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
     DECL_LINK(PaintHdl, target_and_area, void);
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
@@ -102,22 +105,21 @@ const long TableWindow::TABLE_CELLS_HORIZ = 10;
 const long TableWindow::TABLE_CELLS_VERT = 15;
 
 
-IMPL_LINK_NOARG(TableWindow, SelectHdl, Button*, void)
+IMPL_LINK_NOARG(TableWindow, SelectHdl, weld::Button&, void)
 {
     CloseAndShowTableDialog();
 }
 
-TableWindow::TableWindow( SvxTableToolBoxControl* pControl, vcl::Window* pParent, const OUString& rCmd,
-                          const OUString& rText )
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "TableWindow", "svx/ui/tablewindow.ui")
-    , aTableButton(get<PushButton>("moreoptions"))
-    , aDrawingArea(get<VclDrawingArea>("table"))
+TableWindow::TableWindow(SvxTableToolBoxControl* pControl, weld::Widget* pParent, const OUString& rCmd)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/tablewindow.ui", "TableWindow")
+    , mxTableButton(m_xBuilder->weld_button("moreoptions"))
+    , mxDrawingArea(m_xBuilder->weld_drawing_area("table"))
     , nCol( 0 )
     , nLine( 0 )
     , maCommand( rCmd )
     , mxControl(pControl)
 {
-    float fScaleFactor = GetDPIScaleFactor();
+    float fScaleFactor = mxDrawingArea->get_ref_device().GetDPIScaleFactor();
 
     mnTableCellWidth  = 15 * fScaleFactor;
     mnTableCellHeight = 15 * fScaleFactor;
@@ -127,52 +129,26 @@ TableWindow::TableWindow( SvxTableToolBoxControl* pControl, vcl::Window* pParent
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
-
+    aFontColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     aLineColor = rStyles.GetShadowColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
-    aBackgroundColor = aDrawingArea->GetSettings().GetStyleSettings().GetFaceColor();
+    aBackgroundColor = rStyles.GetFaceColor();
 
-    aDrawingArea->SetBackground( aBackgroundColor );
-    vcl::Font aFont = aDrawingArea->GetFont();
-    aFont.SetColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    aFont.SetFillColor( aBackgroundColor );
-    aFont.SetTransparent( false );
-    aDrawingArea->SetFont( aFont );
+    mxDrawingArea->connect_key_press(LINK(this, TableWindow, KeyInputHdl));
+    mxDrawingArea->connect_mouse_move(LINK(this, TableWindow, MouseMoveHdl));
+    mxDrawingArea->connect_mouse_release(LINK(this, TableWindow, MouseButtonUpHdl));
+    mxDrawingArea->connect_mouse_press(LINK(this, TableWindow, MouseButtonDownHdl));
+    mxDrawingArea->connect_size_allocate(LINK(this, TableWindow, ResizeHdl));
+    mxDrawingArea->connect_draw(LINK(this, TableWindow, PaintHdl));
 
-    aDrawingArea->SetKeyPressHdl(LINK(this, TableWindow, KeyInputHdl));
-    aDrawingArea->SetMouseMoveHdl(LINK(this, TableWindow, MouseMoveHdl));
-    aDrawingArea->SetMouseReleaseHdl(LINK(this, TableWindow, MouseButtonUpHdl));
-    aDrawingArea->SetPaintHdl(LINK(this, TableWindow, PaintHdl));
-
-    SetText( rText );
-
-    // if parent window is a toolbox only display table button when mouse activated
-    ToolBox* pToolBox = nullptr;
-    if (pParent->GetType() == WindowType::TOOLBOX)
-        pToolBox = dynamic_cast<ToolBox*>( pParent );
-    if ( !pToolBox || !pToolBox->IsKeyEvent() )
-    {
-        aTableButton->SetText( SvxResId( RID_SVXSTR_MORE ) );
-        aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
-        aTableButton->Show();
-    }
+    mxTableButton->set_label( SvxResId( RID_SVXSTR_MORE ) );
+    mxTableButton->connect_clicked( LINK( this, TableWindow, SelectHdl ) );
+    mxTableButton->show();
 
     // + 1 to leave space to draw the right/bottom borders
-    aDrawingArea->set_width_request(mnTableWidth + 1);
-    aDrawingArea->set_height_request(mnTableHeight + 1);
-}
-
-TableWindow::~TableWindow()
-{
-    disposeOnce();
-}
-
-void TableWindow::dispose()
-{
-    aTableButton.disposeAndClear();
-    aDrawingArea.disposeAndClear();
-    ToolbarPopup::dispose();
+    mxDrawingArea->set_size_request(mnTableWidth + 1, mnTableHeight + 1);
+    mxDrawingArea->queue_draw();
 }
 
 IMPL_LINK(TableWindow, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
@@ -204,7 +180,7 @@ IMPL_LINK(TableWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                 if ( nNewLine > 1 )
                     nNewLine--;
                 else
-                    EndPopupMode();
+                    mxControl->EndPopupMode();
                 break;
             case KEY_DOWN:
                 if ( nNewLine < TABLE_CELLS_VERT )
@@ -216,7 +192,7 @@ IMPL_LINK(TableWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                 if ( nNewCol > 1 )
                     nNewCol--;
                 else
-                    EndPopupMode();
+                    mxControl->EndPopupMode();
                 break;
             case KEY_RIGHT:
                 if ( nNewCol < TABLE_CELLS_HORIZ )
@@ -225,12 +201,11 @@ IMPL_LINK(TableWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                     CloseAndShowTableDialog();
                 break;
             case KEY_ESCAPE:
-                EndPopupMode();
+                mxControl->EndPopupMode();
                 break;
             case KEY_RETURN:
                 InsertTable();
-                EndPopupMode();
-                GrabFocusToDocument();
+                mxControl->EndPopupMode();
                 return true;
             default:
                 bHandled = false;
@@ -240,11 +215,10 @@ IMPL_LINK(TableWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             Update( nNewCol, nNewLine );
         }
     }
-    else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
+    else if (KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
         InsertTable();
-        EndPopupMode();
-        GrabFocusToDocument();
+        mxControl->EndPopupMode();
         return true;
     }
 
@@ -254,15 +228,32 @@ IMPL_LINK(TableWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 IMPL_LINK_NOARG(TableWindow, MouseButtonUpHdl, const MouseEvent&, bool)
 {
     InsertTable();
-    EndPopupMode();
-    GrabFocusToDocument();
-
+    mxControl->EndPopupMode();
     return true;
+}
+
+IMPL_STATIC_LINK_NOARG(TableWindow, MouseButtonDownHdl, const MouseEvent&, bool)
+{
+    return true;
+}
+
+IMPL_LINK_NOARG(TableWindow, ResizeHdl, const Size&, void)
+{
+    mxDrawingArea->queue_draw();
 }
 
 IMPL_LINK(TableWindow, PaintHdl, target_and_area, aPayload, void)
 {
     vcl::RenderContext& rRenderContext = aPayload.first;
+
+    rRenderContext.Push(PushFlags::FONT);
+
+    rRenderContext.SetBackground( aBackgroundColor );
+    vcl::Font aFont = rRenderContext.GetFont();
+    aFont.SetColor( aFontColor );
+    aFont.SetFillColor( aBackgroundColor );
+    aFont.SetTransparent( false );
+    rRenderContext.SetFont( aFont );
 
     const long nSelectionWidth = nCol * mnTableCellWidth;
     const long nSelectionHeight = nLine * mnTableCellHeight;
@@ -297,7 +288,10 @@ IMPL_LINK(TableWindow, PaintHdl, target_and_area, aPayload, void)
 
     // the text near the mouse cursor telling the table dimensions
     if (!nCol || !nLine)
+    {
+        rRenderContext.Pop();
         return;
+    }
 
     OUString aText = OUString::number( nCol ) + " x " + OUString::number( nLine );
     if (maCommand == ".uno:ShowMultiplePages")
@@ -325,10 +319,12 @@ IMPL_LINK(TableWindow, PaintHdl, target_and_area, aPayload, void)
                                       nTextY + aTextSize.Height() + nTipBorder));
 
     // #i95350# force RTL output
-    if (IsRTLEnabled())
+    if (mxDrawingArea->get_direction())
         aText = u"\u202D" + aText;
 
     rRenderContext.DrawText(Point(nTextX, nTextY), aText);
+
+    rRenderContext.Pop();
 }
 
 void TableWindow::InsertTable()
@@ -357,7 +353,7 @@ void TableWindow::Update( long nNewCol, long nNewLine )
     {
         nCol = nNewCol;
         nLine = nNewLine;
-        aDrawingArea->Invalidate(tools::Rectangle(0, 0, mnTableWidth, mnTableHeight));
+        mxDrawingArea->queue_draw_area(0, 0, mnTableWidth, mnTableHeight);
     }
 }
 
@@ -380,25 +376,10 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 void TableWindow::CloseAndShowTableDialog()
 {
     // close the toolbar tool
-    EndPopupMode();
+    mxControl->EndPopupMode();
 
     // and open the table dialog instead
     TableDialog( Sequence< PropertyValue >() );
-}
-
-bool TableWindow::EventNotify( NotifyEvent& rNEvt )
-{
-    // handle table button key input
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
-        const sal_uInt16 nCode = rKey.GetCode();
-        if ( nCode != KEY_RETURN && nCode != KEY_SPACE && nCode != KEY_ESCAPE )
-        {
-            return true;
-        }
-    }
-    return ToolbarPopup::EventNotify( rNEvt );
 }
 
 namespace {
@@ -719,12 +700,25 @@ SvxTableToolBoxControl::~SvxTableToolBoxControl()
 {
 }
 
-VclPtr<vcl::Window> SvxTableToolBoxControl::createPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> SvxTableToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<TableWindow>(this, m_pToolbar, m_aCommandURL);
+}
+
+VclPtr<vcl::Window> SvxTableToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     bool bToolBox = getToolboxId(nId, &pToolBox);
-    return VclPtr<TableWindow>::Create(this, pParent, m_aCommandURL, bToolBox ? pToolBox->GetItemText(nId) : OUString());
+
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<TableWindow>(this, pParent->GetFrameWeld(), m_aCommandURL));
+
+    mxInterimPopover->SetText(bToolBox ? pToolBox->GetItemText(nId) : OUString());
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString SvxTableToolBoxControl::getImplementationName()
