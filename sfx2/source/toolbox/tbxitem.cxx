@@ -715,7 +715,6 @@ SfxPopupWindow::SfxPopupWindow(
     WinBits nBits ) :
     FloatingWindow( pParentWindow, nBits )
     , m_bFloating( false )
-    , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
 {
@@ -731,7 +730,6 @@ SfxPopupWindow::SfxPopupWindow(
     const Reference< XFrame >& rFrame ) :
     FloatingWindow( pParentWindow, rID, rUIXMLDescription, rFrame)
     , m_bFloating( false )
-    , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
 {
@@ -801,37 +799,6 @@ void SfxPopupWindow::PopupModeEnd()
     }
     else
         Close();
-}
-
-
-void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
-{
-    if ( !m_bCascading )
-        FloatingWindow::MouseMove( rMEvt );
-    else
-    {
-        // Forward MouseMove-Event to Children
-        ::Point       aPos = rMEvt.GetPosPixel();
-        ::Point       aScrPos = OutputToScreenPixel( aPos );
-        sal_uInt16 i = 0;
-        vcl::Window* pWindow = GetChild( i );
-        while ( pWindow )
-        {
-            ::MouseEvent aChildMEvt( pWindow->ScreenToOutputPixel( aScrPos ),
-                              rMEvt.GetClicks(), rMEvt.GetMode(),
-                              rMEvt.GetButtons(), rMEvt.GetModifier() );
-            pWindow->MouseMove( aChildMEvt );
-            pWindow->Update();
-            i++;
-            pWindow = GetChild( i );
-        }
-    }
-}
-
-
-void SfxPopupWindow::StartCascading()
-{
-    m_bCascading = true;
 }
 
 

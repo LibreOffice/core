@@ -62,7 +62,6 @@ class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow
 {
 friend class SfxFrameStatusListener;
     bool                                                   m_bFloating;
-    bool                                                   m_bCascading;
     Link<SfxPopupWindow*,void>                             m_aDeleteLink;
     sal_uInt16 const                                       m_nId;
     css::uno::Reference< css::frame::XFrame > const        m_xFrame;
@@ -95,9 +94,6 @@ public:
                             virtual ~SfxPopupWindow() override;
     virtual void            dispose() override;
 
-    virtual void            MouseMove( const MouseEvent& rMEvt ) override;
-
-    void                    StartCascading();
     SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link<SfxPopupWindow*,void>& rLink )
                             {
                                 m_aDeleteLink = rLink;
