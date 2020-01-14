@@ -29,7 +29,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <tools/wldcrd.hxx>
-#include <sal/log.hxx>
 #include <framework/interaction.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

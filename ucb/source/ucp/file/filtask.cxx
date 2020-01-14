@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
 #include <sys/stat.h>

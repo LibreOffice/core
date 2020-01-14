@@ -21,7 +21,6 @@
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <sal/log.hxx>
 #include <chgviset.hxx>
 #include <formulacell.hxx>
 #include <chgtrack.hxx>

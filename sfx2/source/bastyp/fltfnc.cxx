@@ -36,7 +36,6 @@
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <svl/stritem.hxx>
 
 #include <comphelper/processfactory.hxx>

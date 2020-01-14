@@ -25,7 +25,6 @@
 #include <osl/process.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/instance.hxx>

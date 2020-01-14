@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 
 #include <svtools/restartdialog.hxx>
 

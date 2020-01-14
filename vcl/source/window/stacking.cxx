@@ -20,7 +20,6 @@
 #include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <sal/log.hxx>
 
 #include <salframe.hxx>
 #include <salobj.hxx>

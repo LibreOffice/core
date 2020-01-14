@@ -31,7 +31,6 @@
 #include <calbck.hxx>
 
 #include <o3tl/optional.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

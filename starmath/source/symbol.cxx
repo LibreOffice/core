@@ -23,7 +23,6 @@
 #include <utility.hxx>
 #include "cfgitem.hxx"
 #include <smmod.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 

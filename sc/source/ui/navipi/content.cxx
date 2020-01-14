@@ -28,7 +28,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 
 #include <content.hxx>

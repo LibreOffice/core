@@ -31,7 +31,6 @@
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>

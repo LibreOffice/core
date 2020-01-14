@@ -52,7 +52,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <memory>
 #include <stack>

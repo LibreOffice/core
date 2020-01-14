@@ -19,7 +19,6 @@
 
 #include <config_folders.h>
 
-#include <sal/log.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/threadpool.hxx>

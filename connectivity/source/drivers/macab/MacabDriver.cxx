@@ -24,7 +24,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hrc>
 #include <comphelper/processfactory.hxx>

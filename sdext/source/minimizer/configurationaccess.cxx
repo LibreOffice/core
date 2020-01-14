@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

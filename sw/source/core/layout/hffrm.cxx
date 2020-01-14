@@ -32,7 +32,6 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <ndindex.hxx>
-#include <sal/log.hxx>
 
 static SwTwips lcl_GetFrameMinHeight(const SwLayoutFrame & rFrame)
 {

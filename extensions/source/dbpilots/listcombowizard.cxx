@@ -28,7 +28,6 @@
 #include <tools/diagnose_ex.h>
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 

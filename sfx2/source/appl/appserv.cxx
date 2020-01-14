@@ -66,7 +66,6 @@
 #include <basic/sberrors.hxx>
 #include <vcl/help.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <vcl/EnumContext.hxx>

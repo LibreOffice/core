@@ -19,7 +19,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>

@@ -33,7 +33,6 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
-#include <sal/log.hxx>
 
 #include <viewdata.hxx>
 #include <docoptio.hxx>

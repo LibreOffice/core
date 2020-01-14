@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <map>
 #include <utility>

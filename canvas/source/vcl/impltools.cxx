@@ -28,7 +28,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapTools.hxx>

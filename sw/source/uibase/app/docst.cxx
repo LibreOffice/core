@@ -25,7 +25,6 @@
 
 #include <comphelper/flagguard.hxx>
 #include <o3tl/any.hxx>
-#include <sal/log.hxx>
 #include <hintids.hxx>
 #include <sfx2/styledlg.hxx>
 #include <svl/whiter.hxx>

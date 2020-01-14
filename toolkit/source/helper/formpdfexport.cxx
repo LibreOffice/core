@@ -23,7 +23,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/lineend.hxx>
 #include <unordered_map>
-#include <sal/log.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/XForm.hpp>

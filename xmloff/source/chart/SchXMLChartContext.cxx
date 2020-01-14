@@ -26,7 +26,6 @@
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/xmlnmspe.hxx>

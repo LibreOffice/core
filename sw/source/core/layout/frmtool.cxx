@@ -24,7 +24,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <sal/log.hxx>
 
 #include <drawdoc.hxx>
 #include <fmtornt.hxx>

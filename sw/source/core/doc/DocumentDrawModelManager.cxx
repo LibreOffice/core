@@ -44,7 +44,6 @@
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <sal/log.hxx>
 
 class SdrOutliner;
 

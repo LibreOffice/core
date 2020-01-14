@@ -20,7 +20,6 @@
 
 #include "oo3extensionmigration.hxx"
 #include <rtl/instance.hxx>
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <tools/diagnose_ex.h>

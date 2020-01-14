@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include "fileview.hxx"
 #include "iodlg.hxx"
 #include <svtools/PlaceEditDialog.hxx>

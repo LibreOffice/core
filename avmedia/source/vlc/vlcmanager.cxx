@@ -11,7 +11,6 @@
 #include <boost/lexical_cast.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 #include "vlcmanager.hxx"
 #include "vlcplayer.hxx"
 #include <wrapper/Instance.hxx>

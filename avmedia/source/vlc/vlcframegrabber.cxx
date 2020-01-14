@@ -29,7 +29,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 
 #include "vlcframegrabber.hxx"
 #include "vlcplayer.hxx"

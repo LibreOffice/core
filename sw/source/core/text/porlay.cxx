@@ -34,7 +34,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <paratr.hxx>
-#include <sal/log.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <svl/asiancfg.hxx>

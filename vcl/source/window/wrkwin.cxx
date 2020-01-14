@@ -18,7 +18,6 @@
  */
 
 
-#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 // declare system types in sysdata.hxx

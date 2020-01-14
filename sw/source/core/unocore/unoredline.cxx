@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>

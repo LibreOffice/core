@@ -18,7 +18,6 @@
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )

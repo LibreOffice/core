@@ -37,7 +37,6 @@
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <officecfg/Office/Common.hxx>
 
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

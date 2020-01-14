@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <java/io/InputStream.hxx>

@@ -17,7 +17,6 @@
 #include <i18nutil/unicode.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/module.hxx>
-#include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>

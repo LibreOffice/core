@@ -23,7 +23,6 @@
 #include "SchXMLTools.hxx"
 #include <facreg.hxx>
 
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/prstylei.hxx>

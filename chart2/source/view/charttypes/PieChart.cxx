@@ -33,7 +33,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/math.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>

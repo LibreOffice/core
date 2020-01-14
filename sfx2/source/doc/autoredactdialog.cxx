@@ -14,7 +14,6 @@
 #include <sfx2/strings.hrc>
 
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/viewoptions.hxx>

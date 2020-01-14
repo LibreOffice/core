@@ -17,7 +17,6 @@
  */
 
 #include <sal/macros.h>
-#include <sal/log.hxx>
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>

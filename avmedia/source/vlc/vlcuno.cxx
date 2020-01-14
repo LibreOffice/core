@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <sal/log.hxx>
 
 #include "vlccommon.hxx"
 #include "vlcmanager.hxx"

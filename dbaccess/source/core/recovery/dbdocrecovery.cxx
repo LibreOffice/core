@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>

@@ -36,7 +36,6 @@
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/diagnose_ex.h>
 

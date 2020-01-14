@@ -34,7 +34,6 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
-#include <sal/log.hxx>
 #include <tools/helpers.hxx>
 #include <tools/diagnose_ex.h>
 

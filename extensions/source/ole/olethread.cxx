@@ -21,7 +21,6 @@
 
 #include <comphelper/windowserrorstring.hxx>
 #include <osl/thread.hxx>
-#include <sal/log.hxx>
 
 using namespace std;
 

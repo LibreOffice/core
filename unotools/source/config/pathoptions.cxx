@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

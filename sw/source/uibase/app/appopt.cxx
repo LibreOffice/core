@@ -22,7 +22,6 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-#include <sal/log.hxx>
 #include <hintids.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>

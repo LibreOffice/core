@@ -30,7 +30,6 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <sal/log.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 

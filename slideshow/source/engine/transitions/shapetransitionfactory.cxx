@@ -20,7 +20,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <sal/log.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>

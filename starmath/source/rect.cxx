@@ -22,7 +22,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <sal/log.hxx>
 
 #include <format.hxx>
 #include <rect.hxx>

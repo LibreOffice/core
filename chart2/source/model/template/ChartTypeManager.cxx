@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <algorithm>
 #include <iterator>

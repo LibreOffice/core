@@ -83,7 +83,6 @@
 #include <vcl/transfer.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sal/log.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>

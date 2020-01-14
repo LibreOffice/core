@@ -20,7 +20,6 @@
 #include <tablecontainer.hxx>
 #include <stringconstants.hxx>
 #include <table.hxx>
-#include <sal/log.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>

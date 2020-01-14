@@ -25,7 +25,6 @@
 #include <expressionnodefactory.hxx>
 
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 
 // Makes parser a static resource,
 // we're synchronized externally.

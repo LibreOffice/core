@@ -30,7 +30,6 @@
 #include <comphelper/xmlsechelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>

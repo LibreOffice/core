@@ -10,7 +10,6 @@
 #include <sfx2/emojiview.hxx>
 #include <sfx2/emojiviewitem.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <config_folders.h>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>

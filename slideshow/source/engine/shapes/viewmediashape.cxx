@@ -21,7 +21,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <sal/log.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/window.hxx>

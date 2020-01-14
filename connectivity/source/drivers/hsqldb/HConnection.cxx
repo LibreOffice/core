@@ -34,7 +34,6 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <resource/sharedresources.hxx>

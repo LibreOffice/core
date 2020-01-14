@@ -20,7 +20,6 @@
 #include <memory>
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>

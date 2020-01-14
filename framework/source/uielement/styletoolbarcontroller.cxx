@@ -12,7 +12,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/status/Template.hpp>

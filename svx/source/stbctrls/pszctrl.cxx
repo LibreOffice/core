@@ -35,7 +35,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>
-#include <sal/log.hxx>
 
 #include <svx/pszctrl.hxx>
 

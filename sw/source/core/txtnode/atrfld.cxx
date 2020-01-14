@@ -40,7 +40,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <fieldhint.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 

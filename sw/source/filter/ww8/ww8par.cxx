@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

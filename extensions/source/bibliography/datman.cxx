@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>

@@ -31,7 +31,6 @@
 #include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
 #include <rtl/tencinfo.h>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 

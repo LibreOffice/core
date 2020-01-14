@@ -65,7 +65,6 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

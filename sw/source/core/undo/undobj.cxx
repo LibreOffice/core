@@ -39,7 +39,6 @@
 #include <strings.hrc>
 #include <docsh.hxx>
 #include <view.hxx>
-#include <sal/log.hxx>
 
 // This class saves the Pam as integers and can recompose those into a PaM
 SwUndRng::SwUndRng()

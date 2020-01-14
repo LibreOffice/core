@@ -46,7 +46,6 @@
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/searchopt.hxx>
-#include <sal/log.hxx>
 
 #include <cfg.hxx> //for SaveInData
 

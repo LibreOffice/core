@@ -37,7 +37,6 @@
 #endif
 
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 #include <set>

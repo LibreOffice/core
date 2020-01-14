@@ -22,7 +22,6 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
-#include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>

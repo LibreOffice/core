@@ -28,7 +28,6 @@
 #include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
 #include <unotools/configmgr.hxx>
-#include <sal/log.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>

@@ -32,7 +32,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/evntconf.hxx>
 #include <unotools/eventcfg.hxx>
-#include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>

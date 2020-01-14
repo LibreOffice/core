@@ -38,7 +38,6 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 

@@ -19,7 +19,6 @@
 
 #include <string.h>
 
-#include <sal/log.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>

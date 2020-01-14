@@ -59,7 +59,6 @@
 #include <column.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <sal/log.hxx>
 
 #include <memory>
 #include <algorithm>

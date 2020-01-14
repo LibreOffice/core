@@ -39,7 +39,6 @@
 #include <rolbck.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <UndoBookmark.hxx>
 #include <tools/datetimeutils.hxx>
 #include <view.hxx>

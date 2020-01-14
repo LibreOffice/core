@@ -32,7 +32,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/errinf.hxx>
-#include <sal/log.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <unotools/saveopt.hxx>

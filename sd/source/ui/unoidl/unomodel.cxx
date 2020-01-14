@@ -39,7 +39,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 
-#include <sal/log.hxx>
 #include <editeng/unofield.hxx>
 #include <notifydocumentevent.hxx>
 #include <unomodel.hxx>

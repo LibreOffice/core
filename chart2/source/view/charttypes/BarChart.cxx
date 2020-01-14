@@ -36,7 +36,6 @@
 #include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <rtl/math.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unordered_set>
 

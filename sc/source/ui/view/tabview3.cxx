@@ -30,7 +30,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
-#include <sal/log.hxx>
 
 #include <IAnyRefDialog.hxx>
 #include <tabview.hxx>

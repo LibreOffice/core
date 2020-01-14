@@ -33,7 +33,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>

@@ -18,7 +18,6 @@
  */
 
 
-#include <sal/log.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>

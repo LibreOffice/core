@@ -20,7 +20,6 @@
 #include <libxml/xmlwriter.h>
 #include <boost/property_tree/json_parser.hpp>
 
-#include <sal/log.hxx>
 #include <tools/datetimeutils.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>

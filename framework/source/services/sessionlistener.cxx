@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 
 #include <services/desktop.hxx>
 

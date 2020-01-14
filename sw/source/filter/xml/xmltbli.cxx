@@ -25,7 +25,6 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
-#include <sal/log.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>

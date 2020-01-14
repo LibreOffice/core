@@ -34,7 +34,6 @@
 #include <dialmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <sal/log.hxx>
 
 #define DEFAULT_GRADIENTSTEP 64
 

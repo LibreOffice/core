@@ -56,7 +56,6 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <svx/xmleohlp.hxx>
-#include <sal/log.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
 

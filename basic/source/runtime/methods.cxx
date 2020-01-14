@@ -42,7 +42,6 @@
 #include <tools/wldcrd.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
-#include <sal/log.hxx>
 
 #include <runtime.hxx>
 #include <sbunoobj.hxx>

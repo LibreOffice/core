@@ -21,7 +21,6 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 #include <excelvbaproject.hxx>
 #include <stylesbuffer.hxx>

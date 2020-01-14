@@ -20,7 +20,6 @@
 
 #include <memory>
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <fmprop.hxx>
 #include <svx/strings.hrc>
 #include <svx/fmtools.hxx>

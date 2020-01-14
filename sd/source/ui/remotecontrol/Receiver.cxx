@@ -14,7 +14,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>

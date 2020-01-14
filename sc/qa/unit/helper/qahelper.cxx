@@ -24,7 +24,6 @@
 #include <formula/errorcodes.hxx>
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
-#include <sal/log.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

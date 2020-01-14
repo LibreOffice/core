@@ -29,7 +29,6 @@
 #include <algorithm>
 #include <cmath>
 
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

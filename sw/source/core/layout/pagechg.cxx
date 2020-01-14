@@ -19,7 +19,6 @@
 
 #include <comphelper/lok.hxx>
 #include <ndole.hxx>
-#include <sal/log.hxx>
 #include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>

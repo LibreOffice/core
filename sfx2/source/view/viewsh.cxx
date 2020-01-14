@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <sal/log.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>

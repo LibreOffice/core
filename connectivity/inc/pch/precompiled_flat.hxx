@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:08 using:
+ Generated on 2020-01-16 15:55:25 using:
  ./bin/update_pch connectivity flat --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,7 +34,6 @@
 #include <memory>
 #include <new>
 #include <ostream>
-#include <set>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -51,7 +50,6 @@
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
@@ -89,19 +87,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
-#include <com/sun/star/i18n/LocaleDataItem2.hpp>
-#include <com/sun/star/i18n/LocaleItem.hpp>
-#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -111,7 +100,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -131,12 +119,8 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -162,19 +146,11 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nutil/transliteration.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <svl/nfkeytab.hxx>
-#include <svl/ondemand.hxx>
-#include <svl/svldllapi.h>
-#include <tools/date.hxx>
-#include <tools/datetime.hxx>
-#include <tools/link.hxx>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -182,12 +158,6 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/calendarwrapper.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/nativenumberwrapper.hxx>
-#include <unotools/readwritemutexguard.hxx>
-#include <unotools/syslocale.hxx>
-#include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

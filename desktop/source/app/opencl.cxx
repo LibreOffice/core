@@ -19,7 +19,6 @@
 #include <config_folders.h>
 
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>

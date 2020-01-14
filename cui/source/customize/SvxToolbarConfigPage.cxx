@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>

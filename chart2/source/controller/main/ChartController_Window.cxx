@@ -81,7 +81,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <sfx2/lokhelper.hxx>
 #include <boost/property_tree/json_parser.hpp>

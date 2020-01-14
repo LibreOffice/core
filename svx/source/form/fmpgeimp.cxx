@@ -36,7 +36,6 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/Forms.hpp>
 
-#include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/fmpage.hxx>

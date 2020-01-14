@@ -74,7 +74,6 @@ namespace
         bool m_bOther;
         sal_Int32 m_nContent;
 #if 0
-#include <sal/log.hxx>
         void Dump()
         {
             SAL_INFO("sw.core", "Index: " << m_nIdx << "\tOther: " << m_bOther << "\tContent: " << m_nContent);

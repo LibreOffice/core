@@ -39,7 +39,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/svborder.hxx>
 #include <boost/property_tree/ptree.hpp>
-#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::uno;

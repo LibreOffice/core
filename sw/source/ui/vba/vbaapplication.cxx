@@ -24,7 +24,6 @@
 #include "vbaapplication.hxx"
 #include "vbadocument.hxx"
 #include "vbafilterpropsfromformat.hxx"
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <vbahelper/vbahelper.hxx>

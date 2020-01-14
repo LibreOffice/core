@@ -27,7 +27,6 @@
 #include <dptabdat.hxx>
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 

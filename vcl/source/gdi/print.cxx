@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>

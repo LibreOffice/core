@@ -28,7 +28,6 @@
 #include <hintids.hxx>
 #include <string.h>
 #include <osl/endian.h>
-#include <sal/log.hxx>
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 

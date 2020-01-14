@@ -24,7 +24,6 @@
 #include <eventqueue.hxx>
 #include "nodetools.hxx"
 #include <delayevent.hxx>
-#include <sal/log.hxx>
 
 #include <functional>
 #include <algorithm>

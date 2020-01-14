@@ -21,7 +21,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -49,7 +49,6 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

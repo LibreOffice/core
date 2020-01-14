@@ -39,7 +39,6 @@
 #include <SlideSorterViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>

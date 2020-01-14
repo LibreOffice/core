@@ -28,7 +28,6 @@
 #include <osl/conditn.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>

@@ -45,7 +45,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svtools/imagemgr.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <dialmgr.hxx>
 #include <tools/diagnose_ex.h>

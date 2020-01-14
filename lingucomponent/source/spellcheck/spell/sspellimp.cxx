@@ -48,7 +48,6 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
-#include <sal/log.hxx>
 
 #include <numeric>
 #include <utility>

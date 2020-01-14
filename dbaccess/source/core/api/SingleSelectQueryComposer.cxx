@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <sal/log.hxx>
 #include <composertools.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>

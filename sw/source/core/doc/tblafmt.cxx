@@ -38,7 +38,6 @@
 #include <editsh.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 

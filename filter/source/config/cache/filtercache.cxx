@@ -45,7 +45,6 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
-#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
 #include <i18nlangtag/languagetag.hxx>

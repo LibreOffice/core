@@ -33,7 +33,6 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

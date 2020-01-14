@@ -22,7 +22,6 @@
 #include <memory>
 
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <datanavi.hxx>
 #include <fmservs.hxx>
 

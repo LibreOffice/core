@@ -47,7 +47,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include "AppView.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dbaobjectex.hxx>

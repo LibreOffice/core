@@ -25,7 +25,6 @@
 #include <tools/lineend.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <node.hxx>

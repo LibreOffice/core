@@ -58,7 +58,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <sal/log.hxx>
 #include <tools/svborder.hxx>
 
 #include <unotools/streamwrap.hxx>

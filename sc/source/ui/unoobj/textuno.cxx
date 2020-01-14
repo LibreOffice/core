@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>

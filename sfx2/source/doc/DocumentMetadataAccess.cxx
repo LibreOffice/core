@@ -39,7 +39,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 
 #include <comphelper/interaction.hxx>
 #include <unotools/mediadescriptor.hxx>

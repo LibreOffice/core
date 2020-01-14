@@ -54,7 +54,6 @@ using namespace ::com::sun::star;
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/securityoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 
 #include <comphelper/lok.hxx>

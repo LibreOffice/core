@@ -58,7 +58,6 @@
 #include <memory>
 #include <utility>
 #include <oox/helper/helper.hxx>
-#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;

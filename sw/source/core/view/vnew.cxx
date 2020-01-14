@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/printer.hxx>
-#include <sal/log.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>

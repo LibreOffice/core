@@ -23,7 +23,6 @@
 #include "modulepcr.hxx"
 #include <strings.hrc>
 #include "formstrings.hxx"
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <connectivity/dbtools.hxx>

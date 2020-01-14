@@ -27,7 +27,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace css::bridge;

@@ -23,7 +23,6 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <tools/urlobj.hxx>
-#include <sal/log.hxx>
 #include <file/FDriver.hxx>
 #include <file/FTable.hxx>
 #include <comphelper/processfactory.hxx>

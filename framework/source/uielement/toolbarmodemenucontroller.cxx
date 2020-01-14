@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <comphelper/types.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/confignode.hxx>

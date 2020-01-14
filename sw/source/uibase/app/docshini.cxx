@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/ctrltool.hxx>

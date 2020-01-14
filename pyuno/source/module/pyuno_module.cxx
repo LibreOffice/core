@@ -27,7 +27,6 @@
 #include <osl/module.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 
 #include <typelib/typedescription.hxx>
 

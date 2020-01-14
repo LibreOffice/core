@@ -29,7 +29,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 

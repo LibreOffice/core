@@ -46,7 +46,6 @@
 #include <svl/visitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-#include <sal/log.hxx>
 
 #include <comphelper/string.hxx>
 #include <basic/sbxcore.hxx>

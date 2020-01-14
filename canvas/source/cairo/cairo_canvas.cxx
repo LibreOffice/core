@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>

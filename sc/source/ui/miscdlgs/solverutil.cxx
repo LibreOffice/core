@@ -29,7 +29,6 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;

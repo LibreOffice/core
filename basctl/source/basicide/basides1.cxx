@@ -36,7 +36,6 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <svl/srchdefs.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/childwin.hxx>
 #include <sfx2/docfac.hxx>

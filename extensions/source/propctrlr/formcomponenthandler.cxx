@@ -101,7 +101,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 #include <sal/macros.h>
-#include <sal/log.hxx>
 
 #include <limits>
 #include <memory>

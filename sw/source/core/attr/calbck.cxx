@@ -23,7 +23,6 @@
 #include <swcache.hxx>
 #include <swfntcch.hxx>
 #include <tools/debug.hxx>
-#include <sal/log.hxx>
 #include <algorithm>
 
 namespace sw

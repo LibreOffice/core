@@ -35,7 +35,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <rtl/string.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>

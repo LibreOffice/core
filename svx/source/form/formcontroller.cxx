@@ -88,7 +88,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 #include <iterator>

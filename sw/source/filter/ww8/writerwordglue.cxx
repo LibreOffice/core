@@ -26,7 +26,6 @@
 #include <algorithm>
 
 #include <rtl/tencinfo.h>
-#include <sal/log.hxx>
 
 #include <unicode/ubidi.h>
 #include <tools/tenccvt.hxx>

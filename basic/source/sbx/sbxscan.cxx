@@ -40,7 +40,6 @@
 #include <strings.hrc>
 
 #include <rtl/character.hxx>
-#include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 
 

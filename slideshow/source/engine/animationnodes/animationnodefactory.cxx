@@ -25,7 +25,6 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <basegfx/numeric/ftools.hxx>
-#include <sal/log.hxx>
 
 #include <animationnodefactory.hxx>
 #include "paralleltimecontainer.hxx"

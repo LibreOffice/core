@@ -49,7 +49,6 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

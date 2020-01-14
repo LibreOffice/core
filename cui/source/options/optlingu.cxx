@@ -43,7 +43,6 @@
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>

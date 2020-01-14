@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <config_features.h>
-#include <sal/log.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <opengl/gdiimpl.hxx>
 #include <opengl/zone.hxx>

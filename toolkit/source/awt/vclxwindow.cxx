@@ -38,7 +38,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
-#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/color.hxx>

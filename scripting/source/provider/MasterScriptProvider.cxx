@@ -42,7 +42,6 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <util/MiscUtils.hxx>
-#include <sal/log.hxx>
 
 #include "ActiveMSPList.hxx"
 #include "MasterScriptProvider.hxx"

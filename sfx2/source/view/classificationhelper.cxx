@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/objsh.hxx>

@@ -80,7 +80,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <o3tl/any.hxx>
-#include <sal/log.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/diagnose_ex.h>
 

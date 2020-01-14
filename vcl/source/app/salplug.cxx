@@ -21,7 +21,6 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
-#include <sal/log.hxx>
 
 #include <salframe.hxx>
 #include <salinst.hxx>

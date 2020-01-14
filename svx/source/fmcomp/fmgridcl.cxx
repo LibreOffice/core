@@ -74,7 +74,6 @@
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
-#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <math.h>
 #include <memory>

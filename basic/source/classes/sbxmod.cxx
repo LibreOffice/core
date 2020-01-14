@@ -35,7 +35,6 @@
 #include <token.hxx>
 #include <sbunoobj.hxx>
 
-#include <sal/log.hxx>
 
 #include <basic/sberrors.hxx>
 #include <sbobjmod.hxx>

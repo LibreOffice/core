@@ -18,7 +18,6 @@
  */
 
 #include <rtl/process.h>
-#include <sal/log.hxx>
 
 #include <uno/environment.h>
 #include <uno/lbnames.h>

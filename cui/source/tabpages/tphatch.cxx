@@ -38,7 +38,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <sal/log.hxx>
 #include <svtools/unitconv.hxx>
 
 using namespace com::sun::star;

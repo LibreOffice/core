@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
 

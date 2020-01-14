@@ -24,7 +24,6 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <vcl/timer.hxx>

@@ -44,7 +44,6 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/toolbox.hxx>
-#include <sal/log.hxx>
 #include <vcl/idle.hxx>
 
 #include <sfx2/app.hxx>

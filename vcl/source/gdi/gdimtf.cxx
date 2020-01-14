@@ -19,7 +19,6 @@
 
 #include <cstdlib>
 #include <memory>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>

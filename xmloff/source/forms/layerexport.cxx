@@ -27,7 +27,6 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/maptype.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include "controlpropertymap.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>

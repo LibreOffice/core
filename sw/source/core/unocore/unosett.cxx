@@ -71,7 +71,6 @@
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
 #include <paratr.hxx>
-#include <sal/log.hxx>
 #include <numeric>
 
 using namespace ::com::sun::star;

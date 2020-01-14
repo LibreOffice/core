@@ -28,7 +28,6 @@
 #include "sbxconv.hxx"
 #include <sbunoobj.hxx>
 #include <rtl/character.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;

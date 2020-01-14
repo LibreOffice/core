@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>

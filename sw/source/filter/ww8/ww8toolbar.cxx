@@ -23,7 +23,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
 #include <map>
-#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

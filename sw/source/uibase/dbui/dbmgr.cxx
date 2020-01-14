@@ -106,7 +106,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <ndindex.hxx>
 #include <swevent.hxx>
-#include <sal/log.hxx>
 #include <swabstdlg.hxx>
 #include <vector>
 #include <section.hxx>

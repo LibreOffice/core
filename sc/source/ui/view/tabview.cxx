@@ -23,7 +23,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <sal/log.hxx>
 #include <tools/svborder.hxx>
 
 #include <pagedata.hxx>

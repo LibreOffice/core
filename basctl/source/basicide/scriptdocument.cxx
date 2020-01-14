@@ -66,7 +66,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/uri.hxx>
 #include <set>

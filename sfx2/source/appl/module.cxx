@@ -30,7 +30,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #define ShellClass_SfxModule
 #include <sfxslots.hxx>

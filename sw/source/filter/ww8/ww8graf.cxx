@@ -21,7 +21,6 @@
 #include <svl/urihelper.hxx>
 #include <hintids.hxx>
 #include <osl/endian.h>
-#include <sal/log.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>

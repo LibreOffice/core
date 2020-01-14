@@ -47,7 +47,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 #include <algorithm>
 #include <map>
 

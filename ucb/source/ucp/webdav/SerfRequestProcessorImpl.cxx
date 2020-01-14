@@ -18,7 +18,6 @@
  */
 
 #include "SerfRequestProcessorImpl.hxx"
-#include <sal/log.hxx>
 
 namespace
 {

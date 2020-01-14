@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
-#include <sal/log.hxx>
 
 #include "eqnolefilehdr.hxx"
 #include <node.hxx>

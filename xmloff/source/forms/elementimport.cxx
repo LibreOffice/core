@@ -46,7 +46,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>

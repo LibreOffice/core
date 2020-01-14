@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/log.hxx>
 #include <comphelper/base64.hxx>
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/recentdocsviewitem.hxx>

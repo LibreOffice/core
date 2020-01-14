@@ -31,7 +31,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 
 #include <editeng/unonames.hxx>
 

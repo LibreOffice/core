@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <tools/diagnose_ex.h>

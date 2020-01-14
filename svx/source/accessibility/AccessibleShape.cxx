@@ -36,7 +36,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <editeng/outlobj.hxx>
 #include <rtl/ref.hxx>
-#include <sal/log.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/ChildrenManager.hxx>

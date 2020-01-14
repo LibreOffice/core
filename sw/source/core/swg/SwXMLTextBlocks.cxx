@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sot/exchange.hxx>
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>

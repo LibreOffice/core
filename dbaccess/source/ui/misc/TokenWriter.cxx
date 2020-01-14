@@ -23,7 +23,6 @@
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
-#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <RtfReader.hxx>
 #include <HtmlReader.hxx>

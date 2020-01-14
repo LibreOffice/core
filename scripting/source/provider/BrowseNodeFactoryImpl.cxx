@@ -36,7 +36,6 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include "BrowseNodeFactoryImpl.hxx"
 #include "MasterScriptProvider.hxx"

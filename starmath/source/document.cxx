@@ -24,7 +24,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <unotools/eventcfg.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/app.hxx>

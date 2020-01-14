@@ -29,7 +29,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdocapt.hxx>
-#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>

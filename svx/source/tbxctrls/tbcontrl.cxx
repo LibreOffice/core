@@ -114,7 +114,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <bitmaps.hlst>
-#include <sal/log.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <boost/property_tree/ptree.hpp>
 

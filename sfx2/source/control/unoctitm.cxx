@@ -70,7 +70,6 @@
 #include <map>
 #include <memory>
 
-#include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 

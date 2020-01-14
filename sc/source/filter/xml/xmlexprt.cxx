@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"

@@ -19,7 +19,6 @@
 
 #include <iostream>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"

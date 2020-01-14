@@ -51,7 +51,6 @@
 #include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/instance.hxx>
-#include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>

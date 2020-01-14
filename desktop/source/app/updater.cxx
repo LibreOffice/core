@@ -30,7 +30,6 @@
 #include <unotools/configmgr.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
-#include <sal/log.hxx>
 
 #include <curl/curl.h>
 

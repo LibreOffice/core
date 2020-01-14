@@ -21,7 +21,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <sal/log.hxx>
 
 namespace {
 

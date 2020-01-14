@@ -43,7 +43,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 #include <osl/conditn.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>

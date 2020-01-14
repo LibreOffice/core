@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>

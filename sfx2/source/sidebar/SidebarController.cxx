@@ -50,7 +50,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/lok.hxx>
-#include <sal/log.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/ptree.hpp>

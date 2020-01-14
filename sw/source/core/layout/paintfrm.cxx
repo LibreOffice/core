@@ -101,7 +101,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/utils/b2dclipstate.hxx>
-#include <sal/log.hxx>
 
 #include <memory>
 #include <vector>

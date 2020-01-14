@@ -24,7 +24,6 @@
 #include <algorithm>
 
 #include <rtl/math.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>

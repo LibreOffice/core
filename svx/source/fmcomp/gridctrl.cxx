@@ -18,7 +18,6 @@
  */
 
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <helpids.h>
 #include <svx/gridctrl.hxx>
 #include <gridcell.hxx>

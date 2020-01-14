@@ -21,7 +21,6 @@
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <svl/cryptosign.hxx>
 #include <tools/zcodec.hxx>

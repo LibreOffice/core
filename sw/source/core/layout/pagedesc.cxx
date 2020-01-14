@@ -24,7 +24,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <sal/log.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
 #include <pagefrm.hxx>

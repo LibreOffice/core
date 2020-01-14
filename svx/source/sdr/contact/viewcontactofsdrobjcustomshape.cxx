@@ -30,7 +30,6 @@
 #include <svx/obj3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <vcl/canvastools.hxx>
-#include <sal/log.hxx>
 
 
 namespace sdr

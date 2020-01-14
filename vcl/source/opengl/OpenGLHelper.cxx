@@ -15,7 +15,6 @@
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <config_folders.h>
 #include <memory>

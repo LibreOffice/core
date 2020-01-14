@@ -34,7 +34,6 @@
 #include "ShapeController.hxx"
 
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>

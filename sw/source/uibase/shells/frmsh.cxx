@@ -37,7 +37,6 @@
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <sal/log.hxx>
 
 #include <doc.hxx>
 #include <drawdoc.hxx>

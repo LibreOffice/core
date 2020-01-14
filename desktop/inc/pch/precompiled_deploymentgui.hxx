@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:32 using:
+ Generated on 2020-01-16 21:08:30 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <initializer_list>
 #include <iomanip>
 #include <limits.h>
@@ -32,12 +31,9 @@
 #include <memory>
 #include <new>
 #include <ostream>
-#include <sstream>
 #include <stddef.h>
-#include <string>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
@@ -50,15 +46,11 @@
 #include <rtl/alloc.h>
 #include <rtl/locale.h>
 #include <rtl/ref.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
-#include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/dllapi.h>
@@ -92,6 +84,7 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/thread.hxx>
 #include <svtools/controldims.hxx>

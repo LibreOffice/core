@@ -38,7 +38,6 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <sbunoobj.hxx>

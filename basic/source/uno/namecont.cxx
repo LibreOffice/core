@@ -33,7 +33,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>

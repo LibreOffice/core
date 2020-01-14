@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 

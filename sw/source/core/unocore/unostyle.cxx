@@ -93,7 +93,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include <sal/log.hxx>
 
 #include <svl/stylepool.hxx>
 #include <svx/unobrushitemhelper.hxx>

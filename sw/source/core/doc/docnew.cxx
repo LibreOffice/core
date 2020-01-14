@@ -30,7 +30,6 @@
 #include <comphelper/random.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
-#include <sal/log.hxx>
 
 #include <sfx2/linkmgr.hxx>
 #include <editeng/ulspitem.hxx>

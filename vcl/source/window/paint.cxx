@@ -26,7 +26,6 @@
 #include <vcl/syswin.hxx>
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 
 #include <window.h>
 #include <salgdi.hxx>

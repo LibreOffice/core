@@ -90,7 +90,6 @@
 #include <svx/svdpage.hxx>
 #include <rtl/ref.hxx>
 #include <bitmaps.hlst>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

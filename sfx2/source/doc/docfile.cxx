@@ -80,7 +80,6 @@
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx>
-#include <sal/log.hxx>
 
 #include <unotools/streamwrap.hxx>
 

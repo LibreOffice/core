@@ -49,7 +49,6 @@
 #include <svl/intitem.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/searchopt.hxx>
-#include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>

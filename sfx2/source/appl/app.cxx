@@ -18,7 +18,6 @@
  */
 
 #include <config_feature_desktop.h>
-#include <sal/log.hxx>
 #include <osl/module.hxx>
 #include <tools/debug.hxx>
 

@@ -37,7 +37,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
-#include <sal/log.hxx>
 
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>

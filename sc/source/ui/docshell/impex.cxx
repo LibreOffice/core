@@ -22,7 +22,6 @@
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/module.hxx>
 

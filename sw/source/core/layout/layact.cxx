@@ -41,7 +41,6 @@
 #include <ftnidx.hxx>
 #include <editeng/opaqitem.hxx>
 #include <SwSmartTagMgr.hxx>
-#include <sal/log.hxx>
 
 #include <layact.hxx>
 #include <swwait.hxx>

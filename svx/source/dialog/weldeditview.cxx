@@ -34,7 +34,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/diagnose.h>
 #include <svl/itemset.hxx>
-#include <sal/log.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/weldeditview.hxx>
 #include <tools/diagnose_ex.h>

@@ -12,7 +12,6 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
-#include <sal/log.hxx>
 
 namespace sw {
 

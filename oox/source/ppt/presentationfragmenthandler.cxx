@@ -21,7 +21,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>
 

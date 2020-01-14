@@ -42,7 +42,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include <sal/log.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 #include <svl/stritem.hxx>

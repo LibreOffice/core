@@ -18,7 +18,6 @@
  */
 
 #include <editeng/formatbreakitem.hxx>
-#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <doc.hxx>
 #include <IDocumentStatistics.hxx>

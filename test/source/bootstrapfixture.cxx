@@ -12,7 +12,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <test/setupvcl.hxx>
 #include <vcl/errinf.hxx>
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

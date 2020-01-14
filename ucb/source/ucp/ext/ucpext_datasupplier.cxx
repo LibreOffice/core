@@ -31,7 +31,6 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 
 #include <memory>
 #include <vector>

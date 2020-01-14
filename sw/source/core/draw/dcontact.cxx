@@ -65,7 +65,6 @@
 #include <calbck.hxx>
 #include <algorithm>
 #include <txtfly.hxx>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

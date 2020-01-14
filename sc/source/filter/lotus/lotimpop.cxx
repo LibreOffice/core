@@ -20,7 +20,6 @@
 #include "lotfilter.hxx"
 #include <lotimpop.hxx>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 
 #include <document.hxx>
 #include <formulacell.hxx>

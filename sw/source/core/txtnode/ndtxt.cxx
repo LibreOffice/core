@@ -26,7 +26,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/rsiditem.hxx>
-#include <sal/log.hxx>
 #include <anchoredobject.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>

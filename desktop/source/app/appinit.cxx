@@ -43,7 +43,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/instance.hxx>

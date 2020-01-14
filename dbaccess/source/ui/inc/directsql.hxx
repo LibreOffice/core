@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <deque>

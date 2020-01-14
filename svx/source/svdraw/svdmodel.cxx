@@ -22,7 +22,6 @@
 #include <math.h>
 #include <osl/endian.h>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

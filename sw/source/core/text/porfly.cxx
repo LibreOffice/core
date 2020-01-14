@@ -27,7 +27,6 @@
 #include <viewsh.hxx>
 #include <textboxhelper.hxx>
 
-#include <sal/log.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtornt.hxx>

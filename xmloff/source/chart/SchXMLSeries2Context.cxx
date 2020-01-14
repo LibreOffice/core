@@ -45,7 +45,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <sal/log.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

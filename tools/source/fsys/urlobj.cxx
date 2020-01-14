@@ -32,7 +32,6 @@
 #include <rtl/string.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 
 #include <algorithm>

@@ -23,7 +23,6 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/ipclient.hxx>
-#include <sal/log.hxx>
 #include <drawdoc.hxx>
 #include <swwait.hxx>
 #include <crsrsh.hxx>

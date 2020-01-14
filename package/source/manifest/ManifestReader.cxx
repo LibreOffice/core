@@ -19,7 +19,6 @@
 
 #include "ManifestReader.hxx"
 #include "ManifestImport.hxx"
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

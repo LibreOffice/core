@@ -19,7 +19,6 @@
 
 
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <fmobj.hxx>
 #include <fmpgeimp.hxx>
 #include <svx/fmtools.hxx>

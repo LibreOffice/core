@@ -40,7 +40,6 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <scmod.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/lok.hxx>

@@ -86,7 +86,6 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 
 #include <desktop/exithelper.h>
-#include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/fileurl.hxx>

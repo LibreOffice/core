@@ -81,7 +81,6 @@
 #include "filtergrouping.hxx"
 #include "filedlgimpl.hxx"
 #include <sfx2/strings.hrc>
-#include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 

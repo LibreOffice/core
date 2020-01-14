@@ -40,7 +40,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <sal/macros.h>
-#include <sal/log.hxx>
 
 #include <algorithm>
 

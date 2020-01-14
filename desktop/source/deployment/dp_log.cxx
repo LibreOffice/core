@@ -21,7 +21,6 @@
 #include <dp_misc.h>
 #include <dp_services.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <osl/time.h>
 #include <osl/thread.h>
 #include <cppuhelper/compbase.hxx>

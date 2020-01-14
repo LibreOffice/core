@@ -38,7 +38,6 @@
 #include <iodetect.hxx>
 #include <osl/module.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 using namespace utl;

@@ -32,7 +32,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <toolkit/helper/property.hxx>

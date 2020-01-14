@@ -24,7 +24,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <canvas/spriteredrawmanager.hxx>
 #include <boost/range/adaptor/reversed.hpp>

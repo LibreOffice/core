@@ -39,7 +39,6 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #ifdef _WIN32

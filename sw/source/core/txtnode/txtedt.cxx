@@ -30,7 +30,6 @@
 #include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <sal/log.hxx>
 #include <swmodule.hxx>
 #include <splargs.hxx>
 #include <viewopt.hxx>

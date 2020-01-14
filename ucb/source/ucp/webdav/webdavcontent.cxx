@@ -21,7 +21,6 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uri.hxx>
-#include <sal/log.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/propertyvalueset.hxx>

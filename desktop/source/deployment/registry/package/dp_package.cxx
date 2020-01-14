@@ -28,7 +28,6 @@
 #include <dp_descriptioninfoset.hxx>
 #include <dp_identifier.hxx>
 #include <rtl/uri.hxx>
-#include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

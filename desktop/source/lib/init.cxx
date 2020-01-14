@@ -38,7 +38,6 @@
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include <sal/log.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>

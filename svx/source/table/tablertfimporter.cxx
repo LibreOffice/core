@@ -40,7 +40,6 @@
 #include <editeng/editdata.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/svxrtf.hxx>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;

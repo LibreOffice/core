@@ -119,7 +119,6 @@
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 #include <cassert>

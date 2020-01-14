@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/dispatch.hxx>
-#include <sal/log.hxx>
 
 #include <uiitems.hxx>
 #include <reffact.hxx>

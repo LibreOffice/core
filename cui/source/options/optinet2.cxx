@@ -39,7 +39,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

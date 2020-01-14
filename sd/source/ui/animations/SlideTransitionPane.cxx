@@ -34,7 +34,6 @@
 #include <EventMultiplexer.hxx>
 
 #include <comphelper/lok.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
 #include <vcl/stdtext.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <sot/formats.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svditer.hxx>

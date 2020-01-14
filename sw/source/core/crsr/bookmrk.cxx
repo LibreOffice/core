@@ -33,7 +33,6 @@
 #include <libxml/xmlwriter.h>
 #include <comphelper/random.hxx>
 #include <comphelper/anytostring.hxx>
-#include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 #include <edtwin.hxx>
 #include <DateFormFieldButton.hxx>

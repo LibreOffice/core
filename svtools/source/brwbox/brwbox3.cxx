@@ -21,7 +21,6 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 #include "brwimpl.hxx"

@@ -48,7 +48,6 @@
 #include <iosys.hxx>
 #include <sbunoobj.hxx>
 #include <propacc.hxx>
-#include <sal/log.hxx>
 #include <eventatt.hxx>
 
 #include <comphelper/processfactory.hxx>

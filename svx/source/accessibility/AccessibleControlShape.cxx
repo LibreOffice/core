@@ -48,7 +48,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/strings.hrc>
 #include <vcl/svapp.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <algorithm>

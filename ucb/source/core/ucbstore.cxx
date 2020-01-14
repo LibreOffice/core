@@ -26,7 +26,6 @@
 
 #include <memory>
 #include <unordered_map>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>

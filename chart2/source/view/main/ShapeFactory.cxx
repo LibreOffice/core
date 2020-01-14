@@ -54,7 +54,6 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 

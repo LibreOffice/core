@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include "xmlbas_import.hxx"
-#include <sal/log.hxx>
 #include <xmlscript/xmlns.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>

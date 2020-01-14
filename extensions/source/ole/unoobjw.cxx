@@ -58,7 +58,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

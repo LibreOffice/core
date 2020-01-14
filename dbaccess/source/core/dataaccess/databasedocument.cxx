@@ -82,7 +82,6 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/errcode.hxx>
-#include <sal/log.hxx>
 
 #include <list>
 

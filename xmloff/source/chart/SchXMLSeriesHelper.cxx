@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

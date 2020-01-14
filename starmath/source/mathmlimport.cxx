@@ -41,7 +41,6 @@ one go*/
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <rtl/character.hxx>
-#include <sal/log.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>

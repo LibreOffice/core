@@ -25,7 +25,6 @@
 
 #include <sallayout.hxx>
 
-#include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>

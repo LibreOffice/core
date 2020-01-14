@@ -66,7 +66,6 @@
 #include <hints.hxx>
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
-#include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <sfx2/Metadatable.hxx>

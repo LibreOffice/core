@@ -21,7 +21,6 @@
 
 #include <initializer_list>
 #include <memory>
-#include <sal/log.hxx>
 
 #include <cmdid.h>
 #include <unomid.h>

@@ -11,7 +11,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <libwps/libwps.h>

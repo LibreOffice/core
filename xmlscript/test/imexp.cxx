@@ -23,7 +23,6 @@
 #include <osl/file.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>

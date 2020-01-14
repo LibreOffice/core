@@ -30,7 +30,6 @@
 #include <osl/thread.hxx>
 #include <chrono>
 #include <rtl/character.hxx>
-#include <sal/log.hxx>
 
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resCompactStylesheet,

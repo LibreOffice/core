@@ -67,7 +67,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/event.hxx>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;

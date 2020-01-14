@@ -25,7 +25,6 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/printer.hxx>
-#include <sal/log.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/scriptspaceitem.hxx>

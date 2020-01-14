@@ -47,7 +47,6 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textcvt.h>
-#include <sal/log.hxx>
 
 #include <uri_internal.hxx>
 

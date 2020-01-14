@@ -18,7 +18,6 @@
  */
 
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>

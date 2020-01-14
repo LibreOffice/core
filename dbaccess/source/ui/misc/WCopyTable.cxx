@@ -54,7 +54,6 @@
 #include <connectivity/dbexception.hxx>
 
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

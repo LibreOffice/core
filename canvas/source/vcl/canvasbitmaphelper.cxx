@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>

@@ -35,7 +35,6 @@
 #include <ColorChanger.hxx>
 #include <RptObject.hxx>
 #include <EndMarker.hxx>
-#include <sal/log.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>

@@ -34,7 +34,6 @@
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <svl/languageoptions.hxx>
 #include <svtools/langhelp.hxx>

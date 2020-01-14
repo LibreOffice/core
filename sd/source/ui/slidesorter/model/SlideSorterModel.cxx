@@ -20,7 +20,6 @@
 #include <model/SlideSorterModel.hxx>
 
 #include <SlideSorter.hxx>
-#include <sal/log.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <controller/SlideSorterController.hxx>

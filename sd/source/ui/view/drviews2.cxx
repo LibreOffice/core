@@ -48,7 +48,6 @@
 #include <editeng/CustomPropertyField.hxx>
 #include <editeng/urlfieldhelper.hxx>
 
-#include <sal/log.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

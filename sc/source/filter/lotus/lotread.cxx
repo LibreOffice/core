@@ -28,7 +28,6 @@
 #include <lotattr.hxx>
 #include <fprogressbar.hxx>
 
-#include <sal/log.hxx>
 
 ErrCode ImportLotus::parse()
 {

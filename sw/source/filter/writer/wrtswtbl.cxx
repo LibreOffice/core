@@ -23,7 +23,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <tools/fract.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <wrtswtbl.hxx>
 #include <swtable.hxx>

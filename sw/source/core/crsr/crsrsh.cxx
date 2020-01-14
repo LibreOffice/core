@@ -64,7 +64,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/frmdir.hxx>
-#include <sal/log.hxx>
 #include <PostItMgr.hxx>
 #include <DocumentSettingManager.hxx>
 #include <vcl/uitest/logger.hxx>

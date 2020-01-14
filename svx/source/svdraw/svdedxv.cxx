@@ -50,7 +50,6 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/outliner.hxx>
-#include <sal/log.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svtools/colorcfg.hxx>

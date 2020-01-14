@@ -54,7 +54,6 @@
 
 #include <rtl/instance.hxx>
 #include <rtl/random.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <PackageConstants.hxx>

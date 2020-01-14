@@ -27,7 +27,6 @@
 
 #include <osl/file.hxx>
 #include <tools/config.hxx>
-#include <sal/log.hxx>
 
 namespace {
 

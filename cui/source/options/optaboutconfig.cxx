@@ -22,7 +22,6 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 #include <vcl/event.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <memory>

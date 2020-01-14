@@ -36,7 +36,6 @@
 #include <excform.hxx>
 #include <scmatrix.hxx>
 #include <documentimport.hxx>
-#include <sal/log.hxx>
 
 // Excel->Calc cell address/range conversion ==================================
 

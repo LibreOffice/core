@@ -26,7 +26,6 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>

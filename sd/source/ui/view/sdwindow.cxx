@@ -41,7 +41,6 @@
 #include <ViewShellBase.hxx>
 #include <uiobject.hxx>
 
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/utils/canvastools.hxx>

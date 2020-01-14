@@ -24,7 +24,6 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <sal/log.hxx>
 
 #include <basic/sbx.hxx>
 #include <sbunoobj.hxx>

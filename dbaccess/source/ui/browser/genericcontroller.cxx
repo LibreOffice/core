@@ -55,7 +55,6 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <o3tl/functional.hxx>
 #include <limits>
 #include <unordered_map>

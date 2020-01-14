@@ -38,7 +38,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <strings.hxx>
-#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

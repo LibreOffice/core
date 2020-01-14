@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
 #include <basic/sbx.hxx>

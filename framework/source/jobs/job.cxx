@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 

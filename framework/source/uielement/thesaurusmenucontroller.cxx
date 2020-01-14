@@ -25,7 +25,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 

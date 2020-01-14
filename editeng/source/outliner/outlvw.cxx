@@ -43,7 +43,6 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 

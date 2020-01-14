@@ -22,7 +22,6 @@
 #include <xmlscript/xmlns.h>
 
 #include <o3tl/any.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/CharSet.hpp>

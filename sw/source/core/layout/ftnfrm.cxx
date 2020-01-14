@@ -36,7 +36,6 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
 
 #define ENDNOTE 0x80000000

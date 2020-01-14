@@ -23,7 +23,6 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

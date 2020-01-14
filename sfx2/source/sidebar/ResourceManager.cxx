@@ -32,7 +32,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>

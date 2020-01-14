@@ -30,7 +30,6 @@
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <sal/log.hxx>
 
 #include <basic/sberrors.hxx>
 #include <basic/sbuno.hxx>

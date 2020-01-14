@@ -28,7 +28,6 @@
 #include <document.hxx>
 
 #include <comphelper/string.hxx>
-#include <sal/log.hxx>
 #include <memory>
 
 static const char*      GetAddInName( const sal_uInt8 nIndex );

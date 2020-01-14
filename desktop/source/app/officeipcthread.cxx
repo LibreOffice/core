@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <osl/process.h>
-#include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>

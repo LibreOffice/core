@@ -18,7 +18,6 @@
  */
 
 #include "resultset.hxx"
-#include <sal/log.hxx>
 #include <stringconstants.hxx>
 #include <apitools.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

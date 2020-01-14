@@ -46,7 +46,6 @@
 #include <editeng/brushitem.hxx>
 #include <svl/itempool.hxx>
 #include <libxml/xmlwriter.h>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>

@@ -19,7 +19,6 @@
 
 #include <java/sql/Driver.hxx>
 #include <java/sql/Connection.hxx>
-#include <sal/log.hxx>
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>
 #include <strings.hrc>

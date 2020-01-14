@@ -27,7 +27,6 @@
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/util/Color.hpp>
 
-#include <sal/log.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

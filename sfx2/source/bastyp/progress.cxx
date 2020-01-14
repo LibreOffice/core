@@ -24,7 +24,6 @@
 
 #include <svl/eitem.hxx>
 #include <tools/debug.hxx>
-#include <sal/log.hxx>
 
 #include <appdata.hxx>
 #include <sfx2/bindings.hxx>

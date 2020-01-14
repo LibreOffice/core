@@ -41,7 +41,6 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <oox/token/tokens.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::oox::core;

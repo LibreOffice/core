@@ -27,7 +27,6 @@
 #include "RowSetCache.hxx"
 #include "StaticSet.hxx"
 #include "WrappedResultSet.hxx"
-#include <sal/log.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>

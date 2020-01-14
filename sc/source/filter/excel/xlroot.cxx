@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <xlroot.hxx>
-#include <sal/log.hxx>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

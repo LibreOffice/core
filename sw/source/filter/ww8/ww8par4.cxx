@@ -32,7 +32,6 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include "sprmids.hxx"
 #include <svx/unoapi.hxx>
-#include <sal/log.hxx>
 
 #include <sot/exchange.hxx>
 #include <fmtanchr.hxx>

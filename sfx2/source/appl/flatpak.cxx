@@ -18,7 +18,6 @@
 #include <rtl/textcvt.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sfx2/flatpak.hxx>
 #include <tools/debug.hxx>
 #include <unotools/tempfile.hxx>

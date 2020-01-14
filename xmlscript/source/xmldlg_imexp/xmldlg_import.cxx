@@ -37,7 +37,6 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/time.hxx>

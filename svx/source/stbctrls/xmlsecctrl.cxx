@@ -40,7 +40,6 @@
 #include <svx/xmlsecctrl.hxx>
 #include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
-#include <sal/log.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

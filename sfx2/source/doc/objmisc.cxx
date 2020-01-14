@@ -26,7 +26,6 @@
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>

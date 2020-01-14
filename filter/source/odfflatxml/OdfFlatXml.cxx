@@ -13,7 +13,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 

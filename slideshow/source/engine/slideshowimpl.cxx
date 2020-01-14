@@ -35,7 +35,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/utils/canvastools.hxx>
 
-#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>

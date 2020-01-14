@@ -22,7 +22,6 @@
 #include <vcl/button.hxx>
 #include <vcl/stdtext.hxx>
 #include <helper/btndlg.hxx>
-#include <sal/log.hxx>
 
 
 struct ImplBtnDlgItem

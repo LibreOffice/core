@@ -41,7 +41,6 @@
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
 #include <calbck.hxx>
-#include <sal/log.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

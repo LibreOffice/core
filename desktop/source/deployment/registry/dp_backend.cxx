@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/unwrapargs.hxx>

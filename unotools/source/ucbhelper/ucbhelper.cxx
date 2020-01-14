@@ -45,7 +45,6 @@
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>

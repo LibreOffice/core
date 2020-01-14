@@ -90,7 +90,6 @@
 #include <unoparagraph.hxx>
 #include <poolfmt.hxx>
 #include <paratr.hxx>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -52,7 +52,6 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/itemtype.hxx>

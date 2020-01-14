@@ -63,7 +63,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <sal/log.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>

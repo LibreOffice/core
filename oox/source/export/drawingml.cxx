@@ -21,7 +21,6 @@
 
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <editeng/rsiditem.hxx>
-#include <sal/log.hxx>
 #include <txatbase.hxx>
 #include <ndhints.hxx>
 #include <txtatr.hxx>

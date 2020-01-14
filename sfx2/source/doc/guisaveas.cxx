@@ -48,7 +48,6 @@
 
 #include <guisaveas.hxx>
 
-#include <sal/log.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>

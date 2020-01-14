@@ -23,7 +23,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <editeng/measfld.hxx>
-#include <sal/log.hxx>
 #include <fmtanchr.hxx>
 #include <charatr.hxx>
 #include <frmfmt.hxx>

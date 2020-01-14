@@ -35,7 +35,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svlbitm.hxx>

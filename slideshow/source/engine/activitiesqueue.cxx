@@ -20,7 +20,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 
 #include <slideshowexceptions.hxx>
 #include <activity.hxx>

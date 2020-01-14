@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
-#include <sal/log.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

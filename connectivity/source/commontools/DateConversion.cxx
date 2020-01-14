@@ -32,7 +32,6 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 

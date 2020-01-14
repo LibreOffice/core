@@ -33,7 +33,6 @@
 #include <fmpgeimp.hxx>
 #include <fmobj.hxx>
 #include <fmprop.hxx>
-#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>

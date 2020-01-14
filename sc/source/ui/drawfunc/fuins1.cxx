@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <sal/log.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>

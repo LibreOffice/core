@@ -15,7 +15,6 @@
 
 #include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 
 #include <orcus/xml_structure_tree.hpp>

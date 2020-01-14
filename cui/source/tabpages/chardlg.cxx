@@ -58,7 +58,6 @@
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <FontFeaturesDialog.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

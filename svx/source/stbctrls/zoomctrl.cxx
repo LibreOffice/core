@@ -27,7 +27,6 @@
 #include <vcl/settings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
-#include <sal/log.hxx>
 
 #include <svx/strings.hrc>
 

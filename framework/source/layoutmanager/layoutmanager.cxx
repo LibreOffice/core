@@ -62,7 +62,6 @@
 #include <unotools/compatibilityviewoptions.hxx>
 
 #include <rtl/ref.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 

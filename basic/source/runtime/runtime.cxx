@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <sal/log.hxx>
 
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>

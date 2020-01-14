@@ -28,7 +28,6 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
-#include <sal/log.hxx>
 
 #include <unotools/charclass.hxx>
 #include <tools/diagnose_ex.h>

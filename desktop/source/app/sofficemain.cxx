@@ -34,7 +34,6 @@
 #include <desktop/exithelper.h>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/glxtestprocess.hxx>

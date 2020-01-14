@@ -54,7 +54,6 @@
 #include <unotools/docinfohelper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
-#include <sal/log.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif

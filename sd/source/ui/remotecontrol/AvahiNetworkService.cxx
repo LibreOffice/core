@@ -26,7 +26,6 @@
 #include <dbus/dbus.h>
 #endif
 
-#include <sal/log.hxx>
 
 #include "AvahiNetworkService.hxx"
 #include "ZeroconfService.hxx"

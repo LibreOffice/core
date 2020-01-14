@@ -83,7 +83,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "gluepts.hxx"
 #include "shapeimpl.hxx"
-#include <sal/log.hxx>
 
 #include <svx/lathe3d.hxx>
 #include <svx/extrud3d.hxx>

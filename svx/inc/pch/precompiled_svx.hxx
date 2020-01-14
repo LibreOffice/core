@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-04 09:33:31 using:
+ Generated on 2020-01-16 21:10:04 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -61,8 +61,11 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
@@ -97,7 +100,6 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
@@ -107,7 +109,6 @@
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
@@ -213,6 +214,7 @@
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -300,6 +302,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -314,6 +318,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -324,6 +329,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/weldutils.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -351,6 +357,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolbarmenu.hxx>

@@ -38,7 +38,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svtools/ehdl.hxx>
 

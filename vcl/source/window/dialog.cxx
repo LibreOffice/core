@@ -38,7 +38,6 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 
 #include <vcl/abstdlg.hxx>
 #include <vcl/builder.hxx>

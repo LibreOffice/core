@@ -24,7 +24,6 @@
 #include "SchXMLTools.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

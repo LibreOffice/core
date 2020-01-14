@@ -22,7 +22,6 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
-#include <sal/log.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>

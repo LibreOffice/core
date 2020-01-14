@@ -1,7 +1,6 @@
 #include <string>
 #include <iostream>
 #include "WINNetworkService.hxx"
-#include <sal/log.hxx>
 
 void sd::WINNetworkService::setup()
 {

@@ -26,7 +26,6 @@
 #include <pdfiprocessor.hxx>
 
 #include <osl/file.h>
-#include <sal/log.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

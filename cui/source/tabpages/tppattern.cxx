@@ -35,7 +35,6 @@
 #include <cuitabarea.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

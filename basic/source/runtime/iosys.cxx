@@ -26,7 +26,6 @@
 #include <runtime.hxx>
 
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

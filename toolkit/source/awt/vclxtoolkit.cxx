@@ -52,7 +52,6 @@
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
-#include <sal/log.hxx>
 #include <tools/link.hxx>
 #include <tools/wintypes.hxx>
 

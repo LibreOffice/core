@@ -21,7 +21,6 @@
 #include <limits.h>
 #include <com/sun/star/uno/Any.h>
 #include <osl/mutex.hxx>
-#include <sal/log.hxx>
 
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>

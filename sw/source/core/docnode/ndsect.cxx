@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/itemiter.hxx>
-#include <sal/log.hxx>
 #include <fmtcntnt.hxx>
 #include <txtftn.hxx>
 #include <doc.hxx>

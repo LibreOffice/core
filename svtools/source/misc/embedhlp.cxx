@@ -24,7 +24,6 @@
 #include <vcl/outdev.hxx>
 #include <bitmaps.hlst>
 
-#include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

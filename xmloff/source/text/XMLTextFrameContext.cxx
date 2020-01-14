@@ -18,7 +18,6 @@
  */
 
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/base64.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

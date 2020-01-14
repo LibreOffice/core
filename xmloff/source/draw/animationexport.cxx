@@ -53,7 +53,6 @@
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 

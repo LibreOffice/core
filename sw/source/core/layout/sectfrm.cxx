@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <svl/itemiter.hxx>

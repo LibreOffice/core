@@ -41,7 +41,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::beans;
