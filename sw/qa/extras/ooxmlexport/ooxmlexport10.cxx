@@ -364,7 +364,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73389,"fdo73389.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // This was 9340, i.e. the width of the inner table was too large.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2843), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
