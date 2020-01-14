@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAbH///oo\u003d",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-14T13:00:26Z",
+      "side": 1,
+      "message": "I mean, in the example case at hand, change in sax/source/expatwrap/expwrap.component, sax/source/expatwrap/sax_expat.cxx, and sax/source/expatwrap/saxwriter.cxx change the three affected implementation names to values that are already valid C identifiers, so the \".replace(\u0027,\u0027, \u0027_\u0027)\" part can go",
+      "parentUuid": "AAAAbH///pE\u003d",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAbH///qk\u003d",
         "filename": "cppuhelper/source/shlib.cxx",
         "patchSetId": 1
