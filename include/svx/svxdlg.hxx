@@ -132,12 +132,6 @@ public:
     virtual OUString      GetName() const = 0;
 };
 
-class AbstractSvxHlinkDlgMarkWnd : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractSvxHlinkDlgMarkWnd() override = default;
-};
-
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog
 {
 protected:
