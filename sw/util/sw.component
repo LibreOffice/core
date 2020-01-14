@@ -55,6 +55,10 @@
     constructor="lo_writer_PageColumnToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="lo.writer.PageMarginToolBoxControl"
+    constructor="lo_writer_PageMarginToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="SwXModule"
       constructor="SwXModule_get_implementation">
     <service name="com.sun.star.text.GlobalSettings"/>

@@ -1206,6 +1206,17 @@
           <value>lo.writer.PageColumnToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="PageMarginToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:PageMargin</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageMarginToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FindText</value>

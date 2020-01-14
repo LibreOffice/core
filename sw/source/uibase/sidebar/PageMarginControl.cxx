@@ -37,6 +37,7 @@
 
 #include <swtypes.hxx>
 #include <cmdid.h>
+#include <PageMarginPopup.hxx>
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -93,8 +94,8 @@ namespace
 
 namespace sw { namespace sidebar {
 
-PageMarginControl::PageMarginControl( sal_uInt16 nId, vcl::Window* pParent )
-    : SfxPopupWindow( nId, pParent, "PageMarginControl", "modules/swriter/ui/pagemargincontrol.ui" )
+PageMarginControl::PageMarginControl(PageMarginPopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageMarginControl", "modules/swriter/ui/pagemargincontrol.ui")
     , m_nPageLeftMargin(0)
     , m_nPageRightMargin(0)
     , m_nPageTopMargin(0)
@@ -255,7 +256,7 @@ void PageMarginControl::dispose()
     m_pWidthHeightField.disposeAndClear();
     m_pContainer.disposeAndClear();
 
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void PageMarginControl::SetMetricFieldMaxValues( const Size& rPageSize )
