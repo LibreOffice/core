@@ -27,7 +27,7 @@ namespace oox {
 namespace drawingml {
 namespace table {
 
-class TableStyleListFragmentHandler : public ::oox::core::FragmentHandler2
+class TableStyleListFragmentHandler final : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            TableStyleListFragmentHandler(

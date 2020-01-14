@@ -33,7 +33,7 @@ namespace chart {
 
 struct DataSequenceModel;
 
-class DataSequenceConverter : public ConverterBase< DataSequenceModel >
+class DataSequenceConverter final : public ConverterBase< DataSequenceModel >
 {
 public:
     explicit            DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel );
@@ -47,7 +47,7 @@ public:
 
 struct DataSourceModel;
 
-class DataSourceConverter : public ConverterBase< DataSourceModel >
+class DataSourceConverter final : public ConverterBase< DataSourceModel >
 {
 public:
     explicit            DataSourceConverter( const ConverterRoot& rParent, DataSourceModel& rModel );

@@ -29,7 +29,7 @@ namespace oox { namespace drawingml {
 
 
 // CT_CustomGeometry2D
-class CustomShapeGeometryContext : public ::oox::core::ContextHandler2
+class CustomShapeGeometryContext final : public ::oox::core::ContextHandler2
 {
 public:
     CustomShapeGeometryContext( ::oox::core::ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties );
@@ -41,7 +41,7 @@ private:
 
 
 // CT_PresetGeometry2D
-class PresetShapeGeometryContext : public ::oox::core::ContextHandler2
+class PresetShapeGeometryContext final : public ::oox::core::ContextHandler2
 {
 public:
     PresetShapeGeometryContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
@@ -53,7 +53,7 @@ private:
 
 
 // CT_PresetTextShape
-class PresetTextShapeContext : public ::oox::core::ContextHandler2
+class PresetTextShapeContext final : public ::oox::core::ContextHandler2
 {
 public:
     PresetTextShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );

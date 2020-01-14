@@ -26,7 +26,7 @@ namespace oox { namespace drawingml {
 
 class TextField;
 
-class TextFieldContext
+class TextFieldContext final
     : public ::oox::core::ContextHandler2
 {
 public:

@@ -29,7 +29,7 @@ namespace drawingml {
 
 
 /** Context handler that imports the a:solidFill element. */
-class SolidFillContext : public ColorContext
+class SolidFillContext final : public ColorContext
 {
 public:
     explicit            SolidFillContext(
@@ -39,7 +39,7 @@ public:
 
 
 /** Context handler that imports the a:gradFill element. */
-class GradientFillContext : public ::oox::core::ContextHandler2
+class GradientFillContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            GradientFillContext(
@@ -57,7 +57,7 @@ private:
 };
 
 /** Context handler that imports the a:pattFill element. */
-class PatternFillContext : public ::oox::core::ContextHandler2
+class PatternFillContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            PatternFillContext(
@@ -77,7 +77,7 @@ private:
 
 /** Context handler that imports a14:imgProps, a14:imgLayer, a14:imgEffect containers
     and the a14:artistic* effect tags defined in the MS-ODRAWXML extension. */
-class ArtisticEffectContext : public ::oox::core::ContextHandler2
+class ArtisticEffectContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ArtisticEffectContext(
@@ -97,7 +97,7 @@ private:
 
 /** Context handler that imports the a:extLst element inside a:blip and its
     children a:ext, which can contain transformations to the bitmap. */
-class BlipExtensionContext : public ::oox::core::ContextHandler2
+class BlipExtensionContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipExtensionContext(
@@ -117,7 +117,7 @@ private:
 
 /** Context handler that imports the a:duotone element containing the colors
     of a bitmap duotone transformation. */
-class DuotoneContext : public ::oox::core::ContextHandler2
+class DuotoneContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            DuotoneContext(
@@ -138,7 +138,7 @@ private:
 
 /** Context handler that imports the a:clrChange element containing the colors
     of a bitmap color change transformation. */
-class ColorChangeContext : public ::oox::core::ContextHandler2
+class ColorChangeContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ColorChangeContext(
@@ -159,7 +159,7 @@ private:
 
 /** Context handler that imports the a:blip element containing the fill bitmap
     and bitmap color transformation settings. */
-class BlipContext : public ::oox::core::ContextHandler2
+class BlipContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipContext(
@@ -177,7 +177,7 @@ private:
 };
 
 /** Context handler that imports the a:blipFill element. */
-class BlipFillContext : public ::oox::core::ContextHandler2
+class BlipFillContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipFillContext(

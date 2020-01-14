@@ -17,7 +17,7 @@ namespace drawingml {
 
 class Theme;
 
-class ThemeOverrideFragmentHandler : public ::oox::core::FragmentHandler2
+class ThemeOverrideFragmentHandler final : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            ThemeOverrideFragmentHandler(

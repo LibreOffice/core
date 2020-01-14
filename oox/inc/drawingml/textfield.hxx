@@ -28,7 +28,7 @@ namespace oox { namespace drawingml {
 
 struct TextCharacterProperties;
 
-class TextField
+class TextField final
     : public TextRun
 {
 public:
