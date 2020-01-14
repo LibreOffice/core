@@ -1052,7 +1052,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         }
 
         // and now ... the BASIC and JavaScript!
-        if( m_pDoc->GetDocShell() )   // only with DocShell BASIC is possible
+        if( m_pDoc->GetDocShell() )   // BASIC is possible only in case we have a DocShell
             OutBasic(*this);
 
         DecIndentLevel();   // indent content of <HEAD>
@@ -1094,7 +1094,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
             OutCSS1_BodyTagStyleOpt( *this, rItemSet );
         }
         // append events
-        if( m_pDoc->GetDocShell() )   // only with DocShell BASIC is possible
+        if( m_pDoc->GetDocShell() )   // BASIC is possible only in case we have a DocShell
             OutBasicBodyEvents();
 
         Strm().WriteChar( '>' );
