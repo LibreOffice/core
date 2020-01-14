@@ -29,7 +29,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-namespace sw { namespace sidebar{
+namespace sw::sidebar{
 
 VclPtr<vcl::Window> PageHeaderPanel::Create(
     vcl::Window* pParent,
@@ -291,6 +291,6 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderLayoutHdl, weld::ComboBox&, void )
 }
 
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

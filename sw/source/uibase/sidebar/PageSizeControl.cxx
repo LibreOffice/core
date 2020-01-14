@@ -68,7 +68,7 @@ namespace
     }
 }
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagesizecontrol.ui", "PageSizeControl")
@@ -233,6 +233,6 @@ IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, weld::Button&, void)
     mxControl->EndPopupMode();
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

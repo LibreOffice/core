@@ -16,9 +16,7 @@
 #include <edtwin.hxx>
 #include <AnnotationWin.hxx>
 
-namespace sw
-{
-namespace sidebarwindows
+namespace sw::sidebarwindows
 {
 
 SidebarScrollBar::SidebarScrollBar(sw::annotation::SwAnnotationWin& rSidebarWin, WinBits nStyle, SwView& rView)
@@ -75,7 +73,6 @@ SidebarScrollBar::~SidebarScrollBar()
     disposeOnce();
 }
 
-}
 } // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

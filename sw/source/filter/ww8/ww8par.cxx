@@ -6553,9 +6553,7 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
     return m_aApos[nLvl];
 }
 
-namespace sw
-{
-    namespace hack
+namespace sw::hack
     {
         Position::Position(const SwPosition &rPos)
             : maPtNode(rPos.nNode), mnPtContent(rPos.nContent.GetIndex())
@@ -6569,7 +6567,6 @@ namespace sw
             return aRet;
         }
     }
-}
 
 SwMacroInfo::SwMacroInfo()
     : SdrObjUserData( SdrInventor::ScOrSwDraw, SW_UD_IMAPDATA )

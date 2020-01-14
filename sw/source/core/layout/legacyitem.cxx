@@ -22,9 +22,7 @@
 #include <sal/log.hxx>
 #include <fmtornt.hxx>
 
-namespace legacy
-{
-    namespace SwFormatVert
+namespace legacy::SwFormatVert
     {
         sal_uInt16 GetVersion(sal_uInt16)
         {
@@ -77,6 +75,5 @@ namespace legacy
             return rStrm;
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

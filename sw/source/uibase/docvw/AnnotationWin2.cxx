@@ -138,7 +138,7 @@ vcl::Window* lcl_getHitWindow(sw::annotation::SwAnnotationWin& rParent, const Mo
 
 }
 
-namespace sw { namespace annotation {
+namespace sw::annotation {
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
@@ -1573,6 +1573,6 @@ css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAc
     return xAcc;
 }
 
-} } // eof of namespace sw::sidebarwindows
+} // eof of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

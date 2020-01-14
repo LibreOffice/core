@@ -46,7 +46,7 @@ namespace {
     }
 }
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageOrientationControl::PageOrientationControl( sal_uInt16 nId, vcl::Window* pParent )
     : SfxPopupWindow( nId, pParent, "PageOrientationControl", "modules/swriter/ui/pageorientationcontrol.ui" )
@@ -197,6 +197,6 @@ IMPL_LINK(PageOrientationControl, ImplOrientationHdl, Button*, pControl, void)
     EndPopupMode();
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

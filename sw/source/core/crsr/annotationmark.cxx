@@ -31,7 +31,7 @@
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     AnnotationMark::AnnotationMark(
         const SwPaM& rPaM,
@@ -99,6 +99,6 @@ namespace sw { namespace mark
 
         return pAnnotationFormatField;
     }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

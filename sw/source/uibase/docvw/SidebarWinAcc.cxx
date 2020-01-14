@@ -26,7 +26,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 namespace {
 
@@ -139,6 +139,6 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessib
     return xAcc;
 }
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

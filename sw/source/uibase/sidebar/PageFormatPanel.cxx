@@ -41,7 +41,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-namespace sw { namespace sidebar{
+namespace sw::sidebar{
 
 VclPtr<vcl::Window> PageFormatPanel::Create(
     vcl::Window* pParent,
@@ -427,6 +427,6 @@ void PageFormatPanel::UpdateMarginBox()
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
