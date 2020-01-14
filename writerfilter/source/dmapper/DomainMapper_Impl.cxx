@@ -3600,7 +3600,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {"FORMCHECKBOX",    {"",                        FIELD_FORMCHECKBOX  }},
         {"FORMDROPDOWN",    {"DropDown",                FIELD_FORMDROPDOWN  }},
         {"FORMTEXT",        {"Input",                   FIELD_FORMTEXT      }},
-//      {"GOTOBUTTON",      {"",                        FIELD_GOTOBUTTON    }},
+        {"GOTOBUTTON",      {"",                        FIELD_GOTOBUTTON    }},
         {"HYPERLINK",       {"",                        FIELD_HYPERLINK     }},
         {"IF",              {"ConditionalText",         FIELD_IF            }},
 //      {"INFO",            {"",                        FIELD_INFO          }},
@@ -4550,6 +4550,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_EQ:
                 case FIELD_INCLUDEPICTURE:
                 case FIELD_SYMBOL:
+                case FIELD_GOTOBUTTON:
                         bCreateField = false;
                         break;
                 case FIELD_FORMCHECKBOX :
