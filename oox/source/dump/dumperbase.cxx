@@ -36,8 +36,7 @@
 
 #ifdef DBG_UTIL
 
-namespace oox {
-namespace dump {
+namespace oox::dump {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -2565,7 +2564,6 @@ void DumperBase::construct( const ConfigRef& rxConfig )
         ObjectBase::construct( rxConfig );
 }
 
-} // namespace dump
 } // namespace oox
 
 #endif

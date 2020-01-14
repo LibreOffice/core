@@ -54,7 +54,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::container;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, const SlidePersistPtr& pPersistPtr, const ShapeLocation eShapeLocation )
 : FragmentHandler2( rFilter, rFragmentPath )
@@ -254,6 +254,6 @@ void SlideFragmentHandler::finalizeImport()
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

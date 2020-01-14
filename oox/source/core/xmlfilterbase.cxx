@@ -77,8 +77,7 @@ using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1141,7 +1140,6 @@ void XmlFilterBase::exportCustomFragments()
     }
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

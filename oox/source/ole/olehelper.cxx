@@ -46,8 +46,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::awt::XControlModel;
@@ -570,7 +569,6 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, t
     return true;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

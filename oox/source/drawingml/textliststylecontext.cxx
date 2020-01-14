@@ -27,7 +27,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 // CT_TextListStyle
 TextListStyleContext::TextListStyleContext( ContextHandler2Helper const & rParent, TextListStyle& rTextListStyle )
@@ -73,6 +73,6 @@ ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

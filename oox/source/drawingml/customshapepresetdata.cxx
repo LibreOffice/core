@@ -704,9 +704,7 @@ void lcl_parsePath(std::vector<beans::PropertyValue>& rPath, const OString& rVal
 
 }
 
-namespace oox
-{
-namespace drawingml
+namespace oox::drawingml
 {
 
 void CustomShapeProperties::initializePresetDataMap()
@@ -836,7 +834,6 @@ void CustomShapeProperties::initializePresetDataMap()
     maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

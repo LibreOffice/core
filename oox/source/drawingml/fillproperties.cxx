@@ -55,8 +55,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::geometry::IntegerRectangle2D;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -1031,7 +1030,6 @@ sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
     return XML_none;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

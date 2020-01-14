@@ -42,7 +42,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 TextField::TextField()
 {
@@ -247,6 +247,6 @@ sal_Int32 TextField::insertAt(
     return nCharHeight;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,9 +18,7 @@
 
 using namespace com::sun::star;
 
-namespace oox
-{
-namespace shape
+namespace oox::shape
 {
 
 WpgContext::WpgContext(FragmentHandler2 const& rParent)
@@ -69,7 +67,6 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
     return nullptr;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,7 @@ using namespace ::com::sun::star::xml::sax;
 
 // CT_LineProperties
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs,
     LineProperties& rLineProperties ) throw()
@@ -134,6 +134,6 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

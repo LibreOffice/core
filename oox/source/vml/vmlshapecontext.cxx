@@ -31,8 +31,7 @@
 
 #include <osl/diagnose.h>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star;
 
@@ -604,7 +603,6 @@ ControlShapeContext::ControlShapeContext( ::oox::core::ContextHandler2Helper con
     rShapes.getDrawing().registerControl(aInfo);
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

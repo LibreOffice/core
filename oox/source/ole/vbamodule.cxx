@@ -33,8 +33,7 @@
 #include <oox/ole/vbahelper.hxx>
 #include <oox/ole/vbainputstream.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script::vba;
@@ -335,7 +334,6 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     }
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

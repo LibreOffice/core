@@ -27,8 +27,7 @@
 using namespace ::com::sun::star;
 using ::oox::core::ContextHandlerRef;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 /** context to import a CT_Transform2D */
 Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape& rShape, bool btxXfrm ) throw()
@@ -113,7 +112,6 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

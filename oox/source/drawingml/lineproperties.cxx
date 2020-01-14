@@ -40,8 +40,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -519,7 +518,6 @@ sal_Int32 LineProperties::getLineWidth() const
     return convertEmuToHmm( moLineWidth.get( 0 ) );
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

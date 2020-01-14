@@ -28,7 +28,7 @@
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableRowContext::TableRowContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, TableRow& rTableRow )
 : ContextHandler2( rParent )
@@ -60,6 +60,6 @@ TableRowContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList
     return this;
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

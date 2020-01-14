@@ -340,7 +340,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
 
 } // namespace oox
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 #define GETA(propName) \
     GetProperty( rXPropSet, #propName)
@@ -2235,6 +2235,6 @@ sal_Int32 ShapeExport::GetShapeID( const Reference< XShape >& rXShape, ShapeHash
     return aIter->second;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

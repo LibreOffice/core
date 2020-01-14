@@ -40,7 +40,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::container;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent, const AttributeList& rAttribs, PropertyMap & aProperties ) throw()
 : FragmentHandler2( rParent )
@@ -196,6 +196,6 @@ void SlideTransitionContext::onEndElement()
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -14,7 +14,7 @@
 
 using namespace com::sun::star;
 
-namespace oox { namespace shape {
+namespace oox::shape {
 
 ShapeDrawingFragmentHandler::ShapeDrawingFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, oox::drawingml::ShapePtr const & pGroupShapePtr)
     : FragmentHandler2(rFilter, rFragmentPath)
@@ -43,6 +43,6 @@ void SAL_CALL ShapeDrawingFragmentHandler::endDocument()
     return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

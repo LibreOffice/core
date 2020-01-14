@@ -20,9 +20,7 @@
 #include <drawingml/chart/seriesmodel.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 DataLabelModelBase::DataLabelModelBase(bool bMSO2007Doc) :
     mbDeleted( !bMSO2007Doc )
@@ -126,8 +124,6 @@ SeriesModel::~SeriesModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

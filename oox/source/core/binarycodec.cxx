@@ -27,8 +27,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement )
 {
@@ -39,7 +38,6 @@ sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int3
 
 
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,8 +29,7 @@
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/token/properties.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -231,7 +230,6 @@ bool ShapePropertyMap::setFillBitmapName(const Any& rValue)
     return false;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

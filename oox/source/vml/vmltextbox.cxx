@@ -31,8 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace com::sun::star;
 
@@ -200,7 +199,6 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
     }
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler2Helper const & rParent,
     const AttributeList& rAttribs, TableStylePart& rTableStylePart )
@@ -93,6 +93,6 @@ TableStyleTextStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
     return new ColorValueContext( *this, mrTableStylePart.getTextColor() );
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableCellContext::TableCellContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, TableCell& rTableCell )
 : ContextHandler2( rParent )
@@ -98,6 +98,6 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
     return this;
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
 
 #include <comphelper/hash.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 /* =========================================================================== */
 /*  Kudos to Caolan McNamara who provided the core decryption implementations. */
@@ -318,7 +317,6 @@ bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputS
     return !aBinaryStream.isEof();
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

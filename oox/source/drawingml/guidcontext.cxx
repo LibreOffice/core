@@ -23,7 +23,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 GuidContext::GuidContext( ContextHandler2Helper const & rParent, OUString& rGuidId )
 : ContextHandler2( rParent )
@@ -35,6 +35,6 @@ void GuidContext::onCharacters( const OUString& aChars )
     mrGuidId += aChars;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

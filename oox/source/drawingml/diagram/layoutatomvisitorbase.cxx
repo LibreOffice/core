@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 void LayoutAtomVisitorBase::defaultVisit(LayoutAtom const& rAtom)
 {
@@ -166,6 +166,6 @@ void ShallowPresNameVisitor::visit(ShapeAtom& /*rAtom*/)
     // stop processing
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

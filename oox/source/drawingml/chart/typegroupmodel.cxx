@@ -20,9 +20,7 @@
 #include <drawingml/chart/typegroupmodel.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 UpDownBarsModel::UpDownBarsModel() :
     mnGapWidth( 150 )
@@ -65,8 +63,6 @@ TypeGroupModel::~TypeGroupModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

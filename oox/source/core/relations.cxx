@@ -22,8 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/helper.hxx>
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 namespace {
 
@@ -149,7 +148,6 @@ OUString Relations::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& r
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-} // namespace core
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

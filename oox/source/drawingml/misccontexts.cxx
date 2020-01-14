@@ -35,8 +35,7 @@ using namespace ::com::sun::star::xml::sax;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 SolidFillContext::SolidFillContext( ContextHandler2Helper const & rParent,
         FillProperties& rFillProps ) :
@@ -379,7 +378,6 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
