@@ -291,10 +291,6 @@ void SwDLL::RegisterControls()
 
     SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );
 
-    SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
-    SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );
-    SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_REGION, pMod );
-
     SwZoomControl::RegisterControl(SID_ATTR_ZOOM, pMod );
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);
     SvxPosSizeStatusBarControl::RegisterControl(0, pMod );
