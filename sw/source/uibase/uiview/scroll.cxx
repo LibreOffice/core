@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
-#include <swrect.hxx>
 #include <scroll.hxx>
 
 #define SCROLL_LINE_SIZE 250

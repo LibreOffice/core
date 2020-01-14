@@ -21,7 +21,6 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svl/intitem.hxx>
 #include <svl/listener.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/svapp.hxx>

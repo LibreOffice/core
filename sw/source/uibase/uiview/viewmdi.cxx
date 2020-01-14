@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-
-#include <hintids.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/ruler.hxx>
@@ -31,11 +27,8 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <viewopt.hxx>
 #include <frmatr.hxx>
-#include <wdocsh.hxx>
-#include <uitool.hxx>
 #include <edtwin.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
@@ -46,15 +39,12 @@
 #include <wview.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 
-#include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 
 #include <svx/srchdlg.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svxids.hrc>
 
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

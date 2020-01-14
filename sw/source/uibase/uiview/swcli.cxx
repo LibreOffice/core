@@ -22,12 +22,9 @@
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <swtypes.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <swcli.hxx>
-#include <cmdid.h>
-#include <cfgitems.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>

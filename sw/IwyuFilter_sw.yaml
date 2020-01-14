@@ -420,8 +420,6 @@ blacklist:
     sw/qa/extras/uiwriter/uiwriter.cxx:
     # Needed for for-loop range
     - PostItMgr.hxx
-    # Needed for TypedWhichId macro
-    - editeng/rsiditem.hxx
     sw/qa/extras/unowriter/unowriter.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XDevice.hpp
@@ -477,29 +475,9 @@ blacklist:
     sw/source/core/swg/SwXMLSectionList.cxx:
     # Actually used
     - vector
-    sw/source/core/SwNumberTree/SwNodeNum.cxx:
-    # Needed for TypedWhichId macro to work
-    - svl/intitem.hxx
-    sw/source/core/text/itratr.cxx:
-    # Needed for TypedWhichId macro to work
-    - editeng/rsiditem.hxx
-    sw/source/core/text/txtfrm.cxx:
-    # Needed for TypedWhichId macro to work
-    - editeng/rsiditem.hxx
-    sw/source/core/undo/unins.cxx:
-    # Needed for TypedWhichId macro to work
-    - fchrfmt.hxx
-    - fmtautofmt.hxx
     sw/source/core/undo/unsect.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
-    sw/source/core/unocore/unoframe.cxx:
-    # Needed for TypedWhichId macro to work
-    - fmtflcnt.hxx
-    sw/source/core/unocore/unomap.cxx:
-    # Needed for TypedWhichId macro to work
-    - fmtruby.hxx
-    - fmtanchr.hxx
     sw/source/core/unocore/unomap1.cxx:
     # Needed for UnoType macro
     - com/sun/star/container/XIndexReplace.hpp
@@ -513,12 +491,6 @@ blacklist:
     - com/sun/star/text/XFootnote.hpp
     - com/sun/star/text/XTextField.hpp
     - com/sun/star/util/DateTime.hpp
-    # Needed for TypedWhichId macro to work
-    - fchrfmt.hxx
-    - fmtruby.hxx
-    - fmtinfmt.hxx
-    - fmtautofmt.hxx
-    - editeng/rsiditem.hxx
     sw/source/core/unocore/unoport.cxx:
     # Actually used
     - com/sun/star/text/XFootnote.hpp
@@ -532,16 +504,6 @@ blacklist:
     sw/source/core/unocore/unoobj.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
-    sw/source/core/unocore/unoobj2.cxx:
-    # Needed for TypedWhichId macro to work
-    - svl/intitem.hxx
-    sw/source/core/unocore/unosrch.cxx:
-    # Needed for TypedWhichId macro to work
-    - fmtinfmt.hxx
-    - fchrfmt.hxx
-    sw/source/core/unocore/unostyle.cxx:
-    # Needed for TypedWhichId macro to work
-    - fmtautofmt.hxx
     sw/source/core/unocore/unotextmarkup.cxx:
     # Actually used
     - com/sun/star/text/TextMarkupDescriptor.hpp
@@ -552,9 +514,6 @@ blacklist:
     sw/source/filter/html/SwAppletImpl.cxx:
     # Needed for direct member access
     - com/sun/star/embed/XEmbeddedObject.hpp
-    sw/source/filter/html/htmlgrin.cxx:
-    # Needed for TypedWhichId macro to work
-    - fmtflcnt.hxx
     sw/source/filter/html/wrthtml.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
@@ -583,13 +542,6 @@ blacklist:
     sw/source/filter/ww8/wrtww8.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
-    sw/source/filter/xml/xmlitemm.cxx:
-    # Needed for TypedWhichId macro to work
-    - fmtfsize.hxx
-    sw/source/filter/xml/xmlitemi.cxx:
-    # Needed for TypedWhichId macro to work
-    - editeng/ulspitem.hxx
-    - fmtfsize.hxx
     sw/source/filter/xml/wrtxml.cxx:
     # Actually used
     - com/sun/star/task/XStatusIndicator.hpp
@@ -715,4 +667,34 @@ blacklist:
     sw/source/uibase/shells/textsh.cxx:
     # Needed for defines in swslots.hxx
     - globals.hrc
-
+    sw/source/uibase/uiview/view0.cxx:
+    # Needed for defines in swslots.hxx
+    - globals.hrc
+    sw/source/uibase/utlui/content.cxx:
+    # Needed for implicit dtor
+    - AnnotationWin.hxx
+    sw/source/uibase/web/wformsh.cxx:
+    # Needed for defines in swslots.hxx
+    - sfx2/sfxsids.hrc
+    sw/source/uibase/web/wfrmsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wtextsh.cxx:
+    # Needed for defines in swslots.hxx
+    - globals.hrc
+    sw/source/uibase/web/wdocsh.cxx:
+    # Needed for defines in swslots.hxx
+    - svx/svxids.hrc
+    sw/source/uibase/web/wlistsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wtabsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wgrfsh.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    sw/source/uibase/web/wview.cxx:
+    # Needed for defines in swslots.hxx
+    - cmdid.h
+    - globals.hrc

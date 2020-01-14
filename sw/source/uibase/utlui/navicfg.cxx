@@ -25,8 +25,6 @@
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <unomid.h>
-
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
 

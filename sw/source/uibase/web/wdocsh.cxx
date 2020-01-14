@@ -17,30 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <sfx2/objface.hxx>
+#include <tools/globname.hxx>
 #include <osl/diagnose.h>
 
 #include <sfx2/msg.hxx>
-#include <cmdid.h>
 #include <swtypes.hxx>
 
-#include <shellio.hxx>
 #include <wdocsh.hxx>
 #include <strings.hrc>
 
-#include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define ShellClass_SwWebDocShell
 #include <swslots.hxx>
-
-#include <unomid.h>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwWebDocShell, SfxObjectShell)
 

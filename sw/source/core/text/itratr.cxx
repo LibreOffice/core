@@ -55,7 +55,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <editeng/lrspitem.hxx>
-#include <editeng/rsiditem.hxx>
 #include <calbck.hxx>
 
 using namespace ::com::sun::star::i18n;

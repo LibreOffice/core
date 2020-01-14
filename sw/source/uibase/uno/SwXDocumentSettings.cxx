@@ -25,7 +25,6 @@
 #include <utility>
 
 #include <o3tl/any.hxx>
-#include <sfx2/sfxbasecontroller.hxx>
 #include "SwXDocumentSettings.hxx"
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -42,19 +41,14 @@
 #include <linkenum.hxx>
 #include <sfx2/printer.hxx>
 #include <editsh.hxx>
-#include <drawdoc.hxx>
-#include <svl/zforlist.hxx>
 #include <unotxdoc.hxx>
 #include <cmdid.h>
-#include <sfx2/zoomitem.hxx>
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/asiancfg.hxx>
 #include <tools/stream.hxx>
 
-#include <swmodule.hxx>
 #include <cfgitems.hxx>
-#include <prtopt.hxx>
 #include <dbmgr.hxx>
 
 using namespace comphelper;

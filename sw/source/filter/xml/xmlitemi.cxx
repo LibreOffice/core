@@ -29,11 +29,9 @@
 
 #include <editeng/brushitem.hxx>
 #include <editeng/memberids.h>
-#include <editeng/ulspitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 
-#include <fmtfsize.hxx>
 #include <hintids.hxx>
 #include <unomid.h>
 #include "xmlbrshi.hxx"

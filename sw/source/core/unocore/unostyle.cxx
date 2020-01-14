@@ -86,7 +86,6 @@
 #include <fmtfsize.hxx>
 #include <numrule.hxx>
 #include <tblafmt.hxx>
-#include <fmtautofmt.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

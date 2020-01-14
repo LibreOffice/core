@@ -23,7 +23,6 @@
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
-#include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>

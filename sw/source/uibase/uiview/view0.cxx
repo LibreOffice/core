@@ -19,9 +19,6 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
-#include <vcl/graph.hxx>
-#include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/configmgr.hxx>
@@ -29,13 +26,10 @@
 #include <unotools/lingucfg.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
-#include <sfx2/app.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/svxids.hrc>
-#include <sfx2/templdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
@@ -45,11 +39,9 @@
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <sfx2/objface.hxx>
-#include <navipi.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
-#include <basesh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <globals.hrc>
@@ -70,9 +62,6 @@ using namespace ::com::sun::star;
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/viewfac.hxx>
 
-#include <IDocumentSettingAccess.hxx>
-
-#include <unomid.h>
 #include <memory>
 #include <swabstdlg.hxx>
 

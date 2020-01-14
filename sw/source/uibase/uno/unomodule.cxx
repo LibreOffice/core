@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
-#include <unofreg.hxx>
 #include "unomodule.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>

@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <SwXFilterOptions.hxx>
 #include <swdll.hxx>
 #include <unofreg.hxx>
 #include <unomailmerge.hxx>
@@ -34,10 +33,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-
-// #i73788#
-#include <cppuhelper/implementationentry.hxx>
-#include <finalthreadmanager.hxx>
 
 extern "C"
 {

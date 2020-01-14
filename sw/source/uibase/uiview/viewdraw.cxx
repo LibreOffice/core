@@ -18,25 +18,19 @@
  */
 
 #include <hintids.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
-#include <editeng/editview.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/fmview.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <textboxhelper.hxx>
 #include <editeng/langitem.hxx>
-#include <linguistic/lngprops.hxx>
-#include <editeng/unolingu.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <editeng/eeitem.hxx>
@@ -45,8 +39,6 @@
 #include <editeng/editstat.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/printer.hxx>
-#include <svx/fmglob.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -55,7 +47,6 @@
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <cmdid.h>
-#include <drawsh.hxx>
 #include <drwbassh.hxx>
 #include <beziersh.hxx>
 #include <conrect.hxx>
@@ -70,7 +61,6 @@
 
 #include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
-#include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

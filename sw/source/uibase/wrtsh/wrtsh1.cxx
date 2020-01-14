@@ -26,10 +26,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
-
-#include <math.h>
 #include <hintids.hxx>
 #include <sot/exchange.hxx>
 #include <svx/hdft.hxx>
@@ -37,18 +33,11 @@
 #include <svl/itemiter.hxx>
 #include <tools/bigint.hxx>
 #include <svtools/insdlg.hxx>
-#include <sfx2/frmdescr.hxx>
 #include <sfx2/ipclient.hxx>
-#include <svtools/ehdl.hxx>
-#include <svtools/soerr.hxx>
-#include <unotools/moduleoptions.hxx>
-#include <editeng/rsiditem.hxx>
-#include <editeng/sizeitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/graph.hxx>
-#include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
@@ -61,29 +50,23 @@
 #include <fmtpdsc.hxx>
 #include <txtfrm.hxx>
 #include <wdocsh.hxx>
-#include <basesh.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <uitool.hxx>
 #include <cmdid.h>
-#include <cfgitems.hxx>
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
-#include <shellio.hxx>
-#include <uinums.hxx>
 #include <swundo.hxx>
 #include <swcli.hxx>
 #include <poolfmt.hxx>
-#include <wview.hxx>
 #include <edtwin.hxx>
 #include <fmtcol.hxx>
 #include <swtable.hxx>
-#include <caption.hxx>
 #include <viscrs.hxx>
 #include <swdtflvr.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <SwCapObjType.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/request.hxx>
 #include <paratr.hxx>
@@ -91,7 +74,6 @@
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
 #include <sfx2/bindings.hxx>
-#include <fchrfmt.hxx>
 #include <flyfrm.hxx>
 
 // -> #111827#

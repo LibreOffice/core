@@ -24,7 +24,6 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <cmdid.h>
-#include <hintids.hxx>
 #include <docsh.hxx>
 #include <rubylist.hxx>
 #include <doc.hxx>
@@ -32,7 +31,6 @@
 #include <unotxvw.hxx>
 #include <unodispatch.hxx>
 #include <unomap.hxx>
-#include <unostyle.hxx>
 #include <unoprnms.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -45,7 +43,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdogrp.hxx>
 #include <editeng/pbinitem.hxx>
 #include <pagedesc.hxx>
 #include <editeng/lrspitem.hxx>
@@ -54,12 +51,8 @@
 #include <sfx2/request.hxx>
 #include <frmatr.hxx>
 #include <IMark.hxx>
-#include <unotxdoc.hxx>
 #include <unodraw.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/svdpagv.hxx>
-#include <swerror.h>
-#include <shellio.hxx>
 #include <ndtxt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

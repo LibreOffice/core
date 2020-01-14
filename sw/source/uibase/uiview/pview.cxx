@@ -23,32 +23,24 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/progress.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/paperinf.hxx>
-#include <svl/srchitem.hxx>
 #include <svx/svdview.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svx/svxids.hrc>
 #include <tools/svborder.hxx>
 
-#include <swwait.hxx>
 #include <globdoc.hxx>
 #include <wdocsh.hxx>
 #include <pvprtdat.hxx>
 #include <swmodule.hxx>
-#include <modcfg.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
@@ -56,16 +48,13 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <pview.hxx>
 #include <view.hxx>
-#include <textsh.hxx>
 #include <scroll.hxx>
 #include <prtopt.hxx>
-#include <docstat.hxx>
 #include <usrpref.hxx>
 #include "viewfunc.hxx"
 
 #include <helpids.h>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <strings.hrc>
 
 #define ShellClass_SwPagePreview
@@ -74,12 +63,10 @@
 #include <pagepreviewlayout.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
 #include <memory>
 #include <vcl/EnumContext.hxx>
 #include <vcl/notebookbar.hxx>
-#include <prevwpage.hxx>
 
 using namespace ::com::sun::star;
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")

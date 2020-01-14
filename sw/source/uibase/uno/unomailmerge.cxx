@@ -20,12 +20,11 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
-#include <svl/urihelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -35,7 +34,6 @@
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #include <com/sun/star/text/XMailMergeListener.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -48,10 +46,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <printdata.hxx>
 #include <swevent.hxx>
 #include <unomailmerge.hxx>
-#include <swdll.hxx>
-#include <swmodule.hxx>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
 #include <swunohelper.hxx>
@@ -60,13 +57,10 @@
 #include <view.hxx>
 #include <dbmgr.hxx>
 #include <unotxdoc.hxx>
-#include <prtopt.hxx>
 #include <wrtsh.hxx>
-#include <shellio.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergehelper.hxx>
 
-#include <unomid.h>
 #include <iodetect.hxx>
 
 #include <memory>

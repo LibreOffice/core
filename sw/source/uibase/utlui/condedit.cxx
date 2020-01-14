@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/formats.hxx>
-
 #include <condedit.hxx>
 #include <svx/dbaexchange.hxx>
 

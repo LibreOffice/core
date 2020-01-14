@@ -26,7 +26,6 @@
 #include <xmloff/xmltoken.hxx>
 
 #include <unomid.h>
-#include <fmtfsize.hxx>
 
 using namespace ::xmloff::token;
 

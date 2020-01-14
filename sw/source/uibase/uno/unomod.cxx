@@ -28,11 +28,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 
-#include <swtypes.hxx>
 #include <unomod.hxx>
-#include <unomid.h>
-#include <unoprnms.hxx>
-#include <unomap.hxx>
 #include <usrpref.hxx>
 #include <prtopt.hxx>
 #include <swmodule.hxx>

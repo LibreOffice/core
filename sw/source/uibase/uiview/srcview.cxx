@@ -19,29 +19,23 @@
 
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
-#include <hintids.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/print.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/ctrltool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/undo.hxx>
-#include <unotools/textsearch.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
-#include <svx/svxids.hrc>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
@@ -50,17 +44,11 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/prnmon.hxx>
 #include <sfx2/docfile.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <svl/srchitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/flstitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
-#include <swmodule.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 #include <srcview.hxx>
@@ -72,15 +60,11 @@
 #include <shellio.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
 #define ShellClass_SwSrcView
 #include <swslots.hxx>
-
-#include <unomid.h>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

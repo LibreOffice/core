@@ -131,7 +131,6 @@
 #include <svx/xfltrit.hxx>
 #include <swunohelper.hxx>
 #include <fefly.hxx>
-#include <fmtflcnt.hxx>
 
 using namespace ::com::sun::star;
 

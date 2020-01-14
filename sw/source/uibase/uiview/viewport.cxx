@@ -17,37 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
-#include <hintids.hxx>
-
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/syswin.hxx>
 
 #include <svx/ruler.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/lrspitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/svxids.hrc>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swmodule.hxx>
 #include <viewopt.hxx>
-#include <frmatr.hxx>
 #include <docsh.hxx>
 #include <cmdid.h>
 #include <edtwin.hxx>
 #include <scroll.hxx>
-#include <wview.hxx>
-#include <usrpref.hxx>
-#include <pagedesc.hxx>
-#include <workctrl.hxx>
 
 #include <PostItMgr.hxx>
-
-#include <IDocumentSettingAccess.hxx>
 
 #include <basegfx/utils/zoomtools.hxx>
 #include <comphelper/lok.hxx>

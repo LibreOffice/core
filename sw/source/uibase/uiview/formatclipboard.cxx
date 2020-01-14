@@ -22,7 +22,6 @@
 
 #include <formatclipboard.hxx>
 
-#include <svx/svxids.hrc>
 #include <cmdid.h>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
