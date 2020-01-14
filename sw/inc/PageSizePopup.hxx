@@ -19,18 +19,24 @@
 #ifndef INCLUDED_SW_INC_PAGESIZEPOPUP_HXX
 #define INCLUDED_SW_INC_PAGESIZEPOPUP_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include "swdllapi.h"
 
-class PageSizePopup final : public SfxToolBoxControl
+class PageSizePopup final : public svt::PopupWindowController
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    PageSizePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    PageSizePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~PageSizePopup() override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 #endif

@@ -23,23 +23,26 @@
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include <vcl/layout.hxx>
 
-#include <vector>
+#include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
+
+#include <vector>
 
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;
 } }
+
+class PageSizePopup;
 class ValueSet;
 
 namespace sw { namespace sidebar {
 
-class PageSizeControl : public SfxPopupWindow
+class PageSizeControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit PageSizeControl(sal_uInt16 nId, vcl::Window* pParent);
+    explicit PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent);
     virtual ~PageSizeControl() override;
     virtual void dispose() override;
 

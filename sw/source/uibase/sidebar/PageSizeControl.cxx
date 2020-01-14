@@ -39,6 +39,8 @@
 #include <svtools/unitconv.hxx>
 #include <editeng/sizeitem.hxx>
 
+#include <PageSizePopup.hxx>
+
 namespace
 {
     FieldUnit lcl_GetFieldUnit()
@@ -68,8 +70,8 @@ namespace
 
 namespace sw { namespace sidebar {
 
-PageSizeControl::PageSizeControl( sal_uInt16 nId, vcl::Window* pParent )
-    : SfxPopupWindow( nId, pParent, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui" )
+PageSizeControl::PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui")
     , maPaperList()
 {
     get(maMoreButton, "moreoptions");
@@ -200,7 +202,7 @@ void PageSizeControl::dispose()
     maMoreButton.disposeAndClear();
     maWidthHeightField.disposeAndClear();
     maContainer.disposeAndClear();
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
