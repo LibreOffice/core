@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-04 09:34:32 using:
+ Generated on 2020-01-14 11:50:23 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,12 +24,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <functional>
 #include <initializer_list>
 #include <limits.h>
+#include <limits>
 #include <list>
 #include <map>
 #include <memory>
@@ -69,7 +69,6 @@
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
@@ -85,9 +84,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
@@ -100,7 +97,6 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
@@ -141,6 +137,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -149,11 +146,9 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -166,7 +161,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -183,6 +177,8 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/classids.hxx>
@@ -209,6 +205,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -229,7 +227,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/formatbreakitem.hxx>
@@ -268,20 +265,18 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <libxml/xmlwriter.h>
-#include <linguistic/lngprops.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
-#include <sax/fastattribs.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -304,7 +299,6 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
@@ -339,30 +333,22 @@
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/langtab.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/fmglob.hxx>
-#include <svx/fmshell.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/ruler.hxx>
-#include <svx/rulritem.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svditer.hxx>
-#include <svx/svdmark.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotext.hxx>
@@ -381,6 +367,7 @@
 #include <svx/xflclit.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
 #include <tools/diagnose_ex.h>
@@ -394,6 +381,7 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.h>
@@ -407,7 +395,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -510,7 +497,6 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <htmltbl.hxx>
-#include <init.hxx>
 #include <iodetect.hxx>
 #include <istyleaccess.hxx>
 #include <lineinfo.hxx>
@@ -533,11 +519,8 @@
 #include <reffld.hxx>
 #include <shellio.hxx>
 #include <shellres.hxx>
-#include <sortopt.hxx>
 #include <swabstdlg.hxx>
 #include <swatrset.hxx>
-#include <swbaslnk.hxx>
-#include <swcli.hxx>
 #include <swcrsr.hxx>
 #include <swddetbl.hxx>
 #include <swdll.hxx>
@@ -546,7 +529,6 @@
 #include <swevent.hxx>
 #include <swmodule.hxx>
 #include <swrect.hxx>
-#include <swregion.hxx>
 #include <swserv.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
@@ -565,10 +547,8 @@
 #include <txtfld.hxx>
 #include <txtftn.hxx>
 #include <txtinet.hxx>
-#include <txtrfmrk.hxx>
 #include <txttxmrk.hxx>
 #include <undobj.hxx>
-#include <unobaseclass.hxx>
 #include <unochart.hxx>
 #include <unocoll.hxx>
 #include <unocrsr.hxx>
@@ -580,7 +560,6 @@
 #include <unoparagraph.hxx>
 #include <unoprnms.hxx>
 #include <unosett.hxx>
-#include <unostyle.hxx>
 #include <unotbl.hxx>
 #include <unotextcursor.hxx>
 #include <unotextrange.hxx>
