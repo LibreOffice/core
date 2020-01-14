@@ -27,7 +27,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <sal/log.hxx>
 
 #include <listbox.hxx>
 #include <controldata.hxx>

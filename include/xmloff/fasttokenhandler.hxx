@@ -15,7 +15,6 @@
 #include <sax/fastattribs.hxx>
 #include <xmloff/token/tokens.hxx>
 #include <rtl/instance.hxx>
-#include <sal/log.hxx>
 #include <xmloff/dllapi.h>
 
 namespace xmloff {

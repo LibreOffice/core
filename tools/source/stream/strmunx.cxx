@@ -26,7 +26,6 @@
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <sal/log.hxx>
 
 #include <osl/file.hxx>
 #include <osl/detail/file.h>

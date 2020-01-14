@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>

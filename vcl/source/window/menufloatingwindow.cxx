@@ -22,7 +22,6 @@
 #include "menubarwindow.hxx"
 #include "bufferdevice.hxx"
 
-#include <sal/log.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>

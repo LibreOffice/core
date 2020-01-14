@@ -29,7 +29,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

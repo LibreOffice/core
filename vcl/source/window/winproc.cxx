@@ -19,7 +19,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#include <sal/log.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

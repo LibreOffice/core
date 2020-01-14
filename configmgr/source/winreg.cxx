@@ -18,7 +18,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>

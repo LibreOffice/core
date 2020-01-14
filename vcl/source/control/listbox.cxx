@@ -23,7 +23,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <sal/log.hxx>
 
 #include <svdata.hxx>
 #include <controldata.hxx>

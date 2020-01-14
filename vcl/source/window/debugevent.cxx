@@ -9,7 +9,6 @@
 
 #include <comphelper/random.hxx>
 #include <rtl/string.hxx>
-#include <sal/log.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/debugevent.hxx>

@@ -45,7 +45,6 @@
 #include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>

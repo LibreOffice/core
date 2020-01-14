@@ -54,7 +54,6 @@
 #include <osl/file.hxx>
 #include <osl/signal.h>
 #include <rtl/alloc.h>
-#include <sal/log.hxx>
 
 #include <grp.h>
 

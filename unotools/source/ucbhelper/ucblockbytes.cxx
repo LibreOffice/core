@@ -19,7 +19,6 @@
 
 #include "ucblockbytes.hxx"
 
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/condition.hxx>
 #include <osl/thread.hxx>
