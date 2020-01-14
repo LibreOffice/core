@@ -114,6 +114,11 @@ void DomainMapperTableManager::finishTableLook()
     insertTableProps(pPropMap);
 }
 
+sal_Int32 lcl_ceil_TwipToMM100(sal_Int32 n)
+{
+   return static_cast<sal_Int32>(ceil((n*127+36)/72.0));
+}
+
 bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
 #ifdef DBG_UTIL
@@ -256,7 +261,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 if (nIntValue == -1)
                     getCurrentGrid()->clear();
                 else
-                    getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
+                    getCurrentGrid()->push_back( nIntValue );
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_vMerge : //vertical merge
@@ -573,6 +578,7 @@ void DomainMapperTableManager::endOfRowAction()
     IntVectorPtr pCellWidths = getCurrentCellWidths( );
     if(!m_nTableWidth && !pTableGrid->empty())
     {
+        sal_Int32 nTableWidthInTwips = 0;
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("tableWidth");
 #endif
@@ -585,8 +591,10 @@ void DomainMapperTableManager::endOfRowAction()
             TagLogger::getInstance().endElement();
 #endif
 
-            m_nTableWidth = o3tl::saturating_add(m_nTableWidth, rCell);
+            nTableWidthInTwips = o3tl::saturating_add(nTableWidthInTwips, rCell);
         }
+        if (nTableWidthInTwips)
+            m_nTableWidth = lcl_ceil_TwipToMM100(nTableWidthInTwips);
 
         if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
         {
