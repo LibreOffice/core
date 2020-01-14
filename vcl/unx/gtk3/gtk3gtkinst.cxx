@@ -68,7 +68,6 @@
 #include <unx/gstsink.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>

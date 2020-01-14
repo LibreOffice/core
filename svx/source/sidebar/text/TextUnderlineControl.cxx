@@ -24,7 +24,6 @@
 #include <svx/TextUnderlinePopup.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
-#include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <helpids.h>
 
