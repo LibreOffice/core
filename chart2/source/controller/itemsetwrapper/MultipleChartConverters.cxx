@@ -38,7 +38,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 AllAxisItemConverter::AllAxisItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
@@ -188,6 +188,6 @@ const sal_uInt16 * AllSeriesStatisticsConverter::GetWhichPairs() const
     return nStatWhichPairs;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

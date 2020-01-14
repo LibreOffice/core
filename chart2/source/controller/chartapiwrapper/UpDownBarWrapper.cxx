@@ -119,9 +119,7 @@ struct StaticUpDownBarWrapperDefaults : public rtl::StaticAggregate< ::chart::tP
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 UpDownBarWrapper::UpDownBarWrapper(
@@ -362,7 +360,6 @@ css::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNam
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

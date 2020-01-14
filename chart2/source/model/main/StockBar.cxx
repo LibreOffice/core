@@ -28,7 +28,7 @@
 
 #include <algorithm>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
 using namespace ::com::sun::star;
 

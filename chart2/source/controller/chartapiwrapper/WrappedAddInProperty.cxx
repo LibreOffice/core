@@ -25,9 +25,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 WrappedAddInProperty::WrappedAddInProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -117,8 +115,6 @@ Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans
 {
     return uno::Any( m_rChartDocumentWrapper.getUpdateAddIn() );
 }
-
-} //namespace wrapper
 
 } //namespace chart
 

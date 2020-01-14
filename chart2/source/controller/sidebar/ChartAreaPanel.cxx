@@ -26,7 +26,7 @@
 
 #include <svx/tbcontrl.hxx>
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 namespace {
 
@@ -525,6 +525,6 @@ void ChartAreaPanel::updateModel(
 }
 
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

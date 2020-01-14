@@ -36,16 +36,14 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <utility>
 
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
+namespace com::sun::star::chart2::data { class XDataProvider; }
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace
@@ -1069,7 +1067,6 @@ void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< st
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

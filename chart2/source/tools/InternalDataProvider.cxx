@@ -43,7 +43,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
 
 using namespace ::com::sun::star;
 using namespace ::std;

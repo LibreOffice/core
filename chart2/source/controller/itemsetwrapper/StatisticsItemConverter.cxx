@@ -209,9 +209,7 @@ void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const 
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 StatisticsItemConverter::StatisticsItemConverter(
@@ -846,7 +844,6 @@ void StatisticsItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

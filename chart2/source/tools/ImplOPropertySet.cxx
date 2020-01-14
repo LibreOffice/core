@@ -84,9 +84,7 @@ struct lcl_replaceInterfacePropertiesByClones
 
 } //  anonymous namespace
 
-namespace property
-{
-namespace impl
+namespace property::impl
 {
 
 ImplOPropertySet::ImplOPropertySet()
@@ -175,7 +173,6 @@ bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
     return true;
 }
 
-} //  namespace impl
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

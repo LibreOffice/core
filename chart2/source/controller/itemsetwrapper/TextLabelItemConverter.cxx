@@ -46,7 +46,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::chart2;
 using com::sun::star::uno::Reference;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 namespace {
 
@@ -652,6 +652,6 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

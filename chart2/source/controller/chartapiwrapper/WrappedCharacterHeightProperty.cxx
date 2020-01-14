@@ -28,9 +28,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 WrappedCharacterHeightProperty_Base::WrappedCharacterHeightProperty_Base(
                             const OUString& rOuterEqualsInnerName
@@ -135,7 +133,6 @@ WrappedComplexCharacterHeightProperty::~WrappedComplexCharacterHeightProperty()
 {
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

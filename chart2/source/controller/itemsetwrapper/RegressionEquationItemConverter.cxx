@@ -31,7 +31,7 @@
 
 using namespace ::com::sun::star;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 namespace {
 
@@ -144,6 +144,6 @@ void RegressionEquationItemConverter::FillSpecialItem(
    }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

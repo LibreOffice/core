@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 namespace {
 
@@ -551,6 +551,6 @@ const uno::Reference<beans::XPropertySet>& CharacterPropertyItemConverter::GetRe
     return m_xRefSizePropSet;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

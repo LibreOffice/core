@@ -33,9 +33,7 @@
 
 using namespace ::com::sun::star;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 LegendItemConverter::LegendItemConverter(
@@ -181,7 +179,6 @@ void LegendItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

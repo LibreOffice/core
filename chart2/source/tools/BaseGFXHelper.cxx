@@ -25,9 +25,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::basegfx;
 
-namespace chart
-{
-namespace BaseGFXHelper
+namespace chart::BaseGFXHelper
 {
 
 ::basegfx::B3DRange getBoundVolume( const drawing::PolyPolygonShape3D& rPolyPoly )
@@ -195,7 +193,6 @@ void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix )
     rB3DMatrix = aRotationMatrix;
 }
 
-} //  namespace BaseGFXHelper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
