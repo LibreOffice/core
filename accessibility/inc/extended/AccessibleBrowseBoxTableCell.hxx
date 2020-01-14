@@ -29,14 +29,13 @@ namespace accessibility
                                 >   AccessibleTextHelper_BASE;
 
     // implementation of a table cell of BrowseBox
-    class AccessibleBrowseBoxTableCell  :public AccessibleBrowseBoxCell
+    class AccessibleBrowseBoxTableCell final : public AccessibleBrowseBoxCell
                                         ,public AccessibleTextHelper_BASE
                                         ,public ::comphelper::OCommonAccessibleText
     {
     private:
         sal_Int32   m_nOffset;
 
-    protected:
         // OCommonAccessibleText
         virtual OUString                        implGetText() final override;
         virtual css::lang::Locale               implGetLocale() override;

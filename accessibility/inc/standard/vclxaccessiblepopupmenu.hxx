@@ -24,9 +24,8 @@
 
 
 
-class VCLXAccessiblePopupMenu : public OAccessibleMenuComponent
+class VCLXAccessiblePopupMenu final : public OAccessibleMenuComponent
 {
-protected:
     virtual bool        IsFocused() override;
 
 public:

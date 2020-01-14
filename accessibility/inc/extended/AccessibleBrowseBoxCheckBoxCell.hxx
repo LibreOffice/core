@@ -30,14 +30,13 @@ namespace accessibility
                                     css::accessibility::XAccessibleValue
                                 >   AccessibleCheckBoxCell_BASE;
 
-    class AccessibleCheckBoxCell :   public AccessibleBrowseBoxCell
+    class AccessibleCheckBoxCell final : public AccessibleBrowseBoxCell
                                     ,public AccessibleCheckBoxCell_BASE
     {
     private:
         TriState m_eState;
         bool m_bIsTriState;
 
-    protected:
         virtual ~AccessibleCheckBoxCell() override {}
 
         virtual ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;

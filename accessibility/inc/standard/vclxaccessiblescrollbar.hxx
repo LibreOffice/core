@@ -33,10 +33,9 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleValue > VCLXAccessibleScrollBar_BASE;
 
-class VCLXAccessibleScrollBar : public VCLXAccessibleComponent,
+class VCLXAccessibleScrollBar final : public VCLXAccessibleComponent,
                                 public VCLXAccessibleScrollBar_BASE
 {
-protected:
     virtual ~VCLXAccessibleScrollBar() override = default;
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
