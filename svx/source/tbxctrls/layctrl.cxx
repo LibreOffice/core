@@ -44,8 +44,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
-
 namespace {
 
 class TableWindow final : public WeldToolbarPopup
@@ -382,7 +380,7 @@ void TableWindow::CloseAndShowTableDialog()
 
 namespace {
 
-class ColumnsWindow : public SfxPopupWindow
+class ColumnsWindow final : public svtools::ToolbarPopup
 {
 private:
     ::Color             aLineColor;
@@ -396,31 +394,28 @@ private:
     long                nTextHeight;
     bool                bInitialKeyInput;
     bool                m_bMod1;
-    Reference< XFrame > mxFrame;
-    OUString const            maCommand;
+    OUString const      maCommand;
 
     void UpdateSize_Impl( long nNewCol );
+
+    void InsertColumns();
 public:
-                            ColumnsWindow( sal_uInt16 nId, vcl::Window* pParent, const OUString& rCmd,
-                                           const OUString &rText, const Reference< XFrame >& rFrame );
+    ColumnsWindow(SvxColumnsToolBoxControl* pControl, vcl::Window* pParent, const OUString& rCmd);
 
     void                    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& ) override;
-    virtual void            PopupModeEnd() override;
 };
 
 }
 
-ColumnsWindow::ColumnsWindow( sal_uInt16 nId, vcl::Window* pParent, const OUString& rCmd,
-                              const OUString& rText, const Reference< XFrame >& rFrame ) :
-    SfxPopupWindow( nId, pParent, rFrame, WB_STDPOPUP ),
-    bInitialKeyInput(true),
-    m_bMod1(false),
-    mxFrame(rFrame),
-    maCommand( rCmd )
+ColumnsWindow::ColumnsWindow(SvxColumnsToolBoxControl* pControl, vcl::Window* pParent, const OUString& rCmd)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "emojictrl", "sfx/ui/emojicontrol.ui")
+    , bInitialKeyInput(true)
+    , m_bMod1(false)
+    , maCommand(rCmd)
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
@@ -441,18 +436,14 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, vcl::Window* pParent, const OUStri
     nCol        = 0;
     nWidth      = 4;
 
-    SetText( rText );
-
     Size aLogicSize = LogicToPixel( Size( 95, 155 ), MapMode( MapUnit::Map10thMM ) );
     nMX = aLogicSize.Width();
     SetOutputSizePixel( Size( nMX*nWidth-1, aLogicSize.Height()+nTextHeight ) );
-    StartCascading();
 }
-
 
 void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    SfxPopupWindow::MouseMove( rMEvt );
+    ToolbarPopup::MouseMove( rMEvt );
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos = aPos;
 
@@ -532,7 +523,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 
 void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    SfxPopupWindow::MouseButtonDown( rMEvt );
+    ToolbarPopup::MouseButtonDown( rMEvt );
     CaptureMouse();
 }
 
@@ -561,11 +552,12 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
                 case KEY_RETURN :
                     if(IsMouseCaptured())
                         ReleaseMouse();
-                    EndPopupMode(FloatWinPopupEndFlags::CloseAll );
+                    InsertColumns();
+                    EndPopupMode();
                 break;
                 case KEY_ESCAPE :
                 case KEY_UP :
-                    EndPopupMode( FloatWinPopupEndFlags::Cancel);
+                    EndPopupMode();
                 break;
             }
             //make sure that a table can initially be created
@@ -583,22 +575,20 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
         m_bMod1 = true;
         if(IsMouseCaptured())
             ReleaseMouse();
-        EndPopupMode(FloatWinPopupEndFlags::CloseAll );
+        InsertColumns();
+        EndPopupMode();
     }
     if(!bHandled)
-        SfxPopupWindow::KeyInput(rKEvt);
+        ToolbarPopup::KeyInput(rKEvt);
 }
-
 
 void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    SfxPopupWindow::MouseButtonUp( rMEvt );
+    ToolbarPopup::MouseButtonUp( rMEvt );
     ReleaseMouse();
-
-    if ( IsInPopupMode() )
-        EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+    InsertColumns();
+    EndPopupMode();
 }
-
 
 void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
@@ -659,24 +649,32 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.DrawRect(tools::Rectangle( 0, 0, aSize.Width() - 1, aSize.Height() - nTextHeight + 1));
 }
 
-
-void ColumnsWindow::PopupModeEnd()
+void ColumnsWindow::InsertColumns()
 {
-    if ( !IsPopupModeCanceled() && nCol )
+    if (nCol)
     {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Columns";
-        aArgs[0].Value <<= sal_Int16( nCol );
-        aArgs[1].Name = "Modifier";
-        aArgs[1].Value <<= sal_Int16( m_bMod1 ? KEY_MOD1 : 0 );
+        Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
+        if ( xDispatchProvider.is() )
+        {
+            css::util::URL aTargetURL;
+            Reference < XURLTransformer > xTrans( URLTransformer::create(::comphelper::getProcessComponentContext()) );
+            aTargetURL.Complete = maCommand;
+            xTrans->parseStrict( aTargetURL );
 
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                        maCommand,
-                                        aArgs );
+            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+            if ( xDispatch.is() )
+            {
+                Sequence< PropertyValue > aArgs( 2 );
+                aArgs[0].Name = "Columns";
+                aArgs[0].Value <<= sal_Int16( nCol );
+                aArgs[1].Name = "Modifier";
+                aArgs[1].Value <<= sal_Int16( m_bMod1 ? KEY_MOD1 : 0 );
+
+                xDispatch->dispatch( aTargetURL, aArgs );
+            }
+        }
+
     }
-    else if ( IsPopupModeCanceled() )
-        ReleaseMouse();
-    SfxPopupWindow::PopupModeEnd();
 }
 
 SvxTableToolBoxControl::SvxTableToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
@@ -737,39 +735,54 @@ com_sun_star_comp_svx_TableToolBoxControl_get_implementation(
     return cppu::acquire(new SvxTableToolBoxControl(rContext));
 }
 
-SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
-    : SfxToolBoxControl(nSlotId, nId, rTbx)
-    , bEnabled(false)
+SvxColumnsToolBoxControl::SvxColumnsToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : PopupWindowController(rContext, nullptr, OUString())
 {
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
 }
 
+void SvxColumnsToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+{
+    PopupWindowController::initialize(rArguments);
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
+}
 
 SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 {
 }
 
-
-VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
+VclPtr<vcl::Window> SvxColumnsToolBoxControl::createPopupWindow(vcl::Window* pParent)
 {
-    VclPtr<ColumnsWindow> pWin;
-    if(bEnabled)
-    {
-            pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), &GetToolBox(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), m_xFrame );
-            pWin->StartPopupMode( &GetToolBox(),
-                                  FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoKeyClose );
-            SetPopupWindow( pWin );
-    }
-    return pWin;
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    bool bToolBox = getToolboxId(nId, &pToolBox);
+
+    auto xRet = VclPtr<ColumnsWindow>::Create(this, pParent, m_aCommandURL);
+
+    xRet->SetText(bToolBox ? pToolBox->GetItemText(nId) : OUString());
+
+    return xRet;
 }
 
-void SvxColumnsToolBoxControl::StateChanged( sal_uInt16 nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState )
+OUString SvxColumnsToolBoxControl::getImplementationName()
 {
-    bEnabled = SfxItemState::DISABLED != eState;
-    SfxToolBoxControl::StateChanged(nSID,   eState, pState );
+    return "com.sun.star.comp.svx.ColumnsToolBoxControl";
+}
+
+css::uno::Sequence<OUString> SvxColumnsToolBoxControl::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_ColumnsToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new SvxColumnsToolBoxControl(rContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
