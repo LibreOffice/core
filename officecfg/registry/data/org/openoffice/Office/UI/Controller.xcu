@@ -965,6 +965,28 @@
           <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="TableToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertTable</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.TableToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="PageToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ShowMultiplePages</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.TableToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ExtrusionDirectionFloater</value>
