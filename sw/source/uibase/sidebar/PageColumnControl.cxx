@@ -29,7 +29,7 @@
 #include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageColumnControl::PageColumnControl(PageColumnPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagecolumncontrol.ui", "PageColumnControl")
@@ -117,6 +117,6 @@ IMPL_LINK_NOARG( PageColumnControl, MoreButtonClickHdl_Impl, weld::Button&, void
     m_xControl->EndPopupMode();
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

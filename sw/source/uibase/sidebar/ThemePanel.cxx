@@ -397,7 +397,7 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 
 } // end anonymous namespace
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
                                         const css::uno::Reference<css::frame::XFrame>& rxFrame)
@@ -501,6 +501,6 @@ void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
 {
 }
 
-}} // end of namespace ::sw::sidebar
+} // end of namespace ::sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sw { namespace sidebar{
+namespace sw::sidebar{
 
 namespace {
 
@@ -599,6 +599,6 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorListHdl, ColorListBox&, void)
     ModifyFillColor();
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

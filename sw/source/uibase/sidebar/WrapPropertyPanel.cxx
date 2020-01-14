@@ -41,7 +41,7 @@ const char UNO_WRAPON[] = ".uno:WrapOn";
 const char UNO_WRAPTHROUGH[] = ".uno:WrapThrough";
 const char UNO_WRAPIDEAL[] = ".uno:WrapIdeal";
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 VclPtr<vcl::Window> WrapPropertyPanel::Create (
     vcl::Window* pParent,
@@ -363,6 +363,6 @@ void WrapPropertyPanel::NotifyItemUpdate(
     }
 }
 
-} } // end of namespace ::sw::sidebar
+} // end of namespace ::sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

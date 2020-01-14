@@ -92,7 +92,7 @@ namespace
     }
 }
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagemargincontrol.ui", "PageMarginControl")
@@ -580,6 +580,6 @@ void PageMarginControl::StoreUserCustomValues()
     aWinOpt5.SetUserData( aSeq );
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

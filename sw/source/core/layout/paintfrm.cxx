@@ -4515,9 +4515,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
         gProp.pSLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol, gProp );
 }
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         namespace {
 
@@ -4761,8 +4759,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SwBorderRectanglePrimitive2D, PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 namespace {
 

@@ -36,11 +36,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-namespace ooo
-{
-namespace vba
-{
-namespace word
+namespace ooo::vba::word
 {
 
 SwDocShell* getDocShell( const uno::Reference< frame::XModel>& xModel )
@@ -175,8 +171,6 @@ bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel )
     return isObjectSelected;
 }
 
-} // word
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

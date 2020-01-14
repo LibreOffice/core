@@ -71,9 +71,7 @@ using namespace ::com::sun::star;
 static bool bInResize = false;
 
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         namespace {
 
@@ -110,8 +108,7 @@ namespace sdr
             return drawinglayer::primitive2d::Primitive2DContainer();
         }
 
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 std::unique_ptr<sdr::properties::BaseProperties> SwFlyDrawObj::CreateObjectSpecificProperties()
 {
@@ -148,9 +145,7 @@ sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 }
 
 // TODO: Need own primitive to get the FlyFrame paint working
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         namespace {
 
@@ -190,12 +185,9 @@ namespace drawinglayer
         };
 
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SwVirtFlyDrawObjPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -248,17 +240,14 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SwVirtFlyDrawObjPrimitive, PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 // AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
 // since offset is defined different from SdrVirtObj's sdr::contact::ViewContactOfVirtObj.
 // For paint, that offset is used by setting at the OutputDevice; for primitives this is
 // not possible since we have no OutputDevice, but define the geometry itself.
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         namespace {
 
@@ -286,12 +275,9 @@ namespace sdr
         };
 
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         drawinglayer::primitive2d::Primitive2DContainer VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence() const
         {
@@ -318,8 +304,7 @@ namespace sdr
             return xRetval;
         }
 
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 {

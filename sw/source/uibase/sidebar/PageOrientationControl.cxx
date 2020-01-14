@@ -47,7 +47,7 @@ namespace {
     }
 }
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 PageOrientationControl::PageOrientationControl(PageOrientationPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pageorientationcontrol.ui", "PageOrientationControl")
@@ -189,6 +189,6 @@ IMPL_LINK(PageOrientationControl, ImplOrientationHdl, weld::Button&, rControl, v
     m_xControl->EndPopupMode();
 }
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
