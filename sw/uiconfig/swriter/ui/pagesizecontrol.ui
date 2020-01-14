@@ -2,6 +2,16 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkImage" id="image_portrait7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/lc_orientation.png</property>
+  </object>
   <object class="GtkPopover" id="PageSizeControl">
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
@@ -81,6 +91,7 @@
             <property name="image">image_portrait7</property>
             <property name="relief">none</property>
             <property name="use_underline">True</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -90,15 +101,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkImage" id="image_portrait7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">cmd/lc_orientation.png</property>
   </object>
 </interface>

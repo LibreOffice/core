@@ -31,11 +31,11 @@
 
 namespace sw { namespace sidebar {
 
-PageColumnControl::PageColumnControl(PageColumnPopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
+PageColumnControl::PageColumnControl(PageColumnPopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagecolumncontrol.ui", "PageColumnControl")
+    , m_xMoreButton(m_xBuilder->weld_button("moreoptions"))
+    , m_xControl(pControl)
 {
-    get( m_pMoreButton, "moreoptions" );
-
     bool bLandscape = false;
     const SfxPoolItem *pItem;
     if ( SfxViewFrame::Current() )
@@ -46,51 +46,43 @@ PageColumnControl::PageColumnControl(PageColumnPopup* pControl, vcl::Window* pPa
 
     if ( bLandscape )
     {
-        get(m_pOneColumn, "column1L");
-        get(m_pTwoColumns, "column2L");
-        get(m_pThreeColumns, "column3L");
-        get(m_pLeft, "columnleftL");
-        get(m_pRight, "columnrightL");
+        m_xOneColumn = m_xBuilder->weld_button("column1L");
+        m_xTwoColumns = m_xBuilder->weld_button("column2L");
+        m_xThreeColumns = m_xBuilder->weld_button("column3L");
+        m_xLeft = m_xBuilder->weld_button("columnleftL");
+        m_xRight = m_xBuilder->weld_button("columnrightL");
     }
     else
     {
-        get(m_pOneColumn, "column1");
-        get(m_pTwoColumns, "column2");
-        get(m_pThreeColumns, "column3");
-        get(m_pLeft, "columnleft");
-        get(m_pRight, "columnright");
+        m_xOneColumn = m_xBuilder->weld_button("column1");
+        m_xTwoColumns = m_xBuilder->weld_button( "column2");
+        m_xThreeColumns = m_xBuilder->weld_button("column3");
+        m_xLeft = m_xBuilder->weld_button("columnleft");
+        m_xRight = m_xBuilder->weld_button("columnright");
     }
 
-    m_pOneColumn->Show();
-    m_pTwoColumns->Show();
-    m_pThreeColumns->Show();
-    m_pLeft->Show();
-    m_pRight->Show();
+    m_xOneColumn->show();
+    m_xTwoColumns->show();
+    m_xThreeColumns->show();
+    m_xLeft->show();
+    m_xRight->show();
 
-    m_pOneColumn->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
-    m_pTwoColumns->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
-    m_pThreeColumns->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
-    m_pLeft->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
-    m_pRight->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_xOneColumn->connect_clicked( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_xTwoColumns->connect_clicked( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_xThreeColumns->connect_clicked( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_xLeft->connect_clicked( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_xRight->connect_clicked( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
 
-    m_pMoreButton->SetClickHdl( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );
-    m_pMoreButton->GrabFocus();
+    m_xMoreButton->connect_clicked( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );
+}
+
+void PageColumnControl::GrabFocus()
+{
+    m_xMoreButton->grab_focus();
 }
 
 PageColumnControl::~PageColumnControl()
 {
-    disposeOnce();
-}
-
-void PageColumnControl::dispose()
-{
-    m_pOneColumn.disposeAndClear();
-    m_pTwoColumns.disposeAndClear();
-    m_pThreeColumns.disposeAndClear();
-    m_pLeft.disposeAndClear();
-    m_pRight.disposeAndClear();
-    m_pMoreButton.disposeAndClear();
-    ToolbarPopup::dispose();
 }
 
 void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
@@ -102,27 +94,27 @@ void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
             SfxCallMode::RECORD, { mpPageColumnTypeItem.get() });
 }
 
-IMPL_LINK( PageColumnControl, ColumnButtonClickHdl_Impl, Button*, pButton, void )
+IMPL_LINK( PageColumnControl, ColumnButtonClickHdl_Impl, weld::Button&, rButton, void )
 {
-    if ( pButton == m_pOneColumn.get() )
+    if ( &rButton == m_xOneColumn.get() )
         ExecuteColumnChange( 1 );
-    else if ( pButton == m_pTwoColumns.get() )
+    else if ( &rButton == m_xTwoColumns.get() )
         ExecuteColumnChange( 2 );
-    else if ( pButton == m_pThreeColumns.get() )
+    else if ( &rButton == m_xThreeColumns.get() )
         ExecuteColumnChange( 3 );
-    else if ( pButton == m_pLeft.get() )
+    else if ( &rButton == m_xLeft.get() )
         ExecuteColumnChange( 4 );
-    else if ( pButton == m_pRight.get() )
+    else if ( &rButton == m_xRight.get() )
         ExecuteColumnChange( 5 );
 
-    EndPopupMode();
+    m_xControl->EndPopupMode();
 }
 
-IMPL_LINK_NOARG( PageColumnControl, MoreButtonClickHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( PageColumnControl, MoreButtonClickHdl_Impl, weld::Button&, void )
 {
     if ( SfxViewFrame::Current() )
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
-    EndPopupMode();
+    m_xControl->EndPopupMode();
 }
 
 } } // end of namespace sw::sidebar
