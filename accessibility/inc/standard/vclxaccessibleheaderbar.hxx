@@ -26,7 +26,7 @@
 typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
     ListItems;
 
-class VCLXAccessibleHeaderBar : public VCLXAccessibleComponent
+class VCLXAccessibleHeaderBar final : public VCLXAccessibleComponent
 {
 
     VclPtr<HeaderBar>  m_pHeadBar;

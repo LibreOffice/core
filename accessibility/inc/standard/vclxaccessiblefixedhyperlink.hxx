@@ -24,9 +24,8 @@
 
 
 
-class VCLXAccessibleFixedHyperlink : public VCLXAccessibleTextComponent
+class VCLXAccessibleFixedHyperlink final : public VCLXAccessibleTextComponent
 {
-protected:
     virtual ~VCLXAccessibleFixedHyperlink() override = default;
 
 public:

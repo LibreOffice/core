@@ -22,7 +22,7 @@
 
 namespace accessibility
 {
-    class AccessibleBrowseBoxHeaderCell : public BrowseBoxAccessibleElement
+    class AccessibleBrowseBoxHeaderCell final : public BrowseBoxAccessibleElement
     {
         sal_Int32   m_nColumnRowId;
     public:
@@ -61,7 +61,7 @@ namespace accessibility
         */
         ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;
 
-    protected:
+    private:
         virtual tools::Rectangle implGetBoundingBox() override;
 
         virtual tools::Rectangle implGetBoundingBoxOnScreen() override;

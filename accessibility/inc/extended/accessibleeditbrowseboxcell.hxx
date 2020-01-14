@@ -28,7 +28,7 @@ namespace accessibility
 
     // = EditBrowseBoxTableCell
 
-    class EditBrowseBoxTableCell    :public AccessibleBrowseBoxCell
+    class EditBrowseBoxTableCell final : public AccessibleBrowseBoxCell
                                     ,public ::comphelper::OAccessibleContextWrapperHelper
     {
     public:
@@ -42,10 +42,9 @@ namespace accessibility
             sal_uInt16 _nColPos
         );
 
-    protected:
+    private:
         virtual ~EditBrowseBoxTableCell() override;
 
-    protected:
         // XAccessibleComponent
         virtual sal_Int32 SAL_CALL getForeground(  ) override ;
         virtual sal_Int32 SAL_CALL getBackground(  ) override ;
@@ -71,7 +70,7 @@ namespace accessibility
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-    protected:
+
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
 
@@ -81,7 +80,6 @@ namespace accessibility
         // OAccessibleContextWrapperHelper();
         void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) override;
 
-    private:
         EditBrowseBoxTableCell( const EditBrowseBoxTableCell& ) = delete;
         EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ) = delete;
     };
