@@ -21,10 +21,6 @@
 
 #include <i18nutil/paper.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
-
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 
@@ -35,30 +31,31 @@ namespace svx { namespace sidebar {
 } }
 
 class PageSizePopup;
-class ValueSet;
+class SvtValueSet;
 
 namespace sw { namespace sidebar {
 
-class PageSizeControl final : public svtools::ToolbarPopup
+class PageSizeControl final : public WeldToolbarPopup
 {
 public:
-    explicit PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent);
+    explicit PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent);
+    virtual void GrabFocus() override;
     virtual ~PageSizeControl() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<VclVBox> maContainer;
-    VclPtr<svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
-    VclPtr<PushButton> maMoreButton;
+    std::unique_ptr<weld::Button> mxMoreButton;
     // hidden metric field
-    VclPtr<MetricField> maWidthHeightField;
+    std::unique_ptr<weld::MetricSpinButton> mxWidthHeightField;
+    std::unique_ptr<svx::sidebar::ValueSetWithTextControl> mxSizeValueSet;
+    std::unique_ptr<weld::CustomWeld> mxSizeValueSetWin;
+    rtl::Reference<PageSizePopup> mxControl;
 
     std::vector< Paper > maPaperList;
 
     static void ExecuteSizeChange( const Paper ePaper );
 
-    DECL_LINK(ImplSizeHdl, ::ValueSet*, void);
-    DECL_LINK(MoreButtonClickHdl_Impl, Button*, void);
+    DECL_LINK(ImplSizeHdl, SvtValueSet*, void);
+    DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);
 };
 
 } } // end of namespace sw::sidebar

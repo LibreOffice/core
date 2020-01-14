@@ -70,27 +70,20 @@ namespace
 
 namespace sw { namespace sidebar {
 
-PageSizeControl::PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent)
-    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui")
+PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/swriter/ui/pagesizecontrol.ui", "PageSizeControl")
+    , mxMoreButton(m_xBuilder->weld_button("moreoptions"))
+    , mxWidthHeightField(m_xBuilder->weld_metric_spin_button("metric", FieldUnit::CM))
+    , mxSizeValueSet(new svx::sidebar::ValueSetWithTextControl)
+    , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxSizeValueSet))
+    , mxControl(pControl)
     , maPaperList()
 {
-    get(maMoreButton, "moreoptions");
-    get(maContainer, "container");
-    mpSizeValueSet = VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( maContainer.get(), WB_BORDER );
-
-    // Avoid flicker when hovering over the menu items.
-    if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
-        // If NWF renders the focus rects itself, that breaks double-buffering.
-        mpSizeValueSet->RequestDoubleBuffering(true);
-
-    maWidthHeightField = VclPtr<MetricField>::Create( maContainer.get(), 0 );
-    maWidthHeightField->Hide();
-    maWidthHeightField->SetUnit(FieldUnit::CM);
-    maWidthHeightField->SetMax(9999);
-    maWidthHeightField->SetDecimalDigits(2);
-    maWidthHeightField->SetSpinSize(10);
-    maWidthHeightField->SetLast(9999);
-    SetFieldUnit( *maWidthHeightField, lcl_GetFieldUnit() );
+    mxWidthHeightField->set_unit(FieldUnit::CM);
+    mxWidthHeightField->set_range(0, 9999, FieldUnit::NONE);
+    mxWidthHeightField->set_digits(2);
+    mxWidthHeightField->set_increments(10, 100, FieldUnit::NONE);
+    SetFieldUnit( *mxWidthHeightField, lcl_GetFieldUnit() );
 
     maPaperList.push_back( PAPER_A3 );
     maPaperList.push_back( PAPER_A4 );
@@ -101,14 +94,14 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent)
     maPaperList.push_back( PAPER_LETTER );
     maPaperList.push_back( PAPER_LEGAL );
 
-    mpSizeValueSet->SetStyle( mpSizeValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT );
-    mpSizeValueSet->SetColor( GetSettings().GetStyleSettings().GetMenuColor() );
+    mxSizeValueSet->SetStyle( mxSizeValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT );
+    mxSizeValueSet->SetColor( Application::GetSettings().GetStyleSettings().GetMenuColor() );
 
     sal_uInt16 nSelectedItem = 0;
     {
         OUString aMetricStr;
         {
-            const OUString aText = maWidthHeightField->GetText();
+            const OUString aText = mxWidthHeightField->get_text();
             for (short i = aText.getLength() - 1; i >= 0; i--)
             {
                 sal_Unicode c = aText[i];
@@ -137,7 +130,7 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent)
             pSize = static_cast<const SvxSizeItem*>(pItem);
         }
 
-        const LocaleDataWrapper& localeDataWrapper = maWidthHeightField->GetLocaleDataWrapper();
+        const LocaleDataWrapper& localeDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         OUString aWidthStr;
         OUString aHeightStr;
         OUString aItemText2;
@@ -151,23 +144,23 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent)
                 Swap( aPaperSize );
             }
 
-            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FieldUnit::TWIP );
+            mxWidthHeightField->set_value( mxWidthHeightField->normalize( aPaperSize.Width() ), FieldUnit::TWIP );
             aWidthStr = localeDataWrapper.getNum(
-                maWidthHeightField->GetValue(),
-                maWidthHeightField->GetDecimalDigits(),
-                maWidthHeightField->IsUseThousandSep(),
-                maWidthHeightField->IsShowTrailingZeros() );
+                mxWidthHeightField->get_value(FieldUnit::NONE),
+                mxWidthHeightField->get_digits(),
+                true,
+                true );
 
-            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Height() ), FieldUnit::TWIP);
+            mxWidthHeightField->set_value( mxWidthHeightField->normalize( aPaperSize.Height() ), FieldUnit::TWIP);
             aHeightStr = localeDataWrapper.getNum(
-                maWidthHeightField->GetValue(),
-                maWidthHeightField->GetDecimalDigits(),
-                maWidthHeightField->IsUseThousandSep(),
-                maWidthHeightField->IsShowTrailingZeros() );
+                mxWidthHeightField->get_value(FieldUnit::NONE),
+                mxWidthHeightField->get_digits(),
+                true,
+                true );
 
             aItemText2 = aWidthStr + " x " + aHeightStr + " " + aMetricStr;
 
-            mpSizeValueSet->AddItem(
+            mxSizeValueSet->AddItem(
                 SvxPaperInfo::GetName( maPaperList[ nPaperIdx ] ),
                 aItemText2 );
 
@@ -177,32 +170,26 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, vcl::Window* pParent)
             }
         }
     }
-    mpSizeValueSet->SetNoSelection();
-    mpSizeValueSet->SetSelectHdl( LINK(this, PageSizeControl, ImplSizeHdl ) );
-    mpSizeValueSet->Show();
-    mpSizeValueSet->Resize();
+    mxSizeValueSet->SetNoSelection();
+    mxSizeValueSet->SetSelectHdl( LINK(this, PageSizeControl, ImplSizeHdl ) );
+    mxSizeValueSet->Show();
+    mxSizeValueSet->Resize();
 
-    mpSizeValueSet->SelectItem( nSelectedItem );
-    mpSizeValueSet->SetFormat();
-    mpSizeValueSet->Invalidate();
-    mpSizeValueSet->StartSelection();
+    mxSizeValueSet->SelectItem( nSelectedItem );
+    mxSizeValueSet->SetFormat();
+    mxSizeValueSet->Invalidate();
 
-    maMoreButton->SetClickHdl( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );
-    maMoreButton->GrabFocus();
+    mxMoreButton->connect_clicked( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );
+    mxMoreButton->grab_focus();
+}
+
+void PageSizeControl::GrabFocus()
+{
+    mxSizeValueSet->GrabFocus();
 }
 
 PageSizeControl::~PageSizeControl()
 {
-    disposeOnce();
-}
-
-void PageSizeControl::dispose()
-{
-    mpSizeValueSet.disposeAndClear();
-    maMoreButton.disposeAndClear();
-    maWidthHeightField.disposeAndClear();
-    maContainer.disposeAndClear();
-    ToolbarPopup::dispose();
 }
 
 void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
@@ -229,24 +216,21 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
 }
 
 
-IMPL_LINK(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
+IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, SvtValueSet*, void)
 {
-    mpSizeValueSet->SetNoSelection();
-    if ( pControl == mpSizeValueSet )
-    {
-        const sal_uInt16 nSelectedPaper = mpSizeValueSet->GetSelectedItemId();
-        const Paper ePaper = maPaperList[nSelectedPaper - 1];
-        ExecuteSizeChange( ePaper );
-    }
+    mxSizeValueSet->SetNoSelection();
+    const sal_uInt16 nSelectedPaper = mxSizeValueSet->GetSelectedItemId();
+    const Paper ePaper = maPaperList[nSelectedPaper - 1];
+    ExecuteSizeChange( ePaper );
 
-    EndPopupMode();
+    mxControl->EndPopupMode();
 }
 
-IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, weld::Button&, void)
 {
     if ( SfxViewFrame::Current() )
         SfxViewFrame::Current()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
-    EndPopupMode();
+    mxControl->EndPopupMode();
 }
 
 } } // end of namespace sw::sidebar

@@ -26,15 +26,25 @@
 #include <vcl/graph.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace svx { namespace sidebar {
 
-ValueSetWithTextControl::ValueSetWithTextControl(Window* pParent, WinBits nBits)
-    : ValueSet( pParent, nBits )
+ValueSetWithTextControl::ValueSetWithTextControl()
+    : SvtValueSet(nullptr)
 {
-    SetColCount();
 }
 
+void ValueSetWithTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    SvtValueSet::SetDrawingArea(pDrawingArea);
+
+    Size aSize(250, 300);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+
+    SetColCount();
+}
 
 void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
@@ -88,7 +98,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         }
         else
         {
-            aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
+            aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldTextColor() );
         }
 
         tools::Rectangle aStrRect = aRect;
