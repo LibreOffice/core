@@ -243,9 +243,7 @@ struct StaticChartDocumentWrapperPropertyArray : public rtl::StaticAggregate< Se
 
 } //  anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace {
@@ -1444,7 +1442,6 @@ css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServic
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

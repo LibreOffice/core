@@ -32,9 +32,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace {
@@ -135,7 +133,6 @@ void WrappedScaleTextProperties::addWrappedProperties( std::vector< std::unique_
     rList.emplace_back( new WrappedScaleTextProperty( spChart2ModelContact ) );
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

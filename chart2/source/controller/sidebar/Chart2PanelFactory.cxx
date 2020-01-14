@@ -38,7 +38,7 @@
 
 using namespace css::uno;
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 ChartPanelFactory::ChartPanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
@@ -143,7 +143,7 @@ css::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
     return { "com.sun.star.ui.UIElementFactory" };
 }
 
-} } // end of namespace chart::sidebar
+} // end of namespace chart::sidebar
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_chart2_sidebar_ChartPanelFactory(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)

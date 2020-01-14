@@ -38,9 +38,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace chart
-{
-namespace sidebar
+namespace chart::sidebar
 {
 ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -435,7 +433,6 @@ void ChartTypePanel::selectMainType()
         uno::Reference<beans::XPropertySet> xTemplateProps(getCurrentTemplate(), uno::UNO_QUERY);
         m_pCurrentMainType->fillExtraControls(m_xChartModel, xTemplateProps);
     }
-}
 }
 } // end of namespace ::chart::sidebar
 

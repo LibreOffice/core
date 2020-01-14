@@ -29,9 +29,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace {
@@ -398,7 +396,6 @@ Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< bean
     return aRet;
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

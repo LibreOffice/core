@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::chart::TimeInterval;
 using ::com::sun::star::chart::TimeIncrement;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 namespace {
 
@@ -967,6 +967,6 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
     return (bSetScale || bChangedOtherwise);
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #include <DataSource.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

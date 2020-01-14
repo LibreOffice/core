@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com::sun::star::awt { class XWindow; }
 
 namespace chart
 {

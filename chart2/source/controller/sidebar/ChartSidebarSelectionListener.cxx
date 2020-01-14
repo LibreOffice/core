@@ -14,8 +14,7 @@
 
 #include <ObjectIdentifier.hxx>
 
-namespace chart {
-namespace sidebar {
+namespace chart::sidebar {
 
 ChartSidebarSelectionListenerParent::~ChartSidebarSelectionListenerParent()
 {
@@ -80,6 +79,6 @@ void ChartSidebarSelectionListener::setAcceptedTypes(const std::vector<ObjectTyp
     maTypes = aTypes;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com::sun::star::drawing { class XShape; }
 
 namespace chart
 {

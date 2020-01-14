@@ -80,9 +80,7 @@ void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const 
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 RegressionCurveItemConverter::RegressionCurveItemConverter(
@@ -332,7 +330,6 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
     }
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

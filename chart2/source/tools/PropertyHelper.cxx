@@ -172,9 +172,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace PropertyHelper
+namespace chart::PropertyHelper
 {
 
 OUString addLineDashUniqueNameToTable(
@@ -293,8 +291,6 @@ void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMa
 {
     setPropertyValueDefault( rOutMap, key, uno::Any());
 }
-
-} // namespace PropertyHelper
 
 } //  namespace chart
 

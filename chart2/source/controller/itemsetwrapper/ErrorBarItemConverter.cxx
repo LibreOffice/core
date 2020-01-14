@@ -74,9 +74,7 @@ void lcl_getErrorIndicatorValues(
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 ErrorBarItemConverter::ErrorBarItemConverter(
@@ -430,7 +428,6 @@ void ErrorBarItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

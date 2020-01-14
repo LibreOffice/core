@@ -416,9 +416,7 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
 
 } // anonymous namespace
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 DataSeriesPointWrapper::DataSeriesPointWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
@@ -852,7 +850,6 @@ css::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServ
     };
 }
 
-} //  namespace wrapper
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

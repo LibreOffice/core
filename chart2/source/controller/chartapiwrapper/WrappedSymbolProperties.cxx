@@ -38,9 +38,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 
-namespace chart
-{
-namespace wrapper
+namespace chart::wrapper
 {
 
 namespace
@@ -526,7 +524,6 @@ beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Refe
     return beans::PropertyState_DEFAULT_VALUE;
 }
 
-} //namespace wrapper
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
