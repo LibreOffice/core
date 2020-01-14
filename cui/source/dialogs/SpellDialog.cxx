@@ -40,7 +40,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/specialchars.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
@@ -1501,9 +1501,9 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OString&, rCurItemId, void)
     }
     else if (rCurItemId == "insert")
     {
-        if (Edit::GetGetSpecialCharsFunction())
+        if (vcl::GetGetSpecialCharsFunction())
         {
-            OUString aChars = Edit::GetGetSpecialCharsFunction()(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
+            OUString aChars = vcl::GetGetSpecialCharsFunction()(GetDrawingArea(), m_xEditEngine->GetStandardFont(0));
             if (!aChars.isEmpty())
             {
                 ESelection aCurrentSelection(m_xEditView->GetSelection());

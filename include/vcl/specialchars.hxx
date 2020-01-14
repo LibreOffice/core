@@ -34,8 +34,8 @@ typedef OUString (*FncGetSpecialChars)(weld::Widget* pWin, const vcl::Font& rFon
 
 namespace vcl
 {
-static void VCL_DLLPUBLIC SetGetSpecialCharsFunction(FncGetSpecialChars fn);
-static FncGetSpecialChars VCL_DLLPUBLIC GetGetSpecialCharsFunction();
+void VCL_DLLPUBLIC SetGetSpecialCharsFunction(FncGetSpecialChars fn);
+FncGetSpecialChars VCL_DLLPUBLIC GetGetSpecialCharsFunction();
 };
 
 #endif // INCLUDED_VCL_SPECIAL_CHARS_HXX
