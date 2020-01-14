@@ -27,9 +27,7 @@
 #include <basegfx/tuple/b3ituple.hxx>
 #include <numeric>
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         // B3DPolygon tools
         void checkClosed(B3DPolygon& rCandidate)
@@ -739,7 +737,6 @@ namespace basegfx
             }
         }
 
-    } // end of namespace utils
-} // end of namespace basegfx
+    } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

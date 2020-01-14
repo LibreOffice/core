@@ -26,9 +26,7 @@
 
 #include <list>
 
-namespace basegfx
-{
-    namespace trapezoidhelper
+namespace basegfx::trapezoidhelper
     {
 
         // helper class to hold a simple edge. This is only used for horizontal edges
@@ -191,12 +189,9 @@ namespace basegfx
 
         typedef std::list< TrDeEdgeEntry > TrDeEdgeEntries;
 
-    } // end of anonymous namespace
-} // end of namespace basegfx
+    } // end of namespace basegfx
 
-namespace basegfx
-{
-    namespace trapezoidhelper
+namespace basegfx::trapezoidhelper
     {
         // FIXME: templatize this and use it for TrDeEdgeEntries too ...
 
@@ -895,8 +890,7 @@ namespace basegfx
         };
 
         }
-    } // end of anonymous namespace
-} // end of namespace basegfx
+    } // end of namespace basegfx
 
 namespace basegfx
 {
@@ -949,9 +943,7 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         // convert Source utils::PolyPolygon to trapezoids
         void trapezoidSubdivide(B2DTrapezoidVector& ro_Result, const B2DPolyPolygon& rSourcePolyPolygon)
@@ -1176,7 +1168,6 @@ namespace basegfx
         }
 
 
-    } // end of namespace utils
-} // end of namespace basegfx
+    } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

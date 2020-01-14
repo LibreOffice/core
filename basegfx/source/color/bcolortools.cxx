@@ -21,7 +21,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-namespace basegfx { namespace utils
+namespace basegfx::utils
 {
     BColor rgb2hsl(const BColor& rRGBColor)
     {
@@ -189,6 +189,6 @@ namespace basegfx { namespace utils
         }
     }
 
-} } // end of namespace basegfx
+} // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
