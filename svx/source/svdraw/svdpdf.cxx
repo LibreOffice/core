@@ -787,6 +787,7 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
             break;
         case FPDF_TEXTRENDERMODE_STROKE:
         case FPDF_TEXTRENDERMODE_STROKE_CLIP:
+        case FPDF_TEXTRENDERMODE_UNKNOWN:
             break;
         case FPDF_TEXTRENDERMODE_INVISIBLE:
         case FPDF_TEXTRENDERMODE_CLIP:

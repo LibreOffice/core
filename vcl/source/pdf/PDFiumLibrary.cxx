@@ -259,9 +259,10 @@ std::unique_ptr<PDFiumPageObject> PDFiumPageObject::getFormObject(int nIndex)
 basegfx::B2DHomMatrix PDFiumPageObject::getMatrix()
 {
     basegfx::B2DHomMatrix aB2DMatrix;
-    double a, b, c, d, e, f;
-    if (FPDFTextObj_GetMatrix(mpPageObject, &a, &b, &c, &d, &e, &f))
-        aB2DMatrix = basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
+    FS_MATRIX matrix;
+    if (FPDFTextObj_GetMatrix(mpPageObject, &matrix))
+        aB2DMatrix = basegfx::B2DHomMatrix::abcdef(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e,
+                                                   matrix.f);
     return aB2DMatrix;
 }
 
