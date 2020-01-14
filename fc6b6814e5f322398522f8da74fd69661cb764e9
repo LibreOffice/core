@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3b8eb39e_8c420d40",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-14T14:34:04Z",
+      "side": 1,
+      "message": "but which is obsoleted by \u003chttps://gerrit.libreoffice.org/c/core/+/86765\u003e \"Remove unused prefix\u003d\u0027direct\u0027 feature\" now, anyway",
+      "parentUuid": "AAAAbH///oo\u003d",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAbH///qk\u003d",
         "filename": "cppuhelper/source/shlib.cxx",
         "patchSetId": 1
