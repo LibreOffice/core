@@ -1923,14 +1923,9 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pInnerFormObject));
     FPDF_PAGEOBJECT pImage = FPDFFormObj_GetObject(pInnerFormObject, 0);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pImage));
-    double fA = 0;
-    double fB = 0;
-    double fC = 0;
-    double fD = 0;
-    double fE = 0;
-    double fF = 0;
-    FPDFFormObj_GetMatrix(pInnerFormObject, &fA, &fB, &fC, &fD, &fE, &fF);
-    basegfx::B2DHomMatrix aMat{ fA, fC, fE, fB, fD, fF };
+    FS_MATRIX aMatrix;
+    FPDFFormObj_GetMatrix(pInnerFormObject, &aMatrix);
+    basegfx::B2DHomMatrix aMat{ aMatrix.a, aMatrix.c, aMatrix.e, aMatrix.b, aMatrix.d, aMatrix.f };
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
     double fRotate = 0;
