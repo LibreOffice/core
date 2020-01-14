@@ -6,6 +6,7 @@ svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkLabel[@id='rubytextft'] orphan-
 svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkEntry[@id='Left1ED'] no-labelled-by
 svx/uiconfig/ui/asianphoneticguidedialog.ui://GtkEntry[@id='Right1ED'] no-labelled-by
 svx/uiconfig/ui/colorwindow.ui://GtkButton[@id='auto_color_button'] button-no-label
+svx/uiconfig/ui/columnswindow.ui://GtkSpinButton[@id='spinbutton'] no-labelled-by
 svx/uiconfig/ui/compressgraphicdialog.ui://GtkLabel[@id='label13'] orphan-label
 svx/uiconfig/ui/compressgraphicdialog.ui://GtkLabel[@id='label14'] orphan-label
 svx/uiconfig/ui/compressgraphicdialog.ui://GtkLabel[@id='label16'] orphan-label
