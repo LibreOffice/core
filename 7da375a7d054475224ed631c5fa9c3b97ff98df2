@@ -16,6 +16,24 @@
       "revId": "7da375a7d054475224ed631c5fa9c3b97ff98df2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8Ho\u003d",
+        "filename": "vcl/unx/gtk/app/gtkdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-14T10:55:47Z",
+      "side": 1,
+      "message": "What do you mean with \"Here, too.\"?",
+      "parentUuid": "AAAAXn//8IA\u003d",
+      "revId": "7da375a7d054475224ed631c5fa9c3b97ff98df2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
