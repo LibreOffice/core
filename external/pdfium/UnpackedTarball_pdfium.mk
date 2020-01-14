@@ -44,6 +44,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/allocator/partition_allocator/partition_oom.cc third_party/base/allocator/partition_allocator/partition_oom.cpp && \
     mv third_party/base/allocator/partition_allocator/partition_page.cc third_party/base/allocator/partition_allocator/partition_page.cpp && \
     mv third_party/base/allocator/partition_allocator/partition_root_base.cc third_party/base/allocator/partition_allocator/partition_root_base.cpp && \
+    mv third_party/base/allocator/partition_allocator/random.cc third_party/base/allocator/partition_allocator/random.cpp && \
     mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp \
 ))
 

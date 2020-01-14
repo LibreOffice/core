@@ -315,6 +315,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_structtree \
     UnpackedTarball/pdfium/core/fpdfdoc/cba_fontmap \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_color_utils \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_icon \
 ))
 
 # fpdftext
@@ -552,6 +553,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_oom \
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_page \
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_root_base \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/random \
 ))
 
 # skia_shared
