@@ -155,6 +155,12 @@ private:
     bool visitBinOp(BinaryOperator const * expr);
     void visitAssign(QualType lhs, Expr const * rhs);
     bool isOverloadedFunction(FunctionDecl const * decl);
+
+    bool isInIgnoredMacroBody(Expr const * expr) {
+        auto const loc = compat::getBeginLoc(expr);
+        return compiler.getSourceManager().isMacroBodyExpansion(loc)
+            && ignoreLocation(compiler.getSourceManager().getSpellingLoc(loc));
+    }
 };
 
 bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
@@ -435,7 +441,8 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
                   || loplugin::isSamePathname(
                       fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx")
                   || loplugin::isSamePathname(
-                      fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_stringliterals.cxx")))
+                      fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_stringliterals.cxx")
+                  || isInIgnoredMacroBody(expr)))
             {
                 report(
                     DiagnosticsEngine::Warning, "redundant static_cast from %0 to %1",
