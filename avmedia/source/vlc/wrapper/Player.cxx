@@ -59,11 +59,7 @@ namespace { extern "C" {
     int ( *libvlc_audio_set_track ) (libvlc_media_player_t *p_mi, int i_track);
 } }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     bool Player::LoadSymbols()
     {
@@ -240,8 +236,6 @@ namespace wrapper
     {
         return libvlc_media_player_has_vout( mPlayer );
     }
-}
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

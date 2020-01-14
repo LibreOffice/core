@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace priv {
+namespace avmedia::priv {
 
 MediaEventListenersImpl::MediaEventListenersImpl( vcl::Window& rEventWindow ) :
     mpNotifyWindow( &rEventWindow )
@@ -169,7 +169,6 @@ void SAL_CALL MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& )
 }
 
 
-} // namespace priv
 } // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
