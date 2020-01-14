@@ -468,7 +468,7 @@ Reference<XClipboard> GetSystemClipboard()
     // single-instance service (sysdtrans_component_getFactory,
     // dtrans/source/win32/clipb/wcbentry.cxx) that needs timely disposing to join a spawned thread
     // (done in DeInitVCL, vcl/source/app/svmain.cxx), while on other platforms it is implemented as
-    // a mutli-instance service (ClipboardFactory, vcl/source/components/dtranscomp.cxx) so we
+    // a multi-instance service (ClipboardFactory, vcl/source/components/dtranscomp.cxx) so we
     // should not hold on to a single instance here:
 #if defined _WIN32
     DBG_TESTSOLARMUTEX();
