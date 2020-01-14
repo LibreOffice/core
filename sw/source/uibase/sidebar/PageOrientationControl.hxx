@@ -20,19 +20,20 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEORIENTATIONCONTROL_HXX
 
 #include <memory>
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
 #include <editeng/sizeitem.hxx>
 
 class Button;
+class PageOrientationPopup;
 
 namespace sw { namespace sidebar {
 
-class PageOrientationControl : public SfxPopupWindow
+class PageOrientationControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit PageOrientationControl(sal_uInt16 nId, vcl::Window* pParent);
+    explicit PageOrientationControl(PageOrientationPopup* pControl, vcl::Window* pParent);
     virtual ~PageOrientationControl() override;
     virtual void dispose() override;
 
