@@ -70,7 +70,7 @@ namespace desktop {
         static RectangleAndPart Create(const std::string& rPayload);
     };
 
-    class DESKTOP_DLLPUBLIC CallbackFlushHandler : public Idle
+    class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle
     {
     public:
         explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);

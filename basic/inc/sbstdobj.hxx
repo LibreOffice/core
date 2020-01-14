@@ -25,7 +25,7 @@
 #include <basic/sbxfac.hxx>
 #include <basic/basicdllapi.h>
 
-class SbStdFactory : public SbxFactory
+class SbStdFactory final : public SbxFactory
 {
 public:
     SbStdFactory();

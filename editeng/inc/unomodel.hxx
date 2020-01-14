@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase4.hxx>
 
-class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
+class SvxSimpleUnoModel final : public cppu::WeakAggImplHelper4<
                                     css::frame::XModel,
                                     css::ucb::XAnyCompareFactory,
                                     css::style::XStyleFamiliesSupplier,

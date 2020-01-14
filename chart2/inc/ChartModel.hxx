@@ -105,7 +105,7 @@ typedef cppu::WeakImplHelper<
 class UndoManager;
 class ChartView;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartModel : public impl::ChartModel_Base
+class OOO_DLLPUBLIC_CHARTTOOLS ChartModel final : public impl::ChartModel_Base
 {
 
 private:

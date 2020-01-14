@@ -151,7 +151,7 @@ inline void EditCharAttrib::Collaps( sal_Int32 nDiff )
 
 
 
-class EditCharAttribFont: public EditCharAttrib
+class EditCharAttribFont final : public EditCharAttrib
 {
 public:
     EditCharAttribFont( const SvxFontItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -161,7 +161,7 @@ public:
 
 
 
-class EditCharAttribWeight : public EditCharAttrib
+class EditCharAttribWeight final : public EditCharAttrib
 {
 public:
     EditCharAttribWeight( const SvxWeightItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -170,7 +170,7 @@ public:
 };
 
 
-class EditCharAttribItalic : public EditCharAttrib
+class EditCharAttribItalic final : public EditCharAttrib
 {
 public:
     EditCharAttribItalic( const SvxPostureItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -180,7 +180,7 @@ public:
 
 
 
-class EditCharAttribShadow : public EditCharAttrib
+class EditCharAttribShadow final : public EditCharAttrib
 {
 public:
     EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -190,7 +190,7 @@ public:
 
 
 
-class EditCharAttribEscapement : public EditCharAttrib
+class EditCharAttribEscapement final : public EditCharAttrib
 {
 public:
     EditCharAttribEscapement( const SvxEscapementItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -200,7 +200,7 @@ public:
 
 
 
-class EditCharAttribOutline : public EditCharAttrib
+class EditCharAttribOutline final : public EditCharAttrib
 {
 public:
     EditCharAttribOutline( const SvxContourItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -210,7 +210,7 @@ public:
 
 
 
-class EditCharAttribStrikeout : public EditCharAttrib
+class EditCharAttribStrikeout final : public EditCharAttrib
 {
 public:
     EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -220,7 +220,7 @@ public:
 
 
 
-class EditCharAttribCaseMap : public EditCharAttrib
+class EditCharAttribCaseMap final : public EditCharAttrib
 {
 public:
     EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -230,7 +230,7 @@ public:
 
 
 
-class EditCharAttribUnderline : public EditCharAttrib
+class EditCharAttribUnderline final : public EditCharAttrib
 {
 public:
     EditCharAttribUnderline( const SvxUnderlineItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -240,7 +240,7 @@ public:
 
 
 
-class EditCharAttribOverline : public EditCharAttrib
+class EditCharAttribOverline final : public EditCharAttrib
 {
 public:
     EditCharAttribOverline( const SvxOverlineItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -250,7 +250,7 @@ public:
 
 
 
-class EditCharAttribEmphasisMark : public EditCharAttrib
+class EditCharAttribEmphasisMark final : public EditCharAttrib
 {
 public:
     EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -260,7 +260,7 @@ public:
 
 
 
-class EditCharAttribRelief : public EditCharAttrib
+class EditCharAttribRelief final : public EditCharAttrib
 {
 public:
     EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -270,7 +270,7 @@ public:
 
 
 
-class EditCharAttribFontHeight : public EditCharAttrib
+class EditCharAttribFontHeight final : public EditCharAttrib
 {
 public:
     EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -280,7 +280,7 @@ public:
 
 
 
-class EditCharAttribFontWidth : public EditCharAttrib
+class EditCharAttribFontWidth final : public EditCharAttrib
 {
 public:
     EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -290,7 +290,7 @@ public:
 
 
 
-class EditCharAttribColor : public EditCharAttrib
+class EditCharAttribColor final : public EditCharAttrib
 {
 public:
     EditCharAttribColor( const SvxColorItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -299,7 +299,7 @@ public:
 };
 
 
-class EditCharAttribBackgroundColor : public EditCharAttrib
+class EditCharAttribBackgroundColor final : public EditCharAttrib
 {
 public:
     EditCharAttribBackgroundColor(const SvxBackgroundColorItem& rAttr,
@@ -310,7 +310,7 @@ public:
 
 
 
-class EditCharAttribLanguage : public EditCharAttrib
+class EditCharAttribLanguage final : public EditCharAttrib
 {
 public:
     EditCharAttribLanguage( const SvxLanguageItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -320,7 +320,7 @@ public:
 
 
 
-class EditCharAttribTab : public EditCharAttrib
+class EditCharAttribTab final : public EditCharAttrib
 {
 public:
     EditCharAttribTab( const SfxVoidItem& rAttr, sal_Int32 nPos );
@@ -330,7 +330,7 @@ public:
 
 
 
-class EditCharAttribLineBreak : public EditCharAttrib
+class EditCharAttribLineBreak final : public EditCharAttrib
 {
 public:
     EditCharAttribLineBreak( const SfxVoidItem& rAttr, sal_Int32 nPos );
@@ -340,7 +340,7 @@ public:
 
 
 
-class EditCharAttribField: public EditCharAttrib
+class EditCharAttribField final : public EditCharAttrib
 {
     OUString   aFieldValue;
     o3tl::optional<Color>  mxTxtColor;
@@ -369,7 +369,7 @@ public:
 
 
 
-class EditCharAttribPairKerning : public EditCharAttrib
+class EditCharAttribPairKerning final : public EditCharAttrib
 {
 public:
     EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -379,7 +379,7 @@ public:
 
 
 
-class EditCharAttribKerning : public EditCharAttrib
+class EditCharAttribKerning final : public EditCharAttrib
 {
 public:
     EditCharAttribKerning( const SvxKerningItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -389,7 +389,7 @@ public:
 
 
 
-class EditCharAttribWordLineMode: public EditCharAttrib
+class EditCharAttribWordLineMode final : public EditCharAttrib
 {
 public:
     EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
@@ -398,7 +398,7 @@ public:
 };
 
 
-class EditCharAttribGrabBag: public EditCharAttrib
+class EditCharAttribGrabBag final : public EditCharAttrib
 {
 public:
     EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
