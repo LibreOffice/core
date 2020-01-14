@@ -37,7 +37,7 @@ namespace framework{
             way to configure the shell command and it's list
             of arguments.
  */
-class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::task::XJob >
+class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::task::XJob >
 {
 
     // member

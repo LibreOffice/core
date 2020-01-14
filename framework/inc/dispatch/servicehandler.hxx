@@ -47,7 +47,7 @@ namespace framework{
 
     @devstatus      ready to use
 */
-class ServiceHandler : public  ::cppu::WeakImplHelper<
+class ServiceHandler final : public  ::cppu::WeakImplHelper<
                                    css::lang::XServiceInfo       ,
                                    css::frame::XDispatchProvider ,
                                    css::frame::XNotifyingDispatch > // => XDispatch

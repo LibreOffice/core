@@ -30,7 +30,7 @@ class FixedImage;
 
 namespace framework
 {
-class FixedImageToolbarController : public ComplexToolbarController
+class FixedImageToolbarController final : public ComplexToolbarController
 {
 public:
     FixedImageToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -42,13 +42,11 @@ public:
 
     void CheckAndUpdateImages();
 
-protected:
+private:
     virtual void executeControlCommand(const css::frame::ControlCommand& rControlCommand) override;
 
-protected:
     DECL_LINK(MiscOptionsChanged, LinkParamNone*, void);
 
-private:
     VclPtr<FixedImage> m_pFixedImageControl;
     sal_Int16 m_eSymbolSize;
 };

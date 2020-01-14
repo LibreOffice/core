@@ -48,7 +48,7 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     yes
 */
-class StatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndicator >
+class StatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XStatusIndicator >
 {
 
     // member

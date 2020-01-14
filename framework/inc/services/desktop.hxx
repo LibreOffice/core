@@ -94,7 +94,7 @@ typedef cppu::WeakComponentImplHelper<
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;
 
-class Desktop : private cppu::BaseMutex,
+class Desktop final : private cppu::BaseMutex,
                 public Desktop_BASE,
                 public cppu::OPropertySetHelper
 {
@@ -283,9 +283,7 @@ class Desktop : private cppu::BaseMutex,
         /// @throws css::uno::RuntimeException
         bool terminateQuickstarterToo();
 
-    //  protected methods
-
-    protected:
+    private:
 
         //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
@@ -299,9 +297,6 @@ class Desktop : private cppu::BaseMutex,
                                                                                                                      sal_Int32       nHandle         ) const override;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       ) override;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) override;
-
-
-    private:
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
 

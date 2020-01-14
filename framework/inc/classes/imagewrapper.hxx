@@ -29,7 +29,7 @@
 namespace framework
 {
 
-class ImageWrapper : public ::cppu::WeakImplHelper< css::awt::XBitmap,
+class ImageWrapper final : public ::cppu::WeakImplHelper< css::awt::XBitmap,
                                                     css::lang::XUnoTunnel >
 {
     public:

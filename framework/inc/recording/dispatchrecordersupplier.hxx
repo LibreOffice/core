@@ -38,7 +38,7 @@ namespace framework{
 
     @threadsafe     yes
  */
-class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper<
+class DispatchRecorderSupplier final : public  ::cppu::WeakImplHelper<
                                                 css::lang::XServiceInfo             ,
                                                 css::frame::XDispatchRecorderSupplier >
 {

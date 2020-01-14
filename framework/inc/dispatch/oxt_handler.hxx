@@ -44,7 +44,7 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
+class Oxt_Handler final  :  public  ::cppu::WeakImplHelper<
                                     css::lang::XServiceInfo,
                                     css::frame::XNotifyingDispatch, // => XDispatch
                                     css::document::XExtendedFilterDetection >

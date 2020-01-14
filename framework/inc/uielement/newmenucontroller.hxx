@@ -31,7 +31,7 @@
 
 namespace framework
 {
-    class NewMenuController :  public svt::PopupMenuControllerBase
+    class NewMenuController final : public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
 

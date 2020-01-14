@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace framework{
 
-class WakeUpThread: public salhelper::Thread {
+class WakeUpThread final : public salhelper::Thread {
     css::uno::WeakReference<css::util::XUpdatable> updatable_;
     osl::Condition condition_;
 

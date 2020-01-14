@@ -34,7 +34,7 @@
 
 namespace framework
 {
-    class FontSizeMenuController :  public svt::PopupMenuControllerBase
+    class FontSizeMenuController final : public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
 

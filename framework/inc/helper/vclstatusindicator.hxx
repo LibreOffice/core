@@ -30,7 +30,7 @@ namespace framework {
 
 // declaration
 
-class VCLStatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndicator >
+class VCLStatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XStatusIndicator >
 {
 
     // member

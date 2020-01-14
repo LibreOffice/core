@@ -31,7 +31,7 @@ namespace framework {
  * responsibility of the owner to destroy the dispatcher first, in order
  * to break the cycle.
  */
-class StyleDispatcher : public cppu::WeakImplHelper< css::frame::XDispatch, css::frame::XStatusListener >
+class StyleDispatcher final : public cppu::WeakImplHelper< css::frame::XDispatch, css::frame::XStatusListener >
 {
 public:
     StyleDispatcher( const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -57,7 +57,7 @@ private:
     css::uno::Reference< css::frame::XStatusListener > m_xOwner;
 };
 
-class StyleToolbarController : public svt::ToolboxController
+class StyleToolbarController final : public svt::ToolboxController
 {
 public:
     StyleToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rContext,

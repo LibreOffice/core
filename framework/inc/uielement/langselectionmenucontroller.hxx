@@ -32,7 +32,7 @@
 
 namespace framework
 {
-    class LanguageSelectionMenuController :  public svt::PopupMenuControllerBase
+    class LanguageSelectionMenuController final : public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
 

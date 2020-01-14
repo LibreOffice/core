@@ -36,7 +36,7 @@
 namespace framework
 {
 
-class ActionTriggerPropertySet :  private cppu::BaseMutex,
+class ActionTriggerPropertySet final : private cppu::BaseMutex,
                                     public css::lang::XServiceInfo ,
                                     public css::lang::XTypeProvider,
                                     public ::cppu::OBroadcastHelper             ,

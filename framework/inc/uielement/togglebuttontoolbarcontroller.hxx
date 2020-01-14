@@ -31,7 +31,7 @@ class ToolBox;
 namespace framework
 {
 
-class ToggleButtonToolbarController : public ComplexToolbarController
+class ToggleButtonToolbarController final : public ComplexToolbarController
 
 {
     public:
@@ -62,11 +62,10 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         // XToolbarController
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
 
-    protected:
+    private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
         virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
-    private:
         DECL_LINK( MenuSelectHdl, Menu *, bool);
 
         OUString                m_aCurrentSelection;

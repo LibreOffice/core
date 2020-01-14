@@ -36,7 +36,7 @@ namespace framework{
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TitleBarUpdate : public  ::cppu::WeakImplHelper<
+class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
                                    css::lang::XInitialization
                                  , css::frame::XTitleChangeListener // => XEventListener
                                  , css::frame::XFrameActionListener > // => XEventListener

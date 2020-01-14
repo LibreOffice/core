@@ -24,7 +24,7 @@
 
 namespace framework
 {
-    class FooterMenuController :  public HeaderMenuController
+    class FooterMenuController final : public HeaderMenuController
     {
         public:
             FooterMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );

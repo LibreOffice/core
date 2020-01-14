@@ -28,7 +28,7 @@
 
 namespace framework{
 
-class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper< css::ui::XDockingAreaAcceptor >
+class DockingAreaDefaultAcceptor final : public ::cppu::WeakImplHelper< css::ui::XDockingAreaAcceptor >
 {
     public:
 

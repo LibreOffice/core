@@ -41,7 +41,7 @@ namespace framework{
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TagWindowAsModified :   public  ::cppu::WeakImplHelper<
+class TagWindowAsModified final : public  ::cppu::WeakImplHelper<
                                           css::lang::XInitialization,
                                           css::frame::XFrameActionListener, // => XEventListener
                                           css::util::XModifyListener >       // => XEventListener

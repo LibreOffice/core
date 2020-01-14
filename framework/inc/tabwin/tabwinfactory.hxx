@@ -32,7 +32,7 @@
 namespace framework
 {
 
-class TabWinFactory :  public ::cppu::WeakImplHelper< css::lang::XSingleComponentFactory, css::lang::XServiceInfo>
+class TabWinFactory final : public ::cppu::WeakImplHelper< css::lang::XSingleComponentFactory, css::lang::XServiceInfo>
 {
     public:
         TabWinFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );

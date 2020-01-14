@@ -40,7 +40,7 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper< css::util::XStringMapping, css::lang::XServiceInfo>
+class MediaTypeDetectionHelper final : public ::cppu::WeakImplHelper< css::util::XStringMapping, css::lang::XServiceInfo>
 {
 
     //  public methods

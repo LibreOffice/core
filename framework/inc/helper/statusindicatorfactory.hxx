@@ -116,7 +116,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
     @devstatus      ready to use
     @threadsafe     yes
  */
-class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
+class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
                                              css::lang::XServiceInfo
                                            , css::lang::XInitialization
                                            , css::task::XStatusIndicatorFactory
@@ -214,12 +214,11 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
 
     // specials
 
-    protected:
+    private:
 
         virtual ~StatusIndicatorFactory() override;
 
     // helper
-    private:
 
         /** @short  show the parent window of this progress ...
                     if it's allowed to do so.

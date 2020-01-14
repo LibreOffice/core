@@ -40,7 +40,7 @@ namespace framework{
             synchronously or asynchronous, control its lifetime
             and differe between jobs with and without configuration.
  */
-class Job : public  ::cppu::WeakImplHelper<
+class Job final : public  ::cppu::WeakImplHelper<
                         css::task::XJobListener
                       , css::frame::XTerminateListener
                       , css::util::XCloseListener >
