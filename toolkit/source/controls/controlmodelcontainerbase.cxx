@@ -49,7 +49,6 @@
 #include <algorithm>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>

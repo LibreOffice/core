@@ -19,7 +19,6 @@
 
 
 #include <sal/main.h>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <uno/environment.hxx>

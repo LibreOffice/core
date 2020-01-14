@@ -20,7 +20,6 @@
 #include <toolkit/awt/vclxtabpagecontainer.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <sal/log.hxx>
 #include <vcl/image.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

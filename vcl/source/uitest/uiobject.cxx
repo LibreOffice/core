@@ -24,7 +24,6 @@
 #include <comphelper/string.hxx>
 
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 
 #include <iostream>
 #include <memory>

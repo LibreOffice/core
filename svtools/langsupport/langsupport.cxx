@@ -19,7 +19,6 @@
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/svapp.hxx>
 #include <iostream>
-#include <sal/log.hxx>
 
 using namespace com::sun::star;
 

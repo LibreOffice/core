@@ -21,7 +21,6 @@
 
 #include <string_view>
 
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>

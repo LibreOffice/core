@@ -40,7 +40,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
 

@@ -10,7 +10,6 @@
 
 #include <vcl/BitmapTools.hxx>
 
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <vcl/canvastools.hxx>

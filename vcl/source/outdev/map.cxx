@@ -25,7 +25,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 #include <svdata.hxx>

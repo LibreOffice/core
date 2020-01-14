@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
