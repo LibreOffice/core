@@ -19,6 +19,7 @@
 
 #include "PageOrientationControl.hxx"
 #include "PageMarginControl.hxx"
+#include <PageOrientationPopup.hxx>
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -49,8 +50,8 @@ namespace {
 
 namespace sw { namespace sidebar {
 
-PageOrientationControl::PageOrientationControl( sal_uInt16 nId, vcl::Window* pParent )
-    : SfxPopupWindow( nId, pParent, "PageOrientationControl", "modules/swriter/ui/pageorientationcontrol.ui" )
+PageOrientationControl::PageOrientationControl(PageOrientationPopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageOrientationControl", "modules/swriter/ui/pageorientationcontrol.ui" )
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) )
     , mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) )
@@ -78,7 +79,7 @@ void PageOrientationControl::dispose()
     mpPageULMarginItem.reset();
     mpPageSizeItem.reset();
 
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void PageOrientationControl::ExecuteMarginLRChange(
