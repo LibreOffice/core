@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-03 09:24:24 using:
+ Generated on 2020-01-14 11:50:28 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -313,6 +313,9 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
@@ -403,6 +406,7 @@
 #include <svtools/valueset.hxx>
 #include <svx/Palette.hxx>
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/ctredlin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
