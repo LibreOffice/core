@@ -48,8 +48,7 @@
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -1218,7 +1217,6 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
     return *rxCache;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

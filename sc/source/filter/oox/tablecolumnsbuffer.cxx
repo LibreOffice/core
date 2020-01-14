@@ -24,8 +24,7 @@
 #include <oox/token/tokens.hxx>
 #include <dbdata.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 TableColumn::TableColumn( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -124,7 +123,6 @@ TableColumns* TableColumnsBuffer::getActiveTableColumns()
     return maTableColumnsVector.empty() ? nullptr : maTableColumnsVector.back().get();
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
 #include <biffhelper.hxx>
 #include <oox/token/namespaces.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::oox::core;
 
@@ -276,7 +275,6 @@ const RecordInfo* PivotTableFragment::getRecordInfos() const
     return spRecInfos;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

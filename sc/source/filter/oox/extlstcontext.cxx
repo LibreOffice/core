@@ -31,8 +31,7 @@ using ::oox::xls::CondFormatBuffer;
 
 sal_Int32 rStyleIdx = 0;
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 ExtCfRuleContext::ExtCfRuleContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ):
     WorksheetContextBase( rFragment ),
@@ -364,7 +363,6 @@ ContextHandlerRef ExtLstGlobalWorkbookContext::onCreateContext( sal_Int32 nEleme
     return this;
 }
 
-} //namespace oox
 } //namespace xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

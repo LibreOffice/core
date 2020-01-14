@@ -47,8 +47,7 @@
 #include <themebuffer.hxx>
 #include <unitconverter.hxx>
 #include <worksheetbuffer.hxx>
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -773,7 +772,6 @@ void VmlDrawingFragment::finalizeImport()
     getVmlDrawing().convertAndInsert();
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

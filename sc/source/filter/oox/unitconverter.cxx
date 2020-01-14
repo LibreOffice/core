@@ -32,10 +32,9 @@
 #include <stylesbuffer.hxx>
 #include <biffhelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt { struct FontDescriptor; } } } }
+namespace com::sun::star::awt { struct FontDescriptor; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -236,7 +235,6 @@ double UnitConverter::getCoefficient( Unit eUnit ) const
     return maCoeffs[ eUnit ];
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-namespace com { namespace sun { namespace star { namespace ucb { class XCommandEnvironment; } } } }
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -15,18 +15,9 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <test/calc_unoapi_test.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace lang
+namespace com::sun::star::lang
 {
 class XComponent;
-}
-}
-}
 }
 
 using namespace css;

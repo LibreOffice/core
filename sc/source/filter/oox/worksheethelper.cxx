@@ -74,8 +74,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1592,7 +1591,6 @@ void WorksheetHelper::createSharedFormulaMapEntry(
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, nSharedId, rTokens);
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

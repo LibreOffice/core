@@ -21,8 +21,7 @@
 
 using namespace css;
 
-namespace sc {
-namespace tools {
+namespace sc::tools {
 
 namespace {
 
@@ -170,6 +169,6 @@ std::vector<SdrOle2Obj*> getAllPivotChartsConntectedTo(OUString const & sPivotTa
     return aObjects;
 }
 
-}} // end sc::tools
+} // end sc::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

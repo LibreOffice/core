@@ -36,7 +36,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 ScPanelFactory::ScPanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
@@ -131,7 +131,7 @@ css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
     return { "com.sun.star.ui.UIElementFactory" };
 }
 
-} } // end of namespace sc::sidebar
+} // end of namespace sc::sidebar
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScPanelFactory_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)

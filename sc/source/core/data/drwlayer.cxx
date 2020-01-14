@@ -70,7 +70,7 @@
 #include <vcl/field.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
+namespace com::sun::star::embed { class XEmbeddedObject; }
 
 #define DET_ARROW_OFFSET    1000
 

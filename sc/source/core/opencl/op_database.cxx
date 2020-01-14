@@ -12,7 +12,7 @@
 #include <formula/vectortoken.hxx>
 #include <sstream>
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
@@ -1637,6 +1637,6 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

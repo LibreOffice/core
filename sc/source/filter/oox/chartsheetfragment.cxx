@@ -26,8 +26,7 @@
 #include <worksheetsettings.hxx>
 #include <biffhelper.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::oox::core;
 
@@ -170,7 +169,6 @@ void ChartsheetFragment::importDrawing( SequenceInputStream& rStrm )
     setDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

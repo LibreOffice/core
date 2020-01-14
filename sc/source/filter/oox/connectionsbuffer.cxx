@@ -26,8 +26,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::uno;
 
@@ -311,7 +310,6 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

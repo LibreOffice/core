@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 CellLineStyleValueSet::CellLineStyleValueSet()
     : SvtValueSet(nullptr)
@@ -166,6 +166,6 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

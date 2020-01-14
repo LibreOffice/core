@@ -22,8 +22,7 @@
 #include <stylesfragment.hxx>
 #include <oox/token/namespaces.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using ::oox::core::ContextHandlerRef;
 
@@ -87,7 +86,6 @@ void RichStringContext::onCharacters( const OUString& rChars )
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

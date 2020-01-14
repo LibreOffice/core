@@ -15,7 +15,7 @@
 
 using namespace formula;
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 UnhandledToken::UnhandledToken(
     const char* m, const std::string& fn, int ln ) :
@@ -386,6 +386,6 @@ void CheckVariables::UnrollDoubleVector( std::stringstream& ss,
     ss << "    }\n";
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

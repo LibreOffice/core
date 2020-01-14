@@ -32,8 +32,7 @@
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::uno;
 
@@ -289,7 +288,6 @@ void WorksheetSettings::finalizeImport()
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

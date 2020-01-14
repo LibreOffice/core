@@ -36,7 +36,7 @@ using namespace css::uno;
 
 // namespace open
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
     vcl::Window* pParent,
@@ -362,6 +362,6 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
 
 // namespace close
 
-}} // end of namespace ::sc::sidebar
+} // end of namespace ::sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

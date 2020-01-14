@@ -28,7 +28,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     vcl::Window* pParent,
@@ -297,6 +297,6 @@ void NumberFormatPropertyPanel::DisableControls()
     mxEdLeadZeroes->set_sensitive(false);
 }
 
-}} // end of namespace ::sc::sidebar
+} // end of namespace ::sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

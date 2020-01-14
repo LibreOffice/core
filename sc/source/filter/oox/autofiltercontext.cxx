@@ -23,8 +23,7 @@
 #include <autofilterbuffer.hxx>
 #include <oox/token/namespaces.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using ::oox::core::ContextHandlerRef;
 
@@ -146,7 +145,6 @@ void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
     mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
