@@ -19,15 +19,17 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <vcl/button.hxx>
+
+class PageColumnPopup;
 
 namespace sw { namespace sidebar {
 
-class PageColumnControl : public SfxPopupWindow
+class PageColumnControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit PageColumnControl(sal_uInt16 nId, vcl::Window* pParent);
+    explicit PageColumnControl(PageColumnPopup* pControl, vcl::Window* pParent);
 
     virtual ~PageColumnControl() override;
     virtual void dispose() override;

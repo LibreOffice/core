@@ -281,7 +281,6 @@ void SwDLL::RegisterControls()
     svx::ParaFirstLineSpacingControl::RegisterControl(SID_ATTR_PARA_FIRSTLINESPACE, pMod);
     PageMarginPopup::RegisterControl(SID_ATTR_PAGE_MARGIN, pMod);
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
-    PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );

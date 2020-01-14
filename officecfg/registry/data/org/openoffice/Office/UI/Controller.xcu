@@ -1173,6 +1173,17 @@
           <value>lo.writer.PageSizeToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="PageColumnToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:PageColumnType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.PageColumnToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FindText</value>
