@@ -27,7 +27,6 @@
 #include <osl/process.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 
 #include "nlsupport.hxx"
 
