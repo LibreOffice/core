@@ -1,16 +1,16 @@
 diff --git a/public/fpdfview.h b/public/fpdfview.h
-index 2b84f07ba..b6c0a356b 100644
+index 0542b0541..2c9a37b4a 100644
 --- a/public/fpdfview.h
 +++ b/public/fpdfview.h
-@@ -168,7 +168,6 @@ typedef int FPDF_OBJECT_TYPE;
- // Text object enums.
- typedef int FPDF_TEXT_RENDERMODE;
+@@ -175,7 +175,6 @@ typedef int FPDF_ANNOT_APPEARANCEMODE;
+ // Dictionary value types.
+ typedef int FPDF_OBJECT_TYPE;
  
 -#if defined(COMPONENT_BUILD)
  // FPDF_EXPORT should be consistent with |export| in the pdfium_fuzzer
  // template in testing/fuzzers/BUILD.gn.
  #if defined(WIN32)
-@@ -184,9 +183,6 @@ typedef int FPDF_TEXT_RENDERMODE;
+@@ -191,9 +190,6 @@ typedef int FPDF_OBJECT_TYPE;
  #define FPDF_EXPORT
  #endif  // defined(FPDF_IMPLEMENTATION)
  #endif  // defined(WIN32)
