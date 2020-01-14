@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d7a3419_343e4da1",
+        "filename": "vcl/source/filter/png/pngwrite.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-14T19:31:35Z",
+      "side": 1,
+      "message": "no need to make a copy? can just use rBitmapEx",
+      "revId": "d9595eb4c930175b77dd4cd97e48711018180b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
