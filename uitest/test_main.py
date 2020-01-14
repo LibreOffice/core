@@ -23,7 +23,7 @@ test_name_limit_found = False
 
 def parseArgs(argv):
     (optlist,args) = getopt.getopt(argv[1:], "hdr",
-            ["help", "debug", "soffice=", "userdir=", "dir=", "file=", "gdb"])
+            ["help", "debug", "valgrind", "headless", "soffice=", "userdir=", "dir=", "file=", "gdb"])
     return (dict(optlist), args)
 
 def usage():

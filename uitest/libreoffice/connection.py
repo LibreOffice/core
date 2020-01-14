@@ -69,6 +69,8 @@ class OfficeConnection:
                 "--norestore", "--nologo"]
         if "--valgrind" in self.args:
             argv.append("--valgrind")
+        if "--headless" in self.args:
+            argv.append("--headless")
 
         if "--gdb" in self.args:
             argv.insert(0, "gdb")
@@ -145,6 +147,7 @@ class OfficeConnection:
                    supported methods: 'path', 'connect'
  --userdir=URL     specify user installation directory for 'path' method
  --valgrind        pass --valgrind to soffice for 'path' method
+ --headless        run in headless mode
 
  'location' is a pathname, not a URL. 'userdir' is a URL.
  """
