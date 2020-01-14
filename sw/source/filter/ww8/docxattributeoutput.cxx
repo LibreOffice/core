@@ -7859,6 +7859,13 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
         return;
     }
 
+    // do not output inherited tabs twice (inside styles and inside inline properties)
+    if ( nCount == nInheritedTabCount && nCount > 0 )
+    {
+        if ( *pInheritedTabs == rTabStop )
+            return;
+    }
+
     m_pSerializer->startElementNS(XML_w, XML_tabs);
 
     // Get offset for tabs
