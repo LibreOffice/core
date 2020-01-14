@@ -1,14 +1,14 @@
---- core/fxcrt/string_data_template.h
-+++ core/fxcrt/string_data_template.h
-@@ -76,7 +76,8 @@ class StringDataTemplate {
-     ASSERT(nLen >= 0);
-     ASSERT(offset + nLen <= m_nAllocLength);
+--- core/fxcrt/string_data_template.cpp
++++ core/fxcrt/string_data_template.cpp
+@@ -82,7 +82,8 @@ void StringDataTemplate<CharType>::CopyContentsAt(size_t offset,
+   ASSERT(nLen >= 0);
+   ASSERT(offset + nLen <= m_nAllocLength);
  
--    memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
-+    if (nLen != 0)
-+      memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
-     m_String[offset + nLen] = 0;
-   }
+-  memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
++  if (nLen != 0)
++    memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
+   m_String[offset + nLen] = 0;
+ }
  
 --- core/fxge/cfx_glyphcache.cpp
 +++ core/fxge/cfx_glyphcache.cpp
