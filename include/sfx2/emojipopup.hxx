@@ -20,18 +20,24 @@
 #ifndef INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
 #define INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <sfx2/dllapi.h>
 
-class SFX2_DLLPUBLIC EmojiPopup final : public SfxToolBoxControl
+class SFX2_DLLPUBLIC EmojiPopup final : public svt::PopupWindowController
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    EmojiPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~EmojiPopup() override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 #endif

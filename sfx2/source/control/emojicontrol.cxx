@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/emojiview.hxx>
 #include <sfx2/emojicontrol.hxx>
+#include <sfx2/emojipopup.hxx>
+#include <sfx2/emojiview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/tabpage.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -37,8 +38,8 @@ const char FILTER_UNICODE9[]  = "unicode9";
 
 using namespace com::sun::star;
 
-SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame)
-    : SfxPopupWindow(nId, pParent, "emojictrl", "sfx/ui/emojicontrol.ui", rFrame)
+SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "emojictrl", "sfx/ui/emojicontrol.ui")
 {
     get(mpTabControl, "tabcontrol");
     get(mpEmojiView, "emoji_view");
@@ -111,13 +112,12 @@ SfxEmojiControl::~SfxEmojiControl()
     disposeOnce();
 }
 
-
 void SfxEmojiControl::dispose()
 {
     mpTabControl.clear();
     mpEmojiView.clear();
 
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void SfxEmojiControl::ConvertLabelToUnicode(sal_uInt16 nPageId)
