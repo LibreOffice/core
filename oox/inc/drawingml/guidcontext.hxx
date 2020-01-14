@@ -24,7 +24,7 @@
 
 namespace oox { namespace drawingml {
 
-    class GuidContext : public ::oox::core::ContextHandler2
+    class GuidContext final : public ::oox::core::ContextHandler2
     {
 
     public:

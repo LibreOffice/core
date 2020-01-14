@@ -31,7 +31,7 @@ struct UpDownBarsModel;
 
 /** Handler for an up/down bars context (c:upDownBars element).
  */
-class UpDownBarsContext : public ContextBase< UpDownBarsModel >
+class UpDownBarsContext final : public ContextBase< UpDownBarsModel >
 {
 public:
     explicit            UpDownBarsContext( ::oox::core::ContextHandler2Helper& rParent, UpDownBarsModel& rModel );
@@ -47,7 +47,7 @@ typedef ContextBase< TypeGroupModel > TypeGroupContextBase;
 
 /** Handler for area type group contexts (c:area3DChart, c:areaChart elements).
  */
-class AreaTypeGroupContext : public TypeGroupContextBase
+class AreaTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            AreaTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -59,7 +59,7 @@ public:
 
 /** Handler for bar type group contexts (c:bar3DChart, c:barChart elements).
  */
-class BarTypeGroupContext : public TypeGroupContextBase
+class BarTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            BarTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -71,7 +71,7 @@ public:
 
 /** Handler for bubble type group context (c:bubbleChart element).
  */
-class BubbleTypeGroupContext : public TypeGroupContextBase
+class BubbleTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            BubbleTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -84,7 +84,7 @@ public:
 /** Handler for line type group contexts (c:line3DChart, c:lineChart,
     c:stockChart elements).
  */
-class LineTypeGroupContext : public TypeGroupContextBase
+class LineTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            LineTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -97,7 +97,7 @@ public:
 /** Handler for pie type group contexts (c:doughnutChart, c:ofPieChart,
     c:pie3DChart, c:pieChart elements).
  */
-class PieTypeGroupContext : public TypeGroupContextBase
+class PieTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            PieTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -109,7 +109,7 @@ public:
 
 /** Handler for radar type group context (c:radarChart element).
  */
-class RadarTypeGroupContext : public TypeGroupContextBase
+class RadarTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            RadarTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -121,7 +121,7 @@ public:
 
 /** Handler for scatter type group context (c:scatterChart element).
  */
-class ScatterTypeGroupContext : public TypeGroupContextBase
+class ScatterTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            ScatterTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
@@ -134,7 +134,7 @@ public:
 /** Handler for surface type group contexts (c:surface3DChart, c:surfaceChart
     elements).
  */
-class SurfaceTypeGroupContext : public TypeGroupContextBase
+class SurfaceTypeGroupContext final : public TypeGroupContextBase
 {
 public:
     explicit            SurfaceTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );

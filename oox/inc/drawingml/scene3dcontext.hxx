@@ -27,7 +27,7 @@ namespace oox { namespace drawingml {
 
 struct Shape3DProperties;
 
-class Scene3DRotationPropertiesContext : public ::oox::core::ContextHandler2
+class Scene3DRotationPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
     Scene3DRotationPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, RotationProperties& rRotationProperties ) throw();
@@ -38,7 +38,7 @@ private:
     RotationProperties& mrRotationProperties;
 };
 
-class Scene3DPropertiesContext : public ::oox::core::ContextHandler2
+class Scene3DPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
     Scene3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Shape3DProperties& r3DProperties ) throw();
@@ -49,7 +49,7 @@ private:
     Shape3DProperties& mr3DProperties;
 };
 
-class Shape3DPropertiesContext : public ::oox::core::ContextHandler2
+class Shape3DPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
     Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw();

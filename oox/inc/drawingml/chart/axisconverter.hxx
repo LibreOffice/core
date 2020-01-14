@@ -34,7 +34,7 @@ namespace chart {
 
 struct AxisDispUnitsModel;
 
-class AxisDispUnitsConverter : public ConverterBase< AxisDispUnitsModel >
+class AxisDispUnitsConverter final : public ConverterBase< AxisDispUnitsModel >
 {
 public:
     explicit            AxisDispUnitsConverter(
@@ -50,7 +50,7 @@ public:
 struct AxisModel;
 class TypeGroupConverter;
 
-class AxisConverter : public ConverterBase< AxisModel >
+class AxisConverter final : public ConverterBase< AxisModel >
 {
 public:
     explicit            AxisConverter(

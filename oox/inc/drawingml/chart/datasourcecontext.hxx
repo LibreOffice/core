@@ -36,7 +36,7 @@ typedef ContextBase< DataSequenceModel > DataSequenceContextBase;
 
 /** Handler for a double sequence context (c:numLit, c:numRef elements).
  */
-class DoubleSequenceContext : public DataSequenceContextBase
+class DoubleSequenceContext final : public DataSequenceContextBase
 {
 public:
     explicit            DoubleSequenceContext( ::oox::core::ContextHandler2Helper& rParent, DataSequenceModel& rModel );
@@ -58,7 +58,7 @@ private:
 /** Handler for a string sequence context (c:multiLvlStrRef, c:strLit,
     c:strRef elements).
  */
-class StringSequenceContext : public DataSequenceContextBase
+class StringSequenceContext final : public DataSequenceContextBase
 {
 public:
     explicit            StringSequenceContext( ::oox::core::ContextHandler2Helper& rParent, DataSequenceModel& rModel );
@@ -77,7 +77,7 @@ struct DataSourceModel;
 /** Handler for a data source context (c:bubbleSize, c:cat, c:minus, c:plus,
     c:val, c:xVal, c:yVal elements).
  */
-class DataSourceContext : public ContextBase< DataSourceModel >
+class DataSourceContext final : public ContextBase< DataSourceModel >
 {
 public:
     explicit            DataSourceContext( ::oox::core::ContextHandler2Helper& rParent, DataSourceModel& rModel );

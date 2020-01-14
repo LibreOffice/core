@@ -26,7 +26,7 @@ namespace oox { namespace drawingml { namespace table {
 
 class TableProperties;
 
-class TableContext : public ShapeContext
+class TableContext final : public ShapeContext
 {
 public:
     TableContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr );

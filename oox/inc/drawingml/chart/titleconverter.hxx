@@ -38,7 +38,7 @@ namespace chart {
 
 struct TextModel;
 
-class TextConverter : public ConverterBase< TextModel >
+class TextConverter final : public ConverterBase< TextModel >
 {
 public:
     explicit            TextConverter( const ConverterRoot& rParent, TextModel& rModel );
@@ -65,7 +65,7 @@ private:
 
 struct TitleModel;
 
-class TitleConverter : public ConverterBase< TitleModel >
+class TitleConverter final : public ConverterBase< TitleModel >
 {
 public:
     explicit            TitleConverter( const ConverterRoot& rParent, TitleModel& rModel );
@@ -81,7 +81,7 @@ public:
 
 struct LegendModel;
 
-class LegendConverter : public ConverterBase< LegendModel >
+class LegendConverter final : public ConverterBase< LegendModel >
 {
 public:
     explicit            LegendConverter( const ConverterRoot& rParent, LegendModel& rModel );

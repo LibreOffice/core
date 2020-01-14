@@ -31,7 +31,7 @@ struct DataLabelModel;
 
 /** Handler for a chart data point label context (c:dLbl element).
  */
-class DataLabelContext : public ContextBase< DataLabelModel >
+class DataLabelContext final : public ContextBase< DataLabelModel >
 {
 public:
     explicit            DataLabelContext( ::oox::core::ContextHandler2Helper& rParent, DataLabelModel& rModel );
@@ -46,7 +46,7 @@ struct DataLabelsModel;
 
 /** Handler for a chart data point label context (c:dLbls element).
  */
-class DataLabelsContext : public ContextBase< DataLabelsModel >
+class DataLabelsContext final : public ContextBase< DataLabelsModel >
 {
 public:
     explicit            DataLabelsContext( ::oox::core::ContextHandler2Helper& rParent, DataLabelsModel& rModel );
@@ -61,7 +61,7 @@ struct PictureOptionsModel;
 
 /** Handler for fill bitmap settings (c:pictureOptions element).
  */
-class PictureOptionsContext : public ContextBase< PictureOptionsModel >
+class PictureOptionsContext final : public ContextBase< PictureOptionsModel >
 {
 public:
     explicit            PictureOptionsContext( ::oox::core::ContextHandler2Helper& rParent, PictureOptionsModel& rModel );
@@ -75,7 +75,7 @@ struct ErrorBarModel;
 
 /** Handler for a series error bar context (c:errBars element).
  */
-class ErrorBarContext : public ContextBase< ErrorBarModel >
+class ErrorBarContext final : public ContextBase< ErrorBarModel >
 {
 public:
     explicit            ErrorBarContext( ::oox::core::ContextHandler2Helper& rParent, ErrorBarModel& rModel );
@@ -89,7 +89,7 @@ struct TrendlineLabelModel;
 
 /** Handler for a series trendline label context (c:trendlineLbl element).
  */
-class TrendlineLabelContext : public ContextBase< TrendlineLabelModel >
+class TrendlineLabelContext final : public ContextBase< TrendlineLabelModel >
 {
 public:
     explicit            TrendlineLabelContext( ::oox::core::ContextHandler2Helper& rParent, TrendlineLabelModel& rModel );
@@ -103,7 +103,7 @@ struct TrendlineModel;
 
 /** Handler for a series trendline context (c:trendline element).
  */
-class TrendlineContext : public ContextBase< TrendlineModel >
+class TrendlineContext final : public ContextBase< TrendlineModel >
 {
 public:
     explicit            TrendlineContext( ::oox::core::ContextHandler2Helper& rParent, TrendlineModel& rModel );
@@ -118,7 +118,7 @@ struct DataPointModel;
 
 /** Handler for a chart data point context (c:dPt element).
  */
-class DataPointContext : public ContextBase< DataPointModel >
+class DataPointContext final : public ContextBase< DataPointModel >
 {
 public:
     explicit            DataPointContext( ::oox::core::ContextHandler2Helper& rParent, DataPointModel& rModel );
@@ -144,7 +144,7 @@ public:
 
 /** Handler for a data series context for area chart types (c:ser element).
  */
-class AreaSeriesContext : public SeriesContextBase
+class AreaSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            AreaSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -156,7 +156,7 @@ public:
 
 /** Handler for a data series context for bar chart types (c:ser element).
  */
-class BarSeriesContext : public SeriesContextBase
+class BarSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            BarSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -168,7 +168,7 @@ public:
 
 /** Handler for a data series context for bubble chart types (c:ser element).
  */
-class BubbleSeriesContext : public SeriesContextBase
+class BubbleSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            BubbleSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -181,7 +181,7 @@ public:
 /** Handler for a data series context for line and stock chart types (c:ser
     element).
  */
-class LineSeriesContext : public SeriesContextBase
+class LineSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            LineSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -194,7 +194,7 @@ public:
 /** Handler for a data series context for pie and doughnut chart types (c:ser
     element).
  */
-class PieSeriesContext : public SeriesContextBase
+class PieSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            PieSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -206,7 +206,7 @@ public:
 
 /** Handler for a data series context for radar chart types (c:ser element).
  */
-class RadarSeriesContext : public SeriesContextBase
+class RadarSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            RadarSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -218,7 +218,7 @@ public:
 
 /** Handler for a data series context for scatter chart types (c:ser element).
  */
-class ScatterSeriesContext : public SeriesContextBase
+class ScatterSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            ScatterSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
@@ -230,7 +230,7 @@ public:
 
 /** Handler for a data series context for scatter chart types (c:ser element).
  */
-class SurfaceSeriesContext : public SeriesContextBase
+class SurfaceSeriesContext final : public SeriesContextBase
 {
 public:
     explicit            SurfaceSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
