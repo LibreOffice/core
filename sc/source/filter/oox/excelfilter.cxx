@@ -40,8 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -246,7 +245,6 @@ OUString ExcelFilter::getImplementationName()
     return "com.sun.star.comp.oox.xls.ExcelFilter";
 }
 
-} // namespace xls
 } // namespace oox
 
 

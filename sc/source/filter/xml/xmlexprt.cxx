@@ -155,7 +155,7 @@
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 
 

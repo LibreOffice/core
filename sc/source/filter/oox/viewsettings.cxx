@@ -40,10 +40,9 @@
 #include <workbooksettings.hxx>
 #include <worksheetbuffer.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com::sun::star::container { class XNameContainer; }
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -632,7 +631,6 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
     return *xModel;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

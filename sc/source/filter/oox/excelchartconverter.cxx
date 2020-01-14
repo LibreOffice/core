@@ -30,8 +30,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <formulaparser.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
@@ -120,7 +119,6 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     return xDataSeq;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

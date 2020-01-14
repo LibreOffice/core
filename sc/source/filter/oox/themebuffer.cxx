@@ -21,8 +21,7 @@
 
 #include <stylesbuffer.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 
 ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
@@ -50,7 +49,6 @@ ThemeBuffer::~ThemeBuffer()
     return getClrScheme().getColorByIndex(nIndex, nColor) ? nColor : API_RGB_TRANSPARENT;
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

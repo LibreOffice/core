@@ -33,8 +33,7 @@
 
 #include <vcl/svapp.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -483,7 +482,6 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

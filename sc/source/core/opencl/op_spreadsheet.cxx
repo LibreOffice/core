@@ -17,7 +17,7 @@
 
 using namespace formula;
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
@@ -281,6 +281,6 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

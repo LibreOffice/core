@@ -23,8 +23,7 @@
 #include <biffhelper.hxx>
 #include <connectionsbuffer.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::oox::core;
 
@@ -157,7 +156,6 @@ void ConnectionsFragment::finalizeImport()
     getConnections().finalizeImport();
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

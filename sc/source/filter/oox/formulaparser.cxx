@@ -35,8 +35,7 @@
 #include <externallinkbuffer.hxx>
 #include <tablebuffer.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::sheet::ReferenceFlags;
@@ -1850,7 +1849,6 @@ OUString FormulaParser::importMacroName( const OUString& rFormulaString )
     return OUString();
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

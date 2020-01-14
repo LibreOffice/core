@@ -47,8 +47,7 @@
 #include <numformat.hxx>
 #include <sax/tools/converter.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -751,7 +750,6 @@ void SheetDataBuffer::applyCellMerging( const ScRange& rRange )
         rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,8 +27,7 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -479,7 +478,6 @@ void AddressConverter::initializeMaxPos(
     }
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

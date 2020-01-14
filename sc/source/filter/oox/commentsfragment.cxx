@@ -23,8 +23,7 @@
 #include <richstringcontext.hxx>
 #include <oox/token/namespaces.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::oox::core;
 
@@ -140,7 +139,6 @@ void CommentsFragment::importComment( SequenceInputStream& rStrm )
     mxComment->importComment( rStrm );
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

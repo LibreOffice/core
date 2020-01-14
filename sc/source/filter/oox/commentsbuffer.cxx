@@ -46,8 +46,7 @@
 #include <docsh.hxx>
 #include <postit.hxx>
 
-namespace oox {
-namespace xls {
+namespace oox::xls {
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::sheet;
@@ -243,7 +242,6 @@ void CommentsBuffer::finalizeImport()
     pModel->setLock(bWasLocked);
 }
 
-} // namespace xls
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
