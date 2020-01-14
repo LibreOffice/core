@@ -34,13 +34,12 @@ class EditView;
 class EditEngine;
 class ContentNode;
 
-class EditSpellWrapper : public SvxSpellWrapper
+class EditSpellWrapper final : public SvxSpellWrapper
 {
 private:
     EditView*               pEditView;
     void                    CheckSpellTo();
 
-protected:
     virtual void            SpellStart( SvxSpellArea eArea ) override;
     virtual void            SpellContinue() override;    // Check area
     virtual void            ReplaceAll( const OUString &rNewText ) override;
