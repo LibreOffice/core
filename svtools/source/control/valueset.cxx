@@ -35,7 +35,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include "valueimp.hxx"
 
 #include <svtools/valueset.hxx>

@@ -30,7 +30,6 @@
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/macros.h>
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>

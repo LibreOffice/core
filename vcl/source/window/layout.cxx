@@ -21,7 +21,6 @@
 #include <boost/multi_array.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <vcl/vclmedit.hxx>
-#include <sal/log.hxx>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WindowType::CONTAINER)

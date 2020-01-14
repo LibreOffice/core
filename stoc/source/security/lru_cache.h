@@ -28,7 +28,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
-#include <sal/log.hxx>
 #endif
 
 

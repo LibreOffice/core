@@ -20,7 +20,6 @@
 #include <limits.h>
 
 #include <o3tl/float_int_conversion.hxx>
-#include <sal/log.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/event.hxx>

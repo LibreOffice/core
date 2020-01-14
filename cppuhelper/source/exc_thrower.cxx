@@ -22,7 +22,6 @@
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
-#include <sal/log.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>

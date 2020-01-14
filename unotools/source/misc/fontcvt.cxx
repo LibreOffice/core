@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <sal/macros.h>

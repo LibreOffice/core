@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-14 11:50:28 using:
+ Generated on 2020-01-15 03:13:17 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -263,6 +263,11 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
+#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+#include <com/sun/star/text/XTextAppendAndConvert.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -406,7 +411,6 @@
 #include <svtools/valueset.hxx>
 #include <svx/Palette.hxx>
 #include <svx/SvxColorValueSet.hxx>
-#include <svx/ctredlin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
@@ -517,6 +521,7 @@
 #include <tblenum.hxx>
 #include <tblsel.hxx>
 #include <txatbase.hxx>
+#include <unobaseclass.hxx>
 #include <unomid.h>
 #include <unoprnms.hxx>
 #include <viewopt.hxx>

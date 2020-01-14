@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include <vcl/accel.hxx>
 #include <vcl/layout.hxx>

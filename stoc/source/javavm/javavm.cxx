@@ -59,7 +59,6 @@
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <uno/current_context.hxx>
 #include <jvmfwk/framework.hxx>

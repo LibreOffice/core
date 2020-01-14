@@ -21,7 +21,6 @@
 #include <string_view>
 
 #include <comphelper/string.hxx>
-#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/math.hxx>
