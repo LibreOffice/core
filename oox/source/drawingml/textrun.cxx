@@ -40,7 +40,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 TextRun::TextRun() :
     mbIsLineBreak( false )
@@ -177,6 +177,6 @@ sal_Int32 TextRun::insertAt(
     return nCharHeight;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     BuildListContext::BuildListContext( FragmentHandler2 const & rParent )
         : FragmentHandler2( rParent )
@@ -81,6 +81,6 @@ namespace oox { namespace ppt {
         return this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

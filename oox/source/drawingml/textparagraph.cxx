@@ -35,7 +35,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 TextParagraph::TextParagraph()
 {
@@ -183,6 +183,6 @@ formulaimport::XmlStreamBuilder & TextParagraph::GetMathXml()
     return *m_pMathXml;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

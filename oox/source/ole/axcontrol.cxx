@@ -64,8 +64,7 @@
 #include <oox/token/tokens.hxx>
 #include <tools/diagnose_ex.h>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -2779,7 +2778,6 @@ Reference< XIndexContainer > const & EmbeddedForm::createXForm()
     return mxFormIC;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

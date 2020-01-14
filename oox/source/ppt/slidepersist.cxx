@@ -48,7 +48,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::animations;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
     const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
@@ -328,6 +328,6 @@ Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) co
     return aResult;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,9 +20,7 @@
 #include <drawingml/chart/titlemodel.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 TextModel::TextModel()
 {
@@ -62,8 +60,6 @@ LegendModel::~LegendModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

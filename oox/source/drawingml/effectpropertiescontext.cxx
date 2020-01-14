@@ -21,7 +21,7 @@ using namespace ::com::sun::star::xml::sax;
 
 // CT_EffectProperties
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper const& rParent,
     EffectProperties& rEffectProperties ) throw()
@@ -119,6 +119,6 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

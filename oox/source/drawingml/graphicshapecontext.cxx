@@ -67,8 +67,7 @@ static OUString lcl_GetMediaReference(const OUString& rStream)
     return rStream.isEmpty() ? OUString() : "vnd.sun.star.Package:" + rStream;
 }
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 // CT_Picture
 
@@ -312,7 +311,6 @@ ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

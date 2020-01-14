@@ -29,7 +29,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
@@ -234,6 +234,6 @@ void ColorFragmentHandler::onEndElement( )
         mrColorsMap[maColorName] = maColorEntry;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

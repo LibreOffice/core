@@ -47,7 +47,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using ::com::sun::star::table::BorderLine2;
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 TableCell::TableCell()
 : mpTextBody( new TextBody() )
@@ -475,6 +475,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         xPropSet->setPropertyValue("RotateAngle", Any(short(9000)));
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

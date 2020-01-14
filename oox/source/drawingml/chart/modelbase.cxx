@@ -22,9 +22,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 NumberFormat::NumberFormat() :
     mbSourceLinked( true )
@@ -55,8 +53,6 @@ LayoutModel::~LayoutModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

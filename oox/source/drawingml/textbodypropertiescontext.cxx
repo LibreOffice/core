@@ -47,7 +47,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 // CT_TextBodyProperties
 TextBodyPropertiesContext::TextBodyPropertiesContext(ContextHandler2Helper const& rParent,
@@ -189,6 +189,6 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

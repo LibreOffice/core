@@ -45,8 +45,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <vcl/virdev.hxx>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::geometry;
@@ -982,7 +981,6 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     }
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

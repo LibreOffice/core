@@ -27,8 +27,7 @@
 
 using ::oox::core::XmlFilterBase;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -92,7 +91,6 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal
     return !rFontName.isEmpty();
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

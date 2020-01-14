@@ -27,8 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
-namespace oox {
-namespace shape {
+namespace oox::shape {
 
 using namespace ::com::sun::star;
 
@@ -140,7 +139,6 @@ void ShapeFilterBase::importTheme()
     }
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

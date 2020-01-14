@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -1291,6 +1291,6 @@ ContextHandlerRef PresetTextShapeContext::onCreateContext( sal_Int32 aElementTok
         return this;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

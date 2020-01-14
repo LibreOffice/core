@@ -43,9 +43,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
@@ -601,8 +599,6 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     }
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

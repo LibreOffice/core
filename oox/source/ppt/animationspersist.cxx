@@ -75,7 +75,7 @@ Any addToSequence( const Any& rOldValue, const Any& rNewValue )
 
 } // namespace oox
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     void ShapeTargetElement::convert( css::uno::Any & rTarget, sal_Int16 & rSubType ) const
     {
@@ -218,6 +218,6 @@ namespace oox { namespace ppt {
         return aAny;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

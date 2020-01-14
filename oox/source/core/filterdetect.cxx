@@ -39,8 +39,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox {
-namespace core {
+namespace oox::core {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -433,7 +432,6 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     return aFilterName;
 }
 
-} // namespace core
 } // namespace oox
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

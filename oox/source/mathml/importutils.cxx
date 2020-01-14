@@ -25,10 +25,7 @@
 
 using namespace com::sun::star;
 
-namespace oox
-{
-
-namespace formulaimport
+namespace oox::formulaimport
 {
 
 namespace
@@ -336,7 +333,6 @@ void XmlStreamBuilder::appendCharacters( const OUString& chars )
     tags.back().text += chars;
 }
 
-} // namespace
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

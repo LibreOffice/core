@@ -27,8 +27,7 @@
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 TextBodyProperties::TextBodyProperties()
     : mbAnchorCtr(false)
@@ -96,7 +95,6 @@ void TextBodyProperties::pushRotationAdjustments()
     }
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

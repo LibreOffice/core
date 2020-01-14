@@ -35,8 +35,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -235,7 +234,6 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

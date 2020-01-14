@@ -35,8 +35,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star::style;
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue )
@@ -398,7 +397,6 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     return range;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

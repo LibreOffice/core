@@ -24,8 +24,7 @@
 
 #include <osl/diagnose.h>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
@@ -129,7 +128,6 @@ void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, con
         shape->convertAndInsert( rxShapes, pParentAnchor );
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

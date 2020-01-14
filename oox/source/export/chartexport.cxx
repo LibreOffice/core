@@ -127,7 +127,7 @@ using ::sax_fastparser::FSHelperPtr;
 
 namespace cssc = css::chart;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 namespace {
 
@@ -4121,7 +4121,6 @@ OUString ChartExport::getNumberFormatCode(sal_Int32 nKey) const
     return aCode;
 }
 
-}// drawingml
 }// oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

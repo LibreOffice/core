@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
         TextTabStopListContext::TextTabStopListContext( ContextHandler2Helper const & rParent, std::vector< TabStop >  & aTabList )
             : ContextHandler2( rParent )
@@ -71,6 +71,6 @@ namespace oox { namespace drawingml {
             }
             return this;
         }
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

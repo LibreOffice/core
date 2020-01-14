@@ -22,8 +22,7 @@
 #include <osl/diagnose.h>
 #include <oox/helper/binaryinputstream.hxx>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star::uno;
 
@@ -55,7 +54,6 @@ bool VbaHelper::extractKeyValue( OUString& rKey, OUString& rValue, const OUStrin
     return false;
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

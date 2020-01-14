@@ -39,7 +39,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     SlideTransition::SlideTransition()
         : mnTransitionType( 0 )
@@ -453,6 +453,6 @@ namespace oox { namespace ppt {
         }
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

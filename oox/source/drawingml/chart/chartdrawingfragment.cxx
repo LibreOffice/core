@@ -32,9 +32,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -230,8 +228,6 @@ void ChartDrawingFragment::onEndElement()
     }
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,9 +26,7 @@
 
 #ifdef DBG_UTIL
 
-namespace oox {
-namespace dump {
-namespace pptx {
+namespace oox::dump::pptx {
 
 using namespace ::com::sun::star::io;
 //using namespace ::com::sun::star::lang;
@@ -124,8 +122,6 @@ void Dumper::implDump()
     RootStorageObject( *this ).dump();
 }
 
-} // namespace pptx
-} // namespace dump
 } // namespace oox
 
 #endif

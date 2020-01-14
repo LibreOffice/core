@@ -29,9 +29,7 @@ using namespace ::oox::drawingml;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox {
-namespace drawingml {
-namespace table {
+namespace oox::drawingml::table {
 
 TableStyleListFragmentHandler::TableStyleListFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, TableStyleList& rTableStyleList ):
 FragmentHandler2( rFilter, rFragmentPath ),
@@ -60,8 +58,6 @@ ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
     return this;
 }
 
-} // namespace table
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

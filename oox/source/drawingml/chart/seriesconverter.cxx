@@ -51,9 +51,7 @@
 #include <drawingml/textfield.hxx>
 #include <drawingml/textbody.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -828,8 +826,6 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
     return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

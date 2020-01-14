@@ -38,8 +38,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -338,7 +337,6 @@ void Drawing::notifyXShapeInserted( const Reference< XShape >& /*rxShape*/,
 {
 }
 
-} // namespace vml
 } // namespave oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

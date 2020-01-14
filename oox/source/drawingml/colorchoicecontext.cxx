@@ -24,8 +24,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox {
-namespace drawingml {
+namespace oox::drawingml {
 
 ColorValueContext::ColorValueContext( ContextHandler2Helper const & rParent, Color& rColor ) :
     ContextHandler2( rParent ),
@@ -149,7 +148,6 @@ ColorContext::ColorContext( ContextHandler2Helper const & rParent, Color& rColor
     return nullptr;
 }
 
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

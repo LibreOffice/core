@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox { namespace shape {
+namespace oox::shape {
 using namespace core;
 using namespace drawingml;
 
@@ -608,7 +608,7 @@ sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceN
     return cppu::supportsService(this, ServiceName);
 }
 
-}}
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_ShapeContextHandler_get_implementation(

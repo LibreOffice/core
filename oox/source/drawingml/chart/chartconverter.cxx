@@ -30,9 +30,7 @@
 
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -154,8 +152,6 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     return nullptr;
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

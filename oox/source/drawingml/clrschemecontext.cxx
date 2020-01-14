@@ -27,7 +27,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 static void setClrMap( const ::oox::AttributeList& rAttributes,
             ClrMap& rClrMap, sal_Int32 nToken )
@@ -97,6 +97,6 @@ ContextHandlerRef clrSchemeContext::onCreateContext(
     return nullptr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

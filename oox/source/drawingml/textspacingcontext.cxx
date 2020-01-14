@@ -28,7 +28,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
     TextSpacingContext::TextSpacingContext( ContextHandler2Helper const & rParent, TextSpacing & aSpacing )
         : ContextHandler2( rParent )
@@ -58,6 +58,6 @@ namespace oox { namespace drawingml {
         return this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

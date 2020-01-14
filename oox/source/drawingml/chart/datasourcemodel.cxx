@@ -19,9 +19,7 @@
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 DataSequenceModel::DataSequenceModel() :
     mnPointCount( -1 ),
@@ -41,8 +39,6 @@ DataSourceModel::~DataSourceModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

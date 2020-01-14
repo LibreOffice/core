@@ -26,8 +26,7 @@
 #include <oox/vml/vmlinputstream.hxx>
 #include <oox/vml/vmlshapecontext.hxx>
 
-namespace oox {
-namespace vml {
+namespace oox::vml {
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -78,7 +77,6 @@ void DrawingFragment::finalizeImport()
     mrDrawing.finalizeFragmentImport();
 }
 
-} // namespace vml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,9 +78,7 @@ sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& N
 
 } // anonymous namespace
 
-namespace oox
-{
-namespace drawingml
+namespace oox::drawingml
 {
 
 ColorPropertySet::ColorPropertySet( ::Color nColor, bool bFillColor /* = true */ ) :
@@ -176,7 +174,6 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
     return uno::Any();
 }
 
-} //  namespace chart
 } //  namespace xmloff
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

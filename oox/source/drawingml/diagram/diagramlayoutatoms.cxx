@@ -106,7 +106,7 @@ bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nTyp
 }
 }
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 IteratorAttr::IteratorAttr( )
     : mnCnt( -1 )
@@ -1441,6 +1441,6 @@ void ShapeAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

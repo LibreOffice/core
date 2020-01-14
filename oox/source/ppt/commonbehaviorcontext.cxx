@@ -37,7 +37,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     CommonBehaviorContext::CommonBehaviorContext( FragmentHandler2 const & rParent,
             const TimeNodePtr & pNode)
@@ -143,6 +143,6 @@ namespace oox { namespace ppt {
         return this;
     }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

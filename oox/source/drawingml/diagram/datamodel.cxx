@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 namespace dgm {
 
@@ -473,6 +473,6 @@ void DiagramData::build()
 #endif
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,9 +53,7 @@ using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
 
-namespace oox {
-namespace drawingml {
-namespace chart {
+namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
@@ -292,8 +290,6 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     }
 }
 
-} // namespace chart
-} // namespace drawingml
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,8 +43,7 @@
 #include <oox/token/tokens.hxx>
 #include <unordered_map>
 
-namespace oox {
-namespace ole {
+namespace oox::ole {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -863,7 +862,6 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     }
 }
 
-} // namespace ole
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

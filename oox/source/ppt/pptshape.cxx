@@ -44,7 +44,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const char* pServiceName )
 : Shape( pServiceName )
@@ -510,6 +510,6 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
     return aShapePtr;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
