@@ -1328,6 +1328,9 @@ void ScTextWnd::InitEditEngine()
     mpEditView = o3tl::make_unique<EditView>(mpEditEngine.get(), this);
     mpEditView->SetInsertMode(bIsInsertMode);
 
+    if (comphelper::LibreOfficeKit::isActive())
+        mpEditView->RegisterViewShell(mpViewShell);
+
     // Text from Clipboard is taken over as ASCII in a single row
     EVControlBits n = mpEditView->GetControlWord();
     mpEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
@@ -1849,6 +1852,8 @@ void ScTextWnd::MakeDialogEditView()
     mpEditEngine->SetUpdateMode( true );
 
     mpEditView = o3tl::make_unique<EditView>(mpEditEngine.get(), this);
+    if (comphelper::LibreOfficeKit::isActive())
+        mpEditView->RegisterViewShell(mpViewShell);
     mpEditEngine->InsertView( mpEditView.get(), EE_APPEND );
 
     Resize();
