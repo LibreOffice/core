@@ -26,10 +26,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas
-{
-
-    namespace internal
+namespace cppcanvas::internal
     {
 
         ImplBitmap::ImplBitmap( const CanvasSharedPtr&                      rParentCanvas,
@@ -110,6 +107,5 @@ namespace cppcanvas
             return mxBitmap;
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

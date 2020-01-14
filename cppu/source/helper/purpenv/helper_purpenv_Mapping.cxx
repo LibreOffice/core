@@ -196,7 +196,7 @@ void Mapping::release()
 }
 
 
-namespace cppu { namespace helper { namespace purpenv {
+namespace cppu::helper::purpenv {
 
 void createMapping(uno_Mapping     ** ppMapping,
                    uno_Environment  * pFrom,
@@ -210,6 +210,6 @@ void createMapping(uno_Mapping     ** ppMapping,
     ::uno_registerMapping(ppMapping, s_free, pFrom, pTo, nullptr);
 }
 
-}}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

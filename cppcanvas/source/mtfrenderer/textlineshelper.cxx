@@ -28,9 +28,7 @@ void initLineStyleWaveline(sal_uInt32 nLineStyle, bool& bIsWaveline, bool& bIsBo
 }
 }
 
-namespace cppcanvas
-{
-namespace internal
+namespace cppcanvas::internal
 {
 TextLinesHelper::TextLinesHelper(const CanvasSharedPtr& rCanvas, const OutDevState& rState)
     : mpCanvas(rCanvas)
@@ -121,7 +119,6 @@ void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bN
 
     if (mxStrikeout.is())
         xCanvas->fillPolyPolygon(mxStrikeout, rViewState, rRenderState);
-}
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

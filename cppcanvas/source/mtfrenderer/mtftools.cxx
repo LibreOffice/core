@@ -36,9 +36,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas
-{
-    namespace tools
+namespace cppcanvas::tools
     {
         void initRenderState( rendering::RenderState&                   renderState,
                               const ::cppcanvas::internal::OutDevState& outdevState )
@@ -669,6 +667,5 @@ namespace cppcanvas
             createStrikeoutPolyPolygon(rStrikeoutPolyPoly, aStartPos, rLineWidth, rTextLineInfo);
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
