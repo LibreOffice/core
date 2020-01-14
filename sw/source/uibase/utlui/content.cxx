@@ -308,7 +308,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     }
                 }
             }
-            m_bDelete = false;
         }
         break;
 
@@ -1307,7 +1306,13 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 ContentTypeId::REGION == nContentType||
                 ContentTypeId::INDEX == nContentType);
 
-        if(!bReadonly && (bEditable || bDeletable))
+        if(ContentTypeId::OUTLINE == nContentType)
+        {
+            lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
+            if(!bReadonly && bDeletable)
+                pPop->InsertItem(801, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
+        }
+        else if(!bReadonly && (bEditable || bDeletable))
         {
             if(ContentTypeId::INDEX == nContentType)
             {
@@ -1337,7 +1342,6 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             }
             else
             {
-
                 if(bEditable && bDeletable)
                 {
                     pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
@@ -1366,8 +1370,6 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 pPop->SetPopupMenu(4, pSubPop4);
             }
         }
-        else if(ContentTypeId::OUTLINE == nContentType)
-            lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
     }
     else if( pEntry )
     {
@@ -3318,6 +3320,23 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case 800:
             KeyInput(KeyEvent(0, KEY_MOD1|KEY_MULTIPLY));
             break;
+        case 801:
+            {
+                SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(GetCurEntry()->GetUserData())->GetOutlinePos();
+                SwWrtShell* pShell = m_pActiveShell;
+                pShell->StartAllAction();
+                pShell->StartUndo();
+                pShell->GotoOutline(nActPos);
+                pShell->Push();
+                pShell->MakeOutlineSel(nActPos, nActPos, true);
+                pShell->SetTextFormatColl(nullptr);
+                pShell->Delete();
+                pShell->ClearMark();
+                pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+                pShell->EndUndo();
+                pShell->EndAllAction();
+                break;
+            }
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
