@@ -50,8 +50,6 @@ struct Impl_IMEInfos;
 
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 
-typedef OUString (*FncGetSpecialChars)( weld::Widget* pWin, const vcl::Font& rFont );
-
 class Timer;
 
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
@@ -237,9 +235,6 @@ public:
 
     // shows a warning box saying "text too long, truncated"
     static void         ShowTruncationWarning(weld::Widget* pParent);
-
-    static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
-    static FncGetSpecialChars   GetGetSpecialCharsFunction();
 
     VclPtr<PopupMenu>           CreatePopupMenu();
 

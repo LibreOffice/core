@@ -36,7 +36,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <vcl/edit.hxx>
+#include <vcl/specialchars.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 
@@ -238,7 +238,7 @@ void SfxApplication::Initialize_Impl()
     {
         SolarMutexGuard aGuard;
         // Set special characters callback on vcl edit control
-        Edit::SetGetSpecialCharsFunction(&SfxGetSpecialCharsForEdit);
+        vcl::SetGetSpecialCharsFunction(&SfxGetSpecialCharsForEdit);
     }
 }
 
