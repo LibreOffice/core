@@ -21,7 +21,6 @@
 #include <editeng/editview.hxx>
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
-#include <vcl/fixed.hxx>
 
 #include <global.hxx>
 #include <scmod.hxx>

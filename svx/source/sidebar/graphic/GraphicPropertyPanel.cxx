@@ -21,8 +21,6 @@
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

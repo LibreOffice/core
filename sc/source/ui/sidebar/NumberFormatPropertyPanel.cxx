@@ -21,10 +21,6 @@
 #include <sc.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
