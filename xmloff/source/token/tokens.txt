@@ -238,6 +238,7 @@ bibliography-source
 bibliography-type
 bind-styles-to-content
 bitmap
+bitmap-table
 black
 blend
 blinking
@@ -359,6 +360,7 @@ color-inversion
 color-mode
 color-scale
 color-scale-entry
+color-table
 column
 column-count
 column-gap
@@ -470,6 +472,7 @@ d
 dash
 dash-dot
 dash-dot-dot
+dash-table
 dashed
 data
 data-bar
@@ -854,6 +857,7 @@ angle
 GRADIENT_BORDER_DUMMY
 gradient-step-count
 gradient-style
+gradient-table
 axial
 ellipsoid
 GRADIENTSTYLE_LINEAR_DUMMY
@@ -880,6 +884,7 @@ has-persistent-data
 hatch
 HATCH_DISTANCE_DUMMY
 HATCH_STYLE_DUMMY
+hatch-table
 HATCHSTYLE_DOUBLE_DUMMY
 HATCHSTYLE_SINGLE_DUMMY
 triple
@@ -1117,6 +1122,7 @@ marker-end-width
 marker-start
 marker-start-center
 marker-start-width
+marker-table
 maroon
 master-page
 master-page-name
