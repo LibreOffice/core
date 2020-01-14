@@ -256,7 +256,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 if (nIntValue == -1)
                     getCurrentGrid()->clear();
                 else
-                    getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
+                    getCurrentGrid()->push_back( nIntValue );
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_vMerge : //vertical merge
@@ -573,6 +573,7 @@ void DomainMapperTableManager::endOfRowAction()
     IntVectorPtr pCellWidths = getCurrentCellWidths( );
     if(!m_nTableWidth && !pTableGrid->empty())
     {
+        sal_Int32 nTableWidthInTwips = 0;
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("tableWidth");
 #endif
@@ -585,8 +586,10 @@ void DomainMapperTableManager::endOfRowAction()
             TagLogger::getInstance().endElement();
 #endif
 
-            m_nTableWidth = o3tl::saturating_add(m_nTableWidth, rCell);
+            nTableWidthInTwips = o3tl::saturating_add(nTableWidthInTwips, rCell);
         }
+        if (nTableWidthInTwips)
+            m_nTableWidth = static_cast<sal_Int32>(ceil(ConversionHelper::convertTwipToMM100Double(nTableWidthInTwips)));
 
         if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
         {
@@ -633,9 +636,15 @@ void DomainMapperTableManager::endOfRowAction()
     // a table with a grid of "1:2:1" looks identical as if the table is having
     // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
     // -> so we have get the sum of each grid entry for the fullWidthRelative:
-    int nFullWidthRelative = 0;
+    sal_Int32 nFullWidthRelative = 0;
+    double fFullWidthRelative = 0.0;
     for (int i : (*pTableGrid))
         nFullWidthRelative = o3tl::saturating_add(nFullWidthRelative, i);
+    if (nFullWidthRelative)
+    {
+        fFullWidthRelative = ConversionHelper::convertTwipToMM100Double(nFullWidthRelative);
+        nFullWidthRelative = static_cast<sal_Int32>(ceil(fFullWidthRelative));
+    }
 
     if( pTableGrid->size() == ( nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
@@ -669,13 +678,13 @@ void DomainMapperTableManager::endOfRowAction()
         }
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_aGridBefore.back() + m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
-        double nLastRelPos = 0.0;
+        double fLastRelPos = 0.0;
         sal_uInt32 nBorderGridIndex = 0;
 
         size_t nWidthsBound = m_aGridBefore.back() + m_nCell.back() - 1;
         if (nWidthsBound)
         {
-            if (nFullWidthRelative == 0)
+            if (fFullWidthRelative == 0.0)
                 throw o3tl::divide_by_zero();
 
             ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
@@ -685,11 +694,12 @@ void DomainMapperTableManager::endOfRowAction()
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid)[nBorderGridIndex++];
 
-                double nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
+                // use convertTwipToMM100 instead of convertTwipToMM100Double, as at cell width, for correct merging
+                double fRelPos = ConversionHelper::convertTwipToMM100(fGridWidth) * 10000 / fFullWidthRelative;
 
-                pSeparators[nBorder].Position = rtl::math::round(nRelPos + nLastRelPos);
+                pSeparators[nBorder].Position = rtl::math::round(fRelPos + fLastRelPos);
                 pSeparators[nBorder].IsVisible = true;
-                nLastRelPos = nLastRelPos + nRelPos;
+                fLastRelPos = fLastRelPos + fRelPos;
                 ++aSpansIter;
             }
         }
