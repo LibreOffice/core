@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3499c150_8e8450ac",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-14T13:44:50Z",
+      "side": 1,
+      "message": "but here we just set it to false? it looks like the intention of the DontExpand flag is that it should be used only once?",
+      "revId": "a6bb2a4d79ffbc7d87cd1059a7b819a6d90c7511",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd56a075_e8c19ca7",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-14T13:44:50Z",
+      "side": 1,
+      "message": "setting this on all hints seems dubious.",
+      "revId": "a6bb2a4d79ffbc7d87cd1059a7b819a6d90c7511",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
