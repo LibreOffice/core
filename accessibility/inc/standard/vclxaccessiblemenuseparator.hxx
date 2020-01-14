@@ -24,7 +24,7 @@
 
 
 
-class VCLXAccessibleMenuSeparator : public OAccessibleMenuItemComponent
+class VCLXAccessibleMenuSeparator final : public OAccessibleMenuItemComponent
 {
 public:
     VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos );

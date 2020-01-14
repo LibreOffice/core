@@ -27,14 +27,13 @@
 
 
 
-class VCLXAccessibleTabPageWindow : public VCLXAccessibleComponent
+class VCLXAccessibleTabPageWindow final : public VCLXAccessibleComponent
 {
 private:
     VclPtr<TabControl>      m_pTabControl;
     VclPtr<TabPage>         m_pTabPage;
     sal_uInt16              m_nPageId;
 
-protected:
     // OCommonAccessibleComponent
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
