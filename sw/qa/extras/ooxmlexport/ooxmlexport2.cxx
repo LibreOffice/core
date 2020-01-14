@@ -1024,7 +1024,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Second table was too wide: 16249, i.e. as wide as the first table.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11248), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11250), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
