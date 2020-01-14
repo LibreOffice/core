@@ -33,10 +33,12 @@ namespace svx { namespace sidebar {
 
     Especially, used for sidebar related controls.
 */
-class SVX_DLLPUBLIC ValueSetWithTextControl final : public ValueSet
+class SVX_DLLPUBLIC ValueSetWithTextControl final : public SvtValueSet
 {
 public:
-    ValueSetWithTextControl(Window* pParent, WinBits nBits);
+    ValueSetWithTextControl();
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     void AddItem(
         const OUString& rItemText,

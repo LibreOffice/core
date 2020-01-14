@@ -181,6 +181,7 @@ sw/uiconfig/swriter/ui/pagemargincontrol.ui://GtkSpinButton[@id='left:0cm'] no-l
 sw/uiconfig/swriter/ui/pagemargincontrol.ui://GtkSpinButton[@id='right:0cm'] no-labelled-by
 sw/uiconfig/swriter/ui/pagemargincontrol.ui://GtkSpinButton[@id='top:0cm'] no-labelled-by
 sw/uiconfig/swriter/ui/pagemargincontrol.ui://GtkSpinButton[@id='bottom:0cm'] no-labelled-by
+sw/uiconfig/swriter/ui/pagesizecontrol.ui://GtkSpinButton[@id='metric'] no-labelled-by
 sw/uiconfig/swriter/ui/printmonitordialog.ui://GtkLabel[@id='docname'] orphan-label
 sw/uiconfig/swriter/ui/printmonitordialog.ui://GtkLabel[@id='printing'] orphan-label
 sw/uiconfig/swriter/ui/printmonitordialog.ui://GtkLabel[@id='printer'] orphan-label
