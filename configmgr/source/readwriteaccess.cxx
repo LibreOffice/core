@@ -32,7 +32,7 @@
 #include "readwriteaccess.hxx"
 #include "rootaccess.hxx"
 
-namespace configmgr { namespace read_write_access {
+namespace configmgr::read_write_access {
 
 namespace {
 
@@ -146,6 +146,6 @@ css::uno::Sequence< OUString > getSupportedServiceNames() {
     return css::uno::Sequence< OUString > { "com.sun.star.configuration.ReadWriteAccess" };
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

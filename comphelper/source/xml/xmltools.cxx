@@ -69,9 +69,7 @@ namespace
     }
 }
 
-namespace comphelper
-{
-    namespace xml
+namespace comphelper::xml
     {
         OString makeXMLChaff()
         {
@@ -105,5 +103,4 @@ namespace comphelper
             return str;
         }
     }
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

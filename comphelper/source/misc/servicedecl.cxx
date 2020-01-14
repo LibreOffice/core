@@ -28,8 +28,7 @@
 
 using namespace com::sun::star;
 
-namespace comphelper {
-namespace service_decl {
+namespace comphelper::service_decl {
 
 const char cDelim = ';';
 
@@ -156,7 +155,6 @@ void* component_getFactoryHelper( const char* pImplName,
     return nullptr;
 }
 
-} // namespace service_decl
 } // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

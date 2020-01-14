@@ -11,9 +11,7 @@
 
 #include <comphelper/automationinvokedzone.hxx>
 
-namespace comphelper
-{
-namespace Automation
+namespace comphelper::Automation
 {
 thread_local static int nActiveount = 0;
 
@@ -29,7 +27,6 @@ AutomationInvokedZone::~AutomationInvokedZone()
 {
     assert(nActiveount > 0);
     nActiveount--;
-}
 }
 }
 

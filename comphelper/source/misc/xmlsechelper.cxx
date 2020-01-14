@@ -26,9 +26,7 @@
 
 using namespace std;
 
-namespace comphelper
-{
-namespace xmlsec
+namespace comphelper::xmlsec
 {
     OUString GetCertificateKind( const css::security::CertificateKind &rKind )
     {
@@ -325,7 +323,6 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
         return aStr.makeStringAndClear();
     }
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
