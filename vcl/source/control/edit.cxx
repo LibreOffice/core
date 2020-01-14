@@ -22,6 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/specialchars.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
@@ -2697,14 +2698,17 @@ sal_Int32 Edit::GetMaxVisChars() const
     return nCharWidth ? nOutWidth/nCharWidth : 0;
 }
 
-void Edit::SetGetSpecialCharsFunction( FncGetSpecialChars fn )
+namespace vcl
 {
-    pImplFncGetSpecialChars = fn;
-}
+    void SetGetSpecialCharsFunction( FncGetSpecialChars fn )
+    {
+        pImplFncGetSpecialChars = fn;
+    }
 
-FncGetSpecialChars Edit::GetGetSpecialCharsFunction()
-{
-    return pImplFncGetSpecialChars;
+    FncGetSpecialChars GetGetSpecialCharsFunction()
+    {
+        return pImplFncGetSpecialChars;
+    }
 }
 
 VclPtr<PopupMenu> Edit::CreatePopupMenu()
