@@ -45,9 +45,7 @@ void Column::construct()
 
 css::uno::Sequence< OUString > SAL_CALL Column::getSupportedServiceNames(  )
 {
-    css::uno::Sequence< OUString > aSupported { "com.sun.star.sdbc.Firebird" };
-
-    return aSupported;
+    return { "com.sun.star.sdbc.Firebird" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

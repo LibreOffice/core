@@ -108,8 +108,7 @@ sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const O
 
 Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSupported { "com.sun.star.util.NumberFormatsSupplier" };
-    return aSupported;
+    return { "com.sun.star.util.NumberFormatsSupplier" };
 }
 
 Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormatSettings()

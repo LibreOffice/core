@@ -406,8 +406,7 @@ OUString FontworkAlignmentControl::getImplementationName()
 
 Sequence< OUString > FontworkAlignmentControl::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 

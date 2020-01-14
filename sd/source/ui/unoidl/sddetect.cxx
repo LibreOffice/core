@@ -146,8 +146,7 @@ sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName 
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames()
 {
-    Sequence<OUString> seqServiceNames { "com.sun.star.frame.ExtendedTypeDetection" };
-    return seqServiceNames ;
+    return { "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
 
