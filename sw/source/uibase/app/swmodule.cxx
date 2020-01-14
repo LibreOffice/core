@@ -296,8 +296,6 @@ void SwDLL::RegisterControls()
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_REGION, pMod );
-    SvxTableToolBoxControl::RegisterControl(FN_INSERT_TABLE, pMod );
-    SvxTableToolBoxControl::RegisterControl(FN_SHOW_MULTIPLE_PAGES, pMod );
 
     SwZoomControl::RegisterControl(SID_ATTR_ZOOM, pMod );
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);

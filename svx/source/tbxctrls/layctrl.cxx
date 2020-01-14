@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/event.hxx>
@@ -34,6 +35,7 @@
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -44,23 +46,23 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
 SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 
 namespace {
 
-class TableWindow : public SfxPopupWindow
+class TableWindow final : public svtools::ToolbarPopup
 {
 private:
     VclPtr<PushButton>  aTableButton;
+    VclPtr<VclDrawingArea> aDrawingArea;
     ::Color             aLineColor;
     ::Color             aFillColor;
     ::Color             aHighlightFillColor;
     ::Color             aBackgroundColor;
     long                nCol;
     long                nLine;
-    Reference< XFrame > mxFrame;
     OUString const      maCommand;
+    rtl::Reference<SvxTableToolBoxControl> mxControl;
 
     static const long TABLE_CELLS_HORIZ;
     static const long TABLE_CELLS_VERT;
@@ -74,23 +76,22 @@ private:
     DECL_LINK( SelectHdl, Button*, void );
 
 public:
-                            TableWindow( sal_uInt16                 nSlotId,
-                                         vcl::Window*               pParent,
-                                         const OUString&            rCmd,
-                                         const OUString&            rText,
-                                         const Reference< XFrame >& rFrame );
-                            virtual ~TableWindow() override;
+    TableWindow( SvxTableToolBoxControl* pControl, vcl::Window* pParent,
+                 const OUString&            rCmd,
+                 const OUString&            rText );
+    virtual ~TableWindow() override;
     virtual void            dispose() override;
 
-    void                    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void            MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& ) override;
-    virtual void            PopupModeEnd() override;
+    DECL_LINK(KeyInputHdl, const KeyEvent& rKEvt, bool);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseButtonUpHdl, const MouseEvent&, bool);
+    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
+    DECL_LINK(PaintHdl, target_and_area, void);
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
+    void                    InsertTable();
     void                    TableDialog( const Sequence< PropertyValue >& rArgs );
     void                    CloseAndShowTableDialog();
 };
@@ -106,25 +107,23 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl, Button*, void)
     CloseAndShowTableDialog();
 }
 
-constexpr long nTablePosX = 2;
-constexpr long nTablePosY = 2;
-
-TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUString& rCmd,
-                          const OUString& rText, const Reference< XFrame >& rFrame )
-    : SfxPopupWindow( nSlotId, pParent, rFrame, WB_STDPOPUP )
-    , aTableButton( VclPtr<PushButton>::Create(this) )
+TableWindow::TableWindow( SvxTableToolBoxControl* pControl, vcl::Window* pParent, const OUString& rCmd,
+                          const OUString& rText )
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "TableWindow", "svx/ui/tablewindow.ui")
+    , aTableButton(get<PushButton>("moreoptions"))
+    , aDrawingArea(get<VclDrawingArea>("table"))
     , nCol( 0 )
     , nLine( 0 )
-    , mxFrame( rFrame )
     , maCommand( rCmd )
+    , mxControl(pControl)
 {
     float fScaleFactor = GetDPIScaleFactor();
 
     mnTableCellWidth  = 15 * fScaleFactor;
     mnTableCellHeight = 15 * fScaleFactor;
 
-    mnTableWidth  = nTablePosX + TABLE_CELLS_HORIZ*mnTableCellWidth;
-    mnTableHeight = nTablePosY + TABLE_CELLS_VERT*mnTableCellHeight;
+    mnTableWidth  = TABLE_CELLS_HORIZ*mnTableCellWidth;
+    mnTableHeight = TABLE_CELLS_VERT*mnTableCellHeight;
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
@@ -132,14 +131,19 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUStri
     aLineColor = rStyles.GetShadowColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
-    aBackgroundColor = GetSettings().GetStyleSettings().GetFaceColor();
+    aBackgroundColor = aDrawingArea->GetSettings().GetStyleSettings().GetFaceColor();
 
-    SetBackground( aBackgroundColor );
-    vcl::Font aFont = GetFont();
+    aDrawingArea->SetBackground( aBackgroundColor );
+    vcl::Font aFont = aDrawingArea->GetFont();
     aFont.SetColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aFont.SetFillColor( aBackgroundColor );
     aFont.SetTransparent( false );
-    SetFont( aFont );
+    aDrawingArea->SetFont( aFont );
+
+    aDrawingArea->SetKeyPressHdl(LINK(this, TableWindow, KeyInputHdl));
+    aDrawingArea->SetMouseMoveHdl(LINK(this, TableWindow, MouseMoveHdl));
+    aDrawingArea->SetMouseReleaseHdl(LINK(this, TableWindow, MouseButtonUpHdl));
+    aDrawingArea->SetPaintHdl(LINK(this, TableWindow, PaintHdl));
 
     SetText( rText );
 
@@ -149,18 +153,15 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUStri
         pToolBox = dynamic_cast<ToolBox*>( pParent );
     if ( !pToolBox || !pToolBox->IsKeyEvent() )
     {
-        aTableButton->SetPosSizePixel( Point( nTablePosX, mnTableHeight + 5 ),
-                Size( mnTableWidth - nTablePosX, 24 ) );
         aTableButton->SetText( SvxResId( RID_SVXSTR_MORE ) );
         aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
         aTableButton->Show();
-
-        SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 33 ) );
     }
-    else
-        SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 3 ) );
-}
 
+    // + 1 to leave space to draw the right/bottom borders
+    aDrawingArea->set_width_request(mnTableWidth + 1);
+    aDrawingArea->set_height_request(mnTableHeight + 1);
+}
 
 TableWindow::~TableWindow()
 {
@@ -170,23 +171,24 @@ TableWindow::~TableWindow()
 void TableWindow::dispose()
 {
     aTableButton.disposeAndClear();
-    SfxPopupWindow::dispose();
+    aDrawingArea.disposeAndClear();
+    ToolbarPopup::dispose();
 }
 
-void TableWindow::MouseMove( const MouseEvent& rMEvt )
+IMPL_LINK(TableWindow, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
-    SfxPopupWindow::MouseMove( rMEvt );
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos( aPos );
 
-    long nNewCol = ( aMousePos.X() - nTablePosX + mnTableCellWidth ) / mnTableCellWidth;
-    long nNewLine = ( aMousePos.Y() - nTablePosY + mnTableCellHeight ) / mnTableCellHeight;
+    long nNewCol = ( aMousePos.X() + mnTableCellWidth ) / mnTableCellWidth;
+    long nNewLine = ( aMousePos.Y() + mnTableCellHeight ) / mnTableCellHeight;
 
     Update( nNewCol, nNewLine );
+
+    return true;
 }
 
-
-void TableWindow::KeyInput( const KeyEvent& rKEvt )
+IMPL_LINK(TableWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
     sal_uInt16 nModifier = rKEvt.GetKeyCode().GetModifier();
@@ -202,7 +204,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                 if ( nNewLine > 1 )
                     nNewLine--;
                 else
-                    EndPopupMode( FloatWinPopupEndFlags::Cancel );
+                    EndPopupMode();
                 break;
             case KEY_DOWN:
                 if ( nNewLine < TABLE_CELLS_VERT )
@@ -214,7 +216,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                 if ( nNewCol > 1 )
                     nNewCol--;
                 else
-                    EndPopupMode( FloatWinPopupEndFlags::Cancel );
+                    EndPopupMode();
                 break;
             case KEY_RIGHT:
                 if ( nNewCol < TABLE_CELLS_HORIZ )
@@ -223,15 +225,13 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                     CloseAndShowTableDialog();
                 break;
             case KEY_ESCAPE:
-                EndPopupMode( FloatWinPopupEndFlags::Cancel );
+                EndPopupMode();
                 break;
             case KEY_RETURN:
-                EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+                InsertTable();
+                EndPopupMode();
                 GrabFocusToDocument();
-                return;
-            case KEY_TAB:
-                CloseAndShowTableDialog();
-                break;
+                return true;
             default:
                 bHandled = false;
         }
@@ -242,55 +242,57 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
-        EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+        InsertTable();
+        EndPopupMode();
         GrabFocusToDocument();
-        return;
+        return true;
     }
 
-    if(!bHandled)
-        SfxPopupWindow::KeyInput(rKEvt);
+    return bHandled;
 }
 
-
-void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
+IMPL_LINK_NOARG(TableWindow, MouseButtonUpHdl, const MouseEvent&, bool)
 {
-    SfxPopupWindow::MouseButtonUp( rMEvt );
-    EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+    InsertTable();
+    EndPopupMode();
     GrabFocusToDocument();
+
+    return true;
 }
 
-
-void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+IMPL_LINK(TableWindow, PaintHdl, target_and_area, aPayload, void)
 {
-    const long nSelectionWidth = nTablePosX + nCol * mnTableCellWidth;
-    const long nSelectionHeight = nTablePosY + nLine * mnTableCellHeight;
+    vcl::RenderContext& rRenderContext = aPayload.first;
+
+    const long nSelectionWidth = nCol * mnTableCellWidth;
+    const long nSelectionHeight = nLine * mnTableCellHeight;
 
     // the non-selected parts of the table
     rRenderContext.SetLineColor(aLineColor);
     rRenderContext.SetFillColor(aFillColor);
-    rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, nTablePosY, mnTableWidth, nSelectionHeight));
-    rRenderContext.DrawRect(tools::Rectangle(nTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight));
+    rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, 0, mnTableWidth, nSelectionHeight));
+    rRenderContext.DrawRect(tools::Rectangle(0, nSelectionHeight, nSelectionWidth, mnTableHeight));
     rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, nSelectionHeight, mnTableWidth, mnTableHeight));
 
     // the selection
     if (nCol > 0 && nLine > 0)
     {
         rRenderContext.SetFillColor(aHighlightFillColor);
-        rRenderContext.DrawRect(tools::Rectangle(nTablePosX, nTablePosY, nSelectionWidth, nSelectionHeight));
+        rRenderContext.DrawRect(tools::Rectangle(0, 0, nSelectionWidth, nSelectionHeight));
     }
 
     // lines inside of the table
     rRenderContext.SetLineColor(aLineColor);
     for (long i = 1; i < TABLE_CELLS_VERT; ++i)
     {
-        rRenderContext.DrawLine(Point(nTablePosX, nTablePosY + i*mnTableCellHeight),
-                                Point(mnTableWidth, nTablePosY + i*mnTableCellHeight));
+        rRenderContext.DrawLine(Point(0, i*mnTableCellHeight),
+                                Point(mnTableWidth, i*mnTableCellHeight));
     }
 
     for (long i = 1; i < TABLE_CELLS_HORIZ; ++i)
     {
-        rRenderContext.DrawLine(Point( nTablePosX + i*mnTableCellWidth, nTablePosY),
-                                Point( nTablePosX + i*mnTableCellWidth, mnTableHeight));
+        rRenderContext.DrawLine(Point( i*mnTableCellWidth, 0),
+                                Point( i*mnTableCellWidth, mnTableHeight));
     }
 
     // the text near the mouse cursor telling the table dimensions
@@ -298,7 +300,7 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         return;
 
     OUString aText = OUString::number( nCol ) + " x " + OUString::number( nLine );
-    if(GetId() == FN_SHOW_MULTIPLE_PAGES)
+    if (maCommand == ".uno:ShowMultiplePages")
     {
         aText += " " + SvxResId(RID_SVXSTR_PAGES);
     }
@@ -309,10 +311,10 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nTextY = nSelectionHeight + mnTableCellHeight;
     const long nTipBorder = 2;
 
-    if (aTextSize.Width() + nTablePosX + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
+    if (aTextSize.Width() + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
         nTextX = nSelectionWidth - mnTableCellWidth - aTextSize.Width();
 
-    if (aTextSize.Height() + nTablePosY + mnTableCellHeight + 2 * nTipBorder < nSelectionHeight)
+    if (aTextSize.Height() + mnTableCellHeight + 2 * nTipBorder < nSelectionHeight)
         nTextY = nSelectionHeight - mnTableCellHeight - aTextSize.Height();
 
     rRenderContext.SetLineColor(aLineColor);
@@ -329,10 +331,9 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     rRenderContext.DrawText(Point(nTextX, nTextY), aText);
 }
 
-
-void TableWindow::PopupModeEnd()
+void TableWindow::InsertTable()
 {
-    if ( !IsPopupModeCanceled() && nCol && nLine )
+    if (nCol && nLine)
     {
         Sequence< PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Columns";
@@ -342,10 +343,7 @@ void TableWindow::PopupModeEnd()
 
         TableDialog( aArgs );
     }
-
-    SfxPopupWindow::PopupModeEnd();
 }
-
 
 void TableWindow::Update( long nNewCol, long nNewLine )
 {
@@ -359,10 +357,9 @@ void TableWindow::Update( long nNewCol, long nNewLine )
     {
         nCol = nNewCol;
         nLine = nNewLine;
-        Invalidate(tools::Rectangle(nTablePosX, nTablePosY, mnTableWidth, mnTableHeight));
+        aDrawingArea->Invalidate(tools::Rectangle(0, 0, mnTableWidth, mnTableHeight));
     }
 }
-
 
 void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 {
@@ -380,11 +377,10 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     }
 }
 
-
 void TableWindow::CloseAndShowTableDialog()
 {
     // close the toolbar tool
-    EndPopupMode( FloatWinPopupEndFlags::Cancel );
+    EndPopupMode();
 
     // and open the table dialog instead
     TableDialog( Sequence< PropertyValue >() );
@@ -402,7 +398,7 @@ bool TableWindow::EventNotify( NotifyEvent& rNEvt )
             return true;
         }
     }
-    return SfxPopupWindow::EventNotify( rNEvt );
+    return ToolbarPopup::EventNotify( rNEvt );
 }
 
 namespace {
@@ -704,49 +700,49 @@ void ColumnsWindow::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
 }
 
-SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    bEnabled( true )
+SvxTableToolBoxControl::SvxTableToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : PopupWindowController(rContext, nullptr, OUString())
 {
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
 }
 
+void SvxTableToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+{
+    PopupWindowController::initialize(rArguments);
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
+}
 
 SvxTableToolBoxControl::~SvxTableToolBoxControl()
 {
 }
 
-
-VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
+VclPtr<vcl::Window> SvxTableToolBoxControl::createPopupWindow(vcl::Window* pParent)
 {
-    if ( bEnabled )
-    {
-        ToolBox& rTbx = GetToolBox();
-        VclPtr<TableWindow> pWin = VclPtr<TableWindow>::Create( GetSlotId(), &GetToolBox(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), m_xFrame );
-        pWin->StartPopupMode( &rTbx, FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoKeyClose );
-        SetPopupWindow( pWin );
-        return pWin;
-    }
-    return nullptr;
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    bool bToolBox = getToolboxId(nId, &pToolBox);
+    return VclPtr<TableWindow>::Create(this, pParent, m_aCommandURL, bToolBox ? pToolBox->GetItemText(nId) : OUString());
 }
 
-void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+OUString SvxTableToolBoxControl::getImplementationName()
 {
-    if ( auto pUInt16Item = dynamic_cast<const SfxUInt16Item* >(pState) )
-    {
-        sal_Int16 nValue = pUInt16Item->GetValue();
-        bEnabled = ( nValue != 0 );
-    }
-    else
-        bEnabled = SfxItemState::DISABLED != eState;
+    return "com.sun.star.comp.svx.TableToolBoxControl";
+}
 
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
+css::uno::Sequence<OUString> SvxTableToolBoxControl::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
 
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
-    rTbx.SetItemState( nId,
-        ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_TableToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new SvxTableToolBoxControl(rContext));
 }
 
 SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )

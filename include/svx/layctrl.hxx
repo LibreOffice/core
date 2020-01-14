@@ -20,23 +20,24 @@
 #define INCLUDED_SVX_LAYCTRL_HXX
 
 #include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxTableToolBoxControl final : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxTableToolBoxControl final : public svt::PopupWindowController
 {
-private:
-    bool    bEnabled;
-
 public:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-    virtual void                StateChanged( sal_uInt16 nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
-
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxTableToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~SvxTableToolBoxControl() override;
+
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 class SVX_DLLPUBLIC SvxColumnsToolBoxControl final : public SfxToolBoxControl

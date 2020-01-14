@@ -220,7 +220,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
 #endif
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
-    SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 
     EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );

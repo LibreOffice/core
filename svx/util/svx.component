@@ -112,6 +112,10 @@
     constructor="com_sun_star_comp_svx_CharacterSpacingToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.TableToolBoxControl"
+    constructor="com_sun_star_comp_svx_TableToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svx.UnderlineToolBoxControl"
     constructor="com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
