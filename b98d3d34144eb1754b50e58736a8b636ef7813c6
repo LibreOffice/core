@@ -70,6 +70,24 @@
       "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_e5cfd0b1",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-14T15:16:46Z",
+      "side": 0,
+      "message": "given that there might be scenarios with 32-bit color depth, using sal_uInt64 as return type for GetColorCount does not sound unreasonable",
+      "parentUuid": "fa32b979_c2396243",
+      "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
