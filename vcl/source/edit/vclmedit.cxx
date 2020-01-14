@@ -23,6 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/specialchars.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/xtextedt.hxx>
@@ -710,11 +711,11 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
     }
     else if ( (nCode == KEY_S) && rKEvent.GetKeyCode().IsShift() && rKEvent.GetKeyCode().IsMod1() )
     {
-        if ( Edit::GetGetSpecialCharsFunction() )
+        if ( vcl::GetGetSpecialCharsFunction() )
         {
             // to maintain the selection
             mbActivePopup = true;
-            OUString aChars = Edit::GetGetSpecialCharsFunction()(GetFrameWeld(), GetFont());
+            OUString aChars = vcl::GetGetSpecialCharsFunction()(GetFrameWeld(), GetFont());
             if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
@@ -782,7 +783,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         pPopup->EnableItem(pPopup->GetItemId("paste"), bEnablePaste);
         pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
         pPopup->EnableItem(pPopup->GetItemId("undo"), bEnableUndo);
-        pPopup->ShowItem(pPopup->GetItemId("specialchar"), !Edit::GetGetSpecialCharsFunction());
+        pPopup->ShowItem(pPopup->GetItemId("specialchar"), !vcl::GetGetSpecialCharsFunction());
 
         mbActivePopup = true;
         Point aPos = rCEvt.GetMousePosPixel();
@@ -828,7 +829,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         }
         else if (sCommand == "specialchar")
         {
-            OUString aChars = Edit::GetGetSpecialCharsFunction()(GetFrameWeld(), GetFont());
+            OUString aChars = vcl::GetGetSpecialCharsFunction()(GetFrameWeld(), GetFont());
             if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
