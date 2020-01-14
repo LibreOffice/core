@@ -20,27 +20,46 @@
 #include <sfx2/emojicontrol.hxx>
 #include <vcl/toolbox.hxx>
 
-SFX_IMPL_TOOLBOX_CONTROL(EmojiPopup, SfxVoidItem);
-
-EmojiPopup::EmojiPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
-    : SfxToolBoxControl(nSlotId, nId, rTbx)
+EmojiPopup::EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : PopupWindowController(rContext, nullptr, OUString())
 {
-    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
+}
+
+void EmojiPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+{
+    PopupWindowController::initialize(rArguments);
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
 EmojiPopup::~EmojiPopup()
 {
 }
 
-VclPtr<SfxPopupWindow> EmojiPopup::CreatePopupWindow()
+VclPtr<vcl::Window> EmojiPopup::createPopupWindow(vcl::Window* pParent)
 {
-    VclPtr<SfxEmojiControl> pControl = VclPtr<SfxEmojiControl>::Create(GetSlotId(), &GetToolBox(), m_xFrame);
+    return VclPtr<SfxEmojiControl>::Create(this, pParent);
+}
 
-    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
+OUString EmojiPopup::getImplementationName()
+{
+    return "com.sun.star.comp.sfx2.InsertEmojiToolBoxControl";
+}
 
-    SetPopupWindow(pControl);
+css::uno::Sequence<OUString> EmojiPopup::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
 
-    return pControl;
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_sfx2_InsertEmojiToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new EmojiPopup(rContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

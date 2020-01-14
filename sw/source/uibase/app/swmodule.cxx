@@ -309,8 +309,6 @@ void SwDLL::RegisterControls()
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
-    EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
-
     SvxIMapDlgChildWindow::RegisterChildWindow( false, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( false, pMod );
     SvxHlinkDlgWrapper::RegisterChildWindow( false, pMod );

@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/tbxctrl.hxx>
 #include <sfx2/charwin.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <deque>

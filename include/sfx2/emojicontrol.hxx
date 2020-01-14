@@ -13,21 +13,21 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <vcl/tabctrl.hxx>
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 
 #define TAB_FONT_SIZE 15
 
 namespace com::sun::star::frame { class XFrame; }
 
+class EmojiPopup;
 class EmojiView;
 class ThumbnailViewItem;
 enum class FILTER_CATEGORY;
 
-class SfxEmojiControl final : public SfxPopupWindow
+class SfxEmojiControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit SfxEmojiControl(sal_uInt16 nId, vcl::Window* pParent,
-                             const css::uno::Reference< css::frame::XFrame >& rFrame);
+    explicit SfxEmojiControl(EmojiPopup* pControl, vcl::Window* pParent);
 
     virtual ~SfxEmojiControl() override;
 
