@@ -56,11 +56,11 @@
 
 #include "configurationregistry.hxx"
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     class XFlushListener;
-} } } }
+}
 
-namespace configmgr { namespace configuration_registry {
+namespace configmgr::configuration_registry {
 
 namespace {
 
@@ -644,6 +644,6 @@ css::uno::Sequence< OUString > getSupportedServiceNames() {
     return css::uno::Sequence< OUString > { "com.sun.star.configuration.ConfigurationRegistry" };
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

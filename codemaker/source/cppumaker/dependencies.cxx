@@ -35,7 +35,7 @@
 
 #include "dependencies.hxx"
 
-namespace codemaker { namespace cppumaker {
+namespace codemaker::cppumaker {
 
 Dependencies::Dependencies(
     rtl::Reference< TypeManager > const & manager, OUString const & name):
@@ -291,6 +291,6 @@ void Dependencies::insert(OUString const & name, Kind kind) {
     }
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

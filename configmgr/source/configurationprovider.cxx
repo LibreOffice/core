@@ -59,7 +59,7 @@
 #include "defaultprovider.hxx"
 #include "rootaccess.hxx"
 
-namespace configmgr { namespace configuration_provider {
+namespace configmgr::configuration_provider {
 
 namespace {
 
@@ -460,6 +460,6 @@ createFactory(
     return new Factory;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

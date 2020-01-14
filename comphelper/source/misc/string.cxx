@@ -40,7 +40,7 @@
 #include <com/sun/star/i18n/Collator.hpp>
 
 
-namespace comphelper { namespace string {
+namespace comphelper::string {
 
 namespace
 {
@@ -492,6 +492,6 @@ OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
     return rIn;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

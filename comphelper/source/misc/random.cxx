@@ -25,9 +25,7 @@
 // this is nothing but a simple wrapper around
 // the std::random generators
 
-namespace comphelper
-{
-namespace rng
+namespace comphelper::rng
 {
 
 // underlying random number generator
@@ -118,7 +116,6 @@ double uniform_real_distribution(double a, double b)
     return dist(gen.global_rng);
 }
 
-} // namespace
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
