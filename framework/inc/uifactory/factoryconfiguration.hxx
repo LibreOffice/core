@@ -36,7 +36,7 @@ namespace framework
 
 //  Configuration access class for PopupMenuControllerFactory implementation
 
-class ConfigurationAccess_ControllerFactory : // interfaces
+class ConfigurationAccess_ControllerFactory final : // interfaces
                                                     public  ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
 public:

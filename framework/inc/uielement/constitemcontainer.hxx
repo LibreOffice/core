@@ -38,7 +38,7 @@ namespace framework
 
 class RootItemContainer;
 class ItemContainer;
-class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper<
+class FWI_DLLPUBLIC ConstItemContainer final : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,
                                                     css::lang::XUnoTunnel       ,
                                                     css::beans::XFastPropertySet,

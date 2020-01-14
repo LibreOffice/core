@@ -30,7 +30,7 @@ class ToolBox;
 namespace framework
 {
 
-class ImageButtonToolbarController : public ComplexToolbarController
+class ImageButtonToolbarController final : public ComplexToolbarController
 
 {
     public:
@@ -44,10 +44,9 @@ class ImageButtonToolbarController : public ComplexToolbarController
         // XComponent
         virtual void SAL_CALL dispose() override;
 
-    protected:
+    private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
 
-    private:
         bool ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage );
 };
 

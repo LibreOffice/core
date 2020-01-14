@@ -48,7 +48,7 @@ namespace framework{
                     or some other menu entries. Or we terminate the whole application in case this backing mode should not
                     be used.
  */
-class CloseDispatcher : public  ::cppu::WeakImplHelper<
+class CloseDispatcher final : public  ::cppu::WeakImplHelper<
                                     css::frame::XNotifyingDispatch,             // => XDispatch
                                     css::frame::XDispatchInformationProvider >
 {

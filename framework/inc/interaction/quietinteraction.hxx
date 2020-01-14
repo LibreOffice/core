@@ -38,7 +38,7 @@ namespace framework{
                     - InteractiveAugmentedIOException
                 All other requests will be aborted.
  */
-class QuietInteraction : public  ::cppu::WeakImplHelper<
+class QuietInteraction final : public  ::cppu::WeakImplHelper<
                                     css::task::XInteractionHandler >
 {
     // member

@@ -49,7 +49,7 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnumerationAccess >
+class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XEnumerationAccess >
 {
 
     //  public methods
@@ -110,7 +110,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
 
     //  protected methods
 
-    protected:
+    private:
 
         /*-****************************************************************************************************
             @short      standard destructor
@@ -124,8 +124,6 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
 
         virtual ~OComponentAccess() override;
 
-
-    private:
 
         /*-****************************************************************************************************
             @short      recursive method (!) to collect all components of all frames from the subtree of given node

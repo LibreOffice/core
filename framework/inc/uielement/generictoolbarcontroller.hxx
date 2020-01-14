@@ -69,7 +69,7 @@ class GenericToolbarController final : public svt::ToolboxController
         OUString            m_aEnumCommand;
 };
 
-class MenuToolbarController : public svt::ToolboxController
+class MenuToolbarController final : public svt::ToolboxController
 {
     css::uno::Reference< css::container::XIndexAccess > m_xMenuDesc;
     VclPtr<PopupMenu>                                   pMenu;

@@ -27,7 +27,7 @@
 
 namespace framework
 {
-    class MacrosMenuController :  public svt::PopupMenuControllerBase
+    class MacrosMenuController final : public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
 

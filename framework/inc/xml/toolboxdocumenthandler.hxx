@@ -37,7 +37,7 @@ namespace framework{
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE OReadToolBoxDocumentHandler_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
 
-class OReadToolBoxDocumentHandler : public OReadToolBoxDocumentHandler_Base
+class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Base
 {
     public:
         enum ToolBox_XML_Entry

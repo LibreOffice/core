@@ -28,7 +28,7 @@
 
 namespace framework
 {
-    class GraphicNameAccess : public ::cppu::WeakImplHelper< css::container::XNameAccess >
+    class GraphicNameAccess final : public ::cppu::WeakImplHelper< css::container::XNameAccess >
     {
         public:
             GraphicNameAccess();

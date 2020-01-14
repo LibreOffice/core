@@ -33,7 +33,7 @@
 namespace framework
 {
 
-class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
+class ActionTriggerSeparatorPropertySet final : private cppu::BaseMutex,
                                             public css::lang::XServiceInfo ,
                                             public css::lang::XTypeProvider,
                                             public ::cppu::OBroadcastHelper             ,

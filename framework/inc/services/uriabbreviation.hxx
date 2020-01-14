@@ -31,7 +31,7 @@
 namespace framework
 {
 
-class UriAbbreviation:    public ::cppu::WeakImplHelper< css::util::XStringAbbreviation, css::lang::XServiceInfo>
+class UriAbbreviation final : public ::cppu::WeakImplHelper< css::util::XStringAbbreviation, css::lang::XServiceInfo>
 {
 public:
     explicit UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & context);

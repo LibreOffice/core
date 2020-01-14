@@ -33,7 +33,7 @@ namespace framework
 
 class SpinfieldControl;
 
-class SpinfieldToolbarController : public ComplexToolbarController
+class SpinfieldToolbarController final : public ComplexToolbarController
 
 {
     public:
@@ -57,11 +57,10 @@ class SpinfieldToolbarController : public ComplexToolbarController
         void GetFocus();
         bool PreNotify( NotifyEvent const & rNEvt );
 
-    protected:
+    private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
         virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
-    private:
         bool impl_getValue( const css::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );
         OUString impl_formatOutputString( double fValue );
 

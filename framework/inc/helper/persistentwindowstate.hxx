@@ -46,7 +46,7 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class PersistentWindowState :   public  ::cppu::WeakImplHelper<
+class PersistentWindowState final : public  ::cppu::WeakImplHelper<
                                            css::lang::XInitialization,
                                            css::frame::XFrameActionListener > // => XEventListener
 {

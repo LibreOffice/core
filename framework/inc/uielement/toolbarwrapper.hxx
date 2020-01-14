@@ -30,7 +30,7 @@ namespace framework
 {
 
 class ToolBarManager;
-class ToolBarWrapper : public css::ui::XUIFunctionListener,
+class ToolBarWrapper final : public css::ui::XUIFunctionListener,
                        public UIConfigElementWrapperBase
 {
     public:
@@ -64,13 +64,10 @@ class ToolBarWrapper : public css::ui::XUIFunctionListener,
         using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
 
-    //  protected methods
-
-    protected:
+    private:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue ) override;
         virtual void impl_fillNewData() override;
 
-    private:
         css::uno::Reference< css::lang::XComponent >            m_xToolBarManager;
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
 };

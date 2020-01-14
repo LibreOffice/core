@@ -32,7 +32,7 @@ namespace framework
 {
     class ImageManagerImpl;
 
-    class ModuleImageManager :    public ::cppu::WeakImplHelper< css::ui::XImageManager>
+    class ModuleImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager>
     {
         public:
             ModuleImageManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );

@@ -32,7 +32,7 @@ namespace framework
 
 class EditControl;
 
-class EditToolbarController : public ComplexToolbarController
+class EditToolbarController final : public ComplexToolbarController
 
 {
     public:
@@ -53,11 +53,10 @@ class EditToolbarController : public ComplexToolbarController
         void LoseFocus();
         bool PreNotify( NotifyEvent const & rNEvt );
 
-    protected:
+    private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
         virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
-    private:
         VclPtr<EditControl>    m_pEditControl;
 };
 

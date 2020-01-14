@@ -31,7 +31,7 @@
 namespace framework
 {
 
-class MenuBarWrapper : public UIConfigElementWrapperBase,
+class MenuBarWrapper final : public UIConfigElementWrapperBase,
                        public css::container::XNameAccess
 
 {

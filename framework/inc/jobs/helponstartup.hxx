@@ -36,7 +36,7 @@ namespace framework{
             feature to show a suitable help page for every (visible!)
             loaded document.
  */
-class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::lang::XEventListener,css::task::XJob >
+class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::lang::XEventListener,css::task::XJob >
 {
 
     // member

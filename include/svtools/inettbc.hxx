@@ -32,7 +32,7 @@
 class MatchContext_Impl;
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
-class SVT_DLLPUBLIC SvtURLBox : public ComboBox
+class SVT_DLLPUBLIC SvtURLBox final : public ComboBox
 {
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
