@@ -1,72 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkImage" id="image_column1">
-    <property name="visible">True</property>
+  <object class="GtkPopover" id="PageColumnControl">
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column_L_1_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_column1L">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column1_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_column2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column_L_2_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_column2L">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column2_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_column3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column_L_3_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_column3L">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column3_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_columnleft">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column_L_left_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_columnleftL">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/columnleft_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_columnright">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/column_L_right_24x24.png</property>
-  </object>
-  <object class="GtkImage" id="image_columnrightL">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/sidebar/pageproppanel/columnright_24x24.png</property>
-  </object>
-  <object class="GtkWindow" id="PageColumnControl">
-    <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="no_show_all">True</property>
     <property name="border_width">4</property>
-    <property name="resizable">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">popup-menu</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <child>
-      <object class="GtkBox" id="box">
+      <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
@@ -78,7 +21,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_column1</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -93,7 +38,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_column2</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -108,7 +55,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_column3</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -123,7 +72,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_columnleft</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -138,7 +89,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_columnright</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -153,7 +106,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_column1L</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -168,7 +123,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_column2L</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -183,7 +140,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_column3L</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -198,7 +157,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_columnleftL</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -213,7 +174,9 @@
             <property name="receives_default">True</property>
             <property name="image">image_columnrightL</property>
             <property name="relief">none</property>
+            <property name="use_underline">True</property>
             <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -240,5 +203,55 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image_column1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column_L_1_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_column1L">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column1_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_column2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column_L_2_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_column2L">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column2_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_column3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column_L_3_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_column3L">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column3_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_columnleft">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column_L_left_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_columnleftL">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/columnleft_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_columnright">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/column_L_right_24x24.png</property>
+  </object>
+  <object class="GtkImage" id="image_columnrightL">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sw/res/sidebar/pageproppanel/columnright_24x24.png</property>
   </object>
 </interface>

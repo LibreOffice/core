@@ -40,9 +40,19 @@ PageColumnPopup::~PageColumnPopup()
 {
 }
 
-VclPtr<vcl::Window> PageColumnPopup::createPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> PageColumnPopup::weldPopupWindow()
 {
-    return VclPtr<sw::sidebar::PageColumnControl>::Create(this, pParent);
+    return std::make_unique<sw::sidebar::PageColumnControl>(this, m_pToolbar);
+}
+
+VclPtr<vcl::Window> PageColumnPopup::createPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<sw::sidebar::PageColumnControl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString PageColumnPopup::getImplementationName()

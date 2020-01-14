@@ -20,32 +20,33 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
 
 #include <svtools/toolbarmenu.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 class PageColumnPopup;
 
 namespace sw { namespace sidebar {
 
-class PageColumnControl final : public svtools::ToolbarPopup
+class PageColumnControl final : public WeldToolbarPopup
 {
 public:
-    explicit PageColumnControl(PageColumnPopup* pControl, vcl::Window* pParent);
-
+    explicit PageColumnControl(PageColumnPopup* pControl, weld::Widget* pParent);
+    virtual void GrabFocus() override;
     virtual ~PageColumnControl() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<PushButton> m_pOneColumn;
-    VclPtr<PushButton> m_pTwoColumns;
-    VclPtr<PushButton> m_pThreeColumns;
-    VclPtr<PushButton> m_pLeft;
-    VclPtr<PushButton> m_pRight;
-    VclPtr<PushButton> m_pMoreButton;
+    std::unique_ptr<weld::Button> m_xOneColumn;
+    std::unique_ptr<weld::Button> m_xTwoColumns;
+    std::unique_ptr<weld::Button> m_xThreeColumns;
+    std::unique_ptr<weld::Button> m_xLeft;
+    std::unique_ptr<weld::Button> m_xRight;
+    std::unique_ptr<weld::Button> m_xMoreButton;
+
+    rtl::Reference<PageColumnPopup> m_xControl;
 
     static void ExecuteColumnChange( const sal_uInt16 nColumnType );
 
-    DECL_LINK( ColumnButtonClickHdl_Impl, Button*, void );
-    DECL_LINK( MoreButtonClickHdl_Impl, Button*, void );
+    DECL_LINK( ColumnButtonClickHdl_Impl, weld::Button&, void );
+    DECL_LINK( MoreButtonClickHdl_Impl, weld::Button&, void );
 };
 
 } } // end of namespace sw::sidebar
