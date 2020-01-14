@@ -60,9 +60,7 @@ void putNumberChar(OUStringBuffer& rStr,double fValue, double fOldValue, bool bU
 
 }
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         bool PointIndex::operator<(const PointIndex& rComp) const
         {
@@ -929,6 +927,5 @@ namespace basegfx
             return aResult.makeStringAndClear();
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

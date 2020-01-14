@@ -39,9 +39,7 @@
 #define ANGLE_BOUND_MINIMUM_VALUE   (0.1)
 #define STEPSPERQUARTER     (3)
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         void openWithGeometryChange(B2DPolygon& rCandidate)
         {
@@ -3487,7 +3485,6 @@ namespace basegfx
             }
         }
 
-    } // end of namespace utils
-} // end of namespace basegfx
+    } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

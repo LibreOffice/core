@@ -32,9 +32,7 @@
 #define nMinSegments sal_uInt32(1)
 #define nMaxSegments sal_uInt32(512)
 
-namespace basegfx
-{
-    namespace utils
+namespace basegfx::utils
     {
         // B3DPolyPolygon tools
         B3DRange getRange(const B3DPolyPolygon& rCandidate)
@@ -583,7 +581,6 @@ namespace basegfx
             }
         }
 
-    } // end of namespace utils
-} // end of namespace basegfx
+    } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

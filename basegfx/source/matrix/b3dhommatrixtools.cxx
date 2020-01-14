@@ -20,9 +20,7 @@
 #include <basegfx/matrix/b3dhommatrixtools.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 
-namespace basegfx
-{
-namespace utils
+namespace basegfx::utils
 {
 B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(const com::sun::star::drawing::HomogenMatrix& rMatrixIn)
 {
@@ -68,7 +66,6 @@ void B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
     rMatrixOut.Line4.Column3 = rMatrixIn.get(3, 2);
     rMatrixOut.Line4.Column4 = rMatrixIn.get(3, 3);
 }
-} // end of namespace tools
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
