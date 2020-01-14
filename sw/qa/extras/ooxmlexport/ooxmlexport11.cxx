@@ -327,6 +327,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117988, "tdf117988.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
+{
+    // This was a 2-page document with unwanted line breaking in table cells, because
+    // the table was narrower, than defined (< 1/100 mm loss during twip to 1/100 mm conversion)
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

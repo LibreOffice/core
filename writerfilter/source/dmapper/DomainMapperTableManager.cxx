@@ -256,7 +256,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 if (nIntValue == -1)
                     getCurrentGrid()->clear();
                 else
-                    getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
+                    getCurrentGrid()->push_back( nIntValue );
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_vMerge : //vertical merge
@@ -330,7 +330,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         if (sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_auto)
                             getCurrentCellWidths()->push_back(sal_Int32(-1));
                         else
-                            getCurrentCellWidths()->push_back(pMeasureHandler->getMeasureValue());
+                            // store the original value to limit rounding mistakes, if it's there in a recognized measure (twip)
+                            getCurrentCellWidths()->push_back(pMeasureHandler->getMeasureValue() ? pMeasureHandler->getValue() : sal_Int32(0));
                         if (getTableDepthDifference() > 0)
                             m_bPushCurrentWidth = true;
                     }
@@ -592,6 +593,9 @@ void DomainMapperTableManager::endOfRowAction()
 
             m_nTableWidth = o3tl::saturating_add(m_nTableWidth, rCell);
         }
+        if (m_nTableWidth)
+            // convert sum of grid twip values to 1/100 mm with rounding up to avoid table width loss
+            m_nTableWidth = static_cast<sal_Int32>(ceil(ConversionHelper::convertTwipToMM100Double(m_nTableWidth)));
 
         if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
         {

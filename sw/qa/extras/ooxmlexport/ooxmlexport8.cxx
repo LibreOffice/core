@@ -890,7 +890,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59273, "fdo59273.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // Was 115596 (i.e. 10 times wider than necessary), as w:tblW was missing and the importer didn't set it.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(12961), getProperty<sal_Int32>(xTextTable, "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12963), getProperty<sal_Int32>(xTextTable, "Width"));
 
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Was 9997, so the 4th column had ~zero width
@@ -1022,7 +1022,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableAutoColumnFixedSize2, "table-auto-column-fixed
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // This was 17907, i.e. the sum of the width of the 3 cells (10152 twips each), which is too wide.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16891), getProperty<sal_Int32>(xTextTable, "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16893), getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo46361, "fdo46361.docx")
@@ -1059,7 +1059,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66474, "fdo66474.docx")
     // The table width was too small, so the text in the second cell was unreadable: this was 1397.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10492), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10493), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeRotation, "groupshape-rotation.docx")
