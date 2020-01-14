@@ -280,7 +280,7 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
     aInfo.mfStart = maStartHelper.GetValue();
     aInfo.mfEnd = maEndHelper.GetValue();
     sal_Int64 nNumDays = mxEdNumDays->get_value();
-    aInfo.mfStep = static_cast<double>( aInfo.mbDateValues ? nNumDays : 0L );
+    aInfo.mfStep = static_cast<double>( aInfo.mbDateValues ? nNumDays : 0 );
     if( aInfo.mfEnd <= aInfo.mfStart )
         aInfo.mfEnd = aInfo.mfStart + nNumDays;
 

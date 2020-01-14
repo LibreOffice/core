@@ -1467,7 +1467,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                         DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
     sal_uInt16 nPerc   = rFormat.GetDistance(nIndex);
     if (bScale)
-        nHeight += 2 * (nHeight * nPerc / 100L);
+        nHeight += 2 * (nHeight * nPerc / 100);
     for (size_t i = 1; i < nNumSubNodes; i += 2)
     {
         SmNode *pNode = GetSubNode(i);
@@ -1477,7 +1477,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // horizontal distance between argument and brackets or separators
     long  nDist = GetFont().GetFontSize().Height()
-                  * rFormat.GetDistance(DIS_BRACKETSPACE) / 100L;
+                  * rFormat.GetDistance(DIS_BRACKETSPACE) / 100;
 
     SmNode *pLeft = GetSubNode(0);
     SmRect::operator = (*pLeft);
@@ -1592,8 +1592,8 @@ long SmOperNode::CalcSymbolHeight(const SmNode &rSymbol,
         nHeight += (nHeight * 20L) / 100L;
 
         nHeight += nHeight
-                   * rFormat.GetDistance(DIS_OPERATORSIZE) / 100L;
-        nHeight = nHeight * 686L / 845L;
+                   * rFormat.GetDistance(DIS_OPERATORSIZE) / 100;
+        nHeight = nHeight * 686 / 845;
     }
 
     // correct user-defined symbols to match height of sum from used font
@@ -1632,7 +1632,7 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     long  nOrigHeight = GetFont().GetFontSize().Height(),
           nDist = nOrigHeight
-                  * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
+                  * rFormat.GetDistance(DIS_OPERATORSPACE) / 100;
 
     Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, bDynamicallySized ? RectVerAlign::CenterY : RectVerAlign::Mid);
     aPos.AdjustX( -nDist );
