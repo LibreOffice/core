@@ -44,7 +44,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <sal/log.hxx>
 #include <memory>
 
 using namespace vcl;

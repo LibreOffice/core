@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/detail/file.h>

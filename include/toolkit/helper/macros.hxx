@@ -20,7 +20,6 @@
 #ifndef INCLUDED_TOOLKIT_HELPER_MACROS_HXX
 #define INCLUDED_TOOLKIT_HELPER_MACROS_HXX
 
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 

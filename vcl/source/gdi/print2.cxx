@@ -22,7 +22,6 @@
 #include <vector>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <vcl/virdev.hxx>

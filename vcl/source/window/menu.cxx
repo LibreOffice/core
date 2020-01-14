@@ -18,7 +18,6 @@
  */
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>

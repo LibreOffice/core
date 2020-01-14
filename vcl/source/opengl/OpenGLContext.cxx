@@ -16,7 +16,6 @@
 #include <vcl/sysdata.hxx>
 
 #include <osl/thread.hxx>
-#include <sal/log.hxx>
 
 #include <svdata.hxx>
 #include <salgdi.hxx>

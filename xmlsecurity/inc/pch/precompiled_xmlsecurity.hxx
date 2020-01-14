@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:17:59 using:
+ Generated on 2020-01-15 03:13:30 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,6 +22,7 @@
 
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <assert.h>
 #include <cassert>
 #include <cstddef>
 #include <cstring>
@@ -163,6 +164,7 @@
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>

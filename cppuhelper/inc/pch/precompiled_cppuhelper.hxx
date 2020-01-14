@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:12 using:
+ Generated on 2020-01-15 05:19:07 using:
  ./bin/update_pch cppuhelper cppuhelper --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -31,6 +31,7 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.h>
@@ -46,7 +47,6 @@
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/unload.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
