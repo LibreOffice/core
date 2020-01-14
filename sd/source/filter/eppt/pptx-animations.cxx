@@ -644,16 +644,13 @@ public:
 };
 }
 
-namespace oox
-{
-namespace core
+namespace oox::core
 {
 void WriteAnimations(const FSHelperPtr& pFS, const Reference<XDrawPage>& rXDrawPage,
                      PowerPointExport& rExport)
 {
     PPTXAnimationExport aAnimationExport(rExport, pFS);
     aAnimationExport.WriteAnimations(rXDrawPage);
-}
 }
 }
 

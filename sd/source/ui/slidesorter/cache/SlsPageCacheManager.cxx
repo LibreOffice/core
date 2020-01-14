@@ -103,7 +103,7 @@ private:
 
 } // end of anonymous namespace
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 /** Container for the active caches.
 */
@@ -416,6 +416,6 @@ void PageCacheManager::PutRecentlyUsedCache(
     }
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

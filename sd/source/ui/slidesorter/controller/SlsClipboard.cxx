@@ -65,7 +65,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 namespace {
 /** Temporarily deactivate slide tracking of the VisibleAreaManager.
@@ -917,6 +917,6 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     return nResult;
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

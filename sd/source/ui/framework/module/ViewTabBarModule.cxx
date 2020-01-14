@@ -40,7 +40,7 @@ static const sal_Int32 ResourceActivationEvent = 2;
 
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== ViewTabBarModule ==================================================
 
@@ -175,6 +175,6 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
         xBar->addTabBarButtonAfter(aNotesViewButton, aOutlineViewButton);
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

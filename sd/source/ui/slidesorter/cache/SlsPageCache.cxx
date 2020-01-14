@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 //===== PageCache =============================================================
 
@@ -104,6 +104,6 @@ void PageCache::Resume()
     mpImplementation->Resume();
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

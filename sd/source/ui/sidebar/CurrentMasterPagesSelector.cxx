@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 VclPtr<vcl::Window> CurrentMasterPagesSelector::Create (
     vcl::Window* pParent,
@@ -271,6 +271,6 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
     }
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

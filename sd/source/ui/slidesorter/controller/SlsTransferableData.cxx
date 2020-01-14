@@ -21,7 +21,7 @@
 
 #include <SlideSorterViewShell.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 SdTransferable* TransferableData::CreateTransferable (
     SdDrawDocument* pSrcDoc,
@@ -81,6 +81,6 @@ void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

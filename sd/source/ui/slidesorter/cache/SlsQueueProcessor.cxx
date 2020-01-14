@@ -24,7 +24,7 @@
 #include <sdpage.hxx>
 #include <comphelper/profilezone.hxx>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 //=====  QueueProcessor  ======================================================
 
@@ -177,6 +177,6 @@ void QueueProcessor::SetBitmapCache (
     mpCache = rpCache;
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

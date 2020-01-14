@@ -29,7 +29,7 @@
 #include <memory>
 #include <set>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 namespace {
 
@@ -426,6 +426,6 @@ void PageObjectRun::operator () (const double nGlobalTime)
     mrAnimatorAccess.GetContentWindow()->Flush();
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

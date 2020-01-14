@@ -33,7 +33,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdundo.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com::sun::star::container { class XNameContainer; }
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

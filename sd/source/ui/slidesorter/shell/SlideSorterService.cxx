@@ -35,7 +35,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::slidesorter::view::Layouter;
 
-namespace sd { namespace slidesorter {
+namespace sd::slidesorter {
 
 //===== SlideSorterService ==========================================================
 
@@ -400,7 +400,7 @@ void SlideSorterService::ThrowIfDisposed()
     }
 }
 
-} } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

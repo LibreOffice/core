@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 //===== BasicToolBarFactory ===================================================
 
@@ -151,7 +151,7 @@ void BasicToolBarFactory::ThrowIfDisposed() const
     }
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation(css::uno::XComponentContext*,

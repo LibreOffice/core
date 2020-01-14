@@ -27,7 +27,7 @@
 
 #include <osl/diagnose.h>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 const static Color Black(0x000000);
 const static Color White(0xffffff);
@@ -237,6 +237,6 @@ void Theme::InitializeIcon(const IconType eType, const OUString& rResourceId)
     }
 }
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

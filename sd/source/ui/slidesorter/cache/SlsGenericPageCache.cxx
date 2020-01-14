@@ -26,7 +26,7 @@
 #include <cache/SlsPageCacheManager.hxx>
 #include <tools/debug.hxx>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 GenericPageCache::GenericPageCache (
     const Size& rPreviewSize,
@@ -275,6 +275,6 @@ void GenericPageCache::Resume()
         mpQueueProcessor->Resume();
 }
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

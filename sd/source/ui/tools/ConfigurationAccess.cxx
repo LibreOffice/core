@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 ConfigurationAccess::ConfigurationAccess (
     const Reference<XComponentContext>& rxContext,
@@ -170,6 +170,6 @@ void ConfigurationAccess::FillList(
     {}
 }
 
-} } // end of namespace sd::tools
+} // end of namespace sd::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

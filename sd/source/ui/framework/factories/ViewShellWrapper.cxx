@@ -42,7 +42,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 using ::com::sun::star::awt::XWindow;
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 ViewShellWrapper::ViewShellWrapper (
     const std::shared_ptr<ViewShell>& pViewShell,
@@ -261,6 +261,6 @@ void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
         mxWindow = nullptr;
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

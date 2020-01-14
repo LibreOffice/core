@@ -24,7 +24,7 @@
 
 #include <set>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 const sal_Int32 MasterPageContainerQueue::snDelayedCreationTimeout (15);
 const sal_Int32 MasterPageContainerQueue::snDelayedCreationTimeoutWhenNotIdle (100);
@@ -258,6 +258,6 @@ void MasterPageContainerQueue::ProcessAllRequests()
         maDelayedPreviewCreationTimer.Start();
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

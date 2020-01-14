@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star::datatransfer::dnd::DNDConstants;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -239,6 +239,6 @@ InsertionIndicatorHandler::ForceShowContext::~ForceShowContext() COVERITY_NOEXCE
     mpHandler->ForceEnd();
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

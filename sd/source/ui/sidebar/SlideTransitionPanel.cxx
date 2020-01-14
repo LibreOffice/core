@@ -22,7 +22,7 @@
 
 #include <ViewShellBase.hxx>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 SlideTransitionPanel::SlideTransitionPanel (
     vcl::Window* pParentWindow,
@@ -56,6 +56,6 @@ css::ui::LayoutSize SlideTransitionPanel::GetHeightForWidth (const sal_Int32 /*n
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

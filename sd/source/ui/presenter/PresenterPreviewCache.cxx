@@ -26,13 +26,13 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::cache;
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 class PresenterPreviewCache::PresenterCacheContext : public CacheContext
 {
@@ -349,7 +349,7 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
     }
 }
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

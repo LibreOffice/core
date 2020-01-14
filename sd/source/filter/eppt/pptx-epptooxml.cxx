@@ -91,9 +91,7 @@ using namespace oox::core;
 void dump_pset(Reference< XPropertySet > const& rXPropSet);
 #endif
 
-namespace oox
-{
-namespace core
+namespace oox::core
 {
 
 class PowerPointShapeExport : public ShapeExport
@@ -130,7 +128,6 @@ void WriteSndAc(const FSHelperPtr& pFS, const OUString& sSoundRelId, const OUStr
 }
 }
 
-}
 }
 
 namespace {

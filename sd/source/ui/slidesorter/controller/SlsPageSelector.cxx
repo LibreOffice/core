@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 PageSelector::PageSelector (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
@@ -382,6 +382,6 @@ PageSelector::BroadcastLock::~BroadcastLock()
     mrSelector.EnableBroadcasting();
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

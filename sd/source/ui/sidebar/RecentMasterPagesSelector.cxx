@@ -26,7 +26,7 @@
 #include <drawdoc.hxx>
 #include <helpids.h>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
     vcl::Window* pParent,
@@ -146,6 +146,6 @@ void RecentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
         rMenu.EnableItem(nItemid, false);
 }
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

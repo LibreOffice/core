@@ -148,7 +148,7 @@ private:
 
 } // end of anonymous namespace
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 namespace {
 
@@ -828,7 +828,7 @@ FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
 {
 }
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 namespace {
 

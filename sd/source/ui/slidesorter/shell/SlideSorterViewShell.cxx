@@ -66,7 +66,7 @@ using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
 using ::vcl::EnumContext;
 
-namespace sd { namespace slidesorter {
+namespace sd::slidesorter {
 
 SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell)
 
@@ -882,6 +882,6 @@ void SlideSorterViewShell::PostMoveSlidesActions(const std::shared_ptr<SlideSort
 
 }
 
-} } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

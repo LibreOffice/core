@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 namespace {
 
@@ -1239,6 +1239,6 @@ IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, weld::ComboBox&, void )
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
