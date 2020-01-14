@@ -479,8 +479,7 @@ sal_Bool FilePolicy::supportsService( OUString const & serviceName )
 
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.security.Policy" };
-    return aSNS;
+    return { "com.sun.star.security.Policy" };
 }
 
 } // namespace

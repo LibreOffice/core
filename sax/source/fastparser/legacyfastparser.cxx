@@ -362,8 +362,7 @@ sal_Bool SaxLegacyFastParser::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > SaxLegacyFastParser::getSupportedServiceNames()
 {
-    Sequence<OUString> seq { "com.sun.star.xml.sax.LegacyFastParser" };
-    return seq;
+    return { "com.sun.star.xml.sax.LegacyFastParser" };
 }
 
 } //namespace

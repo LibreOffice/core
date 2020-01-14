@@ -143,8 +143,7 @@ sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rS
 }
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.drawing.CustomShapeEngine" };
-    return aRet;
+    return { "com.sun.star.drawing.CustomShapeEngine" };
 }
 
 // XCustomShapeEngine

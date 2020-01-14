@@ -57,8 +57,7 @@ OUString VCLXAccessibleHeaderBar::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames()
 {
-    Sequence<OUString> aNames { "com.sun.star.awt.AccessibleHeaderBar" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleHeaderBar" };
 }
 
 // =======XAccessibleContext=======

@@ -148,8 +148,7 @@ sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServic
 
 Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { cOrdinalSuffix };
-    return aRet;
+    return { cOrdinalSuffix };
 }
 
 }

@@ -384,8 +384,7 @@ sal_Bool Parser::supportsService(OUString const & serviceName)
 
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript" };
-    return s;
+    return { "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript" };
 }
 
 css::uno::Reference< css::uri::XUriReference >
