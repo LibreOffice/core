@@ -16,6 +16,24 @@
       "revId": "65429eac65efbc68f60882e3a87085cf682cf62a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23faa77d_8bb530e2",
+        "filename": "drawinglayer/source/tools/emfppath.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2020-01-14T02:11:45Z",
+      "side": 1,
+      "message": "You are correct - that\u0027s a 32 bit field. EmfPlusInteger15 specifies a 15-bit signed integer in a 16-bit field. But these are encapsulated in a 32-bit field... so it should be 0x7FFFFFFF.",
+      "parentUuid": "051bf6c8_8cb6a351",
+      "revId": "65429eac65efbc68f60882e3a87085cf682cf62a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
