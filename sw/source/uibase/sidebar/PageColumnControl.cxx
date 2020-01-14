@@ -19,6 +19,7 @@
 
 #include <memory>
 #include "PageColumnControl.hxx"
+#include <PageColumnPopup.hxx>
 
 #include <cmdid.h>
 
@@ -30,8 +31,8 @@
 
 namespace sw { namespace sidebar {
 
-PageColumnControl::PageColumnControl( sal_uInt16 nId, vcl::Window* pParent )
-    : SfxPopupWindow( nId, pParent, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
+PageColumnControl::PageColumnControl(PageColumnPopup* pControl, vcl::Window* pParent)
+    : ToolbarPopup(pControl->getFrameInterface(), pParent, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
 {
     get( m_pMoreButton, "moreoptions" );
 
@@ -89,7 +90,7 @@ void PageColumnControl::dispose()
     m_pLeft.disposeAndClear();
     m_pRight.disposeAndClear();
     m_pMoreButton.disposeAndClear();
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
