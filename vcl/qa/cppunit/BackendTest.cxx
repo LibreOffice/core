@@ -430,7 +430,17 @@ public:
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
         exportImage("08-05_blend_test.png", aBitmapEx);
-        if (aOutDevTest.getRenderBackendName() == "skia")
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawXor()
+    {
+        vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupXOR();
+        auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
+        exportImage("08-06_xor_test.png", aBitmap);
+        if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
@@ -475,6 +485,7 @@ public:
     CPPUNIT_TEST(testDrawBitmapExWithAlpha);
     CPPUNIT_TEST(testDrawMask);
     CPPUNIT_TEST(testDrawBlend);
+    CPPUNIT_TEST(testDrawXor);
 
     CPPUNIT_TEST_SUITE_END();
 };

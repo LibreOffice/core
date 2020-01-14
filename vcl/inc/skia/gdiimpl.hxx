@@ -206,6 +206,8 @@ protected:
     void preDraw();
     // To be called after any drawing.
     void postDraw();
+    // The canvas to drawn to. Will be diverted to a temporary for Xor mode.
+    SkCanvas* getDrawCanvas() { return mXorMode ? getXorCanvas() : mSurface->getCanvas(); }
 
     virtual void createSurface();
     // Call to ensure that mSurface is valid. If mSurface is going to be modified,
@@ -240,6 +242,9 @@ protected:
 
     void drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImage>& rImage, Color nMaskColor);
 
+    SkCanvas* getXorCanvas();
+    static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
+
     // When drawing using GPU, rounding errors may result in off-by-one errors,
     // see https://bugs.chromium.org/p/skia/issues/detail?id=9611 . Compensate for
     // it by using centers of pixels (Skia uses float coordinates). In raster case
@@ -267,6 +272,9 @@ protected:
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
+    bool mXorMode;
+    SkBitmap mXorBitmap;
+    std::unique_ptr<SkCanvas> mXorCanvas;
     std::unique_ptr<SkiaFlushIdle> mFlush;
 };
 
