@@ -39,9 +39,19 @@ PageMarginPopup::~PageMarginPopup()
 {
 }
 
-VclPtr<vcl::Window> PageMarginPopup::createPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> PageMarginPopup::weldPopupWindow()
 {
-    return VclPtr<sw::sidebar::PageMarginControl>::Create(this, pParent);
+    return std::make_unique<sw::sidebar::PageMarginControl>(this, m_pToolbar);
+}
+
+VclPtr<vcl::Window> PageMarginPopup::createPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<sw::sidebar::PageMarginControl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString PageMarginPopup::getImplementationName()

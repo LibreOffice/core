@@ -20,9 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 
 #include <svtools/toolbarmenu.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
 
 #define SWPAGE_NARROW_VALUE    720
 #define SWPAGE_NORMAL_VALUE    1136
@@ -37,34 +34,34 @@ class PageMarginPopup;
 
 namespace sw { namespace sidebar {
 
-class PageMarginControl final : public svtools::ToolbarPopup
+class PageMarginControl final : public WeldToolbarPopup
 {
 public:
-    explicit PageMarginControl(PageMarginPopup* pControl, vcl::Window* pParent);
+    explicit PageMarginControl(PageMarginPopup* pControl, weld::Widget* pParent);
+    virtual void GrabFocus() override;
     virtual ~PageMarginControl() override;
-    virtual void dispose() override;
 
 private:
-    VclPtr<PushButton> m_pNarrow;
-    VclPtr<PushButton> m_pNormal;
-    VclPtr<PushButton> m_pWide;
-    VclPtr<PushButton> m_pMirrored;
-    VclPtr<PushButton> m_pLast;
+    std::unique_ptr<weld::Button> m_xNarrow;
+    std::unique_ptr<weld::Button> m_xNormal;
+    std::unique_ptr<weld::Button> m_xWide;
+    std::unique_ptr<weld::Button> m_xMirrored;
+    std::unique_ptr<weld::Button> m_xLast;
 
-    VclPtr<FixedText> m_pLeft;
-    VclPtr<FixedText> m_pRight;
-    VclPtr<FixedText> m_pInner;
-    VclPtr<FixedText> m_pOuter;
+    std::unique_ptr<weld::Label> m_xLeft;
+    std::unique_ptr<weld::Label> m_xRight;
+    std::unique_ptr<weld::Label> m_xInner;
+    std::unique_ptr<weld::Label> m_xOuter;
 
-    VclPtr<VclVBox> m_pContainer;
-
-    VclPtr<MetricField> m_pLeftMarginEdit;
-    VclPtr<MetricField> m_pRightMarginEdit;
-    VclPtr<MetricField> m_pTopMarginEdit;
-    VclPtr<MetricField> m_pBottomMarginEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xLeftMarginEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xRightMarginEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xTopMarginEdit;
+    std::unique_ptr<weld::MetricSpinButton> m_xBottomMarginEdit;
 
     // hidden metric field
-    VclPtr<MetricField> m_pWidthHeightField;
+    std::unique_ptr<weld::MetricSpinButton> m_xWidthHeightField;
+
+    rtl::Reference<PageMarginPopup> m_xControl;
 
     long m_nPageLeftMargin;
     long m_nPageRightMargin;
@@ -85,9 +82,9 @@ private:
 
     bool m_bCustomValuesUsed;
 
-    DECL_LINK( SelectMarginHdl, Button*, void );
-    DECL_LINK( ModifyLRMarginHdl, Edit&, void );
-    DECL_LINK( ModifyULMarginHdl, Edit&, void );
+    DECL_LINK( SelectMarginHdl, weld::Button&, void );
+    DECL_LINK( ModifyLRMarginHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ModifyULMarginHdl, weld::MetricSpinButton&, void );
 
     static void ExecuteMarginLRChange(
         const long nPageLeftMargin,
