@@ -52,6 +52,7 @@
 #include <xmloff/attrlist.hxx>
 
 #include <xmlxtimp.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <cstdio>
 
@@ -72,10 +73,15 @@ enum class SvxXMLTableImportContextEnum { Color, Marker, Dash, Hatch, Gradient, 
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
+    SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
         bool bOOoFormat );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext(sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
 protected:
     void importColor( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
@@ -93,27 +99,36 @@ private:
 
 }
 
-SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
-: SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
+SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
+: SvXMLImportContext( rImport ), mxTable( xTable ), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
 {
 }
 
-SvXMLImportContextRef SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& rAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler >
+        SvxXMLTableImportContext::createFastChildContext(sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    sal_Int32 nNamespace = nElement & NMSP_MASK;
+    if( NAMESPACE_TOKEN(XML_NAMESPACE_DRAW) == nNamespace ||
+        NAMESPACE_TOKEN(XML_NAMESPACE_DRAW_OOO) == nNamespace )
     {
-        uno::Reference< XAttributeList > xAttrList( rAttrList );
+        sax_fastparser::FastAttributeList *pFastAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( rAttrList );
+        SvXMLAttributeList *pAttrList = new SvXMLAttributeList;
+        for (auto& aIter : *pFastAttribList)
+            pAttrList->AddAttribute(
+                SvXMLImport::getNamespacePrefixFromToken(aIter.getToken(), nullptr) + ":" +
+                GetXMLToken(static_cast<XMLTokenEnum>(aIter.getToken() & TOKEN_MASK)),
+                aIter.toString());
         if( mbOOoFormat &&
              (SvxXMLTableImportContextEnum::Dash == meContext || SvxXMLTableImportContextEnum::Hatch == meContext ||
              SvxXMLTableImportContextEnum::Bitmap == meContext) )
         {
-            SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
-            xAttrList = pAttrList;
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            sal_Int16 nAttrCount = pAttrList->getLength();
             for( sal_Int16 i=0; i < nAttrCount; i++ )
             {
-                const OUString& rAttrName = xAttrList->getNameByIndex( i );
+                const OUString& rAttrName = pAttrList->getNameByIndex( i );
                 OUString aLocalName;
                 sal_uInt16 nPrefix_ =
                     GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
@@ -122,11 +137,11 @@ SvXMLImportContextRef SvxXMLTableImportContext::CreateChildContext( sal_uInt16 n
                     SvxXMLTableImportContextEnum::Bitmap == meContext &&
                     IsXMLToken( aLocalName, XML_HREF ) )
                 {
-                    const OUString rValue = xAttrList->getValueByIndex( i );
+                    const OUString rValue = pAttrList->getValueByIndex( i );
                     if( !rValue.isEmpty() && '#' == rValue[0] )
                         pAttrList->SetValueByIndex( i, rValue.copy( 1 ) );
                 }
-                else if( XML_NAMESPACE_DRAW == nPrefix_ &&
+                else if( (XML_NAMESPACE_DRAW == nPrefix_ || XML_NAMESPACE_DRAW_OOO == nPrefix_) &&
                           ( ( SvxXMLTableImportContextEnum::Dash == meContext &&
                               (IsXMLToken( aLocalName, XML_DOTS1_LENGTH ) ||
                                IsXMLToken( aLocalName, XML_DOTS2_LENGTH ) ||
@@ -134,7 +149,7 @@ SvXMLImportContextRef SvxXMLTableImportContext::CreateChildContext( sal_uInt16 n
                             ( SvxXMLTableImportContextEnum::Hatch == meContext &&
                               IsXMLToken( aLocalName, XML_HATCH_DISTANCE ) ) ) )
                 {
-                    const OUString rValue = xAttrList->getValueByIndex( i );
+                    const OUString rValue = pAttrList->getValueByIndex( i );
                     sal_Int32 nPos = rValue.getLength();
                     while( nPos && rValue[nPos-1] <= ' ' )
                         --nPos;
@@ -155,22 +170,22 @@ SvXMLImportContextRef SvxXMLTableImportContext::CreateChildContext( sal_uInt16 n
             switch( meContext )
             {
             case SvxXMLTableImportContextEnum::Color:
-                importColor( xAttrList, aAny, aName );
+                importColor( pAttrList, aAny, aName );
                 break;
             case SvxXMLTableImportContextEnum::Marker:
-                importMarker( xAttrList, aAny, aName  );
+                importMarker( pAttrList, aAny, aName  );
                 break;
             case SvxXMLTableImportContextEnum::Dash:
-                importDash( xAttrList, aAny, aName  );
+                importDash( pAttrList, aAny, aName  );
                 break;
             case SvxXMLTableImportContextEnum::Hatch:
-                importHatch( xAttrList, aAny, aName  );
+                importHatch( pAttrList, aAny, aName  );
                 break;
             case SvxXMLTableImportContextEnum::Gradient:
-                importGradient( xAttrList, aAny, aName  );
+                importGradient( pAttrList, aAny, aName  );
                 break;
             case SvxXMLTableImportContextEnum::Bitmap:
-                importBitmap( xAttrList, aAny, aName  );
+                importBitmap( pAttrList, aAny, aName  );
                 break;
             }
 
@@ -188,10 +203,11 @@ SvXMLImportContextRef SvxXMLTableImportContext::CreateChildContext( sal_uInt16 n
         }
         catch (const uno::Exception&)
         {
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
+        return new SvXMLImportContext( GetImport() );
     }
-
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return nullptr;
 }
 
 void SvxXMLTableImportContext::importColor( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
@@ -204,7 +220,7 @@ void SvxXMLTableImportContext::importColor( const uno::Reference< XAttributeList
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rFullAttrName, &aLocalName );
 
 
-        if( XML_NAMESPACE_DRAW == nPrefix )
+        if( XML_NAMESPACE_DRAW == nPrefix || XML_NAMESPACE_DRAW_OOO == nPrefix )
         {
             if( aLocalName == GetXMLToken(XML_NAME) )
             {
@@ -303,9 +319,12 @@ SvxXMLXTableImport::SvxXMLXTableImport(
 {
     SetGraphicStorageHandler(xGraphicStorageHandler);
 
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO);
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE);
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW);
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK);
+
     GetNamespaceMap().Add( "__ooo", GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-    GetNamespaceMap().Add( "__office", GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-    GetNamespaceMap().Add( "__draw", GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
     GetNamespaceMap().Add( "__xlink", GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
 
     // OOo namespaces for reading OOo 1.1 files
@@ -416,45 +435,48 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
     return bRet;
 }
 
-SvXMLImportContext *SvxXMLXTableImport::CreateDocumentContext(
-        sal_uInt16 const nPrefix, const OUString& rLocalName,
-        const uno::Reference< XAttributeList >& /*xAttrList*/)
+SvXMLImportContext *SvxXMLXTableImport::CreateFastContext( sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    if( XML_NAMESPACE_OOO == nPrefix ||
-        XML_NAMESPACE_OFFICE == nPrefix )
+    sal_Int32 nNamespace = nElement & NMSP_MASK;
+    if( NAMESPACE_TOKEN(XML_NAMESPACE_OOO) == nNamespace ||
+        NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE) == nNamespace ||
+        NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE_OOO) == nNamespace )
     {
-        bool bOOoFormat = (XML_NAMESPACE_OFFICE == nPrefix);
+        bool bOOoFormat = (NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE) == nNamespace) ||
+                          (NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE_OOO) == nNamespace);
         Type aType = mrTable->getElementType();
+        sal_Int32 nToken = nElement & TOKEN_MASK;
 
-        if ( rLocalName == "color-table" )
+        if ( nToken == XML_COLOR_TABLE )
         {
             if( aType == ::cppu::UnoType<sal_Int32>::get() )
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Color, mrTable, bOOoFormat );
+                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Color, mrTable, bOOoFormat );
         }
-        else if ( rLocalName == "marker-table" )
+        else if ( nToken == XML_MARKER_TABLE )
         {
             if( aType == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Marker, mrTable, bOOoFormat );
+                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Marker, mrTable, bOOoFormat );
         }
-        else if ( rLocalName == "dash-table" )
+        else if ( nToken == XML_DASH_TABLE )
         {
             if( aType == cppu::UnoType<drawing::LineDash>::get())
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Dash, mrTable, bOOoFormat );
+                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Dash, mrTable, bOOoFormat );
         }
-        else if ( rLocalName == "hatch-table" )
+        else if ( nToken == XML_HATCH_TABLE )
         {
             if( aType == cppu::UnoType<drawing::Hatch>::get())
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Hatch, mrTable, bOOoFormat );
+                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Hatch, mrTable, bOOoFormat );
         }
-        else if ( rLocalName == "gradient-table" )
+        else if ( nToken == XML_GRADIENT_TABLE )
         {
             if( aType == cppu::UnoType<awt::Gradient>::get())
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Gradient, mrTable, bOOoFormat );
+                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Gradient, mrTable, bOOoFormat );
         }
-        else if ( rLocalName == "bitmap-table" )
+        else if ( nToken == XML_BITMAP_TABLE )
         {
             if( aType == ::cppu::UnoType<awt::XBitmap>::get())
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Bitmap, mrTable, bOOoFormat );
+                return new SvxXMLTableImportContext( *this, SvxXMLTableImportContextEnum::Bitmap, mrTable, bOOoFormat );
         }
     }
 
