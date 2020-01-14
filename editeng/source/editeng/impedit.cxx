@@ -384,6 +384,33 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
         if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !pOldRegion && pOutWin)
         {
+            VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
+            if (pParent && pParent->GetLOKWindowId() != 0)
+            {
+                const long nX = pOutWin->GetOutOffXPixel() - pParent->GetOutOffXPixel();
+                const long nY = pOutWin->GetOutOffYPixel() - pParent->GetOutOffYPixel();
+
+                std::vector<tools::Rectangle> aRectangles;
+                pRegion->GetRegionRectangles(aRectangles);
+
+                std::vector<OString> v;
+                for (tools::Rectangle & rRectangle : aRectangles)
+                {
+                    rRectangle = pOutWin->LogicToPixel(rRectangle);
+                    rRectangle.Move(nX, nY);
+                    v.emplace_back(rRectangle.toString().getStr());
+                }
+                OString sRectangle = comphelper::string::join("; ", v);
+
+                const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+                const OUString rAction("text_selection");
+                std::vector<vcl::LOKPayloadItem> aItems;
+                aItems.emplace_back("rectangles", sRectangle);
+                pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+                pPolyPoly.reset();
+                return;
+            }
+
             pOutWin->Push(PushFlags::MAPMODE);
             if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
             {
@@ -1715,6 +1742,19 @@ void ImpEditView::DeselectAll()
     aNewSelection.Min() = aNewSelection.Max();
     SetEditSelection(aNewSelection);
     // const_cast<EditPaM&>(GetEditSelection().Min()) = GetEditSelection().Max();
+
+    if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
+    {
+        VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
+        if (pParent && pParent->GetLOKWindowId())
+        {
+            const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+            const OUString rAction("text_selection");
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("rectangles", "");
+            pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+        }
+    }
 }
 
 bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
