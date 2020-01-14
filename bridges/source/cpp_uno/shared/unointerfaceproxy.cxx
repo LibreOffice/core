@@ -25,7 +25,7 @@
 #include <typelib/typedescription.h>
 #include <uno/dispatcher.h>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
 {
@@ -120,6 +120,6 @@ UnoInterfaceProxy::UnoInterfaceProxy(
 UnoInterfaceProxy::~UnoInterfaceProxy()
 {}
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

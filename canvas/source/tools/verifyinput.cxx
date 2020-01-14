@@ -46,9 +46,7 @@
 
 using namespace ::com::sun::star;
 
-namespace canvas
-{
-    namespace tools
+namespace canvas::tools
     {
         void verifyInput( const geometry::RealPoint2D&              rPoint,
                           const char*                               pStr,
@@ -710,8 +708,6 @@ namespace canvas
         }
 
 
-    } // namespace tools
-
-} // namespace canvas
+    } // namespace canvas
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

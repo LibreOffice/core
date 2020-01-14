@@ -31,7 +31,7 @@
 #include <uno/environment.h>
 #include <uno/mapping.h>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 void freeMapping(uno_Mapping * pMapping)
 {
@@ -205,6 +205,6 @@ Bridge::~Bridge()
     (*pCppEnv->aBase.release)( &pCppEnv->aBase );
 }
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

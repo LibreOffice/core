@@ -29,8 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 
-namespace basic {
-namespace vba {
+namespace basic::vba {
 
 using namespace ::com::sun::star;
 
@@ -183,7 +182,6 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
 }
 
 
-} // namespace vba
 } // namespace basic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
