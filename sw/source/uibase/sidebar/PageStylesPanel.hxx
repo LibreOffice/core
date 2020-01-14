@@ -28,8 +28,6 @@
 
 #include <svx/pageitem.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/xbtmpit.hxx>

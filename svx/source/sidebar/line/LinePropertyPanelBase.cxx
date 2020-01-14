@@ -41,8 +41,6 @@
 #include <svx/xlndsit.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/xlnwtit.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/toolbox.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>

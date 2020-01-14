@@ -24,8 +24,6 @@
 #include <sfx2/weldutils.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/svxids.hrc>
