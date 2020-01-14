@@ -4816,7 +4816,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         pRet->SetMergedItemSet(aSet);
 
                         // connectors
-                        MSO_ConnectorStyle eConnectorStyle = static_cast<MSO_ConnectorStyle>(GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight ));
+                        auto eConnectorStyle = GetPropertyValue(DFF_Prop_cxstyle, mso_cxstyleStraight);
 
                         static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(true, nullptr);
                         static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(false, nullptr);
