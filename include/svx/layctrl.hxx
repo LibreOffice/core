@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_LAYCTRL_HXX
 #define INCLUDED_SVX_LAYCTRL_HXX
 
-#include <sfx2/tbxctrl.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 
@@ -41,20 +40,21 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
-class SVX_DLLPUBLIC SvxColumnsToolBoxControl final : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxColumnsToolBoxControl final : public svt::PopupWindowController
 {
-    bool    bEnabled;
 public:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxColumnsToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~SvxColumnsToolBoxControl() override;
 
-    virtual void                StateChanged( sal_uInt16 nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 #endif

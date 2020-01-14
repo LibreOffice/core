@@ -987,6 +987,39 @@
           <value>com.sun.star.comp.svx.TableToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="InteractiveFrameColumnsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFrameInteract</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColumnsToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FrameColumnsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFrame</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColumnsToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="SectionColumnsToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertSection</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColumnsToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ExtrusionDirectionFloater</value>

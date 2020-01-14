@@ -116,6 +116,10 @@
     constructor="com_sun_star_comp_svx_TableToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.ColumnsToolBoxControl"
+    constructor="com_sun_star_comp_svx_ColumnsToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svx.UnderlineToolBoxControl"
     constructor="com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
