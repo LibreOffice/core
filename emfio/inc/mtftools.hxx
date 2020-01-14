@@ -314,7 +314,7 @@ namespace emfio
         virtual ~GDIObj() = default; // Polymorphic base class
     };
 
-    struct EMFIO_DLLPUBLIC WinMtfFontStyle : GDIObj
+    struct EMFIO_DLLPUBLIC WinMtfFontStyle final : GDIObj
     {
         vcl::Font    aFont;
 
@@ -326,7 +326,7 @@ namespace emfio
         Solid, Pattern
     };
 
-    struct WinMtfFillStyle : GDIObj
+    struct WinMtfFillStyle final : GDIObj
     {
         Color               aFillColor;
         bool                bTransparent;
@@ -359,7 +359,7 @@ namespace emfio
         }
     };
 
-    struct WinMtfLineStyle : GDIObj
+    struct WinMtfLineStyle final : GDIObj
     {
         Color       aLineColor;
         LineInfo    aLineInfo;

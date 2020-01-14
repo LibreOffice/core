@@ -816,13 +816,13 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int3
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs);
 #endif
 
-class EditEngineItemPool : public SfxItemPool
+class EditEngineItemPool final : public SfxItemPool
 {
 private:
     std::shared_ptr<DefItems> m_xDefItems;
 public:
     EditEngineItemPool();
-protected:
+private:
     virtual ~EditEngineItemPool() override;
 };
 
