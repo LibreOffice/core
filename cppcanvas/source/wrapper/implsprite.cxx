@@ -27,9 +27,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas
-{
-    namespace internal
+namespace cppcanvas::internal
     {
 
         ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
@@ -188,6 +186,5 @@ namespace cppcanvas
                 mxSprite->setPriority(fPriority);
         }
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
