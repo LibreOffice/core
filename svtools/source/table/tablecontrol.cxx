@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/settings.hxx>

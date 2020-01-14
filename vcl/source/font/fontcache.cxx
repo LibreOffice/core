@@ -22,7 +22,6 @@
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <PhysicalFontFamily.hxx>
-#include <sal/log.hxx>
 
 #if !(defined(_WIN32) || defined(MACOSX) || defined(IOS))
 #include <unx/glyphcache.hxx>

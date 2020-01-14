@@ -35,7 +35,6 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <xmlreader/span.hxx>
 

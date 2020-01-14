@@ -23,7 +23,6 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
-#include <sal/log.hxx>
 
 #include <vcl/configsettings.hxx>
 #include <vcl/dockwin.hxx>

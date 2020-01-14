@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
 #include <sal/main.h>
 #include <osl/diagnose.h>
 

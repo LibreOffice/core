@@ -23,7 +23,6 @@
 #include "datwin.hxx"
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
-#include <sal/log.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>

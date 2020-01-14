@@ -22,7 +22,6 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <sal/log.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>

@@ -29,7 +29,6 @@
 
 #include <sal/types.h>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <sal/log.hxx>
 
 #include <expat.h>
 #include <memory>

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/configitem.hxx>

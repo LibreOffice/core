@@ -30,7 +30,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <sal/log.hxx>
 
 #include <math.h>
 

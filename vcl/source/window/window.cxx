@@ -18,7 +18,6 @@
  */
 
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 
 #include <sal/types.h>
 #include <vcl/salgtype.hxx>
