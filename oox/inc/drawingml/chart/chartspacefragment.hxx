@@ -31,7 +31,7 @@ struct ChartSpaceModel;
 
 /** Handler for a chart fragment (c:chartSpace root element).
  */
-class ChartSpaceFragment : public FragmentBase< ChartSpaceModel >
+class ChartSpaceFragment final : public FragmentBase< ChartSpaceModel >
 {
 public:
     explicit            ChartSpaceFragment(

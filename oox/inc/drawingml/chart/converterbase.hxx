@@ -125,7 +125,7 @@ protected:
 
 /** A layout converter calculates positions and sizes for various chart objects.
  */
-class LayoutConverter : public ConverterBase< LayoutModel >
+class LayoutConverter final : public ConverterBase< LayoutModel >
 {
 public:
     explicit            LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel );

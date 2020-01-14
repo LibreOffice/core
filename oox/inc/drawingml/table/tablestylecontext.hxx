@@ -25,7 +25,7 @@
 
 namespace oox { namespace drawingml { namespace table {
 
-class TableStyleContext : public ::oox::core::ContextHandler2
+class TableStyleContext final : public ::oox::core::ContextHandler2
 {
 public:
     TableStyleContext( ::oox::core::ContextHandler2Helper const & rParent,

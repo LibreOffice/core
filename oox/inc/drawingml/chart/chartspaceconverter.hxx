@@ -33,7 +33,7 @@ namespace chart {
 
 struct ChartSpaceModel;
 
-class ChartSpaceConverter : public ConverterBase< ChartSpaceModel >
+class ChartSpaceConverter final : public ConverterBase< ChartSpaceModel >
 {
 public:
     explicit            ChartSpaceConverter( const ConverterRoot& rParent, ChartSpaceModel& rModel );

@@ -52,7 +52,7 @@ protected:
 
 /** Help class for all contexts that have only the c:spPr child element.
  */
-class ShapePrWrapperContext : public ContextBase< Shape >
+class ShapePrWrapperContext final : public ContextBase< Shape >
 {
 public:
     explicit            ShapePrWrapperContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rModel );
@@ -65,7 +65,7 @@ struct LayoutModel;
 
 /** Handler for a chart layout context (c:layout element).
  */
-class LayoutContext : public ContextBase< LayoutModel >
+class LayoutContext final : public ContextBase< LayoutModel >
 {
 public:
     explicit            LayoutContext( ::oox::core::ContextHandler2Helper& rParent, LayoutModel& rModel );

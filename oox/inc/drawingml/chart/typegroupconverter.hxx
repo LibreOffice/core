@@ -94,7 +94,7 @@ const TypeGroupInfo& GetTypeGroupInfo( TypeId eType );
 
 struct UpDownBarsModel;
 
-class UpDownBarsConverter : public ConverterBase< UpDownBarsModel >
+class UpDownBarsConverter final : public ConverterBase< UpDownBarsModel >
 {
 public:
     explicit            UpDownBarsConverter( const ConverterRoot& rParent, UpDownBarsModel& rModel );
@@ -108,7 +108,7 @@ public:
 struct TypeGroupModel;
 struct View3DModel;
 
-class TypeGroupConverter : public ConverterBase< TypeGroupModel >
+class TypeGroupConverter final : public ConverterBase< TypeGroupModel >
 {
 public:
     explicit            TypeGroupConverter( const ConverterRoot& rParent, TypeGroupModel& rModel );

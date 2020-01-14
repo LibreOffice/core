@@ -30,7 +30,7 @@ class Color;
 
 /** Context handler for the different color value elements (a:scrgbClr,
     a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
-class ColorValueContext : public ::oox::core::ContextHandler2
+class ColorValueContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ColorValueContext( ::oox::core::ContextHandler2Helper const & rParent, Color& rColor );

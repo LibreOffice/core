@@ -27,7 +27,7 @@ namespace drawingml {
 
 class Theme;
 
-class ThemeElementsContext : public oox::core::ContextHandler2
+class ThemeElementsContext final : public oox::core::ContextHandler2
 {
 public:
     ThemeElementsContext( ::oox::core::ContextHandler2Helper const & rParent, Theme& rTheme );

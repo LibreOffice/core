@@ -34,7 +34,7 @@ namespace chart {
 struct View3DModel;
 class TypeGroupConverter;
 
-class View3DConverter : public ConverterBase< View3DModel >
+class View3DConverter final : public ConverterBase< View3DModel >
 {
 public:
     explicit            View3DConverter( const ConverterRoot& rParent, View3DModel& rModel );
@@ -49,7 +49,7 @@ public:
 
 struct WallFloorModel;
 
-class WallFloorConverter : public ConverterBase< WallFloorModel >
+class WallFloorConverter final : public ConverterBase< WallFloorModel >
 {
 public:
     explicit            WallFloorConverter( const ConverterRoot& rParent, WallFloorModel& rModel );
@@ -64,7 +64,7 @@ public:
 
 struct DataTableModel;
 
-class DataTableConverter : public ConverterBase< DataTableModel >
+class DataTableConverter final : public ConverterBase< DataTableModel >
 {
 public:
     explicit            DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel );
@@ -78,7 +78,7 @@ public:
 
 struct PlotAreaModel;
 
-class PlotAreaConverter : public ConverterBase< PlotAreaModel >
+class PlotAreaConverter final : public ConverterBase< PlotAreaModel >
 {
 public:
     explicit            PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel );

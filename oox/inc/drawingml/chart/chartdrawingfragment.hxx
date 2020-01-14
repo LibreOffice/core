@@ -72,7 +72,7 @@ private:
 
 /** Handler for a chart drawing fragment (c:userShapes root element).
  */
-class ChartDrawingFragment : public ::oox::core::FragmentHandler2
+class ChartDrawingFragment final : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            ChartDrawingFragment(
