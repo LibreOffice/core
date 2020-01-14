@@ -257,7 +257,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartedTOC(false),
         m_bStartIndex(false),
         m_bStartBibliography(false),
-        m_bStartGenericField(false),
+        m_nStartGenericField(0),
         m_bTextInserted(false),
         m_sCurrentPermId(0),
         m_pLastSectionContext( ),
@@ -1870,7 +1870,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
             }
             else
             {
-                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
+                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0)
                 {
                     if (IsInHeaderFooter() && !m_bStartTOCHeaderFooter)
                     {
@@ -1882,16 +1882,22 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                         assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
-                        if (m_bStartGenericField)
+                        if (m_nStartGenericField != 0)
+                        {
                             xTOCTextCursor->goLeft(1, false);
+                        }
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                         SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                         if (!xTextRange.is())
                             throw uno::Exception("insertTextPortion failed", nullptr);
                         m_bTextInserted = true;
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
+<<<<<<< HEAD   (0424ae tdf#129516 DOCX import: fix incorrect z-order with textboxes)
                         mxTOCTextCursor = xTOCTextCursor;
                         if (!m_bStartGenericField)
+=======
+                        if (m_nStartGenericField == 0)
+>>>>>>> CHANGE (cf2265 tdf#129805 writerfilter: fix import of nested generic field)
                         {
                             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
                         }
@@ -5320,7 +5326,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
                             pContext->GetFieldId());
                     xFormField->setFieldType(ODF_UNHANDLED);
-                    m_bStartGenericField = true;
+                    ++m_nStartGenericField;
                     pContext->SetFormField( xFormField );
                     uno::Reference<container::XNameContainer> const xNameCont(xFormField->getParameters());
                     // note: setting the code to empty string is *required* in
@@ -5736,9 +5742,9 @@ void DomainMapper_Impl::PopFieldContext()
                                 }
                             }
                         }
-                        else if(m_bStartGenericField)
+                        else if (m_nStartGenericField != 0)
                         {
-                            m_bStartGenericField = false;
+                            --m_nStartGenericField;
                             PopFieldmark(m_aTextAppendStack, xCrsr, pContext->GetFieldId());
                             if(m_bTextInserted)
                             {
