@@ -20,26 +20,46 @@
 #include "PageMarginControl.hxx"
 #include <vcl/toolbox.hxx>
 
-SFX_IMPL_TOOLBOX_CONTROL(PageMarginPopup, SfxVoidItem);
-
-PageMarginPopup::PageMarginPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
-    : SfxToolBoxControl(nSlotId, nId, rTbx)
+PageMarginPopup::PageMarginPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : PopupWindowController(rContext, nullptr, OUString())
 {
-    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
+}
+
+void PageMarginPopup::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+{
+    PopupWindowController::initialize(rArguments);
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
 
 PageMarginPopup::~PageMarginPopup()
 {
 }
 
-VclPtr<SfxPopupWindow> PageMarginPopup::CreatePopupWindow()
+VclPtr<vcl::Window> PageMarginPopup::createPopupWindow(vcl::Window* pParent)
 {
-    VclPtr<sw::sidebar::PageMarginControl> pControl = VclPtr<sw::sidebar::PageMarginControl>::Create(GetSlotId(), &GetToolBox());
-    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
-    SetPopupWindow(pControl);
-
-    return pControl;
+    return VclPtr<sw::sidebar::PageMarginControl>::Create(this, pParent);
 }
 
+OUString PageMarginPopup::getImplementationName()
+{
+    return "lo.writer.PageMarginToolBoxControl";
+}
+
+css::uno::Sequence<OUString> PageMarginPopup::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+lo_writer_PageMarginToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new PageMarginPopup(rContext));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 
-#include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
@@ -33,12 +33,14 @@
 // #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and svx/source/dialog/hdft.cxx
 static const long MINBODY = 56;  // 1mm in twips rounded
 
+class PageMarginPopup;
+
 namespace sw { namespace sidebar {
 
-class PageMarginControl : public SfxPopupWindow
+class PageMarginControl final : public svtools::ToolbarPopup
 {
 public:
-    explicit PageMarginControl( sal_uInt16 nId, vcl::Window* pParent );
+    explicit PageMarginControl(PageMarginPopup* pControl, vcl::Window* pParent);
     virtual ~PageMarginControl() override;
     virtual void dispose() override;
 
