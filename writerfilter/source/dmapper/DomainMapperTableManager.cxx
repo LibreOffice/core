@@ -662,7 +662,7 @@ void DomainMapperTableManager::endOfRowAction()
                 }
                 else
                 {
-                    pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
+                    pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, m_nTableWidth + 1);
                     pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
                 }
             }
