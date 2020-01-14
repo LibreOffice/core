@@ -40,9 +40,19 @@ PageOrientationPopup::~PageOrientationPopup()
 {
 }
 
-VclPtr<vcl::Window> PageOrientationPopup::createPopupWindow(vcl::Window* pParent)
+std::unique_ptr<WeldToolbarPopup> PageOrientationPopup::weldPopupWindow()
 {
-    return VclPtr<sw::sidebar::PageOrientationControl>::Create(this, pParent);
+    return std::make_unique<sw::sidebar::PageOrientationControl>(this, m_pToolbar);
+}
+
+VclPtr<vcl::Window> PageOrientationPopup::createPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<sw::sidebar::PageOrientationControl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 OUString PageOrientationPopup::getImplementationName()

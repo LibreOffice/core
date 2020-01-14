@@ -28,6 +28,7 @@ public:
     PageOrientationPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~PageOrientationPopup() override;
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     using svt::ToolboxController::createPopupWindow;
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
