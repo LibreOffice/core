@@ -49,7 +49,7 @@
 #endif
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace priv {
+namespace avmedia::priv {
 
 MediaWindowControl::MediaWindowControl(vcl::Window* pParent)
     : MediaControl(pParent, MEDIACONTROLSTYLE_MULTILINE)
@@ -672,7 +672,6 @@ void MediaWindowImpl::StartDrag(sal_Int8 nAction, const Point& rPosPixel)
         mpMediaWindow->StartDrag(nAction, rPosPixel);
 }
 
-} // namespace priv
 } // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

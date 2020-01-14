@@ -17,11 +17,7 @@ namespace
     void ( *libvlc_retain ) ( libvlc_instance_t *p_instance );
 }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
     bool Instance::LoadSymbols()
     {
@@ -61,8 +57,6 @@ namespace wrapper
     {
         libvlc_release( mInstance );
     }
-}
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

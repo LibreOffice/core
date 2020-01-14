@@ -24,8 +24,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia {
-namespace vlc {
+namespace avmedia::vlc {
 
 namespace
 {
@@ -193,7 +192,6 @@ void SAL_CALL VLCWindow::removePaintListener( const uno::Reference< awt::XPaintL
 {
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

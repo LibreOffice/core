@@ -17,11 +17,7 @@ namespace
     char *  ( * libvlc_errmsg ) ();
 }
 
-namespace avmedia
-{
-namespace vlc
-{
-namespace wrapper
+namespace avmedia::vlc::wrapper
 {
 bool Common::LoadSymbols()
 {
@@ -43,8 +39,6 @@ const char* Common::LastErrorMessage()
 {
     const char *errorMsg = libvlc_errmsg();
     return errorMsg == nullptr ? AVMEDIA_NO_ERROR : errorMsg;
-}
-}
 }
 }
 
