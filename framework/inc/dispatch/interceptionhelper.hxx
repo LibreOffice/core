@@ -43,7 +43,7 @@ namespace framework{
     @attention  Don't use this class as direct member - use it dynamically. Do not derive from this class.
                 We hold a weakreference to our owner not to our superclass.
  */
-class InterceptionHelper : public  ::cppu::WeakImplHelper<
+class InterceptionHelper final : public  ::cppu::WeakImplHelper<
                                      css::frame::XDispatchProvider,
                                      css::frame::XDispatchProviderInterception,
                                      css::lang::XEventListener >
@@ -153,7 +153,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
         InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                            const css::uno::Reference< css::frame::XDispatchProvider >& xSlave);
 
-    protected:
+    private:
 
         /** @short standard destructor.
 

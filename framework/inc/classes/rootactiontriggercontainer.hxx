@@ -34,7 +34,7 @@
 namespace framework
 {
 
-class RootActionTriggerContainer :  public PropertySetContainer,
+class RootActionTriggerContainer final : public PropertySetContainer,
                                     public css::lang::XMultiServiceFactory,
                                     public css::lang::XServiceInfo,
                                     public css::lang::XUnoTunnel,

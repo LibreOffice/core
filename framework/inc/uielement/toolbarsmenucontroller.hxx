@@ -36,7 +36,7 @@
 
 namespace framework
 {
-    class ToolbarsMenuController :  public svt::PopupMenuControllerBase
+    class ToolbarsMenuController final : public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
 

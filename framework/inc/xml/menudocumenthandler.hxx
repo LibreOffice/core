@@ -77,7 +77,7 @@ class ReadMenuDocumentHandlerBase : public ::cppu::WeakImplHelper< css::xml::sax
         OUString m_aStyle;
 };
 
-class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuDocumentHandler final : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuDocumentHandler(
@@ -105,7 +105,7 @@ class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
           css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuDocumentHandler
 
-class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuBarHandler final : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuBarHandler(
@@ -133,7 +133,7 @@ class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuBarHandler
 
-class OReadMenuHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuHandler final : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuHandler( const css::uno::Reference< css::container::XIndexContainer >& rMenuContainer,
@@ -160,7 +160,7 @@ class OReadMenuHandler : public ReadMenuDocumentHandlerBase
         css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 }; // OReadMenuHandler
 
-class OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuPopupHandler final : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuPopupHandler( const css::uno::Reference< css::container::XIndexContainer >& rMenuContainer,

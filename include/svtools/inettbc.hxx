@@ -32,7 +32,7 @@
 class MatchContext_Impl;
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
-class SVT_DLLPUBLIC SvtURLBox : public ComboBox
+class SVT_DLLPUBLIC SvtURLBox final : public ComboBox
 {
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
@@ -48,7 +48,6 @@ friend class SvtURLBox_Impl;
     DECL_DLLPRIVATE_LINK(     AutoCompleteHdl_Impl, Edit&, void );
     SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
 
-protected:
     virtual bool                    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void                    Select() override;
     virtual bool                    PreNotify( NotifyEvent& rNEvt ) override;

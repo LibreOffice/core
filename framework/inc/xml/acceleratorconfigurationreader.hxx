@@ -31,7 +31,7 @@
 
 namespace framework{
 
-class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
+class AcceleratorConfigurationReader final : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
 
     // const, types

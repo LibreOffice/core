@@ -34,7 +34,7 @@ namespace framework{
 /**
     @short          helper to handle all URLs related to the StartModule
  */
-class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
+class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
                                          css::frame::XNotifyingDispatch,             // => XDispatch
                                          css::frame::XDispatchInformationProvider >
 {

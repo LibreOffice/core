@@ -32,7 +32,7 @@
 namespace framework
 {
 
-class ActionTriggerContainer :    public PropertySetContainer,
+class ActionTriggerContainer final : public PropertySetContainer,
                                 public css::lang::XMultiServiceFactory,
                                 public css::lang::XServiceInfo,
                                 public css::lang::XTypeProvider

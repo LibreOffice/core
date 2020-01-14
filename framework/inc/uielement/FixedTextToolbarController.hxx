@@ -31,7 +31,7 @@ class FixedText;
 
 namespace framework
 {
-class FixedTextToolbarController : public ComplexToolbarController
+class FixedTextToolbarController final : public ComplexToolbarController
 {
 public:
     FixedTextToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -41,12 +41,11 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() override;
 
-protected:
+private:
     virtual void executeControlCommand(const css::frame::ControlCommand& rControlCommand) override;
     virtual css::uno::Sequence<css::beans::PropertyValue>
     getExecuteArgs(sal_Int16 KeyModifier) const override;
 
-private:
     VclPtr<FixedText> m_pFixedTextControl;
 };
 }

@@ -33,7 +33,7 @@
 namespace framework
 {
     class ImageManagerImpl;
-    class ImageManager :    public ::cppu::WeakImplHelper< css::ui::XImageManager, css::lang::XServiceInfo>
+    class ImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
             ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );

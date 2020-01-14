@@ -39,7 +39,7 @@
 
 namespace framework{
 
-class DispatchRecorder
+class DispatchRecorder final
     : public  ::cppu::WeakImplHelper<
                 css::lang::XServiceInfo
               , css::frame::XDispatchRecorder

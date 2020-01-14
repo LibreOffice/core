@@ -30,7 +30,7 @@
 
 namespace framework
 {
-    class FontMenuController :  public svt::PopupMenuControllerBase
+    class FontMenuController final : public svt::PopupMenuControllerBase
     {
         using svt::PopupMenuControllerBase::disposing;
 

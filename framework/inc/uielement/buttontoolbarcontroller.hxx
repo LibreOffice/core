@@ -37,7 +37,7 @@ class ToolBox;
 namespace framework
 {
 
-class ButtonToolbarController : public css::frame::XStatusListener,
+class ButtonToolbarController final : public css::frame::XStatusListener,
                                 public css::frame::XToolbarController,
                                 public css::lang::XInitialization,
                                 public css::util::XUpdatable,

@@ -136,7 +136,7 @@ FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
 //OriginalListener owns the Broadcaster which "owns" the WeakContainerListener
 //which forwards the events to the OriginalListener without taking ownership of
 //it.
-class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XContainerListener>
+class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container::XContainerListener>
 {
     private:
         css::uno::WeakReference<css::container::XContainerListener> mxOwner;
@@ -183,7 +183,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
         }
 };
 
-class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesListener>
+class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChangesListener>
 {
     private:
         css::uno::WeakReference<css::util::XChangesListener> mxOwner;
@@ -214,7 +214,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         }
 };
 
-class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::XDocumentEventListener>
+class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::document::XDocumentEventListener>
 {
     private:
         css::uno::WeakReference<css::document::XDocumentEventListener> mxOwner;

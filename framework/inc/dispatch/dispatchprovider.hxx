@@ -65,7 +65,7 @@ enum EDispatchHelper
     @devstatus      ready to use
     @threadsafe     yes
 */
-class DispatchProvider: public ::cppu::WeakImplHelper< css::frame::XDispatchProvider >
+class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider >
 {
     /* member */
     private:
@@ -88,11 +88,10 @@ class DispatchProvider: public ::cppu::WeakImplHelper< css::frame::XDispatchProv
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
     /* helper */
-    protected:
+    private:
         // Let him protected! So nobody can use us as base ...
         virtual ~DispatchProvider() override;
 
-    private:
         css::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,
                                                                                           const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
                                                                                           const OUString&                           sTarget = OUString()   ,

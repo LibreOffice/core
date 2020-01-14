@@ -32,7 +32,7 @@ namespace framework{
 
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
+class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
         enum Image_XML_Entry

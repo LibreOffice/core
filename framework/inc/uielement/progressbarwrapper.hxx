@@ -28,7 +28,7 @@
 
 namespace framework{
 
-class ProgressBarWrapper : public UIElementWrapperBase
+class ProgressBarWrapper final : public UIElementWrapperBase
 {
     public:
 

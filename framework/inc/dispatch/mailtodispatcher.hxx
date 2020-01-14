@@ -43,7 +43,7 @@ namespace framework{
 
     @devstatus      ready to use
 */
-class MailToDispatcher : public  ::cppu::WeakImplHelper<
+class MailToDispatcher final : public  ::cppu::WeakImplHelper<
                                      css::lang::XServiceInfo,
                                      css::frame::XDispatchProvider,
                                      css::frame::XNotifyingDispatch> // => XDispatch

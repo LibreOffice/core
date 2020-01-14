@@ -28,7 +28,7 @@
 namespace framework
 {
 
-class StatusBarWrapper : public UIConfigElementWrapperBase
+class StatusBarWrapper final : public UIConfigElementWrapperBase
 {
     public:
         StatusBarWrapper(

@@ -29,7 +29,7 @@ namespace framework
 {
 
 class AddonsToolBarManager;
-class AddonsToolBarWrapper : public UIElementWrapperBase
+class AddonsToolBarWrapper final : public UIElementWrapperBase
 {
     public:
         AddonsToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );

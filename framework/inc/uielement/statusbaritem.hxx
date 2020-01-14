@@ -33,7 +33,7 @@ struct AddonStatusbarItemData;
 
 typedef cppu::WeakComponentImplHelper< css::ui::XStatusbarItem > StatusbarItem_Base;
 
-class StatusbarItem : protected cppu::BaseMutex,
+class StatusbarItem final : protected cppu::BaseMutex,
                       public StatusbarItem_Base
 {
 public:

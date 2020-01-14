@@ -30,7 +30,7 @@
 namespace framework
 {
 
-class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper< css::task::XStatusIndicator>
+class StatusIndicatorInterfaceWrapper final : public ::cppu::WeakImplHelper< css::task::XStatusIndicator>
 {
     public:
         StatusIndicatorInterfaceWrapper( const css::uno::Reference< css::lang::XComponent >& rStatusIndicatorImpl );

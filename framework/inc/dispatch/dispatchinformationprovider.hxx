@@ -32,7 +32,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
-class DispatchInformationProvider : public  ::cppu::WeakImplHelper< css::frame::XDispatchInformationProvider >
+class DispatchInformationProvider final : public  ::cppu::WeakImplHelper< css::frame::XDispatchInformationProvider >
 {
 
     // member

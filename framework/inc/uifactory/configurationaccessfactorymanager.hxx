@@ -35,7 +35,7 @@
 
 namespace framework {
 
-    class ConfigurationAccess_FactoryManager : public ::cppu::WeakImplHelper< css::container::XContainerListener>
+class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
     public:
                       ConfigurationAccess_FactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const OUString& _sRoot );

@@ -45,7 +45,7 @@ namespace framework{
 
     @devstatus      ready to use
 */
-class SystemExec :     public  ::cppu::WeakImplHelper<
+class SystemExec final :  public  ::cppu::WeakImplHelper<
                                    css::lang::XServiceInfo       ,
                                    css::frame::XDispatchProvider ,
                                    css::frame::XNotifyingDispatch > // => XDispatch
