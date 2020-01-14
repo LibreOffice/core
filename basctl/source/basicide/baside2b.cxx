@@ -2492,21 +2492,16 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     {
                         if ( pItem->mpObject.is() && !pItem->maMemberList.empty() )
                         {
-                            bool bObjChanged = false; // Check if member list has changed
+                            createAllObjectProperties(pObj);
                             SbxArray* pProps = pObj->GetProperties();
                             const sal_uInt32 nPropCount = getCorrectedPropCount(pProps);
-                            for( sal_uInt32 i = 0 ; i < nPropCount ; i++ )
+                            // Check if member list has changed
+                            bCollapse = pItem->maMemberList.size() != nPropCount;
+                            for( sal_uInt32 i = 0 ; !bCollapse && i < nPropCount ; i++ )
                             {
                                 SbxVariable* pVar_ = pProps->Get32( i );
                                 if( pItem->maMemberList[i] != pVar_->GetName() )
-                                {
-                                    bObjChanged = true;
-                                    break;
-                                }
-                            }
-                            if( bObjChanged )
-                            {
-                                bCollapse = true;
+                                    bCollapse = true;
                             }
                         }
 
@@ -2520,8 +2515,6 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         if( pItem->mpObject.is() )
                         {
                             bCollapse = true;
-                            pItem->clearWatchItem();
-
                             implEnableChildren( pEntry, false );
                         }
                     }
@@ -2531,8 +2524,6 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     if( pItem->mpObject.is() )
                     {
                         bCollapse = true;
-                        pItem->clearWatchItem();
-
                         implEnableChildren( pEntry, false );
                     }
 
@@ -2565,6 +2556,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             if( bCollapse )
             {
                 implCollapseModifiedObjectEntry( pEntry, this );
+                pItem->clearWatchItem();
             }
 
         }
@@ -2573,8 +2565,10 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             if( pItem->mpObject.is() || pItem->mpArray.is() )
             {
                 implCollapseModifiedObjectEntry( pEntry, this );
-                pItem->mpObject = nullptr;
+                pItem->mpObject.clear();
+                pItem->mpArray.clear();
             }
+            pItem->clearWatchItem();
         }
 
         SvHeaderTabListBox::SetEntryText( aWatchStr, pEntry, ITEM_ID_VALUE-1 );
