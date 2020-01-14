@@ -7,20 +7,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <limits>
+
 #include "readwrite_helper.hxx"
 
-#include <osl/diagnose.h>
 #include "system.hxx"
 
-bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
+namespace {
+
+std::size_t cap_ssize_t(std::size_t value) {
+    return std::min(value, std::size_t(std::numeric_limits<ssize_t>::max()));
+}
+
+}
+
+bool safeWrite(int fd, void* data, std::size_t dataSize)
 {
-    sal_Int32 nToWrite = dataSize;
+    auto nToWrite = dataSize;
     unsigned char* dataToWrite = static_cast<unsigned char *>(data);
 
-    // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(dataSize == static_cast<sal_uInt32>(nToWrite));
     while ( nToWrite ) {
-        sal_Int32 nWritten = write(fd, dataToWrite, nToWrite);
+        auto nWritten = write(fd, dataToWrite, cap_ssize_t(nToWrite));
         if ( nWritten < 0 ) {
             if ( errno == EINTR )
                 continue;
@@ -29,7 +41,7 @@ bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 
         }
 
-        OSL_ASSERT(nWritten > 0);
+        assert(nWritten > 0);
         nToWrite -= nWritten;
         dataToWrite += nWritten;
     }
@@ -37,15 +49,13 @@ bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
     return true;
 }
 
-bool safeRead( int fd, void* buffer, sal_uInt32 count )
+bool safeRead( int fd, void* buffer, std::size_t count )
 {
-    sal_Int32 nToRead = count;
+    auto nToRead = count;
     unsigned char* bufferForReading = static_cast<unsigned char *>(buffer);
 
-    // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(count == static_cast<sal_uInt32>(nToRead));
     while ( nToRead ) {
-        sal_Int32 nRead = read(fd, bufferForReading, nToRead);
+        auto nRead = read(fd, bufferForReading, cap_ssize_t(nToRead));
         if ( nRead < 0 ) {
             // We were interrupted before reading, retry.
             if (errno == EINTR)
