@@ -255,20 +255,19 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         if (curEnv.get() != env.get()) {
             std::abort();//TODO
         }
-        OUString name(prefix == "direct" ? implementation : uri);
         SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);
         lib_to_factory_mapping const * map = lo_get_factory_map();
         component_getFactoryFunc fp = 0;
         for (int i = 0; map[i].name != 0; ++i) {
-            if (name.equalsAscii(map[i].name)) {
+            if (uri.equalsAscii(map[i].name)) {
                 fp = map[i].component_getFactory_function;
                 break;
             }
         }
         if (fp == 0) {
-            SAL_WARN("cppuhelper", "unknown factory name \"" << name << "\"");
+            SAL_WARN("cppuhelper", "unknown factory name \"" << uri << "\"");
             throw css::loader::CannotActivateFactoryException(
-                "unknown factory name \"" + name + "\"",
+                "unknown factory name \"" + uri + "\"",
                 css::uno::Reference<css::uno::XInterface>());
         }
         *factory = invokeComponentFactory(
@@ -301,9 +300,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
     if (constructor.isEmpty()) {
         OUString sym;
         SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);
-        if (prefix == "direct") {
-            sym = implementation.replace('.', '_') + "_" COMPONENT_GETFACTORY;
-        } else if (!prefix.isEmpty()) {
+        if (!prefix.isEmpty()) {
             sym = prefix + "_" COMPONENT_GETFACTORY;
         } else {
             sym = COMPONENT_GETFACTORY;
