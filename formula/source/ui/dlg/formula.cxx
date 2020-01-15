@@ -18,16 +18,10 @@
  */
 
 #include <memory>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-#include <svl/stritem.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/eitem.hxx>
 #include <sal/log.hxx>
 
 #include <unotools/charclass.hxx>
@@ -51,7 +45,6 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <map>
 
 // For tab page

@@ -18,14 +18,10 @@
  */
 
 #include <comphelper/string.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/stritem.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
 #include "parawin.hxx"
-#include <formula/formdata.hxx>
 #include <formula/IFunctionDescription.hxx>
 #include <formula/funcvarargs.h>
 #include <strings.hrc>
