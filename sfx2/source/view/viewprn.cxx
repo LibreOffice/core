@@ -30,7 +30,6 @@
 #include <svtools/prnsetup.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
@@ -46,7 +45,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

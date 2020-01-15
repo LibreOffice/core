@@ -21,8 +21,13 @@
 #include <sfx2/userinputinterception.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/awt/MouseEvent.hpp>
+#include <com/sun/star/awt/InputEvent.hpp>
+#include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/XUserInputInterception.hpp>
+#include <com/sun/star/awt/XKeyHandler.hpp>
+#include <com/sun/star/awt/XMouseClickHandler.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>

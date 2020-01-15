@@ -27,7 +27,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>

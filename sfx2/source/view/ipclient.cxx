@@ -20,24 +20,19 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/UnreachableStateException.hpp>
-#include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XEmbeddedClient.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
-#include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/XWindowSupplier.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/XEmbeddedOleObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -50,29 +45,23 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/dispatch.hxx>
-#include <workwin.hxx>
 #include <guisaveas.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/ehdl.hxx>
-#include <sal/log.hxx>
 
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <svl/rectitem.hxx>
 #include <svtools/soerr.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define SFX_CLIENTACTIVATE_TIMEOUT 100

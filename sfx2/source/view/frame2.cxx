@@ -19,18 +19,11 @@
 
 
 #include "impframe.hxx"
-#include <objshimp.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <workwin.hxx>
 
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/objface.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewsh.hxx>
@@ -44,11 +37,6 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/itemset.hxx>
-#include <svl/rectitem.hxx>
-#include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/event.hxx>

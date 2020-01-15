@@ -19,7 +19,6 @@
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/charmapcontrol.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weld.hxx>
 
 CharmapPopup::CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())

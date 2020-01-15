@@ -24,9 +24,6 @@
 #include <sfx2/charwin.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/strings.hrc>
-#include <sfx2/viewfrm.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
