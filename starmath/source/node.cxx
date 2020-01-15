@@ -1394,8 +1394,8 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         Size  aTmpSize (pLeft->GetFont().GetFontSize());
         OSL_ENSURE(pRight->GetFont().GetFontSize() == aTmpSize,
                     "Sm : different font sizes");
-        aTmpSize.setWidth( std::min(nBraceHeight * 60L / 100L,
-                            rFormat.GetBaseSize().Height() * 3L / 2L) );
+        aTmpSize.setWidth( std::min(nBraceHeight * 60 / 100,
+                            rFormat.GetBaseSize().Height() * 3 / 2) );
         // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
         aTmpSize.setWidth( aTmpSize.Width() * 182 );
