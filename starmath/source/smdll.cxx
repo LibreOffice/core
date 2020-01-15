@@ -68,8 +68,6 @@ namespace
         SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
         SvxZoomSliderControl::RegisterControl(SID_ATTR_ZOOMSLIDER, pModule);
         SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
-        SvxUndoRedoControl::RegisterControl(SID_UNDO, pModule);
-        SvxUndoRedoControl::RegisterControl(SID_REDO, pModule);
         XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
 
         SmCmdBoxWrapper::RegisterChildWindow(true);

@@ -151,8 +151,6 @@ void ScDLL::Init()
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
     SvxClipBoardControl             ::RegisterControl(SID_PASTE_UNFORMATTED,    pMod );
-    SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
-    SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
     sc::ScNumberFormatControl       ::RegisterControl(SID_NUMBER_TYPE_FORMAT,   pMod );
 
