@@ -162,6 +162,7 @@ void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::Featu
     sal_uInt16 nItemId = 0;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
+        SolarMutexGuard aSolarLock;
         pToolBox->EnableItem( nItemId, rEvent.IsEnabled );
         bool bValue;
         if ( rEvent.State >>= bValue )
