@@ -11,6 +11,7 @@
 
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <svx/swframetypes.hxx>
@@ -164,6 +165,19 @@ DECLARE_RTFEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.rtf")
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
                          static_cast<style::ParagraphAdjust>(
                              getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust")));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf129574, "mw00_table_of_contents_templates.doc")
+{
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes());
+    uno::Reference<text::XDocumentIndex> xTOC(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTOC.is());
+    uno::Reference<text::XTextRange> xTextRange(xTOC->getAnchor());
+    // table of contents contains 4 paragraphs
+    CPPUNIT_ASSERT_EQUAL(OUString("1.Koffice 1" SAL_NEWLINE_STRING "2.Kword 1" SAL_NEWLINE_STRING
+                                  "3.Kspread 1" SAL_NEWLINE_STRING "4.Kpresenter 1"),
+                         xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist34, "cjklist34.rtf")
