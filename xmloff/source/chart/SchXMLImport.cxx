@@ -498,38 +498,6 @@ SchXMLImport::~SchXMLImport() throw ()
 
 // create the main context (subcontexts are created
 // by the one created here)
-SvXMLImportContext *SchXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix,
-        const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    SvXMLImportContext* pContext = nullptr;
-
-    // accept <office:document>
-    if( XML_NAMESPACE_OFFICE == nPrefix &&
-        ( IsXMLToken( rLocalName, XML_DOCUMENT_STYLES) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT) ))
-    {
-        pContext = new SchXMLDocContext(*maImportHelper, *this, nPrefix, rLocalName);
-    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-                ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
-                  (IsXMLToken(rLocalName, XML_DOCUMENT_META)
-                   && (getImportFlags() & SvXMLImportFlags::META) )) )
-    {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            GetModel(), uno::UNO_QUERY);
-        // mst@: right now, this seems to be not supported, so it is untested
-        if (!xDPS.is()) {
-            pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
-                           ? SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList)
-                           : new SchXMLDocContext(*maImportHelper, *this, nPrefix, rLocalName);
-        }
-    } else {
-        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
-    }
-
-    return pContext;
-}
-
 SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
@@ -552,7 +520,11 @@ SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
             }
         }
         break;
-        default: break;
+        // accept <office:document>
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_STYLES):
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT):
+            pContext = new SchXMLDocContext(*maImportHelper, *this, nElement);
+        break;
     }
     return pContext;
 }

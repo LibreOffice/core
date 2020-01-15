@@ -41,45 +41,28 @@ private:
 public:
 
     SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
-                SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName );
+                SvXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
 
 SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
-        SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+        SchXMLImportHelper& rImpHelper, SvXMLImport& rImport ) :
+    SvXMLImportContext( rImport ),
     mrImportHelper( rImpHelper )
 {
 }
 
-SvXMLImportContextRef SchXMLBodyContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLBodyContext_Impl::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
-                                  rLocalName );
-}
-
-SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
-                                    SvXMLImport& rImport,
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLName ) :
-        SvXMLImportContext( rImport, nPrefix, rLName ),
-        mrImportHelper( rImpHelper )
-{
-    SAL_WARN_IF( (XML_NAMESPACE_OFFICE != nPrefix) ||
-        ( !IsXMLToken( rLName, XML_DOCUMENT ) &&
-          !IsXMLToken( rLName, XML_DOCUMENT_META) &&
-          !IsXMLToken( rLName, XML_DOCUMENT_STYLES) &&
-          !IsXMLToken( rLName, XML_DOCUMENT_CONTENT) ), "xmloff.chart", "SchXMLDocContext instantiated with no <office:document> element" );
+    return new SchXMLBodyContext( mrImportHelper, GetImport(), nElement );
 }
 
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
@@ -126,22 +109,21 @@ SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
             // if XDocumentPropertiesSupplier is not supported at the model
             xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
-        case XML_TOK_DOC_BODY:
-            if( nFlags & SvXMLImportFlags::CONTENT )
-                xContext = new SchXMLBodyContext_Impl( mrImportHelper, GetImport(), nPrefix, rLocalName );
-            break;
     }
-
-    // call parent when no own context was created
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return xContext;
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLDocContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
+    SvXMLImportFlags nFlags = GetImport().getImportFlags();
+    switch (nElement)
+    {
+        case XML_ELEMENT(OFFICE, XML_BODY):
+            if( nFlags & SvXMLImportFlags::CONTENT )
+                return new SchXMLBodyContext_Impl( mrImportHelper, GetImport() );
+    }
     return nullptr;
 }
 
@@ -171,20 +153,20 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLFlatDocContext_Im
 
 SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport,
-                                      sal_uInt16 nPrefix,
-                                      const OUString& rLName ) :
-        SvXMLImportContext( rImport, nPrefix, rLName ),
+                                      sal_Int32 nElement ) :
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper )
 {
-    SAL_WARN_IF( (XML_NAMESPACE_OFFICE != nPrefix) ||
-                !IsXMLToken( rLName, XML_CHART ), "xmloff.chart", "SchXMLBodyContext instantiated with no <office:chart> element" );
+    SAL_WARN_IF( nElement != XML_ELEMENT(OFFICE, XML_CHART), "xmloff.chart", "SchXMLBodyContext instantiated with no <office:chart> element" );
 }
 
 SchXMLBodyContext::~SchXMLBodyContext()
 {}
 
-void SchXMLBodyContext::EndElement()
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
+    return nullptr;
 }
 
 SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
@@ -208,10 +190,6 @@ SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
     {
         // i99104 handle null date correctly
         xContext = new SchXMLCalculationSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList);
-    }
-    else
-    {
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     }
 
     return xContext;
