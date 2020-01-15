@@ -281,8 +281,6 @@ void SwDLL::RegisterControls()
     svx::ParaFirstLineSpacingControl::RegisterControl(SID_ATTR_PARA_FIRSTLINESPACE, pMod);
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
-    SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
-    SvxUndoRedoControl::RegisterControl(SID_REDO, pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH, pMod );
 
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );

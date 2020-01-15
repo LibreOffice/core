@@ -20,38 +20,36 @@
 #ifndef INCLUDED_SVX_LBOXCTRL_HXX
 #define INCLUDED_SVX_LBOXCTRL_HXX
 
-#include <sfx2/tbxctrl.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 
 class ToolBox;
 class SvxPopupWindowListBox;
 
-
-class SVX_DLLPUBLIC SvxUndoRedoControl final : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxUndoRedoControl final : public svt::PopupWindowController
 {
-    OUString                aActionStr;
-    VclPtr<SvxPopupWindowListBox> pPopupWin;
     std::vector< OUString > aUndoRedoList;
     OUString                aDefaultTooltip;
 
-    void    Impl_SetInfo( sal_Int32 nCount );
-
-    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxUndoRedoControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~SvxUndoRedoControl() override;
 
-    virtual void StateChanged( sal_uInt16 nSID,
-                               SfxItemState eState,
-                               const SfxPoolItem* pState ) override;
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+
+    void Do(sal_Int16 nCount);
 };
 
 #endif
