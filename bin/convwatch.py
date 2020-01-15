@@ -319,7 +319,10 @@ class LoadPrintFileTest:
         log("Time: " + str(start) + " Loading document: " + self.file)
         xDoc = None
         try:
-            url = "file://" + quote(self.file)
+            if os.name == 'nt' and self.file[1] == ':':
+                url = "file:///" + self.file[0:2] + quote(self.file[2:])
+            else:
+                url = "file://" + quote(self.file)
             xDoc = loadFromURL(xContext, url)
             printDoc(xContext, xDoc, url + self.prtsuffix)
         finally:
