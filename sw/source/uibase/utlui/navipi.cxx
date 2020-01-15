@@ -354,7 +354,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     const OUString sCommand = pBox->GetItemCommand(nCurrItemId);
     if (sCommand == "navigation")
-       CreateNavigationTool(pBox->GetItemRect(nCurrItemId), true, this);
+        CreateNavigationTool();
     else if (sCommand == "dragmode")
     {
         static const char* aHIDs[] =
@@ -404,33 +404,16 @@ SwNavHelpToolBox::SwNavHelpToolBox(Window* pParent)
 
 VCL_BUILDER_FACTORY(SwNavHelpToolBox)
 
-void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
+void SwNavigationPI::CreateNavigationTool()
 {
-    sal_uInt16 nItemId = GetItemId(rEvt.GetPosPixel());
-    if (rEvt.GetButtons() == MOUSE_LEFT && GetItemCommand(nItemId) == "navigation")
-    {
-        m_xDialog->CreateNavigationTool(GetItemRect(nItemId), false, this);
-        return;
-    }
-    ToolBox::MouseButtonDown(rEvt);
-}
+    auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get());
 
-void SwNavigationPI::CreateNavigationTool(const tools::Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
-{
-    Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
-    VclPtrInstance<SwScrollNaviPopup> pPopup(FN_SCROLL_NAVIGATION, xFrame, pParent);
+    xPopup->EnableDocking();
 
-    tools::Rectangle aRect(rRect);
-    Point aT1 = aRect.TopLeft();
-    aT1 = pPopup->GetParent()->OutputToScreenPixel(pPopup->GetParent()->AbsoluteScreenToOutputPixel(m_aContentToolBox->OutputToAbsoluteScreenPixel(aT1)));
-    aRect.SetPos(aT1);
-    pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Right|FloatWinPopupFlags::AllowTearOff);
-    SetPopupWindow( pPopup );
-    if(bSetFocus)
-    {
-        pPopup->EndPopupMode(FloatWinPopupEndFlags::TearOff);
-        pPopup->GrabFocus();
-    }
+    SetPopupWindow( xPopup );
+
+    xPopup->Show();
+    vcl::Window::GetDockingManager()->StartPopupMode(m_aContentToolBox, xPopup, FloatWinPopupFlags::GrabFocus);
 }
 
 FactoryFunction SwNavigationPI::GetUITestFactory() const
@@ -574,8 +557,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     , m_pContentWrtShell(nullptr)
     , m_pActContView(nullptr)
     , m_pCreateView(nullptr)
-    , m_pPopupWindow(nullptr)
-    , m_pFloatingWindow(nullptr)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
     , m_rBindings(*_pBindings)
     , m_nRegionMode(RegionMode::NONE)
@@ -756,8 +737,7 @@ void SwNavigationPI::dispose()
     if (IsBound())
         m_rBindings.Release(*this);
 
-    m_pFloatingWindow.disposeAndClear();
-    m_pPopupWindow.disposeAndClear();
+    m_xPopupWindow.disposeAndClear();
     m_aDocListBox.clear();
     m_aGlobalTree.disposeAndClear();
     m_aGlobalBox.clear();
@@ -774,38 +754,10 @@ void SwNavigationPI::dispose()
     PanelLayout::dispose();
 }
 
-void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
+void SwNavigationPI::SetPopupWindow( SwScrollNaviPopup* pWindow )
 {
-    m_pPopupWindow.disposeAndClear();
-    m_pPopupWindow = pWindow;
-    m_pPopupWindow->SetPopupModeEndHdl( LINK( this, SwNavigationPI, PopupModeEndHdl ));
-    m_pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
-}
-
-IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl, FloatingWindow*, void)
-{
-    if ( m_pPopupWindow->IsVisible() )
-    {
-        // Replace floating window with popup window and destroy
-        // floating window instance.
-        m_pFloatingWindow.disposeAndClear();
-        m_pFloatingWindow = m_pPopupWindow;
-        m_pPopupWindow    = nullptr;
-    }
-    else
-    {
-        // Popup window has been closed by the user. No replacement, instance
-        // will destroy itself.
-        m_pPopupWindow = nullptr;
-    }
-}
-
-IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
-{
-    if ( pWindow == m_pFloatingWindow )
-        m_pFloatingWindow = nullptr;
-    else
-        m_pPopupWindow = nullptr;
+    m_xPopupWindow.disposeAndClear();
+    m_xPopupWindow = pWindow;
 }
 
 void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
