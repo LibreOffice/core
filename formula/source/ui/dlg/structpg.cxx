@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/zforlist.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 
 #include "structpg.hxx"
-#include <formula/formdata.hxx>
 #include <formula/formula.hxx>
-#include <formula/IFunctionDescription.hxx>
 #include <formula/token.hxx>
 #include <bitmaps.hlst>
 

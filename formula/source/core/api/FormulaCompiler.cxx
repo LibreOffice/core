@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sal/macros.h>
-#include <sal/alloca.h>
 #include <sal/log.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <formula/errorcodes.hxx>
@@ -29,12 +28,10 @@
 #include <osl/mutex.hxx>
 
 #include <svl/zforlist.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
-#include <rtl/strbuf.hxx>
 #include <algorithm>
 
 namespace formula

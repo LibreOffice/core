@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 
-#include <formula/IFunctionDescription.hxx>
 #include <vcl/weld.hxx>
 
 namespace formula
