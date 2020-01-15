@@ -107,6 +107,9 @@ public:
         sal_Int32 nPointIndex, const css::uno::Reference<css::chart2::XChartType>& xChartType,
         bool bSwapXAndY ) const;
 
+    css::awt::Point getLabelRelPosition( sal_Int32 nPointIndex ) const;
+    void setLabelAbsPosition( css::awt::Point aRelPos, sal_Int32 nPointIndex ) const;
+
     css::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
 
     css::uno::Reference<css::beans::XPropertySet> getPropertiesOfSeries() const;
