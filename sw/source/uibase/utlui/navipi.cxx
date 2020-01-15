@@ -424,12 +424,6 @@ void SwNavHelpToolBox::RequestHelp(const HelpEvent& rHEvt)
     ToolBox::RequestHelp(rHEvt);
 }
 
-void SwNavHelpToolBox::dispose()
-{
-    m_xDialog.clear();
-    ToolBox::dispose();
-}
-
 SwNavHelpToolBox::~SwNavHelpToolBox()
 {
     disposeOnce();
@@ -558,7 +552,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     get(m_aContentToolBox, "content");
     m_aContentToolBox->SetLineCount(2);
     m_aContentToolBox->InsertBreak(8);
-    m_aContentToolBox->SetDialog(this);
     get(m_aGlobalToolBox, "global");
     get(m_aDocListBox, "documents");
 
