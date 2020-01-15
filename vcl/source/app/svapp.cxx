@@ -1042,11 +1042,6 @@ void Application::LockFontUpdates(bool bLock)
     OutputDevice::LockFontUpdates(bLock);
 }
 
-WorkWindow* Application::GetAppWindow()
-{
-    return ImplGetSVData()->maFrameData.mpAppWin;
-}
-
 vcl::Window* Application::GetFocusWindow()
 {
     return ImplGetSVData()->mpWinData->mpFocusWin;

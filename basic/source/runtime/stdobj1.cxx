@@ -19,7 +19,7 @@
 
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
-#include <vcl/wrkwin.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <sbstdobj.hxx>
 
@@ -85,8 +85,8 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, bool bWrite )
     }
 
     Size aSize = aGraphic.GetPrefSize();
-    aSize = Application::GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
-    aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
+    aSize = Application::GetDefaultDevice()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
+    aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
 
     pVar->PutInteger( static_cast<sal_Int16>(aSize.Width()) );
 }
@@ -100,8 +100,8 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, bool bWrite )
     }
 
     Size aSize = aGraphic.GetPrefSize();
-    aSize = Application::GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
-    aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
+    aSize = Application::GetDefaultDevice()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
+    aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
 
     pVar->PutInteger( static_cast<sal_Int16>(aSize.Height()) );
 }
