@@ -82,7 +82,10 @@ namespace DataPointProperties
         PROP_DATAPOINT_LABEL_BORDER_DASH,
         PROP_DATAPOINT_LABEL_BORDER_DASH_NAME,
         PROP_DATAPOINT_LABEL_BORDER_TRANS,
-        PROP_DATAPOINT_CUSTOM_LABEL_FIELDS
+        PROP_DATAPOINT_CUSTOM_LABEL_FIELDS,
+        PROP_DATAPOINT_LABEL_REL_POS,
+        PROP_DATAPOINT_LABEL_ABS_POS,
+        PROP_DATAPOINT_LABEL_MOVED
 
         // additionally some properties from ::chart::LineProperties
     };

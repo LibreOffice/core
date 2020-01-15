@@ -409,6 +409,8 @@ bool DataPointItemConverter::ApplySpecialItem(
             {
                 sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
                 sal_Int32 nOld =0;
+                bool bOld = false;
+                GetPropertySet()->getPropertyValue( "MovedDataLabel" ) >>= bOld;
                 if( !(GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nOld) )
                 {
                     if( m_aAvailableLabelPlacements.hasElements() )
@@ -424,9 +426,10 @@ bool DataPointItemConverter::ApplySpecialItem(
                         bChanged = true;
                     }
                 }
-                else if( nOld!=nNew )
+                else if( nOld!=nNew || bOld)
                 {
                     GetPropertySet()->setPropertyValue( "LabelPlacement" , uno::Any( nNew ));
+                    GetPropertySet()->setPropertyValue( "MovedDataLabel" , uno::Any( false ));
                     bChanged = true;
                 }
             }

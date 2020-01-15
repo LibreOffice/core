@@ -194,7 +194,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
             }
 
             bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
-                        , aObjectRect, aPageRect );
+                        , aObjectRect, awt::Rectangle(), aPageRect );
             if( bMoved || bChanged )
                 aUndoGuard.commit();
         }

@@ -34,11 +34,13 @@ public:
     static bool moveObject( ObjectType eObjectType
             , const css::uno::Reference< css::beans::XPropertySet >& xObjectProp
             , const css::awt::Rectangle& rNewPositionAndSize
+            , const css::awt::Rectangle& rOldPositionAndSize
             , const css::awt::Rectangle& rPageRectangle );
 
     static bool moveObject( const OUString& rObjectCID
             , const css::uno::Reference< css::frame::XModel >& xChartModel
             , const css::awt::Rectangle& rNewPositionAndSize
+            , const css::awt::Rectangle& rOldPositionAndSize
             , const css::awt::Rectangle& rPageRectangle );
 };
 

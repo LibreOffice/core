@@ -12,6 +12,7 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -150,6 +151,7 @@ public:
     void testTdf122765();
     void testTdf123206CustomLabelField();
     void testTdf125444PercentageCustomLabel();
+    void testDataPointLabelCustomPos();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -249,6 +251,7 @@ public:
     CPPUNIT_TEST(testTdf122765);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
+    CPPUNIT_TEST(testDataPointLabelCustomPos);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2320,6 +2323,31 @@ void Chart2ImportTest::testTdf125444PercentageCustomLabel()
     // to assert the latter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aLabelFields.getLength());
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType_PERCENTAGE, aLabelFields[2]->getFieldType());
+}
+
+void Chart2ImportTest::testDataPointLabelCustomPos()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testDataPointLabelCustomPos.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xPropertySet.is());
+
+    chart2::RelativePosition aRelativePosition;
+    xPropertySet->getPropertyValue("RelativePosition") >>= aRelativePosition;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aRelativePosition.Primary, -0.14621409921671025, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aRelativePosition.Secondary, -5.2887961029923464E-2, 1e-7);
+
+    bool bDataPointLabelMoved = false;
+    xPropertySet->getPropertyValue("MovedDataLabel") >>= bDataPointLabelMoved;
+    CPPUNIT_ASSERT_EQUAL(true, bDataPointLabelMoved);
+
+    sal_Int32 aPlacement;
+    xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
+    CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, aPlacement);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

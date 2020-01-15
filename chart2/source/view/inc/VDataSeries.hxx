@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 
 #include <memory>
 #include <map>
@@ -106,6 +107,9 @@ public:
     sal_Int32 getLabelPlacement(
         sal_Int32 nPointIndex, const css::uno::Reference<css::chart2::XChartType>& xChartType,
         bool bSwapXAndY ) const;
+
+    css::awt::Point getLabelPosition( css::awt::Point aTextShapePos, sal_Int32 nPointIndex ) const;
+    bool isLabelCustomPos( sal_Int32 nPointIndex ) const;
 
     css::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
 
