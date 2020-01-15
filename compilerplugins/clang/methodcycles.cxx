@@ -80,7 +80,7 @@ public:
         for (const MyFuncInfo& s : definitionSet)
             output += "definition:\t" + s.returnType + "\t" + s.nameAndParams + "\t"
                       + s.sourceLocation + "\n";
-        for (const std::pair<const FunctionDecl*, const FunctionDecl*>& pair : callMap)
+        for (const auto& pair : callMap)
         {
             if (!isLocationMine(pair.first->getLocation())
                 || !isLocationMine(pair.second->getLocation()))
