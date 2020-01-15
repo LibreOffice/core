@@ -50,6 +50,8 @@ class SwView;
 #define NID_TABLE_FORMULA_ERROR     20019
 #define NID_COUNT  20
 
+#define NID_LINE_COUNT 10
+
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
 public:
@@ -66,29 +68,16 @@ public:
     DECL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
 };
 
-class SwScrollNaviPopup;
-
-class SwScrollNaviToolBox : public ToolBox
+class SwScrollNaviPopup : public DockingWindow
 {
-    VclPtr<SwScrollNaviPopup> m_pNaviPopup;
+    VclPtr<ToolBox> m_xToolBox1;
+    VclPtr<ToolBox> m_xToolBox2;
+    VclPtr<FixedText> m_xInfoField;
 
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-
-public:
-    SwScrollNaviToolBox(vcl::Window* pParent, SwScrollNaviPopup* pNaviPopup, WinBits nWinStyle)
-        : ToolBox(pParent, nWinStyle)
-        , m_pNaviPopup(pNaviPopup)
-    {
-    }
-    virtual ~SwScrollNaviToolBox() override;
-    virtual void dispose() override;
-};
-
-class SwScrollNaviPopup : public SfxPopupWindow
-{
-    VclPtr<SwScrollNaviToolBox> m_pToolBox;
-    VclPtr<FixedText>           m_pInfoField;
+    sal_uInt16 GetCurItemId() const;
+    OUString GetItemText(sal_uInt16 nItemId) const;
+    void SetItemText(sal_uInt16 nItemId, const OUString& rText);
+    void CheckItem(sal_uInt16 nItemId, bool bOn);
 
     OUString        sQuickHelp[2 * NID_COUNT];
 
@@ -96,15 +85,15 @@ protected:
     DECL_LINK(SelectHdl, ToolBox*, void);
 
 public:
-    SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
+    SwScrollNaviPopup(vcl::Window *pParent);
     virtual ~SwScrollNaviPopup() override;
     virtual void dispose() override;
 
     static OUString     GetToolTip(bool bNext);
 
-    void                GrabFocus() { m_pToolBox->GrabFocus(); }
+    void                GrabFocus() { m_xToolBox1->GrabFocus(); }
 
-    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    void                syncFromDoc();
 };
 
 class SwPreviewZoomControl : public SfxToolBoxControl

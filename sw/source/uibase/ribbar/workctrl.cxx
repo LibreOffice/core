@@ -20,6 +20,7 @@
 #include <i18nutil/unicode.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <initui.hxx>
@@ -305,32 +306,22 @@ static const char* STR_IMGBTN_ARY[] =
     STR_IMGBTN_TBLFML_ERR_UP
 };
 
-SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window *pParent)
-    : SfxPopupWindow(nId, pParent, "FloatingNavigation",
-        "modules/swriter/ui/floatingnavigation.ui", rFrame)
+SwScrollNaviPopup::SwScrollNaviPopup(vcl::Window *pParent)
+    : DockingWindow(pParent, "FloatingNavigation", "modules/swriter/ui/floatingnavigation.ui")
+    , m_xToolBox1(get<ToolBox>("line1"))
+    , m_xToolBox2(get<ToolBox>("line2"))
+    , m_xInfoField(get<FixedText>("label"))
 {
-    m_pToolBox = VclPtr<SwScrollNaviToolBox>::Create(get<vcl::Window>("box"), this, 0);
-    get(m_pInfoField, "label");
+    m_xToolBox1->SetHelpId(HID_NAVI_VS);
+    m_xToolBox2->SetHelpId(HID_NAVI_VS);
 
-    size_t i;
+    for (size_t i = 0; i < NID_LINE_COUNT; ++i)
+        m_xToolBox1->SetHelpId(m_xToolBox1->GetItemId(i), aNavigationHelpIds[i]);
 
-    m_pToolBox->SetHelpId(HID_NAVI_VS);
-    m_pToolBox->SetLineCount( 2 );
-    m_pToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
-    for( i = 0; i < NID_COUNT; i++)
-    {
-        sal_uInt16 nNaviId = aNavigationInsertIds[i];
-        ToolBoxItemBits nTbxBits = ToolBoxItemBits::NONE;
-        if ((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
-            nTbxBits = ToolBoxItemBits::CHECKABLE;
-        m_pToolBox->InsertItem(nNaviId, Image(StockImage::Yes, aNavigationImgIds[i]),
-                              SwResId(aNavigationStrIds[i]), nTbxBits);
-        m_pToolBox->SetHelpId(nNaviId, aNavigationHelpIds[i]);
-    }
+    for (size_t i = 0; i < NID_LINE_COUNT; ++i)
+        m_xToolBox2->SetHelpId(m_xToolBox2->GetItemId(i), aNavigationHelpIds[i + NID_LINE_COUNT]);
 
-    m_pToolBox->InsertBreak(NID_COUNT/2);
-
-    for (i = 0; i < SAL_N_ELEMENTS(STR_IMGBTN_ARY); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_IMGBTN_ARY); ++i)
     {
         const char* id = STR_IMGBTN_ARY[i];
         if (!id)
@@ -339,14 +330,11 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     }
 
     sal_uInt16 nItemId = SwView::GetMoveType();
-    m_pInfoField->SetText(m_pToolBox->GetItemText(nItemId));
-    m_pToolBox->CheckItem( nItemId );
+    m_xInfoField->SetText(GetItemText(nItemId));
+    CheckItem(nItemId, true);
 
-    m_pToolBox->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
-    m_pToolBox->StartSelection();
-    m_pToolBox->Show();
-
-    AddStatusListener(".uno:NavElement");
+    m_xToolBox1->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
+    m_xToolBox2->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
 }
 
 SwScrollNaviPopup::~SwScrollNaviPopup()
@@ -356,56 +344,29 @@ SwScrollNaviPopup::~SwScrollNaviPopup()
 
 void SwScrollNaviPopup::dispose()
 {
-    m_pToolBox.disposeAndClear();
-    m_pInfoField.clear();
-    SfxPopupWindow::dispose();
+    m_xToolBox2.disposeAndClear();
+    m_xToolBox1.disposeAndClear();
+    m_xInfoField.clear();
+    DockingWindow::dispose();
 }
 
-IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
+IMPL_LINK_NOARG(SwScrollNaviPopup, SelectHdl, ToolBox*, void)
 {
-    sal_uInt16 nSet = pSet->GetCurItemId();
+    sal_uInt16 nSet = GetCurItemId();
     if( nSet != NID_PREV && nSet != NID_NEXT )
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
         SwView::SetMoveType( nSet );
-        Sequence< PropertyValue > aArgs;
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     ".uno:NavElement", aArgs );
+        GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(FN_NAV_ELEMENT);
+        syncFromDoc();
     }
     else
     {
-        Sequence< PropertyValue > aArgs;
-        OUString cmd(".uno:ScrollToPrevious");
+        sal_uInt16 cmd(FN_SCROLL_PREV);
         if (NID_NEXT == nSet)
-            cmd = ".uno:ScrollToNext";
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     cmd, aArgs );
+            cmd = FN_SCROLL_NEXT;
+        GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(cmd);
     }
-}
-
-SwScrollNaviToolBox::~SwScrollNaviToolBox()
-{
-    disposeOnce();
-}
-
-void SwScrollNaviToolBox::dispose()
-{
-    m_pNaviPopup.disposeAndClear();
-    ToolBox::dispose();
-}
-
-void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    ToolBox::MouseButtonUp(rMEvt);
-    if (m_pNaviPopup->IsInPopupMode())
-        m_pNaviPopup->EndPopupMode(FloatWinPopupEndFlags::CloseAll);
-}
-
-void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
-{
-    SetItemText(NID_NEXT, SwScrollNaviPopup::GetToolTip(true));
-    SetItemText(NID_PREV, SwScrollNaviPopup::GetToolTip(false));
-    ToolBox::RequestHelp( rHEvt );
 }
 
 OUString SwScrollNaviPopup::GetToolTip(bool bNext)
@@ -417,21 +378,159 @@ OUString SwScrollNaviPopup::GetToolTip(bool bNext)
     return id ? SwResId(id): OUString();
 }
 
-void SwScrollNaviPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+void SwScrollNaviPopup::syncFromDoc()
 {
-    if ( rEvent.FeatureURL.Path == "NavElement" )
+    sal_uInt16 nSet = SwView::GetMoveType();
+    SetItemText( NID_NEXT, sQuickHelp[nSet - NID_START] );
+    SetItemText( NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT] );
+    m_xInfoField->SetText( GetItemText( nSet ) );
+    // check the current button only
+    for( ToolBox::ImplToolItems::size_type i = 0; i < NID_COUNT; i++ )
     {
-        sal_uInt16 nSet = SwView::GetMoveType();
-        m_pToolBox->SetItemText( NID_NEXT, sQuickHelp[nSet - NID_START] );
-        m_pToolBox->SetItemText( NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT] );
-        m_pInfoField->SetText( m_pToolBox->GetItemText( nSet ) );
-        // check the current button only
-        for( ToolBox::ImplToolItems::size_type i = 0; i < NID_COUNT; i++ )
-        {
-            sal_uInt16 nItemId = m_pToolBox->GetItemId( i );
-            m_pToolBox->CheckItem( nItemId, nItemId == nSet );
-        }
+        sal_uInt16 nItemId = aNavigationInsertIds[i];
+        CheckItem(nItemId, nItemId == nSet);
     }
+}
+
+namespace
+{
+    sal_uInt16 IdToIdent(const OUString& rId)
+    {
+        if (rId == "tbl")
+            return NID_TBL;
+        if (rId == "frm")
+            return NID_FRM;
+        if (rId == "grf")
+            return NID_GRF;
+        if (rId == "ole")
+            return NID_OLE;
+        if (rId == "pge")
+            return NID_PGE;
+        if (rId == "outl")
+            return NID_OUTL;
+        if (rId == "mark")
+            return NID_MARK;
+        if (rId == "drw")
+            return NID_DRW;
+        if (rId == "ctrl")
+            return NID_CTRL;
+        if (rId == "prev")
+            return NID_PREV;
+
+        if (rId == "reg")
+            return NID_REG;
+        if (rId == "bkm")
+            return NID_BKM;
+        if (rId == "sel")
+            return NID_SEL;
+        if (rId == "ftn")
+            return NID_FTN;
+        if (rId == "postit")
+            return NID_POSTIT;
+        if (rId == "rep")
+            return NID_SRCH_REP;
+        if (rId == "entry")
+            return NID_INDEX_ENTRY;
+        if (rId == "formula")
+            return NID_TABLE_FORMULA;
+        if (rId == "formulaerror")
+            return NID_TABLE_FORMULA_ERROR;
+        if (rId == "next")
+            return NID_NEXT;
+
+        return 0;
+    }
+
+    OUString IdentToId(sal_uInt16 nId)
+    {
+        if (nId == NID_TBL)
+            return "tbl";
+        if (nId == NID_FRM)
+            return "frm";
+        if (nId == NID_GRF)
+            return "grf";
+        if (nId == NID_OLE)
+            return "ole";
+        if (nId == NID_PGE)
+            return "pge";
+        if (nId == NID_OUTL)
+            return "outl";
+        if (nId == NID_MARK)
+            return "mark";
+        if (nId == NID_DRW)
+            return "drw";
+        if (nId == NID_CTRL)
+            return "ctrl";
+        if (nId == NID_PREV)
+            return "prev";
+
+        if (nId == NID_REG)
+            return "reg";
+        if (nId == NID_BKM)
+            return "bkm";
+        if (nId == NID_SEL)
+            return "sel";
+        if (nId == NID_FTN)
+            return "ftn";
+        if (nId == NID_POSTIT)
+            return "postit";
+        if (nId == NID_SRCH_REP)
+            return "rep";
+        if (nId == NID_INDEX_ENTRY)
+            return "entry";
+        if (nId == NID_TABLE_FORMULA)
+            return "formula";
+        if (nId == NID_TABLE_FORMULA_ERROR)
+            return "formulaerror";
+        if (nId == NID_NEXT)
+            return "next";
+
+        return "";
+    }
+}
+
+sal_uInt16 SwScrollNaviPopup::GetCurItemId() const
+{
+    OUString sItemId = m_xToolBox1->GetItemCommand(m_xToolBox1->GetCurItemId());
+    if (sItemId.isEmpty())
+        sItemId = m_xToolBox2->GetItemCommand(m_xToolBox2->GetCurItemId());
+    return IdToIdent(sItemId);
+}
+
+OUString SwScrollNaviPopup::GetItemText(sal_uInt16 nId) const
+{
+    const OUString sId(IdentToId(nId));
+    sal_uInt16 nItemId = m_xToolBox1->GetItemId(sId);
+    if (nItemId)
+        return m_xToolBox1->GetItemText(nItemId);
+    nItemId = m_xToolBox2->GetItemId(sId);
+    return m_xToolBox2->GetItemText(nItemId);
+}
+
+void SwScrollNaviPopup::SetItemText(sal_uInt16 nId, const OUString &rText)
+{
+    const OUString sId(IdentToId(nId));
+    sal_uInt16 nItemId = m_xToolBox1->GetItemId(sId);
+    if (nItemId)
+    {
+        m_xToolBox1->SetItemText(nItemId, rText);
+        return;
+    }
+    nItemId = m_xToolBox2->GetItemId(sId);
+    m_xToolBox2->SetItemText(nItemId, rText);
+}
+
+void SwScrollNaviPopup::CheckItem(sal_uInt16 nId, bool bOn)
+{
+    const OUString sId(IdentToId(nId));
+    sal_uInt16 nItemId = m_xToolBox1->GetItemId(sId);
+    if (nItemId)
+    {
+        m_xToolBox1->CheckItem(nItemId, bOn);
+        return;
+    }
+    nItemId = m_xToolBox2->GetItemId(sId);
+    m_xToolBox2->CheckItem(nItemId, bOn);
 }
 
 namespace {

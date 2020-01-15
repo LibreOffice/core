@@ -38,8 +38,9 @@ class SwNavigationPI;
 class SwNavigationChild;
 class SfxBindings;
 class NumEditAction;
-class SwView;
 class SwNavigationConfig;
+class SwScrollNaviPopup;
+class SwView;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
 enum class RegionMode;
@@ -48,7 +49,6 @@ class SpinField;
 class SwNavHelpToolBox : public ToolBox
 {
     VclPtr<SwNavigationPI> m_xDialog;
-    virtual void    MouseButtonDown(const MouseEvent &rEvt) override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    dispose() override;
 public:
@@ -86,8 +86,7 @@ class SwNavigationPI : public PanelLayout,
     SwWrtShell          *m_pContentWrtShell;
     SwView              *m_pActContView;
     SwView              *m_pCreateView;
-    VclPtr<SfxPopupWindow>      m_pPopupWindow;
-    VclPtr<SfxPopupWindow>      m_pFloatingWindow;
+    VclPtr<SwScrollNaviPopup>   m_xPopupWindow;
 
     SwNavigationConfig  *m_pConfig;
     SfxBindings         &m_rBindings;
@@ -114,11 +113,9 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( MenuSelectHdl, Menu *, bool );
     DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, SpinField&, void );
-    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
-    DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
     void UsePage();
 
-    void SetPopupWindow( SfxPopupWindow* );
+    void SetPopupWindow( SwScrollNaviPopup* );
 
 protected:
 
@@ -156,7 +153,7 @@ public:
     bool            IsGlobalMode() const {return    m_bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool(const tools::Rectangle& rRect, bool bSetFocus, vcl::Window *pParent);
+    void            CreateNavigationTool();
 
     FactoryFunction GetUITestFactory() const override;
 };
