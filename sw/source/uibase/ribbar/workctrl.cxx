@@ -306,9 +306,8 @@ static const char* STR_IMGBTN_ARY[] =
     STR_IMGBTN_TBLFML_ERR_UP
 };
 
-SwScrollNaviPopup::SwScrollNaviPopup(vcl::Window *pParent, SfxBindings& rBindings)
+SwScrollNaviPopup::SwScrollNaviPopup(vcl::Window *pParent)
     : DockingWindow(pParent, "FloatingNavigation", "modules/swriter/ui/floatingnavigation.ui")
-    , SfxControllerItem(FN_NAV_ELEMENT, rBindings)
     , m_xToolBox1(get<ToolBox>("line1"))
     , m_xToolBox2(get<ToolBox>("line2"))
     , m_xInfoField(get<FixedText>("label"))
@@ -367,12 +366,6 @@ IMPL_LINK_NOARG(SwScrollNaviPopup, SelectHdl, ToolBox*, void)
             cmd = FN_SCROLL_NEXT;
         GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(cmd);
     }
-}
-
-void SwScrollNaviPopup::StateChanged(sal_uInt16 /*nSID*/, SfxItemState /*eState*/,
-                                     const SfxPoolItem* /*pState*/)
-{
-    syncFromDoc();
 }
 
 OUString SwScrollNaviPopup::GetToolTip(bool bNext)

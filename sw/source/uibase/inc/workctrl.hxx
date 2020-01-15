@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WORKCTRL_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <sfx2/ctrlitem.hxx>
 #include <vcl/toolbox.hxx>
 
 class PopupMenu;
@@ -70,7 +69,6 @@ public:
 };
 
 class SwScrollNaviPopup final : public DockingWindow
-                              , public SfxControllerItem
 {
     VclPtr<ToolBox> m_xToolBox1;
     VclPtr<ToolBox> m_xToolBox2;
@@ -83,13 +81,10 @@ class SwScrollNaviPopup final : public DockingWindow
 
     OUString        sQuickHelp[2 * NID_COUNT];
 
-    void                syncFromDoc();
-
     DECL_LINK(SelectHdl, ToolBox*, void);
 
-    using DockingWindow::StateChanged;
 public:
-    SwScrollNaviPopup(vcl::Window *pParent, SfxBindings& rBindings);
+    SwScrollNaviPopup(vcl::Window *pParent);
     virtual ~SwScrollNaviPopup() override;
     virtual void dispose() override;
 
@@ -97,8 +92,7 @@ public:
 
     void                GrabFocus() { m_xToolBox1->GrabFocus(); }
 
-    virtual void    StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                                 const SfxPoolItem* pState) override;
+    void                syncFromDoc();
 };
 
 class SwPreviewZoomControl : public SfxToolBoxControl

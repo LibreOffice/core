@@ -2078,7 +2078,7 @@ void SwContentTree::ToggleToRoot()
         }
     }
     m_pConfig->SetRootType( m_nRootType );
-    VclPtr<SwNavHelpToolBox> xBox = GetParentWindow()->m_aContentToolBox;
+    VclPtr<ToolBox> xBox = GetParentWindow()->m_aContentToolBox;
     xBox->CheckItem(xBox->GetItemId("root"), m_bIsRoot);
 }
 
