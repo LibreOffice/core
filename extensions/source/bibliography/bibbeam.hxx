@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <vcl/splitwin.hxx>
 #include "toolbar.hxx"
 #include "formcontrolcontainer.hxx"
 #include "bibshortcuthandler.hxx"
