@@ -326,8 +326,7 @@ SwXTextPortionEnumeration::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.TextPortionEnumeration" };
-    return aRet;
+    return { "com.sun.star.text.TextPortionEnumeration" };
 }
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(

@@ -974,8 +974,7 @@ sal_Bool SwXTextTables::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet { "com.sun.star.text.TextTables" };
-    return aRet;
+    return { "com.sun.star.text.TextTables" };
 }
 
 uno::Reference<text::XTextTable> SwXTextTables::GetObject(SwFrameFormat& rFormat)
@@ -1292,8 +1291,7 @@ sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextFrames::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.TextFrames" };
-    return aRet;
+    return { "com.sun.star.text.TextFrames" };
 }
 
 SwXTextFrames::SwXTextFrames(SwDoc* _pDoc) :
@@ -1317,8 +1315,7 @@ sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.TextGraphicObjects" };
-    return aRet;
+    return { "com.sun.star.text.TextGraphicObjects" };
 }
 
 SwXTextGraphicObjects::SwXTextGraphicObjects(SwDoc* _pDoc) :
@@ -1342,8 +1339,7 @@ sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.TextEmbeddedObjects" };
-    return aRet;
+    return { "com.sun.star.text.TextEmbeddedObjects" };
 }
 
 SwXTextEmbeddedObjects::SwXTextEmbeddedObjects(SwDoc* _pDoc) :
@@ -1367,8 +1363,7 @@ sal_Bool SwXTextSections::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXTextSections::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.TextSections" };
-    return aRet;
+    return { "com.sun.star.text.TextSections" };
 }
 
 SwXTextSections::SwXTextSections(SwDoc* _pDoc) :
@@ -1543,8 +1538,7 @@ sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.text.Bookmarks" };
-    return aRet;
+    return { "com.sun.star.text.Bookmarks" };
 }
 
 SwXBookmarks::SwXBookmarks(SwDoc* _pDoc) :
@@ -1742,8 +1736,7 @@ sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXFootnotes::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.Footnotes" };
-    return aRet;
+    return { "com.sun.star.text.Footnotes" };
 }
 
 SwXFootnotes::SwXFootnotes(bool bEnd, SwDoc* _pDoc)
@@ -1838,8 +1831,7 @@ sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName)
 
 Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames()
 {
-    Sequence<OUString> aRet { "com.sun.star.text.ReferenceMarks" };
-    return aRet;
+    return { "com.sun.star.text.ReferenceMarks" };
 }
 
 SwXReferenceMarks::SwXReferenceMarks(SwDoc* _pDoc) :

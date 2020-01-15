@@ -464,8 +464,7 @@ sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.drawing.GenericDrawPage" };
-    return aRet;
+    return { "com.sun.star.drawing.GenericDrawPage" };
 }
 
 SwXDrawPage::SwXDrawPage(SwDoc* pDc) :

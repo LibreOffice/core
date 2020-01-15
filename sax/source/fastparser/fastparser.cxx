@@ -1419,8 +1419,7 @@ sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
 
 uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 {
-    Sequence<OUString> seq { "com.sun.star.xml.sax.FastParser" };
-    return seq;
+    return { "com.sun.star.xml.sax.FastParser" };
 }
 
 } // namespace sax_fastparser

@@ -65,8 +65,7 @@ sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.ProtocolHandler" };
-    return aSeq;
+    return { "com.sun.star.frame.ProtocolHandler" };
 }
 
 SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()

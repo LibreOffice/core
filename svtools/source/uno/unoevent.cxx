@@ -317,9 +317,7 @@ sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
 
 Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames()
 {
-    Sequence<OUString> aSequence { sAPI_ServiceName };
-
-    return aSequence;
+    return { sAPI_ServiceName };
 }
 
 SvMacroItemId SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const

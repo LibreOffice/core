@@ -871,8 +871,7 @@ OUString SAL_CALL NavElementToolBoxControl::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent

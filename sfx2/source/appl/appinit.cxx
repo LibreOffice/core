@@ -124,8 +124,7 @@ Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceName
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    Sequence< OUString > lNames { "com.sun.star.frame.TerminateListener" };
-    return lNames;
+    return { "com.sun.star.frame.TerminateListener" };
 }
 
 

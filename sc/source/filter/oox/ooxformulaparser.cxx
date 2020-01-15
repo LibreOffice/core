@@ -119,8 +119,7 @@ sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService 
 
 Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames()
 {
-    Sequence< OUString > aServiceNames { "com.sun.star.sheet.FilterFormulaParser" };
-    return aServiceNames;
+    return { "com.sun.star.sheet.FilterFormulaParser" };
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
