@@ -37,9 +37,11 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
 
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <memory>
 
 using namespace com::sun::star;
@@ -370,6 +372,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             {
                 sal_Int32 nNew = static_cast<const SfxInt32Item&>(rItemSet.Get(nWhichId)).GetValue();
                 sal_Int32 nOld = 0;
+                RelativePosition aCustomLabelPosition;
                 if (!(GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld))
                 {
                     if (maAvailableLabelPlacements.hasElements())
@@ -385,9 +388,10 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                         bChanged = true;
                     }
                 }
-                else if (nOld != nNew)
+                else if (nOld != nNew || (GetPropertySet()->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition))
                 {
                     GetPropertySet()->setPropertyValue("LabelPlacement", uno::Any(nNew));
+                    GetPropertySet()->setPropertyValue("CustomLabelPosition", uno::Any());
                     bChanged = true;
                 }
             }
@@ -591,7 +595,10 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             try
             {
                 sal_Int32 nPlacement = 0;
-                if (GetPropertySet()->getPropertyValue("LabelPlacement") >>= nPlacement)
+                RelativePosition aCustomLabelPosition;
+                if (!mbDataSeries && (GetPropertySet()->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition))
+                    rOutItemSet.Put(SfxInt32Item(nWhichId, css::chart::DataLabelPlacement::CUSTOM));
+                else if (GetPropertySet()->getPropertyValue("LabelPlacement") >>= nPlacement)
                     rOutItemSet.Put(SfxInt32Item(nWhichId, nPlacement));
                 else if (maAvailableLabelPlacements.hasElements())
                     rOutItemSet.Put(SfxInt32Item(nWhichId, maAvailableLabelPlacements[0]));
