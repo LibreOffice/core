@@ -34,6 +34,7 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <comphelper/lok.hxx>
 
 
 E3dDragMethod::E3dDragMethod (
@@ -214,6 +215,10 @@ void E3dDragMethod::CreateOverlayGeometry(
     sdr::overlay::OverlayManager& rOverlayManager,
     const sdr::contact::ObjectContact& rObjectContact)
 {
+    // We do client-side object manipulation with the Kit API
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     const sal_uInt32 nCnt(maGrp.size());
     basegfx::B2DPolyPolygon aResult;
 

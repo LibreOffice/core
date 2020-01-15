@@ -361,8 +361,13 @@ void SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
     BrkAction();
 
     DBG_ASSERT(nullptr == mpMarkObjOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkObjOverlay (!)");
-    basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-    mpMarkObjOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
+
+    // We do client-side object manipulation with the Kit API
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
+        mpMarkObjOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
+    }
 
     maDragStat.Reset(rPnt);
     maDragStat.NextPoint();
