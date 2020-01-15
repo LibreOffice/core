@@ -247,7 +247,9 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
 
 void SwHTMLWriter::OutBasic(SwHTMLWriter & rHTMLWrt)
 {
-#if HAVE_FEATURE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
+    (void) rHTMLWrt;
+#else
     if( !m_bCfgStarBasic )
         return;
 
