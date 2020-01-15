@@ -335,10 +335,18 @@ ScMarkData::ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList)
     for (const ScRange& rRange : rList)
         maTabMarked.insert( rRange.aStart.Tab() );
 
-    bMultiMarked = true;
-    aMultiRange = rList.Combine();
+    if (rList.size() > 1)
+    {
+        bMultiMarked = true;
+        aMultiRange = rList.Combine();
 
-    aMultiSel.Set( ScSheetLimits(mnMaxCol, mnMaxRow), rList );
+        aMultiSel.Set( ScSheetLimits(mnMaxCol, mnMaxRow), rList );
+    }
+    else if (rList.size() == 1)
+    {
+        const ScRange& rRange = rList[ 0 ];
+        SetMarkArea( rRange );
+    }
 }
 
 
