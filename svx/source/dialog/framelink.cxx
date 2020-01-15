@@ -34,8 +34,7 @@
 using namespace ::com::sun::star;
 using namespace editeng;
 
-namespace svx {
-namespace frame {
+namespace svx::frame {
 
 // Classes
 void Style::implEnsureImplStyle()
@@ -314,7 +313,6 @@ bool Style::operator<( const Style& rOther) const
 
     // seem to be equal
     return false;
-}
 }
 }
 

@@ -41,7 +41,7 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <bitmaps.hlst>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewContactOfPageSubObject::ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
 :   mrParentViewContactOfSdrPage(rParentViewContactOfSdrPage)
@@ -620,6 +620,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createView
     return xRetval;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

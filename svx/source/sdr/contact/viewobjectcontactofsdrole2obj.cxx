@@ -35,7 +35,7 @@
 
 using namespace com::sun::star;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
     const DisplayInfo& /*rDisplayInfo*/) const
@@ -145,6 +145,6 @@ ViewObjectContactOfSdrOle2Obj::~ViewObjectContactOfSdrOle2Obj()
 {
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,9 +22,7 @@
 #include <svx/extrud3d.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         E3dExtrudeProperties::E3dExtrudeProperties(SdrObject& rObj)
         :   E3dCompoundProperties(rObj)
@@ -72,7 +70,6 @@ namespace sdr
                 }
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

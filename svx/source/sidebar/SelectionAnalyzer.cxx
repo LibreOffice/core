@@ -28,7 +28,7 @@
 using vcl::EnumContext;
 
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMarkList& rMarkList)
 {
@@ -476,6 +476,6 @@ bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
 }
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

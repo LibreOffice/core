@@ -46,7 +46,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class SdrTableRtfExporter
 {
@@ -240,6 +240,6 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

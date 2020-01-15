@@ -34,7 +34,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::beans;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 const sal_Int32 Property_Width = 0;
 const sal_Int32 Property_OptimalWidth = 1;
@@ -283,6 +283,6 @@ sal_Int32 TableColumn::getWidth() const
     return mnWidth;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

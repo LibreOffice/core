@@ -110,7 +110,7 @@ enum class CellPosFlag  // signals the relative position of a cell to a selectio
 namespace o3tl
 { template<> struct typed_flags<CellPosFlag> : is_typed_flags<CellPosFlag, 0xff> {}; }
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 namespace {
 
@@ -3253,6 +3253,6 @@ bool SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPo
     return false;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

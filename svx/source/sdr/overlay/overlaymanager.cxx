@@ -34,9 +34,7 @@
 using namespace com::sun::star;
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         void OverlayManager::ImpDrawMembers(const basegfx::B2DRange& rRange, OutputDevice& rDestinationDevice) const
         {
@@ -347,7 +345,6 @@ namespace sdr
             }
         }
 
-    } // end of namespace overlay
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -83,9 +83,7 @@ namespace
 } // end of anonymous namespace
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
         // for slideshow. This uses TextHierarchyBlockPrimitive2D to mark a text block.
@@ -238,13 +236,10 @@ namespace drawinglayer
             // call parent
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SdrContourTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
         {
@@ -290,13 +285,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrContourTextPrimitive2D, PRIMITIVE2D_ID_SDRCONTOURTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SdrPathTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
         {
@@ -345,13 +337,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrPathTextPrimitive2D, PRIMITIVE2D_ID_SDRPATHTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SdrBlockTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
         {
@@ -421,13 +410,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrBlockTextPrimitive2D, PRIMITIVE2D_ID_SDRBLOCKTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
          void SdrAutoFitTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
          {
@@ -469,12 +455,9 @@ namespace drawinglayer
          // provide unique ID
          ImplPrimitive2DIDBlock(SdrAutoFitTextPrimitive2D, PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D)
 
-     } // end of namespace primitive2d
- } // end of namespace drawinglayer
+     } // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
 
         SdrChainedTextPrimitive2D::SdrChainedTextPrimitive2D(
@@ -512,13 +495,10 @@ namespace drawinglayer
 
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrChainedTextPrimitive2D, PRIMITIVE2D_ID_SDRCHAINEDTEXTPRIMITIVE2D)
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
- namespace drawinglayer
- {
-     namespace primitive2d
+ namespace drawinglayer::primitive2d
      {
         void SdrStretchTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
         {
@@ -564,7 +544,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrStretchTextPrimitive2D, PRIMITIVE2D_ID_SDRSTRETCHTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

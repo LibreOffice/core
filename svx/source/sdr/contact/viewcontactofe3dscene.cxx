@@ -132,7 +132,7 @@ void createSubPrimitive3DVector(
 
 }
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 // Create an Object-Specific ViewObjectContact, set ViewContact and
 // ObjectContact. Always needs to return something.
@@ -453,6 +453,6 @@ basegfx::B3DRange ViewContactOfE3dScene::getAllContentRange3D() const
     return aAllContentRange3D;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

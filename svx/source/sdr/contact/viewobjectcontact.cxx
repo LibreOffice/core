@@ -150,7 +150,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
 
 } // end of anonymous namespace
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact)
 :   mrObjectContact(rObjectContact),
@@ -478,6 +478,6 @@ void ViewObjectContact::resetGridOffset()
     mxPrimitive2DSequence.clear();
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

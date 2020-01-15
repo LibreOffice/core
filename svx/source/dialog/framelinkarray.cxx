@@ -30,8 +30,7 @@
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-namespace svx {
-namespace frame {
+namespace svx::frame {
 
 namespace {
 
@@ -1288,7 +1287,6 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveArray()
 #undef DBG_FRAME_CHECK_COL
 #undef DBG_FRAME_CHECK
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

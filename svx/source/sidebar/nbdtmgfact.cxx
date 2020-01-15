@@ -19,7 +19,7 @@
 
 #include <svx/nbdtmgfact.hxx>
 
-namespace svx { namespace sidebar { namespace NBOutlineTypeMgrFact {
+namespace svx::sidebar::NBOutlineTypeMgrFact {
 
 NBOTypeMgrBase* CreateInstance(const NBOType aType)
 {
@@ -38,6 +38,6 @@ NBOTypeMgrBase* CreateInstance(const NBOType aType)
     return nullptr;
 }
 
-}}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

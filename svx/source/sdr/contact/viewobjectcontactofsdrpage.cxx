@@ -35,7 +35,7 @@
 
 using namespace com::sun::star;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 const SdrPage& ViewObjectContactOfPageSubObject::getPage() const
 {
@@ -628,6 +628,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrPage::getP
     return xRetval;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

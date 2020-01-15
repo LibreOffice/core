@@ -29,9 +29,7 @@
 #include <vcl/settings.hxx>
 
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         drawinglayer::primitive2d::Primitive2DContainer OverlayRectangle::createOverlayObjectPrimitive2DSequence()
         {
@@ -114,8 +112,7 @@ namespace sdr
                 objectChange();
             }
         }
-    } // end of namespace overlay
-} // end of namespace sdr
+    } // end of namespace sdr
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

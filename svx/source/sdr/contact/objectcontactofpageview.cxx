@@ -44,9 +44,7 @@
 
 using namespace com::sun::star;
 
-namespace sdr
-{
-    namespace contact
+namespace sdr::contact
     {
         // internal access to SdrPage of SdrPageView
         SdrPage* ObjectContactOfPageView::GetSdrPage() const
@@ -441,7 +439,6 @@ namespace sdr
                 }
             }
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

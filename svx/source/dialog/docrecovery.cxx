@@ -54,8 +54,7 @@
 #include <unotools/pathoptions.hxx>
 #include <officecfg/Office/Recovery.hxx>
 
-namespace svx{
-    namespace DocRecovery{
+namespace svx::DocRecovery{
 
 using namespace ::osl;
 
@@ -1105,6 +1104,5 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 }
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

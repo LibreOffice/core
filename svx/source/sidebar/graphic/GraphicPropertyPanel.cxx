@@ -32,7 +32,7 @@ using namespace css::uno;
 
 // namespace open
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 
 GraphicPropertyPanel::GraphicPropertyPanel(
@@ -410,6 +410,6 @@ void GraphicPropertyPanel::NotifyItemUpdate(
 
 // namespace close
 
-}} // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

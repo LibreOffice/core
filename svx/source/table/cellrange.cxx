@@ -30,7 +30,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 CellRange::CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 : mxTable( xTable )
@@ -111,6 +111,6 @@ Reference< XCellRange > SAL_CALL CellRange::getCellRangeByName( const OUString& 
 }
 
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

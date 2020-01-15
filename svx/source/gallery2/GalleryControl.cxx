@@ -28,7 +28,7 @@
 #include <vcl/settings.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 static const sal_Int32 gnInitialVerticalSplitPosition (150);
 
@@ -239,6 +239,6 @@ IMPL_LINK_NOARG( GalleryControl, SplitHdl, Splitter*, void )
 }
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

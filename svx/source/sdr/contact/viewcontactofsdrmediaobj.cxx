@@ -25,7 +25,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <vcl/canvastools.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewContactOfSdrMediaObj::ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj ) :
     ViewContactOfSdrObj( rMediaObj )
@@ -125,6 +125,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::create
     return drawinglayer::primitive2d::Primitive2DContainer { xRetval };
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,8 +38,7 @@
 #include <svx/strings.hrc>
 #include <frmsel.hrc>
 
-namespace svx {
-namespace a11y {
+namespace svx::a11y {
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -392,7 +391,6 @@ void AccFrameSelectorChild::Invalidate()
     mpFrameSel = nullptr;
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

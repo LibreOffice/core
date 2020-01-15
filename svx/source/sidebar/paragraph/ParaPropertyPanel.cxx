@@ -37,7 +37,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx {namespace sidebar {
+namespace svx::sidebar {
 #define DEFAULT_VALUE          0
 
 #define MAX_DURCH             5670
@@ -521,6 +521,6 @@ void ParaPropertyPanel::dispose()
     PanelLayout::dispose();
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

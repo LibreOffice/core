@@ -53,7 +53,7 @@ using namespace css::uno;
 
 const char USERITEM_NAME[] = "FitItem";
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 PosSizePropertyPanel::PosSizePropertyPanel(
     vcl::Window* pParent,
@@ -1033,6 +1033,6 @@ void PosSizePropertyPanel::UpdateUIScale()
 }
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

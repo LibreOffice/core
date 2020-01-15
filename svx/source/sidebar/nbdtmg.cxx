@@ -64,7 +64,7 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 namespace {
 
@@ -918,6 +918,6 @@ bool OutlineTypeMgr::IsCustomized(sal_uInt16 nIndex)
 }
 
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,9 +35,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         // create a new itemset
         std::unique_ptr<SfxItemSet> MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
@@ -125,7 +123,6 @@ namespace sdr
             mpItemSet->Put(XLineEndWidthItem(200));
             mpItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

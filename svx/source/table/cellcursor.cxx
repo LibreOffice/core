@@ -37,7 +37,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::table;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 CellCursor::CellCursor( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 : CellCursorBase( xTable, nLeft, nTop, nRight, nBottom )
@@ -540,6 +540,6 @@ sal_Bool SAL_CALL CellCursor::isMergeable(  )
 }
 
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

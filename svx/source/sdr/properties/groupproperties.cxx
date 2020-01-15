@@ -29,9 +29,7 @@
 #include <svx/svdpage.hxx>
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         // create a new itemset
         std::unique_ptr<SfxItemSet> GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
@@ -262,7 +260,6 @@ namespace sdr
                 pSub->GetObj(a)->GetProperties().ForceStyleToHardAttributes();
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
