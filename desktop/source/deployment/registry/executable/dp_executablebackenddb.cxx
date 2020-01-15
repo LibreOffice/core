@@ -31,9 +31,7 @@ using namespace ::com::sun::star::uno;
 #define ROOT_ELEMENT_NAME "executable-backend-db"
 #define ENTRY_NAME "executable"
 
-namespace dp_registry {
-namespace backend {
-namespace executable {
+namespace dp_registry::backend::executable {
 
 ExecutableBackendDb::ExecutableBackendDb(
     Reference<XComponentContext> const &  xContext,
@@ -63,8 +61,6 @@ OUString ExecutableBackendDb::getKeyElementName()
 }
 
 
-} // namespace executable
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

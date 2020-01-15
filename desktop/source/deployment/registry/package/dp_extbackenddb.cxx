@@ -36,9 +36,7 @@ using namespace ::com::sun::star::uno;
 #define ROOT_ELEMENT_NAME "extension-backend-db"
 #define KEY_ELEMENT_NAME "extension"
 
-namespace dp_registry {
-namespace backend {
-namespace bundle {
+namespace dp_registry::backend::bundle {
 
 ExtensionBackendDb::ExtensionBackendDb(
     Reference<XComponentContext> const &  xContext,
@@ -112,8 +110,6 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(OUString const & url)
     }
 }
 
-} // namespace bundle
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,8 +30,7 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace dp_manager {
-namespace factory {
+namespace dp_manager::factory {
 
 typedef ::cppu::WeakComponentImplHelper<
     deployment::XPackageManagerFactory > t_pmfac_helper;
@@ -162,7 +161,6 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     return xRet;
 }
 
-} // namespace factory
-} // namespace dp_manager
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

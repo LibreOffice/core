@@ -91,9 +91,7 @@ OUString produceErrorText(
 
 }
 
-namespace dp_misc {
-
-namespace Dependencies {
+namespace dp_misc::Dependencies {
 
 css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
 check(dp_misc::DescriptionInfoset const & infoset) {
@@ -178,8 +176,6 @@ OUString getErrorText(
     } else {
         return DpResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN);
     }
-}
-
 }
 
 }

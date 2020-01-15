@@ -106,9 +106,9 @@
 
 class KeyEvent;
 class MouseEvent;
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 using namespace ::com::sun::star;
 using dp_gui::UpdateDialog;

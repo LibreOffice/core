@@ -45,7 +45,7 @@
 #include "cmdlineargs.hxx"
 #include "langselect.hxx"
 
-namespace desktop { namespace langselect {
+namespace desktop::langselect {
 
 namespace {
 
@@ -146,6 +146,6 @@ bool prepareLocale() {
     return true;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
