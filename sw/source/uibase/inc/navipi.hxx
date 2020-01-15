@@ -48,10 +48,21 @@ class SpinField;
 
 class SwNavHelpToolBox : public ToolBox
 {
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 public:
     SwNavHelpToolBox(Window* pParent);
     ~SwNavHelpToolBox() override;
+};
+
+class NaviStateListener final : public SfxControllerItem
+{
+private:
+    VclPtr<SwNavigationPI> m_xNavigation;
+public:
+    NaviStateListener(SfxBindings& rBindings, SwNavigationPI* pNavigation);
+    virtual ~NaviStateListener() override;
+
+    virtual void    StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                                 const SfxPoolItem* pState) override;
 };
 
 class SwNavigationPI : public PanelLayout,
@@ -63,6 +74,7 @@ class SwNavigationPI : public PanelLayout,
     friend class SwNavigationPIUIObject;
 
     VclPtr<SwNavHelpToolBox>    m_aContentToolBox;
+    std::unique_ptr<NaviStateListener> m_xNaviListener;
     VclPtr<ToolBox>             m_aGlobalToolBox;
     VclPtr<NumEditAction>       m_xEdit;
     VclPtr<VclContainer>        m_aContentBox;
@@ -148,6 +160,8 @@ public:
 
     SwView*         GetCreateView() const;
     void            CreateNavigationTool();
+
+    void            NaviStateChanged();
 
     FactoryFunction GetUITestFactory() const override;
 };

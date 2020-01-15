@@ -398,7 +398,7 @@ VCL_BUILDER_FACTORY(SwNavHelpToolBox)
 
 void SwNavigationPI::CreateNavigationTool()
 {
-    auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get(), GetBindings());
+    auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get());
 
     xPopup->EnableDocking();
 
@@ -411,17 +411,6 @@ void SwNavigationPI::CreateNavigationTool()
 FactoryFunction SwNavigationPI::GetUITestFactory() const
 {
     return SwNavigationPIUIObject::create;
-}
-
-void SwNavHelpToolBox::RequestHelp(const HelpEvent& rHEvt)
-{
-    const sal_uInt16 nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-    const OUString sCommand(GetItemCommand(nItemId));
-    if (sCommand == "back")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(false));
-    else if (sCommand == "forward")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(true));
-    ToolBox::RequestHelp(rHEvt);
 }
 
 SwNavHelpToolBox::~SwNavHelpToolBox()
@@ -691,6 +680,9 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aDocListBox->SetAccessibleName(m_aStatusArr[3]);
 
     m_aExpandedSize = GetOptimalSize();
+
+    m_xNaviListener.reset(new NaviStateListener(GetBindings(), this));
+    NaviStateChanged();
 }
 
 SwNavigationPI::~SwNavigationPI()
@@ -700,6 +692,8 @@ SwNavigationPI::~SwNavigationPI()
 
 void SwNavigationPI::dispose()
 {
+    m_xNaviListener.reset();
+
     if (IsGlobalDoc() && !IsGlobalMode())
     {
         SwView *pView = GetCreateView();
@@ -1169,6 +1163,34 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     }
 
     SetWindow(pNavi);
+}
+
+NaviStateListener::NaviStateListener(SfxBindings& rBindings, SwNavigationPI* pNavigation)
+    : SfxControllerItem(FN_NAV_ELEMENT, rBindings)
+    , m_xNavigation(pNavigation)
+{
+}
+
+NaviStateListener::~NaviStateListener()
+{
+}
+
+void NaviStateListener::StateChanged(sal_uInt16 /*nSID*/, SfxItemState /*eState*/,
+                                     const SfxPoolItem* /*pState*/)
+{
+    m_xNavigation->NaviStateChanged();
+}
+
+void SwNavigationPI::NaviStateChanged()
+{
+    if (m_xPopupWindow)
+        m_xPopupWindow->syncFromDoc();
+
+    if (m_aContentToolBox)
+    {
+        m_aContentToolBox->SetQuickHelpText(m_aContentToolBox->GetItemId("back"), SwScrollNaviPopup::GetToolTip(false));
+        m_aContentToolBox->SetQuickHelpText(m_aContentToolBox->GetItemId("forward"), SwScrollNaviPopup::GetToolTip(true));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
