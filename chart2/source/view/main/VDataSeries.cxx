@@ -26,11 +26,13 @@
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
@@ -603,7 +605,9 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         if( xPointProps.is() )
             xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
 
-        //ensure that the set label placement is supported by this charttype
+        //ensure that the set label placement is supported by this charttype, unless the DataLabelPlacement is custom
+        if( nLabelPlacement == css::chart::DataLabelPlacement::CUSTOM )
+            return nLabelPlacement;
 
         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, bSwapXAndY, m_xDataSeries ) );
@@ -626,6 +630,44 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return nLabelPlacement;
+}
+
+awt::Point VDataSeries::getLabelRelPosition(sal_Int32 nPointIndex) const
+{
+    awt::Point aRelPos(0, 0);
+    try
+    {
+        chart2::RelativePosition aRelativePosition;
+        uno::Reference< beans::XPropertySet > xPointProps(getPropertiesOfPoint(nPointIndex));
+        if( xPointProps.is() && (xPointProps->getPropertyValue("RelativePosition") >>= aRelativePosition) )
+        {
+            aRelPos.X = static_cast<sal_Int32>(aRelativePosition.Primary * m_aReferenceSize.Width);
+            aRelPos.Y = static_cast<sal_Int32>(aRelativePosition.Secondary * m_aReferenceSize.Height);
+        }
+    }
+    catch (const uno::Exception&) {}
+
+    return aRelPos;
+}
+
+void VDataSeries::setLabelAbsPosition( awt::Point aRelPos, sal_Int32 nPointIndex ) const
+{
+    uno::Reference< beans::XPropertySet > xPointProps(m_xDataSeries->getDataPointByIndex(nPointIndex));
+    if( xPointProps.is() )
+    {
+        chart2::RelativePosition aOldAbsolutePosition;
+        chart2::RelativePosition aNewAbsolutePosition;
+        aNewAbsolutePosition.Primary = double(aRelPos.X) / double(m_aReferenceSize.Width);
+        aNewAbsolutePosition.Secondary = double(aRelPos.Y) / double(m_aReferenceSize.Height);
+        aNewAbsolutePosition.Anchor = drawing::Alignment_TOP_LEFT;
+        try
+        {
+            xPointProps->getPropertyValue("AbsolutePosition") >>= aOldAbsolutePosition;
+            if( !(aOldAbsolutePosition.Primary == aNewAbsolutePosition.Primary && aOldAbsolutePosition.Secondary == aNewAbsolutePosition.Secondary))
+                xPointProps->setPropertyValue("AbsolutePosition", uno::Any(aNewAbsolutePosition));
+        }
+        catch (const uno::Exception&) {}
+    }
 }
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
