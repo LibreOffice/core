@@ -48,15 +48,9 @@ class SpinField;
 
 class SwNavHelpToolBox : public ToolBox
 {
-    VclPtr<SwNavigationPI> m_xDialog;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void    dispose() override;
 public:
     SwNavHelpToolBox(Window* pParent);
-    void SetDialog(SwNavigationPI* pDialog)
-    {
-        m_xDialog = pDialog;
-    }
     ~SwNavHelpToolBox() override;
 };
 
