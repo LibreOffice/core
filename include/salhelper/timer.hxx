@@ -50,7 +50,7 @@ struct SAL_WARN_UNUSED TTimeValue : public TimeValue
 
     TTimeValue(sal_uInt32 MilliSecs)
     {
-        Seconds = MilliSecs / 1000L;
+        Seconds = MilliSecs / 1000;
         Nanosec = (MilliSecs % 1000) * 1000000L;
 
         normalize();
