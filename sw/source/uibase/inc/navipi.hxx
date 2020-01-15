@@ -46,13 +46,6 @@ class SfxChildWindowContext;
 enum class RegionMode;
 class SpinField;
 
-class SwNavHelpToolBox : public ToolBox
-{
-public:
-    SwNavHelpToolBox(Window* pParent);
-    ~SwNavHelpToolBox() override;
-};
-
 class NaviStateListener final : public SfxControllerItem
 {
 private:
@@ -73,7 +66,7 @@ class SwNavigationPI : public PanelLayout,
     friend class SwGlobalTree;
     friend class SwNavigationPIUIObject;
 
-    VclPtr<SwNavHelpToolBox>    m_aContentToolBox;
+    VclPtr<ToolBox>    m_aContentToolBox;
     std::unique_ptr<NaviStateListener> m_xNaviListener;
     VclPtr<ToolBox>             m_aGlobalToolBox;
     VclPtr<NumEditAction>       m_xEdit;

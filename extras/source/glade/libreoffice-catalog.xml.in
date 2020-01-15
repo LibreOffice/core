@@ -123,10 +123,6 @@
         </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Writer Navigator ToolBox" name="swlo-SwNavHelpToolBox"
-                        generic-name="Writer Navigator ToolBox" parent="GtkToolbar"
-                        icon-name="widget-gtk-toolbar"/>
-
     <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
                         generic-name="Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>

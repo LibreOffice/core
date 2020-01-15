@@ -23,7 +23,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="swlo-SwNavHelpToolBox" id="content">
+              <object class="GtkToolbar" id="content">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="toolbar_style">icons</property>
