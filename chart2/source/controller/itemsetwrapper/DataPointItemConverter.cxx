@@ -31,9 +31,11 @@
 #include <ChartTypeHelper.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svx/xflclit.hxx>
@@ -426,7 +428,8 @@ bool DataPointItemConverter::ApplySpecialItem(
                 }
                 else if( nOld!=nNew )
                 {
-                    GetPropertySet()->setPropertyValue( "LabelPlacement" , uno::Any( nNew ));
+                    GetPropertySet()->setPropertyValue("LabelPlacement", uno::Any(nNew));
+                    GetPropertySet()->setPropertyValue("CustomLabelPosition", uno::Any());
                     bChanged = true;
                 }
             }
@@ -641,7 +644,14 @@ void DataPointItemConverter::FillSpecialItem(
             try
             {
                 sal_Int32 nPlacement=0;
-                if( GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nPlacement )
+                RelativePosition aCustomLabelPosition;
+                if (!m_bOverwriteLabelsForAttributedDataPointsAlso &&
+                    (GetPropertySet()->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition) &&
+                    !(aCustomLabelPosition.Primary == 0 && aCustomLabelPosition.Secondary == 0) )
+                {
+                    rOutItemSet.Put(SfxInt32Item(nWhichId, css::chart::DataLabelPlacement::CUSTOM));
+                }
+                else if( GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nPlacement )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, nPlacement ));
                 else if( m_aAvailableLabelPlacements.hasElements() )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, m_aAvailableLabelPlacements[0] ));

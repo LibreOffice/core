@@ -1,4 +1,5 @@
 AbsoluteName
+AbsolutePosition
 Action
 ActiveSplitRange
 ActiveTable
@@ -113,6 +114,7 @@ CursorPositionX
 CursorPositionY
 CurveName
 CurveStyle
+CustomLabelPosition
 CustomShapeGeometry
 D3DSceneAmbientColor
 D3DSceneLightColor2

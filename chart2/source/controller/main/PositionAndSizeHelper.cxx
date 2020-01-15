@@ -21,6 +21,7 @@
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
@@ -36,6 +37,7 @@ using namespace ::com::sun::star::chart2;
 bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
                 , const uno::Reference< beans::XPropertySet >& xObjectProp
                 , const awt::Rectangle& rNewPositionAndSize
+                , const awt::Rectangle& rOldPositionAndSize
                 , const awt::Rectangle& rPageRectangle
                 )
 {
@@ -58,6 +60,38 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
         aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0)/double(aPageRect.getHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+    }
+    else if( eObjectType == OBJECTTYPE_DATA_LABEL )
+    {
+        RelativePosition aAbsolutePosition;
+        RelativePosition aCustomLabelPosition;
+
+        if((xObjectProp->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition) &&
+            !(aCustomLabelPosition.Primary == 0 && aCustomLabelPosition.Secondary == 0))
+        {
+            xObjectProp->getPropertyValue("AbsolutePosition") >>= aAbsolutePosition;
+        }
+        else
+        {
+            aAbsolutePosition.Primary = double(rOldPositionAndSize.X) / double(aPageRect.getWidth());
+            aAbsolutePosition.Secondary = double(rOldPositionAndSize.Y) / double(aPageRect.getHeight());
+            xObjectProp->setPropertyValue("AbsolutePosition", uno::Any(aAbsolutePosition));
+        }
+
+        //the anchor point at the datalabel object is top/left
+        Point aPos = aObjectRect.TopLeft();
+        double fRotation = 0.0;
+        xObjectProp->getPropertyValue("TextRotation") >>= fRotation;
+        if( fRotation == 90.0 )
+            aPos = aObjectRect.BottomLeft();
+        else if( fRotation == 270.0 )
+            aPos = aObjectRect.TopRight();
+
+        aCustomLabelPosition.Primary = double(aPos.X()) / double(aPageRect.getWidth());
+        aCustomLabelPosition.Secondary = double(aPos.Y()) / double(aPageRect.getHeight());
+        aCustomLabelPosition.Primary -= aAbsolutePosition.Primary;
+        aCustomLabelPosition.Secondary -=  aAbsolutePosition.Secondary;
+        xObjectProp->setPropertyValue("CustomLabelPosition", uno::Any(aCustomLabelPosition));
     }
     else if( eObjectType==OBJECTTYPE_DATA_CURVE_EQUATION )
     {
@@ -128,6 +162,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const awt::Rectangle& rNewPositionAndSize
+                , const awt::Rectangle& rOldPositionAndSize
                 , const awt::Rectangle& rPageRectangle
                 )
 {
@@ -143,7 +178,7 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
         if(!xObjectProp.is())
             return false;
     }
-    return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
+    return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rOldPositionAndSize, rPageRectangle );
 }
 
 } //namespace chart

@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -600,6 +601,8 @@ void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSer
             if(!xPointProp.is())
                 continue;
             xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
+            if( rPropertyName == "LabelPlacement" )
+                xPointProp->setPropertyValue("CustomLabelPosition", uno::Any());
         }
     }
 }
