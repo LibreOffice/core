@@ -58,7 +58,7 @@ public:
     SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTbxAutoTextCtrl() override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+    virtual void CreatePopupWindow() override;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
