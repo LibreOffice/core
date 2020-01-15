@@ -23,6 +23,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 
@@ -190,7 +191,7 @@ void OInterfaceContainerHelper::copyAndResetInUse()
 
 sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener )
 {
-    OSL_ASSERT( rListener.is() );
+    SAL_WARN_IF( !rListener.is(), "cppuhelper", "rListener is empty" );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
@@ -221,7 +222,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
 
 sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener )
 {
-    assert( rListener.is() );
+    SAL_WARN_IF( !rListener.is(), "cppuhelper", "rListener is empty" );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
