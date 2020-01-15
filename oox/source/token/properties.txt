@@ -1,4 +1,5 @@
 AbsoluteName
+AbsolutePosition
 Action
 ActiveSplitRange
 ActiveTable
@@ -324,6 +325,7 @@ MirroredY
 MissingValueTreatment
 Model
 ModifyPasswordHash
+MovedDataLabel
 MoveProtect
 MovingAveragePeriod
 MultiLine

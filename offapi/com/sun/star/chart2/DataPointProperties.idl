@@ -32,6 +32,7 @@
 #include <com/sun/star/chart2/DataPointLabel.idl>
 #include <com/sun/star/chart2/Symbol.idl>
 #include <com/sun/star/chart2/XFormattedString2.idl>
+#include <com/sun/star/chart2/RelativePosition.idl>
 
 module com
 {
@@ -327,6 +328,24 @@ service DataPointProperties
     /** A value between 0 and 100 indicating the percentage how round an edge should be.
     */
     [optional, maybevoid, property] short             PercentDiagonal;
+
+    /** The position is placed as a relative position on the AbsolutePosition.
+
+        @since LibreOffice 6.5
+    */
+    [optional, property] ::com::sun::star::chart2::RelativePosition RelativePosition;
+
+    /** The position is placed as a relative position on the page.
+
+        @since LibreOffice 6.5
+    */
+    [optional, property] ::com::sun::star::chart2::RelativePosition AbsolutePosition;
+
+    /** The data point label position is custom.
+
+        @since LibreOffice 6.5
+    */
+    [optional, property] boolean MovedDataLabel;
 };
 
 } ; // chart2
