@@ -24,9 +24,9 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
-#include <vcl/floatwin.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/window.hxx>
 
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XFrame; }
@@ -53,54 +53,6 @@ struct SfxTbxCtrlFactory
 };
 
 
-/* Floating windows that can be torn from tool boxes should be derived from
-   this class. Since it is also derived from SfxControllerItem, its instances
-   will also receive the StateChanged calls.
-*/
-class SfxFrameStatusListener;
-class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow
-{
-friend class SfxFrameStatusListener;
-    bool                                                   m_bFloating;
-    Link<SfxPopupWindow*,void>                             m_aDeleteLink;
-    sal_uInt16 const                                       m_nId;
-    css::uno::Reference< css::frame::XFrame > const        m_xFrame;
-    rtl::Reference<SfxFrameStatusListener>                 m_xStatusListener;
-
-private:
-    SfxPopupWindow(SfxPopupWindow const &) = delete;
-    SfxPopupWindow& operator =(SfxPopupWindow const &) = delete;
-    void Delete();
-
-protected:
-    virtual void            PopupModeEnd() override;
-    virtual bool            Close() override;
-
-    sal_uInt16              GetId() const { return m_nId; }
-    const css::uno::Reference< css::frame::XFrame >& GetFrame() const { return m_xFrame; }
-
-    void                    AddStatusListener( const OUString& rCommandURL );
-
-    virtual void            statusChanged( const css::frame::FeatureStateEvent& rEvent );
-
-public:
-                            SfxPopupWindow(sal_uInt16 nId, vcl::Window *pParent,
-                                            const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                            WinBits nBits );
-                            SfxPopupWindow(sal_uInt16 nId, vcl::Window *pParent,
-                                           const OString& rID, const OUString& rUIXMLDescription,
-                                           const css::uno::Reference<css::frame::XFrame> &rFrame =
-                                               css::uno::Reference<css::frame::XFrame>());
-                            virtual ~SfxPopupWindow() override;
-    virtual void            dispose() override;
-
-    SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link<SfxPopupWindow*,void>& rLink )
-                            {
-                                m_aDeleteLink = rLink;
-                            }
-};
-
-
 #define SFX_DECL_TOOLBOX_CONTROL() \
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr)
@@ -117,15 +69,11 @@ public:
 struct SfxToolBoxControl_Impl;
 class SFX2_DLLPUBLIC SfxToolBoxControl: public svt::ToolboxController
 {
-friend class SfxPopupWindow;
 friend struct SfxTbxCtrlFactory;
 
     std::unique_ptr< SfxToolBoxControl_Impl>    pImpl;
 
 protected:
-    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
-    DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
-
     // old SfxToolBoxControl methods
     virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void               Select( sal_uInt16 nSelectModifier );
@@ -134,9 +82,6 @@ protected:
     virtual void               Click();
     virtual void               CreatePopupWindow();
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent );
-
-    // Must be called by subclass to set a new popup window instance
-    void                       SetPopupWindow( SfxPopupWindow* pWindow );
 
 public:
     // XComponent

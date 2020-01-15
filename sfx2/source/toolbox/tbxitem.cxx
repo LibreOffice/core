@@ -96,29 +96,6 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 
-static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
-{
-    OSL_ASSERT( pWindow );
-    if ( pWindow )
-    {
-        // ->manually search topmost system window
-        // required because their might be another system window between this and the top window
-        pWindow = pWindow->GetParent();
-        SystemWindow* pTopMostSysWin = nullptr;
-        while ( pWindow )
-        {
-            if ( pWindow->IsSystemWindow() )
-                pTopMostSysWin = static_cast<SystemWindow*>(pWindow);
-            pWindow = pWindow->GetParent();
-        }
-        pWindow = pTopMostSysWin;
-        OSL_ASSERT( pWindow );
-        return pWindow;
-    }
-
-    return nullptr;
-}
-
 svt::ToolboxController* SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
 {
     SolarMutexGuard aGuard;
@@ -178,25 +155,7 @@ struct SfxToolBoxControl_Impl
     bool                    bShowString;
     sal_uInt16              nTbxId;
     sal_uInt16              nSlotId;
-    VclPtr<SfxPopupWindow>  mpFloatingWindow;
-    VclPtr<SfxPopupWindow>  mpPopupWindow;
-    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 };
-
-IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclWindowEvent&, rEvent, void )
-{
-    if ( ( rEvent.GetId() == VclEventId::WindowMove ) ||
-         ( rEvent.GetId() == VclEventId::WindowActivate ))
-    {
-        vcl::Window* pWindow( rEvent.GetWindow() );
-        if (( pWindow == mpFloatingWindow ) &&
-            ( mpPopupWindow != nullptr ))
-        {
-            mpPopupWindow.disposeAndClear();
-        }
-    }
-}
-
 
 SfxToolBoxControl::SfxToolBoxControl(
     sal_uInt16      nSlotID,
@@ -209,8 +168,6 @@ SfxToolBoxControl::SfxToolBoxControl(
     pImpl->bShowString = bShowStringItems;
     pImpl->nTbxId = nID;
     pImpl->nSlotId = nSlotID;
-    pImpl->mpFloatingWindow = nullptr;
-    pImpl->mpPopupWindow = nullptr;
 }
 
 
@@ -245,10 +202,6 @@ void SAL_CALL SfxToolBoxControl::dispose()
     VclPtr< vcl::Window > pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, nullptr );
     pWindow.disposeAndClear();
-
-    // Delete my popup windows
-    pImpl->mpFloatingWindow.disposeAndClear();
-    pImpl->mpPopupWindow.disposeAndClear();
 }
 
 
@@ -557,45 +510,6 @@ Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( con
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
 }
 
-void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
-{
-    pImpl->mpPopupWindow = pWindow;
-    pImpl->mpPopupWindow->SetPopupModeEndHdl( LINK( this, SfxToolBoxControl, PopupModeEndHdl ));
-    pImpl->mpPopupWindow->SetDeleteLink_Impl( LINK( this, SfxToolBoxControl, ClosePopupWindow ));
-}
-
-
-IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
-{
-    if ( pImpl->mpPopupWindow->IsVisible() )
-    {
-        // Replace floating window with popup window and destroy
-        // floating window instance.
-        pImpl->mpFloatingWindow.disposeAndClear();
-        pImpl->mpFloatingWindow = pImpl->mpPopupWindow;
-        pImpl->mpPopupWindow.clear();
-        // We also need to know when the user tries to use the
-        // floating window.
-        pImpl->mpFloatingWindow->AddEventListener( LINK( pImpl.get(), SfxToolBoxControl_Impl, WindowEventListener ));
-    }
-    else
-    {
-        // Popup window has been closed by the user. No replacement, instance
-        // will destroy itself.
-        pImpl->mpPopupWindow.clear();
-    }
-}
-
-
-IMPL_LINK( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
-{
-    if ( pWindow == pImpl->mpFloatingWindow )
-        pImpl->mpFloatingWindow = nullptr;
-    else
-        pImpl->mpPopupWindow = nullptr;
-}
-
-
 void SfxToolBoxControl::StateChanged
 (
     sal_uInt16              nId,
@@ -673,148 +587,6 @@ void SfxToolBoxControl::CreatePopupWindow()
 VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
 {
     return VclPtr<vcl::Window>();
-}
-
-class SfxFrameStatusListener : public svt::FrameStatusListener
-{
-    public:
-        SfxFrameStatusListener( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                const css::uno::Reference< css::frame::XFrame >& xFrame,
-                                SfxPopupWindow* pCallee );
-
-        // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-
-    private:
-        VclPtr<SfxPopupWindow> m_pCallee;
-};
-SfxFrameStatusListener::SfxFrameStatusListener(
-    const Reference< XComponentContext >& rxContext,
-    const Reference< XFrame >& xFrame,
-    SfxPopupWindow* pCallee ) :
-    svt::FrameStatusListener( rxContext, xFrame ),
-    m_pCallee( pCallee )
-{
-}
-
-// XStatusListener
-void SAL_CALL SfxFrameStatusListener::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-{
-    m_pCallee->statusChanged( rEvent );
-}
-
-SfxPopupWindow::SfxPopupWindow(
-    sal_uInt16 nId,
-    vcl::Window* pParentWindow,
-    const Reference< XFrame >& rFrame,
-    WinBits nBits ) :
-    FloatingWindow( pParentWindow, nBits )
-    , m_bFloating( false )
-    , m_nId( nId )
-    , m_xFrame( rFrame )
-{
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
-}
-
-SfxPopupWindow::SfxPopupWindow(
-    sal_uInt16 nId,
-    vcl::Window* pParentWindow,
-    const OString& rID, const OUString& rUIXMLDescription,
-    const Reference< XFrame >& rFrame ) :
-    FloatingWindow( pParentWindow, rID, rUIXMLDescription, rFrame)
-    , m_bFloating( false )
-    , m_nId( nId )
-    , m_xFrame( rFrame )
-{
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
-}
-
-SfxPopupWindow::~SfxPopupWindow()
-{
-    disposeOnce();
-}
-
-void SfxPopupWindow::dispose()
-{
-    if ( m_xStatusListener.is() )
-    {
-        m_xStatusListener->dispose();
-        m_xStatusListener.clear();
-    }
-
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
-    FloatingWindow::dispose();
-}
-
-
-void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
-{
-    if ( !m_xStatusListener.is() )
-    {
-        m_xStatusListener = new SfxFrameStatusListener(
-                                    ::comphelper::getProcessComponentContext(),
-                                    m_xFrame,
-                                    this );
-    }
-    if ( m_xStatusListener.is() )
-        m_xStatusListener->addStatusListener( rCommandURL );
-}
-
-
-bool SfxPopupWindow::Close()
-{
-    m_bFloating = false;
-    FloatingWindow::Close();
-
-    Delete();
-    return true;
-}
-
-
-void SfxPopupWindow::PopupModeEnd()
-{
-    //! to allow PopupModeEndHdl to be called
-    FloatingWindow::PopupModeEnd();
-
-    if ( IsVisible() )
-    {
-        // was teared-off
-        if ( m_bFloating )
-        {
-            Hide();
-            Delete();
-        }
-        m_bFloating = true;
-    }
-    else
-        Close();
-}
-
-
-void SfxPopupWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-{
-    if ( !rEvent.IsEnabled )
-    {
-        Hide();
-    }
-    else if ( m_bFloating )
-    {
-        Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
-    }
-}
-
-
-void SfxPopupWindow::Delete()
-{
-    VclPtr<SfxPopupWindow> xThis(this);
-    m_aDeleteLink.Call( this );
-    disposeOnce();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -822,10 +822,6 @@ include/sfx2/tabdlg.hxx:46
     void SfxTabDialogItem::SfxTabDialogItem(unsigned short,const class SfxItemSet &)
     unsigned short nId
     11022
-include/sfx2/tbxctrl.hxx:88
-    void SfxPopupWindow::SfxPopupWindow(unsigned short,class vcl::Window *,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,long)
-    long nBits
-    1610612810
 include/sfx2/templatelocalview.hxx:228
     class BitmapEx SfxTemplateLocalView::fetchThumbnail(const class rtl::OUString &,long,long)
     long height
