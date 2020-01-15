@@ -16,6 +16,24 @@
       "revId": "d9595eb4c930175b77dd4cd97e48711018180b9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5fbd5ee_c2283aa9",
+        "filename": "vcl/source/filter/png/pngwrite.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-01-15T10:48:21Z",
+      "side": 1,
+      "message": "I think the contents are refcounted, but fair enough.",
+      "parentUuid": "2d7a3419_343e4da1",
+      "revId": "d9595eb4c930175b77dd4cd97e48711018180b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
