@@ -406,7 +406,7 @@ VCL_BUILDER_FACTORY(SwNavHelpToolBox)
 
 void SwNavigationPI::CreateNavigationTool()
 {
-    auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get());
+    auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get(), GetBindings());
 
     xPopup->EnableDocking();
 
