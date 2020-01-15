@@ -37,8 +37,7 @@ sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName )
 
 uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aNames { "com.sun.star.frame.ExtendedTypeDetection" };
-    return aNames;
+    return { "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
 namespace {

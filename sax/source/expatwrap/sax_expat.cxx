@@ -530,8 +530,7 @@ sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName)
 // XServiceInfo
 css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> seq { "com.sun.star.xml.sax.Parser" };
-    return seq;
+    return { "com.sun.star.xml.sax.Parser" };
 }
 
 

@@ -1047,8 +1047,7 @@ sal_Bool SAXWriter::supportsService(const OUString& ServiceName)
 // XServiceInfo
 Sequence< OUString > SAXWriter::getSupportedServiceNames()
 {
-    Sequence<OUString> seq { "com.sun.star.xml.sax.Writer" };
-    return seq;
+    return { "com.sun.star.xml.sax.Writer" };
 }
 
 void SAXWriter::startDocument()

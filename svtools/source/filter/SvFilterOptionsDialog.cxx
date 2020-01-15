@@ -142,8 +142,7 @@ sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServi
 }
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
-    return aRet;
+    return { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
 }
 
 // XPropertyAccess

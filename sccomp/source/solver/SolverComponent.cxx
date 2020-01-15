@@ -248,8 +248,7 @@ sal_Bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName
 
 uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aServiceNames { "com.sun.star.sheet.Solver" };
-    return aServiceNames;
+    return { "com.sun.star.sheet.Solver" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -260,8 +260,7 @@ namespace {
 
     Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames()
     {
-        Sequence< OUString > aServices { "com.sun.star.ui.dialogs.Wizard" };
-        return aServices;
+        return { "com.sun.star.ui.dialogs.Wizard" };
     }
 
     Reference< XPropertySetInfo > SAL_CALL Wizard::getPropertySetInfo()
