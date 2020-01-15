@@ -59,7 +59,6 @@ class Help;
 class OutputDevice;
 namespace vcl { class Window; }
 namespace vcl { class KeyCode; }
-class WorkWindow;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
@@ -808,26 +807,11 @@ public:
     */
     ///@{
 
-    /** Get the main application window.
-
-     @remark the main application window (or App window) has a style of WB_APP,
-        there can only be on WorkWindow with this style, if a dialog or floating
-        window cannot find a parent, then the parent becomes the app window.
-
-        It also becomes the "default window", is used for help, is a fallback if
-        the application has no name, and a number of other things.
-
-     returns Pointer to main application window.
-
-     @see GetFocusWindow, GetDefaultDevice
-    */
-    static WorkWindow*          GetAppWindow();
-
     /** Get the currently focused window.
 
      @returns Pointer to focused window.
 
-     @see GetAppWindow, GetDefaultDevice
+     @see GetDefaultDevice
     */
     static vcl::Window*              GetFocusWindow();
 
@@ -836,7 +820,7 @@ public:
      @returns Pointer to an OutputDevice. However, it is a Window object -
              Window class subclasses OutputDevice.
 
-     @see GetAppWindow, GetFocusWindow
+     @see GetFocusWindow
     */
     static OutputDevice*        GetDefaultDevice();
 

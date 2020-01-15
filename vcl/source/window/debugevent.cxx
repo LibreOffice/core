@@ -45,8 +45,6 @@ vcl::Window *DebugEventInjector::ChooseWindow()
         // select a top window at random
         long nIdx = Application::GetTopWindowCount() * getRandom();
         pParent = Application::GetTopWindow( nIdx );
-        if (!pParent)
-            pParent = Application::GetAppWindow();
     }
     assert (pParent != nullptr);
 
