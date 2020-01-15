@@ -9,12 +9,12 @@
   </object>
   <object class="GtkAdjustment" id="adjustmentbright">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
+    <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentcyan">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
+    <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentgreen">
@@ -29,12 +29,12 @@
   </object>
   <object class="GtkAdjustment" id="adjustmentkey">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
+    <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentmag">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
+    <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentred">
@@ -44,12 +44,12 @@
   </object>
   <object class="GtkAdjustment" id="adjustmentsat">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
+    <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentyellow">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
+    <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="ColorPicker">
