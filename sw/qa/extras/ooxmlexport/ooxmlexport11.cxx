@@ -97,6 +97,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121665_back2backColumnBreaks, "tdf121665_back2ba
         style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf126795_TabsRelativeToIndent0, "tdf126795_TabsRelativeToIndent0.odt")
+{
+    uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), "ParaTabStops");
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
+    CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_LEFT, stops[ 0 ].Alignment );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(499), stops[ 0 ].Position );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf126795_TabsRelativeToIndent1, "tdf126795_TabsRelativeToIndent1.odt")
+{
+    uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), "ParaTabStops");
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
+    CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_LEFT, stops[ 0 ].Alignment );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(499), stops[ 0 ].Position );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf46938_clearTabStop, "tdf46938_clearTabStop.docx")
 {
     // Number of tabstops should be zero, overriding the one in the style
