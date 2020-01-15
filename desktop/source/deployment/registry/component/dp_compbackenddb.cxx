@@ -37,9 +37,7 @@ using namespace ::com::sun::star::uno;
 #define ROOT_ELEMENT_NAME "component-backend-db"
 #define KEY_ELEMENT_NAME "component"
 
-namespace dp_registry {
-namespace backend {
-namespace component {
+namespace dp_registry::backend::component {
 
 ComponentBackendDb::ComponentBackendDb(
     Reference<XComponentContext> const &  xContext,
@@ -133,8 +131,6 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
 }
 
 
-} // namespace bundle
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

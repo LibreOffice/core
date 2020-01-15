@@ -58,9 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
-namespace dp_registry {
-namespace backend {
-namespace component {
+namespace dp_registry::backend::component {
 namespace {
 
 #define IMPLEMENTATION_NAME  "com.sun.star.comp.deployment.component.PackageRegistryBackend"
@@ -1700,9 +1698,7 @@ sdecl::ServiceDecl const serviceDecl(
     IMPLEMENTATION_NAME,
     BACKEND_SERVICE_NAME );
 
-} // namespace component
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,9 +37,7 @@ using namespace ::com::sun::star::uno;
 #define ROOT_ELEMENT_NAME "help-backend-db"
 #define KEY_ELEMENT_NAME "help"
 
-namespace dp_registry {
-namespace backend {
-namespace help {
+namespace dp_registry::backend::help {
 
 HelpBackendDb::HelpBackendDb(
     Reference<XComponentContext> const &  xContext,
@@ -128,8 +126,6 @@ std::vector<OUString> HelpBackendDb::getAllDataUrls()
     return getOneChildFromAllEntries("data-url");
 }
 
-} // namespace help
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

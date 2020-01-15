@@ -53,8 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
-namespace dp_registry {
-namespace backend {
+namespace dp_registry::backend {
 
 
 PackageRegistryBackend::~PackageRegistryBackend()
@@ -766,7 +765,6 @@ Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool /*smallIcon*
     return Any();
 }
 
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,11 +41,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::script;
 
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace sfwk
+namespace dp_registry::backend::sfwk
 {
 
 namespace {
@@ -358,8 +354,6 @@ sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.sfwk.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace sfwk
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

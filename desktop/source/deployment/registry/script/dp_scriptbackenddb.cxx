@@ -34,9 +34,7 @@ using namespace ::com::sun::star::uno;
 #define ROOT_ELEMENT_NAME "script-backend-db"
 #define KEY_ELEMENT_NAME "script"
 
-namespace dp_registry {
-namespace backend {
-namespace script {
+namespace dp_registry::backend::script {
 
 ScriptBackendDb::ScriptBackendDb(
     Reference<XComponentContext> const &  xContext,
@@ -66,8 +64,6 @@ OUString ScriptBackendDb::getKeyElementName()
 }
 
 
-} // namespace executable
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

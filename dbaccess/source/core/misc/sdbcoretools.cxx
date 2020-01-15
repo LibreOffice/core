@@ -109,7 +109,7 @@ namespace dbaccess
         return sDisplayMessage;
     }
 
-    namespace tools { namespace stor {
+    namespace tools::stor {
 
     bool storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
     {
@@ -142,7 +142,7 @@ namespace dbaccess
         return bSuccess;
     }
 
-    } } // tools::stor
+    }
 
 }   // namespace dbaccess
 
