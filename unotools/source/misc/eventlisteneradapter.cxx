@@ -74,7 +74,8 @@ namespace utl
     {
         if (m_xComponent.is())
         {
-            m_xComponent->removeEventListener(m_xKeepMeAlive);
+            if (m_xKeepMeAlive.is())
+                m_xComponent->removeEventListener(m_xKeepMeAlive);
             m_xComponent.clear();
             m_xKeepMeAlive.clear();
         }

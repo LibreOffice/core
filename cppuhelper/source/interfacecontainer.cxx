@@ -221,7 +221,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
 
 sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener )
 {
-    OSL_ASSERT( rListener.is() );
+    assert( rListener.is() );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
