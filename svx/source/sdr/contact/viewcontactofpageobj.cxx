@@ -30,7 +30,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewObjectContact& ViewContactOfPageObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
@@ -79,6 +79,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageObj::createView
     return drawinglayer::primitive2d::Primitive2DContainer { xReference };
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

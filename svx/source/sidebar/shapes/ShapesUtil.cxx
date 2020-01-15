@@ -21,7 +21,7 @@
 #include <map>
 #include <rtl/ustring.hxx>
 
-namespace svx{ namespace sidebar{
+namespace svx::sidebar{
 SvxShapeCommandsMap::SvxShapeCommandsMap()
 {
     mpLineShapes = decltype(mpLineShapes){
@@ -207,6 +207,6 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {7, ".uno:HalfSphere"}
     };
 }
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

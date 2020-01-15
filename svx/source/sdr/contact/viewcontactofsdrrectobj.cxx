@@ -28,7 +28,7 @@
 #include <vcl/canvastools.hxx>
 #include <svx/sdmetitm.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 ViewContactOfSdrRectObj::ViewContactOfSdrRectObj(SdrRectObj& rRectObj)
 :   ViewContactOfTextObj(rRectObj)
@@ -84,6 +84,6 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
     return drawinglayer::primitive2d::Primitive2DContainer{ xReference };
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

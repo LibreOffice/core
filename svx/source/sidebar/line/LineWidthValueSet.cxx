@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 LineWidthValueSet::LineWidthValueSet()
     : SvtValueSet(nullptr)
@@ -167,6 +167,6 @@ void LineWidthValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetOutputSizePixel(aSize);
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

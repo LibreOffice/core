@@ -145,9 +145,7 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
 
 }
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         class CellProperties : public TextProperties
         {
@@ -379,10 +377,9 @@ namespace sdr
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 
 // Cell
@@ -1701,6 +1698,6 @@ void Cell::dumpAsXml(xmlTextWriterPtr pWriter, sal_Int32 nRow, sal_Int32 nCol) c
     xmlTextWriterEndElement(pWriter);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

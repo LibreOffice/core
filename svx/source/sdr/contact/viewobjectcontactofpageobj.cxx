@@ -36,7 +36,7 @@
 
 using namespace com::sun::star;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class PagePrimitiveExtractor : public ObjectContactOfPagePainter, public Idle
 {
@@ -314,6 +314,6 @@ ViewObjectContactOfPageObj::~ViewObjectContactOfPageObj()
     }
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

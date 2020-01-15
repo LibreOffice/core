@@ -28,9 +28,7 @@
 
 // class to remember broadcast start positions
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         ItemChangeBroadcaster::ItemChangeBroadcaster(const SdrObject& rObj)
         {
@@ -54,13 +52,10 @@ namespace sdr
                 maRectangles.push_back(rObj.GetLastBoundRect());
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 
-namespace sdr
-{
-    namespace properties
+namespace sdr::properties
     {
         void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale)
         {
@@ -90,7 +85,6 @@ namespace sdr
                 nWhich = aIter.NextWhich();
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

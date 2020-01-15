@@ -21,9 +21,7 @@
 #include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
 
 
-namespace drawinglayer
-{
-    namespace attribute
+namespace drawinglayer::attribute
     {
         SdrShadowTextAttribute::SdrShadowTextAttribute(
             const SdrShadowAttribute& rShadow,
@@ -64,7 +62,6 @@ namespace drawinglayer
             return (getShadow() == rCandidate.getShadow()
                 && getText() == rCandidate.getText());
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

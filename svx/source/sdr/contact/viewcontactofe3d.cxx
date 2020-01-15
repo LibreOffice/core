@@ -65,7 +65,7 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
 
 } // end of anonymous namespace
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithGivenPrimitive3DContainer(
     const drawinglayer::primitive3d::Primitive3DContainer& rxContent3D) const
@@ -191,6 +191,6 @@ ViewObjectContact& ViewContactOfE3d::CreateObjectSpecificViewObjectContact(Objec
     return *pRetval;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 AreaPropertyPanel::AreaPropertyPanel(
     vcl::Window* pParent,
@@ -152,6 +152,6 @@ void AreaPropertyPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
             : std::initializer_list<SfxPoolItem const*>{ &rBitmapItem });
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

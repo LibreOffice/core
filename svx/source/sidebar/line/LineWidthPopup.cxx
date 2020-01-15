@@ -28,7 +28,7 @@
 #include "LineWidthValueSet.hxx"
 #include <bitmaps.hlst>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent)
     : m_rParent(rParent)
@@ -220,6 +220,6 @@ IMPL_LINK_NOARG(LineWidthPopup, FocusHdl, weld::Widget&, void)
         m_xMFWidth->grab_focus();
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

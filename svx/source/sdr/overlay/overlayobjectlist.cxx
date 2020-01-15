@@ -30,9 +30,7 @@
 #define DEFAULT_VALUE_FOR_HITTEST_PIXEL         (2)
 #define DEFAULT_VALUE_FOR_HITTEST_TWIP          (30)
 
-namespace sdr
-{
-    namespace overlay
+namespace sdr::overlay
     {
         OverlayObjectList::~OverlayObjectList()
         {
@@ -142,7 +140,6 @@ namespace sdr
 
             return aRetval;
         }
-    } // end of namespace overlay
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,7 +61,7 @@ using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 typedef std::map< OUString, sal_Int32 > CellStyleNameMap;
 
@@ -720,6 +720,6 @@ Reference< XNameAccess > CreateTableDesignFamily()
     return new TableDesignFamily;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

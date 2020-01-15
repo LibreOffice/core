@@ -82,7 +82,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 namespace {
 
@@ -2533,6 +2533,6 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
     return true;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

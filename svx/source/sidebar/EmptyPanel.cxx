@@ -21,7 +21,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 EmptyPanel::EmptyPanel (vcl::Window* pParent)
     : Control(pParent)
@@ -57,6 +57,6 @@ void EmptyPanel::Resize()
 }
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

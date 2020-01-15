@@ -30,7 +30,7 @@
 
 using namespace avmedia;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 MediaPlaybackPanel::MediaPlaybackPanel (
     vcl::Window* pParent,
@@ -199,6 +199,6 @@ IMPL_LINK( MediaPlaybackPanel, PlayToolBoxSelectHdl, ToolBox*, pControl, void)
     }
 }
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

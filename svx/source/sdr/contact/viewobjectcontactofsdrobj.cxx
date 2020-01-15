@@ -35,7 +35,7 @@
 
 #include <fmobj.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 const SdrObject& ViewObjectContactOfSdrObj::getSdrObject() const
 {
@@ -189,6 +189,6 @@ const OutputDevice* ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
     return nullptr;
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

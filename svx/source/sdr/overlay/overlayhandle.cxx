@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
-namespace sdr { namespace overlay {
+namespace sdr::overlay {
 
 using namespace drawinglayer;
 using namespace basegfx;
@@ -58,6 +58,6 @@ OverlayHandle::~OverlayHandle()
 {
 }
 
-}} // end of namespace sdr::overlay
+} // end of namespace sdr::overlay
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

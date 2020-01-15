@@ -37,7 +37,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 
     using ::com::sun::star::awt::XControl;
@@ -130,7 +130,7 @@ namespace sdr { namespace contact {
     }
 
 
-} } // namespace sdr::contact
+} // namespace sdr::contact
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

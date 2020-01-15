@@ -25,9 +25,7 @@
 
 // event class
 
-namespace sdr
-{
-    namespace animation
+namespace sdr::animation
     {
         Event::Event() : mnTime(0)
         {
@@ -167,7 +165,6 @@ namespace sdr
                 checkTimeout();
             }
         }
-    } // end of namespace animation
-} // end of namespace sdr
+    } // end of namespace sdr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

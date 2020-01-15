@@ -47,7 +47,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 
 static SvxBorderLine gEmptyBorder;
@@ -1314,6 +1314,6 @@ void TableLayouter::Layout::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

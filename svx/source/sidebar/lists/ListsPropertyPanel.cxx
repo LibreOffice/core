@@ -23,9 +23,7 @@
 using namespace css;
 using namespace css::uno;
 
-namespace svx
-{
-namespace sidebar
+namespace svx::sidebar
 {
 VclPtr<vcl::Window>
 ListsPropertyPanel::Create(vcl::Window* pParent,
@@ -61,7 +59,6 @@ void ListsPropertyPanel::dispose()
     mxTBxNumBullet.reset();
 
     PanelLayout::dispose();
-}
 }
 } // end of namespace svx::sidebar
 
