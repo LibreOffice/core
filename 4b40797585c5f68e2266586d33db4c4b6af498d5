@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec7f2369_87587724",
+        "filename": "sd/source/core/annotations/Annotation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-15T06:36:30Z",
+      "side": 1,
+      "message": "Should we possibly further simplify this to\n\n    class css::uno::XComponentContext;",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 58
+      },
+      "revId": "4b40797585c5f68e2266586d33db4c4b6af498d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
