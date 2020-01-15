@@ -275,6 +275,7 @@ protected:
     bool mXorMode;
     SkBitmap mXorBitmap;
     std::unique_ptr<SkCanvas> mXorCanvas;
+    SkRect mXorExtents; // the area that needs updating for the xor operation (or empty for all)
     std::unique_ptr<SkiaFlushIdle> mFlush;
 };
 
