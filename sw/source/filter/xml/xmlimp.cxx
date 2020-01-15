@@ -202,6 +202,9 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 };
 
 }
@@ -288,6 +291,10 @@ public:
     SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override
+    { SvXMLMetaDocumentContext::startFastElement(nElement, xAttrList); }
+
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 };
@@ -371,22 +378,15 @@ const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
 SvXMLImportContext *SwXMLImport::CreateDocumentContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    // #i69629# - own subclasses for <office:document> and <office:document-styles>
-    if( XML_NAMESPACE_OFFICE==nPrefix &&
-        ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
-        pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName );
-    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
+    if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
     {
         pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName );
     }
-    else
-        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
 }
@@ -408,6 +408,11 @@ SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
             // flat OpenDocument file format
             pContext = new SwXMLOfficeDocContext_Impl( *this, xDocProps );
         }
+        break;
+        // #i69629# - own subclasses for <office:document> and <office:document-styles>
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_SETTINGS):
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT):
+            pContext = new SwXMLDocContext_Impl( *this );
         break;
     }
     return pContext;
