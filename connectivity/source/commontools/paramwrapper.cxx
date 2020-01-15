@@ -33,9 +33,7 @@
 #define PROPERTY_ID_VALUE   1000
 
 
-namespace dbtools
-{
-namespace param
+namespace dbtools::param
 {
 
 
@@ -349,7 +347,7 @@ namespace param
     }
 
 
-} } // namespace dbtools::param
+} // namespace dbtools::param
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

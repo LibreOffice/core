@@ -32,18 +32,9 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace text
+namespace com::sun::star::text
 {
 class XTextDocument;
-}
-}
-}
 }
 
 using namespace ::com::sun::star;
@@ -108,9 +99,7 @@ static void lcl_SetValue(connectivity::ORowSetValue& rValue,
     }
 }
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 void OWriterTable::fillColumns()
 {
@@ -262,7 +251,6 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool
     return true;
 }
 
-} // namespace writer
 } // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

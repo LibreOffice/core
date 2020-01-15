@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 
-namespace connectivity { namespace java { namespace sql {
+namespace connectivity::java::sql {
 
 
     namespace
@@ -60,10 +60,10 @@ namespace connectivity { namespace java { namespace sql {
     }
 
 
-} } } // namespace connectivity::java::sql
+} // namespace connectivity::java::sql
 
 
-namespace comphelper { namespace log { namespace convert
+namespace comphelper::log::convert
 {
 
 
@@ -104,7 +104,7 @@ namespace comphelper { namespace log { namespace convert
     }
 
 
-} } }   // comphelper::log::convert
+}   // comphelper::log::convert
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

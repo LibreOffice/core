@@ -38,9 +38,7 @@ using namespace ::com::sun::star;
 
 using OConnection_BASE = connectivity::file::OConnection;
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 OWriterConnection::OWriterConnection(ODriver* _pDriver)
     : OConnection(_pDriver)
@@ -245,7 +243,6 @@ uno::Reference<sdbc::XPreparedStatement>
     return nullptr;
 }
 
-} // namespace writer
 } // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

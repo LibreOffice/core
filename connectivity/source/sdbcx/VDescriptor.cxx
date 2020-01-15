@@ -25,9 +25,7 @@
 
 #include <algorithm>
 
-namespace connectivity
-{
-    namespace sdbcx
+namespace connectivity::sdbcx
     {
         using namespace ::com::sun::star::uno;
         using namespace ::com::sun::star::lang;
@@ -125,7 +123,6 @@ namespace connectivity
         }
 
     }
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

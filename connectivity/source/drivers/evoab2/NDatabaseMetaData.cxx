@@ -44,9 +44,7 @@ namespace
     }
 }
 
-namespace connectivity
-{
-    namespace evoab
+namespace connectivity::evoab
     {
         static sal_Int32    const s_nCOLUMN_SIZE = 256;
         static sal_Int32    const s_nDECIMAL_DIGITS = 0;
@@ -239,7 +237,6 @@ namespace connectivity
 
 
     }
-}
 
 
 OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(OEvoabConnection* _pCon)

@@ -35,7 +35,7 @@
 #include <unotools/sharedunocomponent.hxx>
 
 
-namespace connectivity { namespace hsqldb
+namespace connectivity::hsqldb
 {
 
 
@@ -211,7 +211,7 @@ namespace connectivity { namespace hsqldb
         return sCommand;
     }
 
-} } // namespace connectivity::hsqldb
+} // namespace connectivity::hsqldb
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

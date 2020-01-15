@@ -43,7 +43,7 @@
 
 #include <cstring>
 
-namespace connectivity { namespace evoab {
+namespace connectivity::evoab {
 
 using namespace ::comphelper;
 using namespace com::sun::star;
@@ -1137,6 +1137,6 @@ OEvoabResultSet::getPropertySetInfo(  )
 }
 
 
-} } // connectivity::evoab
+} // connectivity::evoab
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
