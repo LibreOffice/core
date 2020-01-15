@@ -184,7 +184,7 @@ SfxBindings::~SfxBindings()
 
 void SfxBindings::DeleteControllers_Impl()
 {
-    // in the first round delete SfxPopupWindows
+    // in the first round delete Controllers
     std::size_t nCount = pImpl->pCaches.size();
     std::size_t nCache;
     for ( nCache = 0; nCache < nCount; ++nCache )
