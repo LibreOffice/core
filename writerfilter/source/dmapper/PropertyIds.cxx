@@ -354,6 +354,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_COMMAND_TYPE: sName = "DataCommandType"; break;
         case PROP_DATATABLE_NAME: sName = "DataTableName"; break;
         case PROP_DATACOLUMN_NAME: sName = "DataColumnName"; break;
+        case PROP_CHAR_TRANSPARENCE: sName = "CharTransparence"; break;
     }
     assert(sName.getLength()>0);
     return sName;
