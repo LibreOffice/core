@@ -728,6 +728,8 @@ chart2/source/model/main/DataPointProperties.hxx:84
     enum chart::DataPointProperties::(anonymous at /media/disk2/libo4/chart2/source/model/main/DataPointProperties.hxx:36:5) PROP_DATAPOINT_LABEL_BORDER_TRANS
 chart2/source/model/main/DataPointProperties.hxx:85
     enum chart::DataPointProperties::(anonymous at /media/disk2/libo4/chart2/source/model/main/DataPointProperties.hxx:36:5) PROP_DATAPOINT_CUSTOM_LABEL_FIELDS
+chart2/source/model/main/DataPointProperties.hxx:86
+    enum chart::DataPointProperties::(anonymous at /media/disk2/libo4/chart2/source/model/main/DataPointProperties.hxx:36:5) PROP_DATAPOINT_LABEL_CUSTOM_POS
 chart2/source/model/main/DataSeriesProperties.hxx:37
     enum chart::DataSeriesProperties::(anonymous at /media/disk2/libo4/chart2/source/model/main/DataSeriesProperties.hxx:34:5) PROP_DATASERIES_STACKING_DIRECTION
 chart2/source/model/main/DataSeriesProperties.hxx:38
