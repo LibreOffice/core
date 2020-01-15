@@ -34,7 +34,7 @@ static LRESULT APIENTRY NativeViewWndProc( HWND , UINT , WPARAM , LPARAM );
 #include "jawt_md.h"
 #include "NativeView.h"
 
-#define MY_ASSERT(X,S) if (!X) { fprintf(stderr,"%s\n",S); return 0L;}
+#define MY_ASSERT(X,S) if (!X) { fprintf(stderr,"%s\n",S); return 0;}
 
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
