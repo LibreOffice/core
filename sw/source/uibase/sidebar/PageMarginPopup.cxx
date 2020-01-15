@@ -44,7 +44,7 @@ std::unique_ptr<WeldToolbarPopup> PageMarginPopup::weldPopupWindow()
     return std::make_unique<sw::sidebar::PageMarginControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> PageMarginPopup::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> PageMarginPopup::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<sw::sidebar::PageMarginControl>(this, pParent->GetFrameWeld()));

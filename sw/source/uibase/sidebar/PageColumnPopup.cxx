@@ -45,7 +45,7 @@ std::unique_ptr<WeldToolbarPopup> PageColumnPopup::weldPopupWindow()
     return std::make_unique<sw::sidebar::PageColumnControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> PageColumnPopup::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> PageColumnPopup::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<sw::sidebar::PageColumnControl>(this, pParent->GetFrameWeld()));

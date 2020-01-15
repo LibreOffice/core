@@ -301,7 +301,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 }
 
 
-VclPtr<vcl::Window> ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionDirectionControl::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<ExtrusionDirectionWindow>::Create( *this, pParent );
 }
@@ -538,7 +538,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 }
 
 
-VclPtr<vcl::Window> ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionDepthController::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<ExtrusionDepthWindow>::Create( *this, pParent );
 }
@@ -789,7 +789,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 }
 
 
-VclPtr<vcl::Window> ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionLightingControl::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<ExtrusionLightingWindow>::Create( *this, pParent );
 }
@@ -902,7 +902,6 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
     }
 }
 
-
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     const Reference< XComponentContext >& rxContext
 )
@@ -914,8 +913,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 {
 }
 
-
-VclPtr<vcl::Window> ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> ExtrusionSurfaceControl::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<ExtrusionSurfaceWindow>::Create( *this, pParent );
 }

@@ -58,7 +58,7 @@ public:
 
     void EndPopupMode();
 
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) = 0;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) = 0;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow();
 
     // XServiceInfo

@@ -39,7 +39,7 @@ EmojiPopup::~EmojiPopup()
 {
 }
 
-VclPtr<vcl::Window> EmojiPopup::createPopupWindow(vcl::Window* pParent)
+VclPtr<vcl::Window> EmojiPopup::createVclPopupWindow(vcl::Window* pParent)
 {
     return VclPtr<SfxEmojiControl>::Create(this, pParent);
 }

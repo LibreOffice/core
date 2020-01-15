@@ -45,7 +45,7 @@ std::unique_ptr<WeldToolbarPopup> CharmapPopup::weldPopupWindow()
     return std::make_unique<SfxCharmapCtrl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> CharmapPopup::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> CharmapPopup::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<SfxCharmapCtrl>(this, pParent->GetFrameWeld()));

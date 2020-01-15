@@ -707,7 +707,7 @@ std::unique_ptr<WeldToolbarPopup> SvxTableToolBoxControl::weldPopupWindow()
     return std::make_unique<TableWindow>(this, m_pToolbar, m_aCommandURL);
 }
 
-VclPtr<vcl::Window> SvxTableToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxTableToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
@@ -765,7 +765,7 @@ std::unique_ptr<WeldToolbarPopup> SvxColumnsToolBoxControl::weldPopupWindow()
     return std::make_unique<ColumnsWindow>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> SvxColumnsToolBoxControl::createPopupWindow(vcl::Window* pParent)
+VclPtr<vcl::Window> SvxColumnsToolBoxControl::createVclPopupWindow(vcl::Window* pParent)
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;

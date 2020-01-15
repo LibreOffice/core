@@ -52,7 +52,7 @@ class NumberingToolBoxControl : public svt::PopupWindowController
 
 public:
     explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
     std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XInitialization
@@ -61,8 +61,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    using svt::ToolboxController::createPopupWindow;
 };
 
 }
@@ -190,7 +188,7 @@ std::unique_ptr<WeldToolbarPopup> NumberingToolBoxControl::weldPopupWindow()
     return std::make_unique<NumberingPopup>(*this, m_pToolbar, mePageType);
 }
 
-VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> NumberingToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<NumberingPopup>(*this, pParent->GetFrameWeld(), mePageType));

@@ -47,7 +47,7 @@ std::unique_ptr<WeldToolbarPopup> TextUnderlinePopup::weldPopupWindow()
     return std::make_unique<TextUnderlineControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> TextUnderlinePopup::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> TextUnderlinePopup::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<TextUnderlineControl>(this, pParent->GetFrameWeld()));

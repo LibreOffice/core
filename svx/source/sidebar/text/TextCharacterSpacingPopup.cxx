@@ -48,7 +48,7 @@ std::unique_ptr<WeldToolbarPopup> TextCharacterSpacingPopup::weldPopupWindow()
     return std::make_unique<TextCharacterSpacingControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> TextCharacterSpacingPopup::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> TextCharacterSpacingPopup::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<TextCharacterSpacingControl>(this, pParent->GetFrameWeld()));
