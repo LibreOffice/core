@@ -21,15 +21,12 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
-#include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/TitleBar.hxx>
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
-#include <sfx2/app.hxx>
 
 namespace sfx2 { namespace sidebar {
 

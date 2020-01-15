@@ -17,55 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <vcl/menu.hxx>
 #include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/globname.hxx>
 #include <tools/svborder.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
+#include <osl/diagnose.h>
 
 #include <appdata.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/unoctitm.hxx>
 #include <sfx2/frame.hxx>
-#include <arrdecl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/frmdescr.hxx>
-#include <openflag.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/fcontnr.hxx>
 #include "impframe.hxx"
 #include <workwin.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/msgpool.hxx>
-#include <objshimp.hxx>
 #include <sfx2/ipclient.hxx>
-#include <childwinimpl.hxx>
 #include <vector>
-
-#ifdef DBG_UTIL
-#include <sfx2/frmhtmlw.hxx>
-#endif
 
 using namespace com::sun::star;
 

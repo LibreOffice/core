@@ -32,9 +32,6 @@
 #include <sfx2/sidebar/Deck.hxx>
 #endif
 
-#include <tools/svborder.hxx>
-
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>

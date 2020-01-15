@@ -20,8 +20,6 @@
 
 #include <sfx2/sidebar/MenuButton.hxx>
 #include <sfx2/sidebar/TabItem.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <vcl/toolbox.hxx>
 
 namespace sfx2 { namespace sidebar {
 

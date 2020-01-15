@@ -17,6 +17,7 @@
 #include <vcl/commandevent.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/msg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -24,8 +25,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <editeng/outliner.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/objface.hxx>
 #include <sfx2/msgpool.hxx>
 
 #include <shellimpl.hxx>

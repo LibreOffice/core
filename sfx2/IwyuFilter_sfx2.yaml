@@ -95,3 +95,34 @@ blacklist:
     sfx2/source/doc/sfxbasemodel.cxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
+    sfx2/source/sidebar/ControllerFactory.cxx:
+    # Actually used
+    - com/sun/star/frame/XFrame.hpp
+    # Needed for instantiation of function template specialization
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sfx2/source/sidebar/Panel.cxx:
+    # Actually used
+    - com/sun/star/ui/XUIElement.hpp
+    sfx2/source/sidebar/SidebarToolBox.cxx:
+    # Actually used
+    - com/sun/star/frame/XFrame.hpp
+    - com/sun/star/frame/XToolbarController.hpp
+    sfx2/source/sidebar/SidebarController.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindowPeer.hpp
+    - com/sun/star/frame/XDispatch.hpp
+    - com/sun/star/ui/ContextChangeEventObject.hpp
+    sfx2/source/view/viewfrm2.cxx:
+    # Neede for direct member access
+    - com/sun/star/embed/VerbDescriptor.hpp
+    sfx2/source/view/classificationhelper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyContainer.hpp
+    - com/sun/star/document/XDocumentProperties.hpp
+    sfx2/source/view/userinputinterception.cxx:
+    # Actually used
+    - com/sun/star/awt/XKeyHandler.hpp
+    - com/sun/star/awt/XMouseClickHandler.hpp
+    sfx2/source/view/viewsh.cxx:
+    # Needed for TypedWhichId define
+    - svl/eitem.hxx
