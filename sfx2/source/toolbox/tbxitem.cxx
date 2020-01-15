@@ -547,11 +547,8 @@ void SAL_CALL SfxToolBoxControl::doubleClick()
 Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow()
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow = CreatePopupWindow();
-    if ( pWindow )
-        return VCLUnoHelper::GetInterface( pWindow );
-    else
-        return Reference< css::awt::XWindow >();
+    CreatePopupWindow();
+    return nullptr;
 }
 
 Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< css::awt::XWindow >& rParent )
@@ -669,10 +666,8 @@ void SfxToolBoxControl::Click()
 {
 }
 
-
-VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
+void SfxToolBoxControl::CreatePopupWindow()
 {
-    return nullptr;
 }
 
 VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )

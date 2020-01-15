@@ -58,8 +58,7 @@ SvxClipBoardControl::~SvxClipBoardControl()
     DelPopup();
 }
 
-
-VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
+void SvxClipBoardControl::CreatePopupWindow()
 {
     const SvxClipboardFormatItem* pFmtItem = dynamic_cast<SvxClipboardFormatItem*>( pClipboardFmtItem.get()  );
     if ( pFmtItem )
@@ -102,9 +101,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 
     GetToolBox().EndSelection();
     DelPopup();
-    return nullptr;
 }
-
 
 void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
