@@ -194,6 +194,7 @@ public:
     void testShapeTextboxAutosize();
     void testFdo82191();
     void testCommentedWord();
+    void testTextFieldGetAnchorGetTextInFooter();
     void testChineseConversionBlank();
     void testChineseConversionNonChineseText();
     void testChineseConversionTraditionalToSimplified();
@@ -400,6 +401,7 @@ public:
     CPPUNIT_TEST(testShapeTextboxAutosize);
     CPPUNIT_TEST(testFdo82191);
     CPPUNIT_TEST(testCommentedWord);
+    CPPUNIT_TEST(testTextFieldGetAnchorGetTextInFooter);
     CPPUNIT_TEST(testChineseConversionBlank);
     CPPUNIT_TEST(testChineseConversionNonChineseText);
     CPPUNIT_TEST(testChineseConversionTraditionalToSimplified);
@@ -1428,6 +1430,17 @@ void SwUiWriterTest::testCommentedWord()
     CPPUNIT_ASSERT_EQUAL(OUString("word"), xField->getAnchor()->getString());
 }
 
+void SwUiWriterTest::testTextFieldGetAnchorGetTextInFooter() {
+    createDoc("textfield-getanchor-gettext-in-footer.odt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    OUString value = xField->getAnchor()->getText()->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("userfield_in_footer"), value );
+}
 
 // Chinese conversion tests
 
