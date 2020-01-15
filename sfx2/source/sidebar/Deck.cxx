@@ -25,14 +25,11 @@
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/IDialogRenderable.hxx>

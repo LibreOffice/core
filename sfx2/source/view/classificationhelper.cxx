@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/infobar.hxx>
-#include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -41,7 +40,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <svl/fstathelper.hxx>
-#include <config_folders.h>
 
 #include <officecfg/Office/Common.hxx>
 

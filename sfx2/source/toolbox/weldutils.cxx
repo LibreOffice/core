@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/dispatchcommand.hxx>
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>

@@ -22,65 +22,41 @@
 #include <ctime>
 #endif
 
-#include <string>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/ui/XUIFunctionListener.hpp>
-#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/imageitm.hxx>
 #include <svl/visitem.hxx>
-#include <svl/urlbmk.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <unotools/moduleoptions.hxx>
 
-#include <svtools/imagemgr.hxx>
 #include <svtools/framestatuslistener.hxx>
 #include <comphelper/processfactory.hxx>
-#include <framework/addonmenu.hxx>
-#include <framework/addonsoptions.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <framework/sfxhelperfunctions.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/event.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/globname.hxx>
-#include <svtools/menuoptions.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
-#include <statcach.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/frmhtmlw.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
-#include <workwin.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;

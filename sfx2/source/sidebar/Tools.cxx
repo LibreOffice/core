@@ -29,8 +29,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
-#include <cstring>
-
 using namespace css;
 using namespace css::uno;
 

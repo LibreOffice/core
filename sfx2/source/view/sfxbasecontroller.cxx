@@ -20,10 +20,6 @@
 #include <time.h>
 #include <sfx2/sfxbasecontroller.hxx>
 
-#include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
@@ -44,10 +40,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <basic/sbstar.hxx>
-#include <uno/mapping.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -57,20 +50,17 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/userinputinterception.hxx>
 
-#include "viewimp.hxx"
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <workwin.hxx>
-#include <sfx2/objface.hxx>
 #include <sfx2/infobar.hxx>
 
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>

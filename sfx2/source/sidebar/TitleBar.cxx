@@ -19,12 +19,7 @@
 
 #include <sfx2/sidebar/TitleBar.hxx>
 #include <sfx2/sidebar/Paint.hxx>
-#include <sfx2/sidebar/Accessible.hxx>
 #include <sfx2/sidebar/AccessibleTitleBar.hxx>
-
-#include <tools/svborder.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/lineinfo.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 

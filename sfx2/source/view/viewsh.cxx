@@ -28,8 +28,6 @@
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/langhelp.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -48,18 +46,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/file.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/embedhlp.hxx>
 #include <tools/svborder.hxx>
 
-#include <basic/basmgr.hxx>
-#include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -77,24 +69,18 @@
 #include "viewimp.hxx"
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/templdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-#include <arrdecl.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/mailmodelapi.hxx>
 #include <bluthsndapi.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <workwin.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <openuriexternally.hxx>
 #include <shellimpl.hxx>

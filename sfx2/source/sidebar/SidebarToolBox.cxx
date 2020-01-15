@@ -21,7 +21,6 @@
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

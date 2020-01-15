@@ -20,8 +20,6 @@
 #include <sfx2/sidebar/MenuButton.hxx>
 
 #include <sfx2/sidebar/DrawHelper.hxx>
-#include <sfx2/sidebar/Paint.hxx>
-#include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <vcl/event.hxx>
 
