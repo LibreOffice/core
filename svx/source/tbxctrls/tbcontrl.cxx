@@ -3456,7 +3456,7 @@ std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
     return xPopover;
 }
 
-VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
@@ -3623,8 +3623,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
-    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 };
 
 }
@@ -3643,7 +3642,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
-VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxFrameToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     if ( m_aCommandURL == ".uno:LineStyle" )
         return VclPtr<SvxLineWindow_Impl>::Create( *this, pParent );
@@ -3844,7 +3843,7 @@ std::unique_ptr<WeldToolbarPopup> SvxCurrencyToolBoxControl::weldPopupWindow()
     return std::make_unique<SvxCurrencyList_Impl>(this, m_pToolbar, m_aFormatString, m_eLanguage);
 }
 
-VclPtr<vcl::Window> SvxCurrencyToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxCurrencyToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<SvxCurrencyList_Impl>(this, pParent->GetFrameWeld(), m_aFormatString, m_eLanguage));

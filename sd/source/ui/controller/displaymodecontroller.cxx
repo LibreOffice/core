@@ -36,7 +36,7 @@ class DisplayModeController : public svt::PopupWindowController
 public:
     explicit DisplayModeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -46,8 +46,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void setToolboxItemImage(const OUString& rImage);
-
-    using svt::PopupWindowController::createPopupWindow;
 };
 
 class DisplayModeToolbarMenu : public svtools::ToolbarMenu
@@ -240,7 +238,7 @@ void SAL_CALL DisplayModeController::initialize( const css::uno::Sequence< css::
     setToolboxItemImage(BMP_DISPLAYMODE_SLIDE);
 }
 
-VclPtr<vcl::Window> DisplayModeController::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> DisplayModeController::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<sd::DisplayModeToolbarMenu>::Create( *this, pParent );
 }

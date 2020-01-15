@@ -195,7 +195,7 @@ void SAL_CALL SvxUndoRedoControl::statusChanged(const css::frame::FeatureStateEv
         pToolBox->SetQuickHelpText(nId, aQuickHelpText);
 }
 
-VclPtr<vcl::Window> SvxUndoRedoControl::createPopupWindow(vcl::Window* pParent)
+VclPtr<vcl::Window> SvxUndoRedoControl::createVclPopupWindow(vcl::Window* pParent)
 {
     if ( m_aCommandURL == ".uno:Undo" )
         updateStatus( ".uno:GetUndoStrings");

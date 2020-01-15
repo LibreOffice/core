@@ -45,7 +45,7 @@ std::unique_ptr<WeldToolbarPopup> PageOrientationPopup::weldPopupWindow()
     return std::make_unique<sw::sidebar::PageOrientationControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> PageOrientationPopup::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> PageOrientationPopup::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<sw::sidebar::PageOrientationControl>(this, pParent->GetFrameWeld()));

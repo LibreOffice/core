@@ -477,8 +477,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
-    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 };
 
 }
@@ -497,7 +496,7 @@ void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::An
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
-VclPtr<vcl::Window> SvxLineEndToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxLineEndToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<SvxLineEndWindow>::Create( *this, pParent );
 }

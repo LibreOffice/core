@@ -228,8 +228,7 @@ public:
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 nSelectModifier ) override;
 
-    using svt::ToolboxController::createPopupWindow;
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XSubToolbarController
@@ -277,8 +276,7 @@ public:
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 nSelectModifier ) override;
 
-    using svt::ToolboxController::createPopupWindow;
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XServiceInfo
