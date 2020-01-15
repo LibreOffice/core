@@ -124,4 +124,8 @@
     constructor="com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.UndoRedoToolBoxControl"
+    constructor="com_sun_star_comp_svx_UndoRedoToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>
