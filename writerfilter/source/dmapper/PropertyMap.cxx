@@ -1425,9 +1425,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                         }
                     }
                 }
+                uno::Reference<text::XParagraphCursor> const xPCursor(xCursor,
+                                                                      uno::UNO_QUERY_THROW);
+                float fCharHeight = 0;
                 if (!isFound)
                 {   // HACK: try the last paragraph of the previous section
-                    uno::Reference<text::XParagraphCursor> const xPCursor(xCursor, uno::UNO_QUERY_THROW);
                     xPCursor->gotoPreviousParagraph(false);
                     uno::Reference<beans::XPropertySet> const xPSCursor(xCursor, uno::UNO_QUERY_THROW);
                     style::BreakType bt;
@@ -1436,6 +1438,27 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     {
                         xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME),
                                 uno::makeAny(m_sFollowPageStyleName));
+                        isFound = true;
+                    }
+                    else
+                    {
+                        xPSCursor->getPropertyValue("CharHeight") >>= fCharHeight;
+                    }
+                }
+                if (!isFound && fCharHeight <= 1.0)
+                {
+                    // If still not found, see if the last paragraph is ~invisible, and work with
+                    // the last-in-practice paragraph.
+                    xPCursor->gotoPreviousParagraph(false);
+                    uno::Reference<beans::XPropertySet> xPropertySet(xCursor, uno::UNO_QUERY_THROW);
+                    OUString aPageDescName;
+                    if ((xPropertySet->getPropertyValue("PageDescName") >>= aPageDescName)
+                        && !aPageDescName.isEmpty())
+                    {
+                        uno::Reference<beans::XPropertySet> xPageStyle(
+                            rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
+                        xPageStyle->setPropertyValue("FollowStyle",
+                                                     uno::makeAny(m_sFollowPageStyleName));
                     }
                 }
             }
