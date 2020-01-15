@@ -132,7 +132,7 @@ protected:
 
     virtual void               DoubleClick();
     virtual void               Click();
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow();
+    virtual void               CreatePopupWindow();
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent );
 
     // Must be called by subclass to set a new popup window instance

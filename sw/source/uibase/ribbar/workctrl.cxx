@@ -78,7 +78,7 @@ SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
 {
 }
 
-VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
+void SwTbxAutoTextCtrl::CreatePopupWindow()
 {
     SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
@@ -123,7 +123,6 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
         pToolBox->SetItemDown( nId, false );
     }
     GetToolBox().EndSelection();
-    return nullptr;
 }
 
 void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
