@@ -17,6 +17,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
 #include <ooxml/resourceids.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 namespace writerfilter {
 namespace dmapper
@@ -747,6 +749,54 @@ beans::PropertyValue TextEffectsHandler::getInteropGrabBag()
     beans::PropertyValue aReturn = mpGrabBagStack->getRootProperty();
     mpGrabBagStack.reset();
     return aReturn;
+}
+
+sal_uInt8 TextEffectsHandler::GetTextFillSolidFillAlpha(const css::beans::PropertyValue& rValue)
+{
+    if (rValue.Name != "textFill")
+    {
+        return 0;
+    }
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    rValue.Value >>= aPropertyValues;
+    comphelper::SequenceAsHashMap aMap(aPropertyValues);
+    auto it = aMap.find("solidFill");
+    if (it == aMap.end())
+    {
+        return 0;
+    }
+
+    comphelper::SequenceAsHashMap aSolidFillMap(it->second);
+    it = aSolidFillMap.find("srgbClr");
+    if (it == aSolidFillMap.end())
+    {
+        return 0;
+    }
+
+    comphelper::SequenceAsHashMap aSrgbClrMap(it->second);
+    it = aSrgbClrMap.find("alpha");
+    if (it == aSrgbClrMap.end())
+    {
+        return 0;
+    }
+
+    comphelper::SequenceAsHashMap aAlphaMap(it->second);
+    it = aAlphaMap.find("attributes");
+    if (it == aAlphaMap.end())
+    {
+        return 0;
+    }
+
+    comphelper::SequenceAsHashMap aAttributesMap(it->second);
+    it = aAttributesMap.find("val");
+    if (it == aAttributesMap.end())
+    {
+        return 0;
+    }
+    sal_Int32 nVal = 0;
+    it->second >>= nVal;
+    return nVal / oox::drawingml::PER_PERCENT;
 }
 
 }//namespace dmapper
