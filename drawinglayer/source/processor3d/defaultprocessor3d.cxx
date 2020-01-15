@@ -264,7 +264,7 @@ namespace drawinglayer
                 const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPrimitive.getFillGraphicAttribute();
 
                 // #121194# For 3D texture we will use the BitmapRex representation
-                const BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+                const BitmapEx& rBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
 
                 // create range scaled by texture size
                 basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
@@ -277,7 +277,7 @@ namespace drawinglayer
                 {
                     mpGeoTexSvx.reset(
                         new texture::GeoTexSvxBitmapExTiled(
-                            aBitmapEx,
+                            rBitmapEx,
                             aGraphicRange,
                             rFillGraphicAttribute.getOffsetX(),
                             rFillGraphicAttribute.getOffsetY()));
@@ -286,7 +286,7 @@ namespace drawinglayer
                 {
                     mpGeoTexSvx.reset(
                         new texture::GeoTexSvxBitmapEx(
-                            aBitmapEx,
+                            rBitmapEx,
                             aGraphicRange));
                 }
 

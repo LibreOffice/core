@@ -358,14 +358,14 @@ static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const S
         if(bBitmapFillUsed)
         {
             GraphicObject aGraphicObject(rOriginalSet.Get(XATTR_FILLBITMAP).GetGraphicObject());
-            const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
+            const BitmapEx& rBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
 
-            if(!aBitmapEx.IsEmpty())
+            if(!rBitmapEx.IsEmpty())
             {
                 ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
-                pVirDev->SetOutputSizePixel(aBitmapEx.GetSizePixel());
-                pVirDev->DrawShadowBitmapEx(aBitmapEx, aShadowColor);
-                aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), aBitmapEx.GetSizePixel())));
+                pVirDev->SetOutputSizePixel(rBitmapEx.GetSizePixel());
+                pVirDev->DrawShadowBitmapEx(rBitmapEx, aShadowColor);
+                aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), rBitmapEx.GetSizePixel())));
             }
 
             aTempSet.Put(XFillBitmapItem(aGraphicObject));

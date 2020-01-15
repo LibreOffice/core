@@ -854,9 +854,9 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEX:
                 {
                     MetaBmpExAction*    pAct = static_cast<MetaBmpExAction*>(pAction);
-                    const BitmapEx      aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
+                    const BitmapEx&      rBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
 
-                    pAct = new MetaBmpExAction( pAct->GetPoint(), aBmpEx );
+                    pAct = new MetaBmpExAction( pAct->GetPoint(), rBmpEx );
                     aMtf.AddAction( pAct );
                 }
                 break;
@@ -864,9 +864,9 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEXSCALE:
                 {
                     MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-                    const BitmapEx          aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
+                    const BitmapEx&         rBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
 
-                    pAct = new MetaBmpExScaleAction( pAct->GetPoint(), pAct->GetSize(), aBmpEx );
+                    pAct = new MetaBmpExScaleAction( pAct->GetPoint(), pAct->GetSize(), rBmpEx );
                     aMtf.AddAction( pAct );
                 }
                 break;
@@ -874,10 +874,10 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEXSCALEPART:
                 {
                     MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
-                    const BitmapEx              aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
+                    const BitmapEx&             rBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
 
                     pAct = new MetaBmpExScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
-                                                         pAct->GetSrcPoint(), pAct->GetSrcSize(), aBmpEx );
+                                                         pAct->GetSrcPoint(), pAct->GetSrcSize(), rBmpEx );
                     aMtf.AddAction( pAct );
                 }
                 break;

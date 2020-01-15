@@ -54,11 +54,11 @@ BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
 
     if(nIndex < Count())
     {
-        BitmapEx rBitmapEx = GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmapEx();
+        BitmapEx aBitmapEx = GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmapEx();
         ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         pVirtualDevice->SetOutputSizePixel(rSize);
 
-        if(rBitmapEx.IsTransparent())
+        if(aBitmapEx.IsTransparent())
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -78,14 +78,14 @@ BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
             }
         }
 
-        if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+        if(aBitmapEx.GetSizePixel().Width() >= rSize.Width() && aBitmapEx.GetSizePixel().Height() >= rSize.Height())
         {
-            rBitmapEx.Scale(rSize);
-            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+            aBitmapEx.Scale(rSize);
+            pVirtualDevice->DrawBitmapEx(Point(0, 0), aBitmapEx);
         }
         else
         {
-            const Size aBitmapSize(rBitmapEx.GetSizePixel());
+            const Size aBitmapSize(aBitmapEx.GetSizePixel());
 
             for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
             {
@@ -93,12 +93,11 @@ BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
                 {
                     pVirtualDevice->DrawBitmapEx(
                         Point(x, y),
-                        rBitmapEx);
+                        aBitmapEx);
                 }
             }
         }
-        rBitmapEx = pVirtualDevice->GetBitmapEx(Point(0, 0), rSize);
-        return rBitmapEx;
+        return pVirtualDevice->GetBitmapEx(Point(0, 0), rSize);
     }
     else
         return BitmapEx();

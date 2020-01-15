@@ -297,8 +297,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     std::unique_ptr<GraphicObject> pGraphicObject;
     pGraphicObject.reset( new GraphicObject(aItem.GetGraphicObject()) );
 
-    BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
-    Size aTempBitmapSize = aBmpEx.GetSizePixel();
+    Size aTempBitmapSize = pGraphicObject->GetGraphic().GetBitmapEx().GetSizePixel();
     rBitmapSize = Application::GetDefaultDevice()->PixelToLogic(aTempBitmapSize, MapMode(MapUnit::Map100thMM));
     CalculateBitmapPresetSize();
 
@@ -495,8 +494,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, SvtValueSet*, void)
 
     if(pGraphicObject)
     {
-        BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
-        Size aTempBitmapSize = aBmpEx.GetSizePixel();
+        Size aTempBitmapSize = pGraphicObject->GetGraphic().GetBitmapEx().GetSizePixel();
         const double fUIScale = ( (mpView && mpView->GetModel()) ? double(mpView->GetModel()->GetUIScale()) : 1.0);
 
         rBitmapSize.setWidth( (OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale );

@@ -361,7 +361,7 @@ const GDIMetaFile& Graphic::GetGDIMetaFile() const
     return mxImpGraphic->ImplGetGDIMetaFile();
 }
 
-const BitmapEx& Graphic::GetBitmapExRef() const
+const BitmapEx& Graphic::GetBitmapEx() const
 {
     return mxImpGraphic->ImplGetBitmapExRef();
 }

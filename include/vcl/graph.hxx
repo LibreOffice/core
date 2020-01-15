@@ -152,9 +152,9 @@ public:
     // allow giving parameters which control AntiAliasing and LineSnapping of the
     // MetaFile when played. Defaults will use a no-AAed, not snapped conversion as
     // before.
-    BitmapEx        GetBitmapEx(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
+    BitmapEx        GetBitmapEx(const GraphicConversionParameters& rParameters) const;
     /// Gives direct access to the contained BitmapEx.
-    const BitmapEx& GetBitmapExRef() const;
+    const BitmapEx& GetBitmapEx() const;
 
     Animation       GetAnimation() const;
     const GDIMetaFile& GetGDIMetaFile() const;

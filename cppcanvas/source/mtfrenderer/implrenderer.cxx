@@ -1693,8 +1693,8 @@ namespace cppcanvas::internal
                                     Graphic aGraphic;
                                     aFill.getGraphic( aGraphic );
 
-                                    BitmapEx     aBmpEx( aGraphic.GetBitmapEx() );
-                                    const ::Size aBmpSize( aBmpEx.GetSizePixel() );
+                                    const BitmapEx& rBmpEx( aGraphic.GetBitmapEx() );
+                                    const ::Size aBmpSize( rBmpEx.GetSizePixel() );
 
                                     ::SvtGraphicFill::Transform aTransform;
                                     aFill.getTransform( aTransform );
@@ -1733,7 +1733,7 @@ namespace cppcanvas::internal
                                         aMatrix );
 
                                     aTexture.Alpha = 1.0 - aFill.getTransparency();
-                                    aTexture.Bitmap = vcl::unotools::xBitmapFromBitmapEx( aBmpEx );
+                                    aTexture.Bitmap = vcl::unotools::xBitmapFromBitmapEx( rBmpEx );
                                     if( aFill.isTiling() )
                                     {
                                         aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;

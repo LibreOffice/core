@@ -1022,8 +1022,8 @@ SdrObjectUniquePtr SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) 
                 SfxItemSet aSet(GetObjectItemSet());
 
                 aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-                const BitmapEx aBitmapEx(GetTransformedGraphic().GetBitmapEx());
-                aSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
+                const BitmapEx & rBitmapEx(GetTransformedGraphic().GetBitmapEx());
+                aSet.Put(XFillBitmapItem(OUString(), Graphic(rBitmapEx)));
                 aSet.Put(XFillBmpTileItem(false));
 
                 pRetval->SetMergedItemSet(aSet);

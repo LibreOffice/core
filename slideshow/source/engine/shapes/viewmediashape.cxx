@@ -162,9 +162,9 @@ namespace slideshow
                 }
 
                 Graphic aGraphic(xGraphic);
-                const BitmapEx aBmp = aGraphic.GetBitmapEx();
+                const BitmapEx & rBmp = aGraphic.GetBitmapEx();
 
-                uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(aBmp));
+                uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(rBmp));
 
                 rendering::ViewState aViewState;
                 aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;
@@ -172,7 +172,7 @@ namespace slideshow
                 rendering::RenderState aRenderState;
                 ::canvas::tools::initRenderState( aRenderState );
 
-                const ::Size aBmpSize( aBmp.GetSizePixel() );
+                const ::Size aBmpSize( rBmp.GetSizePixel() );
 
                 const ::basegfx::B2DVector aScale( rBounds.getWidth() / aBmpSize.Width(),
                                                    rBounds.getHeight() / aBmpSize.Height() );

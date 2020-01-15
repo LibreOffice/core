@@ -9161,8 +9161,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         GraphicConverter::Import( rDCTData, aGraphic, ConvertDataFormat::JPG );
         if( !!rMask && rMask.GetSizePixel() == aGraphic.GetSizePixel() )
         {
-            Bitmap aBmp( aGraphic.GetBitmapEx().GetBitmap() );
-            BitmapEx aBmpEx( aBmp, rMask );
+            BitmapEx aBmpEx( aGraphic.GetBitmapEx().GetBitmap(), rMask );
             drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmpEx );
         }
         else

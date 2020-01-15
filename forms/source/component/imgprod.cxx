@@ -340,7 +340,8 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
     sal_uInt32 nHeight = 0;
     sal_uInt8 nBitCount = 0;
     css::uno::Sequence< sal_Int32 > aRGBPal;
-    rGraphic.GetBitmapEx().GetColorModel(aRGBPal, nRMask, nGMask, nBMask, nAMask, mnTransIndex, nWidth, nHeight, nBitCount);
+    BitmapEx aBitmapEx(rGraphic.GetBitmapEx());
+    aBitmapEx.GetColorModel(aRGBPal, nRMask, nGMask, nBMask, nAMask, mnTransIndex, nWidth, nHeight, nBitCount);
 
     // create temporary list to hold interfaces
     ConsumerList_t aTmp = maConsList;
@@ -358,13 +359,13 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 
 void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 {
-    BitmapEx            aBmpEx( rGraphic.GetBitmapEx() );
-    Bitmap              aBmp( aBmpEx.GetBitmap() );
+    const BitmapEx &    rBmpEx( rGraphic.GetBitmapEx() );
+    Bitmap              aBmp( rBmpEx.GetBitmap() );
     BitmapReadAccess*   pBmpAcc = aBmp.AcquireReadAccess();
 
     if( pBmpAcc )
     {
-        Bitmap              aMask( aBmpEx.GetMask() );
+        Bitmap              aMask( rBmpEx.GetMask() );
         BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : nullptr;
         const long          nWidth = pBmpAcc->Width();
         const long          nHeight = pBmpAcc->Height();

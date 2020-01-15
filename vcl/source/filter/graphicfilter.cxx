@@ -573,7 +573,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             // Resolution is set
             if( nMode == 1 )
             {
-                BitmapEx    aBitmap( rGraphic.GetBitmapEx() );
+                const BitmapEx & rBitmap( rGraphic.GetBitmapEx() );
                 MapMode     aMap( MapUnit::Map100thInch );
 
                 sal_Int32   nDPI = rConfigItem.ReadInt32( "Resolution", 75 );
@@ -582,7 +582,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 aMap.SetScaleX( aFrac );
                 aMap.SetScaleY( aFrac );
 
-                Size aOldSize = aBitmap.GetSizePixel();
+                Size aOldSize = rBitmap.GetSizePixel();
                 aGraphic = rGraphic;
                 aGraphic.SetPrefMapMode( aMap );
                 aGraphic.SetPrefSize( Size( aOldSize.Width() * 100,
@@ -1133,7 +1133,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                         rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
                     else
                     {
-                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmap());
+                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapEx().GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
@@ -1616,7 +1616,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             else
             {
-                Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapExRef().GetBitmap());
+                Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapEx().GetBitmap());
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 rIStream.Seek(nPosition);
                 if( !ImportJPEG( rIStream, rGraphic, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess ) )
