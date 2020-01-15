@@ -35,7 +35,7 @@
 #include <connectivity/dbexception.hxx>
 #include <tools/diagnose_ex.h>
 
-namespace connectivity { namespace evoab {
+namespace connectivity::evoab {
 
 
 using namespace com::sun::star::uno;
@@ -627,6 +627,6 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ )
     return 0;
 }
 
-} } // namespace ::connectivity::evoab
+} // namespace ::connectivity::evoab
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

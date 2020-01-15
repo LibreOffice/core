@@ -16,7 +16,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-namespace connectivity { namespace mork {
+namespace connectivity::mork {
 
 
 class MorkDriverTest: public test::BootstrapFixture
@@ -194,6 +194,6 @@ void MorkDriverTest::test_select_list_table_joe_doe_5()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MorkDriverTest);
 
-}}
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();

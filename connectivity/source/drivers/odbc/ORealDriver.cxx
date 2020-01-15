@@ -22,9 +22,7 @@
 #include <odbc/OTools.hxx>
 #include <odbc/OFunctions.hxx>
 
-namespace connectivity
-{
-    namespace odbc
+namespace connectivity::odbc
     {
         namespace {
 
@@ -290,6 +288,5 @@ SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
 
 
     }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

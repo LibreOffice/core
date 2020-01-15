@@ -24,16 +24,13 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 
 
-namespace connectivity
-{
-    namespace mork
+namespace connectivity::mork
     {
         static sal_Int32 const s_nCOLUMN_SIZE = 256;
         static sal_Int32 const s_nDECIMAL_DIGITS = 0;
         static sal_Int32 const s_nNULLABLE = 1;
         static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
     }
-}
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
                         : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())

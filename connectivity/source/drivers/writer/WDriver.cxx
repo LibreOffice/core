@@ -28,9 +28,7 @@
 using namespace connectivity::file;
 using namespace ::com::sun::star;
 
-namespace connectivity
-{
-namespace writer
+namespace connectivity::writer
 {
 OUString ODriver::getImplementationName_Static() { return "com.sun.star.comp.sdbc.writer.ODriver"; }
 
@@ -77,7 +75,6 @@ ODriver::getPropertyInfo(const OUString& url, const uno::Sequence<beans::Propert
     return uno::Sequence<sdbc::DriverPropertyInfo>();
 }
 
-} // namespace writer
 } // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
