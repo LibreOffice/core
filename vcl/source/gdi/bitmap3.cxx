@@ -819,7 +819,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     }
 
     if (bRetval)
-        *this = aBmpEx.GetBitmapRef();
+        *this = aBmpEx.GetBitmap();
 
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;

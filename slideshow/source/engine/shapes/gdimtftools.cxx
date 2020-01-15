@@ -315,14 +315,14 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             {
                 // #i70772# react on no mask
                 const Bitmap aMask(rAnimationBitmap.maBitmapEx.GetMask());
-                const Bitmap aContent(rAnimationBitmap.maBitmapEx.GetBitmap());
+                const Bitmap & rContent(rAnimationBitmap.maBitmapEx.GetBitmap());
 
                 pVDevMask->Erase();
-                pVDev->DrawBitmap(rAnimationBitmap.maPositionPixel, aContent);
+                pVDev->DrawBitmap(rAnimationBitmap.maPositionPixel, rContent);
 
                 if(aMask.IsEmpty())
                 {
-                    const tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, aContent.GetSizePixel());
+                    const tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, rContent.GetSizePixel());
                     pVDevMask->SetFillColor( COL_BLACK);
                     pVDevMask->SetLineColor();
                     pVDevMask->DrawRect(aRect);

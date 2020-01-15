@@ -261,22 +261,22 @@ namespace drawinglayer
                             case Disposal::Back:
                             {
                                 // #i70772# react on no mask, for primitives, too.
-                                const Bitmap aMask(rAnimationBitmap.maBitmapEx.GetMask());
-                                const Bitmap aContent(rAnimationBitmap.maBitmapEx.GetBitmap());
+                                const Bitmap & rMask(rAnimationBitmap.maBitmapEx.GetMask());
+                                const Bitmap & rContent(rAnimationBitmap.maBitmapEx.GetBitmap());
 
                                 maVirtualDeviceMask->Erase();
-                                maVirtualDevice->DrawBitmap(rAnimationBitmap.maPositionPixel, aContent);
+                                maVirtualDevice->DrawBitmap(rAnimationBitmap.maPositionPixel, rContent);
 
-                                if (aMask.IsEmpty())
+                                if (rMask.IsEmpty())
                                 {
-                                    const ::tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, aContent.GetSizePixel());
+                                    const ::tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, rContent.GetSizePixel());
                                     maVirtualDeviceMask->SetFillColor(COL_BLACK);
                                     maVirtualDeviceMask->SetLineColor();
                                     maVirtualDeviceMask->DrawRect(aRect);
                                 }
                                 else
                                 {
-                                    BitmapEx aExpandVisibilityMask(aMask, aMask);
+                                    BitmapEx aExpandVisibilityMask(rMask, rMask);
                                     maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                                 }
 

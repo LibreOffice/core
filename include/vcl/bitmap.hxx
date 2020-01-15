@@ -145,7 +145,7 @@ public:
 
     BitmapChecksum          GetChecksum() const;
 
-    Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
+    Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay ) const;
 
     static const BitmapPalette&
                             GetGreyPalette( int nEntries );

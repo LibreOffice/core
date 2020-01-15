@@ -845,7 +845,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
     return bRet;
 }
 
-Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
+Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay ) const
 {
     Bitmap aDispBmp( *this );
 
