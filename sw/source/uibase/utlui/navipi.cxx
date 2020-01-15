@@ -20,7 +20,6 @@
 #include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
@@ -389,13 +388,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
     }
 }
 
-SwNavHelpToolBox::SwNavHelpToolBox(Window* pParent)
-    : ToolBox(pParent)
-{
-}
-
-VCL_BUILDER_FACTORY(SwNavHelpToolBox)
-
 void SwNavigationPI::CreateNavigationTool()
 {
     auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get());
@@ -411,11 +403,6 @@ void SwNavigationPI::CreateNavigationTool()
 FactoryFunction SwNavigationPI::GetUITestFactory() const
 {
     return SwNavigationPIUIObject::create;
-}
-
-SwNavHelpToolBox::~SwNavHelpToolBox()
-{
-    disposeOnce();
 }
 
 // Action-Handler Edit:
