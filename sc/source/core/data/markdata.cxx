@@ -366,10 +366,17 @@ ScMarkData::ScMarkData(const ScRangeList& rList)
     for (const ScRange& rRange : rList)
         maTabMarked.insert( rRange.aStart.Tab() );
 
-    bMultiMarked = true;
-    aMultiRange = rList.Combine();
-
-    aMultiSel.Set( rList );
+    if (rList.size() > 1)
+    {
+        bMultiMarked = true;
+        aMultiRange = rList.Combine();
+        aMultiSel.Set( rList );
+    }
+    else if (rList.size() == 1)
+    {
+        const ScRange& rRange = rList[ 0 ];
+        SetMarkArea( rRange );
+    }
 }
 
 
