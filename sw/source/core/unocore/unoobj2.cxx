@@ -1111,15 +1111,25 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             for(size_t i = 0; i < nPDescCount; i++)
             {
                 const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
+
                 const SwFrameFormat* pFrameFormatMaster = &rDesc.GetMaster();
                 const SwFrameFormat* pFrameFormatLeft = &rDesc.GetLeft();
+                const SwFrameFormat* pFrameFormatFirstMaster = &rDesc.GetFirstMaster();
+                const SwFrameFormat* pFrameFormatFirstLeft = &rDesc.GetFirstLeft();
 
                 SwFrameFormat* pHeadFootFormat = nullptr;
                 if (!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrameFormatMaster,
-                            pHeadFootFormat))
+                          pHeadFootFormat))
                 {
-                    lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrameFormatLeft,
-                            pHeadFootFormat);
+                    if (!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrameFormatLeft,
+                             pHeadFootFormat))
+                    {
+                        if (!lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrameFormatFirstMaster,
+                             pHeadFootFormat))
+                        {
+                             lcl_IsStartNodeInFormat(bHeader, pSttNode, pFrameFormatFirstLeft, pHeadFootFormat);
+                        }
+                    }
                 }
 
                 if (pHeadFootFormat)
