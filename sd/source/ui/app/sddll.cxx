@@ -206,10 +206,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
-    // #UndoRedo#
-    SvxUndoRedoControl::RegisterControl( SID_UNDO , pMod );
-    SvxUndoRedoControl::RegisterControl( SID_REDO , pMod );
-
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH, pMod );
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );

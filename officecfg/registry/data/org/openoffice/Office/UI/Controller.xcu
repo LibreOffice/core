@@ -1536,6 +1536,28 @@
           <value>com.sun.star.comp.svx.UnderlineToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="UndoToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Undo</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.UndoRedoToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="RedoToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Redo</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.UndoRedoToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="XLineColorToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:XLineColor</value>
