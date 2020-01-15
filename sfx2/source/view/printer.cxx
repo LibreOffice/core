@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/virdev.hxx>
-#include <vcl/metric.hxx>
-#include <unotools/printwarningoptions.hxx>
-#include <svtools/printoptions.hxx>
 #include <tools/debug.hxx>
 
 #include <utility>
-#include <vector>
 
 #include <sfx2/printer.hxx>
-#include <sfx2/printopt.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/prnmon.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>

@@ -20,7 +20,6 @@
 #include <sfx2/sidebar/DrawHelper.hxx>
 #include <sfx2/sidebar/Paint.hxx>
 
-#include <vcl/lineinfo.hxx>
 #include <tools/svborder.hxx>
 
 namespace sfx2 { namespace sidebar {

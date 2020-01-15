@@ -22,7 +22,6 @@
 #include <sfx2/charmapcontrol.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/event.hxx>
 
 using namespace css;
 

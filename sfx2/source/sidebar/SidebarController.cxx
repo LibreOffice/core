@@ -29,13 +29,10 @@
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/Context.hxx>
-#include <sfx2/sidebar/ContextList.hxx>
 
 
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/titledockwin.hxx>
 #include <sfx2/strings.hrc>
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
@@ -58,11 +55,9 @@
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 

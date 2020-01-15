@@ -18,12 +18,9 @@
  */
 
 
-#include <sal/macros.h>
-#include <objshimp.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -31,9 +28,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
 
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -59,17 +53,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/interaction.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustring.h>
 #include <sal/log.hxx>
-#include <sot/storinfo.hxx>
-#include <svtools/ehdl.hxx>
 #include <svl/eitem.hxx>
-#include <svl/itemset.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
-#include <ucbhelper/simpleinteractionrequest.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

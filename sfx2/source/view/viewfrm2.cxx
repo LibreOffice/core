@@ -20,7 +20,6 @@
 
 #include "impviewframe.hxx"
 #include <statcach.hxx>
-#include <sfx2/viewfac.hxx>
 #include <workwin.hxx>
 
 #include <sfx2/app.hxx>
@@ -40,12 +39,9 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 
-#include <svtools/asynclink.hxx>
+#include <osl/diagnose.h>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/stritem.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/window.hxx>
 

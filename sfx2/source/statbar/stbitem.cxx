@@ -25,7 +25,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 
 #include <vcl/commandevent.hxx>
@@ -35,9 +34,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/stbitem.hxx>
-#include <sfxtypes.hxx>
 #include <sfx2/msg.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>

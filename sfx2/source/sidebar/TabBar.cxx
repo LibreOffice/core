@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/TabBar.hxx>
-#include <sfx2/sidebar/TabItem.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/DeckDescriptor.hxx>
 #include <sfx2/sidebar/Paint.hxx>
@@ -33,15 +32,10 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/svborder.hxx>
 #include <svtools/acceleratorexecute.hxx>
-
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-
-#include <sfx2/app.hxx>
 
 using namespace css;
 using namespace css::uno;

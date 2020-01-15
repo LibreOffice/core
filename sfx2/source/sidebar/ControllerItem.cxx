@@ -19,16 +19,9 @@
 #include <memory>
 #include <sfx2/sidebar/ControllerItem.hxx>
 
-#include <sfx2/msgpool.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
-#include <unotools/cmdoptions.hxx>
-#include <vcl/commandinfoprovider.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/help.hxx>
 
-#include <cppuhelper/compbase.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
 
 using namespace css;
 using namespace css::uno;
