@@ -306,6 +306,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             static_cast< XSystemShellExecute* >( this ),
             3 );
 
+    OUString preprocessed_command(aCommand);
     if ((nFlags & URIS_ONLY) != 0)
     {
         css::uno::Reference< css::uri::XUriReference > uri(
@@ -319,6 +320,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 static_cast< cppu::OWeakObject * >(this), 0);
         }
         if (uri->getScheme().equalsIgnoreAsciiCase("file")) {
+            // ShellExecuteExW appears to ignore the fragment of a file URL anyway, so remove it:
+            uri->clearFragment();
+            preprocessed_command = uri->getUriReference();
             OUString pathname;
             auto const e1 = osl::FileBase::getSystemPathFromFileURL(aCommand, pathname);
             if (e1 != osl::FileBase::E_None) {
@@ -422,7 +426,6 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         and names no existing file (remember the jump mark
         sign '#' is a valid file name character we remove
         the jump mark, else ShellExecuteEx fails */
-    OUString preprocessed_command(aCommand);
     if (is_system_path(preprocessed_command))
     {
         if (has_jump_mark(preprocessed_command) && !is_existing_file(preprocessed_command))
