@@ -26,6 +26,7 @@
 #include <svx/Palette.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <functional>
 
