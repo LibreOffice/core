@@ -2619,19 +2619,22 @@ void SdImportTest::testTdf114821()
     CPPUNIT_ASSERT( rPropSet0.is() );
     sal_Int32 aPlacement;
     rPropSet0->getPropertyValue( "LabelPlacement" ) >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::TOP, aPlacement );
+    // The datapoint label is moved from the fix TOP position, so it is already a CUSTOM position
+    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::CUSTOM, aPlacement );
 
     // Check the second label
     const css::uno::Reference< css::beans::XPropertySet >& rPropSet1( aSeriesSeq[0]->getDataPointByIndex( 1 ) );
     CPPUNIT_ASSERT( rPropSet1.is() );
     rPropSet1->getPropertyValue( "LabelPlacement" ) >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::CENTER, aPlacement );
+    // The datapoint label is moved from the fix CENTER position, so it is already a CUSTOM position
+    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::CUSTOM, aPlacement );
 
     // Check the third label
     const css::uno::Reference< css::beans::XPropertySet >& rPropSet2( aSeriesSeq[0]->getDataPointByIndex( 2 ) );
     CPPUNIT_ASSERT( rPropSet2.is() );
     rPropSet2->getPropertyValue( "LabelPlacement") >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::TOP, aPlacement );
+    // The datapoint label is moved from the fix TOP position, so it is already a CUSTOM position
+    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::CUSTOM, aPlacement );
 
     xDocShRef->DoClose();
 }

@@ -319,7 +319,8 @@ protected:
                 , const css::awt::Point& rScreenPosition2D
                 , LabelAlignment eAlignment
                 , sal_Int32 nOffset=0
-                , sal_Int32 nTextWidth = 0 );
+                , sal_Int32 nTextWidth = 0
+                , bool bLabelMoved = false );
 
     /// This method returns a text string representation of the passed numeric
     /// value by exploiting a NumberFormatterWrapper object.

@@ -21,6 +21,7 @@
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
@@ -57,6 +58,28 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
         aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0)/double(aPageRect.getHeight());
+        xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+    }
+    else if( eObjectType == OBJECTTYPE_DATA_LABEL )
+    {
+        xObjectProp->setPropertyValue( "LabelPlacement", uno::Any(css::chart::DataLabelPlacement::CUSTOM));
+        chart2::RelativePosition aRelativePosition;
+        aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
+        //the anchor point at the datalabel object is top/left
+        Point aPos = aObjectRect.TopLeft();
+        double fRotation = 0.0;
+        xObjectProp->getPropertyValue("TextRotation") >>= fRotation;
+        if( fRotation == 90.0 )
+            aPos = aObjectRect.BottomLeft();
+        else if( fRotation == 270.0 )
+            aPos = aObjectRect.TopRight();
+
+        aRelativePosition.Primary = double(aPos.X()) / double(aPageRect.getWidth());
+        aRelativePosition.Secondary = double(aPos.Y()) / double(aPageRect.getHeight());
+        chart2::RelativePosition aAbsolutePosition;
+        xObjectProp->getPropertyValue( "AbsolutePosition") >>= aAbsolutePosition;
+        aRelativePosition.Primary -= aAbsolutePosition.Primary;
+        aRelativePosition.Secondary -=  aAbsolutePosition.Secondary;
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
     else if( eObjectType==OBJECTTYPE_DATA_CURVE_EQUATION )

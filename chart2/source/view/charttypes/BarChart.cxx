@@ -221,6 +221,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
         }
         break;
     case css::chart::DataLabelPlacement::OUTSIDE:
+    case css::chart::DataLabelPlacement::CUSTOM:
         {
         fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
         if( pPosHelper->isSwapXAndY() )
@@ -911,9 +912,11 @@ void BarChart::createShapes()
                                 if( m_nDimension == 3 )
                                     nOffset = 260;
                             }
+
                             createDataLabel(
                                 xTextTarget, *pSeries, nPointIndex,
-                                fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset);
+                                fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset, 0,
+                                nLabelPlacement == css::chart::DataLabelPlacement::CUSTOM);
                         }
 
                     }//end iteration through partial points

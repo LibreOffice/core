@@ -398,7 +398,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , const awt::Point& rScreenPosition2D
                     , LabelAlignment eAlignment
                     , sal_Int32 nOffset
-                    , sal_Int32 nTextWidth )
+                    , sal_Int32 nTextWidth
+                    , bool bLabelMoved )
 {
     uno::Reference< drawing::XShape > xTextShape;
     Sequence<uno::Reference<XDataPointCustomLabelField>> aCustomLabels;
@@ -707,7 +708,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         // in case text is rotated, the transformation property of the text
         // shape is modified.
-        const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
         if( fRotationDegrees != 0.0 )
         {
             const double fDegreesPi( -basegfx::deg2rad(fRotationDegrees) );
@@ -717,8 +717,19 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
+        awt::Point aTextShapePos(xTextShape->getPosition());
+        rDataSeries.setLabelAbsPosition(aTextShapePos, nPointIndex);
+        if (bLabelMoved)
+        {
+            awt::Point aRelPos = rDataSeries.getLabelRelPosition(nPointIndex);
+            aTextShapePos.X += aRelPos.X;
+            aTextShapePos.Y += aRelPos.Y;
+            xTextShape->setPosition(aTextShapePos);
+        }
+
         // in case legend symbol has to be displayed, text shape position is
         // slightly changed.
+        const awt::Point aUnrotatedTextPos(xTextShape->getPosition());
         if( xSymbol.is() )
         {
             const awt::Point aOldTextPos( xTextShape->getPosition() );
