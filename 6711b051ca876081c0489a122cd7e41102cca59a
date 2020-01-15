@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "406ada06_9003b267",
+        "filename": "svx/qa/unit/classicshapes.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-15T23:07:54Z",
+      "side": 1,
+      "message": "why not remain private?",
+      "revId": "6711b051ca876081c0489a122cd7e41102cca59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
