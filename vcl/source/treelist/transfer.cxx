@@ -702,10 +702,8 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
         }
         else
         {
-            const Bitmap aBitmap(rBitmapEx.GetBitmap());
-
             // explicitly use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
-            WriteDIB(aBitmap, aMemStm, false, true);
+            WriteDIB(rBitmapEx.GetBitmap(), aMemStm, false, true);
         }
 
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );

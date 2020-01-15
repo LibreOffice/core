@@ -1720,8 +1720,8 @@ namespace emfio
                                 // is inverted
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) )
                                 {
-                                    Bitmap aMask( pSave->aBmpEx.GetBitmap() );
-                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+                                    const Bitmap & rMask( pSave->aBmpEx.GetBitmap() );
+                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), rMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -1729,8 +1729,8 @@ namespace emfio
                                 // tdf#90539
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) )
                                 {
-                                    Bitmap aMask( pSave->aBmpEx.GetBitmap() );
-                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+                                    const Bitmap & rMask( pSave->aBmpEx.GetBitmap() );
+                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), rMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;

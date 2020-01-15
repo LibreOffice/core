@@ -711,7 +711,8 @@ void CanvasBitmapTest::runTest()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have bitcount of 8",
                             static_cast<sal_uInt16>(8),  aBmp.GetBitCount());
     {
-        BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
+        Bitmap aBitmap = aBmp.GetBitmap();
+        BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc );
@@ -738,7 +739,8 @@ void CanvasBitmapTest::runTest()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap has bitcount of 24",
                             static_cast<sal_uInt16>(24), aBmp.GetBitCount());
     {
-        BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
+        Bitmap aBitmap = aBmp.GetBitmap();
+        BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
         BitmapReadAccess* pAlphaAcc = aBmp.GetAlpha().AcquireReadAccess();
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",

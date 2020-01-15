@@ -635,10 +635,10 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
         if( aGraphic.GetType() == GraphicType::Bitmap )
         {
-            Bitmap      aBmp( aGraphic.GetBitmapEx().GetBitmap() );
+            const Bitmap & rBmp( aGraphic.GetBitmapEx().GetBitmap() );
             const long  nTol = static_cast<long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255L / 100L);
 
-            aMask = aBmp.CreateMask( rColor, nTol );
+            aMask = rBmp.CreateMask( rColor, nTol );
 
             if( aGraphic.IsTransparent() )
                 aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
@@ -652,7 +652,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
-                aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
+                aGraphic = Graphic( BitmapEx( rBmp, aMask ) );
                 mnGrfChanged++;
 
                 bNewContour = (xQBox->run() == RET_YES);
