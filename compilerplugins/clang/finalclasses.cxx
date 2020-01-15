@@ -53,7 +53,7 @@ public:
         std::string output;
         for (const std::string & s : inheritedFromSet)
             output += "inherited-from:\t" + s + "\n";
-        for (const std::pair<std::string,std::string> & s : definitionMap)
+        for (const auto & s : definitionMap)
             output += "definition:\t" + s.first + "\t" + s.second + "\n";
         std::ofstream myfile;
         myfile.open( WORKDIR "/loplugin.finalclasses.log", std::ios::app | std::ios::out);

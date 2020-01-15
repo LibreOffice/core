@@ -64,7 +64,7 @@ public:
             output += "instantiated:\t" + s + "\n";
         for (const std::pair<std::string,std::string> & s : childToParentClassSet)
             output += "has-subclass:\t" + s.first + "\t" + s.second + "\n";
-        for (const std::pair<std::string,std::string> & s : definitionMap)
+        for (const auto & s : definitionMap)
             output += "definition:\t" + s.first + "\t" + s.second + "\n";
         std::ofstream myfile;
         myfile.open( WORKDIR "/loplugin.mergeclasses.log", std::ios::app | std::ios::out);
