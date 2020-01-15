@@ -796,6 +796,7 @@ bool ObjectIdentifier::isDragableObject( const OUString& rClassifiedIdentifier )
         case OBJECTTYPE_TITLE:
         case OBJECTTYPE_LEGEND:
         case OBJECTTYPE_DIAGRAM:
+        case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
         //case OBJECTTYPE_DIAGRAM_WALL:
             bReturn = true;

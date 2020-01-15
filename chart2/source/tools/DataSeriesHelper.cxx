@@ -600,6 +600,8 @@ void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSer
             if(!xPointProp.is())
                 continue;
             xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
+            if( rPropertyName == "LabelPlacement" )
+                xPointProp->setPropertyValue("CustomLabelPosition", uno::Any());
         }
     }
 }

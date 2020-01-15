@@ -2614,24 +2614,25 @@ void SdImportTest::testTdf114821()
     uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Series count", static_cast<sal_Int32>( 1 ), aSeriesSeq.getLength() );
 
+    // These Labels have custom position, so the exported LabelPlacement (reference point) by MSO is OUTSIDE/OUTEND
     // Check the first label
     const css::uno::Reference< css::beans::XPropertySet >& rPropSet0( aSeriesSeq[0]->getDataPointByIndex( 0 ) );
     CPPUNIT_ASSERT( rPropSet0.is() );
     sal_Int32 aPlacement;
     rPropSet0->getPropertyValue( "LabelPlacement" ) >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::TOP, aPlacement );
+    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::OUTSIDE, aPlacement );
 
     // Check the second label
     const css::uno::Reference< css::beans::XPropertySet >& rPropSet1( aSeriesSeq[0]->getDataPointByIndex( 1 ) );
     CPPUNIT_ASSERT( rPropSet1.is() );
     rPropSet1->getPropertyValue( "LabelPlacement" ) >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::CENTER, aPlacement );
+    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::OUTSIDE, aPlacement );
 
     // Check the third label
     const css::uno::Reference< css::beans::XPropertySet >& rPropSet2( aSeriesSeq[0]->getDataPointByIndex( 2 ) );
     CPPUNIT_ASSERT( rPropSet2.is() );
     rPropSet2->getPropertyValue( "LabelPlacement") >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::TOP, aPlacement );
+    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::OUTSIDE, aPlacement );
 
     xDocShRef->DoClose();
 }
