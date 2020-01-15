@@ -81,9 +81,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-namespace dp_registry {
-namespace backend {
-namespace bundle {
+namespace dp_registry::backend::bundle {
 namespace {
 
 typedef cppu::ImplInheritanceHelper<PackageRegistryBackend,
@@ -1596,8 +1594,6 @@ Reference<deployment::XPackageRegistry> create(
     return new BackendImpl( args, xComponentContext, xRootRegistry );
 }
 
-} // namespace bundle
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

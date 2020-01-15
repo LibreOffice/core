@@ -39,8 +39,7 @@
 using namespace ::com::sun::star::uno;
 
 
-namespace dp_registry {
-namespace backend {
+namespace dp_registry::backend {
 
 BackendDb::BackendDb(
     Reference<css::uno::XComponentContext> const &  xContext,
@@ -656,7 +655,6 @@ void RegisteredDb::addEntry(OUString const & url)
     }
 }
 
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

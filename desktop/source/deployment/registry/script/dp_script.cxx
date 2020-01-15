@@ -40,9 +40,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
-namespace dp_registry {
-namespace backend {
-namespace script {
+namespace dp_registry::backend::script {
 namespace {
 
 typedef ::cppu::ImplInheritanceHelper<
@@ -459,8 +457,6 @@ sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.script.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace script
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

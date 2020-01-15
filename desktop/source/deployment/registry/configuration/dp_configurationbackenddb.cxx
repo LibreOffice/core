@@ -37,9 +37,7 @@ using namespace ::com::sun::star::uno;
 #define ROOT_ELEMENT_NAME "configuration-backend-db"
 #define KEY_ELEMENT_NAME "configuration"
 
-namespace dp_registry {
-namespace backend {
-namespace configuration {
+namespace dp_registry::backend::configuration {
 
 ConfigurationBackendDb::ConfigurationBackendDb(
     Reference<XComponentContext> const &  xContext,
@@ -162,8 +160,6 @@ std::vector<OUString> ConfigurationBackendDb::getAllDataUrls()
     }
 }
 
-} // namespace configuration
-} // namespace backend
-} // namespace dp_registry
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
