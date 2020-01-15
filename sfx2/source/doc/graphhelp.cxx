@@ -45,6 +45,11 @@
 
 #include <memory>
 
+#if defined _WIN32
+#include <unotools/tempfile.hxx>
+#include <vcl/outdev.hxx>
+#endif
+
 using namespace css;
 
 std::unique_ptr<SvMemoryStream> GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )
