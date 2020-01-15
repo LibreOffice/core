@@ -43,15 +43,12 @@ public:
     SchXMLDocContext(
         SchXMLImportHelper& rImpHelper,
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLName );
-
-    SchXMLDocContext(
-        SchXMLImportHelper& rImpHelper,
-        SvXMLImport& rImport,
         sal_Int32 nElement );
 
     virtual ~SchXMLDocContext() override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+               const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -73,6 +70,10 @@ public:
         sal_Int32 i_nElement,
         const css::uno::Reference<css::document::XDocumentProperties>& i_xDocProps);
 
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override
+    { SvXMLMetaDocumentContext::startFastElement(nElement, xAttrList); }
+
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -86,11 +87,15 @@ public:
     SchXMLBodyContext(
         SchXMLImportHelper& rImpHelper,
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLName );
+        sal_Int32 nElement );
     virtual ~SchXMLBodyContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+               const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
