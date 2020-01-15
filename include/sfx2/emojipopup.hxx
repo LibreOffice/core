@@ -29,8 +29,7 @@ public:
     EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~EmojiPopup() override;
 
-    using svt::ToolboxController::createPopupWindow;
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

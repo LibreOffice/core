@@ -359,7 +359,7 @@ class FontworkAlignmentControl : public svt::PopupWindowController
 public:
     explicit FontworkAlignmentControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -367,8 +367,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    using  svt::PopupWindowController::createPopupWindow;
 };
 
 }
@@ -379,7 +377,7 @@ FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentC
 }
 
 
-VclPtr<vcl::Window> FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> FontworkAlignmentControl::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<FontworkAlignmentWindow>::Create( *this, pParent );
 }
@@ -578,7 +576,7 @@ class FontworkCharacterSpacingControl : public svt::PopupWindowController
 public:
     explicit FontworkCharacterSpacingControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
@@ -586,8 +584,6 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    using svt::PopupWindowController::createPopupWindow;
 };
 
 }
@@ -598,7 +594,7 @@ FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Referenc
 }
 
 
-VclPtr<vcl::Window> FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> FontworkCharacterSpacingControl::createVclPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<FontworkCharacterSpacingWindow>::Create( *this, pParent );
 }

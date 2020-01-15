@@ -29,8 +29,7 @@ public:
     virtual ~PageColumnPopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
-    using svt::ToolboxController::createPopupWindow;
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

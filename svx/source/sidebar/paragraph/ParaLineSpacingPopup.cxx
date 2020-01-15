@@ -69,7 +69,7 @@ std::unique_ptr<WeldToolbarPopup> SvxLineSpacingToolBoxControl::weldPopupWindow(
     return std::make_unique<ParaLineSpacingControl>(this, m_pToolbar);
 }
 
-VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createPopupWindow( vcl::Window* pParent )
+VclPtr<vcl::Window> SvxLineSpacingToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
         std::make_unique<ParaLineSpacingControl>(this, pParent->GetFrameWeld()));

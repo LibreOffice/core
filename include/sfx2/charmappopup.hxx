@@ -29,8 +29,7 @@ public:
     CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~CharmapPopup() override;
 
-    using svt::ToolboxController::createPopupWindow;
-    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XServiceInfo
