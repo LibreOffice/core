@@ -836,6 +836,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     if( pObj )
                     {
                         tools::Rectangle aObjectRect = pObj->GetSnapRect();
+                        tools::Rectangle aOldObjectRect = pObj->GetLastBoundRect();
                         awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                         tools::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
@@ -868,6 +869,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
+                                        , awt::Rectangle(aOldObjectRect.getX(), aOldObjectRect.getY(), 0, 0)
                                         , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
 
                         if( bMoved || bChanged )
