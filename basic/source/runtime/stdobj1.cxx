@@ -84,10 +84,7 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, bool bWrite )
         return;
     }
 
-    Size aSize = aGraphic.GetPrefSize();
-    aSize = Application::GetDefaultDevice()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
-    aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
-
+    Size aSize = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::MapTwip));
     pVar->PutInteger( static_cast<sal_Int16>(aSize.Width()) );
 }
 
@@ -99,10 +96,7 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, bool bWrite )
         return;
     }
 
-    Size aSize = aGraphic.GetPrefSize();
-    aSize = Application::GetDefaultDevice()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
-    aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
-
+    Size aSize = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::MapTwip));
     pVar->PutInteger( static_cast<sal_Int16>(aSize.Height()) );
 }
 
