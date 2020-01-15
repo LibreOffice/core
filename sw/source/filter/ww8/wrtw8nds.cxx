@@ -2275,7 +2275,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                3) If the anchor is associated with a text node with empty text then we ignore.
                */
             if( rNode.IsTextNode()
-                    && aStr != "\001" && !aStr.isEmpty()
+                && aStr != OUStringChar(CH_TXTATR_BREAKWORD) && !aStr.isEmpty()
                     && !rNode.GetFlyFormat()
                     && !(IsInTable() && !AllowPostponedTextInTable())
                     && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
