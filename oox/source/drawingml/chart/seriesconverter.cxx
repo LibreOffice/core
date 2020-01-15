@@ -20,6 +20,7 @@
 #include <drawingml/chart/seriesconverter.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
@@ -273,22 +274,32 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
-        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
+
+        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout )
         {
-            // bnc#694340 - nasty hack - chart2 cannot individually
-            // place data labels, let's try to find a useful
-            // compromise instead
-            namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
-            const sal_Int32 aPositionsLookupTable[] =
+            if( rTypeInfo.meTypeCategory == TYPECATEGORY_BAR )
+            {
+                // It is only works for BAR Chart, yet!!!
+                RelativePosition aPos(mrModel.mxLayout->mfX, mrModel.mxLayout->mfY, css::drawing::Alignment_TOP_LEFT);
+                aPropSet.setProperty(PROP_CustomLabelPosition, aPos);
+            }
+            else if( !bIsPie )
+            {
+                // bnc#694340 - nasty hack - chart2 cannot individually
+                // place data labels, let's try to find a useful
+                // compromise instead
+                namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+                const sal_Int32 aPositionsLookupTable[] =
                 {
                     csscd::TOP_LEFT,    csscd::TOP,    csscd::TOP_RIGHT,
                     csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
                     csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
                 };
-            const int simplifiedX = lclGetPositionX(mrModel.mxLayout->mfX);
-            const int simplifiedY = lclGetPositionY(mrModel.mxLayout->mfY);
-            aPropSet.setProperty( PROP_LabelPlacement,
-                                  aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
+                const int simplifiedX = lclGetPositionX(mrModel.mxLayout->mfX);
+                const int simplifiedY = lclGetPositionY(mrModel.mxLayout->mfY);
+                aPropSet.setProperty(PROP_LabelPlacement,
+                    aPositionsLookupTable[simplifiedX + 1 + 3 * (simplifiedY + 1)]);
+            }
         }
 
         if (mrModel.mxShapeProp)

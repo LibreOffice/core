@@ -26,11 +26,13 @@
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
@@ -603,8 +605,6 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         if( xPointProps.is() )
             xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
 
-        //ensure that the set label placement is supported by this charttype
-
         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, bSwapXAndY, m_xDataSeries ) );
 
@@ -626,6 +626,42 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
     return nLabelPlacement;
+}
+
+awt::Point VDataSeries::getLabelPosition( awt::Point aTextShapePos, sal_Int32 nPointIndex ) const
+{
+    awt::Point aPos(-1, -1);
+    try
+    {
+        RelativePosition aCustomLabelPosition;
+        uno::Reference< beans::XPropertySet > xPointProps(getPropertiesOfPoint(nPointIndex));
+        if( xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition))
+        {
+            aPos.X = static_cast<sal_Int32>(aCustomLabelPosition.Primary * m_aReferenceSize.Width) + aTextShapePos.X;
+            aPos.Y = static_cast<sal_Int32>(aCustomLabelPosition.Secondary * m_aReferenceSize.Height) + aTextShapePos.Y;
+        }
+    }
+    catch (const uno::Exception&) {}
+
+    return aPos;
+}
+
+bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
+{
+    bool bCustom = false;
+    RelativePosition aCustomLabelPosition;
+    try
+    {
+        if( isAttributedDataPoint(nPointIndex) )
+        {
+            uno::Reference< beans::XPropertySet > xPointProps(m_xDataSeries->getDataPointByIndex(nPointIndex));
+            if( xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition) )
+                bCustom = true;
+        }
+    }
+    catch (const uno::Exception&) {}
+
+    return bCustom;
 }
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
