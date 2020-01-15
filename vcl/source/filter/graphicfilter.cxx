@@ -1133,7 +1133,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                         rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
                     else
                     {
-                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmapRef());
+                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
@@ -1616,7 +1616,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             else
             {
-                Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapExRef().GetBitmapRef());
+                Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapExRef().GetBitmap());
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 rIStream.Seek(nPosition);
                 if( !ImportJPEG( rIStream, rGraphic, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess ) )

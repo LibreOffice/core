@@ -1865,7 +1865,7 @@ bool WriteDIB(
     SvStream& rOStm,
     bool bCompressed)
 {
-    return ImplWriteDIB(rSource.GetBitmapRef(), rOStm, bCompressed, /*bFileHeader*/true);
+    return ImplWriteDIB(rSource.GetBitmap(), rOStm, bCompressed, /*bFileHeader*/true);
 }
 
 bool WriteDIBBitmapEx(

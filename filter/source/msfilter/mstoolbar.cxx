@@ -291,14 +291,14 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                     TBCBitMap* pIconMask = pSpecificInfo->getIconMask();
                     if (pIconMask)
                     {
-                        Bitmap aMaskBase(pIconMask->getBitMap().GetBitmap());
-                        Size aMaskSize = aMaskBase.GetSizePixel();
+                        const Bitmap& rMaskBase(pIconMask->getBitMap().GetBitmap());
+                        Size aMaskSize = rMaskBase.GetSizePixel();
                         if (aMaskSize.Width() && aMaskSize.Height())
                         {
                             // according to the spec:
                             // "the iconMask is white in all the areas in which the icon is
                             // displayed as transparent and is black in all other areas."
-                            aBitEx = BitmapEx(aBitEx.GetBitmap(), aMaskBase.CreateMask(COL_WHITE));
+                            aBitEx = BitmapEx(aBitEx.GetBitmap(), rMaskBase.CreateMask(COL_WHITE));
                         }
                     }
 

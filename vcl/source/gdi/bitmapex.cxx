@@ -228,16 +228,16 @@ bool BitmapEx::IsAlpha() const
     return( IsTransparent() && mbAlpha );
 }
 
-const Bitmap& BitmapEx::GetBitmapRef() const
+const Bitmap& BitmapEx::GetBitmap() const
 {
     return maBitmap;
 }
 
-Bitmap BitmapEx::GetBitmap( o3tl::optional<Color> xTransparentReplaceColor ) const
+Bitmap BitmapEx::GetBitmap( Color aTransparentReplaceColor ) const
 {
     Bitmap aRetBmp( maBitmap );
 
-    if( xTransparentReplaceColor && ( meTransparent != TransparentType::NONE ) )
+    if( meTransparent != TransparentType::NONE )
     {
         Bitmap aTempMask;
 
@@ -247,9 +247,9 @@ Bitmap BitmapEx::GetBitmap( o3tl::optional<Color> xTransparentReplaceColor ) con
             aTempMask = maMask;
 
         if( !IsAlpha() )
-            aRetBmp.Replace( aTempMask, *xTransparentReplaceColor );
+            aRetBmp.Replace( aTempMask, aTransparentReplaceColor );
         else
-            aRetBmp.Replace( GetAlpha(), *xTransparentReplaceColor );
+            aRetBmp.Replace( GetAlpha(), aTransparentReplaceColor );
     }
 
     return aRetBmp;
@@ -915,7 +915,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
     // force destination to 24 bit, we want to smooth output
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
     bool bSmooth = implTransformNeedsSmooth(rTransformation);
-    const Bitmap aDestination(impTransformBitmap(GetBitmapRef(), aDestinationSize, rTransformation, bSmooth));
+    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
 
     // create mask
     if(IsTransparent())
@@ -1018,7 +1018,7 @@ BitmapEx BitmapEx::getTransformed(
 
 BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const
 {
-    Bitmap aChangedBitmap(GetBitmapRef());
+    Bitmap aChangedBitmap(GetBitmap());
     bool bDone(false);
 
     for(sal_uInt32 a(rBColorModifierStack.count()); a && !bDone; )
@@ -1616,7 +1616,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
             }
         }
     }
-    *this = BitmapEx( GetBitmapRef(), aAlpha );
+    *this = BitmapEx( GetBitmap(), aAlpha );
 }
 
 // AS: Because JPEGs require the alpha channel provided separately (JPEG does not
