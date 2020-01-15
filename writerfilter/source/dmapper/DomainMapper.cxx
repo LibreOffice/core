@@ -2658,7 +2658,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 pProperties->resolve(*pTextEffectsHandlerPtr);
 
-                rContext->Insert(*aPropertyId, uno::makeAny(pTextEffectsHandlerPtr->getInteropGrabBag()), true, CHAR_GRAB_BAG);
+                beans::PropertyValue aGrabBag = pTextEffectsHandlerPtr->getInteropGrabBag();
+                rContext->Insert(*aPropertyId, uno::makeAny(aGrabBag), true, CHAR_GRAB_BAG);
+
+                sal_Int16 nTransparency = TextEffectsHandler::GetTextFillSolidFillAlpha(aGrabBag);
+                if (nTransparency != 0)
+                {
+                    rContext->Insert(PROP_CHAR_TRANSPARENCE, uno::makeAny(nTransparency));
+                }
             }
         }
     }
