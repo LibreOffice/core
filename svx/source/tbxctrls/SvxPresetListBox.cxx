@@ -20,11 +20,9 @@
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/image.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/popupmenuwindow.hxx>
 
 SvxPresetListBox::SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : SvtValueSet(std::move(pWindow))
