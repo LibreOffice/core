@@ -76,8 +76,7 @@ case "$1" in
 	created_ssh=
 	if ! test -d $ssh_home; then
 	    echo "It appears that you have no ssh setup, running ssh-keygen to create that:"
-	    mkdir $ssh_home
-	    chmod 0700 $ssh_home
+	    mkdir -m0700 "$ssh_home"
 	    created_ssh=TRUE
 	    echo
 	    echo "Hit enter to generate an ssh key - you will need to enter a pass-phrase"
