@@ -202,6 +202,7 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
     sal_uInt16 nItemId = 0;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
+        SolarMutexGuard aSolarLock;
         pToolBox->CheckItem( nItemId, bValue );
         pToolBox->EnableItem( nItemId, rEvent.IsEnabled );
     }
