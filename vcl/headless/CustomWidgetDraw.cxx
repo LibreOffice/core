@@ -24,7 +24,8 @@ CustomWidgetDraw::CustomWidgetDraw(SvpSalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
 {
 #ifndef DISABLE_DYNLOADING
-    if (!s_pWidgetImplementation)
+    static bool s_bMissingLibrary = false;
+    if (!s_pWidgetImplementation && !s_bMissingLibrary)
     {
         OUString aUrl("${LO_LIB_DIR}/" SVLIBRARY("vcl_widget_theme"));
         rtl::Bootstrap::expandMacros(aUrl);
@@ -45,6 +46,8 @@ CustomWidgetDraw::CustomWidgetDraw(SvpSalGraphics& rGraphics)
             pSVData->maNWFData.mbNoFocusRects = true;
             pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
         }
+        else
+            s_bMissingLibrary = true;
     }
 #endif
 }
