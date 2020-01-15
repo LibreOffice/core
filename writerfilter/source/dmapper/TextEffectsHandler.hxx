@@ -66,6 +66,8 @@ public:
     static OUString getNumFormString(sal_Int32 nType);
     static OUString getNumSpacingString(sal_Int32 nType);
 
+    static sal_uInt8 GetTextFillSolidFillAlpha(const css::beans::PropertyValue& rValue);
+
 };
 
 }}
