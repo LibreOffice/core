@@ -69,6 +69,7 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <svl/itempool.hxx>
+#include <comphelper/lok.hxx>
 #include <map>
 #include <vector>
 
@@ -658,6 +659,10 @@ typedef std::map< const SdrObject*, SdrObject* > SdrObjectAndCloneMap;
 
 void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
+    // We do client-side object manipulation with the Kit API
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     // create SdrDragEntries on demand
     if(maSdrDragEntries.empty())
     {
