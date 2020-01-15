@@ -31,7 +31,6 @@
 
 #include <vcl/menu.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/splitwin.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/globname.hxx>
