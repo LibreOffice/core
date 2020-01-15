@@ -33,6 +33,7 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>
 
 
@@ -211,6 +212,10 @@ void E3dDragMethod::MoveSdrDrag(const Point& /*rPnt*/)
 // for migration from XOR to overlay
 void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
+    // We do client-side object manipulation with the Kit API
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     const sal_uInt32 nCnt(maGrp.size());
     basegfx::B2DPolyPolygon aResult;
 
