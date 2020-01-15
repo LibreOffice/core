@@ -16,6 +16,24 @@
       "revId": "8c34040943503df4d929cebefe446e0880fcc89d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ada8e41c_c11e5491",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-01-15T13:06:21Z",
+      "side": 1,
+      "message": "Here I don\u0027t change an existing value but create one, so it should be ok?\nIf yes, why -1 for code review?\nIf no, how can we add COLON?",
+      "parentUuid": "56255420_2e226605",
+      "revId": "8c34040943503df4d929cebefe446e0880fcc89d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
