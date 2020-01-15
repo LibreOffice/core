@@ -190,10 +190,6 @@ protected: // #i69629#
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
 public:
-
-    SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName );
-
     SwXMLDocContext_Impl( SwXMLImport& rImport );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
@@ -202,14 +198,11 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 };
 
-}
-
-SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
-{
 }
 
 SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport ) :
@@ -288,6 +281,10 @@ public:
     SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override
+    { SvXMLMetaDocumentContext::startFastElement(nElement, xAttrList); }
+
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 };
@@ -333,25 +330,20 @@ class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
 {
 public:
 
-    SwXMLDocStylesContext_Impl( SwXMLImport& rImport,
-                                sal_uInt16 nPrfx,
-                                const OUString& rLName );
+    SwXMLDocStylesContext_Impl( SwXMLImport& rImport );
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
-                    SwXMLImport& rImport,
-                    sal_uInt16 nPrfx,
-                    const OUString& rLName ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    SwXMLDocContext_Impl( rImport, nPrfx, rLName )
+SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl( SwXMLImport& rImport ) :
+    SvXMLImportContext( rImport ),
+    SwXMLDocContext_Impl( rImport )
 {
 }
 
-void SwXMLDocStylesContext_Impl::EndElement()
+void SwXMLDocStylesContext_Impl::endFastElement(sal_Int32 )
 {
     // assign paragraph styles to list levels of outline style after all styles
     // are imported and finished.
@@ -366,29 +358,6 @@ const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
         m_pDocElemTokenMap.reset( new SvXMLTokenMap( aDocTokenMap ) );
 
     return *m_pDocElemTokenMap;
-}
-
-SvXMLImportContext *SwXMLImport::CreateDocumentContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    // #i69629# - own subclasses for <office:document> and <office:document-styles>
-    if( XML_NAMESPACE_OFFICE==nPrefix &&
-        ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
-        pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName );
-    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
-              IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
-    {
-        pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName );
-    }
-    else
-        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
-
-    return pContext;
 }
 
 SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
@@ -409,6 +378,14 @@ SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
             pContext = new SwXMLOfficeDocContext_Impl( *this, xDocProps );
         }
         break;
+        // #i69629# - own subclasses for <office:document> and <office:document-styles>
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_SETTINGS):
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT):
+            pContext = new SwXMLDocContext_Impl( *this );
+            break;
+        case XML_ELEMENT(OFFICE, XML_DOCUMENT_STYLES):
+            pContext = new SwXMLDocStylesContext_Impl( *this );
+            break;
     }
     return pContext;
 }
