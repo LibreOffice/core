@@ -63,7 +63,7 @@ case "$1" in
         echo "             <any other gerrit command>"
         echo
         echo "advanced users should consider using git review instead:"
-        echo "http://wiki.documentfoundation.org/Development/GitReview"
+        echo "https://wiki.documentfoundation.org/Development/GitReview"
         exit
     ;;
     setup)
@@ -236,7 +236,7 @@ case "$1" in
         echo >> ../commitmsg
         echo "branch is at:" >> ../commitmsg
         git log -1|sed -e "s/Change-Id:/XXXXXX:/" >> ../commitmsg
-        git fetch git://gerrit.libreoffice.org/core.git feature/$BRANCH && \
+        git fetch https://git.libreoffice.org/core feature/$BRANCH && \
             git checkout -b featuretst FETCH_HEAD && \
             cp -a .git-hooks/* .git/hooks
             git commit --allow-empty -F ../commitmsg && \
