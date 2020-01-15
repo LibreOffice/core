@@ -309,7 +309,7 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
         awt::Rectangle aNewPositionAndSize(aPos.X,aPos.Y,aSize.Width,aSize.Height);
 
         PositionAndSizeHelper::moveObject( OBJECTTYPE_LEGEND
-                , xProp, aNewPositionAndSize, aPageRectangle );
+                , xProp, aNewPositionAndSize, awt::Rectangle(), aPageRectangle );
     }
 }
 

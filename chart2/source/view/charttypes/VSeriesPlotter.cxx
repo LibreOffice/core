@@ -707,7 +707,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         // in case text is rotated, the transformation property of the text
         // shape is modified.
-        const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
         if( fRotationDegrees != 0.0 )
         {
             const double fDegreesPi( -basegfx::deg2rad(fRotationDegrees) );
@@ -717,8 +716,17 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
+        awt::Point aTextShapePos(xTextShape->getPosition());
+        if( rDataSeries.isLabelCustomPos(nPointIndex) )
+        {
+            awt::Point aRelPos = rDataSeries.getLabelPosition(aTextShapePos, nPointIndex);
+            if( aRelPos.X != -1 )
+                xTextShape->setPosition(aRelPos);
+        }
+
         // in case legend symbol has to be displayed, text shape position is
         // slightly changed.
+        const awt::Point aUnrotatedTextPos(xTextShape->getPosition());
         if( xSymbol.is() )
         {
             const awt::Point aOldTextPos( xTextShape->getPosition() );

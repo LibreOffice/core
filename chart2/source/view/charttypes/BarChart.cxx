@@ -911,9 +911,10 @@ void BarChart::createShapes()
                                 if( m_nDimension == 3 )
                                     nOffset = 260;
                             }
+
                             createDataLabel(
                                 xTextTarget, *pSeries, nPointIndex,
-                                fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset);
+                                fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
                         }
 
                     }//end iteration through partial points
