@@ -2493,8 +2493,16 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
         if (!sStr.isEmpty())
         {
             GetExport( ).m_bInWriteTOX = true;
+            if (GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF)
+            {   // tdf#129574: required for RTF; doesn't work with DOCX
+                StartRun(nullptr, -42, true);
+            }
             GetExport( ).OutputField( nullptr, eCode, sStr, FieldFlags::Start | FieldFlags::CmdStart |
                 FieldFlags::CmdEnd );
+            if (GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF)
+            {
+                EndRun(nullptr, -42, true);
+            }
         }
     }
 
