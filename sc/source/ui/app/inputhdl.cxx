@@ -987,7 +987,7 @@ IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent&,
 {
     if (rEvent.GetId() == VclEventId::ObjectDying || rEvent.GetId() == VclEventId::WindowHide
         || rEvent.GetId() == VclEventId::WindowLoseFocus)
-        HideTipBelow();
+        HideTip();
 }
 
 void ScInputHandler::HideTip()
@@ -998,17 +998,6 @@ void ScInputHandler::HideTip()
         Help::HidePopover(pTipVisibleParent, nTipVisible );
         nTipVisible = nullptr;
         pTipVisibleParent = nullptr;
-    }
-    aManualTip.clear();
-}
-void ScInputHandler::HideTipBelow()
-{
-    if ( nTipVisibleSec )
-    {
-        pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
-        Help::HidePopover(pTipVisibleSecParent, nTipVisibleSec);
-        nTipVisibleSec = nullptr;
-        pTipVisibleSecParent = nullptr;
     }
     aManualTip.clear();
 }
@@ -1156,13 +1145,13 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append( " : " );
                                 aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
                                 aNew = aBuf.makeStringAndClear();
-                                ShowTipBelow( aNew );
+                                ShowTip( aNew );
                                 bFound = true;
                             }
                         }
                         else
                         {
-                            ShowTipBelow( aNew );
+                            ShowTip( aNew );
                             bFound = true;
                         }
                     }
@@ -1179,7 +1168,6 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 void ScInputHandler::ShowTipCursor()
 {
     HideTip();
-    HideTipBelow();
     EditView* pActiveView = pTopView ? pTopView : pTableView;
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && mpEditEngine->GetParagraphCount() == 1 )
@@ -1205,7 +1193,6 @@ void ScInputHandler::ShowTip( const OUString& rText )
     // aManualTip needs to be set afterwards from outside
 
     HideTip();
-    HideTipBelow();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
@@ -1221,30 +1208,6 @@ void ScInputHandler::ShowTip( const OUString& rText )
         QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
         nTipVisible = Help::ShowPopover(pTipVisibleParent, aRect, rText, nAlign);
         pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
-    }
-}
-
-void ScInputHandler::ShowTipBelow( const OUString& rText )
-{
-    HideTipBelow();
-
-    EditView* pActiveView = pTopView ? pTopView : pTableView;
-    if ( pActiveView )
-    {
-        Point aPos;
-        pTipVisibleSecParent = pActiveView->GetWindow();
-        vcl::Cursor* pCur = pActiveView->GetCursor();
-        if ( pCur )
-        {
-            Point aLogicPos = pCur->GetPos();
-            aLogicPos.AdjustY(pCur->GetHeight() );
-            aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
-        }
-        aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
-        tools::Rectangle aRect( aPos, aPos );
-        QuickHelpFlags const nAlign = QuickHelpFlags::Left | QuickHelpFlags::Top | QuickHelpFlags::NoEvadePointer;
-        nTipVisibleSec = Help::ShowPopover(pTipVisibleSecParent, aRect, rText, nAlign);
-        pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
     }
 }
 
@@ -3164,7 +3127,6 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     }
 
     HideTip();
-    HideTipBelow();
 
     nFormSelStart = nFormSelEnd = 0;
     aFormText.clear();
@@ -3530,14 +3492,9 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             }
             break;
         case KEY_ESCAPE:
-            if ( nTipVisible )
+            if ( nTipVisible || nTipVisibleSec )
             {
                 HideTip();
-                bUsed = true;
-            }
-            else if( nTipVisibleSec )
-            {
-                HideTipBelow();
                 bUsed = true;
             }
             else if (eMode != SC_INPUT_NONE)
@@ -3565,7 +3522,6 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     ( eMode != SC_INPUT_NONE && ( bCursorKey || bInsKey ) ) ) )
     {
         HideTip();
-        HideTipBelow();
 
         if (bSelIsRef)
         {
@@ -3746,7 +3702,6 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
         }
 
         HideTip();
-        HideTipBelow();
 
         if ( bSelIsRef )
         {
@@ -4004,7 +3959,6 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     }
 
     HideTip();
-    HideTipBelow();
     bInOwnChange = false;
 }
 
