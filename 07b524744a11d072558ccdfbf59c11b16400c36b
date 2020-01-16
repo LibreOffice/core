@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a872933_d82f3bee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-16T08:49:15Z",
+      "side": 1,
+      "message": "Makes sense, I did the same in e.g. 189d3e10c7d25138c58f28ca4f5c041f1a9f4494.",
+      "revId": "07b524744a11d072558ccdfbf59c11b16400c36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
