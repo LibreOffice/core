@@ -28,7 +28,7 @@
 class ScRangeList;
 struct ScSheetLimits;
 
-class ScMultiSel
+class SC_DLLPUBLIC ScMultiSel
 {
 
 private:

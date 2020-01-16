@@ -14,8 +14,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <markdata.hxx>
-#include "../../source/core/data/markarr.cxx"
-#include "../../source/core/data/markmulti.cxx"
+#include <sheetlimits.hxx>
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsubobject-linkage"
@@ -877,8 +876,8 @@ void Test::testScMarkArraySearch()
     // empty
     {
         ScMarkArray ar(MAXROW);
-        testScMarkArraySearch_check(ar, -1, false, 0);
-        testScMarkArraySearch_check(ar, 100, false, 0);
+        testScMarkArraySearch_check(ar, -1, true, 0);
+        testScMarkArraySearch_check(ar, 100, true, 0);
     }
 
     // one range
