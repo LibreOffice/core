@@ -151,6 +151,7 @@ public:
     void testTdf115012();
     void testTdf123206_customLabelText();
     void testDeletedLegendEntries();
+    void testDataLabelsInAreaChart();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -265,6 +266,7 @@ public:
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
+    CPPUNIT_TEST(testDataLabelsInAreaChart);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2441,6 +2443,20 @@ void Chart2ExportTest::testDeletedLegendEntries()
         CPPUNIT_ASSERT(xPropertySet2->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
     }
+}
+
+void Chart2ExportTest::testDataLabelsInAreaChart()
+{
+    load("/chart2/qa/extras/data/xlsx/", "data_labels_in_area_chart.xlsx");
+    reload("Calc Office Open XML");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+    sal_Int32 nLabelPlacement = -1;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("LabelPlacement") >>= nLabelPlacement);
+    CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::CENTER, nLabelPlacement);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
