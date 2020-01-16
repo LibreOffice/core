@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-14 14:50:28 using:
+ Generated on 2020-01-19 20:29:49 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -61,12 +61,10 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
-#include <rtl/crc.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
@@ -93,7 +91,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
@@ -124,7 +121,6 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/headbar.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
@@ -145,6 +141,7 @@
 #include <vcl/task.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -331,7 +328,6 @@
 #include <editeng/writingmodeitem.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
@@ -386,7 +382,6 @@
 #include <tools/helpers.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
@@ -415,7 +410,6 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <svx/XPropertyTable.hxx>
-#include <svx/cube3d.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/extrud3d.hxx>
@@ -458,7 +452,6 @@
 #include <svx/sdtfchim.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/selectioncontroller.hxx>
-#include <svx/sphere3d.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdedtv.hxx>

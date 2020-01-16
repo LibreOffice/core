@@ -31,31 +31,6 @@
 class GalleryBrowser1;
 
 
-class GalleryButton : public PushButton
-{
-private:
-
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-
-public:
-
-                    GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits );
-};
-
-
-class GalleryThemeListBox final : public ListBox
-{
-    void            InitSettings();
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-
-public:
-
-                    GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits );
-};
-
-
 class Gallery;
 class GalleryThemeEntry;
 class GalleryTheme;
@@ -65,31 +40,26 @@ class SfxItemSet;
 
 namespace svx { namespace sidebar { class GalleryControl; } }
 
-class GalleryBrowser1 : public Control, public SfxListener
+class GalleryBrowser1 final : public SfxListener
 {
     friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;
-    friend class GalleryThemeListBox;
-    using Window::KeyInput;
 
 private:
 
-    VclPtr<GalleryButton>        maNewTheme;
-    VclPtr<GalleryThemeListBox>  mpThemes;
-    VclPtr<VclAbstractDialog>   mpThemePropertiesDialog; // to keep it alive during execution
-    Gallery*                mpGallery;
+    std::unique_ptr<weld::Button> mxNewTheme;
+    std::unique_ptr<weld::TreeView> mxThemes;
+    Gallery* mpGallery;
     std::unique_ptr<ExchangeData> mpExchangeData;
-    std::unique_ptr<SfxItemSet>   mpThemePropsDlgItemSet;
+    std::unique_ptr<SfxItemSet> mpThemePropsDlgItemSet;
 
-    Image                   aImgNormal;
-    Image                   aImgDefault;
-    Image                   aImgReadOnly;
+    OUString aImgNormal;
+    OUString aImgDefault;
+    OUString aImgReadOnly;
 
-    ::std::function<sal_Bool (const KeyEvent&,Window*)> const maKeyInputHandler;
     ::std::function<void ()> const maThemeSlectionHandler;
 
-    void                    ImplAdjustControls();
-    sal_uIntPtr             ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
+    void                    ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     static void             ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     void                    ImplGetExecuteVector(std::vector<OString>& o_aExec);
     void                    ImplExecute(const OString &rIdent);
@@ -98,33 +68,28 @@ private:
     void                    EndThemePropertiesDlgHdl(sal_Int32 nResult);
     void                    ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 nResult);
 
-    // Control
-    virtual void            Resize() override;
-    virtual void            GetFocus() override;
-
     // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-                            DECL_LINK( ClickNewThemeHdl, Button*, void );
-                            DECL_LINK( SelectThemeHdl, ListBox&, void );
-                            DECL_LINK( ShowContextMenuHdl, void*, void );
-                            DECL_LINK( PopupMenuHdl, Menu*, bool );
-                            DECL_LINK( DestroyThemePropertiesDlgHdl, void*, void );
+                            DECL_LINK( ClickNewThemeHdl, weld::Button&, void );
+                            DECL_LINK( SelectThemeHdl, weld::TreeView&, void );
+                            DECL_LINK( PopupMenuHdl, const CommandEvent&, bool );
+                            DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
 
 public:
 
                             GalleryBrowser1(
-                                vcl::Window* pParent,
+                                weld::Builder& rBuilder,
                                 Gallery* pGallery,
-                                const ::std::function<sal_Bool (const KeyEvent&,Window*)>& rKeyInputHandler,
                                 const ::std::function<void ()>& rThemeSlectionHandler);
-                            virtual ~GalleryBrowser1() override;
-    virtual void            dispose() override;
 
-    void                    SelectTheme( sal_uInt16 nThemePos ) { mpThemes->SelectEntryPos( nThemePos ); SelectThemeHdl( *mpThemes ); }
-    OUString                GetSelectedTheme() const { return mpThemes->GetEntryCount() ? mpThemes->GetSelectedEntry() : OUString(); }
+                            ~GalleryBrowser1();
 
-    void                    ShowContextMenu();
+    void                    SelectTheme( sal_uInt16 nThemePos ) { mxThemes->select( nThemePos ); SelectThemeHdl( *mxThemes ); }
+    OUString                GetSelectedTheme() const { return mxThemes->get_selected_text(); }
+    void                    GrabFocus();
+
+    void                    ShowContextMenu(const CommandEvent& rCEvt);
     bool                    KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow );
 };
 

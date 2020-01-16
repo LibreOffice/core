@@ -1221,16 +1221,10 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
     return bRet;
 }
 
-void GalleryTheme::CopyToClipboard(vcl::Window* pWindow, sal_uInt32 nPos)
+void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
-    pTransferable->CopyToClipboard( pWindow );
-}
-
-void GalleryTheme::StartDrag(vcl::Window* pWindow, sal_uInt32 nPos)
-{
-    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, true );
-    pTransferable->StartDrag( pWindow, DND_ACTION_COPY | DND_ACTION_LINK );
+    pTransferable->CopyToClipboard(GetSystemClipboard());
 }
 
 SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const

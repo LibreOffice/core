@@ -5711,6 +5711,7 @@ private:
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
+    DECL_LINK(StartDragHdl, VclDrawingArea*, bool);
 
     // SalInstanceWidget has a generic listener for all these
     // events, ignore the ones we have specializations for
@@ -5757,6 +5758,7 @@ public:
         m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
         m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
         m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
+        m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
     }
 
     virtual void queue_draw() override
@@ -5828,6 +5830,11 @@ public:
     virtual Point get_accessible_location() override
     {
         return m_xDrawingArea->OutputToAbsoluteScreenPixel(Point());
+    }
+
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
+    {
+        m_xDrawingArea->SetDragHelper(rHelper, eDNDConstants);
     }
 
     virtual ~SalInstanceDrawingArea() override
@@ -5903,6 +5910,13 @@ IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)
 {
     return m_aQueryTooltipHdl.Call(rHelpArea);
+}
+
+IMPL_LINK_NOARG(SalInstanceDrawingArea, StartDragHdl, VclDrawingArea*, bool)
+{
+    if (m_aDragBeginHdl.Call(*this))
+        return true;
+    return false;
 }
 
 namespace {

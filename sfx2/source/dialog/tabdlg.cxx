@@ -302,7 +302,7 @@ const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
 
 SfxTabDialogController::SfxTabDialogController
 (
-    weld::Window* pParent,              // Parent Window
+    weld::Widget* pParent,              // Parent Window
     const OUString& rUIXMLDescription, const OString& rID, // Dialog .ui path, Dialog Name
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand

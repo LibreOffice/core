@@ -90,7 +90,11 @@ private:
     SAL_DLLPRIVATE bool         ImplWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
     SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject(sal_uInt32 nPos) const
-                                { return aObjectList[ nPos ].get(); }
+    {
+        if (nPos < aObjectList.size())
+            return aObjectList[ nPos ].get();
+        return nullptr;
+    }
     const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
 
     SAL_DLLPRIVATE sal_uInt32   ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
@@ -162,12 +166,12 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE SgaObjKind   GetObjectKind(sal_uInt32 nPos) const
-                                {
-                                    DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
-                                    return ImplGetGalleryObject( nPos )->eObjKind;
-                                }
-
+    SAL_DLLPRIVATE SgaObjKind GetObjectKind(sal_uInt32 nPos) const
+    {
+        if (nPos < GetObjectCount())
+            return ImplGetGalleryObject( nPos )->eObjKind;
+        return SgaObjKind::NONE;
+    }
 
     SAL_DLLPRIVATE const INetURLObject& GetObjectURL(sal_uInt32 nPos) const
                                 {
@@ -192,8 +196,7 @@ public:
 
     SAL_DLLPRIVATE bool         InsertTransferable(const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uInt32 nInsertPos);
 
-    SAL_DLLPRIVATE void         CopyToClipboard(vcl::Window* pWindow, sal_uInt32 nPos);
-    SAL_DLLPRIVATE void         StartDrag(vcl::Window* pWindow, sal_uInt32 nPos);
+    SAL_DLLPRIVATE void         CopyToClipboard(sal_uInt32 nPos);
 
 public:
 

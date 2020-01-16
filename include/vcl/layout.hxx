@@ -19,6 +19,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/commandevent.hxx>
@@ -630,10 +631,13 @@ public:
 };
 
 class VCL_DLLPUBLIC VclDrawingArea final : public Control
+                                         , public DragSourceHelper
 {
 private:
     FactoryFunction m_pFactoryFunction;
     void* m_pUserData;
+    rtl::Reference<TransferDataContainer> m_xTransferHelper;
+    sal_Int8 m_nDragAction;
     Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void> m_aPaintHdl;
     Link<const Size&, void> m_aResizeHdl;
     Link<const MouseEvent&, bool> m_aMousePressHdl;
@@ -644,6 +648,7 @@ private:
     Link<VclDrawingArea&, void> m_aStyleUpdatedHdl;
     Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
+    Link<VclDrawingArea*, bool> m_aStartDragHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
@@ -723,6 +728,7 @@ private:
             Help::ShowQuickHelp(this, aHelpArea, sHelpTip, eHelpWinStyle);
         }
     }
+    virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override;
     virtual FactoryFunction GetUITestFactory() const override
     {
         if (m_pFactoryFunction)
@@ -733,8 +739,10 @@ private:
 public:
     VclDrawingArea(vcl::Window *pParent, WinBits nStyle)
         : Control(pParent, nStyle)
+        , DragSourceHelper(this)
         , m_pFactoryFunction(nullptr)
         , m_pUserData(nullptr)
+        , m_nDragAction(0)
     {
         SetBackground();
     }
@@ -786,6 +794,15 @@ public:
     void SetQueryTooltipHdl(const Link<tools::Rectangle&, OUString>& rLink)
     {
         m_aQueryTooltipHdl = rLink;
+    }
+    void SetStartDragHdl(const Link<VclDrawingArea*, bool>& rLink)
+    {
+        m_aStartDragHdl = rLink;
+    }
+    void SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+    {
+        m_xTransferHelper = rHelper;
+        m_nDragAction = eDNDConstants;
     }
 };
 
