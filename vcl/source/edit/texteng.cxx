@@ -2135,8 +2135,6 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
     sal_Int32 nIndex = pLine->GetStart();
     TextLine aSaveLine( *pLine );
 
-    vcl::Font aFont;
-
     while ( nIndex < pNode->GetText().getLength() )
     {
         bool bEOL = false;
