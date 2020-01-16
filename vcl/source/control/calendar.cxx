@@ -204,8 +204,6 @@ void Calendar::ImplFormat()
 
         OUString const a99Text("99");
 
-        vcl::Font aOldFont = GetFont();
-
         long n99TextWidth = GetTextWidth( a99Text );
         long nTextHeight = GetTextHeight();
 
@@ -1532,7 +1530,6 @@ void Calendar::EndSelection()
 Size Calendar::CalcWindowSizePixel() const
 {
     OUString  const a99Text("99");
-    vcl::Font aOldFont = GetFont();
 
     Size    aSize;
     long    n99TextWidth = GetTextWidth( a99Text );
