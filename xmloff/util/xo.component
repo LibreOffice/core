@@ -96,7 +96,8 @@
     constructor="com_sun_star_comp_Draw_XMLOasisStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLOasisStylesExporter"/>
   </implementation>
-  <implementation name="XMLDrawingLayerExport">
+  <implementation name="XMLDrawingLayerExport"
+    constructor="com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation">
     <service name="com.sun.star.comp.DrawingLayer.XMLExporter"/>
   </implementation>
   <implementation name="XMLImpressClipboardExport">

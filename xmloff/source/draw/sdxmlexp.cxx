@@ -2784,7 +2784,17 @@ com_sun_star_comp_Draw_XMLOasisExporter_get_implementation(uno::XComponentContex
             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
 }
 
-SERVICE( XMLDrawingLayerExport, "com.sun.star.comp.DrawingLayer.XMLExporter", "XMLDrawingLayerExport", true, SvXMLExportFlags::OASIS|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::EMBEDDED );
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(
+        new SdXMLExport(pCtx, "XMLDrawingLayerExport", true,
+                        SvXMLExportFlags::OASIS | SvXMLExportFlags::STYLES
+                            | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
+                            | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
+}
+
 SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExporter", "XMLImpressClipboardExport", false, SvXMLExportFlags::OASIS|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::EMBEDDED );
 
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()

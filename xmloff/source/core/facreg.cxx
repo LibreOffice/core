@@ -54,11 +54,8 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * 
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
-        // drawing layer export
-        SINGLEFACTORY( XMLDrawingLayerExport )
-
         // impress xml clipboard export
-        else SINGLEFACTORY( XMLImpressClipboardExport )
+        SINGLEFACTORY( XMLImpressClipboardExport )
 
         // chart oasis import
         else SINGLEFACTORY( SchXMLImport )
