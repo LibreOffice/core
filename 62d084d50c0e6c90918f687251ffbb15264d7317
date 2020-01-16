@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b4d0d2c_f0b275a5",
+        "filename": "writerfilter/source/dmapper/ConversionHelper.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-16T05:50:38Z",
+      "side": 1,
+      "message": "Hmm... You are converting to double, right? Then why do you add 36? That trick (adding half of divisor) is useful for correct rounding when you are doing integer arythmetics; but here you are effectively skew the results up? Correct result is `_t*(127/72.0)`.",
+      "range": {
+        "startLine": 426,
+        "startChar": 22,
+        "endLine": 426,
+        "endChar": 38
+      },
+      "revId": "62d084d50c0e6c90918f687251ffbb15264d7317",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
