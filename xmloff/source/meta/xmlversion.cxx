@@ -105,8 +105,8 @@ XMLVersionListImport::XMLVersionListImport(
 :   SvXMLImport(rContext, ""),
     maVersions( rVersions )
 {
-    GetNamespaceMap().AddAtIndex( xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
-                                  xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
+    GetNamespaceMap().Add( xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
+                           xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_VERSIONS_LIST );
 }
 
 XMLVersionListImport::~XMLVersionListImport() throw()
@@ -117,7 +117,7 @@ SvXMLImportContext *XMLVersionListImport::CreateFastContext( sal_Int32 nElement,
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ( nElement == XML_ELEMENT(FRAMEWORK, xmloff::token::XML_VERSION_LIST) )
+    if ( nElement == XML_ELEMENT(VERSIONS_LIST, xmloff::token::XML_VERSION_LIST) )
     {
         pContext = new XMLVersionListContext( *this );
     }
