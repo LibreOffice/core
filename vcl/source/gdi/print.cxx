@@ -318,7 +318,6 @@ void Printer::CopyArea( const Point& /*rDestPt*/,
 
 tools::Rectangle Printer::SetBackgroundComponentBounds()
 {
-    assert(this);
     Point aPageOffset = Point( 0, 0 ) - this->GetPageOffsetPixel();
     Size aSize  = this->GetPaperSizePixel();
     return tools::Rectangle( aPageOffset, aSize );
