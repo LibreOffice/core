@@ -2243,11 +2243,12 @@ namespace {
         Size aSize(1024, 1024);
         xDevice->SetOutputSizePixel(aSize);
 
+#if 0
         for (auto & aFontName : aFontNames)
         {
             vcl::Font aFont(aFontName, Size(0,96));
-#if 0
-            aFont.SetCOL_BLACK);
+
+            aFont.Set(COL_BLACK);
             xDevice->SetFont(aFont);
             xDevice->Erase();
 
@@ -2288,8 +2289,8 @@ include/vcl/outdev.hxx:                                              DrawTextFla
                                              TextRectInfo* pInfo = nullptr,
                                              const vcl::ITextLayout* _pTextLayout = nullptr ) const;
 
-#endif
         }
+#endif
 
     }
 };

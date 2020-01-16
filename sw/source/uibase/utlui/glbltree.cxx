@@ -1238,7 +1238,6 @@ void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCont
       !pCont->GetSection()->IsConnectFlag())
     {
         rRenderContext.Push(PushFlags::FONT);
-        vcl::Font aOldFont(rRenderContext.GetFont());
         vcl::Font aFont(rRenderContext.GetFont());
         aFont.SetColor(COL_LIGHTRED);
         rRenderContext.SetFont(aFont);
