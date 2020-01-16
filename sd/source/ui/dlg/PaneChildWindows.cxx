@@ -25,7 +25,6 @@
 #include <strings.hrc>
 #include <sdresid.hxx>
 
-#include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 

@@ -32,7 +32,6 @@
 
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/IDialogRenderable.hxx>
