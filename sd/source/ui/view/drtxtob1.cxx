@@ -175,6 +175,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     nStartPara = 0;
                     nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
                 }
+
+                pOLV->GetOutliner()->UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxStyleSheet* pStyleSheet = nullptr;
@@ -204,6 +206,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
+                pOLV->GetOutliner()->UndoActionEnd();
+                mpViewShell->Invalidate( SID_UNDO );
             }
             rReq.Done();
 
@@ -228,6 +232,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     nStartPara = 0;
                     nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
                 }
+
+                pOLV->GetOutliner()->UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxStyleSheet* pStyleSheet = nullptr;
@@ -267,6 +273,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
+                pOLV->GetOutliner()->UndoActionEnd();
+                mpViewShell->Invalidate( SID_UNDO );
             }
             else
             {
