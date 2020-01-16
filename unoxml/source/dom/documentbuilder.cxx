@@ -37,6 +37,7 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -393,11 +394,27 @@ namespace DOM
         OString oUri = OUStringToOString(sUri, RTL_TEXTENCODING_UTF8);
         char *uri = const_cast<char*>(oUri.getStr());
         xmlDocPtr pDoc = xmlCtxtReadFile(pContext.get(), uri, nullptr, 0);
+
+        Reference< XDocument > xRet;
+
+        // if we failed to parse the URI as a simple file, lets try via a ucb stream.
+        // For Android file:///assets/ URLs which must go via the osl/ file API.
         if (pDoc == nullptr) {
-            throwEx(pContext.get());
-        }
-        Reference< XDocument > const xRet(
-                CDocument::CreateCDocument(pDoc).get());
+            Reference < XSimpleFileAccess3 > xStreamAccess(
+                SimpleFileAccess::create( comphelper::getProcessComponentContext() ) );
+            Reference< XInputStream > xInStream = xStreamAccess->openFileRead( sUri );
+            if (!xInStream.is())
+                throwEx(pContext.get());
+
+            // loop over every layout entry in current file
+            xRet = parse( xInStream );
+
+            xInStream->closeInput();
+            xInStream.clear();
+
+        } else
+            xRet = CDocument::CreateCDocument(pDoc).get();
+
         return xRet;
     }
 
