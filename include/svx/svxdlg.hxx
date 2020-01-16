@@ -344,15 +344,16 @@ public:
                                             SfxBindings* pBindings,
                                             svx::SpellDialogChildWindow* pSpellChildWindow )=0;
 
-    virtual VclPtr<VclAbstractDialog> CreateActualizeProgressDialog(weld::Window* pParent,
+    virtual VclPtr<VclAbstractDialog> CreateActualizeProgressDialog(weld::Widget* pParent,
                                             GalleryTheme* pThm) = 0;
-    virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Widget* pParent,
                                              const OUString& rOldText) = 0;
-    virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Widget* pParent,
                                             GalleryTheme* pThm) = 0;
-    virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Window* pParent,
+    virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Widget* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
+
     virtual VclPtr<AbstractURLDlg> CreateURLDialog(weld::Widget* pParent,
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,

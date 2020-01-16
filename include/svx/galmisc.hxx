@@ -91,7 +91,6 @@ bool                FileExists( const INetURLObject& rURL );
 bool                CreateDir(  const INetURLObject& rURL );
 bool                CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 bool                KillFile( const INetURLObject& rURL );
-BitmapEx            GalleryResGetBitmapEx(const OUString& rId);
 
 class SgaIMapInfo final : public SdrObjUserData, public SfxListener
 {
