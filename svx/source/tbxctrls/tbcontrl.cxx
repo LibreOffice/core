@@ -2074,11 +2074,11 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
     mxRecentColorSet->SetNoSelection();
     mpDefaultButton = &rButton;
 
-    maMenuButton.set_inactive();
-
     maSelectedLink.Call(aNamedColor);
 
     maColorSelectFunction(maCommand, aNamedColor);
+
+    maMenuButton.set_inactive();
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
@@ -2103,8 +2103,15 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 
 IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
 {
+    // copy before set_inactive
+    auto nColor = GetSelectEntryColor().first;
+    auto pParentWindow = mpParentWindow;
+    OUString sCommand = maCommand;
+    std::shared_ptr<PaletteManager> xPaletteManager(mxPaletteManager);
+
     maMenuButton.set_inactive();
-    mxPaletteManager->PopupColorPicker(mpParentWindow, maCommand, GetSelectEntryColor().first);
+
+    xPaletteManager->PopupColorPicker(pParentWindow, sCommand, nColor);
 }
 
 void SvxColorWindow::SetNoSelection()
