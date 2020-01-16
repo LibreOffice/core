@@ -8,7 +8,7 @@
 #
 # Conversion watch, initially intended to detect if document layout changed since the last time it was run.
 #
-# Print a set of docs, compare the ps (or was it pdf) against the old run and highlight the different pieces
+# Print a set of docs, compare the pdf against the old run and highlight the differences
 #
 
 import getopt
