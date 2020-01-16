@@ -192,7 +192,7 @@ public:
 
     SAL_DLLPRIVATE bool         InsertTransferable(const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uInt32 nInsertPos);
 
-    SAL_DLLPRIVATE void         CopyToClipboard(vcl::Window* pWindow, sal_uInt32 nPos);
+    SAL_DLLPRIVATE void         CopyToClipboard(sal_uInt32 nPos);
     SAL_DLLPRIVATE void         StartDrag(vcl::Window* pWindow, sal_uInt32 nPos);
 
 public:
