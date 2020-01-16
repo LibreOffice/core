@@ -877,8 +877,8 @@ void Test::testScMarkArraySearch()
     // empty
     {
         ScMarkArray ar(MAXROW);
-        testScMarkArraySearch_check(ar, -1, false, 0);
-        testScMarkArraySearch_check(ar, 100, false, 0);
+        testScMarkArraySearch_check(ar, -1, true, 0);
+        testScMarkArraySearch_check(ar, 100, true, 0);
     }
 
     // one range

@@ -21,16 +21,17 @@
 #define INCLUDED_SC_INC_MARKARR_HXX
 
 #include "address.hxx"
-#include <memory>
+#include <vector>
 
 class ScRangeList;
 
-#define SC_MARKARRAY_DELTA    4
-
 struct ScMarkEntry
 {
-    SCROW           nRow;
-    bool            bMarked;
+    SCROW           nRow : 31;
+    bool            bMarked : 1;
+
+    bool operator==(const ScMarkEntry& rOther) const
+    { return nRow == rOther.nRow && bMarked == rOther.bMarked; }
 };
 
 /**
@@ -40,10 +41,8 @@ struct ScMarkEntry
 */
 class ScMarkArray
 {
-    SCSIZE                            nCount;
-    SCSIZE                            nLimit;
-    std::unique_ptr<ScMarkEntry[]>    pData;
-    SCROW                             mnMaxRow;
+    std::vector<ScMarkEntry>    mvData;
+    SCROW                       mnMaxRow;
 
 friend class ScMarkArrayIter;
 friend class ScDocument;                // for FillInfo
@@ -60,7 +59,7 @@ public:
     bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
 
-    bool    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
+    bool    HasMarks() const    { return mvData.size() > 1 || ( mvData.size() == 1 && mvData[0].bMarked ); }
 
     ScMarkArray& operator=( ScMarkArray const & rSource );
     ScMarkArray& operator=(ScMarkArray&& rSource) noexcept;
