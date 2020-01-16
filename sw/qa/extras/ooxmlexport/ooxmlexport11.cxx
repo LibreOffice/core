@@ -1123,6 +1123,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf81100, "tdf81100.docx")
         assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf88496, "tdf88496.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Switch off repeating header, there is no place for it.
+    // Now there are only 3 pages with complete table content
+    // instead of a 51-page long table only with header.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

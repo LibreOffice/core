@@ -1074,10 +1074,11 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     if ( nRowCount < nRepeat )
     {
         // First case: One of the repeated headline does not fit to the page anymore.
-        // At least one more non-heading row has to stay in this table in
-        // order to avoid loops:
+        // tdf#88496 Disable repeated headline (like for #i44910#) to avoid loops and
+        // to fix interoperability problems (very long tables only with headline)
         OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
-        bKeepNextRow = true;
+        m_pTable->SetRowsToRepeat(0);
+        return false;
     }
     else if ( !GetIndPrev() && nRepeat == nRowCount )
     {
