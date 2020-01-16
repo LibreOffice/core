@@ -69,7 +69,7 @@ XMLMetaImportComponent::XMLMetaImportComponent(
 }
 
 SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if (nElement == XML_ELEMENT( OFFICE, XML_DOCUMENT_META ))
     {
@@ -81,10 +81,7 @@ SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElemen
         return new SvXMLMetaDocumentContext(
                         *this, mxDocProps);
     }
-    else
-    {
-        return SvXMLImport::CreateFastContext(nElement, xAttrList);
-    }
+    return nullptr;
 }
 
 void SAL_CALL XMLMetaImportComponent::setTargetDocument(

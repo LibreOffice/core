@@ -542,7 +542,7 @@ public:
 }
 
 SvXMLImportContext* ODBFilter::CreateFastContext(sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList )
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -561,12 +561,7 @@ SvXMLImportContext* ODBFilter::CreateFastContext(sal_Int32 nElement,
         case XML_ELEMENT(OOO, XML_DOCUMENT_CONTENT):
             pContext = new DBXMLDocumentContentContext(*this);
             break;
-        default:
-            break;
     }
-
-    if ( !pContext )
-        pContext = SvXMLImport::CreateFastContext( nElement, xAttrList );
 
     return pContext;
 }

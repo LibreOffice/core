@@ -372,13 +372,11 @@ public:
     }
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) override
     {
         if (Element == XML_ELEMENT(OFFICE, XML_STYLES))
-        {
             return new StoredChapterNumberingRootContext(m_rNumRules, *this);
-        }
-        return SvXMLImport::CreateFastContext(Element, xAttrList);
+        return nullptr;
     }
 };
 

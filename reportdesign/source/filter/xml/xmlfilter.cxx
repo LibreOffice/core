@@ -727,7 +727,7 @@ public:
 
 SvXMLImportContext* ORptFilter::CreateDocumentContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+                                      const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -744,12 +744,7 @@ SvXMLImportContext* ORptFilter::CreateDocumentContext( sal_uInt16 nPrefix,
         case XML_TOK_DOC_CONTENT:
             pContext = new RptXMLDocumentContentContext(*this, nPrefix, rLocalName);
             break;
-        default:
-            break;
     }
-
-    if ( !pContext )
-        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
 
     return pContext;
 }

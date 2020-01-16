@@ -1276,10 +1276,6 @@ SvXMLImportContext *AnimationsImport::CreateDocumentContext(
     {
          pContext = new AnimationNodeContext( mxRootNode, *this, nPrefix, rLocalName, xAttrList );
     }
-    else
-    {
-        pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
-    }
 
     return pContext;
 }
