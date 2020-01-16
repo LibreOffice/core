@@ -314,9 +314,10 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {
-        aRet.realloc(1);
+        aRet.realloc(2);
         sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::DataLabelPlacement::TOP;
+        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
     {
