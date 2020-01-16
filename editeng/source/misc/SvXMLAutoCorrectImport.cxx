@@ -40,12 +40,11 @@ SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() throw ()
 }
 
 SvXMLImportContext *SvXMLAutoCorrectImport::CreateFastContext( sal_Int32 Element,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
         return new SvXMLWordListContext( *this );
-    else
-        return SvXMLImport::CreateFastContext( Element, xAttrList );
+    return nullptr;
 }
 
 SvXMLWordListContext::SvXMLWordListContext(
@@ -114,12 +113,11 @@ SvXMLExceptionListImport::~SvXMLExceptionListImport() throw ()
 }
 
 SvXMLImportContext *SvXMLExceptionListImport::CreateFastContext(sal_Int32 Element,
-    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+    const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
         return new SvXMLExceptionListContext( *this );
-    else
-        return SvXMLImport::CreateFastContext( Element, xAttrList );
+    return nullptr;
 }
 
 SvXMLExceptionListContext::SvXMLExceptionListContext(

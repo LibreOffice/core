@@ -347,12 +347,11 @@ ConvDicXMLImport::ConvDicXMLImport( ConvDic *pConvDic ) :
 
 SvXMLImportContext * ConvDicXMLImport::CreateFastContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
         return new ConvDicXMLDictionaryContext_Impl( *this );
-    else
-        return SvXMLImport::CreateFastContext( Element, xAttrList );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

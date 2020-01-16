@@ -113,17 +113,13 @@ XMLVersionListImport::~XMLVersionListImport() throw()
 {}
 
 SvXMLImportContext *XMLVersionListImport::CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList )
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
     if ( nElement == XML_ELEMENT(VERSIONS_LIST, xmloff::token::XML_VERSION_LIST) )
     {
         pContext = new XMLVersionListContext( *this );
-    }
-    else
-    {
-        pContext = SvXMLImport::CreateFastContext( nElement, xAttrList );
     }
 
     return pContext;

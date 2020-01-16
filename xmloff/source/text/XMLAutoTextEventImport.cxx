@@ -86,16 +86,13 @@ void XMLAutoTextEventImport::initialize(
 
 SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
     sal_Int32 nElement,
-    const Reference<css::xml::sax::XFastAttributeList> & xAttrList )
+    const Reference<css::xml::sax::XFastAttributeList> & /*xAttrList*/ )
 {
     if ( xEvents.is() && nElement == XML_ELEMENT(OOO, XML_AUTO_TEXT_EVENTS) )
     {
         return new XMLAutoTextContainerEventImport(*this, xEvents);
     }
-    else
-    {
-        return SvXMLImport::CreateFastContext(nElement, xAttrList);
-    }
+    return nullptr;
 }
 
 

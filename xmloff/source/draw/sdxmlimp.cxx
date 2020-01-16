@@ -686,8 +686,6 @@ SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,
             pContext = new SdXMLFlatDocContext_Impl( *this, xDPS->getDocumentProperties());
         }
         break;
-        default:
-            pContext = SvXMLImport::CreateFastContext(nElement, xAttrList);
     }
     return pContext;
 }
