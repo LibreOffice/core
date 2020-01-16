@@ -33,7 +33,7 @@ class AreaTransparencyGradientPopup final
 private:
     AreaPropertyPanelBase& mrAreaPropertyPanel;
     std::unique_ptr<weld::Builder> mxBuilder;
-    std::unique_ptr<weld::Widget> mxTopLevel;
+    std::unique_ptr<weld::Container> mxTopLevel;
     std::unique_ptr<weld::Widget> mxCenterGrid;
     std::unique_ptr<weld::Widget> mxAngleGrid;
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrCenterX;
@@ -50,11 +50,13 @@ private:
     DECL_LINK(ModifiedTrgrHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(Left_Click45_Impl, const OString&, void);
     DECL_LINK(Right_Click45_Impl, const OString&, void);
+    DECL_LINK(FocusHdl, weld::Widget&, void);
+
 public:
     AreaTransparencyGradientPopup(AreaPropertyPanelBase& rPanel, weld::Widget* pParent);
     ~AreaTransparencyGradientPopup();
 
-    weld::Widget* getTopLevel() const { return mxTopLevel.get(); }
+    weld::Container* getTopLevel() const { return mxTopLevel.get(); }
 
     void Rearrange(XFillFloatTransparenceItem const * pItem);
 };

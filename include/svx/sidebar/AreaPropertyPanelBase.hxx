@@ -160,6 +160,7 @@ protected:
     DECL_LINK(ModifyTransSliderHdl, weld::Scale&, void);
     DECL_LINK(ClickImportBitmapHdl, weld::Button&, void);
     DECL_LINK(ToolbarHdl_Impl, const OString&, void);
+    DECL_LINK(ToggleMenuHdl, const OString&, void);
 
     void Update();
     void ImpUpdateTransparencies();
