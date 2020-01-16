@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>
+#include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -30,12 +31,15 @@ class SFX2_DLLPUBLIC ToolbarUnoDispatcher
 {
 private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
+    SvtMiscOptions m_aToolbarOptions;
     weld::Toolbar* m_pToolbar;
 
     DECL_LINK(SelectHdl, const OString&, void);
     DECL_LINK(ToggleMenuHdl, const OString&, void);
+    DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
 
     void CreateController(const OUString& rCommand);
+    vcl::ImageType GetIconSize() const;
 
     typedef std::map<OUString, css::uno::Reference<css::frame::XToolbarController>>
         ControllerContainer;

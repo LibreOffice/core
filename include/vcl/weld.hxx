@@ -1995,6 +1995,7 @@ public:
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) = 0;
 
     virtual vcl::ImageType get_icon_size() const = 0;
+    virtual void set_icon_size(vcl::ImageType eType) = 0;
 
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
     void connect_menu_toggled(const Link<const OString&, void>& rLink) { m_aToggleMenuHdl = rLink; }
