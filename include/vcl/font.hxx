@@ -43,7 +43,7 @@ VCL_DLLPUBLIC SvStream&  WriteFont( SvStream& rOStm, const vcl::Font& );
 
 namespace vcl {
 
-class VCL_DLLPUBLIC Font
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Font
 {
 public:
     explicit            Font();
