@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c7fa247_11bb49be",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-16T08:17:31Z",
+      "side": 1,
+      "message": "Use\n\n@since LibreOffice 6.5\n\nfor the UNO API extension",
+      "range": {
+        "startLine": 332,
+        "startChar": 1,
+        "endLine": 333,
+        "endChar": 6
+      },
+      "revId": "764e8d8a5fffbd59784264e34a96e276223a9d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55e4c4c_9e19191f",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-16T08:17:31Z",
+      "side": 1,
+      "message": "Use\n\n@since LibreOffice 6.5\n\nfor the UNO API extension",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 6
+      },
+      "revId": "764e8d8a5fffbd59784264e34a96e276223a9d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
