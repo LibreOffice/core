@@ -43,6 +43,34 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
     assertXPathContent(p_XmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor/wp:positionH/wp:posOffset", "4445");
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
+{
+    //the line shape has anchor in the first cell however it has to
+    //be positioned to an another cell. To reach this we must handle
+    //the o:allowincell attribute of the shape, and its position has
+    //to be calculated from the page frame instead of the table:
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888vml The line shape has bad place!",
+                                 text::RelOrientation::PAGE_FRAME, nValue);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
+{
+    //the shape has anchor in the first cell however it has to
+    //be positioned to the right side of the page. To reach this we must handle
+    //the layoutInCell attribute of the shape, and its position has
+    //to be calculated from the page frame instead of the table:
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888dml The shape has bad place!",
+                                 text::RelOrientation::PAGE_FRAME, nValue);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
 {
     //the original tdf87569 sample has vml shapes...
