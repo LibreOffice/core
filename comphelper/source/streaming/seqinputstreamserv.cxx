@@ -96,8 +96,7 @@ sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & 
 
 uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> s { "com.sun.star.io.SequenceInputStream" };
-    return s;
+    return { "com.sun.star.io.SequenceInputStream" };
 }
 
 // css::io::XInputStream:

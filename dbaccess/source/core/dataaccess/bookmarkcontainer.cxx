@@ -77,8 +77,7 @@ sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rService
 
 Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aReturn { "com.sun.star.sdb.DefinitionContainer" };
-    return aReturn;
+    return { "com.sun.star.sdb.DefinitionContainer" };
 }
 
 // XNameContainer
