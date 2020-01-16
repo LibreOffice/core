@@ -23,7 +23,7 @@
  *
  * In Skia's case we draw into SkSurface (as that's what's GPU-backed),
  * but then for using the result we need to get an associated SkImage.
- * The use of SkSurface::makeImageSnapshot() complicates thingss in two ways:
+ * The use of SkSurface::makeImageSnapshot() complicates things in two ways:
  * - it does data copy if we want a sub-rectangle, so we need to pass a reference
  *   and the geometry wanted
  * - it does a snapshot of the state, meaning any further drawing into the SkSurface
