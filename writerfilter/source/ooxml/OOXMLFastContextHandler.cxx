@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
@@ -64,6 +66,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnToken(oox::XML_TOKEN_COUNT),
   mpStream(nullptr),
   mnTableDepth(0),
+  mbLayoutInCell(true),
   inPositionV(false),
   m_xContext(context),
   m_bDiscardChildren(false),
@@ -84,6 +87,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mpStream(pContext->mpStream),
   mpParserState(pContext->mpParserState),
   mnTableDepth(pContext->mnTableDepth),
+  mbLayoutInCell(pContext->mbLayoutInCell ),
   inPositionV(pContext->inPositionV),
   m_xContext(pContext->m_xContext),
   m_bDiscardChildren(pContext->m_bDiscardChildren),
@@ -1580,6 +1584,21 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
             bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
 
+
+            //tdf#87569: Fix table layout with correcting anchoring
+            //If anchored object is in table, Word calculates its position from cell border
+            //instead of page (what is set in the sample document)
+            if (mnTableDepth > 0 && mbLayoutInCell) //if we had a table
+            {
+                uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+                sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
+                xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
+                //and the correction:
+                if (nCurrentHorOriRel == com::sun::star::text::RelOrientation::PAGE_FRAME)
+                    xShapePropSet->setPropertyValue("HoriOrientRelation",
+                                                    uno::makeAny(text::RelOrientation::FRAME));
+            }
+
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {
@@ -1651,6 +1670,11 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                         new OOXMLFastContextHandlerWrapper(this,
                                                            pChildContext,
                                                            this);
+
+                    //tdf129888 check if the allowincell attribute false of the vmlshape
+                    if (Attribs->hasAttribute(NMSP_vmlOffice | XML_allowincell))
+                        mbLayoutInCell
+                            = !(Attribs->getValue(NMSP_vmlOffice | XML_allowincell) == "f");
 
                     if (!bGroupShape)
                     {

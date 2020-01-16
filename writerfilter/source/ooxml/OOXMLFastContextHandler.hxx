@@ -202,6 +202,9 @@ protected:
     // the table depth of this context
     unsigned int mnTableDepth;
 
+    // the o:allowincell attribute handler, if it is presented and has f value the bool is false else true.
+    bool mbLayoutInCell;
+
     /// @throws css::uno::RuntimeException
     /// @throws css::xml::sax::SAXException
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
