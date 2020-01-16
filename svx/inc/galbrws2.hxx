@@ -56,46 +56,39 @@ namespace o3tl
 }
 
 
-class GalleryToolBox final : public ToolBox
-{
-private:
-
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-
-public:
-
-                    GalleryToolBox( GalleryBrowser2* pParent );
-};
-
-
 class Gallery;
+class GalleryDragDrop;
 class GalleryTheme;
 class GalleryIconView;
 class GalleryListView;
 class GalleryPreview;
+class GalleryTransferable;
 class Menu;
 class SgaObject;
 struct DispatchInfo;
 
 namespace svx { namespace sidebar { class GalleryControl; } }
 
-class GalleryBrowser2 : public Control, public SfxListener
+class GalleryBrowser2 : public SfxListener
 {
     friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;
-    using Window::KeyInput;
 
 private:
 
     SvtMiscOptions      maMiscOptions;
     Gallery*            mpGallery;
     GalleryTheme*       mpCurTheme;
-    VclPtr<GalleryIconView>    mpIconView;
-    VclPtr<GalleryListView>    mpListView;
-    VclPtr<GalleryPreview> mpPreview;
-    VclPtr<GalleryToolBox> maViewBox;
-    VclPtr<FixedLine>   maSeparator;
-    VclPtr<FixedText>   maInfoBar;
+    std::unique_ptr<GalleryIconView> mxIconView;
+    std::unique_ptr<weld::CustomWeld> mxIconViewWin;
+    std::unique_ptr<weld::TreeView> mxListView;
+    std::unique_ptr<GalleryDragDrop> mxDragDropTargetHelper;
+    std::unique_ptr<GalleryPreview> mxPreview;
+    std::unique_ptr<weld::CustomWeld> mxPreviewWin;
+    std::unique_ptr<weld::ToggleButton> mxIconButton;
+    std::unique_ptr<weld::ToggleButton> mxListButton;
+    std::unique_ptr<weld::Label> mxInfoBar;
+    rtl::Reference<GalleryTransferable> m_xHelper;
     sal_uInt32 mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
@@ -103,24 +96,25 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::util::XURLTransformer > m_xTransformer;
 
-    void                InitSettings();
-
     void                ImplUpdateViews( sal_uInt16 nSelectionId );
     void                ImplUpdateInfoBar();
     sal_uInt32          ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
     void                ImplSelectItemId(sal_uInt32 nItemId);
-
-    // Control
-    virtual void        Resize() override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    void                ImplUpdateSelection();
+    void                UpdateVisibleRows();
 
     // SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-                        DECL_LINK( SelectObjectHdl, GalleryListView*, void );
-                        DECL_LINK( SelectObjectValueSetHdl, ValueSet*, void );
-                        DECL_LINK( SelectTbxHdl, ToolBox*, void );
-                        DECL_LINK( MiscHdl, LinkParamNone*, void );
+                        DECL_LINK( SelectObjectHdl, weld::TreeView&, void );
+                        DECL_LINK( SelectObjectValueSetHdl, SvtValueSet*, void );
+                        DECL_LINK( SelectTbxHdl, weld::ToggleButton&, void );
+                        DECL_LINK( PopupMenuHdl, const CommandEvent&, bool );
+                        DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
+                        DECL_LINK( RowActivatedHdl, weld::TreeView&, bool );
+                        DECL_LINK( DragBeginHdl, weld::TreeView&, bool );
+                        DECL_LINK( VisRowsScrolledHdl, weld::TreeView&, void );
+                        DECL_LINK( SizeAllocHdl, const Size&, void );
 
 private:
 
@@ -132,16 +126,15 @@ public:
 
 public:
 
-    GalleryBrowser2(vcl::Window* pParent, Gallery* pGallery);
-    virtual ~GalleryBrowser2() override;
-    virtual void dispose() override;
+    GalleryBrowser2(weld::Builder& rBuilder, Gallery* pGallery);
+    ~GalleryBrowser2();
 
     void                SelectTheme( const OUString& rThemeName );
 
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );
 
-    vcl::Window*        GetViewWindow() const;
+    weld::Widget*       GetViewWindow() const;
 
     void                Travel( GalleryBrowserTravel eTravel );
 
@@ -150,10 +143,11 @@ public:
 
     sal_Int8            AcceptDrop( DropTargetHelper& rTarget );
     sal_Int8            ExecuteDrop( const ExecuteDropEvent& rEvt );
-    void                StartDrag( const Point* pDragPoint = nullptr );
+    bool                StartDrag();
     void                TogglePreview();
-    void                ShowContextMenu( const Point* pContextPoint );
-    bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
+    void                ShowContextMenu(const CommandEvent& rCEvt);
+    bool                KeyInput(const KeyEvent& rEvt);
+    bool                ViewBoxHasFocus() const;
 
     static css::uno::Reference< css::frame::XFrame > GetFrame();
     const css::uno::Reference< css::util::XURLTransformer >& GetURLTransformer() const { return m_xTransformer; }
@@ -163,6 +157,29 @@ public:
                      const css::util::URL &rURL);
 
     DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
+};
+
+class GalleryDragDrop : public DropTargetHelper
+{
+private:
+    GalleryBrowser2* m_pParent;
+
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& /*rEvt*/) override
+    {
+        return m_pParent->AcceptDrop(*this);
+    }
+
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override
+    {
+        return m_pParent->ExecuteDrop(rEvt);
+    }
+
+public:
+    GalleryDragDrop(GalleryBrowser2* pParent, const css::uno::Reference<css::datatransfer::dnd::XDropTarget>& rDropTarget)
+        : DropTargetHelper(rDropTarget)
+        , m_pParent(pParent)
+    {
+    }
 };
 
 #endif

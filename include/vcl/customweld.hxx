@@ -19,6 +19,7 @@ class VCL_DLLPUBLIC CustomWidgetController
 private:
     Size m_aSize;
     weld::DrawingArea* m_pDrawingArea;
+    DECL_LINK(DragBeginHdl, weld::DrawingArea&, bool);
 
 public:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible()
@@ -72,6 +73,14 @@ public:
     void SetPointer(PointerStyle ePointerStyle) { m_pDrawingArea->set_cursor(ePointerStyle); }
     void SetHelpId(const OString& rHelpId) { m_pDrawingArea->set_help_id(rHelpId); }
     void SetAccessibleName(const OUString& rName) { m_pDrawingArea->set_accessible_name(rName); }
+    void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
+                                  sal_uInt8 eDNDConstants)
+    {
+        m_pDrawingArea->enable_drag_source(rTransferrable, eDNDConstants);
+        m_pDrawingArea->connect_drag_begin(LINK(this, CustomWidgetController, DragBeginHdl));
+    }
+    // return true to disallow drag, false to allow
+    virtual bool StartDrag() { return false; }
     void set_size_request(int nWidth, int nHeight)
     {
         m_pDrawingArea->set_size_request(nWidth, nHeight);

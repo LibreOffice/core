@@ -91,7 +91,6 @@ bool                FileExists( const INetURLObject& rURL );
 bool                CreateDir(  const INetURLObject& rURL );
 bool                CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 bool                KillFile( const INetURLObject& rURL );
-BitmapEx            GalleryResGetBitmapEx(const OUString& rId);
 
 class SgaIMapInfo final : public SdrObjUserData, public SfxListener
 {
@@ -131,22 +130,26 @@ class SVX_DLLPUBLIC GalleryProgress
 class GalleryTheme;
 class GraphicObject;
 
-class GalleryTransferable final : public TransferableHelper
+class GalleryTransferable final : public TransferDataContainer
 {
 friend class GalleryTheme;
 using TransferableHelper::CopyToClipboard;
 
     GalleryTheme*                   mpTheme;
-    SgaObjKind const                meObjectKind;
-    sal_uInt32 const                mnObjectPos;
+    SgaObjKind                      meObjectKind;
+    sal_uInt32                      mnObjectPos;
     tools::SvRef<SotStorageStream>  mxModelStream;
     std::unique_ptr<GraphicObject>  mpGraphicObject;
     std::unique_ptr<INetURLObject>  mpURL;
 
+    void                            InitData( bool bLazy );
+
+public:
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObjectPos, bool bLazy );
                                     virtual ~GalleryTransferable() override;
 
-    void                            InitData( bool bLazy );
+    void                            SelectObject(sal_uInt32 nObjectPos);
+    sal_uInt32                      GetObject() const { return mnObjectPos; }
 
     // TransferableHelper
     virtual void                    AddSupportedFormats() override;
@@ -155,7 +158,7 @@ using TransferableHelper::CopyToClipboard;
     virtual void                    DragFinished( sal_Int8 nDropAction ) override;
     virtual void                    ObjectReleased() override;
 
-    void                            StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions );
+    bool                            StartDrag();
 };
 
 enum class GalleryHintType

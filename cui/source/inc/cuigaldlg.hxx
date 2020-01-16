@@ -147,7 +147,7 @@ private:
     DECL_LINK(ActualizeHdl, const INetURLObject&, void);
 
 public:
-    ActualizeProgress(weld::Window* pWindow, GalleryTheme* pThm);
+    ActualizeProgress(weld::Widget* pWindow, GalleryTheme* pThm);
     virtual ~ActualizeProgress() override;
 
     virtual short run() override;
@@ -158,7 +158,7 @@ class TitleDialog : public weld::GenericDialogController
 private:
     std::unique_ptr<weld::Entry> m_xEdit;
 public:
-    TitleDialog(weld::Window* pParent, const OUString& rOldText);
+    TitleDialog(weld::Widget* pParent, const OUString& rOldText);
     virtual ~TitleDialog() override;
     OUString GetTitle() const { return m_xEdit->get_text(); }
 };
@@ -172,7 +172,7 @@ private:
 
     DECL_LINK(ClickOkHdl, weld::Button&, void);
 public:
-    GalleryIdDialog(weld::Window* pParent, GalleryTheme* pThm);
+    GalleryIdDialog(weld::Widget* pParent, GalleryTheme* pThm);
     virtual ~GalleryIdDialog() override;
     sal_uInt32 GetId() const { return m_xLbResName->get_active(); }
 };
@@ -184,7 +184,7 @@ class GalleryThemeProperties : public SfxTabDialogController
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-    GalleryThemeProperties(weld::Window* pParent, ExchangeData* pData, SfxItemSet const * pItemSet);
+    GalleryThemeProperties(weld::Widget* pParent, ExchangeData* pData, SfxItemSet const * pItemSet);
 };
 
 class TPGalleryThemeGeneral : public SfxTabPage
@@ -231,7 +231,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     css::uno::Reference< css::media::XPlayer >              xMediaPlayer;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-    SvxGalleryPreview m_aWndPreview;
+    DialogGalleryPreview m_aWndPreview;
     std::unique_ptr<weld::ComboBox> m_xCbbFileType;
     std::unique_ptr<weld::TreeView> m_xLbxFound;
     std::unique_ptr<weld::Button> m_xBtnSearch;
