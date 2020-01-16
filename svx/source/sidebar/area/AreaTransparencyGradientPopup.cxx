@@ -28,7 +28,7 @@ namespace svx::sidebar {
 AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(AreaPropertyPanelBase& rPanel, weld::Widget* pParent)
     : mrAreaPropertyPanel(rPanel)
     , mxBuilder(Application::CreateBuilder(pParent, "svx/ui/floatingareastyle.ui"))
-    , mxTopLevel(mxBuilder->weld_widget("FloatingAreaStyle"))
+    , mxTopLevel(mxBuilder->weld_container("FloatingAreaStyle"))
     , mxCenterGrid(mxBuilder->weld_widget("centergrid"))
     , mxAngleGrid(mxBuilder->weld_widget("anglegrid"))
     , mxMtrTrgrCenterX(mxBuilder->weld_metric_spin_button("centerx", FieldUnit::PERCENT))
@@ -49,6 +49,7 @@ AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(AreaPropertyPanelBa
     mxMtrTrgrEndValue->connect_value_changed(aLink);
     mxBtnLeft45->connect_clicked(LINK(this, AreaTransparencyGradientPopup, Left_Click45_Impl));
     mxBtnRight45->connect_clicked(LINK(this, AreaTransparencyGradientPopup, Right_Click45_Impl));
+    mxTopLevel->connect_focus_in(LINK(this, AreaTransparencyGradientPopup, FocusHdl));
 }
 
 AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
@@ -168,6 +169,11 @@ IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, const OString
     nTemp -= 45;
     mxMtrTrgrAngle->set_value(nTemp, FieldUnit::DEGREE);
     ExecuteValueModify(nStartCol, nEndCol);
+}
+
+IMPL_LINK_NOARG(AreaTransparencyGradientPopup, FocusHdl, weld::Widget&, void)
+{
+    mxMtrTrgrCenterX->grab_focus();
 }
 
 } // end of namespace svx::sidebar

@@ -192,6 +192,7 @@ void AreaPropertyPanelBase::Initialize()
 
     mxBTNGradient->set_item_popover(SIDEBARGRADIENT, mxTrGrPopup->getTopLevel());
     mxBTNGradient->connect_clicked(LINK(this, AreaPropertyPanelBase, ToolbarHdl_Impl));
+    mxBTNGradient->connect_menu_toggled(LINK(this, AreaPropertyPanelBase, ToggleMenuHdl));
 
     mxBTNGradient->set_item_icon_name(SIDEBARGRADIENT, maImgLinear);
     mxBTNGradient->hide();
@@ -201,6 +202,12 @@ void AreaPropertyPanelBase::Initialize()
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ToolbarHdl_Impl, const OString&, void)
 {
     mxBTNGradient->set_menu_item_active(SIDEBARGRADIENT, !mxBTNGradient->get_menu_item_active(SIDEBARGRADIENT));
+}
+
+IMPL_LINK(AreaPropertyPanelBase, ToggleMenuHdl, const OString&, rCommand, void)
+{
+    if (mxBTNGradient->get_menu_item_active(rCommand))
+        mxTrGrPopup->GrabFocus();
 }
 
 void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
