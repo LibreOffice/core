@@ -145,8 +145,6 @@
 #define RID_SVXBMP_GALLERY_SOUND_5                  "svx/res/galsnd5.png"
 #define RID_SVXBMP_GALLERY_SOUND_6                  "svx/res/galsnd6.png"
 #define RID_SVXBMP_GALLERY_SOUND_7                  "svx/res/galsnd7.png"
-#define RID_SVXBMP_GALLERY_VIEW_ICON                "svx/res/galicon.png"
-#define RID_SVXBMP_GALLERY_VIEW_LIST                "svx/res/gallist.png"
 
 #define BMP_NONE_ICON                               "svx/res/symphony/blank.png"
 #define BMP_WIDTH1_ICON                             "svx/res/symphony/width1.png"

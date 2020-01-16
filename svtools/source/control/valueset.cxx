@@ -4013,4 +4013,18 @@ void SvtValueSet::SetColor(const Color& rColor)
         Invalidate();
 }
 
+void SvtValueSet::Show()
+{
+    if (mxScrolledWindow)
+        mxScrolledWindow->show();
+    CustomWidgetController::Show();
+}
+
+void SvtValueSet::Hide()
+{
+    CustomWidgetController::Hide();
+    if (mxScrolledWindow)
+        mxScrolledWindow->hide();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

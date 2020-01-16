@@ -153,7 +153,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/gallery2/galobj \
     svx/source/gallery2/galtheme \
     svx/source/gallery2/GalleryControl \
-    svx/source/gallery2/GallerySplitter \
     svx/source/items/chrtitem \
     svx/source/items/clipfmtitem \
     svx/source/items/customshapeitem \
@@ -274,6 +273,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/properties/connectorproperties \
     svx/source/sdr/properties/e3dcompoundproperties \
     svx/source/sdr/properties/oleproperties \
+    svx/source/sidebar/PanelLayout \
     svx/source/svdraw/clonelist \
     svx/source/svdraw/charthelper \
     svx/source/svdraw/gradtrns \

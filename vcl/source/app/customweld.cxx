@@ -13,6 +13,11 @@ namespace weld
 {
 CustomWidgetController::~CustomWidgetController() {}
 
+IMPL_LINK_NOARG(CustomWidgetController, DragBeginHdl, weld::DrawingArea&, bool)
+{
+    return StartDrag();
+}
+
 CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
                        CustomWidgetController& rWidgetController)
     : m_rWidgetController(rWidgetController)

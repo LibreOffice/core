@@ -55,17 +55,6 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx GalleryResGetBitmapEx(const OUString &rId)
-{
-    BitmapEx aBmpEx(rId);
-
-    //TODO, check if any of these have no transparency layer
-    if (!aBmpEx.IsTransparent())
-        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), COL_LIGHTMAGENTA);
-
-    return aBmpEx;
-}
-
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName )
 {
@@ -375,11 +364,22 @@ void GalleryProgress::Update( sal_Int32 nVal, sal_Int32 nMaxVal )
 
 GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
-    meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
+    meObjectKind( pTheme ? mpTheme->GetObjectKind(nObjectPos) : SgaObjKind::NONE),
     mnObjectPos( nObjectPos )
 {
 
     InitData( bLazy );
+}
+
+void GalleryTransferable::SelectObject(sal_uInt32 nObjectPos)
+{
+    if (nObjectPos == mnObjectPos)
+        return;
+    ClearFormats();
+    mnObjectPos = nObjectPos;
+    meObjectKind = mpTheme ? mpTheme->GetObjectKind(mnObjectPos) : SgaObjKind::NONE;
+    ObjectReleased();
+    InitData(true);
 }
 
 GalleryTransferable::~GalleryTransferable()
@@ -398,7 +398,7 @@ void GalleryTransferable::InitData( bool bLazy )
                 {
                     Graphic aGraphic;
 
-                    if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                    if (mpTheme && mpTheme->GetGraphic(mnObjectPos, aGraphic))
                         mpGraphicObject.reset(new GraphicObject( aGraphic ));
                 }
 
@@ -407,7 +407,7 @@ void GalleryTransferable::InitData( bool bLazy )
                     mxModelStream = new SotStorageStream( "" );
                     mxModelStream->SetBufferSize( 16348 );
 
-                    if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
+                    if (!mpTheme || !mpTheme->GetModelStream(mnObjectPos, mxModelStream))
                         mxModelStream.clear();
                     else
                         mxModelStream->Seek( 0 );
@@ -425,7 +425,7 @@ void GalleryTransferable::InitData( bool bLazy )
             {
                 mpURL.reset(new INetURLObject);
 
-                if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
+                if (!mpTheme || !mpTheme->GetURL(mnObjectPos, *mpURL))
                 {
                     mpURL.reset();
                 }
@@ -435,7 +435,7 @@ void GalleryTransferable::InitData( bool bLazy )
             {
                 Graphic aGraphic;
 
-                if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                if (mpTheme && mpTheme->GetGraphic(mnObjectPos, aGraphic))
                     mpGraphicObject.reset(new GraphicObject( aGraphic ));
             }
         }
@@ -526,8 +526,11 @@ bool GalleryTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, v
 
 void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mpTheme->SetDragging( false );
-    mpTheme->SetDragPos( 0 );
+    if (mpTheme)
+    {
+        mpTheme->SetDragging( false );
+        mpTheme->SetDragPos( 0 );
+    }
     if ( nDropAction )
     {
         vcl::Window *pFocusWindow = Application::GetFocusWindow();
@@ -543,16 +546,16 @@ void GalleryTransferable::ObjectReleased()
     mpURL.reset();
 }
 
-void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions )
+bool GalleryTransferable::StartDrag()
 {
     INetURLObject aURL;
-
-    if( mpTheme->GetURL( mnObjectPos, aURL ) && ( aURL.GetProtocol() != INetProtocol::NotValid ) )
+    if (mpTheme && mpTheme->GetURL(mnObjectPos, aURL) && aURL.GetProtocol() != INetProtocol::NotValid)
     {
         mpTheme->SetDragging( true );
         mpTheme->SetDragPos( mnObjectPos );
-        TransferableHelper::StartDrag( pWindow, nDragSourceActions );
+        return false;
     }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

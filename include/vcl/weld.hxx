@@ -1874,6 +1874,8 @@ protected:
     Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
+    // if handler returns true, drag is disallowed
+    Link<DrawingArea&, bool> m_aDragBeginHdl;
 
     OUString signal_query_tooltip(tools::Rectangle& rHelpArea)
     {
@@ -1892,9 +1894,14 @@ public:
     {
         m_aQueryTooltipHdl = rLink;
     }
+    void connect_drag_begin(const Link<DrawingArea&, bool>& rLink) { m_aDragBeginHdl = rLink; }
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
     virtual void queue_resize() = 0;
+
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferrable,
+                                    sal_uInt8 eDNDConstants)
+        = 0;
 
     virtual void set_cursor(PointerStyle ePointerStyle) = 0;
 
