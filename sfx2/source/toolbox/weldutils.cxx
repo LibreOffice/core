@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/weldutils.hxx>
@@ -52,6 +53,25 @@ bool lcl_RTLizeCommandURL(OUString& rCommandURL)
 }
 }
 
+// for now all controllers are in the sidebar
+vcl::ImageType ToolbarUnoDispatcher::GetIconSize() const
+{
+    vcl::ImageType eType = vcl::ImageType::Size16;
+    switch (m_aToolbarOptions.GetSidebarIconSize())
+    {
+        case ToolBoxButtonSize::Large:
+            eType = vcl::ImageType::Size26;
+            break;
+        case ToolBoxButtonSize::Size32:
+            eType = vcl::ImageType::Size32;
+            break;
+        case ToolBoxButtonSize::DontCare:
+        case ToolBoxButtonSize::Small:
+            break;
+    }
+    return eType;
+}
+
 ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
                                            const css::uno::Reference<css::frame::XFrame>& rFrame)
     : m_xFrame(rFrame)
@@ -61,7 +81,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
     rToolbar.connect_menu_toggled(LINK(this, ToolbarUnoDispatcher, ToggleMenuHdl));
 
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
-    vcl::ImageType eSize = rToolbar.get_icon_size();
+    vcl::ImageType eSize = GetIconSize();
+    rToolbar.set_icon_size(eSize);
 
     bool bRTL = AllSettings::GetLayoutRTL();
 
@@ -82,6 +103,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
 
         CreateController(sCommand);
     }
+
+    m_aToolbarOptions.AddListenerLink(LINK(this, ToolbarUnoDispatcher, ChangedIconSizeHandler));
 }
 
 void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)
@@ -121,10 +144,37 @@ IMPL_LINK(ToolbarUnoDispatcher, ToggleMenuHdl, const OString&, rCommand, void)
         xController->click();
 }
 
+IMPL_LINK_NOARG(ToolbarUnoDispatcher, ChangedIconSizeHandler, LinkParamNone*, void)
+{
+    vcl::ImageType eSize = GetIconSize();
+    m_pToolbar->set_icon_size(eSize);
+
+    for (int i = 0, nItems = m_pToolbar->get_n_items(); i < nItems; ++i)
+    {
+        OUString sCommand = OUString::fromUtf8(m_pToolbar->get_item_ident(i));
+        auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sCommand, m_xFrame, eSize));
+        m_pToolbar->set_item_image(i, xImage);
+    }
+
+    for (auto const& it : maControllers)
+    {
+        css::uno::Reference<css::frame::XSubToolbarController> xController(it.second,
+                                                                           css::uno::UNO_QUERY);
+        if (xController.is() && xController->opensSubToolbar())
+        {
+            // The button should show the last function that was selected from the
+            // dropdown. The controller should know better than us what it was.
+            xController->updateImage();
+        }
+    }
+}
+
 void ToolbarUnoDispatcher::dispose()
 {
     if (!m_pToolbar)
         return;
+
+    m_aToolbarOptions.RemoveListenerLink(LINK(this, ToolbarUnoDispatcher, ChangedIconSizeHandler));
 
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
