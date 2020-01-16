@@ -938,7 +938,6 @@
 // Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
 #define RID_SVXSTR_COLOR_TANGO_ALUMINIUM                    NC_("RID_SVXSTR_COLOR_TANGO_ALUMINIUM", "Tango: Aluminium")
 #define RID_SVXSTR_GALLERYPROPS_GALTHEME                    NC_("RID_SVXSTR_GALLERYPROPS_GALTHEME", "Gallery Theme")
-#define RID_SVXSTR_GALLERY_THEMEITEMS                       NC_("RID_SVXSTR_GALLERY_THEMEITEMS", "Theme Items")
 #define RID_SVXSTR_GALLERY_PREVIEW                          NC_("RID_SVXSTR_GALLERY_PREVIEW", "Preview")
 #define RID_SVXSTR_SUCCESSRECOV                             NC_("RID_SVXSTR_SUCCESSRECOV", "Successfully recovered")
 #define RID_SVXSTR_ORIGDOCRECOV                             NC_("RID_SVXSTR_ORIGDOCRECOV", "Original document recovered")
@@ -966,10 +965,7 @@
 
 #define RID_SVXSTR_GALLERY_FILTER                           NC_("RID_SVXSTR_GALLERY_FILTER", "Graphics filter")
 #define RID_SVXSTR_GALLERY_NEWTHEME                         NC_("RID_SVXSTR_GALLERY_NEWTHEME", "New Theme")
-#define RID_SVXSTR_GALLERY_CREATETHEME                      NC_("RID_SVXSTR_GALLERY_CREATETHEME", "New Theme...")
 #define RID_SVXSTR_GALLERY_TITLE                            NC_("RID_SVXSTR_GALLERY_TITLE", "Title")
-#define RID_SVXSTR_GALLERY_ICONVIEW                         NC_("RID_SVXSTR_GALLERY_ICONVIEW", "Icon View")
-#define RID_SVXSTR_GALLERY_LISTVIEW                         NC_("RID_SVXSTR_GALLERY_LISTVIEW", "Detailed View")
 
 #define RID_GALLERYSTR_THEME_3D                             NC_("RID_GALLERYSTR_THEME_3D", "3D Effects")
 #define RID_GALLERYSTR_THEME_ANIMATIONS                     NC_("RID_GALLERYSTR_THEME_ANIMATIONS", "Animations")
