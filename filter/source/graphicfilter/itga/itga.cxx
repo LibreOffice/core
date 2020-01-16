@@ -715,7 +715,7 @@ bool TGAReader::ImplReadPalette()
         {
             case 0x3f :
                 {
-                    for ( sal_uInt16 i = 0; i < nColors; i++ )
+                    for (sal_uInt32 i = 0; i < nColors; ++i)
                     {
                         mpColorMap[ i ] = ( i << 16 ) + ( i << 8 ) + i;
                     }
