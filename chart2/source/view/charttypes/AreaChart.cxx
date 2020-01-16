@@ -750,6 +750,7 @@ void AreaChart::createShapes()
                     if( rLogicYForNextSeriesMap.find(nAttachedAxisIndex) == rLogicYForNextSeriesMap.end() )
                         rLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
 
+                    double fPreviousYValue = rLogicYForNextSeriesMap[nAttachedAxisIndex];
                     fLogicY += rLogicYForNextSeriesMap[nAttachedAxisIndex];
                     rLogicYForNextSeriesMap[nAttachedAxisIndex] = fLogicY;
 
@@ -897,12 +898,18 @@ void AreaChart::createShapes()
                         if( pSeries->getDataPointLabelIfLabel(nIndex) )
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement(
+                                nIndex, m_xChartTypeModel, rPosHelper.isSwapXAndY());
+
+                            if (m_bArea && nLabelPlacement == css::chart::DataLabelPlacement::CENTER)
+                            {
+                                fLogicY -= (fLogicY - fPreviousYValue) / 2.0;
+                                aScenePosition = rPosHelper.transformLogicToScene(fLogicX, fLogicY, fLogicZ, false);
+                            }
+
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
                                     , aScenePosition.PositionY
                                     , aScenePosition.PositionZ+getTransformedDepth() );
-
-                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement(
-                                nIndex, m_xChartTypeModel, rPosHelper.isSwapXAndY());
 
                             switch(nLabelPlacement)
                             {
@@ -924,7 +931,6 @@ void AreaChart::createShapes()
                                     break;
                                 case css::chart::DataLabelPlacement::CENTER:
                                     eAlignment = LABEL_ALIGN_CENTER;
-                                    //todo implement this different for area charts
                                     break;
                                 default:
                                     OSL_FAIL("this label alignment is not implemented yet");

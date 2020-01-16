@@ -2504,6 +2504,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129173)
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[22]/text", "56");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130031)
+{
+    SwDoc* pDoc = createDoc("tdf130031.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4339, nY, 50);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");
