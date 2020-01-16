@@ -14056,8 +14056,6 @@ svx/source/form/tbxform.cxx
 svx/source/form/typemap.cxx
 svx/source/form/xfm_addcondition.cxx
 svx/source/gallery2/GalleryControl.cxx
-svx/source/gallery2/GallerySplitter.cxx
-svx/source/gallery2/GallerySplitter.hxx
 svx/source/gallery2/codec.cxx
 svx/source/gallery2/codec.hxx
 svx/source/gallery2/galbrws1.cxx

@@ -55,17 +55,6 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx GalleryResGetBitmapEx(const OUString &rId)
-{
-    BitmapEx aBmpEx(rId);
-
-    //TODO, check if any of these have no transparency layer
-    if (!aBmpEx.IsTransparent())
-        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), COL_LIGHTMAGENTA);
-
-    return aBmpEx;
-}
-
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName )
 {

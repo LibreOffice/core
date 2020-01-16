@@ -1875,6 +1875,7 @@ protected:
 
     static gboolean signalPopupMenu(GtkWidget* pWidget, gpointer widget)
     {
+        fprintf(stderr, "signalPopupMenu\n");
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
         //center it when we don't know where else to use

@@ -479,6 +479,8 @@ public:
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
     virtual void    StyleUpdated() override;
+    virtual void    Show() override;
+    virtual void    Hide() override;
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
     void            Select();
