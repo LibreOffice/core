@@ -7049,6 +7049,24 @@ public:
         }
         return eRet;
     }
+
+    GtkIconSize VclToGtk(vcl::ImageType eSize)
+    {
+        GtkIconSize eRet;
+        switch (eSize)
+        {
+            case vcl::ImageType::Size16:
+                eRet = GTK_ICON_SIZE_SMALL_TOOLBAR;
+                break;
+            case vcl::ImageType::Size26:
+                eRet = GTK_ICON_SIZE_LARGE_TOOLBAR;
+                break;
+            case vcl::ImageType::Size32:
+                eRet = GTK_ICON_SIZE_DIALOG;
+                break;
+        }
+        return eRet;
+    }
 }
 
 void GtkInstanceMenuButton::set_menu(weld::Menu* pMenu)
@@ -7408,6 +7426,11 @@ public:
     virtual vcl::ImageType get_icon_size() const override
     {
         return GtkToVcl(gtk_toolbar_get_icon_size(m_pToolbar));
+    }
+
+    virtual void set_icon_size(vcl::ImageType eType) override
+    {
+        return gtk_toolbar_set_icon_size(m_pToolbar, VclToGtk(eType));
     }
 
     virtual ~GtkInstanceToolbar() override

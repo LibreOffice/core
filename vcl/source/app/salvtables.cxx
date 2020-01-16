@@ -1164,6 +1164,28 @@ public:
         return m_xToolBox->GetImageSize();
     }
 
+    virtual void set_icon_size(vcl::ImageType eType) override
+    {
+        ToolBoxButtonSize eButtonSize = ToolBoxButtonSize::DontCare;
+        switch (eType)
+        {
+            case vcl::ImageType::Size16:
+                eButtonSize = ToolBoxButtonSize::Small;
+                break;
+            case vcl::ImageType::Size26:
+                eButtonSize = ToolBoxButtonSize::Large;
+                break;
+            case vcl::ImageType::Size32:
+                eButtonSize = ToolBoxButtonSize::Size32;
+                break;
+        }
+        if (m_xToolBox->GetToolboxButtonSize() != eButtonSize)
+        {
+            m_xToolBox->SetToolboxButtonSize(eButtonSize);
+            m_xToolBox->queue_resize();
+        }
+    }
+
     virtual ~SalInstanceToolbar() override
     {
         m_xToolBox->SetDropdownClickHdl(Link<ToolBox*, void>());
