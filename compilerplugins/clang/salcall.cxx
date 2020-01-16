@@ -29,7 +29,7 @@
 //
 // VisitFunctionDecl would need to also visit explicit instantiations, by letting
 // shouldVisitTemplateInstantiations return true and returning from VisitFunctionDecl early iff
-// decl->getTemplateSpecializationKind() == TSK_ImplicitInstantiation.  However, an instantiatied
+// decl->getTemplateSpecializationKind() == TSK_ImplicitInstantiation.  However, an instantiated
 // FunctionDecl is created in TemplateDeclInstantiator::VisitCXXMethodDecl by copying information
 // (including source locations) from the declaration at #1, and later modified in
 // Sema::InstantiateFunctionDefinition with some source location information from the definition at
