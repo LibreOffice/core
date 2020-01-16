@@ -255,6 +255,9 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
         pSheet->SetParent(aStdName);
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
+        pISet = &pSheet->GetItemSet();
+
+        pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
     // Default > Object no fill no line
     {
