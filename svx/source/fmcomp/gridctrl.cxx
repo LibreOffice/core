@@ -1108,7 +1108,6 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            vcl::Font aFont = m_aBar->GetSettings().GetStyleSettings().GetToolFont();
             if ( IsControlFont() )
                 m_aBar->SetControlFont( GetControlFont() );
             else

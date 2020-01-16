@@ -1059,8 +1059,6 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                     aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
 
                 // setup the device & draw
-                vcl::Font aOldFont(rRenderContext.GetFont());
-
                 Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
 
                 rRenderContext.SetFont(aFont);

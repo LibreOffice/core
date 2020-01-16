@@ -372,8 +372,6 @@ void ImpEditEngine::FormatDoc()
     long nY = 0;
     bool bGrow = false;
 
-    vcl::Font aOldFont( GetRefDevice()->GetFont() );
-
     // Here already, so that not always in CreateLines...
     bool bMapChanged = ImpCheckRefMapMode();
 
@@ -2954,7 +2952,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
-    vcl::Font aOldFont( pOutDev->GetFont() );
     vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
 
     // In the case of rotated text is aStartPos considered TopLeft because
@@ -3352,7 +3349,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                     pTmpDXArray.reset(new long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
-                                    vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
 
@@ -3380,7 +3376,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     // crash when accessing 0 pointer in pDXArray
                                     pTmpDXArray.reset(new long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
-                                    vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );
                                 }
@@ -3973,7 +3968,6 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
             {
                 if ( pPPortion->IsInvalid() )
                 {
-                    vcl::Font aOldFont( GetRefDevice()->GetFont() );
                     CreateLines( nParagraph, 0 );   // 0: No TextRanger
                 }
                 else

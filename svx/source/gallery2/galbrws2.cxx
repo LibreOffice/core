@@ -391,7 +391,6 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
         css::uno::UNO_QUERY );
 
     Image      aDummyImage;
-    vcl::Font  aInfoFont( maInfoBar->GetControlFont() );
 
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 

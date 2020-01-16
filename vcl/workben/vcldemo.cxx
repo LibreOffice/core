@@ -2237,17 +2237,18 @@ public:
 };
 
 namespace {
-    void renderFonts(const std::vector<OUString> &aFontNames)
+    void renderFonts()
     {
         ScopedVclPtrInstance<VirtualDevice> xDevice;
         Size aSize(1024, 1024);
         xDevice->SetOutputSizePixel(aSize);
 
+#if 0
         for (auto & aFontName : aFontNames)
         {
             vcl::Font aFont(aFontName, Size(0,96));
-#if 0
-            aFont.SetCOL_BLACK);
+
+            aFont.Set(COL_BLACK);
             xDevice->SetFont(aFont);
             xDevice->Erase();
 
@@ -2288,8 +2289,8 @@ include/vcl/outdev.hxx:                                              DrawTextFla
                                              TextRectInfo* pInfo = nullptr,
                                              const vcl::ITextLayout* _pTextLayout = nullptr ) const;
 
-#endif
         }
+#endif
 
     }
 };
@@ -2384,7 +2385,7 @@ public:
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();
             else if (!aFontNames.empty())
-                renderFonts(aFontNames);
+                renderFonts();
             else
                 aMainWin->Show();
 
