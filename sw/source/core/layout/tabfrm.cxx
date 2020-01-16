@@ -1077,7 +1077,8 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         // At least one more non-heading row has to stay in this table in
         // order to avoid loops:
         OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
-        bKeepNextRow = true;
+        m_pTable->SetRowsToDoNotRepeatTemporarily(true);
+        return false;
     }
     else if ( !GetIndPrev() && nRepeat == nRowCount )
     {

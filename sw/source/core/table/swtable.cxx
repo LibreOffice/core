@@ -206,6 +206,7 @@ SwTable::SwTable()
     m_pTableNode( nullptr ),
     m_nGraphicsThatResize( 0 ),
     m_nRowsToRepeat( 1 ),
+    m_bDoNotRepeatRowsTemporarily( false ),
     m_bModifyLocked( false ),
     m_bNewModel( true )
 {
@@ -219,6 +220,7 @@ SwTable::SwTable( const SwTable& rTable )
     m_eTableChgMode( rTable.m_eTableChgMode ),
     m_nGraphicsThatResize( 0 ),
     m_nRowsToRepeat( rTable.GetRowsToRepeat() ),
+    m_bDoNotRepeatRowsTemporarily( false ),
     maTableStyleName(rTable.maTableStyleName),
     m_bModifyLocked( false ),
     m_bNewModel( rTable.m_bNewModel )

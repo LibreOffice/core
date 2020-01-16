@@ -129,6 +129,7 @@ protected:
     sal_uInt16      m_nGraphicsThatResize;    // Count of Grfs that initiate a resize of table
                                         // at HTML-import.
     sal_uInt16      m_nRowsToRepeat;      // Number of rows to repeat on every page.
+    bool            m_bDoNotRepeatRowsTemporarily; // Stop repeat, no place for it temporarily
 
     /// Name of the table style to be applied on this table.
     OUString maTableStyleName;
@@ -190,8 +191,9 @@ public:
     /// Set the new table style name for this table.
     void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }
 
-    sal_uInt16 GetRowsToRepeat() const { return std::min( static_cast<sal_uInt16>(GetTabLines().size()), m_nRowsToRepeat ); }
+    sal_uInt16 GetRowsToRepeat() const { return m_bDoNotRepeatRowsTemporarily ? 0 : std::min( static_cast<sal_uInt16>(GetTabLines().size()), m_nRowsToRepeat ); }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }
+    void SetRowsToDoNotRepeatTemporarily(bool bDoNotRepeat) { m_bDoNotRepeatRowsTemporarily = bDoNotRepeat; }
 
     bool IsHeadline( const SwTableLine& rLine ) const;
 
