@@ -105,7 +105,7 @@
 #include <app.hrc>
 #include <strings.hxx>
 
-namespace com::sun::star::linguistic2 { class XHyphenator; }
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -249,12 +249,16 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     SfxItemSet* pISet = nullptr;
 
-    // Default > Object without filling
+       // Default > Object without filling
     {
         aName = SdResId(STR_POOLSHEET_OBJWITHOUTFILL);
         pSheet = &(pSSPool->Make(aName, SfxStyleFamily::Para, nMask));
         pSheet->SetParent(aStdName);
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
+        pISet = &pSheet->GetItemSet();
+
+        pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
+
     }
     // Default > Object no fill no line
     {
