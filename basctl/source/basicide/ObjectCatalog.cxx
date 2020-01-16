@@ -18,11 +18,11 @@
  */
 
 #include <strings.hrc>
+#include <iderid.hxx>
 
 #include <ObjectCatalog.hxx>
 #include <helpids.h>
 
-#include <svl/itemset.hxx>
 #include <vcl/taskpanelist.hxx>
 
 namespace basctl

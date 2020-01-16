@@ -21,8 +21,6 @@
 
 #include "scriptdocument.hxx"
 
-#include <svl/lstner.hxx>
-
 class SbMethod;
 class SbModule;
 class SbxVariable;

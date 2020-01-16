@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDDEF_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_DLGEDDEF_HXX
 
-#include <sal/types.h>
-
 namespace basctl
 {
 

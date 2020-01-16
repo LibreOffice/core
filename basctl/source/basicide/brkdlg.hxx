@@ -21,6 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 
 #include <vcl/weld.hxx>
+#include "breakpoint.hxx"
 
 namespace basctl
 {

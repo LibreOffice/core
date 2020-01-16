@@ -22,6 +22,7 @@
 #include <tools/diagnose_ex.h>
 #include <basic/basmgr.hxx>
 #include <svx/svxids.hrc>
+#include <iderid.hxx>
 #include <strings.hrc>
 #include "baside2.hxx"
 #include <baside3.hxx>
@@ -30,15 +31,16 @@
 #include <editeng/sizeitem.hxx>
 #include "iderdll2.hxx"
 #include <basidectrlr.hxx>
+#include <basidesh.hxx>
+#include <basobj.hxx>
 #include <localizationmgr.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/srchitem.hxx>
 
 #ifdef DISABLE_DYNLOADING

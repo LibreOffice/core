@@ -23,7 +23,6 @@
 #include <memory>
 #include <layout.hxx>
 #include "bastype3.hxx"
-#include <basidesh.hxx>
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 
@@ -32,11 +31,11 @@
 
 #include <vcl/button.hxx>
 #include <basic/sbmod.hxx>
+#include <basic/sbstar.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 
 #include <svtools/colorcfg.hxx>
-#include <sfx2/progress.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include <set>
@@ -45,7 +44,6 @@
 #include <basic/codecompletecache.hxx>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <comphelper/syntaxhighlight.hxx>
-#include <com/sun/star/reflection/XIdlReflection.hpp>
 
 class ExtTextEngine;
 class TextView;
@@ -60,6 +58,7 @@ namespace basctl
 class ObjectCatalog;
 class CodeCompleteListBox;
 class CodeCompleteWindow;
+class ModulWindowLayout;
 
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports

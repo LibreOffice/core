@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <basic/basmgr.hxx>
@@ -26,10 +27,12 @@
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
 #include "basdoc.hxx"
+#include <iderid.hxx>
 #include <strings.hrc>
 
-#include "baside2.hxx"
 #include <baside3.hxx>
+#include <basidesh.hxx>
+#include <basobj.hxx>
 #include <localizationmgr.hxx>
 #include <dlged.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
@@ -40,7 +43,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <svtools/ehdl.hxx>
+#include <tools/debug.hxx>
 
 namespace basctl
 {

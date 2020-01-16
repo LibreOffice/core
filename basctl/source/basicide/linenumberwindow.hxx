@@ -11,6 +11,8 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_LINENUMBERWINDOW_HXX
 
 
+#include <vcl/window.hxx>
+
 namespace basctl
 {
 

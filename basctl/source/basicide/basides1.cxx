@@ -18,11 +18,14 @@
  */
 
 #include <memory>
+#include <iderid.hxx>
 #include <strings.hrc>
 #include <helpids.h>
 
 #include "baside2.hxx"
 #include <baside3.hxx>
+#include <basidesh.hxx>
+#include <basobj.hxx>
 #include <docsignature.hxx>
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
@@ -30,7 +33,6 @@
 #include <managelang.hxx>
 
 #include <basic/basmgr.hxx>
-#include <basic/sbmeth.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
@@ -38,20 +40,18 @@
 #include <svl/srchdefs.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/minfitem.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
-#include <svl/aeitem.hxx>
+#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/xtextedt.hxx>
+#include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

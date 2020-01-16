@@ -22,11 +22,14 @@
 #include <cassert>
 
 #include <helpids.h>
+#include <iderid.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
 #include "baside2.hxx"
 #include "brkdlg.hxx"
+#include <basidesh.hxx>
+#include <basobj.hxx>
 #include <iderdll.hxx>
 
 #include <basic/sbmeth.hxx>
@@ -37,6 +40,7 @@
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>

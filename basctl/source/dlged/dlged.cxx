@@ -18,7 +18,6 @@
  */
 
 
-#include <basidesh.hxx>
 #include <dlged.hxx>
 #include <dlgedclip.hxx>
 #include <dlgeddef.hxx>
@@ -28,23 +27,19 @@
 #include <dlgedobj.hxx>
 #include <dlgedpage.hxx>
 #include <dlgedview.hxx>
-#include <iderdll.hxx>
 #include <localizationmgr.hxx>
 #include <baside3.hxx>
 
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/print.hxx>

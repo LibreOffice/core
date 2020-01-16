@@ -19,13 +19,13 @@
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
+#include <basobj.hxx>
 #include <bastype2.hxx>
 #include <bitmaps.hlst>
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <deque>
-#include <sfx2/docfac.hxx>
 #include <vcl/treelistentry.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>

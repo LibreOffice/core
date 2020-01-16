@@ -25,16 +25,14 @@
 #include "iderdll2.hxx"
 #include <iderid.hxx>
 #include <basidesh.hxx>
-#include <strings.hrc>
+#include <basobj.hxx>
 #include "basdoc.hxx"
 #include "basicmod.hxx"
 
-#include <svl/srchitem.hxx>
-#include <svx/svxids.hrc>
+#include <basic/sbstar.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
 #include <osl/diagnose.h>
 

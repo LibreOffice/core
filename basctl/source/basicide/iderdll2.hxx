@@ -27,8 +27,6 @@ class SvxSearchItem;
 #include <bastypes.hxx>
 #include <bastype2.hxx>
 
-#include <memory>
-
 namespace basctl
 {
 
