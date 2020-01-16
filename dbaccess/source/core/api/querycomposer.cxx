@@ -112,8 +112,7 @@ sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > OQueryComposer::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSNS { SERVICE_SDB_SQLQUERYCOMPOSER };
-    return aSNS;
+    return { SERVICE_SDB_SQLQUERYCOMPOSER };
 }
 
 // XSQLQueryComposer

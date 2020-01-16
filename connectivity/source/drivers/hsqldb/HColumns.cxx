@@ -69,9 +69,7 @@ void OHSQLColumn::construct()
 
 Sequence< OUString > SAL_CALL OHSQLColumn::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSupported { "com.sun.star.sdbcx.Column" };
-
-    return aSupported;
+    return { "com.sun.star.sdbcx.Column" };
 }
 
 

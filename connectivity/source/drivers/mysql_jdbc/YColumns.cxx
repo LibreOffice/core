@@ -66,9 +66,7 @@ void OMySQLColumn::construct()
 
 Sequence<OUString> SAL_CALL OMySQLColumn::getSupportedServiceNames()
 {
-    Sequence<OUString> aSupported{ "com.sun.star.sdbcx.Column" };
-
-    return aSupported;
+    return { "com.sun.star.sdbcx.Column" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

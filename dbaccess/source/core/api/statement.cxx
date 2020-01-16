@@ -436,8 +436,7 @@ sal_Bool OStatement::supportsService( const OUString& _rServiceName )
 
 Sequence< OUString > OStatement::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSNS { SERVICE_SDBC_STATEMENT };
-    return aSNS;
+    return { SERVICE_SDBC_STATEMENT };
 }
 
 // XStatement
