@@ -219,10 +219,8 @@ public:
     void            ResetDelayTimer(); //BugId 54702
 
     void            HideTip();
-    void            HideTipBelow();
     void            ShowTipCursor();
     void            ShowTip( const OUString& rText );     // at Cursor
-    void            ShowTipBelow( const OUString& rText );
     void            ShowFuncList( const ::std::vector< OUString > & rFuncStrVec );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
