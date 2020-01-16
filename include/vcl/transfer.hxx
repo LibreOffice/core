@@ -363,6 +363,7 @@ public:
     css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
+    static TransferableDataHelper   CreateFromClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rClipboard);
     static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );
     static TransferableDataHelper   CreateFromSelection( vcl::Window * pWindow );
     static bool                     IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
