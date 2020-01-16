@@ -897,12 +897,15 @@ void AreaChart::createShapes()
                         if( pSeries->getDataPointLabelIfLabel(nIndex) )
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement(
+                                nIndex, m_xChartTypeModel, rPosHelper.isSwapXAndY());
+
+                            if (m_bArea && nLabelPlacement == css::chart::DataLabelPlacement::CENTER)
+                                aScenePosition = css::drawing::Position3D(rPosHelper.transformLogicToScene(fLogicX, fLogicY/2, fLogicZ, false));
+
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
                                     , aScenePosition.PositionY
                                     , aScenePosition.PositionZ+getTransformedDepth() );
-
-                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement(
-                                nIndex, m_xChartTypeModel, rPosHelper.isSwapXAndY());
 
                             switch(nLabelPlacement)
                             {
@@ -924,7 +927,6 @@ void AreaChart::createShapes()
                                     break;
                                 case css::chart::DataLabelPlacement::CENTER:
                                     eAlignment = LABEL_ALIGN_CENTER;
-                                    //todo implement this different for area charts
                                     break;
                                 default:
                                     OSL_FAIL("this label alignment is not implemented yet");
