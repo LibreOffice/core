@@ -42,7 +42,7 @@ public:
     void RemoveTextures(std::vector<GLuint>& rTextureIDs);
 
 private:
-    // This class just "adds" RemoveTextures() to the base class, it's never instantiatied.
+    // This class just "adds" RemoveTextures() to the base class, it's never instantiated.
     OpenGLWinGlyphCache() = delete;
 };
 
