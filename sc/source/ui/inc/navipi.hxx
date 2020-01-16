@@ -23,7 +23,6 @@
 #include <vector>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
@@ -179,9 +178,9 @@ private:
     VclPtr<ColumnEdit> aEdCol;
     VclPtr<RowEdit> aEdRow;
     VclPtr<ToolBox> aTbxCmd;
-    VclPtr<VclContainer> aContentBox;
+    VclPtr<vcl::Window> aContentBox;
     VclPtr<ScContentTree> aLbEntries;
-    VclPtr<VclContainer> aScenarioBox;
+    VclPtr<vcl::Window> aScenarioBox;
     VclPtr<ScScenarioWindow> aWndScenarios;
     VclPtr<ListBox> aLbDocuments;
 

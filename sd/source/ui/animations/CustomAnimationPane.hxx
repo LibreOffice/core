@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
-#include <vcl/layout.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
@@ -144,7 +143,7 @@ private:
     VclPtr<ListBox>     mpLBStart;
     VclPtr<FixedText>   mpFTProperty;
     VclPtr<PropertyControl> mpLBProperty;
-    VclPtr<VclHBox>     mpPlaceholderBox;
+    VclPtr<vcl::Window> mpPlaceholderBox;
     VclPtr<PushButton>  mpPBPropertyMore;
     VclPtr<FixedText>   mpFTDuration;
     VclPtr<MetricBox>   mpCBXDuration;
