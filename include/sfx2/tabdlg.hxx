@@ -101,7 +101,7 @@ protected:
      */
     void SavePosAndId();
 public:
-    SfxTabDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
+    SfxTabDialogController(weld::Widget* pParent, const OUString& rUIXMLDescription, const OString& rID,
                            const SfxItemSet * = nullptr, bool bEditFmt = false);
     virtual ~SfxTabDialogController() override;
 

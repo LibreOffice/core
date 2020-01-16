@@ -367,7 +367,7 @@ void TakeProgress::LaunchThread()
     maTakeThread->launch();
 }
 
-ActualizeProgress::ActualizeProgress(weld::Window* pWindow, GalleryTheme* pThm)
+ActualizeProgress::ActualizeProgress(weld::Widget* pWindow, GalleryTheme* pThm)
     : GenericDialogController(pWindow, "cui/ui/galleryupdateprogress.ui",
                               "GalleryUpdateProgress")
     , pIdle(nullptr)
@@ -416,7 +416,7 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
     m_xFtActualizeFile->set_label(GetReducedString(rURL, 30));
 }
 
-TitleDialog::TitleDialog(weld::Window* pParent, const OUString& rOldTitle)
+TitleDialog::TitleDialog(weld::Widget* pParent, const OUString& rOldTitle)
     : GenericDialogController(pParent, "cui/ui/gallerytitledialog.ui", "GalleryTitleDialog")
     , m_xEdit(m_xBuilder->weld_entry("entry"))
 {
@@ -428,7 +428,7 @@ TitleDialog::~TitleDialog()
 {
 }
 
-GalleryIdDialog::GalleryIdDialog(weld::Window* pParent, GalleryTheme* _pThm)
+GalleryIdDialog::GalleryIdDialog(weld::Widget* pParent, GalleryTheme* _pThm)
     : GenericDialogController(pParent, "cui/ui/gallerythemeiddialog.ui", "GalleryThemeIDDialog")
     , m_pThm(_pThm)
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, weld::Button&, void)
         m_xDialog->response(RET_OK);
 }
 
-GalleryThemeProperties::GalleryThemeProperties(weld::Window* pParent,
+GalleryThemeProperties::GalleryThemeProperties(weld::Widget* pParent,
     ExchangeData* _pData, SfxItemSet const * pItemSet)
     : SfxTabDialogController(pParent, "cui/ui/gallerythemedialog.ui",
                              "GalleryThemeDialog", pItemSet)

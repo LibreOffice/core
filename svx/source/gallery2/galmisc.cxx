@@ -55,17 +55,6 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx GalleryResGetBitmapEx(const OUString &rId)
-{
-    BitmapEx aBmpEx(rId);
-
-    //TODO, check if any of these have no transparency layer
-    if (!aBmpEx.IsTransparent())
-        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), COL_LIGHTMAGENTA);
-
-    return aBmpEx;
-}
-
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName )
 {
@@ -382,6 +371,18 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uInt32 nObje
     InitData( bLazy );
 }
 
+void GalleryTransferable::SelectObject(sal_uInt32 nObjectPos)
+{
+    fprintf(stderr, "SelectObject %d\n", nObjectPos);
+    if (nObjectPos == mnObjectPos)
+        return;
+    ClearFormats();
+    mnObjectPos = nObjectPos;
+    meObjectKind = mpTheme->GetObjectKind(mnObjectPos);
+    ObjectReleased();
+    InitData(true);
+}
+
 GalleryTransferable::~GalleryTransferable()
 {
 }
@@ -543,16 +544,16 @@ void GalleryTransferable::ObjectReleased()
     mpURL.reset();
 }
 
-void GalleryTransferable::StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions )
+bool GalleryTransferable::StartDrag()
 {
     INetURLObject aURL;
-
-    if( mpTheme->GetURL( mnObjectPos, aURL ) && ( aURL.GetProtocol() != INetProtocol::NotValid ) )
+    if (mpTheme->GetURL(mnObjectPos, aURL) && aURL.GetProtocol() != INetProtocol::NotValid)
     {
         mpTheme->SetDragging( true );
         mpTheme->SetDragPos( mnObjectPos );
-        TransferableHelper::StartDrag( pWindow, nDragSourceActions );
+        return false;
     }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
