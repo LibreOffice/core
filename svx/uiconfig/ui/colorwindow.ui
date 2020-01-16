@@ -11,9 +11,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="margin_right">6</property>
-    <property name="xalign">0</property>
     <property name="icon_name">cmd/sc_colorsettings.png</property>
-    <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="none_icon">
     <property name="visible">True</property>
@@ -44,7 +42,9 @@
                 <property name="no_show_all">True</property>
                 <property name="image">auto_icon</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -61,7 +61,9 @@
                 <property name="no_show_all">True</property>
                 <property name="image">none_icon</property>
                 <property name="relief">none</property>
+                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
