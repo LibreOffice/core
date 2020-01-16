@@ -49,7 +49,7 @@ namespace detail {
     */
     union element_alias
     {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > *pAsSequence;
+        std::vector< css::uno::Reference< css::uno::XInterface > > *pAsVector;
         css::uno::XInterface * pAsInterface;
         element_alias() : pAsInterface(NULL) {}
     };
