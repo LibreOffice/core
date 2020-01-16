@@ -18,6 +18,7 @@
  */
 
 
+#include <basobj.hxx>
 #include <bastypes.hxx>
 #include <bastype2.hxx>
 #include <strings.hrc>

@@ -20,6 +20,11 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDFUNC_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_DLGEDFUNC_HXX
 
+#include <vcl/event.hxx>
+#include <vcl/timer.hxx>
+#include <tools/link.hxx>
+#include <tools/gen.hxx>
+
 namespace basctl
 {
 

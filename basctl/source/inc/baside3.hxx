@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 
+#include "dlged.hxx"
 #include "layout.hxx"
 #include "bastypes.hxx"
 #include "propbrw.hxx"

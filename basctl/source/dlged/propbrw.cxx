@@ -26,9 +26,7 @@
 #include <strings.hrc>
 
 #include <strings.hxx>
-#include <svx/svxids.hrc>
 
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

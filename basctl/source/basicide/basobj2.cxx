@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basidesh.hxx>
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
 #include "macrodlg.hxx"
 #include "moduldlg.hxx"
+#include <iderid.hxx>
 #include <strings.hrc>
 #include "baside2.hxx"
 

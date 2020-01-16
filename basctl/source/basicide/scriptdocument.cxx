@@ -29,7 +29,6 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -51,9 +50,6 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
-#include <unotools/syslocale.hxx>
-
-#include <unotools/collatorwrapper.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
@@ -66,7 +62,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/uri.hxx>
 #include <set>

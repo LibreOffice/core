@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_LAYOUT_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_LAYOUT_HXX
 
+#include "bastypes.hxx"
 #include <vcl/split.hxx>
 #include <vcl/vclptr.hxx>
 

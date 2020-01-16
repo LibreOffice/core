@@ -24,6 +24,9 @@
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/lstbox.hxx>
 
+#include "doceventnotifier.hxx"
+#include "scriptdocument.hxx"
+
 namespace basctl
 {
 /*!

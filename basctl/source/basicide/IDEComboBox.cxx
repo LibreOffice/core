@@ -19,8 +19,10 @@
 
 #include <strings.hrc>
 #include <basidesh.hxx>
+#include <basobj.hxx>
 #include <IDEComboBox.hxx>
 #include <iderdll.hxx>
+#include <iderid.hxx>
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
 
@@ -30,6 +32,7 @@
 #include <svtools/langtab.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
 
 namespace basctl

@@ -21,6 +21,7 @@
 
 #include <basidesh.hxx>
 #include <baside3.hxx>
+#include <basobj.hxx>
 #include <iderdll.hxx>
 #include <dlged.hxx>
 #include <managelang.hxx>
@@ -28,7 +29,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>

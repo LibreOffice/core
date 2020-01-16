@@ -19,13 +19,15 @@
 
 #include <strings.hrc>
 #include <helpids.h>
+#include <iderid.hxx>
 
 #include "baside2.hxx"
 #include <baside3.hxx>
+#include <basidesh.hxx>
+#include <basobj.hxx>
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
 
-#include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>

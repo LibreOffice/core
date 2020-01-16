@@ -24,16 +24,18 @@
 #include <bitmaps.hlst>
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
+#include <iderid.hxx>
+#include <basobj.hxx>
 #include <svx/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <svl/stritem.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
@@ -41,7 +43,7 @@
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/io/Pipe.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>

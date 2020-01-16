@@ -26,16 +26,11 @@
 
 #include <strings.hrc>
 
-#include <com/sun/star/i18n/Boundary.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/sequence.hxx>
-#include <editeng/unolingu.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/langtab.hxx>
 #include <svx/langbox.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>

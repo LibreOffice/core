@@ -19,11 +19,13 @@
 
 #include <strings.hrc>
 #include <helpids.h>
+#include <iderid.hxx>
 
 #include <accessibledialogwindow.hxx>
 #include <baside3.hxx>
 #include <basidesh.hxx>
 #include <bastype2.hxx>
+#include <basobj.hxx>
 #include <dlged.hxx>
 #include <dlgeddef.hxx>
 #include <dlgedmod.hxx>
@@ -32,7 +34,6 @@
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
 
-#include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -44,7 +45,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdundo.hxx>

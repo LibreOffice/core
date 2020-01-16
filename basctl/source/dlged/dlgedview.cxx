@@ -21,12 +21,9 @@
 #include <dlged.hxx>
 #include <dlgedpage.hxx>
 
-#include <svx/svxids.hrc>
-#include <sfx2/viewfrm.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/scrbar.hxx>
 
-#include <basidesh.hxx>
-#include <iderdll.hxx>
 #include <dlgedobj.hxx>
 
 namespace basctl

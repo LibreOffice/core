@@ -22,10 +22,9 @@
 #include "scriptdocument.hxx"
 
 #include "sbxitem.hxx"
-#include "iderid.hxx"
 #include <svtools/tabbar.hxx>
-#include <vcl/toolbox.hxx>
 #include <basic/sbdef.hxx>
+#include <vcl/dockwin.hxx>
 
 #include <unordered_map>
 

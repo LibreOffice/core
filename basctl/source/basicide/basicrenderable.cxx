@@ -19,6 +19,7 @@
 
 #include "basicrenderable.hxx"
 #include <bastypes.hxx>
+#include <iderid.hxx>
 #include <strings.hrc>
 
 #include <toolkit/awt/vclxdevice.hxx>
