@@ -1949,6 +1949,9 @@ public:
         insert(-1, rId, rStr, nullptr, &rImage, false);
     }
 
+    // return the number of toplevel nodes
+    virtual int n_children() const = 0;
+
     virtual ~Menu() {}
 };
 

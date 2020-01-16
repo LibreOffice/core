@@ -6841,7 +6841,7 @@ class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
 protected:
     std::vector<GtkMenuItem*> m_aExtraItems;
     OString m_sActivated;
-    GtkInstanceMenuButton* m_pTopLevelMenuButton;
+    MenuHelper* m_pTopLevelMenuButton;
 
 private:
     virtual void signal_activate(GtkMenuItem* pItem) override
@@ -7046,6 +7046,14 @@ public:
             m_pTopLevelMenuButton->add_to_map(pMenuItem);
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
+    }
+
+    virtual int n_children() const override
+    {
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+        int nLen = g_list_length(pChildren);
+        g_list_free(pChildren);
+        return nLen;
     }
 
     virtual ~GtkInstanceMenu() override

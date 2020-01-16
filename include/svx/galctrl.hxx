@@ -28,42 +28,46 @@
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 
+class GalleryIconViewDragDrop;
+class GalleryPreviewDragDrop;
 class GalleryTheme;
 class GalleryBrowser2;
 class INetURLObject;
 
-class GalleryPreview final : public vcl::Window, public DropTargetHelper, public DragSourceHelper
+class GalleryPreview final : public weld::CustomWidgetController
 {
 private:
 
-    GraphicObject       aGraphicObj;
-    tools::Rectangle           aPreviewRect;
-    GalleryTheme* const       mpTheme;
+    std::unique_ptr<GalleryPreviewDragDrop> mxDragDropTargetHelper;
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
+    GraphicObject aGraphicObj;
+    tools::Rectangle aPreviewRect;
+    GalleryBrowser2* mpParent;
+    GalleryTheme* const mpTheme;
 
     bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
-    void             InitSettings();
 
     // Window
     virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual Size     GetOptimalSize() const override;
-    virtual void     MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void     Command(const CommandEvent& rCEvt) override;
-    virtual void     KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void     DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-
-    // DropTargetHelper
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-
-    // DragSourceHelper
-    virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+    virtual void     SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual bool     MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool     Command(const CommandEvent& rCEvt) override;
+    virtual bool     KeyInput( const KeyEvent& rKEvt ) override;
 
 public:
 
-    GalleryPreview(vcl::Window* pParent,
-        WinBits nStyle = WB_TABSTOP | WB_BORDER,
-        GalleryTheme* pTheme = nullptr);
+    GalleryPreview(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow, GalleryTheme* pTheme = nullptr);
+    virtual ~GalleryPreview() override;
+
+    // DropTargetHelper
+    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+
+    // DragSourceHelper
+    void     StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+
+    virtual void Show() override;
+    virtual void Hide() override;
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
     static void         PreviewMedia( const INetURLObject& rURL );
@@ -86,39 +90,45 @@ public:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );
+
+    static void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize);
 };
 
-class GalleryIconView final : public ValueSet, public DropTargetHelper, public DragSourceHelper
+class GalleryIconView final : public SvtValueSet
 {
-    using ValueSet::StartDrag;
+//TODO    using ValueSet::StartDrag;
 
 private:
+    std::unique_ptr<GalleryIconViewDragDrop> mxDragDropTargetHelper;
 
+    GalleryBrowser2*    mpParent;
     GalleryTheme*       mpTheme;
-
-    void                InitSettings();
 
     // ValueSet
     virtual void        UserDraw( const UserDrawEvent& rUDEvt ) override;
 
     // Window
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void        Command( const CommandEvent& rCEvt ) override;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool        Command( const CommandEvent& rCEvt ) override;
+    virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
 
-    // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-
-    // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
+    virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:
 
-                        GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme );
+    GalleryIconView(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
+    void SetTheme(GalleryTheme* pTheme) { mpTheme = pTheme; }
+    virtual ~GalleryIconView() override;
+
+    // DropTargetHelper
+    sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+
+    // DragSourceHelper
+    void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 };
 
+#if 0
 class GalleryListView final : public BrowseBox
 {
     using BrowseBox::AcceptDrop;
@@ -129,8 +139,6 @@ private:
     Link<GalleryListView*,void>  maSelectHdl;
     GalleryTheme*       mpTheme;
     sal_uInt32          mnCurRow;
-
-    void                InitSettings();
 
     // BrowseBox
     virtual bool        SeekRow( long nRow ) override;
@@ -168,6 +176,7 @@ public:
     virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 };
+#endif
 
 #endif // INCLUDED_SVX_GALCTRL_HXX
 

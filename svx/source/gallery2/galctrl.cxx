@@ -41,42 +41,70 @@
 #include <vcl/settings.hxx>
 #include <bitmaps.hlst>
 
-#define GALLERY_BRWBOX_TITLE    1
+class GalleryPreviewDragDrop : public DropTargetHelper
+//TODO                             , public DragSourceHelper
+{
+private:
+    GalleryPreview& m_rPreview;
 
-GalleryPreview::GalleryPreview(vcl::Window* pParent, WinBits nStyle, GalleryTheme* pTheme)
-    : Window(pParent, nStyle)
-    , DropTargetHelper(this)
-    , DragSourceHelper(this)
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override
+    {
+        return m_rPreview.AcceptDrop(rEvt);
+    }
+
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override
+    {
+        return m_rPreview.ExecuteDrop(rEvt);
+    }
+
+public:
+    GalleryPreviewDragDrop(GalleryPreview& rPreview)
+        : DropTargetHelper(rPreview.GetDrawingArea()->get_drop_target())
+        , m_rPreview(rPreview)
+    {
+    }
+};
+
+GalleryPreview::GalleryPreview(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow, GalleryTheme* pTheme)
+//TODO    , DragSourceHelper(this)
+    : mxScrolledWindow(std::move(xScrolledWindow))
+    , mpParent(pParent)
     , mpTheme(pTheme)
 {
-    SetHelpId( HID_GALLERY_WINDOW );
-    InitSettings();
 }
 
-Size GalleryPreview::GetOptimalSize() const
+void GalleryPreview::Show()
 {
-    return LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
+    mxScrolledWindow->show();
+    weld::CustomWidgetController::Show();
 }
 
-void GalleryPreview::InitSettings()
+void GalleryPreview::Hide()
 {
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
-    SetControlForeground( GALLERY_FG_COLOR );
+    weld::CustomWidgetController::Hide();
+    mxScrolledWindow->hide();
 }
 
-void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
+GalleryPreview::~GalleryPreview()
 {
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        InitSettings();
-    else
-        Window::DataChanged( rDCEvt );
+}
+
+void GalleryPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+
+    pDrawingArea->set_help_id(HID_GALLERY_WINDOW);
+
+    mxDragDropTargetHelper.reset(new GalleryPreviewDragDrop(*this));
 }
 
 bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const
 {
     const Size  aWinSize( GetOutputSizePixel() );
-    Size        aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
+    Size        aNewSize(GetDrawingArea()->get_ref_device().LogicToPixel(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode()));
     bool        bRet = false;
 
     if( aNewSize.Width() && aNewSize.Height() )
@@ -106,9 +134,10 @@ bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::R
     return bRet;
 }
 
-void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    Window::Paint(rRenderContext, rRect);
+    rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
+    rRenderContext.Erase();
 
     if (ImplGetGraphicCenterRect(aGraphicObj.GetGraphic(), aPreviewRect))
     {
@@ -122,28 +151,28 @@ void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 }
 
-void GalleryPreview::MouseButtonDown(const MouseEvent& rMEvt)
+bool GalleryPreview::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (mpTheme && (rMEvt.GetClicks() == 2))
-        static_cast<GalleryBrowser2*>(GetParent())->TogglePreview();
+        mpParent->TogglePreview();
+    return true;
 }
 
-void GalleryPreview::Command(const CommandEvent& rCEvt)
+bool GalleryPreview::Command(const CommandEvent& rCEvt)
 {
-    Window::Command(rCEvt);
-
     if (mpTheme && (rCEvt.GetCommand() == CommandEventId::ContextMenu))
     {
-        GalleryBrowser2* pGalleryBrowser = static_cast<GalleryBrowser2*>(GetParent());
-        pGalleryBrowser->ShowContextMenu(rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : nullptr);
+        mpParent->ShowContextMenu(rCEvt);
+        return true;
     }
+    return false;
 }
 
-void GalleryPreview::KeyInput(const KeyEvent& rKEvt)
+bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 {
     if(mpTheme)
     {
-        GalleryBrowser2* pBrowser = static_cast< GalleryBrowser2* >( GetParent() );
+        GalleryBrowser2* pBrowser = mpParent;
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
@@ -171,16 +200,15 @@ void GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 
             default:
             {
-                if (!pBrowser->KeyInput(rKEvt, this))
-                    Window::KeyInput(rKEvt);
+                if (!pBrowser->KeyInput(rKEvt, GetDrawingArea()))
+                    return false;
             }
             break;
         }
+
+        return true;
     }
-    else
-    {
-        Window::KeyInput(rKEvt);
-    }
+    return false;
 }
 
 sal_Int8 GalleryPreview::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
@@ -188,7 +216,7 @@ sal_Int8 GalleryPreview::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     sal_Int8 nRet;
 
     if (mpTheme)
-        nRet = static_cast<GalleryBrowser2*>(GetParent())->AcceptDrop(*this);
+        nRet = mpParent->AcceptDrop(*mxDragDropTargetHelper);
     else
         nRet = DND_ACTION_NONE;
 
@@ -200,7 +228,7 @@ sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
     sal_Int8 nRet;
 
     if (mpTheme)
-        nRet = static_cast<GalleryBrowser2*>(GetParent())->ExecuteDrop(rEvt);
+        nRet = mpParent->ExecuteDrop(rEvt);
     else
         nRet = DND_ACTION_NONE;
 
@@ -209,8 +237,8 @@ sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void GalleryPreview::StartDrag( sal_Int8, const Point& )
 {
-    if(mpTheme)
-        static_cast<GalleryBrowser2*>(GetParent())->StartDrag();
+    if (mpTheme)
+        mpParent->StartDrag();
 }
 
 void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
@@ -318,7 +346,7 @@ void SvxGalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     }
 }
 
-static void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
+void SvxGalleryPreview::drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
 {
 
     // draw checkered background
@@ -329,36 +357,55 @@ static void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rP
     rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
 }
 
-GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
-        ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET ),
-        DropTargetHelper( this ),
-        DragSourceHelper( this ),
-        mpTheme ( pTheme )
+class GalleryIconViewDragDrop : public DropTargetHelper
+//TODO                             , public DragSourceHelper
 {
+private:
+    GalleryIconView& m_rIconView;
 
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override
+    {
+        return m_rIconView.AcceptDrop(rEvt);
+    }
+
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override
+    {
+        return m_rIconView.ExecuteDrop(rEvt);
+    }
+
+public:
+    GalleryIconViewDragDrop(GalleryIconView& rIconView)
+        : DropTargetHelper(rIconView.GetDrawingArea()->get_drop_target())
+        , m_rIconView(rIconView)
+    {
+    }
+};
+
+GalleryIconView::GalleryIconView(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+    : SvtValueSet(std::move(xScrolledWindow))
+//TODO    , DragSourceHelper(this)
+    , mpParent(pParent)
+    , mpTheme(nullptr)
+{
+}
+
+GalleryIconView::~GalleryIconView()
+{
+}
+
+void GalleryIconView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    SvtValueSet::SetDrawingArea(pDrawingArea);
+
+    SetStyle(GetStyle() | WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET);
     EnableFullItemMode( false );
 
     SetHelpId( HID_GALLERY_WINDOW );
-    InitSettings();
     SetExtraSpacing( 2 );
     SetItemWidth( S_THUMB + 6 );
     SetItemHeight( S_THUMB + 6 );
-}
 
-void GalleryIconView::InitSettings()
-{
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
-    SetControlForeground( GALLERY_FG_COLOR );
-    SetColor( GALLERY_BG_COLOR );
-}
-
-void GalleryIconView::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        InitSettings();
-    else
-        ValueSet::DataChanged( rDCEvt );
+    mxDragDropTargetHelper.reset(new GalleryIconViewDragDrop(*this));
 }
 
 void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
@@ -413,7 +460,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
         if(aBitmapEx.IsTransparent())
         {
             // draw checkered background for full rectangle.
-            drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
+            SvxGalleryPreview::drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
         }
 
         pDev->DrawBitmapEx(aPos, aBitmapEx);
@@ -422,79 +469,66 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
     SetItemText(nId, aItemTextTitle);
 }
 
-void GalleryIconView::MouseButtonDown(const MouseEvent& rMEvt)
+bool GalleryIconView::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    ValueSet::MouseButtonDown(rMEvt);
+    bool bRet = SvtValueSet::MouseButtonDown(rMEvt);
 
     if (rMEvt.GetClicks() == 2)
-        static_cast<GalleryBrowser2*>(GetParent())->TogglePreview();
+        mpParent->TogglePreview();
+
+    return bRet;
 }
 
-void GalleryIconView::Command(const CommandEvent& rCEvt)
+bool GalleryIconView::Command(const CommandEvent& rCEvt)
 {
-    ValueSet::Command(rCEvt);
+    bool bRet = SvtValueSet::Command(rCEvt);
 
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        GalleryBrowser2* pGalleryBrowser = static_cast<GalleryBrowser2*>(GetParent());
-        pGalleryBrowser->ShowContextMenu(rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : nullptr);
+        mpParent->ShowContextMenu(rCEvt);
     }
+
+    return bRet;
 }
 
-void GalleryIconView::KeyInput(const KeyEvent& rKEvt)
+bool GalleryIconView::KeyInput(const KeyEvent& rKEvt)
 {
-    if (!mpTheme || !static_cast<GalleryBrowser2*>(GetParent())->KeyInput(rKEvt, this))
-        ValueSet::KeyInput(rKEvt);
+    if (!mpTheme || !mpParent->KeyInput(rKEvt, GetDrawingArea()))
+        return SvtValueSet::KeyInput(rKEvt);
+    return false;
 }
 
 sal_Int8 GalleryIconView::AcceptDrop(const AcceptDropEvent& /*rEvt*/)
 {
-    return static_cast<GalleryBrowser2*>(GetParent())->AcceptDrop(*this);
+    return mpParent->AcceptDrop(*mxDragDropTargetHelper);
 }
 
 sal_Int8 GalleryIconView::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    return static_cast<GalleryBrowser2*>(GetParent())->ExecuteDrop(rEvt);
+    return mpParent->ExecuteDrop(rEvt);
 }
 
 void GalleryIconView::StartDrag(sal_Int8, const Point&)
 {
+#if 0 //TODO
     const CommandEvent aEvt(GetPointerPosPixel(), CommandEventId::StartDrag, true);
     vcl::Region aRegion;
 
     // call this to initiate dragging for ValueSet
-    ValueSet::StartDrag(aEvt, aRegion);
-    static_cast<GalleryBrowser2*>(GetParent())->StartDrag();
+    SvtValueSet::StartDrag(aEvt, aRegion);
+    mpParent->StartDrag();
+#endif
 }
 
+#if 0
 GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
     BrowseBox( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER ),
     mpTheme( pTheme ),
     mnCurRow( 0 )
 {
-
-    SetHelpId( HID_GALLERY_WINDOW );
-
-    InitSettings();
-
     SetMode( BrowserMode::AUTO_VSCROLL | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::AUTO_HSCROLL );
     SetDataRowHeight( 28 );
     InsertDataColumn( GALLERY_BRWBOX_TITLE, SvxResId(RID_SVXSTR_GALLERY_TITLE), 256  );
-}
-
-void GalleryListView::InitSettings()
-{
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
-    SetControlForeground( GALLERY_FG_COLOR );
-}
-
-void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        InitSettings();
-    else
-        BrowseBox::DataChanged( rDCEvt );
 }
 
 bool GalleryListView::SeekRow( long nRow )
@@ -618,13 +652,13 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
         if( rCEvt.IsMouseEvent() && ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) )
             pPos = &rCEvt.GetMousePosPixel();
 
-        static_cast<GalleryBrowser2*>( GetParent() )->ShowContextMenu( pPos );
+        mpParent->ShowContextMenu(rCEvt);
     }
 }
 
 void GalleryListView::KeyInput( const KeyEvent& rKEvt )
 {
-    if( !mpTheme || !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
+    if (!mpTheme || !mpParent->KeyInput(rKEvt, GetDrawingArea()))
         BrowseBox::KeyInput( rKEvt );
 }
 
@@ -633,7 +667,7 @@ void GalleryListView::DoubleClick( const BrowserMouseEvent& rEvt )
     BrowseBox::DoubleClick( rEvt );
 
     if( rEvt.GetRow() != BROWSER_ENDOFSELECTION )
-        static_cast<GalleryBrowser2*>( GetParent() )->TogglePreview();
+        mpParent->TogglePreview();
 }
 
 void GalleryListView::Select()
@@ -657,12 +691,14 @@ sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
     aEvt.maPosPixel.AdjustY(GetTitleHeight() );
 
-    return static_cast<GalleryBrowser2*>( GetParent() )->ExecuteDrop( aEvt );
+    return mpParent->ExecuteDrop( aEvt );
 }
 
 void GalleryListView::StartDrag( sal_Int8, const Point& rPosPixel )
 {
-    static_cast<GalleryBrowser2*>( GetParent() )->StartDrag( &rPosPixel );
+    mpParent->StartDrag( &rPosPixel );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

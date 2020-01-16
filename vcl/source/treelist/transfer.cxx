@@ -2118,28 +2118,21 @@ void TransferableDataHelper::StopClipboardListening( )
     }
 }
 
-
-TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( vcl::Window * pWindow )
+TransferableDataHelper TransferableDataHelper::CreateFromClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rClipboard)
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
-
-    Reference< XClipboard > xClipboard;
     TransferableDataHelper  aRet;
 
-    if( pWindow )
-        xClipboard = pWindow->GetClipboard();
-
-    if( xClipboard.is() )
+    if( rClipboard.is() )
     {
         try
         {
-            Reference< XTransferable > xTransferable( xClipboard->getContents() );
+            Reference< XTransferable > xTransferable( rClipboard->getContents() );
 
             if( xTransferable.is() )
             {
                 aRet = TransferableDataHelper( xTransferable );
                 // also copy the clipboard
-                aRet.mxClipboard = xClipboard;
+                aRet.mxClipboard = rClipboard;
             }
         }
         catch( const css::uno::Exception& )
@@ -2148,6 +2141,18 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( vcl::W
     }
 
     return aRet;
+}
+
+TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( vcl::Window * pWindow )
+{
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+
+    Reference< XClipboard > xClipboard;
+
+    if( pWindow )
+        xClipboard = pWindow->GetClipboard();
+
+    return CreateFromClipboard(xClipboard);
 }
 
 
