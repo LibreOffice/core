@@ -27,6 +27,7 @@ skia_patches := \
     fix-msvc.patch.1 \
     fix-gcc-x86.patch.1	\
     msvc-vectorcall-sse.patch.1 \
+    clang11-flax-vector-conversion.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
