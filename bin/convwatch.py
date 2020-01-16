@@ -6,6 +6,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+# Conversion watch, initially intended to detect if document layout changed since the last time it was run.
+#
+# Print a set of docs, compare the ps (or was it pdf) against the old run and highlight the different pieces
+#
 
 import getopt
 import os
