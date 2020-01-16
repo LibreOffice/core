@@ -25,11 +25,9 @@
 #include <osl/diagnose.h>
 
 ScMarkArray::ScMarkArray(SCROW nMaxRow) :
-    nCount( 0 ),
-    nLimit( 0 ),
     mnMaxRow( nMaxRow )
 {
-    // special case "no marks" with pData = NULL
+    Reset(false);
 }
 
 // Move constructor
@@ -54,42 +52,38 @@ void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
     // (or have separate method to ensure pData)
 
     assert(nNeeded);
-    nLimit = nNeeded;
-    nCount = 1;
-    pData.reset( new ScMarkEntry[nNeeded] );
-    pData[0].nRow = mnMaxRow;
-    pData[0].bMarked = bMarked;
+    mvData.resize(1);
+    mvData.reserve(nNeeded);
+    mvData[0].nRow = mnMaxRow;
+    mvData[0].bMarked = bMarked;
 }
 
 // Iterative implementation of Binary Search
 bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
-    if (pData)
+    assert(mvData.size() > 0);
+    SCSIZE    nHi         = mvData.size() - 1;
+    SCSIZE    nLo         = 0;
+
+    while ( nLo <= nHi )
     {
-        assert(nCount > 0);
-        SCSIZE    nHi         = nCount - 1;
-        SCSIZE    nLo         = 0;
+        SCSIZE i = (nLo + nHi) / 2;
 
-        while ( nLo <= nHi )
+        if (mvData[i].nRow < nRow)
         {
-            SCSIZE i = (nLo + nHi) / 2;
-
-            if (pData[i].nRow < nRow)
-            {
-                // If [nRow] greater, ignore left half
-                nLo = i + 1;
-            }
-            else if ((i > 0) && (pData[i - 1].nRow >= nRow))
-            {
-                // If [nRow] is smaller, ignore right half
-                nHi = i - 1;
-            }
-            else
-            {
-                // found
-                nIndex=i;
-                return true;
-            }
+            // If [nRow] greater, ignore left half
+            nLo = i + 1;
+        }
+        else if ((i > 0) && (mvData[i - 1].nRow >= nRow))
+        {
+            // If [nRow] is smaller, ignore right half
+            nHi = i - 1;
+        }
+        else
+        {
+            // found
+            nIndex=i;
+            return true;
         }
     }
 
@@ -102,7 +96,7 @@ bool ScMarkArray::GetMark( SCROW nRow ) const
 {
     SCSIZE i;
     if (Search( nRow, i ))
-        return pData[i].bMarked;
+        return mvData[i].bMarked;
     else
         return false;
 
@@ -118,31 +112,6 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
         }
         else
         {
-            if (!pData)
-                Reset( false, 3);   // create pData for further processing, allocating 1+2 entries
-            else
-            {
-                SCSIZE nNeeded = nCount + 2;
-                if ( nLimit < nNeeded )
-                {
-                    // Assume that if it grew already beyond a certain
-                    // threshold it will continue to grow and avoid the
-                    // bottleneck of lots of reallocations in small steps.
-                    // Don't use a simple "double amount" strategy though as
-                    // that again may allocate much more than actually needed.
-                    // The "one and a half" is just a shot into the blue sky.
-                    if (nLimit > 4 * SC_MARKARRAY_DELTA)
-                        nLimit += nLimit / 2;
-                    else
-                        nLimit += SC_MARKARRAY_DELTA;
-                    if ( nLimit < nNeeded )
-                        nLimit = nNeeded;
-                    ScMarkEntry* pNewData = new ScMarkEntry[nLimit];
-                    memcpy( pNewData, pData.get(), nCount*sizeof(ScMarkEntry) );
-                    pData.reset( pNewData );
-                }
-            }
-
             SCSIZE ni;          // number of entries in beginning
             SCSIZE nInsert;     // insert position (mnMaxRow+1 := no insert)
             bool bCombined = false;
@@ -155,22 +124,22 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 ni = nIndex;
 
                 nInsert = MAXROWCOUNT;
-                if ( pData[ni].bMarked != bMarked )
+                if ( mvData[ni].bMarked != bMarked )
                 {
-                    if ( ni == 0 || (pData[ni-1].nRow < nStartRow - 1) )
+                    if ( ni == 0 || (mvData[ni-1].nRow < nStartRow - 1) )
                     {   // may be a split or a simple insert or just a shrink,
                         // row adjustment is done further down
-                        if ( pData[ni].nRow > nEndRow )
+                        if ( mvData[ni].nRow > nEndRow )
                             bSplit = true;
                         ni++;
                         nInsert = ni;
                     }
-                    else if ( ni > 0 && pData[ni-1].nRow == nStartRow - 1 )
+                    else if ( ni > 0 && mvData[ni-1].nRow == nStartRow - 1 )
                         nInsert = ni;
                 }
-                if ( ni > 0 && pData[ni-1].bMarked == bMarked )
+                if ( ni > 0 && mvData[ni-1].bMarked == bMarked )
                 {   // combine
-                    pData[ni-1].nRow = nEndRow;
+                    mvData[ni-1].nRow = nEndRow;
                     nInsert = MAXROWCOUNT;
                     bCombined = true;
                 }
@@ -182,64 +151,59 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
             }
 
             SCSIZE nj = ni;     // stop position of range to replace
-            while ( nj < nCount && pData[nj].nRow <= nEndRow )
+            while ( nj < mvData.size() && mvData[nj].nRow <= nEndRow )
                 nj++;
             if ( !bSplit )
             {
-                if ( nj < nCount && pData[nj].bMarked == bMarked )
+                if ( nj < mvData.size() && mvData[nj].bMarked == bMarked )
                 {   // combine
                     if ( ni > 0 )
                     {
-                        if ( pData[ni-1].bMarked == bMarked )
+                        if ( mvData[ni-1].bMarked == bMarked )
                         {   // adjacent entries
-                            pData[ni-1].nRow = pData[nj].nRow;
+                            mvData[ni-1].nRow = mvData[nj].nRow;
                             nj++;
                         }
                         else if ( ni == nInsert )
-                            pData[ni-1].nRow = nStartRow - 1;   // shrink
+                            mvData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
                     nInsert = MAXROWCOUNT;
                     bCombined = true;
                 }
                 else if ( ni > 0 && ni == nInsert )
-                    pData[ni-1].nRow = nStartRow - 1;   // shrink
+                    mvData[ni-1].nRow = nStartRow - 1;   // shrink
             }
             if ( ni < nj )
             {   // remove middle entries
                 if ( !bCombined )
                 {   // replace one entry
-                    pData[ni].nRow = nEndRow;
-                    pData[ni].bMarked = bMarked;
+                    mvData[ni].nRow = nEndRow;
+                    mvData[ni].bMarked = bMarked;
                     ni++;
                     nInsert = MAXROWCOUNT;
                 }
                 if ( ni < nj )
                 {   // remove entries
-                    memmove( pData.get() + ni, pData.get() + nj, (nCount - nj) * sizeof(ScMarkEntry) );
-                    nCount -= nj - ni;
+                    mvData.erase(mvData.begin() + ni, mvData.begin() + nj);
                 }
             }
 
             if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
             {   // insert or append new entry
-                if ( nInsert <= nCount )
+                if ( nInsert <= mvData.size() )
                 {
                     if ( !bSplit )
-                        memmove( pData.get() + nInsert + 1, pData.get() + nInsert,
-                            (nCount - nInsert) * sizeof(ScMarkEntry) );
+                        mvData.insert(mvData.begin() + nInsert, { nEndRow, bMarked });
                     else
                     {
-                        memmove( pData.get() + nInsert + 2, pData.get() + nInsert,
-                            (nCount - nInsert) * sizeof(ScMarkEntry) );
-                        pData[nInsert+1] = pData[nInsert-1];
-                        nCount++;
+                        mvData.insert(mvData.begin() + nInsert, 2, { nEndRow, bMarked });
+                        mvData[nInsert+1] = mvData[nInsert-1];
                     }
                 }
+                else
+                    mvData.push_back(ScMarkEntry{ nEndRow, bMarked });
                 if ( nInsert )
-                    pData[nInsert-1].nRow = nStartRow - 1;
-                pData[nInsert].nRow = nEndRow;
-                pData[nInsert].bMarked = bMarked;
-                nCount++;
+                    mvData[nInsert-1].nRow = nStartRow - 1;
             }
         }
     }
@@ -251,11 +215,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 */
 void ScMarkArray::Set( const std::vector<ScMarkEntry> & rMarkEntries )
 {
-    nCount = rMarkEntries.size()+1;
-    nLimit = nCount;
-    pData.reset( new ScMarkEntry[nLimit] );
-    memcpy(pData.get(), rMarkEntries.data(), sizeof(ScMarkEntry) * rMarkEntries.size());
-    pData[nCount-1] = ScMarkEntry{mnMaxRow, false};
+    mvData = rMarkEntries;
 }
 
 bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
@@ -264,7 +224,7 @@ bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
     SCSIZE nEndIndex;
 
     if (Search( nStartRow, nStartIndex ))
-        if (pData[nStartIndex].bMarked)
+        if (mvData[nStartIndex].bMarked)
             if (Search( nEndRow, nEndIndex ))
                 if (nEndIndex==nStartIndex)
                     return true;
@@ -275,35 +235,35 @@ bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
 bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
 {
     bool bRet = false;
-    if ( nCount == 1 )
+    if ( mvData.size() == 1 )
     {
-        if ( pData[0].bMarked )
+        if ( mvData[0].bMarked )
         {
             rStartRow = 0;
             rEndRow = mnMaxRow;
             bRet = true;
         }
     }
-    else if ( nCount == 2 )
+    else if ( mvData.size() == 2 )
     {
-        if ( pData[0].bMarked )
+        if ( mvData[0].bMarked )
         {
             rStartRow = 0;
-            rEndRow = pData[0].nRow;
+            rEndRow = mvData[0].nRow;
         }
         else
         {
-            rStartRow = pData[0].nRow + 1;
+            rStartRow = mvData[0].nRow + 1;
             rEndRow = mnMaxRow;
         }
         bRet = true;
     }
-    else if ( nCount == 3 )
+    else if ( mvData.size() == 3 )
     {
-        if ( pData[1].bMarked )
+        if ( mvData[1].bMarked )
         {
-            rStartRow = pData[0].nRow + 1;
-            rEndRow = pData[1].nRow;
+            rStartRow = mvData[0].nRow + 1;
+            rEndRow = mvData[1].nRow;
             bRet = true;
         }
     }
@@ -312,66 +272,41 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
 
 bool ScMarkArray::operator==( const ScMarkArray& rOther ) const
 {
-    if (nCount != rOther.nCount)
-        return false;
-
-    for (size_t i=0; i < nCount; ++i)
-    {
-        if (pData[i].bMarked != rOther.pData[i].bMarked ||
-                pData[i].nRow != rOther.pData[i].nRow)
-            return false;
-    }
-
-    return true;
+    return mvData == rOther.mvData;
 }
 
 ScMarkArray& ScMarkArray::operator=( const ScMarkArray& rOther )
 {
-    if (rOther.pData)
-    {
-        pData.reset( new ScMarkEntry[rOther.nCount] );
-        memcpy( pData.get(), rOther.pData.get(), rOther.nCount * sizeof(ScMarkEntry) );
-    }
-    else
-        pData.reset();
-
-    nCount = nLimit = rOther.nCount;
+    mvData = rOther.mvData;
     mnMaxRow = rOther.mnMaxRow;
     return *this;
 }
 
 ScMarkArray& ScMarkArray::operator=(ScMarkArray&& rOther) noexcept
 {
-    nCount = rOther.nCount;
-    nLimit = rOther.nLimit;
-    pData = std::move( rOther.pData );
+    mvData = std::move(rOther.mvData);
     mnMaxRow = rOther.mnMaxRow;
-    rOther.nCount = 0;
-    rOther.nLimit = 0;
     return *this;
 }
 
 SCROW ScMarkArray::GetNextMarked( SCROW nRow, bool bUp ) const
 {
-    if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset();   // create pData for further processing
-
     SCROW nRet = nRow;
     if (ValidRow(nRow, mnMaxRow))
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);
-        if (!pData[nIndex].bMarked)
+        if (!mvData[nIndex].bMarked)
         {
             if (bUp)
             {
                 if (nIndex>0)
-                    nRet = pData[nIndex-1].nRow;
+                    nRet = mvData[nIndex-1].nRow;
                 else
                     nRet = -1;
             }
             else
-                nRet = pData[nIndex].nRow + 1;
+                nRet = mvData[nIndex].nRow + 1;
         }
     }
     return nRet;
@@ -379,34 +314,31 @@ SCROW ScMarkArray::GetNextMarked( SCROW nRow, bool bUp ) const
 
 SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 {
-    if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset();   // create pData for further processing
-
     SCROW nRet;
     SCSIZE nIndex;
     Search(nRow, nIndex);
-    OSL_ENSURE( pData[nIndex].bMarked, "GetMarkEnd without bMarked" );
+    assert( mvData[nIndex].bMarked && "GetMarkEnd without bMarked" );
     if (bUp)
     {
         if (nIndex>0)
-            nRet = pData[nIndex-1].nRow + 1;
+            nRet = mvData[nIndex-1].nRow + 1;
         else
             nRet = 0;
     }
     else
-        nRet = pData[nIndex].nRow;
+        nRet = mvData[nIndex].nRow;
 
     return nRet;
 }
 
 void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
 {
-    if (!pData || nOffset == 0 || nStartRow > mnMaxRow)
+    if (nOffset == 0 || nStartRow > mnMaxRow)
         return;
 
-    for (size_t i=0; i < nCount; ++i)
+    for (size_t i=0; i < mvData.size(); ++i)
     {
-        auto& rEntry = pData[i];
+        auto& rEntry = mvData[i];
 
         if (rEntry.nRow < nStartRow)
             continue;
@@ -424,32 +356,29 @@ void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
 
 void ScMarkArray::Intersect(const ScMarkArray& rOther)
 {
-    if (!pData || !rOther.pData)
-        return;
-
     size_t i = 0;
     size_t j = 0;
 
     std::vector<ScMarkEntry> aEntryArray;
-    aEntryArray.reserve(std::max(nCount, rOther.nCount));
+    aEntryArray.reserve(std::max(mvData.size(), rOther.mvData.size()));
 
-    while (i < nCount && j < rOther.nCount)
+    while (i < mvData.size() && j < rOther.mvData.size())
     {
-        const auto& rEntry = pData[i];
-        const auto& rOtherEntry = rOther.pData[j];
+        const auto& rEntry = mvData[i];
+        const auto& rOtherEntry = rOther.mvData[j];
 
         if (rEntry.bMarked != rOtherEntry.bMarked)
         {
             if (!rOtherEntry.bMarked)
             {
-                aEntryArray.push_back(rOther.pData[j++]);
-                while (i < nCount && pData[i].nRow <= rOtherEntry.nRow)
+                aEntryArray.push_back(rOther.mvData[j++]);
+                while (i < mvData.size() && mvData[i].nRow <= rOtherEntry.nRow)
                     ++i;
             }
             else // rEntry not marked
             {
-                aEntryArray.push_back(pData[i++]);
-                while (j < rOther.nCount && rOther.pData[j].nRow <= rEntry.nRow)
+                aEntryArray.push_back(mvData[i++]);
+                while (j < rOther.mvData.size() && rOther.mvData[j].nRow <= rEntry.nRow)
                     ++j;
             }
         }
@@ -459,56 +388,45 @@ void ScMarkArray::Intersect(const ScMarkArray& rOther)
             {
                 if (rEntry.nRow <= rOtherEntry.nRow)
                 {
-                    aEntryArray.push_back(pData[i++]); // upper row
+                    aEntryArray.push_back(mvData[i++]); // upper row
                     if (rEntry.nRow == rOtherEntry.nRow)
                         ++j;
                 }
                 else
                 {
-                    aEntryArray.push_back(rOther.pData[j++]); // upper row
+                    aEntryArray.push_back(rOther.mvData[j++]); // upper row
                 }
             }
             else // both not marked
             {
                 if (rEntry.nRow <= rOtherEntry.nRow)
                 {
-                    aEntryArray.push_back(rOther.pData[j++]); // lower row
-                    while (i < nCount && pData[i].nRow <= rOtherEntry.nRow)
+                    aEntryArray.push_back(rOther.mvData[j++]); // lower row
+                    while (i < mvData.size() && mvData[i].nRow <= rOtherEntry.nRow)
                         ++i;
                 }
                 else
                 {
-                    aEntryArray.push_back(pData[i++]); // lower row
-                    while (j < rOther.nCount && rOther.pData[j].nRow <= rEntry.nRow)
+                    aEntryArray.push_back(mvData[i++]); // lower row
+                    while (j < rOther.mvData.size() && rOther.mvData[j].nRow <= rEntry.nRow)
                         ++j;
                 }
             }
         }
     }
 
-    OSL_ENSURE(i == nCount || j == rOther.nCount, "Unexpected case.");
+    assert((i == mvData.size() || j == rOther.mvData.size()) && "Unexpected case.");
 
-    if (i == nCount)
+    if (i == mvData.size())
     {
-        for (; j < rOther.nCount; ++j)
-        {
-            aEntryArray.push_back(rOther.pData[j]);
-        }
+        aEntryArray.insert(aEntryArray.end(), rOther.mvData.begin() + j, rOther.mvData.end());
     }
     else // j == rOther.nCount
     {
-        for (; i < nCount; ++i)
-        {
-            aEntryArray.push_back(pData[i]);
-        }
+        aEntryArray.insert(aEntryArray.end(), mvData.begin() + i, mvData.end());
     }
 
-    size_t nSize = aEntryArray.size();
-    OSL_ENSURE(nSize > 0, "Unexpected case.");
-
-    pData.reset(new ScMarkEntry[nSize]);
-    memcpy(pData.get(), aEntryArray.data(), nSize * sizeof(ScMarkEntry));
-    nCount = nLimit = nSize;
+    mvData = std::move(aEntryArray);
 }
 
 
@@ -534,19 +452,19 @@ bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
 {
     if (!pArray)
         return false;
-    if ( nPos >= pArray->nCount )
+    if ( nPos >= pArray->mvData.size() )
         return false;
-    while (!pArray->pData[nPos].bMarked)
+    while (!pArray->mvData[nPos].bMarked)
     {
         ++nPos;
-        if ( nPos >= pArray->nCount )
+        if ( nPos >= pArray->mvData.size() )
             return false;
     }
-    rBottom = pArray->pData[nPos].nRow;
+    rBottom = pArray->mvData[nPos].nRow;
     if (nPos==0)
         rTop = 0;
     else
-        rTop = pArray->pData[nPos-1].nRow + 1;
+        rTop = pArray->mvData[nPos-1].nRow + 1;
     ++nPos;
     return true;
 }
