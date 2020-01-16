@@ -243,8 +243,7 @@ OUString SAL_CALL GenericPropertySet::getImplementationName()
 
 Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
 {
-    Sequence<OUString> aSNS { "com.sun.star.beans.XPropertySet" };
-    return aSNS;
+    return { "com.sun.star.beans.XPropertySet" };
 }
 
 css::uno::Reference< css::beans::XPropertySet > comphelper::GenericPropertySet_CreateInstance( comphelper::PropertySetInfo* pInfo )

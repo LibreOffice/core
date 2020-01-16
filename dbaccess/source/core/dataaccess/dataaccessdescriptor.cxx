@@ -176,8 +176,7 @@ namespace
 
     Sequence< OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  )
     {
-        Sequence< OUString > aServices { "com.sun.star.sdb.DataAccessDescriptor" };
-        return aServices;
+        return { "com.sun.star.sdb.DataAccessDescriptor" };
     }
 
     Reference< XPropertySetInfo > SAL_CALL DataAccessDescriptor::getPropertySetInfo()
@@ -229,8 +228,7 @@ namespace
 
     Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames()
     {
-        Sequence< OUString > aServices { "com.sun.star.sdb.DataAccessDescriptorFactory" };
-        return aServices;
+        return { "com.sun.star.sdb.DataAccessDescriptorFactory" };
     }
 
     Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  )
