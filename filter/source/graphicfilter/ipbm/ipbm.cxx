@@ -393,7 +393,7 @@ bool PBMReader::ImplReadBody()
                     nCount--;
                     if ( nGrey <= mnMaxVal )
                         nGrey = 255 * nGrey / mnMaxVal;
-                    mpRawBmp->SetPixel( nHeight, nWidth++, mvPalette[nGrey] );
+                    mpRawBmp->SetPixel( nHeight, nWidth++, mvPalette[static_cast<sal_uInt8>(nGrey)] );
                     nGrey = 0;
                     if ( nWidth == mnWidth )
                     {
