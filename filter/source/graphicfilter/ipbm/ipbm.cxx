@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graph.hxx>
@@ -258,6 +259,22 @@ bool PBMReader::ImplReadHeader()
     return mbStatus;
 }
 
+namespace
+{
+    const Color& SanitizePaletteIndex(std::vector<Color> const & rvPalette, sal_uInt64 nIndex)
+    {
+        if (nIndex >= rvPalette.size())
+        {
+            auto nSanitizedIndex = nIndex % rvPalette.size();
+            SAL_WARN_IF(nIndex != nSanitizedIndex, "filter.tga", "invalid colormap index: "
+                        << static_cast<unsigned int>(nIndex) << ", colormap len is: "
+                        << rvPalette.size());
+            nIndex = nSanitizedIndex;
+        }
+        return rvPalette[nIndex];
+    }
+}
+
 bool PBMReader::ImplReadBody()
 {
     sal_uInt8   nDat = 0, nCount;
@@ -283,7 +300,7 @@ bool PBMReader::ImplReadBody()
                         mrPBM.ReadUChar( nDat );
                         nShift = 7;
                     }
-                    mpRawBmp->SetPixel( nHeight, nWidth, mvPalette[(nDat >> nShift) & 0x01] );
+                    mpRawBmp->SetPixel( nHeight, nWidth, SanitizePaletteIndex(mvPalette, (nDat >> nShift) & 0x01));
                     if ( ++nWidth == mnWidth )
                     {
                         nShift = 0;
@@ -301,7 +318,7 @@ bool PBMReader::ImplReadBody()
                         return false;
 
                     mrPBM.ReadUChar( nDat );
-                    mpRawBmp->SetPixel( nHeight, nWidth++, mvPalette[nDat]);
+                    mpRawBmp->SetPixel( nHeight, nWidth++, SanitizePaletteIndex(mvPalette, nDat));
 
                     if ( nWidth == mnWidth )
                     {
@@ -365,7 +382,7 @@ bool PBMReader::ImplReadBody()
 
                 if ( nDat == '0' || nDat == '1' )
                 {
-                    mpRawBmp->SetPixel( nHeight, nWidth, mvPalette[static_cast<sal_uInt8>(nDat - '0')] );
+                    mpRawBmp->SetPixel( nHeight, nWidth, SanitizePaletteIndex(mvPalette, static_cast<sal_uInt8>(nDat - '0')) );
                     nWidth++;
                     if ( nWidth == mnWidth )
                     {
@@ -393,7 +410,7 @@ bool PBMReader::ImplReadBody()
                     nCount--;
                     if ( nGrey <= mnMaxVal )
                         nGrey = 255 * nGrey / mnMaxVal;
-                    mpRawBmp->SetPixel( nHeight, nWidth++, mvPalette[nGrey] );
+                    mpRawBmp->SetPixel( nHeight, nWidth++, SanitizePaletteIndex(mvPalette, nGrey) );
                     nGrey = 0;
                     if ( nWidth == mnWidth )
                     {
