@@ -510,7 +510,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             // TODO: ???
             OString sOut =
-                "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_comment
+                "<" OOO_STRING_SVTOOLS_HTML_comment
                 " " +
                 OUStringToOString(sComment, static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc) +
                 " -->";

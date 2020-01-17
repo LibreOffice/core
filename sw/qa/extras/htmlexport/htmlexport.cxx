@@ -14,6 +14,8 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
@@ -23,6 +25,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -766,6 +769,47 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     // Load a document with Chinese text in it.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-chinese.odt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // Export it.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+
+    // Without the accompanying fix in place, this test would have failed as the output was not
+    // well-formed.
+    CPPUNIT_ASSERT(pDoc);
+}
+
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
+{
+    // Create a document with a comment in it.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("some text"))},
+        {"Author", uno::makeAny(OUString("me"))},
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
 
     // Export it.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
