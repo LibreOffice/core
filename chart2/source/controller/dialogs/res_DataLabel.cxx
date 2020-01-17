@@ -109,9 +109,10 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xNF_Degrees(pBuilder->weld_metric_spin_button("NF_LABEL_DEGREES", FieldUnit::DEGREE))
     , m_xBxTextDirection(pBuilder->weld_widget("boxTXT_DIRECTION"))
     , m_xLB_TextDirection(new TextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
-    , m_xDC_Dial(new weld::CustomWeld(*pBuilder, "CT_DIAL", m_aDC_Dial))
+    , m_xDC_Dial(new svx::DialControl(pBuilder->weld_scrolled_window("anglepreview")))
+    , m_xDC_DialWin(new weld::CustomWeld(*pBuilder, "CT_DIAL", *m_xDC_Dial))
 {
-    m_aDC_Dial.SetText(m_xFT_Dial->get_label());
+    m_xDC_Dial->SetText(m_xFT_Dial->get_label());
 
     //fill label placement list
     std::map< sal_Int32, OUString > aPlacementToStringMap;
@@ -153,7 +154,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
             m_xCBPercent->set_sensitive(false);
     }
 
-    m_aDC_Dial.SetLinkedField(m_xNF_Degrees.get());
+    m_xDC_Dial->SetLinkedField(m_xNF_Degrees.get());
 }
 
 DataLabelResources::~DataLabelResources()
@@ -293,9 +294,9 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
     if (m_xLB_TextDirection->get_active() != -1)
         rOutAttrs->Put( SvxFrameDirectionItem( m_xLB_TextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
 
-    if( m_aDC_Dial.IsVisible() )
+    if( m_xDC_Dial->IsVisible() )
     {
-        sal_Int32 nDegrees = m_aDC_Dial.GetRotation();
+        sal_Int32 nDegrees = m_xDC_Dial->GetRotation();
         rOutAttrs->Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 }
@@ -345,10 +346,10 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
-        m_aDC_Dial.SetRotation( nDegrees );
+        m_xDC_Dial->SetRotation( nDegrees );
     }
     else
-        m_aDC_Dial.SetRotation( 0 );
+        m_xDC_Dial->SetRotation( 0 );
 
     EnableControls();
 }

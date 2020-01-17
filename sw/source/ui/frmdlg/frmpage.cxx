@@ -2316,12 +2316,13 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     // RotGrfFlyFrame: Need Angle and RotateControls now
     , m_xFlAngle(m_xBuilder->weld_frame("FL_ANGLE"))
     , m_xNfAngle(m_xBuilder->weld_metric_spin_button("NF_ANGLE", FieldUnit::DEGREE))
-    , m_xCtlAngle(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", m_aCtlAngle))
+    , m_xCtlAngle(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aBmpWin))
 {
     m_aBmpWin.SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
 
-    m_aCtlAngle.SetLinkedField(m_xNfAngle.get(), 2);
+    m_xCtlAngle->SetLinkedField(m_xNfAngle.get(), 2);
 
     SetExchangeSupport();
     m_xMirrorHorzBox->connect_toggled(LINK(this, SwGrfExtPage, MirrorHdl));
@@ -2332,6 +2333,7 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
 SwGrfExtPage::~SwGrfExtPage()
 {
     m_xBmpWin.reset();
+    m_xCtlAngleWin.reset();
     m_xCtlAngle.reset();
     m_xGrfDlg.reset();
 }
@@ -2357,13 +2359,13 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
     // RotGrfFlyFrame: Get RotationAngle and set at control
     if(SfxItemState::SET == rSet->GetItemState( SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
     {
-        m_aCtlAngle.SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
+        m_xCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
     }
     else
     {
-        m_aCtlAngle.SetRotation(0);
+        m_xCtlAngle->SetRotation(0);
     }
-    m_aCtlAngle.SaveValue();
+    m_xCtlAngle->SaveValue();
 
     ActivatePage(*rSet);
 }
@@ -2496,9 +2498,9 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
     }
 
     // RotGrfFlyFrame: Safe rotation if modified
-    if(m_aCtlAngle.IsValueModified())
+    if(m_xCtlAngle->IsValueModified())
     {
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_aCtlAngle.GetRotation()));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
         bModified = true;
     }
 

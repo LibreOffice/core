@@ -44,13 +44,13 @@ public:
     virtual void Reset(const SfxItemSet* rInAttrs) override;
 
 private:
-    svx::DialControl m_aAngleDial;
     std::unique_ptr<weld::CheckButton> m_xCB_Clockwise;
     std::unique_ptr<weld::Frame> m_xFL_StartingAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xNF_StartingAngle;
     std::unique_ptr<weld::Frame> m_xFL_PlotOptions;
     std::unique_ptr<weld::CheckButton> m_xCB_IncludeHiddenCells;
-    std::unique_ptr<weld::CustomWeld> m_xAngleDial;
+    std::unique_ptr<svx::DialControl> m_xAngleDial;
+    std::unique_ptr<weld::CustomWeld> m_xAngleDialWin;
 };
 
 } //namespace chart

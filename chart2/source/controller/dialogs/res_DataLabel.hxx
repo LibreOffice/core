@@ -59,8 +59,6 @@ private:
     weld::Window*       m_pWindow;
     SfxItemPool*        m_pPool;
 
-    svx::DialControl m_aDC_Dial;
-
     std::unique_ptr<weld::CheckButton> m_xCBNumber;
     std::unique_ptr<weld::Button> m_xPB_NumberFormatForValue;
     std::unique_ptr<weld::CheckButton> m_xCBPercent;
@@ -83,7 +81,8 @@ private:
     std::unique_ptr<weld::Widget> m_xBxTextDirection;
 
     std::unique_ptr<TextDirectionListBox> m_xLB_TextDirection;
-    std::unique_ptr<weld::CustomWeld> m_xDC_Dial;
+    std::unique_ptr<svx::DialControl> m_xDC_Dial;
+    std::unique_ptr<weld::CustomWeld> m_xDC_DialWin;
 
     DECL_LINK(NumberFormatDialogHdl, weld::Button&, void );
     DECL_LINK(CheckHdl, weld::ToggleButton&, void );

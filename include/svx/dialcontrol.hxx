@@ -75,6 +75,7 @@ private:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl final : public weld::CustomWidgetController
 {
 public:
+    DialControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -86,6 +87,8 @@ public:
     virtual bool        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual bool        KeyInput(const KeyEvent& rKEvt) override;
     virtual void        LoseFocus() override;
+    virtual void        Show() override;
+    virtual void        Hide() override;
 
     virtual void        Resize() override;
 
@@ -118,6 +121,14 @@ public:
     void                SetModifyHdl( const Link<DialControl&,void>& rLink );
 
     void                Init( const Size& rWinSize );
+
+    void                set_visible(bool bVisible)
+    {
+        if (bVisible)
+            Show();
+        else
+            Hide();
+    }
 private:
     struct DialControl_Impl
     {
@@ -141,6 +152,7 @@ private:
         void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
         void                SetSize( const Size& rWinSize );
     };
+    std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     std::unique_ptr< DialControl_Impl > mpImpl;
 
     void                HandleMouseEvent( const Point& rPos, bool bInitial );
