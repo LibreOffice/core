@@ -39,9 +39,6 @@
 
 namespace framework{
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
-    IMPL_ListenerHashContainer;
-
 /*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches
     @descr          Use this class as member only! Never use it as baseclass.
@@ -115,7 +112,6 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
         osl::Mutex                                              m_mutex;
-        IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
         bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
         bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation
 

@@ -47,7 +47,6 @@ using namespace ::osl;
 PopupMenuDispatcher::PopupMenuDispatcher(
     const uno::Reference< XComponentContext >& xContext )
         :   m_xContext              ( xContext                       )
-        ,   m_aListenerContainer    ( m_mutex )
         ,   m_bAlreadyDisposed      ( false                      )
         ,   m_bActivateListener     ( false                      )
 {
@@ -224,22 +223,14 @@ void SAL_CALL PopupMenuDispatcher::dispatch( const URL& /*aURL*/, const Sequence
 {
 }
 
-void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XStatusListener >& xControl,
-                                                      const URL& aURL )
+void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XStatusListener >& /*xControl*/,
+                                                      const URL& /*aURL*/ )
 {
-    SolarMutexGuard g;
-    // Safe impossible cases
-    // Add listener to container.
-    m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
 
-void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< XStatusListener >& xControl,
-                                                         const URL& aURL )
+void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< XStatusListener >& /*xControl*/,
+                                                         const URL& /*aURL*/ )
 {
-    SolarMutexGuard g;
-    // Safe impossible cases
-    // Add listener to container.
-    m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
 
 void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
