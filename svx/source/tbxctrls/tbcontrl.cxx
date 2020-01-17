@@ -31,6 +31,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/vclptr.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
@@ -251,50 +252,71 @@ public:
 };
 
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
-class SvxFrmValueSet_Impl : public ValueSet
+class SvxFrmValueSet_Impl final : public SvtValueSet
 {
-    sal_uInt16          nModifier;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-public:
-    SvxFrmValueSet_Impl(vcl::Window* pParent,  WinBits nWinStyle)
-        : ValueSet(pParent, nWinStyle), nModifier(0) {}
-    sal_uInt16          GetModifier() const {return nModifier;}
+private:
+    sal_uInt16 nModifier;
 
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override
+    {
+        nModifier = rMEvt.GetModifier();
+        return SvtValueSet::MouseButtonUp(rMEvt);
+    }
+
+public:
+    SvxFrmValueSet_Impl()
+        : SvtValueSet(nullptr)
+        , nModifier(0)
+    {
+    }
+    sal_uInt16 GetModifier() const {return nModifier;}
 };
 
 }
 
-void SvxFrmValueSet_Impl::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    nModifier = rMEvt.GetModifier();
-    ValueSet::MouseButtonUp(rMEvt);
-}
-
 namespace {
 
-class SvxFrameWindow_Impl : public svtools::ToolbarPopup
+class SvxFrameToolBoxControl;
+
+class SvxFrameWindow_Impl final : public WeldToolbarPopup
 {
 private:
-    VclPtr<SvxFrmValueSet_Impl> aFrameSet;
-    svt::ToolboxController&     mrController;
+    rtl::Reference<SvxFrameToolBoxControl> mxControl;
+    std::unique_ptr<SvxFrmValueSet_Impl> mxFrameSet;
+    std::unique_ptr<weld::CustomWeld> mxFrameSetWin;
     std::vector<BitmapEx>       aImgVec;
     bool                        bParagraphMode;
 
     void InitImageList();
     void CalcSizeValueSet();
-    DECL_LINK( SelectHdl, ValueSet*, void );
-
-protected:
-    virtual void    GetFocus() override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
+    DECL_LINK( SelectHdl, SvtValueSet*, void );
 
 public:
-    SvxFrameWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow );
-    virtual ~SvxFrameWindow_Impl() override;
-    virtual void dispose() override;
+    SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
+    virtual void GrabFocus() override
+    {
+        mxFrameSet->GrabFocus();
+    }
 
     virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+};
+
+class SvxFrameToolBoxControl : public svt::PopupWindowController
+{
+public:
+    explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+private:
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 };
 
     class LineListBox final : public ListBox
@@ -2343,12 +2365,14 @@ Color ColorStatus::GetColor()
 }
 
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl ( svt::ToolboxController& rController, vcl::Window* pParentWindow ) :
-    ToolbarPopup( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
-    aFrameSet   ( VclPtr<SvxFrmValueSet_Impl>::Create(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
-    mrController( rController ),
-    bParagraphMode(false)
+SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatingframeborder.ui", "FloatingFrameBorder")
+    , mxControl(pControl)
+    , mxFrameSet(new SvxFrmValueSet_Impl)
+    , mxFrameSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxFrameSet))
+    , bParagraphMode(false)
 {
+    mxFrameSet->SetStyle(WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
     AddStatusListener(".uno:BorderReducedMode");
     InitImageList();
 
@@ -2364,58 +2388,19 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl ( svt::ToolboxController& rController, 
     sal_uInt16 i = 0;
 
     for ( i=1; i<9; i++ )
-        aFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+        mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         for ( i = 9; i < 13; i++ )
-            aFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+            mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
 
-    aFrameSet->SetColCount( 4 );
-    aFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
+    mxFrameSet->SetColCount( 4 );
+    mxFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
     CalcSizeValueSet();
 
-    SetHelpId( HID_POPUP_FRAME );
-    SetText( SvxResId(RID_SVXSTR_FRAME) );
-    aFrameSet->SetAccessibleName( SvxResId(RID_SVXSTR_FRAME) );
-    aFrameSet->Show();
-}
-
-SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
-{
-    disposeOnce();
-}
-
-void SvxFrameWindow_Impl::dispose()
-{
-    aFrameSet.disposeAndClear();
-    ToolbarPopup::dispose();
-}
-
-void SvxFrameWindow_Impl::GetFocus()
-{
-    if (aFrameSet)
-        aFrameSet->StartSelection();
-}
-
-void SvxFrameWindow_Impl::KeyInput( const KeyEvent& rKEvt )
-{
-    aFrameSet->GrabFocus();
-    aFrameSet->KeyInput( rKEvt );
-}
-
-void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    ToolbarPopup::DataChanged( rDCEvt );
-
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-    {
-        InitImageList();
-
-        sal_uInt16 nNumOfItems = aFrameSet->GetItemCount();
-        for ( sal_uInt16 i = 1 ; i <= nNumOfItems ; ++i )
-            aFrameSet->SetItemImage( i, Image(aImgVec[i-1]) );
-    }
+    mxFrameSet->SetHelpId( HID_POPUP_FRAME );
+    mxFrameSet->SetAccessibleName( SvxResId(RID_SVXSTR_FRAME) );
 }
 
 namespace {
@@ -2440,10 +2425,8 @@ namespace o3tl {
 // By default unset lines remain unchanged.
 // Via Shift unset lines are reset
 
-IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, SvtValueSet*, void)
 {
-    VclPtr<SvxFrameWindow_Impl> xThis(this);
-
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
@@ -2451,8 +2434,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                         *pRight = nullptr,
                         *pTop = nullptr,
                         *pBottom = nullptr;
-    sal_uInt16           nSel = aFrameSet->GetSelectedItemId();
-    sal_uInt16           nModifier = aFrameSet->GetModifier();
+    sal_uInt16           nSel = mxFrameSet->GetSelectedItemId();
+    sal_uInt16           nModifier = mxFrameSet->GetModifier();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 
     theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(),
@@ -2531,9 +2514,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
 
-    if ( IsInPopupMode() )
-        EndPopupMode();
-
     Any a;
     Sequence< PropertyValue > aArgs( 2 );
     aArgs[0].Name = "OuterBorder";
@@ -2543,15 +2523,17 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     aBorderInner.QueryValue( a );
     aArgs[1].Value = a;
 
-    if (aFrameSet)
+    if (mxFrameSet)
     {
         /* #i33380# Moved the following line above the Dispatch() call.
            This instance may be deleted in the meantime (i.e. when a dialog is opened
            while in Dispatch()), accessing members will crash in this case. */
-        aFrameSet->SetNoSelection();
+        mxFrameSet->SetNoSelection();
     }
 
-    mrController.dispatchCommand( ".uno:SetBorderStyle", aArgs );
+    mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
+
+    mxControl->EndPopupMode();
 }
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -2563,21 +2545,21 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
         {
             bParagraphMode = bValue;
             //initial calls mustn't insert or remove elements
-            if(aFrameSet->GetItemCount())
+            if(mxFrameSet->GetItemCount())
             {
-                bool bTableMode = ( aFrameSet->GetItemCount() == 12 );
+                bool bTableMode = ( mxFrameSet->GetItemCount() == 12 );
                 bool bResize    = false;
 
                 if ( bTableMode && bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
-                        aFrameSet->RemoveItem(i);
+                        mxFrameSet->RemoveItem(i);
                     bResize = true;
                 }
                 else if ( !bTableMode && !bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
-                        aFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+                        mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
                     bResize = true;
                 }
 
@@ -2592,12 +2574,12 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
 
 void SvxFrameWindow_Impl::CalcSizeValueSet()
 {
-    Size aItemSize( 20 * GetParent()->GetDPIScaleFactor(), 20 * GetParent()->GetDPIScaleFactor() );
-    Size aSize = aFrameSet->CalcWindowSizePixel( aItemSize );
-    aFrameSet->SetPosSizePixel( Point( 2, 2 ), aSize );
-    aSize.AdjustWidth(4 );
-    aSize.AdjustHeight(4 );
-    SetOutputSizePixel( aSize );
+    weld::DrawingArea* pDrawingArea = mxFrameSet->GetDrawingArea();
+    const OutputDevice& rDevice = pDrawingArea->get_ref_device();
+    Size aItemSize( 20 * rDevice.GetDPIScaleFactor(), 20 * rDevice.GetDPIScaleFactor() );
+    Size aSize = mxFrameSet->CalcWindowSizePixel( aItemSize );
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    mxFrameSet->SetOutputSizePixel(aSize);
 }
 
 void SvxFrameWindow_Impl::InitImageList()
@@ -3611,40 +3593,45 @@ com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
     return cppu::acquire( new SvxColorToolBoxControl( rContext ) );
 }
 
-// class SvxFrameToolBoxControl --------------------------------------------
-
-namespace {
-
-class SvxFrameToolBoxControl : public svt::PopupWindowController
-{
-public:
-    explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-private:
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
-};
-
-}
-
 SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
 }
 
+void SAL_CALL SvxFrameToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+{
+    if (m_pToolbar)
+    {
+        // Toggle the popup also when toolbutton is activated
+        const OString aId(m_aCommandURL.toUtf8());
+        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+    }
+    else
+    {
+        // Open the popup also when Enter key is pressed.
+        createPopupWindow();
+    }
+}
+
 void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
+
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox ) )
+    if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
+
+std::unique_ptr<WeldToolbarPopup> SvxFrameToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<SvxFrameWindow_Impl>(this, m_pToolbar);
 }
 
 VclPtr<vcl::Window> SvxFrameToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
@@ -3652,7 +3639,14 @@ VclPtr<vcl::Window> SvxFrameToolBoxControl::createVclPopupWindow( vcl::Window* p
     if ( m_aCommandURL == ".uno:LineStyle" )
         return VclPtr<SvxLineWindow_Impl>::Create( *this, pParent );
 
-    return VclPtr<SvxFrameWindow_Impl>::Create( *this, pParent );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<SvxFrameWindow_Impl>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    mxInterimPopover->SetText(SvxResId(RID_SVXSTR_FRAME));
+
+    return mxInterimPopover;
 }
 
 OUString SvxFrameToolBoxControl::getImplementationName()
