@@ -217,7 +217,7 @@ class SwGrfExtPage : public SfxTabPage
 
     // RotGrfFlyFrame: Need Angle and RotateControls now
     std::unique_ptr<weld::Frame> m_xFlAngle;
-    std::unique_ptr<weld::SpinButton> m_xNfAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xNfAngle;
     std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
     std::unique_ptr<weld::CustomWeld> m_xBmpWin;
 

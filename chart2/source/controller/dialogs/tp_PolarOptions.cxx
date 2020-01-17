@@ -30,7 +30,7 @@ PolarOptionsTabPage::PolarOptionsTabPage(weld::Container* pPage, weld::DialogCon
     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_PolarOptions.ui", "tp_PolarOptions", &rInAttrs)
     , m_xCB_Clockwise(m_xBuilder->weld_check_button("CB_CLOCKWISE"))
     , m_xFL_StartingAngle(m_xBuilder->weld_frame("frameANGLE"))
-    , m_xNF_StartingAngle(m_xBuilder->weld_spin_button("NF_STARTING_ANGLE"))
+    , m_xNF_StartingAngle(m_xBuilder->weld_metric_spin_button("NF_STARTING_ANGLE", FieldUnit::DEGREE))
     , m_xFL_PlotOptions(m_xBuilder->weld_frame("framePLOT_OPTIONS"))
     , m_xCB_IncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS_POLAR"))
     , m_xAngleDial(new weld::CustomWeld(*m_xBuilder, "CT_ANGLE_DIAL", m_aAngleDial))

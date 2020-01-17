@@ -358,29 +358,29 @@ void DialControl::SetRotation(sal_Int32 nAngle)
     SetRotation(nAngle, false);
 }
 
-void DialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces)
+void DialControl::SetLinkedField(weld::MetricSpinButton* pField, sal_Int32 nDecimalPlaces)
 {
     mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
 
     // remove modify handler from old linked field
     if( mpImpl->mpLinkField )
     {
-        weld::SpinButton& rField = *mpImpl->mpLinkField;
-        rField.connect_value_changed(Link<weld::SpinButton&,void>());
+        weld::MetricSpinButton& rField = *mpImpl->mpLinkField;
+        rField.connect_value_changed(Link<weld::MetricSpinButton&,void>());
     }
     // remember the new linked field
     mpImpl->mpLinkField = pField;
     // set modify handler at new linked field
     if( mpImpl->mpLinkField )
     {
-        weld::SpinButton& rField = *mpImpl->mpLinkField;
+        weld::MetricSpinButton& rField = *mpImpl->mpLinkField;
         rField.connect_value_changed(LINK(this, DialControl, LinkedFieldModifyHdl));
     }
 }
 
-IMPL_LINK_NOARG(DialControl, LinkedFieldModifyHdl, weld::SpinButton&, void)
+IMPL_LINK_NOARG(DialControl, LinkedFieldModifyHdl, weld::MetricSpinButton&, void)
 {
-    SetRotation(mpImpl->mpLinkField->get_value() * mpImpl->mnLinkedFieldValueMultiplyer, true);
+    SetRotation(mpImpl->mpLinkField->get_value(FieldUnit::DEGREE) * mpImpl->mnLinkedFieldValueMultiplyer, true);
 }
 
 void DialControl::SaveValue()
@@ -433,7 +433,7 @@ void DialControl::SetRotation(sal_Int32 nAngle, bool bBroadcast)
         mpImpl->mnAngle = nAngle;
         InvalidateControl();
         if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer);
+            mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer, FieldUnit::DEGREE);
         if( bBroadcast )
             mpImpl->maModifyHdl.Call(*this);
     }

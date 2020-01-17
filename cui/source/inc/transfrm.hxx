@@ -182,7 +182,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
     std::unique_ptr<weld::CustomWeld> m_xCtlRect;
     std::unique_ptr<weld::Widget> m_xFlAngle;
-    std::unique_ptr<weld::SpinButton> m_xNfAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xNfAngle;
     std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
 
 public:
