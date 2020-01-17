@@ -13,11 +13,14 @@
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <basic/basrdll.hxx>
 #include <cppunit/TestAssert.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace css;
 
@@ -59,6 +62,22 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
     return xComponent;
 }
 
+void MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
+                                 const OUString& rCommand,
+                                 const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

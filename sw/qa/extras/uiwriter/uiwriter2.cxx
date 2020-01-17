@@ -81,23 +81,6 @@ protected:
     SwDoc* createDoc(const char* pName = nullptr);
 };
 
-static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
-                                const OUString& rCommand,
-                                const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController
-        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
-}
-
 SwDoc* SwUiWriterTest2::createDoc(const char* pName)
 {
     if (!pName)
@@ -122,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->EndPara(/*bSelect=*/true);
-    lcl_dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
+    dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
 
     // the background color should revert to the color for 00Background style
     CPPUNIT_ASSERT_EQUAL(sal_Int32(14605542), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
@@ -701,11 +684,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 
     pWrtShell->SelTable(); //select the whole table
 
-    lcl_dispatchCommand(mxComponent, ".uno:SetOptimalColumnWidth", {});
+    dispatchCommand(mxComponent, ".uno:SetOptimalColumnWidth", {});
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Width: optimize", origWidth,
                                          getProperty<double>(xTextTable, "Width"), nToleranceW);
 
-    lcl_dispatchCommand(mxComponent, ".uno:SetMinimalColumnWidth", {});
+    dispatchCommand(mxComponent, ".uno:SetMinimalColumnWidth", {});
     CPPUNIT_ASSERT_MESSAGE("Table Width: minimized",
                            (origWidth - nToleranceW) > getProperty<double>(xTextTable, "Width"));
 
@@ -713,12 +696,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
     sal_Int32 nToleranceH = origRowHeight * .01;
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Row Height", double(3441), origRowHeight, nToleranceH);
 
-    lcl_dispatchCommand(mxComponent, ".uno:SetOptimalRowHeight", {});
+    dispatchCommand(mxComponent, ".uno:SetOptimalRowHeight", {});
     double optimalRowHeight = getProperty<double>(xTableRows->getByIndex(2), "Height");
     CPPUNIT_ASSERT_MESSAGE("Row Height: optimized",
                            (origRowHeight - nToleranceH) > optimalRowHeight);
 
-    lcl_dispatchCommand(mxComponent, ".uno:SetMinimalRowHeight", {});
+    dispatchCommand(mxComponent, ".uno:SetMinimalRowHeight", {});
     double minimalRowHeight = getProperty<double>(xTableRows->getByIndex(2), "Height");
     CPPUNIT_ASSERT_MESSAGE("Row Height: minimized",
                            (optimalRowHeight - nToleranceH) > minimalRowHeight);
@@ -745,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
     //Select column 1 and 2
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
-    lcl_dispatchCommand(mxComponent, ".uno:DistributeColumns", {});
+    dispatchCommand(mxComponent, ".uno:DistributeColumns", {});
 
     aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
                                                                   "TableColumnSeparators");
@@ -942,7 +925,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
         { "Style", uno::makeAny(OUString("Heading 1")) },
         { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
     });
-    lcl_dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
@@ -1150,7 +1133,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
     for (int i = 1; i < 4; ++i)
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(i), "ParaAdjust"));
-        lcl_dispatchCommand(mxComponent, ".uno:SpacePara1", {});
+        dispatchCommand(mxComponent, ".uno:SpacePara1", {});
     }
 
     // turn on red-lining and show changes
@@ -1172,8 +1155,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
 
-    lcl_dispatchCommand(mxComponent, ".uno:CenterPara", {});
-    lcl_dispatchCommand(mxComponent, ".uno:SpacePara2", {});
+    dispatchCommand(mxComponent, ".uno:CenterPara", {});
+    dispatchCommand(mxComponent, ".uno:SpacePara2", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
                          getProperty<sal_Int32>(getParagraph(3), "ParaAdjust")); // center-aligned
@@ -1226,7 +1209,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
 
-    lcl_dispatchCommand(mxComponent, ".uno:ParaspaceIncrease", {});
+    dispatchCommand(mxComponent, ".uno:ParaspaceIncrease", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(101), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(101),
@@ -1289,7 +1272,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
     const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
     // this was "Portion1", because the tracked background color of Portion1 was
@@ -1316,7 +1299,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
     }
 
     // reject tracked changes
-    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
     // bold text again
     xText = getParagraph(1)->getText();
@@ -1348,14 +1331,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
         { "SearchItem.SearchString", uno::makeAny(OUString("fig")) },
         { "SearchItem.Backward", uno::makeAny(false) },
     }));
-    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
-    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
 
     uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", uno::makeAny(OUString("something")) },
         { "SearchItem.Backward", uno::makeAny(false) },
     }));
-    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSecond);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSecond);
 
     // Without the accompanying fix in place, this test would have failed with "Expected: something;
     // Actual:", i.e. searching for "something" failed, even if it was inserted above.
@@ -1389,7 +1372,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a text form field
-    lcl_dispatchCommand(mxComponent, ".uno:TextFormField", {});
+    dispatchCommand(mxComponent, ".uno:TextFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -1405,13 +1388,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTextFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
 
     // Undo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
     xPara.set(getParagraph(1));
     CPPUNIT_ASSERT(xPara->getString().isEmpty());
 
     // Redo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     xPara.set(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
@@ -1427,7 +1410,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a checkbox form field
-    lcl_dispatchCommand(mxComponent, ".uno:CheckBoxFormField", {});
+    dispatchCommand(mxComponent, ".uno:CheckBoxFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -1443,11 +1426,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
     CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 
     // Undo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Redo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
@@ -1466,7 +1449,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a drop-down form field
-    lcl_dispatchCommand(mxComponent, ".uno:DropDownFormField", {});
+    dispatchCommand(mxComponent, ".uno:DropDownFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -1483,11 +1466,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)
     CPPUNIT_ASSERT(bool(pResult == pParameters->end()));
 
     // Undo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Redo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
@@ -1506,21 +1489,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testMixedFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert fields
-    lcl_dispatchCommand(mxComponent, ".uno:TextFormField", {});
-    lcl_dispatchCommand(mxComponent, ".uno:CheckBoxFormField", {});
-    lcl_dispatchCommand(mxComponent, ".uno:DropDownFormField", {});
+    dispatchCommand(mxComponent, ".uno:TextFormField", {});
+    dispatchCommand(mxComponent, ".uno:CheckBoxFormField", {});
+    dispatchCommand(mxComponent, ".uno:DropDownFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 
     // Undo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Redo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 }
 
@@ -1761,7 +1744,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf106843)
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
 
     // try to turn off red-lining
-    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
 
     // but the protection doesn't allow it
     CPPUNIT_ASSERT_MESSAGE("redlining should be on",
@@ -1961,7 +1944,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338)
                          getProperty<OUString>(getParagraph(11), "ParaStyleName"));
 
     // reject tracked paragraph adjustments
-    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          getProperty<sal_Int32>(getParagraph(2), "ParaAdjust")); // left
@@ -2001,7 +1984,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120338_multiple_paragraph_join)
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 
     // reject tracked paragraph styles
-    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
@@ -2066,7 +2049,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a date form field
-    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -2082,11 +2065,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
 
     // Undo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Redo insertion
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
@@ -2103,7 +2086,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldContentOperations)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a date form field
-    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -2136,7 +2119,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateHandling)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a date form field
-    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -2190,7 +2173,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDateFormFieldCurrentDateInvalidation)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 
     // Insert a date form field
-    lcl_dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
+    dispatchCommand(mxComponent, ".uno:DatePickerFormField", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
     // Check whether the fieldmark is created
@@ -2318,17 +2301,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118311)
         { "SearchItem.SearchString", uno::makeAny(OUString("a")) },
         { "SearchItem.Backward", uno::makeAny(false) },
     }));
-    lcl_dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSearch);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSearch);
 
     //  .uno:Cut doesn't remove the table, only the selected content of the first cell
-    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // .uno:SelectAll selects the whole table, and UNO command Cut cuts it
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -2437,7 +2420,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
 
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
-    lcl_dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     pWrtShell->Down(false);
     pWrtShell->Insert("foo");
 

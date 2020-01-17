@@ -588,20 +588,6 @@ void ScTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
 }
 
-void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rArguments)
-{
-    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rArguments);
-}
-
 void ScTiledRenderingTest::testTextViewSelection()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -615,7 +601,7 @@ void ScTiledRenderingTest::testTextViewSelection()
 
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
-    lcl_dispatchCommand(mxComponent, ".uno:GoRightSel", {});
+    dispatchCommand(mxComponent, ".uno:GoRightSel", {});
     Scheduler::ProcessEventsToIdle();
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
@@ -634,7 +620,7 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
     {
         comphelper::makePropertyValue("ToPoint", OUString("$A$30")),
     };
-    lcl_dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     // Assert that the size in the payload is not 0.
     CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);

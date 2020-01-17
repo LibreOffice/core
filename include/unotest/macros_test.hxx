@@ -38,6 +38,11 @@ public:
     css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
         const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args = css::uno::Sequence<css::beans::PropertyValue>() );
 
+    static void
+    dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
+                    const OUString& rCommand,
+                    const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
+
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
 
