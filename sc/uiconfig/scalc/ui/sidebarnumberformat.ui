@@ -2,21 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">20</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="upper">8</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">20</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkGrid" id="NumberFormatPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -30,14 +15,61 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="column_spacing">6</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkToolbar" id="numberformat">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="toolbar_style">icons</property>
+                <property name="show_arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToggleToolButton" id=".uno:NumberFormatDecimal">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleToolButton" id=".uno:NumberFormatPercent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuToolButton" id=".uno:NumberFormatCurrency">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkComboBoxText" id="category">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|category|tooltip_text">Select a category of contents.</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
@@ -60,54 +92,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolbar" id="numberformat">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
-                <property name="icon_size">2</property>
-                <child>
-                  <object class="GtkMenuToolButton" id=".uno:NumberFormatCurrency">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id=".uno:NumberFormatPercent">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id=".uno:NumberFormatDecimal">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -118,22 +105,24 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">12</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">center</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="denominatorplaceslabel">
+                  <object class="GtkLabel" id="decimalplaceslabel">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="sidebarnumberformat|denominatorplaceslabel">Den_ominator places:</property>
+                    <property name="label" translatable="yes" context="sidebarnumberformat|decimalplaceslabel">_Decimal places:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">denominatorplaces</property>
+                    <property name="mnemonic_widget">decimalplaces</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -142,17 +131,48 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="decimalplaceslabel">
-                    <property name="visible">True</property>
+                  <object class="GtkLabel" id="denominatorplaceslabel">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="sidebarnumberformat|decimalplaceslabel">_Decimal places:</property>
+                    <property name="label" translatable="yes" context="sidebarnumberformat|denominatorplaceslabel">Den_ominator places:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">decimalplaces</property>
+                    <property name="mnemonic_widget">denominatorplaces</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkSpinButton" id="denominatorplaces">
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|denominatorplaces|tooltip_text">Enter the number of places for the denominator that you want to display.</property>
+                    <property name="adjustment">adjustment2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="denominatorplaces-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|denominatorplaces-atkobject">Denominator Places</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -173,23 +193,33 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkSpinButton" id="denominatorplaces">
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|denominatorplaces|tooltip_text">Enter the number of places for the denominator that you want to display.</property>
-                    <property name="adjustment">adjustment2</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="denominatorplaces-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|denominatorplaces-atkobject">Denominator Places</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="leadingzeroeslabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="sidebarnumberformat|leadingzeroeslabel">Leading _zeroes:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">leadingzeroes</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -198,49 +228,21 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box5">
+              <object class="GtkSpinButton" id="leadingzeroes">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="leadingzeroeslabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="sidebarnumberformat|leadingzeroeslabel">Leading _zeroes:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">leadingzeroes</property>
-                    <property name="xalign">0</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|leadingzeroes|tooltip_text">Enter the maximum number of zeroes to display before the decimal point.</property>
+                <property name="hexpand">True</property>
+                <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="leadingzeroes-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|leadingzeroes-atkobject">Leading Zeroes</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="leadingzeroes">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|leadingzeroes|tooltip_text">Enter the maximum number of zeroes to display before the decimal point.</property>
-                    <property name="adjustment">adjustment1</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="leadingzeroes-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|leadingzeroes-atkobject">Leading Zeroes</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -248,7 +250,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -307,5 +309,27 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="box4"/>
+      <widget name="leadingzeroeslabel"/>
+      <widget name="numberformat"/>
+    </widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">20</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">8</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">20</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
