@@ -90,7 +90,7 @@ private:
 
     //rotation
     std::unique_ptr<weld::Label> mxFtAngle;
-    std::unique_ptr<weld::SpinButton> mxMtrAngle;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrAngle;
 
     //rotation control
     std::unique_ptr<svx::DialControl> mxCtrlDial;
