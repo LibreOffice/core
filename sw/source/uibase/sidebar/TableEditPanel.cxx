@@ -16,6 +16,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/unitconv.hxx>
+#include <svx/dlgctrl.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 
@@ -146,6 +147,8 @@ void TableEditPanel::InitRowHeightToolitem()
 
     m_xRowHeightEdit->set_min(MINLAY, FieldUnit::TWIP);
     m_xRowHeightEdit->set_max(SAL_MAX_INT32, FieldUnit::TWIP);
+
+    limitWidthForSidebar(*m_xRowHeightEdit);
 }
 
 void TableEditPanel::InitColumnWidthToolitem()
@@ -158,6 +161,8 @@ void TableEditPanel::InitColumnWidthToolitem()
 
     m_xColumnWidthEdit->set_min(MINLAY, FieldUnit::TWIP);
     m_xColumnWidthEdit->set_max(SAL_MAX_INT32, FieldUnit::TWIP);
+
+    limitWidthForSidebar(*m_xColumnWidthEdit);
 }
 
 void TableEditPanel::dispose()

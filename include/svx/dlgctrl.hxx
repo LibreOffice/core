@@ -413,6 +413,11 @@ public:
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 };
 
+class RelativeField;
+
+SVX_DLLPUBLIC void limitWidthForSidebar(weld::SpinButton& rSpinButton);
+SVX_DLLPUBLIC void limitWidthForSidebar(RelativeField& rMetricSpinButton);
+
 #endif // INCLUDED_SVX_DLGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
