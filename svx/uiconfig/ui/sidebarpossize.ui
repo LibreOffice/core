@@ -233,7 +233,7 @@
                 <property name="hexpand">True</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="preview">
+                  <object class="GtkScrolledWindow" id="anglepreview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>

@@ -82,7 +82,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkScrolledWindow" id="anglepreview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="halign">center</property>

@@ -46,7 +46,6 @@ private:
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
     bool                m_bComplexCategories;
 
-    svx::DialControl m_aCtrlDial;
     std::unique_ptr<weld::CheckButton> m_xCbShowDescription;
     std::unique_ptr<weld::Label> m_xFlOrder;
     std::unique_ptr<weld::RadioButton> m_xRbSideBySide;
@@ -63,7 +62,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbStacked;
     std::unique_ptr<weld::Label> m_xFtTextDirection;
     std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
-    std::unique_ptr<weld::CustomWeld> m_xCtrlDial;
+    std::unique_ptr<svx::DialControl> m_xCtrlDial;
+    std::unique_ptr<weld::CustomWeld> m_xCtrlDialWin;
 
     DECL_LINK(StackedToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(ToggleShowLabel, weld::ToggleButton&, void);
