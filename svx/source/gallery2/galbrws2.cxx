@@ -59,8 +59,6 @@
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 
-#undef GALLERY_USE_CLIPBOARD
-
 #define TBX_ID_ICON 1
 #define TBX_ID_LIST 2
 
