@@ -185,6 +185,7 @@ OString lclConvToHex(sal_uInt16 nHex)
 
     return OString(aNToABuf, 2);
 }
+}
 
 /// Determines if rProperty has to be suppressed due to ReqIF mode.
 bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
@@ -200,7 +201,6 @@ bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
         return false;
 
     return true;
-}
 }
 
 OString GetCSS1_Color(const Color& rColor)
