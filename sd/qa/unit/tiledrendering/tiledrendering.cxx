@@ -24,6 +24,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
@@ -1428,8 +1429,10 @@ void SdTiledRenderingTest::testTdf103083()
     SdrOutliner* pOutliner = pView->GetTextEditOutliner();
     CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
                          pOutliner->GetStyleSheet(2)->GetName());
-    const SfxItemSet& rParagraphItemSet1 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rParagraphItemSet1.Count());
+    const EditTextObject& aEdit = pTextObject->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+    sal_Unicode c1 = pNumFmt->GetNumRule()->GetLevel(2).GetBulletChar();
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(9679), c1);
 
     // cut contents of bullet item
     comphelper::dispatchCommand(".uno:Cut", uno::Sequence<beans::PropertyValue>());
@@ -1456,8 +1459,10 @@ void SdTiledRenderingTest::testTdf103083()
     CPPUNIT_ASSERT_EQUAL(OUString("No-Logo Content~LT~Gliederung 2"),
                          pOutliner->GetStyleSheet(2)->GetName());
 
-    const SfxItemSet& rParagraphItemSet2 = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(2);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rParagraphItemSet2.Count());
+    const EditTextObject& aEdit2 = pTextObject->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem* pNumFmt2 = aEdit2.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+    sal_Unicode c2 = pNumFmt2->GetNumRule()->GetLevel(2).GetBulletChar();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet char changed after paste", c1, c2);
 }
 
 /**
