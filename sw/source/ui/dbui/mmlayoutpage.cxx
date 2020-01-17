@@ -27,19 +27,14 @@
 #include <i18nutil/unicode.hxx>
 #include <unotools/tempfile.hxx>
 #include <uitool.hxx>
-#include <svx/dlgutil.hxx>
 #include <view.hxx>
 #include <swundo.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svtools/unitconv.hxx>
-#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
-#include <poolfmt.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
@@ -50,15 +45,12 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <editeng/boxitem.hxx>
-#include <svl/urihelper.hxx>
-#include <shellio.hxx>
 #include <osl/file.hxx>
 #include <vcl/settings.hxx>
 #include <unoprnms.hxx>
 #include <iodetect.hxx>
 
 #include <dbui.hrc>
-#include <unomid.h>
 
 using namespace osl;
 using namespace svt;

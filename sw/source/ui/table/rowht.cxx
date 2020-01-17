@@ -17,23 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svx/dlgutil.hxx>
 #include <svtools/unitconv.hxx>
 
 #include <fmtfsize.hxx>
 #include <swtypes.hxx>
 #include <rowht.hxx>
 #include <wrtsh.hxx>
-#include <frmatr.hxx>
 #include <wdocsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>
-
-#include <cmdid.h>
 
 void SwTableHeightDlg::Apply()
 {

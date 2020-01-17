@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/settings.hxx>
 
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
@@ -38,9 +37,7 @@
 #include <swmodule.hxx>
 #include <viewopt.hxx>
 #include <fmtsrnd.hxx>
-#include <frmatr.hxx>
 #include <frmmgr.hxx>
-#include <globals.hrc>
 #include <wrap.hxx>
 #include <bitmaps.hlst>
 #include <fmtwrapinfluenceonobjpos.hxx>

@@ -17,22 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <mailconfigpage.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergehelper.hxx>
-#include <cmdid.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/mail/MailServiceType.hpp>
 #include <com/sun/star/mail/XMailService.hpp>
 #include <com/sun/star/mail/MailServiceProvider.hpp>
-#include <globals.hrc>
-#include <dbui.hrc>
 #include <strings.hrc>
-#include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

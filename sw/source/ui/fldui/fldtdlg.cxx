@@ -20,16 +20,14 @@
 #include <config_features.h>
 
 #include <cmdid.h>
-#include <swtypes.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <viewopt.hxx>
+#include <chldwrap.hxx>
 #include <docsh.hxx>
-#include <fldwrap.hxx>
 #include "flddb.hxx"
 #include "flddinf.hxx"
 #include "fldvar.hxx"
@@ -40,8 +38,6 @@
 #include <view.hxx>
 #include <fldtdlg.hxx>
 #include <swmodule.hxx>
-
-#include <globals.hrc>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

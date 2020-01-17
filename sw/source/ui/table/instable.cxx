@@ -23,7 +23,6 @@
 #include <swmodule.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
-#include <swabstdlg.hxx>
 
 #define ROW_COL_PROD 16384
 

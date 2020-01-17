@@ -17,16 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <basic/basmgr.hxx>
-#include <basic/sbmod.hxx>
-#include <docsh.hxx>
 #include <swtypes.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <fldbas.hxx>
 #include <docufld.hxx>
-#include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include "fldfunc.hxx"

@@ -20,21 +20,16 @@
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <hintids.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <sfx2/objsh.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/svxids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <fmtline.hxx>
 #include <numpara.hxx>
 
-#include <app.hrc>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <sfx2/viewsh.hxx>
 
 const sal_uInt16 SwParagraphNumTabPage::aPageRg[] = {

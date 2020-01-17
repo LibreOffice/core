@@ -20,7 +20,6 @@
 #include "mmoutputtypepage.hxx"
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#include <dbui.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <swtypes.hxx>
@@ -31,7 +30,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-#include <cmdid.h>
 #include <swunohelper.hxx>
 #include <mmresultdialogs.hxx>
 #include <maildispatcher.hxx>

@@ -17,36 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <sfx2/app.hxx>
-#include <svx/gallery.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <cmdid.h>
-#include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <wview.hxx>
 #include <uitool.hxx>
 #include <wdocsh.hxx>
 #include <uiitems.hxx>
-#include <docstyle.hxx>
-#include <charfmt.hxx>
-#include <uinums.hxx>
 #include <poolfmt.hxx>
 #include <shellres.hxx>
 #include <outline.hxx>
 #include <num.hxx>
-#include <viewopt.hxx>
-#include <frmmgr.hxx>
 
-#include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
-#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svl/stritem.hxx>
-#include <svl/aeitem.hxx>
+#include <svl/eitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/intitem.hxx>
 #include <comphelper/lok.hxx>

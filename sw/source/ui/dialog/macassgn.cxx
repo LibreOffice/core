@@ -21,23 +21,18 @@
 
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
-#include <sfx2/app.hxx>
 #include <svl/macitem.hxx>
 
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <macassgn.hxx>
-#include <swevent.hxx>
 #include <docsh.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <view.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/svxdlg.hxx>
-
-#include <doc.hxx>
 
 
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )

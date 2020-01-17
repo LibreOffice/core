@@ -28,9 +28,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
-#include <unomid.h>
-
-#include <dbui.hrc>
 #include <strings.hrc>
 
 using namespace ::com::sun::star;

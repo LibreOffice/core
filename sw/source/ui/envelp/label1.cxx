@@ -20,22 +20,17 @@
 #include <memory>
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <tools/lineend.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <swtypes.hxx>
-#include <wrtsh.hxx>
-#include <initui.hxx>
 #include <labimp.hxx>
 #include "swuilabimp.hxx"
 #include "labfmt.hxx"
 #include "labprt.hxx"
-#include <unotools.hxx>
 #include <dbmgr.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <helpids.h>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <envimg.hxx>
 

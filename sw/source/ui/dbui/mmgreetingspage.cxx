@@ -21,7 +21,6 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include "mmaddressblockpage.hxx"
-#include <swtypes.hxx>
 #include <dbui.hrc>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>

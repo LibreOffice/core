@@ -17,38 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/style.hxx>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
-#include <com/sun/star/style/BreakType.hpp>
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
-#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/string.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <cnttab.hxx>
-#include <poolfmt.hxx>
 #include <unoprnms.hxx>
 #include <unotools.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
-#include <swmodule.hxx>
 
-#include <cmdid.h>
-#include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

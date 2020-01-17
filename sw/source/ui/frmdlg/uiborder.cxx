@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svl/itemset.hxx>
 #include <svx/flagsdef.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/intitem.hxx>
 

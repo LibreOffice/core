@@ -21,8 +21,6 @@
 
 #include "swdlgfact.hxx"
 #include <svl/style.hxx>
-#include <svx/svxids.hrc>
-#include <dbui.hrc>
 #include <globals.hrc>
 
 #include <wordcountdialog.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <dbmgr.hxx>
-#include <sfx2/app.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
@@ -36,8 +35,6 @@
 #include <view.hxx>
 
 #include <comphelper/string.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;

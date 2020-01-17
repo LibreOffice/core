@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
 #include <selglos.hxx>
 
 SwSelGlossaryDlg::SwSelGlossaryDlg(weld::Window * pParent, const OUString &rShortName)

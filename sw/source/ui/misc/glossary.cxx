@@ -23,7 +23,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/help.hxx>
 #include <svl/stritem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -33,38 +32,29 @@
 #include <sfx2/docfilt.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <editeng/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <unocrsr.hxx>
 #include <unotools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
-#include <swwait.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <basesh.hxx>
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
 #include <initui.hxx>
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
-#include <swevent.hxx>
 #include <docsh.hxx>
 #include <shellio.hxx>
 
 #include <cmdid.h>
-#include <swerror.h>
-#include <globals.hrc>
-#include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
 #include <memory>

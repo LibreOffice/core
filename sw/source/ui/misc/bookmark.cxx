@@ -19,20 +19,16 @@
 
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#include <svx/svxids.hrc>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 #include <swabstdlg.hxx>
 #include <swuiexp.hxx>
 #include <view.hxx>
-#include <basesh.hxx>
 #include <wrtsh.hxx>
 #include <cmdid.h>
 #include <bookmark.hxx>
 #include <docsh.hxx>
-#include <globals.hrc>
 #include <ndtxt.hxx>
 #include <strings.hrc>
 #include <svtools/miscopt.hxx>

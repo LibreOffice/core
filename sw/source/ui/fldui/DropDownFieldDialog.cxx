@@ -19,7 +19,6 @@
 
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
-#include <fldmgr.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
 

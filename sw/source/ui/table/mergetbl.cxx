@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
 #include <mergetbl.hxx>
 
 SwMergeTableDlg::SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev)

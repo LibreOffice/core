@@ -31,7 +31,6 @@
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <view.hxx>
-#include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <uitool.hxx>
 #include <fmtinfmt.hxx>
@@ -40,17 +39,15 @@
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 
-#include <globals.hrc>
 #include <strings.hrc>
 #include <chrdlgmodes.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <sfx2/frame.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/dialogs.hrc>
 

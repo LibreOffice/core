@@ -19,12 +19,11 @@
 
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
-#include <swtypes.hxx>
 #include <tblnumfm.hxx>
 
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svl/itemset.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/tabdlg.hxx>
 
 SwNumFormatDlg::SwNumFormatDlg(weld::Widget* pParent, const SfxItemSet& rSet)

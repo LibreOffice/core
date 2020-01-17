@@ -21,17 +21,12 @@
 
 #include <cmdid.h>
 #include <docsh.hxx>
-#include <swmodule.hxx>
-#include <swtypes.hxx>
 #include <uiitems.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 
-#include <globals.hrc>
-#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <IDocumentSettingAccess.hxx>

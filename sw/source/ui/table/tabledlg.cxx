@@ -28,24 +28,22 @@
 #include <editeng/frmdiritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
-#include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 #include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-#include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
-#include <frmatr.hxx>
 #include <tabledlg.hxx>
 #include "../../uibase/table/tablepg.hxx"
 #include <tablemgr.hxx>
@@ -55,12 +53,12 @@
 #include <swtablerep.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#include <app.hrc>
 #include <cmdid.h>
-#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
-#include <svx/svxdlg.hxx>
+
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 using namespace ::com::sun::star;
 

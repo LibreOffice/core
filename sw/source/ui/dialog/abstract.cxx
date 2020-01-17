@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
-#include <hintids.hxx>
-
 #include <abstract.hxx>
 
 SwInsertAbstractDlg::SwInsertAbstractDlg(weld::Window* pParent)

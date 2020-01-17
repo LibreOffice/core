@@ -23,39 +23,30 @@
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <printdata.hxx>
 #include <wrtsh.hxx>
 #include <dbmgr.hxx>
-#include <dbui.hxx>
-#include <prtopt.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <mailmergehelper.hxx>
 #include <mailmrge.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
-
-#include <unomid.h>
 
 #include <algorithm>
 

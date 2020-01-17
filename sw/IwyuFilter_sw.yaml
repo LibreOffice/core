@@ -698,3 +698,6 @@ blacklist:
     # Needed for defines in swslots.hxx
     - cmdid.h
     - globals.hrc
+    sw/source/ui/fldui/flddinf.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/XPropertySet.hpp

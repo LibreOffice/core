@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
 #include <svtools/prnsetup.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/print.hxx>
-#include <wrtsh.hxx>
 #include <label.hxx>
 #include "labprt.hxx"
 #include <labimg.hxx>
-
-#include <cmdid.h>
 
 SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)

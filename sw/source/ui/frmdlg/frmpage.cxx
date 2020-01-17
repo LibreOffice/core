@@ -25,7 +25,6 @@
 #include <hintids.hxx>
 #include <bitmaps.hlst>
 #include <vcl/mnemonic.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/sizeitem.hxx>
@@ -38,8 +37,8 @@
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframevalidation.hxx>
 #include <comphelper/classids.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <tools/globname.hxx>
+#include <tools/urlobj.hxx>
 #include <fmturl.hxx>
 #include <fmteiro.hxx>
 #include <fmtcnct.hxx>
@@ -50,23 +49,18 @@
 #include <uitool.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
-#include <frmatr.hxx>
 #include <frmdlg.hxx>
 #include <frmmgr.hxx>
 #include <frmpage.hxx>
-#include <wrap.hxx>
 #include <colmgr.hxx>
 #include <grfatr.hxx>
-#include <uiitems.hxx>
 #include <fmtfollowtextflow.hxx>
-#include <editeng/adjustitem.hxx>
 #include <svx/sdtaitm.hxx>
 #include <sal/macros.h>
 
 #include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/svxids.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>

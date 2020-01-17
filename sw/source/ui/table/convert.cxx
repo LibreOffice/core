@@ -17,20 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/stritem.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <modcfg.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
-#include <cmdid.h>
 #include <convert.hxx>
 #include <tablemgr.hxx>
-#include <wrtsh.hxx>
 #include <view.hxx>
 #include <tblafmt.hxx>
 
-#include <app.hrc>
 #include <strings.hrc>
 #include <swabstdlg.hxx>
 #include <swuiexp.hxx>

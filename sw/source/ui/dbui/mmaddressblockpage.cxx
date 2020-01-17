@@ -36,13 +36,10 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
-#include <globals.hrc>
 #include <strings.hrc>
-#include <dbui.hrc>
 #include <mmaddressblockpage.hrc>
 #include <helpids.h>
 

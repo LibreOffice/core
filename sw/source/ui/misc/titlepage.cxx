@@ -7,24 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/viewfrm.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>
-#include <charfmt.hxx>
-#include <docstyle.hxx>
 
-#include <fldbas.hxx>
-#include <lineinfo.hxx>
-#include <globals.hrc>
 #include <titlepage.hxx>
-#include <uitool.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-
-#include <IDocumentStylePoolAccess.hxx>
 
 namespace
 {

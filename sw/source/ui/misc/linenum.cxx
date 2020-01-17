@@ -28,7 +28,6 @@
 
 #include <docstyle.hxx>
 
-#include <fldbas.hxx>
 #include <lineinfo.hxx>
 #include <linenum.hxx>
 #include <swmodule.hxx>

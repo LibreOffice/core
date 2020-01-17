@@ -18,8 +18,6 @@
  */
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <hintids.hxx>
-#include <vcl/svapp.hxx>
 #include <svl/urihelper.hxx>
 #include <view.hxx>
 #include <sfx2/docfile.hxx>
@@ -29,10 +27,8 @@
 #include <fldbas.hxx>
 #include <fldmgr.hxx>
 #include <docufld.hxx>
-#include <uitool.hxx>
 #include <javaedit.hxx>
 
-#include <globals.hrc>
 #include <strings.hrc>
 
 using namespace ::com::sun::star;

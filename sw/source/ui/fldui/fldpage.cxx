@@ -21,7 +21,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/svxids.hrc>
 #include <dbfld.hxx>
 #include <flddat.hxx>
 #include <fmtfld.hxx>
@@ -36,7 +35,6 @@
 #include "fldpage.hxx"
 #include <docufld.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <sfx2/bindings.hxx>
 
 using namespace ::com::sun::star;

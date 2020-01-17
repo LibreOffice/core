@@ -27,16 +27,10 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/lingucfg.hxx>
 #include <unotools/viewoptions.hxx>
-#include <fontcfg.hxx>
-#include <swmodule.hxx>
-#include <editeng/unolingu.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/printer.hxx>
-#include <editeng/flstitem.hxx>
-#include <svx/dlgutil.hxx>
-#include <editeng/fontitem.hxx>
+#include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <swtypes.hxx>
 #include <ascfldlg.hxx>
 #include <shellio.hxx>

@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/request.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 
-#include <cmdid.h>
 #include <uitool.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#include <basesh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <break.hxx>
