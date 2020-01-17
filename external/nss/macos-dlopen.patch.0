@@ -1,0 +1,25 @@
+--- nspr/pr/src/linking/prlink.c
++++ nspr/pr/src/linking/prlink.c
+@@ -793,7 +793,7 @@
+         /* ensure the file exists if it contains a slash character i.e. path */
+         /* DARWIN's dlopen ignores the provided path and checks for the */
+         /* plain filename in DYLD_LIBRARY_PATH */
+-        if (strchr(name, PR_DIRECTORY_SEPARATOR) == NULL ||
++        if (strchr(name, PR_DIRECTORY_SEPARATOR) == NULL || strncmp(name, "@loader_path/", 13) == 0 ||
+             PR_Access(name, PR_ACCESS_EXISTS) == PR_SUCCESS) {
+             h = dlopen(name, dl_flags);
+         }
+--- nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
++++ nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
+@@ -224,7 +224,11 @@
+ static PRStatus PR_CALLBACK pkix_getDecodeFunction(void)
+ {
+     pkix_decodeFunc.smimeLib = 
++#if defined DARWIN
++		PR_LoadLibrary("@loader_path/" SHLIB_PREFIX"smime3."SHLIB_SUFFIX);
++#else
+ 		PR_LoadLibrary(SHLIB_PREFIX"smime3."SHLIB_SUFFIX);
++#endif
+     if (pkix_decodeFunc.smimeLib == NULL) {
+ 	return PR_FAILURE;
+     }
