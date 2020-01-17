@@ -2692,6 +2692,11 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.m_bOutOpts )
         return rWrt;
 
+    if (IgnorePropertyForReqIF(rHTMLWrt.mbReqIF, "font-family"))
+    {
+        return rWrt;
+    }
+
     if( rHTMLWrt.m_bTagOn )
     {
         OUString aNames;
@@ -2732,6 +2737,11 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.m_bOutOpts )
         return rWrt;
+
+    if (IgnorePropertyForReqIF(rHTMLWrt.mbReqIF, "font-size"))
+    {
+        return rWrt;
+    }
 
     if( rHTMLWrt.m_bTagOn )
     {
