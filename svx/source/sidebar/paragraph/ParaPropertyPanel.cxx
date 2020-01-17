@@ -26,6 +26,7 @@
 #include <editeng/ulspitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <svx/dlgctrl.hxx>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -401,18 +402,6 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
-namespace
-{
-    void limitWidth(RelativeField& rMetricSpinButton)
-    {
-        // space is limited in the sidebar, so limit MetricSpinButtons to a width of 4 digits
-        const int nMaxDigits = 4;
-
-        weld::SpinButton& rSpinButton = rMetricSpinButton.get_widget();
-        rSpinButton.set_width_chars(std::min(rSpinButton.get_width_chars(), nMaxDigits));
-    }
-}
-
 ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -456,25 +445,17 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       mpBindings(pBindings),
       mxSidebar(rxSidebar)
 {
-#if 0
-    mxTopDist->set_size_request(mxTopDist->get_preferred_size().Width(), -1);
-    mxBottomDist->set_size_request(mxBottomDist->get_preferred_size().Width(), -1);
-    mxLeftIndent->set_size_request(mxLeftIndent->get_preferred_size().Width(), -1);
-    mxRightIndent->set_size_request(mxRightIndent->get_preferred_size().Width(), -1);
-    mxFLineIndent->set_size_request(mxFLineIndent->get_preferred_size().Width(), -1);
-#endif
-
     initial();
     m_aMetricCtl.RequestUpdate();
 }
 
 void ParaPropertyPanel::limitMetricWidths()
 {
-    limitWidth(*mxTopDist);
-    limitWidth(*mxBottomDist);
-    limitWidth(*mxLeftIndent);
-    limitWidth(*mxRightIndent);
-    limitWidth(*mxFLineIndent);
+    limitWidthForSidebar(*mxTopDist);
+    limitWidthForSidebar(*mxBottomDist);
+    limitWidthForSidebar(*mxLeftIndent);
+    limitWidthForSidebar(*mxRightIndent);
+    limitWidthForSidebar(*mxFLineIndent);
 }
 
 ParaPropertyPanel::~ParaPropertyPanel()

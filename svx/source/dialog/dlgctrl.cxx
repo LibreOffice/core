@@ -22,6 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/dialoghelper.hxx>
+#include <svx/relfld.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
 #include <svx/strings.hrc>
@@ -1449,6 +1450,19 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     LocalPostPaint(rRenderContext);
     rRenderContext.Pop();
+}
+
+void limitWidthForSidebar(weld::SpinButton& rSpinButton)
+{
+    // space is limited in the sidebar, so limit MetricSpinButtons to a width of 4 digits
+    const int nMaxDigits = 4;
+    rSpinButton.set_width_chars(std::min(rSpinButton.get_width_chars(), nMaxDigits));
+}
+
+void limitWidthForSidebar(RelativeField& rMetricSpinButton)
+{
+    weld::SpinButton& rSpinButton = rMetricSpinButton.get_widget();
+    limitWidthForSidebar(rSpinButton);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
