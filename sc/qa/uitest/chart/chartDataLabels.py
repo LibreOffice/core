@@ -93,7 +93,7 @@ class chartDataLabels(UITestCase):
     self.assertEqual(get_state_as_dict(wrapText)["Selected"], "true")
     self.assertEqual(get_state_as_dict(separator)["SelectEntryText"], "Comma")
     self.assertEqual(get_state_as_dict(placement)["SelectEntryText"], "Below")
-    self.assertEqual(get_state_as_dict(degrees)["Text"], "1")
+    self.assertEqual(get_state_as_dict(degrees)["Text"], "1°")
     self.assertEqual(get_state_as_dict(textDirection)["SelectEntryText"], "Right-to-left")
 
     xOKBtn = xDialog.getChild("ok")

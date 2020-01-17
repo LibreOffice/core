@@ -72,7 +72,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxMtrHeight(m_xBuilder->weld_metric_spin_button("selectheight", FieldUnit::CM)),
     mxCbxScale(m_xBuilder->weld_check_button("ratio")),
     mxFtAngle(m_xBuilder->weld_label("rotationlabel")),
-    mxMtrAngle(m_xBuilder->weld_spin_button("rotation")),
+    mxMtrAngle(m_xBuilder->weld_metric_spin_button("rotation", FieldUnit::DEGREE)),
     mxCtrlDial(new DialControl),
     mxDial(new weld::CustomWeld(*m_xBuilder, "orientationcontrol", *mxCtrlDial)),
     mxFtFlip(m_xBuilder->weld_label("fliplabel")),
@@ -669,7 +669,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     long nTmp = pItem->GetValue();
                     nTmp = nTmp < 0 ? 36000+nTmp : nTmp;
 
-                    mxMtrAngle->set_value(nTmp);
+                    mxMtrAngle->set_value(nTmp, FieldUnit::DEGREE);
                     mxCtrlDial->SetRotation(nTmp);
 
                     break;
