@@ -16,6 +16,24 @@
       "revId": "e93862ef30b40723556ed002a5ddc348d08d6a86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4b6054e_e61bf0fb",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-01-17T10:01:57Z",
+      "side": 1,
+      "message": "Hypothesis:  Put en-dash between theming and suggest. \"native theming\" identifies the situation. \"suggest\" onward is a recommendation for how to act in this situation.",
+      "parentUuid": "7f7f9b97_9005d013",
+      "revId": "e93862ef30b40723556ed002a5ddc348d08d6a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
