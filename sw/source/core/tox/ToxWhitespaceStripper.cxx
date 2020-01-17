@@ -36,13 +36,11 @@ ToxWhitespaceStripper::ToxWhitespaceStripper(const OUString& inputString)
         }
         mNewPositions.push_back(buffer.getLength()-1);
     }
-    // Add one position if the position after the stripped string is requested, e.g., for attributes which
-    // extend beyond the string.
-    mNewPositions.push_back(buffer.getLength());
     // strip the last whitespace (if there was one)
     if (lastCharacterWasWhitespace) {
         buffer.truncate(buffer.getLength() - 1);
     }
+    mNewPositions.push_back(buffer.getLength());
     mStripped = buffer.getStr();
 }
 
