@@ -191,7 +191,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
     InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
     InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
-    InsertSeparator (7);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        InsertSeparator (7);
+    }
     InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 8);
     SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
 
@@ -398,12 +401,26 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 {
     ToolBox::Paint(rRenderContext, rRect);
 
+<<<<<<< HEAD   (062309 tdf#128814 Make Writer Navigator context menus content speci)
     // draw a line at the bottom to distinguish that from the grid
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
     Size aSize = GetSizePixel();
     rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
                             Point(aSize.Width() - 1, aSize.Height() - 1));
+=======
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // draw a line at the bottom to distinguish that from the grid
+        // (we have space for that thanks to ADDITIONAL_BORDER)
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+
+        Size aSize = GetSizePixel();
+        rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
+                                Point(aSize.Width() - 1, aSize.Height() - 1));
+    }
+>>>>>>> CHANGE (29ea62 lok formula input: Don't show un-needed elements with the LO)
 }
 
 void ScInputWindow::Resize()
