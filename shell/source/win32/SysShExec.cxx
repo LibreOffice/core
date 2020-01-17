@@ -33,7 +33,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
-#include <rtl/uri.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -163,73 +162,6 @@ namespace
     #define MapError( oserror ) _mapError( oserror )
 
     #define E_UNKNOWN_EXEC_ERROR -1
-
-
-    bool is_system_path(const OUString& path_or_uri)
-    {
-        OUString url;
-        osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(path_or_uri, url);
-        return (rc == osl::FileBase::E_None);
-    }
-
-
-    // trying to identify a jump mark
-
-
-    const OUString    JUMP_MARK_HTM(".htm#");
-    const OUString    JUMP_MARK_HTML(".html#");
-    const sal_Unicode HASH_MARK      = '#';
-
-    bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = nullptr)
-    {
-        sal_Int32 jmp_mark = std::max<int>(
-            system_path.lastIndexOf(JUMP_MARK_HTM),
-            system_path.lastIndexOf(JUMP_MARK_HTML));
-
-        if (jmp_mark_start)
-            *jmp_mark_start = jmp_mark;
-
-        return (jmp_mark > -1);
-    }
-
-
-    bool is_existing_file(const OUString& file_name)
-    {
-        OSL_ASSERT(is_system_path(file_name));
-
-        bool exist = false;
-
-        OUString file_url;
-        osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(file_name, file_url);
-
-        if (osl::FileBase::E_None == rc)
-        {
-            osl::DirectoryItem dir_item;
-            rc = osl::DirectoryItem::get(file_url, dir_item);
-            exist = (osl::FileBase::E_None == rc);
-        }
-        return exist;
-    }
-
-
-    // Jump marks in file urls are illegal.
-
-
-    void remove_jump_mark(OUString* p_command)
-    {
-        OSL_PRECOND(p_command, "invalid parameter");
-
-        sal_Int32 pos;
-        if (has_jump_mark(*p_command, &pos))
-        {
-            const sal_Unicode* p_jmp_mark = p_command->getStr() + pos;
-            while (*p_jmp_mark && (*p_jmp_mark != HASH_MARK))
-                p_jmp_mark++;
-
-            *p_command = OUString(p_command->getStr(), p_jmp_mark - p_command->getStr());
-        }
-    }
-
 }
 
 CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
@@ -318,7 +250,6 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if (uri->getScheme().equalsIgnoreAsciiCase("file")) {
             // ShellExecuteExW appears to ignore the fragment of a file URL anyway, so remove it:
             uri->clearFragment();
-            preprocessed_command = uri->getUriReference();
             OUString pathname;
             auto const e1
                 = osl::FileBase::getSystemPathFromFileURL(uri->getUriReference(), pathname);
@@ -328,6 +259,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                      + "> failed with " + OUString::number(e1)),
                     {}, 0);
             }
+            preprocessed_command = pathname;
             for (int i = 0;; ++i) {
                 SHFILEINFOW info;
                 if (SHGetFileInfoW(
@@ -415,29 +347,6 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 }
             }
         }
-    }
-
-    /*  #i4789#; jump mark detection on system paths
-        if the given command is a system path (not http or
-        other uri schemes) and seems to have a jump mark
-        and names no existing file (remember the jump mark
-        sign '#' is a valid file name character we remove
-        the jump mark, else ShellExecuteEx fails */
-    if (is_system_path(preprocessed_command))
-    {
-        if (has_jump_mark(preprocessed_command) && !is_existing_file(preprocessed_command))
-            remove_jump_mark(&preprocessed_command);
-    }
-    /* Convert file uris to system paths */
-    else
-    {
-        OUString aSystemPath;
-        if (::osl::FileBase::E_None == ::osl::FileBase::getSystemPathFromFileURL(preprocessed_command, aSystemPath))
-            preprocessed_command = aSystemPath;
-        else if (preprocessed_command.startsWithIgnoreAsciiCase("file:"))
-            //I use ToIUri conversion instead of the translateToExternal method of the css.uri.ExternalUriReferenceTranslator
-            //UNO service, because the translateToExternal method only supports characters covered by the current Windows code page.
-            preprocessed_command = rtl::Uri::decode(preprocessed_command, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
     }
 
     SHELLEXECUTEINFOW sei;
