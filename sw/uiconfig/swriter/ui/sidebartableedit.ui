@@ -509,7 +509,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id=".uno:SetBorderStyle">
+              <object class="GtkMenuToolButton" id=".uno:SetBorderStyle">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
