@@ -2232,7 +2232,9 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     if ( bBackward )
     {
         pLeft->SetStyleSheet( pRight->GetStyleSheet() );
-        pLeft->GetContentAttribs().GetItems().Set( pRight->GetContentAttribs().GetItems() );
+        // it feels wrong to set pLeft's attribs if pRight is empty, tdf#128046
+        if ( pRight->Len() )
+            pLeft->GetContentAttribs().GetItems().Set( pRight->GetContentAttribs().GetItems() );
         pLeft->GetCharAttribs().GetDefFont() = pRight->GetCharAttribs().GetDefFont();
     }
 
@@ -3489,7 +3491,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     std::filebuf afilebuf;
     afilebuf.open ("gsoc17_clipboard_test.xml",std::ios::out);
     std::ostream os(&afilebuf);
-    os.write((const char*)(pDataObj->GetODFStream().GetBuffer()), pDataObj->GetODFStream().remainingSize());
+    os.write((const char*)(pDataObj->GetODFStream().GetData()), pDataObj->GetODFStream().remainingSize());
     afilebuf.close();
     */
     //dumping ends
