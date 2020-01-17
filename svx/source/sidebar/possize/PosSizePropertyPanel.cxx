@@ -73,7 +73,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxCbxScale(m_xBuilder->weld_check_button("ratio")),
     mxFtAngle(m_xBuilder->weld_label("rotationlabel")),
     mxMtrAngle(m_xBuilder->weld_spin_button("rotation")),
-    mxCtrlDial(new DialControl),
+    mxCtrlDial(new DialControl(m_xBuilder->weld_scrolled_window("anglepreview"))),
     mxDial(new weld::CustomWeld(*m_xBuilder, "orientationcontrol", *mxCtrlDial)),
     mxFtFlip(m_xBuilder->weld_label("fliplabel")),
     mxFlipTbx(m_xBuilder->weld_toolbar("selectrotationtype")),
