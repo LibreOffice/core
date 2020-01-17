@@ -203,7 +203,6 @@ class SwGrfExtPage : public SfxTabPage
 
     // mirror
     BmpWindow m_aBmpWin;
-    svx::DialControl m_aCtlAngle;
     std::unique_ptr<weld::Widget> m_xMirror;
     std::unique_ptr<weld::CheckButton> m_xMirrorVertBox;
     std::unique_ptr<weld::CheckButton> m_xMirrorHorzBox;
@@ -218,7 +217,8 @@ class SwGrfExtPage : public SfxTabPage
     // RotGrfFlyFrame: Need Angle and RotateControls now
     std::unique_ptr<weld::Frame> m_xFlAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xNfAngle;
-    std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
+    std::unique_ptr<svx::DialControl> m_xCtlAngle;
+    std::unique_ptr<weld::CustomWeld> m_xCtlAngleWin;
     std::unique_ptr<weld::CustomWeld> m_xBmpWin;
 
 

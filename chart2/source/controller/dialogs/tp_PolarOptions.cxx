@@ -33,13 +33,15 @@ PolarOptionsTabPage::PolarOptionsTabPage(weld::Container* pPage, weld::DialogCon
     , m_xNF_StartingAngle(m_xBuilder->weld_metric_spin_button("NF_STARTING_ANGLE", FieldUnit::DEGREE))
     , m_xFL_PlotOptions(m_xBuilder->weld_frame("framePLOT_OPTIONS"))
     , m_xCB_IncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS_POLAR"))
-    , m_xAngleDial(new weld::CustomWeld(*m_xBuilder, "CT_ANGLE_DIAL", m_aAngleDial))
+    , m_xAngleDial(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xAngleDialWin(new weld::CustomWeld(*m_xBuilder, "CT_ANGLE_DIAL", *m_xAngleDial))
 {
-    m_aAngleDial.SetLinkedField(m_xNF_StartingAngle.get());
+    m_xAngleDial->SetLinkedField(m_xNF_StartingAngle.get());
 }
 
 PolarOptionsTabPage::~PolarOptionsTabPage()
 {
+    m_xAngleDialWin.reset();
     m_xAngleDial.reset();
 }
 
@@ -50,10 +52,10 @@ std::unique_ptr<SfxTabPage> PolarOptionsTabPage::Create(weld::Container* pPage, 
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
-    if (m_xAngleDial->get_visible())
+    if (m_xAngleDialWin->get_visible())
     {
         rOutAttrs->Put(SfxInt32Item(SCHATTR_STARTING_ANGLE,
-            static_cast< sal_Int32 >(m_aAngleDial.GetRotation()/100)));
+            static_cast< sal_Int32 >(m_xAngleDial->GetRotation()/100)));
     }
 
     if( m_xCB_Clockwise->get_visible() )
@@ -72,7 +74,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     if (rInAttrs->GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SfxItemState::SET)
     {
         long nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
-        m_aAngleDial.SetRotation( nTmp*100 );
+        m_xAngleDial->SetRotation( nTmp*100 );
     }
     else
     {

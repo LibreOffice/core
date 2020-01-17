@@ -54,11 +54,12 @@ SchAxisLabelTabPage::SchAxisLabelTabPage(weld::Container* pPage, weld::DialogCon
     , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
     , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
     , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
-    , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialCtrl", m_aCtrlDial))
+    , m_xCtrlDial(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialCtrl", *m_xCtrlDial))
 {
-    m_aCtrlDial.SetText(m_xFtABCD->get_label());
-    m_aCtrlDial.SetLinkedField(m_xNfRotate.get());
-    m_xCtrlDial->set_sensitive(true);
+    m_xCtrlDial->SetText(m_xFtABCD->get_label());
+    m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
+    m_xCtrlDialWin->set_sensitive(true);
     m_xNfRotate->set_sensitive(true);
     m_xCbStacked->set_sensitive(true);
     m_xFtRotate->set_sensitive(true);
@@ -69,6 +70,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage(weld::Container* pPage, weld::DialogCon
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
 {
+    m_xCtrlDialWin.reset();
     m_xCtrlDial.reset();
     m_xLbTextDirection.reset();
 }
@@ -88,9 +90,9 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
     }
 
-    if( m_aCtrlDial.HasRotation() )
+    if( m_xCtrlDial->HasRotation() )
     {
-        sal_Int32 nDegrees = bStacked ? 0 : m_aCtrlDial.GetRotation();
+        sal_Int32 nDegrees = bStacked ? 0 : m_xCtrlDial->GetRotation();
         if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
             rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
@@ -159,9 +161,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
     m_bHasInitialDegrees = aState != SfxItemState::DONTCARE;
     if( m_bHasInitialDegrees )
-        m_aCtrlDial.SetRotation( m_nInitialDegrees );
+        m_xCtrlDial->SetRotation( m_nInitialDegrees );
     else
-        m_aCtrlDial.SetNoRotation();
+        m_xCtrlDial->SetNoRotation();
 
     // check stacked item
     m_bInitialStacking = false;
@@ -271,8 +273,8 @@ IMPL_LINK_NOARG(SchAxisLabelTabPage, StackedToggleHdl, weld::ToggleButton&, void
 {
     bool bActive = m_xCbStacked->get_active() && m_xCbStacked->get_sensitive();
     m_xNfRotate->set_sensitive(!bActive);
-    m_xCtrlDial->set_sensitive(!bActive);
-    m_aCtrlDial.StyleUpdated();
+    m_xCtrlDialWin->set_sensitive(!bActive);
+    m_xCtrlDial->StyleUpdated();
     m_xFtRotate->set_sensitive(!bActive);
 }
 

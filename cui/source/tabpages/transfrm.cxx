@@ -177,14 +177,15 @@ SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController*
     , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, "CTL_RECT", m_aCtlRect))
     , m_xFlAngle(m_xBuilder->weld_widget("FL_ANGLE"))
     , m_xNfAngle(m_xBuilder->weld_metric_spin_button("NF_ANGLE", FieldUnit::DEGREE))
-    , m_xCtlAngle(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", m_aCtlAngle))
+    , m_xCtlAngle(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
 {
     // calculate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
-    m_aCtlAngle.SetLinkedField(m_xNfAngle.get(), 2);
+    m_xCtlAngle->SetLinkedField(m_xNfAngle.get(), 2);
 }
 
 SvxAngleTabPage::~SvxAngleTabPage()
@@ -243,13 +244,13 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 {
     bool bModified = false;
 
-    if (m_aCtlAngle.IsValueModified() || m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
+    if (m_xCtlAngle->IsValueModified() || m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
     {
         const double fUIScale(double(pView->GetModel()->GetUIScale()));
         const double fTmpX((GetCoreValue(*m_xMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(*m_xMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_aCtlAngle.GetRotation()));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
@@ -289,13 +290,13 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
-        m_aCtlAngle.SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
+        m_xCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
     }
     else
     {
-        m_aCtlAngle.SetRotation(0);
+        m_xCtlAngle->SetRotation(0);
     }
-    m_aCtlAngle.SaveValue();
+    m_xCtlAngle->SaveValue();
     m_xMtrPosX->save_value();
     m_xMtrPosY->save_value();
 }

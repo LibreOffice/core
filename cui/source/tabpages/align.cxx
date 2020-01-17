@@ -132,10 +132,11 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xOrientFrame(m_xBuilder->weld_widget("orientation"))
     , m_xPropertiesFrame(m_xBuilder->weld_widget("properties"))
     , m_xVsRefEdge(new weld::CustomWeld(*m_xBuilder, "references", m_aVsRefEdge))
-    , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialcontrol", m_aCtrlDial))
+    , m_xCtrlDial(new DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialcontrol", *m_xCtrlDial))
 {
-    m_aCtrlDial.SetLinkedField(m_xNfRotate.get());
-    m_aCtrlDial.SetText(m_xFtABCD->get_label());
+    m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
+    m_xCtrlDial->SetText(m_xFtABCD->get_label());
 
     InitVsRefEgde();
 
@@ -160,6 +161,7 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
 
 AlignmentTabPage::~AlignmentTabPage()
 {
+    m_xCtrlDialWin.reset();
     m_xCtrlDial.reset();
     m_xVsRefEdge.reset();
     m_xLbFrameDir.reset();
@@ -258,7 +260,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
                                             *rSet, SID_ATTR_ALIGN_DEGREES));
         assert(pAngleItem);
         std::unique_ptr<SdrAngleItem> pNewAngleItem(pAngleItem->Clone());
-        pNewAngleItem->SetValue(m_aCtrlDial.GetRotation());
+        pNewAngleItem->SetValue(m_xCtrlDial->GetRotation());
         rSet->Put(*pNewAngleItem);
         bChanged = true;
     }
@@ -538,21 +540,21 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         case SfxItemState::UNKNOWN:
             m_xNfRotate->hide();
-            m_xCtrlDial->hide();
+            m_xCtrlDialWin->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
             m_xNfRotate->set_sensitive(false);
-            m_xCtrlDial->set_sensitive(false);
+            m_xCtrlDialWin->set_sensitive(false);
             break;
         case SfxItemState::DONTCARE:
-            m_aCtrlDial.SetNoRotation();
+            m_xCtrlDial->SetNoRotation();
             break;
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
         {
             const SdrAngleItem& rAlignItem = static_cast<const SdrAngleItem&>(pCoreAttrs->Get(nWhich));
-            m_aCtrlDial.SetRotation(rAlignItem.GetValue());
+            m_xCtrlDial->SetRotation(rAlignItem.GetValue());
             break;
         }
     }
@@ -694,7 +696,7 @@ void AlignmentTabPage::UpdateEnableControls()
     // visibility of frames
     m_xAlignmentFrame->set_visible(m_xLbHorAlign->get_visible() || m_xEdIndent->get_visible() ||
         m_xLbVerAlign->get_visible());
-    m_xOrientFrame->set_visible(m_xCtrlDial->get_visible() || m_xVsRefEdge->get_visible() ||
+    m_xOrientFrame->set_visible(m_xCtrlDialWin->get_visible() || m_xVsRefEdge->get_visible() ||
         m_xCbStacked->get_visible() || m_xCbAsianMode->get_visible());
     m_xPropertiesFrame->set_visible(m_xBtnWrap->get_visible() || m_xBtnHyphen->get_visible() ||
         m_xBtnShrink->get_visible() || m_xLbFrameDir->get_visible());
@@ -707,7 +709,7 @@ void AlignmentTabPage::UpdateEnableControls()
     // windows to be disabled, if stacked text is turned OFF
     m_xCbAsianMode->set_sensitive(bStackedText);
     // rotation/stacked disabled for fill alignment/stacked
-    m_xCtrlDial->set_sensitive(!bHorFill && !bStackedText);
+    m_xCtrlDialWin->set_sensitive(!bHorFill && !bStackedText);
     m_xNfRotate->set_sensitive(!bHorFill && !bStackedText);
 }
 

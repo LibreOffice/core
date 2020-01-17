@@ -174,7 +174,6 @@ private:
     MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
-    svx::DialControl m_aCtlAngle;
     SvxRectCtl m_aCtlRect;
 
     std::unique_ptr<weld::Widget> m_xFlPosition;
@@ -183,7 +182,8 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xCtlRect;
     std::unique_ptr<weld::Widget> m_xFlAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xNfAngle;
-    std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
+    std::unique_ptr<svx::DialControl> m_xCtlAngle;
+    std::unique_ptr<weld::CustomWeld> m_xCtlAngleWin;
 
 public:
     SvxAngleTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
