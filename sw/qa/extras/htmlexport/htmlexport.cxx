@@ -521,16 +521,16 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:td>") != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testReqIfWellFormed, "reqif.odt")
+DECLARE_HTMLEXPORT_TEST(testXHTMLUseCSS, "xhtml-css.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This failed, <font face="..."> was written.
-    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"font-family:") != -1);
+    CPPUNIT_ASSERT(aStream.indexOf("<span style=\"font-family:") != -1);
     // This failed, <font size="..."> was written.
-    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"font-size:") != -1);
+    CPPUNIT_ASSERT(aStream.indexOf("<span style=\"font-size:") != -1);
 }
 
 DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
@@ -825,6 +825,39 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
     // Without the accompanying fix in place, this test would have failed as the output was not
     // well-formed.
     CPPUNIT_ASSERT(pDoc);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
+{
+    // Create a document with a custom font name and size in it.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue("CharFontName", uno::makeAny(OUString("Liberation Serif")));
+    float fCharHeight = 14.0;
+    xParagraph->setPropertyValue("CharHeight", uno::makeAny(fCharHeight));
+    sal_Int32 nCharColor = 0xff0000;
+    xParagraph->setPropertyValue("CharColor", uno::makeAny(nCharColor));
+    uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
+    xTextRange->setString("x");
+
+    // Export it.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+
+    // Make sure the output is well-formed.
+    CPPUNIT_ASSERT(pDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. font name and size was written, even if that's not relevant for ReqIF.
+    assertXPath(pDoc, "//reqif-xhtml:span", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
