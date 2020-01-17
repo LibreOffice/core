@@ -63,30 +63,13 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
     CPPUNIT_ASSERT(getComponent().is());
 }
 
-static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
-                                const OUString& rCommand,
-                                const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController
-        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
-}
-
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
 {
     getComponent() = loadFromDesktop("private:factory/swriter");
     uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
         { "Text", uno::makeAny(OUString("comment")) },
     });
-    lcl_dispatchCommand(getComponent(), ".uno:InsertAnnotation", aCommentProps);
+    dispatchCommand(getComponent(), ".uno:InsertAnnotation", aCommentProps);
     uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);

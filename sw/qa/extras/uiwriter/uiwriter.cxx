@@ -4132,20 +4132,6 @@ void SwUiWriterTest::testShapeAnchorUndo()
     CPPUNIT_ASSERT_EQUAL(pObject->GetLogicRect(), aOrigLogicRect);
 }
 
-static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134252)
 {
     load(DATA_DIRECTORY, "tdf134252.fodt");
@@ -4162,13 +4148,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134252)
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
 
     // select all with section
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
@@ -4176,28 +4162,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134252)
     CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
 
     // this would crash
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("bar" SAL_NEWLINE_STRING "baz" SAL_NEWLINE_STRING), xCursor->getString());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
@@ -4226,18 +4212,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
 
     // select all with table at start -> 3 times
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 
     // this would crash in 2 different ways
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
@@ -4246,20 +4232,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     // Without the fix in place, section's content would have been gone after undo
     CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
 
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT(xTextContent->getAnchor()->getString().endsWith("bar"));
 
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
@@ -4275,7 +4261,7 @@ void SwUiWriterTest::testDde()
     pWrtShell->Insert("asdf");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
     uno::Sequence<beans::PropertyValue> aPropertyValues;
-    lcl_dispatchCommand(mxComponent, ".uno:Copy", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:Copy", aPropertyValues);
 
     // Go before the selection and paste as a DDE link.
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -4283,7 +4269,7 @@ void SwUiWriterTest::testDde()
     {
         {"SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::LINK))}
     });
-    lcl_dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
 
     // Make sure that the document starts with a field now, and its expanded string value contains asdf.
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
@@ -4300,14 +4286,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf132160)
     CPPUNIT_ASSERT(pTextDoc);
 
     // this would crash due to delete redline starting with ToX
-    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
     // this would crash due to insert redline ending on table node
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
 
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
 }
 
 //IdleTask class to add a low priority Idle task
@@ -4410,12 +4396,12 @@ void SwUiWriterTest::testUnicodeNotationToggle()
     sOriginalDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL(OUString("uU+002b"), sOriginalDocString);
 
-    lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sExpectedString = "u+";
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL( sDocString, sExpectedString );
 
-    lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL( sDocString, sOriginalDocString );
 }
@@ -4428,17 +4414,17 @@ void SwUiWriterTest::testTdf133967()
     CPPUNIT_ASSERT(pTextDoc);
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
     Scheduler::ProcessEventsToIdle();
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+        dispatchCommand(mxComponent, ".uno:Undo", {});
         Scheduler::ProcessEventsToIdle();
 
-        lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+        dispatchCommand(mxComponent, ".uno:Redo", {});
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -4456,13 +4442,13 @@ void SwUiWriterTest::testTdf132187()
     CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
-    lcl_dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+        dispatchCommand(mxComponent, ".uno:Paste", {});
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -5325,12 +5311,12 @@ void SwUiWriterTest::testClassificationPaste()
 
     // Classified source, not classified destination.
     uno::Sequence<beans::PropertyValue> aInternalOnly = comphelper::InitPropertySequence({{"Name", uno::makeAny(OUString("Internal Only"))}});
-    lcl_dispatchCommand(xSourceComponent, ".uno:ClassificationApply", aInternalOnly);
+    dispatchCommand(xSourceComponent, ".uno:ClassificationApply", aInternalOnly);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified), checkShells(pSourceShell, pDestinationShell));
 
     // Classified source and classified destination -- internal only has a higher level than confidential.
     uno::Sequence<beans::PropertyValue> aConfidential = comphelper::InitPropertySequence({{"Name", uno::makeAny(OUString("Confidential"))}});
-    lcl_dispatchCommand(mxComponent, ".uno:ClassificationApply", aConfidential);
+    dispatchCommand(mxComponent, ".uno:ClassificationApply", aConfidential);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow), checkShells(pSourceShell, pDestinationShell));
 
     xSourceComponent->dispose();
@@ -5347,7 +5333,7 @@ void SwUiWriterTest::testSmallCaps()
     pWrtShell->SelAll();
 
     // Dispatch the command to make them formatted small capitals.
-    lcl_dispatchCommand(mxComponent, ".uno:SmallCaps", {});
+    dispatchCommand(mxComponent, ".uno:SmallCaps", {});
 
     // This was css::style::CaseMap::NONE as the shell didn't handle the command.
     CPPUNIT_ASSERT_EQUAL(css::style::CaseMap::SMALLCAPS, getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharCaseMap"));
@@ -5570,9 +5556,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134436)
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
 
     // select all 3 times, table at the start
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -5580,14 +5566,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134436)
     CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
 
     // first, the section doesn't get deleted
-    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
@@ -5595,14 +5581,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134436)
     CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
 
     // second, the section does get deleted because point is at the end
-    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
@@ -5610,21 +5596,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134436)
     CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
 
     // the problem was that the section was not deleted on Redo
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
@@ -5683,7 +5669,7 @@ void SwUiWriterTest::testRedlineParam()
     {
         {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[0]->GetId()))}
     }));
-    lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This failed: the parameter wasn't handled so the next change (zzz) was
@@ -5696,7 +5682,7 @@ void SwUiWriterTest::testRedlineParam()
     {
         {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
     });
-    lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("zzz"), pShellCursor->GetText());
@@ -5707,7 +5693,7 @@ void SwUiWriterTest::testRedlineParam()
     {
         {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
     });
-    lcl_dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     pShellCursor = pWrtShell->getShellCursor(false);
 
@@ -5744,7 +5730,7 @@ void SwUiWriterTest::testRedlineViewAuthor()
     CPPUNIT_ASSERT_EQUAL(aAuthor, pRedline->GetAuthorString());
 
     // Insert a comment and assert that SwView::SetRedlineAuthor() affects this as well.
-    lcl_dispatchCommand(mxComponent, ".uno:.uno:InsertAnnotation", {});
+    dispatchCommand(mxComponent, ".uno:.uno:InsertAnnotation", {});
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -5849,7 +5835,7 @@ void SwUiWriterTest::testLandscape()
     uno::Sequence<beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence({
         { "AttributePage.Landscape", uno::Any(true) }
     }));
-    lcl_dispatchCommand(mxComponent, ".uno:AttributePage", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:AttributePage", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
     // Assert that the document model was modified.
@@ -6000,12 +5986,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf132944)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    lcl_dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the document would have had 2 pages
@@ -6219,7 +6205,7 @@ void SwUiWriterTest::testCreateDocxAnnotation()
         {"Text", uno::makeAny(aSomeText)},
         {"Author", uno::makeAny(OUString("me"))},
     });
-    lcl_dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
 
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "create-docx-annotation.docx");
@@ -6273,7 +6259,7 @@ void SwUiWriterTest::testTdf112025()
 
     OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo112025-insert.docx";
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({{ "Name", uno::makeAny(insertFileid) }}));
-    lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     // something has been inserted + an additional paragraph
     CPPUNIT_ASSERT_GREATER(numberOfParagraphs, getParagraphs());
 
@@ -6293,7 +6279,7 @@ void SwUiWriterTest::testTdf72942()
 
     OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo72942-insert.docx";
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({{ "Name", uno::makeAny(insertFileid) }}));
-    lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
 
     // check styles of paragraphs added from [fdo72942.docx]
     const uno::Reference< text::XTextRange > xRun1 = getRun(getParagraph(1), 1);
@@ -6354,7 +6340,7 @@ void SwUiWriterTest::testTdf113877()
     {
         const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list.odt";
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
@@ -6387,7 +6373,7 @@ void SwUiWriterTest::testTdf113877NoMerge()
     {
         const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list_abcd.odt";
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
@@ -6426,7 +6412,7 @@ void SwUiWriterTest::testTdf113877_default_style()
     {
         const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list_abcd.odt";
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
@@ -6458,7 +6444,7 @@ void SwUiWriterTest::testTdf113877_Standard_style()
     {
         const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113877_insert_numbered_list_abcd.odt";
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
-        lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
 
     const OUString listId1 = getProperty<OUString>(getParagraph(1), "ListId");
@@ -6866,7 +6852,7 @@ void SwUiWriterTest::testTdf108048()
         { "PageNumber", uno::makeAny(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
         { "PageNumberFilled", uno::makeAny(true) },
     });
-    lcl_dispatchCommand(mxComponent, ".uno:InsertBreak", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:InsertBreak", aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
@@ -7384,12 +7370,12 @@ void SwUiWriterTest::testSpellOnlineParameter()
     bool bSet = pOpt->IsOnlineSpell();
 
     uno::Sequence<beans::PropertyValue> params = comphelper::InitPropertySequence({{"Enable", uno::makeAny(!bSet)}});
-    lcl_dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
     params = comphelper::InitPropertySequence({{"Enable", uno::makeAny(!bSet)}});
-    lcl_dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
 
@@ -7489,7 +7475,7 @@ void SwUiWriterTest::testInsertPdf()
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
                 {"FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "hello-world.pdf")}
                 }));
-    lcl_dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
 
     // Save and load cycle
     utl::TempFile aTempFile;
