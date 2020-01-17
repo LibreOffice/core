@@ -9,6 +9,7 @@
  *
  */
 
+#include <cassert>
 #include <iostream>
 #include <unordered_map>
 
@@ -89,12 +90,28 @@ void DuplicateDefines::MacroDefined(const Token& rMacroNameTok, const MacroDirec
         || aMacroName == "STR_TABLE_NUMFORMAT" || aMacroName == "STR_DELETE")
         return;
 
-    if (!m_aDefMap.emplace(aMacroName, Entry{ aLoc }).second)
+    if (m_aDefMap.emplace(aMacroName, Entry{ aLoc }).second)
     {
-        report(DiagnosticsEngine::Warning, "duplicate defines", aLoc);
-        report(DiagnosticsEngine::Note, "previous define", m_aDefMap[aMacroName].m_aLoc);
         return;
     }
+
+    // Happens e.g. with macros defined in include/premac.h, which is intended to be included
+    // (without include guards) multiple times:
+    auto const other = m_aDefMap[aMacroName].m_aLoc;
+    assert(aLoc == compiler.getSourceManager().getSpellingLoc(aLoc));
+    assert(other == compiler.getSourceManager().getSpellingLoc(other));
+    if ((compiler.getSourceManager().getFilename(aLoc)
+         == compiler.getSourceManager().getFilename(other))
+        && (compiler.getSourceManager().getSpellingLineNumber(aLoc)
+            == compiler.getSourceManager().getSpellingLineNumber(other))
+        && (compiler.getSourceManager().getSpellingColumnNumber(aLoc)
+            == compiler.getSourceManager().getSpellingColumnNumber(other)))
+    {
+        return;
+    }
+
+    report(DiagnosticsEngine::Warning, "duplicate defines", aLoc);
+    report(DiagnosticsEngine::Note, "previous define", other);
 }
 
 void DuplicateDefines::MacroUndefined(const Token& rMacroNameTok, const MacroDefinition& /*MD*/,
