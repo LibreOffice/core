@@ -38,20 +38,21 @@ SchAlignmentTabPage::SchAlignmentTabPage(weld::Container* pPage, weld::DialogCon
     , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
     , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
     , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
-    , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialCtrl", m_aCtrlDial))
+    , m_xCtrlDial(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialCtrl", *m_xCtrlDial))
 {
-    m_aCtrlDial.SetLinkedField(m_xNfRotate.get());
-    m_aCtrlDial.SetText(m_xFtABCD->get_label());
+    m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
+    m_xCtrlDial->SetText(m_xFtABCD->get_label());
     m_xCbStacked->connect_toggled(LINK(this, SchAlignmentTabPage, StackedToggleHdl));
 
-    m_xCtrlDial->set_sensitive(true);
+    m_xCtrlDialWin->set_sensitive(true);
     m_xNfRotate->set_sensitive(true);
     m_xCbStacked->set_sensitive(true);
     m_xFtRotate->set_sensitive(true);
 
     if( !bWithRotation )
     {
-        m_xCtrlDial->hide();
+        m_xCtrlDialWin->hide();
         m_xNfRotate->hide();
         m_xCbStacked->hide();
         m_xFtRotate->hide();
@@ -62,13 +63,14 @@ IMPL_LINK_NOARG(SchAlignmentTabPage, StackedToggleHdl, weld::ToggleButton&, void
 {
     bool bActive = m_xCbStacked->get_active();
     m_xNfRotate->set_sensitive(bActive);
-    m_xCtrlDial->set_sensitive(bActive);
-    m_aCtrlDial.StyleUpdated();
+    m_xCtrlDialWin->set_sensitive(bActive);
+    m_xCtrlDial->StyleUpdated();
     m_xFtRotate->set_sensitive(bActive);
 }
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
+    m_xCtrlDialWin.reset();
     m_xCtrlDial.reset();
     m_xLbTextDirection.reset();
 }
@@ -91,7 +93,7 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     bool bStacked = m_xCbStacked->get_active();
     rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
-    sal_Int32 nDegrees = bStacked ? 0 : m_aCtrlDial.GetRotation();
+    sal_Int32 nDegrees = bStacked ? 0 : m_xCtrlDial->GetRotation();
     rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
     SvxFrameDirection aDirection( m_xLbTextDirection->get_active_id() );
@@ -105,7 +107,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
     const SfxPoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
 
     sal_Int32 nDegrees = pItem ? static_cast<const SfxInt32Item*>(pItem)->GetValue() : 0;
-    m_aCtrlDial.SetRotation( nDegrees );
+    m_xCtrlDial->SetRotation( nDegrees );
 
     pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue();

@@ -253,6 +253,23 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
     mxBmpBuffered->SetSize( maWinSize );
 }
 
+DialControl::DialControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+    : mxScrolledWindow(std::move(xScrolledWindow))
+{
+}
+
+void DialControl::Show()
+{
+    mxScrolledWindow->show();
+    weld::CustomWidgetController::Show();
+}
+
+void DialControl::Hide()
+{
+    weld::CustomWidgetController::Hide();
+    mxScrolledWindow->hide();
+}
+
 void DialControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
