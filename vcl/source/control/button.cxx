@@ -733,51 +733,83 @@ DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
     return nTextStyle;
 }
 
-void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
-                                           const tools::Rectangle& rRect, bool bMenuBtnSep,
+void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFlags,
+                                           const tools::Rectangle &rRect, bool bMenuBtnSep,
                                            DrawButtonFlags nButtonFlags)
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    tools::Rectangle               aInRect = rRect;
-    Color                   aColor;
-    DrawTextFlags           nTextStyle = ImplGetTextStyle( nDrawFlags );
-    DrawSymbolFlags         nStyle;
+    const StyleSettings &rStyleSettings = GetSettings().GetStyleSettings();
+    tools::Rectangle aInRect = rRect;
+    Color aColor;
+    DrawTextFlags nTextStyle = ImplGetTextStyle(nDrawFlags);
+    DrawSymbolFlags nStyle;
 
-    if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
-        return; // nothing to do
+    if (aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top())
+        return;
 
     pDev->Push( PushFlags::CLIPREGION );
-    pDev->IntersectClipRegion( aInRect );
+    pDev->IntersectClipRegion(aInRect);
 
-    if ( nDrawFlags & DrawFlags::Mono )
+    if (nDrawFlags & DrawFlags::Mono)
         aColor = COL_BLACK;
-    else if( (nButtonFlags & DrawButtonFlags::Highlight) && IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
-    {
-        if (nButtonFlags & DrawButtonFlags::Pressed)
-            aColor = rStyleSettings.GetButtonPressedRolloverTextColor();
+    else if (IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) && !(GetStyle() & WB_FLATBUTTON))
+        if (nButtonFlags & DrawButtonFlags::Highlight)
+            if (nButtonFlags & DrawButtonFlags::Pressed)
+                aColor = isAction() ? (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultActionButtonPressedRolloverTextColor()
+                                        : rStyleSettings.GetActionButtonPressedRolloverTextColor()
+                                    : (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultButtonPressedRolloverTextColor()
+                                        : rStyleSettings.GetButtonPressedRolloverTextColor();
+            else
+                aColor = isAction() ? (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultActionButtonRolloverTextColor()
+                                        : rStyleSettings.GetActionButtonRolloverTextColor()
+                                    : (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultButtonRolloverTextColor()
+                                        : rStyleSettings.GetButtonRolloverTextColor();
         else
-            aColor = isAction() ? rStyleSettings.GetActionButtonRolloverTextColor()
-                                : rStyleSettings.GetButtonRolloverTextColor();
-    }
-    else if ( IsControlForeground() )
-        aColor = GetControlForeground();
-    else if( nButtonFlags & DrawButtonFlags::Highlight )
-    {
-        if (nButtonFlags & DrawButtonFlags::Pressed)
-            aColor = rStyleSettings.GetButtonPressedRolloverTextColor();
+            if (nButtonFlags & DrawButtonFlags::Pressed)
+                aColor = isAction() ? (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultActionButtonPressedRolloverTextColor()
+                                        : rStyleSettings.GetActionButtonPressedRolloverTextColor()
+                                    : (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultButtonPressedRolloverTextColor()
+                                        : rStyleSettings.GetButtonPressedRolloverTextColor();
+            else
+                aColor = isAction() ? (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultActionButtonTextColor()
+                                        : rStyleSettings.GetActionButtonTextColor()
+                                    : (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultButtonTextColor()
+                                        : rStyleSettings.GetButtonTextColor();
+    else if (nButtonFlags & DrawButtonFlags::Highlight)
+        if (GetStyle() & WB_FLATBUTTON)
+            aColor = (nButtonFlags & DrawButtonFlags::Pressed)
+                ? rStyleSettings.GetFlatButtonPressedRolloverTextColor()
+                : rStyleSettings.GetFlatButtonRolloverTextColor();
         else
-            aColor = isAction() ? rStyleSettings.GetActionButtonRolloverTextColor()
-                                : rStyleSettings.GetButtonRolloverTextColor();
-    }
+            if (nButtonFlags & DrawButtonFlags::Pressed)
+                aColor = (GetButtonState() & DrawButtonFlags::Default)
+                       ? rStyleSettings.GetDefaultButtonPressedRolloverTextColor()
+                       : rStyleSettings.GetButtonPressedRolloverTextColor();
+            else
+                aColor = isAction() ? (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultActionButtonRolloverTextColor()
+                                        : rStyleSettings.GetActionButtonRolloverTextColor()
+                                    : (GetButtonState() & DrawButtonFlags::Default)
+                                        ? rStyleSettings.GetDefaultButtonRolloverTextColor()
+                                        : rStyleSettings.GetButtonRolloverTextColor();
+    else if (!IsControlForeground())
+        aColor = isAction() ? (GetButtonState() & DrawButtonFlags::Default)
+                                ? rStyleSettings.GetDefaultActionButtonTextColor()
+                                : rStyleSettings.GetActionButtonTextColor()
+                            : (GetButtonState() & DrawButtonFlags::Default)
+                                ? rStyleSettings.GetDefaultButtonTextColor()
+                                : rStyleSettings.GetButtonTextColor();
     else
-    {
-        aColor = isAction() ? ((GetButtonState() & DrawButtonFlags::Default)
-                                   ? rStyleSettings.GetDefaultActionButtonTextColor()
-                                   : rStyleSettings.GetActionButtonTextColor())
-                            : rStyleSettings.GetButtonTextColor();
-    }
+        aColor = GetControlForeground();
 
-    pDev->SetTextColor( aColor );
+    pDev->SetTextColor(aColor);
 
     if ( IsEnabled() )
         nStyle = DrawSymbolFlags::NONE;
