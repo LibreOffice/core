@@ -1248,7 +1248,7 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
         {
             // => yes
             if (nCount != 0)
-                memcpy(pData, m_pBufPos, static_cast<size_t>(nCount));
+                memcpy(pData, m_pBufPos, nCount);
             m_nBufActualPos = m_nBufActualPos + static_cast<sal_uInt16>(nCount);
             m_pBufPos += nCount;
             m_nBufFree = m_nBufFree - static_cast<sal_uInt16>(nCount);
@@ -1291,7 +1291,7 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
                 {
                     nCount = nCountTmp;  // trim count back, EOF see below
                 }
-                memcpy( pData, m_pRWBuf.get(), static_cast<size_t>(nCount) );
+                memcpy( pData, m_pRWBuf.get(), nCount );
                 m_nBufActualPos = static_cast<sal_uInt16>(nCount);
                 m_pBufPos = m_pRWBuf.get() + nCount;
             }
@@ -1331,7 +1331,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
     m_isIoWrite = true;
     if (nCount <= static_cast<std::size_t>(m_nBufSize - m_nBufActualPos))
     {
-        memcpy( m_pBufPos, pData, static_cast<size_t>(nCount) );
+        memcpy( m_pBufPos, pData, nCount );
         m_nBufActualPos = m_nBufActualPos + static_cast<sal_uInt16>(nCount);
         // Update length if buffer was updated
         if (m_nBufActualPos > m_nBufActualLen)
@@ -1362,7 +1362,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
         else
         {
             // Copy block to buffer
-            memcpy( m_pRWBuf.get(), pData, static_cast<size_t>(nCount) );
+            memcpy( m_pRWBuf.get(), pData, nCount );
 
             // Mind the order!
             m_nBufFilePos += m_nBufActualPos;
@@ -1693,7 +1693,7 @@ std::size_t SvMemoryStream::GetData( void* pData, std::size_t nCount )
         nCount = nMaxCount;
     if (nCount != 0)
     {
-        memcpy( pData, pBuf+nPos, static_cast<size_t>(nCount) );
+        memcpy( pData, pBuf+nPos, nCount );
     }
     nPos += nCount;
     return nCount;
@@ -1746,7 +1746,7 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
     }
     assert(pBuf && "Possibly Reallocate failed");
-    memcpy( pBuf+nPos, pData, static_cast<size_t>(nCount));
+    memcpy( pBuf+nPos, pData, nCount);
 
     nPos += nCount;
     if( nPos > nEndOfData )
@@ -1824,7 +1824,7 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
         bRetVal = true; // Success!
         if( nNewSize < nSize )      // Are we shrinking?
         {
-            memcpy( pNewBuf, pBuf, static_cast<size_t>(nNewSize) );
+            memcpy( pNewBuf, pBuf, nNewSize );
             if( nPos > nNewSize )
                 nPos = 0;
             if( nEndOfData >= nNewSize )
@@ -1834,7 +1834,7 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
         {
             if (nSize != 0)
             {
-                memcpy( pNewBuf, pBuf, static_cast<size_t>(nSize) );
+                memcpy( pNewBuf, pBuf, nSize );
             }
             memset(pNewBuf + nSize, 0x00, nNewSize - nSize);
         }
