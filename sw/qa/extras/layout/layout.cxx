@@ -63,23 +63,6 @@ SwDoc* SwLayoutWriter::createDoc(const char* pName)
     return pTextDoc->GetDocShell()->GetDoc();
 }
 
-static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
-                                const OUString& rCommand,
-                                const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController
-        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
-}
-
 // this is a member because our test classes have protected members :(
 void SwLayoutWriter::CheckRedlineFootnotesHidden()
 {
@@ -120,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     // verify after load
     CheckRedlineFootnotesHidden();
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     discardDumpedLayout();
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -198,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[3]", "Portion", "o");
 
     // verify after hide
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     discardDumpedLayout();
     CheckRedlineFootnotesHidden();
@@ -237,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("ghi");
 
-    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // delete redline inside fly
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
@@ -259,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -273,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/Text[1]", "Portion",
                     "ahi");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -335,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -350,7 +333,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -411,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -425,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/Text[1]", "Portion",
                     "ahi");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -507,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("ghi");
 
-    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // delete redline inside fly
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
@@ -529,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -545,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/Text[1]",
                     "Portion", "ahi");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -609,7 +592,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -627,7 +610,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -690,7 +673,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -706,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/anchored/fly[1]/txt[1]/Text[1]",
                     "Portion", "ahi");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -802,7 +785,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("ghi");
 
-    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // delete redline inside fly
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
@@ -832,7 +815,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -852,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
                     "PortionType::FootnoteNum");
         assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "rText", "1");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -937,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -959,7 +942,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -1045,7 +1028,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
             pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -1065,7 +1048,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
                     "PortionType::FootnoteNum");
         assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "rText", "1");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -1178,7 +1161,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("pqr");
 
-    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // delete redline inside fly2
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
@@ -1211,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -1239,7 +1222,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foaz");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -1353,7 +1336,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -1368,7 +1351,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -1480,7 +1463,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
         }
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
         discardDumpedLayout();
         xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -1508,7 +1491,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foaz");
 
-        lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+        dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
@@ -1642,7 +1625,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("pqr");
 
-    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // delete redline inside fly2
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
@@ -1660,7 +1643,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 7, /*bBasicCall=*/false);
     pWrtShell->Delete();
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     discardDumpedLayout();
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -1685,7 +1668,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foaz");
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -1767,7 +1750,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     anchor1.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     pDoc->SetAttr(anchor1, *const_cast<SwFrameFormat*>(pFly1));
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -1782,7 +1765,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
         xmlXPathFreeObject(pXmlObj);
     }
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -1883,7 +1866,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     // verify after load
     CheckRedlineSectionsHidden();
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
@@ -1931,7 +1914,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[3]/Text[2]", "Portion", "lah");
 
     // verify after hide
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
@@ -1955,7 +1938,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foar");
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
@@ -1992,7 +1975,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[2]", "Portion", "ar");
 
     // verify after hide
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
@@ -2071,7 +2054,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineCharAttributes)
     // verify after load
     CheckRedlineCharAttributesHidden();
 
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
@@ -2161,7 +2144,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineCharAttributes)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/Text[5]", "Portion", "baz");
 
     // verify after hide
-    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
