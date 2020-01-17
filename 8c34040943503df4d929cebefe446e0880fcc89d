@@ -34,6 +34,24 @@
       "revId": "8c34040943503df4d929cebefe446e0880fcc89d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9e2e7bb_2b10d39c",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-17T07:19:03Z",
+      "side": 1,
+      "message": "Just don\u0027t modify this file in this change.  Modifying offapi/com/sun/star/awt/Key.idl should be enough.",
+      "parentUuid": "ada8e41c_c11e5491",
+      "revId": "8c34040943503df4d929cebefe446e0880fcc89d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
