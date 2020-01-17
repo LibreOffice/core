@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/dispatch.hxx>
-#include <svx/dlgutil.hxx>
 #include <svtools/unitconv.hxx>
 #include <colwd.hxx>
 #include <tablemgr.hxx>
@@ -26,10 +24,7 @@
 #include <wdocsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
-#include <modcfg.hxx>
 #include <usrpref.hxx>
-
-#include <cmdid.h>
 
 IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, weld::SpinButton&, void)
 {

@@ -21,13 +21,7 @@
 #include <fmtfsize.hxx>
 #include <hintids.hxx>
 #include <svtools/unitconv.hxx>
-#include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
-#include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>
-#include <sal/macros.h>
 #include <vcl/field.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <editeng/borderline.hxx>
@@ -39,10 +33,7 @@
 #include <pagedesc.hxx>
 #include <pgfnote.hxx>
 #include <uiitems.hxx>
-#include <sfx2/objsh.hxx>
 
-#include <globals.hrc>
-#include <strings.hrc>
 #include <memory>
 
 using namespace ::com::sun::star;

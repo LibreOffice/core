@@ -24,22 +24,15 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/unitconv.hxx>
-#include <svx/svxids.hrc>
-#include <vcl/menu.hxx>
 
 #include <cmdid.h>
-#include <frmatr.hxx>
-#include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <basesh.hxx>
-#include <drpcps.hxx>
 #include "envfmt.hxx"
 #include <fmtcol.hxx>
 #include <swuipardlg.hxx>
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
-#include <pattern.hxx>
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 

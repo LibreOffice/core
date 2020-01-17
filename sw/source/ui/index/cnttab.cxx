@@ -17,38 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
-
 #include <sal/log.hxx>
 #include <svl/style.hxx>
-#include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/svxids.hrc>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svtools/indexentryres.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <editeng/unolingu.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
-#include <shellio.hxx>
 #include <authfld.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <basesh.hxx>
-#include <outline.hxx>
 #include <cnttab.hxx>
 #include <swuicnttab.hxx>
 #include <poolfmt.hxx>
@@ -58,22 +47,16 @@
 #include <fldbas.hxx>
 #include <expfld.hxx>
 #include <unotools.hxx>
-#include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <cnttab.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <toxwrap.hxx>
 #include <chpfld.hxx>
-
-#include <sfx2/app.hxx>
-
-#include <unomid.h>
 
 #include <cmath>
 #include <memory>

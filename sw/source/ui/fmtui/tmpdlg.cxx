@@ -19,17 +19,15 @@
 
 #include <hintids.hxx>
 
-#include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <numpara.hxx>
-#include <fmtclds.hxx>
-#include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -42,8 +40,6 @@
 #include <drpcps.hxx>
 #include <frmpage.hxx>
 #include <wrap.hxx>
-#include <frmmgr.hxx>
-#include <ccoll.hxx>
 #include <swuiccoll.hxx>
 #include <docstyle.hxx>
 #include <fmtcol.hxx>
@@ -51,18 +47,13 @@
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>
-#include <swabstdlg.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
-#include <svx/svxids.hrc>
 #include <svl/stritem.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 

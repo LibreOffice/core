@@ -32,24 +32,19 @@
 #include <docsh.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentRedlineAccess.hxx>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <uitool.hxx>
 #include <cfgitems.hxx>
 #include <poolfmt.hxx>
 #include <uiitems.hxx>
-#include <initui.hxx>
 #include <printdata.hxx>
 #include <modcfg.hxx>
-#include <srcview.hxx>
 #include <crstate.hxx>
 #include <viewopt.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <swwrtshitem.hxx>
-#include <unomid.h>
 
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -57,23 +52,16 @@
 #include <editeng/svxenum.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/slstitm.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/xtable.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/strarray.hxx>
-#include <svx/svxids.hrc>
 
-#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

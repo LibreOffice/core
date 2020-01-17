@@ -20,12 +20,11 @@
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
-#include <doc.hxx>
 #include <view.hxx>
-#include <docsh.hxx>
 #include <viewopt.hxx>
 #include <frmdlg.hxx>
 #include <frmpage.hxx>
@@ -33,15 +32,11 @@
 #include <column.hxx>
 #include <macassgn.hxx>
 
-#include <globals.hrc>
 #include <strings.hrc>
+#include <svl/eitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
-#include <svx/svxdlg.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflgrit.hxx>
 
 // the dialog's carrier
 SwFrameDlg::SwFrameDlg(SfxViewFrame const * pViewFrame,

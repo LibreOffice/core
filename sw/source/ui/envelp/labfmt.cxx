@@ -35,7 +35,6 @@
 #include <uitool.hxx>
 
 #include <strings.hrc>
-#include <unomid.h>
 
 using namespace utl;
 using namespace ::com::sun::star::uno;

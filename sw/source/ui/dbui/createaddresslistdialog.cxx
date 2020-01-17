@@ -26,24 +26,15 @@
 #include "createaddresslistdialog.hxx"
 #include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
-#include <vcl/event.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/controldims.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <tools/urlobj.hxx>
-#include <dbui.hrc>
 #include <strings.hrc>
-#include <unomid.h>
 #include <map>
 
 using namespace ::com::sun::star;

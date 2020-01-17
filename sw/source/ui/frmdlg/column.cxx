@@ -17,19 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdint>
-
 #include <column.hxx>
 
 #include <hintids.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <sfx2/htmlmode.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -37,6 +31,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/event.hxx>
@@ -44,9 +39,7 @@
 #include <vcl/svapp.hxx>
 
 #include <swmodule.hxx>
-#include <sal/macros.h>
 
-#include <globals.hrc>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -55,16 +48,12 @@
 #include <cmdid.h>
 #include <viewopt.hxx>
 #include <fmtclbl.hxx>
-#include <format.hxx>
+#include <fmtfsize.hxx>
 #include <frmatr.hxx>
-#include <frmmgr.hxx>
-#include <frmdlg.hxx>
 #include <colmgr.hxx>
 #include <prcntfld.hxx>
-#include <paratr.hxx>
 #include <strings.hrc>
 #include <section.hxx>
-#include <docary.hxx>
 #include <pagedesc.hxx>
 
 //to match associated data in ColumnPage.ui

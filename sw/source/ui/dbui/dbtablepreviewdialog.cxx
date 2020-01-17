@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
 #include "dbtablepreviewdialog.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Frame.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

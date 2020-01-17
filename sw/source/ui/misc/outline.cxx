@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -40,18 +39,11 @@
 #include <charfmt.hxx>
 #include <docstyle.hxx>
 #include <viewopt.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <globals.hrc>
 #include <outline.hrc>
 #include <strings.hrc>
 #include <paratr.hxx>
 
-#include <unomid.h>
-
 #include <IDocumentOutlineNodes.hxx>
-#include <app.hrc>
-
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 using namespace ::com::sun::star;
 

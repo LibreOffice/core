@@ -19,7 +19,7 @@
 
 #include <addrdlg.hxx>
 #include <sfx2/pageids.hxx>
-#include <svx/svxdlg.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 SwAddrDlg::SwAddrDlg(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet)

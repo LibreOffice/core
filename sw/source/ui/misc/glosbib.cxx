@@ -18,8 +18,6 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
-#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -30,7 +28,6 @@
 #include <swtypes.hxx>
 #include <glosbib.hxx>
 #include <gloshdl.hxx>
-#include <actctrl.hxx>
 #include <glossary.hxx>
 #include <glosdoc.hxx>
 #include <swunohelper.hxx>

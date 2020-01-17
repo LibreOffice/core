@@ -18,7 +18,6 @@
  */
 
 #include <swtypes.hxx>
-#include <view.hxx>
 #include <IMark.hxx>
 #include <expfld.hxx>
 #include <swmodule.hxx>
@@ -27,12 +26,9 @@
 #include <wrtsh.hxx>
 
 #include <fldref.hrc>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <ndtxt.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/charclass.hxx>
 

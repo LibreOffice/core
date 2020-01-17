@@ -29,18 +29,15 @@
 #include <uitool.hxx>
 #include <view.hxx>
 
-#include <globals.hrc>
 #include <strings.hrc>
 #include <optload.hrc>
 #include <cmdid.h>
 
 #include <optload.hxx>
-#include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <fldmgr.hxx>
 #include <poolfmt.hxx>
 #include <expfld.hxx>
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 
 #include <svtools/insdlg.hxx>
 #include <svtools/unitconv.hxx>
@@ -49,11 +46,8 @@
 
 #include <comphelper/classids.hxx>
 #include <unotools/configmgr.hxx>
-#include <docsh.hxx>
-#include <app.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <numrule.hxx>
-#include <SwNodeNum.hxx>
 
 #include <doc.hxx>
 #include <svl/cjkoptions.hxx>

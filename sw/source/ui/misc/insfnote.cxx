@@ -20,20 +20,13 @@
 #include <hintids.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/svxids.hrc>
-#include <sfx2/request.hxx>
 #include <editeng/fontitem.hxx>
 #include <fmtftn.hxx>
 #include <swundo.hxx>
 #include <cmdid.h>
 #include <wrtsh.hxx>
-#include <view.hxx>
-#include <basesh.hxx>
 #include <insfnote.hxx>
-#include <globals.hrc>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <sfx2/viewfrm.hxx>
 
 #include <memory>
 

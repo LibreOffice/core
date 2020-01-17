@@ -21,13 +21,10 @@
 #include <svtools/prnsetup.hxx>
 #include <svtools/unitconv.hxx>
 
-#include <swtypes.hxx>
 #include <cmdid.h>
 #include "envprt.hxx"
 #include <envlop.hxx>
 #include <uitool.hxx>
-
-#include <bitmaps.hlst>
 
 SwEnvPrtPage::SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/envprinterpage.ui", "EnvPrinterPage", &rSet)

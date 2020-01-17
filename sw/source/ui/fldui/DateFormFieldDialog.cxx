@@ -8,12 +8,10 @@
  */
 
 #include <DateFormFieldDialog.hxx>
-#include <vcl/event.hxx>
 #include <IMark.hxx>
 #include <xmloff/odffields.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svx/numfmtsh.hxx>
 #include <doc.hxx>
 
 namespace sw

@@ -24,7 +24,6 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 
 #include <vcl/metric.hxx>
@@ -41,7 +40,6 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <editeng/scripttypeitem.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <charatr.hxx>

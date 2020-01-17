@@ -17,27 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <redline.hxx>
-#include <svl/eitem.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
-#include <svx/postattr.hxx>
 #include <unotools/viewoptions.hxx>
-#include <swtypes.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <swmodule.hxx>
-#include <swwait.hxx>
-#include <uitool.hxx>
 
-#include <cmdid.h>
-
-#include <vector>
 #include <redlndlg.hxx>
 #include <swmodalredlineacceptdlg.hxx>
-
-#include <unomid.h>
 
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(weld::Window *pParent)
     : SfxDialogController(pParent, "svx/ui/acceptrejectchangesdialog.ui",

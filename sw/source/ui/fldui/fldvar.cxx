@@ -24,7 +24,6 @@
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <ddefld.hxx>
-#include <view.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -33,7 +32,6 @@
 #include "flddinf.hxx"
 #include <calc.hxx>
 #include <svl/zformat.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 
 #define USER_DATA_VERSION_1 "1"

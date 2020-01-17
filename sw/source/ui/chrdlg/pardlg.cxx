@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/style.hxx>
@@ -25,15 +24,10 @@
 #include <svl/cjkoptions.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
-#include <frmatr.hxx>
 #include <view.hxx>
-#include <globals.hrc>
 #include <swuipardlg.hxx>
-#include <pagedesc.hxx>
 #include <pardlg.hxx>
-#include <paratr.hxx>
 #include <drpcps.hxx>
-#include <uitool.hxx>
 #include <viewopt.hxx>
 #include <numpara.hxx>
 #include <strings.hrc>

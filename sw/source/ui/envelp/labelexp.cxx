@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/AutoTextContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <swtypes.hxx>
-#include "labfmt.hxx"
-#include <unotools.hxx>
-#include <unoatxt.hxx>
-#include <unomid.h>
+#include <label.hxx>
+#include <labimg.hxx>
 #include <unoprnms.hxx>
 
 using namespace ::com::sun::star;

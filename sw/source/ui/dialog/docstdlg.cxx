@@ -20,15 +20,10 @@
 #include <swwait.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <swmodule.hxx>
-#include <globals.hrc>
 #include <docsh.hxx>
 #include <pview.hxx>
 #include <doc.hxx>
 #include <docstdlg.hxx>
-#include <modcfg.hxx>
-#include <fldmgr.hxx>
-#include <fldbas.hxx>
 #include <IDocumentStatistics.hxx>
 
 #include <unotools/localedatawrapper.hxx>

@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 #include <helpids.h>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Bibliography.hpp>
@@ -29,38 +28,26 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nutil/searchopt.hxx>
-#include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/eitem.hxx>
-#include <unotools/textsearch.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <swtypes.hxx>
-#include <idxmrk.hxx>
 #include <toxmgr.hxx>
 #include <txttxmrk.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <multmrk.hxx>
 #include <swundo.hxx>
 #include <cmdid.h>
-#include <app.hrc>
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 #include <strings.hrc>
-#include <swcont.hxx>
 #include <svl/cjkoptions.hxx>
 #include <ndtxt.hxx>
-#include <breakit.hxx>
 #include <SwRewriter.hxx>
-
-#include <unomid.h>
 
 #define POS_CONTENT 0
 #define POS_INDEX   1

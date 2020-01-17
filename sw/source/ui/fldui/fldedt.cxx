@@ -21,14 +21,10 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/app.hxx>
 #include <svx/optgenrl.hxx>
-#include <svx/svxids.hrc>
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <view.hxx>
-#include <dbfld.hxx>
 #include <wrtsh.hxx>
 #include "flddb.hxx"
 #include "flddinf.hxx"
@@ -39,7 +35,6 @@
 #include <fldedt.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <swabstdlg.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

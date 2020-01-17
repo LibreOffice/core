@@ -17,16 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <swtypes.hxx>
-#include <globals.hrc>
 #include <svx/colorbox.hxx>
-#include <svx/xtable.hxx>
-#include <svx/svxids.hrc>
-#include <uitool.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -38,7 +32,6 @@
 
 #include <wrtsh.hxx>
 #include <doc.hxx>
-#include <uiitems.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 

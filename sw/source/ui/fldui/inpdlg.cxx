@@ -19,13 +19,11 @@
 
 #include <tools/lineend.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/unolingu.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <expfld.hxx>
 #include <usrfld.hxx>
 #include <inpdlg.hxx>
-#include <fldmgr.hxx>
 
 // edit field-insert
 SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,

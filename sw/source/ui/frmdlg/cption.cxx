@@ -25,25 +25,17 @@
 #include <numrule.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>
-#include <frmfmt.hxx>
 #include <calc.hxx>
 #include <uitool.hxx>
 #include <doc.hxx>
 #include <modcfg.hxx>
 #include <swmodule.hxx>
-#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
-#include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
-#include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/weld.hxx>
-#include <initui.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 

@@ -18,12 +18,8 @@
  */
 
 #include <swmodule.hxx>
-#include <view.hxx>
 #include <wrtsh.hxx>
-#include <globals.hrc>
 #include <dbfld.hxx>
-#include <fldtdlg.hxx>
-#include <numrule.hxx>
 #include <doc.hxx>
 
 #include "flddb.hxx"

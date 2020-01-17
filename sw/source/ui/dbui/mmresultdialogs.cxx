@@ -18,7 +18,6 @@
  */
 
 #include <mmresultdialogs.hxx>
-#include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <mailconfigpage.hxx>
 #include "mmgreetingspage.hxx"
@@ -33,10 +32,8 @@
 #include <hintids.hxx>
 #include <swmodule.hxx>
 
-#include <editeng/scripttypeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <o3tl/temporary.hxx>
-#include <officecfg/Office/Writer.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
@@ -44,17 +41,14 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/print.hxx>
-#include <vcl/settings.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 
@@ -64,7 +58,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <dbmgr.hxx>
 #include <swunohelper.hxx>
 #include <shellio.hxx>
@@ -76,7 +69,6 @@
 #include <doc.hxx>
 #include <sfx2/app.hxx>
 #include <strings.hrc>
-#include <unomid.h>
 #include <comphelper/string.hxx>
 #include <iodetect.hxx>
 

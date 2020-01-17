@@ -18,15 +18,12 @@
  */
 
 #include <officecfg/Office/Writer.hxx>
-#include <swtypes.hxx>
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
-#include <cmdid.h>
 #include <swmodule.hxx>
-#include <wview.hxx>
+#include <view.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>

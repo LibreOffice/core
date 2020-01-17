@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
 #include "customizeaddresslistdialog.hxx"
 #include "createaddresslistdialog.hxx"
-#include <dbui.hrc>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         weld::Window* pParent, const SwCSVData& rOldData)

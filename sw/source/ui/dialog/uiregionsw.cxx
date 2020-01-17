@@ -40,12 +40,9 @@
 #include <section.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
-#include <basesh.hxx>
 #include <wdocsh.hxx>
 #include <view.hxx>
-#include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>
 #include <column.hxx>
 #include <fmtclbl.hxx>
 #include <fmtfsize.hxx>
@@ -54,16 +51,12 @@
 
 #include <cmdid.h>
 #include <strings.hrc>
-#include <globals.hrc>
 #include <bitmaps.hlst>
 #include <sfx2/bindings.hxx>
-#include <sfx2/htmlmode.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/svxids.hrc>
 #include <memory>
 
 using namespace ::com::sun::star;

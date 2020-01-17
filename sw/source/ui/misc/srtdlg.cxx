@@ -17,32 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdint>
-
 #include <srtdlg.hxx>
 
+#include <editeng/editids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svx/svxids.hrc>
-#include <editeng/unolingu.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <unotools/collatorwrapper.hxx>
 #include <svtools/collatorres.hxx>
 #include <swwait.hxx>
 #include <view.hxx>
-#include <cmdid.h>
 #include <wrtsh.hxx>
-#include <app.hrc>
 #include <strings.hrc>
 #include <swtable.hxx>
 #include <sortopt.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
-#include <sfx2/request.hxx>
 #include <memory>
 
 static bool bCheck1 = true;

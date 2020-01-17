@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <chpfld.hxx>
 #include "flddok.hxx"
 #include <swmodule.hxx>
-#include <view.hxx>
 #include <wrtsh.hxx>
 #include <svl/zformat.hxx>
 

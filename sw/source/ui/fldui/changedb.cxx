@@ -18,10 +18,8 @@
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -29,19 +27,10 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <dbmgr.hxx>
-#include <fldmgr.hxx>
-#include <expfld.hxx>
-#include <txtatr.hxx>
-#include <ndtxt.hxx>
-#include <fldbas.hxx>
-#include <dbfld.hxx>
 #include <changedb.hxx>
 
-#include <globals.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;

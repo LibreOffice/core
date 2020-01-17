@@ -17,24 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
-#include <vcl/svapp.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 
 #include <swtypes.hxx>
 #include <flddinf.hrc>
-#include <globals.hrc>
 #include <strings.hrc>
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <wrtsh.hxx>
 
 #include "flddinf.hxx"
-#include <swmodule.hxx>
-#include <view.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>

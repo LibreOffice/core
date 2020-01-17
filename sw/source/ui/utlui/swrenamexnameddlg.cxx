@@ -17,29 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
-#include <globals.hrc>
-
-#include <unoprnms.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/view/XScreenCursor.hpp>
-#include <com/sun/star/view/DocumentZoomType.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
-#include <shellio.hxx>
-#include <docsh.hxx>
-#include <view.hxx>
-#include <wrtsh.hxx>
-#include <swmodule.hxx>
-#include <unocrsr.hxx>
 
 #include <swrenamexnameddlg.hxx>
 

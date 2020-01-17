@@ -33,9 +33,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -51,11 +49,8 @@
 #include <swunohelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>
-#include <dbui.hrc>
 #include <strings.hrc>
 #include <view.hxx>
-
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
