@@ -39,7 +39,7 @@ class SchAlignmentTabPage : public SfxTabPage
 private:
     svx::DialControl m_aCtrlDial;
     std::unique_ptr<weld::Label> m_xFtRotate;
-    std::unique_ptr<weld::SpinButton> m_xNfRotate;
+    std::unique_ptr<weld::MetricSpinButton> m_xNfRotate;
     std::unique_ptr<weld::CheckButton> m_xCbStacked;
     std::unique_ptr<weld::Label> m_xFtTextDirection;
     std::unique_ptr<weld::Label> m_xFtABCD;

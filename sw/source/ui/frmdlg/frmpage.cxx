@@ -2315,7 +2315,7 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xLinkFrame(m_xBuilder->weld_frame("linkframe"))
     // RotGrfFlyFrame: Need Angle and RotateControls now
     , m_xFlAngle(m_xBuilder->weld_frame("FL_ANGLE"))
-    , m_xNfAngle(m_xBuilder->weld_spin_button("NF_ANGLE"))
+    , m_xNfAngle(m_xBuilder->weld_metric_spin_button("NF_ANGLE", FieldUnit::DEGREE))
     , m_xCtlAngle(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", m_aCtlAngle))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aBmpWin))
 {

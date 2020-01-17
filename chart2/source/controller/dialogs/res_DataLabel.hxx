@@ -78,7 +78,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xBxOrientation;
     std::unique_ptr<weld::Label> m_xFT_Dial;
-    std::unique_ptr<weld::SpinButton> m_xNF_Degrees;
+    std::unique_ptr<weld::MetricSpinButton> m_xNF_Degrees;
 
     std::unique_ptr<weld::Widget> m_xBxTextDirection;
 

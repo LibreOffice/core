@@ -112,7 +112,7 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xLbVerAlign(m_xBuilder->weld_combo_box("comboboxVertAlign"))
     //text rotation
     , m_xFtRotate(m_xBuilder->weld_label("labelDegrees"))
-    , m_xNfRotate(m_xBuilder->weld_spin_button("spinDegrees"))
+    , m_xNfRotate(m_xBuilder->weld_metric_spin_button("spinDegrees", FieldUnit::DEGREE))
     , m_xFtRefEdge(m_xBuilder->weld_label("labelRefEdge"))
     //Asian mode
     , m_xCbStacked(m_xBuilder->weld_check_button("checkVertStack"))

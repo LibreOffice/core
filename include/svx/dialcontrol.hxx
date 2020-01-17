@@ -104,7 +104,7 @@ public:
      *     default is 0 which means field values are in degrees,
      *     2 means 100th of degree
      */
-    void                SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimalPlaces = 0);
+    void                SetLinkedField(weld::MetricSpinButton* pField, sal_Int32 nDecimalPlaces = 0);
 
     /** Save value for later comparison */
     void                SaveValue();
@@ -126,7 +126,7 @@ private:
         ScopedVclPtr<DialControlBmp> mxBmpBuffered;
         Link<DialControl&,void>      maModifyHdl;
         OUString            maText;
-        weld::SpinButton*   mpLinkField;
+        weld::MetricSpinButton*   mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
         vcl::Font           maWinFont;
@@ -152,7 +152,7 @@ private:
 
     void                InvalidateControl();
 
-    DECL_LINK(LinkedFieldModifyHdl, weld::SpinButton&, void);
+    DECL_LINK(LinkedFieldModifyHdl, weld::MetricSpinButton&, void);
 };
 
 }
