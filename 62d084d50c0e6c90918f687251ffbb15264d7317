@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3067e24f_ff92dd07",
+        "filename": "writerfilter/source/dmapper/ConversionHelper.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-17T09:09:50Z",
+      "side": 1,
+      "message": "\u003e \"signed integer overflow: -2147478239 * 127 cannot be represented in type \u0027int\u0027\"\n\nWhile the handling of negatives outside of 16 bit might need consideration, this specific warning is because integer arithmetics are used for a value later converted to double; using double from the start would be better instead...",
+      "parentUuid": "404d79e2_aca48c24",
+      "revId": "62d084d50c0e6c90918f687251ffbb15264d7317",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b4d0d2c_f0b275a5",
         "filename": "writerfilter/source/dmapper/ConversionHelper.cxx",
         "patchSetId": 17
