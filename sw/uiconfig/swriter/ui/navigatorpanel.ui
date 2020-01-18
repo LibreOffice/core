@@ -23,7 +23,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="GtkToolbar" id="content">
+              <object class="sfxlo-SidebarToolBox" id="content">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="toolbar_style">icons</property>
@@ -41,12 +41,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkMenuToolButton" id="navigation">
+                  <object class="GtkToolButton" id=".uno:NavElement">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|navigation|tooltip_text">Navigation</property>
-                    <property name="action_name">navigation</property>
-                    <property name="icon_name">sw/res/sc20249.png</property>
+                    <property name="action_name">.uno:NavElement</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -57,9 +55,7 @@
                   <object class="GtkToolButton" id="back">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|back|tooltip_text">Back</property>
-                    <property name="action_name">back</property>
-                    <property name="icon_name">sw/res/sc20186.png</property>
+                    <property name="action_name">.uno:ScrollToPrevious</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -70,58 +66,7 @@
                   <object class="GtkToolButton" id="forward">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|forward|tooltip_text">Forward</property>
-                    <property name="action_name">forward</property>
-                    <property name="icon_name">sw/res/sc20175.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="dragmode">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
-                    <property name="action_name">dragmode</property>
-                    <property name="icon_name">sw/res/sc20235.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparatorToolItem" id="separator1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="chapterup">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterup|tooltip_text">Promote Chapter</property>
-                    <property name="action_name">up</property>
-                    <property name="icon_name">sw/res/sc20174.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="chapterdown">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterdown|tooltip_text">Demote Chapter</property>
-                    <property name="action_name">down</property>
-                    <property name="icon_name">sw/res/sc20171.png</property>
+                    <property name="action_name">.uno:ScrollToNext</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -260,6 +205,29 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkToolButton" id="dragmode">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
+                    <property name="action_name">dragmode</property>
+                    <property name="icon_name">sw/res/sc20235.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="separator6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkToolButton" id="promote">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -279,6 +247,32 @@
                     <property name="tooltip_text" translatable="yes" context="navigatorpanel|demote|tooltip_text">Demote Level</property>
                     <property name="action_name">demote</property>
                     <property name="icon_name">sw/res/sc20173.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="chapterup">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterup|tooltip_text">Promote Chapter</property>
+                    <property name="action_name">up</property>
+                    <property name="icon_name">sw/res/sc20174.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="chapterdown">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterdown|tooltip_text">Demote Chapter</property>
+                    <property name="action_name">down</property>
+                    <property name="icon_name">sw/res/sc20171.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -348,7 +342,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="separator6">
+              <object class="GtkSeparatorToolItem" id="separator7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -397,7 +391,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="separator7">
+              <object class="GtkSeparatorToolItem" id="separator8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -420,7 +414,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="separator8">
+              <object class="GtkSeparatorToolItem" id="separator9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>

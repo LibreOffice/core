@@ -54,10 +54,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 // Size check
-#define NAVI_ENTRIES 20
-#if NAVI_ENTRIES != NID_COUNT
-#error SwScrollNaviPopup-CTOR static array wrong size. Are new IDs added?
-#endif
+#define NAVI_ENTRIES 18
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -159,7 +156,6 @@ IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
 // determine the order of the toolbox items
 static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
 {
-    // -- first line
     NID_TBL,
     NID_FRM,
     NID_GRF,
@@ -169,8 +165,6 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_MARK,
     NID_DRW,
     NID_CTRL,
-    NID_PREV,
-    // -- second line
     NID_REG,
     NID_BKM,
     NID_SEL,
@@ -179,13 +173,11 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_SRCH_REP,
     NID_INDEX_ENTRY,
     NID_TABLE_FORMULA,
-    NID_TABLE_FORMULA_ERROR,
-    NID_NEXT
+    NID_TABLE_FORMULA_ERROR
 };
 
 static OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
 {
-    // -- first line
     RID_BMP_RIBBAR_TBL,
     RID_BMP_RIBBAR_FRM,
     RID_BMP_RIBBAR_GRF,
@@ -195,8 +187,6 @@ static OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
     RID_BMP_RIBBAR_MARK,
     RID_BMP_RIBBAR_DRW,
     RID_BMP_RIBBAR_CTRL,
-    RID_BMP_RIBBAR_PREV,
-    // -- second line
     RID_BMP_RIBBAR_REG,
     RID_BMP_RIBBAR_BKM,
     RID_BMP_RIBBAR_SEL,
@@ -205,39 +195,11 @@ static OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
     RID_BMP_RIBBAR_REP,
     RID_BMP_RIBBAR_ENTRY,
     RID_BMP_RIBBAR_FORMULA,
-    RID_BMP_RIBBAR_ERROR,
-    RID_BMP_RIBBAR_NEXT
-};
-
-static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
-{
-    // -- first line
-    HID_NID_TBL,
-    HID_NID_FRM,
-    HID_NID_GRF,
-    HID_NID_OLE,
-    HID_NID_PGE,
-    HID_NID_OUTL,
-    HID_NID_MARK,
-    HID_NID_DRW,
-    HID_NID_CTRL,
-    HID_NID_PREV,
-    // -- second line
-    HID_NID_REG,
-    HID_NID_BKM,
-    HID_NID_SEL,
-    HID_NID_FTN,
-    HID_NID_POSTIT,
-    HID_NID_SRCH_REP,
-    HID_NID_INDEX_ENTRY,
-    HID_NID_TABLE_FORMULA,
-    HID_NID_TABLE_FORMULA_ERROR,
-    HID_NID_NEXT
+    RID_BMP_RIBBAR_ERROR
 };
 
 static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
 {
-    // -- first line
     ST_TBL,
     ST_FRM,
     ST_GRF,
@@ -247,8 +209,6 @@ static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
     ST_MARK,
     ST_DRW,
     ST_CTRL,
-    STR_IMGBTN_PGE_UP,
-    // -- second line
     ST_REG,
     ST_BKM,
     ST_SEL,
@@ -257,15 +217,12 @@ static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
     ST_SRCH_REP,
     ST_INDEX_ENTRY,
     ST_TABLE_FORMULA,
-    ST_TABLE_FORMULA_ERROR,
-    STR_IMGBTN_PGE_DOWN
+    ST_TABLE_FORMULA_ERROR
 };
 
 // these are global strings
 static const char* STR_IMGBTN_ARY[] =
 {
-    nullptr,
-    nullptr,
     STR_IMGBTN_TBL_DOWN,
     STR_IMGBTN_FRM_DOWN,
     STR_IMGBTN_PGE_DOWN,
@@ -284,8 +241,6 @@ static const char* STR_IMGBTN_ARY[] =
     STR_IMGBTN_INDEX_ENTRY_DOWN,
     STR_IMGBTN_TBLFML_DOWN,
     STR_IMGBTN_TBLFML_ERR_DOWN,
-    nullptr,
-    nullptr,
     STR_IMGBTN_TBL_UP,
     STR_IMGBTN_FRM_UP,
     STR_IMGBTN_PGE_UP,
@@ -306,230 +261,13 @@ static const char* STR_IMGBTN_ARY[] =
     STR_IMGBTN_TBLFML_ERR_UP
 };
 
-SwScrollNaviPopup::SwScrollNaviPopup(vcl::Window *pParent)
-    : DockingWindow(pParent, "FloatingNavigation", "modules/swriter/ui/floatingnavigation.ui")
-    , m_xToolBox1(get<ToolBox>("line1"))
-    , m_xToolBox2(get<ToolBox>("line2"))
-    , m_xInfoField(get<FixedText>("label"))
-{
-    m_xToolBox1->SetHelpId(HID_NAVI_VS);
-    m_xToolBox2->SetHelpId(HID_NAVI_VS);
-
-    for (size_t i = 0; i < NID_LINE_COUNT; ++i)
-        m_xToolBox1->SetHelpId(m_xToolBox1->GetItemId(i), aNavigationHelpIds[i]);
-
-    for (size_t i = 0; i < NID_LINE_COUNT; ++i)
-        m_xToolBox2->SetHelpId(m_xToolBox2->GetItemId(i), aNavigationHelpIds[i + NID_LINE_COUNT]);
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_IMGBTN_ARY); ++i)
-    {
-        const char* id = STR_IMGBTN_ARY[i];
-        if (!id)
-            continue;
-        sQuickHelp[i] = SwResId(id);
-    }
-
-    sal_uInt16 nItemId = SwView::GetMoveType();
-    m_xInfoField->SetText(GetItemText(nItemId));
-    CheckItem(nItemId, true);
-
-    m_xToolBox1->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
-    m_xToolBox2->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
-}
-
-SwScrollNaviPopup::~SwScrollNaviPopup()
-{
-    disposeOnce();
-}
-
-void SwScrollNaviPopup::dispose()
-{
-    m_xToolBox2.disposeAndClear();
-    m_xToolBox1.disposeAndClear();
-    m_xInfoField.clear();
-    DockingWindow::dispose();
-}
-
-IMPL_LINK_NOARG(SwScrollNaviPopup, SelectHdl, ToolBox*, void)
-{
-    sal_uInt16 nSet = GetCurItemId();
-    if( nSet != NID_PREV && nSet != NID_NEXT )
-    {
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-        SwView::SetMoveType( nSet );
-        GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(FN_NAV_ELEMENT);
-    }
-    else
-    {
-        sal_uInt16 cmd(FN_SCROLL_PREV);
-        if (NID_NEXT == nSet)
-            cmd = FN_SCROLL_NEXT;
-        GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(cmd);
-    }
-}
-
-OUString SwScrollNaviPopup::GetToolTip(bool bNext)
+static OUString lcl_GetScrollToolTip(bool bNext)
 {
     sal_uInt16 nResId = SwView::GetMoveType();
     if (!bNext)
         nResId += NID_COUNT;
     const char* id = STR_IMGBTN_ARY[nResId - NID_START];
     return id ? SwResId(id): OUString();
-}
-
-void SwScrollNaviPopup::syncFromDoc()
-{
-    sal_uInt16 nSet = SwView::GetMoveType();
-    SetItemText( NID_NEXT, sQuickHelp[nSet - NID_START] );
-    SetItemText( NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT] );
-    m_xInfoField->SetText( GetItemText( nSet ) );
-    // check the current button only
-    for( ToolBox::ImplToolItems::size_type i = 0; i < NID_COUNT; i++ )
-    {
-        sal_uInt16 nItemId = aNavigationInsertIds[i];
-        CheckItem(nItemId, nItemId == nSet);
-    }
-}
-
-namespace
-{
-    sal_uInt16 IdToIdent(const OUString& rId)
-    {
-        if (rId == "tbl")
-            return NID_TBL;
-        if (rId == "frm")
-            return NID_FRM;
-        if (rId == "grf")
-            return NID_GRF;
-        if (rId == "ole")
-            return NID_OLE;
-        if (rId == "pge")
-            return NID_PGE;
-        if (rId == "outl")
-            return NID_OUTL;
-        if (rId == "mark")
-            return NID_MARK;
-        if (rId == "drw")
-            return NID_DRW;
-        if (rId == "ctrl")
-            return NID_CTRL;
-        if (rId == "prev")
-            return NID_PREV;
-
-        if (rId == "reg")
-            return NID_REG;
-        if (rId == "bkm")
-            return NID_BKM;
-        if (rId == "sel")
-            return NID_SEL;
-        if (rId == "ftn")
-            return NID_FTN;
-        if (rId == "postit")
-            return NID_POSTIT;
-        if (rId == "rep")
-            return NID_SRCH_REP;
-        if (rId == "entry")
-            return NID_INDEX_ENTRY;
-        if (rId == "formula")
-            return NID_TABLE_FORMULA;
-        if (rId == "formulaerror")
-            return NID_TABLE_FORMULA_ERROR;
-        if (rId == "next")
-            return NID_NEXT;
-
-        return 0;
-    }
-
-    OUString IdentToId(sal_uInt16 nId)
-    {
-        if (nId == NID_TBL)
-            return "tbl";
-        if (nId == NID_FRM)
-            return "frm";
-        if (nId == NID_GRF)
-            return "grf";
-        if (nId == NID_OLE)
-            return "ole";
-        if (nId == NID_PGE)
-            return "pge";
-        if (nId == NID_OUTL)
-            return "outl";
-        if (nId == NID_MARK)
-            return "mark";
-        if (nId == NID_DRW)
-            return "drw";
-        if (nId == NID_CTRL)
-            return "ctrl";
-        if (nId == NID_PREV)
-            return "prev";
-
-        if (nId == NID_REG)
-            return "reg";
-        if (nId == NID_BKM)
-            return "bkm";
-        if (nId == NID_SEL)
-            return "sel";
-        if (nId == NID_FTN)
-            return "ftn";
-        if (nId == NID_POSTIT)
-            return "postit";
-        if (nId == NID_SRCH_REP)
-            return "rep";
-        if (nId == NID_INDEX_ENTRY)
-            return "entry";
-        if (nId == NID_TABLE_FORMULA)
-            return "formula";
-        if (nId == NID_TABLE_FORMULA_ERROR)
-            return "formulaerror";
-        if (nId == NID_NEXT)
-            return "next";
-
-        return "";
-    }
-}
-
-sal_uInt16 SwScrollNaviPopup::GetCurItemId() const
-{
-    OUString sItemId = m_xToolBox1->GetItemCommand(m_xToolBox1->GetCurItemId());
-    if (sItemId.isEmpty())
-        sItemId = m_xToolBox2->GetItemCommand(m_xToolBox2->GetCurItemId());
-    return IdToIdent(sItemId);
-}
-
-OUString SwScrollNaviPopup::GetItemText(sal_uInt16 nNaviId) const
-{
-    const OUString sId(IdentToId(nNaviId));
-    sal_uInt16 nItemId = m_xToolBox1->GetItemId(sId);
-    if (nItemId)
-        return m_xToolBox1->GetItemText(nItemId);
-    nItemId = m_xToolBox2->GetItemId(sId);
-    return m_xToolBox2->GetItemText(nItemId);
-}
-
-void SwScrollNaviPopup::SetItemText(sal_uInt16 nNaviId, const OUString &rText)
-{
-    const OUString sId(IdentToId(nNaviId));
-    sal_uInt16 nItemId = m_xToolBox1->GetItemId(sId);
-    if (nItemId)
-    {
-        m_xToolBox1->SetItemText(nItemId, rText);
-        return;
-    }
-    nItemId = m_xToolBox2->GetItemId(sId);
-    m_xToolBox2->SetItemText(nItemId, rText);
-}
-
-void SwScrollNaviPopup::CheckItem(sal_uInt16 nNaviId, bool bOn)
-{
-    const OUString sId(IdentToId(nNaviId));
-    sal_uInt16 nItemId = m_xToolBox1->GetItemId(sId);
-    if (nItemId)
-    {
-        m_xToolBox1->CheckItem(nItemId, bOn);
-        return;
-    }
-    nItemId = m_xToolBox2->GetItemId(sId);
-    m_xToolBox2->CheckItem(nItemId, bOn);
 }
 
 namespace {
@@ -906,11 +644,7 @@ NavElementBox_Impl::NavElementBox_Impl(
 
     sal_uInt16 i;
     for ( i = 0; i < NID_COUNT; i++ )
-    {
-        sal_uInt16 nNaviId = aNavigationInsertIds[i];
-        if ( ( NID_PREV != nNaviId ) && ( NID_NEXT != nNaviId ) )
-            InsertEntry( SwResId( aNavigationStrIds[i] ), Image( StockImage::Yes, aNavigationImgIds[i] ) );
-    }
+        InsertEntry( SwResId( aNavigationStrIds[i] ), Image( StockImage::Yes, aNavigationImgIds[i] ) );
 }
 
 void NavElementBox_Impl::ReleaseFocus_Impl()
@@ -934,10 +668,6 @@ void NavElementBox_Impl::Select()
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
         sal_uInt16 nPos = GetSelectedEntryPos();
-        // adjust array index for Ids after NID_PREV in aNavigationInsertIds
-        if ( nPos >= NID_COUNT/2 - 1 )
-            ++nPos;
-
         sal_uInt16 nMoveType = aNavigationInsertIds[nPos];
         SwView::SetMoveType( nMoveType );
 
@@ -973,21 +703,23 @@ bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
-        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        vcl::KeyCode aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        sal_uInt16 nCode = aKeyCode.GetCode();
 
         switch ( nCode )
         {
-            case KEY_RETURN:
             case KEY_TAB:
             {
-                if ( KEY_TAB == nCode )
-                    m_bRelease = false;
-                else
-                    bHandled = true;
+                static_cast<ToolBox*>(GetParent())->ChangeHighlightUpDn( aKeyCode.IsShift() );
+                m_bRelease = false;
+                [[fallthrough]];
+            }
+            case KEY_RETURN:
+            {
+                bHandled = true;
                 Select();
                 break;
             }
-
             case KEY_ESCAPE:
                 ReleaseFocus_Impl();
                 bHandled = true;
@@ -1155,10 +887,6 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() override;
 
-    // XToolbarController
-    virtual void SAL_CALL execute( sal_Int16 /* KeyModifier */ ) override;
-    virtual void SAL_CALL click() override;
-
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
@@ -1223,30 +951,6 @@ void SAL_CALL PrevNextScrollToolboxController::dispose()
     svt::ToolboxController::dispose();
 }
 
-// XToolbarController
-void SAL_CALL PrevNextScrollToolboxController::execute( sal_Int16 /* KeyModifier */ )
-{
-}
-
-void SAL_CALL PrevNextScrollToolboxController::click()
-{
-    uno::Sequence< beans::PropertyValue > rArgs;
-
-    uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
-    if ( xDispatchProvider.is() )
-    {
-        util::URL                               aURL;
-        uno::Reference< frame::XDispatch >      xDispatch;
-        uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
-
-        aURL.Complete = getCommandURL();
-        xURLTransformer->parseStrict( aURL );
-        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aURL, rArgs );
-    }
-}
-
 // XStatusListener
 void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
@@ -1255,8 +959,8 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
         ToolBox* pToolBox = nullptr;
         sal_uInt16 nId = 0;
         if ( getToolboxId( nId, &pToolBox ) )
-            pToolBox->SetQuickHelpText( nId, ( meType == PrevNextScrollToolboxController::PREVIOUS?SwScrollNaviPopup::GetToolTip( false ):
-                                                                                                   SwScrollNaviPopup::GetToolTip( true ) ) );
+            pToolBox->SetQuickHelpText( nId, ( meType == PrevNextScrollToolboxController::PREVIOUS?lcl_GetScrollToolTip( false ):
+                                                                                                   lcl_GetScrollToolTip( true ) ) );
     }
 }
 
