@@ -29,18 +29,11 @@
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC DateTime : public Date, public tools::Time
 {
 public:
-    enum DateTimeInitSystem
-    {
-        SYSTEM
-    };
+    struct DateTimeInitSystem {} static constexpr SYSTEM{};
+    struct DateTimeInitEmpty {} static constexpr EMPTY{};
 
-    enum DateTimeInitEmpty
-    {
-        EMPTY
-    };
-
-                    explicit DateTime( DateTimeInitEmpty ) : Date( Date::EMPTY ), Time( Time::EMPTY ) {}
-                    explicit DateTime( DateTimeInitSystem );
+                    DateTime( DateTimeInitEmpty ) : Date( Date::EMPTY ), Time( Time::EMPTY ) {}
+                    DateTime( DateTimeInitSystem ) : DateTime(EMPTY) { initFromSystemDateTime(); }
                     DateTime( const DateTime& rDateTime ) :
                         Date( rDateTime ), Time( rDateTime ) {}
                     DateTime( const Date& rDate ) : Date( rDate ), Time(0) {}
@@ -104,6 +97,9 @@ public:
     /// Creates DateTime given a unix time, which is the number of seconds
     /// elapsed since Jan 1st, 1970.
     static DateTime CreateFromUnixTime( const double fSecondsSinceEpoch );
+
+private:
+    void            initFromSystemDateTime();
 };
 
 inline DateTime& DateTime::operator =( const DateTime& rDateTime )

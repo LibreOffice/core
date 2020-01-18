@@ -90,7 +90,7 @@ namespace {
 
 namespace tools {
 
-Time::Time( TimeInitSystem )
+void Time::initFromSystemTime()
 {
     if ( !GetSystemDateTime( nullptr, &nTime ) )
         nTime = 0;

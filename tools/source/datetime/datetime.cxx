@@ -22,9 +22,8 @@
 
 #include <systemdatetime.hxx>
 
-DateTime::DateTime(DateTimeInitSystem)
-    : Date( Date::EMPTY )
-    , Time( Time::EMPTY )
+// called from ctor; date and time are empty on entry
+void DateTime::initFromSystemDateTime()
 {
     sal_Int32 nD = 0;
     sal_Int64 nT = 0;

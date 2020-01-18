@@ -38,18 +38,14 @@ private:
     sal_Int64       nTime;
     void            init( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec, sal_uInt64 nNanoSec);
+    void            initFromSystemTime();
 
 public:
-    enum TimeInitSystem
-    {
-        SYSTEM
-    };
+    struct TimeInitSystem {} static constexpr SYSTEM{};
 
     // temporary until all uses are inspected and resolved
-    enum TimeInitEmpty
-    {
-        EMPTY
-    };
+    struct TimeInitEmpty {} static constexpr EMPTY{};
+
     static const sal_Int64 hourPerDay = 24;
     static const sal_Int64 minutePerHour = 60;
     static const sal_Int64 secondPerMinute = 60;
@@ -64,9 +60,9 @@ public:
     static const sal_Int64 nanoPerMilli  = 1000000;
     static const sal_Int64 nanoPerCenti  = 10000000;
 
-                    explicit Time( TimeInitEmpty )
+                    Time( TimeInitEmpty )
                         { nTime = 0; }
-                    explicit Time( TimeInitSystem );
+                    Time( TimeInitSystem ) { initFromSystemTime(); }
                     explicit Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime );
                     Time( const css::util::Time& rTime );

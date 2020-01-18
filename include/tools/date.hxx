@@ -56,20 +56,14 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Date
 private:
     sal_Int32       mnDate;
     void            setDateFromDMY( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear );
+    void            initFromSystemDate();
 
 public:
-    enum DateInitSystem
-    {
-        SYSTEM
-    };
+    struct DateInitSystem {} static constexpr SYSTEM{};
+    struct DateInitEmpty {} static constexpr EMPTY{};
 
-    enum DateInitEmpty
-    {
-        EMPTY
-    };
-
-                    explicit Date( DateInitEmpty ) : mnDate(0) {}
-                    explicit Date( DateInitSystem );
+                    Date( DateInitEmpty ) : mnDate(0) {}
+                    Date( DateInitSystem ) { initFromSystemDate(); }
                     explicit Date( sal_Int32 nDate ) : mnDate(nDate) {}
                     Date( const Date& rDate ) : mnDate(rDate.mnDate) {}
 

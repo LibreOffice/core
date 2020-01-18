@@ -203,7 +203,7 @@ static Date lcl_DaysToDate( sal_Int32 nDays )
     return Date( static_cast<sal_uInt16>(nTempDays), nMonth, nYear );
 }
 
-Date::Date( DateInitSystem )
+void Date::initFromSystemDate()
 {
     if ( !GetSystemDateTime( &mnDate, nullptr ) )
         setDateFromDMY( 1, 1, 1900 );
