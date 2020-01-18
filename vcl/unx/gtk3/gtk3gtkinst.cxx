@@ -3536,6 +3536,16 @@ namespace
             gtk_container_forall(GTK_CONTAINER(pItem), do_collect_screenshot_data, data);
     }
 
+    tools::Rectangle get_monitor_workarea(GtkWidget* pWindow)
+    {
+        GdkScreen* pScreen = gtk_widget_get_screen(pWindow);
+        gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, gtk_widget_get_window(pWindow));
+        GdkRectangle aRect;
+        gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
+        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
+    }
+
+
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window
 {
 private:
@@ -3634,11 +3644,7 @@ public:
 
     virtual tools::Rectangle get_monitor_workarea() const override
     {
-        GdkScreen* pScreen = gtk_widget_get_screen(GTK_WIDGET(m_pWindow));
-        gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, gtk_widget_get_window(GTK_WIDGET(m_pWindow)));
-        GdkRectangle aRect;
-        gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
-        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
+        return ::get_monitor_workarea(GTK_WIDGET(m_pWindow));
     }
 
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) override
@@ -6521,12 +6527,35 @@ private:
             gtk_widget_translate_coordinates(GTK_WIDGET(m_pMenuButton), pToplevel, 0, 0, &x, &y);
             GdkWindow *pWindow = gtk_widget_get_window(pToplevel);
             gdk_window_get_position(pWindow, &absx, &absy);
+            x += absx;
+            y += absy;
+
+            gint nButtonHeight = gtk_widget_get_allocated_height(GTK_WIDGET(m_pMenuButton));
+            y += nButtonHeight;
 
             gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), m_pMenuHack);
             gtk_window_set_transient_for(m_pMenuHack, GTK_WINDOW(pToplevel));
 
             gtk_widget_show_all(GTK_WIDGET(m_pMenuHack));
-            gtk_window_move(m_pMenuHack, x + absx, y + absy + gtk_widget_get_allocated_height(GTK_WIDGET(m_pMenuButton)));
+
+            tools::Rectangle aWorkArea(::get_monitor_workarea(GTK_WIDGET(m_pMenuHack)));
+            gint endx = x + gtk_widget_get_allocated_width(GTK_WIDGET(m_pMenuHack));
+            if (endx > aWorkArea.Right())
+            {
+                x -= endx - aWorkArea.Right();
+                if (x < 0)
+                    x = 0;
+            }
+            gint nMenuHeight = gtk_widget_get_allocated_height(GTK_WIDGET(m_pMenuHack));
+            gint endy = y + nMenuHeight;
+            if (endy > aWorkArea.Bottom())
+            {
+                y -= nButtonHeight + nMenuHeight;
+                if (y < 0)
+                    y = 0;
+            }
+
+            gtk_window_move(m_pMenuHack, x, y);
 
             gtk_widget_grab_focus(GTK_WIDGET(m_pMenuHack));
 
