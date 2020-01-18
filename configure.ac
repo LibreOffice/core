@@ -4062,6 +4062,29 @@ printf ("hello world\n");
 fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
+LD_GC_SECTIONS=
+if test "$GCC" = "yes"; then
+    for flag in "--gc-sections" "-dead_strip"; do
+        AC_MSG_CHECKING([for $flag linker support])
+        ldflags_save=$LDFLAGS
+        LDFLAGS="$LDFLAGS -Wl,$flag"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+            ],[
+printf ("hello world\n");
+            ])],[
+            LD_GC_SECTIONS="-Wl,$flag"
+            AC_MSG_RESULT( found )
+            ], [
+            AC_MSG_RESULT( not found )
+            ])
+        LDFLAGS=$ldflags_save
+        if test -n "$LD_GC_SECTIONS"; then
+            break
+        fi
+    done
+fi
+AC_SUBST(LD_GC_SECTIONS)
 
 HAVE_GSPLIT_DWARF=
 if test "$enable_split_debug" != no; then
