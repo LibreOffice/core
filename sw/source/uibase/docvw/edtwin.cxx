@@ -5988,6 +5988,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
 
     if (rWord[0] == '2')
     {
+        (*pCalendar)->setGregorianDateTime(Date(Date::SYSTEM)); // tdf#130066: reset today
         OUStringBuffer rStr("");
         rStr.append(sal::static_int_cast< sal_Int32 >((*pCalendar)->getValue(i18n::CalendarFieldIndex::YEAR))).append("-");
         sal_Int32 nMonth = sal::static_int_cast< sal_Int32 >((*pCalendar)->getValue(i18n::CalendarFieldIndex::MONTH)+1);
