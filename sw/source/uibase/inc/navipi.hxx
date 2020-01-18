@@ -27,6 +27,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "conttree.hxx"
 #include <ndarr.hxx>
@@ -38,24 +39,11 @@ class SwNavigationChild;
 class SfxBindings;
 class NumEditAction;
 class SwNavigationConfig;
-class SwScrollNaviPopup;
 class SwView;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
 enum class RegionMode;
 class SpinField;
-
-class NaviStateListener final : public SfxControllerItem
-{
-private:
-    VclPtr<SwNavigationPI> m_xNavigation;
-public:
-    NaviStateListener(SfxBindings& rBindings, SwNavigationPI* pNavigation);
-    virtual ~NaviStateListener() override;
-
-    virtual void    StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                                 const SfxPoolItem* pState) override;
-};
 
 class SwNavigationPI : public PanelLayout,
                        public SfxControllerItem, public SfxListener
@@ -65,8 +53,7 @@ class SwNavigationPI : public PanelLayout,
     friend class SwGlobalTree;
     friend class SwNavigationPIUIObject;
 
-    VclPtr<ToolBox>    m_aContentToolBox;
-    std::unique_ptr<NaviStateListener> m_xNaviListener;
+    VclPtr<sfx2::sidebar::SidebarToolBox> m_aContentToolBox;
     VclPtr<ToolBox>             m_aGlobalToolBox;
     VclPtr<NumEditAction>       m_xEdit;
     VclPtr<VclContainer>        m_aContentBox;
@@ -84,7 +71,6 @@ class SwNavigationPI : public PanelLayout,
     SwWrtShell          *m_pContentWrtShell;
     SwView              *m_pActContView;
     SwView              *m_pCreateView;
-    VclPtr<SwScrollNaviPopup>   m_xPopupWindow;
 
     SwNavigationConfig  *m_pConfig;
     SfxBindings         &m_rBindings;
@@ -113,8 +99,6 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( PageEditModifyHdl, SpinField&, void );
     void UsePage();
 
-    void SetPopupWindow( SwScrollNaviPopup* );
-
 protected:
 
     // release ObjectShellLock early enough for app end
@@ -126,7 +110,12 @@ protected:
 
 public:
 
-    SwNavigationPI(SfxBindings*, vcl::Window*);
+    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+            SfxBindings* pBindings);
+    SwNavigationPI(vcl::Window* pParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+            SfxBindings* _pBindings);
     virtual ~SwNavigationPI() override;
     virtual void    dispose() override;
 
@@ -152,8 +141,6 @@ public:
 
     SwView*         GetCreateView() const;
     void            CreateNavigationTool();
-
-    void            NaviStateChanged();
 
     FactoryFunction GetUITestFactory() const override;
 };
