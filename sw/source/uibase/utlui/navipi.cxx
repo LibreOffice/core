@@ -224,17 +224,13 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
     bool bOutlineWithChildren  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
     bool bFocusToDoc = false;
-    if (sCommand == "back")
+    if (sCommand == ".uno:ScrollToPrevious")
     {
-        // #i75416# move the execution of the search to an asynchronously called static link
-        bool* pbNext = new bool(false);
-        Application::PostUserEvent(LINK(pView, SwView, MoveNavigationHdl), pbNext);
+        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SCROLL_PREV, SfxCallMode::ASYNCHRON);
     }
-    else if (sCommand == "forward")
+    else if (sCommand == ".uno:ScrollToNext")
     {
-        // #i75416# move the execution of the search to an asynchronously called static link
-        bool* pbNext = new bool(true);
-        Application::PostUserEvent(LINK(pView, SwView, MoveNavigationHdl), pbNext);
+        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SCROLL_NEXT, SfxCallMode::ASYNCHRON);
     }
     else if (sCommand == "root")
     {
@@ -353,9 +349,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     const OUString sCommand = pBox->GetItemCommand(nCurrItemId);
-    if (sCommand == "navigation")
-        CreateNavigationTool();
-    else if (sCommand == "dragmode")
+    if (sCommand == "dragmode")
     {
         static const char* aHIDs[] =
         {
@@ -397,50 +391,9 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
     }
 }
 
-SwNavHelpToolBox::SwNavHelpToolBox(Window* pParent)
-    : ToolBox(pParent)
-{
-}
-
-VCL_BUILDER_FACTORY(SwNavHelpToolBox)
-
-void SwNavigationPI::CreateNavigationTool()
-{
-    auto xPopup = VclPtr<SwScrollNaviPopup>::Create(m_aContentToolBox.get());
-
-    xPopup->EnableDocking();
-
-    SetPopupWindow( xPopup );
-
-    xPopup->Show();
-    vcl::Window::GetDockingManager()->StartPopupMode(m_aContentToolBox, xPopup, FloatWinPopupFlags::GrabFocus);
-}
-
 FactoryFunction SwNavigationPI::GetUITestFactory() const
 {
     return SwNavigationPIUIObject::create;
-}
-
-void SwNavHelpToolBox::RequestHelp(const HelpEvent& rHEvt)
-{
-    const sal_uInt16 nItemId = GetItemId(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-    const OUString sCommand(GetItemCommand(nItemId));
-    if (sCommand == "back")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(false));
-    else if (sCommand == "forward")
-        SetQuickHelpText(nItemId, SwScrollNaviPopup::GetToolTip(true));
-    ToolBox::RequestHelp(rHEvt);
-}
-
-void SwNavHelpToolBox::dispose()
-{
-    m_xDialog.clear();
-    ToolBox::dispose();
-}
-
-SwNavHelpToolBox::~SwNavHelpToolBox()
-{
-    disposeOnce();
 }
 
 // Action-Handler Edit:
@@ -549,9 +502,23 @@ enum StatusIndex
 
 }
 
-SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
-                               vcl::Window* pParent)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", nullptr)
+VclPtr<vcl::Window> SwNavigationPI::Create(vcl::Window* pParent,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    SfxBindings* pBindings)
+{
+    if( pParent == nullptr )
+        throw css::lang::IllegalArgumentException("no parent window given to SwNavigationPI::Create", nullptr, 0);
+    if( !rxFrame.is() )
+        throw css::lang::IllegalArgumentException("no XFrame given to SwNavigationPI::Create", nullptr, 0);
+    if( pBindings == nullptr )
+        throw css::lang::IllegalArgumentException("no SfxBindings given to SwNavigationPI::Create", nullptr, 0);
+    return VclPtr<SwNavigationPI>::Create(pParent, rxFrame, pBindings);
+}
+
+SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    SfxBindings* _pBindings)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame/*, true*/)
     , SfxControllerItem(SID_DOCFULLNAME, *_pBindings)
     , m_pContentView(nullptr)
     , m_pContentWrtShell(nullptr)
@@ -565,8 +532,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 {
     get(m_aContentToolBox, "content");
     m_aContentToolBox->SetLineCount(2);
-    m_aContentToolBox->InsertBreak(8);
-    m_aContentToolBox->SetDialog(this);
+    m_aContentToolBox->InsertBreak(4);
     get(m_aGlobalToolBox, "global");
     get(m_aDocListBox, "documents");
 
@@ -679,8 +645,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 
     StartListening(*SfxGetpApp());
 
-    sal_uInt16 nNavId = m_aContentToolBox->GetItemId("navigation");
-    m_aContentToolBox->SetItemBits(nNavId, m_aContentToolBox->GetItemBits(nNavId) | ToolBoxItemBits::DROPDOWNONLY );
     sal_uInt16 nDropId = m_aContentToolBox->GetItemId("dragmode");
     m_aContentToolBox->SetItemBits(nDropId, m_aContentToolBox->GetItemBits(nDropId) | ToolBoxItemBits::DROPDOWNONLY );
     sal_uInt16 nOutlineId = m_aContentToolBox->GetItemId("headings");
@@ -737,7 +701,6 @@ void SwNavigationPI::dispose()
     if (IsBound())
         m_rBindings.Release(*this);
 
-    m_xPopupWindow.disposeAndClear();
     m_aDocListBox.clear();
     m_aGlobalTree.disposeAndClear();
     m_aGlobalBox.clear();
@@ -752,12 +715,6 @@ void SwNavigationPI::dispose()
     ::SfxControllerItem::dispose();
 
     PanelLayout::dispose();
-}
-
-void SwNavigationPI::SetPopupWindow( SwScrollNaviPopup* pWindow )
-{
-    m_xPopupWindow.disposeAndClear();
-    m_xPopupWindow = pWindow;
 }
 
 void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
@@ -1155,7 +1112,8 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         SfxBindings* _pBindings )
     : SfxChildWindowContext( nId )
 {
-    VclPtr<SwNavigationPI> pNavi = VclPtr<SwNavigationPI>::Create(_pBindings, pParent);
+    Reference< XFrame > xFrame = _pBindings->GetActiveFrame();
+    VclPtr< SwNavigationPI > pNavi = VclPtr< SwNavigationPI >::Create( pParent, xFrame, _pBindings );
     _pBindings->Invalidate(SID_NAVIGATOR);
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
