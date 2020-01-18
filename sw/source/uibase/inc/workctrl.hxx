@@ -28,8 +28,6 @@ class SwView;
 // double entry! hrc and hxx
 // these Ids say what the buttons below the scrollbar are doing
 #define NID_START   20000
-#define NID_NEXT    20000
-#define NID_PREV    20001
 #define NID_TBL     20002
 #define NID_FRM     20003
 #define NID_PGE     20004
@@ -48,9 +46,7 @@ class SwView;
 #define NID_INDEX_ENTRY  20017
 #define NID_TABLE_FORMULA   20018
 #define NID_TABLE_FORMULA_ERROR     20019
-#define NID_COUNT  20
-
-#define NID_LINE_COUNT 10
+#define NID_COUNT  18
 
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
@@ -66,33 +62,6 @@ public:
                                               const SfxPoolItem* pState ) override;
 
     DECL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
-};
-
-class SwScrollNaviPopup final : public DockingWindow
-{
-    VclPtr<ToolBox> m_xToolBox1;
-    VclPtr<ToolBox> m_xToolBox2;
-    VclPtr<FixedText> m_xInfoField;
-
-    sal_uInt16 GetCurItemId() const;
-    OUString GetItemText(sal_uInt16 nItemId) const;
-    void SetItemText(sal_uInt16 nItemId, const OUString& rText);
-    void CheckItem(sal_uInt16 nItemId, bool bOn);
-
-    OUString        sQuickHelp[2 * NID_COUNT];
-
-    DECL_LINK(SelectHdl, ToolBox*, void);
-
-public:
-    SwScrollNaviPopup(vcl::Window *pParent);
-    virtual ~SwScrollNaviPopup() override;
-    virtual void dispose() override;
-
-    static OUString     GetToolTip(bool bNext);
-
-    void                GrabFocus() { m_xToolBox1->GrabFocus(); }
-
-    void                syncFromDoc();
 };
 
 class SwPreviewZoomControl : public SfxToolBoxControl
