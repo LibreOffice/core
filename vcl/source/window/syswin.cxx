@@ -705,15 +705,15 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         if( std::abs(g.nX-aState.mnX) < 2 && std::abs(g.nY-aState.mnY) < 5 )
                         {
                             long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                            if( static_cast<unsigned long>(aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > static_cast<unsigned long>(aDesktop.Right()) ||
-                                static_cast<unsigned long>(aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > static_cast<unsigned long>(aDesktop.Bottom()) )
+                            if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > static_cast<unsigned long>(aDesktop.Right()) ||
+                                aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > static_cast<unsigned long>(aDesktop.Bottom()) )
                             {
                                 // displacing would leave screen
                                 aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                                 aState.mnY = displacement;
                                 if( bWrapped ||
-                                    static_cast<unsigned long>(aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > static_cast<unsigned long>(aDesktop.Right()) ||
-                                    static_cast<unsigned long>(aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > static_cast<unsigned long>(aDesktop.Bottom()) )
+                                    aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > static_cast<unsigned long>(aDesktop.Right()) ||
+                                    aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > static_cast<unsigned long>(aDesktop.Bottom()) )
                                     break;  // further displacement not possible -> break
                                 // avoid endless testing
                                 bWrapped = true;
