@@ -1111,10 +1111,11 @@ AC_ARG_ENABLE(fuzzers,
 
 libo_FUZZ_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch=<yes/no/system/base/normal/full>],
-        [Enables precompiled header support for C++. Forced default on Windows/VC build.
+        [Enables precompiled header support for C++.
          Using 'system' will include only external headers, 'base' will add also headers
          from base modules, 'normal' will also add all headers except from the module built,
-         'full' will use all suitable headers even from a module itself.])
+         'full' will use all suitable headers even from a module itself.
+         Defaults to 'full' for Windows/VC builds and 'system' for Clang builds.])
 )
 
 libo_FUZZ_ARG_ENABLE(epm,
@@ -5131,6 +5132,9 @@ if test -z "$enable_pch"; then
     if test "$_os" = "WINNT"; then
         # Enabled by default on Windows.
         enable_pch=yes
+    elif test -n "$COM_IS_CLANG"; then
+        # With Clang using 'system' should be without ~any drawbacks.
+        enable_pch=system
     else
         enable_pch=no
     fi
