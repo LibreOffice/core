@@ -1360,7 +1360,7 @@ void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
         }
     }
 
-    // and append the new entries at the end of the maS20-list or insert at the
+    // and append the new entries at the end of the maS2O-list or insert at the
     // position nPos in the maS2O-list
     for ( i=0; i<nCount; i++ )
     {
