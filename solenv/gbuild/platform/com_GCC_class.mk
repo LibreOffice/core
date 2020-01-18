@@ -95,7 +95,7 @@ gb_PrecompiledHeader_pch_with_obj = $(BUILDING_PCH_WITH_OBJ)
 ifneq ($(BUILDING_PCH_WITH_OBJ),)
 # If using Clang's PCH extra object, we may need to strip unused sections, otherwise inline and template functions
 # emitted in that object may in some cases cause unresolved references to private symbols in other libraries.
-gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
+gb_LinkTarget_LDFLAGS += $(LD_GC_SECTIONS)
 gb_PrecompiledHeader_pch_with_obj += -ffunction-sections -fdata-sections
 # Enable generating more shared code and debuginfo in the PCH object file.
 gb_PrecompiledHeader_pch_with_obj += $(PCH_MODULES_DEBUGINFO)
