@@ -153,7 +153,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/NavigatorPanel"))
     {
-        VclPtrInstance<SwNavigationPI> pPanel(pBindings, pParentWindow);
+        VclPtr<vcl::Window> pPanel = SwNavigationPI::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
