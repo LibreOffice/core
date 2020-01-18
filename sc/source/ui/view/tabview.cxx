@@ -2245,18 +2245,15 @@ void ScTabView::EnableRefInput(bool bFlag)
 
     if(pTabControl!=nullptr) pTabControl->EnableInput(bFlag);
 
-    if(pGridWin[SC_SPLIT_BOTTOMLEFT]!=nullptr)
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->EnableInput(bFlag,false);
-    if(pGridWin[SC_SPLIT_BOTTOMRIGHT]!=nullptr)
-        pGridWin[SC_SPLIT_BOTTOMRIGHT]->EnableInput(bFlag,false);
-    if(pGridWin[SC_SPLIT_TOPLEFT]!=nullptr)
-        pGridWin[SC_SPLIT_TOPLEFT]->EnableInput(bFlag,false);
-    if(pGridWin[SC_SPLIT_TOPRIGHT]!=nullptr)
-        pGridWin[SC_SPLIT_TOPRIGHT]->EnableInput(bFlag,false);
-    if(pColBar[SC_SPLIT_RIGHT]!=nullptr)
-        pColBar[SC_SPLIT_RIGHT]->EnableInput(bFlag,false);
-    if(pRowBar[SC_SPLIT_TOP]!=nullptr)
-        pRowBar[SC_SPLIT_TOP]->EnableInput(bFlag,false);
+    for (auto& p : pGridWin)
+        if (p)
+            p->EnableInput(bFlag, false);
+    for (auto& p : pColBar)
+        if (p)
+            p->EnableInput(bFlag, false);
+    for (auto& p : pRowBar)
+        if (p)
+            p->EnableInput(bFlag, false);
 }
 
 bool ScTabView::ContinueOnlineSpelling()
