@@ -11,7 +11,9 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlexport8))
 
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_ooxmlexport8))
+endif
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlexport8, \
     sw/qa/extras/ooxmlexport/ooxmlexport8 \
