@@ -312,23 +312,22 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                 pView->setMarked(true);
             }
 
-            // delete all unmarked views and reset marked state
-            for (size_t i = 0; i < maViewList.size();)
-            {
-                pView = maViewList[i].get();
-                if (!pView->isMarked())
-                {
-                    maViewList.erase(maViewList.begin() + i);
-                }
-                else
-                {
-                    if (!pView->isPause())
-                        bGlobalPause = false;
+            // delete all unmarked views
+            maViewList.erase(
+                std::remove_if(maViewList.begin(), maViewList.end(),
+                               [](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
+                                   return !pAnimView->isMarked();
+                               }),
+                maViewList.end());
 
-                    pView->setMarked(false);
-                    i++;
-                }
-            }
+            bGlobalPause = std::all_of(maViewList.cbegin(), maViewList.cend(),
+                                       [](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
+                                           return pAnimView->isPause();
+                                       });
+
+            // reset marked state
+            for (auto& pAnimView : maViewList)
+                pAnimView->setMarked(false);
         }
         else
             bGlobalPause = false;
