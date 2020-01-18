@@ -14,7 +14,7 @@
         <property name="can_focus">False</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">3</property>
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
@@ -78,7 +78,7 @@
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">12</property>
+            <property name="spacing">6</property>
             <child>
               <object class="sfxlo-SidebarToolBox" id="fonteffects">
                 <property name="visible">True</property>
@@ -206,7 +206,7 @@
           <object class="GtkBox" id="box4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">12</property>
+            <property name="spacing">6</property>
             <child>
               <object class="sfxlo-SidebarToolBox" id="colorbar_writer">
                 <property name="visible">True</property>
