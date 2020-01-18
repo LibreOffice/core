@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9419e3e8_d3478b01",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-18T20:09:06Z",
+      "side": 1,
+      "message": "I don\u0027t think including these into ImplInitMapModeObjects is ok; iiuc they are flags intended to *modify* (control) the initialization, so they are better outside of this.",
+      "range": {
+        "startLine": 771,
+        "startChar": 4,
+        "endLine": 772,
+        "endChar": 22
+      },
+      "revId": "34ba5015ef1fe77a07d54ab9072e6f93ca48328f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a142dab_7a47ab5a",
+        "filename": "vcl/source/window/window3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-18T20:09:06Z",
+      "side": 1,
+      "message": "Unrelated; please revert",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "34ba5015ef1fe77a07d54ab9072e6f93ca48328f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83b3f353_86205c41",
+        "filename": "vcl/source/window/window3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-18T20:09:06Z",
+      "side": 1,
+      "message": "Unrelated; please revert",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 54
+      },
+      "revId": "34ba5015ef1fe77a07d54ab9072e6f93ca48328f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
