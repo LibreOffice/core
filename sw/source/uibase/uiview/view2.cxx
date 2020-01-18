@@ -1091,7 +1091,6 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_SCROLL_PREV:
         case FN_SCROLL_NEXT:
         {
-            // call the handlers of PageUp/DownButtons, only
             bool *pbNext = new bool(true); // FN_SCROLL_NEXT
             if (nSlot == FN_SCROLL_PREV)
                 *pbNext = false;
