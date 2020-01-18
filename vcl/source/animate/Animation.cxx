@@ -169,28 +169,24 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         if ((pOut->GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maList[mnPos]->mnWait))
         {
-            ImplAnimView* pView;
-            ImplAnimView* pMatch = nullptr;
+            bool differs = true;
 
-            for (size_t i = 0; i < maViewList.size(); ++i)
+            auto itAnimView = std::find_if(
+                maViewList.begin(), maViewList.end(),
+                [pOut, nExtraData](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {
+                    return pAnimView->matches(pOut, nExtraData);
+                });
+
+            if (itAnimView != maViewList.end())
             {
-                pView = maViewList[i].get();
-                if (pView->matches(pOut, nExtraData))
+                if ((*itAnimView)->getOutPos() == rDestPt
+                    && (*itAnimView)->getOutSizePix() == pOut->LogicToPixel(rDestSz))
                 {
-                    if (pView->getOutPos() == rDestPt
-                        && pView->getOutSizePix() == pOut->LogicToPixel(rDestSz))
-                    {
-                        pView->repaint();
-                        pMatch = pView;
-                    }
-                    else
-                    {
-                        maViewList.erase(maViewList.begin() + i);
-                        pView = nullptr;
-                    }
-
-                    break;
+                    (*itAnimView)->repaint();
+                    differs = false;
                 }
+                else
+                    maViewList.erase(itAnimView);
             }
 
             if (maViewList.empty())
@@ -200,7 +196,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
                 mnPos = 0;
             }
 
-            if (!pMatch)
+            if (differs)
                 maViewList.emplace_back(
                     new ImplAnimView(this, pOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev));
 
