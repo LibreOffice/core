@@ -279,8 +279,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
     if (nAnimCount)
     {
-        ImplAnimView* pView;
-        bool bGlobalPause = true;
+        bool bGlobalPause = false;
 
         if (maNotifyLink.IsSet())
         {
@@ -294,6 +293,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             // set view state from AInfo structure
             for (auto& pAInfo : aAInfoList)
             {
+                ImplAnimView* pView = nullptr;
                 if (!pAInfo->pViewData)
                 {
                     pView = new ImplAnimView(this, pAInfo->pOutDev, pAInfo->aStartOrg,
@@ -308,26 +308,19 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                 pView->setMarked(true);
             }
 
-            // delete all unmarked views and reset marked state
-            for (size_t i = 0; i < maViewList.size();)
-            {
-                pView = maViewList[i].get();
-                if (!pView->isMarked())
-                {
-                    maViewList.erase(maViewList.begin() + i);
-                }
-                else
-                {
-                    if (!pView->isPause())
-                        bGlobalPause = false;
+            // delete all unmarked views
+            auto removeStart = std::remove_if(maViewList.begin(), maViewList.end(),
+                                              [](const auto& pView) { return !pView->isMarked(); });
+            maViewList.erase(removeStart, maViewList.cend());
 
-                    pView->setMarked(false);
-                    i++;
-                }
-            }
+            // check if every remaining view is paused
+            bGlobalPause = std::all_of(maViewList.cbegin(), maViewList.cend(),
+                                       [](const auto& pView) { return pView->isPause(); });
+
+            // reset marked state
+            std::for_each(maViewList.cbegin(), maViewList.cend(),
+                          [](const auto& pView) { pView->setMarked(false); });
         }
-        else
-            bGlobalPause = false;
 
         if (maViewList.empty())
             Stop();
@@ -363,7 +356,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             // set from view itself
             for (size_t i = 0; i < maViewList.size();)
             {
-                pView = maViewList[i].get();
+                ImplAnimView* pView = maViewList[i].get();
                 pView->draw(mnPos);
 
                 if (pView->isMarked())
