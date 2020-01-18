@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b91e3714_71a22a6f",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-01-18T11:57:12Z",
+      "side": 1,
+      "message": "Purpose of that change? Do not make unrelated changes.",
+      "revId": "9f20c38f2cc9047e24d9ef3f9e6cf6334826fb69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32ce43d2_4ffebc6e",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-01-18T11:57:12Z",
+      "side": 1,
+      "message": "Wrong indent.",
+      "revId": "9f20c38f2cc9047e24d9ef3f9e6cf6334826fb69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
