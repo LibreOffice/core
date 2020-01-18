@@ -704,4 +704,4 @@ en-US = "OK"
 en-US = "{&DialogDefaultBold}Attention!"
 
 [OOO_CONTROL_328]
-en-US = "LibreOffice help must be installed into the installation directory of LibreOffice program."
+en-US = "The [ProductName] Help must be installed in the same directory as the program."
