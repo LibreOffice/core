@@ -85,7 +85,7 @@ bool isVCLSkiaEnabled()
         bEnable = bEnableSkiaEnv;
 
         if (officecfg::Office::Common::VCL::UseSkia::get())
-            bEnable = false;
+            bEnable = true;
 
         // Force disable in safe mode
         if (Application::IsSafeModeEnabled())
