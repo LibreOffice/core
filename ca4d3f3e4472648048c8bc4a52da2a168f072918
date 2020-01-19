@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72448b49_29114773",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-19T07:18:36Z",
+      "side": 1,
+      "message": "Oh, please let\u0027s not make unnecessary changes! These two lines were below, with specific alignment; moving them up is not necessary for the change. The diff should only show what got different! It\u0027s very important, believe me!",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 667,
+        "endChar": 26
+      },
+      "revId": "ca4d3f3e4472648048c8bc4a52da2a168f072918",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4641ef9f_0a8c67ee",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-19T07:18:36Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 757,
+        "endChar": 22
+      },
+      "revId": "ca4d3f3e4472648048c8bc4a52da2a168f072918",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
