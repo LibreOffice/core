@@ -4527,6 +4527,11 @@ bool SalInstanceTreeView::get_dest_row_at_pos(const Point &rPos, weld::TreeIter*
     return pTarget != nullptr;
 }
 
+tools::Rectangle SalInstanceTreeView::get_row_area(const weld::TreeIter& rIter) const
+{
+    return m_xTreeView->GetBoundingRect(static_cast<const SalInstanceTreeIter&>(rIter).iter);
+}
+
 weld::TreeView* SalInstanceTreeView::get_drag_source() const
 {
     return g_DragSource;

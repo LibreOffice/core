@@ -277,14 +277,14 @@ void ScCheckListMenuControl::launchSubMenu(bool bSetMenuPos)
     if (!mxMenu->get_selected(mxScratchIter.get()))
         return;
 
-    // tools::Rectangle aRect = mxMenu->get_row_area(*mxScratchIter);
-    // ScCheckListMenuControl& rSubMenuControl = pSubMenu->get_widget();
-    // rSubMenuControl.StartPopupMode(aRect, (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
-    // if (bSetMenuPos)
-    //     rSubMenuControl.setSelectedMenuItem(0, false, false); // select menu item after the popup becomes fully visible.
+    tools::Rectangle aRect = mxMenu->get_row_area(*mxScratchIter);
+    ScCheckListMenuControl& rSubMenuControl = pSubMenu->get_widget();
+    rSubMenuControl.StartPopupMode(aRect, (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
+    if (bSetMenuPos)
+        rSubMenuControl.setSelectedMenuItem(0, false); // select menu item after the popup becomes fully visible.
 
-    // mxMenu->select(*mxScratchIter);
-    // rSubMenuControl.GrabFocus();
+    mxMenu->select(*mxScratchIter);
+    rSubMenuControl.GrabFocus();
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PostPopdownHdl, void*, void)
