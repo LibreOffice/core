@@ -1024,6 +1024,7 @@ public:
 
     // for dnd
     virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;
+    virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const = 0;
     // for dragging and dropping between TreeViews, return the active source
     virtual TreeView* get_drag_source() const = 0;
 

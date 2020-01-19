@@ -1402,6 +1402,8 @@ public:
 
     virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) override;
 
+    virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override;
+
     virtual TreeView* get_drag_source() const override;
 
     void set_show_expanders(bool bShow) override;
