@@ -298,7 +298,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     }
                 }
             }
-            m_bDelete = false;
         }
         break;
 
@@ -466,6 +465,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case ContentTypeId::DRAWOBJECT:
         {
             m_sTypeToken.clear();
+            m_bEdit = true;
             m_nMemberCount = 0;
             SwDrawModel* pModel = m_pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
             if(pModel)
@@ -1217,12 +1217,12 @@ static void lcl_InsertExpandCollapseAllItem(SwContentTree* pContentTree, SvTreeL
 
 VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 {
+    bool bOutline(false);
+
     auto pPop = VclPtr<PopupMenu>::Create();
     VclPtrInstance<PopupMenu> pSubPop1;
     VclPtrInstance<PopupMenu> pSubPop2;
     VclPtrInstance<PopupMenu> pSubPop3;
-    VclPtrInstance<PopupMenu> pSubPop4; // Edit
-    bool bSubPop4 = false;
 
     for(int i = 1; i <= MAXLEVEL; ++i)
     {
@@ -1269,10 +1269,6 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     else if (State::HIDDEN == m_eState)
         pSubPop3->CheckItem( nId );
 
-    pPop->InsertItem( 1, m_aContextStrings[IDX_STR_OUTLINE_LEVEL]);
-    pPop->InsertItem(2, m_aContextStrings[IDX_STR_DRAGMODE]);
-    pPop->InsertItem(3, m_aContextStrings[IDX_STR_DISPLAY]);
-    // Now edit
     SvTreeListEntry* pEntry = nullptr;
     // Edit only if the shown content is coming from the current view.
     if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
@@ -1294,70 +1290,69 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 ContentTypeId::GRAPHIC == nContentType ||
                 ContentTypeId::OLE == nContentType ||
                 ContentTypeId::BOOKMARK == nContentType ||
-                ContentTypeId::REGION == nContentType||
-                ContentTypeId::INDEX == nContentType);
+                ContentTypeId::REGION == nContentType ||
+                ContentTypeId::INDEX == nContentType ||
+                ContentTypeId::DRAWOBJECT == nContentType);
 
         if(!bReadonly && (bEditable || bDeletable))
         {
             if(ContentTypeId::INDEX == nContentType)
             {
-                bSubPop4 = true;
-                pSubPop4->InsertItem(401, m_sRemoveIdx);
-                pSubPop4->InsertItem(402, m_sUpdateIdx);
+                pPop->InsertItem(401, m_sRemoveIdx);
+                pPop->InsertItem(402, m_sUpdateIdx);
 
                 const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pEntry->GetUserData())->GetTOXBase();
                 if(!pBase->IsTOXBaseInReadonly())
-                    pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
-                pSubPop4->InsertItem(405, m_sReadonlyIdx);
+                    pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
+                pPop->InsertItem(405, m_sReadonlyIdx);
 
-                pSubPop4->CheckItem( 405, SwEditShell::IsTOXBaseReadonly(*pBase));
-                pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
+                pPop->CheckItem( 405, SwEditShell::IsTOXBaseReadonly(*pBase));
+                pPop->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
             }
             else if(ContentTypeId::TABLE == nContentType)
             {
-                bSubPop4 = true;
-                pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
-                pSubPop4->InsertItem(404, m_sUnprotTable);
+                pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
+                pPop->InsertItem(404, m_sUnprotTable);
                 bool bFull = false;
                 OUString sTableName = static_cast<SwContent*>(pEntry->GetUserData())->GetName();
                 bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
-                pSubPop4->EnableItem(403, !bFull );
-                pSubPop4->EnableItem(404, bProt );
-                pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
+                pPop->EnableItem(403, !bFull );
+                pPop->EnableItem(404, bProt );
+                pPop->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
+            }
+            else if(ContentTypeId::OUTLINE == nContentType)
+            {
+                bOutline = true;
+                lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
+                pPop->InsertSeparator();
+                pPop->InsertItem(501, SwResId(STR_DELETE_CHAPTER));
+                pPop->InsertItem(801, SwResId(STR_PROMOTE_CHAPTER));
+                pPop->InsertItem(802, SwResId(STR_DEMOTE_CHAPTER));
+                pPop->InsertItem(803, SwResId(STR_PROMOTE_LEVEL));
+                pPop->InsertItem(804, SwResId(STR_DEMOTE_LEVEL));
+            }
+            else if(ContentTypeId::DRAWOBJECT == nContentType)
+            {
+                pPop->InsertItem(501, SwResId(STR_DELETE_ENTRY));
             }
             else
             {
-
                 if(bEditable && bDeletable)
                 {
-                    pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
-                    pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
-                    bSubPop4 = true;
+                    pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
+                    pPop->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
                 }
                 else if(bEditable)
                     pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
                 else if(bDeletable)
                 {
-                    pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
+                    pPop->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
                 }
             }
             //Rename object
             if(bRenamable)
-            {
-                if(bSubPop4)
-                    pSubPop4->InsertItem(502, m_sRename);
-                else
-                    pPop->InsertItem(502, m_sRename);
-            }
-
-            if(bSubPop4)
-            {
-                pPop->InsertItem(4, pContType->GetSingleName());
-                pPop->SetPopupMenu(4, pSubPop4);
-            }
+                pPop->InsertItem(502, m_sRename);
         }
-        else if(ContentTypeId::OUTLINE == nContentType)
-            lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
     }
     else if( pEntry )
     {
@@ -1365,26 +1360,32 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if(ContentTypeId::OUTLINE == pType->GetType())
         {
+            bOutline = true;
             lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
             pPop->InsertSeparator();
             pPop->InsertItem(700, m_aContextStrings[IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY]);
         }
         if ( (pType->GetType() == ContentTypeId::POSTIT) &&  (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
         {
-            bSubPop4 = true;
-            pSubPop4->InsertItem(600, m_sPostItShow );
-            pSubPop4->InsertItem(601, m_sPostItHide );
-            pSubPop4->InsertItem(602, m_sPostItDelete );
-            pPop->InsertItem(4, pType->GetSingleName());
-            pPop->SetPopupMenu(4, pSubPop4);
+            pPop->InsertItem(600, m_sPostItShow );
+            pPop->InsertItem(601, m_sPostItHide );
+            pPop->InsertItem(602, m_sPostItDelete );
         }
     }
 
-    pPop->SetPopupMenu( 1, pSubPop1 );
-    pPop->SetPopupMenu( 2, pSubPop2 );
-    pPop->SetPopupMenu( 3, pSubPop3 );
-    if (!bSubPop4)
-        pSubPop4.disposeAndClear();
+    pPop->InsertSeparator();
+    if (bOutline)
+    {
+        pPop->InsertItem(1, m_aContextStrings[IDX_STR_OUTLINE_LEVEL]);
+        pPop->SetPopupMenu(1, pSubPop1);
+    }
+    else
+        pSubPop1.disposeAndClear();
+    pPop->InsertItem(2, m_aContextStrings[IDX_STR_DRAGMODE]);
+    pPop->SetPopupMenu(2, pSubPop2);
+    pPop->InsertItem(3, m_aContextStrings[IDX_STR_DISPLAY]);
+    pPop->SetPopupMenu(3, pSubPop3);
+
     return pPop;
 }
 
@@ -3308,6 +3309,18 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case 800:
             KeyInput(KeyEvent(0, KEY_MOD1|KEY_MULTIPLY));
             break;
+        case 801:
+            ExecCommand("up", true);
+            break;
+        case 802:
+            ExecCommand("down", true);
+            break;
+        case 803:
+            ExecCommand("promote", true);
+            break;
+        case 804:
+            ExecCommand("demote", true);
+            break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
@@ -3604,9 +3617,28 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
             }
         }
         break;
+        case ContentTypeId::OUTLINE :
+            if(EditEntryMode::DELETE == nMode)
+            {
+                SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos();
+                SwWrtShell* pShell = m_pActiveShell;
+                pShell->StartAllAction();
+                pShell->StartUndo();
+                pShell->Push();
+                pShell->MakeOutlineSel(nActPos, nActPos, true);
+                pShell->SetTextFormatColl(nullptr);
+                pShell->Delete();
+                pShell->ClearMark();
+                pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+                pShell->EndUndo();
+                pShell->EndAllAction();
+            }
+        break;
         case ContentTypeId::DRAWOBJECT :
             if(EditEntryMode::DELETE == nMode)
                 nSlot = SID_DELETE;
+            else if(nMode == EditEntryMode::RENAME)
+                nSlot = FN_NAME_SHAPE;
         break;
         default: break;
     }
