@@ -58,6 +58,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/colritem.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/datetime.hxx>
 
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -5988,17 +5989,7 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
 
     if (rWord[0] == '2')
     {
-        (*pCalendar)->setGregorianDateTime(Date(Date::SYSTEM)); // tdf#130066: reset today
-        OUStringBuffer rStr("");
-        rStr.append(sal::static_int_cast< sal_Int32 >((*pCalendar)->getValue(i18n::CalendarFieldIndex::YEAR))).append("-");
-        sal_Int32 nMonth = sal::static_int_cast< sal_Int32 >((*pCalendar)->getValue(i18n::CalendarFieldIndex::MONTH)+1);
-        sal_Int32 nDay = sal::static_int_cast< sal_Int32 > ((*pCalendar)->getValue(i18n::CalendarFieldIndex::DAY_OF_MONTH));
-        if (nMonth < 10)
-            rStr.append("0");
-        rStr.append(nMonth).append("-");
-        if (nDay < 10)
-            rStr.append("0");
-        rStrToday = rStr.append(nDay).toString();
+        rStrToday = utl::toISO8601(DateTime(Date::SYSTEM).GetUNODateTime());
 
         // do not suggest for single years, for example for "2016",
         // only for "201" or "2016-..." (to avoid unintentional text
