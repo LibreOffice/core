@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d870ee7b_6ece7d54",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-19T17:18:57Z",
+      "side": 1,
+      "message": "This last iteration appears redundant to me - obviously for the remaining entries in maViewList, mbIsMarked must be false already (as remove_if just kicked out all those with isMarked() \u003d\u003d true)",
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d6b6164_4421270d",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
