@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "940631ca_44b1f4b9",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-19T08:28:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "72448b49_29114773",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 667,
+        "endChar": 26
+      },
+      "revId": "ca4d3f3e4472648048c8bc4a52da2a168f072918",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4641ef9f_0a8c67ee",
         "filename": "vcl/source/outdev/map.cxx",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "ca4d3f3e4472648048c8bc4a52da2a168f072918",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df883be9_9f29f557",
+        "filename": "vcl/source/outdev/map.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-19T08:28:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4641ef9f_0a8c67ee",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 757,
+        "endChar": 22
+      },
+      "revId": "ca4d3f3e4472648048c8bc4a52da2a168f072918",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
