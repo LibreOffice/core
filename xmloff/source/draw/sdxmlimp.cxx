@@ -77,9 +77,10 @@ SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
 SvXMLImportContextRef SdXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
         const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
-    return GetSdImport().CreateBodyContext(rLocalName, xAttrList);
+    SvXMLImportContext* pContext = new SdXMLBodyContext(GetSdImport(), rLocalName);
+    return pContext;
 }
 
 namespace {
@@ -177,7 +178,7 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & SvXMLImportFlags::SCRIPTS )
             {
                 // office:script inside office:document
-                xContext = GetSdImport().CreateScriptContext( rLocalName );
+                xContext = new XMLScriptContext( GetSdImport(), rLocalName, GetSdImport().GetModel() );
             }
             break;
         }
@@ -707,13 +708,6 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 /*nElement*/,
     return pContext;
 }
 
-SvXMLImportContext *SdXMLImport::CreateBodyContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>&)
-{
-    SvXMLImportContext* pContext = new SdXMLBodyContext(*this, rLocalName);
-    return pContext;
-}
-
 SvXMLStylesContext *SdXMLImport::CreateStylesContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -755,13 +749,6 @@ SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalNa
                                       osl_getThreadTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
-}
-
-SvXMLImportContext *SdXMLImport::CreateScriptContext(
-                                       const OUString& rLocalName )
-{
-    SvXMLImportContext *pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
-    return pContext;
 }
 
 void SdXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps)

@@ -202,9 +202,6 @@ public:
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext* CreateMetaContext(const sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
-    SvXMLImportContext* CreateScriptContext( const OUString& rLocalName );
-    SvXMLImportContext* CreateBodyContext(const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLStylesContext* CreateStylesContext(const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLStylesContext* CreateAutoStylesContext(const OUString& rLocalName,
