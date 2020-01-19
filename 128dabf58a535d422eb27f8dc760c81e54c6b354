@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfcc80b3_518f04d7",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf",
+        "patchSetId": 8
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-01-19T00:24:08Z",
+      "side": 1,
+      "message": "Potential confusion.   MS directory structure has \"LibreOffice\" as  top directory and \"help\" and \"program\" as subdirectories.  Will this be misunderstood to mean that help should be installed as a subdirectory of the \"program\" subdirectory?  How about:  \"LibreOffice help must be installed in the directory where LibreOffice is installed.\"",
+      "range": {
+        "startLine": 707,
+        "startChar": 79,
+        "endLine": 707,
+        "endChar": 98
+      },
+      "revId": "128dabf58a535d422eb27f8dc760c81e54c6b354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4db0550d_fea8596f",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Control.ulf",
+        "patchSetId": 8
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-01-19T00:24:08Z",
+      "side": 1,
+      "message": "in",
+      "range": {
+        "startLine": 707,
+        "startChar": 44,
+        "endLine": 707,
+        "endChar": 49
+      },
+      "revId": "128dabf58a535d422eb27f8dc760c81e54c6b354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
