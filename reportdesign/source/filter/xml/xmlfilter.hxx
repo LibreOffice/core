@@ -101,10 +101,6 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 protected:
     // SvXMLImport
-    virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
@@ -133,7 +129,6 @@ public:
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
 
-    const SvXMLTokenMap& GetDocElemTokenMap() const;
     const SvXMLTokenMap& GetDocContentElemTokenMap() const;
     const SvXMLTokenMap& GetReportElemTokenMap() const;
     const SvXMLTokenMap& GetGroupElemTokenMap() const;

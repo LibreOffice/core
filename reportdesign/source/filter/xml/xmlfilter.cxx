@@ -590,11 +590,18 @@ namespace {
 class RptXMLDocumentSettingsContext : public SvXMLImportContext
 {
 public:
-    RptXMLDocumentSettingsContext(SvXMLImport & rImport,
-           sal_uInt16 const nPrefix,
-           const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    RptXMLDocumentSettingsContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
+    }
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+    {
+        return nullptr;
     }
 
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
@@ -612,11 +619,18 @@ public:
 class RptXMLDocumentStylesContext : public SvXMLImportContext
 {
 public:
-    RptXMLDocumentStylesContext(SvXMLImport & rImport,
-            sal_uInt16 const nPrefix,
-            const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    RptXMLDocumentStylesContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
+    }
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+    {
+        return nullptr;
     }
 
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
@@ -687,11 +701,18 @@ namespace {
 class RptXMLDocumentContentContext : public SvXMLImportContext
 {
 public:
-    RptXMLDocumentContentContext(SvXMLImport & rImport,
-            sal_uInt16 const nPrefix,
-            const OUString& rLocalName)
-        : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    RptXMLDocumentContentContext(SvXMLImport & rImport)
+        : SvXMLImportContext(rImport)
     {
+    }
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+    {
+        return nullptr;
     }
 
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
@@ -725,30 +746,6 @@ public:
 
 }
 
-SvXMLImportContext* ORptFilter::CreateDocumentContext( sal_uInt16 nPrefix,
-                                      const OUString& rLocalName,
-                                      const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = GetDocElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-        case XML_TOK_DOC_SETTINGS:
-            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new RptXMLDocumentSettingsContext(*this, nPrefix, rLocalName);
-            break;
-        case XML_TOK_DOC_STYLES:
-            pContext = new RptXMLDocumentStylesContext(*this, nPrefix, rLocalName);
-            break;
-        case XML_TOK_DOC_CONTENT:
-            pContext = new RptXMLDocumentContentContext(*this, nPrefix, rLocalName);
-            break;
-    }
-
-    return pContext;
-}
-
 SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
@@ -760,25 +757,18 @@ SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = CreateMetaContext( nElement );
             break;
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_CONTENT ):
+            pContext = new RptXMLDocumentContentContext(*this);
+            break;
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_STYLES ):
+            pContext = new RptXMLDocumentStylesContext(*this);
+            break;
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_SETTINGS ):
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = new RptXMLDocumentSettingsContext(*this);
+            break;
     }
     return pContext;
-}
-
-const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
-{
-    if (!m_pDocElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_SETTINGS,  XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_CONTENT,   XML_TOK_DOC_CONTENT     },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_STYLES,    XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,      XML_TOK_DOC_META        },
-            XML_TOKEN_MAP_END
-        };
-        m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDocElemTokenMap;
 }
 
 const SvXMLTokenMap& ORptFilter::GetDocContentElemTokenMap() const
