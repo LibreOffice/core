@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a57f1c82_04a3457b",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-19T18:17:44Z",
+      "side": 1,
+      "message": "No, we previously removed the elements for which isMarked() is false (!pAnimView-\u003eisMarked()).",
+      "parentUuid": "d870ee7b_6ece7d54",
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d6b6164_4421270d",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
