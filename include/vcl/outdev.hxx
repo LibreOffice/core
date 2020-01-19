@@ -301,7 +301,7 @@ typedef struct _cairo_surface cairo_surface_t;
 * so we need to use virtual inheritance to keep the referencing counting
 * OK.
 */
-class VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
+class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
 {
     friend class Printer;
     friend class VirtualDevice;
