@@ -4745,6 +4745,11 @@ public:
         return pTarget != nullptr;
     }
 
+    virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override
+    {
+        return m_xTreeView->GetBoundingRect(static_cast<const SalInstanceTreeIter&>(rIter).iter);
+    }
+
     virtual TreeView* get_drag_source() const override
     {
         return g_DragSource;
