@@ -532,4 +532,13 @@
       </packing>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="labelHorzAlign"/>
+      <widget name="labelVertAlign"/>
+      <widget name="labelDegrees"/>
+      <widget name="labelRefEdge"/>
+      <widget name="LabelTxtDir"/>
+    </widgets>
+  </object>
 </interface>
