@@ -4098,6 +4098,19 @@ if test "$enable_split_debug" != no; then
 fi
 AC_SUBST(HAVE_GCC_SPLIT_DWARF)
 
+HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR=
+AC_MSG_CHECKING([whether $CC_BASE supports -Xclang -debug-info-kind=constructor])
+save_CFLAGS=$CFLAGS
+CFLAGS="$CFLAGS -Werror -Xclang -debug-info-kind=constructor"
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR=TRUE ],[])
+CFLAGS=$save_CFLAGS
+if test "$HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR" = "TRUE"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR)
+
 ENABLE_GDB_INDEX=
 if test "$enable_gdb_index" != "no"; then
     dnl Currently by default enabled only on Linux, feel free to set test_gdb_index above also for other platforms.

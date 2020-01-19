@@ -221,6 +221,10 @@ ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
 gb_DEBUGINFO_FLAGS+=-gsplit-dwarf
 endif
 
+ifeq ($(HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR),TRUE)
+gb_DEBUGINFO_FLAGS+=-Xclang -debug-info-kind=constructor
+endif
+
 ifeq ($(ENABLE_GDB_INDEX),TRUE)
 gb_LINKER_DEBUGINFO_FLAGS += -Wl,--gdb-index
 gb_DEBUGINFO_FLAGS += -ggnu-pubnames
