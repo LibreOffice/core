@@ -32,7 +32,6 @@
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
-using ::com::sun::star::xml::sax::XFastAttributeList;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -53,31 +52,54 @@ XMLSectionSourceImportContext::~XMLSectionSourceImportContext()
 {
 }
 
-
-void XMLSectionSourceImportContext::startFastElement(sal_Int32 /*nElement*/,
-    const Reference<XFastAttributeList> & xAttrList)
+namespace {
+enum XMLSectionSourceToken
 {
+    XML_TOK_SECTION_XLINK_HREF,
+    XML_TOK_SECTION_TEXT_FILTER_NAME,
+    XML_TOK_SECTION_TEXT_SECTION_NAME
+};
+
+}
+
+static const SvXMLTokenMapEntry aSectionSourceTokenMap[] =
+{
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
+    { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },
+    { XML_NAMESPACE_TEXT, XML_SECTION_NAME,
+                                        XML_TOK_SECTION_TEXT_SECTION_NAME },
+    XML_TOKEN_MAP_END
+};
+
+
+void XMLSectionSourceImportContext::StartElement(
+    const Reference<XAttributeList> & xAttrList)
+{
+    static const SvXMLTokenMap aTokenMap(aSectionSourceTokenMap);
     OUString sURL;
     OUString sFilterName;
     OUString sSectionName;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-    for (auto &aIter : *pAttribList)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
-        switch (aIter.getToken())
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                              &sLocalName );
+
+        switch (aTokenMap.Get(nPrefix, sLocalName))
         {
-            case XML_ELEMENT(XLINK, XML_HREF):
-                sURL = aIter.toString();
+            case XML_TOK_SECTION_XLINK_HREF:
+                sURL = xAttrList->getValueByIndex(nAttr);
                 break;
 
-            case XML_ELEMENT(TEXT, XML_FILTER_NAME):
-                sFilterName = aIter.toString();
+            case XML_TOK_SECTION_TEXT_FILTER_NAME:
+                sFilterName = xAttrList->getValueByIndex(nAttr);
                 break;
 
-            case XML_ELEMENT(TEXT, XML_SECTION_NAME):
-                sSectionName = aIter.toString();
+            case XML_TOK_SECTION_TEXT_SECTION_NAME:
+                sSectionName = xAttrList->getValueByIndex(nAttr);
                 break;
 
             default:
@@ -105,7 +127,7 @@ void XMLSectionSourceImportContext::startFastElement(sal_Int32 /*nElement*/,
     }
 }
 
-void XMLSectionSourceImportContext::endFastElement(sal_Int32 /*nElement*/)
+void XMLSectionSourceImportContext::EndElement()
 {
     // this space intentionally left blank.
 }
