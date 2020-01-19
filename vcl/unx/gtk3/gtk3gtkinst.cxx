@@ -10189,6 +10189,27 @@ public:
         return ret;
     }
 
+    virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override
+    {
+        tools::Rectangle aRet;
+
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* pPath = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+
+        GdkRectangle aRect;
+        for (GList* pEntry = g_list_last(m_pColumns); pEntry; pEntry = g_list_previous(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            gtk_tree_view_get_cell_area(m_pTreeView, pPath, pColumn, &aRect);
+            aRet.Union(tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height));
+        }
+
+        gtk_tree_path_free(pPath);
+
+        return aRet;
+    }
+
     virtual void start_editing(const weld::TreeIter& rIter) override
     {
         int col = get_view_col(m_nTextCol);
