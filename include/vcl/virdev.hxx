@@ -29,7 +29,7 @@ class SalVirtualDevice;
 struct SystemGraphicsData;
 typedef struct _cairo_surface cairo_surface_t;
 
-class VCL_DLLPUBLIC VirtualDevice : public OutputDevice
+class SAL_WARN_UNUSED VCL_DLLPUBLIC VirtualDevice : public OutputDevice
 {
     friend class Application;
     friend class ::OutputDevice;
