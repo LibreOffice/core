@@ -6841,7 +6841,7 @@ class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
 protected:
     std::vector<GtkMenuItem*> m_aExtraItems;
     OString m_sActivated;
-    GtkInstanceMenuButton* m_pTopLevelMenuButton;
+    MenuHelper* m_pTopLevelMenuHelper;
 
 private:
     virtual void signal_activate(GtkMenuItem* pItem) override
@@ -6855,10 +6855,10 @@ private:
     {
         if (m_aExtraItems.empty())
             return;
-        if (m_pTopLevelMenuButton)
+        if (m_pTopLevelMenuHelper)
         {
             for (auto a : m_aExtraItems)
-                m_pTopLevelMenuButton->remove_from_map(a);
+                m_pTopLevelMenuHelper->remove_from_map(a);
         }
         m_aExtraItems.clear();
     }
@@ -6866,8 +6866,9 @@ private:
 public:
     GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
         : MenuHelper(pMenu, bTakeOwnership)
-        , m_pTopLevelMenuButton(nullptr)
+        , m_pTopLevelMenuHelper(nullptr)
     {
+        g_object_set_data(G_OBJECT(m_pMenu), "g-lo-GtkInstanceMenu", this);
         // tdf#122527 if we're welding a submenu of a menu of a MenuButton,
         // then find that MenuButton parent so that when adding items to this
         // menu we can inform the MenuButton of their addition
@@ -6884,11 +6885,18 @@ public:
         }
         if (pTopLevelMenu != pMenu)
         {
+            // maybe the toplevel is a menubutton
             GtkWidget* pAttached = gtk_menu_get_attach_widget(pTopLevelMenu);
             if (pAttached && GTK_IS_MENU_BUTTON(pAttached))
             {
                 void* pData = g_object_get_data(G_OBJECT(pAttached), "g-lo-GtkInstanceButton");
-                m_pTopLevelMenuButton = dynamic_cast<GtkInstanceMenuButton*>(static_cast<GtkInstanceButton*>(pData));
+                m_pTopLevelMenuHelper = dynamic_cast<GtkInstanceMenuButton*>(static_cast<GtkInstanceButton*>(pData));
+            }
+            // or maybe a menu
+            if (!m_pTopLevelMenuHelper)
+            {
+                void* pData = g_object_get_data(G_OBJECT(pTopLevelMenu), "g-lo-GtkInstanceMenu");
+                m_pTopLevelMenuHelper = static_cast<GtkInstanceMenu*>(pData);
             }
         }
     }
@@ -7042,8 +7050,8 @@ public:
         GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
         m_aExtraItems.push_back(pMenuItem);
         add_to_map(pMenuItem);
-        if (m_pTopLevelMenuButton)
-            m_pTopLevelMenuButton->add_to_map(pMenuItem);
+        if (m_pTopLevelMenuHelper)
+            m_pTopLevelMenuHelper->add_to_map(pMenuItem);
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
@@ -7051,6 +7059,7 @@ public:
     virtual ~GtkInstanceMenu() override
     {
         clear_extras();
+        g_object_steal_data(G_OBJECT(m_pMenu), "g-lo-GtkInstanceMenu");
     }
 };
 
