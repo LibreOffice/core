@@ -7056,6 +7056,14 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 
+    virtual int n_children() const override
+    {
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+        int nLen = g_list_length(pChildren);
+        g_list_free(pChildren);
+        return nLen;
+    }
+
     virtual ~GtkInstanceMenu() override
     {
         clear_extras();
