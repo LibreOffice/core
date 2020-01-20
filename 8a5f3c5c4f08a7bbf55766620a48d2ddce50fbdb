@@ -178,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "b329984f_36a96379",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-20T15:38:06Z",
+      "side": 1,
+      "message": "You confuse clarity - which improves understanding - with verbosity - which most of the time makes things more difficult. Being explicit and adding more obvious stuff will not improve understanding by people who are not very used to lambda syntax, but who are really good programmers. It will only make it look ugly.",
+      "parentUuid": "ca4e3cee_6302551b",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 91
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c0cc0c7_af0065e3",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
