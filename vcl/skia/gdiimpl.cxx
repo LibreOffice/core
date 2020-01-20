@@ -542,7 +542,11 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
-    getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
+    // Raster has better results if shifted by 0.25 (unlike the 0.5 done by toSkX/toSkY).
+    if (!isGPU())
+        getDrawCanvas()->drawLine(nX1 + 0.25, nY1 + 0.25, nX2 + 0.25, nY2 + 0.25, paint);
+    else
+        getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
     if (mXorMode) // limit xor area update
         mXorExtents = SkRect::MakeLTRB(nX1, nY1, nX2 + 1, nY2 + 1);
     postDraw();
@@ -656,7 +660,10 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        if (isGPU()) // Apply the same adjustment as toSkX()/toSkY() do.
+        // Raster has better results if shifted by 0.25 (unlike the 0.5 done by toSkX/toSkY).
+        if (!isGPU())
+            aPath.offset(0.25, 0.25, nullptr);
+        else // Apply the same adjustment as toSkX()/toSkY() do.
             aPath.offset(0.5, 0.5, nullptr);
         aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         aPaint.setStyle(SkPaint::kStroke_Style);
