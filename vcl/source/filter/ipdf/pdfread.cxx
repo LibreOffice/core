@@ -325,7 +325,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     // dummy Bitmap
     Bitmap aBitmap(Size(1, 1), 24);
 
-    for (size_t nPageIndex = 0; nPageIndex < static_cast<size_t>(nPageCount); ++nPageIndex)
+    for (int nPageIndex = 0; nPageIndex < nPageCount; ++nPageIndex)
     {
         double fPageWidth = 0;
         double fPageHeight = 0;
