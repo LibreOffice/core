@@ -69,11 +69,6 @@ SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPr
             GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
-    // call parent when no own context was created
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext(
-        nPrefix, rLocalName, xAttrList);
-
     return xContext;
 }
 

@@ -697,9 +697,6 @@ SvXMLImportContextRef XMLImpRubyContext_Impl::CreateChildContext(
                                                        xAttrList,
                                                        *this );
     }
-    else
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
-                                                            xAttrList );
 
     return xContext;
 }
@@ -2316,11 +2313,6 @@ SvXMLImportContextRef XMLNumberedParaContext::CreateChildContext(
             xContext = new XMLParaContext( GetImport(),
                 i_nPrefix, i_rLocalName, i_xAttrList, bIsHeader );
         }
-    }
-
-    if (!xContext) {
-        xContext = SvXMLImportContext::CreateChildContext(
-            i_nPrefix, i_rLocalName, i_xAttrList );
     }
 
     return xContext;

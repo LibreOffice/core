@@ -276,7 +276,7 @@ void XMLIndexTOCContext::EndElement()
 SvXMLImportContextRef XMLIndexTOCContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -344,13 +344,6 @@ SvXMLImportContextRef XMLIndexTOCContext::CreateChildContext(
         // else: no text: namespace -> ignore
     }
     // else: not valid -> ignore
-
-    // default: ignore
-    if (!xContext)
-    {
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                          xAttrList);
-    }
 
     return xContext;
 }

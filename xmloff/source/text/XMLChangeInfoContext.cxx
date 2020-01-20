@@ -56,7 +56,7 @@ void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
 SvXMLImportContextRef XMLChangeInfoContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList >& xAttrList )
+    const Reference<XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -75,12 +75,6 @@ SvXMLImportContextRef XMLChangeInfoContext::CreateChildContext(
     {
         xContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                                    rLocalName, sCommentBuffer);
-    }
-
-    if (!xContext)
-    {
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                          xAttrList);
     }
 
     return xContext;

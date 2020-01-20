@@ -176,10 +176,6 @@ SvXMLImportContextRef DrawAnnotationContext::CreateChildContext( sal_uInt16 nPre
         }
     }
 
-    // call parent for content
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-
     return xContext;
 }
 
@@ -273,10 +269,6 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
         xContext = GetImport().GetShapeImport()->CreateGroupChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
     }
-
-    // call parent when no own context was created
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return xContext;
 }

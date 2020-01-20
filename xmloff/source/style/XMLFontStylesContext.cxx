@@ -228,7 +228,7 @@ SvXMLImportContextRef XMLFontStyleContextFontFaceSrc::CreateChildContext(
 {
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_URI ))
         return new XMLFontStyleContextFontFaceUri( GetImport(), nPrefix, rLocalName, xAttrList, font );
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return nullptr;
 }
 
 
@@ -254,7 +254,7 @@ SvXMLImportContextRef XMLFontStyleContextFontFaceUri::CreateChildContext(
         if( mxBase64Stream.is() )
             return new XMLBase64ImportContext( GetImport(), nPrefix, rLocalName, xAttrList, mxBase64Stream );
     }
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return nullptr;
 }
 
 void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,

@@ -217,7 +217,7 @@ SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
 SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -285,12 +285,6 @@ SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
     }
 
     // ignore unknown
-    if (nullptr == pContext)
-    {
-        return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                      xAttrList);
-    }
-
     return pContext;
 }
 

@@ -621,14 +621,11 @@ SchXMLDataLabelContext::SchXMLDataLabelContext( SvXMLImport& rImport, const OUSt
 SvXMLImportContextRef SchXMLDataLabelContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
     if ( IsXMLToken( rLocalName, XML_P ) && nPrefix == XML_NAMESPACE_TEXT )
         xContext = new SchXMLDataLabelParaContext(GetImport(), rLocalName, mrLabels);
-
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return xContext;
 }

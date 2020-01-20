@@ -88,7 +88,7 @@ void SchXMLRegressionCurveObjectContext::StartElement( const uno::Reference< xml
 SvXMLImportContextRef SchXMLRegressionCurveObjectContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -96,10 +96,6 @@ SvXMLImportContextRef SchXMLRegressionCurveObjectContext::CreateChildContext(
     {
         xContext = new SchXMLEquationContext(
             mrImportHelper, GetImport(), nPrefix, rLocalName, maChartSize, mrRegressionStyleVector.back());
-    }
-    else
-    {
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     }
 
     return xContext;

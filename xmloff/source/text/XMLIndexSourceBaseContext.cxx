@@ -215,7 +215,7 @@ void XMLIndexSourceBaseContext::EndElement()
 SvXMLImportContextRef XMLIndexSourceBaseContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -237,13 +237,6 @@ SvXMLImportContextRef XMLIndexSourceBaseContext::CreateChildContext(
         // else: unknown element in text namespace -> ignore
     }
     // else: unknown namespace -> ignore
-
-    // use default context
-    if (!xContext)
-    {
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                          xAttrList);
-    }
 
     return xContext;
 }

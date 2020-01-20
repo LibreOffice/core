@@ -107,7 +107,6 @@ SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
         case XML_TOK_DOC_META:
             // we come here in the flat ODF file format,
             // if XDocumentPropertiesSupplier is not supported at the model
-            xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
     }
 

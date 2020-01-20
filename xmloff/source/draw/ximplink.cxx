@@ -62,8 +62,7 @@ SvXMLImportContextRef SdXMLShapeLinkContext::CreateChildContext( sal_uInt16 nPre
         return pContext;
     }
 
-    // call parent when no own context was created
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
+    return nullptr;
 
 }
 
