@@ -248,8 +248,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx))
             || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 && IsDestroyFrameAnchoredAtChar(*pAPos, rStart, rEnd, pPtIdx
-                    ? DelContentType::AllMask
-                    : DelContentType::AllMask|DelContentType::CheckNoCntnt))))
+                    ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                    : DelContentType::AllMask|DelContentType::WriterfilterHack|DelContentType::CheckNoCntnt))))
         {
             // Only move the Anchor??
             if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)

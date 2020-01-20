@@ -2241,7 +2241,7 @@ SwXText::copyText(
 
     SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
     SwPosition rPos( rNdIndex );
-    m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/true);
+    m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*pCursor->GetPaM(), rPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
 }
 
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)
