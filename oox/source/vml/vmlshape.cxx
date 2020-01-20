@@ -792,6 +792,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                 xShape->setSize(aSize);
             }
         }
+
+        PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
+                                           makeAny(maTypeModel.mbAutoHeight));
     }
 
     // Import Legacy Fragments (if any)

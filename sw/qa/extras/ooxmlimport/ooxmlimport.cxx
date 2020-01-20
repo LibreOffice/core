@@ -569,8 +569,9 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
 
 #if HAVE_MORE_FONTS
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
-    // This was 887, i.e. border distances were included in the height.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(661), xShape->getSize().Height);
+    // This was true, a VML textbox without <v:textbox style="mso-fit-shape-to-text:t"> had
+    // auto-grow on.
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, "TextAutoGrowHeight"));
     // Paragraph Style Normal should provide the font name - which slightly affects the shape's height (was 686)
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font", OUString("Times New Roman"), getProperty<OUString>(getRun(xText, 1), "CharFontName"));
