@@ -135,12 +135,12 @@ enum class DelContentType : sal_uInt16
     Fly          = 0x02,
     Bkm          = 0x08,
     AllMask      = 0x0b,
+    WriterfilterHack = 0x20,
     ExcludeAtCharFlyAtStartEnd = 0x40,
     CheckNoCntnt = 0x80,
-    CopyText = 0x100,
 };
 namespace o3tl {
-    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0x1cb> {};
+    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0xeb> {};
 }
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
