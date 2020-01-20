@@ -1527,7 +1527,7 @@ void SwDoc::SetAllUniqueFlyNames()
         // #i52775# Chapter footnotes did not get updated correctly.
         // Calling UpdateAllFootnote() instead of UpdateFootnote() solves this problem,
         // but I do not dare to call UpdateAllFootnote() in all cases: Safety first.
-        if ( FTNNUM_CHAPTER == GetFootnoteInfo().eNum )
+        if ( FTNNUM_CHAPTER == GetFootnoteInfo().m_eNum )
         {
             GetFootnoteIdxs().UpdateAllFootnote();
         }

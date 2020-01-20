@@ -832,7 +832,7 @@ bool SwFrame::IsFootnoteAllowed() const
 void SwRootFrame::UpdateFootnoteNums()
 {
     // page numbering only if set at the document
-    if ( GetFormat()->GetDoc()->GetFootnoteInfo().eNum == FTNNUM_PAGE )
+    if ( GetFormat()->GetDoc()->GetFootnoteInfo().m_eNum == FTNNUM_PAGE )
     {
         SwPageFrame *pPage = static_cast<SwPageFrame*>(Lower());
         while ( pPage && !pPage->IsFootnotePage() )
@@ -1493,7 +1493,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             }
         }
     }
-    else if( FTNPOS_CHAPTER == pDoc->GetFootnoteInfo().ePos && ( !GetUpper()->
+    else if( FTNPOS_CHAPTER == pDoc->GetFootnoteInfo().m_ePos && ( !GetUpper()->
              IsSctFrame() || !static_cast<SwSectionFrame*>(GetUpper())->IsFootnoteAtEnd() ) )
     {
         while ( pPage->GetNext() && !pPage->IsFootnotePage() &&
@@ -2140,7 +2140,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
 void SwFootnoteBossFrame::MoveFootnotes( const SwContentFrame *pSrc, SwContentFrame *pDest,
                              SwTextFootnote const *pAttr )
 {
-    if( ( GetFormat()->GetDoc()->GetFootnoteInfo().ePos == FTNPOS_CHAPTER &&
+    if( ( GetFormat()->GetDoc()->GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER &&
         (!GetUpper()->IsSctFrame() || !static_cast<SwSectionFrame*>(GetUpper())->IsFootnoteAtEnd()))
         || pAttr->GetFootnote().IsEndNote() )
         return;
@@ -2395,7 +2395,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
 void SwPageFrame::UpdateFootnoteNum()
 {
     // page numbering only if set at the document
-    if ( GetFormat()->GetDoc()->GetFootnoteInfo().eNum != FTNNUM_PAGE )
+    if ( GetFormat()->GetDoc()->GetFootnoteInfo().m_eNum != FTNNUM_PAGE )
         return;
 
     SwLayoutFrame* pBody = FindBodyCont();
@@ -2628,7 +2628,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
     SwDoc *pDoc = GetFormat()->GetDoc();
     if ( pDoc->GetFootnoteIdxs().empty() )
         return false;
-    if( pDoc->GetFootnoteInfo().ePos == FTNPOS_CHAPTER &&
+    if( pDoc->GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER &&
         ( !IsInSct() || !FindSctFrame()->IsFootnoteAtEnd() ) )
         return true;
 

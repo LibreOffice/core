@@ -39,116 +39,116 @@
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
-    pTextFormatColl = rInfo.pTextFormatColl;
-    pPageDesc = rInfo.pPageDesc;
-    pCharFormat = rInfo.pCharFormat;
-    pAnchorFormat = rInfo.pAnchorFormat;
-    aDepends.EndListeningAll();
-    aDepends.StartListening(pTextFormatColl);
-    aDepends.StartListening(pPageDesc);
-    aDepends.StartListening(pCharFormat);
-    aDepends.StartListening(pAnchorFormat);
+    m_pTextFormatColl = rInfo.m_pTextFormatColl;
+    m_pPageDesc = rInfo.m_pPageDesc;
+    m_pCharFormat = rInfo.m_pCharFormat;
+    m_pAnchorFormat = rInfo.m_pAnchorFormat;
+    m_aDepends.EndListeningAll();
+    m_aDepends.StartListening(m_pTextFormatColl);
+    m_aDepends.StartListening(m_pPageDesc);
+    m_aDepends.StartListening(m_pCharFormat);
+    m_aDepends.StartListening(m_pAnchorFormat);
 
-    aFormat = rInfo.aFormat;
-    nFootnoteOffset = rInfo.nFootnoteOffset;
+    m_aFormat = rInfo.m_aFormat;
+    m_nFootnoteOffset = rInfo.m_nFootnoteOffset;
     m_bEndNote = rInfo.m_bEndNote;
-    sPrefix = rInfo.sPrefix;
-    sSuffix = rInfo.sSuffix;
+    m_sPrefix = rInfo.m_sPrefix;
+    m_sSuffix = rInfo.m_sSuffix;
     return *this;
 }
 
 bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
     return
-            pTextFormatColl == rInfo.pTextFormatColl &&
-            pPageDesc == rInfo.pPageDesc &&
-            pCharFormat == rInfo.pCharFormat &&
-            pAnchorFormat == rInfo.pAnchorFormat &&
-            aFormat.GetNumberingType() == rInfo.aFormat.GetNumberingType() &&
-            nFootnoteOffset == rInfo.nFootnoteOffset &&
+            m_pTextFormatColl == rInfo.m_pTextFormatColl &&
+            m_pPageDesc == rInfo.m_pPageDesc &&
+            m_pCharFormat == rInfo.m_pCharFormat &&
+            m_pAnchorFormat == rInfo.m_pAnchorFormat &&
+            m_aFormat.GetNumberingType() == rInfo.m_aFormat.GetNumberingType() &&
+            m_nFootnoteOffset == rInfo.m_nFootnoteOffset &&
             m_bEndNote == rInfo.m_bEndNote &&
-            sPrefix == rInfo.sPrefix &&
-            sSuffix == rInfo.sSuffix;
+            m_sPrefix == rInfo.m_sPrefix &&
+            m_sSuffix == rInfo.m_sSuffix;
 }
 
 SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     SwClient(nullptr),
-    aDepends(*this),
-    pTextFormatColl(rInfo.pTextFormatColl),
-    pPageDesc(rInfo.pPageDesc),
-    pCharFormat(rInfo.pCharFormat),
-    pAnchorFormat(rInfo.pAnchorFormat),
-    sPrefix( rInfo.sPrefix ),
-    sSuffix( rInfo.sSuffix ),
+    m_aDepends(*this),
+    m_pTextFormatColl(rInfo.m_pTextFormatColl),
+    m_pPageDesc(rInfo.m_pPageDesc),
+    m_pCharFormat(rInfo.m_pCharFormat),
+    m_pAnchorFormat(rInfo.m_pAnchorFormat),
+    m_sPrefix( rInfo.m_sPrefix ),
+    m_sSuffix( rInfo.m_sSuffix ),
     m_bEndNote( true ),
-    aFormat( rInfo.aFormat ),
-    nFootnoteOffset( rInfo.nFootnoteOffset )
+    m_aFormat( rInfo.m_aFormat ),
+    m_nFootnoteOffset( rInfo.m_nFootnoteOffset )
 {
-    aDepends.StartListening(pTextFormatColl);
-    aDepends.StartListening(pPageDesc);
-    aDepends.StartListening(pCharFormat);
-    aDepends.StartListening(pAnchorFormat);
+    m_aDepends.StartListening(m_pTextFormatColl);
+    m_aDepends.StartListening(m_pPageDesc);
+    m_aDepends.StartListening(m_pCharFormat);
+    m_aDepends.StartListening(m_pAnchorFormat);
 }
 
 SwEndNoteInfo::SwEndNoteInfo() :
     SwClient(nullptr),
-    aDepends(*this),
-    pTextFormatColl(nullptr),
-    pPageDesc(nullptr),
-    pCharFormat(nullptr),
-    pAnchorFormat(nullptr),
+    m_aDepends(*this),
+    m_pTextFormatColl(nullptr),
+    m_pPageDesc(nullptr),
+    m_pCharFormat(nullptr),
+    m_pAnchorFormat(nullptr),
     m_bEndNote( true ),
-    nFootnoteOffset( 0 )
+    m_nFootnoteOffset( 0 )
 {
-    aFormat.SetNumberingType(SVX_NUM_ROMAN_LOWER);
+    m_aFormat.SetNumberingType(SVX_NUM_ROMAN_LOWER);
 }
 
 SwPageDesc* SwEndNoteInfo::GetPageDesc(SwDoc& rDoc) const
 {
-    if(!pPageDesc)
+    if(!m_pPageDesc)
     {
-        pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
+        m_pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLPAGE_ENDNOTE : RES_POOLPAGE_FOOTNOTE ) );
-        aDepends.StartListening(pPageDesc);
+        m_aDepends.StartListening(m_pPageDesc);
     }
-    return pPageDesc;
+    return m_pPageDesc;
 }
 
 bool SwEndNoteInfo::KnowsPageDesc() const
 {
-    return pPageDesc != nullptr;
+    return m_pPageDesc != nullptr;
 }
 
 bool SwEndNoteInfo::DependsOn(const SwPageDesc* pDesc) const
 {
-    return pPageDesc == pDesc;
+    return m_pPageDesc == pDesc;
 }
 
 void SwEndNoteInfo::ChgPageDesc(SwPageDesc* pDesc)
 {
-    aDepends.EndListening(pPageDesc);
-    pPageDesc = pDesc;
-    aDepends.StartListening(pPageDesc);
+    m_aDepends.EndListening(m_pPageDesc);
+    m_pPageDesc = pDesc;
+    m_aDepends.StartListening(m_pPageDesc);
 }
 
 void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)
 {
-    aDepends.EndListening(pTextFormatColl);
-    pTextFormatColl = &rFormat;
-    aDepends.StartListening(pTextFormatColl);
+    m_aDepends.EndListening(m_pTextFormatColl);
+    m_pTextFormatColl = &rFormat;
+    m_aDepends.StartListening(m_pTextFormatColl);
 }
 
 SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc& rDoc) const
 {
     auto pCharFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
         m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
-    if (pCharFormat != pCharFormatFromDoc)
+    if (m_pCharFormat != pCharFormatFromDoc)
     {
-        aDepends.EndListening(pCharFormat);
-        aDepends.StartListening(pCharFormatFromDoc);
-        pCharFormat = pCharFormatFromDoc;
+        m_aDepends.EndListening(m_pCharFormat);
+        m_aDepends.StartListening(pCharFormatFromDoc);
+        m_pCharFormat = pCharFormatFromDoc;
     }
-    return pCharFormat;
+    return m_pCharFormat;
 }
 
 namespace
@@ -184,13 +184,13 @@ SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 {
     auto pAnchorFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
         m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
-    if(pAnchorFormat != pAnchorFormatFromDoc)
+    if(m_pAnchorFormat != pAnchorFormatFromDoc)
     {
-        aDepends.EndListening(pAnchorFormat);
-        aDepends.StartListening(pAnchorFormatFromDoc);
-        pAnchorFormat = pAnchorFormatFromDoc;
+        m_aDepends.EndListening(m_pAnchorFormat);
+        m_aDepends.StartListening(pAnchorFormatFromDoc);
+        m_pAnchorFormat = pAnchorFormatFromDoc;
     }
-    return pAnchorFormat;
+    return m_pAnchorFormat;
 }
 
 void SwEndNoteInfo::SetAnchorCharFormat(SwCharFormat* pFormat)
@@ -206,8 +206,8 @@ void SwEndNoteInfo::SetAnchorCharFormat(SwCharFormat* pFormat)
 SwCharFormat* SwEndNoteInfo::GetCurrentCharFormat(const bool bAnchor) const
 {
     return bAnchor
-        ? pAnchorFormat
-        : pCharFormat;
+        ? m_pAnchorFormat
+        : m_pCharFormat;
 }
 
 void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHint)
@@ -217,8 +217,8 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         const sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0 ;
         if (RES_ATTRSET_CHG == nWhich || RES_FMT_CHG == nWhich)
         {
-            auto pFormat = GetCurrentCharFormat(pCharFormat == nullptr);
-            if (!pFormat || !aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
+            auto pFormat = GetCurrentCharFormat(m_pCharFormat == nullptr);
+            if (!pFormat || !m_aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
                 return;
             SwDoc* pDoc = pFormat->GetDoc();
             SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
@@ -238,52 +238,52 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
         auto pNew = const_cast<SwModify*>(pModifyChangedHint->m_pNew);
-        if(pAnchorFormat == &rModify)
-            pAnchorFormat = static_cast<SwCharFormat*>(pNew);
-        else if(pCharFormat == &rModify)
-            pCharFormat = static_cast<SwCharFormat*>(pNew);
-        else if(pPageDesc == &rModify)
-            pPageDesc = static_cast<SwPageDesc*>(pNew);
-        else if(pTextFormatColl == &rModify)
-            pTextFormatColl = static_cast<SwTextFormatColl*>(pNew);
+        if(m_pAnchorFormat == &rModify)
+            m_pAnchorFormat = static_cast<SwCharFormat*>(pNew);
+        else if(m_pCharFormat == &rModify)
+            m_pCharFormat = static_cast<SwCharFormat*>(pNew);
+        else if(m_pPageDesc == &rModify)
+            m_pPageDesc = static_cast<SwPageDesc*>(pNew);
+        else if(m_pTextFormatColl == &rModify)
+            m_pTextFormatColl = static_cast<SwTextFormatColl*>(pNew);
     }
 }
 
 SwFootnoteInfo& SwFootnoteInfo::operator=(const SwFootnoteInfo& rInfo)
 {
     SwEndNoteInfo::operator=(rInfo);
-    aQuoVadis =  rInfo.aQuoVadis;
-    aErgoSum = rInfo.aErgoSum;
-    ePos = rInfo.ePos;
-    eNum = rInfo.eNum;
+    m_aQuoVadis =  rInfo.m_aQuoVadis;
+    m_aErgoSum = rInfo.m_aErgoSum;
+    m_ePos = rInfo.m_ePos;
+    m_eNum = rInfo.m_eNum;
     return *this;
 }
 
 bool SwFootnoteInfo::operator==( const SwFootnoteInfo& rInfo ) const
 {
-    return  ePos == rInfo.ePos &&
-            eNum == rInfo.eNum &&
+    return  m_ePos == rInfo.m_ePos &&
+            m_eNum == rInfo.m_eNum &&
             SwEndNoteInfo::operator==(rInfo) &&
-            aQuoVadis == rInfo.aQuoVadis &&
-            aErgoSum == rInfo.aErgoSum;
+            m_aQuoVadis == rInfo.m_aQuoVadis &&
+            m_aErgoSum == rInfo.m_aErgoSum;
 }
 
 SwFootnoteInfo::SwFootnoteInfo(const SwFootnoteInfo& rInfo) :
     SwEndNoteInfo( rInfo ),
-    aQuoVadis( rInfo.aQuoVadis ),
-    aErgoSum( rInfo.aErgoSum ),
-    ePos( rInfo.ePos ),
-    eNum( rInfo.eNum )
+    m_aQuoVadis( rInfo.m_aQuoVadis ),
+    m_aErgoSum( rInfo.m_aErgoSum ),
+    m_ePos( rInfo.m_ePos ),
+    m_eNum( rInfo.m_eNum )
 {
     m_bEndNote = false;
 }
 
 SwFootnoteInfo::SwFootnoteInfo() :
     SwEndNoteInfo(),
-    ePos( FTNPOS_PAGE ),
-    eNum( FTNNUM_DOC )
+    m_ePos( FTNPOS_PAGE ),
+    m_eNum( FTNNUM_DOC )
 {
-    aFormat.SetNumberingType(SVX_NUM_ARABIC);
+    m_aFormat.SetNumberingType(SVX_NUM_ARABIC);
     m_bEndNote = false;
 }
 
@@ -300,12 +300,12 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
         GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoFootNoteInfo>(rOld, this) );
     }
 
-    bool bFootnotePos  = rInfo.ePos != rOld.ePos;
-    bool bFootnoteDesc = rOld.ePos == FTNPOS_CHAPTER &&
+    bool bFootnotePos  = rInfo.m_ePos != rOld.m_ePos;
+    bool bFootnoteDesc = rOld.m_ePos == FTNPOS_CHAPTER &&
                         rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
-    bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
-                        rInfo.aErgoSum != rOld.aErgoSum ||
-                        rInfo.aFormat.GetNumberingType() != rOld.aFormat.GetNumberingType() ||
+    bool bExtra   = rInfo.m_aQuoVadis != rOld.m_aQuoVadis ||
+                        rInfo.m_aErgoSum != rOld.m_aErgoSum ||
+                        rInfo.m_aFormat.GetNumberingType() != rOld.m_aFormat.GetNumberingType() ||
                         rInfo.GetPrefix() != rOld.GetPrefix() ||
                         rInfo.GetSuffix() != rOld.GetSuffix();
     SwCharFormat *pOldChrFormat = rOld.GetCharFormat( *this ),
@@ -342,7 +342,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
             }
         }
     }
-    if( FTNNUM_PAGE != rInfo.eNum )
+    if( FTNNUM_PAGE != rInfo.m_eNum )
         GetFootnoteIdxs().UpdateAllFootnote();
     else if( bFootnoteChrFormats )
     {
@@ -372,13 +372,13 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             std::make_unique<SwUndoEndNoteInfo>( GetEndNoteInfo(), this ) );
     }
 
-    bool bNumChg  = rInfo.nFootnoteOffset != GetEndNoteInfo().nFootnoteOffset;
+    bool bNumChg  = rInfo.m_nFootnoteOffset != GetEndNoteInfo().m_nFootnoteOffset;
     // this seems to be an optimization: UpdateAllFootnote() is only called
     // if the offset changes; if the offset is the same,
     // but type/prefix/suffix changes, just set new numbers.
     bool const bExtra = !bNumChg &&
-            (   (rInfo.aFormat.GetNumberingType() !=
-                    GetEndNoteInfo().aFormat.GetNumberingType())
+            (   (rInfo.m_aFormat.GetNumberingType() !=
+                    GetEndNoteInfo().m_aFormat.GetNumberingType())
             ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
             ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
             );
@@ -523,7 +523,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
 
         if ( bTypeChgd )
             rFootnoteArr.UpdateAllFootnote();
-        if( FTNNUM_PAGE != GetFootnoteInfo().eNum )
+        if( FTNNUM_PAGE != GetFootnoteInfo().m_eNum )
         {
             if ( !bTypeChgd )
                 rFootnoteArr.UpdateAllFootnote();

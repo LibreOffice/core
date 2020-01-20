@@ -150,10 +150,10 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                         if( !rFootnote.GetNumStr().isEmpty() )
                             sOut = rFootnote.GetNumStr();
                         else if( rFootnote.IsEndNote() )
-                            sOut = rWrt.m_pDoc->GetEndNoteInfo().aFormat.
+                            sOut = rWrt.m_pDoc->GetEndNoteInfo().m_aFormat.
                             GetNumStr( rFootnote.GetNumber() );
                         else
-                            sOut = rWrt.m_pDoc->GetFootnoteInfo().aFormat.
+                            sOut = rWrt.m_pDoc->GetFootnoteInfo().m_aFormat.
                             GetNumStr( rFootnote.GetNumber() );
                     }
                     break;

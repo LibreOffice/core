@@ -1136,8 +1136,8 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
 {
     sal_uInt8 nInfoFlags = 0;
     const SwFootnoteInfo& rInfo = rWrt.m_pDoc->GetFootnoteInfo();
-    if( !rInfo.aErgoSum.isEmpty() )  nInfoFlags |= 0x02;
-    if( !rInfo.aQuoVadis.isEmpty() ) nInfoFlags |= 0x04;
+    if( !rInfo.m_aErgoSum.isEmpty() )  nInfoFlags |= 0x02;
+    if( !rInfo.m_aQuoVadis.isEmpty() ) nInfoFlags |= 0x04;
 
     sal_uInt8 nEmptyStt = 0;
     if( nInfoFlags )
@@ -1147,7 +1147,7 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
         if( 0x02 & nInfoFlags )         // Footnote continuation separator
         {
             pTextPos->Append( nCpStt );
-            rWrt.WriteStringAsPara( rInfo.aErgoSum );
+            rWrt.WriteStringAsPara( rInfo.m_aErgoSum );
             rWrt.WriteStringAsPara( OUString() );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
@@ -1157,7 +1157,7 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
         if( 0x04 & nInfoFlags )         // Footnote continuation notice
         {
             pTextPos->Append( nCpStt );
-            rWrt.WriteStringAsPara( rInfo.aQuoVadis );
+            rWrt.WriteStringAsPara( rInfo.m_aQuoVadis );
             rWrt.WriteStringAsPara( OUString() );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
@@ -1173,21 +1173,21 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
     // set the flags at the Dop right away
     WW8Dop& rDop = *rWrt.pDop;
     // Footnote Info
-    switch( rInfo.eNum )
+    switch( rInfo.m_eNum )
     {
     case FTNNUM_PAGE:       rDop.rncFootnote = 2; break;
     case FTNNUM_CHAPTER:    rDop.rncFootnote  = 1; break;
     default: rDop.rncFootnote  = 0; break;
     }                                   // rncFootnote
-    rDop.nfcFootnoteRef = WW8Export::GetNumId( rInfo.aFormat.GetNumberingType() );
-    rDop.nFootnote = rInfo.nFootnoteOffset + 1;
+    rDop.nfcFootnoteRef = WW8Export::GetNumId( rInfo.m_aFormat.GetNumberingType() );
+    rDop.nFootnote = rInfo.m_nFootnoteOffset + 1;
     rDop.fpc = rWrt.m_bFootnoteAtTextEnd ? 2 : 1;
 
     // Endnote Info
     rDop.rncEdn = 0;                        // rncEdn: Don't Restart
     const SwEndNoteInfo& rEndInfo = rWrt.m_pDoc->GetEndNoteInfo();
-    rDop.nfcEdnRef = WW8Export::GetNumId( rEndInfo.aFormat.GetNumberingType() );
-    rDop.nEdn = rEndInfo.nFootnoteOffset + 1;
+    rDop.nfcEdnRef = WW8Export::GetNumId( rEndInfo.m_aFormat.GetNumberingType() );
+    rDop.nEdn = rEndInfo.m_nFootnoteOffset + 1;
     rDop.epc = rWrt.m_bEndAtTextEnd ? 3 : 0;
 }
 
@@ -1327,7 +1327,7 @@ void WW8AttributeOutput::SectFootnoteEndnotePr()
 {
     const SwFootnoteInfo& rInfo = m_rWW8Export.m_pDoc->GetFootnoteInfo();
     m_rWW8Export.InsUInt16( NS_sprm::sprmSRncFtn );
-    switch( rInfo.eNum )
+    switch( rInfo.m_eNum )
     {
     case FTNNUM_PAGE:     m_rWW8Export.pO->push_back( sal_uInt8/*rncRstPage*/ (2) ); break;
     case FTNNUM_CHAPTER:  m_rWW8Export.pO->push_back( sal_uInt8/*rncRstSect*/ (1) ); break;

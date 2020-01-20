@@ -88,14 +88,14 @@ static sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
         switch( nPart )
         {
         case 0:
-            rInfo.aFormat.SetNumberingType( bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC );
+            rInfo.m_aFormat.SetNumberingType( bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC );
             if( !aPart.isEmpty() )
-                rInfo.aFormat.SetNumberingType(SwHTMLParser::GetNumType( aPart,
-                                                             rInfo.aFormat.GetNumberingType() ));
+                rInfo.m_aFormat.SetNumberingType(SwHTMLParser::GetNumType( aPart,
+                                                             rInfo.m_aFormat.GetNumberingType() ));
             break;
 
         case 1:
-            rInfo.nFootnoteOffset = aPart.isEmpty() ? 0 : static_cast<sal_uInt16>(aPart.toInt32());
+            rInfo.m_nFootnoteOffset = aPart.isEmpty() ? 0 : static_cast<sal_uInt16>(aPart.toInt32());
             break;
 
         case 2:
@@ -133,36 +133,36 @@ void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
         switch( nPart )
         {
         case 4:
-            aInfo.eNum = FTNNUM_DOC;
+            aInfo.m_eNum = FTNNUM_DOC;
             if( !aPart.isEmpty() )
             {
                 switch( aPart[0] )
                 {
-                case 'D': aInfo.eNum = FTNNUM_DOC; break;
-                case 'C': aInfo.eNum = FTNNUM_CHAPTER; break;
-                case 'P': aInfo.eNum = FTNNUM_PAGE; break;
+                case 'D': aInfo.m_eNum = FTNNUM_DOC; break;
+                case 'C': aInfo.m_eNum = FTNNUM_CHAPTER; break;
+                case 'P': aInfo.m_eNum = FTNNUM_PAGE; break;
                 }
             }
             break;
 
         case 5:
-            aInfo.ePos = FTNPOS_PAGE;
+            aInfo.m_ePos = FTNPOS_PAGE;
             if( !aPart.isEmpty() )
             {
                 switch( aPart[0] )
                 {
-                case 'C': aInfo.ePos = FTNPOS_CHAPTER; break;
-                case 'P': aInfo.ePos = FTNPOS_PAGE; break;
+                case 'C': aInfo.m_ePos = FTNPOS_CHAPTER; break;
+                case 'P': aInfo.m_ePos = FTNPOS_PAGE; break;
                 }
             }
             break;
 
         case 6:
-            aInfo.aQuoVadis = aPart;
+            aInfo.m_aQuoVadis = aPart;
             break;
 
         case 7:
-            aInfo.aErgoSum = aPart;
+            aInfo.m_aErgoSum = aPart;
             break;
         }
     }
@@ -457,7 +457,7 @@ static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
                                  bool bEndNote  )
 {
     int nParts = 0;
-    sal_Int16 eFormat = rInfo.aFormat.GetNumberingType();
+    sal_Int16 eFormat = rInfo.m_aFormat.GetNumberingType();
     if( (bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC) != eFormat )
     {
         const char *pStr = SwHTMLWriter::GetNumFormat( eFormat );
@@ -467,9 +467,9 @@ static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
             nParts = 1;
         }
     }
-    if( rInfo.nFootnoteOffset > 0 )
+    if( rInfo.m_nFootnoteOffset > 0 )
     {
-        pParts[1] = OUString::number(rInfo.nFootnoteOffset);
+        pParts[1] = OUString::number(rInfo.m_nFootnoteOffset);
         nParts = 2;
     }
     if( !rInfo.GetPrefix().isEmpty() )
@@ -527,24 +527,24 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         const SwFootnoteInfo& rInfo = m_pDoc->GetFootnoteInfo();
         OUString aParts[8];
         int nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, false );
-        if( rInfo.eNum != FTNNUM_DOC )
+        if( rInfo.m_eNum != FTNNUM_DOC )
         {
-            aParts[4] = rInfo.eNum == FTNNUM_CHAPTER ? OUStringLiteral( "C" ) : OUStringLiteral( "P" );
+            aParts[4] = rInfo.m_eNum == FTNNUM_CHAPTER ? OUStringLiteral( "C" ) : OUStringLiteral( "P" );
             nParts = 5;
         }
-        if( rInfo.ePos != FTNPOS_PAGE)
+        if( rInfo.m_ePos != FTNPOS_PAGE)
         {
             aParts[5] = "C";
             nParts = 6;
         }
-        if( !rInfo.aQuoVadis.isEmpty() )
+        if( !rInfo.m_aQuoVadis.isEmpty() )
         {
-            aParts[6] = rInfo.aQuoVadis;
+            aParts[6] = rInfo.m_aQuoVadis;
             nParts = 7;
         }
-        if( !rInfo.aErgoSum.isEmpty() )
+        if( !rInfo.m_aErgoSum.isEmpty() )
         {
-            aParts[7] = rInfo.aErgoSum;
+            aParts[7] = rInfo.m_aErgoSum;
             nParts = 8;
         }
         if( nParts > 0 )

@@ -1579,7 +1579,7 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
     SwNodes& rNds = GetNodes();
     // If Level 0 (Chapter), update the footnotes!
     if( ( !nNewLevel || !nOldLevel) && pDoc && !pDoc->GetFootnoteIdxs().empty() &&
-        FTNNUM_CHAPTER == pDoc->GetFootnoteInfo().eNum &&
+        FTNNUM_CHAPTER == pDoc->GetFootnoteInfo().m_eNum &&
         rNds.IsDocNodes() )
     {
         SwNodeIndex aTmpIndex( rNds, GetIndex());
@@ -3522,10 +3522,10 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
                             if( !rFootnote.GetNumStr().isEmpty() )
                                 sExpand = rFootnote.GetNumStr();
                             else if( rFootnote.IsEndNote() )
-                                sExpand = GetDoc()->GetEndNoteInfo().aFormat.
+                                sExpand = GetDoc()->GetEndNoteInfo().m_aFormat.
                                             GetNumStr(number);
                             else
-                                sExpand = GetDoc()->GetFootnoteInfo().aFormat.
+                                sExpand = GetDoc()->GetFootnoteInfo().m_aFormat.
                                             GetNumStr(number);
                             if( !sExpand.isEmpty() )
                             {
