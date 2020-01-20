@@ -11,7 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,skia))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 
-# TODO
 skia_patches := \
     lerp.patch \
     fix-pch.patch.1 \
