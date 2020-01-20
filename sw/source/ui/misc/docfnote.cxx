@@ -124,7 +124,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     {
         const SwFootnoteInfo &rInf = pSh->GetFootnoteInfo();
         // set position (page, chapter)
-        if ( rInf.ePos == FTNPOS_PAGE )
+        if ( rInf.m_ePos == FTNPOS_PAGE )
         {
             m_xPosPageBox->set_active(true);
             m_xPageTemplLbl->set_sensitive(false);
@@ -138,17 +138,17 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
             bPosDoc = true;
         }
             // reference tests
-        m_xContEdit->set_text(rInf.aQuoVadis);
-        m_xContFromEdit->set_text(rInf.aErgoSum);
+        m_xContEdit->set_text(rInf.m_aQuoVadis);
+        m_xContFromEdit->set_text(rInf.m_aErgoSum);
 
             // collected
-        SelectNumbering(rInf.eNum);
+        SelectNumbering(rInf.m_eNum);
     }
 
         // numbering
         // art
-    m_xNumViewBox->SelectNumberingType( pInf->aFormat.GetNumberingType());
-    m_xOffsetField->set_value(pInf->nFootnoteOffset + 1);
+    m_xNumViewBox->SelectNumberingType( pInf->m_aFormat.GetNumberingType());
+    m_xOffsetField->set_value(pInf->m_nFootnoteOffset + 1);
     m_xPrefixED->set_text(pInf->GetPrefix().replaceAll("\t", "\\t")); // fdo#65666
     m_xSuffixED->set_text(pInf->GetSuffix().replaceAll("\t", "\\t"));
 
@@ -329,8 +329,8 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 {
     std::unique_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFootnoteInfo());
 
-    pInf->nFootnoteOffset = m_xOffsetField->get_value() - 1;
-    pInf->aFormat.SetNumberingType(m_xNumViewBox->GetSelectedNumberingType() );
+    pInf->m_nFootnoteOffset = m_xOffsetField->get_value() - 1;
+    pInf->m_aFormat.SetNumberingType(m_xNumViewBox->GetSelectedNumberingType() );
     pInf->SetPrefix(m_xPrefixED->get_text().replaceAll("\\t", "\t"));
     pInf->SetSuffix(m_xSuffixED->get_text().replaceAll("\\t", "\t"));
 
@@ -361,10 +361,10 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     else
     {
         SwFootnoteInfo *pI = static_cast<SwFootnoteInfo*>(pInf.get());
-        pI->ePos = m_xPosPageBox->get_active() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
-        pI->eNum = GetNumbering();
-        pI->aQuoVadis = m_xContEdit->get_text();
-        pI->aErgoSum = m_xContFromEdit->get_text();
+        pI->m_ePos = m_xPosPageBox->get_active() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
+        pI->m_eNum = GetNumbering();
+        pI->m_aQuoVadis = m_xContEdit->get_text();
+        pI->m_aErgoSum = m_xContFromEdit->get_text();
         if ( !(*pI == pSh->GetFootnoteInfo()) )
             pSh->SetFootnoteInfo( *pI );
     }

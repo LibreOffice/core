@@ -74,7 +74,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
 
     // For normal foot notes we treat per-chapter and per-document numbering
     // separately. For Endnotes we only have per-document numbering.
-    if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )
+    if( FTNNUM_CHAPTER == rFootnoteInfo.m_eNum )
     {
         SwRootFrame const* pLayout(nullptr);
         std::set<SwRootFrame*> layouts = pDoc->GetAllLayouts();
@@ -166,9 +166,9 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
             {
                 pTextFootnote->SetNumber(
                     (nChapterStart <= nNode && nNode < nChapterEnd)
-                        ? rFootnoteInfo.nFootnoteOffset + nFootnoteNo
+                        ? rFootnoteInfo.m_nFootnoteOffset + nFootnoteNo
                         : rFootnote.GetNumber(),
-                    rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden,
+                    rFootnoteInfo.m_nFootnoteOffset + nFootnoteNoHidden,
                     rFootnote.GetNumStr() );
                 if (nChapterStart <= nNode && nNode < nChapterEnd)
                 {
@@ -185,7 +185,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
     SwUpdFootnoteEndNtAtEnd aNumArr;
 
     // unless we have per-document numbering, only look at endnotes here
-    const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.eNum;
+    const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.m_eNum;
 
     size_t nPos;
     size_t nFootnoteNo = 1;
@@ -236,9 +236,9 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
             {
                 if (rFootnote.IsEndNote())
                 {
-                    nSectNo.first = rEndInfo.nFootnoteOffset + nEndNo;
+                    nSectNo.first = rEndInfo.m_nFootnoteOffset + nEndNo;
                     ++nEndNo;
-                    nSectNo.second = rEndInfo.nFootnoteOffset + nEndNoHidden;
+                    nSectNo.second = rEndInfo.m_nFootnoteOffset + nEndNoHidden;
                     if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
                     {
                         ++nEndNoHidden;
@@ -246,9 +246,9 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
                 }
                 else
                 {
-                    nSectNo.first = rFootnoteInfo.nFootnoteOffset + nFootnoteNo;
+                    nSectNo.first = rFootnoteInfo.m_nFootnoteOffset + nFootnoteNo;
                     ++nFootnoteNo;
-                    nSectNo.second = rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden;
+                    nSectNo.second = rFootnoteInfo.m_nFootnoteOffset + nFootnoteNoHidden;
                     if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
                     {
                         ++nFootnoteNoHidden;
@@ -282,7 +282,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
     std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
-    if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )
+    if( FTNNUM_CHAPTER == rFootnoteInfo.m_eNum )
     {
         // sw_redlinehide: here we need to know if there's *any* layout with
         // IsHideRedlines(), because then the hidden-numbers have to be updated
@@ -315,8 +315,8 @@ void SwFootnoteIdxs::UpdateAllFootnote()
                         !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
                     {
                         pTextFootnote->SetNumber(
-                            rFootnoteInfo.nFootnoteOffset + nNo,
-                            rFootnoteInfo.nFootnoteOffset + nNoNo,
+                            rFootnoteInfo.m_nFootnoteOffset + nNo,
+                            rFootnoteInfo.m_nFootnoteOffset + nNoNo,
                             rFootnote.GetNumStr() );
                         ++nNo;
                         if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
@@ -345,8 +345,8 @@ void SwFootnoteIdxs::UpdateAllFootnote()
                 !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
             {
                 pTextFootnote->SetNumber(
-                        rFootnoteInfo.nFootnoteOffset + nNo,
-                        rFootnoteInfo.nFootnoteOffset + nNoNo,
+                        rFootnoteInfo.m_nFootnoteOffset + nNo,
+                        rFootnoteInfo.m_nFootnoteOffset + nNoNo,
                         rFootnote.GetNumStr() );
                 ++nNo;
                 if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
@@ -358,7 +358,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
     }
 
     // We use bool here, so that we also iterate through the Endnotes with a chapter setting.
-    const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.eNum;
+    const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.m_eNum;
     sal_uInt16 nFootnoteNo = 1;
     sal_uInt16 nEndnoteNo = 1;
     sal_uInt16 nFootnoteNoHidden = 1;
@@ -374,9 +374,9 @@ void SwFootnoteIdxs::UpdateAllFootnote()
             {
                 if (rFootnote.IsEndNote())
                 {
-                    nSectNo.first = rEndInfo.nFootnoteOffset + nEndnoteNo;
+                    nSectNo.first = rEndInfo.m_nFootnoteOffset + nEndnoteNo;
                     ++nEndnoteNo;
-                    nSectNo.second = rEndInfo.nFootnoteOffset + nEndnoteNoHidden;
+                    nSectNo.second = rEndInfo.m_nFootnoteOffset + nEndnoteNoHidden;
                     if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
                     {
                         ++nEndnoteNoHidden;
@@ -384,9 +384,9 @@ void SwFootnoteIdxs::UpdateAllFootnote()
                 }
                 else
                 {
-                    nSectNo.first = rFootnoteInfo.nFootnoteOffset + nFootnoteNo;
+                    nSectNo.first = rFootnoteInfo.m_nFootnoteOffset + nFootnoteNo;
                     ++nFootnoteNo;
-                    nSectNo.second = rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden;
+                    nSectNo.second = rFootnoteInfo.m_nFootnoteOffset + nFootnoteNoHidden;
                     if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
                     {
                         ++nFootnoteNoHidden;
@@ -401,7 +401,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
         }
     }
 
-    if (pLayout && FTNNUM_PAGE == rFootnoteInfo.eNum)
+    if (pLayout && FTNNUM_PAGE == rFootnoteInfo.m_eNum)
         for( auto aLayout : aAllLayouts )
             aLayout->UpdateFootnoteNums();
 }

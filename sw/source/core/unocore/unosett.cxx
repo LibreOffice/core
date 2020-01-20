@@ -339,7 +339,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     nTmp > SVX_NUM_BITMAP)))
                 throw lang::IllegalArgumentException();
 
-            aFootnoteInfo.aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
+            aFootnoteInfo.m_aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
 
         }
         break;
@@ -347,7 +347,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         {
             sal_Int16 nTmp = 0;
             aValue >>= nTmp;
-            aFootnoteInfo.nFootnoteOffset = nTmp;
+            aFootnoteInfo.m_nFootnoteOffset = nTmp;
         }
         break;
         case WID_FOOTNOTE_COUNTING:
@@ -357,13 +357,13 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
             switch(nTmp)
             {
                 case  FootnoteNumbering::PER_PAGE:
-                    aFootnoteInfo.eNum = FTNNUM_PAGE;
+                    aFootnoteInfo.m_eNum = FTNNUM_PAGE;
                 break;
                 case  FootnoteNumbering::PER_CHAPTER:
-                    aFootnoteInfo.eNum = FTNNUM_CHAPTER;
+                    aFootnoteInfo.m_eNum = FTNNUM_CHAPTER;
                 break;
                 case  FootnoteNumbering::PER_DOCUMENT:
-                    aFootnoteInfo.eNum = FTNNUM_DOC;
+                    aFootnoteInfo.m_eNum = FTNNUM_DOC;
                 break;
             }
         }
@@ -398,21 +398,21 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         case WID_POSITION_END_OF_DOC:
         {
             bool bVal = *o3tl::doAccess<bool>(aValue);
-            aFootnoteInfo.ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
+            aFootnoteInfo.m_ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
         }
         break;
         case WID_END_NOTICE:
         {
             OUString uTmp;
             aValue >>= uTmp;
-            aFootnoteInfo.aQuoVadis = uTmp;
+            aFootnoteInfo.m_aQuoVadis = uTmp;
         }
         break;
         case WID_BEGIN_NOTICE:
         {
             OUString uTmp;
             aValue >>= uTmp;
-            aFootnoteInfo.aErgoSum = uTmp;
+            aFootnoteInfo.m_aErgoSum = uTmp;
         }
         break;
     }
@@ -447,16 +447,16 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
         break;
         case  WID_NUMBERING_TYPE :
         {
-            aRet <<= static_cast<sal_Int16>(rFootnoteInfo.aFormat.GetNumberingType());
+            aRet <<= static_cast<sal_Int16>(rFootnoteInfo.m_aFormat.GetNumberingType());
         }
         break;
         case  WID_START_AT:
-            aRet <<= static_cast<sal_Int16>(rFootnoteInfo.nFootnoteOffset);
+            aRet <<= static_cast<sal_Int16>(rFootnoteInfo.m_nFootnoteOffset);
         break;
         case  WID_FOOTNOTE_COUNTING  :
         {
             sal_Int16 nRet = 0;
-            switch(rFootnoteInfo.eNum)
+            switch(rFootnoteInfo.m_eNum)
             {
                 case  FTNNUM_PAGE:
                     nRet = FootnoteNumbering::PER_PAGE;
@@ -510,13 +510,13 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
         }
         break;
         case  WID_POSITION_END_OF_DOC:
-            aRet <<= FTNPOS_CHAPTER == rFootnoteInfo.ePos;
+            aRet <<= FTNPOS_CHAPTER == rFootnoteInfo.m_ePos;
         break;
         case  WID_END_NOTICE         :
-            aRet <<= rFootnoteInfo.aQuoVadis;
+            aRet <<= rFootnoteInfo.m_aQuoVadis;
         break;
         case  WID_BEGIN_NOTICE       :
-            aRet <<= rFootnoteInfo.aErgoSum;
+            aRet <<= rFootnoteInfo.m_aErgoSum;
         break;
     }
 
@@ -612,14 +612,14 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             {
                 sal_Int16 nTmp = 0;
                 aValue >>= nTmp;
-                aEndInfo.aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
+                aEndInfo.m_aFormat.SetNumberingType(static_cast<SvxNumType>(nTmp));
             }
             break;
             case  WID_START_AT:
             {
                 sal_Int16 nTmp = 0;
                 aValue >>= nTmp;
-                aEndInfo.nFootnoteOffset = nTmp;
+                aEndInfo.m_nFootnoteOffset = nTmp;
             }
             break;
             case  WID_PARAGRAPH_STYLE    :
@@ -675,10 +675,10 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 aRet <<= rEndInfo.GetSuffix();
             break;
             case  WID_NUMBERING_TYPE :
-                aRet <<= static_cast<sal_Int16>(rEndInfo.aFormat.GetNumberingType());
+                aRet <<= static_cast<sal_Int16>(rEndInfo.m_aFormat.GetNumberingType());
             break;
             case  WID_START_AT:
-                aRet <<= static_cast<sal_Int16>(rEndInfo.nFootnoteOffset);
+                aRet <<= static_cast<sal_Int16>(rEndInfo.m_nFootnoteOffset);
             break;
             case  WID_PARAGRAPH_STYLE    :
             {

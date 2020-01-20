@@ -2773,7 +2773,7 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FOOTNOTE);
-    if (rFootnote.IsEndNote() || m_rExport.m_pDoc->GetFootnoteInfo().ePos == FTNPOS_CHAPTER)
+    if (rFootnote.IsEndNote() || m_rExport.m_pDoc->GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER)
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FTNALT);
     m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);

@@ -860,12 +860,12 @@ ErrCode RtfExport::ExportDocument_Impl()
         // write the footnotes and endnotes-out Info
         const SwFootnoteInfo& rFootnoteInfo = m_pDoc->GetFootnoteInfo();
 
-        const char* pOut = FTNPOS_CHAPTER == rFootnoteInfo.ePos ? OOO_STRING_SVTOOLS_RTF_ENDDOC
-                                                                : OOO_STRING_SVTOOLS_RTF_FTNBJ;
+        const char* pOut = FTNPOS_CHAPTER == rFootnoteInfo.m_ePos ? OOO_STRING_SVTOOLS_RTF_ENDDOC
+                                                                  : OOO_STRING_SVTOOLS_RTF_FTNBJ;
         Strm().WriteCharPtr(pOut).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FTNSTART);
-        OutLong(rFootnoteInfo.nFootnoteOffset + 1);
+        OutLong(rFootnoteInfo.m_nFootnoteOffset + 1);
 
-        switch (rFootnoteInfo.eNum)
+        switch (rFootnoteInfo.m_eNum)
         {
             case FTNNUM_PAGE:
                 pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG;
@@ -879,7 +879,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         }
         Strm().WriteCharPtr(pOut);
 
-        switch (rFootnoteInfo.aFormat.GetNumberingType())
+        switch (rFootnoteInfo.m_aFormat.GetNumberingType())
         {
             case SVX_NUM_CHARS_LOWER_LETTER:
             case SVX_NUM_CHARS_LOWER_LETTER_N:
@@ -910,9 +910,9 @@ ErrCode RtfExport::ExportDocument_Impl()
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AENDDOC)
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT)
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AFTNSTART);
-        OutLong(rEndNoteInfo.nFootnoteOffset + 1);
+        OutLong(rEndNoteInfo.m_nFootnoteOffset + 1);
 
-        switch (rEndNoteInfo.aFormat.GetNumberingType())
+        switch (rEndNoteInfo.m_aFormat.GetNumberingType())
         {
             case SVX_NUM_CHARS_LOWER_LETTER:
             case SVX_NUM_CHARS_LOWER_LETTER_N:

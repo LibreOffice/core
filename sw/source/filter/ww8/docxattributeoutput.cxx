@@ -7522,7 +7522,7 @@ void DocxAttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
     // remember the footnote/endnote to
     // 1) write the footnoteReference/endnoteReference in EndRunProperties()
     // 2) be able to dump them all to footnotes.xml/endnotes.xml
-    if ( !rFootnote.IsEndNote() && m_rExport.m_pDoc->GetFootnoteInfo().ePos != FTNPOS_CHAPTER )
+    if ( !rFootnote.IsEndNote() && m_rExport.m_pDoc->GetFootnoteInfo().m_ePos != FTNPOS_CHAPTER )
         m_pFootnotesList->add( rFootnote );
     else
         m_pEndnotesList->add( rFootnote );
@@ -7633,7 +7633,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
 {
     fs->startElementNS(XML_w, tag);
     const char* fmt = nullptr;
-    switch( info.aFormat.GetNumberingType())
+    switch( info.m_aFormat.GetNumberingType())
     {
         case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
         case SVX_NUM_CHARS_UPPER_LETTER:
@@ -7665,14 +7665,14 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     }
     if( fmt != nullptr )
         fs->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), fmt);
-    if( info.nFootnoteOffset != 0 )
+    if( info.m_nFootnoteOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
-            OString::number(info.nFootnoteOffset + 1) );
+            OString::number(info.m_nFootnoteOffset + 1) );
 
     const SwFootnoteInfo* pFootnoteInfo = dynamic_cast<const SwFootnoteInfo*>(&info);
     if( pFootnoteInfo )
     {
-        switch( pFootnoteInfo->eNum )
+        switch( pFootnoteInfo->m_eNum )
         {
             case FTNNUM_PAGE:       fmt = "eachPage"; break;
             case FTNNUM_CHAPTER:    fmt = "eachSect"; break;

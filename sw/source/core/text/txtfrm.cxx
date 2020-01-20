@@ -2683,13 +2683,13 @@ static bool lcl_ErgoVadis(SwTextFrame* pFrame, TextFrameIndex & rPos, const Prep
     const SwFootnoteInfo &rFootnoteInfo = pFrame->GetDoc().GetFootnoteInfo();
     if( ePrep == PrepareHint::ErgoSum )
     {
-        if( rFootnoteInfo.aErgoSum.isEmpty() )
+        if( rFootnoteInfo.m_aErgoSum.isEmpty() )
             return false;
         rPos = pFrame->GetOfst();
     }
     else
     {
-        if( rFootnoteInfo.aQuoVadis.isEmpty() )
+        if( rFootnoteInfo.m_aQuoVadis.isEmpty() )
             return false;
         if( pFrame->HasFollow() )
             rPos = pFrame->GetFollow()->GetOfst();
@@ -2832,7 +2832,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     // We're the last Footnote; we need to update the
                     // QuoVadis texts now
                     const SwFootnoteInfo &rFootnoteInfo = GetDoc().GetFootnoteInfo();
-                    if( !pPara->UpdateQuoVadis( rFootnoteInfo.aQuoVadis ) )
+                    if( !pPara->UpdateQuoVadis( rFootnoteInfo.m_aQuoVadis ) )
                     {
                         TextFrameIndex nPos = pPara->GetParLen();
                         if( nPos )

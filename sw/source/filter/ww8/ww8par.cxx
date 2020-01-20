@@ -5145,21 +5145,21 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
         SwFootnoteInfo aInfo = m_rDoc.GetFootnoteInfo(); // Copy-Ctor private
 
-        aInfo.ePos = FTNPOS_PAGE;
-        aInfo.eNum = eNumA[m_xWDop->rncFootnote];
+        aInfo.m_ePos = FTNPOS_PAGE;
+        aInfo.m_eNum = eNumA[m_xWDop->rncFootnote];
         sal_uInt16 nfcFootnoteRef = m_xWDop->nfcFootnoteRef & 0xF;
-        aInfo.aFormat.SetNumberingType( eNumTA[nfcFootnoteRef] );
+        aInfo.m_aFormat.SetNumberingType( eNumTA[nfcFootnoteRef] );
         if( m_xWDop->nFootnote )
-            aInfo.nFootnoteOffset = m_xWDop->nFootnote - 1;
+            aInfo.m_nFootnoteOffset = m_xWDop->nFootnote - 1;
         m_rDoc.SetFootnoteInfo( aInfo );
     }
     if (m_xSBase->AreThereEndnotes())
     {
         SwEndNoteInfo aInfo = m_rDoc.GetEndNoteInfo(); // Same as for Footnote
         sal_uInt16 nfcEdnRef = m_xWDop->nfcEdnRef & 0xF;
-        aInfo.aFormat.SetNumberingType( eNumTA[nfcEdnRef] );
+        aInfo.m_aFormat.SetNumberingType( eNumTA[nfcEdnRef] );
         if( m_xWDop->nEdn )
-            aInfo.nFootnoteOffset = m_xWDop->nEdn - 1;
+            aInfo.m_nFootnoteOffset = m_xWDop->nEdn - 1;
         m_rDoc.SetEndNoteInfo( aInfo );
     }
 

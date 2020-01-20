@@ -2926,7 +2926,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         SwContentFrame *pCnt;
         if( IsFootnoteFrame() && !static_cast<SwFootnoteFrame*>(this)->GetAttr()->GetFootnote().IsEndNote() &&
-            ( GetFormat()->GetDoc()->GetFootnoteInfo().ePos != FTNPOS_CHAPTER ||
+            ( GetFormat()->GetDoc()->GetFootnoteInfo().m_ePos != FTNPOS_CHAPTER ||
               ( IsInSct() && FindSctFrame()->IsFootnoteAtEnd() ) ) &&
               nullptr != (pCnt = static_cast<SwFootnoteFrame*>(this)->GetRefFromAttr() ) )
         {
@@ -4560,7 +4560,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     }
 
     SwFootnoteIdxs & rFootnotes(rDoc.GetFootnoteIdxs());
-    if (rDoc.GetFootnoteInfo().eNum == FTNNUM_CHAPTER)
+    if (rDoc.GetFootnoteInfo().m_eNum == FTNNUM_CHAPTER)
     {
         // sadly determining which node is outline node requires hidden layout
         rFootnotes.UpdateAllFootnote();

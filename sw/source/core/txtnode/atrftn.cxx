@@ -250,7 +250,7 @@ OUString SwFormatFootnote::GetViewNumStr(const SwDoc& rDoc,
                 pInfo = &rDoc.GetEndNoteInfo();
             else
                 pInfo = &rDoc.GetFootnoteInfo();
-            sRet = pInfo->aFormat.GetNumStr( nNumber );
+            sRet = pInfo->m_aFormat.GetNumStr( nNumber );
             if( bInclStrings )
             {
                 sRet = pInfo->GetPrefix() + sRet + pInfo->GetSuffix();

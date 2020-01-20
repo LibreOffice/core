@@ -122,9 +122,9 @@ DECLARE_WW8EXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     // The footnote numbering type of ARABIC will not transfer over when those footnotes are converted to endnotes.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().aFormat.GetNumberingType() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().m_aFormat.GetNumberingType() );
     // The original document has a real endnote using ROMAN_LOWER numbering, so that setting MUST remain unchanged.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().aFormat.GetNumberingType() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().m_aFormat.GetNumberingType() );
 
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
