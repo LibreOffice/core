@@ -90,8 +90,6 @@ public:
 
     static OUString     GetToolTip(bool bNext);
 
-    void                GrabFocus() { m_xToolBox1->GrabFocus(); }
-
     void                syncFromDoc();
 };
 

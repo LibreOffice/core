@@ -97,7 +97,6 @@ private:
     void SetMetricFieldMaxValues(const Size& rPageSize);
 
     bool GetUserCustomValues();
-    void StoreUserCustomValues();
 
     void FillHelpText( const bool bUserCustomValuesAvailable );
 };

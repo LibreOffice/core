@@ -271,21 +271,6 @@ sal_Int32 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_Int32 nSta
     return nPos;
 }
 
-sal_Int32 ImplEntryList::FindEntry( const void* pData ) const
-{
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
-    for ( sal_Int32 n = GetEntryCount(); n; )
-    {
-        ImplEntryType* pImplEntry = GetEntry( --n );
-        if ( pImplEntry->mpUserData == pData )
-        {
-            nPos = n;
-            break;
-        }
-    }
-    return nPos;
-}
-
 long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginIndex ) const
 {
     long nHeight = 0;
