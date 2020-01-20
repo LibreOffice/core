@@ -1380,10 +1380,16 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 
 
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(
-    SdXMLImport& rImport,
-    const OUString& rLName)
-:   SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLName)
+    SdXMLImport& rImport)
+:   SvXMLImportContext( rImport )
 {
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesContext::createFastChildContext(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return nullptr;
 }
 
 SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(

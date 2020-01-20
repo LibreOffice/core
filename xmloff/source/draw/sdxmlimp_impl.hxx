@@ -206,8 +206,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLStylesContext* CreateAutoStylesContext(const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    SvXMLImportContext* CreateMasterStylesContext(const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+    SvXMLImportContext* CreateMasterStylesContext();
     SvXMLImportContext *CreateFontDeclsContext(const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
