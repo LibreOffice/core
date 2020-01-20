@@ -267,10 +267,10 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
     unsigned int nStride = cairo_image_surface_get_stride( pPixels );
     vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-    for( unsigned long y = 0; y < static_cast<unsigned long>(aSize.Height()); y++ )
+    for( long y = 0; y < aSize.Height(); y++ )
     {
         sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
-        for( unsigned long x = 0; x < static_cast<unsigned long>(aSize.Width()); x++ )
+        for( long x = 0; x < aSize.Width(); x++ )
         {
 #if defined OSL_BIGENDIAN
             sal_uInt8 nB = (*pPix >> 24);
