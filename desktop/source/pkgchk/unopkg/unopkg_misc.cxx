@@ -416,12 +416,14 @@ static OUString getLockFilePath()
 }
 
 Reference<XComponentContext> getUNO(
-    bool verbose, bool shared, bool bGui,
+    bool verbose, bool bGui, const OUString& sTempDir,
     Reference<XComponentContext> & out_localContext)
 {
     // do not create any user data (for the root user) in --shared mode:
-    if (shared) {
-        rtl::Bootstrap::set("CFG_CacheUrl", OUString());
+    if (!sTempDir.isEmpty()) {
+        rtl::Bootstrap::set("UserInstallation", sTempDir);
+        // Prevent writing registrymodifications.xcu - it can't be cleaned in the temp directory
+        rtl::Bootstrap::set("LO_NO_REGISTRYMODIFICATIONS", "1");
     }
 
     // hold lock during process runtime:
