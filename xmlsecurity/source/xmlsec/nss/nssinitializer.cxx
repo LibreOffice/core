@@ -70,65 +70,6 @@ class InitNSSPrivate
 private:
     std::unique_ptr<utl::TempFile> m_pTempFileDatabaseDirectory;
 
-    static void scanDirsAndFiles(OUString const & rDirURL, std::vector<OUString> & rDirs, std::vector<OUString> & rFiles)
-    {
-        if (rDirURL.isEmpty())
-            return;
-        osl::Directory aDirectory(rDirURL);
-
-        if (osl::FileBase::E_None != aDirectory.open())
-            return;
-
-        osl::DirectoryItem aDirectoryItem;
-
-        while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
-        {
-            osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
-
-            if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
-            {
-                if (aFileStatus.isDirectory())
-                {
-                    const OUString aFileName(aFileStatus.getFileName());
-                    if (!aFileName.isEmpty())
-                        rDirs.push_back(aFileName);
-                }
-                else if (aFileStatus.isRegular())
-                {
-                    const OUString aFileName(aFileStatus.getFileName());
-                    if (!aFileName.isEmpty())
-                        rFiles.push_back(aFileName);
-
-                }
-            }
-        }
-    }
-
-    static bool deleteDirRecursively(OUString const & rDirURL)
-    {
-        std::vector<OUString> aDirs;
-        std::vector<OUString> aFiles;
-        bool bError(false);
-
-        scanDirsAndFiles(rDirURL, aDirs, aFiles);
-
-        for (const auto& sDir : aDirs)
-        {
-            const OUString aNewDirURL(rDirURL + "/" + sDir);
-            bError |= deleteDirRecursively(aNewDirURL);
-        }
-
-        for (const auto& sFile : aFiles)
-        {
-            OUString aNewFileURL(rDirURL + "/" + sFile);
-            bError |= (osl::FileBase::E_None != osl::File::remove(aNewFileURL));
-        }
-
-        bError |= (osl::FileBase::E_None != osl::Directory::remove(rDirURL));
-
-        return bError;
-    }
-
 public:
     OUString getTempDatabasePath()
     {
@@ -144,7 +85,6 @@ public:
     {
         if (m_pTempFileDatabaseDirectory)
         {
-            deleteDirRecursively(m_pTempFileDatabaseDirectory->GetURL());
             m_pTempFileDatabaseDirectory.reset();
         }
     }

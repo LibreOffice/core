@@ -29,6 +29,7 @@
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 
 #ifdef UNX
 #include <unistd.h>
@@ -386,8 +387,7 @@ TempFile::~TempFile()
     {
         if ( bIsDirectory )
         {
-            // at the moment no recursiv algorithm present
-            Directory::remove( aName );
+            comphelper::DirectoryHelper::deleteDirRecursively(aName);
         }
         else
         {

@@ -13,6 +13,7 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <comphelper/backupfilehelper.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 #include <rtl/crc.h>
 #include <algorithm>
 #include <deque>
@@ -43,6 +44,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
+using namespace comphelper;
 using namespace css;
 using namespace css::xml::dom;
 
@@ -51,29 +53,6 @@ static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 namespace
 {
     typedef std::shared_ptr< osl::File > FileSharedPtr;
-
-    OUString splitAtLastToken(const OUString& rSrc, sal_Unicode aToken, OUString& rRight)
-    {
-        const sal_Int32 nIndex(rSrc.lastIndexOf(aToken));
-        OUString aRetval;
-
-        if (-1 == nIndex)
-        {
-            aRetval = rSrc;
-            rRight.clear();
-        }
-        else if (nIndex > 0)
-        {
-            aRetval = rSrc.copy(0, nIndex);
-
-            if (rSrc.getLength() > nIndex + 1)
-            {
-                rRight = rSrc.copy(nIndex + 1);
-            }
-        }
-
-        return aRetval;
-    }
 
     sal_uInt32 createCrc32(FileSharedPtr const & rCandidate, sal_uInt32 nOffset)
     {
@@ -220,181 +199,6 @@ namespace
         }
 
         return aRetval;
-    }
-
-    bool fileExists(const OUString& rBaseURL)
-    {
-        if (!rBaseURL.isEmpty())
-        {
-            FileSharedPtr aBaseFile(new osl::File(rBaseURL));
-
-            return (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read));
-        }
-
-        return false;
-    }
-
-    bool dirExists(const OUString& rDirURL)
-    {
-        if (!rDirURL.isEmpty())
-        {
-            osl::Directory aDirectory(rDirURL);
-
-            return (osl::FileBase::E_None == aDirectory.open());
-        }
-
-        return false;
-    }
-
-    void scanDirsAndFiles(
-        const OUString& rDirURL,
-        std::set< OUString >& rDirs,
-        std::set< std::pair< OUString, OUString > >& rFiles)
-    {
-        if (!rDirURL.isEmpty())
-        {
-            osl::Directory aDirectory(rDirURL);
-
-            if (osl::FileBase::E_None == aDirectory.open())
-            {
-                osl::DirectoryItem aDirectoryItem;
-
-                while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
-                {
-                    osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
-
-                    if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
-                    {
-                        if (aFileStatus.isDirectory())
-                        {
-                            const OUString aFileName(aFileStatus.getFileName());
-
-                            if (!aFileName.isEmpty())
-                            {
-                                rDirs.insert(aFileName);
-                            }
-                        }
-                        else if (aFileStatus.isRegular())
-                        {
-                            OUString aFileName(aFileStatus.getFileName());
-                            OUString aExtension;
-                            aFileName = splitAtLastToken(aFileName, '.', aExtension);
-
-                            if (!aFileName.isEmpty())
-                            {
-                                rFiles.insert(std::pair< OUString, OUString >(aFileName, aExtension));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    bool deleteDirRecursively(const OUString& rDirURL)
-    {
-        std::set< OUString > aDirs;
-        std::set< std::pair< OUString, OUString > > aFiles;
-        bool bError(false);
-
-        scanDirsAndFiles(
-            rDirURL,
-            aDirs,
-            aFiles);
-
-        for (const auto& dir : aDirs)
-        {
-            const OUString aNewDirURL(rDirURL + "/" + dir);
-
-            bError |= deleteDirRecursively(aNewDirURL);
-        }
-
-        for (const auto& file : aFiles)
-        {
-            OUString aNewFileURL(rDirURL + "/" + file.first);
-
-            if (!file.second.isEmpty())
-            {
-                aNewFileURL += "." + file.second;
-            }
-
-            bError |= (osl::FileBase::E_None != osl::File::remove(aNewFileURL));
-        }
-
-        bError |= (osl::FileBase::E_None != osl::Directory::remove(rDirURL));
-
-        return bError;
-    }
-
-    // both exist, move content
-    bool moveDirContent(
-        const OUString& rSourceDirURL,
-        const OUString& rTargetDirURL,
-        const std::set< OUString >& rExcludeList)
-    {
-        std::set< OUString > aDirs;
-        std::set< std::pair< OUString, OUString > > aFiles;
-        bool bError(false);
-
-        scanDirsAndFiles(
-            rSourceDirURL,
-            aDirs,
-            aFiles);
-
-        for (const auto& dir : aDirs)
-        {
-            const bool bExcluded(
-                !rExcludeList.empty() &&
-                rExcludeList.find(dir) != rExcludeList.end());
-
-            if (!bExcluded)
-            {
-                const OUString aNewSourceDirURL(rSourceDirURL + "/" + dir);
-
-                if (dirExists(aNewSourceDirURL))
-                {
-                    const OUString aNewTargetDirURL(rTargetDirURL + "/" + dir);
-
-                    if (dirExists(aNewTargetDirURL))
-                    {
-                        deleteDirRecursively(aNewTargetDirURL);
-                    }
-
-                    bError |= (osl::FileBase::E_None != osl::File::move(
-                        aNewSourceDirURL,
-                        aNewTargetDirURL));
-                }
-            }
-        }
-
-        for (const auto& file : aFiles)
-        {
-            OUString aSourceFileURL(rSourceDirURL + "/" + file.first);
-
-            if (!file.second.isEmpty())
-            {
-                aSourceFileURL += "." + file.second;
-            }
-
-            if (fileExists(aSourceFileURL))
-            {
-                OUString aTargetFileURL(rTargetDirURL + "/" + file.first);
-
-                if (!file.second.isEmpty())
-                {
-                    aTargetFileURL += "." +file.second;
-                }
-
-                if (fileExists(aTargetFileURL))
-                {
-                    osl::File::remove(aTargetFileURL);
-                }
-
-                bError |= (osl::FileBase::E_None != osl::File::move(aSourceFileURL, aTargetFileURL));
-            }
-        }
-
-        return bError;
     }
 }
 
@@ -700,7 +504,7 @@ namespace
 
         void createExtensionRegistryEntriesFromXML(const OUString& aPath)
         {
-            if (fileExists(aPath))
+            if (DirectoryHelper::fileExists(aPath))
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< xml::dom::XDocumentBuilder > xBuilder(xml::dom::DocumentBuilder::create(xContext));
@@ -801,7 +605,7 @@ namespace
             const ExtensionInfoEntryVector& rToBeEnabled,
             const ExtensionInfoEntryVector& rToBeDisabled)
         {
-            if (fileExists(rUnoPackagReg))
+            if (DirectoryHelper::fileExists(rUnoPackagReg))
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< xml::dom::XDocumentBuilder > xBuilder = xml::dom::DocumentBuilder::create(xContext);
@@ -836,9 +640,9 @@ namespace
                             aUrl >>= aTempURL;
 
                             // copy back file
-                            if (!aTempURL.isEmpty() && fileExists(aTempURL))
+                            if (!aTempURL.isEmpty() && DirectoryHelper::fileExists(aTempURL))
                             {
-                                if (fileExists(rUnoPackagReg))
+                                if (DirectoryHelper::fileExists(rUnoPackagReg))
                                 {
                                     osl::File::remove(rUnoPackagReg);
                                 }
@@ -1700,13 +1504,15 @@ namespace comphelper
             if (!maInitialBaseURL.isEmpty())
             {
                 // split URL at extension and at last path separator
-                maUserConfigBaseURL = splitAtLastToken(splitAtLastToken(maInitialBaseURL, '.', maExt), '/', maRegModName);
+                maUserConfigBaseURL = DirectoryHelper::splitAtLastToken(
+                    DirectoryHelper::splitAtLastToken(maInitialBaseURL, '.', maExt), '/',
+                    maRegModName);
             }
 
             if (!maUserConfigBaseURL.isEmpty())
             {
                 // check if SafeModeDir exists
-                mbSafeModeDirExists = dirExists(maUserConfigBaseURL + "/" + getSafeModeName());
+                mbSafeModeDirExists = DirectoryHelper::dirExists(maUserConfigBaseURL + "/" + getSafeModeName());
             }
 
             maUserConfigWorkURL = maUserConfigBaseURL;
@@ -1813,7 +1619,7 @@ namespace comphelper
                     maUserConfigWorkURL = maUserConfigBaseURL + "/" + getSafeModeName();
 
                     osl::Directory::createPath(maUserConfigWorkURL);
-                    moveDirContent(maUserConfigBaseURL, maUserConfigWorkURL, aExcludeList);
+                    DirectoryHelper::moveDirContent(maUserConfigBaseURL, maUserConfigWorkURL, aExcludeList);
 
                     // switch local flag, maUserConfigWorkURL is already reset
                     mbSafeModeDirExists = true;
@@ -1828,7 +1634,7 @@ namespace comphelper
                     // Both Dirs have to exist
                     std::set< OUString > aExcludeList;
 
-                    moveDirContent(maUserConfigWorkURL, maUserConfigBaseURL, aExcludeList);
+                    DirectoryHelper::moveDirContent(maUserConfigWorkURL, maUserConfigBaseURL, aExcludeList);
                     osl::Directory::remove(maUserConfigWorkURL);
 
                     // switch local flag and reset maUserConfigWorkURL
@@ -2009,7 +1815,7 @@ namespace comphelper
     void BackupFileHelper::tryDeinstallUserExtensions()
     {
         // delete User Extension installs
-        deleteDirRecursively(maUserConfigWorkURL + "/uno_packages");
+        DirectoryHelper::deleteDirRecursively(maUserConfigWorkURL + "/uno_packages");
     }
 
     bool BackupFileHelper::isTryResetSharedExtensionsPossible()
@@ -2025,7 +1831,7 @@ namespace comphelper
     void BackupFileHelper::tryResetSharedExtensions()
     {
         // reset shared extension info
-        deleteDirRecursively(maUserConfigWorkURL + "/extensions/shared");
+        DirectoryHelper::deleteDirRecursively(maUserConfigWorkURL + "/extensions/shared");
     }
 
     bool BackupFileHelper::isTryResetBundledExtensionsPossible()
@@ -2041,7 +1847,7 @@ namespace comphelper
     void BackupFileHelper::tryResetBundledExtensions()
     {
         // reset shared extension info
-        deleteDirRecursively(maUserConfigWorkURL + "/extensions/bundled");
+        DirectoryHelper::deleteDirRecursively(maUserConfigWorkURL + "/extensions/bundled");
     }
 
     const std::vector< OUString >& BackupFileHelper::getCustomizationDirNames()
@@ -2094,7 +1900,7 @@ namespace comphelper
     void BackupFileHelper::tryDisableHWAcceleration()
     {
         const OUString aRegistryModifications(maUserConfigWorkURL + "/registrymodifications.xcu");
-        if (!fileExists(aRegistryModifications))
+        if (!DirectoryHelper::fileExists(aRegistryModifications))
             return;
 
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -2131,10 +1937,10 @@ namespace comphelper
         aUrl >>= aTempURL;
 
         // copy back file
-        if (aTempURL.isEmpty() || !fileExists(aTempURL))
+        if (aTempURL.isEmpty() || !DirectoryHelper::fileExists(aTempURL))
             return;
 
-        if (fileExists(aRegistryModifications))
+        if (DirectoryHelper::fileExists(aRegistryModifications))
         {
             osl::File::remove(aRegistryModifications);
         }
@@ -2150,7 +1956,7 @@ namespace comphelper
 
         for (const auto& a : rDirs)
         {
-            if (dirExists(maUserConfigWorkURL + "/" + a))
+            if (DirectoryHelper::dirExists(maUserConfigWorkURL + "/" + a))
             {
                 return true;
             }
@@ -2160,7 +1966,7 @@ namespace comphelper
 
         for (const auto& b : rFiles)
         {
-            if (fileExists(maUserConfigWorkURL + "/" + b))
+            if (DirectoryHelper::fileExists(maUserConfigWorkURL + "/" + b))
             {
                 return true;
             }
@@ -2176,7 +1982,7 @@ namespace comphelper
 
         for (const auto& a : rDirs)
         {
-            deleteDirRecursively(maUserConfigWorkURL + "/" + a);
+            DirectoryHelper::deleteDirRecursively(maUserConfigWorkURL + "/" + a);
         }
 
         const std::vector< OUString >& rFiles = getCustomizationFileNames();
@@ -2190,7 +1996,7 @@ namespace comphelper
     void BackupFileHelper::tryResetUserProfile()
     {
         // completely delete the current UserProfile
-        deleteDirRecursively(maUserConfigWorkURL);
+        DirectoryHelper::deleteDirRecursively(maUserConfigWorkURL);
     }
 
     const OUString& BackupFileHelper::getUserProfileURL()
@@ -2240,7 +2046,7 @@ namespace comphelper
             std::set< OUString > aNewDirs;
             std::set< std::pair< OUString, OUString > > aNewFiles;
 
-            scanDirsAndFiles(
+            DirectoryHelper::scanDirsAndFiles(
                 aNewSourceURL,
                 aNewDirs,
                 aNewFiles);
@@ -2273,7 +2079,7 @@ namespace comphelper
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
 
-        if (fileExists(aFileURL))
+        if (DirectoryHelper::fileExists(aFileURL))
         {
             const OUString aPackURL(createPackURL(rTargetURL, rName));
             PackedFile aPackedFile(aPackURL);
@@ -2321,7 +2127,7 @@ namespace comphelper
             std::set< OUString > aNewDirs;
             std::set< std::pair< OUString, OUString > > aNewFiles;
 
-            scanDirsAndFiles(
+            DirectoryHelper::scanDirsAndFiles(
                 aNewSourceURL,
                 aNewDirs,
                 aNewFiles);
@@ -2348,7 +2154,7 @@ namespace comphelper
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
 
-        if (fileExists(aFileURL))
+        if (DirectoryHelper::fileExists(aFileURL))
         {
             const OUString aPackURL(createPackURL(rTargetURL, rName));
             PackedFile aPackedFile(aPackURL);
@@ -2388,7 +2194,7 @@ namespace comphelper
             std::set< OUString > aNewDirs;
             std::set< std::pair< OUString, OUString > > aNewFiles;
 
-            scanDirsAndFiles(
+            DirectoryHelper::scanDirsAndFiles(
                 aNewSourceURL,
                 aNewDirs,
                 aNewFiles);
@@ -2421,7 +2227,7 @@ namespace comphelper
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
 
-        if (fileExists(aFileURL))
+        if (DirectoryHelper::fileExists(aFileURL))
         {
             // try Pop for base file
             const OUString aPackURL(createPackURL(rTargetURL, rName));
@@ -2685,7 +2491,7 @@ namespace comphelper
             // whole directory. To do so, scan directory and exclude some dirs
             // from which we know they do not need to be secured explicitly. This
             // should already include registrymodifications, too.
-            scanDirsAndFiles(
+            DirectoryHelper::scanDirsAndFiles(
                 maUserConfigWorkURL,
                 maDirs,
                 maFiles);
