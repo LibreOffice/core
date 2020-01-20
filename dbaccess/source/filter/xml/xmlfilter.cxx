@@ -512,9 +512,6 @@ public:
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
                 break;
-            case XML_TOK_CONTENT_SCRIPTS:
-                pContext = new XMLScriptContext(GetImport(), rLocalName, rImport.GetModel());
-                break;
             default:
                 break;
         }
@@ -532,6 +529,9 @@ public:
             case XML_ELEMENT(OFFICE, XML_BODY):
             case XML_ELEMENT(OOO, XML_BODY):
                 return new DBXMLDocumentBodyContext(rImport);
+                break;
+            case XML_ELEMENT(OFFICE, XML_SCRIPTS):
+                return new XMLScriptContext(GetImport(), rImport.GetModel());
                 break;
             default: break;
         }

@@ -313,8 +313,7 @@ public:
                                     const sal_Int32 nElement );
     SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
-    SvXMLImportContext *CreateScriptContext(
-                                    const OUString& rLocalName );
+    SvXMLImportContext *CreateScriptContext();
     SvXMLImportContext *CreateStylesContext(const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                      bool bAutoStyles );
