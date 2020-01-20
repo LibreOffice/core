@@ -260,6 +260,24 @@
     },
     {
       "key": {
+        "uuid": "2169a6ee_c05ad22b",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-20T15:47:28Z",
+      "side": 1,
+      "message": "Perhaps an example illustrates what I\u0027m after - e.g. something like:\n\n// check if every remaining view is paused",
+      "parentUuid": "25626ac5_18eca85c",
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d870ee7b_6ece7d54",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
