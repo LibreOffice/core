@@ -109,7 +109,7 @@ void printf_packages(
 
 
 css::uno::Reference<css::uno::XComponentContext> getUNO(
-    bool verbose, bool shared, bool bGui,
+    bool verbose, bool bGui, const OUString& sTempDir,
     css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);
 
 }
