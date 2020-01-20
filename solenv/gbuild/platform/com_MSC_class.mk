@@ -256,10 +256,12 @@ $(if $(call gb_LinkTarget__is_merged,$(1)),\
 	$(call gb_LinkTarget_add_libs,$(call gb_Library_get_linktarget,merged),$(foreach lib,$(2),$(call gb_MSVCRT_subst,$(lib)).lib)))
 endef
 
-# Flags common for PE executables (EXEs and DLLs)
+# Flags common for PE executables (EXEs and DLLs).
+# Enable incremental only when debugging to speed up relinking.
 gb_Windows_PE_TARGETTYPEFLAGS := \
 	-release \
 	-opt:noref \
+	$(if $(filter 0,$(gb_DEBUGLEVEL)), -incremental:no) \
 	$(if $(filter NO,$(LIBRARY_X64)), -safeseh) \
 	-nxcompat \
 	-dynamicbase \
