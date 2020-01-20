@@ -111,7 +111,6 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
         css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
-        osl::Mutex                                              m_mutex;
         bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
         bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation
 

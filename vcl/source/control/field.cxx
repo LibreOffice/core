@@ -537,7 +537,6 @@ void NumericFormatter::ImplNumericReformat()
 
 NumericFormatter::NumericFormatter(Edit* pEdit)
     : FormatterBase(pEdit)
-    , mnFieldValue(0)
     , mnLastValue(0)
     , mnMin(0)
     // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
@@ -599,7 +598,6 @@ void NumericFormatter::SetShowTrailingZeros( bool bShowTrailingZeros )
 void NumericFormatter::SetValue( sal_Int64 nNewValue )
 {
     SetUserValue( nNewValue );
-    mnFieldValue = mnLastValue;
     SetEmptyFieldValueData( false );
 }
 
@@ -1415,7 +1413,6 @@ void MetricFormatter::SetCustomUnitText( const OUString& rStr )
 void MetricFormatter::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     SetUserValue( nNewValue, eInUnit );
-    mnFieldValue = mnLastValue;
 }
 
 OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
@@ -1855,7 +1852,6 @@ CurrencyFormatter::~CurrencyFormatter()
 void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 {
     SetUserValue( nNewValue );
-    mnFieldValue = mnLastValue;
     SetEmptyFieldValueData( false );
 }
 

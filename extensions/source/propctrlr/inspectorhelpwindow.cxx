@@ -27,8 +27,6 @@ namespace pcr
     InspectorHelpWindow::InspectorHelpWindow(weld::Builder& rBuilder)
         : m_xHelpFrame(rBuilder.weld_widget("helpframe"))
         , m_xHelpText(rBuilder.weld_text_view("helptext"))
-        , m_nMinLines( 3 )
-        , m_nMaxLines( 8 )
     {
     }
 
@@ -39,12 +37,6 @@ namespace pcr
     void InspectorHelpWindow::SetText(const OUString& rStr)
     {
         m_xHelpText->set_text(rStr);
-    }
-
-    void InspectorHelpWindow::SetLimits(sal_Int32 nMinLines, sal_Int32 nMaxLines)
-    {
-        m_nMinLines = nMinLines;
-        m_nMaxLines = nMaxLines;
     }
 
 } // namespace pcr

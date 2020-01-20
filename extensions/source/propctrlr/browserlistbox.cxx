@@ -381,11 +381,6 @@ namespace pcr
         m_xHelpWindow->SetText( _rHelpText );
     }
 
-    void OBrowserListBox::SetHelpLineLimites(sal_Int32 nMinLines, sal_Int32 nMaxLines)
-    {
-        m_xHelpWindow->SetLimits(nMinLines, nMaxLines);
-    }
-
     void OBrowserListBox::UpdatePlayGround()
     {
         for (auto& line : m_aLines)

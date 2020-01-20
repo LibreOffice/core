@@ -131,7 +131,6 @@ namespace pcr
         xPage->getListBox().SetListener(m_pListener);
         xPage->getListBox().SetObserver(m_pObserver);
         xPage->getListBox().EnableHelpSection(m_bHasHelpSection);
-        xPage->getListBox().SetHelpLineLimites(m_nMinHelpLines, m_nMaxHelpLines);
         xPage->SetHelpId(rHelpId);
 
         m_aShownPages[nId] = PropertyPage(m_xTabControl->get_n_pages() - 1, rText, std::move(xPage));
@@ -226,7 +225,6 @@ namespace pcr
     {
         m_nMinHelpLines = nMinLines;
         m_nMaxHelpLines = nMaxLines;
-        forEachPage( &OPropertyEditor::setHelpLineLimits );
     }
 
     void OPropertyEditor::enableHelpSection( OBrowserPage& rPage, const void* )
@@ -242,11 +240,6 @@ namespace pcr
 
         const OUString& rText( *static_cast<const OUString*>(pPointerToOUString) );
         rPage.getListBox().SetHelpText( rText );
-    }
-
-    void OPropertyEditor::setHelpLineLimits( OBrowserPage& rPage, const void* )
-    {
-        rPage.getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
     }
 
     void OPropertyEditor::InsertEntry( const OLineDescriptor& rData, sal_uInt16 nPageId, sal_uInt16 nPos )

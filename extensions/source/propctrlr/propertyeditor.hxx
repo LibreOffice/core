@@ -124,7 +124,6 @@ namespace pcr
         void    setPageControlObserver( OBrowserPage& _rPage, const void* );
         void    enableHelpSection( OBrowserPage& _rPage, const void* );
         static void setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString );
-        void    setHelpLineLimits( OBrowserPage& _rPage, const void* );
 
         DECL_LINK(OnPageDeactivate, const OString&, bool);
         DECL_LINK(OnPageActivate, const OString&, void);

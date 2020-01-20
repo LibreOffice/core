@@ -154,7 +154,6 @@ public:
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
 protected:
-    sal_Int64               mnFieldValue;
     sal_Int64               mnLastValue;
     sal_Int64               mnMin;
     sal_Int64               mnMax;
