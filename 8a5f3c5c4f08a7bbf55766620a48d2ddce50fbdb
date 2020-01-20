@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "d23996c2_0b13c965",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-20T06:32:29Z",
+      "side": 1,
+      "message": "And even shorter yet if not-too-verbode arg names are chosen:\n\n      // delete all unmarked views and reset marked state\n      auto removeStart \u003d std::remove_if(maViewList.begin(), maViewList.end(),\n                                        [](const auto\u0026 pView) { return !pView-\u003eisMarked(); });\n      maViewList.erase(removeStart, maViewList.cend());\n\n      bGlobalPause \u003d std::all_of(maViewList.cbegin(), maViewList.cend(),\n                                 [](const auto\u0026 pView) { return pView-\u003eisPause(); });\n\n      // reset marked state\n      std::for_each(maViewList.cbegin(), maViewList.cend(),\n                    [](const auto\u0026 pView) { pView-\u003esetMarked(false); });",
+      "parentUuid": "d7d09ad9_6a49d483",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 91
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d870ee7b_6ece7d54",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
