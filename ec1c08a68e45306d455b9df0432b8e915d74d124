@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb8b33fe_b52007bf",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-20T10:18:25Z",
+      "side": 1,
+      "message": "Concur with quikee - a brief one-line summary comment, describing the gist of the find_if, would be really helpful for posterity here",
+      "revId": "ec1c08a68e45306d455b9df0432b8e915d74d124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
