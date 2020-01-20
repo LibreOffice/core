@@ -27,10 +27,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void MarkerArrayPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
@@ -128,7 +126,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(MarkerArrayPrimitive2D, PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

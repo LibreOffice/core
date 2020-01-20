@@ -27,10 +27,8 @@
 #include <vcl/graph.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         class ImpSdrFillGraphicAttribute
         {
         public:
@@ -304,7 +302,7 @@ namespace drawinglayer
                 fOffsetX,
                 fOffsetY);
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

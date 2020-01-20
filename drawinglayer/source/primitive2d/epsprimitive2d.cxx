@@ -21,10 +21,8 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void EpsPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const GDIMetaFile& rSubstituteContent = getMetaFile();
@@ -79,7 +77,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(EpsPrimitive2D, PRIMITIVE2D_ID_EPSPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

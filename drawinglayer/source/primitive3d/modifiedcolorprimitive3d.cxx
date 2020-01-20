@@ -24,10 +24,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         ModifiedColorPrimitive3D::ModifiedColorPrimitive3D(
             const Primitive3DContainer& rChildren,
             const basegfx::BColorModifierSharedPtr& rColorModifier)
@@ -61,7 +59,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(ModifiedColorPrimitive3D, PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

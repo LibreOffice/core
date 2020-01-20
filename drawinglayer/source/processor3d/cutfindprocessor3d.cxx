@@ -28,10 +28,8 @@
 #include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::processor3d
 {
-    namespace processor3d
-    {
         CutFindProcessor::CutFindProcessor(const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B3DPoint& rFront,
             const basegfx::B3DPoint& rBack,
@@ -190,7 +188,7 @@ namespace drawinglayer
                 }
             }
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

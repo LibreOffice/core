@@ -29,10 +29,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         CropPrimitive2D::CropPrimitive2D(
             const Primitive2DContainer& rChildren,
             const basegfx::B2DHomMatrix& rTransformation,
@@ -149,7 +147,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(CropPrimitive2D, PRIMITIVE2D_ID_CROPPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         ModifiedColorPrimitive2D::ModifiedColorPrimitive2D(
             const Primitive2DContainer& rChildren,
             const basegfx::BColorModifierSharedPtr& rColorModifier)
@@ -61,7 +59,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(ModifiedColorPrimitive2D, PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

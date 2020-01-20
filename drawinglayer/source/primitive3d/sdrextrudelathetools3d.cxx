@@ -339,10 +339,8 @@ namespace
 } // end of anonymous namespace
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         void createLatheSlices(
             Slice3DVector& rSliceVector,
             const basegfx::B2DPolyPolygon& rSource,
@@ -979,7 +977,6 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

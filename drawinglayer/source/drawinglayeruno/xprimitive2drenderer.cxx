@@ -40,10 +40,8 @@
 using namespace ::com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::unorenderer
 {
-    namespace unorenderer
-    {
         namespace {
 
         class XPrimitive2DRenderer:
@@ -72,15 +70,12 @@ namespace drawinglayer
         };
 
         }
-    } // end of namespace unorenderer
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
 // uno functions
 
-namespace drawinglayer
-{
-    namespace unorenderer
+namespace drawinglayer::unorenderer
     {
         uno::Sequence< OUString > XPrimitive2DRenderer_getSupportedServiceNames()
         {
@@ -96,13 +91,10 @@ namespace drawinglayer
         {
             return static_cast< ::cppu::OWeakObject* >(new XPrimitive2DRenderer);
         }
-    } // end of namespace unorenderer
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace unorenderer
+namespace drawinglayer::unorenderer
     {
         XPrimitive2DRenderer::XPrimitive2DRenderer()
         {
@@ -196,7 +188,6 @@ namespace drawinglayer
             return XPrimitive2DRenderer_getSupportedServiceNames();
         }
 
-    } // end of namespace unorenderer
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

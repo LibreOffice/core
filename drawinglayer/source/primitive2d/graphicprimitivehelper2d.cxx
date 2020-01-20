@@ -41,10 +41,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         namespace {
 
         class AnimatedGraphicPrimitive2D : public AnimatedSwitchPrimitive2D
@@ -459,13 +457,10 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void create2DDecompositionOfGraphic(
             Primitive2DContainer& rContainer,
             const Graphic& rGraphic,
@@ -688,7 +683,6 @@ namespace drawinglayer
             return aRetval;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

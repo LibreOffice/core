@@ -50,10 +50,8 @@
 
 using namespace com::sun::star;
 
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         struct VclPixelProcessor2D::Impl
         {
             AntialiasingFlags m_nOrigAntiAliasing;
@@ -885,7 +883,7 @@ namespace drawinglayer
                 mpOutputDevice->SetAntialiasing(nOldAntiAliase);
             }
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

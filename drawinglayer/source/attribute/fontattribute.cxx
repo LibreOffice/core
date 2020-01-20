@@ -22,10 +22,8 @@
 #include <rtl/ustring.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         class ImpFontAttribute
         {
         public:
@@ -200,7 +198,6 @@ namespace drawinglayer
         }
 
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

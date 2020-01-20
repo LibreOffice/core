@@ -22,10 +22,8 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void DiscreteBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use getViewTransformation() and getObjectTransformation() from
@@ -93,7 +91,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(DiscreteBitmapPrimitive2D, PRIMITIVE2D_ID_DISCRETEBITMAPPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         TextHierarchyLinePrimitive2D::TextHierarchyLinePrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
@@ -36,14 +34,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextHierarchyLinePrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(
             const Primitive2DContainer& rChildren,
             sal_Int16 nOutlineLevel)
@@ -67,14 +58,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextHierarchyParagraphPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
@@ -83,14 +67,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextHierarchyBulletPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
@@ -99,14 +76,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextHierarchyBlockPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
             const Primitive2DContainer& rChildren,
             const FieldType& rFieldType,
@@ -149,14 +119,6 @@ namespace drawinglayer
 
         // provide unique ID
         ImplPrimitive2DIDBlock(TextHierarchyFieldPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
-
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren)
         {
@@ -165,7 +127,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextHierarchyEditPrimitive2D, PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

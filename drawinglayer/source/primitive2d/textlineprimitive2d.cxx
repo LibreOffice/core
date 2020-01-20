@@ -26,10 +26,8 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void TextLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(TEXT_LINE_NONE != getTextLine())
@@ -285,7 +283,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextLinePrimitive2D, PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

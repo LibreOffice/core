@@ -123,10 +123,8 @@ namespace
     }
 } // end of anonymous namespace
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         bool ScenePrimitive2D::impGetShadow3D() const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -690,7 +688,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(ScenePrimitive2D, PRIMITIVE2D_ID_SCENEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,10 +31,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         Primitive3DContainer SdrCubePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
@@ -196,7 +194,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(SdrCubePrimitive3D, PRIMITIVE3D_ID_SDRCUBEPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

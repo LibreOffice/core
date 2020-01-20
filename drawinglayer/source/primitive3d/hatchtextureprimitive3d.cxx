@@ -34,10 +34,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         Primitive3DContainer HatchTexturePrimitive3D::impCreate3DDecomposition() const
         {
             Primitive3DContainer aRetval;
@@ -317,7 +315,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(HatchTexturePrimitive3D, PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

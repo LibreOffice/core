@@ -24,10 +24,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         HiddenGeometryPrimitive3D::HiddenGeometryPrimitive3D(
             const Primitive3DContainer& rChildren)
         :   GroupPrimitive3D(rChildren)
@@ -48,7 +46,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(HiddenGeometryPrimitive3D, PRIMITIVE3D_ID_HIDDENGEOMETRYPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

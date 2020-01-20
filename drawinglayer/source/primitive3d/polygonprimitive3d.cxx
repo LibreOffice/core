@@ -27,10 +27,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         PolygonHairlinePrimitive3D::PolygonHairlinePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor)
@@ -61,14 +59,8 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(PolygonHairlinePrimitive3D, PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive3d
-    {
         Primitive3DContainer PolygonStrokePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             Primitive3DContainer aRetval;
@@ -153,7 +145,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(PolygonStrokePrimitive3D, PRIMITIVE3D_ID_POLYGONSTROKEPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

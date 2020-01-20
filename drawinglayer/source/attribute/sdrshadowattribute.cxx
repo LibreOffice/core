@@ -23,10 +23,8 @@
 #include <rtl/instance.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         class ImpSdrShadowAttribute
         {
         public:
@@ -124,7 +122,7 @@ namespace drawinglayer
         {
             return mpSdrShadowAttribute->getColor();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

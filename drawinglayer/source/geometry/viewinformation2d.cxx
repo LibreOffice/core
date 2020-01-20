@@ -32,10 +32,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::geometry
 {
-    namespace geometry
-    {
         class ImpViewInformation2D
         {
         private:
@@ -389,13 +387,10 @@ namespace drawinglayer
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
         };
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace geometry
+namespace drawinglayer::geometry
     {
         namespace
         {
@@ -499,7 +494,7 @@ namespace drawinglayer
         {
             return mpViewInformation2D->getExtendedInformationSequence();
         }
-    } // end of namespace geometry
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
