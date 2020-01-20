@@ -19,10 +19,11 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">3</property>
+        <property name="row_spacing">3</property>
+        <property name="column_spacing">6</property>
         <property name="column_homogeneous">True</property>
         <child>
           <object class="GtkSpinButton" id="rowheight">
