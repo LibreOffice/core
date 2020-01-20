@@ -16,6 +16,24 @@
       "revId": "ec1c08a68e45306d455b9df0432b8e915d74d124",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17421679_af66a8cf",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T13:02:53Z",
+      "side": 1,
+      "message": "Using STL algorithms makes things very explicit, because we call well-named functions.\nHere we can see easily that we find the first element of the list for which matches(pOut, nExtraData) is true. This was not so clear in previous version, because it was included in a for loop.\nFor me, now it is limpid.\n\nIn general, I agree that comments are welcome.\nHowever, I think that here they do not add value. They would be a pure english translation of what the function does.\nIt would be just like adding the following comment: \"get the name of the object\" to the call of a function called \"getName\" for an object. Or \"increments x\" before the instruction \"++x\".\nIn my opinion, the comparison is not exaggerated.\n\nInstead, a very helpful comment would be to explain why the element has to satisfy the if statement to be repaint, and why it is erased otherwise.",
+      "parentUuid": "eb8b33fe_b52007bf",
+      "revId": "ec1c08a68e45306d455b9df0432b8e915d74d124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
