@@ -60,6 +60,29 @@
     },
     {
       "key": {
+        "uuid": "b4543a1b_85568877",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:24:43Z",
+      "side": 1,
+      "message": "Here I should use cbegin() and cend(), because the C++11 version of erase take const_iterator arguments. Doing so, removeStart would be a const_iterator instead of an iterator.",
+      "range": {
+        "startLine": 317,
+        "startChar": 33,
+        "endLine": 317,
+        "endChar": 69
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7d09ad9_6a49d483",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
@@ -124,6 +147,29 @@
         "startChar": 35,
         "endLine": 318,
         "endChar": 91
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c0cc0c7_af0065e3",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:24:43Z",
+      "side": 1,
+      "message": "Here I should use cend(), because C++11 version of erase takes const_iterator arguments.",
+      "range": {
+        "startLine": 321,
+        "startChar": 42,
+        "endLine": 321,
+        "endChar": 58
       },
       "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
