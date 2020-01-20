@@ -173,15 +173,6 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
             SAL_INFO("xmloff.draw", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
             break;
         }
-        case XML_TOK_DOC_SCRIPT:
-        {
-            if( GetImport().getImportFlags() & SvXMLImportFlags::SCRIPTS )
-            {
-                // office:script inside office:document
-                xContext = new XMLScriptContext( GetSdImport(), rLocalName, GetSdImport().GetModel() );
-            }
-            break;
-        }
         case XML_TOK_DOC_BODY:
         {
             if( GetImport().getImportFlags() & SvXMLImportFlags::CONTENT )
@@ -198,8 +189,20 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
+    switch (nElement)
+    {
+        case XML_ELEMENT(OFFICE, XML_SCRIPTS):
+        {
+            if( GetImport().getImportFlags() & SvXMLImportFlags::SCRIPTS )
+            {
+                // office:script inside office:document
+                return new XMLScriptContext( GetSdImport(), GetSdImport().GetModel() );
+            }
+            break;
+        }
+    }
     return nullptr;
 }
 

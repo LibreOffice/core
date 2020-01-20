@@ -134,7 +134,7 @@ public:
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext( const sal_Int32 nElement );
-    SvXMLImportContext *CreateScriptContext( const OUString& rLocalName );
+    SvXMLImportContext *CreateScriptContext();
     SvXMLImportContext *CreateStylesContext(
                 const OUString& rLocalName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,

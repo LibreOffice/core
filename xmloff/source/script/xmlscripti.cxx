@@ -48,21 +48,25 @@ private:
     OUString const m_aLanguage;
 
 public:
-    XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+    XMLScriptChildContext( SvXMLImport& rImport,
         const css::uno::Reference< css::frame::XModel>& rxModel,
         const OUString& rLanguage );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+    { return nullptr; }
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 };
 
 }
 
-XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport,
         const Reference< frame::XModel >& rxModel, const OUString& rLanguage )
-    :SvXMLImportContext( rImport, nPrfx, rLName )
+    :SvXMLImportContext( rImport )
     ,m_xModel( rxModel )
     ,m_xDocumentScripts( rxModel, UNO_QUERY )
     ,m_aLanguage( rLanguage )
@@ -74,7 +78,6 @@ SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
     const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
-
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
         OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) + ":Basic" );
@@ -86,15 +89,11 @@ SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
     return xContext;
 }
 
-void XMLScriptChildContext::EndElement()
-{
-}
-
 // XMLScriptContext: context for <office:scripts> element
 
-XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, const OUString& rLName,
+XMLScriptContext::XMLScriptContext( SvXMLImport& rImport,
         const Reference<XModel>& rDocModel )
-    :SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLName )
+    :SvXMLImportContext( rImport )
     ,m_xModel( rDocModel )
 {
 }
@@ -103,9 +102,32 @@ XMLScriptContext::~XMLScriptContext()
 {
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    if ( nElement == XML_ELEMENT(OFFICE, XML_SCRIPT) )
+    {
+        if ( m_xModel.is() )
+        {
+            OUString aLanguage = xAttrList->getValue( XML_ELEMENT(SCRIPT, XML_LANGUAGE) );
+
+            uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
+            sal_Int32 nNewLen = aMedDescr.getLength() + 1;
+            aMedDescr.realloc( nNewLen );
+            aMedDescr[nNewLen-1].Name = "BreakMacroSignature";
+            aMedDescr[nNewLen-1].Value <<= true;
+            m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
+
+            return new XMLScriptChildContext( GetImport(), m_xModel, aLanguage );
+        }
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLScriptContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,
-    const Reference<XAttributeList>& xAttrList )
+    const Reference<XAttributeList>& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -116,33 +138,10 @@ SvXMLImportContextRef XMLScriptContext::CreateChildContext(
             Reference< XEventsSupplier> xSupplier( GetImport().GetModel(), UNO_QUERY );
             xContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
         }
-        else if ( IsXMLToken( rLName, XML_SCRIPT ) )
-        {
-            OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) + ":language" );
-            if ( xAttrList.is() )
-            {
-                OUString aLanguage = xAttrList->getValueByName( aAttrName );
-
-                if ( m_xModel.is() )
-                {
-                    uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
-                    sal_Int32 nNewLen = aMedDescr.getLength() + 1;
-                    aMedDescr.realloc( nNewLen );
-                    aMedDescr[nNewLen-1].Name = "BreakMacroSignature";
-                    aMedDescr[nNewLen-1].Value <<= true;
-                    m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
-
-                    xContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );
-                }
-            }
-        }
     }
 
     return xContext;
 }
 
-void XMLScriptContext::EndElement()
-{
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

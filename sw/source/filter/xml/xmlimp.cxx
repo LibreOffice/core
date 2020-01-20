@@ -211,8 +211,14 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport ) :
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
+    switch (nElement)
+    {
+        case XML_ELEMENT(OFFICE, XML_SCRIPTS):
+            return GetSwImport().CreateScriptContext();
+            break;
+    }
     return nullptr;
 }
 
@@ -250,9 +256,6 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_META:
         OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
-        break;
-    case XML_TOK_DOC_SCRIPT:
-        pContext = GetSwImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
         GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );

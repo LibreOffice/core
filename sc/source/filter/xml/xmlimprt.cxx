@@ -373,10 +373,6 @@ SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPref
     case XML_TOK_DOC_META:
         SAL_INFO("sc", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
-    case XML_TOK_DOC_SCRIPTS:
-        if (GetScImport().getImportFlags() & SvXMLImportFlags::SCRIPTS)
-            pContext = GetScImport().CreateScriptContext( rLocalName );
-        break;
     case XML_TOK_DOC_SETTINGS:
         if (GetScImport().getImportFlags() & SvXMLImportFlags::SETTINGS)
             pContext = new XMLDocumentSettingsContext(GetScImport(), nPrefix, rLocalName, xAttrList );
@@ -397,6 +393,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         case XML_ELEMENT( OFFICE, XML_BODY ):
         if (GetScImport().getImportFlags() & SvXMLImportFlags::CONTENT)
             pContext = new ScXMLBodyContext_Impl( GetScImport() );
+        break;
+        case XML_ELEMENT( OFFICE, XML_SCRIPTS ):
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::SCRIPTS)
+            pContext = GetScImport().CreateScriptContext();
         break;
 
         //TODO: handle all other cases
@@ -788,14 +788,13 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateScriptContext(
-    const OUString& rLocalName )
+SvXMLImportContext *ScXMLImport::CreateScriptContext()
 {
     SvXMLImportContext* pContext = nullptr;
 
     if( !(IsStylesOnlyMode()) )
     {
-        pContext = new XMLScriptContext( *this, rLocalName, GetModel() );
+        pContext = new XMLScriptContext( *this, GetModel() );
     }
 
     return pContext;
