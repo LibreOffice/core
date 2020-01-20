@@ -177,29 +177,31 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 {
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
-    if (nNewBitCount == src.GetBitCount())
-    {
-        mBitmap = src.mBitmap;
-        // SkBitmap shares pixels on copy.
-        assert(mBitmap.getPixels() == src.mBitmap.getPixels());
-        mImage = src.mImage;
-        mAlphaImage = src.mAlphaImage;
-        mBuffer = src.mBuffer;
-        mPalette = src.mPalette;
-        mBitCount = src.mBitCount;
-        mSize = src.mSize;
-        mScanlineSize = src.mScanlineSize;
+    mBitmap = src.mBitmap;
+    // SkBitmap shares pixels on copy.
+    assert(mBitmap.getPixels() == src.mBitmap.getPixels());
+    mImage = src.mImage;
+    mAlphaImage = src.mAlphaImage;
+    mBuffer = src.mBuffer;
+    mPalette = src.mPalette;
+    mBitCount = src.mBitCount;
+    mSize = src.mSize;
+    mScanlineSize = src.mScanlineSize;
 #ifdef DBG_UTIL
-        mWriteAccessCount = 0;
+    mWriteAccessCount = 0;
 #endif
-        SAL_INFO("vcl.skia", "create(" << this << "): (" << &src << ")");
-        return true;
+    if (nNewBitCount != src.GetBitCount())
+    {
+        // This appears to be unused(?). Implement this just in case, but be lazy
+        // about it and rely on EnsureBitmapData() doing the conversion from mImage
+        // if needed, even if that may need unnecessary to- and from- SkImage
+        // conversion.
+        GetSkImage(); // create mImage
+        mBitmap.reset();
+        mBuffer.reset();
     }
-    if (!Create(src.mSize, src.mBitCount, src.mPalette))
-        return false;
-    // TODO copy data
-    SAL_INFO("vcl.skia", "copy(" << this << "): (" << &src << ")");
-    abort();
+    SAL_INFO("vcl.skia", "create(" << this << "): (" << &src << ")");
+    return true;
 }
 
 bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&, bool)
