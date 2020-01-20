@@ -33,6 +33,7 @@
 #include <svx/svdpage.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
@@ -336,7 +337,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             {
                 // Do CSV dialog if more than one line. But not if invoked from Automation.
                 sal_Int32 nDelim = pStrBuffer->indexOf('\n');
-                if (!comphelper::Automation::AutomationInvokedZone::isActive()
+                if (!comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) && !comphelper::Automation::AutomationInvokedZone::isActive()
                     && nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
                 {
                     vcl::Window* pParent = GetActiveWin();
