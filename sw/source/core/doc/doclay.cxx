@@ -428,7 +428,11 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                         *rTmp.GetPoint() != *rTmp.GetMark() )
                     {
                         // aPos is the newly created fly section, so definitely outside rPam, it's pointless to check that again.
+<<<<<<< HEAD   (5fc073 writerperfect[libwps,tdf#128673]: use the inFilter option in)
                         getIDocumentContentOperations().CopyRange( *const_cast<SwPaM*>(&rTmp), aPos, /*bCopyAll=*/false, /*bCheckPos=*/false );
+=======
+                        getIDocumentContentOperations().CopyRange( *const_cast<SwPaM*>(&rTmp), aPos, /*bCopyAll=*/false, /*bCheckPos=*/false, /*bCopyText=*/true);
+>>>>>>> CHANGE (81ec00 tdf#129582 sw: fix copying of flys in header/footer in DOCX/)
                     }
                 }
                 getIDocumentRedlineAccess().SetRedlineMove(bOldRedlineMove);

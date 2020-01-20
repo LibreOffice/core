@@ -1828,6 +1828,30 @@ DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSw
 {
 }
 
+<<<<<<< HEAD   (5fc073 writerperfect[libwps,tdf#128673]: use the inFilter option in)
+=======
+/**
+ * Checks if rStart..rEnd mark a range that makes sense to copy.
+ *
+ * bCopyText is misnamed and means that the copy is a move to create a fly
+ * and so existing flys at the edge must not be copied.
+ */
+static bool IsEmptyRange(const SwPosition& rStart, const SwPosition& rEnd, bool bCopyText)
+{
+    if (rStart == rEnd)
+    {   // check if a fly anchored there would be copied - then copy...
+        return !IsDestroyFrameAnchoredAtChar(rStart, rStart, rEnd,
+                bCopyText
+                    ? DelContentType::WriterfilterHack|DelContentType::AllMask
+                    : DelContentType::AllMask);
+    }
+    else
+    {
+        return rEnd < rStart;
+    }
+}
+
+>>>>>>> CHANGE (81ec00 tdf#129582 sw: fix copying of flys in header/footer in DOCX/)
 // Copy an area into this document or into another document
 bool
 DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos ) const
@@ -3486,14 +3510,24 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 {
                     bAdd = IsSelectFrameAnchoredAtPara(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
+<<<<<<< HEAD   (5fc073 writerperfect[libwps,tdf#128673]: use the inFilter option in)
                         pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+=======
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        bCopyText
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
+>>>>>>> CHANGE (81ec00 tdf#129582 sw: fix copying of flys in header/footer in DOCX/)
                 }
             break;
             case RndStdIds::FLY_AT_CHAR:
                 {
                     bAdd = IsDestroyFrameAnchoredAtChar(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
-                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        bCopyText
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
                 }
             break;
             default:

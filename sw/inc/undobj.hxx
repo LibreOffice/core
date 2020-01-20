@@ -135,11 +135,16 @@ enum class DelContentType : sal_uInt16
     Fly          = 0x02,
     Bkm          = 0x08,
     AllMask      = 0x0b,
+    WriterfilterHack = 0x20,
     ExcludeFlyAtStartEnd = 0x40,
     CheckNoCntnt = 0x80,
 };
 namespace o3tl {
+<<<<<<< HEAD   (5fc073 writerperfect[libwps,tdf#128673]: use the inFilter option in)
     template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0xcb> {};
+=======
+    template<> struct typed_flags<DelContentType> : is_typed_flags<DelContentType, 0xeb> {};
+>>>>>>> CHANGE (81ec00 tdf#129582 sw: fix copying of flys in header/footer in DOCX/)
 }
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
