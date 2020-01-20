@@ -2440,7 +2440,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         }
 
         weld::WaitObject aWait( GetActiveDialogParent() );
-        // FIXME:  Hack so that the Sba opened TempFile can be overwritten
+        // Hack so that Sba can overwrite the opened TempFile.
         rMed.CloseOutStream();
         bool bHasMemo = false;
 
