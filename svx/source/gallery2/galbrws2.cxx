@@ -351,10 +351,14 @@ GalleryBrowser2::GalleryBrowser2(weld::Builder& rBuilder, Gallery* pGallery)
     , mxIconButton(rBuilder.weld_toggle_button("icon"))
     , mxListButton(rBuilder.weld_toggle_button("list"))
     , mxInfoBar(rBuilder.weld_label("label"))
+    , mxDev(mxListView->create_virtual_device())
+    , maPreviewSize(28, 28)
     , mnCurActionPos      ( 0xffffffff )
     , meMode              ( GALLERYBROWSERMODE_NONE )
     , meLastMode          ( GALLERYBROWSERMODE_NONE )
 {
+    mxDev->SetOutputSizePixel(maPreviewSize);
+
     m_xContext.set( ::comphelper::getProcessComponentContext() );
 
     int nHeight = mxListView->get_height_rows(10);
@@ -668,7 +672,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 GalleryPreview::PreviewMedia( INetURLObject() );
 
                 mxListView->show();
-                UpdateVisibleRows();
+                UpdateRows(true);
 
                 mxIconButton->set_sensitive(true);
                 mxListButton->set_sensitive(true);
@@ -791,12 +795,25 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
     if( mpCurTheme )
     {
+        const int nAlwaysUpToDate = 15;
+
+        mxListView->freeze();
+
         OUString sCreateOnDemand;
-        for (sal_uInt32 i = 0, nCount = mpCurTheme->GetObjectCount(); i < nCount; ++i)
+        sal_uInt32 nCount = mpCurTheme->GetObjectCount();
+        for (sal_uInt32 i = 0; i < nCount; ++i)
         {
             mxIconView->InsertItem(i + 1); // skip reserved id 0
             mxListView->append(OUString::number(i), sCreateOnDemand); // create on-demand in VisRowsScrolledHdl
+
+            if (i == nAlwaysUpToDate) // fill in the first block
+                UpdateRows(false);
         }
+
+        if (nCount < nAlwaysUpToDate) // if less than block size, fill in all of them
+            UpdateRows(false);
+
+        mxListView->thaw();
 
         ImplSelectItemId( std::min<sal_uInt16>( nSelectionId, mpCurTheme->GetObjectCount() ) );
     }
@@ -806,7 +823,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
         case GALLERYBROWSERMODE_ICON: mxIconView->Show(); break;
         case GALLERYBROWSERMODE_LIST:
             mxListView->show();
-            UpdateVisibleRows();
+            UpdateRows(true);
             break;
         case GALLERYBROWSERMODE_PREVIEW: mxPreview->Show(); break;
 
@@ -817,7 +834,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
     ImplUpdateInfoBar();
 }
 
-void GalleryBrowser2::UpdateVisibleRows()
+void GalleryBrowser2::UpdateRows(bool bVisibleOnly)
 {
     auto lambda = [this](weld::TreeIter& rEntry){
         // id is non-null if the preview is pending creation
@@ -826,9 +843,6 @@ void GalleryBrowser2::UpdateVisibleRows()
             return false;
 
         // get the icon for the listview
-        VclPtr<VirtualDevice> xDev = mxListView->create_virtual_device();
-        const Size aSize(28, 28);
-        xDev->SetOutputSizePixel(aSize);
         BitmapEx aBitmapEx;
         Size aPreparedSize;
 
@@ -839,7 +853,7 @@ void GalleryBrowser2::UpdateVisibleRows()
         mpCurTheme->GetPreviewBitmapExAndStrings(i, aBitmapEx, aPreparedSize, sItemTextTitle, sItemTextPath);
 
         bool bNeedToCreate(aBitmapEx.IsEmpty());
-        if (!bNeedToCreate && (sItemTextTitle.isEmpty() || aPreparedSize != aSize))
+        if (!bNeedToCreate && (sItemTextTitle.isEmpty() || aPreparedSize != maPreviewSize))
             bNeedToCreate = true;
 
         if (bNeedToCreate)
@@ -847,11 +861,11 @@ void GalleryBrowser2::UpdateVisibleRows()
             std::unique_ptr<SgaObject> xObj = mpCurTheme->AcquireObject(i);
             if (xObj)
             {
-                aBitmapEx = xObj->createPreviewBitmapEx(aSize);
+                aBitmapEx = xObj->createPreviewBitmapEx(maPreviewSize);
                 sItemTextTitle = GalleryBrowser2::GetItemText(*xObj, GalleryItemFlags::Title);
                 sItemTextPath = GalleryBrowser2::GetItemText(*xObj, GalleryItemFlags::Path);
 
-                mpCurTheme->SetPreviewBitmapExAndStrings(i, aBitmapEx, aSize, sItemTextTitle, sItemTextPath);
+                mpCurTheme->SetPreviewBitmapExAndStrings(i, aBitmapEx, maPreviewSize, sItemTextTitle, sItemTextPath);
             }
         }
 
@@ -859,39 +873,47 @@ void GalleryBrowser2::UpdateVisibleRows()
         {
             const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
             const Point aPos(
-                ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1),
-                ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1));
+                ((maPreviewSize.Width() - aBitmapExSizePixel.Width()) >> 1),
+                ((maPreviewSize.Height() - aBitmapExSizePixel.Height()) >> 1));
+
+            mxDev->Erase();
 
             if (aBitmapEx.IsTransparent())
             {
                 // draw checkered background
-                GalleryIconView::drawTransparenceBackground(*xDev, aPos, aBitmapExSizePixel);
+                GalleryIconView::drawTransparenceBackground(*mxDev, aPos, aBitmapExSizePixel);
             }
 
-            xDev->DrawBitmapEx(aPos, aBitmapEx);
+            mxDev->DrawBitmapEx(aPos, aBitmapEx);
         }
 
         mxListView->set_text(rEntry, sItemTextTitle);
-        mxListView->set_image(rEntry, *xDev);
+        mxListView->set_image(rEntry, *mxDev);
         mxListView->set_id(rEntry, OUString());
 
         return false;
     };
 
-    // ensure all visible entries are up to date
-    mxListView->visible_foreach(lambda);
-    // and ensure all selected entries are up to date
-    mxListView->selected_foreach(lambda);
+    if (bVisibleOnly)
+    {
+        // ensure all visible entries are up to date
+        mxListView->visible_foreach(lambda);
+        // and ensure all selected entries are up to date
+        mxListView->selected_foreach(lambda);
+        return;
+    }
+
+    mxListView->all_foreach(lambda);
 }
 
 IMPL_LINK_NOARG(GalleryBrowser2, VisRowsScrolledHdl, weld::TreeView&, void)
 {
-    UpdateVisibleRows();
+    UpdateRows(true);
 }
 
 IMPL_LINK_NOARG(GalleryBrowser2, SizeAllocHdl, const Size&, void)
 {
-    UpdateVisibleRows();
+    UpdateRows(true);
 }
 
 void GalleryBrowser2::ImplUpdateInfoBar()

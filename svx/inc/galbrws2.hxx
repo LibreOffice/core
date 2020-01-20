@@ -88,6 +88,8 @@ private:
     std::unique_ptr<weld::ToggleButton> mxIconButton;
     std::unique_ptr<weld::ToggleButton> mxListButton;
     std::unique_ptr<weld::Label> mxInfoBar;
+    VclPtr<VirtualDevice> mxDev;
+    Size maPreviewSize;
     rtl::Reference<GalleryTransferable> m_xHelper;
     sal_uInt32 mnCurActionPos;
     GalleryBrowserMode  meMode;
@@ -101,7 +103,7 @@ private:
     sal_uInt32          ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
     void                ImplSelectItemId(sal_uInt32 nItemId);
     void                ImplUpdateSelection();
-    void                UpdateVisibleRows();
+    void                UpdateRows(bool bVisibleOnly);
 
     // SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
