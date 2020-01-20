@@ -389,8 +389,8 @@ namespace emfio
 
     const sal_uInt32 EMR_COMMENT_BEGINGROUP = 0x00000002;
     const sal_uInt32 EMR_COMMENT_ENDGROUP = 0x00000003;
-    const sal_uInt32 EMR_COMMENT_MULTIFORMATS = 0x00000004;
-    const sal_uInt32 EMR_COMMENT_WINDOWS_METAFILE = 0x00000005;
+    const sal_uInt32 EMR_COMMENT_MULTIFORMATS = 0x40000004;
+    const sal_uInt32 EMR_COMMENT_WINDOWS_METAFILE = 0x80000001;
 
     void EmfReader::ReadGDIComment(sal_uInt32 nCommentId)
     {
