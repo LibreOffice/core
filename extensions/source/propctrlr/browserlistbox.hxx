@@ -100,7 +100,6 @@ namespace pcr
         void                        EnableHelpSection( bool _bEnable );
         bool                        HasHelpSection() const;
         void                        SetHelpText( const OUString& _rHelpText );
-        void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
         void                        Clear();
 

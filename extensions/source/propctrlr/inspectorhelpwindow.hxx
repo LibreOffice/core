@@ -30,16 +30,11 @@ namespace pcr
         std::unique_ptr<weld::Widget> m_xHelpFrame;
         std::unique_ptr<weld::TextView> m_xHelpText;
 
-        sal_Int32       m_nMinLines;
-        sal_Int32       m_nMaxLines;
-
     public:
         explicit InspectorHelpWindow(weld::Builder& rBuilder);
         ~InspectorHelpWindow();
 
         void            SetText(const OUString& rStr);
-
-        void            SetLimits(sal_Int32 nMinLines, sal_Int32 nMaxLines);
 
         void            Show(bool bShow) { m_xHelpFrame->set_visible(bShow); }
         bool            IsVisible() const { return m_xHelpFrame->get_visible(); }

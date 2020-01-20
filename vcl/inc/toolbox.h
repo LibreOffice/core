@@ -37,7 +37,6 @@ struct ImplToolItem
     VclPtr<vcl::Window> mpWindow; //don't dispose mpWindow - we get copied around
     void*               mpUserData;
     Image               maImage;
-    Image               maOverlayImage;
     long                mnImageAngle;
     bool                mbMirrorMode;
     OUString            maText;

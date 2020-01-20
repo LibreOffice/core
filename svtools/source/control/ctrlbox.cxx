@@ -1056,7 +1056,6 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
     {
         mnLastValue = nTempValue;
         SetText( aName );
-        mnFieldValue = mnLastValue;
         SetEmptyFieldValueData( false );
         return;
     }
