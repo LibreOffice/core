@@ -110,11 +110,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         bIsPng = (eType == GfxLinkType::NativePng);
     }
 
-    if( i_rContext.m_nMaxImageResolution > 50 )
+    // Do not downsample images smaller than 50x50px.
+    const Size aBmpSize(aBitmapEx.GetSizePixel());
+    if (i_rContext.m_nMaxImageResolution > 50 && aBmpSize.getWidth() > 50
+        && aBmpSize.getHeight() > 50)
     {
         // do downsampling if necessary
         const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic(i_pDummyVDev->LogicToPixel(aSize), MapMode(MapUnit::MapTwip)) );
-        const Size      aBmpSize( aBitmapEx.GetSizePixel() );
         const double    fBmpPixelX = aBmpSize.Width();
         const double    fBmpPixelY = aBmpSize.Height();
         const double    fMaxPixelX = aDstSizeTwip.Width() * i_rContext.m_nMaxImageResolution / 1440.0;
