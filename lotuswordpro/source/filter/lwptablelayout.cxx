@@ -834,7 +834,7 @@ void LwpTableLayout::Read()
 void LwpTableLayout::XFConvert(XFContentContainer* pCont)
 {
     if (!m_pXFTable)
-        throw std::runtime_error("missing table");
+        return;
     pCont->Add(m_pXFTable.get());
 }
 /**
