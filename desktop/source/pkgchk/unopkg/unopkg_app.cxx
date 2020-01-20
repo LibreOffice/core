@@ -31,6 +31,7 @@
 #include <osl/process.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
+#include <unotools/tempfile.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
@@ -204,6 +205,7 @@ extern "C" int unopkg_main()
     Reference<XLogHandler> xFileHandler;
     Reference<XLogHandler> xConsoleHandler;
     std::unique_ptr<comphelper::EventLogger> logger;
+    std::unique_ptr<utl::TempFile> pUserProfileTempDir;
 
     OptionInfo const * info_shared = getOptionInfo(
         s_option_infos, "shared" );
@@ -298,8 +300,16 @@ extern "C" int unopkg_main()
             }
         }
 
-        xComponentContext = getUNO(
-        option_verbose, option_shared, subcmd_gui, xLocalComponentContext );
+        // tdf#129917 Use temp user profile when installing shared extensions
+        if (option_shared)
+        {
+            pUserProfileTempDir.reset(new utl::TempFile(nullptr, true));
+            pUserProfileTempDir->EnableKillingFile();
+        }
+
+        xComponentContext = getUNO(option_verbose, subcmd_gui,
+                                   pUserProfileTempDir ? pUserProfileTempDir->GetURL() : "",
+                                   xLocalComponentContext);
 
         // Initialize logging. This will log errors to the console and
         // also to file if the --log-file parameter was provided.
@@ -359,7 +369,6 @@ extern "C" int unopkg_main()
                            APP_NAME, toString(info_shared), toString(info_bundled));
                 return 1;
             }
-
         }
 #endif
 
