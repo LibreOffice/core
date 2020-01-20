@@ -107,6 +107,7 @@ void X11SkiaSalGraphicsImpl::freeResources() {}
 
 void X11SkiaSalGraphicsImpl::performFlush()
 {
+    mPendingPixelsToFlush = 0;
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
     mWindowContext->swapBuffers();
 }
