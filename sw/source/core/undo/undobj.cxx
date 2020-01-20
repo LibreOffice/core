@@ -1554,8 +1554,9 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
             && (rStart.nNode <= rAnchorPos.nNode);
     }
 
-    if (rAnchorPos.GetDoc()->IsInReading())
-    {   // FIXME hack for writerfilter RemoveLastParagraph(); can't test file format more specific?
+    if ((nDelContentType & DelContentType::WriterfilterHack)
+        && rAnchorPos.GetDoc()->IsInReading())
+    {   // FIXME hack for writerfilter RemoveLastParagraph() and MakeFlyAndMove(); can't test file format more specific?
         return (rStart < rAnchorPos) && (rAnchorPos < rEnd);
     }
 
