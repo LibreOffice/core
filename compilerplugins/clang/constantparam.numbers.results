@@ -310,10 +310,6 @@ fpicker/source/office/iodlg.hxx:228
     void SvtFileDialog::displayIOException(const class rtl::OUString &,enum com::sun::star::ucb::IOErrorCode)
     enum com::sun::star::ucb::IOErrorCode _eCode
     5
-framework/inc/tabwin/tabwindow.hxx:142
-    void framework::TabWindow::implts_SendNotification(enum framework::TabWindow::Notification,int,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::NamedValue> &) const
-    enum framework::TabWindow::Notification eNotify
-    2
 framework/inc/uielement/macrosmenucontroller.hxx:63
     void framework::MacrosMenuController::addScriptItems(class PopupMenu *,unsigned short)
     unsigned short startItemId

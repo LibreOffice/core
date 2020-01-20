@@ -46,7 +46,6 @@ officecfg_XCSFILES := \
     Office/ReportDesign \
     Office/Scripting \
     Office/Security \
-    Office/TabBrowse \
     Office/TableWizard \
     Office/TypeDetection \
     Office/UI \

@@ -28,7 +28,4 @@
   <implementation name="com.sun.star.comp.framework.SystemExecute">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.TabWindowFactory">
-    <service name="com.sun.star.frame.TabWindowFactory"/>
-  </implementation>
 </component>

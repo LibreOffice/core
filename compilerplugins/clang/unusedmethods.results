@@ -154,8 +154,6 @@ editeng/inc/edtspell.hxx:105
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, class std::__cxx1998::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> > >, class std::__debug::vector<struct editeng::MisspellRange, class std::allocator<struct editeng::MisspellRange> >, struct std::random_access_iterator_tag> WrongList::end() const
 extensions/source/scanner/scanner.hxx:85
     void ScannerManager::SetData(void *)
-framework/inc/tabwin/tabwindow.hxx:64
-    void framework::TabWindow::impl_initService()
 hwpfilter/source/mzstring.h:99
     class MzString & MzString::operator<<(unsigned char)
 hwpfilter/source/mzstring.h:101
