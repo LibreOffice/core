@@ -18,19 +18,14 @@
  */
 
 
-#include <desktop/dllapi.h>
 #include <dp_misc.h>
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
 #include <dp_identifier.hxx>
 #include <tools/extendapplicationenvironment.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
-#include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/conditn.hxx>
-#include <osl/file.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
@@ -48,10 +43,7 @@
 #include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
-#include <com/sun/star/bridge/BridgeFactory.hpp>
-#include <stdio.h>
 #if defined(UNX)
   #include <unistd.h>
 #endif

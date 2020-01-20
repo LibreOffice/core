@@ -22,6 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <osl/file.hxx>
 
 
 using namespace ::com::sun::star;

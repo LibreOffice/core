@@ -35,6 +35,8 @@
 
 #include <memory>
 
+#include "dp_gui.h"
+
 namespace dp_gui {
 
 #define SMALL_ICON_SIZE     16

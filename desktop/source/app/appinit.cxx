@@ -20,28 +20,18 @@
 
 #include <algorithm>
 
-#include <config_vclplug.h>
-
 #include <app.hxx>
 #include <dp_shared.hxx>
 #include "cmdlineargs.hxx"
 #include <strings.hrc>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
-#include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
-#include <uno/current_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
-#include <osl/module.h>
-#include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -52,7 +42,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
-#include <sfx2/safemode.hxx>
 #include <map>
 
 using namespace desktop;

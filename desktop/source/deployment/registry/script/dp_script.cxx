@@ -23,15 +23,12 @@
 #include "dp_lib_container.h"
 #include <dp_backend.h>
 #include <dp_ucb.h>
-#include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/script/XLibraryContainer3.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
 #include <memory>
 #include "dp_scriptbackenddb.hxx"
 

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_LICENSE_DIALOG_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_LICENSE_DIALOG_HXX
 
-#include "dp_gui.h"
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 

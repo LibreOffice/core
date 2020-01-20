@@ -8,7 +8,6 @@
  */
 
 #include <config_features.h>
-#include <config_folders.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -75,8 +74,6 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
@@ -89,8 +86,6 @@
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
-#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -98,9 +93,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -108,12 +101,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokcharthelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
-#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
-#include <svx/ruler.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
@@ -127,15 +117,11 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/ptrstyle.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/IDialogRenderable.hxx>
 #include <vcl/dialog.hxx>
 #include <unicode/uchar.h>
-#include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/pathoptions.hxx>
@@ -144,7 +130,6 @@
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <svl/eitem.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/mslangid.hxx>

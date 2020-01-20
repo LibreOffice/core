@@ -7,16 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <boost/property_tree/json_parser.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
-#include <cstdlib>
-#include <string>
-#include <stdio.h>
 
 #include <tools/color.hxx>
 

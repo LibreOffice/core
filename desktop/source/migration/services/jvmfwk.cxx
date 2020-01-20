@@ -19,10 +19,7 @@
 
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/types.h>
@@ -41,7 +38,6 @@
 #include <stack>
 #include <stdio.h>
 
-#include <osl/thread.hxx>
 #include <osl/diagnose.h>
 
 #define SERVICE_NAME "com.sun.star.migration.Java"

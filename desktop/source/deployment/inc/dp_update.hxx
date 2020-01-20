@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include "dp_misc_api.hxx"
 
 #include <map>

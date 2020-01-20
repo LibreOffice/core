@@ -26,7 +26,6 @@
 #include "dp_parceldesc.hxx"
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

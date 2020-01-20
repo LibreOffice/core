@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
 
-#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <unotools/resmgr.hxx>
 

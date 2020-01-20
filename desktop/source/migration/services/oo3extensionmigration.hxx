@@ -25,14 +25,12 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 
 #include <osl/mutex.hxx>
-#include <osl/file.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <ucbhelper/content.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

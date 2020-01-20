@@ -24,10 +24,8 @@
 #include <dp_backend.h>
 #include <dp_ucb.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
-#include <osl/file.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <ucbhelper/content.hxx>
@@ -35,7 +33,6 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>

@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/controldims.hxx>
-
 #include <dp_shared.hxx>
 #include <strings.hrc>
 #include "dp_gui.h"
 #include "dp_gui_extlistbox.hxx"
 #include "dp_gui_theextmgr.hxx"
-#include "dp_gui_dialog2.hxx"
 #include <dp_dependencies.hxx>
 #include <bitmaps.hlst>
 
@@ -38,7 +35,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/commandevent.hxx>
+#include <osl/diagnose.h>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>

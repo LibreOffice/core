@@ -19,13 +19,12 @@
 
 
 #include <strings.hrc>
+#include <dp_misc.h>
 #include <dp_shared.hxx>
 #include "unopkg_shared.h"
-#include <osl/thread.h>
-#include <sal/log.hxx>
-#include <unotools/resmgr.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
@@ -34,14 +33,12 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/InstallException.hpp>
-#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/VersionException.hpp>
 #include <com/sun/star/deployment/PlatformException.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
-#include <stdio.h>
 #include <dp_version.hxx>
 
 using namespace ::com::sun::star;

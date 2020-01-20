@@ -18,13 +18,7 @@
  */
 
 
-#include <cppuhelper/implementationentry.hxx>
-#include <unotools/configmgr.hxx>
 #include <comphelper/unwrapargs.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <svl/lstner.hxx>
 #include <vcl/event.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
@@ -35,7 +29,6 @@
 
 #include <functional>
 
-using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

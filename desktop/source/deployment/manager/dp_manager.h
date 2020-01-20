@@ -21,9 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_MANAGER_H
 
 #include <dp_misc.h>
-#include <dp_interact.h>
 #include "dp_activepackages.hxx"
-#include <rtl/ref.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/content.hxx>

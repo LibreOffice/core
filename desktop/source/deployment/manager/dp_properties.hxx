@@ -23,6 +23,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/optional.hxx>
 
 

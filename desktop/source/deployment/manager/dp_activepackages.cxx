@@ -17,20 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include <config_extensions.h>
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <utility>
-#include <vector>
 
 #include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
-#include <rtl/uri.h>
-#include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 
 #include <dp_identifier.hxx>

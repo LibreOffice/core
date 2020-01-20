@@ -27,15 +27,13 @@
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "dispatchwatcher.hxx"
-#include <stdio.h>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
-#include <osl/process.h>
+#include <salhelper/thread.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/help.hxx>
 #include <unotools/configmgr.hxx>
-#include <osl/thread.hxx>
+#include <osl/pipe.hxx>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
@@ -46,7 +44,6 @@
 #include <osl/file.hxx>
 #include <rtl/process.h>
 
-#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <memory>

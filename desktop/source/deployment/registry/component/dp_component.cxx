@@ -36,6 +36,7 @@
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
 #include <tools/diagnose_ex.h>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

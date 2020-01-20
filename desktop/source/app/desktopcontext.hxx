@@ -21,7 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_APP_DESKTOPCONTEXT_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <uno/current_context.hxx>
+#include <com/sun/star/uno/XCurrentContext.hpp>
 
 namespace desktop
 {

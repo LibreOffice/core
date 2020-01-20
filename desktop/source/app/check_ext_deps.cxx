@@ -20,22 +20,16 @@
 #include <config_folders.h>
 #include <config_features.h>
 
-#include <osl/file.hxx>
-
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <vcl/timer.hxx>
-
-#include <unotools/configmgr.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -50,7 +44,6 @@
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/ui/LicenseDialog.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
-#include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

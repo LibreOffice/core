@@ -22,7 +22,6 @@
 
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
 #include "dp_misc_api.hxx"

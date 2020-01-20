@@ -15,12 +15,9 @@
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <com/sun/star/frame/XStorable.hpp>
 
 #include <vcl/combobox.hxx>
 #include <vcl/scheduler.hxx>
@@ -30,7 +27,6 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
 #include <comphelper/lok.hxx>
@@ -49,7 +45,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
-#include <ostream>
 #include <config_features.h>
 #include <config_mpl.h>
 

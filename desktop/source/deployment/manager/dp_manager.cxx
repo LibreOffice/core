@@ -19,11 +19,11 @@
 
 #include <config_features.h>
 
+#include <dp_interact.h>
 #include <dp_registry.hxx>
 #include <dp_shared.hxx>
 #include <strings.hrc>
 #include <dp_ucb.h>
-#include <dp_resource.h>
 #include <dp_platform.hxx>
 #include "dp_manager.h"
 #include <dp_identifier.hxx>
@@ -37,15 +37,12 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/logging.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
@@ -63,10 +60,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
-#include <com/sun/star/deployment/VersionException.hpp>
-#include <com/sun/star/deployment/InstallException.hpp>
 #include <com/sun/star/deployment/Prerequisites.hpp>
-#include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <unotools/tempfile.hxx>
 
@@ -75,7 +69,6 @@
 #include "dp_properties.hxx"
 
 #include <vector>
-#include <list>
 #include <algorithm>
 
 using namespace ::dp_misc;

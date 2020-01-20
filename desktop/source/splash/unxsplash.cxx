@@ -20,10 +20,7 @@
 #include "unxsplash.hxx"
 #include <stdio.h>
 #include <osl/process.h>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;

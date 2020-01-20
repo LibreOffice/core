@@ -21,17 +21,13 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKEND_H
 
 #include <dp_misc.h>
-#include <dp_resource.h>
 #include <dp_shared.hxx>
 #include <dp_interact.h>
 #include <rtl/ref.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
-#include <com/sun/star/deployment/XPackageManager.hpp>
-#include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
 #include <unordered_map>
 #include <strings.hrc>
 

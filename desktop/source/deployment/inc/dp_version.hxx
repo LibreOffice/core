@@ -21,6 +21,8 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
 
 #include <sal/config.h>
+
+#include <rtl/ustring.hxx>
 #include "dp_misc_api.hxx"
 
 

@@ -26,14 +26,12 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <osl/pipe.hxx>
-#include <osl/security.hxx>
 #include <osl/signal.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
-#include <salhelper/thread.hxx>
 #include <o3tl/optional.hxx>
 
 namespace desktop

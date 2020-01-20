@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <com/sun/star/deployment/DependencyException.hpp>
@@ -31,7 +29,6 @@
 
 #include <com/sun/star/deployment/ui/LicenseDialog.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -46,15 +43,13 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <o3tl/any.hxx>
+#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
@@ -64,9 +59,7 @@
 #include <comphelper/anytostring.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
-#include "dp_gui.h"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_gui_dialog2.hxx"
@@ -76,6 +69,7 @@
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_updateinstalldialog.hxx"
 #include <dp_dependencies.hxx>
+#include <dp_misc.h>
 #include <dp_identifier.hxx>
 #include <dp_version.hxx>
 
