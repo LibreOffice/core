@@ -1715,16 +1715,22 @@ DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSw
 /**
  * Checks if rStart..rEnd mark a range that makes sense to copy.
  *
- * bCopyText means that an empty range is OK, since paragraph-anchored objects may present.
+ * bCopyText is misnamed and means that the copy is a move to create a fly
+ * and so existing flys at the edge must not be copied.
  */
 static bool IsEmptyRange(const SwPosition& rStart, const SwPosition& rEnd, bool bCopyText)
 {
-    bool bEmptyRange = rStart >= rEnd;
-    if (bCopyText)
-    {
-        bEmptyRange = rStart > rEnd;
+    if (rStart == rEnd)
+    {   // check if a fly anchored there would be copied - then copy...
+        return !IsDestroyFrameAnchoredAtChar(rStart, rStart, rEnd,
+                bCopyText
+                    ? DelContentType::WriterfilterHack|DelContentType::AllMask
+                    : DelContentType::AllMask);
     }
-    return bEmptyRange;
+    else
+    {
+        return rEnd < rStart;
+    }
 }
 
 // Copy an area into this document or into another document
@@ -3462,7 +3468,10 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 {
                     bAdd = IsDestroyFrameAnchoredAtChar(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
-                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        bCopyText
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
                 }
             break;
             default:
