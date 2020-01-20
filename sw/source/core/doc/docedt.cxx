@@ -221,12 +221,12 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
         if (pAPos &&
             (((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
                 && IsSelectFrameAnchoredAtPara(*pAPos, rStart, rEnd, pPtIdx
-                    ? DelContentType::AllMask
-                    : DelContentType::AllMask|DelContentType::CheckNoCntnt))
+                    ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                    : DelContentType::AllMask|DelContentType::WriterfilterHack|DelContentType::CheckNoCntnt))
             || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 && IsDestroyFrameAnchoredAtChar(*pAPos, rStart, rEnd, pPtIdx
-                    ? DelContentType::AllMask
-                    : DelContentType::AllMask|DelContentType::CheckNoCntnt))))
+                    ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                    : DelContentType::AllMask|DelContentType::WriterfilterHack|DelContentType::CheckNoCntnt))))
         {
             // If the Fly is deleted, all Flys in its content have to be deleted too.
             const SwFormatContent &rContent = pFormat->GetContent();
