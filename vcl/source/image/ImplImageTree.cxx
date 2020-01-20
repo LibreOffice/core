@@ -150,6 +150,7 @@ std::shared_ptr<SvMemoryStream> wrapStream(uno::Reference<io::XInputStream> cons
             break;
     }
     aMemoryStream->Seek(0);
+    rInputStream->closeInput();
     return aMemoryStream;
 }
 
