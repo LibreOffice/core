@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/textcvt.h>
@@ -559,6 +560,9 @@ void writeValueContent(TempFile &handle, std::u16string_view value) {
 void writeModFile(
     Components & components, OUString const & url, Data const & data)
 {
+    OUString sTokenOut;
+    if (rtl::Bootstrap::get("LO_NO_REGISTRYMODIFICATIONS", sTokenOut))
+        return;
     sal_Int32 i = url.lastIndexOf('/');
     assert(i != -1);
     OUString dir(url.copy(0, i));
