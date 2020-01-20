@@ -32,6 +32,7 @@
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <stdio.h>
+#include <comphelper/DirectoryHelper.hxx>
 
 #ifdef UNX
 #include <sys/stat.h>
@@ -389,8 +390,7 @@ TempFile::~TempFile()
     {
         if ( bIsDirectory )
         {
-            // at the moment no recursiv algorithm present
-            Directory::remove( aName );
+            comphelper::DirectoryHelper::deleteDirRecursively(aName);
         }
         else
         {
