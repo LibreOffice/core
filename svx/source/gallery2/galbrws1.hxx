@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
 #define INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/menu.hxx>
 #include <svl/lstner.hxx>
 #include <vector>
 
