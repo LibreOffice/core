@@ -22,9 +22,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <o3tl/optional.hxx>
 
-#include "officeipcthread.hxx"
-#include <unordered_map>
 #include <vector>
 
 namespace desktop

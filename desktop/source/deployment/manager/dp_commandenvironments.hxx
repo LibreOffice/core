@@ -21,7 +21,11 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <ucbhelper/content.hxx>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
 
 namespace dp_manager {
 

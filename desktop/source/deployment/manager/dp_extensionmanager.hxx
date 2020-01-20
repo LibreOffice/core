@@ -23,13 +23,10 @@
 #include <strings.hrc>
 #include <dp_misc.h>
 #include <dp_shared.hxx>
-#include <dp_interact.h>
-#include "dp_activepackages.hxx"
-#include <rtl/ref.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <ucbhelper/content.hxx>
-#include <com/sun/star/deployment/XPackageRegistry.hpp>
+#include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
+#include <com/sun/star/deployment/XPackageManagerFactory.hpp>
 #include <osl/mutex.hxx>
 #include <vector>
 #include <unordered_map>

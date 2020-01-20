@@ -10,7 +10,6 @@
 #include <desktop/minidump.hxx>
 
 #include <map>
-#include <memory>
 #include <fstream>
 #include <sstream>
 #include <string>

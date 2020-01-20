@@ -19,11 +19,9 @@
 
 
 #include <memory>
-#include "dp_gui.h"
 #include "dp_gui_theextmgr.hxx"
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicedecl.hxx>
@@ -31,8 +29,6 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
@@ -40,6 +36,7 @@
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
+#include <dp_misc.h>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;

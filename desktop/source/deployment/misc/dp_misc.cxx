@@ -22,12 +22,12 @@
 #include <chrono>
 
 #include <dp_misc.h>
-#include <dp_version.hxx>
 #include <dp_interact.h>
 #include <rtl/uri.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <osl/file.hxx>
@@ -40,6 +40,7 @@
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <memory>
 #include <string_view>

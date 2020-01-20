@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_extensions.h>
+
 #include <strings.hrc>
 #include <helpids.h>
-#include <svtools/controldims.hxx>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
@@ -28,10 +29,8 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include <dp_misc.h>
-#include <dp_ucb.h>
 #include <dp_update.hxx>
 #include <dp_identifier.hxx>
-#include <dp_descriptioninfoset.hxx>
 
 #include <fpicker/strings.hrc>
 
@@ -48,28 +47,19 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/bootstrap.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
-#include <ucbhelper/content.hxx>
-#include <unotools/collatorwrapper.hxx>
 #include <unotools/configmgr.hxx>
 
-#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 
 #include <officecfg/Office/ExtensionManager.hxx>
 

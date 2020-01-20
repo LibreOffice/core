@@ -28,21 +28,16 @@
 #include <sal/config.h>
 
 #include <iostream>
-#include <mutex>
-#if defined UNX
-#include <signal.h>
-#endif
 
 #include <app.hxx>
 #include <dp_shared.hxx>
 #include <strings.hrc>
 #include "cmdlineargs.hxx"
-#include "cmdlinehelp.hxx"
-#include "dispatchwatcher.hxx"
 #include <lockfile.hxx>
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include <migration.hxx>
+#include "officeipcthread.hxx"
 #if HAVE_FEATURE_UPDATE_MAR
 #include "updater.hxx"
 #endif
@@ -61,7 +56,6 @@
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
@@ -79,8 +73,6 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
-#include <com/sun/star/ui/theUIElementFactoryManager.hpp>
-#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
@@ -93,6 +85,7 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/backupfilehelper.hxx>
+#include <uno/current_context.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -105,7 +98,6 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/byteseq.hxx>
-#include <rtl/uri.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>

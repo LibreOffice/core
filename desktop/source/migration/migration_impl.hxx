@@ -19,27 +19,18 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
 #define INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
 
-#include <algorithm>
 #include <memory>
 #include <unordered_map>
 #include <vector>
 
-#include <migration.hxx>
-
 #include <sal/types.h>
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
 namespace desktop
 {

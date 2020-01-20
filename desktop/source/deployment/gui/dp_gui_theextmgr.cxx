@@ -19,11 +19,10 @@
 
 #include <vcl/svapp.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
@@ -31,14 +30,13 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_theextmgr.hxx"
-#include <dp_identifier.hxx>
+#include <dp_misc.h>
 #include <dp_update.hxx>
 
 #define USER_PACKAGE_MANAGER    "user"

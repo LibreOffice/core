@@ -19,25 +19,18 @@
 
 
 #include "oo3extensionmigration.hxx"
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
-#include <osl/thread.h>
 #include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <ucbhelper/content.hxx>
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
-#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/XCommandInfo.hpp>
-#include <com/sun/star/ucb/TransferInfo.hpp>
-#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>

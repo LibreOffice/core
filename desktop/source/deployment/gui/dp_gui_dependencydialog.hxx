@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <tools/gen.hxx>
 #include <vcl/weld.hxx>
 
 #include <vector>

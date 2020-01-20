@@ -20,9 +20,6 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-#include <vector>
-
 #include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
 

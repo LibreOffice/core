@@ -19,17 +19,13 @@
 
 #include <config_folders.h>
 
-#include <stdio.h>
-
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
-#include <osl/thread.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -42,6 +38,7 @@
 #include <strings.hrc>
 #include "unopkg_shared.h"
 #include <dp_identifier.hxx>
+#include <dp_misc.h>
 #include <dp_shared.hxx>
 #include <lockfile.hxx>
 

@@ -22,32 +22,20 @@
 
 #include <sal/config.h>
 #include <osl/file.hxx>
-#include <osl/conditn.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
-#include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
-#include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/VersionException.hpp>
-#include <com/sun/star/deployment/ui/LicenseDialog.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 
 #include <dp_descriptioninfoset.hxx>
@@ -56,7 +44,6 @@
 #include <dp_shared.hxx>
 #include <dp_ucb.h>
 #include <dp_misc.h>
-#include <dp_version.hxx>
 #include "dp_gui_extensioncmdqueue.hxx"
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>

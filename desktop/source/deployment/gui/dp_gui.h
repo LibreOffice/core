@@ -20,33 +20,6 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_H
 
-#include "dp_gui_updatedata.hxx"
-#include <dp_misc.h>
-#include <rtl/ref.hxx>
-#include <rtl/instance.hxx>
-#include <osl/thread.hxx>
-#include <salhelper/simplereferenceobject.hxx>
-#include <com/sun/star/ucb/XContentEventListener.hpp>
-#include <osl/mutex.hxx>
-
-namespace com { namespace sun { namespace star {
-    namespace container {
-        class XNameAccess;
-    }
-    namespace frame {
-        class XDesktop;
-    }
-    namespace awt {
-        class XWindow;
-    }
-    namespace uno {
-        class XComponentContext;
-    }
-    namespace deployment {
-        class XPackageManagerFactory;
-    }
-} } }
-
 namespace dp_gui {
 
 enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };

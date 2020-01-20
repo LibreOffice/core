@@ -24,7 +24,6 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/deployment/XExtensionManager.hpp>
-#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -32,7 +31,6 @@
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
-#include "dp_gui_updatedata.hxx"
 
 
 namespace dp_gui {

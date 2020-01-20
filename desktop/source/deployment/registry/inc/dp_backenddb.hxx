@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKENDDB_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKENDDB_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
 #include <vector>

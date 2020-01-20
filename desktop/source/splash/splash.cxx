@@ -19,23 +19,18 @@
 
 
 #include "splash.hxx"
-#include <stdio.h>
 #include <sal/log.hxx>
-#include <unotools/bootstrap.hxx>
-#include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/math.hxx>
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
 
@@ -43,7 +38,6 @@
 #define NOT_LOADED_COLOR  (Color(0xffffffff))
 
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 

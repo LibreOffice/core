@@ -27,18 +27,18 @@
 #include <dp_platform.hxx>
 #include <dp_descriptioninfoset.hxx>
 #include <dp_identifier.hxx>
+#include <dp_resource.h>
 #include <rtl/uri.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/inettype.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -65,9 +65,6 @@
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/PlatformException.hpp>
 #include <com/sun/star/deployment/Prerequisites.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
-#include <com/sun/star/deployment/XPackageManager.hpp>
 #include <o3tl/optional.hxx>
 #include <tools/diagnose_ex.h>
 

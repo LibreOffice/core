@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include <stdlib.h>
 #include <time.h>
 #ifndef _WIN32
 #include <unistd.h>
@@ -34,7 +33,6 @@
 #include <comphelper/random.hxx>
 #include <sal/types.h>
 #include <osl/file.hxx>
-#include <osl/socket.hxx>
 #include <osl/security.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>

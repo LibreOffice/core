@@ -23,13 +23,8 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
 
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 namespace dp_registry
 {
 namespace backend

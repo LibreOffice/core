@@ -20,9 +20,6 @@
 #ifndef INCLUDED_DESKTOP_INC_MIGRATION_HXX
 #define INCLUDED_DESKTOP_INC_MIGRATION_HXX
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-
 namespace desktop {
 
 class Migration

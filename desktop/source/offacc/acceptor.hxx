@@ -24,18 +24,13 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <comphelper/weakbag.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

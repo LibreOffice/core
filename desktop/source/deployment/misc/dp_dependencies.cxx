@@ -25,15 +25,13 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/string.h>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <unotools/configmgr.hxx>
 
 #include <strings.hrc>
-#include <dp_resource.h>
 #include <dp_shared.hxx>
 
 #include <dp_dependencies.hxx>

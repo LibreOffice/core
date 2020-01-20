@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
-#include <osl/file.hxx>
 
 
 class INetURLObject;

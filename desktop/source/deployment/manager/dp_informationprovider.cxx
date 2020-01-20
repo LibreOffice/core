@@ -26,18 +26,14 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
@@ -47,7 +43,6 @@
 #include <dp_identifier.hxx>
 #include <dp_services.hxx>
 #include <dp_version.hxx>
-#include <dp_misc.h>
 #include <dp_update.hxx>
 
 namespace beans      = com::sun::star::beans ;

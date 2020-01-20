@@ -20,23 +20,13 @@
 
 #include <dp_misc.h>
 #include <dp_services.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
-#include <osl/time.h>
-#include <osl/thread.h>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <comphelper/unwrapargs.hxx>
 #include <comphelper/logging.hxx>
-#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <stdio.h>
-#include <o3tl/optional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

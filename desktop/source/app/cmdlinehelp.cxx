@@ -18,10 +18,8 @@
  */
 
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <comphelper/string.hxx>
-#include <sal/types.h>
 #include <app.hxx>
 
 #include "cmdlinehelp.hxx"

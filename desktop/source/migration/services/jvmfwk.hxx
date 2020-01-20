@@ -20,15 +20,8 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
 #define INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
 
-#include <cppuhelper/implementationentry.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
-#include <memory>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 
 namespace migration

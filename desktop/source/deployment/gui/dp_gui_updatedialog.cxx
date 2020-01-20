@@ -20,86 +20,54 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
-#include <limits>
-#include <map>
 #include <utility>
 #include <vector>
 
 
 #include <o3tl/optional.hxx>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/WindowClass.hpp>
-#include <com/sun/star/awt/WindowDescriptor.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
-#include <com/sun/star/deployment/XPackage.hpp>
-#include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/XAbortChannel.hpp>
-#include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
-#include <svtools/controldims.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 #include <dp_dependencies.hxx>
 #include <dp_descriptioninfoset.hxx>
 #include <dp_identifier.hxx>
-#include <dp_version.hxx>
 #include <dp_misc.h>
 #include <dp_update.hxx>
 
-#include "dp_gui.h"
 #include <strings.hrc>
-#include <bitmaps.hlst>
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include <dp_shared.hxx>

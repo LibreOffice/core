@@ -26,17 +26,14 @@
 #endif
 
 #include "cmdlineargs.hxx"
+#include <osl/thread.hxx>
 #include <tools/stream.hxx>
-#include <vcl/svapp.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/process.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <unotools/bootstrap.hxx>
-
-#include <svl/documentlockfile.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>

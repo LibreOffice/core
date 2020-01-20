@@ -21,7 +21,6 @@
 
 #include "desktopcontext.hxx"
 
-#include <vcl/svapp.hxx>
 #include <svtools/javainteractionhandler.hxx>
 
 using namespace com::sun::star::uno;

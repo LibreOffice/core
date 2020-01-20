@@ -21,7 +21,6 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include <rtl/ref.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>

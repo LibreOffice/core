@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 #include <config_features.h>
-#include <config_version.h>
-#include <config_folders.h>
 
 #include <desktop/dllapi.h>
 
@@ -31,18 +29,12 @@
 // needed before sal/main.h to avoid redefinition of macros
 #include <prewin.h>
 
-#include <desktop/exithelper.h>
-#include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/glxtestprocess.hxx>
 #include <vcl/svmain.hxx>
-
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <cppuhelper/bootstrap.hxx>
-#include <unotools/mediadescriptor.hxx>
 
 #if HAVE_FEATURE_BREAKPAD
 #include <desktop/crashreport.hxx>

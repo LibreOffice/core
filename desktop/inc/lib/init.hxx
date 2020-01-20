@@ -15,6 +15,7 @@
 #include <memory>
 #include <mutex>
 
+#include <boost/property_tree/ptree.hpp>
 #include <boost/variant.hpp>
 
 #include <osl/thread.h>

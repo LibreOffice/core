@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustring.hxx>
-
 namespace desktop { namespace langselect {
 
 bool prepareLocale();

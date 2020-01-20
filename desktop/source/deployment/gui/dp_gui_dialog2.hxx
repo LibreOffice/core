@@ -20,30 +20,21 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
 
-#include <config_extensions.h>
-
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-#include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
-
-#include <stack>
-#include <vector>
 
 namespace dp_gui {
 

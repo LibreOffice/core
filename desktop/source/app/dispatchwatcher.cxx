@@ -23,11 +23,11 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/app.hxx>
 #include <svl/fstathelper.hxx>
 
 #include <app.hxx>
 #include "dispatchwatcher.hxx"
+#include "officeipcthread.hxx"
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/synchronousdispatch.hxx>
@@ -49,8 +49,6 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
@@ -60,11 +58,8 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 
-#include <vector>
 #include <osl/thread.hxx>
 #include <osl/file.hxx>
-#include <osl/file.h>
-#include <rtl/byteseq.hxx>
 #include <iostream>
 
 using namespace ::osl;

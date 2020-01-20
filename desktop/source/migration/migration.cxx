@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <iterator>
 #include <map>
-#include <new>
 #include <set>
 
 #include <migration.hxx>
@@ -33,7 +32,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/bootstrap.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/diagnose_ex.h>
@@ -44,21 +42,17 @@
 
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
 using namespace osl;

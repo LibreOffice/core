@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstddef>
 #include <sal/types.h>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/uno/Reference.hxx>

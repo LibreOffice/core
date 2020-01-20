@@ -27,9 +27,7 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/bootstrap.hxx>
 

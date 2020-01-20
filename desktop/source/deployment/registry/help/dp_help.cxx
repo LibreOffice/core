@@ -27,11 +27,9 @@
 #include <dp_ucb.h>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
-#include <uno/current_context.hxx>
 #include <unotools/pathoptions.hxx>
 
 #if HAVE_FEATURE_DESKTOP

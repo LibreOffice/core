@@ -21,12 +21,10 @@
 #define INCLUDED_DESKTOP_INC_APP_HXX
 
 #include <o3tl/optional.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/bootstrap.hxx>
-#include <unotools/resmgr.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>

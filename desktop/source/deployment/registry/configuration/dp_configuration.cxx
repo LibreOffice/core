@@ -31,8 +31,6 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/uri.hxx>
-#include <osl/file.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -41,11 +39,8 @@
 #include <comphelper/lok.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/configuration/Update.hpp>
-#include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/util/XRefreshable.hpp>
 #include <deque>
 #include <memory>
 #include <utility>

@@ -19,11 +19,10 @@
 
 
 #include "dp_manager.h"
-#include <dp_resource.h>
 #include <dp_services.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
+#include <com/sun/star/deployment/XPackageManagerFactory.hpp>
 #include <unordered_map>
 
 using namespace ::dp_misc;
