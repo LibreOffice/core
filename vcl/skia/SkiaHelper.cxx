@@ -74,7 +74,6 @@ bool isVCLSkiaEnabled()
 
     bool bRet = false;
     bool bSupportsVCLSkia = supportsVCLSkia();
-    // TODO SKIA always call supportsVCLOpenGL to de-zombie the glxtest child process on X11
     if (bForceSkia)
     {
         bRet = true;

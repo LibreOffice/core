@@ -290,7 +290,6 @@ void SkiaSalGraphicsImpl::destroySurface()
         // if this fails, something forgot to use SkAutoCanvasRestore
         assert(mSurface->getCanvas()->getTotalMatrix().isIdentity());
     }
-    // TODO Is this still needed?
     // If we use e.g. Vulkan, we must destroy the surface before the context,
     // otherwise destroying the surface will reference the context. This is
     // handled by calling destroySurface() before destroying the context.
@@ -957,7 +956,7 @@ Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
     checkSurface();
     SAL_INFO("vcl.skia", "getpixel(" << this << "): " << Point(nX, nY));
     mSurface->getCanvas()->flush();
-    // TODO this is presumably slow, and possibly won't work with GPU surfaces
+    // This is presumably slow, but getPixel() should be generally used only by unit tests.
     SkBitmap bitmap;
     if (!bitmap.tryAllocN32Pixels(GetWidth(), GetHeight()))
         abort();

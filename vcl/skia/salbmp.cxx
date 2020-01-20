@@ -299,7 +299,7 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 
 void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
-    if (nMode == BitmapAccessMode::Write) // TODO something more?
+    if (nMode == BitmapAccessMode::Write)
     {
 #ifdef DBG_UTIL
         assert(mWriteAccessCount > 0);
@@ -599,7 +599,7 @@ void SkiaSalBitmap::EnsureBitmapData()
 void SkiaSalBitmap::EnsureBitmapUniqueData()
 {
     EnsureBitmapData();
-    // TODO threads?
+    // TODO thread safety?
     if (mBitmap.pixelRef() && !mBitmap.pixelRef()->unique())
     {
         // SkBitmap copies share pixels, so make a deep copy.

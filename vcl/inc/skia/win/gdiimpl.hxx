@@ -63,11 +63,7 @@ private:
 public:
     WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics, SalGeometryProvider* mpProvider);
 
-#if 0 // TODO
-    virtual void Init() override;
-#endif
     virtual void DeInit() override;
-
     virtual void freeResources() override;
 
     virtual bool UseRenderNativeControl() const override { return true; }

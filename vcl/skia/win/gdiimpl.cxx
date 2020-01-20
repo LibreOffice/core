@@ -25,24 +25,6 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 {
 }
 
-#if 0 // TODO
-void WinSkiaSalGraphicsImpl::Init()
-{
-    if (!IsOffscreen() && mpContext.is() && mpContext->isInitialized())
-    {
-        const GLWinWindow& rGLWindow = static_cast<const GLWinWindow&>(mpContext->getOpenGLWindow());
-        if (rGLWindow.hWnd != mrWinParent.mhWnd || rGLWindow.hDC == mrWinParent.mhLocalDC)
-        {
-            // This can legitimately happen, SalFrame keeps 2x
-            // SalGraphics which share the same hWnd and hDC.
-            // The shape 'Area' dialog does reparenting to trigger this.
-            SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");
-            DeInit();
-        }
-    }
-}
-#endif
-
 void WinSkiaSalGraphicsImpl::createWindowContext()
 {
     // When created, Init() gets called with size (0,0), which is invalid size
