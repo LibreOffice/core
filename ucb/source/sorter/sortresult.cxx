@@ -1377,7 +1377,6 @@ void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
 
 void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEvents )
 {
-    sal_uInt32  i;
     sal_IntPtr        nOldLastSort;
 
     // correct mnLastSort first
@@ -1392,7 +1391,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
 
     // remove the entries from the lists and correct the positions
     // in the original2sorted list
-    for ( i=0; i < static_cast<sal_uInt32>(nCount); i++ )
+    for ( sal_IntPtr i=0; i < nCount; i++ )
     {
         sal_IntPtr nSortPos = m_O2S[nPos];
         m_O2S.erase(m_O2S.begin() + nPos);
@@ -1417,7 +1416,7 @@ void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEv
     }
 
     // correct the positions in the sorted list
-    for ( i=1; i<= maS2O.Count(); i++ )
+    for ( sal_uInt32 i=1; i<= maS2O.Count(); i++ )
     {
         SortListData *pData = maS2O.GetData( i );
         if ( pData->mnCurPos > nPos )
