@@ -43,6 +43,7 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 
 #include <runtime.hxx>
 #include <sbunoobj.hxx>
@@ -638,8 +639,6 @@ void SbRtl_MkDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 }
 
 
-// In OSL only empty directories can be deleted
-// so we have to delete all files recursively
 static void implRemoveDirRecursive( const OUString& aDirPath )
 {
     DirectoryItem aItem;
@@ -664,40 +663,9 @@ static void implRemoveDirRecursive( const OUString& aDirPath )
         StarBASIC::Error( ERRCODE_BASIC_PATH_NOT_FOUND );
         return;
     }
-
-    for( ;; )
-    {
-        DirectoryItem aItem2;
-        nRet = aDir.getNextItem( aItem2 );
-        if( nRet != FileBase::E_None )
-        {
-            break;
-        }
-        // Handle flags
-        FileStatus aFileStatus2( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
-        nRet = aItem2.getFileStatus( aFileStatus2 );
-        if( nRet != FileBase::E_None )
-        {
-            SAL_WARN("basic", "getFileStatus failed");
-            continue;
-        }
-        OUString aPath = aFileStatus2.getFileURL();
-
-        // Directory?
-        FileStatus::Type aType2 = aFileStatus2.getFileType();
-        bool bFolder2 = isFolder( aType2 );
-        if( bFolder2 )
-        {
-            implRemoveDirRecursive( aPath );
-        }
-        else
-        {
-            File::remove( aPath );
-        }
-    }
     aDir.close();
 
-    Directory::remove( aDirPath );
+    comphelper::DirectoryHelper::deleteDirRecursively(aDirPath);
 }
 
 
