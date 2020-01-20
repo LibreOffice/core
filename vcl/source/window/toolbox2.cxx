@@ -1084,20 +1084,6 @@ vcl::Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
         return nullptr;
 }
 
-void ToolBox::StartSelection()
-{
-    if ( mbDrag )
-        EndSelection();
-
-    if ( !mbSelection )
-    {
-        mbSelection  = true;
-        mnCurPos     = ITEM_NOTFOUND;
-        mnCurItemId  = 0;
-        Activate();
-    }
-}
-
 void ToolBox::EndSelection()
 {
     if ( mbDrag || mbSelection )

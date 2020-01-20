@@ -113,7 +113,6 @@ public:
 
     sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart, bool bLazy ) const;
     sal_Int32           FindEntry( const OUString& rStr, bool bSearchMRUArea = false ) const;
-    sal_Int32           FindEntry( const void* pData ) const;
 
     /// helper: add up heights up to index nEndIndex.
     /// GetAddedHeight( 0 ) @return 0

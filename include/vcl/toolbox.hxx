@@ -375,7 +375,6 @@ public:
     vcl::Window*        GetItemWindow( sal_uInt16 nItemId ) const;
     sal_uInt16          GetHighlightItemId() const { return mnHighItemId; }
 
-    void                StartSelection();
     void                EndSelection();
 
     void                SetItemDown( sal_uInt16 nItemId, bool bDown );
