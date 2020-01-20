@@ -54,8 +54,6 @@ $(eval $(call gb_Library_add_exception_objects,fwm,\
     framework/source/jobs/helponstartup \
     framework/source/jobs/shelljob \
     framework/source/register/register3rdcomponents \
-    framework/source/tabwin/tabwindow \
-    framework/source/tabwin/tabwinfactory \
 ))
 
 # vim: set noet sw=4 ts=4:

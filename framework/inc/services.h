@@ -31,8 +31,6 @@ namespace framework{
 #define SERVICENAME_JOB                                         "com.sun.star.task.Job"
 #define SERVICENAME_PROTOCOLHANDLER                             "com.sun.star.frame.ProtocolHandler"
 #define SERVICENAME_POPUPMENUCONTROLLER                         "com.sun.star.frame.PopupMenuController"
-#define SERVICENAME_TABWINFACTORY                               "com.sun.star.frame.TabWindowFactory"
-#define SERVICENAME_TABWINDOW                                   "com.sun.star.frame.TabWindow"
 #define SERVICENAME_STRINGABBREVIATION                          "com.sun.star.util.UriAbbreviation"
 
 //  used implementationnames by framework
@@ -56,8 +54,6 @@ namespace framework{
 #define IMPLEMENTATIONNAME_HELPONSTARTUP                        "com.sun.star.comp.framework.HelpOnStartup"
 #define IMPLEMENTATIONNAME_SHELLJOB                             "com.sun.star.comp.framework.ShellJob"
 #define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
-#define IMPLEMENTATIONNAME_TABWINFACTORY                        "com.sun.star.comp.framework.TabWindowFactory"
-#define IMPLEMENTATIONNAME_TABWINDOW                            "com.sun.star.comp.framework.TabWindow"
 #define IMPLEMENTATIONNAME_SYSTEMEXEC                           "com.sun.star.comp.framework.SystemExecute"
 #define IMPLEMENTATIONNAME_URIABBREVIATION                      "com.sun.star.comp.framework.UriAbbreviation"
 #define IMPLEMENTATIONNAME_POPUPMENUDISPATCHER                  "com.sun.star.comp.framework.PopupMenuControllerDispatcher"

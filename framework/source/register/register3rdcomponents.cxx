@@ -33,13 +33,11 @@
                              )
 =================================================================================================================*/
 #include <jobs/helponstartup.hxx>
-#include <tabwin/tabwinfactory.hxx>
 #include <dispatch/systemexec.hxx>
 #include <jobs/shelljob.hxx>
 
 COMPONENTGETFACTORY ( fwm,
                         IFFACTORY( ::framework::HelpOnStartup       ) else
-                        IFFACTORY( ::framework::TabWinFactory       ) else
                         IFFACTORY( ::framework::SystemExec          ) else
                         IFFACTORY( ::framework::ShellJob            )
                     )
