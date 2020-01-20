@@ -27,8 +27,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <officecfg/Office/TabBrowse.hxx>
-
 namespace framework{
 
 /*-****************************************************************************************************
@@ -62,16 +60,6 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
 
     try
     {
-        if (
-            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::ESpecialTarget::Blank  ) ) ||
-            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::ESpecialTarget::Default) )
-           )
-        {
-
-            o3tl::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(m_xContext));
-            if (x) sCreator = *x;
-        }
-
         xCreator.set( m_xContext->getServiceManager()->createInstanceWithContext(sCreator, m_xContext), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)

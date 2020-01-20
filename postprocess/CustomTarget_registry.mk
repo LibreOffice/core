@@ -158,7 +158,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/Recovery.xcs \
 	$(postprocess_XCS)/Office/Scripting.xcs \
 	$(postprocess_XCS)/Office/Security.xcs \
-	$(postprocess_XCS)/Office/TabBrowse.xcs \
 	$(postprocess_XCS)/Office/TableWizard.xcs \
 	$(postprocess_XCS)/Office/TypeDetection.xcs \
 	$(postprocess_XCS)/Office/UI/BaseWindowState.xcs \

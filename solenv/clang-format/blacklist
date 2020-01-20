@@ -5079,8 +5079,6 @@ framework/inc/services/layoutmanager.hxx
 framework/inc/services/mediatypedetectionhelper.hxx
 framework/inc/services/uriabbreviation.hxx
 framework/inc/stdtypes.h
-framework/inc/tabwin/tabwindow.hxx
-framework/inc/tabwin/tabwinfactory.hxx
 framework/inc/targets.h
 framework/inc/taskcreatordefs.hxx
 framework/inc/threadhelp/gate.hxx
@@ -5268,8 +5266,6 @@ framework/source/services/substitutepathvars.cxx
 framework/source/services/taskcreatorsrv.cxx
 framework/source/services/uriabbreviation.cxx
 framework/source/services/urltransformer.cxx
-framework/source/tabwin/tabwindow.cxx
-framework/source/tabwin/tabwinfactory.cxx
 framework/source/uiconfiguration/CommandImageResolver.cxx
 framework/source/uiconfiguration/CommandImageResolver.hxx
 framework/source/uiconfiguration/ImageList.cxx
