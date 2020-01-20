@@ -3486,14 +3486,20 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 {
                     bAdd = IsSelectFrameAnchoredAtPara(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
-                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        m_rDoc.IsCopyIsMove()
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
                 }
             break;
             case RndStdIds::FLY_AT_CHAR:
                 {
                     bAdd = IsDestroyFrameAnchoredAtChar(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
-                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        m_rDoc.IsCopyIsMove()
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
                 }
             break;
             default:
