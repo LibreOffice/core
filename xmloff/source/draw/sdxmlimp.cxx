@@ -159,15 +159,6 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
             }
             break;
         }
-        case XML_TOK_DOC_MASTERSTYLES:
-        {
-            if( GetImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES )
-            {
-                // office:master-styles inside office:document
-                xContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
-            }
-            break;
-        }
         case XML_TOK_DOC_META:
         {
             SAL_INFO("xmloff.draw", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
@@ -199,6 +190,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
             {
                 // office:script inside office:document
                 return new XMLScriptContext( GetSdImport(), GetSdImport().GetModel() );
+            }
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
+        {
+            if( GetImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES )
+            {
+                // office:master-styles inside office:document
+                return GetSdImport().CreateMasterStylesContext();
             }
             break;
         }
@@ -731,11 +731,10 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
     return GetShapeImport()->GetAutoStylesContext();
 }
 
-SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>&)
+SvXMLImportContext* SdXMLImport::CreateMasterStylesContext()
 {
     if (!mxMasterStylesContext.is())
-        mxMasterStylesContext.set(new SdXMLMasterStylesContext(*this, rLocalName));
+        mxMasterStylesContext.set(new SdXMLMasterStylesContext(*this));
     return mxMasterStylesContext.get();
 }
 
