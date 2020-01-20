@@ -83,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "e5c26914_a1f991d6",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-20T15:34:44Z",
+      "side": 1,
+      "message": "You can\u0027t use const_iterator here. The iterator must be dereferenced to a modifiable value, since algorithm will then std::move() it.\n\nBut it should not actually matter below, since converting iterator to const_iterator is trivial, and even a no-op where iterator inherits from const_iterator.",
+      "parentUuid": "b4543a1b_85568877",
+      "range": {
+        "startLine": 317,
+        "startChar": 33,
+        "endLine": 317,
+        "endChar": 69
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7d09ad9_6a49d483",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
