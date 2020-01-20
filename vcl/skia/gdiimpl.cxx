@@ -881,6 +881,7 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     // "result_alpha = 1.0 - (1.0 - floor(alpha)) * mask".
     // See also blendBitmap().
     SkCanvas* aCanvas = tmpSurface->getCanvas();
+    aCanvas->clear(SK_ColorTRANSPARENT);
     SkPaint aPaint;
     // First copy the mask as is.
     aPaint.setBlendMode(SkBlendMode::kSrc);
