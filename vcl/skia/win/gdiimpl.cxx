@@ -57,6 +57,7 @@ void WinSkiaSalGraphicsImpl::freeResources() {}
 
 void WinSkiaSalGraphicsImpl::performFlush()
 {
+    mPendingPixelsToFlush = 0;
     if (mWindowContext)
         mWindowContext->swapBuffers();
 }
