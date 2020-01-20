@@ -116,7 +116,6 @@ IMPL_LINK(SvxPopupWindowListBox, SelectHdl, ListBox&, rListBox, void)
         SetInfo(rListBox.GetSelectedEntryCount());
     else
     {
-        fprintf(stderr, "popdown\n");
         m_xControl->Do(GetListBox().GetSelectedEntryCount());
         EndPopupMode();
     }
