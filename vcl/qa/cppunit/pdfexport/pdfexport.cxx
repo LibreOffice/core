@@ -137,6 +137,7 @@ public:
     void testTdf121615();
     void testTocLink();
     void testPdfImageResourceInlineXObjectRef();
+    void testReduceSmallImage();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -174,6 +175,7 @@ public:
     CPPUNIT_TEST(testTdf121615);
     CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
+    CPPUNIT_TEST(testReduceSmallImage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1856,6 +1858,45 @@ void PdfExportTest::testTocLink()
     // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
     // returned false, as the page contained no links.
     CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot));
+}
+
+void PdfExportTest::testReduceSmallImage()
+{
+    // Load the Writer document.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reduce-small-image.fodt";
+    mxComponent = loadFromDesktop(aURL);
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the PDF: get the image.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+    FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pPageObject));
+
+    // Make sure we don't scale down a tiny bitmap.
+    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject);
+    CPPUNIT_ASSERT(pBitmap);
+    int nWidth = FPDFBitmap_GetWidth(pBitmap);
+    int nHeight = FPDFBitmap_GetHeight(pBitmap);
+    FPDFBitmap_Destroy(pBitmap);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 16
+    // - Actual  : 6
+    // i.e. the image was scaled down to 300 DPI, even if it had tiny size.
+    CPPUNIT_ASSERT_EQUAL(16, nWidth);
+    CPPUNIT_ASSERT_EQUAL(16, nHeight);
 }
 
 void PdfExportTest::testPdfImageResourceInlineXObjectRef()
