@@ -145,6 +145,7 @@ std::shared_ptr<SvMemoryStream> wrapStream(css::uno::Reference< css::io::XInputS
             break;
     }
     s->Seek(0);
+    stream->closeInput();
     return s;
 }
 
