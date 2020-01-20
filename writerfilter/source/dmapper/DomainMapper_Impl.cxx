@@ -5633,17 +5633,24 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     else
                     {
                         uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
-                        OUString sContent;
-                        bool bCanHaveContent = false;
-                        try
-                        {   // this will throw for field types without Content property
-                            uno::Any aValue(xFieldProperties->getPropertyValue(getPropertyName(PROP_CONTENT)));
-                            bCanHaveContent = true;
-                            aValue >>= sContent;
+                        // In case of SetExpression, and Input fields the field result contains the content of the variable.
+                        uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
+                        // there are fields with a content property, which aren't working correctly with
+                        // a generalized try catch of the content, property, so just restrict content
+                        // handling to these explicit services.
+                        const bool bHasContent = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression") ||
+                            xServiceInfo->supportsService("com.sun.star.text.TextField.Input");
+                        // If we already have content set, then use the current presentation
+                        OUString sValue;
+                        if (bHasContent)
+                        {
+                            // this will throw for field types without Content
+                            uno::Any aValue(xFieldProperties->getPropertyValue(
+                                    getPropertyName(PROP_CONTENT)));
+                            aValue >>= sValue;
                         }
-                        catch (...) {}
                         xFieldProperties->setPropertyValue(
-                                getPropertyName(bCanHaveContent && sContent.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
+                                getPropertyName(bHasContent && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                              uno::makeAny( rResult ));
                     }
                 }
