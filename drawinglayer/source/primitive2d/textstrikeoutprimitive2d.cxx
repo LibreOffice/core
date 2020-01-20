@@ -28,10 +28,8 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         BaseTextStrikeoutPrimitive2D::BaseTextStrikeoutPrimitive2D(
             const basegfx::B2DHomMatrix& rObjectTransformation,
             double fWidth,
@@ -56,14 +54,8 @@ namespace drawinglayer
 
             return false;
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void TextCharacterStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // strikeout with character
@@ -139,14 +131,8 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextCharacterStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void TextGeometryStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             OSL_ENSURE(TEXT_STRIKEOUT_SLASH != getTextStrikeout() && TEXT_STRIKEOUT_X != getTextStrikeout(),
@@ -263,7 +249,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(TextGeometryStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTGEOMETRYSTRIKEOUTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

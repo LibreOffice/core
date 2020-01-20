@@ -24,10 +24,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         PointArrayPrimitive2D::PointArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const basegfx::BColor& rRGBColor)
@@ -73,7 +71,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PointArrayPrimitive2D, PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

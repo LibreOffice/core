@@ -25,10 +25,8 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         Primitive2DReference createHiddenGeometryPrimitives2D(
             const basegfx::B2DHomMatrix& rMatrix)
         {
@@ -101,7 +99,7 @@ namespace drawinglayer
             return Primitive2DReference(
                 new HiddenGeometryPrimitive2D(Primitive2DContainer { xReference }));
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

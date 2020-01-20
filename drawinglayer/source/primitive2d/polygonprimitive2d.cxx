@@ -32,10 +32,8 @@ using namespace com::sun::star;
 using namespace std;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         PolygonHairlinePrimitive2D::PolygonHairlinePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
             const basegfx::BColor& rBColor)
@@ -83,14 +81,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolygonHairlinePrimitive2D, PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void PolygonMarkerPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // calculate logic DashLength
@@ -201,8 +192,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 namespace drawinglayer
 {
@@ -393,10 +383,8 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void PolygonWavePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getB2DPolygon().count())
@@ -495,14 +483,7 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolygonWavePrimitive2D, PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void PolygonStrokeArrowPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // copy local polygon, it may be changed
@@ -623,7 +604,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(PolygonStrokeArrowPrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

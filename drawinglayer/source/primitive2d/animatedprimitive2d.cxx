@@ -27,10 +27,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void AnimatedSwitchPrimitive2D::setAnimationEntry(const animation::AnimationEntry& rNew)
         {
             // clone given animation description
@@ -85,13 +83,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(AnimatedSwitchPrimitive2D, PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
@@ -116,13 +111,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(AnimatedBlinkPrimitive2D, PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
             const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
@@ -199,7 +191,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(AnimatedInterpolatePrimitive2D, PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

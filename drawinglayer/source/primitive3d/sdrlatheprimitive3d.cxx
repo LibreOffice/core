@@ -31,10 +31,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         Primitive3DContainer SdrLathePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             Primitive3DContainer aRetval;
@@ -359,7 +357,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(SdrLathePrimitive3D, PRIMITIVE3D_ID_SDRLATHEPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

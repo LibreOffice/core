@@ -31,10 +31,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         bool Embedded3DPrimitive2D::impGetShadow3D() const
         {
             osl::MutexGuard aGuard( m_aMutex );
@@ -145,7 +143,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(Embedded3DPrimitive2D, PRIMITIVE2D_ID_EMBEDDED3DPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

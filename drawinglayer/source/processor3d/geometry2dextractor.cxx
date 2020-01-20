@@ -33,10 +33,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::processor3d
 {
-    namespace processor3d
-    {
         // as tooling, the process() implementation takes over API handling and calls this
         // virtual render method when the primitive implementation is BasePrimitive3D-based.
         void Geometry2DExtractingProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
@@ -150,7 +148,7 @@ namespace drawinglayer
             maBColorModifierStack()
         {
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,10 +41,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::processor3d
 {
-    namespace processor3d
-    {
         void DefaultProcessor3D::impRenderGradientTexturePrimitive3D(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence)
         {
             const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
@@ -600,7 +598,7 @@ namespace drawinglayer
         DefaultProcessor3D::~DefaultProcessor3D()
         {
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

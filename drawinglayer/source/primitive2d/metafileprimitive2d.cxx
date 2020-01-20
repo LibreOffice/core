@@ -28,10 +28,8 @@
 
 using namespace com::sun::star;
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void MetafilePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             // Interpret the Metafile and get the content. There should be only one target, as in the start condition,
@@ -130,7 +128,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(MetafilePrimitive2D, PRIMITIVE2D_ID_METAFILEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

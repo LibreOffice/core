@@ -28,10 +28,8 @@
 
 #include <converters.hxx>
 
-namespace drawinglayer
+namespace drawinglayer::texture
 {
-    namespace texture
-    {
         GeoTexSvx::GeoTexSvx()
         {
         }
@@ -61,14 +59,8 @@ namespace drawinglayer
             modifyBColor(rUV, aBaseColor, rfOpacity);
             rfOpacity = 1.0 - aBaseColor.luminance();
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradient::GeoTexSvxGradient(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
@@ -96,14 +88,8 @@ namespace drawinglayer
                 && maDefinitionRange == pCompare->maDefinitionRange
                 && mfBorder == pCompare->mfBorder);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
@@ -191,14 +177,7 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
@@ -275,14 +254,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
@@ -331,14 +304,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
@@ -407,14 +374,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
@@ -465,14 +426,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
@@ -541,14 +496,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxHatch::GeoTexSvxHatch(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
@@ -688,14 +637,8 @@ namespace drawinglayer
 
             return maBackTextureTransform;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace texture
-    {
         GeoTexSvxTiled::GeoTexSvxTiled(
             const basegfx::B2DRange& rRange,
             double fOffsetX,
@@ -833,7 +776,7 @@ namespace drawinglayer
 
             return nTiles;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

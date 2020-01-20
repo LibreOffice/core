@@ -25,10 +25,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive3d
 {
-    namespace primitive3d
-    {
         PolyPolygonMaterialPrimitive3D::PolyPolygonMaterialPrimitive3D(
             const basegfx::B3DPolyPolygon& rPolyPolygon,
             const attribute::MaterialAttribute3D& rMaterial,
@@ -62,7 +60,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive3DIDBlock(PolyPolygonMaterialPrimitive3D, PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

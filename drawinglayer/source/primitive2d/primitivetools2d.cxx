@@ -22,10 +22,8 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void DiscreteMetricDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -49,14 +47,7 @@ namespace drawinglayer
             // call base implementation
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void ViewportDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -79,14 +70,7 @@ namespace drawinglayer
             // call base implementation
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void ViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -109,14 +93,7 @@ namespace drawinglayer
             // call base implementation
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         void ObjectAndViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -149,7 +126,7 @@ namespace drawinglayer
             // call base implementation
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

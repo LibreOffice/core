@@ -87,10 +87,8 @@ namespace
     }
 }
 
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         // rendering support
 
         // directdraw of text simple portion or decorated portion primitive. When decorated, all the extra
@@ -1433,7 +1431,6 @@ namespace drawinglayer
         VclProcessor2D::~VclProcessor2D()
         {
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

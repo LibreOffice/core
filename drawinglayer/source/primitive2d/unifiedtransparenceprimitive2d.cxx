@@ -30,10 +30,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         UnifiedTransparencePrimitive2D::UnifiedTransparencePrimitive2D(
             const Primitive2DContainer& rChildren,
             double fTransparence)
@@ -106,7 +104,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(UnifiedTransparencePrimitive2D, PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

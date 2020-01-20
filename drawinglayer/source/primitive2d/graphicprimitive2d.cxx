@@ -28,10 +28,8 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& ) const
         {
             if(255 == getGraphicAttr().GetTransparency())
@@ -229,7 +227,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(GraphicPrimitive2D, PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

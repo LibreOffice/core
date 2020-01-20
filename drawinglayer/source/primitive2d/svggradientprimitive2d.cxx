@@ -57,10 +57,8 @@ namespace
 } // end of anonymous namespace
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         void SvgGradientHelper::createSingleGradientEntryFill(Primitive2DContainer& rContainer) const
         {
             const SvgGradientEntryVector& rEntries = getGradientEntries();
@@ -304,13 +302,10 @@ namespace drawinglayer
                 && getSpreadMethod() == rCompare.getSpreadMethod());
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SvgLinearGradientPrimitive2D::checkPreconditions()
         {
@@ -579,13 +574,10 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SvgLinearGradientPrimitive2D, PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SvgRadialGradientPrimitive2D::checkPreconditions()
         {
@@ -883,15 +875,12 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SvgRadialGradientPrimitive2D, PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
 // SvgLinearAtomPrimitive2D class
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SvgLinearAtomPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -971,15 +960,12 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SvgLinearAtomPrimitive2D, PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } // end of namespace drawinglayer
 
 
 // SvgRadialAtomPrimitive2D class
 
-namespace drawinglayer
-{
-    namespace primitive2d
+namespace drawinglayer::primitive2d
     {
         void SvgRadialAtomPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -1119,7 +1105,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(SvgRadialAtomPrimitive2D, PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

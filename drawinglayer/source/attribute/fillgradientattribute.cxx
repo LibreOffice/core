@@ -22,10 +22,8 @@
 #include <rtl/instance.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         class ImpFillGradientAttribute
         {
         public:
@@ -183,7 +181,6 @@ namespace drawinglayer
             return mpFillGradientAttribute->getSteps();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

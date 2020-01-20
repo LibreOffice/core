@@ -34,10 +34,8 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <comphelper/lok.hxx>
 
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
             const basegfx::B2DPoint& rLogicHitPosition,
             double fLogicHitTolerance,
@@ -547,7 +545,6 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

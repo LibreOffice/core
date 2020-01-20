@@ -25,10 +25,8 @@
 
 using namespace com::sun::star;
 
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
@@ -47,7 +45,6 @@ namespace drawinglayer
                 return std::make_unique<drawinglayer::processor2d::VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
             }
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

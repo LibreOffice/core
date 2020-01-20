@@ -24,10 +24,8 @@
 using namespace com::sun::star;
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         StructureTagPrimitive2D::StructureTagPrimitive2D(
             const vcl::PDFWriter::StructElement& rStructureElement,
             bool bBackground,
@@ -56,7 +54,6 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(StructureTagPrimitive2D, PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
