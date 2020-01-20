@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "d7d09ad9_6a49d483",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-20T06:04:00Z",
+      "side": 1,
+      "message": "IMO unnecessary verbocity decreases readability. Using explicit argument type is unnecessary here, as well as explicit return type: both are easily deducible, and obvious to reader. Without these, the whole piece looks much more compact:\n\n       auto removeStart\n           \u003d std::remove_if(maViewList.begin(), maViewList.end(),\n                            [](const auto\u0026 pAnimView) { return !pAnimView-\u003eisMarked(); });\n       maViewList.erase(removeStart, maViewList.cend());\n\n       bGlobalPause \u003d std::all_of(maViewList.cbegin(), maViewList.cend(),\n                                  [](const auto\u0026 pAnimView) { return pAnimView-\u003eisPause(); });\n\n       // reset marked state\n       std::for_each(maViewList.cbegin(), maViewList.cend(),\n                     [](const auto\u0026 pAnimView) { pAnimView-\u003esetMarked(false); });",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 91
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d870ee7b_6ece7d54",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
