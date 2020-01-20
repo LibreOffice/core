@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "d1b1a94a_670291bc",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5c26914_a1f991d6",
+      "range": {
+        "startLine": 317,
+        "startChar": 33,
+        "endLine": 317,
+        "endChar": 69
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d7d09ad9_6a49d483",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
@@ -222,6 +246,30 @@
       "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f1ff66_c77fc1e4",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c0cc0c7_af0065e3",
+      "range": {
+        "startLine": 321,
+        "startChar": 42,
+        "endLine": 321,
+        "endChar": 58
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
