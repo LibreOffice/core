@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5cae655e_02b2c377",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:17:57Z",
+      "side": 1,
+      "message": "Yes, I agree. My comment should be more specific.",
+      "parentUuid": "d4fb4d23_8f244e95",
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f4c670d_59bc8409",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
@@ -89,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "ca4e3cee_6302551b",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:17:57Z",
+      "side": 1,
+      "message": "Some people complain that lambda expressions disturb them. I am not sure that making them shorter by using the \"auto\" keyword for type deduction and omitting the return type makes understanding easier.\nIn general, I prefer being explicit, so there is no possible ambiguity and I suppose that helps understanding. On the other hand, I quite agree that readability may be decreased, although ultimately it is probably a matter of personal taste. That does not disturb me.\n\nThe only exception for not being explicit is the return type of the function, which is an iterator. Here, the type of removeStart is std::vector\u003cstd::unique_ptr\u003cImplAnimView\u003e\u003e::iterator. For this, I prefer using auto.",
+      "parentUuid": "d23996c2_0b13c965",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 91
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ad8159b_c984dd66",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
@@ -100,6 +142,24 @@
       "writtenOn": "2020-01-20T10:29:53Z",
       "side": 1,
       "message": "as for the other two algo calls, a one-line comment describing the gist of the next line would be great!",
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25626ac5_18eca85c",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-20T15:17:57Z",
+      "side": 1,
+      "message": "The comment would be that bGlobalPause is true only if isPause() is true for all elements of maViewList, which is explicit by the use of std::all_of and the lambda expression which is very simple.\nI think that a comment would add nothing.\nThat\u0027s precisely the reason why I wanted to use the algorithms of the STL: they are simple and well-named, and so what is done is explicit and very easy to understand.\nIt was not the case in the previous version.",
+      "parentUuid": "7ad8159b_c984dd66",
       "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
