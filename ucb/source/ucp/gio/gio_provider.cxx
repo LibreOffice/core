@@ -120,10 +120,24 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 }
 
+// gio creates threads we don't want in online's forkit
+static bool isDisabled()
+{
+    const char *pDisable = getenv("UNODISABLELIBRARY");
+    if (!pDisable)
+        return false;
+    OString aDisable(pDisable, strlen(pDisable));
+    return aDisable.indexOf("ucpgio1") >= 0;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * ucpgio1_component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
     void * pRet = nullptr;
+
+    static bool bDisabled = isDisabled();
+    if (bDisabled)
+        return nullptr;
 
     uno::Reference< lang::XMultiServiceFactory > xSMgr
         (static_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
