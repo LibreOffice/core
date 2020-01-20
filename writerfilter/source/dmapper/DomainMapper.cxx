@@ -3168,8 +3168,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             }
         }
 
-        PropertyMapPtr pContext = m_pImpl->GetTopContext();
-        if (pContext && !pContext->GetFootnote().is())
+        if (!m_pImpl->GetFootnoteContext())
         {
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
@@ -3178,7 +3177,8 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->clearDeferredBreaks();
         }
 
-        if( pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote() )
+        PropertyMapPtr pContext = m_pImpl->GetTopContext();
+        if (pContext && pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote())
         {
             pContext->GetFootnote()->setLabel(sText);
             //otherwise ignore sText
@@ -3404,7 +3404,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(true) && m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-            if (pContext && !pContext->GetFootnote().is())
+            if (!m_pImpl->GetFootnoteContext())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
@@ -3464,9 +3464,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         }
         else
         {
-
-            PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            if ( pContext && !pContext->GetFootnote().is() )
+            if (!m_pImpl->GetFootnoteContext())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
@@ -3495,7 +3493,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->clearDeferredBreaks();
             }
 
-            if( pContext && pContext->GetFootnote().is() )
+            PropertyMapPtr pContext = m_pImpl->GetTopContext();
+            if (pContext && pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote())
             {
                 pContext->GetFootnote()->setLabel( sText );
                 //otherwise ignore sText
