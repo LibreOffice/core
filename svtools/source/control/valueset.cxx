@@ -2687,6 +2687,12 @@ void SvtValueSet::Clear()
     mnSelItemId     = 0;
     mbNoSelection   = true;
 
+    // reset scrolled window state to initial value
+    // so it will get configured to the right adjustment
+    WinBits nStyle = GetStyle();
+    if (mxScrolledWindow && (nStyle & WB_VSCROLL))
+        mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+
     mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
