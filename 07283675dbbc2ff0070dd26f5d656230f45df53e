@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f53f3e6_ff241f2d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2459,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-20T12:43:39Z",
+      "side": 1,
+      "message": "@Tünde: Could you improve somehow the unit test to catch the fix, please? Maybe using Metafile based testing?",
+      "range": {
+        "startLine": 2448,
+        "startChar": 0,
+        "endLine": 2459,
+        "endChar": 82
+      },
+      "revId": "07283675dbbc2ff0070dd26f5d656230f45df53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
