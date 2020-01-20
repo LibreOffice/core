@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6f4c670d_59bc8409",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-20T05:14:20Z",
+      "side": 1,
+      "message": "Actually reading the code, I don\u0027t see how this part of code could ever be executed. Every AInfo in local aAInfoList is created with pViewData set to some \"this\" -\u003e non-null; and this data (neither aAInfoList noor its members) can\u0027t mutate in maNotifyLink.Call(). (Btw, an obvious optimization would be to reserve space in aAInfoList on creation, since its size is known...)",
+      "range": {
+        "startLine": 301,
+        "startChar": 16,
+        "endLine": 307,
+        "endChar": 17
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d870ee7b_6ece7d54",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
