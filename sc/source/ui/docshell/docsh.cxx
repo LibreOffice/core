@@ -2447,15 +2447,10 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         ErrCode eError = DBaseExport(
             rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
 
-        if ( eError != ERRCODE_NONE && eError.IsWarning() )
-        {
-            eError = ERRCODE_NONE;
-        }
-
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::File );
         if ( bHasMemo )
             aTmpFile.setExtension("dbt");
-        if ( eError != ERRCODE_NONE )
+        if ( eError != ERRCODE_NONE && !eError.IsWarning() )
         {
             if (!GetError())
                 SetError(eError);
@@ -2473,8 +2468,13 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
                 // tdf#40713: don't lose dbt file
                 // if aDbtFile corresponds exactly to aTmpFile, we just have to return
-                if (aDbtFile.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) == aTmpFile.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ))
+                if (aDbtFile.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) ==
+                    aTmpFile.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ))
+                {
+                    if (eError != ERRCODE_NONE && !GetError())
+                        SetError(eError);
                     return bRet;
+                }
 
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
                     bRet = false;
@@ -2483,10 +2483,12 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 if ( !bRet )
                 {
                     KillFile( aTmpFile );
-                    if ( !GetError() )
-                        SetError(SCERR_EXPORT_DATA);
+                    if (eError == ERRCODE_NONE || eError.IsWarning())
+                        eError = SCERR_EXPORT_DATA;
                 }
             }
+            if (eError != ERRCODE_NONE && !GetError())
+                SetError(eError);
         }
     }
     else if (aFltName == pFilterDif)
