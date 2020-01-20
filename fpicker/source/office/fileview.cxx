@@ -862,7 +862,7 @@ void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolde
 
     std::unique_ptr<weld::TreeIter> xIconEntry = mpImpl->mxIconView->make_iterator();
     mpImpl->mxIconView->insert(-1, &rEntry.maDisplayName, &sId, &mpImpl->maFolderImage, xIconEntry.get());
-    mpImpl->mxIconView->scroll_to_item(*xEntry);
+    mpImpl->mxIconView->scroll_to_item(*xIconEntry);
 }
 
 FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDescriptor )
