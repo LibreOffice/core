@@ -531,6 +531,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf129659, "tdf129659.docx")
+{
+    // don't crash on footnote with page break
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
