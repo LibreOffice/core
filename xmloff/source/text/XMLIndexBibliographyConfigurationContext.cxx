@@ -208,8 +208,7 @@ SvXMLImportContextRef XMLIndexBibliographyConfigurationContext::CreateChildConte
         }
     }
 
-    return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                  xAttrList);
+    return nullptr;
 }
 
 void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)

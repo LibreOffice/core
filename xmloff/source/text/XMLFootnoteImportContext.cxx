@@ -209,12 +209,6 @@ SvXMLImportContextRef XMLFootnoteImportContext::CreateChildContext(
             xContext = new XMLFootnoteBodyImportContext(GetImport(),
                                                         p_nPrefix, rLocalName);
             break;
-        default:
-            // default:
-            xContext = SvXMLImportContext::CreateChildContext(p_nPrefix,
-                                                              rLocalName,
-                                                              xAttrList);
-            break;
     }
 
     return xContext;

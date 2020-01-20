@@ -261,7 +261,7 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
 SvXMLImportContextRef XMLLineNumberingImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     if ( (nPrefix == XML_NAMESPACE_TEXT) &&
          IsXMLToken(rLocalName, XML_LINENUMBERING_SEPARATOR) )
@@ -270,12 +270,7 @@ SvXMLImportContextRef XMLLineNumberingImportContext::CreateChildContext(
                                                           nPrefix, rLocalName,
                                                           *this);
     }
-    else
-    {
-        // unknown element: default context
-        return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                      xAttrList);
-    }
+    return nullptr;
 }
 
 void XMLLineNumberingImportContext::SetSeparatorText(

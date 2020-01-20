@@ -71,8 +71,6 @@ SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
             // no text element
             // illegal element content! TODO: discard this redline!
             // for the moment -> use default
-            xContext = SvXMLImportContext::CreateChildContext(
-                nPrefix, rLocalName, xAttrList);
         }
     }
 

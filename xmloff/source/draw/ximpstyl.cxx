@@ -1450,10 +1450,6 @@ SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
         xContext = new SdXMLLayerSetContext( GetImport(), nPrefix, rLocalName, xAttrList );
     }
 
-    // call base class
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
-
     return xContext;
 }
 

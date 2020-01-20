@@ -95,7 +95,7 @@ void XMLChangedRegionImportContext::StartElement(
 SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
+    const Reference<XAttributeList> & /*xAttrList*/)
 {
     SvXMLImportContextRef xContext;
 
@@ -121,16 +121,7 @@ SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
     {
         // illegal element content! TODO: discard the redlines
         // for the moment -> use text
-
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                          xAttrList);
-
         // or default if text fail
-        if (!xContext)
-        {
-            xContext = SvXMLImportContext::CreateChildContext(
-                nPrefix, rLocalName, xAttrList);
-        }
     }
 
     return xContext;

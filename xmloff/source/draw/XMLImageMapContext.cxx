@@ -212,7 +212,7 @@ void XMLImageMapObjectContext::EndElement()
 SvXMLImportContextRef XMLImageMapObjectContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken(rLocalName, XML_EVENT_LISTENERS) )
@@ -233,10 +233,7 @@ SvXMLImportContextRef XMLImageMapObjectContext::CreateChildContext(
         return new XMLStringBufferImportContext(
             GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
     }
-    else
-        return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                      xAttrList);
-
+    return nullptr;
 }
 
 void XMLImageMapObjectContext::ProcessAttribute(
@@ -587,7 +584,7 @@ XMLImageMapContext::~XMLImageMapContext()
 SvXMLImportContextRef XMLImageMapContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -609,9 +606,6 @@ SvXMLImportContextRef XMLImageMapContext::CreateChildContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);
         }
     }
-    else
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                          xAttrList);
 
     return xContext;
 }

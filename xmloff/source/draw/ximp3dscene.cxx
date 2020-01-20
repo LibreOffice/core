@@ -199,13 +199,6 @@ SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 n
             GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
-    // call parent when no own context was created
-    if (!xContext)
-    {
-        xContext = SvXMLImportContext::CreateChildContext(
-        nPrefix, rLocalName, xAttrList);
-    }
-
     return xContext;
 }
 

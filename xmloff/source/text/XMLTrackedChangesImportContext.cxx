@@ -79,7 +79,7 @@ void XMLTrackedChangesImportContext::StartElement(
 SvXMLImportContextRef XMLTrackedChangesImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
+    const Reference<XAttributeList> & /*xAttrList*/)
 {
     SvXMLImportContextRef xContext;
 
@@ -88,12 +88,6 @@ SvXMLImportContextRef XMLTrackedChangesImportContext::CreateChildContext(
     {
         xContext = new XMLChangedRegionImportContext(GetImport(),
                                                      nPrefix, rLocalName);
-    }
-
-    if (!xContext)
-    {
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
-                                                          xAttrList);
     }
 
     return xContext;

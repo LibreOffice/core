@@ -2427,7 +2427,7 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
 SvXMLImportContextRef XMLMacroFieldImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -2440,9 +2440,6 @@ SvXMLImportContextRef XMLMacroFieldImportContext::CreateChildContext(
         xEventContext = xContext;
         bValid = true;
     }
-    else
-        xContext = SvXMLImportContext::CreateChildContext(
-            nPrefix, rLocalName, xAttrList);
 
     return xContext;
 }
@@ -2699,7 +2696,7 @@ XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
 SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          (IsXMLToken(rLocalName, XML_DDE_CONNECTION_DECL)) )
@@ -2708,12 +2705,7 @@ SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
         return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix,
                                                 rLocalName, aTokenMap);
     }
-    else
-    {
-        return SvXMLImportContext::CreateChildContext(nPrefix,
-                                                      rLocalName,
-                                                      xAttrList);
-    }
+    return nullptr;
 }
 
 

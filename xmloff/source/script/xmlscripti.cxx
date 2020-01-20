@@ -71,7 +71,7 @@ XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 n
 
 SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList >& xAttrList )
+    const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
 
@@ -82,9 +82,6 @@ SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
         if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
             xContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
     }
-
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return xContext;
 }
@@ -140,9 +137,6 @@ SvXMLImportContextRef XMLScriptContext::CreateChildContext(
             }
         }
     }
-
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLName, xAttrList);
 
     return xContext;
 }

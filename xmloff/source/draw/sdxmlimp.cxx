@@ -194,10 +194,6 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
         }
     }
 
-    // call parent when no own context was created
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
-
     return xContext;
 }
 

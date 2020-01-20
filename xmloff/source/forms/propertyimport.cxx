@@ -258,20 +258,14 @@ OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 
 }
 
 SvXMLImportContextRef OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
-    const Reference< XAttributeList >& _rxAttrList)
+    const Reference< XAttributeList >& /*_rxAttrList*/)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
     {
         return new OPropertyElementsContext( m_rContext.getGlobalContext(),
                                              _nPrefix, _rLocalName, this);
     }
-    else
-    {
-        OSL_FAIL(OStringBuffer("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ").
-            append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
-            append(")!").getStr());
-        return SvXMLImportContext::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
-    }
+    return nullptr;
 }
 
 void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrList)

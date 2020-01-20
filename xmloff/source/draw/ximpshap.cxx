@@ -251,10 +251,6 @@ SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefi
         }
     }
 
-    // call parent for content
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
-
     return xContext;
 }
 
@@ -3559,9 +3555,6 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
             }
         }
     }
-    // call parent for content
-    if (!xContext)
-        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return xContext;
 }

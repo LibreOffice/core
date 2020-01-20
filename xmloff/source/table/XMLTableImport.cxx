@@ -181,8 +181,7 @@ SvXMLImportContextRef XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, c
 {
     if( mxParent.is() )
         return mxParent->CreateChildContext( nPrefix, rLocalName, xAttrList );
-    else
-        return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return nullptr;
 }
 
 
@@ -366,7 +365,7 @@ XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImpo
 {
 }
 
-SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const Reference< XAttributeList >& xAttrList )
 {
     if( mxColumns.is() && (mnCurrentRow == -1) ) try
     {
@@ -419,7 +418,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, c
         OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
     }
 
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
+    return nullptr;
 }
 
 void XMLTableImportContext::InitColumns()
@@ -558,7 +557,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, con
         OSL_FAIL("xmloff::XMLTableImportContext::ImportCell(), exception caught!");
     }
 
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
+    return nullptr;
 }
 
 SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
@@ -578,7 +577,7 @@ SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPre
         }
     }
 
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
+    return nullptr;
 }
 
 void XMLTableImportContext::StartElement( const Reference< XAttributeList >& /*xAttrList*/ )
@@ -713,10 +712,7 @@ SvXMLImportContextRef XMLCellImportContext::CreateChildContext( sal_uInt16 nPref
         pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
     }
 
-    if( pContext )
-        return pContext;
-    else
-        return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
+    return pContext;
 }
 
 void XMLCellImportContext::EndElement()
@@ -824,7 +820,7 @@ SvXMLImportContextRef XMLTableTemplateContext::CreateChildContext( sal_uInt16 nP
         }
     }
 
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

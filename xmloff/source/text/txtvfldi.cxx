@@ -690,12 +690,6 @@ SvXMLImportContextRef XMLVariableDeclsImportContext::CreateChildContext(
     }
 
     // if no context was created, use default context
-    if (!xImportContext) {
-        xImportContext = SvXMLImportContext::CreateChildContext(nPrefix,
-                                                                rLocalName,
-                                                                xAttrList);
-    }
-
     return xImportContext;
 }
 

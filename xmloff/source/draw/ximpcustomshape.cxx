@@ -1298,7 +1298,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-SvXMLImportContextRef XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const OUString& rLocalName,
+SvXMLImportContextRef XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 /*nPrefix*/,const OUString& rLocalName,
                                                                     const uno::Reference< xml::sax::XAttributeList> & xAttrList )
 {
     EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( rLocalName );
@@ -1384,7 +1384,7 @@ SvXMLImportContextRef XMLEnhancedCustomShapeContext::CreateChildContext( sal_uIn
         }
         maHandles.push_back( comphelper::containerToSequence(aHandle) );
     }
-    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
