@@ -37,6 +37,9 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
+#include <ObjectIdentifier.hxx>
+#include<bits/stdc++.h>
+using namespace std;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -262,6 +265,7 @@ bool RegressionCurveHelper::hasMeanValueLine(
 bool RegressionCurveHelper::isMeanValueLine(
     const uno::Reference< chart2::XRegressionCurve > & xRegCurve )
 {
+    // cout<<"Enterign_is\n\n";
     uno::Reference< XServiceName > xServName( xRegCurve, uno::UNO_QUERY );
     return xServName.is() &&
         xServName->getServiceName() ==
@@ -272,6 +276,7 @@ uno::Reference< chart2::XRegressionCurve >
     RegressionCurveHelper::getMeanValueLine(
         const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
 {
+    // cout<<"Entering_get\n\n";
     if( xRegCnt.is())
     {
         try
@@ -476,9 +481,21 @@ uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveT
             xRegressionCurve->getEquationProperties());
 }
 
+uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getCurrentSelectedCurve(
+    const uno::Reference< XRegressionCurveContainer > & xRegCnt, const OUString& rSelectedCID  )
+{
+    if( !xRegCnt.is())
+        return nullptr;
+
+    sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rSelectedCID );
+    uno::Reference< chart2::XRegressionCurve > xCurve( getRegressionCurveAtIndex(xRegCnt, nCurveIndex) );
+    return xCurve;
+}
+
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
+    cout<<"akhsdj\n\n";
     if( !xRegCnt.is())
         return nullptr;
 
@@ -738,6 +755,7 @@ sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
                 return i;
         }
     }
+    cout<<"returned_-1\n\n";
     return -1;
 }
 
