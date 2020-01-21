@@ -227,8 +227,13 @@ namespace slideshow
             if( rRangePix.isEmpty() )
                 return true;
 
-            const Point aPosPixel( rRangePix.getMinX() + maWindowOffset.X,
-                                   rRangePix.getMinY() + maWindowOffset.Y );
+            awt::Rectangle aCanvasArea;
+            UnoViewSharedPtr xUnoView(std::dynamic_pointer_cast<UnoView>(mpViewLayer));
+            if (xUnoView)
+                aCanvasArea = xUnoView->getUnoView()->getCanvasArea();
+
+            const Point aPosPixel( rRangePix.getMinX() + maWindowOffset.X + aCanvasArea.X,
+                                   rRangePix.getMinY() + maWindowOffset.Y + aCanvasArea.Y );
             const Size  aSizePixel( rRangePix.getMaxX() - rRangePix.getMinX(),
                                     rRangePix.getMaxY() - rRangePix.getMinY() );
 
