@@ -24,6 +24,7 @@
 #include <ErrorBar.hxx>
 #include <StatisticsHelper.hxx>
 #include <unonames.hxx>
+#include <ChartController.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -906,7 +907,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
     {
         case PROPERTY_SET_TYPE_REGRESSION:
             if( xRegCnt.is() )
-                xResult.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ), uno::UNO_QUERY );
+                xResult.set( RegressionCurveHelper::getCurrentSelectedCurve( xRegCnt, m_aSelection.getSelectedCID() ), uno::UNO_QUERY );
             break;
         case PROPERTY_SET_TYPE_ERROR_BAR:
             if( xSeriesPropertySet.is())

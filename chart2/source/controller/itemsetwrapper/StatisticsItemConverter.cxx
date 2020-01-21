@@ -120,7 +120,7 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
         uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
+            ::chart::RegressionCurveHelper::getCurrentSelectedCurve( xRegCurveCnt, m_aSelection.getSelectedCID() ));
         if( xCurve.is())
         {
             return xCurve->getEquationProperties();
@@ -151,7 +151,7 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
         uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
+            ::chart::RegressionCurveHelper::getCurrentSelectedCurve( xRegCurveCnt, m_aSelection.getSelectedCID() ));
         if( xCurve.is())
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );

@@ -1039,8 +1039,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     bool bIsPoint = ( eObjectType == OBJECTTYPE_DATA_POINT );
                     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
                     uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-                    Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
-                    bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
                     Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );
                     bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );
@@ -1121,8 +1119,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                     if( bHasDataLabelsAtSeries )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataLabels" );
-                    if( bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatTrendlineEquation" );
                     if( xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatMeanValue" );
                     if( bHasXErrorBars )
@@ -1145,8 +1141,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertYErrorBars" );
                     if( bHasDataLabelsAtSeries || ( bHasDataLabelsAtPoints && bHasFormattedDataPointsOtherThanSelected ) )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteDataLabels" );
-                    if( bHasEquation )
-                        lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteTrendlineEquation" );
                     if( xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteMeanValue" );
                     if( bHasXErrorBars )
