@@ -350,22 +350,17 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                 }
             }
 
-            // Paint all views; after painting check, if view is
-            // marked; in this case remove view, because area of output
-            // lies out of display area of window; mark state is
-            // set from view itself
-            for (size_t i = 0; i < maViewList.size();)
-            {
-                ImplAnimView* pView = maViewList[i].get();
-                pView->draw(mnPos);
-
-                if (pView->isMarked())
-                {
-                    maViewList.erase(maViewList.begin() + i);
-                }
-                else
-                    i++;
-            }
+            // Paint all views.
+            std::for_each(maViewList.cbegin(), maViewList.cend(),
+                          [this](const auto& pView) { pView->draw(mnPos); });
+            /*
+             * If a view is marked, remove the view, because
+             * area of output lies out of display area of window.
+             * Mark state is set from view itself.
+             */
+            auto removeStart = std::remove_if(maViewList.begin(), maViewList.end(),
+                                              [](const auto& pView) { return pView->isMarked(); });
+            maViewList.erase(removeStart, maViewList.cend());
 
             // stop or restart timer
             if (maViewList.empty())
