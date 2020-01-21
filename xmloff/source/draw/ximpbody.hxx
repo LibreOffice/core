@@ -55,8 +55,14 @@ class SdXMLBodyContext : public SvXMLImportContext
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
 public:
-    SdXMLBodyContext( SdXMLImport& rImport, const OUString& rLocalName );
+    SdXMLBodyContext( SdXMLImport& rImport );
     virtual ~SdXMLBodyContext() override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
