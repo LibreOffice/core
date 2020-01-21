@@ -117,6 +117,7 @@ public:
 
     void testTdf90510(); // Pie chart label placement settings(XLS)
     void testTdf109858(); // Pie chart label placement settings(XLSX)
+    void testTdf130105();
 
     void testTdf111173();
     void testTdf122226();
@@ -217,6 +218,7 @@ public:
     CPPUNIT_TEST(testCombinedChartAttachedAxisXLSX);
     CPPUNIT_TEST(testTdf90510);
     CPPUNIT_TEST(testTdf109858);
+    CPPUNIT_TEST(testTdf130105);
     CPPUNIT_TEST(testTdf111173);
     CPPUNIT_TEST(testTdf122226);
 
@@ -1668,12 +1670,36 @@ void Chart2ImportTest::testTdf109858()
 {
     load("/chart2/qa/extras/data/xlsx/", "piechart_outside.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
-    Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
-    uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
+
+    // test data point labels position
+    Reference<beans::XPropertySet> xDataPointPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
+    uno::Any aAny = xDataPointPropSet->getPropertyValue( "LabelPlacement" );
     CPPUNIT_ASSERT( aAny.hasValue() );
     sal_Int32 nLabelPlacement = 0;
     CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be placed outside", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data point label should be placed bestFit", chart::DataLabelPlacement::AVOID_OVERLAP, nLabelPlacement );
+
+    // test data series label position
+    Reference<beans::XPropertySet> xSeriesPropSet(xChart1Doc->getDiagram()->getDataRowProperties(0), uno::UNO_SET_THROW);
+    aAny = xSeriesPropSet->getPropertyValue( "LabelPlacement" );
+    CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data series labels should be placed outside", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement );
+}
+
+void Chart2ImportTest::testTdf130105()
+{
+    load("/chart2/qa/extras/data/xlsx/", "barchart_outend.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    uno::Any aAny = xPropertySet->getPropertyValue("LabelPlacement");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    sal_Int32 nLabelPlacement = 0;
+    CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Data label should be placed outend", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
 }
 
 void Chart2ImportTest::testTdf111173()
