@@ -16,13 +16,12 @@
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class SvxColorToolBoxControl;
+class SvxLineStyleToolBoxControl;
 
 namespace chart { namespace sidebar {
 
 class ChartColorWrapper
 {
-private:
-
 public:
     ChartColorWrapper(css::uno::Reference<css::frame::XModel> const & xModel,
             SvxColorToolBoxControl* pControl,
@@ -41,6 +40,25 @@ private:
     SvxColorToolBoxControl* mpControl;
 
     OUString maPropertyName;
+};
+
+class ChartLineStyleWrapper
+{
+public:
+    ChartLineStyleWrapper(css::uno::Reference<css::frame::XModel> const & xModel,
+            SvxLineStyleToolBoxControl* pControl);
+
+    bool operator()(const OUString& rCommand, const css::uno::Any& rValue);
+
+    void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
+
+    void updateData();
+
+private:
+
+    css::uno::Reference<css::frame::XModel> mxModel;
+
+    SvxLineStyleToolBoxControl* mpControl;
 };
 
 } }

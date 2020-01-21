@@ -54,7 +54,6 @@ LinePropertyPanel::LinePropertyPanel(
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
     maDashControl (SID_ATTR_LINE_DASH, *pBindings, *this),
     maWidthControl(SID_ATTR_LINE_WIDTH, *pBindings, *this),
-    maLineStyleListControl(SID_DASH_LIST, *pBindings, *this),
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
     maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
@@ -74,7 +73,6 @@ void LinePropertyPanel::dispose()
     maStyleControl.dispose();
     maDashControl.dispose();
     maWidthControl.dispose();
-    maLineStyleListControl.dispose();
     maTransControl.dispose();
     maEdgeStyle.dispose();
     maCapStyle.dispose();
@@ -107,16 +105,6 @@ void LinePropertyPanel::NotifyItemUpdate(
 
     switch(nSID)
     {
-        case SID_ATTR_LINE_DASH:
-        {
-            updateLineDash(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_ATTR_LINE_STYLE:
-        {
-            updateLineStyle(bDisabled, bSetOrDefault, pState);
-            break;
-        }
         case SID_ATTR_LINE_TRANSPARENCE:
         {
             updateLineTransparence(bDisabled, bSetOrDefault, pState);
@@ -125,12 +113,6 @@ void LinePropertyPanel::NotifyItemUpdate(
         case SID_ATTR_LINE_WIDTH:
         {
             updateLineWidth(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_DASH_LIST:
-        {
-            FillLineStyleList();
-            SelectLineStyle();
             break;
         }
         case SID_ATTR_LINE_JOINT:
@@ -174,30 +156,6 @@ void LinePropertyPanel::HandleContextChange(
         disableArrowHead();
     else
         enableArrowHead();
-}
-
-void LinePropertyPanel::setLineStyle(const XLineStyleItem& rItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_STYLE,
-            SfxCallMode::RECORD, { &rItem });
-}
-
-void LinePropertyPanel::setLineDash(const XLineDashItem& rItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_DASH,
-            SfxCallMode::RECORD, { &rItem });
-}
-
-void LinePropertyPanel::setLineEndStyle(const XLineEndItem* pItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINEEND_STYLE,
-            SfxCallMode::RECORD, { pItem });
-}
-
-void LinePropertyPanel::setLineStartStyle(const XLineStartItem* pItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINEEND_STYLE,
-            SfxCallMode::RECORD, { pItem });
 }
 
 void LinePropertyPanel::setLineJoint(const XLineJointItem* pItem)

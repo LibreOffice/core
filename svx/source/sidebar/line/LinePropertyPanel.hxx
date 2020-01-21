@@ -72,10 +72,6 @@ public:
 
 protected:
 
-    virtual void setLineStyle(const XLineStyleItem& rItem) override;
-    virtual void setLineDash(const XLineDashItem& rItem) override;
-    virtual void setLineEndStyle(const XLineEndItem* pItem) override;
-    virtual void setLineStartStyle(const XLineStartItem* pItem) override;
     virtual void setLineTransparency(const XLineTransparenceItem& rItem) override;
     virtual void setLineJoint(const XLineJointItem* pItem) override;
     virtual void setLineCap(const XLineCapItem* pItem) override;
@@ -85,7 +81,6 @@ private:
     sfx2::sidebar::ControllerItem maStyleControl;
     sfx2::sidebar::ControllerItem maDashControl;
     sfx2::sidebar::ControllerItem maWidthControl;
-    sfx2::sidebar::ControllerItem maLineStyleListControl;
     sfx2::sidebar::ControllerItem maTransControl;
     sfx2::sidebar::ControllerItem maEdgeStyle;
     sfx2::sidebar::ControllerItem maCapStyle;
