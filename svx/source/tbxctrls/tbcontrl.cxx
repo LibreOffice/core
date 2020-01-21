@@ -4363,7 +4363,7 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OStrin
 {
 }
 
-MenuOrToolMenuButton::MenuOrToolMenuButton(svt::PopupWindowController* pControl, ToolBox* pToolbar, sal_uInt16 nId)
+MenuOrToolMenuButton::MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId)
     : m_pMenuButton(nullptr)
     , m_pToolbar(nullptr)
     , m_pControl(pControl)
