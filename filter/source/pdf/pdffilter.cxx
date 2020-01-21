@@ -55,7 +55,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     Reference< task::XStatusIndicator > xStatusIndicator;
     Reference< task::XInteractionHandler > xIH;
 
-    for (sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
+    for (sal_Int32 i = 0; i < nLength; ++i)
     {
         if ( pValue[ i ].Name == "OutputStream" )
             pValue[ i ].Value >>= xOStm;

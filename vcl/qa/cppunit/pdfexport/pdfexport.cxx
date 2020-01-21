@@ -22,6 +22,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -37,6 +40,7 @@
 #include <fpdfview.h>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -138,6 +142,7 @@ public:
     void testTocLink();
     void testPdfImageResourceInlineXObjectRef();
     void testReduceSmallImage();
+    void testReduceImage();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -176,6 +181,7 @@ public:
     CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
     CPPUNIT_TEST(testReduceSmallImage);
+    CPPUNIT_TEST(testReduceImage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1897,6 +1903,61 @@ void PdfExportTest::testReduceSmallImage()
     // i.e. the image was scaled down to 300 DPI, even if it had tiny size.
     CPPUNIT_ASSERT_EQUAL(16, nWidth);
     CPPUNIT_ASSERT_EQUAL(16, nHeight);
+}
+
+void PdfExportTest::testReduceImage()
+{
+    // Load the Writer document.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reduce-image.fodt";
+    mxComponent = loadFromDesktop(aURL);
+
+    // Save as PDF.
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
+    uno::Reference<document::XFilter> xFilter(
+        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxComponent);
+
+    SvFileStream aOutputStream(maTempFile.GetURL(), StreamMode::WRITE);
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ReduceImageResolution", uno::Any(false) } }));
+
+    // This is intentionally in an "unlucky" order, output stream comes before filter data.
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+        { "OutputStream", uno::Any(xOutputStream) },
+        { "FilterData", uno::Any(aFilterData) },
+    }));
+    xFilter->filter(aDescriptor);
+    aOutputStream.Close();
+
+    // Parse the PDF: get the image.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pPageObject));
+
+    // Make sure we don't scale down a bitmap.
+    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject);
+    CPPUNIT_ASSERT(pBitmap);
+    int nWidth = FPDFBitmap_GetWidth(pBitmap);
+    int nHeight = FPDFBitmap_GetHeight(pBitmap);
+    FPDFBitmap_Destroy(pBitmap);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 160
+    // - Actual  : 6
+    // i.e. the image was scaled down even with ReduceImageResolution=false.
+    CPPUNIT_ASSERT_EQUAL(160, nWidth);
+    CPPUNIT_ASSERT_EQUAL(160, nHeight);
 }
 
 void PdfExportTest::testPdfImageResourceInlineXObjectRef()
