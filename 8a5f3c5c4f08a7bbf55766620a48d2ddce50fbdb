@@ -435,6 +435,29 @@
       "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "652aa941_527f8ee0",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-21T16:10:23Z",
+      "side": 1,
+      "message": "This may be moved to the declaration of bGlobalPause, which would avoid the else statement.",
+      "range": {
+        "startLine": 335,
+        "startChar": 12,
+        "endLine": 335,
+        "endChar": 32
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
