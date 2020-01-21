@@ -83,8 +83,7 @@ private:
     static void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
 
 public:
-    SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const OUString& rLocalName,
-                                     const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
+    SvXMLImportContext* CreateStylesContext( bool bIsAutoStyle );
 
 protected:
     // SvXMLImport

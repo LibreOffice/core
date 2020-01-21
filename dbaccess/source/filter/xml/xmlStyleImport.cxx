@@ -134,11 +134,8 @@ ODBFilter& OTableStyleContext::GetOwnImport()
 
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
-                                          sal_uInt16 nPrfx ,
-                                          const OUString& rLName ,
-                                          const Reference< XAttributeList > & xAttrList,
-                                          const bool bTempAutoStyles )
-    : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+                                          bool bTempAutoStyles )
+    : SvXMLStylesContext( rImport )
     , m_nNumberFormatIndex(-1)
     , m_nMasterPageNameIndex(-1)
     , bAutoStyles(bTempAutoStyles)

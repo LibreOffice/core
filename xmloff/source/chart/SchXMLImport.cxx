@@ -529,15 +529,12 @@ SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
     return pContext;
 }
 
-SvXMLImportContext* SchXMLImport::CreateStylesContext(
-    const OUString& rLocalName,
-    const Reference<xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContext* SchXMLImport::CreateStylesContext()
 {
     //#i103287# make sure that the version information is set before importing all the properties (especially stroke-opacity!)
     SchXMLTools::setBuildIDAtImportInfo( GetModel(), getImportInfo() );
 
-    SvXMLStylesContext* pStylesCtxt =
-        new SvXMLStylesContext( *(this), XML_NAMESPACE_OFFICE, rLocalName, xAttrList );
+    SvXMLStylesContext* pStylesCtxt = new SvXMLStylesContext( *this );
 
     // set context at base class, so that all auto-style classes are imported
     SetAutoStyles( pStylesCtxt );

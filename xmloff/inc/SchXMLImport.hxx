@@ -162,8 +162,7 @@ public:
 
     virtual ~SchXMLImport() throw () override;
 
-    SvXMLImportContext* CreateStylesContext( const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    SvXMLImportContext* CreateStylesContext();
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;

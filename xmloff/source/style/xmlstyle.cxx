@@ -754,8 +754,20 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
 {
 }
 
+SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, bool bAuto ) :
+    SvXMLImportContext( rImport ),
+    mpImpl( new SvXMLStylesContext_Impl( bAuto ) )
+{
+}
+
 SvXMLStylesContext::~SvXMLStylesContext()
 {
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return nullptr;
 }
 
 SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,

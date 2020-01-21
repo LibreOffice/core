@@ -680,11 +680,8 @@ static const OUStringLiteral gsRowStyleServiceName(XML_STYLE_FAMILY_TABLE_ROW_ST
 static const OUStringLiteral gsTableStyleServiceName(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME);
 
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx ,
-        const OUString& rLName ,
-        const uno::Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles )
-    : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+    : SvXMLStylesContext( rImport )
     , nNumberFormatIndex(-1)
     , nConditionalFormatIndex(-1)
     , nCellStyleIndex(-1)

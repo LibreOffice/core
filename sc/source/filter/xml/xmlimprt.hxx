@@ -314,9 +314,7 @@ public:
     SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext();
-    SvXMLImportContext *CreateStylesContext(const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
-                                     bool bAutoStyles );
+    SvXMLImportContext *CreateStylesContext( bool bAutoStyles );
 
     SvXMLImportContext *CreateBodyContext(
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );

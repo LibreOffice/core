@@ -198,8 +198,17 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         bool bAutomatic = false );
+    SvXMLStylesContext( SvXMLImport& rImport,
+        bool bAutomatic = false );
 
     virtual ~SvXMLStylesContext() override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    // Create child element.
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // Create child element.
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
