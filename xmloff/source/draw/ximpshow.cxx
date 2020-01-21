@@ -58,8 +58,8 @@ public:
 };
 
 
-SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList )
+:   SvXMLImportContext(rImport),
     mpImpl(new ShowsImpImpl )
 {
 
@@ -88,28 +88,27 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
             bIsMouseVisible = false;
 
         // read attributes
-        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-            OUString sValue = xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( nPrefix )
+            switch( aIter.getToken() )
             {
-            case XML_NAMESPACE_PRESENTATION:
-                if( IsXMLToken( aLocalName, XML_START_PAGE ) )
+                case XML_ELEMENT(PRESENTATION, XML_START_PAGE):
                 {
                     mpImpl->mxPresProps->setPropertyValue("FirstPage", Any(sValue) );
                     bAll = false;
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_SHOW ) )
+                case XML_ELEMENT(PRESENTATION, XML_SHOW):
                 {
                     mpImpl->maCustomShowName = sValue;
                     bAll = false;
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_PAUSE ) )
+                case XML_ELEMENT(PRESENTATION, XML_PAUSE):
                 {
                     Duration aDuration;
                     if (!::sax::Converter::convertDuration(aDuration,  sValue))
@@ -118,55 +117,66 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                     const sal_Int32 nMS = (aDuration.Hours * 60 +
                             aDuration.Minutes) * 60 + aDuration.Seconds;
                     mpImpl->mxPresProps->setPropertyValue("Pause", Any(nMS) );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_ANIMATIONS ) )
+                case XML_ELEMENT(PRESENTATION, XML_ANIMATIONS):
                 {
                     aAny <<= IsXMLToken( sValue, XML_ENABLED );
                     mpImpl->mxPresProps->setPropertyValue("AllowAnimations", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_STAY_ON_TOP ) )
+                case XML_ELEMENT(PRESENTATION, XML_STAY_ON_TOP):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsAlwaysOnTop", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_FORCE_MANUAL ) )
+                case XML_ELEMENT(PRESENTATION, XML_FORCE_MANUAL):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsAutomatic", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_ENDLESS ) )
+                case XML_ELEMENT(PRESENTATION, XML_ENDLESS):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsEndless", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_FULL_SCREEN ) )
+                case XML_ELEMENT(PRESENTATION, XML_FULL_SCREEN):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsFullScreen", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_MOUSE_VISIBLE ) )
+                case XML_ELEMENT(PRESENTATION, XML_MOUSE_VISIBLE):
                 {
                     bIsMouseVisible = IsXMLToken( sValue, XML_TRUE );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_START_WITH_NAVIGATOR ) )
+                case XML_ELEMENT(PRESENTATION, XML_START_WITH_NAVIGATOR):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("StartWithNavigator", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_MOUSE_AS_PEN ) )
+                case XML_ELEMENT(PRESENTATION, XML_MOUSE_AS_PEN):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("UsePen", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_TRANSITION_ON_CLICK ) )
+                case XML_ELEMENT(PRESENTATION, XML_TRANSITION_ON_CLICK):
                 {
                     aAny <<= IsXMLToken( sValue, XML_ENABLED );
                     mpImpl->mxPresProps->setPropertyValue("IsTransitionOnClick", aAny );
+                    break;
                 }
-                else if( IsXMLToken( aLocalName, XML_SHOW_LOGO ) )
+                case XML_ELEMENT(PRESENTATION, XML_SHOW_LOGO):
                 {
                     aAny <<= IsXMLToken( sValue, XML_TRUE );
                     mpImpl->mxPresProps->setPropertyValue("IsShowLogo", aAny );
+                    break;
                 }
             }
         }
@@ -185,33 +195,30 @@ SdXMLShowsContext::~SdXMLShowsContext()
     }
 }
 
-SvXMLImportContextRef SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( mpImpl && p_nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
+    if( nElement == XML_ELEMENT(PRESENTATION, XML_SHOW) )
     {
         OUString aName;
         OUString aPages;
 
         // read attributes
-        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-            OUString sValue = xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( nPrefix )
+            switch( aIter.getToken() )
             {
-            case XML_NAMESPACE_PRESENTATION:
-                if( IsXMLToken( aLocalName, XML_NAME ) )
-                {
+                case XML_ELEMENT(PRESENTATION, XML_NAME):
                     aName = sValue;
-                }
-                else if( IsXMLToken( aLocalName, XML_PAGES ) )
-                {
+                    break;
+                case XML_ELEMENT(PRESENTATION, XML_PAGES):
                     aPages = sValue;
-                }
+                    break;
             }
         }
 

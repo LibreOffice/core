@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
@@ -277,14 +278,27 @@ void SdXMLDrawPageContext::EndElement()
     }
 }
 
-SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport,
-    const OUString& rLocalName )
-:   SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLocalName )
+SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport )
+:   SvXMLImportContext( rImport )
 {
 }
 
 SdXMLBodyContext::~SdXMLBodyContext()
 {
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::createFastChildContext(
+     sal_Int32 nElement,
+     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    switch (nElement)
+    {
+        case XML_ELEMENT(PRESENTATION, XML_SETTINGS):
+        {
+            return new SdXMLShowsContext( GetSdImport(), xAttrList );
+        }
+    }
+    return nullptr;
 }
 
 SvXMLImportContextRef SdXMLBodyContext::CreateChildContext(
@@ -339,10 +353,6 @@ SvXMLImportContextRef SdXMLBodyContext::CreateChildContext(
                 }
             }
             break;
-        }
-        case XML_TOK_BODY_SETTINGS:
-        {
-            xContext = new SdXMLShowsContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
         }
     }
 

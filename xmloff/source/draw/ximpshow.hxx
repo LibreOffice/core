@@ -35,13 +35,14 @@ class SdXMLShowsContext : public SvXMLImportContext
 public:
 
     SdXMLShowsContext( SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
     virtual ~SdXMLShowsContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHOW_HXX

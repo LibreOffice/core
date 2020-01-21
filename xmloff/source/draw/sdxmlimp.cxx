@@ -56,31 +56,27 @@ class SdXMLBodyContext_Impl : public SvXMLImportContext
 
 public:
 
-    SdXMLBodyContext_Impl( SdXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    SdXMLBodyContext_Impl( SdXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 }
 
-SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const uno::Reference< xml::sax::XAttributeList > & ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport ) :
+    SvXMLImportContext( rImport )
 {
 }
 
-SvXMLImportContextRef SdXMLBodyContext_Impl::CreateChildContext(
-        sal_uInt16 /*nPrefix*/,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext_Impl::createFastChildContext(
+        sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
-    SvXMLImportContext* pContext = new SdXMLBodyContext(GetSdImport(), rLocalName);
-    return pContext;
+    return new SdXMLBodyContext(GetSdImport());
 }
 
 namespace {
@@ -164,16 +160,6 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
             SAL_INFO("xmloff.draw", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
             break;
         }
-        case XML_TOK_DOC_BODY:
-        {
-            if( GetImport().getImportFlags() & SvXMLImportFlags::CONTENT )
-            {
-                // office:body inside office:document
-                xContext = new SdXMLBodyContext_Impl(GetSdImport(),nPrefix,
-                                                     rLocalName, xAttrList);
-            }
-            break;
-        }
     }
 
     return xContext;
@@ -199,6 +185,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
             {
                 // office:master-styles inside office:document
                 return GetSdImport().CreateMasterStylesContext();
+            }
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_BODY):
+        {
+            if( GetImport().getImportFlags() & SvXMLImportFlags::CONTENT )
+            {
+                // office:body inside office:document
+                return new SdXMLBodyContext_Impl(GetSdImport());
             }
             break;
         }
