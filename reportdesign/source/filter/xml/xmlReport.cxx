@@ -41,33 +41,27 @@ namespace rptxml
 
 
 OXMLReport::OXMLReport( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< XAttributeList > & _xAttrList
+                const Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                 ,const uno::Reference< report::XReportDefinition >& _xComponent) :
-    OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),nullptr)
+    OXMLReportElementBase( rImport, _xComponent.get(),nullptr)
     ,m_xReportDefinition(_xComponent)
 {
     OSL_ENSURE(m_xReportDefinition.is(),"No Report definition!");
 
     impl_initRuntimeDefaults();
 
-    const SvXMLNamespaceMap& rMap = m_rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = m_rImport.GetReportElemTokenMap();
-
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
-        for(sal_Int16 i = 0; i < nLength; ++i)
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sLocalName;
-            const OUString sAttrName = _xAttrList->getNameByIndex( i );
-            const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const OUString sValue = _xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_COMMAND_TYPE:
+                case XML_ELEMENT(REPORT, XML_COMMAND_TYPE):
                     {
                         sal_Int32 nRet = sdb::CommandType::COMMAND;
                         const SvXMLEnumMapEntry<sal_Int32>* aXML_EnumMap = OXMLHelper::GetCommandTypeOptions();
@@ -76,22 +70,22 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
                         m_xReportDefinition->setCommandType(nRet);
                     }
                     break;
-                case XML_TOK_COMMAND:
+                case XML_ELEMENT(REPORT, XML_COMMAND):
                     m_xReportDefinition->setCommand(sValue);
                     break;
-                case XML_TOK_FILTER:
+                case XML_ELEMENT(REPORT, XML_FILTER):
                     m_xReportDefinition->setFilter(sValue);
                     break;
-                case XML_TOK_CAPTION:
+                case XML_ELEMENT(REPORT, XML_CAPTION):
                     m_xReportDefinition->setCaption(sValue);
                     break;
-                case XML_TOK_ESCAPE_PROCESSING:
+                case XML_ELEMENT(REPORT, XML_ESCAPE_PROCESSING):
                     m_xReportDefinition->setEscapeProcessing(sValue == s_sTRUE);
                     break;
-                case XML_TOK_REPORT_MIMETYPE:
+                case XML_ELEMENT(OFFICE, XML_MIMETYPE):
                     m_xReportDefinition->setMimeType(sValue);
                     break;
-                case XML_TOK_REPORT_NAME:
+                case XML_ELEMENT(DRAW, XML_NAME):
                     m_xReportDefinition->setName(sValue);
                     break;
                 default:
@@ -128,64 +122,62 @@ void OXMLReport::impl_initRuntimeDefaults() const
 }
 
 
-SvXMLImportContextRef OXMLReport::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReport::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = createFastChildContext_(nElement,xAttrList);
     if (xContext)
         return xContext;
-    const SvXMLTokenMap&    rTokenMap   = m_rImport.GetReportElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_REPORT_FUNCTION:
+        case XML_ELEMENT(REPORT, XML_FUNCTION):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                xContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xReportDefinition.get(),true);
+                xContext = new OXMLFunction( m_rImport,xAttrList,m_xReportDefinition.get(),true);
             }
             break;
-        case XML_TOK_MASTER_DETAIL_FIELDS:
+        case XML_ELEMENT(REPORT, XML_MASTER_DETAIL_FIELDS):
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                xContext = new OXMLMasterFields(m_rImport, nPrefix, rLocalName,xAttrList ,this);
+                xContext = new OXMLMasterFields(m_rImport,xAttrList ,this);
             break;
-        case XML_TOK_REPORT_HEADER:
+        case XML_ELEMENT(REPORT, XML_REPORT_HEADER):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setReportHeaderOn(true);
-                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportHeader());
+                xContext = new OXMLSection( m_rImport,xAttrList, m_xReportDefinition->getReportHeader());
             }
             break;
-        case XML_TOK_PAGE_HEADER:
+        case XML_ELEMENT(REPORT, XML_PAGE_HEADER):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setPageHeaderOn(true);
-                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageHeader());
+                xContext = new OXMLSection( m_rImport,xAttrList, m_xReportDefinition->getPageHeader());
             }
             break;
-        case XML_TOK_GROUP:
+        case XML_ELEMENT(REPORT, XML_GROUP):
             m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            xContext = new OXMLGroup( m_rImport, nPrefix, rLocalName,xAttrList);
+            xContext = new OXMLGroup( m_rImport,xAttrList);
             break;
-        case XML_TOK_DETAIL:
+        case XML_ELEMENT(REPORT, XML_DETAIL):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getDetail());
+                xContext = new OXMLSection( m_rImport,xAttrList, m_xReportDefinition->getDetail());
             }
             break;
-        case XML_TOK_PAGE_FOOTER:
+        case XML_ELEMENT(REPORT, XML_PAGE_FOOTER):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setPageFooterOn(true);
-                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageFooter(),false);
+                xContext = new OXMLSection( m_rImport,xAttrList, m_xReportDefinition->getPageFooter(),false);
             }
             break;
-        case XML_TOK_REPORT_FOOTER:
+        case XML_ELEMENT(REPORT, XML_REPORT_FOOTER):
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setReportFooterOn(true);
-                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportFooter());
+                xContext = new OXMLSection( m_rImport, xAttrList, m_xReportDefinition->getReportFooter());
             }
             break;
         default:
@@ -195,7 +187,7 @@ SvXMLImportContextRef OXMLReport::CreateChildContext(
     return xContext;
 }
 
-void OXMLReport::EndElement()
+void OXMLReport::endFastElement(sal_Int32)
 {
     Reference< XFunctions > xFunctions = m_xReportDefinition->getFunctions();
     const ORptFilter::TGroupFunctionMap& aFunctions = m_rImport.getFunctions();

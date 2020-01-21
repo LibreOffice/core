@@ -34,13 +34,11 @@ namespace rptxml
 
 
 OXMLFunction::OXMLFunction( ORptFilter& _rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XFunctionsSupplier >& _xFunctions
                 ,bool _bAddToReport
                 ) :
-    SvXMLImportContext( _rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( _rImport )
     ,m_xFunctions(_xFunctions->getFunctions())
     ,m_bAddToReport(_bAddToReport)
 {
@@ -48,38 +46,31 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     OSL_ENSURE(m_xFunctions.is(),"Functions is NULL!");
     m_xFunction = m_xFunctions->createFunction();
 
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-
-    const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = _rImport.GetFunctionElemTokenMap();
-
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
         try
         {
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_FUNCTION_NAME:
+                case XML_ELEMENT(REPORT, XML_NAME):
                     m_xFunction->setName(sValue);
                     break;
-                case XML_TOK_FUNCTION_FORMULA:
+                case XML_ELEMENT(REPORT, XML_FORMULA):
                     m_xFunction->setFormula(ORptFilter::convertFormula(sValue));
                     break;
-                case XML_TOK_PRE_EVALUATED:
+                case XML_ELEMENT(REPORT, XML_PRE_EVALUATED):
                     m_xFunction->setPreEvaluated(sValue == s_sTRUE);
                     break;
-                case XML_TOK_INITIAL_FORMULA:
+                case XML_ELEMENT(REPORT, XML_INITIAL_FORMULA):
                     if ( !sValue.isEmpty() )
                         m_xFunction->setInitialFormula(beans::Optional< OUString>(true,ORptFilter::convertFormula(sValue)));
                     break;
-                case XML_TOK_DEEP_TRAVERSING:
+                case XML_ELEMENT(REPORT, XML_DEEP_TRAVERSING):
                     m_xFunction->setDeepTraversing(sValue == s_sTRUE);
                     break;
                 default:
@@ -103,7 +94,7 @@ ORptFilter& OXMLFunction::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-void OXMLFunction::EndElement()
+void OXMLFunction::endFastElement(sal_Int32 )
 {
     if ( m_bAddToReport )
     {

@@ -46,12 +46,10 @@ namespace rptxml
 
 
 OXMLCell::OXMLCell( ORptFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,OXMLTable* _pContainer
                 ,OXMLCell* _pCell) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( rImport )
     ,m_pContainer(_pContainer)
     ,m_pCell(_pCell)
     ,m_nCurrentCount(0)
@@ -60,27 +58,21 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     if ( !m_pCell )
         m_pCell = this;
 
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetColumnTokenMap();
-
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_COLUMN_STYLE_NAME:
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
                 m_sStyleName = sValue;
                 break;
-            case XML_TOK_NUMBER_COLUMNS_SPANNED:
+            case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_SPANNED):
                 m_pContainer->setColumnSpanned(sValue.toInt32());
                 break;
-            case XML_TOK_NUMBER_ROWS_SPANNED:
+            case XML_ELEMENT(TABLE, XML_NUMBER_ROWS_SPANNED):
                 m_pContainer->setRowSpanned(sValue.toInt32());
                 break;
             default:
@@ -101,61 +93,9 @@ SvXMLImportContextRef OXMLCell::CreateChildContext(
     SvXMLImportContext *pContext = nullptr;
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetCellElemTokenMap();
-    Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
-    static const char s_sStringConcat[] = " & ";
-
     const sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
     switch( nToken )
     {
-        case XML_TOK_FIXED_CONTENT:
-            {
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLFixedContent( rImport, _nPrefix, _rLocalName,*m_pCell,m_pContainer);
-            }
-            break;
-        case XML_TOK_PAGE_NUMBER:
-            m_sText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
-            break;
-        case XML_TOK_PAGE_COUNT:
-            m_sText += OUStringLiteral(s_sStringConcat) + " PageCount()";
-            break;
-        case XML_TOK_FORMATTED_TEXT:
-            {
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
-                Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-
-                OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
-                setComponent(xControl.get());
-                if ( xControl.is() )
-                    pContext = new OXMLFormattedField( rImport, _nPrefix, _rLocalName,xAttrList,xControl.get(),m_pContainer,XML_TOK_PAGE_COUNT == nToken);
-            }
-            break;
-        case XML_TOK_IMAGE:
-            {
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference< XImageControl > xControl(xFactor->createInstance(SERVICE_IMAGECONTROL),uno::UNO_QUERY);
-
-                OSL_ENSURE(xControl.is(),"Could not create ImageControl!");
-                setComponent(xControl.get());
-                if ( xControl.is() )
-                    pContext = new OXMLImage( rImport, _nPrefix, _rLocalName,xAttrList,xControl.get(),m_pContainer);
-            }
-            break;
-        case XML_TOK_SUB_DOCUMENT:
-            {
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                if ( !m_bContainsShape )
-                    m_nCurrentCount = m_pContainer->getSection()->getCount();
-                uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
-                Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-                pContext = new OXMLSubDocument( rImport, _nPrefix, _rLocalName,xControl.get(),m_pContainer, this /* give the current cell as parent*/ );
-            }
-            break;
-
-        case XML_TOK_P:
-            pContext = new OXMLCell( rImport, _nPrefix, _rLocalName,xAttrList ,m_pContainer,this);
-            break;
         case XML_TOK_CUSTOM_SHAPE:
         case XML_TOK_FRAME:
             {
@@ -167,6 +107,70 @@ SvXMLImportContextRef OXMLCell::CreateChildContext(
                 m_bContainsShape = true;
             }
             break;
+    }
+    return pContext;
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    ORptFilter& rImport = GetOwnImport();
+    Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
+    static const char s_sStringConcat[] = " & ";
+
+    switch( nElement )
+    {
+        case XML_ELEMENT(REPORT, XML_FIXED_CONTENT):
+            {
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                xContext = new OXMLFixedContent( rImport,*m_pCell,m_pContainer);
+            }
+            break;
+        case XML_ELEMENT(TEXT, XML_PAGE_NUMBER):
+            m_sText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
+            break;
+        case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
+            m_sText += OUStringLiteral(s_sStringConcat) + " PageCount()";
+            break;
+        case XML_ELEMENT(REPORT, XML_FORMATTED_TEXT):
+            {
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
+                Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
+
+                OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
+                setComponent(xControl.get());
+                if ( xControl.is() )
+                    xContext = new OXMLFormattedField( rImport,xAttrList,xControl.get(),m_pContainer, false);
+            }
+            break;
+        case XML_ELEMENT(REPORT, XML_IMAGE):
+            {
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                Reference< XImageControl > xControl(xFactor->createInstance(SERVICE_IMAGECONTROL),uno::UNO_QUERY);
+
+                OSL_ENSURE(xControl.is(),"Could not create ImageControl!");
+                setComponent(xControl.get());
+                if ( xControl.is() )
+                    xContext = new OXMLImage( rImport,xAttrList,xControl.get(),m_pContainer);
+            }
+            break;
+        case XML_ELEMENT(REPORT, XML_SUB_DOCUMENT):
+            {
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                if ( !m_bContainsShape )
+                    m_nCurrentCount = m_pContainer->getSection()->getCount();
+                uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
+                Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
+                xContext = new OXMLSubDocument( rImport,xControl.get(),m_pContainer, this /* give the current cell as parent*/ );
+            }
+            break;
+
+        case XML_ELEMENT(TEXT, XML_P):
+            xContext = new OXMLCell( rImport,xAttrList ,m_pContainer,this);
+            break;
         default:
             break;
     }
@@ -174,10 +178,10 @@ SvXMLImportContextRef OXMLCell::CreateChildContext(
     if ( m_xComponent.is() )
         m_pContainer->addCell(m_xComponent);
 
-    return pContext;
+    return xContext;
 }
 
-void OXMLCell::EndElement()
+void OXMLCell::endFastElement(sal_Int32)
 {
     if ( m_bContainsShape )
     {
@@ -247,7 +251,7 @@ void OXMLCell::setComponent(const uno::Reference< report::XReportComponent >& _x
     m_xComponent = _xComponent;
 }
 
-void OXMLCell::Characters( const OUString& rChars )
+void OXMLCell::characters( const OUString& rChars )
 {
     if ( !rChars.isEmpty() )
     {

@@ -46,29 +46,21 @@ namespace rptxml
 
 
 OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,OXMLTable* _pContainer
                 ) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( rImport )
     ,m_pContainer(_pContainer)
 {
-
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetColumnTokenMap();
-
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_COLUMN_STYLE_NAME:
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
                 fillStyle(sValue);
                 break;
             default:
@@ -82,32 +74,30 @@ OXMLRowColumn::~OXMLRowColumn()
 {
 }
 
-SvXMLImportContextRef OXMLRowColumn::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLRowColumn::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetColumnTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_COLUMN:
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMN):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLRowColumn( rImport, nPrefix, rLocalName,xAttrList,m_pContainer);
+            xContext = new OXMLRowColumn( rImport,xAttrList,m_pContainer);
             break;
-        case XML_TOK_ROW:
+        case XML_ELEMENT(TABLE, XML_TABLE_ROW):
             m_pContainer->incrementRowIndex();
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLRowColumn( rImport, nPrefix, rLocalName,xAttrList,m_pContainer);
+            xContext = new OXMLRowColumn( rImport,xAttrList,m_pContainer);
             break;
-        case XML_TOK_CELL:
+        case XML_ELEMENT(TABLE, XML_TABLE_CELL):
             m_pContainer->incrementColumnIndex();
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLCell( rImport, nPrefix, rLocalName,xAttrList,m_pContainer);
+            xContext = new OXMLCell( rImport,xAttrList,m_pContainer);
             break;
-        case XML_TOK_COV_CELL:
+        case XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL):
             m_pContainer->incrementColumnIndex();
             m_pContainer->addCell(nullptr);
             break;
@@ -115,7 +105,7 @@ SvXMLImportContextRef OXMLRowColumn::CreateChildContext(
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
 void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
@@ -174,7 +164,7 @@ ORptFilter& OXMLRowColumn::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-void OXMLRowColumn::EndElement()
+void OXMLRowColumn::endFastElement(sal_Int32 )
 {
 }
 

@@ -40,41 +40,36 @@ namespace rptxml
 
 
 OXMLImage::OXMLImage( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< XAttributeList > & _xAttrList
+                const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XImageControl > & _xComponent
                 ,OXMLTable* _pContainer) :
-    OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
+    OXMLReportElementBase( rImport,_xComponent.get(),_pContainer)
 {
 
     OSL_ENSURE(m_xReportComponent.is(),"Component is NULL!");
-    const SvXMLNamespaceMap& rMap = m_rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = m_rImport.GetControlElemTokenMap();
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
 
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     try
     {
-        for(sal_Int16 i = 0; i < nLength; ++i)
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sLocalName;
-            const OUString sAttrName = _xAttrList->getNameByIndex( i );
-            const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            /* const */ OUString sValue = _xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_IMAGE_DATA:
+                case XML_ELEMENT(FORM, XML_IMAGE_DATA):
                 {
                     SvtPathOptions aPathOptions;
                     sValue = aPathOptions.SubstituteVariable(sValue);
                     _xComponent->setImageURL(rImport.GetAbsoluteReference( sValue ));
                     break;
                 }
-                case XML_TOK_PRESERVE_IRI:
+                case XML_ELEMENT(REPORT, XML_PRESERVE_IRI):
                     _xComponent->setPreserveIRI(s_sTRUE == sValue);
                     break;
-                case XML_TOK_SCALE:
+                case XML_ELEMENT(REPORT, XML_SCALE):
                 {
                     sal_Int16 nRet = awt::ImageScaleMode::NONE;
                     if ( s_sTRUE == sValue )
@@ -90,7 +85,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     _xComponent->setScaleMode( nRet );
                     break;
                 }
-                case XML_TOK_DATA_FORMULA:
+                case XML_ELEMENT(REPORT, XML_FORMULA):
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));
                     break;
                 default:

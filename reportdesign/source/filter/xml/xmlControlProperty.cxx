@@ -49,38 +49,30 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XPropertySet >& _xControl
                 ,OXMLControlProperty* _pContainer) :
-    SvXMLImportContext( rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( rImport )
     ,m_xControl(_xControl)
     ,m_pContainer(_pContainer)
     ,m_bIsList(false)
 {
     m_aPropType = cppu::UnoType<void>::get();
 
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     OSL_ENSURE(m_xControl.is(),"Control is NULL!");
 
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetControlPropertyElemTokenMap();
-
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_LIST_PROPERTY:
+            case XML_ELEMENT(FORM, XML_LIST_PROPERTY):
                 m_bIsList = sValue == "true";
                 break;
-            case XML_TOK_VALUE_TYPE:
+            case XML_ELEMENT(OOO, XML_VALUE_TYPE):
                 {
                     // needs to be translated into a css::uno::Type
                     static std::map< OUString, css::uno::Type > const s_aTypeNameMap
@@ -103,7 +95,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                         m_aPropType = aTypePos->second;
                 }
                 break;
-            case XML_TOK_PROPERTY_NAME:
+            case XML_ELEMENT(FORM, XML_PROPERTY_NAME):
                 m_aSetting.Name = sValue;
                 break;
             default:
@@ -118,33 +110,31 @@ OXMLControlProperty::~OXMLControlProperty()
 {
 }
 
-SvXMLImportContextRef OXMLControlProperty::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLControlProperty::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetControlPropertyElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_LIST_PROPERTY:
+        case XML_ELEMENT(FORM, XML_LIST_PROPERTY):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLControlProperty( rImport, nPrefix, rLocalName,xAttrList,m_xControl);
+            xContext = new OXMLControlProperty( rImport,xAttrList,m_xControl);
             break;
-        case XML_TOK_VALUE:
+        case XML_ELEMENT(OOO, XML_VALUE):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLControlProperty( rImport, nPrefix, rLocalName,xAttrList,m_xControl,this );
+            xContext = new OXMLControlProperty( rImport,xAttrList,m_xControl,this );
             break;
         default:
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
-void OXMLControlProperty::EndElement()
+void OXMLControlProperty::endFastElement(sal_Int32 )
 {
     if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
     {
@@ -161,7 +151,7 @@ void OXMLControlProperty::EndElement()
     }
 }
 
-void OXMLControlProperty::Characters( const OUString& rChars )
+void OXMLControlProperty::characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);

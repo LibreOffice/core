@@ -665,14 +665,12 @@ public:
 
 }
 
-SvXMLImportContextRef RptXMLDocumentBodyContext::CreateChildContext(
-        sal_uInt16 const nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList> & xAttrList)
+css::uno::Reference< css::xml::sax::XFastContextHandler > RptXMLDocumentBodyContext::createFastChildContext(
+        sal_Int32 nElement,
+        const uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     ORptFilter & rImport(static_cast<ORptFilter&>(GetImport()));
-    if ((XML_NAMESPACE_OFFICE == nPrefix || XML_NAMESPACE_OOO == nPrefix)
-        && IsXMLToken(rLocalName, XML_REPORT))
+    if (nElement == XML_ELEMENT(OFFICE, XML_REPORT) || nElement == XML_ELEMENT(OOO, XML_REPORT))
     {
         rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         const SvXMLStylesContext* pAutoStyles = rImport.GetAutoStyles();
@@ -684,7 +682,7 @@ SvXMLImportContextRef RptXMLDocumentBodyContext::CreateChildContext(
                 pAutoStyle->FillPropertySet(rImport.getReportDefinition().get());
             }
         }
-        return new OXMLReport(rImport, nPrefix, rLocalName, xAttrList, rImport.getReportDefinition());
+        return new OXMLReport(rImport, xAttrList, rImport.getReportDefinition());
     }
     return nullptr;
 }
@@ -703,8 +701,15 @@ public:
                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
+        ORptFilter & rImport(static_cast<ORptFilter&>(GetImport()));
+        switch (nElement)
+        {
+            case XML_ELEMENT(OFFICE, XML_BODY):
+                return new RptXMLDocumentBodyContext(rImport);
+                break;
+        }
         return nullptr;
     }
 
@@ -725,9 +730,6 @@ public:
             case XML_TOK_CONTENT_FONTDECLS:
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 pContext = rImport.CreateFontDeclsContext(rLocalName, xAttrList);
-                break;
-            case XML_TOK_CONTENT_BODY:
-                pContext = new RptXMLDocumentBodyContext(rImport, nPrefix, rLocalName);
                 break;
             default:
                 break;
