@@ -35,6 +35,13 @@ ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
 {
 }
 
+ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
+                                      OUStringBuffer& sTempValue) :
+    ScXMLImportContext( rImport ),
+    sValue(sTempValue)
+{
+}
+
 ScXMLContentContext::~ScXMLContentContext()
 {
 }
@@ -67,7 +74,35 @@ SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefi
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    if (nElement == XML_ELEMENT(TEXT, XML_S))
+    {
+        sal_Int32 nRepeat(0);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
+        {
+            if (aIter.getToken() == XML_ELEMENT(TEXT, XML_C))
+                nRepeat = aIter.toInt32();
+        }
+        if (nRepeat)
+            for (sal_Int32 j = 0; j < nRepeat; ++j)
+                sValue.append(' ');
+        else
+            sValue.append(' ');
+    }
+
+    return new SvXMLImportContext( GetImport() );
+}
+
 void ScXMLContentContext::Characters( const OUString& rChars )
+{
+    sValue.append(rChars);
+}
+
+void ScXMLContentContext::characters( const OUString& rChars )
 {
     sValue.append(rChars);
 }
