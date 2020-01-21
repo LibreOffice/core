@@ -33,15 +33,13 @@ namespace rptxml
     public:
 
         OXMLCondPrtExpr( ORptFilter& _rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & _xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                     ,const css::uno::Reference< css::beans::XPropertySet >& _xComponent);
         virtual ~OXMLCondPrtExpr() override;
 
         // This method is called for all characters that are contained in the
         // current element. The default is to ignore them.
-        virtual void Characters( const OUString& rChars ) override;
+        virtual void SAL_CALL characters( const OUString& rChars ) override;
     };
 
 } // namespace rptxml

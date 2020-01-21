@@ -35,9 +35,7 @@ namespace rptxml
     public:
 
         OXMLComponent( ORptFilter& rImport
-                    , sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XReportComponent >& _xComponent
                     );
         virtual ~OXMLComponent() override;

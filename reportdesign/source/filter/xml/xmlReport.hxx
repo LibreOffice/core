@@ -34,17 +34,17 @@ namespace rptxml
         void operator =(const OXMLReport&) = delete;
     public:
 
-        OXMLReport( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+        OXMLReport( ORptFilter& rImport,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XReportDefinition >& _xComponent);
         virtual ~OXMLReport() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-        virtual void EndElement() override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) override;
 

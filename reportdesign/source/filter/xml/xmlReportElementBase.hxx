@@ -46,23 +46,22 @@ namespace rptxml
         OXMLTable*    m_pContainer;
         css::uno::Reference< css::report::XReportComponent >      m_xReportComponent;
 
-        virtual SvXMLImportContextRef CreateChildContext_( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext_( sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
     public:
 
         OXMLReportElementBase( ORptFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
                     ,const css::uno::Reference< css::report::XReportComponent >& _xComponent
                     ,OXMLTable* _pContainer);
         virtual ~OXMLReportElementBase() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
-        virtual void EndElement() override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     };
 
 } // namespace rptxml

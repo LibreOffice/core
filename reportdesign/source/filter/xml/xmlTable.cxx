@@ -57,51 +57,46 @@ namespace rptxml
     }
 
 OXMLTable::OXMLTable( ORptFilter& rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,const uno::Reference< report::XSection >& _xSection
                 )
-:SvXMLImportContext( rImport, nPrfx, _sLocalName )
+:SvXMLImportContext( rImport )
 ,m_xSection(_xSection)
 ,m_nColSpan(1)
 ,m_nRowSpan(0)
 ,m_nRowIndex(0)
 ,m_nColumnIndex(0)
 {
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetSectionElemTokenMap();
 
-    const sal_Int16 nLength = (m_xSection.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
+    if (!m_xSection.is())
+        return;
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
-        for(sal_Int16 i = 0; i < nLength; ++i)
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sLocalName;
-            const OUString sAttrName = _xAttrList->getNameByIndex( i );
-            const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const OUString sValue = _xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_VISIBLE:
+                case XML_ELEMENT(REPORT, XML_VISIBLE):
                     m_xSection->setVisible(sValue == s_sTRUE);
                     break;
-                case XML_TOK_FORCE_NEW_PAGE:
+                case XML_ELEMENT(REPORT, XML_FORCE_NEW_PAGE):
                     m_xSection->setForceNewPage(lcl_getForceNewPageOption(sValue));
                     break;
-                case XML_TOK_FORCE_NEW_COLUMN:
+                case XML_ELEMENT(REPORT, XML_FORCE_NEW_COLUMN):
                     m_xSection->setNewRowOrCol(lcl_getForceNewPageOption(sValue));
                     break;
-                case XML_TOK_KEEP_TOGETHER:
+                case XML_ELEMENT(REPORT, XML_KEEP_TOGETHER):
                     m_xSection->setKeepTogether(sValue == s_sTRUE);
                     break;
-                case XML_TOK_SECTION_NAME:
+                case XML_ELEMENT(TABLE, XML_NAME):
                     m_xSection->setName(sValue);
                     break;
-                case XML_TOK_SECT_STYLE_NAME:
+                case XML_ELEMENT(TABLE, XML_STYLE_NAME):
                     m_sStyleName = sValue;
                     break;
                 default:
@@ -119,38 +114,36 @@ OXMLTable::~OXMLTable()
 {
 }
 
-SvXMLImportContextRef OXMLTable::CreateChildContext(
-        sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLTable::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetColumnTokenMap();
 
-    switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_TABLE_COLUMNS:
-        case XML_TOK_TABLE_ROWS:
-            pContext = new OXMLRowColumn( rImport, _nPrefix, _rLocalName,xAttrList ,this);
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMNS):
+        case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
+            xContext = new OXMLRowColumn( rImport,xAttrList ,this);
             break;
-        case XML_TOK_ROW:
+        case XML_ELEMENT(TABLE, XML_TABLE_ROW):
             incrementRowIndex();
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLRowColumn( rImport, _nPrefix, _rLocalName,xAttrList,this);
+            xContext = new OXMLRowColumn( rImport,xAttrList,this);
             break;
-        case XML_TOK_COLUMN:
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMN):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLRowColumn( rImport, _nPrefix, _rLocalName,xAttrList,this);
+            xContext = new OXMLRowColumn( rImport,xAttrList,this);
             break;
-        case XML_TOK_CONDITIONAL_PRINT_EXPRESSION:
-            pContext = new OXMLCondPrtExpr( rImport, _nPrefix, _rLocalName,xAttrList,m_xSection.get());
+        case XML_ELEMENT(REPORT, XML_CONDITIONAL_PRINT_EXPRESSION):
+            xContext = new OXMLCondPrtExpr( rImport,xAttrList,m_xSection.get());
             break;
         default:
                 break;
     }
 
-    return pContext;
+    return xContext;
 }
 
 ORptFilter& OXMLTable::GetOwnImport()
@@ -158,7 +151,7 @@ ORptFilter& OXMLTable::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-void OXMLTable::EndElement()
+void OXMLTable::endFastElement(sal_Int32 )
 {
     try
     {

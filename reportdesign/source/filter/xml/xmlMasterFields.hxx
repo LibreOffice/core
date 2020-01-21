@@ -31,16 +31,13 @@ namespace rptxml
         void operator =(const OXMLMasterFields&) = delete;
     public:
 
-        OXMLMasterFields( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+        OXMLMasterFields( ORptFilter& rImport,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,IMasterDetailFieds* _pReport);
         virtual ~OXMLMasterFields() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     };
 
 } // namespace rptxml

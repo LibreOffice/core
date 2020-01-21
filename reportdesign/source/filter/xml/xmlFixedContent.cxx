@@ -46,17 +46,12 @@ public:
     OXMLCharContent(
             SvXMLImport& rImport,
             OXMLFixedContent* _pFixedContent,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
             sal_Unicode c,
             bool bCount );
     OXMLCharContent(
             SvXMLImport& rImport,
             OXMLFixedContent* _pFixedContent,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
     OXMLCharContent(const OXMLCharContent&) = delete;
     OXMLCharContent& operator=(const OXMLCharContent&) = delete;
@@ -70,12 +65,10 @@ public:
 OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,
         OXMLFixedContent* _pFixedContent,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         sal_Unicode c,
         bool bCount )
-    : XMLCharContext(rImport,nPrfx,rLName,xAttrList,c,bCount)
+    : XMLCharContext(rImport,xAttrList,c,bCount)
     ,m_pFixedContent(_pFixedContent)
 {
 }
@@ -83,11 +76,8 @@ OXMLCharContent::OXMLCharContent(
 OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,
         OXMLFixedContent* _pFixedContent,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Int16 nControl )
-    : XMLCharContext(rImport,nPrfx,rLName,xAttrList,nControl)
+    : XMLCharContext(rImport,nControl)
     ,m_pFixedContent(_pFixedContent)
 {
 }
@@ -111,12 +101,11 @@ void OXMLCharContent::InsertString(const OUString& _sString)
 }
 
 
-OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName
+OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport
                 ,OXMLCell& _rCell
                 ,OXMLTable* _pContainer
                 ,OXMLFixedContent* _pInP) :
-    OXMLReportElementBase( rImport, nPrfx, rLName,nullptr,_pContainer)
+    OXMLReportElementBase( rImport,nullptr,_pContainer)
 ,m_rCell(_rCell)
 ,m_pInP(_pInP)
 ,m_bFormattedField(false)
@@ -130,47 +119,41 @@ OXMLFixedContent::~OXMLFixedContent()
 }
 
 
-SvXMLImportContextRef OXMLFixedContent::CreateChildContext_(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::createFastChildContext_(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContextRef xContext = OXMLReportElementBase::CreateChildContext_(nPrefix,rLocalName,xAttrList);
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext_(nElement,xAttrList);
     if (xContext)
         return xContext;
 
     static const char s_sStringConcat[] = " & ";
-    const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
 
     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-    const sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
-    switch( nToken )
+    switch( nElement )
     {
-        case XML_TOK_P:
-            xContext = new OXMLFixedContent(m_rImport,nPrefix, rLocalName,m_rCell,m_pContainer,this);
+        case XML_ELEMENT(TEXT, XML_P):
+            xContext = new OXMLFixedContent(m_rImport,m_rCell,m_pContainer,this);
             break;
-        case XML_TOK_TEXT_TAB_STOP:
-            xContext = new OXMLCharContent( m_rImport, this,nPrefix,
-                                                rLocalName, xAttrList,
+        case XML_ELEMENT(TEXT, XML_TAB):
+            xContext = new OXMLCharContent( m_rImport, this, xAttrList,
                                                 0x0009, false );
             break;
 
-        case XML_TOK_TEXT_LINE_BREAK:
-            xContext = new OXMLCharContent( m_rImport, this,nPrefix,
-                                                rLocalName, xAttrList,
+        case XML_ELEMENT(TEXT, XML_LINE_BREAK):
+            xContext = new OXMLCharContent( m_rImport, this,
                                                 ControlCharacter::LINE_BREAK );
             break;
 
-        case XML_TOK_TEXT_S:
-            xContext = new OXMLCharContent( m_rImport, this,nPrefix,
-                                                rLocalName, xAttrList,
+        case XML_ELEMENT(TEXT, XML_S):
+            xContext = new OXMLCharContent( m_rImport, this, xAttrList,
                                                 0x0020, true );
             break;
-        case XML_TOK_PAGE_NUMBER:
+        case XML_ELEMENT(TEXT, XML_PAGE_NUMBER):
             m_sPageText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
             m_bFormattedField = true;
             break;
-        case XML_TOK_PAGE_COUNT:
+        case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
             m_sPageText += OUStringLiteral(s_sStringConcat) + " PageCount()";
             m_bFormattedField = true;
             break;
@@ -180,7 +163,7 @@ SvXMLImportContextRef OXMLFixedContent::CreateChildContext_(
     return xContext;
 }
 
-void OXMLFixedContent::EndElement()
+void OXMLFixedContent::endFastElement(sal_Int32 )
 {
     if ( m_pInP )
     {
@@ -210,7 +193,7 @@ void OXMLFixedContent::EndElement()
     }
 }
 
-void OXMLFixedContent::Characters( const OUString& rChars )
+void OXMLFixedContent::characters( const OUString& rChars )
 {
     m_sLabel += rChars;
     if ( !rChars.isEmpty() )

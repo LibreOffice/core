@@ -38,40 +38,26 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::xml::sax;
 OXMLComponent::OXMLComponent( ORptFilter& _rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XReportComponent > & _xComponent
                 ) :
-    SvXMLImportContext( _rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( _rImport )
     ,m_xComponent(_xComponent)
 {
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
 
-    const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = _rImport.GetComponentElemTokenMap();
-
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
+        OUString sValue = aIter.toString();
+
         try
         {
-            OUString sLocalName;
-            const OUString sAttrName = _xAttrList->getNameByIndex( i );
-            const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const OUString sValue = _xAttrList->getValueByIndex( i );
-
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_NAME:
+                case XML_ELEMENT(DRAW, XML_NAME):
                     m_xComponent->setName(sValue);
-                    break;
-                case XML_TOK_TEXT_STYLE_NAME:
-                case XML_TOK_TRANSFORM:
-                    break;
-                default:
                     break;
             }
         }

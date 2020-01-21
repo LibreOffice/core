@@ -31,9 +31,8 @@ namespace rptxml
         void operator =(const OXMLImage&) = delete;
     public:
 
-        OXMLImage( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+        OXMLImage( ORptFilter& rImport,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XImageControl >& _xComponent
                     ,OXMLTable* _pContainer);
         virtual ~OXMLImage() override;

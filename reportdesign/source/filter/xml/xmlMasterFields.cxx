@@ -33,32 +33,25 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< XAttributeList > & _xAttrList
+                const Reference< XFastAttributeList > & _xAttrList
                 ,IMasterDetailFieds* _pReport
                 ) :
-    SvXMLImportContext( rImport, nPrfx, rLName)
+    SvXMLImportContext( rImport )
 ,m_pReport(_pReport)
 {
-
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetSubDocumentElemTokenMap();
-
     OUString sMasterField,sDetailField;
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_MASTER:
+            case XML_ELEMENT(REPORT, XML_MASTER):
                 sMasterField = sValue;
                 break;
-            case XML_TOK_SUB_DETAIL:
+            case XML_ELEMENT(REPORT, XML_DETAIL):
                 sDetailField = sValue;
                 break;
             default:
@@ -76,27 +69,25 @@ OXMLMasterFields::~OXMLMasterFields()
 {
 }
 
-SvXMLImportContextRef OXMLMasterFields::CreateChildContext(
-        sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLMasterFields::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetSubDocumentElemTokenMap();
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
-    switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_MASTER_DETAIL_FIELD:
+        case XML_ELEMENT(REPORT, XML_MASTER_DETAIL_FIELD):
             {
                 GetImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLMasterFields(static_cast<ORptFilter&>(GetImport()), _nPrefix, _rLocalName,xAttrList ,m_pReport);
+                xContext = new OXMLMasterFields(static_cast<ORptFilter&>(GetImport()),xAttrList ,m_pReport);
             }
             break;
         default:
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
 

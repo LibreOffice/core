@@ -47,45 +47,37 @@ namespace rptxml
     }
 
 OXMLGroup::OXMLGroup( ORptFilter& _rImport
-                ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFastAttributeList > & _xAttrList
                 ) :
-    SvXMLImportContext( _rImport, nPrfx, _sLocalName )
+    SvXMLImportContext( _rImport )
 {
 
     m_xGroups = _rImport.getReportDefinition()->getGroups();
     OSL_ENSURE(m_xGroups.is(),"Groups is NULL!");
     m_xGroup = m_xGroups->createGroup();
 
-    OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
-
-    const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = _rImport.GetGroupElemTokenMap();
     m_xGroup->setSortAscending(false);// the default value has to be set
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
-    for(sal_Int16 i = 0; i < nLength; ++i)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        const OUString sAttrName = _xAttrList->getNameByIndex( i );
-        const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
         try
         {
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_START_NEW_COLUMN:
+                case XML_ELEMENT(REPORT, XML_START_NEW_COLUMN):
                     m_xGroup->setStartNewColumn(sValue == s_sTRUE);
                     break;
-                case XML_TOK_RESET_PAGE_NUMBER:
+                case XML_ELEMENT(REPORT, XML_RESET_PAGE_NUMBER):
                     m_xGroup->setResetPageNumber(sValue == s_sTRUE);
                     break;
-                case XML_TOK_SORT_ASCENDING:
+                case XML_ELEMENT(REPORT, XML_SORT_ASCENDING):
                     m_xGroup->setSortAscending(sValue == s_sTRUE);
                     break;
-                case XML_TOK_GROUP_EXPRESSION:
+                case XML_ELEMENT(REPORT, XML_GROUP_EXPRESSION):
                     {
                         sal_Int32 nLen = sValue.getLength();
                         if ( nLen )
@@ -164,7 +156,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                         }
                     }
                     break;
-                case XML_TOK_GROUP_KEEP_TOGETHER:
+                case XML_ELEMENT(REPORT, XML_KEEP_TOGETHER):
                     m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(sValue));
                     break;
                 default:
@@ -184,54 +176,52 @@ OXMLGroup::~OXMLGroup()
 
 }
 
-SvXMLImportContextRef OXMLGroup::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLGroup::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetGroupElemTokenMap();
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_GROUP_FUNCTION:
+        case XML_ELEMENT(REPORT, XML_FUNCTION):
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLFunction( rImport, nPrefix, rLocalName,xAttrList,m_xGroup.get());
+                xContext = new OXMLFunction( rImport,xAttrList,m_xGroup.get());
             }
             break;
-        case XML_TOK_GROUP_HEADER:
+        case XML_ELEMENT(REPORT, XML_GROUP_HEADER):
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xGroup->setHeaderOn(true);
-                pContext = new OXMLSection( rImport, nPrefix, rLocalName,xAttrList,m_xGroup->getHeader());
+                xContext = new OXMLSection( rImport,xAttrList,m_xGroup->getHeader());
             }
             break;
-        case XML_TOK_GROUP_GROUP:
+        case XML_ELEMENT(REPORT, XML_GROUP):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLGroup( rImport, nPrefix, rLocalName,xAttrList);
+            xContext = new OXMLGroup( rImport,xAttrList);
             break;
-        case XML_TOK_GROUP_DETAIL:
+        case XML_ELEMENT(REPORT, XML_DETAIL):
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Reference<XReportDefinition> xComponent = rImport.getReportDefinition();
-                pContext = new OXMLSection( rImport, nPrefix, rLocalName,xAttrList, xComponent->getDetail());
+                xContext = new OXMLSection( rImport,xAttrList, xComponent->getDetail());
             }
             break;
 
-        case XML_TOK_GROUP_FOOTER:
+        case XML_ELEMENT(REPORT, XML_GROUP_FOOTER):
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xGroup->setFooterOn(true);
-                pContext = new OXMLSection( rImport, nPrefix, rLocalName,xAttrList,m_xGroup->getFooter());
+                xContext = new OXMLSection( rImport,xAttrList,m_xGroup->getFooter());
             }
             break;
         default:
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
 ORptFilter& OXMLGroup::GetOwnImport()
@@ -239,7 +229,7 @@ ORptFilter& OXMLGroup::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-void OXMLGroup::EndElement()
+void OXMLGroup::endFastElement(sal_Int32 )
 {
     try
     {

@@ -34,13 +34,12 @@ namespace rptxml
         void operator =(const OXMLFormatCondition&) = delete;
     public:
 
-        OXMLFormatCondition( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+        OXMLFormatCondition( ORptFilter& rImport,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XFormatCondition >& _xComponent
                     );
         virtual ~OXMLFormatCondition() override;
-        virtual void EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     };
 
 } // namespace rptxml
