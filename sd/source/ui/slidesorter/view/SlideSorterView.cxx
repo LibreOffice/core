@@ -41,6 +41,7 @@
 #include <sdpage.hxx>
 #include <Window.hxx>
 
+#include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
@@ -568,13 +569,17 @@ void SlideSorterView::CompleteRedraw (
     sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     (void)pRedirector;
+
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (pDevice == nullptr || pDevice!=mrSlideSorter.GetContentWindow())
+        return;
+
 #ifdef DEBUG_TIMING
     const double nStartTime (gaTimer.getElapsedTime());
     SAL_INFO("sd.timing", "SlideSorterView::CompleteRedraw start" << (mnLockRedrawSmph ? " locked" : ""));
 #endif
-
-    if (pDevice == nullptr || pDevice!=mrSlideSorter.GetContentWindow())
-        return;
 
     // The parent implementation of CompleteRedraw is called only when
     // painting is locked.  We do all the painting ourself.  When painting
