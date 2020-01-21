@@ -203,6 +203,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     Size                aInitSize[SVX_MAX_NUM];
 
+    ImplSVEvent*        m_pLevelHdlEvent;
+
     bool                bLastWidthModified  : 1;
     bool                bModified           : 1;
     bool                bPreset             : 1;
