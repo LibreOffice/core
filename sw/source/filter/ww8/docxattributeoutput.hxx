@@ -743,6 +743,7 @@ private:
     bool m_bStartedParaSdt;
     /// Attributes of the run color
     rtl::Reference<sax_fastparser::FastAttributeList> m_pColorAttrList;
+    sal_uInt8 m_nCharTransparence = 0;
     /// Attributes of the paragraph background
     rtl::Reference<sax_fastparser::FastAttributeList> m_pBackgroundAttrList;
     OUString m_sOriginalBackgroundColor;

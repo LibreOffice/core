@@ -15,6 +15,7 @@
 #include <editsh.hxx>
 #include <frmatr.hxx>
 #include <tools/lineend.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -216,6 +217,38 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121658, "tdf121658.docx")
     if (!pXmlSettings)
         return;
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
+{
+    // Create an in-memory empty document.
+    loadURL("private:factory/swriter", nullptr);
+
+    // Set text to half-transparent and type a character.
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+    sal_Int16 nTransparence = 75;
+    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nTransparence));
+    uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextRange.is());
+    xTextRange->setString("x");
+
+    // Export to docx.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mbExported = true;
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    OString aXPath
+        = "/w:document/w:body/w:p/w:r/w:rPr/w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha";
+    double fValue = getXPath(pXmlDoc, aXPath, "val").toDouble();
+    sal_Int16 nActual = basegfx::fround(fValue / oox::drawingml::PER_PERCENT);
+
+    // Without the accompanying fix in place, this test would have failed, as the w14:textFill
+    // element was missing.
+    CPPUNIT_ASSERT_EQUAL(nTransparence, nActual);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
