@@ -22,7 +22,6 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/dlgctrl.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/Palette.hxx>
 #include <vcl/lstbox.hxx>
@@ -109,6 +108,34 @@ public:
 };
 
 class SvxColorToolBoxControl;
+
+class SVX_DLLPUBLIC MenuOrToolMenuButton
+{
+private:
+    // either
+    weld::MenuButton* m_pMenuButton;
+    // or
+    weld::Toolbar* m_pToolbar;
+    OString m_aIdent;
+    // or
+    SvxColorToolBoxControl* m_pControl;
+    VclPtr<ToolBox> m_xToolBox;
+    sal_uInt16 m_nId;
+public:
+    MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
+    MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent);
+    MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId);
+    ~MenuOrToolMenuButton();
+
+    MenuOrToolMenuButton(MenuOrToolMenuButton const &) = default;
+    MenuOrToolMenuButton(MenuOrToolMenuButton &&) = default;
+    MenuOrToolMenuButton & operator =(MenuOrToolMenuButton const &) = default;
+    MenuOrToolMenuButton & operator =(MenuOrToolMenuButton &&) = default;
+
+    bool get_active() const;
+    void set_inactive() const;
+    weld::Widget* get_widget() const;
+};
 
 class SVX_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
 {
