@@ -401,10 +401,15 @@ class SdrTextHorzAdjustItem;
 #define SDRATTR_TABLE_BORDER_TLBR               TypedWhichId<SvxLineItem>(SDRATTR_TABLE_FIRST+2)
 #define SDRATTR_TABLE_BORDER_BLTR               TypedWhichId<SvxLineItem>(SDRATTR_TABLE_FIRST+3)
 #define SDRATTR_TABLE_TEXT_ROTATION             TypedWhichId<SvxTextRotateItem>(SDRATTR_TABLE_FIRST+4)
-
 #define SDRATTR_TABLE_LAST                      (SDRATTR_TABLE_TEXT_ROTATION)
 
-#define SDRATTR_END                             SDRATTR_TABLE_LAST      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
+#define SDRATTR_GLOW_FIRST                      (SDRATTR_TABLE_LAST+1)
+#define SDRATTR_GLOW                            TypedWhichId<SdrOnOffItem>(SDRATTR_GLOW_FIRST+0)
+#define SDRATTR_GLOW_RAD                        TypedWhichId<SdrMetricItem>(SDRATTR_GLOW_FIRST+1)
+#define SDRATTR_GLOW_COLOR                      TypedWhichId<XColorItem>(SDRATTR_GLOW_FIRST+2)
+#define SDRATTR_GLOW_LAST                       (SDRATTR_GLOW_COLOR)
+
+#define SDRATTR_END                             SDRATTR_GLOW_LAST      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 
