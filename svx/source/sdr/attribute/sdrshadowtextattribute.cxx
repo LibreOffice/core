@@ -27,9 +27,11 @@ namespace drawinglayer
     {
         SdrShadowTextAttribute::SdrShadowTextAttribute(
             const SdrShadowAttribute& rShadow,
-            const SdrTextAttribute& rTextAttribute)
+            const SdrTextAttribute& rTextAttribute,
+            const SdrGlowAttribute& rGlow)
         :   maShadow(rShadow),
-            maTextAttribute(rTextAttribute)
+            maTextAttribute(rTextAttribute),
+            maGlow(rGlow)
         {
         }
 
@@ -41,7 +43,8 @@ namespace drawinglayer
 
         SdrShadowTextAttribute::SdrShadowTextAttribute(const SdrShadowTextAttribute& rCandidate)
         :   maShadow(rCandidate.getShadow()),
-            maTextAttribute(rCandidate.getText())
+            maTextAttribute(rCandidate.getText()),
+            maGlow(rCandidate.maGlow)
         {
         }
 
@@ -49,6 +52,7 @@ namespace drawinglayer
         {
             maShadow = rCandidate.getShadow();
             maTextAttribute = rCandidate.getText();
+            maGlow = rCandidate.maGlow;
 
             return *this;
         }
@@ -56,13 +60,14 @@ namespace drawinglayer
         bool SdrShadowTextAttribute::isDefault() const
         {
             return (getShadow().isDefault()
-                && getText().isDefault());
+                && getText().isDefault() && maGlow.isDefault());
         }
 
         bool SdrShadowTextAttribute::operator==(const SdrShadowTextAttribute& rCandidate) const
         {
             return (getShadow() == rCandidate.getShadow()
-                && getText() == rCandidate.getText());
+                && getText() == rCandidate.getText()
+                && maGlow.isDefault());
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

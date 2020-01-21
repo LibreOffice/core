@@ -3640,6 +3640,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/table,\
 	CellRangeAddress \
 	CellVertJustify \
 	CellVertJustify2 \
+	GlowFormat \
 	ShadowFormat \
 	ShadowLocation \
 	TableBorder \

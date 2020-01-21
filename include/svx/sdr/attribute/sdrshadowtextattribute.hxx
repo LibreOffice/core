@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
 
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 
 
@@ -34,10 +35,14 @@ namespace drawinglayer
             SdrShadowAttribute          maShadow;                   // shadow attributes (if used)
             SdrTextAttribute            maTextAttribute;            // text and text attributes (if used)
 
+            // glow effect
+            SdrGlowAttribute            maGlow;
+
         public:
             SdrShadowTextAttribute(
                 const SdrShadowAttribute& rShadow,
-                const SdrTextAttribute& rTextAttribute);
+                const SdrTextAttribute& rTextAttribute,
+                const SdrGlowAttribute& rGlow);
             SdrShadowTextAttribute();
             SdrShadowTextAttribute(const SdrShadowTextAttribute& rCandidate);
             SdrShadowTextAttribute& operator=(const SdrShadowTextAttribute& rCandidate);
@@ -51,6 +56,7 @@ namespace drawinglayer
             // data access
             const SdrShadowAttribute& getShadow() const { return maShadow; }
             const SdrTextAttribute& getText() const { return maTextAttribute; }
+            const SdrGlowAttribute& getGlow() const { return maGlow; }
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

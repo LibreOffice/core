@@ -58,6 +58,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/attribute/sdrallattribute3d \
     drawinglayer/source/attribute/sdrfillattribute \
     drawinglayer/source/attribute/sdrfillgraphicattribute \
+    drawinglayer/source/attribute/sdrglowattribute \
     drawinglayer/source/attribute/sdrlightattribute3d \
     drawinglayer/source/attribute/sdrlightingattribute3d \
     drawinglayer/source/attribute/sdrlineattribute \
@@ -82,6 +83,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/fillgraphicprimitive2d \
     drawinglayer/source/primitive2d/fillgradientprimitive2d \
     drawinglayer/source/primitive2d/fillhatchprimitive2d \
+    drawinglayer/source/primitive2d/glowprimitive2d \
     drawinglayer/source/primitive2d/graphicprimitivehelper2d \
     drawinglayer/source/primitive2d/graphicprimitive2d \
     drawinglayer/source/primitive2d/gridprimitive2d \

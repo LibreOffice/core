@@ -1,0 +1,40 @@
+
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_table_GlowFormat_idl__
+#define __com_sun_star_table_Glow_idl__
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/table/ShadowLocation.idl>
+
+
+module com {  module sun {  module star {  module table {
+
+
+/** Describes the settings of a glow effect on a shape.
+ * A glow effect adds a color-blurred outline outside of the shape.
+ */
+published struct GlowFormat
+{
+    /** The amount or radius of the blur.
+     */
+    short GlowRad;
+
+    /** Contains the color value of the glow.
+     */
+    com::sun::star::util::Color Color;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
