@@ -1215,6 +1215,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     aFormat.ShadowWidth = *oShadowDistance;
                     aShapeProps.setProperty(PROP_ShadowFormat, aFormat);
                 }
+
             }
             else if (mbTextBox)
             {
@@ -1463,6 +1464,15 @@ Reference< XShape > const & Shape::createAndInsert(
                 ::Color nCharColor = pFontRef->maPhClr.getColor(rGraphicHelper);
                 aPropertySet.setAnyProperty(PROP_CharColor, uno::makeAny(nCharColor));
             }
+        }
+
+        // Set glow effect properties
+        if ( aEffectProperties.maGlow.moGlowRad.has() )
+        {
+            uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
+            propertySet->setPropertyValue("GlowEffect", makeAny(true));
+            propertySet->setPropertyValue("GlowEffectRad", makeAny(static_cast<sal_Int32>(aEffectProperties.maGlow.moGlowRad.get())));
+            propertySet->setPropertyValue("GlowEffectColor", makeAny(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
         }
     }
 
