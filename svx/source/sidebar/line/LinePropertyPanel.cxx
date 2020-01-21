@@ -107,16 +107,6 @@ void LinePropertyPanel::NotifyItemUpdate(
 
     switch(nSID)
     {
-        case SID_ATTR_LINE_DASH:
-        {
-            updateLineDash(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_ATTR_LINE_STYLE:
-        {
-            updateLineStyle(bDisabled, bSetOrDefault, pState);
-            break;
-        }
         case SID_ATTR_LINE_TRANSPARENCE:
         {
             updateLineTransparence(bDisabled, bSetOrDefault, pState);
@@ -125,12 +115,6 @@ void LinePropertyPanel::NotifyItemUpdate(
         case SID_ATTR_LINE_WIDTH:
         {
             updateLineWidth(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_DASH_LIST:
-        {
-            FillLineStyleList();
-            SelectLineStyle();
             break;
         }
         case SID_ATTR_LINE_JOINT:

@@ -20,40 +20,31 @@
 #define INCLUDED_SVX_ITEMWIN_HXX
 
 #include <vcl/field.hxx>
-
+#include <svtools/toolbarmenu.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
 
 class XLineWidthItem;
 class SfxObjectShell;
+class SvtValueSet;
+class SvxLineStyleToolBoxControl;
 
-class SvxLineBox final : public ListBox
+class SvxLineBox final : public WeldToolbarPopup
 {
-    sal_uInt16      nCurPos;
-    Timer           aDelayTimer;
-    Size const      aLogicalSize;
-    bool            bRelease;
-    SfxObjectShell* mpSh;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
-
-                    DECL_LINK(DelayHdl_Impl, Timer *, void);
-
-    void            ReleaseFocus_Impl();
-
-public:
-    SvxLineBox( vcl::Window* pParent,
-                const css::uno::Reference< css::frame::XFrame >& rFrame );
+    rtl::Reference<SvxLineStyleToolBoxControl> mxControl;
+    std::unique_ptr<SvtValueSet> mxLineStyleSet;
+    std::unique_ptr<weld::CustomWeld> mxLineStyleSetWin;
 
     void FillControl();
-
     void Fill(const XDashListRef &pList);
 
-private:
-    virtual void    Select() override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    DECL_LINK(SelectHdl, SvtValueSet*, void);
 
+    virtual void GrabFocus() override;
+
+public:
+    SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex);
+    virtual ~SvxLineBox() override;
 };
 
 class SVX_DLLPUBLIC SvxMetricField : public MetricField

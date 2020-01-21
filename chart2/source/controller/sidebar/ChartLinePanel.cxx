@@ -196,6 +196,8 @@ void ChartLinePanel::updateData()
     XLineTransparenceItem aLineTransparenceItem(nLineTransparence);
     updateLineTransparence(false, true, &aLineTransparenceItem);
 
+#if 0
+    //TODO
     css::drawing::LineStyle eStyle = css::drawing::LineStyle_SOLID;
     xPropSet->getPropertyValue("LineStyle") >>= eStyle;
     XLineStyleItem aStyleItem(eStyle);
@@ -208,6 +210,7 @@ void ChartLinePanel::updateData()
     XLineDashItem aDashItem;
     aDashItem.PutValue(aLineDash, MID_LINEDASH);
     updateLineDash(false, true, &aDashItem);
+#endif
 
     maLineColorWrapper.updateData();
 }

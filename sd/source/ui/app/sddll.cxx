@@ -177,7 +177,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
-    SvxLineStyleToolBoxControl::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl::RegisterControl(0, pMod);
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
