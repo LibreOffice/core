@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SDR_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/attribute/sdrglowattribute.hxx>
 
 #include <svx/svxdllapi.h>
 
@@ -72,6 +73,10 @@ namespace drawinglayer
         Primitive2DContainer SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow);
+
+        Primitive2DContainer SVX_DLLPUBLIC createEmbeddedGlowPrimitive(
+            const Primitive2DContainer& rContent,
+            const attribute::SdrGlowAttribute& rGlow);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
