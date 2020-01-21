@@ -42,9 +42,7 @@ namespace rptxml
     public:
 
         OXMLCell( ORptFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,OXMLTable* _pContainer
                     ,OXMLCell* _pCell = nullptr);
         virtual ~OXMLCell() override;
@@ -53,8 +51,13 @@ namespace rptxml
                     const OUString& rLocalName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-        virtual void Characters( const OUString& rChars ) override;
-        virtual void EndElement() override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL characters( const OUString& rChars ) override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         void setComponent(const css::uno::Reference< css::report::XReportComponent >& _xComponent);
         void setContainsShape(bool _bContainsShapes);

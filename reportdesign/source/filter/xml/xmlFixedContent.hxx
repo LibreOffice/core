@@ -36,16 +36,14 @@ namespace rptxml
         bool                m_bFormattedField;
 
     protected:
-        virtual SvXMLImportContextRef CreateChildContext_( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext_( sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
     private:
         OXMLFixedContent(const OXMLFixedContent&) = delete;
         OXMLFixedContent& operator =(const OXMLFixedContent&) = delete;
     public:
 
-        OXMLFixedContent( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const OUString& rLName
+        OXMLFixedContent( ORptFilter& rImport
                     ,OXMLCell& _rCell
                     ,OXMLTable* _pContainer
                     ,OXMLFixedContent* _pInP = nullptr);
@@ -53,9 +51,9 @@ namespace rptxml
 
         // This method is called for all characters that are contained in the
         // current element. The default is to ignore them.
-        virtual void Characters( const OUString& rChars ) override;
+        virtual void SAL_CALL characters( const OUString& rChars ) override;
 
-        virtual void EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     };
 
 } // namespace rptxml

@@ -144,6 +144,37 @@ XMLCharContext::XMLCharContext(
 }
 
 XMLCharContext::XMLCharContext(
+        SvXMLImport& rImport,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
+        sal_Unicode c,
+        bool bCount ) :
+    SvXMLImportContext( rImport )
+    ,m_nControl(0)
+    ,m_nCount(1)
+    ,m_c(c)
+{
+    if( bCount )
+    {
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
+        {
+            if( aIter.getToken() == XML_ELEMENT(TEXT, XML_C) )
+            {
+                sal_Int32 nTmp = aIter.toInt32();
+                if( nTmp > 0 )
+                {
+                    if( nTmp > SAL_MAX_UINT16 )
+                        m_nCount = SAL_MAX_UINT16;
+                    else
+                        m_nCount = static_cast<sal_uInt16>(nTmp);
+                }
+            }
+        }
+    }
+}
+
+XMLCharContext::XMLCharContext(
         SvXMLImport& rImp,
         sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -156,10 +187,41 @@ XMLCharContext::XMLCharContext(
 {
 }
 
+XMLCharContext::XMLCharContext(
+        SvXMLImport& rImp,
+        sal_Int16 nControl ) :
+    SvXMLImportContext( rImp )
+    ,m_nControl(nControl)
+    ,m_nCount(0)
+    ,m_c(0)
+{
+}
+
 XMLCharContext::~XMLCharContext()
 {
 }
 void XMLCharContext::EndElement()
+{
+    if ( !m_nCount )
+        InsertControlCharacter( m_nControl );
+    else
+    {
+        if( 1U == m_nCount )
+        {
+            OUString sBuff( &m_c, 1 );
+            InsertString(sBuff);
+        }
+        else
+        {
+            OUStringBuffer sBuff(static_cast<int>(m_nCount));
+            while( m_nCount-- )
+                sBuff.append( &m_c, 1 );
+
+            InsertString(sBuff.makeStringAndClear() );
+        }
+    }
+}
+void XMLCharContext::endFastElement(sal_Int32 )
 {
     if ( !m_nCount )
         InsertControlCharacter( m_nControl );
