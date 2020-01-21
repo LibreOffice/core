@@ -45,20 +45,17 @@ namespace rptxml
     public:
 
         OXMLControlProperty( ORptFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
-                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::beans::XPropertySet >& _xControl
                     ,OXMLControlProperty* _pContainer = nullptr);
         virtual ~OXMLControlProperty() override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-        virtual void EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-        virtual void Characters( const OUString& rChars ) override;
+        virtual void SAL_CALL characters( const OUString& rChars ) override;
 
 
         /** adds value to property

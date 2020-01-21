@@ -39,20 +39,21 @@ namespace rptxml
         OXMLSubDocument(const OXMLSubDocument&) = delete;
         void operator =(const OXMLSubDocument&) = delete;
 
-        virtual SvXMLImportContextRef CreateChildContext_( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext_( sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
     public:
 
         OXMLSubDocument( ORptFilter& rImport
-                    ,sal_uInt16 nPrfx
-                    ,const OUString& rLName
                     ,const css::uno::Reference< css::report::XReportComponent >& _xComponent
                     ,OXMLTable* _pContainer
                     ,OXMLCell* _pCellParent);
         virtual ~OXMLSubDocument() override;
 
-        virtual void EndElement() override;
+        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                    const OUString& rLocalName,
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
         virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) override;
     };
 

@@ -36,34 +36,29 @@ namespace rptxml
     using namespace xml::sax;
 
 OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< XAttributeList > & _xAttrList
+                const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XReportControlModel > & _xComponent) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport )
 ,m_xComponent(_xComponent)
 {
 
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
-    const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
-    const SvXMLTokenMap& rTokenMap = rImport.GetReportElementElemTokenMap();
 
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
-    const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     try
     {
-        for(sal_Int16 i = 0; i < nLength; ++i)
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sLocalName;
-            const OUString sAttrName = _xAttrList->getNameByIndex( i );
-            const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const OUString sValue = _xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( rTokenMap.Get( nPrefix, sLocalName ) )
+            switch( aIter.getToken() )
             {
-                case XML_TOK_PRINT_WHEN_GROUP_CHANGE:
+                case XML_ELEMENT(REPORT, XML_PRINT_WHEN_GROUP_CHANGE):
                     m_xComponent->setPrintWhenGroupChange(s_sTRUE == sValue);
                     break;
-                case XML_TOK_PRINT_REPEATED_VALUES:
+                case XML_ELEMENT(REPORT, XML_PRINT_REPEATED_VALUES):
                     m_xComponent->setPrintRepeatedValues(sValue == s_sTRUE);
                     break;
                 default:
@@ -82,38 +77,36 @@ OXMLReportElement::~OXMLReportElement()
 {
 }
 
-SvXMLImportContextRef OXMLReportElement::CreateChildContext(
-        sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElement::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetReportElementElemTokenMap();
 
-    switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_COMPONENT:
+        case XML_ELEMENT(REPORT, XML_REPORT_COMPONENT):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLComponent( rImport, _nPrefix, _rLocalName,xAttrList,m_xComponent.get());
+            xContext = new OXMLComponent( rImport,xAttrList,m_xComponent.get());
             break;
-        case XML_TOK_REP_CONDITIONAL_PRINT_EXPRESSION:
+        case XML_ELEMENT(REPORT, XML_CONDITIONAL_PRINT_EXPRESSION):
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLCondPrtExpr( rImport, _nPrefix, _rLocalName,xAttrList,m_xComponent.get());
+            xContext = new OXMLCondPrtExpr( rImport,xAttrList,m_xComponent.get());
             break;
-        case XML_TOK_FORMATCONDITION:
+        case XML_ELEMENT(REPORT, XML_FORMAT_CONDITION):
             {
                 uno::Reference< report::XFormatCondition > xNewCond = m_xComponent->createFormatCondition();
                 m_xComponent->insertByIndex(m_xComponent->getCount(),uno::makeAny(xNewCond));
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLFormatCondition( rImport, _nPrefix, _rLocalName,xAttrList,xNewCond);
+                xContext = new OXMLFormatCondition( rImport,xAttrList,xNewCond);
             }
             break;
         default:
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
 ORptFilter& OXMLReportElement::GetOwnImport()

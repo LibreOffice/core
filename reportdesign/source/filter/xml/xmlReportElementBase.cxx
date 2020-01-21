@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <xmloff/ProgressBarHelper.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include "xmlReportElementBase.hxx"
 #include "xmlfilter.hxx"
 #include "xmlControlProperty.hxx"
@@ -32,11 +33,9 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
 
 OXMLReportElementBase::OXMLReportElementBase( ORptFilter& rImport
-                ,sal_uInt16 nPrfx
-                , const OUString& rLName
                 ,const Reference< XReportComponent > & _xComponent
                 ,OXMLTable* _pContainer) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport )
 ,m_rImport(rImport)
 ,m_pContainer(_pContainer)
 ,m_xReportComponent(_xComponent)
@@ -48,47 +47,44 @@ OXMLReportElementBase::~OXMLReportElementBase()
 {
 }
 
-SvXMLImportContextRef OXMLReportElementBase::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElementBase::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContextRef xContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = createFastChildContext_(nElement,xAttrList);
     return xContext;
 }
 
-SvXMLImportContextRef OXMLReportElementBase::CreateChildContext_(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElementBase::createFastChildContext_(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    const SvXMLTokenMap&    rTokenMap   = m_rImport.GetControlElemTokenMap();
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-        case XML_TOK_REPORT_ELEMENT:
+        case XML_ELEMENT(REPORT, XML_REPORT_ELEMENT):
             {
                 uno::Reference<report::XReportControlModel> xReportModel(m_xReportComponent,uno::UNO_QUERY);
                 if ( xReportModel.is() )
                 {
                     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                    pContext = new OXMLReportElement( m_rImport, nPrefix, rLocalName,xAttrList,xReportModel);
+                    xContext = new OXMLReportElement( m_rImport,xAttrList,xReportModel);
                 }
             }
             break;
-        case XML_TOK_PROPERTIES:
+        case XML_ELEMENT(FORM, XML_PROPERTIES):
             m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLControlProperty( m_rImport, nPrefix, rLocalName,xAttrList,m_xReportComponent.get());
+            xContext = new OXMLControlProperty( m_rImport,xAttrList,m_xReportComponent.get());
             break;
         default:
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
-void OXMLReportElementBase::EndElement()
+void OXMLReportElementBase::endFastElement(sal_Int32 )
 {
     try
     {
