@@ -2577,7 +2577,6 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     if ( m_pColorAttrList.is() )
     {
         XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
-        m_pColorAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
     }
@@ -2596,6 +2595,24 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
+    if (m_nCharTransparence != 0 && m_pColorAttrList && m_aTextEffectsGrabBag.empty())
+    {
+        const char* pVal = nullptr;
+        m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pVal);
+        if (OString("auto") != pVal)
+        {
+            m_pSerializer->startElementNS(XML_w14, XML_textFill, FSEND);
+            m_pSerializer->startElementNS(XML_w14, XML_solidFill, FSEND);
+            m_pSerializer->startElementNS(XML_w14, XML_srgbClr, FSNS(XML_w14, XML_val), pVal, FSEND);
+            sal_Int32 nTransparence = m_nCharTransparence * oox::drawingml::MAX_PERCENT / 255.0;
+            m_pSerializer->singleElementNS(XML_w14, XML_alpha, FSNS(XML_w14, XML_val), OString::number(nTransparence), FSEND);
+            m_pSerializer->endElementNS(XML_w14, XML_srgbClr);
+            m_pSerializer->endElementNS(XML_w14, XML_solidFill);
+            m_pSerializer->endElementNS(XML_w14, XML_textFill);
+            m_nCharTransparence = 0;
+        }
+    }
+    m_pColorAttrList.clear();
     for (beans::PropertyValue & i : m_aTextEffectsGrabBag)
     {
         boost::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
@@ -6993,6 +7010,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     }
 
     AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_val ), aColorString.getStr() );
+    m_nCharTransparence = aColor.GetTransparency();
 }
 
 void DocxAttributeOutput::CharContour( const SvxContourItem& rContour )
