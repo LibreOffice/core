@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_DLGCTRL_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
 #include <vcl/customweld.hxx>
@@ -35,6 +36,13 @@
 namespace com { namespace sun { namespace star { namespace awt {
     struct Point;
 } } } }
+
+namespace svt {
+    class PopupWindowController;
+}
+
+class SvtValueSet;
+class ToolBox;
 
 /*************************************************************************
 |* Derived from SfxTabPage for being able to get notified through the
@@ -211,6 +219,34 @@ public:
     virtual void        LoseFocus() override;
 };
 
+class SVX_DLLPUBLIC MenuOrToolMenuButton
+{
+private:
+    // either
+    weld::MenuButton* m_pMenuButton;
+    // or
+    weld::Toolbar* m_pToolbar;
+    OString m_aIdent;
+    // or
+    svt::PopupWindowController* m_pControl;
+    VclPtr<ToolBox> m_xToolBox;
+    sal_uInt16 m_nId;
+public:
+    MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
+    MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent);
+    MenuOrToolMenuButton(svt::PopupWindowController* pControl, ToolBox* pToolbar, sal_uInt16 nId);
+    ~MenuOrToolMenuButton();
+
+    MenuOrToolMenuButton(MenuOrToolMenuButton const &) = default;
+    MenuOrToolMenuButton(MenuOrToolMenuButton &&) = default;
+    MenuOrToolMenuButton & operator =(MenuOrToolMenuButton const &) = default;
+    MenuOrToolMenuButton & operator =(MenuOrToolMenuButton &&) = default;
+
+    bool get_active() const;
+    void set_inactive() const;
+    weld::Widget* get_widget() const;
+};
+
 /************************************************************************/
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
@@ -286,6 +322,31 @@ public:
     void save_value() { m_xControl->save_value(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     bool get_sensitive() const { return m_xControl->get_sensitive(); }
+};
+
+typedef std::function<void(const css::uno::Sequence<css::beans::PropertyValue>&)> LineEndSelectFunction;
+
+class SvxLineEndWindow final : public WeldToolbarPopup
+{
+private:
+    XLineEndListRef mpLineEndList;
+    MenuOrToolMenuButton maMenuButton;
+    LineEndSelectFunction maLineEndSelectFunction;
+    std::unique_ptr<SvtValueSet> mxLineEndSet;
+    std::unique_ptr<weld::CustomWeld> mxLineEndSetWin;
+    sal_uInt16 mnLines;
+    Size maBmpSize;
+
+    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    void FillValueSet();
+    void SetSize();
+
+    virtual void GrabFocus() override;
+
+public:
+    SvxLineEndWindow(const css::uno::Reference< css::frame::XFrame >& rFrame, weld::Window* pParent,
+                     const MenuOrToolMenuButton &rMenuButton, const LineEndSelectFunction& rLineEndSelectFunction);
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
 class SdrObject;

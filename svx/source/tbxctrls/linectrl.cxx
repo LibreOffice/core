@@ -19,6 +19,7 @@
 
 #include <string>
 
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -263,39 +264,20 @@ public:
 private:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
-};
 
-class SvxLineEndWindow final : public WeldToolbarPopup
-{
-private:
-    XLineEndListRef mpLineEndList;
-    rtl::Reference<SvxLineEndToolBoxControl> mxControl;
-    std::unique_ptr<SvtValueSet> mxLineEndSet;
-    std::unique_ptr<weld::CustomWeld> mxLineEndSetWin;
-    sal_uInt16 mnLines;
-    Size maBmpSize;
-
-    DECL_LINK( SelectHdl, SvtValueSet*, void );
-    void FillValueSet();
-    void SetSize();
-
-    virtual void GrabFocus() override
-    {
-        mxLineEndSet->GrabFocus();
-    }
-
-public:
-    SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent);
-    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+    void dispatch(const Sequence<PropertyValue>& rArgs);
 };
 
 }
 
 static constexpr sal_uInt16 gnCols = 2;
 
-SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
-    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
-    , mxControl(pControl)
+SvxLineEndWindow::SvxLineEndWindow(const Reference<XFrame>& rFrame, weld::Window* pParent,
+                                   const MenuOrToolMenuButton &rMenuButton,
+                                   const LineEndSelectFunction& rLineEndSelectFunction)
+    : WeldToolbarPopup(rFrame, pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
+    , maMenuButton(rMenuButton)
+    , maLineEndSelectFunction(rLineEndSelectFunction)
     , mxLineEndSet(new SvtValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineEndSet))
     , mnLines(12)
@@ -320,6 +302,11 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     FillValueSet();
 
     AddStatusListener( ".uno:LineEndListState");
+}
+
+void SvxLineEndWindow::GrabFocus()
+{
+    mxLineEndSet->GrabFocus();
 }
 
 IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, SvtValueSet*, void)
@@ -368,9 +355,9 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, SvtValueSet*, void)
         while in Dispatch()), accessing members will crash in this case. */
     mxLineEndSet->SetNoSelection();
 
-    mxControl->dispatchCommand(mxControl->getCommandURL(), aArgs);
+    maLineEndSelectFunction(aArgs);
 
-    mxControl->EndPopupMode();
+    maMenuButton.set_inactive();
 }
 
 void SvxLineEndWindow::FillValueSet()
@@ -478,6 +465,11 @@ void SAL_CALL SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
+void SvxLineEndToolBoxControl::dispatch(const Sequence<PropertyValue>& rArgs)
+{
+    dispatchCommand(getCommandURL(), rArgs);
+}
+
 void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
@@ -496,13 +488,29 @@ void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::An
 
 std::unique_ptr<WeldToolbarPopup> SvxLineEndToolBoxControl::weldPopupWindow()
 {
-    return std::make_unique<SvxLineEndWindow>(this, m_pToolbar);
+    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
+    weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
+
+    const OString aId(m_aCommandURL.toUtf8());
+    return std::make_unique<SvxLineEndWindow>(m_xFrame, pParentFrame,
+            MenuOrToolMenuButton(m_pToolbar, aId),
+            std::bind(&SvxLineEndToolBoxControl::dispatch, this, std::placeholders::_1));
 }
 
 VclPtr<vcl::Window> SvxLineEndToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
-    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
-        std::make_unique<SvxLineEndWindow>(this, pParent->GetFrameWeld()));
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (!getToolboxId(nId, &pToolBox))
+        return nullptr;
+
+    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
+    weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
+
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(m_xFrame, pParent,
+        std::make_unique<SvxLineEndWindow>(m_xFrame, pParentFrame,
+            MenuOrToolMenuButton(this, pToolBox, nId),
+            std::bind(&SvxLineEndToolBoxControl::dispatch, this, std::placeholders::_1)));
 
     mxInterimPopover->Show();
 
