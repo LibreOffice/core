@@ -1039,12 +1039,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf81100, "tdf81100.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf88496, "tdf88496.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
-    CPPUNIT_ASSERT(pXmlDoc);
     // Switch off repeating header, there is no place for it.
     // Now there are only 3 pages with complete table content
     // instead of a 51-page long table only with header.
     CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77417, "tdf77417.docx")
+{
+    // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
+    // This was 3 pages with the first invisible blank page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
