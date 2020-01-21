@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "dd1763f8_28dc46b3",
+        "filename": "include/vcl/salnativewidgets.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-01-21T19:56:59Z",
+      "side": 1,
+      "message": "You\u0027re probably referring to the code I removed in Qt5Graphics_Controls.cxx:\n\nQApplication::fontMetrics().height()\n\nUnfortunately I had to implement this portion of code because this line above was providing values different from the size LO apparently wants to use. For instance, if I add this code in Qt5Graphics_Controls.cxx:\n\nconst int nHeight \u003d val.getFontHeight();\nconst int systemHeight \u003d QApplication::fontMetrics().height();\nprintf(\"nHeight: %d, system: %d\\n\", nHeight, systemHeight);\n\nI get:\n\nnHeight: 27, system: 16\n[...]\nnHeight: 30, system: 16\n\nThe scale I set for my display is 2.\n16 should be scaled according to the factor, but it would be too big. I did not investigate much into this, cause I thought LO may want to draw fonts of different sizes.\nIf you have a better idea, please let me know.",
+      "parentUuid": "61500ccb_2edad013",
+      "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "246cbce1_eb56ec19",
         "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
         "patchSetId": 10
