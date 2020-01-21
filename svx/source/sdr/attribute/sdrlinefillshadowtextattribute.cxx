@@ -31,8 +31,9 @@ namespace drawinglayer
             const SdrLineStartEndAttribute& rLineStartEnd,
             const SdrShadowAttribute& rShadow,
             const FillGradientAttribute& rFillFloatTransGradient,
-            const SdrTextAttribute& rTextAttribute)
-        :   SdrLineShadowTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute),
+            const SdrTextAttribute& rTextAttribute,
+            const SdrGlowAttribute& rGlow)
+        :   SdrLineShadowTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute, rGlow),
             maFill(rFill),
             maFillFloatTransGradient(rFillFloatTransGradient)
         {

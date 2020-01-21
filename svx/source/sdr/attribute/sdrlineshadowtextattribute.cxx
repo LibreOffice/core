@@ -20,7 +20,6 @@
 
 #include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
 
-
 namespace drawinglayer
 {
     namespace attribute
@@ -29,8 +28,9 @@ namespace drawinglayer
             const SdrLineAttribute& rLine,
             const SdrLineStartEndAttribute& rLineStartEnd,
             const SdrShadowAttribute& rShadow,
-            const SdrTextAttribute& rTextAttribute)
-        :   SdrShadowTextAttribute(rShadow, rTextAttribute),
+            const SdrTextAttribute& rTextAttribute,
+            const SdrGlowAttribute& rGlow)
+        :   SdrShadowTextAttribute(rShadow, rTextAttribute, rGlow),
             maLine(rLine),
             maLineStartEnd(rLineStartEnd)
         {
