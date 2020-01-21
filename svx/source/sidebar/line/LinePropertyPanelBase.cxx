@@ -623,6 +623,8 @@ void  LinePropertyPanelBase::FillLineEndList()
     if ( pSh && pSh->GetItem( SID_LINEEND_LIST ) )
     {
         mxLBStart->set_sensitive(true);
+        mxLBStart->clear();
+        mxLBEnd->clear();
         mxLineEndList = pSh->GetItem( SID_LINEEND_LIST )->GetLineEndList();
 
         if (mxLineEndList.is())
