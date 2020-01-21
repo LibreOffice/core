@@ -218,6 +218,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
         case XML_ELEMENT(OFFICE, XML_SCRIPTS):
             return GetSwImport().CreateScriptContext();
             break;
+        case XML_ELEMENT(OFFICE, XML_SETTINGS):
+            return new XMLDocumentSettingsContext( GetImport() );
+            break;
     }
     return nullptr;
 }
@@ -261,9 +264,6 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         pContext = new SwXMLBodyContext_Impl( GetSwImport(), nPrefix,
                                               rLocalName );
-        break;
-    case XML_TOK_DOC_SETTINGS:
-        pContext = new XMLDocumentSettingsContext( GetImport(), nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_DOC_XFORMS:
         pContext = createXFormsModelContext(GetImport(), nPrefix, rLocalName);

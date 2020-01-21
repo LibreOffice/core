@@ -373,10 +373,6 @@ SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPref
     case XML_TOK_DOC_META:
         SAL_INFO("sc", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
-    case XML_TOK_DOC_SETTINGS:
-        if (GetScImport().getImportFlags() & SvXMLImportFlags::SETTINGS)
-            pContext = new XMLDocumentSettingsContext(GetScImport(), nPrefix, rLocalName, xAttrList );
-        break;
     }
 
     return pContext;
@@ -397,6 +393,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         case XML_ELEMENT( OFFICE, XML_SCRIPTS ):
         if (GetScImport().getImportFlags() & SvXMLImportFlags::SCRIPTS)
             pContext = GetScImport().CreateScriptContext();
+        break;
+        case XML_ELEMENT( OFFICE, XML_SETTINGS ):
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::SETTINGS)
+            pContext = new XMLDocumentSettingsContext(GetScImport());
         break;
 
         //TODO: handle all other cases
