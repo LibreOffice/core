@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sdr/attribute/sdrshadowtextattribute.hxx>
+#include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 
@@ -39,7 +40,8 @@ namespace drawinglayer
                 const SdrLineAttribute& rLine,
                 const SdrLineStartEndAttribute& rLineStartEnd,
                 const SdrShadowAttribute& rShadow,
-                const SdrTextAttribute& rTextAttribute);
+                const SdrTextAttribute& rTextAttribute,
+                const SdrGlowAttribute& rGlow);
             SdrLineShadowTextAttribute();
             SdrLineShadowTextAttribute(const SdrLineShadowTextAttribute& rCandidate);
             SdrLineShadowTextAttribute& operator=(const SdrLineShadowTextAttribute& rCandidate);

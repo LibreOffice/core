@@ -68,6 +68,7 @@
 #define XML_SD_TYPE_IMAGE_SCALE_MODE                (XML_SD_TYPES_START + 34 )
 #define XML_SD_TYPE_LINECAP                         (XML_SD_TYPES_START + 35 )
 #define XML_SD_TYPE_FITTOSIZE_AUTOFIT               (XML_SD_TYPES_START + 36 )
+#define XML_SD_TYPE_GLOW                            (XML_SD_TYPES_START + 37 )
 
 //////////////////////////////////////////////////////////////////////////////
 // 3D property types

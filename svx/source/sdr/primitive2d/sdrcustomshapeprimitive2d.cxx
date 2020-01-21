@@ -26,6 +26,8 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 
+#include <sal/log.hxx>
+
 
 using namespace com::sun::star;
 
@@ -68,6 +70,12 @@ namespace drawinglayer::primitive2d
                 {
                     aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow());
                 }
+            }
+
+            if(!aRetval.empty() && !getSdrSTAttribute().getGlow().isDefault())
+            {
+                    // glow
+                    aRetval = createEmbeddedGlowPrimitive(aRetval, getSdrSTAttribute().getGlow());
             }
 
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());

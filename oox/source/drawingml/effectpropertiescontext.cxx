@@ -15,6 +15,8 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
+#include <sal/log.hxx>
+
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -97,13 +99,18 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         }
         break;
         case A_TOKEN( glow ):
+        {
+            mrEffectProperties.maGlow.moGlowRad = rAttribs.getInteger( XML_rad, 0 );
+            // undo push_back to effects
+            mrEffectProperties.m_Effects.pop_back();
+            return new ColorContext(*this, mrEffectProperties.maGlow.moGlowColor);
+
+        }
         case A_TOKEN( softEdge ):
         case A_TOKEN( reflection ):
         case A_TOKEN( blur ):
         {
-            if( nElement == A_TOKEN( glow ) )
-                mrEffectProperties.m_Effects[nPos]->msName = "glow";
-            else if( nElement == A_TOKEN( softEdge ) )
+            if( nElement == A_TOKEN( softEdge ) )
                 mrEffectProperties.m_Effects[nPos]->msName = "softEdge";
             else if( nElement == A_TOKEN( reflection ) )
                 mrEffectProperties.m_Effects[nPos]->msName = "reflection";
