@@ -21,6 +21,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/BitmapFilterStackBlur.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gdimtf.hxx>
@@ -47,6 +48,9 @@
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>
+
+#include <vcl/dibtools.hxx>
+#include <tools/stream.hxx>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {

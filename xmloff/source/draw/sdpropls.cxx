@@ -152,6 +152,11 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ShadowColor",                        XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 ),
     GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
 
+    // glow attributes
+    GMAPV( "GlowEffect",                       XML_NAMESPACE_LO_EXT, XML_GLOW,                 XML_SD_TYPE_GLOW  , 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT ),
+    GMAPV( "GlowEffectRad",                    XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT ),
+    GMAPV( "GlowEffectColor",                  XML_NAMESPACE_LO_EXT, XML_GLOW_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT ),
+
     // graphic attributes
     GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
     GMAP( "AdjustLuminance",                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
@@ -1015,6 +1020,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             }
             case XML_SD_TYPE_SHADOW :
+            {
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
+                break;
+            }
+            case XML_SD_TYPE_GLOW :
             {
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
                 break;
