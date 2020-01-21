@@ -16,6 +16,24 @@
       "revId": "868ee97d6600fd8eb98c132af435f395f803d9bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb344fc4_eb434860",
+        "filename": "xmlsecurity/source/dialogs/macrosecurity.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-21T12:11:41Z",
+      "side": 1,
+      "message": "Dropped the whole ShowBrokenCertificateError for this LTS backport. The existing SAL_WARNs are considered sufficient for debugging.",
+      "parentUuid": "5f7c97a3_dc60c535",
+      "revId": "868ee97d6600fd8eb98c132af435f395f803d9bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
