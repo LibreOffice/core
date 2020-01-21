@@ -617,8 +617,8 @@ public:
     SwOutlineNodes::size_type GetOutlinePos( sal_uInt8 nLevel = UCHAR_MAX );
     // select the given range of OutlineNodes. Optionally including the children
     // the sal_uInt16s are the positions in OutlineNodes-Array (EditShell)
-    bool MakeOutlineSel( SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
-                         bool bWithChildren );
+    bool MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
+                         bool bWithChildren, bool bKillPams = true );
 
     bool GotoNextOutline();
     bool GotoPrevOutline();
