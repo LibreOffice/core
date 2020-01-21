@@ -213,6 +213,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     vcl::Font             aActBulletFont;
 
     sal_uInt8           nBullet;
+    ImplSVEvent*        m_pLevelHdlEvent;
     sal_uInt16          nActNumLvl;
     sal_uInt16          nNumItemId;
     MapUnit             eCoreUnit;
