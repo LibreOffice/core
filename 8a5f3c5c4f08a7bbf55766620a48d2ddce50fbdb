@@ -226,6 +226,30 @@
     },
     {
       "key": {
+        "uuid": "4d0d2d88_ce930731",
+        "filename": "vcl/source/animate/Animation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1002127
+      },
+      "writtenOn": "2020-01-21T16:09:26Z",
+      "side": 1,
+      "message": "If I use pView as variable name, I get a warning from the compiler, reporting that pView overloads another variable named pView too.\nI prefer to avoid warnings, that\u0027s why I called this local variable pAnimView.\n\nAlso, using auto for argument type makes the lambda expression become a generic lambda, which is not what I want.\nFurthermore, in the for_each algorithm, the pointed to object is modified, but not the object (std::unique_ptr) containing the pointer. By using const auto\u0026, it is not so clear. One could wonder why we declare a const object and at the same time invoke a non-const method. By specifiying that the object is a std::unique_ptr, IMO is it more clear.\n\nFinally, I agree that the return type is optional and can be easily deduced, but I prefer specifying it so that the reader immediately knows the return type and can verify that the function returns an expression of the specified type.\n\nSorry to insist but IMO the current declaration of the lambda expressions is not preoblematic so I don\u0027t want to change these declarations.\n\nIMO the previous for loop was ugly, not expressive and not efficient. That\u0027s why I couldn\u0027t help but modify it. Whether my lambda expressions are ugly is a matter of taste but not only. I explained that I have concrete reasons to use the full declaration and I hope I have finally convinced you.",
+      "parentUuid": "b329984f_36a96379",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 91
+      },
+      "revId": "8a5f3c5c4f08a7bbf55766620a48d2ddce50fbdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c0cc0c7_af0065e3",
         "filename": "vcl/source/animate/Animation.cxx",
         "patchSetId": 3
