@@ -561,11 +561,6 @@ namespace sw { namespace mark
                 pPos2->nContent.GetIndex());
         }
 #endif
-        // see for example _SaveContentIdx, Shells
-        OSL_PRECOND(m_vAllMarks.size() < USHRT_MAX,
-            "MarkManager::makeMark(..)"
-            " - more than USHRT_MAX marks are not supported correctly");
-
         if (   (!rPaM.GetPoint()->nNode.GetNode().IsTextNode()
                 && (eType != MarkType::UNO_BOOKMARK
                 // SwXTextRange can be on table node or plain start node (FLY_AT_FLY)

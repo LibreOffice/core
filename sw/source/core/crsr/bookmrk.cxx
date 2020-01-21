@@ -431,6 +431,24 @@ namespace sw { namespace mark
         }
     }
 
+    void Bookmark::Hide(bool const isHide)
+    {
+        if (isHide != m_bHidden)
+        {
+            m_bHidden = isHide;
+            InvalidateFrames();
+        }
+    }
+
+    void Bookmark::SetHideCondition(OUString const& rHideCondition)
+    {
+        if (m_sHideCondition != rHideCondition)
+        {
+            m_sHideCondition = rHideCondition;
+            InvalidateFrames();
+        }
+    }
+
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );

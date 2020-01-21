@@ -186,10 +186,8 @@ namespace sw {
                 { return m_bHidden; }
             virtual const OUString& GetHideCondition() const override
                 { return m_sHideCondition; }
-            virtual void Hide(bool rHide) override
-                { m_bHidden = rHide; }
-            virtual void SetHideCondition(const OUString& rHideCondition) override
-                { m_sHideCondition = rHideCondition; }
+            virtual void Hide(bool rHide) override;
+            virtual void SetHideCondition(const OUString& rHideCondition) override;
 
             // ::sfx2::Metadatable
             virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
