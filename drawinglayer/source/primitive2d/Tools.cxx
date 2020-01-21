@@ -228,6 +228,8 @@ OUString idToString(sal_uInt32 nId)
             return "POLYPOLYGONSELECTION";
         case PRIMITIVE2D_ID_PAGEHIERARCHYPRIMITIVE2D:
             return "PAGEHIERARCHY";
+        case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
+            return "GLOWPRIMITIVE";
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }

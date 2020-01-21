@@ -20,6 +20,15 @@
 namespace oox {
 namespace drawingml {
 
+struct EffectGlowProperties
+{
+    OptValue< sal_Int64 > moGlowRad; // size of glow effect
+    Color moGlowColor;
+    // TODO saturation and luminance missing
+
+    void assignUsed( const EffectGlowProperties& rSourceProps );
+};
+
 struct EffectShadowProperties
 {
     OptValue< sal_Int64 > moShadowDist;
@@ -42,6 +51,7 @@ struct Effect
 struct EffectProperties
 {
     EffectShadowProperties maShadow;
+    EffectGlowProperties maGlow;
 
     /** Stores all effect properties, including those not supported by core yet */
     std::vector<std::unique_ptr<Effect>> m_Effects;
