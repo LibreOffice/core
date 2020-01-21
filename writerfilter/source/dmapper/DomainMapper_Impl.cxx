@@ -1703,6 +1703,24 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         xCur->gotoRange( rAppendContext.xInsertPosition, false );
                     else
                         xCur->gotoEnd( false );
+
+                    // tdf#77417 trim right white spaces in table cells in 2010 compatibility mode
+                    sal_Int32 nMode = GetSettingsTable()->GetWordCompatibilityMode();
+                    if ( m_nTableDepth > 0 && nMode > 0 && nMode <= 14 )
+                    {
+                        // skip new line
+                        xCur->goLeft(1, false);
+                        while ( xCur->goLeft(1, true) )
+                        {
+                            OUString sChar = xCur->getString();
+                            if ( sChar == " " || sChar == "\t" || sChar == OUStringChar(u'\x00A0') )
+                                xCur->setString("");
+                            else
+                                break;
+                        }
+                        xCur->goRight(2, false);
+                    }
+
                     xCur->goLeft( 1 , true );
                     // Extend the redline ranges for empty paragraphs
                     if ( !m_bParaChanged && m_previousRedline.get() )
