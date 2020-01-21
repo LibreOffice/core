@@ -74,6 +74,10 @@ namespace RegressionCurveHelper
         getFirstCurveNotMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve >
+        getCurrentSelectedCurve(
+            const css::uno::Reference<css::chart2::XRegressionCurveContainer > & xRegCnt, const OUString& rSelectedCID  );
+
     /** Returns the regression curve found at the index provided.
      */
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>

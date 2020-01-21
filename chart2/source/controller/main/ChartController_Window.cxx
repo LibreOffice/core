@@ -1039,7 +1039,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     bool bIsPoint = ( eObjectType == OBJECTTYPE_DATA_POINT );
                     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
                     uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-                    Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
+                    Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getCurrentSelectedCurve( xCurveCnt, m_aSelection.getSelectedCID() ) );
                     bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
                     Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );

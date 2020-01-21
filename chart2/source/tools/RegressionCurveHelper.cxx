@@ -37,6 +37,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
+#include <ObjectIdentifier.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -474,6 +475,17 @@ uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveT
             xRegressionCurveContainer,
             uno::Reference< beans::XPropertySet >( xRegressionCurve, uno::UNO_QUERY ),
             xRegressionCurve->getEquationProperties());
+}
+
+uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getCurrentSelectedCurve(
+    const uno::Reference< XRegressionCurveContainer > & xRegCnt, const OUString& rSelectedCID  )
+{
+    if( !xRegCnt.is())
+        return nullptr;
+
+    sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rSelectedCID );
+    uno::Reference< chart2::XRegressionCurve > xCurve( getRegressionCurveAtIndex(xRegCnt, nCurveIndex) );
+    return xCurve;
 }
 
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
