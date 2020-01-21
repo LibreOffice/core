@@ -7405,7 +7405,7 @@ private:
         gtk_tool_button_set_icon_widget(pItem, pImage);
     }
 
-    static void set_item_image(GtkToolButton* pItem, VirtualDevice* pDevice)
+    void set_item_image(GtkToolButton* pItem, VirtualDevice* pDevice)
     {
         GtkWidget* pImage = nullptr;
 
@@ -7416,6 +7416,7 @@ private:
         }
 
         gtk_tool_button_set_icon_widget(pItem, pImage);
+        gtk_widget_queue_draw(GTK_WIDGET(m_pToolbar));
     }
 
 public:

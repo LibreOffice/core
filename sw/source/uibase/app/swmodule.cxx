@@ -284,7 +284,6 @@ void SwDLL::RegisterControls()
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH, pMod );
 
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );
-    SvxLineStyleToolBoxControl::RegisterControl(SID_ATTR_LINE_STYLE, pMod );
     SvxLineWidthToolBoxControl::RegisterControl(SID_ATTR_LINE_WIDTH, pMod );
 
     SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );

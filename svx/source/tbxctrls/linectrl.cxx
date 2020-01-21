@@ -19,6 +19,8 @@
 
 #include <string>
 
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -42,6 +44,7 @@
 #include <svx/linectrl.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/tbxcolorupdate.hxx>
 #include <svx/unoapi.hxx>
 #include <memory>
 
@@ -55,198 +58,171 @@ using namespace ::com::sun::star;
 // For End Line Controller
 #define MAX_LINES 12
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxLineStyleToolBoxControl, XLineStyleItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );
-
-SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
-                                                        sal_uInt16 nId,
-                                                        ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    bUpdate         ( false )
+SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
+    : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
-    addStatusListener( ".uno:LineDash");
-    addStatusListener( ".uno:DashListState");
+    addStatusListener(".uno:LineDash");
 }
-
 
 SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 {
 }
 
-
-void SvxLineStyleToolBoxControl::StateChanged (
-
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-
+void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
-    SvxLineBox* pBox = static_cast<SvxLineBox*>( GetToolBox().GetItemWindow( GetId() ) );
-    DBG_ASSERT( pBox, "Window not found!" );
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
+        return;
 
-    if( eState == SfxItemState::DISABLED )
+    OString sId(m_aCommandURL.toUtf8());
+
+    if ( rEvent.FeatureURL.Complete == m_aCommandURL )
     {
-        pBox->Disable();
-        pBox->SetNoSelection();
-    }
-    else
-    {
-        pBox->Enable();
-
-        if ( eState == SfxItemState::DEFAULT )
-        {
-            if( nSID == SID_ATTR_LINE_STYLE )
-            {
-                pStyleItem.reset( static_cast<XLineStyleItem*>(pState->Clone()) );
-            }
-            else if( nSID == SID_ATTR_LINE_DASH )
-            {
-                pDashItem.reset( static_cast<XLineDashItem*>(pState->Clone()) );
-            }
-
-            bUpdate = true;
-            Update( pState );
-        }
-        else if ( nSID != SID_DASH_LIST )
-        {
-            // no or ambiguous status
-            pBox->SetNoSelection();
-        }
-    }
-}
-
-
-void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
-{
-    if ( pState && bUpdate )
-    {
-        bUpdate = false;
-
-        SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
-        DBG_ASSERT( pBox, "Window not found!" );
-
-        // Since the timer can strike unexpectedly, it may happen that
-        // the LB is not yet filled. A ClearCache() on the control
-        // in DelayHdl () was unsuccessful.
-        if( pBox->GetEntryCount() == 0 )
-            pBox->FillControl();
-
-        drawing::LineStyle eXLS;
-
-        if ( pStyleItem )
-            eXLS = pStyleItem->GetValue();
+        if (m_pToolbar)
+            m_pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
         else
-            eXLS = drawing::LineStyle_NONE;
+            pToolBox->EnableItem( nId, rEvent.IsEnabled );
+    }
 
-        switch( eXLS )
+    m_xBtnUpdater->Update(rEvent);
+
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    if (pSh)
+    {
+        const SvxDashListItem* pItem = pSh->GetItem( SID_DASH_LIST );
+        if (pItem)
         {
-            case drawing::LineStyle_NONE:
-                pBox->SelectEntryPos( 0 );
-                break;
-
-            case drawing::LineStyle_SOLID:
-                pBox->SelectEntryPos( 1 );
-                break;
-
-            case drawing::LineStyle_DASH:
+            XDashListRef xList = pItem->GetDashList();
+            int nIndex = m_xBtnUpdater->GetStyleIndex();
+            switch (nIndex)
             {
-                if( pDashItem )
+                case -1:
+                case 0:
                 {
-                    OUString aString = SvxUnogetInternalNameForItem(
-                        XATTR_LINEDASH, pDashItem->GetName());
-                    pBox->SelectEntry( aString );
+                    BitmapEx aEmpty(xList->GetBitmapForUISolidLine());
+                    aEmpty.Erase(Application::GetSettings().GetStyleSettings().GetFieldColor());
+                    if (m_pToolbar)
+                    {
+                        Graphic aGraf(aEmpty);
+                        m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+                    }
+                    else
+                        pToolBox->SetItemImage(nId, Image(aEmpty));
+                    break;
                 }
-                else
-                    pBox->SetNoSelection();
+                case 1:
+                    if (m_pToolbar)
+                    {
+                        Graphic aGraf(xList->GetBitmapForUISolidLine());
+                        m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+                    }
+                    else
+                        pToolBox->SetItemImage(nId, Image(xList->GetBitmapForUISolidLine()));
+                    break;
+                default:
+                    if (m_pToolbar)
+                    {
+                        Graphic aGraf(xList->GetUiBitmap(nIndex - 2));
+                        m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+                    }
+                    else
+                        pToolBox->SetItemImage(nId, Image(xList->GetUiBitmap(nIndex - 2)));
+                    break;
             }
-            break;
-
-            default:
-                OSL_FAIL( "Unsupported type of line" );
-                break;
         }
     }
+}
 
-    if ( auto pDashListItem = dynamic_cast<const SvxDashListItem*>( pState) )
+void SAL_CALL SvxLineStyleToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+{
+    if (m_pToolbar)
     {
-        // The list of line styles has changed
-        SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
-        DBG_ASSERT( pBox, "Window not found!" );
-
-        OUString aString( pBox->GetSelectedEntry() );
-        pBox->Clear();
-        pBox->InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
-        pBox->InsertEntry( SvxResId(RID_SVXSTR_SOLID) );
-        pBox->Fill( pDashListItem->GetDashList() );
-        pBox->SelectEntry( aString );
-    }
-}
-
-
-VclPtr<vcl::Window> SvxLineStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
-{
-    return VclPtr<SvxLineBox>::Create( pParent, m_xFrame ).get();
-}
-
-SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    addStatusListener( ".uno:MetricUnit");
-}
-
-
-SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
-{
-}
-
-
-void SvxLineWidthToolBoxControl::StateChanged(
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    SvxMetricField* pFld = static_cast<SvxMetricField*>(
-                           GetToolBox().GetItemWindow( GetId() ));
-    DBG_ASSERT( pFld, "Window not found" );
-
-    if ( nSID == SID_ATTR_METRIC )
-    {
-        pFld->RefreshDlgUnit();
+        // Toggle the popup also when toolbutton is activated
+        const OString aId(m_aCommandURL.toUtf8());
+        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
     }
     else
     {
-        if ( eState == SfxItemState::DISABLED )
-        {
-            pFld->Disable();
-            pFld->SetText( "" );
-        }
-        else
-        {
-            pFld->Enable();
-
-            if ( eState == SfxItemState::DEFAULT )
-            {
-                DBG_ASSERT( dynamic_cast<const XLineWidthItem*>( pState) !=  nullptr, "wrong ItemType" );
-
-                // Core-Unit handed over to MetricField
-                // Should not happen in CreateItemWin ()!
-                // CD!!! GetCoreMetric();
-                pFld->SetCoreUnit( MapUnit::Map100thMM );
-
-                pFld->Update( static_cast<const XLineWidthItem*>(pState) );
-            }
-            else
-                pFld->Update( nullptr );
-        }
+        // Open the popup also when Enter key is pressed.
+        createPopupWindow();
     }
 }
 
-
-VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
 {
-    return VclPtr<SvxMetricField>::Create( pParent, m_xFrame ).get();
+    svt::PopupWindowController::initialize( rArguments );
+
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+    {
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+    }
+
+    m_xBtnUpdater.reset(new svx::ToolboxButtonLineStyleUpdater);
+}
+
+void SvxLineStyleToolBoxControl::setLineStyleSelectFunction(const LineStyleSelectFunction& rLineStyleSelectFunction)
+{
+    m_aLineStyleSelectFunction = rLineStyleSelectFunction;
+}
+
+void SvxLineStyleToolBoxControl::dispatchLineStyleCommand(const OUString& rCommand, const Sequence<PropertyValue>& rArgs)
+{
+    if (m_aLineStyleSelectFunction && m_aLineStyleSelectFunction(rCommand, rArgs[0].Value))
+        return;
+
+    dispatchCommand(rCommand, rArgs);
+}
+
+int SvxLineStyleToolBoxControl::GetStyleIndex() const
+{
+    return m_xBtnUpdater->GetStyleIndex();
+}
+
+std::unique_ptr<WeldToolbarPopup> SvxLineStyleToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<SvxLineBox>(this, m_pToolbar, m_xBtnUpdater->GetStyleIndex());
+}
+
+VclPtr<vcl::Window> SvxLineStyleToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
+{
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<SvxLineBox>(this, pParent->GetFrameWeld(), m_xBtnUpdater->GetStyleIndex()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
+}
+
+OUString SvxLineStyleToolBoxControl::getImplementationName()
+{
+    return "com.sun.star.comp.svx.LineStyleToolBoxControl";
+}
+
+css::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new SvxLineStyleToolBoxControl( rContext ) );
 }
 
 namespace {
 
-class SvxLineEndToolBoxControl : public svt::PopupWindowController
+class SvxLineEndToolBoxControl final : public svt::PopupWindowController
 {
 public:
     explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
@@ -527,6 +503,138 @@ com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
     css::uno::Sequence<css::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineEndToolBoxControl( rContext ) );
+}
+
+SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglinestyle.ui", "FloatingLineStyle")
+    , mxControl(pControl)
+    , mxLineStyleSet(new SvtValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , mxLineStyleSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineStyleSet))
+{
+    mxLineStyleSet->SetStyle(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
+
+    FillControl();
+
+    mxLineStyleSet->SelectItem(nInitialIndex + 1);
+
+    mxLineStyleSet->SetSelectHdl( LINK( this, SvxLineBox, SelectHdl ) );
+}
+
+void SvxLineBox::GrabFocus()
+{
+    mxLineStyleSet->GrabFocus();
+}
+
+SvxLineBox::~SvxLineBox()
+{
+}
+
+// Fills the listbox (provisional) with strings
+
+void SvxLineBox::Fill( const XDashListRef &pList )
+{
+    mxLineStyleSet->Clear();
+
+    if( !pList.is() )
+        return;
+
+    // entry for 'none'
+    mxLineStyleSet->InsertItem(1, Image(), pList->GetStringForUiNoLine());
+
+    // entry for solid line
+    auto aBmp = pList->GetBitmapForUISolidLine();
+    Size aBmpSize = aBmp.GetSizePixel();
+    mxLineStyleSet->InsertItem(2, Image(aBmp), pList->GetStringForUiSolidLine());
+
+    // entries for dashed lines
+    long nCount = pList->Count();
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XDashEntry* pEntry = pList->GetDash(i);
+        const BitmapEx aBitmap = pList->GetUiBitmap(i);
+
+        mxLineStyleSet->InsertItem(i + 3, Image(aBitmap), pEntry->GetName());
+    }
+
+    sal_uInt16 nLines = std::min( static_cast<sal_uInt16>(nCount + 2), sal_uInt16(MAX_LINES) );
+    mxLineStyleSet->SetLineCount(nLines);
+
+    WinBits nBits = mxLineStyleSet->GetStyle();
+    if ( nLines == mxLineStyleSet->GetItemCount() )
+        nBits &= ~WB_VSCROLL;
+    else
+        nBits |= WB_VSCROLL;
+    mxLineStyleSet->SetStyle( nBits );
+
+    Size aSize(aBmpSize);
+    aSize.AdjustWidth(6);
+    aSize.AdjustHeight(6);
+    aSize = mxLineStyleSet->CalcWindowSizePixel(aSize);
+    mxLineStyleSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
+    mxLineStyleSet->SetOutputSizePixel(aSize);
+}
+
+IMPL_LINK_NOARG(SvxLineBox, SelectHdl, SvtValueSet*, void)
+{
+    drawing::LineStyle eXLS;
+    sal_Int32 nPos = mxLineStyleSet->GetSelectedItemId();
+    --nPos; // ids start at 1, get the pos of the id
+
+    switch ( nPos )
+    {
+        case 0:
+            eXLS = drawing::LineStyle_NONE;
+            break;
+
+        case 1:
+            eXLS = drawing::LineStyle_SOLID;
+            break;
+
+        default:
+        {
+            eXLS = drawing::LineStyle_DASH;
+
+            if ( nPos != -1 &&
+                 SfxObjectShell::Current()  &&
+                 SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
+            {
+                // LineDashItem will only be sent if it also has a dash.
+                // Notify cares!
+                SvxDashListItem const * pItem = SfxObjectShell::Current()->GetItem( SID_DASH_LIST );
+                const XDashEntry* pEntry = pItem->GetDashList()->GetDash(nPos - 2);
+                XLineDashItem aLineDashItem(pEntry->GetName(), pEntry->GetDash());
+
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = "LineDash";
+                aLineDashItem.QueryValue ( a );
+                aArgs[0].Value = a;
+                mxControl->dispatchLineStyleCommand(".uno:LineDash", aArgs);
+            }
+        }
+        break;
+    }
+
+    XLineStyleItem aLineStyleItem( eXLS );
+    Any a;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "XLineStyle";
+    aLineStyleItem.QueryValue ( a );
+    aArgs[0].Value = a;
+    mxControl->dispatchLineStyleCommand(".uno:XLineStyle", aArgs);
+
+    mxControl->EndPopupMode();
+}
+
+void SvxLineBox::FillControl()
+{
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    if (pSh)
+    {
+        const SvxDashListItem* pItem = pSh->GetItem( SID_DASH_LIST );
+        if (pItem)
+            Fill(pItem->GetDashList());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
