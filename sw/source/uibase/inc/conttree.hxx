@@ -171,6 +171,8 @@ class SwContentTree final
     virtual VclPtr<PopupMenu> CreateContextMenu() override;
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
+    void DeleteOutlineSelections();
+
 public:
     SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog);
     virtual ~SwContentTree() override;

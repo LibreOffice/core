@@ -1177,8 +1177,8 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
     return SwOutlineNodes::npos; // no more left
 }
 
-bool SwCursorShell::MakeOutlineSel( SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
-                                  bool bWithChildren )
+bool SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
+                                  bool bWithChildren , bool bKillPams)
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
@@ -1215,7 +1215,8 @@ bool SwCursorShell::MakeOutlineSel( SwOutlineNodes::size_type nSttPos, SwOutline
     if( nEndPos == rOutlNds.size() ) // no end found
         pEndNd = &rNds.GetEndOfContent();
 
-    KillPams();
+    if( bKillPams )
+        KillPams();
 
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
