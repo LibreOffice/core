@@ -1311,6 +1311,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             }
             else if(ContentTypeId::TABLE == nContentType)
             {
+                pPop->InsertItem(805, SwResId(STR_SELECT));
                 pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
                 pPop->InsertItem(404, m_sUnprotTable);
                 bool bFull = false;
@@ -1325,15 +1326,26 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 bOutline = true;
                 lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
                 pPop->InsertSeparator();
-                pPop->InsertItem(501, SwResId(STR_DELETE_CHAPTER));
+                pPop->InsertItem(805, SwResId(STR_SELECT));
+                pPop->InsertItem(806, SwResId(STR_DELETE));
                 pPop->InsertItem(801, SwResId(STR_PROMOTE_CHAPTER));
                 pPop->InsertItem(802, SwResId(STR_DEMOTE_CHAPTER));
                 pPop->InsertItem(803, SwResId(STR_PROMOTE_LEVEL));
                 pPop->InsertItem(804, SwResId(STR_DEMOTE_LEVEL));
+                pPop->SetAccelKey(806, vcl::KeyCode(KEY_DELETE, false, false, false, false));
+                pPop->SetAccelKey(801, vcl::KeyCode(KEY_UP, false, true, false, false));
+                pPop->SetAccelKey(802, vcl::KeyCode(KEY_DOWN, false, true, false, false));
+                pPop->SetAccelKey(803, vcl::KeyCode(KEY_LEFT, false, true, false, false));
+                pPop->SetAccelKey(804, vcl::KeyCode(KEY_RIGHT, false, true, false, false));
             }
             else if(ContentTypeId::DRAWOBJECT == nContentType)
             {
                 pPop->InsertItem(501, SwResId(STR_DELETE_ENTRY));
+            }
+            else if(ContentTypeId::REGION == nContentType)
+            {
+                pPop->InsertItem(805, SwResId(STR_SELECT));
+                pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
             }
             else
             {
@@ -1353,6 +1365,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             if(bRenamable)
                 pPop->InsertItem(502, m_sRename);
         }
+        pPop->SetAccelKey(501, vcl::KeyCode(KEY_DELETE, false, false, false, false));
     }
     else if( pEntry )
     {
@@ -3021,17 +3034,21 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
     else if(aCode.GetCode() == KEY_DELETE && 0 == aCode.GetModifier())
     {
         SvTreeListEntry* pEntry = FirstSelected();
-        assert(!pEntry || dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-        if(pEntry &&
-            lcl_IsContent(pEntry) &&
-                static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
-                    !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
+        if(pEntry && lcl_IsContent(pEntry))
         {
-            EditEntry(pEntry, EditEntryMode::DELETE);
-            m_bViewHasChanged = true;
-            GetParentWindow()->UpdateListBox();
-            TimerUpdate(&m_aUpdTimer);
-            GrabFocus();
+            assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+            if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
+                    !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
+            {
+                if (static_cast<SwContentType*>(pEntry->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+                    DeleteOutlineSelections();
+                else
+                    EditEntry(pEntry, EditEntryMode::DELETE);
+                m_bViewHasChanged = true;
+                GetParentWindow()->UpdateListBox();
+                TimerUpdate(&m_aUpdTimer);
+                GrabFocus();
+            }
         }
     }
     //Make KEY_SPACE has same function as DoubleClick ,
@@ -3334,6 +3351,40 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case 804:
             ExecCommand("demote", true);
             break;
+        case 805:
+        {
+            m_pActiveShell->KillPams();
+            m_pActiveShell->ClearMark();
+            m_pActiveShell->EnterAddMode();
+            SwContent* pCnt = static_cast<SwContent*>(pFirst->GetUserData());
+            const ContentTypeId eTypeId = pCnt->GetParent()->GetType();
+            if (eTypeId == ContentTypeId::OUTLINE)
+            {
+                for (SvTreeListEntry* pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
+                {
+                    m_pActiveShell->SttSelect();
+                    SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                    m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !IsExpanded(pEntry), false); // select children if not expanded
+                    m_pActiveShell->EndSelect();
+                }
+            }
+            else if (eTypeId == ContentTypeId::TABLE)
+            {
+                m_pActiveShell->GotoTable(pCnt->GetName());
+                m_pActiveShell->SelAll();
+            }
+            else if (eTypeId == ContentTypeId::REGION)
+            {
+                m_pActiveShell->GotoRegion(pCnt->GetName());
+                m_pActiveShell->Right(CRSR_SKIP_CHARS, false, 1, false );
+                m_pActiveShell->SelAll();
+            }
+            m_pActiveShell->LeaveAddMode();
+        }
+        break;
+        case 806:
+            DeleteOutlineSelections();
+            break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
@@ -3359,6 +3410,29 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         }
     }
     GetParentWindow()->UpdateListBox();
+}
+
+void SwContentTree::DeleteOutlineSelections()
+{
+    OUString sChapter = GetSelectionCount() > 1 ? SwResId(STR_CHAPTERS_NAME) : SwResId(STR_CHAPTER_NAME);
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, sChapter);
+    m_pActiveShell->StartAction();
+    m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+    m_pActiveShell->EnterAddMode();
+    for (SvTreeListEntry* pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
+    {
+        m_pActiveShell->SttSelect();
+        SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+        m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !IsExpanded(pEntry), false); // select children if not expanded
+        m_pActiveShell->EndSelect();
+    }
+    m_pActiveShell->LeaveAddMode();
+    m_pActiveShell->SetTextFormatColl(nullptr);
+    m_pActiveShell->Delete();
+    m_pActiveShell->ClearMark();
+    m_pActiveShell->EndUndo();
+    m_pActiveShell->EndAction();
 }
 
 void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
@@ -3629,23 +3703,6 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
                 default: break;
             }
         }
-        break;
-        case ContentTypeId::OUTLINE :
-            if(EditEntryMode::DELETE == nMode)
-            {
-                SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos();
-                SwWrtShell* pShell = m_pActiveShell;
-                pShell->StartAllAction();
-                pShell->StartUndo();
-                pShell->Push();
-                pShell->MakeOutlineSel(nActPos, nActPos, true);
-                pShell->SetTextFormatColl(nullptr);
-                pShell->Delete();
-                pShell->ClearMark();
-                pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
-                pShell->EndUndo();
-                pShell->EndAllAction();
-            }
         break;
         case ContentTypeId::DRAWOBJECT :
             if(EditEntryMode::DELETE == nMode)
