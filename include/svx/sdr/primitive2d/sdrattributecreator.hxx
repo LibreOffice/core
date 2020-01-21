@@ -32,6 +32,7 @@ namespace drawinglayer { namespace attribute {
     class SdrLineAttribute;
     class SdrLineStartEndAttribute;
     class SdrShadowAttribute;
+    class SdrGlowAttribute;
     class SdrFillAttribute;
     class SdrTextAttribute;
     class FillGradientAttribute;
@@ -63,6 +64,9 @@ namespace drawinglayer
             double fWidth);
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrGlowAttribute createNewSdrGlowAttribute(
             const SfxItemSet& rSet);
 
         attribute::SdrFillAttribute SVX_DLLPUBLIC createNewSdrFillAttribute(

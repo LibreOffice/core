@@ -74,6 +74,7 @@
 #include <editeng/editstat.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
 #include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
@@ -83,6 +84,8 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -335,6 +338,18 @@ namespace drawinglayer
             }
 
             return attribute::SdrLineStartEndAttribute();
+        }
+
+        attribute::SdrGlowAttribute createNewSdrGlowAttribute( const SfxItemSet& rSet)
+        {
+            const bool bGlow(rSet.Get(SDRATTR_GLOW).GetValue());
+            if(!bGlow)
+                return attribute::SdrGlowAttribute();
+            sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RAD).GetValue();
+            const Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
+
+            attribute::SdrGlowAttribute glowAttr{ nRadius, aColor.getBColor() };
+            return glowAttr;
         }
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(const SfxItemSet& rSet)
@@ -729,8 +744,9 @@ namespace drawinglayer
 
             // try shadow
             const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
+            const attribute::SdrGlowAttribute aGlow(createNewSdrGlowAttribute(rSet));
 
-            return attribute::SdrShadowTextAttribute(aShadow, aText);
+            return attribute::SdrShadowTextAttribute(aShadow, aText, aGlow);
         }
 
         attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
@@ -740,6 +756,7 @@ namespace drawinglayer
             attribute::SdrLineAttribute aLine;
             attribute::SdrLineStartEndAttribute aLineStartEnd;
             attribute::SdrTextAttribute aText;
+            attribute::SdrGlowAttribute aGlow;
             bool bFontworkHideContour(false);
 
             // look for text first
@@ -773,8 +790,9 @@ namespace drawinglayer
             {
                 // try shadow
                 const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
+                aGlow = createNewSdrGlowAttribute(rSet);
 
-                return attribute::SdrLineShadowTextAttribute(aLine, aLineStartEnd, aShadow, aText);
+                return attribute::SdrLineShadowTextAttribute(aLine, aLineStartEnd, aShadow, aText, aGlow);
             }
 
             return attribute::SdrLineShadowTextAttribute();
@@ -791,6 +809,7 @@ namespace drawinglayer
             attribute::SdrShadowAttribute aShadow;
             attribute::FillGradientAttribute aFillFloatTransGradient;
             attribute::SdrTextAttribute aText;
+            attribute::SdrGlowAttribute aGlow;
             bool bFontworkHideContour(false);
 
             // look for text first
@@ -836,8 +855,11 @@ namespace drawinglayer
                 // try shadow
                 aShadow = createNewSdrShadowAttribute(rSet);
 
+                // glow
+                aGlow = createNewSdrGlowAttribute(rSet);
+
                 return attribute::SdrLineFillShadowTextAttribute(
-                    aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient, aText);
+                    aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient, aText, aGlow);
             }
 
             return attribute::SdrLineFillShadowTextAttribute();

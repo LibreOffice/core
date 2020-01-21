@@ -209,6 +209,11 @@
     { OUString("FontWorkHideForm"),         XATTR_FORMTXTHIDEFORM,      cppu::UnoType<bool>::get(),                        0,  0}, \
     { OUString("FontWorkShadowTransparence"),XATTR_FORMTXTSHDWTRANSP,   ::cppu::UnoType<sal_Int16>::get(),            0,  0},
 
+#define GLOW_PROPERTIES \
+    { OUString("GlowEffect"),                     SDRATTR_GLOW,             cppu::UnoType<bool>::get(),           0,      0}, \
+    { OUString{"GlowEffectRad"},                  SDRATTR_GLOW_RAD,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
+    { OUString{"GlowEffectColor"},                SDRATTR_GLOW_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0},
+
 #define SHADOW_PROPERTIES \
     { OUString(UNO_NAME_SHADOW),            SDRATTR_SHADOW,             cppu::UnoType<bool>::get(),    0,      0}, \
     { OUString(UNO_NAME_SHADOWCOLOR),       SDRATTR_SHADOWCOLOR,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
