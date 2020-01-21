@@ -238,6 +238,12 @@ namespace
 
         io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     };
+
+    auto InvalidatePosition(SwPosition const& rPos) -> void
+    {
+        SwUpdateAttr const hint(rPos.nContent.GetIndex(), rPos.nContent.GetIndex(), 0);
+        rPos.nNode.GetNode().GetTextNode()->NotifyClients(nullptr, &hint);
+    }
 }
 
 namespace sw::mark
@@ -336,6 +342,10 @@ namespace sw::mark
         }
     }
 
+    auto MarkBase::InvalidateFrames() -> void
+    {
+    }
+
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
         : MarkBase(rPaM, MarkBase::GenerateNewName("__NavigatorReminder__"))
     { }
@@ -392,6 +402,7 @@ namespace sw::mark
                     std::make_unique<SwUndoInsBookmark>(*this));
         }
         io_pDoc->getIDocumentState().SetModified();
+        InvalidateFrames();
     }
 
     void Bookmark::DeregisterFromDoc(SwDoc* const io_pDoc)
@@ -404,6 +415,35 @@ namespace sw::mark
                     std::make_unique<SwUndoDeleteBookmark>(*this));
         }
         io_pDoc->getIDocumentState().SetModified();
+        InvalidateFrames();
+    }
+
+    // invalidate text frames in case it's hidden or Formatting Marks enabled
+    auto Bookmark::InvalidateFrames() -> void
+    {
+        InvalidatePosition(GetMarkPos());
+        if (IsExpanded())
+        {
+            InvalidatePosition(GetOtherMarkPos());
+        }
+    }
+
+    void Bookmark::Hide(bool const isHide)
+    {
+        if (isHide != m_bHidden)
+        {
+            m_bHidden = isHide;
+            InvalidateFrames();
+        }
+    }
+
+    void Bookmark::SetHideCondition(OUString const& rHideCondition)
+    {
+        if (m_sHideCondition != rHideCondition)
+        {
+            m_sHideCondition = rHideCondition;
+            InvalidateFrames();
+        }
     }
 
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
@@ -512,6 +552,8 @@ namespace sw::mark
         if (eMode == sw::mark::InsertMode::New)
         {
             lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
+            // no need to invalidate text frames here, the insertion of the
+            // CH_TXT_ATR already invalidates
         }
         else
         {

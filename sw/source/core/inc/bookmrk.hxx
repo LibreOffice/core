@@ -90,6 +90,8 @@ namespace sw {
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
 
+            virtual auto InvalidateFrames() -> void;
+
             virtual OUString ToString( ) const override;
             virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
@@ -170,6 +172,8 @@ namespace sw {
 
             virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;
 
+            virtual auto InvalidateFrames() -> void override;
+
             virtual const OUString& GetShortName() const override
                 { return m_sShortName; }
             virtual const vcl::KeyCode& GetKeyCode() const override
@@ -182,10 +186,8 @@ namespace sw {
                 { return m_bHidden; }
             virtual const OUString& GetHideCondition() const override
                 { return m_sHideCondition; }
-            virtual void Hide(bool rHide) override
-                { m_bHidden = rHide; }
-            virtual void SetHideCondition(const OUString& rHideCondition) override
-                { m_sHideCondition = rHideCondition; }
+            virtual void Hide(bool rHide) override;
+            virtual void SetHideCondition(const OUString& rHideCondition) override;
 
             // ::sfx2::Metadatable
             virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
