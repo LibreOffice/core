@@ -134,7 +134,7 @@ void convertTextProperty(PropertySet& rPropSet, ObjectFormatter& rFormatter,
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
                                 const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
-                                bool bDataSeriesLabel, bool bMSO2007Doc, const PropertySet* pSeriesPropSet )
+                                bool bDataSeriesLabel, bool bMSO2007Doc )
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -193,7 +193,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
         {
             namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
-            sal_Int32 nPlacement = rTypeInfo.mnDefLabelPos;
+            sal_Int32 nPlacement = -1;
             switch( rDataLabel.monLabelPos.get( XML_TOKEN_INVALID ) )
             {
                 case XML_outEnd:    nPlacement = csscd::OUTSIDE;        break;
@@ -207,10 +207,10 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
                 case XML_bestFit:   nPlacement = csscd::AVOID_OVERLAP;  break;
             }
 
-            sal_Int32 nGlobalPlacement = 0;
-            if ( !bDataSeriesLabel && nPlacement == rTypeInfo.mnDefLabelPos && pSeriesPropSet &&
-                 pSeriesPropSet->getProperty( nGlobalPlacement, PROP_LabelPlacement ) )
-                nPlacement = nGlobalPlacement;
+            if( !bDataSeriesLabel && nPlacement == -1 )
+                return;
+            else if( nPlacement == -1 )
+                nPlacement = rTypeInfo.mnDefLabelPos;
 
             rPropSet.setProperty( PROP_LabelPlacement, nPlacement );
         }
@@ -262,8 +262,7 @@ DataLabelConverter::~DataLabelConverter()
 {
 }
 
-void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup,
-                                           const PropertySet& rSeriesPropSet )
+void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
 {
     if (!rxDataSeries.is())
         return;
@@ -272,7 +271,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc, &rSeriesPropSet );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
         if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
@@ -372,7 +371,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     if( !mrModel.mbDeleted )
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc, nullptr );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
             // Import baseline border properties for these data labels.
@@ -386,7 +385,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
             pointLabel->maNumberFormat = mrModel.maNumberFormat;
 
         DataLabelConverter aLabelConv(*this, *pointLabel);
-        aLabelConv.convertFromModel( rxDataSeries, rTypeGroup, aPropSet );
+        aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
     }
 }
 
