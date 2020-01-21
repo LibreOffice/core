@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "032eb188_afaaae50",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2020-01-21T13:27:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c7fa247_11bb49be",
+      "range": {
+        "startLine": 332,
+        "startChar": 1,
+        "endLine": 333,
+        "endChar": 6
+      },
+      "revId": "764e8d8a5fffbd59784264e34a96e276223a9d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f55e4c4c_9e19191f",
         "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "764e8d8a5fffbd59784264e34a96e276223a9d27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "583705f8_8ec059ea",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2020-01-21T13:27:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f55e4c4c_9e19191f",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 6
+      },
+      "revId": "764e8d8a5fffbd59784264e34a96e276223a9d27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
