@@ -77,19 +77,15 @@ protected:
     virtual void setLineJoint(const XLineJointItem* pItem) = 0;
     virtual void setLineCap(const XLineCapItem* pItem) = 0;
 
-
     void updateLineStyle(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineDash(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
-    void updateLineStart(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
-    void updateLineEnd(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineJoint(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineCap(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
 
-    void FillLineEndList();
     void FillLineStyleList();
-    void SelectEndStyle(bool bStart);
+
     void SelectLineStyle();
     void ActivateControls();
 
@@ -110,8 +106,8 @@ private:
     std::unique_ptr<SvxLineLB> mxLBStyle;
     std::unique_ptr<weld::Label> mxFTTransparency;
     std::unique_ptr<weld::MetricSpinButton> mxMFTransparent;
-    std::unique_ptr<SvxLineEndLB> mxLBStart;
-    std::unique_ptr<SvxLineEndLB> mxLBEnd;
+    std::unique_ptr<weld::Toolbar> mxArrowsTB;
+    std::unique_ptr<ToolbarUnoDispatcher> mxArrowsDispatch;
     std::unique_ptr<weld::Label> mxFTEdgeStyle;
     std::unique_ptr<weld::ComboBox> mxLBEdgeStyle;
     std::unique_ptr<weld::Label> mxFTCapStyle;
@@ -127,10 +123,7 @@ private:
     sal_uInt16      mnTrans;
     MapUnit         meMapUnit;
     sal_Int32       mnWidthCoreValue;
-    XLineEndListRef mxLineEndList;
     XDashListRef    mxLineStyleList;
-    std::unique_ptr<XLineStartItem> mpStartItem;
-    std::unique_ptr<XLineEndItem>   mpEndItem;
 
     // images from resource
     OUString maIMGNone;

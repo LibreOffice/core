@@ -85,9 +85,6 @@ private:
     sfx2::sidebar::ControllerItem maStyleControl;
     sfx2::sidebar::ControllerItem maDashControl;
     sfx2::sidebar::ControllerItem maWidthControl;
-    sfx2::sidebar::ControllerItem maStartControl;
-    sfx2::sidebar::ControllerItem maEndControl;
-    sfx2::sidebar::ControllerItem maLineEndListControl;
     sfx2::sidebar::ControllerItem maLineStyleListControl;
     sfx2::sidebar::ControllerItem maTransControl;
     sfx2::sidebar::ControllerItem maEdgeStyle;

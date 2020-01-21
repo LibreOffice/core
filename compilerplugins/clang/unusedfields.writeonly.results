@@ -772,12 +772,6 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:85
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:86
     svx::sidebar::LinePropertyPanel maDashControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:88
-    svx::sidebar::LinePropertyPanel maStartControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:89
-    svx::sidebar::LinePropertyPanel maEndControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:90
-    svx::sidebar::LinePropertyPanel maLineEndListControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:91
     svx::sidebar::LinePropertyPanel maLineStyleListControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:92

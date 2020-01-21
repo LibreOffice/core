@@ -54,9 +54,6 @@ LinePropertyPanel::LinePropertyPanel(
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
     maDashControl (SID_ATTR_LINE_DASH, *pBindings, *this),
     maWidthControl(SID_ATTR_LINE_WIDTH, *pBindings, *this),
-    maStartControl(SID_ATTR_LINE_START, *pBindings, *this),
-    maEndControl(SID_ATTR_LINE_END, *pBindings, *this),
-    maLineEndListControl(SID_LINEEND_LIST, *pBindings, *this),
     maLineStyleListControl(SID_DASH_LIST, *pBindings, *this),
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
@@ -77,9 +74,6 @@ void LinePropertyPanel::dispose()
     maStyleControl.dispose();
     maDashControl.dispose();
     maWidthControl.dispose();
-    maStartControl.dispose();
-    maEndControl.dispose();
-    maLineEndListControl.dispose();
     maLineStyleListControl.dispose();
     maTransControl.dispose();
     maEdgeStyle.dispose();
@@ -131,23 +125,6 @@ void LinePropertyPanel::NotifyItemUpdate(
         case SID_ATTR_LINE_WIDTH:
         {
             updateLineWidth(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_ATTR_LINE_START:
-        {
-            updateLineStart(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_ATTR_LINE_END:
-        {
-            updateLineEnd(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_LINEEND_LIST:
-        {
-            FillLineEndList();
-            SelectEndStyle(true);
-            SelectEndStyle(false);
             break;
         }
         case SID_DASH_LIST:
