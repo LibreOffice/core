@@ -22,7 +22,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <ErrorBar.hxx>
 #include <StatisticsHelper.hxx>
-
 #include <unonames.hxx>
 
 #include <svl/stritem.hxx>
@@ -116,17 +115,6 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
         }
     }
 
-    if( bEquationExists )
-    {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
-        uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
-        if( xCurve.is())
-        {
-            return xCurve->getEquationProperties();
-        }
-    }
-
     return uno::Reference< beans::XPropertySet >();
 }
 
@@ -144,18 +132,6 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
             bExists = ( eRegress != SvxChartRegress::NONE );
-        }
-    }
-
-    if( bExists )
-    {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
-        uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
-        if( xCurve.is())
-        {
-            uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            return xProperties;
         }
     }
 

@@ -516,12 +516,6 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
 {
     uno::Reference< chart2::XRegressionCurve > xRegCurve(
         ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
-    if( !xRegCurve.is() )
-    {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-            ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
-        xRegCurve.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
-    }
     if( xRegCurve.is())
     {
         uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
