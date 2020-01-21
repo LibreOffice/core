@@ -67,13 +67,6 @@ namespace RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt );
 
-    /** Returns the first regression curve found that is not of type
-        mean-value line
-     */
-    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
-        getFirstCurveNotMeanValueLine(
-            const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
-
     /** Returns the regression curve found at the index provided.
      */
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>

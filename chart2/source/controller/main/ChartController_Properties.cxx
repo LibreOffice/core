@@ -569,7 +569,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createDataCurveCID(
                 ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
-                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ), false );
+                        RegressionCurveHelper::getAllCurveNotMeanValueLine( xDiagram )[0] ), false );
     }
     //trend line equation
     else if( rDispatchCommand == "FormatTrendlineEquation" )
@@ -580,7 +580,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createDataCurveEquationCID(
                 ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
-                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ) );
+                        RegressionCurveHelper::getAllCurveNotMeanValueLine( xDiagram )[0] ) );
     }
     // y error bars
     else if( rDispatchCommand == "FormatXErrorBars" )
