@@ -367,6 +367,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/image/ImageRepository \
     vcl/source/image/ImplImage \
     vcl/source/image/ImplImageTree \
+    vcl/source/bitmap/BitmapFilterStackBlur \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
     vcl/source/helper/commandinfoprovider \

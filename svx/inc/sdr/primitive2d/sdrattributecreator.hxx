@@ -31,6 +31,7 @@ namespace drawinglayer { namespace attribute {
     class SdrLineAttribute;
     class SdrLineStartEndAttribute;
     class SdrShadowAttribute;
+    class SdrGlowAttribute;
     class SdrFillAttribute;
     class SdrTextAttribute;
     class FillGradientAttribute;
@@ -65,6 +66,9 @@ namespace drawinglayer
             const SfxItemSet& rSet);
 
         attribute::SdrFillAttribute SVXCORE_DLLPUBLIC createNewSdrFillAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrGlowAttribute createNewSdrGlowAttribute(
             const SfxItemSet& rSet);
 
         // #i101508# Support handing over given text-to-border distances

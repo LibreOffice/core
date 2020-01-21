@@ -20,6 +20,8 @@
 #pragma once
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/attribute/sdrglowattribute.hxx>
+
 #include <svx/svxdllapi.h>
 
 // predefines
@@ -70,6 +72,10 @@ namespace drawinglayer
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow);
+
+        Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedGlowPrimitive(
+            const Primitive2DContainer& rContent,
+            const attribute::SdrGlowAttribute& rGlow);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
