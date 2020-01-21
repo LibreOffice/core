@@ -561,6 +561,21 @@ namespace sw { namespace mark
                 pPos2->nContent.GetIndex());
         }
 #endif
+        // see for example _SaveContentIdx, Shells
+        OSL_PRECOND(m_vAllMarks.size() < USHRT_MAX,
+            "MarkManager::makeMark(..)"
+            " - more than USHRT_MAX marks are not supported correctly");
+
+        if (   (!rPaM.GetPoint()->nNode.GetNode().IsTextNode()
+                    // huh, SwXTextRange puts one on table node?
+                && !rPaM.GetPoint()->nNode.GetNode().IsTableNode())
+            || (!rPaM.GetMark()->nNode.GetNode().IsTextNode()
+                && !rPaM.GetMark()->nNode.GetNode().IsTableNode()))
+        {
+            SAL_WARN("sw.core", "MarkManager::makeMark(..)"
+                " - refusing to create mark on non-textnode");
+            return nullptr;
+        }
         // There should only be one CrossRefBookmark per Textnode per Type
         if ((eType == MarkType::CROSSREF_NUMITEM_BOOKMARK || eType == MarkType::CROSSREF_HEADING_BOOKMARK)
             && (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.Start(), eType) != m_vBookmarks.end()))
@@ -809,6 +824,8 @@ namespace sw { namespace mark
         if (!pMarkBase)
             return;
 
+        pMarkBase->InvalidateFrames();
+
         pMarkBase->SetMarkPos(*(rPaM.GetPoint()));
         if(rPaM.HasMark())
             pMarkBase->SetOtherMarkPos(*(rPaM.GetMark()));
@@ -817,6 +834,8 @@ namespace sw { namespace mark
 
         if(pMarkBase->GetMarkPos() != pMarkBase->GetMarkStart())
             pMarkBase->Swap();
+
+        pMarkBase->InvalidateFrames();
 
         sortMarks();
     }

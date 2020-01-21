@@ -90,6 +90,8 @@ namespace sw {
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
 
+            virtual auto InvalidateFrames() -> void;
+
             virtual OUString ToString( ) const override;
             virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
@@ -169,6 +171,8 @@ namespace sw {
             virtual void InitDoc(SwDoc* const io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
             virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;
+
+            virtual auto InvalidateFrames() -> void override;
 
             virtual const OUString& GetShortName() const override
                 { return m_sShortName; }
