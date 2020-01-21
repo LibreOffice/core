@@ -223,6 +223,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     Size                aInitSize[SVX_MAX_NUM];
 
+    ImplSVEvent*        m_pLevelHdlEvent;
+
     bool                bLastWidthModified  : 1;
     bool                bModified           : 1;
     bool                bPreset             : 1;
@@ -282,6 +284,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LevelHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(LevelHdl, void *, void);
     DECL_LINK(PopupActivateHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(GraphicHdl_Impl, const OString&, void);
     DECL_LINK(BulletHdl_Impl, weld::Button&, void);
