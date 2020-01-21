@@ -48,6 +48,10 @@ while ( <INFILE> )
     # check for valid characters
     $_ =~ /^[a-zA-Z0-9-_]+$/ or die "Error: invalid character in token '$_'";
     $id = "XML_$_";
+    # we have two ids with similar names("cut-offs" and "cut_offs")
+    if ($id eq "XML_cut_offs") {
+        $id = "cut_offs2";
+    }
     $id =~ s/-/_/g;
     $tokens{$_} = $id;
     print( IDFILE "const sal_Int32 $id = $i;\n" );

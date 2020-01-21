@@ -541,6 +541,7 @@ namespace xmloff { namespace token {
         XML_CUSTOM_LABEL_FIELD,
         XML_CUT,
         XML_CUT_OFFS,
+        XML_CUT_OFFS2,
         XML_CX,
         XML_CY,
         XML_CYLINDER,
