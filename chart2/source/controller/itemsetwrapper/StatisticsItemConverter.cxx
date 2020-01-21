@@ -102,7 +102,6 @@ void lcl_getErrorIndicatorValues(
 uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     const uno::Reference< beans::XPropertySet > & xSeriesPropSet, const SfxItemSet * pItemSet )
 {
-    bool bEquationExists = true;
 
     // ensure that a trendline is on
     if( pItemSet )
@@ -116,24 +115,12 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
         }
     }
 
-    if( bEquationExists )
-    {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
-        uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
-        if( xCurve.is())
-        {
-            return xCurve->getEquationProperties();
-        }
-    }
-
     return uno::Reference< beans::XPropertySet >();
 }
 
 uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
     const uno::Reference< beans::XPropertySet > & xSeriesPropSet, const SfxItemSet * pItemSet )
 {
-    bool bExists = true;
 
     // ensure that a trendline is on
     if( pItemSet )
@@ -144,18 +131,6 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
             bExists = ( eRegress != SvxChartRegress::NONE );
-        }
-    }
-
-    if( bExists )
-    {
-        uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
-        uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
-        if( xCurve.is())
-        {
-            uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            return xProperties;
         }
     }
 
