@@ -113,7 +113,7 @@ blacklist:
     - com/sun/star/frame/XDispatch.hpp
     - com/sun/star/ui/ContextChangeEventObject.hpp
     sfx2/source/view/viewfrm2.cxx:
-    # Neede for direct member access
+    # Needed for direct member access
     - com/sun/star/embed/VerbDescriptor.hpp
     sfx2/source/view/classificationhelper.cxx:
     # Actually used
