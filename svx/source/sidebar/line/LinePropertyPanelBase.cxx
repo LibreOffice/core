@@ -66,8 +66,8 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mxLBStyle(new SvxLineLB(m_xBuilder->weld_combo_box("linestyle"))),
     mxFTTransparency(m_xBuilder->weld_label("translabel")),
     mxMFTransparent(m_xBuilder->weld_metric_spin_button("linetransparency", FieldUnit::PERCENT)),
-    mxLBStart(new SvxLineEndLB(m_xBuilder->weld_combo_box("beginarrowstyle"))),
-    mxLBEnd(new SvxLineEndLB(m_xBuilder->weld_combo_box("endarrowstyle"))),
+    mxArrowsTB(m_xBuilder->weld_toolbar("arrowheads")),
+    mxArrowsDispatch(new ToolbarUnoDispatcher(*mxArrowsTB, rxFrame)),
     mxFTEdgeStyle(m_xBuilder->weld_label("cornerlabel")),
     mxLBEdgeStyle(m_xBuilder->weld_combo_box("edgestyle")),
     mxFTCapStyle(m_xBuilder->weld_label("caplabel")),
@@ -80,8 +80,6 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mnTrans(0),
     meMapUnit(MapUnit::MapMM),
     mnWidthCoreValue(0),
-    mpStartItem(),
-    mpEndItem(),
     maIMGNone(BMP_NONE_ICON),
     mbWidthValuable(true),
     mbArrowSupported(true)
@@ -104,8 +102,8 @@ void LinePropertyPanelBase::dispose()
     mxLBStyle.reset();
     mxFTTransparency.reset();
     mxMFTransparent.reset();
-    mxLBStart.reset();
-    mxLBEnd.reset();
+    mxArrowsDispatch.reset();
+    mxArrowsTB.reset();
     mxFTEdgeStyle.reset();
     mxLBEdgeStyle.reset();
     mxFTCapStyle.reset();
@@ -135,12 +133,6 @@ void LinePropertyPanelBase::Initialize()
 
     mxTBWidth->set_item_icon_name(SELECTWIDTH, maIMGWidthIcon[0]);
     mxTBWidth->connect_clicked(LINK(this, LinePropertyPanelBase, ToolboxWidthSelectHdl));
-
-    FillLineEndList();
-    SelectEndStyle(true);
-    SelectEndStyle(false);
-    mxLBStart->connect_changed( LINK( this, LinePropertyPanelBase, ChangeStartHdl ) );
-    mxLBEnd->connect_changed( LINK( this, LinePropertyPanelBase, ChangeEndHdl ) );
 
     mxMFTransparent->connect_value_changed(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
 
@@ -260,54 +252,6 @@ void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
 
     mbWidthValuable = false;
     SetWidthIcon();
-}
-
-void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
-        const SfxPoolItem* pItem)
-{
-    if(bDisabled)
-    {
-        mxLBStart->set_sensitive(false);
-    }
-    else
-    {
-        if (mbArrowSupported)
-            mxLBStart->set_sensitive(true);
-    }
-
-    if(bSetOrDefault && pItem)
-    {
-        mpStartItem.reset(static_cast<XLineStartItem*>(pItem->Clone()));
-        SelectEndStyle(true);
-        return;
-    }
-
-    mpStartItem.reset();
-    SelectEndStyle(true);
-}
-
-void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
-        const SfxPoolItem* pItem)
-{
-    if(bDisabled)
-    {
-        mxLBEnd->set_sensitive(false);
-    }
-    else
-    {
-        if (mbArrowSupported)
-            mxLBEnd->set_sensitive(true);
-    }
-
-    if(bSetOrDefault && pItem)
-    {
-        mpEndItem.reset(static_cast<XLineEndItem*>(pItem->Clone()));
-        SelectEndStyle(false);
-        return;
-    }
-
-    mpEndItem.reset();
-    SelectEndStyle(false);
 }
 
 void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
@@ -460,34 +404,6 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeLineStyleHdl, weld::ComboBox&, void
     ActivateControls();
 }
 
-IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeStartHdl, weld::ComboBox&, void)
-{
-    sal_Int32  nPos = mxLBStart->get_active();
-    if (nPos != -1 && mxLBStart->get_value_changed_from_saved())
-    {
-        std::unique_ptr<XLineStartItem> pItem;
-        if( nPos == 0 )
-            pItem.reset(new XLineStartItem());
-        else if( mxLineEndList.is() && mxLineEndList->Count() > static_cast<long>( nPos - 1 ) )
-            pItem.reset(new XLineStartItem( mxLBStart->get_active_text(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
-        setLineStartStyle(pItem.get());
-    }
-}
-
-IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEndHdl, weld::ComboBox&, void)
-{
-    sal_Int32  nPos = mxLBEnd->get_active();
-    if (nPos != -1 && mxLBEnd->get_value_changed_from_saved())
-    {
-        std::unique_ptr<XLineEndItem> pItem;
-        if( nPos == 0 )
-            pItem.reset(new XLineEndItem());
-        else if( mxLineEndList.is() && mxLineEndList->Count() > static_cast<long>( nPos - 1 ) )
-            pItem.reset(new XLineEndItem( mxLBEnd->get_active_text(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
-        setLineEndStyle(pItem.get());
-    }
-}
-
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, weld::ComboBox&, void)
 {
     const sal_Int32 nPos(mxLBEdgeStyle->get_active());
@@ -617,35 +533,6 @@ void LinePropertyPanelBase::SetWidth(long nWidth)
     mxLineWidthPopup->SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
 }
 
-void  LinePropertyPanelBase::FillLineEndList()
-{
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-    if ( pSh && pSh->GetItem( SID_LINEEND_LIST ) )
-    {
-        mxLBStart->set_sensitive(true);
-        mxLBStart->clear();
-        mxLBEnd->clear();
-        mxLineEndList = pSh->GetItem( SID_LINEEND_LIST )->GetLineEndList();
-
-        if (mxLineEndList.is())
-        {
-            OUString sNone(SvxResId(RID_SVXSTR_NONE));
-            mxLBStart->append_text(sNone);
-            mxLBStart->Fill(mxLineEndList, true);
-            mxLBEnd->append_text(sNone);
-            mxLBEnd->Fill(mxLineEndList, false);
-        }
-
-        mxLBStart->set_active(0);
-        mxLBEnd->set_active(0);
-    }
-    else
-    {
-        mxLBStart->set_sensitive(false);
-        mxLBEnd->set_sensitive(false);
-    }
-}
-
 void  LinePropertyPanelBase::FillLineStyleList()
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -711,70 +598,6 @@ void LinePropertyPanelBase::SelectLineStyle()
     ActivateControls();
 }
 
-void LinePropertyPanelBase::SelectEndStyle(bool bStart)
-{
-    bool bSelected(false);
-
-    if(bStart)
-    {
-        if (!mpStartItem)
-        {
-            mxLBStart->set_active(-1);
-            mxLBStart->set_sensitive(false);
-            return;
-        }
-
-        if (mxLineEndList.is())
-        {
-            const basegfx::B2DPolyPolygon& rItemPolygon = mpStartItem->GetLineStartValue();
-            for(long a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
-            {
-                const XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
-                const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
-                if(rItemPolygon == rEntryPolygon)
-                {
-                    mxLBStart->set_active(a + 1);
-                    bSelected = true;
-                }
-            }
-        }
-
-        if(!bSelected)
-        {
-            mxLBStart->set_active( 0 );
-        }
-    }
-    else
-    {
-        if (!mpEndItem)
-        {
-            mxLBEnd->set_active(-1);
-            mxLBEnd->set_sensitive(false);
-            return;
-        }
-
-        if (mxLineEndList.is())
-        {
-            const basegfx::B2DPolyPolygon& rItemPolygon = mpEndItem->GetLineEndValue();
-            for(long a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
-            {
-                const XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
-                const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
-                if(rItemPolygon == rEntryPolygon)
-                {
-                    mxLBEnd->set_active(a + 1);
-                    bSelected = true;
-                }
-            }
-        }
-
-        if(!bSelected)
-        {
-            mxLBEnd->set_active( 0 );
-        }
-    }
-}
-
 void LinePropertyPanelBase::ActivateControls()
 {
     const sal_Int32 nPos(mxLBStyle->get_active());
@@ -782,8 +605,7 @@ void LinePropertyPanelBase::ActivateControls()
 
     mxGridLineProps->set_sensitive( bLineStyle );
     mxBoxArrowProps->set_sensitive( bLineStyle );
-    mxLBStart->set_sensitive( bLineStyle && mbArrowSupported );
-    mxLBEnd->set_sensitive( bLineStyle && mbArrowSupported );
+    mxArrowsTB->set_sensitive( bLineStyle && mbArrowSupported );
 }
 
 void LinePropertyPanelBase::setMapUnit(MapUnit eMapUnit)
