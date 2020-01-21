@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb9d698_df01eceb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-21T01:36:57Z",
+      "side": 1,
+      "message": "Please prefix the commit message with the bug number, in your case tdf#127687.",
+      "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "246cbce1_eb56ec19",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-21T01:36:57Z",
+      "side": 1,
+      "message": "Where does that constant come from?",
+      "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
