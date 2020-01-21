@@ -296,7 +296,7 @@ static constexpr sal_uInt16 gnCols = 2;
 SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
     , mxControl(pControl)
-    , mxLineEndSet(new SvtValueSet(nullptr))
+    , mxLineEndSet(new SvtValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineEndSet))
     , mnLines(12)
 {
