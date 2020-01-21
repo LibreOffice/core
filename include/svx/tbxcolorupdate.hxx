@@ -27,6 +27,8 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <svx/Palette.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
 class ToolBox;
@@ -121,6 +123,17 @@ namespace svx
         virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
         virtual vcl::ImageType GetImageSize() const override;
         virtual Size GetItemSize() const override;
+    };
+
+    class ToolboxButtonLineStyleUpdater
+    {
+    private:
+        css::drawing::LineStyle m_eXLS;
+        int m_nDashStyleIndex;
+    public:
+        ToolboxButtonLineStyleUpdater();
+        void Update(const css::frame::FeatureStateEvent& rEvent);
+        int GetStyleIndex() const;
     };
 }
 

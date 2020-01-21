@@ -19,41 +19,47 @@
 #ifndef INCLUDED_SVX_LINECTRL_HXX
 #define INCLUDED_SVX_LINECTRL_HXX
 
-
 #include <sfx2/tbxctrl.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
+
+namespace svx {
+    class ToolboxButtonLineStyleUpdater;
+}
 
 class XLineStyleItem;
 class XLineDashItem;
 
-
 // SvxLineStyleController:
-
-
-class SVX_DLLPUBLIC SvxLineStyleToolBoxControl final : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxLineStyleToolBoxControl final : public svt::PopupWindowController
 {
 private:
     std::unique_ptr<XLineStyleItem>  pStyleItem;
     std::unique_ptr<XLineDashItem>   pDashItem;
-
-    bool                bUpdate;
+    std::unique_ptr<svx::ToolboxButtonLineStyleUpdater> m_xBtnUpdater;
 
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
+    SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
-    SvxLineStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+
     virtual ~SvxLineStyleToolBoxControl() override;
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) override;
-    void                Update( const SfxPoolItem* pState );
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+private:
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 };
 
-
 // SvxLineWidthController:
-
 
 class SVX_DLLPUBLIC SvxLineWidthToolBoxControl final : public SfxToolBoxControl
 {

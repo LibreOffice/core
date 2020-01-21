@@ -146,7 +146,6 @@ void ScDLL::Init()
     // SvxToolboxController
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
     SvxFillToolBoxControl           ::RegisterControl(0, pMod);
-    SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );

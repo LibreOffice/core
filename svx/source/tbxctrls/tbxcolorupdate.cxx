@@ -17,9 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/objsh.hxx>
+#include <svx/drawitem.hxx>
 #include <svx/tbxcolorupdate.hxx>
 #include <svx/svxids.hrc>
+#include <svx/unomid.hxx>
 #include <svx/xdef.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlndsit.hxx>
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
@@ -275,6 +280,67 @@ namespace svx
         return Size(nWidth, nHeight);
     }
 
+    ToolboxButtonLineStyleUpdater::ToolboxButtonLineStyleUpdater()
+        : m_eXLS(css::drawing::LineStyle_NONE)
+        , m_nDashStyleIndex(-1)
+    {
+    }
+
+    void ToolboxButtonLineStyleUpdater::Update(const com::sun::star::frame::FeatureStateEvent& rEvent)
+    {
+        if (rEvent.FeatureURL.Complete == ".uno:LineDash")
+        {
+            m_nDashStyleIndex = -1;
+
+            SfxObjectShell* pSh = SfxObjectShell::Current();
+            if (!pSh)
+                return;
+            const SvxDashListItem* pItem = pSh->GetItem( SID_DASH_LIST );
+            if (!pItem)
+                return;
+
+            XLineDashItem aDashItem;
+            aDashItem.PutValue(rEvent.State, 0);
+            const XDash& rDash = aDashItem.GetDashValue();
+
+            XDashListRef xLineStyleList = pItem->GetDashList();
+            for (long i = 0; i < xLineStyleList->Count(); ++i)
+            {
+                const XDashEntry* pEntry = xLineStyleList->GetDash(i);
+                const XDash& rEntry = pEntry->GetDash();
+                if (rDash == rEntry)
+                {
+                    m_nDashStyleIndex = i;
+                    break;
+                }
+            }
+        }
+        else if (rEvent.FeatureURL.Complete == ".uno:XLineStyle")
+        {
+            XLineStyleItem aLineStyleItem;
+            aLineStyleItem.PutValue(rEvent.State, 0);
+
+            m_eXLS = aLineStyleItem.GetValue();
+        }
+    }
+
+    int ToolboxButtonLineStyleUpdater::GetStyleIndex() const
+    {
+        int nRet;
+        switch (m_eXLS)
+        {
+            case css::drawing::LineStyle_NONE:
+                nRet = 0;
+                break;
+            case css::drawing::LineStyle_SOLID:
+                nRet = 1;
+                break;
+            default:
+                nRet = m_nDashStyleIndex + 2;
+                break;
+        }
+        return nRet;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
