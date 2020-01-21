@@ -371,7 +371,7 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
 
 bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 {
-    return m_pImpl->m_bVisibleImpressView && !comphelper::LibreOfficeKit::isActive();
+    return m_pImpl->m_bVisibleImpressView;
 }
 
 void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
