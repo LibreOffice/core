@@ -1050,6 +1050,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
 SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "cui/ui/numberingoptionspage.ui", "NumberingOptionsPage", &rSet)
+    , m_pLevelHdlEvent(nullptr)
     , bLastWidthModified(false)
     , bModified(false)
     , bPreset(false)
@@ -1151,6 +1152,11 @@ void SvxNumOptionsTabPage::dispose()
     m_xBulColLB.reset();
     pActNum.reset();
     pSaveNum.reset();
+    if (m_pLevelHdlEvent)
+    {
+        Application::RemoveUserEvent(m_pLevelHdlEvent);
+        m_pLevelHdlEvent = nullptr;
+    }
     SfxTabPage::dispose();
 }
 
@@ -1194,6 +1200,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     {
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
+        m_xLevelLB->unselect_all();
         if (nActNumLvl == SAL_MAX_UINT16)
             m_xLevelLB->select(pActNum->GetLevelCount());
         if(nActNumLvl != SAL_MAX_UINT16)
@@ -1589,17 +1596,29 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType )
     m_xOrientLB->set_sensitive(bEnableBitmap);
 }
 
-IMPL_LINK(SvxNumOptionsTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, LevelHdl_Impl, weld::TreeView&, void)
 {
+    if (m_pLevelHdlEvent)
+        return;
+    // tdf#127112 (borrowing tdf#127120 solution) multiselection may be implemented by deselect follow by select so
+    // fire off the handler to happen on next event loop and only process the
+    // final state
+    m_pLevelHdlEvent = Application::PostUserEvent(LINK(this, SvxNumOptionsTabPage, LevelHdl));
+}
+
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, LevelHdl, void*, void)
+{
+    m_pLevelHdlEvent = nullptr;
+
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
-    auto aSelectedRows = rBox.get_selected_rows();
+    std::vector<int> aSelectedRows = m_xLevelLB->get_selected_rows();
     if (std::find(aSelectedRows.begin(), aSelectedRows.end(), pActNum->GetLevelCount()) != aSelectedRows.end() &&
         (aSelectedRows.size() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
-            rBox.unselect(i);
+             m_xLevelLB->unselect(i);
     }
     else if (!aSelectedRows.empty())
     {
@@ -1610,7 +1629,7 @@ IMPL_LINK(SvxNumOptionsTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        rBox.unselect(pActNum->GetLevelCount());
+        m_xLevelLB->unselect(pActNum->GetLevelCount());
     }
     else
     {
@@ -1620,7 +1639,7 @@ IMPL_LINK(SvxNumOptionsTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
         {
             if(nActNumLvl & nMask)
             {
-                rBox.select(i);
+                m_xLevelLB->select(i);
                 break;
             }
             nMask <<=1;
