@@ -50,6 +50,24 @@
       "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10f41887_a23186c4",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-01-21T19:33:48Z",
+      "side": 1,
+      "message": "I set it by inspection. It seems that the content of spinboxes (and also combos, see above) has no margin around it. That results in a bad rendering and also no border around some controls. So I added a bit of margin around the text (which is then scaled). I also checked on a non-highdpi screen and it looks ok.\nI don\u0027t like this approach, if you have a better idea please let me know.",
+      "parentUuid": "246cbce1_eb56ec19",
+      "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
