@@ -360,7 +360,8 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
 
 bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 {
-    return m_pImpl->m_bVisibleImpressView && !comphelper::LibreOfficeKit::isActive();
+    static const bool bRunningUnitTest = getenv("LO_TESTNAME");
+    return m_pImpl->m_bVisibleImpressView && (!bRunningUnitTest || !comphelper::LibreOfficeKit::isActive());
 }
 
 void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
