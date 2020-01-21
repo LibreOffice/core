@@ -1272,7 +1272,6 @@
 #define RID_SVXSTR_ZOOM_WHOLE_PAGE                          NC_("RID_SVXSTR_ZOOM_WHOLE_PAGE", "Entire Page")
 #define RID_SVXSTR_ZOOM_PAGE_WIDTH                          NC_("RID_SVXSTR_ZOOM_PAGE_WIDTH", "Page Width")
 #define RID_SVXSTR_ZOOM_OPTIMAL_VIEW                        NC_("RID_SVXSTR_ZOOM_OPTIMAL_VIEW", "Optimal View")
-#define RID_SIDEBAR_EMPTY_PANEL_TEXT                        NC_("RID_SIDEBAR_EMPTY_PANEL_TEXT", "Properties for the task that you are performing are not available for the current selection")
 
 #define RID_SVXSTR_SEARCH_STYLES                            NC_("RID_SVXSTR_SEARCH_STYLES", "Including Styles")
 #define RID_SVXSTR_WRITER_STYLES                            NC_("RID_SVXSTR_WRITER_STYLES", "Paragraph St~yles")

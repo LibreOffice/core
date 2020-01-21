@@ -19,10 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_EMPTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_EMPTYPANEL_HXX
 
-#include <vcl/window.hxx>
-#include <vcl/ctrl.hxx>
-#include <vcl/fixed.hxx>
-
+#include <svx/sidebar/PanelLayout.hxx>
 
 namespace svx { namespace sidebar {
 
@@ -30,18 +27,15 @@ namespace svx { namespace sidebar {
 /** Display a panel that tells the user that the current deck is
     intentionally empty.
 */
-class EmptyPanel
-    : public Control
+class EmptyPanel final : public PanelLayout
 {
 public:
     explicit EmptyPanel (vcl::Window* pParent);
     virtual ~EmptyPanel() override;
     virtual void dispose() override;
 
-    virtual void Resize() override;
-
 private:
-    VclPtr<FixedText> maMessageControl;
+    std::unique_ptr<weld::Label> mxMessageControl;
 };
 
 } } // end of namespace svx::sidebar
