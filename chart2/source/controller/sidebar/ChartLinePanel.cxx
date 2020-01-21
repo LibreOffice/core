@@ -19,6 +19,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/unomid.hxx>
 
+#include <svx/linectrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <sfx2/weldutils.hxx>
 #include <vcl/svapp.hxx>
@@ -31,9 +32,16 @@ namespace chart::sidebar {
 
 namespace {
 
-SvxColorToolBoxControl* getColorToolBoxControl(ToolbarUnoDispatcher& rToolBoxColor)
+SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(ToolbarUnoDispatcher& rToolBoxColor)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineColor");
+    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
+    SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
+    return pToolBoxLineStyleControl;
+}
+
+SvxColorToolBoxControl* getColorToolBoxControl(ToolbarUnoDispatcher& rToolBoxLineStyle)
+{
+    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxLineStyle.GetControllerForCommand(".uno:XLineColor");
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
     return pToolBoxColorControl;
 }
@@ -74,24 +82,6 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     }
 
     return xPropSet;
-}
-
-css::uno::Any getLineDash(
-        const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName)
-{
-    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
-    css::uno::Reference<css::container::XNameAccess> xNameAccess(
-            xFact->createInstance("com.sun.star.drawing.DashTable"),
-            css::uno::UNO_QUERY );
-    if(xNameAccess.is())
-    {
-        if (!xNameAccess->hasByName(rDashName))
-            return css::uno::Any();
-
-        return xNameAccess->getByName(rDashName);
-    }
-
-    return css::uno::Any();
 }
 
 class PreventUpdate
@@ -137,7 +127,8 @@ ChartLinePanel::ChartLinePanel(vcl::Window* pParent,
     mxSelectionListener(new ChartSidebarSelectionListener(this)),
     mbUpdate(true),
     mbModelValid(true),
-    maLineColorWrapper(mxModel, getColorToolBoxControl(*mxColorDispatch), "LineColor")
+    maLineColorWrapper(mxModel, getColorToolBoxControl(*mxColorDispatch), "LineColor"),
+    maLineStyleWrapper(mxModel, getLineStyleToolBoxControl(*mxLineStyleDispatch))
 {
     disableArrowHead();
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM,
@@ -177,6 +168,9 @@ void ChartLinePanel::Initialize()
     SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(*mxColorDispatch);
     pToolBoxColor->setColorSelectFunction(maLineColorWrapper);
 
+    SvxLineStyleToolBoxControl* pToolBoxLineStyle = getLineStyleToolBoxControl(*mxLineStyleDispatch);
+    pToolBoxLineStyle->setLineStyleSelectFunction(maLineStyleWrapper);
+
     setMapUnit(MapUnit::Map100thMM);
     updateData();
 }
@@ -196,19 +190,7 @@ void ChartLinePanel::updateData()
     XLineTransparenceItem aLineTransparenceItem(nLineTransparence);
     updateLineTransparence(false, true, &aLineTransparenceItem);
 
-    css::drawing::LineStyle eStyle = css::drawing::LineStyle_SOLID;
-    xPropSet->getPropertyValue("LineStyle") >>= eStyle;
-    XLineStyleItem aStyleItem(eStyle);
-    updateLineStyle(false, true, &aStyleItem);
-
-    css::uno::Any aLineDashName = xPropSet->getPropertyValue("LineDashName");
-    OUString aDashName;
-    aLineDashName >>= aDashName;
-    css::uno::Any aLineDash = getLineDash(mxModel, aDashName);
-    XLineDashItem aDashItem;
-    aDashItem.PutValue(aLineDash, MID_LINEDASH);
-    updateLineDash(false, true, &aDashItem);
-
+    maLineStyleWrapper.updateData();
     maLineColorWrapper.updateData();
 }
 
@@ -235,6 +217,7 @@ void ChartLinePanel::updateModel(
     mxModel = xModel;
     mbModelValid = true;
 
+    maLineStyleWrapper.updateModel(mxModel);
     maLineColorWrapper.updateModel(mxModel);
 
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
@@ -243,44 +226,6 @@ void ChartLinePanel::updateModel(
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener.get());
-}
-
-void ChartLinePanel::setLineStyle(const XLineStyleItem& rItem)
-{
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
-        getPropSet(mxModel);
-
-    if (!xPropSet.is())
-        return;
-
-    PreventUpdate aPreventUpdate(mbUpdate);
-    xPropSet->setPropertyValue("LineStyle", css::uno::Any(rItem.GetValue()));
-}
-
-void ChartLinePanel::setLineDash(const XLineDashItem& rItem)
-{
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
-        getPropSet(mxModel);
-
-    if (!xPropSet.is())
-        return;
-
-    PreventUpdate aPreventUpdate(mbUpdate);
-    css::uno::Any aAny;
-    rItem.QueryValue(aAny, MID_LINEDASH);
-    OUString aDashName = PropertyHelper::addLineDashUniqueNameToTable(aAny,
-            css::uno::Reference<css::lang::XMultiServiceFactory>(mxModel, css::uno::UNO_QUERY),
-            "");
-    xPropSet->setPropertyValue("LineDash", aAny);
-    xPropSet->setPropertyValue("LineDashName", css::uno::Any(aDashName));
-}
-
-void ChartLinePanel::setLineEndStyle(const XLineEndItem* /*pItem*/)
-{
-}
-
-void ChartLinePanel::setLineStartStyle(const XLineStartItem* /*pItem*/)
-{
 }
 
 void ChartLinePanel::setLineJoint(const XLineJointItem* pItem)
