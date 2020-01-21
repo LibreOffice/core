@@ -167,6 +167,8 @@ protected:
 
     static bool EqualGradients( css::awt::Gradient aGradient1, css::awt::Gradient aGradient2 );
 
+    void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
         : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ) {}

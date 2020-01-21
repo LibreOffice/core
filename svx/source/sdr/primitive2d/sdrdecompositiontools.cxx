@@ -31,6 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>
+#include <drawinglayer/primitive2d/glowprimitive2d.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/svdotext.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -43,6 +44,7 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <drawinglayer/attribute/sdrglowattribute.hxx>
 
 
 using namespace com::sun::star;
@@ -514,6 +516,25 @@ namespace drawinglayer::primitive2d
                 return rContent;
             }
         }
+
+        Primitive2DContainer createEmbeddedGlowPrimitive(
+            const Primitive2DContainer& rContent,
+            const attribute::SdrGlowAttribute& rGlow)
+        {
+            if(rContent.empty())
+                return rContent;
+            Primitive2DContainer aRetval(2);
+            const uno::Sequence< beans::PropertyValue > xViewParameters;
+            geometry::ViewInformation2D aViewInformation2D(xViewParameters);
+            aRetval[0] = Primitive2DReference(
+                new GlowPrimitive2D(
+                    rGlow.GetTransfMatrix(rContent.getB2DRange(aViewInformation2D)),
+                    rGlow.getColor(),
+                    rContent));
+            aRetval[1] = Primitive2DReference(new GroupPrimitive2D(rContent));
+            return aRetval;
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
