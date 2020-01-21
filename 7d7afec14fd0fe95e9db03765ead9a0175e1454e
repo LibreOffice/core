@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a101a8cb_5adf723d",
+        "filename": "svx/source/gallery2/galbrws2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-21T08:23:36Z",
+      "side": 1,
+      "message": "maPreviwSize -\u003e maPreviewSize",
+      "revId": "7d7afec14fd0fe95e9db03765ead9a0175e1454e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
