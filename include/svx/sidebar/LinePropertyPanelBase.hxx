@@ -45,14 +45,13 @@ namespace svx
 namespace sidebar
 {
 
+class DisableArrowsWrapper;
+
 class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
 public:
     virtual ~LinePropertyPanelBase() override;
     virtual void dispose() override;
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
 
     void SetWidth(long nWidth);
     void SetWidthIcon(int n);
@@ -67,27 +66,27 @@ public:
 
     virtual void setLineWidth(const XLineWidthItem& rItem) = 0;
 
+    void SetNoneLineStyle(bool bNoneLineStyle)
+    {
+        if (bNoneLineStyle != mbNoneLineStyle)
+        {
+            mbNoneLineStyle = bNoneLineStyle;
+            ActivateControls();
+        }
+    }
+
 protected:
 
-    virtual void setLineStyle(const XLineStyleItem& rItem) = 0;
-    virtual void setLineDash(const XLineDashItem& rItem) = 0;
-    virtual void setLineEndStyle(const XLineEndItem* pItem) = 0;
-    virtual void setLineStartStyle(const XLineStartItem* pItem) = 0;
+    void ActivateControls();
+
     virtual void setLineTransparency(const XLineTransparenceItem& rItem) = 0;
     virtual void setLineJoint(const XLineJointItem* pItem) = 0;
     virtual void setLineCap(const XLineCapItem* pItem) = 0;
 
-    void updateLineStyle(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
-    void updateLineDash(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineJoint(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     void updateLineCap(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
-
-    void FillLineStyleList();
-
-    void SelectLineStyle();
-    void ActivateControls();
 
     void setMapUnit(MapUnit eMapUnit);
 
@@ -99,15 +98,15 @@ protected:
     std::unique_ptr<weld::Toolbar> mxTBColor;
     std::unique_ptr<ToolbarUnoDispatcher> mxColorDispatch;
 
+    std::unique_ptr<weld::Toolbar> mxLineStyleTB;
+    std::unique_ptr<ToolbarUnoDispatcher> mxLineStyleDispatch;
+
 private:
     //ui controls
     std::unique_ptr<weld::Label> mxFTWidth;
     std::unique_ptr<weld::Toolbar> mxTBWidth;
-    std::unique_ptr<SvxLineLB> mxLBStyle;
     std::unique_ptr<weld::Label> mxFTTransparency;
     std::unique_ptr<weld::MetricSpinButton> mxMFTransparent;
-    std::unique_ptr<weld::Toolbar> mxArrowsTB;
-    std::unique_ptr<ToolbarUnoDispatcher> mxArrowsDispatch;
     std::unique_ptr<weld::Label> mxFTEdgeStyle;
     std::unique_ptr<weld::ComboBox> mxLBEdgeStyle;
     std::unique_ptr<weld::Label> mxFTCapStyle;
@@ -117,13 +116,11 @@ private:
     //popup windows
     std::unique_ptr<LineWidthPopup> mxLineWidthPopup;
 
-    std::unique_ptr<XLineStyleItem> mpStyleItem;
-    std::unique_ptr<XLineDashItem>  mpDashItem;
+    std::unique_ptr<DisableArrowsWrapper> mxDisableArrowsWrapper;
 
     sal_uInt16      mnTrans;
     MapUnit         meMapUnit;
     sal_Int32       mnWidthCoreValue;
-    XDashListRef    mxLineStyleList;
 
     // images from resource
     OUString maIMGNone;
@@ -133,6 +130,7 @@ private:
 
     bool                mbWidthValuable : 1;
     bool mbArrowSupported;
+    bool mbNoneLineStyle;
 
     void Initialize();
 

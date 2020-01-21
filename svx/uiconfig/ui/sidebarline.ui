@@ -7,18 +7,6 @@
     <property name="step_increment">10</property>
     <property name="page_increment">20</property>
   </object>
-  <object class="GtkListStore" id="liststore5">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
-    </columns>
-  </object>
   <object class="GtkGrid" id="LinePropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -42,33 +30,13 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">3</property>
                 <child>
-                  <object class="GtkComboBox" id="linestyle">
-                    <property name="width_request">105</property>
+                  <object class="GtkLabel" id="linelabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the line.</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="model">liststore5</property>
-                    <property name="entry_text_column">0</property>
-                    <property name="id_column">1</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext7"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
-                      <attributes>
-                        <attribute name="surface">3</attribute>
-                      </attributes>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="linestyle-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarline|linestyle-atkobject">Style</property>
-                      </object>
-                    </child>
+                    <property name="label" translatable="yes" context="sidebarline|widthlabel">_Line:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">linestyle</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -77,18 +45,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolbar" id="arrowheads">
+                  <object class="GtkToolbar" id="linestyle">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes" context="sidebarline|arrowheads|tooltip_text">Select the style of the arrowheads.</property>
                     <property name="toolbar_style">icons</property>
                     <property name="show_arrow">False</property>
                     <property name="icon_size">2</property>
                     <child>
-                      <object class="GtkMenuToolButton" id=".uno:LineEndStyle">
+                      <object class="GtkMenuToolButton" id=".uno:XLineStyle">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes" context="sidebarline|arrowheads|tooltip_text">Select the style of the arrowheads.</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the line.</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -96,10 +63,17 @@
                         <property name="homogeneous">False</property>
                       </packing>
                     </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="arrowheads-atkobject">
-                        <property name="AtkObject::accessible-name" context="sidebarline|arrowheads-atkobject" translatable="yes">Arrow Styles</property>
+                    <child>
+                      <object class="GtkMenuToolButton" id=".uno:LineEndStyle">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarline|linestyle|tooltip_text">Select the style of the arrowheads.</property>
+                        <property name="use_underline">True</property>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -359,5 +333,25 @@
       <widget name="width"/>
       <widget name="color"/>
     </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="linelabel"/>
+      <widget name="widthlabel"/>
+      <widget name="colorlabel"/>
+      <widget name="translabel"/>
+    </widgets>
+  </object>
+  <object class="GtkListStore" id="liststore5">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
   </object>
 </interface>

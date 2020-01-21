@@ -32,6 +32,7 @@
 #include <svx/xtable.hxx>
 #include <svx/xdash.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/linectrl.hxx>
 #include <svx/svxitems.hrc>
 #include <svtools/valueset.hxx>
 #include <unotools/pathoptions.hxx>
@@ -55,19 +56,53 @@ const char SELECTWIDTH[] = "SelectWidth";
 
 namespace svx::sidebar {
 
+// trigger disabling the arrows if the none line style is selected
+class DisableArrowsWrapper
+{
+private:
+    LinePropertyPanelBase& m_rPanel;
+
+public:
+    DisableArrowsWrapper(LinePropertyPanelBase& rPanel)
+        : m_rPanel(rPanel)
+    {
+    }
+
+    bool operator()(const OUString& rCommand, const css::uno::Any& rValue)
+    {
+        if (rCommand == ".uno:XLineStyle")
+        {
+            css::drawing::LineStyle eLineStyle(css::drawing::LineStyle_NONE);
+            rValue >>= eLineStyle;
+            m_rPanel.SetNoneLineStyle(eLineStyle == css::drawing::LineStyle_NONE);
+        }
+        return false;
+    }
+};
+
+namespace
+{
+    SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(ToolbarUnoDispatcher& rToolBoxColor)
+    {
+        css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
+        SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
+        return pToolBoxLineStyleControl;
+    }
+}
+
+
 LinePropertyPanelBase::LinePropertyPanelBase(
     vcl::Window* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame)
 :   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame, true),
     mxTBColor(m_xBuilder->weld_toolbar("color")),
     mxColorDispatch(new ToolbarUnoDispatcher(*mxTBColor, rxFrame)),
+    mxLineStyleTB(m_xBuilder->weld_toolbar("linestyle")),
+    mxLineStyleDispatch(new ToolbarUnoDispatcher(*mxLineStyleTB, rxFrame)),
     mxFTWidth(m_xBuilder->weld_label("widthlabel")),
     mxTBWidth(m_xBuilder->weld_toolbar("width")),
-    mxLBStyle(new SvxLineLB(m_xBuilder->weld_combo_box("linestyle"))),
     mxFTTransparency(m_xBuilder->weld_label("translabel")),
     mxMFTransparent(m_xBuilder->weld_metric_spin_button("linetransparency", FieldUnit::PERCENT)),
-    mxArrowsTB(m_xBuilder->weld_toolbar("arrowheads")),
-    mxArrowsDispatch(new ToolbarUnoDispatcher(*mxArrowsTB, rxFrame)),
     mxFTEdgeStyle(m_xBuilder->weld_label("cornerlabel")),
     mxLBEdgeStyle(m_xBuilder->weld_combo_box("edgestyle")),
     mxFTCapStyle(m_xBuilder->weld_label("caplabel")),
@@ -75,14 +110,14 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mxGridLineProps(m_xBuilder->weld_widget("lineproperties")),
     mxBoxArrowProps(m_xBuilder->weld_widget("arrowproperties")),
     mxLineWidthPopup(new LineWidthPopup(mxTBWidth.get(), *this)),
-    mpStyleItem(),
-    mpDashItem(),
+    mxDisableArrowsWrapper(new DisableArrowsWrapper(*this)),
     mnTrans(0),
     meMapUnit(MapUnit::MapMM),
     mnWidthCoreValue(0),
     maIMGNone(BMP_NONE_ICON),
     mbWidthValuable(true),
-    mbArrowSupported(true)
+    mbArrowSupported(true),
+    mbNoneLineStyle(false)
 {
     Initialize();
 }
@@ -99,11 +134,10 @@ void LinePropertyPanelBase::dispose()
     mxTBWidth.reset();
     mxColorDispatch.reset();
     mxTBColor.reset();
-    mxLBStyle.reset();
     mxFTTransparency.reset();
     mxMFTransparent.reset();
-    mxArrowsDispatch.reset();
-    mxArrowsTB.reset();
+    mxLineStyleDispatch.reset();
+    mxLineStyleTB.reset();
     mxFTEdgeStyle.reset();
     mxLBEdgeStyle.reset();
     mxFTCapStyle.reset();
@@ -127,10 +161,6 @@ void LinePropertyPanelBase::Initialize()
     maIMGWidthIcon[6] = BMP_WIDTH7_ICON;
     maIMGWidthIcon[7] = BMP_WIDTH8_ICON;
 
-    FillLineStyleList();
-    SelectLineStyle();
-    mxLBStyle->connect_changed( LINK( this, LinePropertyPanelBase, ChangeLineStyleHdl ) );
-
     mxTBWidth->set_item_icon_name(SELECTWIDTH, maIMGWidthIcon[0]);
     mxTBWidth->connect_clicked(LINK(this, LinePropertyPanelBase, ToolboxWidthSelectHdl));
 
@@ -139,62 +169,9 @@ void LinePropertyPanelBase::Initialize()
     mxLBEdgeStyle->connect_changed( LINK( this, LinePropertyPanelBase, ChangeEdgeStyleHdl ) );
 
     mxLBCapStyle->connect_changed( LINK( this, LinePropertyPanelBase, ChangeCapStyleHdl ) );
-}
 
-void LinePropertyPanelBase::DataChanged(const DataChangedEvent& /*rEvent*/)
-{
-}
-
-void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)
-{
-    if(bDisabled)
-    {
-        mxLBStyle->set_sensitive(false);
-    }
-    else
-    {
-        mxLBStyle->set_sensitive(true);
-    }
-
-    if(bSetOrDefault)
-    {
-        if(pItem)
-        {
-            mpStyleItem.reset(static_cast<XLineStyleItem*>(pItem->Clone()));
-        }
-    }
-    else
-    {
-        mpStyleItem.reset();
-    }
-
-    SelectLineStyle();
-}
-
-void LinePropertyPanelBase::updateLineDash(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)
-{
-    if(bDisabled)
-    {
-        mxLBStyle->set_sensitive(false);
-    }
-    else
-    {
-        mxLBStyle->set_sensitive(true);
-    }
-
-    if(bSetOrDefault)
-    {
-        if(pItem)
-        {
-            mpDashItem.reset(static_cast<XLineDashItem*>(pItem->Clone()));
-        }
-    }
-    else
-    {
-        mpDashItem.reset();
-    }
-
-    SelectLineStyle();
+    SvxLineStyleToolBoxControl* pLineStyleControl = getLineStyleToolBoxControl(*mxLineStyleDispatch);
+    pLineStyleControl->setLineStyleSelectFunction(*mxDisableArrowsWrapper);
 }
 
 void LinePropertyPanelBase::updateLineTransparence(bool bDisabled, bool bSetOrDefault,
@@ -366,44 +343,6 @@ void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
     mxLBCapStyle->set_active(-1);
 }
 
-IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeLineStyleHdl, weld::ComboBox&, void)
-{
-    const sal_Int32 nPos(mxLBStyle->get_active());
-
-    if (nPos != -1 && mxLBStyle->get_value_changed_from_saved())
-    {
-        if(0 == nPos)
-        {
-            // drawing::LineStyle_NONE
-            const XLineStyleItem aItem(drawing::LineStyle_NONE);
-
-            setLineStyle(aItem);
-        }
-        else if(1 == nPos)
-        {
-            // drawing::LineStyle_SOLID
-            const XLineStyleItem aItem(drawing::LineStyle_SOLID);
-
-            setLineStyle(aItem);
-        }
-        else if (mxLineStyleList.is() && mxLineStyleList->Count() > static_cast<long>(nPos - 2))
-        {
-            // drawing::LineStyle_DASH
-            const XLineStyleItem aItemA(drawing::LineStyle_DASH);
-            const XDashEntry* pDashEntry = mxLineStyleList->GetDash(nPos - 2);
-            OSL_ENSURE(pDashEntry, "OOps, got empty XDash from XDashList (!)");
-            const XLineDashItem aItemB(
-                pDashEntry ? pDashEntry->GetName() : OUString(),
-                pDashEntry ? pDashEntry->GetDash() : XDash());
-
-            setLineStyle(aItemA);
-            setLineDash(aItemB);
-        }
-    }
-
-    ActivateControls();
-}
-
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, weld::ComboBox&, void)
 {
     const sal_Int32 nPos(mxLBEdgeStyle->get_active());
@@ -533,79 +472,12 @@ void LinePropertyPanelBase::SetWidth(long nWidth)
     mxLineWidthPopup->SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
 }
 
-void  LinePropertyPanelBase::FillLineStyleList()
-{
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-    if ( pSh && pSh->GetItem( SID_DASH_LIST ) )
-    {
-        mxLBStyle->set_sensitive(true);
-        mxLineStyleList = pSh->GetItem( SID_DASH_LIST )->GetDashList();
-
-        if (mxLineStyleList.is())
-        {
-            mxLBStyle->Fill(mxLineStyleList);
-        }
-
-        mxLBStyle->set_active(0);
-    }
-    else
-    {
-        mxLBStyle->set_sensitive(false);
-    }
-}
-
-void LinePropertyPanelBase::SelectLineStyle()
-{
-    if (!mpStyleItem || !mpDashItem)
-    {
-        mxLBStyle->set_active(-1);
-        mxLBStyle->set_sensitive(false);
-        return;
-    }
-
-    const drawing::LineStyle eXLS(mpStyleItem->GetValue());
-    bool bSelected(false);
-
-    switch(eXLS)
-    {
-        case drawing::LineStyle_NONE:
-            break;
-        case drawing::LineStyle_SOLID:
-            mxLBStyle->set_active(1);
-            bSelected = true;
-            break;
-        default:
-            if(mxLineStyleList.is())
-            {
-                const XDash& rDash = mpDashItem->GetDashValue();
-                for(long a(0);!bSelected &&  a < mxLineStyleList->Count(); a++)
-                {
-                    const XDashEntry* pEntry = mxLineStyleList->GetDash(a);
-                    const XDash& rEntry = pEntry->GetDash();
-                    if(rDash == rEntry)
-                    {
-                        mxLBStyle->set_active(a + 2);
-                        bSelected = true;
-                    }
-                }
-            }
-            break;
-    }
-
-    if(!bSelected)
-        mxLBStyle->set_active( 0 );
-
-    ActivateControls();
-}
-
 void LinePropertyPanelBase::ActivateControls()
 {
-    const sal_Int32 nPos(mxLBStyle->get_active());
-    bool bLineStyle( nPos != 0 );
-
-    mxGridLineProps->set_sensitive( bLineStyle );
-    mxBoxArrowProps->set_sensitive( bLineStyle );
-    mxArrowsTB->set_sensitive( bLineStyle && mbArrowSupported );
+    mxGridLineProps->set_sensitive(mbNoneLineStyle);
+    mxBoxArrowProps->set_sensitive(mbNoneLineStyle);
+    mxLineStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
+    mxLineStyleTB->set_item_sensitive(".uno:LineEndStyle", !mbNoneLineStyle);
 }
 
 void LinePropertyPanelBase::setMapUnit(MapUnit eMapUnit)

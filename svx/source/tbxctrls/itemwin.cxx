@@ -34,8 +34,6 @@
 
 #include <svx/svxids.hrc>
 
-#define DELAY_TIMEOUT           100
-
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlineit0.hxx>
@@ -47,6 +45,7 @@
 #include <svx/linectrl.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/unitconv.hxx>
+#include <svtools/valueset.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -55,231 +54,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-
-SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
-    ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL),
-    nCurPos     ( 0 ),
-    aLogicalSize(40,140),
-    bRelease    ( true ),
-    mpSh        ( nullptr ),
-    mxFrame     ( rFrame )
-{
-    SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
-    Show();
-
-    aDelayTimer.SetTimeout( DELAY_TIMEOUT );
-    aDelayTimer.SetInvokeHandler( LINK( this, SvxLineBox, DelayHdl_Impl ) );
-    aDelayTimer.Start();
-}
-
-
-// Fills the listbox (provisional) with strings
-
-void SvxLineBox::Fill( const XDashListRef &pList )
-{
-    Clear();
-
-    if( !pList.is() )
-        return;
-
-    // entry for 'none'
-    InsertEntry(pList->GetStringForUiNoLine());
-
-    // entry for solid line
-    InsertEntry(pList->GetStringForUiSolidLine(),
-            Image(pList->GetBitmapForUISolidLine()));
-
-    // entries for dashed lines
-
-    long nCount = pList->Count();
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XDashEntry* pEntry = pList->GetDash(i);
-        const BitmapEx aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-        {
-            InsertEntry(pEntry->GetName(), Image(aBitmap));
-        }
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
-IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl, Timer *, void)
-{
-    if ( GetEntryCount() == 0 )
-    {
-        mpSh = SfxObjectShell::Current();
-        FillControl();
-    }
-}
-
-
-void SvxLineBox::Select()
-{
-    // Call the parent's Select() member to trigger accessibility events.
-    ListBox::Select();
-
-    if ( IsTravelSelect() )
-        return;
-
-    drawing::LineStyle eXLS;
-    sal_Int32 nPos = GetSelectedEntryPos();
-
-    switch ( nPos )
-    {
-        case 0:
-            eXLS = drawing::LineStyle_NONE;
-            break;
-
-        case 1:
-            eXLS = drawing::LineStyle_SOLID;
-            break;
-
-        default:
-        {
-            eXLS = drawing::LineStyle_DASH;
-
-            if ( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                 SfxObjectShell::Current()  &&
-                 SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
-            {
-                // LineDashItem will only be sent if it also has a dash.
-                // Notify cares!
-                SvxDashListItem const * pItem = SfxObjectShell::Current()->GetItem( SID_DASH_LIST );
-                XLineDashItem aLineDashItem( GetSelectedEntry(),
-                    pItem->GetDashList()->GetDash( nPos - 2 )->GetDash() );
-
-                Any a;
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = "LineDash";
-                aLineDashItem.QueryValue ( a );
-                aArgs[0].Value = a;
-                SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                             ".uno:LineDash",
-                                             aArgs );
-            }
-        }
-        break;
-    }
-
-    XLineStyleItem aLineStyleItem( eXLS );
-    Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "XLineStyle";
-    aLineStyleItem.QueryValue ( a );
-    aArgs[0].Value = a;
-    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 ".uno:XLineStyle",
-                                 aArgs );
-
-    nCurPos = GetSelectedEntryPos();
-    ReleaseFocus_Impl();
-}
-
-
-bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
-{
-    MouseNotifyEvent nType = rNEvt.GetType();
-
-    switch(nType)
-    {
-        case MouseNotifyEvent::MOUSEBUTTONDOWN:
-        case MouseNotifyEvent::GETFOCUS:
-            nCurPos = GetSelectedEntryPos();
-        break;
-        case MouseNotifyEvent::LOSEFOCUS:
-            SelectEntryPos(nCurPos);
-        break;
-        case MouseNotifyEvent::KEYINPUT:
-        {
-            const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-            if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
-            {
-                bRelease = false;
-                Select();
-            }
-        }
-        break;
-        default:
-        break;
-    }
-    return ListBox::PreNotify( rNEvt );
-}
-
-
-bool SvxLineBox::EventNotify( NotifyEvent& rNEvt )
-{
-    bool bHandled = ListBox::EventNotify( rNEvt );
-
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-        switch ( pKEvt->GetKeyCode().GetCode() )
-        {
-            case KEY_RETURN:
-                Select();
-                bHandled = true;
-                break;
-
-            case KEY_ESCAPE:
-                SelectEntryPos( nCurPos );
-                ReleaseFocus_Impl();
-                bHandled = true;
-                break;
-        }
-    }
-    return bHandled;
-}
-
-
-void SvxLineBox::ReleaseFocus_Impl()
-{
-    if(!bRelease)
-    {
-        bRelease = true;
-        return;
-    }
-
-    if( SfxViewShell::Current() )
-    {
-        vcl::Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
-}
-
-void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
-    }
-
-    ListBox::DataChanged( rDCEvt );
-}
-
-void SvxLineBox::FillControl()
-{
-    // FillStyles();
-    if ( !mpSh )
-        mpSh = SfxObjectShell::Current();
-
-    if( mpSh )
-    {
-        const SvxDashListItem* pItem = mpSh->GetItem( SID_DASH_LIST );
-        if ( pItem )
-            Fill( pItem->GetDashList() );
-    }
-}
 
 SvxMetricField::SvxMetricField(
     vcl::Window* pParent, const Reference< XFrame >& rFrame )
@@ -303,7 +77,6 @@ SvxMetricField::SvxMetricField(
     Show();
 }
 
-
 void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
     if ( pItem )
@@ -314,7 +87,6 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
     else
         SetText( "" );
 }
-
 
 void SvxMetricField::Modify()
 {
@@ -331,7 +103,6 @@ void SvxMetricField::Modify()
                                  ".uno:LineWidth",
                                  aArgs );
 }
-
 
 void SvxMetricField::ReleaseFocus_Impl()
 {
