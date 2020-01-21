@@ -24,23 +24,32 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-#include <memory>
+#include <vector>
 
 struct XMLDocumentSettingsContext_Data;
 
 class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext final : public SvXMLImportContext
 {
-    ::std::unique_ptr< XMLDocumentSettingsContext_Data >  m_pData;
+    struct SettingsGroup
+    {
+        OUString        sGroupName;
+        css::uno::Any   aSettings;
+    };
+    css::uno::Any                   maViewProps;
+    css::uno::Any                   maConfigProps;
+    ::std::vector< SettingsGroup >  maDocSpecificSettings;
 
 public:
-    XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
+    XMLDocumentSettingsContext(SvXMLImport& rImport);
     virtual ~XMLDocumentSettingsContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
     XMLDocumentSettingsContext( const XMLDocumentSettingsContext& ) = delete;

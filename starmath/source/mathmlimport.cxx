@@ -1914,40 +1914,23 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 /*nElement*/ ) override {}
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
 
-SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList)
+uno::Reference< xml::sax::XFastContextHandler > SmXMLOfficeContext_Impl::createFastChildContext(sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > &/*xAttrList*/)
 {
-    SvXMLImportContext *pContext = nullptr;
-    if ( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName == GetXMLToken(XML_META) )
+    if ( nElement == XML_ELEMENT(OFFICE, XML_META) )
     {
         SAL_WARN("starmath", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
     }
-    else if ( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName == GetXMLToken(XML_SETTINGS) )
+    else if ( nElement == XML_ELEMENT(OFFICE, XML_SETTINGS) )
     {
-        pContext = new XMLDocumentSettingsContext( GetImport(),
-                                    XML_NAMESPACE_OFFICE, rLocalName,
-                                    xAttrList );
+        return new XMLDocumentSettingsContext( GetImport() );
     }
-
-    return pContext;
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SmXMLOfficeContext_Impl::createFastChildContext(sal_Int32 /*nElement*/,
-        const uno::Reference< xml::sax::XFastAttributeList > &/*xAttrList*/)
-{
     return nullptr;
 }
 

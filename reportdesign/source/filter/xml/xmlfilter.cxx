@@ -599,18 +599,11 @@ public:
                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
-        return nullptr;
-    }
-
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
-           const OUString& rLocalName,
-           const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
-    {
-        if (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken(rLocalName, XML_SETTINGS))
+        if (nElement == XML_ELEMENT(OFFICE, XML_SETTINGS))
         {
-            return new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList);
+            return new XMLDocumentSettingsContext(GetImport());
         }
         return nullptr;
     }
