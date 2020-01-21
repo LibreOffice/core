@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "61500ccb_2edad013",
+        "filename": "include/vcl/salnativewidgets.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-21T13:04:17Z",
+      "side": 1,
+      "message": "I\u0027m not sure this \"forwarding\" is really needed. LO and the used Qt style are normally synced, so using the default font should work. Maybe applying the scale factor is needed there too?\n\nOr this whole font handling can be dropped from getNativeControlRegion, as that should already contain the height of the text LO wants to paint and this should just add some \"border\" for the widget styling. This is very old code, which was just ported from the old KDE3 codebase. Never checked that.",
+      "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "246cbce1_eb56ec19",
         "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
         "patchSetId": 10
