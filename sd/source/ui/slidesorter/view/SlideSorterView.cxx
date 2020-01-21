@@ -558,7 +558,7 @@ static const size_t gFrameTimeCount (10);
 static size_t gFrameTimeIndex (0);
 static ::std::vector<double> gFrameTimes (gFrameTimeCount, 0);
 static double gFrameTimeSum (0);
-static const Rectangle gFrameTimeBox (10,10,150,20);
+static const ::tools::Rectangle gFrameTimeBox (10,10,150,20);
 static double gnLastFrameStart = 0;
 #endif
 
@@ -570,9 +570,7 @@ void SlideSorterView::CompleteRedraw (
     (void)pRedirector;
 #ifdef DEBUG_TIMING
     const double nStartTime (gaTimer.getElapsedTime());
-    SAL_INFO("sd",("SlideSorterView::CompleteRedraw start at %f, %s",
-        nStartTime,
-        mnLockRedrawSmph ? "locked" : "");
+    SAL_INFO("sd.timing", "SlideSorterView::CompleteRedraw start" << (mnLockRedrawSmph ? " locked" : ""));
 #endif
 
     if (pDevice == nullptr || pDevice!=mrSlideSorter.GetContentWindow())
@@ -597,16 +595,16 @@ void SlideSorterView::CompleteRedraw (
 
 #ifdef DEBUG_TIMING
     const double nEndTime (gaTimer.getElapsedTime());
-    SAL_INFO("sd",("SlideSorterView::CompleteRedraw end at %f after %fms", nEndTime, (nEndTime-nStartTime)*1000);
+    SAL_INFO("sd.timing", "SlideSorterView::CompleteRedraw end after " << (nEndTime-nStartTime)*1000 << " ms");
     gFrameTimeSum -= gFrameTimes[gFrameTimeIndex];
     gFrameTimes[gFrameTimeIndex] = nStartTime - gnLastFrameStart;
     gnLastFrameStart = nStartTime;
     gFrameTimeSum += gFrameTimes[gFrameTimeIndex];
     gFrameTimeIndex = (gFrameTimeIndex+1) % gFrameTimeCount;
 
-    mrSlideSorter.GetContentWindow()->SetFillCOL_BLUE);
+    mrSlideSorter.GetContentWindow()->SetFillColor(COL_BLUE);
     mrSlideSorter.GetContentWindow()->DrawRect(gFrameTimeBox);
-    mrSlideSorter.GetContentWindow()->SetTextCOL_WHITE);
+    mrSlideSorter.GetContentWindow()->SetTextColor(COL_WHITE);
     mrSlideSorter.GetContentWindow()->DrawText(
         gFrameTimeBox,
         OUString::number(1 / (gFrameTimeSum / gFrameTimeCount)),
