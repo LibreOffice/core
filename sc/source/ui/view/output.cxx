@@ -1958,10 +1958,11 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
 
         if (bTop && bBottom && bLeft && bRight)
         {
-            aResult = ReferenceMark( nMinX / mnPPTX * double( aZoomX ),
-                                     nMinY / mnPPTY * double( aZoomY ),
-                                     ( nMaxX - nMinX ) / mnPPTX * double( aZoomX ),
-                                     ( nMaxY - nMinY ) / mnPPTY * double( aZoomY ),
+            // mnPPT[XY] already has the factor aZoom[XY] in it.
+            aResult = ReferenceMark( nMinX / mnPPTX,
+                                     nMinY / mnPPTY,
+                                     ( nMaxX - nMinX ) / mnPPTX,
+                                     ( nMaxY - nMinY ) / mnPPTY,
                                      nTab,
                                      rColor );
         }
