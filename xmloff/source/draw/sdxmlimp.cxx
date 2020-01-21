@@ -129,14 +129,6 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
             xContext = GetSdImport().CreateFontDeclsContext( rLocalName, xAttrList );
             break;
         }
-        case XML_TOK_DOC_SETTINGS:
-        {
-            if( GetImport().getImportFlags() & SvXMLImportFlags::SETTINGS )
-            {
-                xContext = new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList );
-            }
-            break;
-        }
         case XML_TOK_DOC_STYLES:
         {
             if( GetImport().getImportFlags() & SvXMLImportFlags::STYLES )
@@ -194,6 +186,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
             {
                 // office:body inside office:document
                 return new SdXMLBodyContext_Impl(GetSdImport());
+            }
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_SETTINGS):
+        {
+            if( GetImport().getImportFlags() & SvXMLImportFlags::SETTINGS )
+            {
+                return new XMLDocumentSettingsContext(GetImport());
             }
             break;
         }
