@@ -476,32 +476,6 @@ uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveT
             xRegressionCurve->getEquationProperties());
 }
 
-uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
-    const Reference< XRegressionCurveContainer > & xRegCnt )
-{
-    if( !xRegCnt.is())
-        return nullptr;
-
-    try
-    {
-        uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-            xRegCnt->getRegressionCurves());
-        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
-        {
-            if( ! isMeanValueLine( aCurves[i] ))
-            {
-                return aCurves[ i ];
-            }
-        }
-    }
-    catch( const Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return nullptr;
-}
-
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionCurveAtIndex(
     const Reference< XRegressionCurveContainer >& xCurveContainer,
     sal_Int32 aIndex )

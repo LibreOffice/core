@@ -520,7 +520,7 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
             ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
-        xRegCurve.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
+        xRegCurve.set( RegressionCurveHelper::getAllCurveNotMeanValueLine( xDiagram )[0]);
     }
     if( xRegCurve.is())
     {

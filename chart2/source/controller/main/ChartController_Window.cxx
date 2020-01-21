@@ -1037,8 +1037,11 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     bool bIsPoint = ( eObjectType == OBJECTTYPE_DATA_POINT );
                     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
                     uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-                    Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
-                    bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
+                    std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
+                    RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
+                    bool bHasEquation = false;
+                    for( const auto& xCurve : aRegressionCurves )
+                        bHasEquation = bHasEquation || RegressionCurveHelper::hasEquation( xCurve );
                     Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );
                     bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );

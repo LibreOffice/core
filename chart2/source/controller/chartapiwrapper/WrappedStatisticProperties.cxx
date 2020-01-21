@@ -906,7 +906,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
     {
         case PROPERTY_SET_TYPE_REGRESSION:
             if( xRegCnt.is() )
-                xResult.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ), uno::UNO_QUERY );
+                xResult.set( RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram )[0], uno::UNO_QUERY );
             break;
         case PROPERTY_SET_TYPE_ERROR_BAR:
             if( xSeriesPropertySet.is())
