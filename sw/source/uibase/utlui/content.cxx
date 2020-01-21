@@ -1325,6 +1325,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
                 bOutline = true;
                 lcl_InsertExpandCollapseAllItem(this, pEntry, pPop);
                 pPop->InsertSeparator();
+                pPop->InsertItem(805, SwResId(STR_SELECT_CHAPTER));
                 pPop->InsertItem(501, SwResId(STR_DELETE_CHAPTER));
                 pPop->InsertItem(801, SwResId(STR_PROMOTE_CHAPTER));
                 pPop->InsertItem(802, SwResId(STR_DEMOTE_CHAPTER));
@@ -3321,6 +3322,21 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case 804:
             ExecCommand("demote", true);
             break;
+        case 805:
+        {
+            m_pActiveShell->EnterAddMode();
+            SvTreeListEntry* pEntry = pFirst;
+            while (pEntry)
+            {
+                m_pActiveShell->SttSelect();
+                SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                m_pActiveShell->MakeOutlineSel(nActPos, nActPos, false, false);
+                pEntry = NextSelected(pEntry);
+                m_pActiveShell->EndSelect();
+            }
+            m_pActiveShell->LeaveAddMode();
+        }
+        break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)

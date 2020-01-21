@@ -640,6 +640,7 @@
 #define STR_OUTLINE_LEVEL                       NC_("STR_OUTLINE_LEVEL", "Outline Level")
 #define STR_DRAGMODE                            NC_("STR_DRAGMODE", "Drag Mode")
 #define STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY     NC_("STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY", "Send Outline to Clipboard")
+#define STR_SELECT_CHAPTER                      NC_("STR_SELECT_CHAPTER", "Select Chapter")
 #define STR_DELETE_CHAPTER                      NC_("STR_DELETE_CHAPTER", "Delete Chapter")
 #define STR_DEMOTE_CHAPTER                      NC_("STR_DEMOTE_CHAPTER", "Demote Chapter")
 #define STR_PROMOTE_CHAPTER                     NC_("STR_PROMOTE_CHAPTER", "Promote Chapter")
