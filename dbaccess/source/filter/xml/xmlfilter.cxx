@@ -426,33 +426,23 @@ public:
     {
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
-        SvXMLImportContext *pContext = nullptr;
-
         ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
-        const SvXMLTokenMap& rTokenMap = rImport.GetDocContentElemTokenMap();
-        switch (rTokenMap.Get(nPrefix, rLocalName))
+        switch (nElement)
         {
-            case XML_TOK_CONTENT_STYLES:
+            case XML_ELEMENT(OFFICE, XML_STYLES):
+            case XML_ELEMENT(OOO, XML_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, false);
+                return rImport.CreateStylesContext(false);
                 break;
-            case XML_TOK_CONTENT_AUTOSTYLES:
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+            case XML_ELEMENT(OOO, XML_AUTOMATIC_STYLES):
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
-                break;
-            default:
+                return rImport.CreateStylesContext(true);
                 break;
         }
-
-        return pContext;
-    }
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
-    {
         return nullptr;
     }
 };
@@ -492,28 +482,9 @@ public:
     {
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
-    {
-        SvXMLImportContext *pContext = nullptr;
-
-        ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
-        const SvXMLTokenMap& rTokenMap = rImport.GetDocContentElemTokenMap();
-        switch (rTokenMap.Get(nPrefix, rLocalName))
-        {
-            case XML_TOK_CONTENT_AUTOSTYLES:
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateStylesContext(nPrefix, rLocalName, xAttrList, true);
-                break;
-            default:
-                break;
-        }
-
-        return pContext;
-    }
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
@@ -526,6 +497,11 @@ public:
                 break;
             case XML_ELEMENT(OFFICE, XML_SCRIPTS):
                 return new XMLScriptContext(GetImport(), rImport.GetModel());
+                break;
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+            case XML_ELEMENT(OOO, XML_AUTOMATIC_STYLES):
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                return rImport.CreateStylesContext(true);
                 break;
             default: break;
         }
@@ -634,10 +610,9 @@ const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
 
 
 
-SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUString& rLocalName,
-                                     const uno::Reference< XAttributeList>& xAttrList, bool bIsAutoStyle )
+SvXMLImportContext* ODBFilter::CreateStylesContext( bool bIsAutoStyle )
 {
-    SvXMLImportContext *pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
+    SvXMLImportContext *pContext = new OTableStylesContext(*this, bIsAutoStyle);
     if (bIsAutoStyle)
         SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
     else

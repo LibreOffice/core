@@ -84,26 +84,13 @@ SchXMLDocContext::~SchXMLDocContext()
 SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContextRef xContext;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetDocElemTokenMap();
-    SvXMLImportFlags nFlags = GetImport().getImportFlags();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
-        case XML_TOK_DOC_AUTOSTYLES:
-            if( nFlags & SvXMLImportFlags::AUTOSTYLES )
-                // not nice, but this is safe, as the SchXMLDocContext class can only by
-                // instantiated by the chart import class SchXMLImport (header is not exported)
-                xContext =
-                    static_cast< SchXMLImport& >( GetImport() ).CreateStylesContext( rLocalName, xAttrList );
-            break;
-        case XML_TOK_DOC_STYLES:
-            // for draw styles containing gradients/hatches/markers and dashes
-            if( nFlags & SvXMLImportFlags::STYLES )
-                xContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
-            break;
         case XML_TOK_DOC_META:
             // we come here in the flat ODF file format,
             // if XDocumentPropertiesSupplier is not supported at the model
@@ -122,6 +109,19 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLDocContext::creat
         case XML_ELEMENT(OFFICE, XML_BODY):
             if( nFlags & SvXMLImportFlags::CONTENT )
                 return new SchXMLBodyContext_Impl( mrImportHelper, GetImport() );
+            break;
+        case XML_ELEMENT(OFFICE, XML_STYLES):
+            // for draw styles containing gradients/hatches/markers and dashes
+            if( nFlags & SvXMLImportFlags::STYLES )
+                return new SvXMLStylesContext( GetImport() );
+            break;
+        case  XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+            if( nFlags & SvXMLImportFlags::AUTOSTYLES )
+                // not nice, but this is safe, as the SchXMLDocContext class can only by
+                // instantiated by the chart import class SchXMLImport (header is not exported)
+                return
+                    static_cast< SchXMLImport& >( GetImport() ).CreateStylesContext();
+            break;
     }
     return nullptr;
 }

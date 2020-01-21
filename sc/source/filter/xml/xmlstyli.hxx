@@ -152,10 +152,7 @@ protected:
 
 public:
 
-    XMLTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
-            const OUString& rLName ,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            const bool bAutoStyles );
+    XMLTableStylesContext( SvXMLImport& rImport, bool bAutoStyles );
     virtual ~XMLTableStylesContext() override;
 
     virtual void EndElement() override;

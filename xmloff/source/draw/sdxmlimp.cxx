@@ -129,24 +129,6 @@ SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
             xContext = GetSdImport().CreateFontDeclsContext( rLocalName, xAttrList );
             break;
         }
-        case XML_TOK_DOC_STYLES:
-        {
-            if( GetImport().getImportFlags() & SvXMLImportFlags::STYLES )
-            {
-                // office:styles inside office:document
-                xContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
-            }
-            break;
-        }
-        case XML_TOK_DOC_AUTOSTYLES:
-        {
-            if( GetImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES )
-            {
-                // office:automatic-styles inside office:document
-                xContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
-            }
-            break;
-        }
         case XML_TOK_DOC_META:
         {
             SAL_INFO("xmloff.draw", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
@@ -194,6 +176,24 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
             if( GetImport().getImportFlags() & SvXMLImportFlags::SETTINGS )
             {
                 return new XMLDocumentSettingsContext(GetImport());
+            }
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_STYLES):
+        {
+            if( GetImport().getImportFlags() & SvXMLImportFlags::STYLES )
+            {
+                // office:styles inside office:document
+                return GetSdImport().CreateStylesContext();
+            }
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+        {
+            if( GetImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES )
+            {
+                // office:automatic-styles inside office:document
+                return GetSdImport().CreateAutoStylesContext();
             }
             break;
         }
@@ -702,26 +702,24 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const sal_Int32 /*nElement*/,
     return pContext;
 }
 
-SvXMLStylesContext *SdXMLImport::CreateStylesContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+SvXMLStylesContext *SdXMLImport::CreateStylesContext()
 {
     if(GetShapeImport()->GetStylesContext())
         return GetShapeImport()->GetStylesContext();
 
     GetShapeImport()->SetStylesContext(new SdXMLStylesContext(
-        *this, rLocalName, xAttrList, false));
+        *this, false));
 
     return GetShapeImport()->GetStylesContext();
 }
 
-SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext()
 {
     if(GetShapeImport()->GetAutoStylesContext())
         return GetShapeImport()->GetAutoStylesContext();
 
     GetShapeImport()->SetAutoStylesContext(new SdXMLStylesContext(
-        *this, rLocalName, xAttrList, true));
+        *this, true));
 
     return GetShapeImport()->GetAutoStylesContext();
 }

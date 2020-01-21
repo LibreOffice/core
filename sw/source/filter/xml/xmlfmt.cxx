@@ -704,8 +704,6 @@ public:
 
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport,
-            const OUString& rLName ,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             bool bAuto );
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
@@ -805,10 +803,9 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
 }
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
-        SwXMLImport& rImport, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+        SwXMLImport& rImport,
         bool bAuto ) :
-    SvXMLStylesContext( rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList, bAuto )
+    SvXMLStylesContext( rImport, bAuto )
 {
 }
 
@@ -910,10 +907,7 @@ protected:
 public:
 
 
-    SwXMLMasterStylesContext_Impl(
-            SwXMLImport& rImport,
-            const OUString& rLName ,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    SwXMLMasterStylesContext_Impl( SwXMLImport& rImport );
 
     virtual void EndElement() override;
 };
@@ -921,10 +915,8 @@ public:
 }
 
 SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
-        SwXMLImport& rImport,
-        const OUString& rLName ,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
-    XMLTextMasterStylesContext( rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList )
+        SwXMLImport& rImport ) :
+    XMLTextMasterStylesContext( rImport )
 {
 }
 
@@ -949,13 +941,9 @@ void SwXMLMasterStylesContext_Impl::EndElement()
 }
 
 SvXMLImportContext *SwXMLImport::CreateStylesContext(
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         bool bAuto )
 {
-    SvXMLStylesContext *pContext =
-        new SwXMLStylesContext_Impl( *this, rLocalName,
-                                       xAttrList, bAuto );
+    SvXMLStylesContext *pContext = new SwXMLStylesContext_Impl( *this, bAuto );
     if( bAuto )
         SetAutoStyles( pContext );
     else
@@ -964,12 +952,10 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
     return pContext;
 }
 
-SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *SwXMLImport::CreateMasterStylesContext()
 {
     SvXMLStylesContext *pContext =
-        new SwXMLMasterStylesContext_Impl( *this, rLocalName, xAttrList );
+        new SwXMLMasterStylesContext_Impl( *this );
     SetMasterStyles( pContext );
 
     return pContext;

@@ -44,6 +44,12 @@ XMLTextMasterStylesContext::XMLTextMasterStylesContext(
 {
 }
 
+XMLTextMasterStylesContext::XMLTextMasterStylesContext(
+        SvXMLImport& rImport ) :
+    SvXMLStylesContext( rImport )
+{
+}
+
 XMLTextMasterStylesContext::~XMLTextMasterStylesContext()
 {
 }

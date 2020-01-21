@@ -221,6 +221,20 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
         case XML_ELEMENT(OFFICE, XML_SETTINGS):
             return new XMLDocumentSettingsContext( GetImport() );
             break;
+        case XML_ELEMENT(OFFICE, XML_STYLES):
+            GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            return GetSwImport().CreateStylesContext( false );
+            break;
+        case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+            // don't use the autostyles from the styles-document for the progress
+            if ( !IsPrefixFilledIn() || ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
+                GetSwImport().GetProgressBarHelper()->Increment
+                    ( PROGRESS_BAR_STEP );
+            return GetSwImport().CreateStylesContext( true );
+            break;
+        case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
+            return GetSwImport().CreateMasterStylesContext();
+            break;
     }
     return nullptr;
 }
@@ -238,24 +252,6 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
     case XML_TOK_DOC_FONTDECLS:
         pContext = GetSwImport().CreateFontDeclsContext( rLocalName,
                                                              xAttrList );
-        break;
-    case XML_TOK_DOC_STYLES:
-        GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-        pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
-                                                      false );
-        break;
-    case XML_TOK_DOC_AUTOSTYLES:
-        // don't use the autostyles from the styles-document for the progress
-        if ( !IsPrefixFilledIn() || ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
-            GetSwImport().GetProgressBarHelper()->Increment
-                ( PROGRESS_BAR_STEP );
-        pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
-                                                      true );
-        break;
-
-    case XML_TOK_DOC_MASTERSTYLES:
-        pContext = GetSwImport().CreateMasterStylesContext( rLocalName,
-                                                            xAttrList );
         break;
     case XML_TOK_DOC_META:
         OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");

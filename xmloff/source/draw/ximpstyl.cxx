@@ -881,10 +881,8 @@ SvXMLImportContextRef SdXMLMasterPageContext::CreateChildContext(
 
 SdXMLStylesContext::SdXMLStylesContext(
     SdXMLImport& rImport,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     bool bIsAutoStyle)
-:   SvXMLStylesContext(rImport, XML_NAMESPACE_OFFICE, rLName, xAttrList),
+:   SvXMLStylesContext(rImport),
     mbIsAutoStyle(bIsAutoStyle)
 {
     Reference< uno::XComponentContext > xContext = rImport.GetComponentContext();

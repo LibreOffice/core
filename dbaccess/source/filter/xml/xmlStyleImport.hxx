@@ -93,10 +93,7 @@ namespace dbaxml
     public:
 
 
-        OTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
-                const OUString& rLName ,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-                const bool bAutoStyles );
+        OTableStylesContext( SvXMLImport& rImport, bool bAutoStyles );
         virtual ~OTableStylesContext() override;
 
         virtual void EndElement() override;

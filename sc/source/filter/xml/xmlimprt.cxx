@@ -357,14 +357,6 @@ SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPref
         if (GetScImport().getImportFlags() & SvXMLImportFlags::FONTDECLS)
             pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
         break;
-    case XML_TOK_DOC_STYLES:
-        if (GetScImport().getImportFlags() & SvXMLImportFlags::STYLES)
-            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, false);
-        break;
-    case XML_TOK_DOC_AUTOSTYLES:
-        if (GetScImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES)
-            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, true);
-        break;
     case XML_TOK_DOC_MASTERSTYLES:
         if (GetScImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES)
             pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
@@ -398,6 +390,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         if (GetScImport().getImportFlags() & SvXMLImportFlags::SETTINGS)
             pContext = new XMLDocumentSettingsContext(GetScImport());
         break;
+        case XML_ELEMENT(OFFICE, XML_STYLES):
+            if (GetScImport().getImportFlags() & SvXMLImportFlags::STYLES)
+                pContext = GetScImport().CreateStylesContext( false);
+            break;
+        case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+            if (GetScImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES)
+                pContext = GetScImport().CreateStylesContext( true);
+            break;
 
         //TODO: handle all other cases
     }
@@ -752,11 +752,10 @@ SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateStylesContext(const OUString& rLocalName,
-                                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList, bool bIsAutoStyle )
+SvXMLImportContext *ScXMLImport::CreateStylesContext( bool bIsAutoStyle )
 {
     SvXMLImportContext* pContext = new XMLTableStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
+        *this, bIsAutoStyle);
 
     if (bIsAutoStyle)
         SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
