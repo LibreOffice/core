@@ -246,26 +246,46 @@ VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *p
 
 namespace {
 
-class SvxLineEndWindow : public svtools::ToolbarPopup
+class SvxLineEndToolBoxControl : public svt::PopupWindowController
+{
+public:
+    explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+
+private:
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
+    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
+};
+
+class SvxLineEndWindow final : public WeldToolbarPopup
 {
 private:
     XLineEndListRef mpLineEndList;
-    VclPtr<ValueSet> mpLineEndSet;
+    rtl::Reference<SvxLineEndToolBoxControl> mxControl;
+    std::unique_ptr<SvtValueSet> mxLineEndSet;
+    std::unique_ptr<weld::CustomWeld> mxLineEndSetWin;
     sal_uInt16 mnLines;
     Size maBmpSize;
-    svt::ToolboxController& mrController;
 
-    DECL_LINK( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectHdl, SvtValueSet*, void );
     void FillValueSet();
     void SetSize();
 
-protected:
-    virtual void GetFocus() override;
+    virtual void GrabFocus() override
+    {
+        mxLineEndSet->GrabFocus();
+    }
 
 public:
-    SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
-    virtual ~SvxLineEndWindow() override;
-    virtual void dispose() override;
+    SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent);
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
@@ -273,15 +293,16 @@ public:
 
 static constexpr sal_uInt16 gnCols = 2;
 
-SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow )
-    :  ToolbarPopup ( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
-    mpLineEndSet    ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
-    mnLines         ( 12 ),
-    mrController    ( rController )
+SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
+    , mxControl(pControl)
+    , mxLineEndSet(new SvtValueSet(nullptr))
+    , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineEndSet))
+    , mnLines(12)
 {
-    SetText( SvxResId( RID_SVXSTR_LINEEND ) );
-    SetHelpId( HID_POPUP_LINEEND );
-    mpLineEndSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
+    mxLineEndSet->SetStyle(mxLineEndSet->GetStyle() | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
+    mxLineEndSet->SetHelpId(HID_POPUP_LINEEND_CTRL);
+    m_xTopLevel->set_help_id(HID_POPUP_LINEEND);
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
@@ -292,33 +313,20 @@ SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Wi
     }
     DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
-    mpLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
-    mpLineEndSet->SetColCount( gnCols );
+    mxLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
+    mxLineEndSet->SetColCount( gnCols );
 
     // ValueSet fill with entries of LineEndList
     FillValueSet();
 
     AddStatusListener( ".uno:LineEndListState");
-
-    mpLineEndSet->Show();
 }
 
-SvxLineEndWindow::~SvxLineEndWindow()
-{
-    disposeOnce();
-}
-
-void SvxLineEndWindow::dispose()
-{
-    mpLineEndSet.disposeAndClear();
-    ToolbarPopup::dispose();
-}
-
-IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, SvtValueSet*, void)
 {
     std::unique_ptr<XLineEndItem> pLineEndItem;
     std::unique_ptr<XLineStartItem> pLineStartItem;
-    sal_uInt16 nId = mpLineEndSet->GetSelectedItemId();
+    sal_uInt16 nId = mxLineEndSet->GetSelectedItemId();
 
     if( nId == 1 )
     {
@@ -339,9 +347,6 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
         pLineEndItem.reset(new XLineEndItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
 
-    if ( IsInPopupMode() )
-        EndPopupMode();
-
     Sequence< PropertyValue > aArgs( 1 );
     Any a;
 
@@ -361,9 +366,11 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    mpLineEndSet->SetNoSelection();
+    mxLineEndSet->SetNoSelection();
 
-    mrController.dispatchCommand( mrController.getCommandURL(), aArgs );
+    mxControl->dispatchCommand(mxControl->getCommandURL(), aArgs);
+
+    mxControl->EndPopupMode();
 }
 
 void SvxLineEndWindow::FillValueSet()
@@ -390,8 +397,8 @@ void SvxLineEndWindow::FillValueSet()
     Point aPt1( maBmpSize.Width(), 0 );
 
     pVD->DrawBitmapEx( Point(), aBmp );
-    mpLineEndSet->InsertItem(1, Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
-    mpLineEndSet->InsertItem(2, Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
+    mxLineEndSet->InsertItem(1, Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
+    mxLineEndSet->InsertItem(2, Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
 
     mpLineEndList->Remove(nCount);
 
@@ -403,13 +410,13 @@ void SvxLineEndWindow::FillValueSet()
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
         pVD->DrawBitmapEx( aPt0, aBmp );
-        mpLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
+        mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
                 Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
-        mpLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
+        mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
                 Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
     }
     mnLines = std::min( static_cast<sal_uInt16>(nCount + 1), sal_uInt16(MAX_LINES) );
-    mpLineEndSet->SetLineCount( mnLines );
+    mxLineEndSet->SetLineCount( mnLines );
 
     SetSize();
 }
@@ -425,7 +432,7 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
             mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
             DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
-            mpLineEndSet->Clear();
+            mxLineEndSet->Clear();
             FillValueSet();
         }
     }
@@ -433,53 +440,22 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
 
 void SvxLineEndWindow::SetSize()
 {
-    sal_uInt16 nItemCount = mpLineEndSet->GetItemCount();
+    sal_uInt16 nItemCount = mxLineEndSet->GetItemCount();
     sal_uInt16 nMaxLines  = nItemCount / gnCols;
 
-    WinBits nBits = mpLineEndSet->GetStyle();
+    WinBits nBits = mxLineEndSet->GetStyle();
     if ( mnLines == nMaxLines )
         nBits &= ~WB_VSCROLL;
     else
         nBits |= WB_VSCROLL;
-    mpLineEndSet->SetStyle( nBits );
+    mxLineEndSet->SetStyle( nBits );
 
     Size aSize( maBmpSize );
     aSize.AdjustWidth(6 );
     aSize.AdjustHeight(6 );
-    aSize = mpLineEndSet->CalcWindowSizePixel( aSize );
-    mpLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
-    aSize.AdjustWidth(4 );
-    aSize.AdjustHeight(4 );
-    SetOutputSizePixel( aSize );
-}
-
-void SvxLineEndWindow::GetFocus()
-{
-    if ( mpLineEndSet )
-    {
-        mpLineEndSet->GrabFocus();
-        mpLineEndSet->StartSelection();
-    }
-}
-
-namespace {
-
-class SvxLineEndToolBoxControl : public svt::PopupWindowController
-{
-public:
-    explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-private:
-    virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
-};
-
+    aSize = mxLineEndSet->CalcWindowSizePixel( aSize );
+    mxLineEndSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
+    mxLineEndSet->SetOutputSizePixel(aSize);
 }
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
@@ -487,18 +463,52 @@ SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<cs
 {
 }
 
+void SAL_CALL SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
+{
+    if (m_pToolbar)
+    {
+        // Toggle the popup also when toolbutton is activated
+        const OString aId(m_aCommandURL.toUtf8());
+        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+    }
+    else
+    {
+        // Open the popup also when Enter key is pressed.
+        createPopupWindow();
+    }
+}
+
 void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
+
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
+std::unique_ptr<WeldToolbarPopup> SvxLineEndToolBoxControl::weldPopupWindow()
+{
+    return std::make_unique<SvxLineEndWindow>(this, m_pToolbar);
+}
+
 VclPtr<vcl::Window> SvxLineEndToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<SvxLineEndWindow>::Create( *this, pParent );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<SvxLineEndWindow>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    mxInterimPopover->SetText(SvxResId(RID_SVXSTR_LINEEND));
+
+    return mxInterimPopover;
 }
 
 OUString SvxLineEndToolBoxControl::getImplementationName()

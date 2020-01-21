@@ -49,6 +49,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/floatingareastyle \
 	svx/uiconfig/ui/floatingcontour \
 	svx/uiconfig/ui/floatingframeborder \
+	svx/uiconfig/ui/floatinglineend \
 	svx/uiconfig/ui/floatinglineproperty \
 	svx/uiconfig/ui/floatingundoredo \
 	svx/uiconfig/ui/fontworkgallerydialog \
