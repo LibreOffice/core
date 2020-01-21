@@ -24,38 +24,14 @@
 namespace svx::sidebar {
 
 EmptyPanel::EmptyPanel (vcl::Window* pParent)
-    : Control(pParent)
-    , maMessageControl(VclPtr<FixedText>::Create(this))
+    : PanelLayout(pParent, "EmptyPanel", "svx/ui/sidebarempty.ui", nullptr, true)
+    , mxMessageControl(m_xBuilder->weld_label("message"))
 {
-    maMessageControl->SetText(SvxResId(RID_SIDEBAR_EMPTY_PANEL_TEXT));
-    maMessageControl->setPosSizePixel(5, 5, 250, 15);
-    maMessageControl->SetStyle(WB_WORDBREAK);
-    maMessageControl->Show();
-
-    SetBackground(Wallpaper());
-
-    maMessageControl->Show();
-    Show();
 }
 
 EmptyPanel::~EmptyPanel()
 {
-    disposeOnce();
 }
-
-void EmptyPanel::dispose()
-{
-    maMessageControl.disposeAndClear();
-    Control::dispose();
-}
-
-
-void EmptyPanel::Resize()
-{
-    const Size aSize (GetSizePixel());
-    maMessageControl->SetSizePixel(aSize);
-}
-
 
 } // end of namespace svx::sidebar
 
