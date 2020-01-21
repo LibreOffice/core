@@ -18,6 +18,12 @@
 
 namespace oox::drawingml {
 
+void EffectGlowProperties ::assignUsed(const EffectGlowProperties& rSourceProps)
+{
+    moGlowRad.assignIfUsed( rSourceProps.moGlowRad );
+    moGlowColor.assignIfUsed( rSourceProps.moGlowColor );
+}
+
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
     moShadowDist.assignIfUsed( rSourceProps.moShadowDist );
@@ -28,6 +34,7 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
 void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 {
     maShadow.assignUsed(rSourceProps.maShadow);
+    maGlow.assignUsed(rSourceProps.maGlow);
     if (!rSourceProps.m_Effects.empty())
     {
         m_Effects.clear();
