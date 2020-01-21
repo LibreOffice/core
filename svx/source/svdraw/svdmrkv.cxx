@@ -843,9 +843,14 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
 
                 OStringBuffer aExtraInfo;
+
+                aExtraInfo.append("{ \"id\": \"");
+                aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
+                aExtraInfo.append("\"");
+
                 if (bWriterGraphic)
                 {
-                    aExtraInfo.append("{ \"isWriterGraphic\": true }");
+                    aExtraInfo.append(", \"isWriterGraphic\": true");
                 }
                 else if (bIsChart)
                 {
@@ -859,7 +864,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                         if (aSel >>= aValue)
                         {
                             OString aObjectCID(aValue.getStr(), aValue.getLength(), osl_getThreadTextEncoding());
-                            aExtraInfo.append("{ ");
                             const std::vector<OString> aProps{"Draggable", "Resizable", "Rotatable"};
                             for (const auto& rProp: aProps)
                             {
@@ -971,10 +975,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                                     aExtraInfo.append("}"); // dragInfo
                                 }
                             }
-                            aExtraInfo.append(" }");
                         }
                     }
                 }
+                aExtraInfo.append(" }");
+
                 sSelectionText = aSelection.toString() +
                     ", " + OString::number(nRotAngle);
                 if (!aExtraInfo.isEmpty())
