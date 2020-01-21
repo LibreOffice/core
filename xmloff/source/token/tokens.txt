@@ -847,6 +847,9 @@ gap-width
 gcd
 generator
 geq
+glow
+glow-radius
+glow-color
 gouraud
 gradient
 angle

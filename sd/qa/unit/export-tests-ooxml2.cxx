@@ -182,6 +182,7 @@ public:
     void testTdf127372();
     void testTdf127379();
     void testTdf98603();
+    void testShapeGlowEffect();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -282,6 +283,7 @@ public:
     CPPUNIT_TEST(testTdf127372);
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
+    CPPUNIT_TEST(testShapeGlowEffect);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2631,6 +2633,22 @@ void SdOOXMLExportTest2::testTdf98603()
     xPropSet->getPropertyValue("CharLocaleComplex") >>= aLocale;
     CPPUNIT_ASSERT_EQUAL(OUString("he"), aLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
+}
+
+void SdOOXMLExportTest2::testShapeGlowEffect()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-glow-effect.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    bool bHasGlow = false;
+    xShape->getPropertyValue("GlowEffect") >>= bHasGlow;
+    CPPUNIT_ASSERT(bHasGlow);
+    sal_Int64 nRadius = -1;
+    xShape->getPropertyValue("GlowEffectRad") >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(139700l), nRadius);
+    Color nColor;
+    xShape->getPropertyValue("GlowEffectColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

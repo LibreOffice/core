@@ -326,6 +326,10 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
     rPoolDefaults[ SDRATTR_TABLE_TEXT_ROTATION - SDRATTR_START ] = new SvxTextRotateItem(0, SDRATTR_TABLE_TEXT_ROTATION);
 
+    rPoolDefaults[ SDRATTR_GLOW - SDRATTR_START ] = new SdrOnOffItem(SDRATTR_GLOW, false);
+    rPoolDefaults[ SDRATTR_GLOW_RAD - SDRATTR_START ] = new SdrMetricItem(SDRATTR_GLOW_RAD, 0);
+    rPoolDefaults[ SDRATTR_GLOW_COLOR - SDRATTR_START ] = new XColorItem(SDRATTR_GLOW_COLOR, aNullCol);
+
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
     mpLocalItemInfos[SDRATTR_SHADOWCOLOR-SDRATTR_START]._nSID=SID_ATTR_SHADOW_COLOR;
@@ -445,6 +449,10 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_SHADOWTRANSPARENCE: pResId = SIP_SA_SHADOWTRANSPARENCE;break;
         case SDRATTR_SHADOW3D          : pResId = SIP_SA_SHADOW3D;break;
         case SDRATTR_SHADOWPERSP       : pResId = SIP_SA_SHADOWPERSP;break;
+
+        case SDRATTR_GLOW              : pResId = SIP_SA_GLOW;break;
+        case SDRATTR_GLOW_RAD          : pResId = SIP_SA_GLOW_RAD;break;
+        case SDRATTR_GLOW_COLOR        : pResId = SIP_SA_GLOW_COLOR;break;
 
         case SDRATTR_CAPTIONTYPE      : pResId = SIP_SA_CAPTIONTYPE;break;
         case SDRATTR_CAPTIONFIXEDANGLE: pResId = SIP_SA_CAPTIONFIXEDANGLE;break;

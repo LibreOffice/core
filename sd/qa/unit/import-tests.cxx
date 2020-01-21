@@ -209,6 +209,7 @@ public:
     void testTdf116266();
     void testTdf126324();
     void testTdf128684();
+    void testShapeGlowEffectPPTXImpoer();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -332,6 +333,7 @@ public:
     CPPUNIT_TEST(testTdf106638);
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
+    CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3143,6 +3145,23 @@ void SdImportTest::testTdf113198()
     sal_Int16 nParaAdjust = -1;
     xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust;
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
+}
+
+void SdImportTest::testShapeGlowEffectPPTXImpoer()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-glow-effect.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    bool bHasGlow = false;
+    xShape->getPropertyValue("GlowEffect") >>= bHasGlow;
+    CPPUNIT_ASSERT(bHasGlow);
+    sal_Int64 nRadius = -1;
+    xShape->getPropertyValue("GlowEffectRad") >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(139700l), nRadius);
+    Color nColor;
+    xShape->getPropertyValue("GlowEffectColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

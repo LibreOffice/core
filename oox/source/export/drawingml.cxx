@@ -3719,29 +3719,38 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         bool bHasShadow = false;
         if( GetProperty( rXPropSet, "Shadow" ) )
             mAny >>= bHasShadow;
-        if( bHasShadow )
+        bool bHasGlow = false;
+        if( GetProperty( rXPropSet, "GlowEffect") )
+            mAny >>= bHasGlow;
+        //rXPropSet->getPropertyValue("GlowEffect") >>= bHasGlow;
+
+        if( bHasShadow || bHasGlow )
         {
-            Sequence< PropertyValue > aShadowGrabBag( 3 );
-            Sequence< PropertyValue > aShadowAttribsGrabBag( 2 );
-
-            double dX = +0.0, dY = +0.0;
-            rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
-            rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
-
-            aShadowAttribsGrabBag[0].Name = "dist";
-            aShadowAttribsGrabBag[0].Value <<= lcl_CalculateDist(dX, dY);
-            aShadowAttribsGrabBag[1].Name = "dir";
-            aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);
-
-            aShadowGrabBag[0].Name = "Attribs";
-            aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
-            aShadowGrabBag[1].Name = "RgbClr";
-            aShadowGrabBag[1].Value = rXPropSet->getPropertyValue( "ShadowColor" );
-            aShadowGrabBag[2].Name = "RgbClrTransparency";
-            aShadowGrabBag[2].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
-
             mpFS->startElementNS(XML_a, XML_effectLst);
-            WriteShapeEffect( "outerShdw", aShadowGrabBag );
+            if( bHasShadow )
+            {
+                Sequence< PropertyValue > aShadowGrabBag( 3 );
+                Sequence< PropertyValue > aShadowAttribsGrabBag( 2 );
+
+                double dX = +0.0, dY = +0.0;
+                rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
+                rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
+
+                aShadowAttribsGrabBag[0].Name = "dist";
+                aShadowAttribsGrabBag[0].Value <<= lcl_CalculateDist(dX, dY);
+                aShadowAttribsGrabBag[1].Name = "dir";
+                aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);
+
+                aShadowGrabBag[0].Name = "Attribs";
+                aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
+                aShadowGrabBag[1].Name = "RgbClr";
+                aShadowGrabBag[1].Value = rXPropSet->getPropertyValue( "ShadowColor" );
+                aShadowGrabBag[2].Name = "RgbClrTransparency";
+                aShadowGrabBag[2].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
+
+                WriteShapeEffect( "outerShdw", aShadowGrabBag );
+            }
+            WriteGlowEffect(rXPropSet);
             mpFS->endElementNS(XML_a, XML_effectLst);
         }
     }
@@ -3796,8 +3805,30 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                 WriteShapeEffect( rEffect.Name, aEffectProps );
             }
         }
+        WriteGlowEffect(rXPropSet);
+
         mpFS->endElementNS(XML_a, XML_effectLst);
     }
+}
+
+void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
+{
+    bool hasGlow = false;
+    rXPropSet->getPropertyValue("GlowEffect") >>= hasGlow;
+    if(!hasGlow)
+        return;
+
+    Sequence< PropertyValue > aGlowAttribs(1);
+    aGlowAttribs[0].Name = "rad";
+    aGlowAttribs[0].Value = rXPropSet->getPropertyValue("GlowEffectRad");
+    Sequence< PropertyValue > aGlowProps(2);
+    aGlowProps[0].Name = "Attribs";
+    aGlowProps[0].Value <<= aGlowAttribs;
+    aGlowProps[1].Name = "RgbClr";
+    aGlowProps[1].Value = rXPropSet->getPropertyValue("GlowEffectColor");
+    // TODO other stuff like saturation or luminance
+
+    WriteShapeEffect("glow", aGlowProps);
 }
 
 void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
