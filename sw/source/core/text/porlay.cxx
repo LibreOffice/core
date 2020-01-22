@@ -35,6 +35,9 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <paratr.hxx>
+#include <sal/log.hxx>
+#include <boost/optional.hpp>
+#include <IMark.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -706,6 +709,173 @@ SwFontScript SwScriptInfo::WhichFont(sal_Int32 nIdx, OUString const& rText)
     return lcl_ScriptToFont(nScript);
 }
 
+static void InitBookmarks(
+    boost::optional<std::vector<sw::Extent>::const_iterator> oPrevIter,
+    std::vector<sw::Extent>::const_iterator iter,
+    std::vector<sw::Extent>::const_iterator const end,
+    TextFrameIndex nOffset,
+    std::vector<std::pair<sw::mark::IBookmark const*, SwScriptInfo::MarkKind>> & rBookmarks,
+    std::vector<std::pair<TextFrameIndex, SwScriptInfo::MarkKind>> & o_rBookmarks)
+{
+    SwTextNode const*const pNode(iter->pNode);
+    for (auto const& it : rBookmarks)
+    {
+        assert(iter->pNode == pNode || pNode->GetIndex() < iter->pNode->GetIndex());
+        assert(!oPrevIter || (*oPrevIter)->pNode->GetIndex() <= pNode->GetIndex());
+        switch (it.second)
+        {
+            case SwScriptInfo::MarkKind::Start:
+            {
+                // SwUndoSaveContent::DelContentIndex() is rather messy but
+                // apparently bookmarks "on the edge" are deleted if
+                // * point: equals start-of-selection (not end-of-selection)
+                // * expanded: one position equals edge of selection
+                //             and other does not (is inside)
+                // interesting case: if end[/start] of the mark is on the
+                // start of first[/end of last] extent, and the other one
+                // is outside this merged paragraph, is it deleted or not?
+                // assume "no" because the line break it contains isn't deleted.
+                SwPosition const& rStart(it.first->GetMarkStart());
+                SwPosition const& rEnd(it.first->GetMarkEnd());
+                assert(&rStart.nNode.GetNode() == pNode);
+                while (iter != end)
+                {
+                    if (&rStart.nNode.GetNode() != iter->pNode // iter moved to next node
+                        || rStart.nContent.GetIndex() < iter->nStart)
+                    {
+                        if (rEnd.nNode.GetIndex() < iter->pNode->GetIndex()
+                            || (&rEnd.nNode.GetNode() == iter->pNode && rEnd.nContent.GetIndex() <= iter->nStart))
+                        {
+                            break; // deleted - skip it
+                        }
+                        else
+                        {
+                            o_rBookmarks.emplace_back(nOffset, it.second);
+                            break;
+                        }
+                    }
+                    else if (rStart.nContent.GetIndex() <= iter->nEnd)
+                    {
+                        auto const iterNext(iter + 1);
+                        if (rStart.nContent.GetIndex() == iter->nEnd
+                            && (iterNext == end
+                                ?   &rEnd.nNode.GetNode() == iter->pNode
+                                :  (rEnd.nNode.GetIndex() < iterNext->pNode->GetIndex()
+                                    || (&rEnd.nNode.GetNode() == iterNext->pNode && rEnd.nContent.GetIndex() < iterNext->nStart))))
+                        {
+                            break; // deleted - skip it
+                        }
+                        else
+                        {
+                            o_rBookmarks.emplace_back(
+                                nOffset + TextFrameIndex(rStart.nContent.GetIndex() - iter->nStart),
+                                it.second);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        nOffset += TextFrameIndex(iter->nEnd - iter->nStart);
+                        oPrevIter = iter;
+                        ++iter; // bookmarks are sorted...
+                    }
+                }
+                if (iter == end)
+                {
+                    if (pNode->GetIndex() < rEnd.nNode.GetIndex()) // pNode is last node of merged
+                    {
+                        break; // deleted - skip it
+                    }
+                    else
+                    {
+                        o_rBookmarks.emplace_back(nOffset, it.second);
+                    }
+                }
+                break;
+            }
+            case SwScriptInfo::MarkKind::End:
+            {
+                SwPosition const& rEnd(it.first->GetMarkEnd());
+                assert(&rEnd.nNode.GetNode() == pNode);
+                while (true)
+                {
+                    if (iter == end
+                        || &rEnd.nNode.GetNode() != iter->pNode // iter moved to next node
+                        || rEnd.nContent.GetIndex() <= iter->nStart)
+                    {
+                        SwPosition const& rStart(it.first->GetMarkStart());
+                        // oPrevIter may point to pNode or a preceding node
+                        if (oPrevIter
+                            ? ((*oPrevIter)->pNode->GetIndex() < rStart.nNode.GetIndex()
+                                || ((*oPrevIter)->pNode == &rStart.nNode.GetNode()
+                                    && ((iter != end && &rEnd.nNode.GetNode() == iter->pNode && rEnd.nContent.GetIndex() == iter->nStart)
+                                        ? (*oPrevIter)->nEnd < rStart.nContent.GetIndex()
+                                        : (*oPrevIter)->nEnd <= rStart.nContent.GetIndex())))
+                            : rStart.nNode == rEnd.nNode)
+                        {
+                            break; // deleted - skip it
+                        }
+                        else
+                        {
+                            o_rBookmarks.emplace_back(nOffset, it.second);
+                            break;
+                        }
+                    }
+                    else if (rEnd.nContent.GetIndex() <= iter->nEnd)
+                    {
+                        o_rBookmarks.emplace_back(
+                            nOffset + TextFrameIndex(rEnd.nContent.GetIndex() - iter->nStart),
+                            it.second);
+                        break;
+                    }
+                    else
+                    {
+                        nOffset += TextFrameIndex(iter->nEnd - iter->nStart);
+                        oPrevIter = iter;
+                        ++iter;
+                    }
+                }
+                break;
+            }
+            case SwScriptInfo::MarkKind::Point:
+            {
+                SwPosition const& rPos(it.first->GetMarkPos());
+                assert(&rPos.nNode.GetNode() == pNode);
+                while (iter != end)
+                {
+                    if (&rPos.nNode.GetNode() != iter->pNode // iter moved to next node
+                        || rPos.nContent.GetIndex() < iter->nStart)
+                    {
+                        break; // deleted - skip it
+                    }
+                    else if (rPos.nContent.GetIndex() <= iter->nEnd)
+                    {
+                        if (rPos.nContent.GetIndex() == iter->nEnd
+                            && rPos.nContent.GetIndex() != iter->pNode->Len())
+                        {
+                            break; // deleted - skip it
+                        }
+                        else
+                        {
+                            o_rBookmarks.emplace_back(
+                                nOffset + TextFrameIndex(rPos.nContent.GetIndex() - iter->nStart),
+                                it.second);
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        nOffset += TextFrameIndex(iter->nEnd - iter->nStart);
+                        oPrevIter = iter;
+                        ++iter;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
 // searches for script changes in rText and stores them
 void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         sw::MergedPara const*const pMerged)
@@ -722,12 +892,15 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
     // HIDDEN TEXT INFORMATION
 
+    m_Bookmarks.clear();
     m_HiddenChg.clear();
     if (pMerged)
     {
         SwTextNode const* pNode(nullptr);
         TextFrameIndex nOffset(0);
-        for (auto iter = pMerged->extents.begin(); iter != pMerged->extents.end(); ++iter)
+        boost::optional<std::vector<sw::Extent>::const_iterator> oPrevIter;
+        for (auto iter = pMerged->extents.begin(); iter != pMerged->extents.end();
+             oPrevIter = iter, ++iter)
         {
             if (iter->pNode == pNode)
             {
@@ -737,7 +910,10 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             pNode = iter->pNode;
             Range aRange( 0, pNode->Len() > 0 ? pNode->Len() - 1 : 0 );
             MultiSelection aHiddenMulti( aRange );
-            CalcHiddenRanges( *pNode, aHiddenMulti );
+            std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> bookmarks;
+            CalcHiddenRanges(*pNode, aHiddenMulti, &bookmarks);
+
+            InitBookmarks(oPrevIter, iter, pMerged->extents.end(), nOffset, bookmarks, m_Bookmarks);
 
             for (sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
             {
@@ -782,7 +958,24 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     {
         Range aRange( 0, !rText.isEmpty() ? rText.getLength() - 1 : 0 );
         MultiSelection aHiddenMulti( aRange );
-        CalcHiddenRanges( rNode, aHiddenMulti );
+        std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> bookmarks;
+        CalcHiddenRanges(rNode, aHiddenMulti, &bookmarks);
+
+        for (auto const& it : bookmarks)
+        {
+            switch (it.second)
+            {
+                case MarkKind::Start:
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().nContent.GetIndex()), it.second);
+                    break;
+                case MarkKind::End:
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().nContent.GetIndex()), it.second);
+                    break;
+                case MarkKind::Point:
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().nContent.GetIndex()), it.second);
+                    break;
+            }
+        }
 
         for (sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
         {
@@ -1559,7 +1752,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
                             ? rNode.GetText().getLength() - 1
                             : 0);
         MultiSelection aHiddenMulti( aRange );
-        SwScriptInfo::CalcHiddenRanges( rNode, aHiddenMulti );
+        SwScriptInfo::CalcHiddenRanges(rNode, aHiddenMulti, nullptr);
         for( sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
         {
             const Range& rRange = aHiddenMulti.GetRange( i );
@@ -2219,7 +2412,9 @@ SwTwips SwTextFrame::HangingMargin() const
     return nRet;
 }
 
-void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti)
+void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
+    MultiSelection & rHiddenMulti,
+    std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> *const pBookmarks)
 {
     assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
         || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
@@ -2248,6 +2443,28 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelect
                     Range aTmp( nSt, nEnd - 1 );
                     rHiddenMulti.Select( aTmp, pHiddenItem->GetValue() );
                 }
+            }
+        }
+    }
+
+    for (const SwIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
+    {
+        const sw::mark::IMark* pMark = pIndex->GetMark();
+        const sw::mark::IBookmark* pBookmark = dynamic_cast<const sw::mark::IBookmark*>(pMark);
+        if (pBookmarks && pBookmark)
+        {
+            if (!pBookmark->IsExpanded())
+            {
+                pBookmarks->emplace_back(pBookmark, MarkKind::Point);
+            }
+            else if (pIndex == &pBookmark->GetMarkStart().nContent)
+            {
+                pBookmarks->emplace_back(pBookmark, MarkKind::Start);
+            }
+            else
+            {
+                assert(pIndex == &pBookmark->GetMarkEnd().nContent);
+                pBookmarks->emplace_back(pBookmark, MarkKind::End);
             }
         }
     }
@@ -2288,9 +2505,11 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
 }
 
 // Returns a MultiSection indicating the hidden ranges.
-void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode, MultiSelection& rHiddenMulti )
+void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode,
+    MultiSelection & rHiddenMulti,
+    std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> *const pBookmarks)
 {
-    selectHiddenTextProperty(rNode, rHiddenMulti);
+    selectHiddenTextProperty(rNode, rHiddenMulti, pBookmarks);
 
     // If there are any hidden ranges in the current text node, we have
     // to unhide the redlining ranges:
