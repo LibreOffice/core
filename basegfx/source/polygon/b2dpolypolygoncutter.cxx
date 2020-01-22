@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -830,6 +833,7 @@ namespace basegfx::utils
                         const B2DPolygon& aCandidate(rCandidate.getB2DPolygon(a));
                         StripHelper* pNewHelper = &(aHelpers[a]);
                         pNewHelper->maRange = utils::getRange(aCandidate);
+                        SAL_DEBUG(__FUNCTION__ << " " << pNewHelper->maRange);
                         pNewHelper->meOrinetation = utils::getOrientation(aCandidate);
                         pNewHelper->mnDepth = (pNewHelper->meOrinetation == B2VectorOrientation::Negative ? -1 : 0);
                     }
@@ -843,8 +847,16 @@ namespace basegfx::utils
                         {
                             const B2DPolygon& aCandB(rCandidate.getB2DPolygon(b));
                             StripHelper& rHelperB = aHelpers[b];
+                            const bool bAInBrange = rHelperB.maRange.isInside(rHelperA.maRange);
+                            const bool bBInArange = rHelperA.maRange.isInside(rHelperB.maRange);
+                            const bool bAInButil = utils::isInside(aCandB, aCandA, true);
+                            const bool bBInAutil = utils::isInside(aCandA, aCandB, true);
+                            SAL_DEBUG(__FUNCTION__ << " a: " << a << " b: " << b << " bAInBrange " << bAInBrange << " bAInButil "
+                                      << bAInButil << " bBInArange " << bBInArange << " bBInAutil " << bBInAutil);
+
                             const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && utils::isInside(aCandB, aCandA, true));
                             const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && utils::isInside(aCandA, aCandB, true));
+                            SAL_DEBUG(__FUNCTION__ << " a: " << a << " b: " << b << " bAInB: " << bAInB << " bBInA: " << bBInA);
 
                             if(bAInB && bBInA)
                             {

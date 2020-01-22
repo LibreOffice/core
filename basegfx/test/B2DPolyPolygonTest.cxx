@@ -17,12 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include "boxclipper.hxx"
 
@@ -65,12 +69,32 @@ public:
         CPPUNIT_ASSERT_MESSAGE("more than zero sub-divided trapezoids", !aVector.empty());
     }
 
+    void testPolyIntersection()
+    {
+        B2DPolygon aPolygon1{{810700,70500}, {810700,484400}, {31209.4,484400}, {31209.4,70500}};
+        aPolygon1.setClosed(true);
+        B2DPolyPolygon aPolyPolygon1;
+        aPolyPolygon1.append(aPolygon1);
+        aPolyPolygon1.setClosed(true);
+
+        B2DPolygon aPolygon2{{31209.4,70486.3}, {810737,70486.3}, {810737,484501}, {31209.4,484501}};
+        aPolygon2.setClosed(true);
+        B2DPolyPolygon aPolyPolygon2;
+        aPolyPolygon2.append(aPolygon2);
+        aPolyPolygon2.setClosed(true);
+
+        SAL_DEBUG(aPolyPolygon1.isClosed() << " " << aPolyPolygon1.getB2DPolygon(0).isClosed() << " " << aPolyPolygon1);
+        SAL_DEBUG(aPolyPolygon2.isClosed() << " " << aPolyPolygon2.getB2DPolygon(0).isClosed() << " " << aPolyPolygon2);
+        SAL_DEBUG(basegfx::utils::solvePolygonOperationAnd(aPolyPolygon1, aPolyPolygon2));
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolypolygon);
     CPPUNIT_TEST(testTrapezoidHelper);
+    CPPUNIT_TEST(testPolyIntersection);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolypolygon
 

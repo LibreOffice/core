@@ -1115,6 +1115,7 @@ public:
 
     void clearClipRegion()
     {
+        SAL_DEBUG(__FUNCTION__ << "\n");
         m_aGraphicsStack.front().m_aClipRegion.clear();
         m_aGraphicsStack.front().m_bClipRegion = false;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
