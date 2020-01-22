@@ -42,11 +42,6 @@ namespace sfx2
         ,m_bLayoutPending( false )
         ,m_nTitleBarHeight(0)
     {
-        impl_construct();
-    }
-
-    void TitledDockingWindow::impl_construct()
-    {
         SetBackground( Wallpaper() );
 
         m_aToolbox->SetSelectHdl( LINK( this, TitledDockingWindow, OnToolboxItemSelected ) );

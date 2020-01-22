@@ -72,7 +72,6 @@ namespace sfx2
     private:
         DECL_LINK( OnToolboxItemSelected, ToolBox*, void );
 
-        void    impl_construct();
         void    impl_layout();
         void    impl_scheduleLayout();
 

@@ -102,19 +102,6 @@ namespace svt
         }
     }
 
-    void EditBrowseBox::impl_construct()
-    {
-        m_aImpl.reset(new EditBrowseBoxImpl);
-
-        SetCompoundControl(true);
-
-        ImplInitSettings(true, true, true);
-
-        pCheckBoxPaint = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
-        pCheckBoxPaint->SetPaintTransparent( true );
-        pCheckBoxPaint->SetBackground();
-    }
-
     EditBrowseBox::EditBrowseBox( vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags, WinBits nBits, BrowserMode _nMode )
                   :BrowseBox( pParent, nBits, _nMode )
                   ,nStartEvent(nullptr)
@@ -130,7 +117,15 @@ namespace svt
                   ,m_nBrowserFlags(nBrowserFlags)
                   ,pHeader(nullptr)
     {
-        impl_construct();
+        m_aImpl.reset(new EditBrowseBoxImpl);
+
+        SetCompoundControl(true);
+
+        ImplInitSettings(true, true, true);
+
+        pCheckBoxPaint = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
+        pCheckBoxPaint->SetPaintTransparent( true );
+        pCheckBoxPaint->SetBackground();
     }
 
     void EditBrowseBox::Init()

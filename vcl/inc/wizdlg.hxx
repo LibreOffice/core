@@ -256,8 +256,6 @@ namespace vcl
         */
         void implUpdateRoadmap( );
 
-        void impl_construct();
-
     public:
         class AccessGuard
         {
@@ -274,7 +272,6 @@ namespace vcl
         TabPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);
 
     private:
-        void             ImplInitData();
         void             ImplCalcSize( Size& rSize );
         void             ImplPosCtrls();
         void             ImplPosTabPage();

@@ -38,7 +38,31 @@ namespace rptui
     ReportFormula::ReportFormula( const OUString& _rFormula )
         :m_eType( Invalid )
     {
-        impl_construct( _rFormula );
+        m_sCompleteFormula = _rFormula;
+
+        // is it an ordinary expression?
+        if ( m_sCompleteFormula.startsWith( sExpressionPrefix, &m_sUndecoratedContent ) )
+        {
+            m_eType = Expression;
+            return;
+        }
+
+        /// does it refer to a field?
+        if ( m_sCompleteFormula.startsWith( sFieldPrefix ) )
+        {
+            sal_Int32 nPrefixLen = strlen(sFieldPrefix);
+            if  (   ( m_sCompleteFormula.getLength() >= nPrefixLen + 2 )
+                &&  ( m_sCompleteFormula[ nPrefixLen ] == '[' )
+                &&  ( m_sCompleteFormula[ m_sCompleteFormula.getLength() - 1 ] == ']' )
+                )
+            {
+                m_eType = Field;
+                m_sUndecoratedContent = m_sCompleteFormula.copy( nPrefixLen + 1, m_sCompleteFormula.getLength() - nPrefixLen - 2 );
+                return;
+            }
+        }
+
+        m_eType = Invalid;
     }
 
 
@@ -72,36 +96,6 @@ namespace rptui
     ReportFormula::~ReportFormula()
     {
     }
-
-    void ReportFormula::impl_construct( const OUString& _rFormula )
-    {
-        m_sCompleteFormula = _rFormula;
-
-        // is it an ordinary expression?
-        if ( m_sCompleteFormula.startsWith( sExpressionPrefix, &m_sUndecoratedContent ) )
-        {
-            m_eType = Expression;
-            return;
-        }
-
-        /// does it refer to a field?
-        if ( m_sCompleteFormula.startsWith( sFieldPrefix ) )
-        {
-            sal_Int32 nPrefixLen = strlen(sFieldPrefix);
-            if  (   ( m_sCompleteFormula.getLength() >= nPrefixLen + 2 )
-                &&  ( m_sCompleteFormula[ nPrefixLen ] == '[' )
-                &&  ( m_sCompleteFormula[ m_sCompleteFormula.getLength() - 1 ] == ']' )
-                )
-            {
-                m_eType = Field;
-                m_sUndecoratedContent = m_sCompleteFormula.copy( nPrefixLen + 1, m_sCompleteFormula.getLength() - nPrefixLen - 2 );
-                return;
-            }
-        }
-
-        m_eType = Invalid;
-    }
-
 
     OUString ReportFormula::getBracketedFieldOrExpression() const
     {
