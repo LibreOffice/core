@@ -27,9 +27,6 @@
     <glade-widget-class title="Search Results Box" name="sfxlo-SearchResultsBox"
                         generic-name="SearchResultsBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
-    <glade-widget-class title="Condition Edit" name="rptuilo-ConditionField"
-                        generic-name="ConditionEdit" parent="GtkEntry"
-                        icon-name="widget-gtk-comboboxtext"/>
 
     <glade-widget-class title="VclComboBoxNumeric" name="VclComboBoxNumeric"
                         generic-name="ComboBoxNumeric" parent="GtkComboBoxText"
