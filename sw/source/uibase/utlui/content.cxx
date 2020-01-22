@@ -3015,10 +3015,6 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
         {
             EditEntry(pEntry, EditEntryMode::DELETE);
-            m_bViewHasChanged = true;
-            GetParentWindow()->UpdateListBox();
-            TimerUpdate(&m_aUpdTimer);
-            GrabFocus();
         }
     }
     //Make KEY_SPACE has same function as DoubleClick ,
@@ -3667,6 +3663,14 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         }
         pDlg->SetForbiddenChars(sForbiddenChars);
         pDlg->Execute();
+    }
+
+    if(EditEntryMode::DELETE == nMode)
+    {
+        m_bViewHasChanged = true;
+        GetParentWindow()->UpdateListBox();
+        TimerUpdate(&m_aUpdTimer);
+        GrabFocus();
     }
 }
 
