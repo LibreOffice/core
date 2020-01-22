@@ -93,10 +93,7 @@ class RptMLMasterStylesContext_Impl:
 public:
 
 
-    RptMLMasterStylesContext_Impl(
-            ORptFilter& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName ,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    RptMLMasterStylesContext_Impl( ORptFilter& rImport );
 
     RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&) = delete;
     RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
@@ -105,11 +102,8 @@ public:
 
 }
 
-RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
-        ORptFilter& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName ,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
-    XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
+RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl( ORptFilter& rImport ) :
+    XMLTextMasterStylesContext( rImport )
 {
 }
 
@@ -630,6 +624,13 @@ public:
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateFontDeclsContext();
                 break;
+            case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
+                {
+                    SvXMLStylesContext* pStyleContext = new RptMLMasterStylesContext_Impl(rImport);
+                    rImport.SetMasterStyles(pStyleContext);
+                    return pStyleContext;
+                }
+                break;
         }
         return nullptr;
     }
@@ -651,13 +652,6 @@ public:
             case XML_TOK_CONTENT_AUTOSTYLES:
                 // don't use the autostyles from the styles-document for the progress
                 pContext = rImport.CreateStylesContext(rLocalName, xAttrList, true);
-                break;
-            case XML_TOK_CONTENT_MASTERSTYLES:
-                {
-                    SvXMLStylesContext* pStyleContext = new RptMLMasterStylesContext_Impl(rImport, nPrefix, rLocalName, xAttrList);//CreateMasterStylesContext( rLocalName,xAttrList );
-                    pContext = pStyleContext;
-                    rImport.SetMasterStyles(pStyleContext);
-                }
                 break;
             default:
                 break;
