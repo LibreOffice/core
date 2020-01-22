@@ -2123,7 +2123,6 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
     aPoint.setX(aPoint.getX() + aPixPos.getX());
     aPoint.setY(aPoint.getY() + aPixPos.getY());
-    MapMode aMapMode = pWin->GetMapMode();
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
     if( !aLogBounds.IsInside( aCorePoint ) )
     {

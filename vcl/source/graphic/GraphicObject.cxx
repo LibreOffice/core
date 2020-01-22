@@ -530,7 +530,6 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
         return;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
-    const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
     // #106258# Clamp size to 1 for zero values. This is okay, since
     // logical size of zero is handled above already
     const Size      aOutTileSize( ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),

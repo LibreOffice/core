@@ -274,9 +274,6 @@ namespace sdr::contact
                 rDisplayInfo.ClearGhostedDrawMode(); // reset, else the VCL-paint with the processor will not do the right thing
                 pOutDev->SetLayoutMode(ComplexTextLayoutFlags::Default); // reset, default is no BiDi/RTL
 
-                // Save the map-mode since creating the 2D processor will replace it.
-                const MapMode aOrigMapMode = pOutDev->GetMapMode();
-
                 // create renderer
                 std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
