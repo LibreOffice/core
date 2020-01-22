@@ -122,7 +122,7 @@ namespace logging
     }
 
 
-    bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, OString& _out_rEntry ) const
+    bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, OUString& _out_rEntry ) const
     {
         if ( _rRecord.Level < getLevel() )
             // not to be published due to low level
@@ -131,8 +131,7 @@ namespace logging
         try
         {
             Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
-            OUString sEntry( xFormatter->format( _rRecord ) );
-            _out_rEntry = OUStringToOString( sEntry, getTextEncoding() );
+            _out_rEntry = xFormatter->format( _rRecord );
             return true;
         }
         catch( const Exception& )
@@ -142,31 +141,47 @@ namespace logging
         return false;
     }
 
+    bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, OString& _out_rEntry ) const
+    {
+        OUString sEntry;
+        const bool bResult = formatForPublishing(_rRecord, sEntry);
+        if (bResult)
+            _out_rEntry = OUStringToOString( sEntry, getTextEncoding() );
+        return bResult;
+    }
+
+
+    bool LogHandlerHelper::getUnencodedHead( OUString& _out_rHead ) const
+    {
+        try
+        {
+            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
+            _out_rHead = xFormatter->getHead();
+            return true;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("extensions.logging");
+        }
+        return false;
+    }
 
     bool LogHandlerHelper::getEncodedHead( OString& _out_rHead ) const
     {
-        try
-        {
-            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
-            OUString sHead( xFormatter->getHead() );
+        OUString sHead;
+        const bool bResult = getUnencodedHead(sHead);
+        if (bResult)
             _out_rHead = OUStringToOString( sHead, getTextEncoding() );
-            return true;
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("extensions.logging");
-        }
-        return false;
+        return bResult;
     }
 
 
-    bool LogHandlerHelper::getEncodedTail( OString& _out_rTail ) const
+    bool LogHandlerHelper::getUnencodedTail( OUString& _out_rTail ) const
     {
         try
         {
             Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
-            OUString sTail( xFormatter->getTail() );
-            _out_rTail = OUStringToOString( sTail, getTextEncoding() );
+            _out_rTail = xFormatter->getTail();
             return true;
         }
         catch( const Exception& )
@@ -176,6 +191,14 @@ namespace logging
         return false;
     }
 
+    bool LogHandlerHelper::getEncodedTail( OString& _out_rTail ) const
+    {
+        OUString sTail;
+        const bool bResult = getUnencodedTail(sTail);
+        if (bResult)
+            _out_rTail = OUStringToOString(sTail, getTextEncoding());
+        return bResult;
+    }
 
 } // namespace logging
 

@@ -227,45 +227,28 @@ namespace logging
 #endif
     }
 
-    namespace
-    {
-    void lcl_printConsole(const OString& sText)
-    {
-#ifdef _WIN32
-        DWORD nWrittenChars = 0;
-        OUString s = OStringToOUString(sText, RTL_TEXTENCODING_ASCII_US);
-        WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), s.getStr(), s.getLength() * 2,
-                  &nWrittenChars, nullptr);
-#else
-        fprintf(stdout, "%s\n", sText.getStr());
-#endif
-    }
-
-    void lcl_printConsoleError(const OString& sText)
-    {
-#ifdef _WIN32
-        DWORD nWrittenChars = 0;
-        OUString s = OStringToOUString(sText, RTL_TEXTENCODING_ASCII_US);
-        WriteFile(GetStdHandle(STD_ERROR_HANDLE), s.getStr(), s.getLength() * 2,
-                  &nWrittenChars, nullptr);
-#else
-        fprintf(stderr, "%s\n", sText.getStr());
-#endif
-    }
-    } // namespace
-
     sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord )
     {
         MethodGuard aGuard( *this );
 
+#ifdef _WIN32
+        OUString sEntry;
+#else
         OString sEntry;
+#endif
+
         if ( !m_aHandlerHelper.formatForPublishing( _rRecord, sEntry ) )
             return false;
 
-        if ( _rRecord.Level >= m_nThreshold )
-            lcl_printConsoleError(sEntry);
-        else
-            lcl_printConsole(sEntry);
+#ifdef _WIN32
+        DWORD nWrittenBytes = 0;
+        sEntry += "\n";
+        WriteFile(
+            GetStdHandle(_rRecord.Level >= m_nThreshold ? STD_ERROR_HANDLE : STD_OUTPUT_HANDLE),
+            sEntry.getStr(), sEntry.getLength() * 2, &nWrittenBytes, nullptr);
+#else
+        fprintf(_rRecord.Level >= m_nThreshold ? stderr : stdout, "%s\n", sEntry.getStr());
+#endif
         return true;
     }
 

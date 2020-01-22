@@ -98,19 +98,32 @@ namespace logging
 
             Second, our formatter is used to create a unicode string from the log record. If an error occurs
             during this, e.g. if the formatter is <NULL/> or throws an exception during formatting,
-            <FALSE/> is returned.
+            <FALSE/> is returned, otherwise <TRUE/> is returned.
+        */
+        bool    formatForPublishing(const css::logging::LogRecord& _rRecord, OUString& _out_rEntry) const;
+        /** formats a record for publishing it
 
-            Finally, the unicode string is encoded into a byte string, using our encoding setting. Then,
-            <TRUE/> is returned.
+            The method calls OUString overload first, then in case of success, the unicode string is encoded
+            into a byte string, using our encoding setting. Then, result of OUString overload is returned.
         */
         bool    formatForPublishing( const css::logging::LogRecord& _rRecord, OString& _out_rEntry ) const;
 
+        /** retrieves our formatter's heading
+
+            @return <TRUE/> in case of success, <FALSE/> if any error occurred
+        */
+        bool    getUnencodedHead(OUString& _out_rHead) const;
         /** retrieves our formatter's heading, encoded with our encoding
 
             @return <TRUE/> in case of success, <FALSE/> if any error occurred
         */
         bool    getEncodedHead( OString& _out_rHead ) const;
 
+        /** retrieves our formatter's tail
+
+            @return <TRUE/> in case of success, <FALSE/> if any error occurred
+        */
+        bool    getUnencodedTail(OUString& _out_rTail) const;
         /** retrieves our formatter's tail, encoded with our encoding
 
             @return <TRUE/> in case of success, <FALSE/> if any error occurred
