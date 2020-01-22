@@ -11733,7 +11733,6 @@ sd/source/ui/dlg/dlgfield.cxx
 sd/source/ui/dlg/dlgolbul.cxx
 sd/source/ui/dlg/dlgpage.cxx
 sd/source/ui/dlg/dlgsnap.cxx
-sd/source/ui/dlg/docprev.cxx
 sd/source/ui/dlg/filedlg.cxx
 sd/source/ui/dlg/gluectrl.cxx
 sd/source/ui/dlg/headerfooterdlg.cxx
@@ -11961,7 +11960,6 @@ sd/source/ui/inc/dlg_char.hxx
 sd/source/ui/inc/dlgfield.hxx
 sd/source/ui/inc/dlgpage.hxx
 sd/source/ui/inc/dlgsnap.hxx
-sd/source/ui/inc/docprev.hxx
 sd/source/ui/inc/drawview.hxx
 sd/source/ui/inc/facreg.hxx
 sd/source/ui/inc/filedlg.hxx
