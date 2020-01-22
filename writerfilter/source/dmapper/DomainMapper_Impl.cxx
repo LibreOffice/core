@@ -1878,7 +1878,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                         assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
-                        if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField != 0)
+                        if (m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0) {
                             xTOCTextCursor->goLeft(1, false);
                         }
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
