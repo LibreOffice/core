@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Executable_Executable,unopkg_bin))
 
-$(eval $(call gb_Executable_set_targettype_gui,unopkg_bin,YES))
+$(eval $(call gb_Executable_set_targettype_gui,unopkg_bin,NO))
 
 $(eval $(call gb_Executable_set_include,unopkg_bin,\
     $$(INCLUDE) \
