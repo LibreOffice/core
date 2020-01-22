@@ -75,23 +75,6 @@ namespace vcl
         return true;
     }
 
-    void RoadmapWizard::ImplInitData()
-    {
-        mpFirstPage     = nullptr;
-        mpFirstBtn      = nullptr;
-        mpCurTabPage    = nullptr;
-        mpPrevBtn       = nullptr;
-        mpNextBtn       = nullptr;
-        mpViewWindow    = nullptr;
-        mnCurLevel      = 0;
-        meViewAlign     = WindowAlign::Left;
-        mbEmptyViewMargin =  false;
-        mnLeftAlignCount = 0;
-
-        maWizardLayoutIdle.SetPriority(TaskPriority::RESIZE);
-        maWizardLayoutIdle.SetInvokeHandler( LINK( this, RoadmapWizard, ImplHandleWizardLayoutTimerHdl ) );
-    }
-
     void RoadmapWizard::SetLeftAlignedButtonCount( sal_Int16 _nCount )
     {
         mnLeftAlignCount = _nCount;

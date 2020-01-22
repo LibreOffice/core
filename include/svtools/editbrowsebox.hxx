@@ -627,7 +627,6 @@ namespace svt
         inline void EnableAndShow() const;
 
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);
-        SVT_DLLPRIVATE void impl_construct();
 
         DECL_DLLPRIVATE_LINK( ModifyHdl, LinkParamNone*, void );
         DECL_DLLPRIVATE_LINK( StartEditHdl, void*, void );

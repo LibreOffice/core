@@ -130,22 +130,22 @@ namespace vcl
         , m_xWizardImpl(new WizardMachineImplData)
         , m_xRoadmapImpl(new RoadmapWizardImpl)
     {
-        ImplInitData();
+        mpFirstPage     = nullptr;
+        mpFirstBtn      = nullptr;
+        mpCurTabPage    = nullptr;
+        mpPrevBtn       = nullptr;
+        mpNextBtn       = nullptr;
+        mpViewWindow    = nullptr;
+        mnCurLevel      = 0;
+        meViewAlign     = WindowAlign::Left;
+        mbEmptyViewMargin =  false;
+        mnLeftAlignCount = 0;
+
+        maWizardLayoutIdle.SetPriority(TaskPriority::RESIZE);
+        maWizardLayoutIdle.SetInvokeHandler( LINK( this, RoadmapWizard, ImplHandleWizardLayoutTimerHdl ) );
 
         implConstruct(WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP);
 
-        impl_construct();
-    }
-
-    RoadmapWizardMachine::RoadmapWizardMachine(weld::Window* pParent)
-        : WizardMachine(pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP)
-        , m_pImpl( new RoadmapWizardImpl )
-    {
-        m_xAssistant->connect_jump_page(LINK(this, RoadmapWizardMachine, OnRoadmapItemSelected));
-    }
-
-    void RoadmapWizard::impl_construct()
-    {
         SetLeftAlignedButtonCount( 1 );
         mbEmptyViewMargin = true;
 
@@ -161,6 +161,13 @@ namespace vcl
         mpViewWindow = m_xRoadmapImpl->pRoadmap;
         meViewAlign = WindowAlign::Left;
         m_xRoadmapImpl->pRoadmap->Show();
+    }
+
+    RoadmapWizardMachine::RoadmapWizardMachine(weld::Window* pParent)
+        : WizardMachine(pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP)
+        , m_pImpl( new RoadmapWizardImpl )
+    {
+        m_xAssistant->connect_jump_page(LINK(this, RoadmapWizardMachine, OnRoadmapItemSelected));
     }
 
     void RoadmapWizard::ShowRoadmap(bool bShow)
