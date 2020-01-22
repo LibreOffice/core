@@ -900,11 +900,8 @@ bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
     return true;
 }
 
-ScXMLMasterStylesContext::ScXMLMasterStylesContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< XAttributeList > & xAttrList ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+ScXMLMasterStylesContext::ScXMLMasterStylesContext( SvXMLImport& rImport ) :
+    SvXMLStylesContext( rImport )
 {
 }
 
