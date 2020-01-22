@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -845,6 +848,7 @@ namespace basegfx::utils
                             StripHelper& rHelperB = aHelpers[b];
                             const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && utils::isInside(aCandB, aCandA, true));
                             const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && utils::isInside(aCandA, aCandB, true));
+                            SAL_DEBUG(__FUNCTION__ << " a: " << a << " b: " << b << " bAInB: " << bAInB << " bBInA: " << bBInA);
 
                             if(bAInB && bBInA)
                             {
