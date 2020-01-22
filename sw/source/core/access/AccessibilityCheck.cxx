@@ -29,6 +29,7 @@
 #include <svx/xflclit.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
+#include <svl/itemiter.hxx>
 
 namespace sw
 {
@@ -426,6 +427,114 @@ public:
     }
 };
 
+class TextFormattingCheck : public NodeCheck
+{
+private:
+public:
+    TextFormattingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void checkAutoFormat(const SwTextAttr* pTextAttr)
+    {
+        const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
+        SfxItemIter aItemIter(*rAutoFormat.GetStyleHandle());
+        const SfxPoolItem* pItem = aItemIter.GetCurItem();
+        std::vector<OUString> aFormattings;
+        while (pItem)
+        {
+            OUString sFormattingType;
+            switch (pItem->Which())
+            {
+                case RES_CHRATR_WEIGHT:
+                case RES_CHRATR_CJK_WEIGHT:
+                case RES_CHRATR_CTL_WEIGHT:
+                    sFormattingType = "Weight";
+                    break;
+                case RES_CHRATR_POSTURE:
+                case RES_CHRATR_CJK_POSTURE:
+                case RES_CHRATR_CTL_POSTURE:
+                    sFormattingType = "Posture";
+                    break;
+
+                case RES_CHRATR_SHADOWED:
+                    sFormattingType = "Shadowed";
+                    break;
+
+                case RES_CHRATR_COLOR:
+                    sFormattingType = "Font Color";
+                    break;
+
+                case RES_CHRATR_FONTSIZE:
+                case RES_CHRATR_CJK_FONTSIZE:
+                case RES_CHRATR_CTL_FONTSIZE:
+                    sFormattingType = "Font Size";
+                    break;
+
+                case RES_CHRATR_FONT:
+                case RES_CHRATR_CJK_FONT:
+                case RES_CHRATR_CTL_FONT:
+                    sFormattingType = "Font";
+                    break;
+
+                case RES_CHRATR_EMPHASIS_MARK:
+                    sFormattingType = "Emphasis Mark";
+                    break;
+
+                case RES_CHRATR_UNDERLINE:
+                    sFormattingType = "Underline";
+                    break;
+
+                case RES_CHRATR_OVERLINE:
+                    sFormattingType = "Overline";
+                    break;
+
+                case RES_CHRATR_CROSSEDOUT:
+                    sFormattingType = "Strikethrough";
+                    break;
+
+                case RES_CHRATR_RELIEF:
+                    sFormattingType = "Relief";
+                    break;
+
+                case RES_CHRATR_CONTOUR:
+                    sFormattingType = "Outline";
+                    break;
+                default:
+                    break;
+            }
+            if (!sFormattingType.isEmpty())
+                aFormattings.push_back(sFormattingType);
+            pItem = aItemIter.NextItem();
+        }
+        if (!aFormattings.empty())
+        {
+            lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                        sfx::AccessibilityIssueID::TEXT_FORMATTING);
+        }
+    }
+    void check(SwNode* pCurrent) override
+    {
+        if (pCurrent->IsTextNode())
+        {
+            SwTextNode* pTextNode = pCurrent->GetTextNode();
+            if (pTextNode->HasHints())
+            {
+                SwpHints& rHints = pTextNode->GetSwpHints();
+                for (size_t i = 0; i < rHints.Count(); ++i)
+                {
+                    const SwTextAttr* pTextAttr = rHints.Get(i);
+                    if (pTextAttr->Which() == RES_TXTATR_AUTOFMT)
+                    {
+                        checkAutoFormat(pTextAttr);
+                    }
+                }
+            }
+        }
+    }
+};
+
 class BlinkingTextCheck : public NodeCheck
 {
 private:
@@ -648,6 +757,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<TextContrastCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<BlinkingTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HeaderCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
