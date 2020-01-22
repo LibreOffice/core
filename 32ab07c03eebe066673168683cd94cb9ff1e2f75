@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc270abe_66ac4230",
+        "filename": "vcl/source/gdi/impanmvw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-22T22:44:11Z",
+      "side": 1,
+      "message": "This is equivalent to\n\n    (nExtraData \u003d\u003d 0 || nExtraData \u003d\u003d mnExtraData)",
+      "range": {
+        "startLine": 102,
+        "startChar": 11,
+        "endLine": 102,
+        "endChar": 81
+      },
+      "revId": "32ab07c03eebe066673168683cd94cb9ff1e2f75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
