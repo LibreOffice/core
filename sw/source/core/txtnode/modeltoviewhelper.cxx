@@ -93,7 +93,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
     MultiSelection aHiddenMulti(aRange);
 
     if (eMode & ExpandMode::HideInvisible)
-        SwScriptInfo::selectHiddenTextProperty(rNode, aHiddenMulti);
+        SwScriptInfo::selectHiddenTextProperty(rNode, aHiddenMulti, nullptr);
 
     if (eMode & ExpandMode::HideDeletions)
         SwScriptInfo::selectRedLineDeleted(rNode, aHiddenMulti);
