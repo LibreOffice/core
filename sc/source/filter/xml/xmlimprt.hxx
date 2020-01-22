@@ -309,10 +309,8 @@ public:
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
-    SvXMLImportContext *CreateMetaContext(
-                                    const sal_Int32 nElement );
-    SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
+    SvXMLImportContext *CreateMetaContext( sal_Int32 nElement );
+    SvXMLImportContext *CreateFontDeclsContext();
     SvXMLImportContext *CreateScriptContext();
     SvXMLImportContext *CreateStylesContext( bool bAutoStyles );
 

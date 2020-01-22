@@ -235,6 +235,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
         case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
             return GetSwImport().CreateMasterStylesContext();
             break;
+        case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
+            return GetSwImport().CreateFontDeclsContext();
+            break;
     }
     return nullptr;
 }
@@ -242,17 +245,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
 SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-    case XML_TOK_DOC_FONTDECLS:
-        pContext = GetSwImport().CreateFontDeclsContext( rLocalName,
-                                                             xAttrList );
-        break;
     case XML_TOK_DOC_META:
         OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
@@ -1192,14 +1191,10 @@ XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
     return new SvTextShapeImportHelper( *this );
 }
 
-SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *SwXMLImport::CreateFontDeclsContext()
 {
     XMLFontStylesContext *pFSContext =
-            new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
-                                      rLocalName, xAttrList,
-                                      osl_getThreadTextEncoding() );
+            new XMLFontStylesContext( *this, osl_getThreadTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
 }

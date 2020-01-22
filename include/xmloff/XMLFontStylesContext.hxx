@@ -51,11 +51,7 @@ class XMLOFF_DLLPUBLIC XMLFontStylesContext final : public SvXMLStylesContext
 
 public:
 
-
-    XMLFontStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            rtl_TextEncoding eDfltEnc );
+    XMLFontStylesContext( SvXMLImport& rImport, rtl_TextEncoding eDfltEnc );
 
     ~XMLFontStylesContext() override;
 

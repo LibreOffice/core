@@ -205,8 +205,7 @@ public:
     SvXMLStylesContext* CreateStylesContext();
     SvXMLStylesContext* CreateAutoStylesContext();
     SvXMLImportContext* CreateMasterStylesContext();
-    SvXMLImportContext *CreateFontDeclsContext(const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+    SvXMLImportContext *CreateFontDeclsContext();
 
     // Styles and AutoStyles contexts
 

@@ -96,8 +96,7 @@ public:
     SvXMLImportContext* CreateStylesContext(const OUString& rLocalName,
                                             const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
     SvXMLImportContext* CreateMetaContext(const sal_Int32 nElement);
-    SvXMLImportContext* CreateFontDeclsContext(const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+    SvXMLImportContext* CreateFontDeclsContext();
 protected:
     // SvXMLImport
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,

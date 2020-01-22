@@ -353,10 +353,6 @@ SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPref
     const SvXMLTokenMap& rTokenMap(GetScImport().GetDocElemTokenMap());
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-    case XML_TOK_DOC_FONTDECLS:
-        if (GetScImport().getImportFlags() & SvXMLImportFlags::FONTDECLS)
-            pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
-        break;
     case XML_TOK_DOC_MASTERSTYLES:
         if (GetScImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES)
             pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
@@ -397,6 +393,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
             if (GetScImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES)
                 pContext = GetScImport().CreateStylesContext( true);
+            break;
+        case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
+            if (GetScImport().getImportFlags() & SvXMLImportFlags::FONTDECLS)
+                pContext = GetScImport().CreateFontDeclsContext();
             break;
 
         //TODO: handle all other cases
@@ -742,11 +742,10 @@ void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArgument
         xInfoSet->getPropertyValue(SC_UNO_ODS_IMPORT_STYLES) >>= mbImportStyles;
 }
 
-SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
-                                                        const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+SvXMLImportContext *ScXMLImport::CreateFontDeclsContext()
 {
     XMLFontStylesContext *pFSContext = new XMLFontStylesContext(
-        *this, nPrefix, rLocalName, xAttrList, osl_getThreadTextEncoding());
+        *this, osl_getThreadTextEncoding());
     SetFontDecls(pFSContext);
     SvXMLImportContext* pContext = pFSContext;
     return pContext;
