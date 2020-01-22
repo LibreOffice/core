@@ -777,6 +777,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                     }
                 }
             }
+            nOffset += TextFrameIndex(iter->nEnd - iter->nStart);
         }
     }
     else
