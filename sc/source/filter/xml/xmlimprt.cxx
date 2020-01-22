@@ -234,10 +234,6 @@ protected:
 public:
     ScXMLDocContext_Impl( ScXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList>& xAttrList ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
@@ -344,28 +340,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return GetScImport().CreateBodyContext( pAttribList );
 }
 
-SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
-                                                             const OUString& rLocalName,
-                                                             const uno::Reference<xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContext *pContext(nullptr);
-
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetDocElemTokenMap());
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-    case XML_TOK_DOC_MASTERSTYLES:
-        if (GetScImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES)
-            pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
-            xAttrList );
-        break;
-    case XML_TOK_DOC_META:
-        SAL_INFO("sc", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
-        break;
-    }
-
-    return pContext;
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
@@ -398,8 +372,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             if (GetScImport().getImportFlags() & SvXMLImportFlags::FONTDECLS)
                 pContext = GetScImport().CreateFontDeclsContext();
             break;
-
-        //TODO: handle all other cases
+        case XML_ELEMENT(OFFICE, XML_MASTER_STYLES):
+            if (GetScImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES)
+                pContext = new ScXMLMasterStylesContext( GetImport() );
+            break;
+        case XML_ELEMENT(OFFICE, XML_META):
+            SAL_INFO("sc", "XML_ELEMENT(OFFICE, XML_META): should not have come here, maybe document is invalid?");
+            break;
     }
 
     return pContext;

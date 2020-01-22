@@ -181,9 +181,7 @@ protected:
 
 public:
 
-    ScXMLMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList);
+    ScXMLMasterStylesContext( SvXMLImport& rImport );
 
     virtual ~ScXMLMasterStylesContext() override;
     virtual void EndElement() override;
