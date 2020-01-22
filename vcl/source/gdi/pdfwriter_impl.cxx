@@ -9620,13 +9620,13 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
-                aLine.append("q ");
-                if ( rNewState.m_aClipRegion.count() )
-                {
+                SAL_DEBUG(__FUNCTION__ << " " << rNewState.m_aClipRegion.count());
+                aLine.append( "q " );
+                if( rNewState.m_aClipRegion.count() )
                     m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
-                    aLine.append( "W* n\n" );
-                }
-
+                else
+                    aLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
+                aLine.append( "W* n\n" );
                 rNewState.m_aMapMode = aNewMapMode;
                 SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
@@ -9740,6 +9740,7 @@ void PDFWriterImpl::pop()
         setMapMode( aState.m_aMapMode );
     if( ! (aState.m_nFlags & PushFlags::CLIPREGION) )
     {
+        SAL_DEBUG(__FUNCTION__);
         // do not use setClipRegion here
         // it would convert again assuming the current mapmode
         rOld.m_aClipRegion = aState.m_aClipRegion;
@@ -9770,6 +9771,7 @@ void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
 
 void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
+    SAL_DEBUG(__FUNCTION__ << " " << rRegion.count());
     basegfx::B2DPolyPolygon aRegion = LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
     aRegion = PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_aClipRegion = aRegion;
@@ -9781,6 +9783,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 {
     if( m_aGraphicsStack.front().m_bClipRegion && m_aGraphicsStack.front().m_aClipRegion.count() )
     {
+        SAL_DEBUG(__FUNCTION__);
         Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
                                    m_aMapMode,
                                    this,
@@ -9808,14 +9811,20 @@ void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
     basegfx::B2DPolyPolygon aRegion( LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
     aRegion = PixelToLogic( aRegion, m_aMapMode );
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
+    SAL_DEBUG(__FUNCTION__ << " in " << m_aGraphicsStack.front().m_bClipRegion << " " << rRegion.count() << " " << aRegion.count());
     if( m_aGraphicsStack.front().m_bClipRegion )
     {
         basegfx::B2DPolyPolygon aOld( basegfx::utils::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );
         aRegion = basegfx::utils::prepareForPolygonOperation( aRegion );
+        SAL_DEBUG(aOld);
+        SAL_DEBUG(aRegion);
         m_aGraphicsStack.front().m_aClipRegion = basegfx::utils::solvePolygonOperationAnd( aOld, aRegion );
+        SAL_DEBUG(m_aGraphicsStack.front().m_aClipRegion);
     }
     else
     {
+        SAL_DEBUG(rRegion);
+        SAL_DEBUG(aRegion);
         m_aGraphicsStack.front().m_aClipRegion = aRegion;
         m_aGraphicsStack.front().m_bClipRegion = true;
     }
