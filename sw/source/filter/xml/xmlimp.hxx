@@ -138,7 +138,7 @@ public:
     SvXMLImportContext *CreateStylesContext( bool bAuto );
     SvXMLImportContext *CreateMasterStylesContext();
     SvXMLImportContext *CreateFontDeclsContext();
-    SvXMLImportContext *CreateBodyContentContext( const OUString& rLocalName );
+    SvXMLImportContext *CreateBodyContentContext();
     SfxStyleFamily GetStyleFamilyMask() const { return m_nStyleFamilyMask; }
     bool IsInsertMode() const { return m_bInsert; }
     bool IsStylesOnlyMode() const { return !m_bLoadDoc; }
