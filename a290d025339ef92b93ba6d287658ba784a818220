@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e5bab87_4383ef66",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-01-22T21:54:14Z",
+      "side": 1,
+      "message": "that m_bStartGenericField probably also should be m_nStartGenericField?",
+      "revId": "a290d025339ef92b93ba6d287658ba784a818220",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
