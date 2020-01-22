@@ -3104,8 +3104,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     MapMode aDest( MapUnit::MapTwip );
 
     Point aPoint = OutputDevice::LogicToLogic( rPoint, aSrc, aDest );
-    vcl::Window *pWin = GetShell()->GetWin();
-    if( pWin )
+    if (const vcl::Window* pWin = GetShell()->GetWin())
     {
         MapMode aMapMode;
         GetMapMode( aPoint, aMapMode );
@@ -3121,11 +3120,11 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
     MapMode aSrc( MapUnit::Map100thMM );
     MapMode aDest( MapUnit::MapTwip );
     Size aSize( OutputDevice::LogicToLogic( rSize, aSrc, aDest ) );
-    if( GetShell()->GetWin() )
+    if (const OutputDevice* pWin = GetShell()->GetWin())
     {
         MapMode aMapMode;
         GetMapMode( Point(0,0), aMapMode );
-        aSize = GetShell()->GetWin()->LogicToPixel( aSize, aMapMode );
+        aSize = pWin->LogicToPixel( aSize, aMapMode );
     }
 
     return aSize;
@@ -3240,11 +3239,11 @@ css::uno::Reference< XAccessible >
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
 {
     Point aPoint;
-    if( GetShell()->GetWin() )
+    if (const OutputDevice* pWin = GetShell()->GetWin())
     {
         MapMode aMapMode;
         GetMapMode( rPoint, aMapMode );
-        aPoint = GetShell()->GetWin()->PixelToLogic( rPoint, aMapMode );
+        aPoint = pWin->PixelToLogic( rPoint, aMapMode );
     }
     return aPoint;
 }
@@ -3285,13 +3284,13 @@ static void lcl_CorrectRectangle(tools::Rectangle & rRect,
 tools::Rectangle SwAccessibleMap::CoreToPixel( const tools::Rectangle& rRect ) const
 {
     tools::Rectangle aRect;
-    if( GetShell()->GetWin() )
+    if (const OutputDevice* pWin = GetShell()->GetWin())
     {
         MapMode aMapMode;
         GetMapMode( rRect.TopLeft(), aMapMode );
-        aRect = GetShell()->GetWin()->LogicToPixel( rRect, aMapMode );
+        aRect = pWin->LogicToPixel( rRect, aMapMode );
 
-        tools::Rectangle aTmpRect = GetShell()->GetWin()->PixelToLogic( aRect, aMapMode );
+        tools::Rectangle aTmpRect = pWin->PixelToLogic( aRect, aMapMode );
         lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
 
