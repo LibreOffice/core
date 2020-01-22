@@ -28,6 +28,7 @@ enum class AccessibilityIssueID
     NO_ALT_GRAPHIC,
     NO_ALT_SHAPE,
     TABLE_MERGE_SPLIT,
+    TEXT_FORMATTING,
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssue
