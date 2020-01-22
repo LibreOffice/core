@@ -8,7 +8,6 @@
 #
 
 pdfium_patches :=
-pdfium_patches += visibility.patch.1
 pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
