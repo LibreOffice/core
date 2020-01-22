@@ -129,19 +129,16 @@ class SwXMLBodyContext_Impl : public SvXMLImportContext
 
 public:
 
-    SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName );
+    SwXMLBodyContext_Impl( SwXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 }
 
-SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport ) :
+    SvXMLImportContext( rImport )
 {
     // tdf#107211: if at this point we don't have a defined char style "Default"
     // or "Default Style", add a mapping for it as it is not written
@@ -169,12 +166,11 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
     }
 }
 
-SvXMLImportContextRef SwXMLBodyContext_Impl::CreateChildContext(
-        sal_uInt16 /*nPrefix*/,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContext_Impl::createFastChildContext(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return GetSwImport().CreateBodyContentContext( rLocalName );
+    return GetSwImport().CreateBodyContentContext();
 }
 
 namespace {
@@ -238,6 +234,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
         case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
             return GetSwImport().CreateFontDeclsContext();
             break;
+        case XML_ELEMENT(OFFICE, XML_META):
+            OSL_FAIL(" XML_ELEMENT(OFFICE, XML_META): should not have come here, maybe document is invalid?");
+            break;
+        case XML_ELEMENT(OFFICE, XML_BODY):
+            GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            return new SwXMLBodyContext_Impl( GetSwImport() );
+            break;
     }
     return nullptr;
 }
@@ -252,14 +255,6 @@ SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
     const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-    case XML_TOK_DOC_META:
-        OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
-        break;
-    case XML_TOK_DOC_BODY:
-        GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-        pContext = new SwXMLBodyContext_Impl( GetSwImport(), nPrefix,
-                                              rLocalName );
-        break;
     case XML_TOK_DOC_XFORMS:
         pContext = createXFormsModelContext(GetImport(), nPrefix, rLocalName);
         break;

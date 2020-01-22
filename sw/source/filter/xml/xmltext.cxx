@@ -32,22 +32,28 @@ class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 
 public:
 
-    SwXMLBodyContentContext_Impl( SwXMLImport& rImport, const OUString& rLName );
+    SwXMLBodyContentContext_Impl( SwXMLImport& rImport );
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+    { return nullptr; }
 
     virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
     // The body element's text:global attribute can be ignored, because
     // we must have the correct object shell already.
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport,
-                                                   const OUString& rLName ) :
-    SvXMLImportContext( rImport, XML_NAMESPACE_OFFICE, rLName )
+SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport ) :
+    SvXMLImportContext( rImport )
 {
 }
 
@@ -62,19 +68,18 @@ SvXMLImportContextRef SwXMLBodyContentContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void SwXMLBodyContentContext_Impl::EndElement()
+void SwXMLBodyContentContext_Impl::endFastElement(sal_Int32 )
 {
     /* Code moved to SwXMLOmport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles( false );
 }
 
-SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
-                                       const OUString& rLocalName )
+SvXMLImportContext *SwXMLImport::CreateBodyContentContext()
 {
     SvXMLImportContext *pContext = nullptr;
 
     if( !IsStylesOnlyMode() )
-         pContext = new SwXMLBodyContentContext_Impl( *this, rLocalName );
+         pContext = new SwXMLBodyContentContext_Impl( *this );
 
     return pContext;
 }
