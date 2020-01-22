@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3c939a0_12c0cb57",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 7911,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-22T11:13:10Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 7911,
+        "startChar": 33,
+        "endLine": 7911,
+        "endChar": 37
+      },
+      "revId": "dfab0f10d1f706726e8771984a653218beb9cf5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
