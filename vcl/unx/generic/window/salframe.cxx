@@ -956,6 +956,8 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
     pFrame->maSystemChildData.pVisual       = GetDisplay()->GetVisual( m_nXScreen ).GetVisual();
     pFrame->maSystemChildData.nScreen       = m_nXScreen.getXScreen();
     pFrame->maSystemChildData.aShellWindow  = pFrame->GetShellWindow();
+    pFrame->maSystemChildData.toolkit       = SystemEnvData::Toolkit::Gen;
+    pFrame->maSystemChildData.platform      = SystemEnvData::Platform::Xcb;
     return &maSystemChildData;
 }
 

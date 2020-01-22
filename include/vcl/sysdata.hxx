@@ -61,7 +61,7 @@ struct SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    enum class Toolkit { Gtk3, Qt5 };
+    enum class Toolkit { Gtk3, Qt5, Gen };
     enum class Platform { Wayland, Xcb };
 
     void*               pDisplay;       // the relevant display connection
