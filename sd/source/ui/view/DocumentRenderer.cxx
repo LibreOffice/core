@@ -1044,7 +1044,6 @@ namespace {
             }
             rViewShell.SetPrintedHandoutPageNum( mnHandoutPageIndex + 1 );
 
-            MapMode aMap (rPrinter.GetMapMode());
             rPrinter.SetMapMode(maMap);
 
             PrintPage(

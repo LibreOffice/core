@@ -30,8 +30,7 @@ class Point;
 class Fraction;
 class SvStream;
 
-
-class VCL_DLLPUBLIC MapMode
+class SAL_WARN_UNUSED VCL_DLLPUBLIC MapMode
 {
     friend class        OutputDevice;
 
