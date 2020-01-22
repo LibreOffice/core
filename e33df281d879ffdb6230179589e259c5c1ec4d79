@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f24445e_a01b989a",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-01-22T11:25:11Z",
+      "side": 1,
+      "message": "Added because I think needed for \"reset\" button (clang_dbgutil was not happy with the ordering of my first attempt) -- but unsure here, because does not mirror SvxNumPositionsTabPage",
+      "range": {
+        "startLine": 1113,
+        "startChar": 4,
+        "endLine": 1113,
+        "endChar": 25
+      },
+      "revId": "e33df281d879ffdb6230179589e259c5c1ec4d79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
