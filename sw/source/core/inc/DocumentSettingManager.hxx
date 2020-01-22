@@ -21,6 +21,7 @@
 
 #include <IDocumentSettingAccess.hxx>
 class SwDoc;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace sw {
 class DocumentSettingManager :
@@ -189,7 +190,7 @@ public:
     void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) override;
     sal_uInt32 Getn32DummyCompatibilityOptions2() const override;
     void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) override;
-
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 }

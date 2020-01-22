@@ -43,6 +43,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <DocumentSettingManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -1934,6 +1935,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     maDBData.dumpAsXml(pWriter);
     mpMarkManager->dumpAsXml(pWriter);
     m_pUndoManager->dumpAsXml(pWriter);
+    m_pDocumentSettingManager->dumpAsXml(pWriter);
     getIDocumentFieldsAccess().GetFieldTypes()->dumpAsXml(pWriter);
     mpTextFormatCollTable->dumpAsXml(pWriter);
     mpCharFormatTable->dumpAsXml(pWriter);
