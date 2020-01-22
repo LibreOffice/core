@@ -119,18 +119,6 @@ namespace
         aDamageRect.intersect(getClipBox(cr));
         return aDamageRect;
     }
-
-    // The caching logic is surprisingly expensive - so avoid it sometimes.
-    inline bool isTrivial(const basegfx::B2DPolyPolygon& rPolyPolygon)
-    {
-        return rPolyPolygon.count() == 1 && rPolyPolygon.begin()->count() <= 4;
-    }
-
-    // The caching logic is surprisingly expensive - so avoid it sometimes.
-    inline bool isTrivial(const basegfx::B2DPolygon& rPolyLine)
-    {
-        return rPolyLine.count() <= 4;
-    }
 }
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
@@ -894,7 +882,9 @@ static basegfx::B2DPoint impPixelSnap(
 // For support of PixelSnapHairline we also need the ObjectToDevice transformation
 // and a method (same as in gdiimpl.cxx for Win and Gdiplus). This is needed e.g.
 // for Chart-content visualization. CAUTION: It's not the same as PixelSnap (!)
-static void AddPolygonToPath(
+// tdf#129845 add reply value to allow counting a point/byte/size measurement to
+// be included
+static size_t AddPolygonToPath(
     cairo_t* cr,
     const basegfx::B2DPolygon& rPolygon,
     const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -903,10 +893,11 @@ static void AddPolygonToPath(
 {
     // short circuit if there is nothing to do
     const sal_uInt32 nPointCount(rPolygon.count());
+    size_t nSizeMeasure(0);
 
     if(0 == nPointCount)
     {
-        return;
+        return nSizeMeasure;
     }
 
     const bool bHasCurves(rPolygon.areControlPointsUsed());
@@ -985,6 +976,7 @@ static void AddPolygonToPath(
         if( !bPendingCurve )    // line segment
         {
             cairo_line_to(cr, aPoint.getX(), aPoint.getY());
+            nSizeMeasure++;
         }
         else                        // cubic bezier segment
         {
@@ -1007,6 +999,10 @@ static void AddPolygonToPath(
 
             cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
                                aPoint.getX(), aPoint.getY());
+            // take some bigger measure for curve segments - too expensive to subdivide
+            // here and that precision not needed, but four (2 points, 2 control-points)
+            // would be a too low weight
+            nSizeMeasure += 10;
         }
 
         aLast = aPoint;
@@ -1016,6 +1012,8 @@ static void AddPolygonToPath(
     {
         cairo_close_path(cr);
     }
+
+    return nSizeMeasure;
 }
 
 void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
@@ -1068,7 +1066,8 @@ private:
 public:
     SystemDependentData_CairoPath(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-        cairo_path_t* pCairoPath,
+        size_t nSizeMeasure,
+        cairo_t* cr,
         bool bNoJoin,
         bool bAntiAliasB2DDraw);
     virtual ~SystemDependentData_CairoPath() override;
@@ -1082,14 +1081,21 @@ public:
 
 SystemDependentData_CairoPath::SystemDependentData_CairoPath(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-    cairo_path_t* pCairoPath,
+    size_t nSizeMeasure,
+    cairo_t* cr,
     bool bNoJoin,
     bool bAntiAliasB2DDraw)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
-    mpCairoPath(pCairoPath),
+    mpCairoPath(nullptr),
     mbNoJoin(bNoJoin),
     mbAntiAliasB2DDraw(bAntiAliasB2DDraw)
 {
+    // tdf#129845 only create a copy of the path when nSizeMeasure is
+    // bigger than some decent threshold
+    if(nSizeMeasure > 50)
+    {
+        mpCairoPath = cairo_copy_path(cr);
+    }
 }
 
 SystemDependentData_CairoPath::~SystemDependentData_CairoPath()
@@ -1103,6 +1109,9 @@ SystemDependentData_CairoPath::~SystemDependentData_CairoPath()
 
 sal_Int64 SystemDependentData_CairoPath::estimateUsageInBytes() const
 {
+    // tdf#129845 by using the default return value of zero when no path
+    // was created, SystemDependentData::calculateCombinedHoldCyclesInSeconds
+    // will do the right thing and not buffer this entry at all
     sal_Int64 nRetval(0);
 
     if(nullptr != mpCairoPath)
@@ -1287,43 +1296,37 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_line_width(cr, aLineWidths.getX());
     cairo_set_miter_limit(cr, fMiterLimit);
 
-    bool bDone = false;
-    bool bIsTrivial = isTrivial(rPolyLine);
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+        rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
 
-    if (!bIsTrivial)
+    if(pSystemDependentData_CairoPath)
     {
-        // try to access buffered data
-        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-            rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
-
-        if(pSystemDependentData_CairoPath)
+        // check data validity
+        if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
+            || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
+            || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw
+            || bPixelSnapHairline /*tdf#124700*/ )
         {
-            // check data validity
-            if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
-               || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
-               || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw
-               || bPixelSnapHairline /*tdf#124700*/ )
-            {
-                // data invalid, forget
-                pSystemDependentData_CairoPath.reset();
-            }
-        }
-
-        if(pSystemDependentData_CairoPath)
-        {
-            // re-use data
-            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-            bDone = true;
+            // data invalid, forget
+            pSystemDependentData_CairoPath.reset();
         }
     }
 
-    if (!bDone)
+    if(pSystemDependentData_CairoPath)
+    {
+        // re-use data
+        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
+    }
+    else
     {
         // create data
+        size_t nSizeMeasure(0);
+
         if (!bNoJoin)
         {
             // PixelOffset now reflected in linear transformation used
-            AddPolygonToPath(
+            nSizeMeasure += AddPolygonToPath(
                 cr,
                 rPolyLine,
                 rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
@@ -1347,7 +1350,7 @@ bool SvpSalGraphics::drawPolyLine(
                 aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
 
                 // PixelOffset now reflected in linear transformation used
-                AddPolygonToPath(
+                nSizeMeasure += AddPolygonToPath(
                     cr,
                     aEdge,
                     rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
@@ -1360,11 +1363,12 @@ bool SvpSalGraphics::drawPolyLine(
         }
 
         // copy and add to buffering mechanism
-        if (!bIsTrivial && !bPixelSnapHairline /*tdf#124700*/)
+        if (!bPixelSnapHairline /*tdf#124700*/)
         {
-            rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+            pSystemDependentData_CairoPath = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
                 ImplGetSystemDependentDataManager(),
-                cairo_copy_path(cr),
+                nSizeMeasure,
+                cr,
                 bNoJoin,
                 bAntiAliasB2DDraw);
         }
@@ -1413,31 +1417,25 @@ namespace
 {
     void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap)
     {
-        bool bDone = false;
-        bool bIsTrivial = isTrivial(rPolyPolygon);
+        // try to access buffered data
+        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+            rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
 
-        if (!bIsTrivial)
+        if(pSystemDependentData_CairoPath)
         {
-            // try to access buffered data
-            std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-                rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
-
-            if(pSystemDependentData_CairoPath)
-            {
-                // re-use data
-                cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-                bDone = true;
-            }
+            // re-use data
+            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
         }
-
-        if (!bDone)
+        else
         {
             // create data
+            size_t nSizeMeasure(0);
+
             for (const auto & rPoly : rPolyPolygon)
             {
                 // PixelOffset used: Was dependent of 'm_aLineColor != SALCOLOR_NONE'
                 // Adapt setupPolyPolygon-users to set a linear transformation to achieve PixelOffset
-                AddPolygonToPath(
+                nSizeMeasure += AddPolygonToPath(
                     cr,
                     rPoly,
                     rObjectToDevice,
@@ -1445,16 +1443,14 @@ namespace
                     false);
             }
 
-            if (!bIsTrivial)
-            {
-                // copy and add to buffering mechanism
-                // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
-                rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-                    ImplGetSystemDependentDataManager(),
-                    cairo_copy_path(cr),
-                    false,
-                    false);
-            }
+            // copy and add to buffering mechanism
+            // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
+            pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                ImplGetSystemDependentDataManager(),
+                nSizeMeasure,
+                cr,
+                false,
+                false);
         }
     }
 }
