@@ -22,6 +22,30 @@
       "revId": "3a1102a8e0261ac36a76d1f4815135254da5141a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba293695_5531ba61",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-01-22T08:25:26Z",
+      "side": 1,
+      "message": "root mode shows only content entries for the content type filtered. The first button on the second line in the toolbox with tool tip \"Content Navigation View\" will toggle between modes. In the root mode for Headings multi selection can be done.",
+      "parentUuid": "c647550c_a4581258",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "3a1102a8e0261ac36a76d1f4815135254da5141a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
