@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c647550c_a4581258",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-22T07:14:15Z",
+      "side": 1,
+      "message": "I\u0027m sorry, what is \"root mode\"?",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "3a1102a8e0261ac36a76d1f4815135254da5141a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
