@@ -21,7 +21,7 @@ $(eval $(call gb_Executable_use_system_win32_libs,unopkg,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,unopkg,\
-    desktop/win32/source/guiloader/genericloader \
+    desktop/win32/source/officeloader/unopkg_exe \
 ))
 
 $(eval $(call gb_Executable_add_default_nativeres,unopkg))
