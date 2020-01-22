@@ -79,7 +79,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -90,8 +90,6 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 
     // Validation test: order of elements were wrong.
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
-    if (!pXmlDoc)
-        return;
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
     int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
