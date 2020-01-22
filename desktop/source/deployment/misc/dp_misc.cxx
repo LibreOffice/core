@@ -48,8 +48,8 @@
 #include <salhelper/linkhelper.hxx>
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -57,6 +57,7 @@ using namespace ::com::sun::star::uno;
 
 #if defined(_WIN32)
 #define SOFFICE1 "soffice.exe"
+#define SOFFICE_COM "soffice.com"
 #define SBASE "sbase.exe"
 #define SCALC "scalc.exe"
 #define SDRAW "sdraw.exe"
@@ -357,12 +358,12 @@ bool office_is_running()
         if (
 #if defined UNIX
             sFile == SOFFICE2
-#elif defined WNT
+#elif defined _WIN32
             //osl_getExecutableFile should deliver "soffice.bin" on windows
             //even if swriter.exe, scalc.exe etc. was started. This is a bug
             //in osl_getExecutableFile
-            sFile == SOFFICE1 || sFile == SOFFICE2 || sFile == SBASE || sFile == SCALC
-            || sFile == SDRAW || sFile == SIMPRESS || sFile == SWRITER
+            sFile == SOFFICE1 || sFile == SOFFICE2 || sFile == SOFFICE_COM || sFile == SBASE ||
+            sFile == SCALC || sFile == SDRAW || sFile == SIMPRESS || sFile == SWRITER
 #else
 #error "Unsupported platform"
 #endif
@@ -464,53 +465,25 @@ Reference<XInterface> resolveUnoURL(
     return nullptr; // warning C4715
 }
 
-#ifdef _WIN32
-static void writeConsoleWithStream(OUString const & sText, HANDLE stream)
-{
-    DWORD nWrittenChars = 0;
-    WriteFile(stream, sText.getStr(),
-        sText.getLength() * 2, &nWrittenChars, nullptr);
-}
-#else
 static void writeConsoleWithStream(OUString const & sText, FILE * stream)
 {
     OString s = OUStringToOString(sText, osl_getThreadTextEncoding());
     fprintf(stream, "%s", s.getStr());
     fflush(stream);
 }
-#endif
 
 void writeConsole(OUString const & sText)
 {
-#ifdef _WIN32
-    writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
-#else
     writeConsoleWithStream(sText, stdout);
-#endif
 }
 
 void writeConsoleError(OUString const & sText)
 {
-#ifdef _WIN32
-    writeConsoleWithStream(sText, GetStdHandle(STD_ERROR_HANDLE));
-#else
     writeConsoleWithStream(sText, stderr);
-#endif
 }
 
 OUString readConsole()
 {
-#ifdef _WIN32
-    sal_Unicode aBuffer[1024];
-    DWORD   dwRead = 0;
-    //unopkg.com feeds unopkg.exe with wchar_t|s
-    if (ReadFile( GetStdHandle(STD_INPUT_HANDLE), &aBuffer, sizeof(aBuffer), &dwRead, nullptr ) )
-    {
-        OSL_ASSERT((dwRead % 2) == 0);
-        OUString value( aBuffer, dwRead / 2);
-        return value.trim();
-    }
-#else
     char buf[1024];
     memset(buf, 0, 1024);
     // read one char less so that the last char in buf is always zero
@@ -519,7 +492,6 @@ OUString readConsole()
         OUString value = OStringToOUString(OString(buf), osl_getThreadTextEncoding());
         return value.trim();
     }
-#endif
     throw css::uno::RuntimeException("reading from stdin failed");
 }
 

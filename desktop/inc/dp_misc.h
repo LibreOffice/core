@@ -108,10 +108,8 @@ oslProcess raiseProcess( OUString const & appURL,
 
 
 /** writes the argument string to the console.
-    On Linux/Unix/etc. it converts the UTF16 string to an ANSI string using
-    osl_getThreadTextEncoding() as target encoding. On Windows it uses WriteFile
-    with the standard out stream. unopkg.com reads the data and prints them out using
-    WriteConsoleW.
+    It converts the UTF16 string to an ANSI string using osl_getThreadTextEncoding()
+    as target encoding.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void writeConsole(OUString const & sText);
@@ -124,9 +122,9 @@ void writeConsoleError(OUString const & sText);
 
 
 /** reads from the console.
-    On Linux/Unix/etc. it uses fgets to read char values and converts them to OUString
-    using osl_getThreadTextEncoding as target encoding. The returned string has a maximum
-    size of 1024 and does NOT include leading and trailing white space(applied OUString::trim())
+    It uses fgets to read char values and converts them to OUString using
+    osl_getThreadTextEncoding as target encoding. The returned string has a maximum size of
+    1024 and does NOT include leading and trailing white space(applied OUString::trim())
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 OUString readConsole();

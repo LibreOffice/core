@@ -90,7 +90,7 @@ const char s_usingText [] =
 "\n"
 "sub-commands:\n"
 " add                     add extension\n"
-" validate                checks the prerequisites of an installed extension and"
+" validate                checks the prerequisites of an installed extension and\n"
 "                         registers it if possible\n"
 " remove                  remove extensions by identifier\n"
 " reinstall               expert feature: reinstall all deployed extensions\n"
