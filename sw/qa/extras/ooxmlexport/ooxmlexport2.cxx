@@ -90,8 +90,6 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 
     // Validation test: order of elements were wrong.
     xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
-    if (!pXmlDoc)
-        return;
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
     int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
@@ -899,7 +897,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
         parseDump("/root/page[3]/header/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGrabBag, "grabbag.docx")
+DECLARE_OOXMLEXPORT_TEST(testGrabBag, "grabbag.docx")
 {
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocPtr pXmlDoc = parseExport();
