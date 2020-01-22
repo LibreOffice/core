@@ -96,19 +96,10 @@ ImplAnimView::~ImplAnimView()
     Animation::ImplDecAnimCount();
 }
 
-bool ImplAnimView::matches( OutputDevice* pOut, long nExtraData ) const
+bool ImplAnimView::matches(OutputDevice* pOut, long nExtraData) const
 {
-    bool bRet = false;
-
-    if( nExtraData )
-    {
-        if( ( mnExtraData == nExtraData ) && ( !pOut || ( pOut == mpRenderContext ) ) )
-            bRet = true;
-    }
-    else if( !pOut || ( pOut == mpRenderContext ) )
-        bRet = true;
-
-    return bRet;
+    return (!pOut || pOut == mpRenderContext)
+           && ((nExtraData != 0 && mnExtraData == nExtraData) || nExtraData == 0);
 }
 
 void ImplAnimView::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
