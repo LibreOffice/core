@@ -2676,6 +2676,15 @@ void SvtValueSet::RemoveItem( sal_uInt16 nItemId )
         Invalidate();
 }
 
+void SvtValueSet::RecalcScrollBar()
+{
+    // reset scrolled window state to initial value
+    // so it will get configured to the right adjustment
+    WinBits nStyle = GetStyle();
+    if (mxScrolledWindow && (nStyle & WB_VSCROLL))
+        mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+}
+
 void SvtValueSet::Clear()
 {
     ImplDeleteItems();
@@ -2687,11 +2696,7 @@ void SvtValueSet::Clear()
     mnSelItemId     = 0;
     mbNoSelection   = true;
 
-    // reset scrolled window state to initial value
-    // so it will get configured to the right adjustment
-    WinBits nStyle = GetStyle();
-    if (mxScrolledWindow && (nStyle & WB_VSCROLL))
-        mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+    RecalcScrollBar();
 
     mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -2851,6 +2856,14 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
 
     bool bNewOut = !mbFormat && IsReallyVisible() && IsUpdateMode();
     bool bNewLine = false;
+
+    if (weld::DrawingArea* pNeedsFormatToScroll = !mnCols ? GetDrawingArea() : nullptr)
+    {
+        Format(pNeedsFormatToScroll->get_ref_device());
+        // reset scrollbar so its set to the later calculated mnFirstLine on
+        // the next Format
+        RecalcScrollBar(); // reset scrollbar so its set to the later calculated
+    }
 
     // if necessary scroll to the visible area
     if (mbScroll && nItemId && mnCols)
