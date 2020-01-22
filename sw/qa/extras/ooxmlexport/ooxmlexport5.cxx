@@ -109,22 +109,18 @@ DECLARE_OOXMLEXPORT_TEST(testDecimalNumberingNoLeveltext, "decimal-numbering-no-
         assertXPath (pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val", "");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testNoDuplicateAttributeExport, "duplicate-east-asia.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNoDuplicateAttributeExport, "duplicate-east-asia.odt")
 {
     // File asserting while saving in LO.
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    parseExport("word/document.xml");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79008, "fdo79008.docx")
 {
     /* File crashing while saving in LO.
      * Check if document.xml file is created after fix
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+     parseExport("word/document.xml");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAuthorPropertySdt, "author-property.docx")
@@ -239,18 +235,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:vMerge", "val", "continue");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeTableInTable, "ooo96040-2.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeTableInTable, "ooo96040-2.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    parseExport("word/document.xml");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    parseExport("word/document.xml");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
@@ -505,14 +497,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf118702,"tdf118702.odt")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:pgSz", "orient", "landscape" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79822, "fdo79822.docx")
 {
     /* File getting crash while saving in LO.
      * The Docx contain smartart and the file was created in ms word 2007
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
+    parseExport("word/document.xml");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO79915, "fdo79915.docx")

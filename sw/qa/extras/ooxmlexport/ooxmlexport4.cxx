@@ -768,15 +768,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("https://bugs.documentfoundation.org/show_bug.cgi?id=104707"), aURL);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOLEObjectinHeader, "2129393649.docx")
 {
     // fdo#76015 : Document contains oleobject in header xml.
     // Problem was relationship entry for oleobject from header was
     // exported into document.xml.rels file because of this rels file
     // for headers were missing from document/word/rels.
     xmlDocPtr pXmlDoc = parseExport("word/_rels/header1.xml.rels");
-    if(!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
 
@@ -910,12 +908,10 @@ DECLARE_OOXMLEXPORT_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO78292, "FDO78292.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78292, "FDO78292.docx")
 {
    //text node is a leaf node, it should not have any children
    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-   if(!pXmlDoc)
-      return;
    assertXPath(pXmlDoc,"/w:document/w:body/w:p[14]/w:sdt[3]/w:sdtPr[1]/w:text/w14:checked",0);
 }
 
