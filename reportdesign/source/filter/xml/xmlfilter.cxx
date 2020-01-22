@@ -621,8 +621,16 @@ public:
                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
+        ORptFilter & rImport(static_cast<ORptFilter&>(GetImport()));
+        switch (nElement)
+        {
+            case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                return rImport.CreateFontDeclsContext();
+                break;
+        }
         return nullptr;
     }
 
@@ -643,10 +651,6 @@ public:
             case XML_TOK_CONTENT_AUTOSTYLES:
                 // don't use the autostyles from the styles-document for the progress
                 pContext = rImport.CreateStylesContext(rLocalName, xAttrList, true);
-                break;
-            case XML_TOK_CONTENT_FONTDECLS:
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateFontDeclsContext(rLocalName, xAttrList);
                 break;
             case XML_TOK_CONTENT_MASTERSTYLES:
                 {
@@ -709,6 +713,10 @@ public:
             case XML_ELEMENT(OFFICE, XML_BODY):
                 return new RptXMLDocumentBodyContext(rImport);
                 break;
+            case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                return rImport.CreateFontDeclsContext();
+                break;
         }
         return nullptr;
     }
@@ -726,10 +734,6 @@ public:
             case XML_TOK_CONTENT_AUTOSTYLES:
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 pContext = rImport.CreateStylesContext(rLocalName, xAttrList, true);
-                break;
-            case XML_TOK_CONTENT_FONTDECLS:
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateFontDeclsContext(rLocalName, xAttrList);
                 break;
             default:
                 break;
@@ -1023,14 +1027,10 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
     return pContext;
 }
 
-SvXMLImportContext *ORptFilter::CreateFontDeclsContext(
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *ORptFilter::CreateFontDeclsContext()
 {
     XMLFontStylesContext *pFSContext =
-            new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
-                                      rLocalName, xAttrList,
-                                      osl_getThreadTextEncoding() );
+            new XMLFontStylesContext( *this, osl_getThreadTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
 }

@@ -366,10 +366,8 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
 
 
 XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         rtl_TextEncoding eDfltEnc ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStylesContext( rImport ),
     pFamilyNameHdl( new XMLFontFamilyNamePropHdl ),
     pFamilyHdl( new XMLFontFamilyPropHdl ),
     pPitchHdl( new XMLFontPitchPropHdl ),

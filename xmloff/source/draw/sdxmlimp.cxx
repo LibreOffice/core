@@ -91,10 +91,6 @@ protected:
 public:
     SdXMLDocContext_Impl( SdXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList>& xAttrList) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
@@ -112,31 +108,6 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
     SdXMLImport& rImport )
 :   SvXMLImportContext(rImport)
 {
-}
-
-SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
-{
-    SvXMLImportContextRef xContext;
-
-    const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
-    switch(rTokenMap.Get(nPrefix, rLocalName))
-    {
-        case XML_TOK_DOC_FONTDECLS:
-        {
-            xContext = GetSdImport().CreateFontDeclsContext( rLocalName, xAttrList );
-            break;
-        }
-        case XML_TOK_DOC_META:
-        {
-            SAL_INFO("xmloff.draw", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
-            break;
-        }
-    }
-
-    return xContext;
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::createFastChildContext(
@@ -195,6 +166,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::c
                 // office:automatic-styles inside office:document
                 return GetSdImport().CreateAutoStylesContext();
             }
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_FONT_FACE_DECLS):
+        {
+            return GetSdImport().CreateFontDeclsContext();
+            break;
+        }
+        case XML_ELEMENT(OFFICE, XML_META):
+        {
+            SAL_INFO("xmloff.draw", "XML_ELEMENT(OFFICE, XML_META): should not have come here, maybe document is invalid?");
             break;
         }
     }
@@ -731,13 +712,10 @@ SvXMLImportContext* SdXMLImport::CreateMasterStylesContext()
     return mxMasterStylesContext.get();
 }
 
-SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *SdXMLImport::CreateFontDeclsContext()
 {
     XMLFontStylesContext *pFSContext =
-            new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
-                                      rLocalName, xAttrList,
-                                      osl_getThreadTextEncoding() );
+            new XMLFontStylesContext( *this, osl_getThreadTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
 }
