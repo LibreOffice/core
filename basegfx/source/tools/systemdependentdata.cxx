@@ -77,39 +77,48 @@ namespace basegfx
         if(0 == mnCalculatedCycles)
         {
             const sal_Int64 nBytes(estimateUsageInBytes());
-            const sal_uInt32 nSeconds = 60; // HoldCyclesInSeconds
 
-            // default is Seconds (minimal is one)
-            sal_uInt32 nResult(0 == nSeconds ? 1 : nSeconds);
-
-            if(0 != nBytes)
+            // tdf#129845 as indicator for no need to buffer trivial data, stay at and
+            // return zero. As border, use 450 bytes. For polygons, this means to buffer
+            // starting with ca. 50 points (GDIPLUS uses 9 bytes per coordinate). For
+            // Bitmap data this means to more or less always buffer (as it was before).
+            // For the future, a more sophisticated differentioation may be added
+            if(nBytes > 450)
             {
-                // use sqrt to get some curved shape. With a default of 60s we get
-                // a single second at 3600 byte. To get close to 10mb, multiply by
-                // a corresponding scaling factor
-                const double fScaleToMB(3600.0 / (1024.0 * 1024.0 * 10.0));
+                const sal_uInt32 nSeconds = 60; // HoldCyclesInSeconds
 
-                // also use a multiplier to move the start point higher
-                const double fMultiplierSeconds(10.0);
+                // default is Seconds (minimal is one)
+                sal_uInt32 nResult(0 == nSeconds ? 1 : nSeconds);
 
-                // calculate
-                nResult = static_cast<sal_uInt32>((fMultiplierSeconds * nSeconds) / sqrt(nBytes * fScaleToMB));
-
-                // minimal value is 1
-                if(nResult < 1)
+                if(0 != nBytes)
                 {
-                    nResult = 1;
+                    // use sqrt to get some curved shape. With a default of 60s we get
+                    // a single second at 3600 byte. To get close to 10mb, multiply by
+                    // a corresponding scaling factor
+                    const double fScaleToMB(3600.0 / (1024.0 * 1024.0 * 10.0));
+
+                    // also use a multiplier to move the start point higher
+                    const double fMultiplierSeconds(10.0);
+
+                    // calculate
+                    nResult = static_cast<sal_uInt32>((fMultiplierSeconds * nSeconds) / sqrt(nBytes * fScaleToMB));
+
+                    // minimal value is 1
+                    if(nResult < 1)
+                    {
+                        nResult = 1;
+                    }
+
+                    // maximal value is nSeconds
+                    if(nResult > nSeconds)
+                    {
+                        nResult = nSeconds;
+                    }
                 }
 
-                // maximal value is nSeconds
-                if(nResult > nSeconds)
-                {
-                    nResult = nSeconds;
-                }
+                // set locally (once, on-demand created, non-zero)
+                const_cast<SystemDependentData*>(this)->mnCalculatedCycles = nResult;
             }
-
-            // set locally (once, on-demand created, non-zero)
-            const_cast<SystemDependentData*>(this)->mnCalculatedCycles = nResult;
         }
 
         return mnCalculatedCycles;

@@ -119,18 +119,6 @@ namespace
         aDamageRect.intersect(getClipBox(cr));
         return aDamageRect;
     }
-
-    // The caching logic is surprisingly expensive - so avoid it sometimes.
-    inline bool isTrivial(const basegfx::B2DPolyPolygon& rPolyPolygon)
-    {
-        return rPolyPolygon.count() == 1 && rPolyPolygon.begin()->count() <= 4;
-    }
-
-    // The caching logic is surprisingly expensive - so avoid it sometimes.
-    inline bool isTrivial(const basegfx::B2DPolygon& rPolyLine)
-    {
-        return rPolyLine.count() <= 4;
-    }
 }
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
@@ -1291,37 +1279,29 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_line_width(cr, aLineWidths.getX());
     cairo_set_miter_limit(cr, fMiterLimit);
 
-    bool bDone = false;
-    bool bIsTrivial = isTrivial(rPolyLine);
+    // try to access buffered data
+    std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+        rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
 
-    if (!bIsTrivial)
+    if(pSystemDependentData_CairoPath)
     {
-        // try to access buffered data
-        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-            rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
-
-        if(pSystemDependentData_CairoPath)
+        // check data validity
+        if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
+            || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
+            || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw
+            || bPixelSnapHairline /*tdf#124700*/ )
         {
-            // check data validity
-            if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
-               || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
-               || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw
-               || bPixelSnapHairline /*tdf#124700*/ )
-            {
-                // data invalid, forget
-                pSystemDependentData_CairoPath.reset();
-            }
-        }
-
-        if(pSystemDependentData_CairoPath)
-        {
-            // re-use data
-            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-            bDone = true;
+            // data invalid, forget
+            pSystemDependentData_CairoPath.reset();
         }
     }
 
-    if (!bDone)
+    if(pSystemDependentData_CairoPath)
+    {
+        // re-use data
+        cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
+    }
+    else
     {
         // create data
         if (!bNoJoin)
@@ -1364,9 +1344,9 @@ bool SvpSalGraphics::drawPolyLine(
         }
 
         // copy and add to buffering mechanism
-        if (!bIsTrivial && !bPixelSnapHairline /*tdf#124700*/)
+        if (!bPixelSnapHairline /*tdf#124700*/)
         {
-            rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+            pSystemDependentData_CairoPath = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
                 ImplGetSystemDependentDataManager(),
                 cairo_copy_path(cr),
                 bNoJoin,
@@ -1417,24 +1397,16 @@ namespace
 {
     void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap)
     {
-        bool bDone = false;
-        bool bIsTrivial = isTrivial(rPolyPolygon);
+        // try to access buffered data
+        std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
+            rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
 
-        if (!bIsTrivial)
+        if(pSystemDependentData_CairoPath)
         {
-            // try to access buffered data
-            std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-                rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
-
-            if(pSystemDependentData_CairoPath)
-            {
-                // re-use data
-                cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
-                bDone = true;
-            }
+            // re-use data
+            cairo_append_path(cr, pSystemDependentData_CairoPath->getCairoPath());
         }
-
-        if (!bDone)
+        else
         {
             // create data
             for (const auto & rPoly : rPolyPolygon)
@@ -1449,16 +1421,13 @@ namespace
                     false);
             }
 
-            if (!bIsTrivial)
-            {
-                // copy and add to buffering mechanism
-                // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
-                rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
-                    ImplGetSystemDependentDataManager(),
-                    cairo_copy_path(cr),
-                    false,
-                    false);
-            }
+            // copy and add to buffering mechanism
+            // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
+            pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
+                ImplGetSystemDependentDataManager(),
+                cairo_copy_path(cr),
+                false,
+                false);
         }
     }
 }
