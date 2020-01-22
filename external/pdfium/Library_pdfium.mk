@@ -31,6 +31,7 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DMEMORY_TOOL_REPLACES_ALLOCATOR \
     -DUNICODE \
     -DWIN32_LEAN_AND_MEAN \
+    -DCOMPONENT_BUILD \
 ))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))
