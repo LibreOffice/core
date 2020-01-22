@@ -3220,7 +3220,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pImpl->m_pSet.reset( pParams );
     TransformParameters( SID_OPENDOC, aArgs, *pParams );
-    pImpl->m_aArgs = aArgs;
+    SetArgs(aArgs);
 
     OUString aFilterProvider, aFilterName;
     {
@@ -3284,7 +3284,10 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
 void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
 {
-    pImpl->m_aArgs = rArgs;
+    comphelper::SequenceAsHashMap aArgsMap(rArgs);
+    aArgsMap.erase("Stream");
+    aArgsMap.erase("InputStream");
+    pImpl->m_aArgs = aArgsMap.getAsConstPropertyValueList();
 }
 
 uno::Sequence<beans::PropertyValue> SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
