@@ -5567,10 +5567,27 @@ public:
 
     virtual ~GtkInstanceScrolledWindow() override
     {
+        // we use GtkInstanceContainer::[disable|enable]_notify_events later on
+        // to avoid touching these removed handlers
+        g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
+        g_signal_handler_disconnect(m_pHAdjustment, m_nHAdjustChangedSignalId);
+
         //put it back the way it was
         if (m_pOrigViewport)
         {
-            disable_notify_events();
+            GtkInstanceContainer::disable_notify_events();
+
+            // force in new adjustment to drop the built-in handlers on value-changed
+            // which are getting called eventually by the gtk_container_add call
+            // and which access the scrolled window indicators which, in the case
+            // of user-managed scrolling windows in toolbar popups during popdown
+            // are nullptr causing crashes when the scrolling windows is not at its
+            // initial 0,0 position
+            GtkAdjustment *pVAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            gtk_scrolled_window_set_vadjustment(m_pScrolledWindow, pVAdjustment);
+            GtkAdjustment *pHAdjustment = gtk_adjustment_new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+            gtk_scrolled_window_set_hadjustment(m_pScrolledWindow, pHAdjustment);
+
             GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
             assert(CRIPPLED_IS_VIEWPORT(pViewport));
             GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
@@ -5578,6 +5595,7 @@ public:
             gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
             g_object_ref(pViewport);
             gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
+
             gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), m_pOrigViewport);
             g_object_unref(m_pOrigViewport);
             gtk_container_add(GTK_CONTAINER(m_pOrigViewport), pChild);
@@ -5585,10 +5603,8 @@ public:
             gtk_widget_destroy(pViewport);
             g_object_unref(pViewport);
             m_pOrigViewport = nullptr;
-            enable_notify_events();
+            GtkInstanceContainer::enable_notify_events();
         }
-        g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
-        g_signal_handler_disconnect(m_pHAdjustment, m_nHAdjustChangedSignalId);
     }
 };
 
