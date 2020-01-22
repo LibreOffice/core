@@ -33,6 +33,7 @@ class Point;
 class MultiSelection;
 enum class SwFontScript;
 namespace sw { struct MergedPara; }
+namespace sw::mark { class IBookmark; }
 
 #define SPACING_PRECISION_FACTOR 100
 
@@ -41,6 +42,7 @@ class SwScriptInfo
 {
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE, SPECIAL_MIDDLE};
+    enum class MarkKind { Start, End, Point };
 
 private:
     //! Records a single change in script type.
@@ -67,6 +69,7 @@ private:
     std::deque<TextFrameIndex> m_NoKashidaLine;
     std::deque<TextFrameIndex> m_NoKashidaLineEnd;
     std::vector<TextFrameIndex> m_HiddenChg;
+    std::vector<std::pair<TextFrameIndex, MarkKind>> m_Bookmarks;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
@@ -178,8 +181,12 @@ public:
         return m_HiddenChg[ nCnt ];
     }
     TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
-    static void CalcHiddenRanges(const SwTextNode& rNode, MultiSelection& rHiddenMulti);
-    static void selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti);
+    static void CalcHiddenRanges(const SwTextNode& rNode,
+            MultiSelection& rHiddenMulti,
+            std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
+    static void selectHiddenTextProperty(const SwTextNode& rNode,
+            MultiSelection &rHiddenMulti,
+            std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
     static void selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
 
     // "high" level operations, nPos refers to string position
