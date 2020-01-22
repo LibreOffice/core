@@ -880,6 +880,8 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
         for( ;; )
         {
             rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamCharSet(), nArbitraryLineLengthLimit );
+            // tdf#125440 When inserting tab separated string, consider quotes as field markers
+            DoubledQuoteMode mode = aLine.indexOf("\t") >= 0 ? DoubledQuoteMode::ESCAPE : DoubledQuoteMode::KEEP_ALL;
             if( rStrm.eof() )
                 break;
             SCCOL nCol = nStartCol;
@@ -892,7 +894,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 {
                     // Always look for a pairing quote and ignore separator in between.
                     while (*p && *p == cStr)
-                        q = p = lcl_ScanString( p, aCell, pSeps, cStr, DoubledQuoteMode::KEEP_ALL, bOverflowCell );
+                        q = p = lcl_ScanString( p, aCell, pSeps, cStr, mode, bOverflowCell );
                     // All until next separator or quote.
                     while (*p && *p != cSep && *p != cStr)
                         ++p;
