@@ -38,34 +38,6 @@ class E3dScene;
 
 enum class SvxPreviewObjectType { SPHERE, CUBE };
 
-class SAL_WARN_UNUSED Svx3DPreviewControl : public Control
-{
-protected:
-    std::unique_ptr<FmFormModel> mpModel;
-    FmFormPage*             mpFmPage;
-    std::unique_ptr<E3dView> mp3DView;
-    E3dScene*               mpScene;
-    E3dObject*              mp3DObj;
-    SvxPreviewObjectType    mnObjectType;
-
-    void Construct();
-
-public:
-    Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle = 0);
-    virtual ~Svx3DPreviewControl() override;
-    virtual void dispose() override;
-
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-
-    virtual void SetObjectType(SvxPreviewObjectType nType);
-    SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
-    SfxItemSet const & Get3DAttributes() const;
-    virtual void Set3DAttributes(const SfxItemSet& rAttr);
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC PreviewControl3D : public weld::CustomWidgetController
 {
 protected:
