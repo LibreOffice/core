@@ -377,6 +377,8 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     , aPipetteColor(COL_WHITE)
     , aSelItem(*this, *pBindinx)
 {
+    SetText(SvxResId(RID_SVXDLG_BMPMASK_STR_TITLE));
+
     m_xLbColor1->SetSlotId(SID_BMPMASK_COLOR);
     m_xLbColor2->SetSlotId(SID_BMPMASK_COLOR);
     m_xLbColor3->SetSlotId(SID_BMPMASK_COLOR);
