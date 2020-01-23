@@ -100,7 +100,8 @@
     constructor="com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation">
     <service name="com.sun.star.comp.DrawingLayer.XMLExporter"/>
   </implementation>
-  <implementation name="XMLImpressClipboardExport">
+  <implementation name="XMLImpressClipboardExport"
+    constructor="com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLClipboardExporter"/>
   </implementation>
   <implementation name="XMLImpressContentExportOOO"
