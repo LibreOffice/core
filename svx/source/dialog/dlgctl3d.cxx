@@ -434,6 +434,7 @@ void PreviewControl3D::Set3DAttributes( const SfxItemSet& rAttr )
 {
     mp3DObj->SetMergedItemSet(rAttr, true);
     Resize();
+    Invalidate();
 }
 
 #define RADIUS_LAMP_PREVIEW_SIZE    (4500.0)

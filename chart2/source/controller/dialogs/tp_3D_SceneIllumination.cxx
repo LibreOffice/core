@@ -23,6 +23,7 @@
 #include <ControllerLockGuard.hxx>
 
 #include <svx/colorbox.hxx>
+#include <svx/float3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svtools/colrdlg.hxx>
@@ -38,24 +39,6 @@ namespace chart
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-LightButton::LightButton(std::unique_ptr<weld::ToggleButton> xButton)
-    : m_xButton(std::move(xButton))
-    , m_bLightOn(false)
-{
-    m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
-}
-
-void LightButton::switchLightOn(bool bOn)
-{
-    if (m_bLightOn == bOn)
-        return;
-    m_bLightOn = bOn;
-    if (m_bLightOn)
-        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_ON);
-    else
-        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
-}
 
 namespace {
 
@@ -77,7 +60,6 @@ struct LightSource
 struct LightSourceInfo
 {
     LightButton* pButton;
-    bool bButtonActive;
     LightSource aLightSource;
 
     LightSourceInfo();
@@ -86,7 +68,6 @@ struct LightSourceInfo
 
 LightSourceInfo::LightSourceInfo()
     : pButton(nullptr)
-    , bButtonActive(false)
     , aLightSource()
 {
     aLightSource.nDiffuseColor = Color(0xffffff); // white
@@ -448,7 +429,7 @@ IMPL_LINK(ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, weld::But
 
     assert(pInfo);
 
-    bool bIsChecked = pInfo->bButtonActive;
+    bool bIsChecked = pInfo->pButton->get_prev_active();
 
     ControllerLockGuardUNO aGuard( m_xChartModel );
     for( nL=0; nL<8; nL++)
@@ -459,12 +440,12 @@ IMPL_LINK(ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, weld::But
             pLightButton->set_active(true);
             if (!pLightButton->get_widget()->has_focus())
                 pLightButton->get_widget()->grab_focus();
-            m_pLightSourceInfoList[nL].bButtonActive = true;
+            m_pLightSourceInfoList[nL].pButton->set_prev_active(true);
         }
         else
         {
             pLightButton->set_active(false);
-            m_pLightSourceInfoList[nL].bButtonActive = false;
+            m_pLightSourceInfoList[nL].pButton->set_prev_active(false);
         }
     }
 
