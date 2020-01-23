@@ -700,9 +700,7 @@ vcl/inc/salwtype.hxx:211
     SalQueryCharPositionEvent mnCharPos sal_uLong
 vcl/inc/svdata.hxx:278
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/toolbox.h:40
-    ImplToolItem maOverlayImage class Image
-vcl/inc/toolbox.h:108
+vcl/inc/toolbox.h:107
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
 vcl/inc/unx/saldisp.hxx:282
     SalDisplay m_aInvalidScreenData const struct SalDisplay::ScreenData
