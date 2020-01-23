@@ -31,13 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
 } } }
 
-// impress xml clipboard export
-OUString XMLImpressClipboardExport_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLImpressClipboardExport_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLImpressClipboardExport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
 // chart oasis import
 OUString SchXMLImport_getImplementationName() throw();
 css::uno::Sequence<OUString> SchXMLImport_getSupportedServiceNames() throw();

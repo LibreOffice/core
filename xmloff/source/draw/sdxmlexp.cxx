@@ -2578,20 +2578,6 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
     }
 }
 
-#define SERVICE( classname, servicename, implementationname, draw, flags )\
-uno::Sequence< OUString > classname##_getSupportedServiceNames() throw()\
-{\
-    return uno::Sequence< OUString > { servicename };\
-}\
-OUString classname##_getImplementationName() throw()\
-{\
-    return implementationname;\
-}\
-uno::Reference< uno::XInterface > classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr)\
-{\
-    return static_cast<cppu::OWeakObject*>(new SdXMLExport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags )); \
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
@@ -2795,7 +2781,16 @@ com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
                             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
 }
 
-SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExporter", "XMLImpressClipboardExport", false, SvXMLExportFlags::OASIS|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::EMBEDDED );
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(
+        new SdXMLExport(pCtx, "XMLImpressClipboardExport", /*bIsDraw=*/false,
+                        SvXMLExportFlags::OASIS | SvXMLExportFlags::STYLES
+                            | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
+                            | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
+}
 
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {
