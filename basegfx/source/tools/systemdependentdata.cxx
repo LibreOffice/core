@@ -82,7 +82,7 @@ namespace basegfx
             // return zero. As border, use 450 bytes. For polygons, this means to buffer
             // starting with ca. 50 points (GDIPLUS uses 9 bytes per coordinate). For
             // Bitmap data this means to more or less always buffer (as it was before).
-            // For the future, a more sophisticated differentioation may be added
+            // For the future, a more sophisticated differentiation may be added
             if(nBytes > 450)
             {
                 const sal_uInt32 nSeconds = 60; // HoldCyclesInSeconds
