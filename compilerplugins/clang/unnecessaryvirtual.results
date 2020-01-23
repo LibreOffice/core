@@ -82,8 +82,8 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svx/svdtext.hxx:60
-    const class SfxItemSet & SdrText::GetItemSet()const
+include/svtools/valueset.hxx:301
+    void ValueSet::UserDraw(const class UserDrawEvent &,)
 include/toolkit/controls/geometrycontrolmodel.hxx:183
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
@@ -108,7 +108,7 @@ include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/customweld.hxx:41
+include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
 include/vcl/weld.hxx:101
     void weld::Widget::set_visible(_Bool,)
@@ -188,23 +188,23 @@ sc/source/ui/vba/vbapagebreak.hxx:49
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
 shell/inc/i_xml_parser_event_handler.hxx:41
     void i_xml_parser_event_handler::~i_xml_parser_event_handler()
-slideshow/source/engine/activities/activitiesfactory.cxx:173
+slideshow/source/engine/activities/activitiesfactory.cxx:172
     void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
-slideshow/source/engine/activities/activitiesfactory.cxx:242
+slideshow/source/engine/activities/activitiesfactory.cxx:241
     void slideshow::internal::(anonymous namespace)::FromToByActivity::endAnimation()
-slideshow/source/engine/activities/activitiesfactory.cxx:332
+slideshow/source/engine/activities/activitiesfactory.cxx:331
     void slideshow::internal::(anonymous namespace)::FromToByActivity::performEnd()
-slideshow/source/engine/activities/activitiesfactory.cxx:345
+slideshow/source/engine/activities/activitiesfactory.cxx:344
     void slideshow::internal::(anonymous namespace)::FromToByActivity::dispose()
-slideshow/source/engine/activities/activitiesfactory.cxx:527
+slideshow/source/engine/activities/activitiesfactory.cxx:526
     void slideshow::internal::(anonymous namespace)::ValuesActivity::startAnimation()
-slideshow/source/engine/activities/activitiesfactory.cxx:538
+slideshow/source/engine/activities/activitiesfactory.cxx:537
     void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
-slideshow/source/engine/activities/activitiesfactory.cxx:583
+slideshow/source/engine/activities/activitiesfactory.cxx:582
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
-slideshow/source/engine/animationfactory.cxx:439
+slideshow/source/engine/animationfactory.cxx:437
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
-slideshow/source/engine/animationfactory.cxx:442
+slideshow/source/engine/animationfactory.cxx:440
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
@@ -216,8 +216,6 @@ vcl/inc/salinst.hxx:92
     _Bool SalInstance::SVMainHook(int *,)
 vcl/inc/salinst.hxx:202
     void SalInstance::releaseMainThread()
-vcl/inc/salmenu.hxx:71
-    void SalMenu::SetItemBits(unsigned int,enum MenuItemBits,)
 vcl/inc/salmenu.hxx:80
     _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
 vcl/inc/salmenu.hxx:81
@@ -228,7 +226,7 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/skia/gdiimpl.hxx:210
+vcl/inc/skia/gdiimpl.hxx:212
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:121
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
@@ -258,6 +256,14 @@ vcl/inc/unx/salframe.h:207
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:44
     class SalX11Display * X11SalInstance::CreateDisplay()const
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:161
+    void Qt5Frame::registerDragSource(class Qt5DragSource *,)
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
+    void Qt5Frame::deregisterDragSource(const class Qt5DragSource *,)
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
+    void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:164
+    void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:72
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:73
