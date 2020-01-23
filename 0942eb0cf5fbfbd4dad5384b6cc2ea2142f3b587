@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a05b9cf0_86f6187a",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-23T13:55:52Z",
+      "side": 1,
+      "message": "So I found out that the reason this isn\u0027t deleted is not a permission problem, but rather a timing issue.\nThe file is simply not there when the temp folder is cleaned up.\n\nThis is probably because shutting down LO happens async and so the registrymodifications.xcu is written after unopkg deletes the temp user profile as last step.\n\nSo I don\u0027t see a cleaner way to fix this, sorry.",
+      "parentUuid": "45677fa5_68755e36",
+      "range": {
+        "startLine": 564,
+        "startChar": 29,
+        "endLine": 564,
+        "endChar": 56
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d8c072f_bb34dd26",
         "filename": "desktop/source/pkgchk/unopkg/unopkg_app.cxx",
         "patchSetId": 3
