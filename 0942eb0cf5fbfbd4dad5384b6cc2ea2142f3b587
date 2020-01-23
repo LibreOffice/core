@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "45677fa5_68755e36",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-23T09:34:59Z",
+      "side": 1,
+      "message": "Ok will try to find a cleaner solution for this.",
+      "parentUuid": "5b3fdbf9_9ee34ee7",
+      "range": {
+        "startLine": 564,
+        "startChar": 29,
+        "endLine": 564,
+        "endChar": 56
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d8c072f_bb34dd26",
         "filename": "desktop/source/pkgchk/unopkg/unopkg_app.cxx",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df297734_f9208406",
+        "filename": "desktop/source/pkgchk/unopkg/unopkg_app.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-23T09:34:59Z",
+      "side": 1,
+      "message": "Good idea, removed the condition now.",
+      "parentUuid": "7d8c072f_bb34dd26",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 16
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
