@@ -20,19 +20,7 @@
 #include <avmedia/mediaitem.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
-
-#include <rtl/ustrbuf.hxx>
-
-#include <ucbhelper/content.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 
