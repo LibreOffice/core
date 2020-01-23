@@ -1177,7 +1177,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 {
     if (!(m_pDocumentClass = gDocumentClass.lock()))
     {
-        m_pDocumentClass.reset(new LibreOfficeKitDocumentClass);
+        m_pDocumentClass = std::make_shared<LibreOfficeKitDocumentClass>();
 
         m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocumentClass);
 
@@ -2016,7 +2016,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
     , mOptionalFeatures(0)
 {
     if(!m_pOfficeClass) {
-        m_pOfficeClass.reset(new LibreOfficeKitClass);
+        m_pOfficeClass = std::make_shared<LibreOfficeKitClass>();
         m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
 
         m_pOfficeClass->destroy = lo_destroy;
@@ -3201,7 +3201,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         }
     }
 
-    pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pThis, pCallback, pData));
+    pDocument->mpCallbackFlushHandlers[nView] = std::make_shared<CallbackFlushHandler>(pThis, pCallback, pData);
 
     if (pCallback != nullptr)
     {

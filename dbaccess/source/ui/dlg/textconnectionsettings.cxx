@@ -41,12 +41,12 @@ namespace dbaui
 
     void TextConnectionSettingsDialog::bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues )
     {
-        _rValues[ PROPERTY_ID_HEADER_LINE ].reset( new SetItemPropertyStorage( _rSet, DSID_TEXTFILEHEADER ) );
-        _rValues[ PROPERTY_ID_FIELD_DELIMITER ].reset( new SetItemPropertyStorage( _rSet, DSID_FIELDDELIMITER ) );
-        _rValues[ PROPERTY_ID_STRING_DELIMITER ].reset( new SetItemPropertyStorage( _rSet, DSID_TEXTDELIMITER ) );
-        _rValues[ PROPERTY_ID_DECIMAL_DELIMITER ].reset( new SetItemPropertyStorage( _rSet, DSID_DECIMALDELIMITER ) );
-        _rValues[ PROPERTY_ID_THOUSAND_DELIMITER ].reset( new SetItemPropertyStorage( _rSet, DSID_THOUSANDSDELIMITER ) );
-        _rValues[ PROPERTY_ID_ENCODING ].reset( new SetItemPropertyStorage( _rSet, DSID_CHARSET ) );
+        _rValues[ PROPERTY_ID_HEADER_LINE ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_TEXTFILEHEADER );
+        _rValues[ PROPERTY_ID_FIELD_DELIMITER ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_FIELDDELIMITER );
+        _rValues[ PROPERTY_ID_STRING_DELIMITER ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_TEXTDELIMITER );
+        _rValues[ PROPERTY_ID_DECIMAL_DELIMITER ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_DECIMALDELIMITER );
+        _rValues[ PROPERTY_ID_THOUSAND_DELIMITER ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_THOUSANDSDELIMITER );
+        _rValues[ PROPERTY_ID_ENCODING ] = std::make_shared<SetItemPropertyStorage>( _rSet, DSID_CHARSET );
     }
 
     short TextConnectionSettingsDialog::run()

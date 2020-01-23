@@ -180,8 +180,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
     }
     // insert table connection into view
-    TTableConnectionData::value_type pTabConnData(new ORelationTableConnectionData(pSourceWin->GetData(),
-                                                                                   pDestWin->GetData()));
+    TTableConnectionData::value_type pTabConnData = std::make_shared<ORelationTableConnectionData>(pSourceWin->GetData(),
+                                                                                   pDestWin->GetData());
 
     // the names of the affected fields
     OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
@@ -246,7 +246,7 @@ void ORelationTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection
 void ORelationTableView::AddNewRelation()
 {
 
-    TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
+    TTableConnectionData::value_type pNewConnData = std::make_shared<ORelationTableConnectionData>();
     ORelationDialog aRelDlg(this, pNewConnData, true);
 
     bool bSuccess = (aRelDlg.run() == RET_OK);

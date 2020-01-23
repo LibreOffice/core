@@ -167,7 +167,7 @@ namespace dbaui
 
     // DataSourceMetaData
     DataSourceMetaData::DataSourceMetaData( const OUString& _sURL )
-        :m_pImpl( new DataSourceMetaData_Impl( _sURL ) )
+        :m_pImpl( std::make_shared<DataSourceMetaData_Impl>( _sURL ) )
     {
     }
 

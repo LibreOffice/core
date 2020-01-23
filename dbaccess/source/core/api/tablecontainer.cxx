@@ -267,7 +267,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
     }
 
     Reference< XConnection > xConnection( m_xConnection.get(), UNO_QUERY );
-    PContainerApprove pApprove( new ObjectNameApproval( xConnection, ObjectNameApproval::TypeTable ) );
+    PContainerApprove pApprove = std::make_shared<ObjectNameApproval>( xConnection, ObjectNameApproval::TypeTable );
     pApprove->approveElement( aName );
 
     {

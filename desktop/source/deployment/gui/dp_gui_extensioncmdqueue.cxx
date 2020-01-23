@@ -616,7 +616,7 @@ void ExtensionCmdQueue::Thread::addExtension( const OUString &rExtensionURL,
 {
     if ( !rExtensionURL.isEmpty() )
     {
-        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ADD, rExtensionURL, rRepository, bWarnUser ) );
+        TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( ExtensionCmd::ADD, rExtensionURL, rRepository, bWarnUser );
         _insert( pEntry );
     }
 }
@@ -626,7 +626,7 @@ void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deploymen
 {
     if ( rPackage.is() )
     {
-        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::REMOVE, rPackage ) );
+        TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( ExtensionCmd::REMOVE, rPackage );
         _insert( pEntry );
     }
 }
@@ -636,7 +636,7 @@ void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment:
 {
     if ( rPackage.is() )
     {
-        TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ACCEPT_LICENSE, rPackage ) );
+        TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( ExtensionCmd::ACCEPT_LICENSE, rPackage );
         _insert( pEntry );
     }
 }
@@ -647,9 +647,9 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 {
     if ( rPackage.is() )
     {
-        TExtensionCmd pEntry( new ExtensionCmd( bEnable ? ExtensionCmd::ENABLE :
+        TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( bEnable ? ExtensionCmd::ENABLE :
                                                           ExtensionCmd::DISABLE,
-                                                rPackage ) );
+                                                rPackage );
         _insert( pEntry );
     }
 }
@@ -658,7 +658,7 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 void ExtensionCmdQueue::Thread::checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::CHECK_FOR_UPDATES, vExtensionList ) );
+    TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( ExtensionCmd::CHECK_FOR_UPDATES, vExtensionList );
     _insert( pEntry );
 }
 
