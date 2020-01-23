@@ -75,6 +75,6 @@ ODriver::getPropertyInfo(const OUString& url, const uno::Sequence<beans::Propert
     return uno::Sequence<sdbc::DriverPropertyInfo>();
 }
 
-} // namespace connectivity
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

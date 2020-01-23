@@ -116,6 +116,6 @@ Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans:
     return uno::Any( true ); // bLink
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -229,7 +229,7 @@ namespace
 }
 
 namespace cppcanvas::internal
-    {
+{
         // state stack manipulators
 
         void VectorOfOutDevStates::clearStateStack()
@@ -3069,6 +3069,6 @@ namespace cppcanvas::internal
                 return false;
             }
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

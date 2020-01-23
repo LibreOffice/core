@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::tools
-    {
+{
         void initRenderState( rendering::RenderState&                   renderState,
                               const ::cppcanvas::internal::OutDevState& outdevState )
         {
@@ -666,6 +666,6 @@ namespace cppcanvas::tools
             createUnderlinePolyPolygon(rUnderlinePolyPoly, aStartPos, rLineWidth, rTextLineInfo);
             createStrikeoutPolyPolygon(rStrikeoutPolyPoly, aStartPos, rLineWidth, rTextLineInfo);
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
-    {
+{
         ImplCustomSprite::ImplCustomSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
                                             const uno::Reference< rendering::XCustomSprite >&       rSprite,
                                             const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
@@ -65,6 +65,6 @@ namespace cppcanvas::internal
 
             return mpLastCanvas;
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

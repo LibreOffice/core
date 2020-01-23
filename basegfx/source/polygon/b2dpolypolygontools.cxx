@@ -29,7 +29,7 @@
 #include <numeric>
 
 namespace basegfx::utils
-    {
+{
         B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aRetval(rCandidate);
@@ -650,6 +650,6 @@ namespace basegfx::utils
             }
         }
 
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

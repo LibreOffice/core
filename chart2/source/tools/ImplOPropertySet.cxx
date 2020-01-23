@@ -173,6 +173,6 @@ bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
     return true;
 }
 
-} //  namespace chart
+} //  namespace property::impl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

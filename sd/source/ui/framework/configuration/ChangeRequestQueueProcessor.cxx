@@ -180,6 +180,6 @@ void ChangeRequestQueueProcessor::Clear()
     maQueue.swap(aEmpty);
 }
 
-} // end of namespace sd::framework::configuration
+} // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

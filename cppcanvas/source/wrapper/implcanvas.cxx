@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
-    {
+{
 
         ImplCanvas::ImplCanvas( const uno::Reference< rendering::XCanvas >& xCanvas ) :
             maViewState(),
@@ -111,6 +111,6 @@ namespace cppcanvas::internal
             return maViewState;
         }
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

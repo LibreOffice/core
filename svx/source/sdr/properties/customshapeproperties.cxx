@@ -30,7 +30,7 @@
 
 
 namespace sdr::properties
-    {
+{
         void CustomShapeProperties::UpdateTextFrameStatus(bool bInvalidateRenderGeometry)
         {
             SdrObjCustomShape& rObj = static_cast< SdrObjCustomShape& >(GetSdrObject());
@@ -223,6 +223,6 @@ namespace sdr::properties
                 // update bTextFrame and RenderGeometry
             UpdateTextFrameStatus(bRemoveRenderGeometry);
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

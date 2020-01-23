@@ -30,7 +30,7 @@
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         attribute::Sdr3DObjectAttribute* createNewSdr3DObjectAttribute(const SfxItemSet& rSet)
         {
             // get NormalsKind
@@ -140,6 +140,6 @@ namespace drawinglayer::primitive2d
                 aTextureKind, aTextureMode, aMaterial,
                 bInvertNormals, bDoubleSided, bShadow3D, bTextureFilter, bReducedLineGeometry);
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

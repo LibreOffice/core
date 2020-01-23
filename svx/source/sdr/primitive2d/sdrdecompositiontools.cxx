@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 
 namespace drawinglayer::primitive2d
-    {
+{
 
         class TransparencePrimitive2D;
 
@@ -516,6 +516,6 @@ namespace drawinglayer::primitive2d
                 return rContent;
             }
         }
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,7 +43,7 @@
 using namespace ::com::sun::star;
 
 namespace basegfx::unotools
-    {
+{
         namespace
         {
             uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly)
@@ -470,6 +470,6 @@ namespace basegfx::unotools
                                         ceil(rRange.getMaxY()) );
         }
 
-    } // namespace canvas
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

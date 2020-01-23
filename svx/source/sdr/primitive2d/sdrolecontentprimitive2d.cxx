@@ -30,7 +30,7 @@
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         void SdrOleContentPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             const SdrOle2Obj* pSource = mpSdrOle2Obj.get();
@@ -172,6 +172,6 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrOleContentPrimitive2D, PRIMITIVE2D_ID_SDROLECONTENTPRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

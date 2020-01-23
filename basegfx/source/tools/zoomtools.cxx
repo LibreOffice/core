@@ -108,6 +108,6 @@ long zoomOut(long nCurrent)
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
-} // namespace basegfx
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

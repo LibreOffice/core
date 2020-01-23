@@ -664,6 +664,6 @@ void MediaWindowImpl::StartDrag(sal_Int8 nAction, const Point& rPosPixel)
         mpMediaWindow->StartDrag(nAction, rPosPixel);
 }
 
-} // namespace avmedia
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

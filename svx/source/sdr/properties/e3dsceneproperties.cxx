@@ -27,7 +27,7 @@
 
 
 namespace sdr::properties
-    {
+{
         E3dSceneProperties::E3dSceneProperties(SdrObject& rObj)
         :   E3dProperties(rObj)
         {
@@ -288,6 +288,6 @@ namespace sdr::properties
             // FocalLength
             mpItemSet->Put(makeSvx3DFocalLengthItem(static_cast<sal_uInt32>((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

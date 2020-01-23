@@ -401,6 +401,6 @@ DefinedNameRef DefinedNamesBuffer::createDefinedName()
     return xDefName;
 }
 
-} // namespace oox
+} // namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

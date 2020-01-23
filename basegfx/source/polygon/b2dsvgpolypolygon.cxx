@@ -61,7 +61,7 @@ void putNumberChar(OUStringBuffer& rStr,double fValue, double fOldValue, bool bU
 }
 
 namespace basegfx::utils
-    {
+{
         bool PointIndex::operator<(const PointIndex& rComp) const
         {
             if(rComp.getPolygonIndex() == getPolygonIndex())
@@ -926,6 +926,6 @@ namespace basegfx::utils
 
             return aResult.makeStringAndClear();
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

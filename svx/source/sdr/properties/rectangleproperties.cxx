@@ -22,7 +22,7 @@
 
 
 namespace sdr::properties
-    {
+{
         RectangleProperties::RectangleProperties(SdrObject& rObj)
         :   TextProperties(rObj)
         {
@@ -63,6 +63,6 @@ namespace sdr::properties
             SdrRectObj& rObj = static_cast<SdrRectObj&>(GetSdrObject());
             rObj.SetXPolyDirty();
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

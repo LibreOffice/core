@@ -27,7 +27,8 @@
 using namespace ::com::sun::star;
 using namespace editeng;
 
-namespace svx::frame {
+namespace svx::frame
+{
 
 // Classes
 void Style::implEnsureImplStyle()

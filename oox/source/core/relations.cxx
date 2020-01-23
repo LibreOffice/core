@@ -148,6 +148,6 @@ OUString Relations::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& r
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

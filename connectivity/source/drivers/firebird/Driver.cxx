@@ -45,14 +45,14 @@ using namespace ::osl;
 using namespace connectivity::firebird;
 
 namespace connectivity::firebird
-    {
+{
         Reference< XInterface > FirebirdDriver_CreateInstance(
             const Reference< XMultiServiceFactory >& _rxFactory)
         {
             SAL_INFO("connectivity.firebird", "FirebirdDriver_CreateInstance()" );
             return *(new FirebirdDriver(comphelper::getComponentContext(_rxFactory)));
         }
-    }
+}
 
 // Static const variables
 namespace {
@@ -228,7 +228,7 @@ uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByUR
 }
 
 namespace connectivity::firebird
-    {
+{
         void checkDisposed(bool _bThrow)
         {
             if (_bThrow)
@@ -236,7 +236,7 @@ namespace connectivity::firebird
 
         }
 
-    } // namespace connectivity
+} // namespace
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
