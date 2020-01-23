@@ -150,7 +150,6 @@ class SdXMLImport: public SvXMLImport
     rtl::Reference<SdXMLMasterStylesContext> mxMasterStylesContext;
 
     // token map lists
-    std::unique_ptr<SvXMLTokenMap>              mpDocElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpBodyElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpStylesElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpMasterPageElemTokenMap;
@@ -209,7 +208,6 @@ public:
 
     // Styles and AutoStyles contexts
 
-    const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetStylesElemTokenMap();
     const SvXMLTokenMap& GetMasterPageElemTokenMap();

@@ -47,8 +47,6 @@ class SAL_WARN_UNUSED SvxColorValueSet_docking final : public SvxColorValueSet, 
     bool            mbLeftButton;
     Point           aDragPosPixel;
 
-    using SvxColorValueSet::StartDrag;
-
     void            DoDrag();
 
     // ValueSet

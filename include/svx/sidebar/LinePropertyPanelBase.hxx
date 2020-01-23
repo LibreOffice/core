@@ -137,8 +137,6 @@ private:
     DECL_LINK(ChangeLineStyleHdl, weld::ComboBox&, void);
     DECL_LINK(ToolboxWidthSelectHdl, const OString&, void);
     DECL_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void );
-    DECL_LINK(ChangeStartHdl, weld::ComboBox&, void);
-    DECL_LINK(ChangeEndHdl, weld::ComboBox&, void);
     DECL_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
     DECL_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
 };
