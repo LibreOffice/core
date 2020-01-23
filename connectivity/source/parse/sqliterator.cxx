@@ -82,8 +82,8 @@ namespace connectivity
             m_xDatabaseMetaData = m_xConnection->getMetaData();
 
             m_bIsCaseSensitive = m_xDatabaseMetaData.is() && m_xDatabaseMetaData->supportsMixedCaseQuotedIdentifiers();
-            m_pTables.reset( new OSQLTables( m_bIsCaseSensitive ) );
-            m_pSubTables.reset( new OSQLTables( m_bIsCaseSensitive ) );
+            m_pTables = std::make_shared<OSQLTables>( m_bIsCaseSensitive );
+            m_pSubTables = std::make_shared<OSQLTables>( m_bIsCaseSensitive );
 
             m_xTableContainer = _rxTables;
 
@@ -124,7 +124,7 @@ namespace connectivity
             ,m_sForbiddenQueryName( _rForbiddenQueryName )
         {
             if ( !m_rpAllForbiddenNames.get() )
-                m_rpAllForbiddenNames.reset( new QueryNameSet );
+                m_rpAllForbiddenNames = std::make_shared<QueryNameSet>();
             m_rpAllForbiddenNames->insert( m_sForbiddenQueryName );
         }
 

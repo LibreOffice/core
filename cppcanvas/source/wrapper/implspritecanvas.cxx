@@ -43,7 +43,7 @@ namespace cppcanvas::internal
         ImplSpriteCanvas::ImplSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) :
             ImplCanvas( rCanvas ),
             mxSpriteCanvas( rCanvas ),
-            mpTransformArbiter( new TransformationArbiter() )
+            mpTransformArbiter( std::make_shared<TransformationArbiter>() )
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas(): Invalid canvas" );
         }
@@ -53,7 +53,7 @@ namespace cppcanvas::internal
             SpriteCanvas(),
             ImplCanvas( rOrig ),
             mxSpriteCanvas( rOrig.getUNOSpriteCanvas() ),
-            mpTransformArbiter( new TransformationArbiter() )
+            mpTransformArbiter( std::make_shared<TransformationArbiter>() )
         {
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas( const ImplSpriteCanvas& ): Invalid canvas" );
 
@@ -88,15 +88,14 @@ namespace cppcanvas::internal
             if( !mxSpriteCanvas.is() )
                 return CustomSpriteSharedPtr();
 
-            return CustomSpriteSharedPtr(
-                new ImplCustomSprite( mxSpriteCanvas,
+            return std::make_shared<ImplCustomSprite>( mxSpriteCanvas,
                                       mxSpriteCanvas->createCustomSprite( ::basegfx::unotools::size2DFromB2DSize(rSize) ),
-                                      mpTransformArbiter ) );
+                                      mpTransformArbiter );
         }
 
         CanvasSharedPtr ImplSpriteCanvas::clone() const
         {
-            return SpriteCanvasSharedPtr( new ImplSpriteCanvas( *this ) );
+            return std::make_shared<ImplSpriteCanvas>( *this );
         }
 
         uno::Reference< rendering::XSpriteCanvas > ImplSpriteCanvas::getUNOSpriteCanvas() const

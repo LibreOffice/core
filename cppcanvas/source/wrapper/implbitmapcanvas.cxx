@@ -52,7 +52,7 @@ namespace cppcanvas::internal
 
         CanvasSharedPtr ImplBitmapCanvas::clone() const
         {
-            return BitmapCanvasSharedPtr( new ImplBitmapCanvas( *this ) );
+            return std::make_shared<ImplBitmapCanvas>( *this );
         }
     }
 

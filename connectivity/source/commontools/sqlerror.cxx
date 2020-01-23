@@ -240,7 +240,7 @@ namespace connectivity
     }
 
     SQLError::SQLError()
-        :m_pImpl( new SQLError_Impl )
+        :m_pImpl( std::make_shared<SQLError_Impl>() )
     {
     }
 

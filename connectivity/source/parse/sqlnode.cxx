@@ -195,7 +195,7 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
     :rLocale(_rLocale)
     ,aMetaData( _rxConnection )
     ,pParser( nullptr )
-    ,pSubQueryHistory( new QueryNameSet )
+    ,pSubQueryHistory( std::make_shared<QueryNameSet>() )
     ,xFormatter(_xFormatter)
     ,xField(_xField)
     ,sPredicateTableAlias(_sPredicateTableAlias)

@@ -34,27 +34,23 @@ namespace cppcanvas
 {
     CanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< rendering::XCanvas >& xCanvas )
     {
-        return CanvasSharedPtr(
-            new internal::ImplCanvas( xCanvas ) );
+        return std::make_shared<internal::ImplCanvas>( xCanvas );
     }
 
     BitmapCanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
-        return BitmapCanvasSharedPtr(
-            new internal::ImplBitmapCanvas( xCanvas ) );
+        return std::make_shared<internal::ImplBitmapCanvas>( xCanvas );
     }
 
     SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const vcl::Window& rVCLWindow )
     {
-        return SpriteCanvasSharedPtr(
-            new internal::ImplSpriteCanvas(
-                    rVCLWindow.GetSpriteCanvas() ) );
+        return std::make_shared<internal::ImplSpriteCanvas>(
+                    rVCLWindow.GetSpriteCanvas() );
     }
 
     SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& xCanvas )
     {
-        return SpriteCanvasSharedPtr(
-            new internal::ImplSpriteCanvas( xCanvas ) );
+        return std::make_shared<internal::ImplSpriteCanvas>( xCanvas );
     }
 
     BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
@@ -71,17 +67,17 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return BitmapSharedPtr();
 
-        return BitmapSharedPtr( new internal::ImplBitmap( rCanvas,
-                                                          vcl::unotools::xBitmapFromBitmapEx(rBmpEx) ) );
+        return std::make_shared<internal::ImplBitmap>( rCanvas,
+                                                          vcl::unotools::xBitmapFromBitmapEx(rBmpEx) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
                                                   const ::GDIMetaFile&          rMtf,
                                                   const Renderer::Parameters&   rParms )
     {
-        return RendererSharedPtr( new internal::ImplRenderer( rCanvas,
+        return std::make_shared<internal::ImplRenderer>( rCanvas,
                                                               rMtf,
-                                                              rParms ) );
+                                                              rParms );
     }
 }
 

@@ -374,7 +374,7 @@ void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
                         m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
 
                     const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::EComposeRule::InDataManipulation);
-                    pKeyProps.reset(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule));
+                    pKeyProps = std::make_shared<sdbcx::KeyProperties>(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
                     pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
                     _rNames.push_back(sFkName);
                     if ( m_pTables->hasByName(sReferencedName) )
@@ -555,7 +555,7 @@ std::shared_ptr<sdbcx::KeyProperties> OTableHelper::getKeyProperties(const OUStr
     else // only a fall back
     {
         OSL_FAIL("No key with the given name found");
-        pKeyProps.reset(new sdbcx::KeyProperties());
+        pKeyProps = std::make_shared<sdbcx::KeyProperties>();
     }
 
     return pKeyProps;

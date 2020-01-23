@@ -54,7 +54,7 @@ sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName )
 
 OKey::OKey(bool _bCase) :   ODescriptor_BASE(m_aMutex)
             ,   ODescriptor(ODescriptor_BASE::rBHelper, _bCase, true)
-            ,   m_aProps(new KeyProperties())
+            ,   m_aProps(std::make_shared<KeyProperties>())
 {
 }
 

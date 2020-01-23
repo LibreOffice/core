@@ -48,11 +48,10 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return PolyPolygonSharedPtr();
 
-        return PolyPolygonSharedPtr(
-            new internal::ImplPolyPolygon( rCanvas,
+        return std::make_shared<internal::ImplPolyPolygon>( rCanvas,
                                            ::basegfx::unotools::xPolyPolygonFromB2DPolygon(
                                                xCanvas->getDevice(),
-                                               rPoly) ) );
+                                               rPoly) );
     }
 
     BitmapSharedPtr BaseGfxFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
@@ -69,10 +68,9 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return BitmapSharedPtr();
 
-        return BitmapSharedPtr(
-            new internal::ImplBitmap( rCanvas,
+        return std::make_shared<internal::ImplBitmap>( rCanvas,
                                       xCanvas->getDevice()->createCompatibleBitmap(
-                                          ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
+                                          ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) );
     }
 
     BitmapSharedPtr BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
@@ -89,10 +87,9 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return BitmapSharedPtr();
 
-        return BitmapSharedPtr(
-            new internal::ImplBitmap( rCanvas,
+        return std::make_shared<internal::ImplBitmap>( rCanvas,
                                       xCanvas->getDevice()->createCompatibleAlphaBitmap(
-                                          ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
+                                          ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) );
     }
 
 }

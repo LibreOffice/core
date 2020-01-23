@@ -376,10 +376,10 @@ void Parser::handleImplementation() {
             reader_.getUrl()
              + ": <implementation> is missing \"name\" attribute");
     }
-    implementation_.reset(
-        new cppuhelper::ServiceManager::Data::Implementation(
+    implementation_ =
+        std::make_shared<cppuhelper::ServiceManager::Data::Implementation>(
             attrName, attrLoader_, attrUri_, attrEnvironment_, attrConstructor,
-            attrPrefix_, alienContext_, reader_.getUrl()));
+            attrPrefix_, alienContext_, reader_.getUrl());
     if (!data_->namedImplementations.emplace(attrName, implementation_).
         second)
     {
