@@ -55,12 +55,12 @@ namespace vclcanvas
                                                 ceil( rSpriteSize.Height ))) );
 
         // create content backbuffer in screen depth
-        BackBufferSharedPtr pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
+        BackBufferSharedPtr pBackBuffer = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev() );
         pBackBuffer->setSize( aSize );
 
         // create mask backbuffer, with one bit color depth
-        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
-                                                             true ) );
+        BackBufferSharedPtr pBackBufferMask = std::make_shared<BackBuffer>( rOutDevProvider->getOutDev(),
+                                                             true );
         pBackBufferMask->setSize( aSize );
 
         // TODO(F1): Implement alpha vdev (could prolly enable

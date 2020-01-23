@@ -87,7 +87,7 @@ namespace vclcanvas
         if( !pOutDev )
             throw lang::NoSupportException("Passed OutDev invalid!", nullptr);
 
-        OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
+        OutDevProviderSharedPtr pOutdevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 
         // setup helper
         maDeviceHelper.init( pOutdevProvider );

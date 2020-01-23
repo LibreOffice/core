@@ -2362,7 +2362,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
             bSetClassName = true;
         }
         StructRefInfo aThisStruct( maTmpUnoObj, maTmpUnoObj.getValueType(), 0 );
-        maStructInfo.reset( new SbUnoStructRefObject( GetName(), aThisStruct ) );
+        maStructInfo = std::make_shared<SbUnoStructRefObject>( GetName(), aThisStruct );
     }
     else if( eType == TypeClass_INTERFACE )
     {

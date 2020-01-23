@@ -41,7 +41,7 @@ namespace vclcanvas
 
         // setup back buffer
         OutputDevice& rOutDev( pOutDev->getOutDev() );
-        mpBackBuffer.reset( new BackBuffer( rOutDev ));
+        mpBackBuffer = std::make_shared<BackBuffer>( rOutDev );
         mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
 
         // #i95645#

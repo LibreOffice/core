@@ -1017,19 +1017,19 @@ namespace basctl
 
 
     ScriptDocument::ScriptDocument()
-        :m_pImpl(new Impl)
+        :m_pImpl(std::make_shared<Impl>())
     { }
 
 
     ScriptDocument::ScriptDocument( ScriptDocument::SpecialDocument _eType )
-        :m_pImpl( new Impl( Reference< XModel >() ) )
+        :m_pImpl( std::make_shared<Impl>( Reference< XModel >() ) )
     {
         OSL_ENSURE( _eType == NoDocument, "ScriptDocument::ScriptDocument: unknown SpecialDocument type!" );
     }
 
 
     ScriptDocument::ScriptDocument( const Reference< XModel >& _rxDocument )
-        :m_pImpl( new Impl( _rxDocument ) )
+        :m_pImpl( std::make_shared<Impl>( _rxDocument ) )
     {
         OSL_ENSURE( _rxDocument.is(), "ScriptDocument::ScriptDocument: document must not be NULL!" );
             // a NULL document results in an uninitialized instance, and for this

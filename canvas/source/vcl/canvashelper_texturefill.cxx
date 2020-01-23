@@ -756,7 +756,7 @@ namespace vclcanvas
                         const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
                         aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
-                        pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                        pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
                     }
                     else
                     {
@@ -779,7 +779,7 @@ namespace vclcanvas
                         aBmpEx = tools::transformBitmap( aBmpEx,
                                                          aTotalTransform);
 
-                        pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                        pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
 
                         // clear scale values, generated bitmap already
                         // contains scaling

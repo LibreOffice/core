@@ -42,7 +42,7 @@ namespace canvas
         }
 
         // otherwise try to create a new page and allocate space there...
-        PageSharedPtr pPage(new Page(mpRenderModule));
+        PageSharedPtr pPage = std::make_shared<Page>(mpRenderModule);
         if(pPage->isValid())
         {
             maPages.push_back(pPage);
@@ -56,7 +56,7 @@ namespace canvas
         // of videomemory], and all other pages could not take
         // the new request. we decide to create a 'naked' fragment
         // which will receive its location later.
-        FragmentSharedPtr pFragment(new PageFragment(rSize));
+        FragmentSharedPtr pFragment = std::make_shared<PageFragment>(rSize);
         maFragments.push_back(pFragment);
         return pFragment;
     }
