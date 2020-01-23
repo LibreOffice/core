@@ -167,6 +167,6 @@ void SwFrameSidebarWinContainer::getAll( const SwFrame& rFrame,
     }
 }
 
-} // eof of namespace sw::sidebarwindows::
+} // eof of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,6 +66,6 @@ uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     return { AVMEDIA_GST_MANAGER_SERVICENAME };
 }
 
-} // namespace avmedia
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

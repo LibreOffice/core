@@ -819,6 +819,6 @@ void AgileEngine::encrypt(css::uno::Reference<css::io::XInputStream> &  rxInputS
     encryptHmacValue();
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

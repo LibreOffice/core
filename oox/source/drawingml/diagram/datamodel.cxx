@@ -57,7 +57,7 @@ void Point::dump() const
             << msModelId << ", type " << mnType);
 }
 
-} // dgm namespace
+} // oox::drawingml::dgm namespace
 
 DiagramData::DiagramData() :
     mpFillProperties( std::make_shared<FillProperties>() )

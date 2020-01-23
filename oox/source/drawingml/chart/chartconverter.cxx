@@ -152,6 +152,6 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

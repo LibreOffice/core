@@ -25,7 +25,7 @@
 #include <svx/svdmodel.hxx>
 
 namespace sdr::properties
-    {
+{
         void OleProperties::applyDefaultStyleSheetFromSdrModel()
         {
             SfxStyleSheet* pStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj());
@@ -69,6 +69,6 @@ namespace sdr::properties
             // force ItemSet
             GetObjectItemSet();
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

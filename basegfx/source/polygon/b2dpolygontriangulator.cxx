@@ -369,7 +369,7 @@ namespace basegfx
 } // end of namespace basegfx
 
 namespace basegfx::triangulator
-    {
+{
         B2DTriangleVector triangulate(const B2DPolygon& rCandidate)
         {
             B2DTriangleVector aRetval;
@@ -430,6 +430,6 @@ namespace basegfx::triangulator
 
             return aRetval;
         }
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -172,6 +172,6 @@ css::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
         "com.sun.star.drawing.LineProperties" };
 }
 
-} //  namespace chart
+} //  namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

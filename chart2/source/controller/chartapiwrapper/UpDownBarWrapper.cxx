@@ -360,6 +360,6 @@ css::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNam
     };
 }
 
-} //  namespace chart
+} //  namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

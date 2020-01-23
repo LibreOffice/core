@@ -23,7 +23,7 @@
 #include <algorithm>
 
 namespace basegfx::utils
-    {
+{
         namespace
         {
             double distance( const double&                   nX,
@@ -106,6 +106,6 @@ namespace basegfx::utils
             moveLineOutsideRect( io_rLeftTop, io_rRightTop, aNormalTop, rFitTarget );
             moveLineOutsideRect( io_rLeftBottom, io_rRightBottom, aNormalBottom, rFitTarget );
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

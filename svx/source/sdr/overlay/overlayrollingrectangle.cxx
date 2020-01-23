@@ -28,7 +28,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayRollingRectangleStriped::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
@@ -114,6 +114,6 @@ namespace sdr::overlay
                 objectChange();
             }
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

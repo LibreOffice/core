@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 /* Implementation of CanvasGraphicHelper class */
 
 namespace cppcanvas::internal
-    {
+{
         CanvasGraphicHelper::CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas ) :
             maClipPolyPolygon(),
             mpCanvas( rParentCanvas )
@@ -83,6 +83,6 @@ namespace cppcanvas::internal
             maRenderState.CompositeOperation = aOp;
         }
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

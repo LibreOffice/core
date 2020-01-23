@@ -26,7 +26,7 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 
 namespace sdr::contact
-    {
+{
         ViewObjectContactOfE3d::ViewObjectContactOfE3d(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
         {
@@ -83,6 +83,7 @@ namespace sdr::contact
             // return current Primitive2DContainer
             return mxPrimitive3DContainer;
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

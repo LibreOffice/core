@@ -124,6 +124,6 @@ void ElapsedTime::releaseTimer()
     m_bInHoldMode = false;
 }
 
-} // namespace canvas
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

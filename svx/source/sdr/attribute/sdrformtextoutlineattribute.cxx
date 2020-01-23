@@ -25,7 +25,7 @@
 
 
 namespace drawinglayer::attribute
-    {
+{
         class ImpSdrFormTextOutlineAttribute
         {
         public:
@@ -135,6 +135,7 @@ namespace drawinglayer::attribute
         {
             return mpSdrFormTextOutlineAttribute->getTransparence();
         }
-    } // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -334,6 +334,6 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     }
 }
 
-} // namespace oox
+} // namespace oox::ole
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

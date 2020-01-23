@@ -182,6 +182,6 @@ css::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
     };
 }
 
-} //  namespace chart
+} //  namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

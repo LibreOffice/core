@@ -363,6 +363,6 @@ ContextHandlerRef ExtLstGlobalWorkbookContext::onCreateContext( sal_Int32 nEleme
     return this;
 }
 
-} //namespace xls
+} //namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
