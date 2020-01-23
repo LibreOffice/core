@@ -409,7 +409,7 @@ const Number natnum5[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_Traditional_ja, MultiplierChar_7_CJK[Multiplier_Traditional_ja], NUMBER_OMIT_ZERO_ONE_67,
                 ExponentCount_7_CJK, MultiplierExponent_7_CJK },
-        { NumberChar_Upper_ko, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ZERO,
+        { NumberChar_Upper_ko, MultiplierChar_6_CJK[Multiplier_Upper_ko], 0,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
@@ -442,7 +442,7 @@ const Number natnum8[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_Traditional_ja, MultiplierChar_2_CJK[Multiplier_Traditional_ja], NUMBER_OMIT_ZERO_ONE,
                 ExponentCount_2_CJK, MultiplierExponent_2_CJK },
-        { NumberChar_Upper_ko, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
+        { NumberChar_Upper_ko, MultiplierChar_6_CJK[Multiplier_Upper_ko], NUMBER_OMIT_ALL,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
