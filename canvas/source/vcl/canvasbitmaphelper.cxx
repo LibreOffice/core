@@ -45,7 +45,7 @@ namespace vclcanvas
                                    const OutDevProviderSharedPtr& rOutDevReference )
     {
         mpOutDevReference = rOutDevReference;
-        mpBackBuffer.reset( new BitmapBackBuffer( rBitmap, rOutDevReference->getOutDev() ));
+        mpBackBuffer = std::make_shared<BitmapBackBuffer>( rBitmap, rOutDevReference->getOutDev() );
 
         // forward new settings to base class (ref device, output
         // surface, no protection (own backbuffer), alpha depends on

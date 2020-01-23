@@ -78,7 +78,7 @@ namespace oglcanvas
         mpSpriteCanvas(nullptr),
         maActiveSprites(),
         maLastUpdate(),
-        mpTextureCache(new TextureCache()),
+        mpTextureCache(std::make_shared<TextureCache>()),
         mnLinearTwoColorGradientProgram(0),
         mnLinearMultiColorGradientProgram(0),
         mnRadialTwoColorGradientProgram(0),
@@ -543,7 +543,7 @@ namespace oglcanvas
 
     IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& rSize) const
     {
-        return IBufferContextSharedPtr(new BufferContextImpl(rSize));
+        return std::make_shared<BufferContextImpl>(rSize);
     }
 
     TextureCache& SpriteDeviceHelper::getTextureCache() const

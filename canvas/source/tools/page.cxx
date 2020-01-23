@@ -48,7 +48,7 @@ namespace canvas
         SurfaceRect rect(rSize);
         if(insert(rect))
         {
-            FragmentSharedPtr pFragment(new PageFragment(rect,this));
+            FragmentSharedPtr pFragment = std::make_shared<PageFragment>(rect,this);
             mpFragments.push_back(pFragment);
             return pFragment;
         }

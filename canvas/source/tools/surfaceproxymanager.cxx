@@ -33,7 +33,7 @@ namespace canvas
     public:
 
         explicit SurfaceProxyManager( const std::shared_ptr<IRenderModule>& rRenderModule ) :
-            mpPageManager( new PageManager(rRenderModule) )
+            mpPageManager( std::make_shared<PageManager>(rRenderModule) )
         {
         }
 

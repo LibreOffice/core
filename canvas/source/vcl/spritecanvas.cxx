@@ -77,7 +77,7 @@ namespace vclcanvas
         uno::Reference< awt::XWindow > xParentWindow;
         maArguments[3] >>= xParentWindow;
 
-        OutDevProviderSharedPtr pOutDev( new WindowOutDevHolder(xParentWindow) );
+        OutDevProviderSharedPtr pOutDev = std::make_shared<WindowOutDevHolder>(xParentWindow);
 
         // setup helper
         maDeviceHelper.init( pOutDev );

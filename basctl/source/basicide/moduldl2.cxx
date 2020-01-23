@@ -637,7 +637,7 @@ void LibPage::InsertLib()
         // library import dialog
         if (!xLibDlg)
         {
-            xLibDlg.reset(new LibDialog(m_pDialog->getDialog()));
+            xLibDlg = std::make_shared<LibDialog>(m_pDialog->getDialog());
             xLibDlg->SetStorageName( aURLObj.getName() );
         }
 
