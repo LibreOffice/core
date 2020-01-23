@@ -18,7 +18,6 @@
  */
 #include "vbatabstop.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

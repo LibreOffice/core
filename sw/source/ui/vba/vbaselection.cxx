@@ -18,13 +18,11 @@
  */
 #include "vbaselection.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include "vbarange.hxx"
 #include "vbafind.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTableCursor.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <basic/sberrors.hxx>
 #include <ooo/vba/word/WdUnits.hpp>
@@ -38,7 +36,6 @@
 #include <unotbl.hxx>
 #include <unocoll.hxx>
 #include "vbatable.hxx"
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <com/sun/star/view/XLineCursor.hpp>
 #include <com/sun/star/text/XWordCursor.hpp>

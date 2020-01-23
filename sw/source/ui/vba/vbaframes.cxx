@@ -18,10 +18,6 @@
  */
 #include "vbaframes.hxx"
 #include "vbaframe.hxx"
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextViewCursor.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include "wordvbahelper.hxx"
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;

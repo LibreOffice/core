@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <ooo/vba/word/WdUnderline.hpp>
 #include <sal/macros.h>
-#include <ooo/vba/word/WdColorIndex.hpp>
 #include <unordered_map>
 
 using namespace ::ooo::vba;

@@ -21,7 +21,6 @@
 #include "vbatablehelper.hxx"
 #include <swtable.hxx>
 #include <unotbl.hxx>
-#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

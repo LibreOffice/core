@@ -42,7 +42,6 @@
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/word/WdProtectionType.hpp>
 #include <ooo/vba/word/WdSaveFormat.hpp>
-#include <ooo/vba/word/XApplication.hpp>
 #include <ooo/vba/word/XDocumentOutgoing.hpp>
 
 #include <vbahelper/helperdecl.hxx>

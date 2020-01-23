@@ -18,7 +18,6 @@
  */
 #include "vbafind.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include "vbareplacement.hxx"
 #include <ooo/vba/word/WdFindWrap.hpp>
 #include <ooo/vba/word/WdReplace.hpp>

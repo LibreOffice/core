@@ -18,12 +18,9 @@
  */
 #include "vbacolumn.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
-#include "vbatable.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <rtl/ustrbuf.hxx>
-#include "wordvbahelper.hxx"
 #include "vbatablehelper.hxx"
 
 using namespace ::ooo::vba;

@@ -18,13 +18,13 @@
  */
 #include "vbarows.hxx"
 #include "vbarow.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <ooo/vba/word/WdRowAlignment.hpp>
 #include <ooo/vba/word/WdConstants.hpp>
 #include <ooo/vba/word/WdRulerStyle.hpp>
 #include <basic/sberrors.hxx>
-#include "wordvbahelper.hxx"
 #include "vbacolumns.hxx"
 #include "vbatablehelper.hxx"
 

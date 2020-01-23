@@ -20,8 +20,6 @@
 #include "vbasection.hxx"
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <docsh.hxx>
-#include <doc.hxx>
 #include "wordvbahelper.hxx"
 #include <cppuhelper/implbase.hxx>
 

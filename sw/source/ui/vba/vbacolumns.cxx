@@ -18,11 +18,6 @@
  */
 #include "vbacolumns.hxx"
 #include "vbacolumn.hxx"
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <ooo/vba/word/WdConstants.hpp>
-#include <ooo/vba/word/WdRulerStyle.hpp>
-#include "wordvbahelper.hxx"
 #include "vbatablehelper.hxx"
 
 using namespace ::ooo::vba;

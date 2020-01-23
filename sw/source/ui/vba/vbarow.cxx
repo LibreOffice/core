@@ -18,14 +18,12 @@
  */
 #include "vbarow.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/word/WdRowHeightRule.hpp>
 #include <ooo/vba/word/WdConstants.hpp>
-#include <rtl/ustrbuf.hxx>
-#include "wordvbahelper.hxx"
 #include "vbatablehelper.hxx"
 
 using namespace ::ooo::vba;

@@ -24,8 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/table/ShadowLocation.hpp>
 #include "vbapalette.hxx"
 
 using namespace ::com::sun::star;
