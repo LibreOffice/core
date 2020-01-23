@@ -23,6 +23,7 @@
 #include <ControllerLockGuard.hxx>
 
 #include <svx/colorbox.hxx>
+#include <svx/float3d.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svtools/colrdlg.hxx>
@@ -38,24 +39,6 @@ namespace chart
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-LightButton::LightButton(std::unique_ptr<weld::ToggleButton> xButton)
-    : m_xButton(std::move(xButton))
-    , m_bLightOn(false)
-{
-    m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
-}
-
-void LightButton::switchLightOn(bool bOn)
-{
-    if (m_bLightOn == bOn)
-        return;
-    m_bLightOn = bOn;
-    if (m_bLightOn)
-        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_ON);
-    else
-        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
-}
 
 namespace {
 

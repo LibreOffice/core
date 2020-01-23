@@ -1291,6 +1291,8 @@
 #define RID_SVXDLG_BMPMASK_STR_PALETTE                      NC_("RID_SVXDLG_BMPMASK_STR_PALETTE", "Color Palette")
 #define RID_SVXDLG_BMPMASK_STR_TITLE                        NC_("RID_SVXDLG_BMPMASK_STR_TITLE", "Color Replacer")
 
+#define RID_SVXDLG_FLOAT3D_STR_TITLE                        NC_("RID_SVXDLG_FLOAT3D_STR_TITLE", "3D Effects")
+
 #define RID_SVXSTR_ERR_OLD_PASSWD                           NC_("RID_SVXSTR_ERR_OLD_PASSWD", "Invalid password")
 #define RID_SVXSTR_ERR_REPEAT_PASSWD                        NC_("RID_SVXSTR_ERR_REPEAT_PASSWD", "Passwords do not match")
 
