@@ -1088,11 +1088,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
+                    for(long y(0); y < xContent->Height(); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
+                        for(long x(0); x < xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *(pScan + 2)* fConvertColor,
@@ -1107,11 +1107,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
+                    for(long y(0); y < xContent->Height(); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
+                        for(long x(0); x < xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *pScan * fConvertColor,
@@ -1126,10 +1126,10 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else
                 {
-                    for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
+                    for(long y(0); y < xContent->Height(); y++)
                     {
                         Scanline pScanline = xContent->GetScanline( y );
-                        for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
+                        for(long x(0); x < xContent->Width(); x++)
                         {
                             const BitmapColor aBMCol(xContent->GetColor(y, x));
                             const basegfx::BColor aBSource(
