@@ -19,8 +19,6 @@
 
 #include <vcl/event.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/field.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/eitem.hxx>
@@ -54,15 +52,14 @@
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxBmpMaskChildWindow, SID_BMPMASK )
 
-class BmpColorWindow : public Control
+class BmpColorWindow : public weld::CustomWidgetController
 {
     Color       aColor;
 
 
 public:
-    explicit BmpColorWindow(vcl::Window* pParent)
-        : Control(pParent, WB_BORDER)
-        , aColor( COL_WHITE )
+    explicit BmpColorWindow()
+        : aColor( COL_WHITE )
     {
     }
 
@@ -72,62 +69,67 @@ public:
         Invalidate();
     }
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
-    virtual Size GetOptimalSize() const override
+    virtual void SetDrawingArea(weld::DrawingArea* pArea) override
     {
-        return LogicToPixel(Size(43, 14), MapMode(MapUnit::MapAppFont));
+        Size aSize(pArea->get_ref_device().LogicToPixel(Size(43, 14), MapMode(MapUnit::MapAppFont)));
+        CustomWidgetController::SetDrawingArea(pArea);
+        pArea->set_size_request(aSize.Width(), aSize.Height());
+        SetOutputSizePixel(aSize);
     }
 };
 
-class MaskSet : public ValueSet
+class MaskSet : public SvtValueSet
 {
     VclPtr<SvxBmpMask> pSvxBmpMask;
 
 public:
-    MaskSet(SvxBmpMask* pMask, vcl::Window* pParent);
-    virtual ~MaskSet() override { disposeOnce(); }
-    virtual void dispose() override { pSvxBmpMask.clear(); ValueSet::dispose(); }
+    MaskSet(SvxBmpMask* pMask);
     virtual void Select() override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
     virtual void GetFocus() override;
-    virtual Size GetOptimalSize() const override
+    virtual void SetDrawingArea(weld::DrawingArea* pArea) override
     {
-        return LogicToPixel(Size(24, 12), MapMode(MapUnit::MapAppFont));
+        Size aSize(pArea->get_ref_device().LogicToPixel(Size(24, 12), MapMode(MapUnit::MapAppFont)));
+        SvtValueSet::SetDrawingArea(pArea);
+        pArea->set_size_request(aSize.Width(), aSize.Height());
+        SetOutputSizePixel(aSize);
+        SetHelpId(HID_BMPMASK_CTL_QCOL_1);
     }
-
     void onEditColor();
 };
 
-MaskSet::MaskSet(SvxBmpMask* pMask, vcl::Window* pParent)
-    : ValueSet(pParent, WB_TABSTOP)
+MaskSet::MaskSet(SvxBmpMask* pMask)
+    : SvtValueSet(nullptr)
     , pSvxBmpMask(pMask)
 {
-    SetHelpId(HID_BMPMASK_CTL_QCOL_1);
 }
 
 void MaskSet::Select()
 {
-    ValueSet::Select();
+    SvtValueSet::Select();
 
     pSvxBmpMask->onSelect( this );
 }
 
 void MaskSet::GetFocus()
 {
-    ValueSet::GetFocus();
+    SvtValueSet::GetFocus();
     SelectItem( 1 );
     pSvxBmpMask->onSelect( this );
 }
 
-void MaskSet::KeyInput( const KeyEvent& rKEvt )
+bool MaskSet::KeyInput( const KeyEvent& rKEvt )
 {
+    bool bRet = false;
+
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
     // if the key has a modifier we don't care
     if( aCode.GetModifier() )
     {
-        ValueSet::KeyInput( rKEvt );
+        bRet = SvtValueSet::KeyInput( rKEvt );
     }
     else
     {
@@ -136,12 +138,13 @@ void MaskSet::KeyInput( const KeyEvent& rKEvt )
         {
             case KEY_SPACE:
                 onEditColor();
+                bRet = true;
                 break;
             default:
-                ValueSet::KeyInput( rKEvt );
+                bRet = SvtValueSet::KeyInput( rKEvt );
         }
-
     }
+    return bRet;
 }
 
 void MaskSet::onEditColor()
@@ -150,13 +153,13 @@ void MaskSet::onEditColor()
 
     aColorDlg.SetColor(GetItemColor(1));
 
-    if (aColorDlg.Execute(GetFrameWeld()))
+    if (aColorDlg.Execute(pSvxBmpMask->GetFrameWeld()))
         SetItemColor(1, aColorDlg.GetColor());
 }
 
 class MaskData
 {
-    VclPtr<SvxBmpMask>     pMask;
+    VclPtr<SvxBmpMask> pMask;
     bool            bIsReady;
     bool            bExecState;
     SfxBindings&    rBindings;
@@ -168,11 +171,11 @@ public:
     void        SetExecState( bool bState ) { bExecState = bState; }
     bool        IsExecReady() const { return bExecState; }
 
-                DECL_LINK( PipetteHdl, ToolBox*, void );
-                DECL_LINK( CbxHdl, Button*, void);
-                DECL_LINK( CbxTransHdl, Button*, void );
-                DECL_LINK( FocusLbHdl, Control&, void );
-                DECL_LINK(ExecHdl, Button*, void);
+                DECL_LINK( PipetteHdl, const OString&, void );
+                DECL_LINK( CbxHdl, weld::ToggleButton&, void);
+                DECL_LINK( CbxTransHdl, weld::ToggleButton&, void );
+                DECL_LINK( FocusLbHdl, weld::Widget&, void );
+                DECL_LINK(ExecHdl, weld::Button&, void);
 };
 
 
@@ -186,122 +189,115 @@ MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 {
 }
 
-IMPL_LINK( MaskData, PipetteHdl, ToolBox*, pTbx, void )
+IMPL_LINK( MaskData, PipetteHdl, const OString&, rId, void )
 {
     SfxBoolItem aBItem( SID_BMPMASK_PIPETTE,
-                        pTbx->IsItemChecked( pTbx->GetItemId(0) ) );
+                        pMask->m_xTbxPipette->get_item_active(rId) );
 
     rBindings.GetDispatcher()->ExecuteList(SID_BMPMASK_PIPETTE, OWN_CALLMODE,
             { &aBItem });
 }
 
-IMPL_LINK( MaskData, CbxHdl, Button*, pButton, void )
+IMPL_LINK( MaskData, CbxHdl, weld::ToggleButton&, rCbx, void )
 {
-    CheckBox* pCbx = static_cast<CheckBox*>(pButton);
-    bIsReady =  pMask->m_pCbx1->IsChecked() || pMask->m_pCbx2->IsChecked() ||
-                pMask->m_pCbx3->IsChecked() || pMask->m_pCbx4->IsChecked();
+    bIsReady =  pMask->m_xCbx1->get_active() || pMask->m_xCbx2->get_active() ||
+                pMask->m_xCbx3->get_active() || pMask->m_xCbx4->get_active();
 
     if ( bIsReady && IsExecReady() )
-        pMask->m_pBtnExec->Enable();
+        pMask->m_xBtnExec->set_sensitive(true);
     else
-        pMask->m_pBtnExec->Disable();
+        pMask->m_xBtnExec->set_sensitive(false);
 
     // When a checkbox is checked, the pipette is enabled
-    if ( pCbx->IsChecked() )
+    if ( rCbx.get_active() )
     {
         MaskSet* pSet = nullptr;
 
-        if (pCbx == pMask->m_pCbx1)
-            pSet = pMask->m_pQSet1;
-        else if (pCbx == pMask->m_pCbx2)
-            pSet = pMask->m_pQSet2;
-        else if (pCbx == pMask->m_pCbx3)
-            pSet = pMask->m_pQSet3;
-        else // if ( pCbx == pMask->m_pCbx4 )
-            pSet = pMask->m_pQSet4;
+        if (&rCbx == pMask->m_xCbx1.get())
+            pSet = pMask->m_xQSet1.get();
+        else if (&rCbx == pMask->m_xCbx2.get())
+            pSet = pMask->m_xQSet2.get();
+        else if (&rCbx == pMask->m_xCbx3.get())
+            pSet = pMask->m_xQSet3.get();
+        else // if ( &rCbx == pMask->m_xCbx4 )
+            pSet = pMask->m_xQSet4.get();
 
         pSet->SelectItem( 1 );
         pSet->Select();
 
-        pMask->m_pTbxPipette->CheckItem( pMask->m_pTbxPipette->GetItemId(0) );
-        PipetteHdl(pMask->m_pTbxPipette);
+        pMask->m_xTbxPipette->set_item_active("pipette", true);
+        PipetteHdl("pipette");
     }
 }
 
-
-IMPL_LINK( MaskData, CbxTransHdl, Button*, pButton, void )
+IMPL_LINK( MaskData, CbxTransHdl, weld::ToggleButton&, rCbx, void )
 {
-    CheckBox* pCbx = static_cast<CheckBox*>(pButton);
-    bIsReady = pCbx->IsChecked();
+    bIsReady = rCbx.get_active();
     if ( bIsReady )
     {
-        pMask->m_pQSet1->Disable();
-        pMask->m_pQSet2->Disable();
-        pMask->m_pQSet3->Disable();
-        pMask->m_pQSet4->Disable();
-        pMask->m_pCtlPipette->Disable();
-        pMask->m_pCbx1->Disable();
-        pMask->m_pSp1->Disable();
-        pMask->m_pCbx2->Disable();
-        pMask->m_pSp2->Disable();
-        pMask->m_pCbx3->Disable();
-        pMask->m_pSp3->Disable();
-        pMask->m_pCbx4->Disable();
-        pMask->m_pSp4->Disable();
-        pMask->m_pTbxPipette->Disable();
+        pMask->m_xQSet1->Disable();
+        pMask->m_xQSet2->Disable();
+        pMask->m_xQSet3->Disable();
+        pMask->m_xQSet4->Disable();
+        pMask->m_xCtlPipette->Disable();
+        pMask->m_xCbx1->set_sensitive(false);
+        pMask->m_xSp1->set_sensitive(false);
+        pMask->m_xCbx2->set_sensitive(false);
+        pMask->m_xSp2->set_sensitive(false);
+        pMask->m_xCbx3->set_sensitive(false);
+        pMask->m_xSp3->set_sensitive(false);
+        pMask->m_xCbx4->set_sensitive(false);
+        pMask->m_xSp4->set_sensitive(false);
+        pMask->m_xTbxPipette->set_sensitive(false);
 
-        pMask->m_pLbColor1->Disable();
-        pMask->m_pLbColor2->Disable();
-        pMask->m_pLbColor3->Disable();
-        pMask->m_pLbColor4->Disable();
-        pMask->m_pLbColorTrans->Enable();
+        pMask->m_xLbColor1->set_sensitive(false);
+        pMask->m_xLbColor2->set_sensitive(false);
+        pMask->m_xLbColor3->set_sensitive(false);
+        pMask->m_xLbColor4->set_sensitive(false);
+        pMask->m_xLbColorTrans->set_sensitive(true);
     }
     else
     {
-        pMask->m_pQSet1->Enable();
-        pMask->m_pQSet2->Enable();
-        pMask->m_pQSet3->Enable();
-        pMask->m_pQSet4->Enable();
-        pMask->m_pCtlPipette->Enable();
-        pMask->m_pCbx1->Enable();
-        pMask->m_pSp1->Enable();
-        pMask->m_pCbx2->Enable();
-        pMask->m_pSp2->Enable();
-        pMask->m_pCbx3->Enable();
-        pMask->m_pSp3->Enable();
-        pMask->m_pCbx4->Enable();
-        pMask->m_pSp4->Enable();
-        pMask->m_pTbxPipette->Enable();
+        pMask->m_xQSet1->Enable();
+        pMask->m_xQSet2->Enable();
+        pMask->m_xQSet3->Enable();
+        pMask->m_xQSet4->Enable();
+        pMask->m_xCtlPipette->Enable();
+        pMask->m_xCbx1->set_sensitive(true);
+        pMask->m_xSp1->set_sensitive(true);
+        pMask->m_xCbx2->set_sensitive(true);
+        pMask->m_xSp2->set_sensitive(true);
+        pMask->m_xCbx3->set_sensitive(true);
+        pMask->m_xSp3->set_sensitive(true);
+        pMask->m_xCbx4->set_sensitive(true);
+        pMask->m_xSp4->set_sensitive(true);
+        pMask->m_xTbxPipette->set_sensitive(true);
 
-        pMask->m_pLbColor1->Enable();
-        pMask->m_pLbColor2->Enable();
-        pMask->m_pLbColor3->Enable();
-        pMask->m_pLbColor4->Enable();
-        pMask->m_pLbColorTrans->Disable();
+        pMask->m_xLbColor1->set_sensitive(true);
+        pMask->m_xLbColor2->set_sensitive(true);
+        pMask->m_xLbColor3->set_sensitive(true);
+        pMask->m_xLbColor4->set_sensitive(true);
+        pMask->m_xLbColorTrans->set_sensitive(false);
 
-        bIsReady = pMask->m_pCbx1->IsChecked() || pMask->m_pCbx2->IsChecked() ||
-                   pMask->m_pCbx3->IsChecked() || pMask->m_pCbx4->IsChecked();
+        bIsReady = pMask->m_xCbx1->get_active() || pMask->m_xCbx2->get_active() ||
+                   pMask->m_xCbx3->get_active() || pMask->m_xCbx4->get_active();
     }
 
     if ( bIsReady && IsExecReady() )
-        pMask->m_pBtnExec->Enable();
+        pMask->m_xBtnExec->set_sensitive(true);
     else
-        pMask->m_pBtnExec->Disable();
+        pMask->m_xBtnExec->set_sensitive(false);
 }
 
-
-IMPL_LINK( MaskData, FocusLbHdl, Control&, rControl, void )
+IMPL_LINK( MaskData, FocusLbHdl, weld::Widget&, rLb, void )
 {
-    SvxColorListBox* pLb = static_cast<SvxColorListBox*>(&rControl);
-    // MT: bFireFox as API parameter is ugly, find better solution????
-    pMask->m_pQSet1->SelectItem( pLb == pMask->m_pLbColor1 ? 1 : 0 /* , false */ );
-    pMask->m_pQSet2->SelectItem( pLb == pMask->m_pLbColor2 ? 1 : 0 /* , false */ );
-    pMask->m_pQSet3->SelectItem( pLb == pMask->m_pLbColor3 ? 1 : 0 /* , false */ );
-    pMask->m_pQSet4->SelectItem( pLb == pMask->m_pLbColor4 ? 1 : 0 /* , false */ );
+    pMask->m_xQSet1->SelectItem( &rLb == &pMask->m_xLbColor1->get_widget() ? 1 : 0 /* , false */ );
+    pMask->m_xQSet2->SelectItem( &rLb == &pMask->m_xLbColor2->get_widget() ? 1 : 0 /* , false */ );
+    pMask->m_xQSet3->SelectItem( &rLb == &pMask->m_xLbColor3->get_widget() ? 1 : 0 /* , false */ );
+    pMask->m_xQSet4->SelectItem( &rLb == &pMask->m_xLbColor4->get_widget() ? 1 : 0 /* , false */ );
 }
 
-
-IMPL_LINK_NOARG(MaskData, ExecHdl, Button*, void)
+IMPL_LINK_NOARG(MaskData, ExecHdl, weld::Button&, void)
 {
     SfxBoolItem aBItem( SID_BMPMASK_EXEC, true );
     rBindings.GetDispatcher()->ExecuteList(SID_BMPMASK_EXEC, OWN_CALLMODE,
@@ -313,7 +309,7 @@ void BmpColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
-    rRenderContext.DrawRect(tools::Rectangle(Point(), GetSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(), GetOutputSizePixel()));
     rRenderContext.Pop();
 }
 
@@ -350,114 +346,100 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 n
 
 SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow(pBindinx, pCW, pParent, "DockingColorReplace",
-                       "svx/ui/dockingcolorreplace.ui" )
-    , pData(new MaskData(this, *pBindinx))
+                       "svx/ui/dockingcolorreplace.ui", true )
+    , m_xTbxPipette(m_xBuilder->weld_toolbar("toolbar"))
+    , m_xCtlPipette(new BmpColorWindow)
+    , m_xCtlPipetteWin(new weld::CustomWeld(*m_xBuilder, "toolcolor", *m_xCtlPipette))
+    , m_xBtnExec(m_xBuilder->weld_button("replace"))
+    , m_xCbx1(m_xBuilder->weld_check_button("cbx1"))
+    , m_xQSet1(new MaskSet(this))
+    , m_xQSetWin1(new weld::CustomWeld(*m_xBuilder, "qset1", *m_xQSet1))
+    , m_xSp1(m_xBuilder->weld_metric_spin_button("tol1", FieldUnit::PERCENT))
+    , m_xLbColor1(new ColorListBox(m_xBuilder->weld_menu_button("color1"), GetFrameWeld()))
+    , m_xCbx2(m_xBuilder->weld_check_button("cbx2"))
+    , m_xQSet2(new MaskSet(this))
+    , m_xQSetWin2(new weld::CustomWeld(*m_xBuilder, "qset2", *m_xQSet2))
+     , m_xSp2(m_xBuilder->weld_metric_spin_button("tol2", FieldUnit::PERCENT))
+    , m_xLbColor2(new ColorListBox(m_xBuilder->weld_menu_button("color2"), GetFrameWeld()))
+    , m_xCbx3(m_xBuilder->weld_check_button("cbx3"))
+    , m_xQSet3(new MaskSet(this))
+    , m_xQSetWin3(new weld::CustomWeld(*m_xBuilder, "qset3", *m_xQSet3))
+    , m_xSp3(m_xBuilder->weld_metric_spin_button("tol3", FieldUnit::PERCENT))
+    , m_xLbColor3(new ColorListBox(m_xBuilder->weld_menu_button("color3"), GetFrameWeld()))
+    , m_xCbx4(m_xBuilder->weld_check_button("cbx4"))
+    , m_xQSet4(new MaskSet(this))
+    , m_xQSetWin4(new weld::CustomWeld(*m_xBuilder, "qset4", *m_xQSet4))
+    , m_xSp4(m_xBuilder->weld_metric_spin_button("tol4", FieldUnit::PERCENT))
+    , m_xLbColor4(new ColorListBox(m_xBuilder->weld_menu_button("color4"), GetFrameWeld()))
+    , m_xCbxTrans(m_xBuilder->weld_check_button("cbx5"))
+    , m_xLbColorTrans(new ColorListBox(m_xBuilder->weld_menu_button("color5"), GetFrameWeld()))
+    , m_xData(new MaskData(this, *pBindinx))
     , aPipetteColor(COL_WHITE)
     , aSelItem(*this, *pBindinx)
 {
-    get(m_pTbxPipette, "toolbar");
-    m_pTbxPipette->SetItemBits(m_pTbxPipette->GetItemId(0),
-        ToolBoxItemBits::AUTOCHECK);
-    get(m_pBtnExec, "replace");
-    m_pCtlPipette = VclPtr<BmpColorWindow>::Create(get<Window>("toolgrid"));
-    m_pCtlPipette->Show();
-    m_pCtlPipette->set_grid_left_attach(1);
-    m_pCtlPipette->set_grid_top_attach(0);
-    m_pCtlPipette->set_hexpand(true);
-    get(m_pCbx1, "cbx1");
-    Window *pGrid = get<Window>("colorgrid");
-    m_pQSet1 = VclPtr<MaskSet>::Create(this, pGrid);
-    m_pQSet1->set_grid_left_attach(1);
-    m_pQSet1->set_grid_top_attach(1);
-    m_pQSet1->Show();
-    get(m_pSp1, "tol1");
-    get(m_pLbColor1, "color1");
-    m_pLbColor1->SetSlotId(SID_BMPMASK_COLOR);
-    get(m_pCbx2, "cbx2");
-    m_pQSet2 = VclPtr<MaskSet>::Create(this, pGrid);
-    m_pQSet2->set_grid_left_attach(1);
-    m_pQSet2->set_grid_top_attach(2);
-    m_pQSet2->Show();
-    get(m_pSp2, "tol2");
-    get(m_pLbColor2, "color2");
-    m_pLbColor2->SetSlotId(SID_BMPMASK_COLOR);
-    get(m_pCbx3, "cbx3");
-    m_pQSet3 = VclPtr<MaskSet>::Create(this, pGrid);
-    m_pQSet3->set_grid_left_attach(1);
-    m_pQSet3->set_grid_top_attach(3);
-    m_pQSet3->Show();
-    get(m_pSp3, "tol3");
-    get(m_pLbColor3, "color3");
-    m_pLbColor3->SetSlotId(SID_BMPMASK_COLOR);
-    get(m_pCbx4, "cbx4");
-    m_pQSet4   = VclPtr<MaskSet>::Create(this, pGrid);
-    m_pQSet4->set_grid_left_attach(1);
-    m_pQSet4->set_grid_top_attach(4);
-    m_pQSet4->Show();
-    get(m_pSp4, "tol4");
-    get(m_pLbColor4, "color4");
-    m_pLbColor4->SetSlotId(SID_BMPMASK_COLOR);
-    get(m_pCbxTrans, "cbx5");
-    get(m_pLbColorTrans, "color5");
+    m_xLbColor1->SetSlotId(SID_BMPMASK_COLOR);
+    m_xLbColor2->SetSlotId(SID_BMPMASK_COLOR);
+    m_xLbColor3->SetSlotId(SID_BMPMASK_COLOR);
+    m_xLbColor4->SetSlotId(SID_BMPMASK_COLOR);
 
-    m_pLbColorTrans->SelectEntry(COL_BLACK);
-    m_pLbColor1->SelectEntry(COL_TRANSPARENT);
-    m_pLbColor2->SelectEntry(COL_TRANSPARENT);
-    m_pLbColor3->SelectEntry(COL_TRANSPARENT);
-    m_pLbColor4->SelectEntry(COL_TRANSPARENT);
+    m_xLbColorTrans->SelectEntry(COL_BLACK);
+    m_xLbColor1->SelectEntry(COL_TRANSPARENT);
+    m_xLbColor2->SelectEntry(COL_TRANSPARENT);
+    m_xLbColor3->SelectEntry(COL_TRANSPARENT);
+    m_xLbColor4->SelectEntry(COL_TRANSPARENT);
 
-    m_pTbxPipette->SetSelectHdl( LINK( pData.get(), MaskData, PipetteHdl ) );
-    m_pBtnExec->SetClickHdl( LINK( pData.get(), MaskData, ExecHdl ) );
+    m_xTbxPipette->connect_clicked( LINK( m_xData.get(), MaskData, PipetteHdl ) );
+    m_xBtnExec->connect_clicked( LINK( m_xData.get(), MaskData, ExecHdl ) );
 
-    m_pCbx1->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
-    m_pCbx2->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
-    m_pCbx3->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
-    m_pCbx4->SetClickHdl( LINK( pData.get(), MaskData, CbxHdl ) );
-    m_pCbxTrans->SetClickHdl( LINK( pData.get(), MaskData, CbxTransHdl ) );
+    m_xCbx1->connect_toggled( LINK( m_xData.get(), MaskData, CbxHdl ) );
+    m_xCbx2->connect_toggled( LINK( m_xData.get(), MaskData, CbxHdl ) );
+    m_xCbx3->connect_toggled( LINK( m_xData.get(), MaskData, CbxHdl ) );
+    m_xCbx4->connect_toggled( LINK( m_xData.get(), MaskData, CbxHdl ) );
+    m_xCbxTrans->connect_toggled( LINK( m_xData.get(), MaskData, CbxTransHdl ) );
 
     SetAccessibleNames ();
 
-    m_pLbColor1->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
-    m_pLbColor2->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
-    m_pLbColor3->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
-    m_pLbColor4->SetGetFocusHdl( LINK( pData.get(), MaskData, FocusLbHdl ) );
-    m_pLbColorTrans->Disable();
+    m_xLbColor1->connect_focus_in( LINK( m_xData.get(), MaskData, FocusLbHdl ) );
+    m_xLbColor2->connect_focus_in( LINK( m_xData.get(), MaskData, FocusLbHdl ) );
+    m_xLbColor3->connect_focus_in( LINK( m_xData.get(), MaskData, FocusLbHdl ) );
+    m_xLbColor4->connect_focus_in( LINK( m_xData.get(), MaskData, FocusLbHdl ) );
+    m_xLbColorTrans->set_sensitive(false);
 
     OUString sColorPalette (SvxResId( RID_SVXDLG_BMPMASK_STR_PALETTE));
     OUString sColorPaletteN;
 
-    m_pQSet1->SetStyle( m_pQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet1->SetColCount();
-    m_pQSet1->SetLineCount( 1 );
+    m_xQSet1->SetStyle( m_xQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    m_xQSet1->SetColCount();
+    m_xQSet1->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 1";
-    m_pQSet1->InsertItem( 1, aPipetteColor, sColorPaletteN);
-    m_pQSet1->SelectItem( 1 );
+    m_xQSet1->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet1->SelectItem( 1 );
 
-    m_pQSet2->SetStyle( m_pQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet2->SetColCount();
-    m_pQSet2->SetLineCount( 1 );
+    m_xQSet2->SetStyle( m_xQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    m_xQSet2->SetColCount();
+    m_xQSet2->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 2";
-    m_pQSet2->InsertItem( 1, aPipetteColor, sColorPaletteN);
-    m_pQSet2->SelectItem( 0 );
+    m_xQSet2->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet2->SelectItem( 0 );
 
-    m_pQSet3->SetStyle( m_pQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet3->SetColCount();
-    m_pQSet3->SetLineCount( 1 );
+    m_xQSet3->SetStyle( m_xQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    m_xQSet3->SetColCount();
+    m_xQSet3->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 3";
-    m_pQSet3->InsertItem( 1, aPipetteColor, sColorPaletteN);
-    m_pQSet3->SelectItem( 0 );
+    m_xQSet3->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet3->SelectItem( 0 );
 
-    m_pQSet4->SetStyle( m_pQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    m_pQSet4->SetColCount();
-    m_pQSet4->SetLineCount( 1 );
+    m_xQSet4->SetStyle( m_xQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    m_xQSet4->SetColCount();
+    m_xQSet4->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 4";
-    m_pQSet4->InsertItem( 1, aPipetteColor, sColorPaletteN);
-    m_pQSet4->SelectItem( 0 );
+    m_xQSet4->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet4->SelectItem( 0 );
 
-    m_pQSet1->Show();
-    m_pQSet2->Show();
-    m_pQSet3->Show();
-    m_pQSet4->Show();
+    m_xQSet1->Show();
+    m_xQSet2->Show();
+    m_xQSet3->Show();
+    m_xQSet4->Show();
 }
 
 SvxBmpMask::~SvxBmpMask()
@@ -467,28 +449,33 @@ SvxBmpMask::~SvxBmpMask()
 
 void SvxBmpMask::dispose()
 {
-    m_pQSet1.disposeAndClear();
-    m_pQSet2.disposeAndClear();
-    m_pQSet3.disposeAndClear();
-    m_pQSet4.disposeAndClear();
-    m_pCtlPipette.disposeAndClear();
-    pData.reset();
-    m_pTbxPipette.clear();
-    m_pBtnExec.clear();
-    m_pCbx1.clear();
-    m_pSp1.clear();
-    m_pLbColor1.clear();
-    m_pCbx2.clear();
-    m_pSp2.clear();
-    m_pLbColor2.clear();
-    m_pCbx3.clear();
-    m_pSp3.clear();
-    m_pLbColor3.clear();
-    m_pCbx4.clear();
-    m_pSp4.clear();
-    m_pLbColor4.clear();
-    m_pCbxTrans.clear();
-    m_pLbColorTrans.clear();
+    m_xQSetWin1.reset();
+    m_xQSet1.reset();
+    m_xQSetWin2.reset();
+    m_xQSet2.reset();
+    m_xQSetWin3.reset();
+    m_xQSet3.reset();
+    m_xQSetWin4.reset();
+    m_xQSet4.reset();
+    m_xCtlPipetteWin.reset();
+    m_xCtlPipette.reset();
+    m_xData.reset();
+    m_xTbxPipette.reset();
+    m_xBtnExec.reset();
+    m_xCbx1.reset();
+    m_xSp1.reset();
+    m_xLbColor1.reset();
+    m_xCbx2.reset();
+    m_xSp2.reset();
+    m_xLbColor2.reset();
+    m_xCbx3.reset();
+    m_xSp3.reset();
+    m_xLbColor3.reset();
+    m_xCbx4.reset();
+    m_xSp4.reset();
+    m_xLbColor4.reset();
+    m_xCbxTrans.reset();
+    m_xLbColorTrans.reset();
     aSelItem.dispose();
     SfxDockingWindow::dispose();
 }
@@ -497,17 +484,17 @@ void SvxBmpMask::dispose()
 void SvxBmpMask::onSelect( MaskSet* pSet )
 {
     // now deselect all other value sets
-    if( pSet != m_pQSet1 )
-        m_pQSet1->SelectItem( 0 );
+    if( pSet != m_xQSet1.get() )
+        m_xQSet1->SelectItem( 0 );
 
-    if( pSet != m_pQSet2 )
-        m_pQSet2->SelectItem( 0 );
+    if( pSet != m_xQSet2.get() )
+        m_xQSet2->SelectItem( 0 );
 
-    if( pSet != m_pQSet3 )
-        m_pQSet3->SelectItem( 0 );
+    if( pSet != m_xQSet3.get() )
+        m_xQSet3->SelectItem( 0 );
 
-    if( pSet != m_pQSet4 )
-        m_pQSet4->SelectItem( 0 );
+    if( pSet != m_xQSet4.get() )
+        m_xQSet4->SelectItem( 0 );
 }
 
 bool SvxBmpMask::Close()
@@ -522,52 +509,52 @@ bool SvxBmpMask::Close()
 void SvxBmpMask::SetColor( const Color& rColor )
 {
     aPipetteColor = rColor;
-    m_pCtlPipette->SetColor( aPipetteColor );
+    m_xCtlPipette->SetColor( aPipetteColor );
 }
 
 void SvxBmpMask::PipetteClicked()
 {
-    if( m_pQSet1->GetSelectedItemId() == 1 )
+    if( m_xQSet1->GetSelectedItemId() == 1 )
     {
-        m_pCbx1->Check();
-        pData->CbxHdl(m_pCbx1);
-        m_pQSet1->SetItemColor( 1, aPipetteColor );
-        m_pQSet1->SetFormat();
+        m_xCbx1->set_active(true);
+        m_xData->CbxHdl(*m_xCbx1);
+        m_xQSet1->SetItemColor( 1, aPipetteColor );
+        m_xQSet1->SetFormat();
     }
-    else if( m_pQSet2->GetSelectedItemId() == 1 )
+    else if( m_xQSet2->GetSelectedItemId() == 1 )
     {
-        m_pCbx2->Check();
-        pData->CbxHdl(m_pCbx2);
-        m_pQSet2->SetItemColor( 1, aPipetteColor );
-        m_pQSet2->SetFormat();
+        m_xCbx2->set_active(true);
+        m_xData->CbxHdl(*m_xCbx2);
+        m_xQSet2->SetItemColor( 1, aPipetteColor );
+        m_xQSet2->SetFormat();
     }
-    else if( m_pQSet3->GetSelectedItemId() == 1 )
+    else if( m_xQSet3->GetSelectedItemId() == 1 )
     {
-        m_pCbx3->Check();
-        pData->CbxHdl(m_pCbx3);
-        m_pQSet3->SetItemColor( 1, aPipetteColor );
-        m_pQSet3->SetFormat();
+        m_xCbx3->set_active(true);
+        m_xData->CbxHdl(*m_xCbx3);
+        m_xQSet3->SetItemColor( 1, aPipetteColor );
+        m_xQSet3->SetFormat();
     }
-    else if( m_pQSet4->GetSelectedItemId() == 1 )
+    else if( m_xQSet4->GetSelectedItemId() == 1 )
     {
-        m_pCbx4->Check();
-        pData->CbxHdl(m_pCbx4);
-        m_pQSet4->SetItemColor( 1, aPipetteColor );
-        m_pQSet4->SetFormat();
+        m_xCbx4->set_active(true);
+        m_xData->CbxHdl(*m_xCbx4);
+        m_xQSet4->SetItemColor( 1, aPipetteColor );
+        m_xQSet4->SetFormat();
     }
 
-    m_pTbxPipette->CheckItem( m_pTbxPipette->GetItemId(0), false );
-    pData->PipetteHdl(m_pTbxPipette);
+    m_xTbxPipette->set_item_active("pipette", false);
+    m_xData->PipetteHdl("pipette");
 }
 
 void SvxBmpMask::SetExecState( bool bEnable )
 {
-    pData->SetExecState( bEnable );
+    m_xData->SetExecState( bEnable );
 
-    if ( pData->IsExecReady() && pData->IsCbxReady() )
-        m_pBtnExec->Enable();
+    if ( m_xData->IsExecReady() && m_xData->IsCbxReady() )
+        m_xBtnExec->set_sensitive(true);
     else
-        m_pBtnExec->Disable();
+        m_xBtnExec->set_sensitive(false);
 }
 
 
@@ -575,32 +562,32 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
 {
     sal_uInt16  nCount = 0;
 
-    if ( m_pCbx1->IsChecked() )
+    if ( m_xCbx1->get_active() )
     {
-        pSrcCols[nCount] = m_pQSet1->GetItemColor( 1 );
-        pDstCols[nCount] = m_pLbColor1->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uInt8>(m_pSp1->GetValue());
+        pSrcCols[nCount] = m_xQSet1->GetItemColor( 1 );
+        pDstCols[nCount] = m_xLbColor1->GetSelectEntryColor();
+        pTols[nCount++] = static_cast<sal_uInt8>(m_xSp1->get_value(FieldUnit::PERCENT));
     }
 
-    if ( m_pCbx2->IsChecked() )
+    if ( m_xCbx2->get_active() )
     {
-        pSrcCols[nCount] = m_pQSet2->GetItemColor( 1 );
-        pDstCols[nCount] = m_pLbColor2->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uInt8>(m_pSp2->GetValue());
+        pSrcCols[nCount] = m_xQSet2->GetItemColor( 1 );
+        pDstCols[nCount] = m_xLbColor2->GetSelectEntryColor();
+        pTols[nCount++] = static_cast<sal_uInt8>(m_xSp2->get_value(FieldUnit::PERCENT));
     }
 
-    if ( m_pCbx3->IsChecked() )
+    if ( m_xCbx3->get_active() )
     {
-        pSrcCols[nCount] = m_pQSet3->GetItemColor( 1 );
-        pDstCols[nCount] = m_pLbColor3->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uInt8>(m_pSp3->GetValue());
+        pSrcCols[nCount] = m_xQSet3->GetItemColor( 1 );
+        pDstCols[nCount] = m_xLbColor3->GetSelectEntryColor();
+        pTols[nCount++] = static_cast<sal_uInt8>(m_xSp3->get_value(FieldUnit::PERCENT));
     }
 
-    if ( m_pCbx4->IsChecked() )
+    if ( m_xCbx4->get_active() )
     {
-        pSrcCols[nCount] = m_pQSet4->GetItemColor( 1 );
-        pDstCols[nCount] = m_pLbColor4->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_pSp4->GetValue());
+        pSrcCols[nCount] = m_xQSet4->GetItemColor( 1 );
+        pDstCols[nCount] = m_xLbColor4->GetSelectEntryColor();
+        pTols[nCount++] = static_cast<sal_uIntPtr>(m_xSp4->get_value(FieldUnit::PERCENT));
     }
 
     return nCount;
@@ -945,15 +932,15 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
 GDIMetaFile SvxBmpMask::GetMetaFile(const Graphic& rGraphic)
 {
     // Replace transparency?
-    if (m_pCbxTrans->IsChecked())
-        return ImpReplaceTransparency(rGraphic.GetGDIMetaFile(), m_pLbColorTrans->GetSelectEntryColor());
+    if (m_xCbxTrans->get_active())
+        return ImpReplaceTransparency(rGraphic.GetGDIMetaFile(), m_xLbColorTrans->GetSelectEntryColor());
     return ImpMask(rGraphic.GetGDIMetaFile());
 }
 
 Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 {
     Graphic     aGraphic( rGraphic );
-    const Color aReplColor( m_pLbColorTrans->GetSelectEntryColor() );
+    const Color aReplColor( m_xLbColorTrans->GetSelectEntryColor() );
 
     switch( rGraphic.GetType() )
     {
@@ -962,7 +949,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
             if( rGraphic.IsAnimated() )
             {
                 // Replace transparency?
-                if ( m_pCbxTrans->IsChecked() )
+                if ( m_xCbxTrans->get_active() )
                     aGraphic = ImpReplaceTransparency( rGraphic.GetAnimation(), aReplColor );
                 else
                     aGraphic = ImpMask( rGraphic.GetAnimation() );
@@ -970,7 +957,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
             else
             {
                 // Replace transparency?
-                if( m_pCbxTrans->IsChecked() )
+                if( m_xCbxTrans->get_active() )
                 {
                     BitmapEx aBmpEx = aGraphic.GetBitmapEx();
                     aBmpEx.ReplaceTransparency(aReplColor);
@@ -1039,7 +1026,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
 bool SvxBmpMask::IsEyedropping() const
 {
-    return m_pTbxPipette->IsItemChecked( m_pTbxPipette->GetItemId(0) );
+    return m_xTbxPipette->get_item_active("pipette");
 }
 
 /** Set an accessible name for the source color check boxes.  Without this
@@ -1052,13 +1039,13 @@ void SvxBmpMask::SetAccessibleNames()
     OUString sColorPaletteN;
 
     sColorPaletteN = sColorPalette + " 1";
-    m_pQSet1->SetText (sColorPaletteN);
+    m_xQSet1->SetText (sColorPaletteN);
     sColorPaletteN = sColorPalette + " 2";
-    m_pQSet2->SetText (sColorPaletteN);
+    m_xQSet2->SetText (sColorPaletteN);
     sColorPaletteN = sColorPalette + " 3";
-    m_pQSet3->SetText (sColorPaletteN);
+    m_xQSet3->SetText (sColorPaletteN);
     sColorPaletteN = sColorPalette + " 4";
-    m_pQSet4->SetText (sColorPaletteN);
+    m_xQSet4->SetText (sColorPaletteN);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
