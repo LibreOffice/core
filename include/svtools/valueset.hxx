@@ -298,7 +298,6 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual void    Select();
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     /// Insert @rImage item.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage);

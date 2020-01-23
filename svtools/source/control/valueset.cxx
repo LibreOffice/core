@@ -273,8 +273,6 @@ void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* 
 
         if (pItem->meType == VALUESETITEM_USERDRAW)
         {
-            UserDrawEvent aUDEvt(this, &rRenderContext, aRect, pItem->mnId);
-            UserDraw(aUDEvt);
         }
         else
         {
@@ -1493,10 +1491,6 @@ FactoryFunction ValueSet::GetUITestFactory() const
 void ValueSet::Select()
 {
     maSelectHdl.Call( this );
-}
-
-void ValueSet::UserDraw( const UserDrawEvent& )
-{
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
