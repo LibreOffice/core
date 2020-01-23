@@ -60,7 +60,7 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     ,m_pTable(nullptr)
     ,m_pConnection(_pConnection)
     ,m_aParser( comphelper::getComponentContext(_pConnection->getDriver()->getFactory()) )
-    ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser ) )
+    ,m_pSQLIterator( std::make_shared<OSQLParseTreeIterator>( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser ) )
 {
 }
 

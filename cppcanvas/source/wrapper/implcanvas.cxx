@@ -80,7 +80,7 @@ namespace cppcanvas::internal
 
         CanvasSharedPtr ImplCanvas::clone() const
         {
-            return CanvasSharedPtr( new ImplCanvas( *this ) );
+            return std::make_shared<ImplCanvas>( *this );
         }
 
         void ImplCanvas::clear() const

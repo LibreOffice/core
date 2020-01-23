@@ -60,7 +60,7 @@ namespace cppcanvas::internal
             if( mpLastCanvas.get() == nullptr ||
                 mpLastCanvas->getUNOCanvas() != xCanvas )
             {
-                mpLastCanvas = CanvasSharedPtr( new ImplCanvas( xCanvas ) );
+                mpLastCanvas = std::make_shared<ImplCanvas>( xCanvas );
             }
 
             return mpLastCanvas;

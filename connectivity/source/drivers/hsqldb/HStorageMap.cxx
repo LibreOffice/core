@@ -282,7 +282,7 @@ namespace connectivity::hsqldb
                         {
                             try
                             {
-                                pHelper.reset(new StreamHelper(storage->openStreamElement(sName,_nMode)));
+                                pHelper = std::make_shared<StreamHelper>(storage->openStreamElement(sName,_nMode));
                             }
                             catch(const Exception&)
                             {
@@ -302,7 +302,7 @@ namespace connectivity::hsqldb
                                     if ( !bIsStream )
                                         return pHelper; // readonly file without data stream
                                 }
-                                pHelper.reset( new StreamHelper(storage->openStreamElement( sStrippedName, _nMode ) ) );
+                                pHelper = std::make_shared<StreamHelper>(storage->openStreamElement( sStrippedName, _nMode ) );
                             }
                             aFind->second.streams.emplace(sName,pHelper);
                         }

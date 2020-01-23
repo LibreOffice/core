@@ -40,9 +40,9 @@ namespace cppcanvas::internal
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( rBitmap,
                                                                       uno::UNO_QUERY );
             if( xBitmapCanvas.is() )
-                mpBitmapCanvas.reset( new ImplBitmapCanvas(
+                mpBitmapCanvas = std::make_shared<ImplBitmapCanvas>(
                                           uno::Reference< rendering::XBitmapCanvas >(rBitmap,
-                                                                                     uno::UNO_QUERY) ) );
+                                                                                     uno::UNO_QUERY) );
         }
 
         ImplBitmap::~ImplBitmap()
