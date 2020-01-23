@@ -397,30 +397,6 @@ void SAL_CALL ScXMLDocContext_Impl::characters(const OUString &)
 {
 }
 
-const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
-{
-    if( !pDocElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aDocTokenMap[] =
-        {
-            { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS           },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES              },
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES          },
-            { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES        },
-            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META                },
-            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPTS             },
-            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY                },
-            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS            },
-            XML_TOKEN_MAP_END
-        };
-
-        pDocElemTokenMap.reset(new SvXMLTokenMap( aDocTokenMap ));
-
-    } // if( !pDocElemTokenMap )
-
-    return *pDocElemTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
 {
     if( !pContentValidationElemTokenMap )
@@ -675,7 +651,6 @@ ScXMLImport::ScXMLImport(
 ScXMLImport::~ScXMLImport() throw()
 {
     //  delete pI18NMap;
-    pDocElemTokenMap.reset();
     pContentValidationElemTokenMap.reset();
     pContentValidationMessageElemTokenMap.reset();
     pTableElemTokenMap.reset();

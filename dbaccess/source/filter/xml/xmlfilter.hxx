@@ -63,8 +63,6 @@ private:
     TPropertyNameMap                                m_aTablesSettings;
     std::vector< css::beans::PropertyValue>         m_aInfoSequence;
 
-    mutable std::unique_ptr<SvXMLTokenMap>          m_pDocContentElemTokenMap;
-
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
@@ -115,8 +113,6 @@ public:
     const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
 
     const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
-
-    const SvXMLTokenMap& GetDocContentElemTokenMap() const;
 
     rtl::Reference < XMLPropertySetMapper > const & GetTableStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;

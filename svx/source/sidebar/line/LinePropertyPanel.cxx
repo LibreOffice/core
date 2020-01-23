@@ -188,18 +188,6 @@ void LinePropertyPanel::setLineDash(const XLineDashItem& rItem)
             SfxCallMode::RECORD, { &rItem });
 }
 
-void LinePropertyPanel::setLineEndStyle(const XLineEndItem* pItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINEEND_STYLE,
-            SfxCallMode::RECORD, { pItem });
-}
-
-void LinePropertyPanel::setLineStartStyle(const XLineStartItem* pItem)
-{
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINEEND_STYLE,
-            SfxCallMode::RECORD, { pItem });
-}
-
 void LinePropertyPanel::setLineJoint(const XLineJointItem* pItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_JOINT,

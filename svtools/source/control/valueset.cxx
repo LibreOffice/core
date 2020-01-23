@@ -1981,13 +1981,6 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
     }
 }
 
-void ValueSet::StartSelection()
-{
-    mbHighlight  = true;
-    mbSelection  = true;
-    mnHighItemId = mnSelItemId;
-}
-
 void ValueSet::EndSelection()
 {
     if ( mbHighlight )
@@ -2004,42 +1997,6 @@ void ValueSet::EndSelection()
 void ValueSet::SetFormat()
 {
     mbFormat = true;
-}
-
-void ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
-{
-    if ( rEvent.GetCommand() != CommandEventId::StartDrag )
-        return;
-
-    // if necessary abort an existing action
-    EndSelection();
-
-    // Check out if the clicked on page is selected. If this is not the
-    // case set it as the current item. We only check mouse actions since
-    // drag-and-drop can also be triggered by the keyboard
-    sal_uInt16 nSelId;
-    if ( rEvent.IsMouseEvent() )
-        nSelId = GetItemId( rEvent.GetMousePosPixel() );
-    else
-        nSelId = mnSelItemId;
-
-    // don't activate dragging if no item was clicked on
-    if ( !nSelId )
-        return;
-
-    // Check out if the page was selected. If not set as current page and
-    // call select.
-    if ( nSelId != mnSelItemId )
-    {
-        SelectItem( nSelId );
-        Update();
-        Select();
-    }
-
-    vcl::Region aRegion;
-
-    // assign region
-    rRegion = aRegion;
 }
 
 Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,

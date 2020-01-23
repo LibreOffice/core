@@ -21,16 +21,6 @@
 
 #define PROGRESS_BAR_STEP 20
 
-namespace dbaxml
-{
-    enum XMLDocContentTokens
-    {
-        XML_TOK_CONTENT_AUTOSTYLES,
-        XML_TOK_CONTENT_STYLES,
-        XML_TOK_CONTENT_SCRIPTS,
-        XML_TOK_CONTENT_BODY,
-    };
-} // namespace dbaxml
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLENUMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

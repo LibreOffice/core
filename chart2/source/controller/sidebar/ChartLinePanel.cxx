@@ -275,14 +275,6 @@ void ChartLinePanel::setLineDash(const XLineDashItem& rItem)
     xPropSet->setPropertyValue("LineDashName", css::uno::Any(aDashName));
 }
 
-void ChartLinePanel::setLineEndStyle(const XLineEndItem* /*pItem*/)
-{
-}
-
-void ChartLinePanel::setLineStartStyle(const XLineStartItem* /*pItem*/)
-{
-}
-
 void ChartLinePanel::setLineJoint(const XLineJointItem* pItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet =

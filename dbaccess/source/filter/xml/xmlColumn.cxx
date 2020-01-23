@@ -23,7 +23,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlEnums.hxx"
 #include <stringconstants.hxx>
 #include <strings.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>

@@ -69,15 +69,6 @@ private:
 
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocContentElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSectionElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pComponentElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pControlElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pFunctionElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSubDocumentElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pFormatElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pColumnTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pCellElemTokenMap;
 
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
@@ -129,16 +120,6 @@ public:
 
     const SvXMLTokenMap& GetDocContentElemTokenMap() const;
     const SvXMLTokenMap& GetReportElemTokenMap() const;
-    const SvXMLTokenMap& GetGroupElemTokenMap() const;
-    const SvXMLTokenMap& GetSectionElemTokenMap() const;
-    const SvXMLTokenMap& GetComponentElemTokenMap() const;
-    const SvXMLTokenMap& GetReportElementElemTokenMap() const;
-    const SvXMLTokenMap& GetControlElemTokenMap() const;
-    const SvXMLTokenMap& GetControlPropertyElemTokenMap() const;
-    const SvXMLTokenMap& GetFunctionElemTokenMap() const;
-    const SvXMLTokenMap& GetFormatElemTokenMap() const;
-    const SvXMLTokenMap& GetSubDocumentElemTokenMap() const;
-    const SvXMLTokenMap& GetColumnTokenMap() const;
     const SvXMLTokenMap& GetCellElemTokenMap() const;
 
     const rtl::Reference< XMLPropertySetMapper >& GetCellStylesPropertySetMapper()      const   {

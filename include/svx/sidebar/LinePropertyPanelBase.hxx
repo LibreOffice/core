@@ -71,8 +71,6 @@ protected:
 
     virtual void setLineStyle(const XLineStyleItem& rItem) = 0;
     virtual void setLineDash(const XLineDashItem& rItem) = 0;
-    virtual void setLineEndStyle(const XLineEndItem* pItem) = 0;
-    virtual void setLineStartStyle(const XLineStartItem* pItem) = 0;
     virtual void setLineTransparency(const XLineTransparenceItem& rItem) = 0;
     virtual void setLineJoint(const XLineJointItem* pItem) = 0;
     virtual void setLineCap(const XLineCapItem* pItem) = 0;
@@ -139,8 +137,6 @@ private:
     DECL_LINK(ChangeLineStyleHdl, weld::ComboBox&, void);
     DECL_LINK(ToolboxWidthSelectHdl, const OString&, void);
     DECL_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void );
-    DECL_LINK(ChangeStartHdl, weld::ComboBox&, void);
-    DECL_LINK(ChangeEndHdl, weld::ComboBox&, void);
     DECL_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
     DECL_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);
 };
