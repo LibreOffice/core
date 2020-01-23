@@ -1515,6 +1515,9 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 
 bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
+    if (!(pParent->HasChildren() || pParent->HasChildrenOnDemand()))
+        return SvTreeListBox::Expand(pParent);
+
     if (!m_bIsRoot
         || (lcl_IsContentType(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
         || (m_nRootType == ContentTypeId::OUTLINE))
@@ -1559,9 +1562,10 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
             }
 
         }
-        else if( lcl_IsContent(pParent) )
+        else if( lcl_IsContent(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
         {
             SwWrtShell* pShell = GetWrtShell();
+            // paranoid assert now that outline type is checked
             assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
             auto const nPos = static_cast<SwOutlineContent*>(pParent->GetUserData())->GetOutlinePos();
             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
