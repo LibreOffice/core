@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1957dd7_3338705a",
+        "filename": "unoxml/source/rdf/librdf_repository.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T18:58:52Z",
+      "side": 1,
+      "message": "Couldn\u0027t it possibly use vector? No need for the int then; no need for initialization in ctor body...",
+      "range": {
+        "startLine": 637,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 7
+      },
+      "revId": "5fd05b2d4a61af0e72cf75f465c4f6ad7b2f4cc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
