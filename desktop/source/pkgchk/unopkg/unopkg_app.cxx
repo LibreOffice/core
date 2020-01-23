@@ -303,13 +303,13 @@ extern "C" int unopkg_main()
 
         // Initialize logging. This will log errors to the console and
         // also to file if the --log-file parameter was provided.
-        logger.reset(new comphelper::EventLogger(xComponentContext, "unopkg"));
+        logger.reset(new comphelper::EventLogger(xLocalComponentContext, "unopkg"));
         const Reference<XLogger> xLogger(logger->getLogger());
         xLogger->setLevel(LogLevel::WARNING);
-        Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xComponentContext));
+        Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xLocalComponentContext));
         Sequence < beans::NamedValue > aSeq { { "Formatter", Any(xLogFormatter) } };
 
-        xConsoleHandler.set(ConsoleHandler::createWithSettings(xComponentContext, aSeq));
+        xConsoleHandler.set(ConsoleHandler::createWithSettings(xLocalComponentContext, aSeq));
         xLogger->addLogHandler(xConsoleHandler);
         xConsoleHandler->setLevel(LogLevel::WARNING);
         xLogger->setLevel(LogLevel::WARNING);
@@ -318,7 +318,7 @@ extern "C" int unopkg_main()
         if (!logFile.isEmpty())
         {
             Sequence < beans::NamedValue > aSeq2 { { "Formatter", Any(xLogFormatter) }, {"FileURL", Any(logFile)} };
-            xFileHandler.set(css::logging::FileHandler::createWithSettings(xComponentContext, aSeq2));
+            xFileHandler.set(css::logging::FileHandler::createWithSettings(xLocalComponentContext, aSeq2));
             xFileHandler->setLevel(LogLevel::WARNING);
             xLogger->addLogHandler(xFileHandler);
         }
