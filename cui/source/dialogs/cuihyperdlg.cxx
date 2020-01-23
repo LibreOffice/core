@@ -286,7 +286,7 @@ void SvxHpLinkDlg::PageCreated(const OString& /*rId*/, IconChoicePage& rPage)
 {
     SvxHyperlinkTabPageBase& rHyperlinkPage = dynamic_cast< SvxHyperlinkTabPageBase& >( rPage );
     Reference< XFrame > xDocumentFrame = GetBindings().GetActiveFrame();
-    OSL_ENSURE( xDocumentFrame.is(), "SvxHpLinkDlg::PageCreated: macro assignment functionality won't work with a proper frame!" );
+    SAL_WARN_IF( !xDocumentFrame.is(), "cui.dialogs", "SvxHpLinkDlg::PageCreated: macro assignment functionality won't work with a proper frame!" );
     rHyperlinkPage.SetDocumentFrame( xDocumentFrame );
 }
 
