@@ -18,7 +18,6 @@
  */
 #include "vbalisttemplate.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include "vbalistlevels.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 

@@ -23,7 +23,7 @@
 #include "vbaeventshelper.hxx"
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <vbahelper/helperdecl.hxx>
+#include <comphelper/servicedecl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;

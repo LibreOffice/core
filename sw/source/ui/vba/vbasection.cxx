@@ -18,7 +18,6 @@
  */
 #include "vbasection.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include "vbapagesetup.hxx"
 #include "vbaheadersfooters.hxx"
 

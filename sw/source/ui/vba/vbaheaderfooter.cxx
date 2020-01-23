@@ -18,7 +18,6 @@
  */
 #include "vbaheaderfooter.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include <ooo/vba/word/WdHeaderFooterIndex.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>

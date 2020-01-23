@@ -20,7 +20,6 @@
 #include "vbastyle.hxx"
 #include <ooo/vba/word/WdStyleType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include "vbafont.hxx"

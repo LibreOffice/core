@@ -19,15 +19,10 @@
 #include <vbahelper/helperdecl.hxx>
 #include "service.hxx"
 #include "vbaglobals.hxx"
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <cppuhelper/bootstrap.hxx>
 #include "vbaapplication.hxx"
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

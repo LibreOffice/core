@@ -18,7 +18,6 @@
  */
 #include "vbalistformat.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include <ooo/vba/word/WdListApplyTo.hpp>
 #include <ooo/vba/word/WdDefaultListBehavior.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

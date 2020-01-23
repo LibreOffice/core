@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbatemplate.hxx"
-#include <vbahelper/vbahelper.hxx>
-#include "wordvbahelper.hxx"
 #include "vbaautotextentry.hxx"
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/character.hxx>
 #include <osl/file.hxx>
