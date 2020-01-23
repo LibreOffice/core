@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c39cf440_5c0cccb7",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T05:17:42Z",
+      "side": 0,
+      "message": "Please revert this whitespace shange.",
+      "range": {
+        "startLine": 93,
+        "startChar": 22,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "57b185a972bce7371ae52f813c3408c1308c0326",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1091d33c_5084a444",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T05:17:42Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 97,
+        "startChar": 41,
+        "endLine": 97,
+        "endChar": 52
+      },
+      "revId": "57b185a972bce7371ae52f813c3408c1308c0326",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b97b5406_9e7be3a9",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T05:17:42Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 98,
+        "startChar": 44,
+        "endLine": 98,
+        "endChar": 52
+      },
+      "revId": "57b185a972bce7371ae52f813c3408c1308c0326",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "087a64bb_7fd14399",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T05:17:42Z",
+      "side": 0,
+      "message": "And this\n\n... and in multiple places below.",
+      "range": {
+        "startLine": 100,
+        "startChar": 9,
+        "endLine": 100,
+        "endChar": 10
+      },
+      "revId": "57b185a972bce7371ae52f813c3408c1308c0326",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
