@@ -21,6 +21,7 @@
 
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/weldutils.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/weld.hxx>
 
@@ -63,34 +64,20 @@ namespace sw { namespace sidebar {
         OUString aCustomEntry;
 
         // Controller Items
-        ::sfx2::sidebar::ControllerItem maSwNoWrapControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapLeftControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapRightControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapParallelControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapThroughControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapIdealControl;
-        ::sfx2::sidebar::ControllerItem maSwEnableContourControl;
         ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;
         ::sfx2::sidebar::ControllerItem maSwULSpacingControl;
 
-        std::unique_ptr<weld::RadioButton> mxRBNoWrap;
-        std::unique_ptr<weld::RadioButton> mxRBWrapLeft;
-        std::unique_ptr<weld::RadioButton> mxRBWrapRight;
-        std::unique_ptr<weld::RadioButton> mxRBWrapParallel;
-        std::unique_ptr<weld::RadioButton> mxRBWrapThrough;
-        std::unique_ptr<weld::RadioButton> mxRBIdealWrap;
-        std::unique_ptr<weld::Button> mxEditContour;
-        std::unique_ptr<weld::CheckButton> mxEnableContour;
+        std::unique_ptr<weld::Toolbar> mxWrapOptions1;
+        std::unique_ptr<ToolbarUnoDispatcher> mxWrapOptions1Dispatch;
+
+        std::unique_ptr<weld::Toolbar> mxWrapOptions2;
+        std::unique_ptr<ToolbarUnoDispatcher> mxWrapOptions2Dispatch;
+
         std::unique_ptr<weld::ComboBox> mxSpacingLB;
-        std::unique_ptr<weld::Label> mxCustomEntry;
 
         void Initialize();
-        void UpdateEditContour();
         void UpdateSpacingLB();
 
-        DECL_LINK(WrapTypeHdl, weld::ToggleButton&, void);
-        DECL_LINK(EnableContourHdl, weld::ToggleButton&, void);
-        DECL_LINK(EditContourHdl, weld::Button&, void);
         DECL_LINK(SpacingLBHdl, weld::ComboBox&, void);
     };
 

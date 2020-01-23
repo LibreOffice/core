@@ -369,6 +369,10 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                             aCommandURL = ".uno:AlignRight";
                         else if (aCommandURL == ".uno:AlignRight")
                             aCommandURL = ".uno:AlignLeft";
+                        else if (aCommandURL == ".uno:WrapLeft")
+                            aCommandURL = ".uno:WrapRight";
+                        else if (aCommandURL == ".uno:WrapRight")
+                            aCommandURL = ".uno:WrapLeft";
                     }
 
                     auto aToolbarItemProp( comphelper::InitPropertySequence( {
