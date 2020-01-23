@@ -634,17 +634,20 @@ librdf_QuerySelectResult::hasMoreElements()
     return !librdf_query_results_finished(m_pQueryResult.get());
 }
 
-class NodeArrayDeleter
+struct NodeArray
 {
-    const int m_Count;
+    int m_Count;
+    std::unique_ptr<librdf_node*[]> m_pNodes;
 
-public:
-    explicit NodeArrayDeleter(int i_Count) : m_Count(i_Count) { }
-
-    void operator() (librdf_node** io_pArray) const throw ()
+    NodeArray(int cnt) : m_Count(cnt), m_pNodes(new librdf_node*[cnt])
     {
-        std::for_each(io_pArray, io_pArray + m_Count, safe_librdf_free_node);
-        delete[] io_pArray;
+        for (int i = 0; i < cnt; ++i)
+            m_pNodes[i] = nullptr;
+    }
+
+    ~NodeArray() throw ()
+    {
+        std::for_each(m_pNodes.get(), m_pNodes.get() + m_Count, safe_librdf_free_node);
     }
 };
 
@@ -657,13 +660,9 @@ librdf_QuerySelectResult::nextElement()
     }
     sal_Int32 count(m_BindingNames.getLength());
     OSL_ENSURE(count >= 0, "negative length?");
-    std::shared_ptr<librdf_node*> const pNodes(new librdf_node*[count],
-        NodeArrayDeleter(count));
-    for (int i = 0; i < count; ++i) {
-        pNodes.get()[i] = nullptr;
-    }
+    NodeArray aNodes(count);
     if (librdf_query_results_get_bindings(m_pQueryResult.get(), nullptr,
-                pNodes.get()))
+                aNodes.m_pNodes.get()))
     {
         rdf::QueryException e(
             "librdf_QuerySelectResult::nextElement: "
@@ -675,7 +674,7 @@ librdf_QuerySelectResult::nextElement()
     }
     uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
     for (int i = 0; i < count; ++i) {
-        ret[i] = m_xRep->getTypeConverter().convertToXNode(pNodes.get()[i]);
+        ret[i] = m_xRep->getTypeConverter().convertToXNode(aNodes.m_pNodes[i]);
     }
     // NB: this will invalidate current item.
     librdf_query_results_next(m_pQueryResult.get());
