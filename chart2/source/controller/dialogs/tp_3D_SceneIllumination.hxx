@@ -26,32 +26,10 @@
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 class ColorListBox;
+class LightButton;
 
 namespace chart
 {
-
-class LightButton
-{
-public:
-    explicit LightButton(std::unique_ptr<weld::ToggleButton> xButton);
-
-    void switchLightOn(bool bOn);
-    bool isLightOn() const { return m_bLightOn;}
-
-    bool get_active() const { return m_xButton->get_active(); }
-    void set_active(bool bActive) { m_xButton->set_active(bActive); }
-
-    weld::ToggleButton* get_widget() const { return m_xButton.get(); }
-
-    void connect_clicked(const Link<weld::Button&, void>& rLink)
-    {
-        m_xButton->connect_clicked(rLink);
-    }
-
-private:
-    std::unique_ptr<weld::ToggleButton> m_xButton;
-    bool m_bLightOn;
-};
 
 struct LightSourceInfo;
 
