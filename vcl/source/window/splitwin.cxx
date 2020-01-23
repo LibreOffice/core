@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include <vcl/event.hxx>
@@ -491,7 +492,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 }
             }
             // do not compensate rounding errors here
-            if ( (nAbsItems < static_cast<sal_uInt16>(std::abs( nSizeDelta ))) && nSizeWinSize )
+            if ( (nAbsItems < o3tl::make_unsigned(std::abs( nSizeDelta ))) && nSizeWinSize )
             {
                 long nNewSizeWinSize = 0;
 
@@ -1678,7 +1679,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     bool            bPropSmaller;
 
     mnMouseModifier = rMEvt.GetModifier();
-    bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (static_cast<sal_uInt16>(mnSplitPos+1) < mpSplitSet->mvItems.size());
+    bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (o3tl::make_unsigned(mnSplitPos+1) < mpSplitSet->mvItems.size());
 
     // here we can set the maximum size
     StartSplit();
