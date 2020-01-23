@@ -1166,7 +1166,7 @@ namespace
             maPackedFileEntryVector(),
             mbChanged(false)
         {
-            FileSharedPtr aSourceFile(new osl::File(rURL));
+            FileSharedPtr aSourceFile = std::make_shared<osl::File>(rURL);
 
             if (osl::File::E_None == aSourceFile->open(osl_File_OpenFlag_Read))
             {
@@ -2083,7 +2083,7 @@ namespace comphelper
         {
             const OUString aPackURL(createPackURL(rTargetURL, rName));
             PackedFile aPackedFile(aPackURL);
-            FileSharedPtr aBaseFile(new osl::File(aFileURL));
+            FileSharedPtr aBaseFile = std::make_shared<osl::File>(aFileURL);
 
             if (aPackedFile.tryPush(aBaseFile, mbCompress))
             {
@@ -2284,7 +2284,7 @@ namespace comphelper
         {
             const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
             PackedFile aPackedFile(aPackURL);
-            FileSharedPtr aBaseFile(new osl::File(aTempURL));
+            FileSharedPtr aBaseFile = std::make_shared<osl::File>(aTempURL);
 
             if (aPackedFile.tryPush(aBaseFile, mbCompress))
             {
@@ -2336,7 +2336,7 @@ namespace comphelper
                 {
                     // last config is in temp file, load it to ExtensionInfo
                     ExtensionInfo aLoadedExtensionInfo;
-                    FileSharedPtr aBaseFile(new osl::File(aTempURL));
+                    FileSharedPtr aBaseFile = std::make_shared<osl::File>(aTempURL);
 
                     if (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read))
                     {

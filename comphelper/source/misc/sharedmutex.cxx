@@ -26,7 +26,7 @@ namespace comphelper
 {
 
     SharedMutex::SharedMutex()
-        :m_pMutexImpl( new ::osl::Mutex )
+        :m_pMutexImpl( std::make_shared<::osl::Mutex >())
     {
     }
 
