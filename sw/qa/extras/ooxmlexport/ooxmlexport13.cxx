@@ -588,7 +588,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
     // only "Er horte leise Schritte hinter", which means the 1st line of the 2nd paragraph was
     // split into two by a Special portion, i.e. the top margin of the shape was too large.
     assertXPath(pDump, "/root/page/body/txt[2]/Text[1]", "Portion",
-                "Er horte leise Schritte hinter sich. Das bedeutete nichts Gutes. Wer wurde ihm ");
+                "Er horte leise Schritte hinter sich. Das bedeutete nichts Gutes. Wer wu"); // ... until the bookmark.
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextInput, "textinput.odt")
