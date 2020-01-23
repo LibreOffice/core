@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
-    {
+{
         namespace
         {
             class PointAction : public Action
@@ -168,6 +168,6 @@ namespace cppcanvas::internal
         {
             return std::make_shared<PointAction>( rPoint, rCanvas, rState, rColor );
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

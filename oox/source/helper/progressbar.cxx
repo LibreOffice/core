@@ -130,7 +130,7 @@ ISegmentProgressBarRef SubSegment::createSegment( double fLength )
     return xSegment;
 }
 
-} // namespace prv
+} // namespace oox::prv
 
 SegmentProgressBar::SegmentProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     maProgress( rxIndicator, rText ),

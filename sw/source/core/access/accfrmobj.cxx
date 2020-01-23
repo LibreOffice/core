@@ -403,6 +403,6 @@ const SwFrame* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
     return pParent;
 }
 
-} // eof of namespace sw::access
+} // namespace sw::access
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

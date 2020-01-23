@@ -367,6 +367,6 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

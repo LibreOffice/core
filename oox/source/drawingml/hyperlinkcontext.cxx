@@ -163,6 +163,6 @@ ContextHandlerRef HyperLinkContext::onCreateContext(
     return this;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

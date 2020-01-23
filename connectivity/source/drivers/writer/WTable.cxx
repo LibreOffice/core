@@ -251,6 +251,6 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool
     return true;
 }
 
-} // namespace connectivity
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

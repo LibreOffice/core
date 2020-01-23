@@ -839,7 +839,7 @@ namespace basegfx
 } // end of namespace basegfx
 
 namespace basegfx::utils
-    {
+{
 
         B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate)
         {
@@ -1051,6 +1051,6 @@ namespace basegfx::utils
             return rCandidate;
         }
 
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -102,7 +102,7 @@ void SAL_CALL LazyMathBufferingContext::characters(OUString const& rChars)
     }
 }
 
-} // namespace formulaimport
+} // namespace oox::formulaimport
 
 rtl::Reference<core::ContextHandler> CreateLazyMathBufferingContext(
         core::ContextHandler const& rParent, drawingml::TextParagraph & rPara)

@@ -58,6 +58,6 @@ ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
     return this;
 }
 
-} // namespace oox
+} // namespace oox::drawingml::table
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

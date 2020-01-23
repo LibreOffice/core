@@ -684,6 +684,6 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     }
 }
 
-} // namespace oox
+} // namespace oox::docprop
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

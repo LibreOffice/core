@@ -245,7 +245,7 @@ OUString ExcelFilter::getImplementationName()
     return "com.sun.star.comp.oox.xls.ExcelFilter";
 }
 
-} // namespace oox
+} // namespace oox::xls
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

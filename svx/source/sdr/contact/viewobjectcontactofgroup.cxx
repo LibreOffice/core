@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 
 namespace sdr::contact
-    {
+{
         ViewObjectContactOfGroup::ViewObjectContactOfGroup(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
         {
@@ -104,6 +104,7 @@ namespace sdr::contact
             aObjectLayers &= aLayers;
             return !aObjectLayers.IsEmpty();
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

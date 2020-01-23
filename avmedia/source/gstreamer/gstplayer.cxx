@@ -923,6 +923,6 @@ uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
     return { AVMEDIA_GST_PLAYER_SERVICENAME };
 }
 
-} // namespace avmedia
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

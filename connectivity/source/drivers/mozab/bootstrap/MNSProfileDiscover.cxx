@@ -23,7 +23,7 @@
 #include "MNSINIParser.hxx"
 
 namespace connectivity::mozab
-    {
+{
         ProfileStruct::ProfileStruct()
         {
         }
@@ -203,7 +203,7 @@ namespace connectivity::mozab
             ProductStruct &rProduct = m_ProductProfileList[index];
             return rProduct.mProfileList.find(profileName) != rProduct.mProfileList.end();
         }
-    }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

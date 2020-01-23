@@ -480,6 +480,6 @@ std::vector<sal_uInt8> CryptoHash::finalize()
     return aHash;
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -302,6 +302,6 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
         mnInsertionPosition = nInsertionPosition;
 }
 
-} // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

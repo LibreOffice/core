@@ -37,7 +37,7 @@
 #include <svx/xlineit0.hxx>
 
 namespace sdr::properties
-    {
+{
         void GraphicProperties::applyDefaultStyleSheetFromSdrModel()
         {
             SfxStyleSheet* pStyleSheet(GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj());
@@ -141,6 +141,6 @@ namespace sdr::properties
             mpItemSet->Put( SdrGrafModeItem( GraphicDrawMode::Standard ) );
             mpItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

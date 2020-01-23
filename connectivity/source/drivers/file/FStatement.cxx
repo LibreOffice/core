@@ -39,7 +39,7 @@
 #include <algorithm>
 
 namespace connectivity::file
-    {
+{
 
 
 using namespace dbtools;
@@ -704,7 +704,7 @@ void OStatement_Base::parseParamterElem(const OUString& /*_sColumnName*/,OSQLPar
     // do nothing here
 }
 
-    }// namespace connectivity
+}// namespace
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

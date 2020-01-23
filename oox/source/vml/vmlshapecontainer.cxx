@@ -128,6 +128,6 @@ void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, con
         shape->convertAndInsert( rxShapes, pParentAnchor );
 }
 
-} // namespace oox
+} // namespace oox::vml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

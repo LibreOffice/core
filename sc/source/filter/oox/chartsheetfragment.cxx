@@ -169,6 +169,6 @@ void ChartsheetFragment::importDrawing( SequenceInputStream& rStrm )
     setDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
 }
 
-} // namespace oox
+} // namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

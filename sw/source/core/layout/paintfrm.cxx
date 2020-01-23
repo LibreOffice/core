@@ -4516,7 +4516,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
 }
 
 namespace drawinglayer::primitive2d
-    {
+{
         namespace {
 
         class SwBorderRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
@@ -4759,7 +4759,7 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(SwBorderRectanglePrimitive2D, PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE)
 
-    } // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 namespace {
 

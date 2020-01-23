@@ -26,7 +26,7 @@
 // helper methods
 
 namespace drawinglayer::primitive2d
-    {
+{
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
             static vcl::DeleteOnDeinit< BitmapEx > aRetVal(nullptr);
@@ -59,6 +59,6 @@ namespace drawinglayer::primitive2d
 
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();
         }
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

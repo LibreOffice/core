@@ -106,6 +106,6 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     return xRef;
 }
 
-} // namespace connectivity
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

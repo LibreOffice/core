@@ -1144,7 +1144,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
 // Own derivation of ObjectContact to allow on-demand calculation of
 // GridOffset for non-linear ViewToDevice transformation (calc)
 namespace sdr::contact
-    {
+{
         namespace {
 
         class ObjectContactOfScDrawView final : public ObjectContactOfPageView
@@ -1224,7 +1224,7 @@ namespace sdr::contact
                     rTarget);
             }
         }
-    }
+}
 
 // Create own derivation of ObjectContact for calc
 sdr::contact::ObjectContact* ScDrawView::createViewSpecificObjectContact(

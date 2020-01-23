@@ -136,6 +136,6 @@ void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName
     parseStream( rStorage.openInputStream( rStreamName ), rStreamName );
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

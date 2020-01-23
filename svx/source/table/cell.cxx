@@ -74,8 +74,7 @@ using namespace ::com::sun::star::container;
 static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
 {
     // property map for an outliner text
-    static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
-    {
+    static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] = {
         FILL_PROPERTIES
 //      { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY,      0},
         { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< css::style::XStyle >::get(),                                    css::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -146,240 +145,228 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
 }
 
 namespace sdr::properties
-    {
-        class CellProperties : public TextProperties
-        {
-        protected:
-            // create a new itemset
-            std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+{
+class CellProperties : public TextProperties
+{
+protected:
+    // create a new itemset
+    std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
-            const svx::ITextProvider& getTextProvider() const override;
+    const svx::ITextProvider& getTextProvider() const override;
 
-        public:
-            // basic constructor
-            CellProperties(SdrObject& rObj, sdr::table::Cell* pCell );
+public:
+    // basic constructor
+    CellProperties(SdrObject& rObj, sdr::table::Cell* pCell );
 
-            // constructor for copying, but using new object
-            CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell);
+    // constructor for copying, but using new object
+    CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell);
 
-            // Clone() operator, normally just calls the local copy constructor
-            std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
+    // Clone() operator, normally just calls the local copy constructor
+    std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
-            void ForceDefaultAttributes() override;
+    void ForceDefaultAttributes() override;
 
-            void ItemSetChanged(const SfxItemSet& rSet) override;
+    void ItemSetChanged(const SfxItemSet& rSet) override;
 
-            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
+    void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
-            sdr::table::CellRef mxCell;
+    sdr::table::CellRef mxCell;
 
-        private:
-            const CellTextProvider maTextProvider;
-        };
+private:
+    const CellTextProvider maTextProvider;
+};
 
-        // create a new itemset
-        std::unique_ptr<SfxItemSet> CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
-        {
-            return std::make_unique<SfxItemSet>(rPool,
+// create a new itemset
+std::unique_ptr<SfxItemSet> CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+{
+    return std::make_unique<SfxItemSet>(rPool,
 
-                // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                                        // range from SdrAttrObj
+                                        svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                                        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
-                // range for SdrTableObj
-                SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
+                                        // range for SdrTableObj
+                                        SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
 
-                // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
-        }
+                                        // range from SdrTextObj
+                                        EE_ITEMS_START, EE_ITEMS_END> {});
+}
 
-        const svx::ITextProvider& CellProperties::getTextProvider() const
-        {
-            return maTextProvider;
-        }
+const svx::ITextProvider& CellProperties::getTextProvider() const
+{
+    return maTextProvider;
+}
 
-        CellProperties::CellProperties(SdrObject& rObj, sdr::table::Cell* pCell)
-        :   TextProperties(rObj)
-        ,   mxCell(pCell)
-        ,   maTextProvider(mxCell)
-        {
-        }
+CellProperties::CellProperties(SdrObject& rObj, sdr::table::Cell* pCell)
+    :   TextProperties(rObj)
+    ,   mxCell(pCell)
+    ,   maTextProvider(mxCell)
+{
+}
 
-        CellProperties::CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell)
-        :   TextProperties(rProps, rObj)
-        ,   mxCell( pCell )
-        ,   maTextProvider(mxCell)
-        {
-        }
+CellProperties::CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell)
+    :   TextProperties(rProps, rObj)
+    ,   mxCell( pCell )
+    ,   maTextProvider(mxCell)
+{
+}
 
-        std::unique_ptr<BaseProperties> CellProperties::Clone(SdrObject& rObj) const
-        {
-            OSL_FAIL("CellProperties::Clone(), does not work yet!");
-            return std::unique_ptr<BaseProperties>(new CellProperties(*this, rObj,nullptr));
-        }
+std::unique_ptr<BaseProperties> CellProperties::Clone(SdrObject& rObj) const
+{
+    OSL_FAIL("CellProperties::Clone(), does not work yet!");
+    return std::unique_ptr<BaseProperties>(new CellProperties(*this, rObj,nullptr));
+}
 
-        void CellProperties::ForceDefaultAttributes()
-        {
-        }
+void CellProperties::ForceDefaultAttributes()
+{
+}
 
-        void CellProperties::ItemSetChanged(const SfxItemSet& rSet )
-        {
-            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
+void CellProperties::ItemSetChanged(const SfxItemSet& rSet )
+{
+    SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
-            if( mxCell.is() )
-            {
-                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
+    if( mxCell.is() ) {
+        OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
 
-                const bool bOwnParaObj = pParaObj != nullptr;
+        const bool bOwnParaObj = pParaObj != nullptr;
 
-                if( pParaObj == nullptr )
-                    pParaObj = mxCell->GetOutlinerParaObject();
+        if( pParaObj == nullptr )
+            pParaObj = mxCell->GetOutlinerParaObject();
 
-                if(pParaObj)
-                {
-                    // handle outliner attributes
-                    Outliner* pOutliner = nullptr;
+        if(pParaObj) {
+            // handle outliner attributes
+            Outliner* pOutliner = nullptr;
 
-                    if(mxCell->IsTextEditActive())
-                    {
-                        pOutliner = rObj.GetTextEditOutliner();
-                    }
-                    else
-                    {
-                        pOutliner = &rObj.ImpGetDrawOutliner();
-                        pOutliner->SetText(*pParaObj);
-                    }
-
-                    sal_Int32 nParaCount(pOutliner->GetParagraphCount());
-
-                    // if the user sets character attributes to the complete
-                    // cell we want to remove all hard set character attributes
-                    // with same which ids from the text
-                    std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(rSet));
-
-                    for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
-                    {
-                        SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                        aSet.Put(rSet);
-
-                        for (const auto& rWhichId : aCharWhichIds)
-                        {
-                            pOutliner->RemoveCharAttribs(nPara, rWhichId);
-                        }
-
-                        pOutliner->SetParaAttribs(nPara, aSet);
-                    }
-
-                    if(!mxCell->IsTextEditActive())
-                    {
-                        if(nParaCount)
-                        {
-                            // force ItemSet
-                            GetObjectItemSet();
-
-                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                            mpItemSet->Put(aNewSet);
-                        }
-
-                        std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
-                        pOutliner->Clear();
-                        mxCell->SetOutlinerParaObject(std::move(pTemp));
-                    }
-
-                    if( bOwnParaObj )
-                        delete pParaObj;
-                }
+            if(mxCell->IsTextEditActive()) {
+                pOutliner = rObj.GetTextEditOutliner();
+            } else {
+                pOutliner = &rObj.ImpGetDrawOutliner();
+                pOutliner->SetText(*pParaObj);
             }
 
-            // call parent
-            AttributeProperties::ItemSetChanged(rSet);
+            sal_Int32 nParaCount(pOutliner->GetParagraphCount());
 
-            if( mxCell.is() )
-                mxCell->notifyModified();
-        }
+            // if the user sets character attributes to the complete
+            // cell we want to remove all hard set character attributes
+            // with same which ids from the text
+            std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(rSet));
 
-        void CellProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
-        {
-            if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
-            {
-                bool bVertical(css::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
+            for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++) {
+                SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+                aSet.Put(rSet);
 
-                sdr::table::SdrTableObj& rObj = static_cast<sdr::table::SdrTableObj&>(GetSdrObject());
-                rObj.SetVerticalWriting(bVertical);
-
-                // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
-
-                const bool bOwnParaObj = pParaObj != nullptr;
-
-                if( pParaObj == nullptr )
-                    pParaObj = mxCell->GetOutlinerParaObject();
-
-                if(pParaObj)
-                {
-                    pParaObj->SetVertical(bVertical);
-
-                    if( bOwnParaObj )
-                        delete pParaObj;
-                }
-            }
-
-            if (pNewItem && (SDRATTR_TABLE_TEXT_ROTATION == nWhich))
-            {
-                const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
-
-                // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
-
-                const bool bOwnParaObj = pParaObj != nullptr;
-
-                if (pParaObj == nullptr)
-                    pParaObj = mxCell->GetOutlinerParaObject();
-
-                if (pParaObj)
-                {
-                    if(pRotateItem->IsVertical() && pRotateItem->IsTopToBottom())
-                        pParaObj->SetRotation(TextRotation::TOPTOBOTTOM);
-                    else if (pRotateItem->IsVertical())
-                        pParaObj->SetRotation(TextRotation::BOTTOMTOTOP);
-                    else
-                        pParaObj->SetRotation(TextRotation::NONE);
-
-                    if (bOwnParaObj)
-                        delete pParaObj;
+                for (const auto& rWhichId : aCharWhichIds) {
+                    pOutliner->RemoveCharAttribs(nPara, rWhichId);
                 }
 
-               // Change autogrow direction
-                SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
-
-                // rescue object size
-                tools::Rectangle aObjectRect = rObj.GetSnapRect();
-
-                const SfxItemSet& rSet = rObj.GetObjectItemSet();
-                bool bAutoGrowWidth = rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
-                bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
-
-                // prepare ItemSet to set exchanged width and height items
-                SfxItemSet aNewSet(*rSet.GetPool(),
-                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{});
-
-                aNewSet.Put(rSet);
-                aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
-                aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
-                rObj.SetObjectItemSet(aNewSet);
-
-                // restore object size
-                rObj.SetSnapRect(aObjectRect);
+                pOutliner->SetParaAttribs(nPara, aSet);
             }
 
-            // call parent
-            AttributeProperties::ItemChange( nWhich, pNewItem );
+            if(!mxCell->IsTextEditActive()) {
+                if(nParaCount) {
+                    // force ItemSet
+                    GetObjectItemSet();
+
+                    SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
+                    mpItemSet->Put(aNewSet);
+                }
+
+                std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                pOutliner->Clear();
+                mxCell->SetOutlinerParaObject(std::move(pTemp));
+            }
+
+            if( bOwnParaObj )
+                delete pParaObj;
+        }
+    }
+
+    // call parent
+    AttributeProperties::ItemSetChanged(rSet);
+
+    if( mxCell.is() )
+        mxCell->notifyModified();
+}
+
+void CellProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich)) {
+        bool bVertical(css::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
+
+        sdr::table::SdrTableObj& rObj = static_cast<sdr::table::SdrTableObj&>(GetSdrObject());
+        rObj.SetVerticalWriting(bVertical);
+
+        // Set a cell vertical property
+        OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
+
+        const bool bOwnParaObj = pParaObj != nullptr;
+
+        if( pParaObj == nullptr )
+            pParaObj = mxCell->GetOutlinerParaObject();
+
+        if(pParaObj) {
+            pParaObj->SetVertical(bVertical);
+
+            if( bOwnParaObj )
+                delete pParaObj;
+        }
+    }
+
+    if (pNewItem && (SDRATTR_TABLE_TEXT_ROTATION == nWhich)) {
+        const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
+
+        // Set a cell vertical property
+        OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
+
+        const bool bOwnParaObj = pParaObj != nullptr;
+
+        if (pParaObj == nullptr)
+            pParaObj = mxCell->GetOutlinerParaObject();
+
+        if (pParaObj) {
+            if(pRotateItem->IsVertical() && pRotateItem->IsTopToBottom())
+                pParaObj->SetRotation(TextRotation::TOPTOBOTTOM);
+            else if (pRotateItem->IsVertical())
+                pParaObj->SetRotation(TextRotation::BOTTOMTOTOP);
+            else
+                pParaObj->SetRotation(TextRotation::NONE);
+
+            if (bOwnParaObj)
+                delete pParaObj;
         }
 
-    } // end of namespace sdr
+        // Change autogrow direction
+        SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
-namespace sdr::table {
+        // rescue object size
+        tools::Rectangle aObjectRect = rObj.GetSnapRect();
+
+        const SfxItemSet& rSet = rObj.GetObjectItemSet();
+        bool bAutoGrowWidth = rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
+        bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
+
+        // prepare ItemSet to set exchanged width and height items
+        SfxItemSet aNewSet(*rSet.GetPool(),
+                           svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT> {});
+
+        aNewSet.Put(rSet);
+        aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
+        aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
+        rObj.SetObjectItemSet(aNewSet);
+
+        // restore object size
+        rObj.SetSnapRect(aObjectRect);
+    }
+
+    // call parent
+    AttributeProperties::ItemChange( nWhich, pNewItem );
+}
+
+} // end of namespace
+
+namespace sdr::table
+{
 
 
 // Cell
@@ -388,8 +375,7 @@ namespace sdr::table {
 rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 {
     rtl::Reference< Cell > xCell( new Cell( rTableObj ) );
-    if( xCell->mxTable.is() )
-    {
+    if( xCell->mxTable.is() ) {
         Reference< XEventListener > xListener( xCell.get() );
         xCell->mxTable->addEventListener( xListener );
     }
@@ -399,7 +385,7 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 
 Cell::Cell(
     SdrTableObj& rTableObj)
-:   SdrText(rTableObj)
+    :   SdrText(rTableObj)
     ,SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
     ,mpPropSet( ImplGetSvxCellPropertySet() )
     ,mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
@@ -418,8 +404,7 @@ Cell::Cell(
     // Also done was (not needed, for reference):
     //         SetStyleSheet( nullptr, true );
     //         ForceOutlinerParaObject( OutlinerMode::TextObject );
-    if(nullptr == GetEditSource())
-    {
+    if(nullptr == GetEditSource()) {
         SetEditSource(new SvxTextEditSource(&GetObject(), this));
     }
 }
@@ -433,15 +418,11 @@ Cell::~Cell() throw()
 
 void Cell::dispose()
 {
-    if( mxTable.is() )
-    {
-        try
-        {
+    if( mxTable.is() ) {
+        try {
             Reference< XEventListener > xThis( this );
             mxTable->removeEventListener( xThis );
-        }
-        catch( Exception& )
-        {
+        } catch( Exception& ) {
             OSL_FAIL("Cell::dispose(), exception caught!");
         }
         mxTable.clear();
@@ -449,8 +430,7 @@ void Cell::dispose()
 
     // tdf#118199 avoid double dispose, detect by using mpProperties
     // as indicator. Only use SetOutlinerParaObject once
-    if( mpProperties )
-    {
+    if( mpProperties ) {
         mpProperties.reset();
         SetOutlinerParaObject( nullptr );
     }
@@ -458,8 +438,7 @@ void Cell::dispose()
 
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 {
-    if ((mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || mbMerged)
-    {
+    if ((mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || mbMerged) {
         mnColSpan = nColumnSpan;
         mnRowSpan = nRowSpan;
         mbMerged = false;
@@ -472,18 +451,14 @@ void Cell::mergeContent( const CellRef& xSourceCell )
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
 
-    if( xSourceCell->hasText() )
-    {
+    if( xSourceCell->hasText() ) {
         SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetUpdateMode(true);
 
-        if( hasText() )
-        {
+        if( hasText() ) {
             rOutliner.SetText(*GetOutlinerParaObject());
             rOutliner.AddText(*xSourceCell->GetOutlinerParaObject());
-        }
-        else
-        {
+        } else {
             rOutliner.SetText(*xSourceCell->GetOutlinerParaObject());
         }
 
@@ -498,8 +473,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
 
 void Cell::cloneFrom( const CellRef& xCell )
 {
-    if( xCell.is() )
-    {
+    if( xCell.is() ) {
         replaceContentAndFormating( xCell );
 
         mnCellContentType = xCell->mnCellContentType;
@@ -518,22 +492,19 @@ void Cell::cloneFrom( const CellRef& xCell )
 
 void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
 {
-    if( xSourceCell.is() && mpProperties )
-    {
+    if( xSourceCell.is() && mpProperties ) {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
 
         // tdf#118354 OutlinerParaObject may be nullptr, do not dereference when
         // not set (!)
-        if(nullptr != xSourceCell->GetOutlinerParaObject())
-        {
+        if(nullptr != xSourceCell->GetOutlinerParaObject()) {
             SetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
         }
 
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
-        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
-        {
+        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject()) {
             // TTTT should not happen - if, then a clone may be needed
             // Maybe add an assertion here later
             SetStyleSheet( nullptr, true );
@@ -544,8 +515,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
 
 void Cell::setMerged()
 {
-    if( !mbMerged )
-    {
+    if( !mbMerged ) {
         mbMerged = true;
         notifyModified();
     }
@@ -554,14 +524,12 @@ void Cell::setMerged()
 
 void Cell::copyFormatFrom( const CellRef& xSourceCell )
 {
-    if( xSourceCell.is() && mpProperties )
-    {
+    if( xSourceCell.is() && mpProperties ) {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
-        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
-        {
+        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject()) {
             // TTTT should not happen - if, then a clone may be needed
             // Maybe add an assertion here later
             SetStyleSheet( nullptr, true );
@@ -596,10 +564,8 @@ bool Cell::IsTextEditActive() const
 {
     bool isActive = false;
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
-    if(rTableObj.getActiveCell().get() == this )
-    {
-        if( rTableObj.CanCreateEditOutlinerParaObject() )
-        {
+    if(rTableObj.getActiveCell().get() == this ) {
+        if( rTableObj.CanCreateEditOutlinerParaObject() ) {
             isActive = true;
         }
     }
@@ -610,13 +576,10 @@ bool Cell::IsTextEditActive() const
 bool Cell::hasText() const
 {
     OutlinerParaObject* pParaObj = GetOutlinerParaObject();
-    if( pParaObj )
-    {
+    if( pParaObj ) {
         const EditTextObject& rTextObj = pParaObj->GetTextObject();
-        if( rTextObj.GetParagraphCount() >= 1 )
-        {
-            if( rTextObj.GetParagraphCount() == 1 )
-            {
+        if( rTextObj.GetParagraphCount() >= 1 ) {
+            if( rTextObj.GetParagraphCount() == 1 ) {
                 if( rTextObj.GetText(0).isEmpty() )
                     return false;
             }
@@ -650,8 +613,7 @@ void Cell::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
     if( pStyleSheet && pStyleSheet->GetFamily() != SfxStyleFamily::Frame )
         return;
 
-    if( mpProperties && (mpProperties->GetStyleSheet() != pStyleSheet) )
-    {
+    if( mpProperties && (mpProperties->GetStyleSheet() != pStyleSheet) ) {
         mpProperties->SetStyleSheet( pStyleSheet, bDontRemoveHardAttr );
     }
 }
@@ -659,12 +621,9 @@ void Cell::SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr )
 
 const SfxItemSet& Cell::GetObjectItemSet()
 {
-    if( mpProperties )
-    {
+    if( mpProperties ) {
         return mpProperties->GetObjectItemSet();
-    }
-    else
-    {
+    } else {
         OSL_FAIL("Cell::GetObjectItemSet(), called without properties!");
         return GetObject().GetObjectItemSet();
     }
@@ -672,8 +631,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
 
 void Cell::SetObjectItem(const SfxPoolItem& rItem)
 {
-    if( mpProperties )
-    {
+    if( mpProperties ) {
         mpProperties->SetObjectItem( rItem );
         notifyModified();
     }
@@ -703,8 +661,7 @@ void Cell::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 
 void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
 {
-    if( mpProperties )
-    {
+    if( mpProperties ) {
         mpProperties->SetMergedItemSetAndBroadcast(rSet, bClearAllItems);
         notifyModified();
     }
@@ -750,20 +707,16 @@ sal_Int32 Cell::getMinimumHeight()
     aSize.setHeight(0x0FFFFFFF );
 
     SdrOutliner* pEditOutliner = rTableObj.GetCellTextEditOutliner( *this );
-    if(pEditOutliner)
-    {
+    if(pEditOutliner) {
         pEditOutliner->SetMaxAutoPaperSize(aSize);
         nMinimumHeight = pEditOutliner->GetTextHeight()+1;
-    }
-    else
-    {
+    } else {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
         rOutliner.SetUpdateMode(true);
         ForceOutlinerParaObject( OutlinerMode::TextObject );
 
-        if( GetOutlinerParaObject() )
-        {
+        if( GetOutlinerParaObject() ) {
             rOutliner.SetText(*GetOutlinerParaObject());
         }
         nMinimumHeight=rOutliner.GetTextHeight()+1;
@@ -826,8 +779,7 @@ void Cell::AddUndo()
 {
     SdrObject& rObj = GetObject();
 
-    if( rObj.IsInserted() && rObj.getSdrModelFromSdrObject().IsUndoEnabled() )
-    {
+    if( rObj.IsInserted() && rObj.getSdrModelFromSdrObject().IsUndoEnabled() ) {
         CellRef xCell( this );
         rObj.getSdrModelFromSdrObject().AddUndo( std::make_unique<CellUndo>( &rObj, xCell ) );
 
@@ -897,9 +849,9 @@ void SAL_CALL Cell::release() throw ()
 Sequence< Type > SAL_CALL Cell::getTypes(  )
 {
     return comphelper::concatSequences( SvxUnoTextBase::getTypes(),
-        Sequence {
-            cppu::UnoType<XMergeableCell>::get(),
-            cppu::UnoType<XLayoutConstrains>::get() });
+    Sequence {
+        cppu::UnoType<XMergeableCell>::get(),
+        cppu::UnoType<XLayoutConstrains>::get() });
 }
 
 
@@ -959,8 +911,7 @@ OUString SAL_CALL Cell::getFormula(  )
 
 void SAL_CALL Cell::setFormula( const OUString& aFormula )
 {
-    if( msFormula != aFormula )
-    {
+    if( msFormula != aFormula ) {
         msFormula = aFormula;
     }
 }
@@ -974,8 +925,7 @@ double SAL_CALL Cell::getValue(  )
 
 void SAL_CALL Cell::setValue( double nValue )
 {
-    if( mfValue != nValue )
-    {
+    if( mfValue != nValue ) {
         mfValue = nValue;
         mnCellContentType = CellContentType_VALUE;
     }
@@ -1001,17 +951,13 @@ Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEnt
 {
     Any aAny( SvxItemPropertySet_getPropertyValue( pMap, aSet ) );
 
-    if( pMap->aType != aAny.getValueType() )
-    {
+    if( pMap->aType != aAny.getValueType() ) {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-        if( ( pMap->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
-        {
+        if( ( pMap->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() ) {
             sal_Int32 nValue = 0;
             aAny >>= nValue;
             aAny <<= static_cast<sal_Int16>(nValue);
-        }
-        else
-        {
+        } else {
             OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
         }
     }
@@ -1033,15 +979,12 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
-    if( pMap )
-    {
+    if( pMap ) {
         if( (pMap->nFlags & PropertyAttribute::READONLY ) != 0 )
             throw PropertyVetoException();
 
-        switch( pMap->nWID )
-        {
-        case OWN_ATTR_STYLE:
-        {
+        switch( pMap->nWID ) {
+        case OWN_ATTR_STYLE: {
             Reference< XStyle > xStyle;
             if( !( rValue >>= xStyle ) )
                 throw IllegalArgumentException();
@@ -1050,8 +993,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             SetStyleSheet( pStyle, true );
             return;
         }
-        case OWN_ATTR_TABLEBORDER:
-        {
+        case OWN_ATTR_TABLEBORDER: {
             auto pBorder = o3tl::tryAccess<TableBorder>(rValue);
             if(!pBorder)
                 break;
@@ -1091,11 +1033,9 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem(aBoxInfo);
             return;
         }
-        case OWN_ATTR_FILLBMP_MODE:
-        {
+        case OWN_ATTR_FILLBMP_MODE: {
             BitmapMode eMode;
-            if(!(rValue >>= eMode) )
-            {
+            if(!(rValue >>= eMode) ) {
                 sal_Int32 nMode = 0;
                 if(!(rValue >>= nMode))
                     throw IllegalArgumentException();
@@ -1107,8 +1047,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
             return;
         }
-        case SDRATTR_TABLE_TEXT_ROTATION:
-        {
+        case SDRATTR_TABLE_TEXT_ROTATION: {
             sal_Int32 nRotVal = 0;
             if (!(rValue >>= nRotVal))
                 throw IllegalArgumentException();
@@ -1119,50 +1058,41 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem(SvxTextRotateItem(nRotVal/10, SDRATTR_TABLE_TEXT_ROTATION));
             return;
         }
-        default:
-        {
+        default: {
             SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             bool bSpecial = false;
 
-            switch( pMap->nWID )
-            {
-                case XATTR_FILLBITMAP:
-                case XATTR_FILLGRADIENT:
-                case XATTR_FILLHATCH:
-                case XATTR_FILLFLOATTRANSPARENCE:
-                case XATTR_LINEEND:
-                case XATTR_LINESTART:
-                case XATTR_LINEDASH:
-                {
-                    if( pMap->nMemberId == MID_NAME )
-                    {
-                        OUString aApiName;
-                        if( rValue >>= aApiName )
-                        {
-                            if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, aSet, &GetObject().getSdrModelFromSdrObject()))
-                                bSpecial = true;
-                        }
+            switch( pMap->nWID ) {
+            case XATTR_FILLBITMAP:
+            case XATTR_FILLGRADIENT:
+            case XATTR_FILLHATCH:
+            case XATTR_FILLFLOATTRANSPARENCE:
+            case XATTR_LINEEND:
+            case XATTR_LINESTART:
+            case XATTR_LINEDASH: {
+                if( pMap->nMemberId == MID_NAME ) {
+                    OUString aApiName;
+                    if( rValue >>= aApiName ) {
+                        if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, aSet, &GetObject().getSdrModelFromSdrObject()))
+                            bSpecial = true;
                     }
                 }
-                break;
+            }
+            break;
             }
 
-            if( !bSpecial )
-            {
+            if( !bSpecial ) {
 
-                if( !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
-                {
-                    if( aSet.GetItemState( pMap->nWID ) != SfxItemState::SET )
-                    {
+                if( !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet )) {
+                    if( aSet.GetItemState( pMap->nWID ) != SfxItemState::SET ) {
                         // fetch the default from ItemPool
                         if(SfxItemPool::IsWhich(pMap->nWID))
                             aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
                     }
 
-                    if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET )
-                    {
+                    if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET ) {
                         SvxItemPropertySet_setPropertyValue( pMap, rValue, aSet );
                     }
                 }
@@ -1186,16 +1116,12 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
-    if( pMap )
-    {
-        switch( pMap->nWID )
-        {
-        case OWN_ATTR_STYLE:
-        {
+    if( pMap ) {
+        switch( pMap->nWID ) {
+        case OWN_ATTR_STYLE: {
             return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
         }
-        case OWN_ATTR_TABLEBORDER:
-        {
+        case OWN_ATTR_TABLEBORDER: {
             const SvxBoxInfoItem& rBoxInfoItem = mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER);
             const SvxBoxItem& rBox = mpProperties->GetItem(SDRATTR_TABLE_BORDER);
 
@@ -1217,38 +1143,28 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
 
             return Any( aTableBorder );
         }
-        case OWN_ATTR_FILLBMP_MODE:
-        {
+        case OWN_ATTR_FILLBMP_MODE: {
             const XFillBmpStretchItem& rStretchItem = mpProperties->GetItem(XATTR_FILLBMP_STRETCH);
             const XFillBmpTileItem& rTileItem = mpProperties->GetItem(XATTR_FILLBMP_TILE);
-            if( rTileItem.GetValue() )
-            {
+            if( rTileItem.GetValue() ) {
                 return Any( BitmapMode_REPEAT );
-            }
-            else if( rStretchItem.GetValue() )
-            {
+            } else if( rStretchItem.GetValue() ) {
                 return Any(  BitmapMode_STRETCH );
-            }
-            else
-            {
+            } else {
                 return Any(  BitmapMode_NO_REPEAT );
             }
         }
-        case SDRATTR_TABLE_TEXT_ROTATION:
-        {
+        case SDRATTR_TABLE_TEXT_ROTATION: {
             const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
             return Any(sal_Int32(rTextRotate.GetValue() * 10));
         }
-        default:
-        {
+        default: {
             SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             Any aAny;
-            if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
-            {
-                if(!aSet.Count())
-                {
+            if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny )) {
+                if(!aSet.Count()) {
                     // fetch the default from ItemPool
                     if(SfxItemPool::IsWhich(pMap->nWID))
                         aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
@@ -1301,18 +1217,12 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
     const OUString* pNames = aPropertyNames.getConstArray();
     const Any* pValues = aValues.getConstArray();
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
-    {
-        try
-        {
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ ) {
+        try {
             setPropertyValue( *pNames, *pValues );
-        }
-        catch( UnknownPropertyException& )
-        {
+        } catch( UnknownPropertyException& ) {
             OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
-        }
-        catch( Exception& )
-        {
+        } catch( Exception& ) {
             OSL_FAIL("svx::Cell::setPropertyValues(), Exception caught!" );
         }
     }
@@ -1330,18 +1240,12 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
     Sequence< Any > aRet( nCount );
     Any* pValue = aRet.getArray();
 
-    for( const OUString& rName : aPropertyNames )
-    {
-        try
-        {
+    for( const OUString& rName : aPropertyNames ) {
+        try {
             *pValue = getPropertyValue( rName );
-        }
-        catch( UnknownPropertyException& )
-        {
+        } catch( UnknownPropertyException& ) {
             OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
-        }
-        catch( Exception& )
-        {
+        } catch( Exception& ) {
             OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
         }
         pValue++;
@@ -1378,45 +1282,35 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
-    if( pMap )
-    {
+    if( pMap ) {
         PropertyState eState;
-        switch( pMap->nWID )
-        {
-        case OWN_ATTR_FILLBMP_MODE:
-        {
+        switch( pMap->nWID ) {
+        case OWN_ATTR_FILLBMP_MODE: {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
 
             const bool bStretch = rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SfxItemState::SET;
             const bool bTile = rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SfxItemState::SET;
-            if( bStretch || bTile )
-            {
+            if( bStretch || bTile ) {
                 eState = PropertyState_DIRECT_VALUE;
-            }
-            else
-            {
+            } else {
                 eState = PropertyState_DEFAULT_VALUE;
             }
             break;
         }
-        case OWN_ATTR_STYLE:
-        {
+        case OWN_ATTR_STYLE: {
             return PropertyState_DIRECT_VALUE;
         }
-        case OWN_ATTR_TABLEBORDER:
-        {
+        case OWN_ATTR_TABLEBORDER: {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
             if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, false ) == SfxItemState::DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, false ) == SfxItemState::DEFAULT) )
                 return PropertyState_DEFAULT_VALUE;
 
             return PropertyState_DIRECT_VALUE;
         }
-        default:
-        {
+        default: {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
 
-            switch( rSet.GetItemState( pMap->nWID, false ) )
-            {
+            switch( rSet.GetItemState( pMap->nWID, false ) ) {
             case SfxItemState::READONLY:
             case SfxItemState::SET:
                 eState = PropertyState_DIRECT_VALUE;
@@ -1430,23 +1324,20 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
             }
 
             // if an item is set, this doesn't mean we want it :)
-            if( PropertyState_DIRECT_VALUE == eState )
-            {
-                switch( pMap->nWID )
-                {
+            if( PropertyState_DIRECT_VALUE == eState ) {
+                switch( pMap->nWID ) {
                 // the following items are disabled by changing the
                 // fill style or the line style. so there is no need
                 // to export items without names which should be empty
                 case XATTR_FILLBITMAP:
                 case XATTR_FILLGRADIENT:
                 case XATTR_FILLHATCH:
-                case XATTR_LINEDASH:
-                    {
-                        const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
-                        if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
-                            eState = PropertyState_DEFAULT_VALUE;
-                    }
-                    break;
+                case XATTR_LINEDASH: {
+                    const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
+                    if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
+                        eState = PropertyState_DEFAULT_VALUE;
+                }
+                break;
 
                 // #i36115#
                 // If e.g. the LineStart is on NONE and thus the string has length 0, it still
@@ -1455,13 +1346,12 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                 // same is for fill float transparency
                 case XATTR_LINEEND:
                 case XATTR_LINESTART:
-                case XATTR_FILLFLOATTRANSPARENCE:
-                    {
-                        const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
-                        if( pItem == nullptr )
-                            eState = PropertyState_DEFAULT_VALUE;
-                    }
-                    break;
+                case XATTR_FILLFLOATTRANSPARENCE: {
+                    const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
+                    if( pItem == nullptr )
+                        eState = PropertyState_DEFAULT_VALUE;
+                }
+                break;
                 }
             }
         }
@@ -1483,16 +1373,15 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
     Sequence< PropertyState > aRet( nCount );
 
     std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.begin(),
-        [this](const OUString& rName) -> PropertyState {
-            try
-            {
-                return getPropertyState( rName );
-            }
-            catch( Exception& )
-            {
-                return PropertyState_AMBIGUOUS_VALUE;
-            }
-        });
+    [this](const OUString& rName) -> PropertyState {
+        try
+        {
+            return getPropertyState( rName );
+        } catch( Exception& )
+        {
+            return PropertyState_AMBIGUOUS_VALUE;
+        }
+    });
 
     return aRet;
 }
@@ -1506,12 +1395,9 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
-    if( pMap )
-    {
-        switch( pMap->nWID )
-        {
-        case OWN_ATTR_FILLBMP_MODE:
-        {
+    if( pMap ) {
+        switch( pMap->nWID ) {
+        case OWN_ATTR_FILLBMP_MODE: {
             mpProperties->ClearObjectItem( XATTR_FILLBMP_STRETCH );
             mpProperties->ClearObjectItem( XATTR_FILLBMP_TILE );
             break;
@@ -1519,15 +1405,13 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName )
         case OWN_ATTR_STYLE:
             break;
 
-        case OWN_ATTR_TABLEBORDER:
-        {
+        case OWN_ATTR_TABLEBORDER: {
             mpProperties->ClearObjectItem( SDRATTR_TABLE_BORDER_INNER );
             mpProperties->ClearObjectItem( SDRATTR_TABLE_BORDER );
             break;
         }
 
-        default:
-        {
+        default: {
             mpProperties->ClearObjectItem( pMap->nWID );
         }
         }
@@ -1547,29 +1431,23 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
-    if( pMap )
-    {
-        switch( pMap->nWID )
-        {
+    if( pMap ) {
+        switch( pMap->nWID ) {
         case OWN_ATTR_FILLBMP_MODE:
             return Any(  BitmapMode_NO_REPEAT );
 
-        case OWN_ATTR_STYLE:
-        {
+        case OWN_ATTR_STYLE: {
             Reference< XStyle > xStyle;
             return Any( xStyle );
         }
 
-        case OWN_ATTR_TABLEBORDER:
-        {
+        case OWN_ATTR_TABLEBORDER: {
             TableBorder aBorder;
             return Any( aBorder );
         }
 
-        default:
-        {
-            if( SfxItemPool::IsWhich(pMap->nWID) )
-            {
+        default: {
+            if( SfxItemPool::IsWhich(pMap->nWID) ) {
                 SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
                 aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
@@ -1591,13 +1469,11 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
     SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();
 
     OutlinerParaObject* pParaObj = GetOutlinerParaObject();
-    if( pParaObj )
-    {
+    if( pParaObj ) {
         rOutliner.SetText(*pParaObj);
         sal_Int32 nParaCount(rOutliner.GetParagraphCount());
 
-        if(nParaCount)
-        {
+        if(nParaCount) {
             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
             rOutliner.RemoveAttribs(aSelection, true, 0);
 
@@ -1623,7 +1499,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& 
     Sequence< Any > aDefaults( nCount );
 
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aDefaults.begin(),
-        [this](const OUString& rName) -> Any { return getPropertyDefault(rName); });
+                   [this](const OUString& rName) -> Any { return getPropertyDefault(rName); });
 
     return aDefaults;
 }

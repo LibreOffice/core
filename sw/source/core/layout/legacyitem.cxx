@@ -23,7 +23,7 @@
 #include <fmtornt.hxx>
 
 namespace legacy::SwFormatVert
-    {
+{
         sal_uInt16 GetVersion(sal_uInt16)
         {
             return 0;
@@ -74,6 +74,6 @@ namespace legacy::SwFormatVert
             rStrm.WriteInt16(rItem.GetVertOrient()).WriteInt16(rItem.GetRelationOrient());
             return rStrm;
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

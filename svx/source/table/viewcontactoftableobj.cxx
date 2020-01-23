@@ -51,7 +51,7 @@ using namespace com::sun::star;
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         namespace {
 
         class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
@@ -144,10 +144,10 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrCellPrimitive2D, PRIMITIVE2D_ID_SDRCELLPRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace
 
 namespace sdr::contact
-    {
+{
         static svx::frame::Style impGetLineStyle(
             const sdr::table::TableLayouter& rLayouter,
             sal_Int32 nX,
@@ -416,6 +416,6 @@ namespace sdr::contact
         ViewContactOfTableObj::~ViewContactOfTableObj()
         {
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

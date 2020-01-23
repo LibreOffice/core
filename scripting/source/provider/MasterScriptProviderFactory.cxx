@@ -95,6 +95,6 @@ sal_Bool MasterScriptProviderFactory::supportsService(
     return cppu::supportsService(this, serviceName);
 }
 
-} // namespace browsenodefactory
+} // namespace func_provider
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

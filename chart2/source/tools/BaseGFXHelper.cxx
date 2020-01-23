@@ -193,6 +193,6 @@ void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix )
     rB3DMatrix = aRotationMatrix;
 }
 
-} //  namespace chart
+} //  namespace chart::BaseGFXHelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

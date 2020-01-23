@@ -312,6 +312,6 @@ void TableBorderHdl::CreateB2dIAObject()
 }
 
 
-} // end of namespace sdr
+} // end of namespace sdr::table
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

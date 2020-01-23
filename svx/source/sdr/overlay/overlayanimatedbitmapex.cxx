@@ -25,7 +25,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
             if(mbOverlayState)
@@ -109,6 +109,7 @@ namespace sdr::overlay
                 objectChange();
             }
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

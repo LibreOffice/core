@@ -26,7 +26,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayPolyPolygonStripedAndFilled::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
@@ -79,6 +79,7 @@ namespace sdr::overlay
         OverlayPolyPolygonStripedAndFilled::~OverlayPolyPolygonStripedAndFilled()
         {
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

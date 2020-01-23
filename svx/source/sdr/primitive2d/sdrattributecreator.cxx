@@ -217,7 +217,7 @@ namespace drawinglayer
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         attribute::SdrLineAttribute createNewSdrLineAttribute(const SfxItemSet& rSet)
         {
             const css::drawing::LineStyle eStyle(rSet.Get(XATTR_LINESTYLE).GetValue());
@@ -1090,6 +1090,6 @@ namespace drawinglayer::primitive2d
             return attribute::SdrFillTextAttribute();
         }
 
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
