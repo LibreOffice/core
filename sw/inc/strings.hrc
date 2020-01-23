@@ -1388,6 +1388,8 @@
 #define STR_AUTOMARK_YES                        NC_("createautomarkdialog|yes", "Yes")
 #define STR_AUTOMARK_NO                         NC_("createautomarkdialog|no", "No")
 
+#define STR_WRAP_PANEL_CUSTOM_STR               NC_("sidebarwrap|customlabel", "Custom")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
