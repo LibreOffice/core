@@ -19,7 +19,6 @@
 #include "vbasystem.hxx"
 
 #include <ooo/vba/word/WdCursorType.hpp>
-#include <tools/diagnose_ex.h>
 #include <tools/config.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>

@@ -23,7 +23,6 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <vbahelper/vbahelper.hxx>
-#include <swtypes.hxx>
 #include <viewsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 

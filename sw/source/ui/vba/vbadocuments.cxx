@@ -19,22 +19,12 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/beans/PropertyVetoException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/document/XTypeDetection.hpp>
 
-#include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 
-#include "vbaglobals.hxx"
 #include "vbadocument.hxx"
 #include "vbadocuments.hxx"
-#include <vbahelper/vbahelper.hxx>
 
 #include <osl/file.hxx>
 using namespace ::ooo::vba;

@@ -19,7 +19,6 @@
 #include "vbatableofcontents.hxx"
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/diagnose_ex.h>
 #include <ooo/vba/word/WdTabLeader.hpp>
 
 using namespace ::ooo::vba;
