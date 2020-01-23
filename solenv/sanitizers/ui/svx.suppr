@@ -16,7 +16,6 @@ svx/uiconfig/ui/crashreportdlg.ui://GtkTextView[@id='ed_bugreport'] no-labelled-
 svx/uiconfig/ui/dockingcolorreplace.ui://GtkLabel[@id='label2'] orphan-label
 svx/uiconfig/ui/dockingcolorreplace.ui://GtkLabel[@id='label3'] orphan-label
 svx/uiconfig/ui/dockingcolorreplace.ui://GtkLabel[@id='label4'] orphan-label
-svx/uiconfig/ui/dockingcolorreplace.ui://svxcorelo-SvxColorListBox[@id='color5'] no-labelled-by
 svx/uiconfig/ui/docrecoverybrokendialog.ui://GtkLabel[@id='label1'] orphan-label
 svx/uiconfig/ui/docrecoveryprogressdialog.ui://GtkLabel[@id='label2'] orphan-label
 svx/uiconfig/ui/docrecoveryrecoverdialog.ui://GtkLabel[@id='desc'] orphan-label

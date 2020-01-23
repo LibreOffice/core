@@ -480,7 +480,7 @@ public:
     virtual void    Hide() override;
     virtual OUString RequestHelp(tools::Rectangle& rHelpRect) override;
 
-    void            Select();
+    virtual void    Select();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     OUString const & GetText() const { return maText; }
@@ -541,6 +541,7 @@ public:
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
+    void            SetItemColor( sal_uInt16 nItemId, const Color& rColor );
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     void            SetItemData( sal_uInt16 nItemId, void* pData );
     void*           GetItemData( sal_uInt16 nItemId ) const;

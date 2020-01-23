@@ -3576,6 +3576,26 @@ void SvtValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         mbFormat = true;
 }
 
+void SvtValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
+{
+    size_t nPos = GetItemPos( nItemId );
+
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    SvtValueSetItem* pItem = mItemList[nPos].get();
+    pItem->meType  = VALUESETITEM_COLOR;
+    pItem->maColor = rColor;
+
+    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    {
+        const tools::Rectangle aRect = ImplGetItemRect(nPos);
+        Invalidate( aRect );
+    }
+    else
+        mbFormat = true;
+}
+
 Color SvtValueSet::GetItemColor( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );

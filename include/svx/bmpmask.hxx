@@ -34,13 +34,10 @@
 #include <memory>
 
 namespace vcl { class Window; }
+namespace weld { class CustomWeld; }
 
-class CheckBox;
-class MetricField;
-class PushButton;
 class SfxBindings;
 class SfxModule;
-class ToolBox;
 
 /*************************************************************************
 |*
@@ -86,40 +83,46 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMaskChildWindow final : public SfxChil
 class MaskData;
 class MaskSet;
 class BmpColorWindow;
-class SvxColorListBox;
+class ColorListBox;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 {
     friend class MaskData;
     friend class MaskSet;
 
-    VclPtr<ToolBox>            m_pTbxPipette;
-    VclPtr<BmpColorWindow>     m_pCtlPipette;
-    VclPtr<PushButton>         m_pBtnExec;
+    std::unique_ptr<weld::Toolbar> m_xTbxPipette;
+    std::unique_ptr<BmpColorWindow> m_xCtlPipette;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPipetteWin;
+    std::unique_ptr<weld::Button> m_xBtnExec;
 
-    VclPtr<CheckBox>           m_pCbx1;
-    VclPtr<MaskSet>            m_pQSet1;
-    VclPtr<MetricField>        m_pSp1;
-    VclPtr<SvxColorListBox>    m_pLbColor1;
+    std::unique_ptr<weld::CheckButton> m_xCbx1;
+    std::unique_ptr<MaskSet> m_xQSet1;
+    std::unique_ptr<weld::CustomWeld> m_xQSetWin1;
+    std::unique_ptr<weld::MetricSpinButton> m_xSp1;
+    std::unique_ptr<ColorListBox> m_xLbColor1;
 
-    VclPtr<CheckBox>           m_pCbx2;
-    VclPtr<MaskSet>            m_pQSet2;
-    VclPtr<MetricField>        m_pSp2;
-    VclPtr<SvxColorListBox>    m_pLbColor2;
+    std::unique_ptr<weld::CheckButton> m_xCbx2;
+    std::unique_ptr<MaskSet> m_xQSet2;
+    std::unique_ptr<weld::CustomWeld> m_xQSetWin2;
+    std::unique_ptr<weld::MetricSpinButton> m_xSp2;
+    std::unique_ptr<ColorListBox> m_xLbColor2;
 
-    VclPtr<CheckBox>           m_pCbx3;
-    VclPtr<MaskSet>            m_pQSet3;
-    VclPtr<MetricField>        m_pSp3;
-    VclPtr<SvxColorListBox>    m_pLbColor3;
+    std::unique_ptr<weld::CheckButton> m_xCbx3;
+    std::unique_ptr<MaskSet> m_xQSet3;
+    std::unique_ptr<weld::CustomWeld> m_xQSetWin3;
+    std::unique_ptr<weld::MetricSpinButton> m_xSp3;
+    std::unique_ptr<ColorListBox> m_xLbColor3;
 
-    VclPtr<CheckBox>           m_pCbx4;
-    VclPtr<MaskSet>            m_pQSet4;
-    VclPtr<MetricField>        m_pSp4;
-    VclPtr<SvxColorListBox>    m_pLbColor4;
+    std::unique_ptr<weld::CheckButton> m_xCbx4;
+    std::unique_ptr<MaskSet> m_xQSet4;
+    std::unique_ptr<weld::CustomWeld> m_xQSetWin4;
+    std::unique_ptr<weld::MetricSpinButton> m_xSp4;
+    std::unique_ptr<ColorListBox> m_xLbColor4;
 
-    std::unique_ptr<MaskData>  pData;
-    VclPtr<CheckBox>           m_pCbxTrans;
-    VclPtr<SvxColorListBox>    m_pLbColorTrans;
+    std::unique_ptr<weld::CheckButton> m_xCbxTrans;
+    std::unique_ptr<ColorListBox> m_xLbColorTrans;
+
+    std::unique_ptr<MaskData> m_xData;
 
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
