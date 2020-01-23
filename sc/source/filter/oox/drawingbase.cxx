@@ -287,6 +287,6 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
     return aEmuPoint;
 }
 
-} // namespace oox
+} // namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

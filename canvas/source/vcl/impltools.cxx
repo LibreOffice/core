@@ -44,7 +44,7 @@
 using namespace ::com::sun::star;
 
 namespace vclcanvas::tools
-    {
+{
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
             // TODO(F3): CanvasCustomSprite should also be tunnelled
@@ -216,6 +216,6 @@ namespace vclcanvas::tools
 
             return vcl::bitmap::CanvasTransformBitmap(rBitmap, rTransform, aDestRect, aLocalTransform);
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

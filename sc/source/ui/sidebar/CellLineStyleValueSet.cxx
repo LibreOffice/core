@@ -166,6 +166,6 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 }
 
-} // end of namespace svx::sidebar
+} // end of namespace sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

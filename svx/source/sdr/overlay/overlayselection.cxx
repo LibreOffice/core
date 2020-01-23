@@ -32,7 +32,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         // combine rages geometrically to a single, ORed polygon
         static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
@@ -217,6 +217,6 @@ namespace sdr::overlay
                 objectChange();
             }
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

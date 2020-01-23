@@ -66,6 +66,6 @@ void B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
     rMatrixOut.Line4.Column3 = rMatrixIn.get(3, 2);
     rMatrixOut.Line4.Column4 = rMatrixIn.get(3, 3);
 }
-} // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

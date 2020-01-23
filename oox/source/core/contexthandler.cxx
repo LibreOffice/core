@@ -128,6 +128,6 @@ void ContextHandler::endRecord( sal_Int32 )
 {
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,7 @@
 
 
 namespace sdr::contact
-    {
+{
         // Create an Object-Specific ViewObjectContact, set ViewContact and
         // ObjectContact. Always needs to return something.
         ViewObjectContact& ViewContactOfGroup::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
@@ -82,6 +82,7 @@ namespace sdr::contact
 
             return xRetval;
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

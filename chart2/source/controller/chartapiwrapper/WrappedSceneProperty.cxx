@@ -96,6 +96,6 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
     return WrappedProperty::getPropertyValue( xInnerPropertySet );
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

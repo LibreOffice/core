@@ -34,7 +34,7 @@
 #include <svx/svdtrans.hxx>
 
 namespace sdr::properties
-    {
+{
         std::unique_ptr<SfxItemSet> DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
@@ -235,6 +235,6 @@ namespace sdr::properties
             mpItemSet->dumpAsXml(pWriter);
             xmlTextWriterEndElement(pWriter);
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,7 @@ using namespace com::sun::star;
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         SdrOle2Primitive2D::SdrOle2Primitive2D(
             const Primitive2DContainer& rOLEContent,
             const basegfx::B2DHomMatrix& rTransform,
@@ -169,6 +169,6 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrOle2Primitive2D, PRIMITIVE2D_ID_SDROLE2PRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

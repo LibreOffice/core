@@ -377,6 +377,6 @@ void AnchorOverlayObject::SetAnchorState( const AnchorState aState)
   }
 }
 
-} // end of namespace sw::annotation
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

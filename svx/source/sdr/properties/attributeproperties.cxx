@@ -45,7 +45,7 @@
 #include <svx/svdpage.hxx>
 
 namespace sdr::properties
-    {
+{
         void AttributeProperties::ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr)
         {
             if(HasSfxItemSet() && mpStyleSheet)
@@ -528,6 +528,6 @@ namespace sdr::properties
             }
             return false;
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

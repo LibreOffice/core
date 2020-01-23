@@ -114,6 +114,6 @@ const RecordInfo* FragmentHandler::getRecordInfos() const
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

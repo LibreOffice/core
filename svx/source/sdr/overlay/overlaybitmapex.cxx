@@ -25,7 +25,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DReference aReference(
@@ -68,6 +68,7 @@ namespace sdr::overlay
         OverlayBitmapEx::~OverlayBitmapEx()
         {
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

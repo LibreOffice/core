@@ -286,6 +286,6 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
     return uno::Any(aInnerValue);
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

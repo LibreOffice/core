@@ -209,7 +209,7 @@ struct TransitionEffect
     bool mbLoopSoundAmbiguous;
 };
 
-} // namespace sd
+} // namespace sd::impl
 
 // Local Helper Functions
 namespace

@@ -148,6 +148,6 @@ ColorContext::ColorContext( ContextHandler2Helper const & rParent, Color& rColor
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

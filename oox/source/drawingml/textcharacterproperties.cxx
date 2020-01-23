@@ -208,6 +208,6 @@ float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
     return moHeight.has() ? GetFontHeight( moHeight.get() ) : fDefault;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -220,7 +220,7 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }
 
-} // namespace oox
+} // namespace oox::dump
 
 #endif
 

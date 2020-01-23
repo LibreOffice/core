@@ -27,7 +27,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewContactOfE3dSphere::ViewContactOfE3dSphere(E3dSphereObj& rSphere)
         :   ViewContactOfE3d(rSphere)
         {
@@ -75,6 +75,7 @@ namespace sdr::contact
 
             return xRetval;
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

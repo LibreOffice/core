@@ -166,6 +166,6 @@ WrappedBarOverlapProperty::~WrappedBarOverlapProperty()
 {
 }
 
-} //  namespace chart
+} //  namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

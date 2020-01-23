@@ -70,13 +70,13 @@ namespace drawinglayer::unorenderer
         };
 
         }
-    } // end of namespace drawinglayer
+} // end of namespace drawinglayer::unorenderer
 
 
 // uno functions
 
 namespace drawinglayer::unorenderer
-    {
+{
         uno::Sequence< OUString > XPrimitive2DRenderer_getSupportedServiceNames()
         {
             return { "com.sun.star.graphic.Primitive2DTools" };
@@ -91,11 +91,11 @@ namespace drawinglayer::unorenderer
         {
             return static_cast< ::cppu::OWeakObject* >(new XPrimitive2DRenderer);
         }
-    } // end of namespace drawinglayer
+} // end of namespace drawinglayer::unorenderer
 
 
 namespace drawinglayer::unorenderer
-    {
+{
         XPrimitive2DRenderer::XPrimitive2DRenderer()
         {
         }

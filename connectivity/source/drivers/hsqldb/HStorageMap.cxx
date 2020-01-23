@@ -29,7 +29,7 @@
 #include <algorithm>
 
 namespace connectivity::hsqldb
-    {
+{
 
         using namespace ::com::sun::star::uno;
         using namespace ::com::sun::star::lang;
@@ -354,8 +354,7 @@ namespace connectivity::hsqldb
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
 
-    }
-// namespace connectivity
+} // namespace
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
