@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d4f99d5_63f3870f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-01-23T21:45:53Z",
+      "side": 1,
+      "message": "Please change to #",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "381633454a508f0bd929804939d336b2aff0ffd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455eafee_2c172174",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 7082,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-01-23T21:45:53Z",
+      "side": 1,
+      "message": "This is worrying. I would like to investigate why it started to fail now.",
+      "revId": "381633454a508f0bd929804939d336b2aff0ffd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
