@@ -171,7 +171,6 @@ namespace pcr
         try
         {
             getPropertyBox().EnableHelpSection( m_xModel->getHasHelpSection() );
-            getPropertyBox().SetHelpLineLimites( m_xModel->getMinHelpTextLines(), m_xModel->getMaxHelpTextLines() );
         }
         catch( const Exception& )
         {

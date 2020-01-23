@@ -76,7 +76,6 @@ class GalleryBrowser2 : public SfxListener
 
 private:
 
-    SvtMiscOptions      maMiscOptions;
     Gallery*            mpGallery;
     GalleryTheme*       mpCurTheme;
     std::unique_ptr<GalleryIconView> mxIconView;
