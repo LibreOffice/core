@@ -22,11 +22,8 @@
 
 #include <memory>
 #include <sfx2/ctrlitem.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
 #include <sfx2/dockwin.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/dlgctl3d.hxx>
@@ -44,9 +41,39 @@ enum class ViewType3D
 class FmFormModel;
 class Svx3DCtrlItem;
 class SvxConvertTo3DItem;
-class SvxColorListBox;
+class ColorListBox;
 
 struct Svx3DWinImpl;
+
+class SVX_DLLPUBLIC LightButton final
+{
+public:
+    explicit LightButton(std::unique_ptr<weld::ToggleButton> xButton);
+
+    void switchLightOn(bool bOn);
+    bool isLightOn() const { return m_bLightOn;}
+
+    bool get_active() const { return m_xButton->get_active(); }
+    void set_active(bool bActive) { m_xButton->set_active(bActive); }
+
+    TriState get_state() const { return m_xButton->get_state(); }
+    void set_state(TriState eState) { m_xButton->set_state(eState); }
+
+    weld::ToggleButton* get_widget() const { return m_xButton.get(); }
+
+    void connect_clicked(const Link<weld::Button&, void>& rLink)
+    {
+        m_xButton->connect_clicked(rLink);
+    }
+
+    bool get_prev_active() const { return m_bButtonPrevActive; }
+    void set_prev_active(bool bPrevActive) { m_bButtonPrevActive = bPrevActive; }
+
+private:
+    std::unique_ptr<weld::ToggleButton> m_xButton;
+    bool m_bLightOn;
+    bool m_bButtonPrevActive;
+};
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DWin final : public SfxDockingWindow
 {
@@ -55,112 +82,118 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DWin final : public SfxDockingWindow
     using Window::Update;
 
 private:
-    VclPtr<PushButton>         m_pBtnGeo;
-    VclPtr<PushButton>         m_pBtnRepresentation;
-    VclPtr<PushButton>         m_pBtnLight;
-    VclPtr<PushButton>         m_pBtnTexture;
-    VclPtr<PushButton>         m_pBtnMaterial;
-    VclPtr<PushButton>         m_pBtnUpdate;
-    VclPtr<PushButton>         m_pBtnAssign;
+    std::unique_ptr<weld::ToggleButton> m_xBtnGeo;
+    std::unique_ptr<weld::ToggleButton> m_xBtnRepresentation;
+    std::unique_ptr<weld::ToggleButton> m_xBtnLight;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexture;
+    std::unique_ptr<weld::ToggleButton> m_xBtnMaterial;
+    std::unique_ptr<weld::ToggleButton> m_xBtnUpdate;
+    std::unique_ptr<weld::Button> m_xBtnAssign;
 
 // geometry
-    VclPtr<VclContainer>       m_pFLGeometrie;
-    VclPtr<FixedText>          m_pFtPercentDiagonal;
-    VclPtr<MetricField>        m_pMtrPercentDiagonal;
-    VclPtr<FixedText>          m_pFtBackscale;
-    VclPtr<MetricField>        m_pMtrBackscale;
-    VclPtr<FixedText>          m_pFtEndAngle;
-    VclPtr<MetricField>        m_pMtrEndAngle;
-    VclPtr<FixedText>          m_pFtDepth;
-    VclPtr<MetricField>        m_pMtrDepth;
+    std::unique_ptr<weld::Container> m_xFLGeometrie;
+    std::unique_ptr<weld::Label> m_xFtPercentDiagonal;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrPercentDiagonal;
+    std::unique_ptr<weld::Label> m_xFtBackscale;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrBackscale;
+    std::unique_ptr<weld::Label> m_xFtEndAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrEndAngle;
+    std::unique_ptr<weld::Label> m_xFtDepth;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrDepth;
 
-    VclPtr<VclContainer>       m_pFLSegments;
-    VclPtr<NumericField>       m_pNumHorizontal;
-    VclPtr<NumericField>       m_pNumVertical;
+    std::unique_ptr<weld::Container> m_xFLSegments;
+    std::unique_ptr<weld::SpinButton> m_xNumHorizontal;
+    std::unique_ptr<weld::SpinButton> m_xNumVertical;
 
-    VclPtr<VclContainer>       m_pFLNormals;
-    VclPtr<PushButton>         m_pBtnNormalsObj;
-    VclPtr<PushButton>         m_pBtnNormalsFlat;
-    VclPtr<PushButton>         m_pBtnNormalsSphere;
-    VclPtr<PushButton>         m_pBtnNormalsInvert;
-    VclPtr<PushButton>         m_pBtnTwoSidedLighting;
-    VclPtr<PushButton>         m_pBtnDoubleSided;
+    std::unique_ptr<weld::Container> m_xFLNormals;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNormalsObj;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNormalsFlat;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNormalsSphere;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNormalsInvert;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTwoSidedLighting;
+    std::unique_ptr<weld::ToggleButton> m_xBtnDoubleSided;
 
 // presentation
-    VclPtr<VclContainer>       m_pFLRepresentation;
-    VclPtr<ListBox>            m_pLbShademode;
+    std::unique_ptr<weld::Container> m_xFLRepresentation;
+    std::unique_ptr<weld::ComboBox> m_xLbShademode;
 
-    VclPtr<VclContainer>       m_pFLShadow;
-    VclPtr<PushButton>         m_pBtnShadow3d;
-    VclPtr<FixedText>          m_pFtSlant;
-    VclPtr<MetricField>        m_pMtrSlant;
+    std::unique_ptr<weld::Container> m_xFLShadow;
+    std::unique_ptr<weld::ToggleButton> m_xBtnShadow3d;
+    std::unique_ptr<weld::Label> m_xFtSlant;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrSlant;
 
-    VclPtr<VclContainer>       m_pFLCamera;
-    VclPtr<MetricField>        m_pMtrDistance;
-    VclPtr<MetricField>        m_pMtrFocalLength;
+    std::unique_ptr<weld::Container> m_xFLCamera;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFocalLength;
 
 // lighting
-    VclPtr<VclContainer>       m_pFLLight;
-    VclPtr<PushButton>         m_pBtnLight1;
-    VclPtr<PushButton>         m_pBtnLight2;
-    VclPtr<PushButton>         m_pBtnLight3;
-    VclPtr<PushButton>         m_pBtnLight4;
-    VclPtr<PushButton>         m_pBtnLight5;
-    VclPtr<PushButton>         m_pBtnLight6;
-    VclPtr<PushButton>         m_pBtnLight7;
-    VclPtr<PushButton>         m_pBtnLight8;
-    VclPtr<SvxColorListBox>    m_pLbLight1;
-    VclPtr<SvxColorListBox>    m_pLbLight2;
-    VclPtr<SvxColorListBox>    m_pLbLight3;
-    VclPtr<SvxColorListBox>    m_pLbLight4;
-    VclPtr<SvxColorListBox>    m_pLbLight5;
-    VclPtr<SvxColorListBox>    m_pLbLight6;
-    VclPtr<SvxColorListBox>    m_pLbLight7;
-    VclPtr<SvxColorListBox>    m_pLbLight8;
-    VclPtr<PushButton>         m_pBtnLightColor;
-    VclPtr<SvxColorListBox>    m_pLbAmbientlight;    // ListBox
-    VclPtr<PushButton>         m_pBtnAmbientColor;   // color button
+    std::unique_ptr<weld::Container> m_xFLLight;
+    std::unique_ptr<LightButton> m_xBtnLight1;
+    std::unique_ptr<LightButton> m_xBtnLight2;
+    std::unique_ptr<LightButton> m_xBtnLight3;
+    std::unique_ptr<LightButton> m_xBtnLight4;
+    std::unique_ptr<LightButton> m_xBtnLight5;
+    std::unique_ptr<LightButton> m_xBtnLight6;
+    std::unique_ptr<LightButton> m_xBtnLight7;
+    std::unique_ptr<LightButton> m_xBtnLight8;
+    std::unique_ptr<ColorListBox> m_xLbLight1;
+    std::unique_ptr<ColorListBox> m_xLbLight2;
+    std::unique_ptr<ColorListBox> m_xLbLight3;
+    std::unique_ptr<ColorListBox> m_xLbLight4;
+    std::unique_ptr<ColorListBox> m_xLbLight5;
+    std::unique_ptr<ColorListBox> m_xLbLight6;
+    std::unique_ptr<ColorListBox> m_xLbLight7;
+    std::unique_ptr<ColorListBox> m_xLbLight8;
+    std::unique_ptr<weld::Button> m_xBtnLightColor;
+    std::unique_ptr<ColorListBox> m_xLbAmbientlight;    // ListBox
+    std::unique_ptr<weld::Button> m_xBtnAmbientColor;   // color button
 
 // Textures
-    VclPtr<VclContainer>       m_pFLTexture;
-    VclPtr<PushButton>         m_pBtnTexLuminance;
-    VclPtr<PushButton>         m_pBtnTexColor;
-    VclPtr<PushButton>         m_pBtnTexReplace;
-    VclPtr<PushButton>         m_pBtnTexModulate;
-    VclPtr<PushButton>         m_pBtnTexBlend;
-    VclPtr<PushButton>         m_pBtnTexObjectX;
-    VclPtr<PushButton>         m_pBtnTexParallelX;
-    VclPtr<PushButton>         m_pBtnTexCircleX;
-    VclPtr<PushButton>         m_pBtnTexObjectY;
-    VclPtr<PushButton>         m_pBtnTexParallelY;
-    VclPtr<PushButton>         m_pBtnTexCircleY;
-    VclPtr<PushButton>         m_pBtnTexFilter;
+    std::unique_ptr<weld::Container> m_xFLTexture;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexLuminance;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexColor;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexReplace;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexModulate;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexBlend;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexObjectX;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexParallelX;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexCircleX;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexObjectY;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexParallelY;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexCircleY;
+    std::unique_ptr<weld::ToggleButton> m_xBtnTexFilter;
 
 // material
 // material editor
-    VclPtr<VclContainer>       m_pFLMaterial;
-    VclPtr<ListBox>            m_pLbMatFavorites;
-    VclPtr<SvxColorListBox>    m_pLbMatColor;
-    VclPtr<PushButton>         m_pBtnMatColor;
-    VclPtr<SvxColorListBox>    m_pLbMatEmission;
-    VclPtr<PushButton>         m_pBtnEmissionColor;
+    std::unique_ptr<weld::Container> m_xFLMaterial;
+    std::unique_ptr<weld::ComboBox> m_xLbMatFavorites;
+    std::unique_ptr<ColorListBox> m_xLbMatColor;
+    std::unique_ptr<weld::Button> m_xBtnMatColor;
+    std::unique_ptr<ColorListBox> m_xLbMatEmission;
+    std::unique_ptr<weld::Button> m_xBtnEmissionColor;
 
-    VclPtr<VclContainer>       m_pFLMatSpecular;
-    VclPtr<SvxColorListBox>    m_pLbMatSpecular;
-    VclPtr<PushButton>         m_pBtnSpecularColor;
-    VclPtr<MetricField>        m_pMtrMatSpecularIntensity;
+    std::unique_ptr<weld::Container> m_xFLMatSpecular;
+    std::unique_ptr<ColorListBox> m_xLbMatSpecular;
+    std::unique_ptr<weld::Button> m_xBtnSpecularColor;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrMatSpecularIntensity;
 
-    VclPtr<Svx3DPreviewControl> m_pCtlPreview;
-    VclPtr<SvxLightCtl3D>      m_pCtlLightPreview;
+    std::unique_ptr<PreviewControl3D> m_xCtlPreview;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreviewWin;
+
+    std::unique_ptr<weld::Widget> m_xLightPreviewGrid;
+    std::unique_ptr<weld::Scale> m_xHoriScale;
+    std::unique_ptr<weld::Scale> m_xVertScale;
+    std::unique_ptr<weld::Button> m_xBtn_Corner;
+    std::unique_ptr<LightControl3D> m_xLightPreview;
+    std::unique_ptr<weld::CustomWeld> m_xCtlLightPreviewWin;
+    std::unique_ptr<LightCtl3D> m_xCtlLightPreview;
 
 // bottom part
-    VclPtr<PushButton>         m_pBtnConvertTo3D;
-    VclPtr<PushButton>         m_pBtnLatheObject;
-    VclPtr<PushButton>         m_pBtnPerspective;
+    std::unique_ptr<weld::Button> m_xBtnConvertTo3D;
+    std::unique_ptr<weld::Button> m_xBtnLatheObject;
+    std::unique_ptr<weld::ToggleButton> m_xBtnPerspective;
 
 // the rest ...
-    Image const         aImgLightOn;
-    Image const         aImgLightOff;
     bool                bUpdate;
     ViewType3D          eViewType;
 
@@ -180,27 +213,26 @@ private:
     // ItemSet used to remember set 2d attributes
     std::unique_ptr<SfxItemSet> mpRemember2DAttributes;
 
-    DECL_LINK( ClickViewTypeHdl, Button*, void );
-    DECL_LINK( ClickUpdateHdl, Button*, void );
-    DECL_LINK( ClickAssignHdl, Button*, void );
-    DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( ClickColorHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( SelectColorHdl, SvxColorListBox&, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    void ClickLight(PushButton &rBtn);
+    DECL_LINK( ClickViewTypeHdl, weld::Button&, void );
+    DECL_LINK( ClickUpdateHdl, weld::Button&, void );
+    DECL_LINK( ClickAssignHdl, weld::Button&, void );
+    DECL_LINK( ClickHdl, weld::Button&, void );
+    DECL_LINK( ClickColorHdl, weld::Button&, void );
+    DECL_LINK( SelectHdl, weld::ComboBox&, void );
+    DECL_LINK( SelectColorHdl, ColorListBox&, void );
+    DECL_LINK( ModifyMetricHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ModifySpinHdl, weld::SpinButton&, void );
+    void ClickLight(const LightButton& rBtn);
 
-    DECL_LINK( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );
+    DECL_LINK( ChangeSelectionCallbackHdl, LightCtl3D*, void );
 
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();
 
-    SVX_DLLPRIVATE static void  LBSelectColor( SvxColorListBox* pLb, const Color& rColor );
-    SVX_DLLPRIVATE sal_uInt16   GetLightSource( const PushButton* pBtn );
-    SVX_DLLPRIVATE SvxColorListBox* GetLbByButton( const PushButton* pBtn = nullptr );
-
-    SVX_DLLPRIVATE bool         GetUILightState( const PushButton& rBtn ) const;
-    SVX_DLLPRIVATE void         SetUILightState( PushButton& aBtn, bool bState );
+    SVX_DLLPRIVATE static void  LBSelectColor( ColorListBox* pLb, const Color& rColor );
+    SVX_DLLPRIVATE sal_uInt16   GetLightSource( const LightButton* pBtn );
+    SVX_DLLPRIVATE ColorListBox* GetCLbByButton( const LightButton* pBtn = nullptr );
+    SVX_DLLPRIVATE LightButton* GetLbByButton( const weld::Button* pBtn );
 
     virtual void    Resize() override;
 
