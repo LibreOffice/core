@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-19 20:29:49 using:
+ Generated on 2020-01-23 20:57:45 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -61,7 +61,6 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -115,6 +114,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
+#include <vcl/field.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -133,7 +133,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
@@ -217,6 +216,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
@@ -228,6 +228,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -261,7 +262,9 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -338,6 +341,7 @@
 #include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
