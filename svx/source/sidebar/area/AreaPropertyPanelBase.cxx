@@ -182,6 +182,11 @@ void AreaPropertyPanelBase::Initialize()
     mxLbFillGradTo->SetSelectHdl( aLink3 );
     mxMTRAngle->connect_value_changed(LINK(this,AreaPropertyPanelBase, ChangeGradientAngle));
 
+    // https://gerrit.libreoffice.org/c/core/+/87313 set a small width to force widgets to
+    // take their final width from other widgets in the grid
+    mxLbFillGradFrom->get_widget().set_size_request(42, -1);
+    mxLbFillGradTo->get_widget().set_size_request(42, -1);
+
     mxLBTransType->connect_changed(LINK(this, AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl));
 
     SetTransparency( 50 );
