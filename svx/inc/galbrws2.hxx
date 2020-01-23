@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVX_INC_GALBRWS2_HXX
 #define INCLUDED_SVX_INC_GALBRWS2_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svx/galctrl.hxx>

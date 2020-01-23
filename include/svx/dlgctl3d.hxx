@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SVX_DLGCTL3D_HXX
 #define INCLUDED_SVX_DLGCTL3D_HXX
 
-#include <vcl/ctrl.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
