@@ -230,6 +230,6 @@ bool ShapePropertyMap::setFillBitmapName(const Any& rValue)
     return false;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

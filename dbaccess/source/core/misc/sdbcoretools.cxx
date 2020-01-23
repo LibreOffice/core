@@ -142,7 +142,7 @@ namespace dbaccess
         return bSuccess;
     }
 
-    }
+}
 
 }   // namespace dbaccess
 

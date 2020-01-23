@@ -28,7 +28,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewContactOfE3dExtrude::ViewContactOfE3dExtrude(E3dExtrudeObj& rExtrude)
         :   ViewContactOfE3d(rExtrude)
         {
@@ -78,6 +78,7 @@ namespace sdr::contact
 
             return xRetval;
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

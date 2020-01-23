@@ -110,6 +110,6 @@ bool DocumentDecryption::decrypt(const uno::Reference<io::XStream>& xDocumentStr
     return bResult;
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

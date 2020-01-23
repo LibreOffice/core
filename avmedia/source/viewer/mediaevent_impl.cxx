@@ -168,6 +168,6 @@ void SAL_CALL MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& )
 }
 
 
-} // namespace avmedia
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

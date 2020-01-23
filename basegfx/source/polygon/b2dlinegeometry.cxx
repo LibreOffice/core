@@ -33,7 +33,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 namespace basegfx::utils
-    {
+{
         B2DPolyPolygon createAreaGeometryForLineStartEnd(
             const B2DPolygon& rCandidate,
             const B2DPolyPolygon& rArrow,
@@ -124,7 +124,7 @@ namespace basegfx::utils
 
             return aRetval;
         }
-    } // end of namespace basegfx
+} // end of namespace
 
 namespace basegfx
 {

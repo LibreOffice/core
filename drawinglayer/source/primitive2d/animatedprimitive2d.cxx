@@ -83,11 +83,11 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(AnimatedSwitchPrimitive2D, PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
             const Primitive2DContainer& rChildren)
@@ -111,11 +111,11 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(AnimatedBlinkPrimitive2D, PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
             const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
             const animation::AnimationEntry& rAnimationEntry,

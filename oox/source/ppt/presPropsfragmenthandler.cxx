@@ -47,6 +47,6 @@ core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aEle
     }
     return this;
 }
-} // namespace oox
+} // namespace oox::ppt
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

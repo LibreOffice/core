@@ -24,7 +24,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayPrimitive2DSequenceObject::createOverlayObjectPrimitive2DSequence()
         {
             return maSequence;
@@ -39,6 +39,6 @@ namespace sdr::overlay
         OverlayPrimitive2DSequenceObject::~OverlayPrimitive2DSequenceObject()
         {
         }
-    } // end of namespace sdr
+} // end of namespace sdr::overlay
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

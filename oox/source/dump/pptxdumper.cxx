@@ -122,7 +122,7 @@ void Dumper::implDump()
     RootStorageObject( *this ).dump();
 }
 
-} // namespace oox
+} // namespace oox::dump::pptx
 
 #endif
 

@@ -217,7 +217,7 @@ void LimitBoxController::dispatchCommand(
     }
 }
 
-} ///dbaui namespace
+} // dbaui namespace
 
 extern "C" void createRegistryInfo_LimitBoxController()
 {

@@ -31,7 +31,7 @@
 
 
 namespace drawinglayer::processor3d
-    {
+{
         namespace {
 
         class MinimalDephInViewExtractor : public BaseProcessor3D
@@ -136,7 +136,7 @@ namespace drawinglayer::processor3d
                 }
             }
         }
-    } // end of namespace drawinglayer
+} // end of namespace
 
 
 // changed to create values using VCs, Primitive3DContainer and ViewInformation3D to allow

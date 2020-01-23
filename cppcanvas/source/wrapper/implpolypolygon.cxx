@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 
 namespace cppcanvas::internal
-    {
+{
         ImplPolyPolygon::ImplPolyPolygon( const CanvasSharedPtr& rParentCanvas,
                                           const uno::Reference< rendering::XPolyPolygon2D >& rPolyPoly ) :
             CanvasGraphicHelper( rParentCanvas ),
@@ -130,6 +130,6 @@ namespace cppcanvas::internal
             return mxPolyPoly;
         }
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

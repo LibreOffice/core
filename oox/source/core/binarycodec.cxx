@@ -38,6 +38,6 @@ sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int3
 
 
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

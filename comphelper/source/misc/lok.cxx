@@ -246,6 +246,6 @@ void statusIndicatorFinish()
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
 }
 
-} // namespace comphelper
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

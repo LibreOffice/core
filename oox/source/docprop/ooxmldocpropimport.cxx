@@ -159,7 +159,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     }
 }
 
-} // namespace oox
+} // namespace oox::docprop
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation(

@@ -91,4 +91,44 @@ void attr_bad() {
 }
 #endif
 
+#if 0
+// no warning expected
+namespace xxx::yyy
+{
+}
+namespace xxx::yyy {
+}
+// expected-error@+1 {{statement left brace mis-aligned [loplugin:indentation]}}
+namespace xxx::yyy
+  {
+// expected-error@+1 {{statement right brace mis-aligned [loplugin:indentation]}}
+  }
+namespace xxx::yyy
+{
+ // expected-error@+1 {{statement right brace mis-aligned [loplugin:indentation]}}
+  }
+// expected-error@+1 {{statement left brace mis-aligned [loplugin:indentation]}}
+namespace xxx::yyy
+  {
+}
+namespace xxx::yyy {
+// expected-error@+1 {{statement right brace mis-aligned [loplugin:indentation]}}
+  }
+namespace xxx::yyy
+{
+} // fooo baaaar
+// expected-error@-1 {{incorrect comment at end of namespace xxx::yyy [loplugin:indentation]}}
+namespace aaa::bbb
+{
+} // namespace foo
+// expected-error@-1 {{incorrect comment at end of namespace aaa::bbb [loplugin:indentation]}}
+namespace xxx::yyy
+{
+} // xxx::yyy
+// no warning expected
+namespace com { namespace sun { namespace star { } } }
+// no warning expected
+namespace com::sun::star::uno { class XComponentContext; }
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

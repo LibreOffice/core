@@ -56,7 +56,7 @@ namespace
 }
 
 namespace sw::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayRanges::createOverlayObjectPrimitive2DSequence()
         {
             const sal_uInt32 nCount(getRanges().size());
@@ -172,6 +172,6 @@ namespace sw::overlay
             }
         }
 
-    } // end of namespace sdr
+} // end of namespace sw::overlay
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

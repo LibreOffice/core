@@ -27,7 +27,7 @@
 #include <basegfx/utils/rectcliptools.hxx>
 
 namespace basegfx::utils
-    {
+{
         B2DPolyPolygon clipPolygonOnParallelAxis(const B2DPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke)
         {
             B2DPolyPolygon aRetval;
@@ -812,6 +812,6 @@ namespace basegfx::utils
             return aResult;
         }
 
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <odbc/OFunctions.hxx>
 
 namespace connectivity::odbc
-    {
+{
         namespace {
 
         class ORealOdbcDriver : public ODBCDriver
@@ -287,6 +287,6 @@ SQLHANDLE ORealOdbcDriver::EnvironmentHandle(OUString &_rPath)
 }
 
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

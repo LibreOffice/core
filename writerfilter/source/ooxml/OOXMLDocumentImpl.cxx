@@ -881,6 +881,7 @@ OOXMLDocumentFactory::createDocument
     return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor);
 }
 
-}}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

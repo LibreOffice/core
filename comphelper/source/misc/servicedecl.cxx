@@ -155,6 +155,6 @@ void* component_getFactoryHelper( const char* pImplName,
     return nullptr;
 }
 
-} // namespace comphelper
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

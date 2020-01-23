@@ -201,6 +201,6 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
