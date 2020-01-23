@@ -20,14 +20,11 @@
 #include "vbarange.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <ooo/vba/word/WdFieldType.hpp>
-#include <swtypes.hxx>
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>

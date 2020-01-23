@@ -42,10 +42,7 @@
 #include <ooo/vba/word/XApplicationOutgoing.hpp>
 #include <ooo/vba/word/XBookmarks.hpp>
 #include <comphelper/processfactory.hxx>
-#include <basic/sbuno.hxx>
 #include <editeng/acorrcfg.hxx>
-#include "wordvbahelper.hxx"
-#include <docsh.hxx>
 #include <swdll.hxx>
 #include <swmodule.hxx>
 #include "vbalistgalleries.hxx"

@@ -701,3 +701,41 @@ blacklist:
     sw/source/ui/fldui/flddinf.cxx:
     # Needed for direct member access
     - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbacolumn.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbafield.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbafind.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbaframe.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbafont.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    sw/source/ui/vba/vbaheaderfooter.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbaglobals.cxx:
+    # Needed for extern functions
+    - service.hxx
+    sw/source/ui/vba/vbalisttemplate.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbaparagraphformat.cxx:
+    # Actually needed
+    - com/sun/star/style/ParagraphAdjust.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    sw/source/ui/vba/vbasystem.cxx:
+    # Needed on WIN
+    - o3tl/char16_t2wchar_t.hxx
+    sw/source/ui/vba/vbarow.cxx:
+    # Actually needed
+    - com/sun/star/frame/XModel.hpp
+    sw/source/ui/vba/vbatabstops.cxx:
+    # Actually needed
+    - com/sun/star/beans/XPropertySet.hpp
