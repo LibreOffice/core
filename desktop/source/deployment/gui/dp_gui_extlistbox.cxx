@@ -900,7 +900,7 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     PackageState eState = TheExtensionManager::getPackageState( xPackage );
     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
-    TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
+    TEntry_Impl pEntry = std::make_shared<Entry_Impl>( xPackage, eState, bLocked );
 
     // Don't add empty entries
     if ( pEntry->m_sTitle.isEmpty() )

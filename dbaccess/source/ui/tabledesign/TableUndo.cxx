@@ -163,7 +163,7 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
     while( nIndex != SFX_ENDOFSELECTION )
     {
         pOriginalRow = (*pOriginalRows)[nIndex];
-        pNewRow.reset(new OTableRow( *pOriginalRow, nIndex ));
+        pNewRow = std::make_shared<OTableRow>( *pOriginalRow, nIndex );
         m_aDeletedRows.push_back( pNewRow);
 
         nIndex = pOwner->NextSelectedRow();
@@ -185,7 +185,7 @@ void OTableEditorDelUndoAct::Undo()
 
     for (auto const& deletedRow : m_aDeletedRows)
     {
-        pNewOrigRow.reset(new OTableRow( *deletedRow ));
+        pNewOrigRow = std::make_shared<OTableRow>( *deletedRow );
         nPos = deletedRow->GetPos();
         pOriginalRows->insert( pOriginalRows->begin()+nPos,pNewOrigRow);
     }
@@ -245,7 +245,7 @@ void OTableEditorInsUndoAct::Redo()
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     for (auto const& insertedRow : m_vInsertedRows)
     {
-        pRow.reset(new OTableRow( *insertedRow ));
+        pRow = std::make_shared<OTableRow>( *insertedRow );
         pRowList->insert( pRowList->begin()+nInsertRow ,pRow );
         nInsertRow++;
     }

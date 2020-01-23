@@ -1022,7 +1022,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             if(mbEnableDrawingLayerFillStyles)
             {
                 // create FillAttributes directly from DrawingLayer FillStyle entries
-                aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
+                aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rTmpSet);
             }
             else
             {
@@ -1035,7 +1035,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                    aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                    aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
                 }
             }
 
@@ -1058,7 +1058,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             if(mbEnableDrawingLayerFillStyles)
             {
                 // create FillAttributes directly from DrawingLayer FillStyle entries
-                aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
+                aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rTmpSet);
             }
             else
             {
@@ -1071,7 +1071,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                    aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                    aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
                 }
             }
 
@@ -1085,7 +1085,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     if(mbEnableDrawingLayerFillStyles)
     {
         // create FillAttributes directly from DrawingLayer FillStyle entries
-        aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rSet));
+        aPageFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rSet);
     }
     else
     {
@@ -1098,7 +1098,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-            aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+            aPageFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
         }
     }
 
@@ -1149,7 +1149,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         if(mbEnableDrawingLayerFillStyles)
         {
             // create FillAttributes directly from DrawingLayer FillStyle entries
-            aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rHeaderSet));
+            aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rHeaderSet);
         }
         else
         {
@@ -1162,7 +1162,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
             }
         }
 
@@ -1203,7 +1203,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         if(mbEnableDrawingLayerFillStyles)
         {
             // create FillAttributes directly from DrawingLayer FillStyle entries
-            aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rFooterSet));
+            aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rFooterSet);
         }
         else
         {
@@ -1216,7 +1216,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
+                aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
             }
         }
 

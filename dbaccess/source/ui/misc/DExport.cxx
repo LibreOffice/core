@@ -670,7 +670,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 
 void ODatabaseExport::createRowSet()
 {
-    m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions)));
+    m_pUpdateHelper = std::make_shared<OParameterUpdateHelper>(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions));
 }
 
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)

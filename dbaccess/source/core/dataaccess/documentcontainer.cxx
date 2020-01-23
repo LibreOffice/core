@@ -96,7 +96,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xO
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, cppu::UnoType<decltype(m_pImpl->m_aProps.aTitle)>::get());
 
-    setElementApproval( PContainerApprove( new LocalNameApproval ) );
+    setElementApproval( std::make_shared<LocalNameApproval>() );
 }
 
 ODocumentContainer::~ODocumentContainer()
@@ -256,7 +256,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         TContentPtr pElementImpl;
         if ( bNew || ( aFind == rDefinitions.end() ) )
         {
-            pElementImpl.reset( new OContentHelper_Impl );
+            pElementImpl = std::make_shared<OContentHelper_Impl>();
             if ( !bNew )
                 pElementImpl->m_aProps.aTitle = sName;
 
@@ -317,7 +317,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         TContentPtr pElementImpl;
         if ( aFind == rDefinitions.end() )
         {
-            pElementImpl.reset(new ODefinitionContainer_Impl);
+            pElementImpl = std::make_shared<ODefinitionContainer_Impl>();
             pElementImpl->m_aProps.aTitle = sName;
             pElementImpl->m_pDataSource = m_pImpl->m_pDataSource;
         }

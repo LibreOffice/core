@@ -814,7 +814,7 @@ void OTableController::loadData()
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
                 xColumn->getPropertyValue(PROPERTY_ALIGN)       >>= nAlign;
 
-            pTabEdRow.reset(new OTableRow());
+            pTabEdRow = std::make_shared<OTableRow>();
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             bool bForce;
@@ -874,7 +874,7 @@ void OTableController::loadData()
     bool bReadRow = !isAddAllowed();
     for(sal_Int32 i=m_vRowList.size(); i < NEWCOLS; i++ )
     {
-        pTabEdRow.reset(new OTableRow());
+        pTabEdRow = std::make_shared<OTableRow>();
         pTabEdRow->SetReadOnly(bReadRow);
         m_vRowList.push_back( pTabEdRow);
     }

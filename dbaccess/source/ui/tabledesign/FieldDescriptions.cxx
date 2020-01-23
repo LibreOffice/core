@@ -576,7 +576,7 @@ SvxCellHorJustify           OFieldDescription::GetHorJustify()          const
 
 TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
 {
-    TOTypeInfoSP pSpecialType( new OTypeInfo() );
+    TOTypeInfoSP pSpecialType = std::make_shared<OTypeInfo>();
     *pSpecialType = *m_pType;
     pSpecialType->nPrecision = GetPrecision();
     pSpecialType->nMaximumScale = static_cast<sal_Int16>(GetScale());

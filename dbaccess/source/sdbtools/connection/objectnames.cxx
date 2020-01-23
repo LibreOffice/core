@@ -307,12 +307,12 @@ namespace sdbtools
             );
         }
 
-        PNameValidation pTableCheck( new PlainExistenceCheck( _rxConnection, xTables ) );
-        PNameValidation pQueryCheck( new PlainExistenceCheck( _rxConnection, xQueries ) );
+        PNameValidation pTableCheck = std::make_shared<PlainExistenceCheck>( _rxConnection, xTables );
+        PNameValidation pQueryCheck = std::make_shared<PlainExistenceCheck>( _rxConnection, xQueries );
         PNameValidation pReturn;
 
         if ( aMeta.supportsSubqueriesInFrom() )
-            pReturn.reset( new CombinedNameCheck( pTableCheck, pQueryCheck ) );
+            pReturn = std::make_shared<CombinedNameCheck>( pTableCheck, pQueryCheck );
         else if ( _nCommandType == CommandType::TABLE )
             pReturn = pTableCheck;
         else
@@ -339,8 +339,8 @@ namespace sdbtools
         }
 
         if ( _nCommandType == CommandType::TABLE )
-            return PNameValidation( new TableValidityCheck( _rxConnection ) );
-        return PNameValidation( new QueryValidityCheck( _rxConnection ) );
+            return std::make_shared<TableValidityCheck>( _rxConnection );
+        return std::make_shared<QueryValidityCheck>( _rxConnection );
     }
 
     // ObjectNames

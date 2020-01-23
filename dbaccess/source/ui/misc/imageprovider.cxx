@@ -94,12 +94,12 @@ namespace dbaui
     }
     // ImageProvider
     ImageProvider::ImageProvider()
-        :m_pData( new ImageProvider_Data )
+        :m_pData( std::make_shared<ImageProvider_Data>() )
     {
     }
 
     ImageProvider::ImageProvider( const Reference< XConnection >& _rxConnection )
-        :m_pData( new ImageProvider_Data )
+        :m_pData( std::make_shared<ImageProvider_Data>() )
     {
         m_pData->xConnection = _rxConnection;
         try

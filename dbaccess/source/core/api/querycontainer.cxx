@@ -63,7 +63,7 @@ OQueryContainer::OQueryContainer(
                 , const Reference< XConnection >& _rxConn
                 , const Reference< XComponentContext >& _rxORB,
                 ::dbtools::WarningsContainer* _pWarnings)
-    :ODefinitionContainer(_rxORB,nullptr,TContentPtr(new ODefinitionContainer_Impl))
+    :ODefinitionContainer(_rxORB,nullptr,std::make_shared<ODefinitionContainer_Impl>())
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)
     ,m_xConnection(_rxConn)
@@ -90,7 +90,7 @@ void OQueryContainer::init()
         m_aDocuments.push_back(m_aDocumentMap.emplace( *pDefinitionName,Documents::mapped_type()).first);
     }
 
-    setElementApproval( PContainerApprove( new ObjectNameApproval( m_xConnection, ObjectNameApproval::TypeQuery ) ) );
+    setElementApproval( std::make_shared<ObjectNameApproval>( m_xConnection, ObjectNameApproval::TypeQuery ) );
 }
 
 rtl::Reference<OQueryContainer> OQueryContainer::create(

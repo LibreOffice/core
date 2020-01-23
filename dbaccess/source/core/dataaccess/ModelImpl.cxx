@@ -1032,7 +1032,7 @@ TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
 
     if ( !rContentPtr.get() )
     {
-        rContentPtr = TContentPtr( new ODefinitionContainer_Impl );
+        rContentPtr = std::make_shared<ODefinitionContainer_Impl>();
         rContentPtr->m_pDataSource = this;
         rContentPtr->m_aProps.aTitle = lcl_getContainerStorageName_throw( _eType );
     }

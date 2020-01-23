@@ -592,7 +592,7 @@ void OQueryTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)
 
 void OQueryTableView::createNewConnection()
 {
-    TTableConnectionData::value_type pData(new OQueryTableConnectionData());
+    TTableConnectionData::value_type pData = std::make_shared<OQueryTableConnectionData>();
     if( openJoinDialog(this,pData,true) )
     {
         OTableWindowMap& rMap = GetTabWinMap();

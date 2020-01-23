@@ -118,7 +118,7 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset(new ImageProvider(sNormalImageID));
+                (*ppProvider) = std::make_shared<ImageProvider>(sNormalImageID);
             return *ppProvider;
         }
 
@@ -143,7 +143,7 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new LabelProvider( pLabelID ) );
+                (*ppProvider) = std::make_shared<LabelProvider>( pLabelID );
             return *ppProvider;
         }
 

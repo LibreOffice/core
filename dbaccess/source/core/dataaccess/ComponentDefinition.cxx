@@ -271,7 +271,7 @@ com_sun_star_comp_dba_OComponentDefinition(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new dbaccess::OComponentDefinition(
-            context, nullptr, dbaccess::TContentPtr(new dbaccess::OComponentDefinition_Impl)));
+            context, nullptr, std::make_shared<dbaccess::OComponentDefinition_Impl>()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

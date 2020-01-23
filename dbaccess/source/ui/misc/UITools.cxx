@@ -436,7 +436,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
         // Loop on the result set until we reach end of file
         while (xRs->next())
         {
-            TOTypeInfoSP pInfo(new OTypeInfo());
+            TOTypeInfoSP pInfo = std::make_shared<OTypeInfo>();
             sal_Int32 nPos = 1;
             if ( aTypes.empty() )
             {

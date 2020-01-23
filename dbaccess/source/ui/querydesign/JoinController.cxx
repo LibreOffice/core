@@ -270,7 +270,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
 void OJoinController::runDialogAsync()
 {
     assert(!m_xAddTableDialog);
-    m_xAddTableDialog.reset(new OAddTableDlg(getFrameWeld(), impl_getDialogContext()));
+    m_xAddTableDialog = std::make_shared<OAddTableDlg>(getFrameWeld(), impl_getDialogContext());
     {
         weld::WaitObject aWaitCursor(getFrameWeld());
         m_xAddTableDialog->Update();

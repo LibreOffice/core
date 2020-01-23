@@ -724,7 +724,7 @@ void OTableEditorCtrl::CopyRows()
         OSL_ENSURE(pRow,"OTableEditorCtrl::CopyRows: Row is NULL!");
         if ( pRow && pRow->GetActFieldDescr() )
         {
-            pClipboardRow.reset(new OTableRow( *pRow ));
+            pClipboardRow = std::make_shared<OTableRow>( *pRow );
             vClipboardList.push_back( pClipboardRow);
         }
     }
@@ -782,7 +782,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             vInsertedUndoRedoRows.reserve(nSize);
             for(sal_Int32 i=0;i < nSize;++i)
             {
-                pRow.reset(new OTableRow());
+                pRow = std::make_shared<OTableRow>();
                 ReadOTableRow( *aStreamRef, *pRow );
                 pRow->SetReadOnly( false );
                 sal_Int32 nType = pRow->GetActFieldDescr()->GetType();
