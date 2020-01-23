@@ -373,11 +373,6 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-void GalleryBrowser1::ShowContextMenu(const CommandEvent& rCEvt)
-{
-    PopupMenuHdl(rCEvt);
-}
-
 IMPL_LINK(GalleryBrowser1, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bRet = false;

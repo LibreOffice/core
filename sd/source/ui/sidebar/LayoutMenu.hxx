@@ -104,7 +104,6 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
     using Window::GetWindow;
-    using ValueSet::StartDrag;
 
 private:
     ViewShellBase& mrBase;

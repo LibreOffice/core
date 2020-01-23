@@ -85,9 +85,6 @@ public:
     void                    SelectTheme( sal_uInt16 nThemePos ) { mxThemes->select( nThemePos ); SelectThemeHdl( *mxThemes ); }
     OUString                GetSelectedTheme() const { return mxThemes->get_selected_text(); }
     void                    GrabFocus();
-
-    void                    ShowContextMenu(const CommandEvent& rCEvt);
-    bool                    KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow );
 };
 
 #endif // INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX

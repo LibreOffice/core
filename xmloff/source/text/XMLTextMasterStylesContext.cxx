@@ -37,14 +37,6 @@ bool XMLTextMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 }
 
 XMLTextMasterStylesContext::XMLTextMasterStylesContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
-{
-}
-
-XMLTextMasterStylesContext::XMLTextMasterStylesContext(
         SvXMLImport& rImport ) :
     SvXMLStylesContext( rImport )
 {

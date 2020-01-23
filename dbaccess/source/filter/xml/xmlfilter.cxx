@@ -588,28 +588,6 @@ void ODBFilter::fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap)
 
 }
 
-const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
-{
-    if (!m_pDocContentElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_CONTENT_STYLES      },
-            { XML_NAMESPACE_OOO,    XML_STYLES,             XML_TOK_CONTENT_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_CONTENT_AUTOSTYLES  },
-            { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_CONTENT_AUTOSTYLES  },
-            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_CONTENT_SCRIPTS     },
-            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_CONTENT_BODY        },
-            { XML_NAMESPACE_OOO,    XML_BODY,               XML_TOK_CONTENT_BODY        },
-            XML_TOKEN_MAP_END
-        };
-        m_pDocContentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pDocContentElemTokenMap;
-}
-
-
-
 SvXMLImportContext* ODBFilter::CreateStylesContext( bool bIsAutoStyle )
 {
     SvXMLImportContext *pContext = new OTableStylesContext(*this, bIsAutoStyle);

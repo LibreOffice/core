@@ -271,8 +271,6 @@ private:
     SVT_DLLPRIVATE void Format(vcl::RenderContext& rRenderContext);
 
 protected:
-    void StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
-
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 public:
@@ -367,7 +365,6 @@ public:
 
     void            SetFormat();
 
-    void            StartSelection();
     void            EndSelection();
 
     Size            CalcWindowSizePixel(const Size& rItemSize,

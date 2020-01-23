@@ -40,9 +40,6 @@ protected:
 
 public:
 
-    XMLTextMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList);
     XMLTextMasterStylesContext( SvXMLImport& rImport );
 
     virtual ~XMLTextMasterStylesContext() override;

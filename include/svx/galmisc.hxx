@@ -149,7 +149,6 @@ public:
                                     virtual ~GalleryTransferable() override;
 
     void                            SelectObject(sal_uInt32 nObjectPos);
-    sal_uInt32                      GetObject() const { return mnObjectPos; }
 
     // TransferableHelper
     virtual void                    AddSupportedFormats() override;

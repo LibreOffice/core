@@ -243,7 +243,6 @@ class ScXMLImport: public SvXMLImport
     rtl::Reference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
-    std::unique_ptr<SvXMLTokenMap>           pDocElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>           pContentValidationElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>           pContentValidationMessageElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>           pTableElemTokenMap;
@@ -337,7 +336,6 @@ public:
     const rtl::Reference < XMLPropertySetMapper >& GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
-    const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetContentValidationElemTokenMap();
     const SvXMLTokenMap& GetContentValidationMessageElemTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();

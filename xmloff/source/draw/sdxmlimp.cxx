@@ -434,29 +434,6 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 }
 
-const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
-{
-    if(!mpDocElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aDocElemTokenMap[] =
-{
-    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS       },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES          },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES      },
-    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
-    { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META            },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT          },
-    { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY            },
-    { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS        },
-    XML_TOKEN_MAP_END
-};
-
-        mpDocElemTokenMap = std::make_unique<SvXMLTokenMap>(aDocElemTokenMap);
-    }
-
-    return *mpDocElemTokenMap;
-}
-
 const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
 {
     if(!mpBodyElemTokenMap)
