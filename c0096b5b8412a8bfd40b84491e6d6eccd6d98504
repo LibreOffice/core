@@ -16,6 +16,24 @@
       "revId": "c0096b5b8412a8bfd40b84491e6d6eccd6d98504",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f42410ad_6c13546d",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-01-23T23:43:54Z",
+      "side": 1,
+      "message": "Amusing \u003d) I guess we should actually hold the SolarMutex there but without more thinking I can\u0027t recall why ;-)",
+      "parentUuid": "d3bd805d_5901a0a4",
+      "revId": "c0096b5b8412a8bfd40b84491e6d6eccd6d98504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
