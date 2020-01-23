@@ -2,11 +2,11 @@ basctl/source/basicide/moduldlg.hxx:130
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:182
+basctl/source/inc/bastype2.hxx:180
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:251
+basctl/source/inc/bastype2.hxx:249
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/IDEComboBox.hxx:101
+basctl/source/inc/IDEComboBox.hxx:104
     basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basegfx/source/polygon/b2dpolygontriangulator.cxx:113
     basegfx::(anonymous namespace)::Triangulator maNewEdgeEntries std::vector<std::unique_ptr<EdgeEntry> >
@@ -284,10 +284,10 @@ emfio/inc/mtftools.hxx:511
     emfio::MtfTools mrclBounds tools::Rectangle
 extensions/source/propctrlr/genericpropertyhandler.hxx:63
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
-extensions/source/propctrlr/inspectorhelpwindow.hxx:33
-    pcr::InspectorHelpWindow m_nMinLines sal_Int32
-extensions/source/propctrlr/inspectorhelpwindow.hxx:34
-    pcr::InspectorHelpWindow m_nMaxLines sal_Int32
+extensions/source/propctrlr/propertyeditor.hxx:62
+    pcr::OPropertyEditor m_nMinHelpLines sal_Int32
+extensions/source/propctrlr/propertyeditor.hxx:63
+    pcr::OPropertyEditor m_nMaxHelpLines sal_Int32
 extensions/source/scanner/scanner.hxx:47
     ScannerManager mpData void *
 framework/inc/services/layoutmanager.hxx:248
@@ -402,10 +402,16 @@ include/svx/float3d.hxx:171
     Svx3DWin pControllerItem std::unique_ptr<Svx3DCtrlItem>
 include/svx/fmtools.hxx:134
     FmXDisposeListener m_pAdapter rtl::Reference<FmXDisposeMultiplexer>
+include/svx/galctrl.hxx:39
+    GalleryPreview mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
+include/svx/galctrl.hxx:92
+    GalleryIconView mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 include/svx/gridctrl.hxx:254
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
+include/svx/sidebar/LinePropertyPanelBase.hxx:110
+    svx::sidebar::LinePropertyPanelBase mxArrowsDispatch std::unique_ptr<ToolbarUnoDispatcher>
 include/svx/srchdlg.hxx:165
     SvxSearchDialog pSearchController std::unique_ptr<SvxSearchController>
 include/svx/srchdlg.hxx:166
@@ -420,8 +426,6 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:158
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/field.hxx:157
-    NumericFormatter mnFieldValue sal_Int64
 include/vcl/menu.hxx:454
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:54
@@ -752,6 +756,8 @@ svl/source/misc/inethist.cxx:45
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
 svl/source/undo/undo.cxx:316
     svl::undo::impl::UndoManagerGuard m_aUndoActionsCleanup ::std::vector<std::unique_ptr<SfxUndoAction> >
+svx/inc/galbrws2.hxx:85
+    GalleryBrowser2 mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 svx/inc/sdr/overlay/overlaytools.hxx:41
     drawinglayer::primitive2d::OverlayStaticRectanglePrimitive mfRotation const double
 svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx:46
@@ -772,11 +778,13 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:85
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:86
     svx::sidebar::LinePropertyPanel maDashControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:92
+svx/source/sidebar/line/LinePropertyPanel.hxx:88
+    svx::sidebar::LinePropertyPanel maLineStyleListControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:89
     svx::sidebar::LinePropertyPanel maTransControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:93
+svx/source/sidebar/line/LinePropertyPanel.hxx:90
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:94
+svx/source/sidebar/line/LinePropertyPanel.hxx:91
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
 svx/source/sidebar/lists/ListsPropertyPanel.hxx:44
     svx::sidebar::ListsPropertyPanel mxNumBulletDispatcher std::unique_ptr<ToolbarUnoDispatcher>
@@ -1078,7 +1086,7 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:266
     chelp::Databases m_aZipFileTable chelp::Databases::ZipFileTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:272
     chelp::Databases m_aCollatorTable chelp::Databases::CollatorTable
-xmloff/source/draw/ximpstyl.hxx:224
+xmloff/source/draw/ximpstyl.hxx:222
     SdXMLMasterStylesContext maMasterPageList std::vector<rtl::Reference<SdXMLMasterPageContext> >
 xmloff/source/forms/elementexport.hxx:47
     xmloff::OElementExport m_pXMLElement std::unique_ptr<SvXMLElementExport>

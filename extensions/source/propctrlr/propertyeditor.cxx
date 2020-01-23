@@ -40,8 +40,6 @@ namespace pcr
         , m_pObserver(nullptr)
         , m_nNextId(1)
         , m_bHasHelpSection(false)
-        , m_nMinHelpLines(0)
-        , m_nMaxHelpLines(0)
     {
         PropertyHandlerHelper::setBuilderParent(rContext, m_xControlHoldingParent.get());
 
@@ -219,12 +217,6 @@ namespace pcr
                 continue;
             setHelpSectionText( *pPage, &rHelpText );
         }
-    }
-
-    void OPropertyEditor::SetHelpLineLimites( sal_Int32 nMinLines, sal_Int32 nMaxLines )
-    {
-        m_nMinHelpLines = nMinLines;
-        m_nMaxHelpLines = nMaxLines;
     }
 
     void OPropertyEditor::enableHelpSection( OBrowserPage& rPage, const void* )

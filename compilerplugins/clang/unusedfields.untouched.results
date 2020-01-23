@@ -40,14 +40,10 @@ dbaccess/source/core/inc/databasecontext.hxx:95
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2776
-      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:45
     ScannerManager maProtector osl::Mutex
-framework/inc/dispatch/popupmenudispatcher.hxx:114
-    framework::PopupMenuDispatcher m_mutex osl::Mutex
 helpcompiler/inc/HelpCompiler.hxx:196
     HelpCompiler lang const std::string
 include/basegfx/DrawCommands.hxx:142
@@ -69,9 +65,9 @@ include/sfx2/msg.hxx:117
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs const sal_uInt16
 include/sfx2/msg.hxx:132
-    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:132
     SfxType1 pType const std::type_info *
+include/sfx2/msg.hxx:132
+    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:132
     SfxType1 nAttribs sal_uInt16
 include/sfx2/msg.hxx:132
@@ -256,8 +252,6 @@ pyuno/source/module/pyuno_impl.hxx:223
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:323
     pyuno::stRuntimeImpl ob_base PyObject
-reportdesign/source/filter/xml/xmlfilter.hxx:70
-    rptxml::ORptFilter m_pDocElemTokenMap ::std::unique_ptr<SvXMLTokenMap>
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/qa/osl/condition/osl_Condition.cxx:72
@@ -374,12 +368,16 @@ svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::PKIStatusInfo statusString SECItem
 svl/source/crypto/cryptosign.cxx:285
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
+svx/inc/galbrws2.hxx:79
+    GalleryBrowser2 maMiscOptions class SvtMiscOptions
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:312
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/tbxctrls/layctrl.cxx:432
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
+sw/qa/extras/uiwriter/uiwriter2.cxx:70
+      class SwUiWriterTest2 *
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:75
@@ -446,7 +444,7 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:4914
+vcl/unx/gtk3/gtk3gtkinst.cxx:5071
     (anonymous namespace)::CrippledViewport viewport GtkViewport
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>

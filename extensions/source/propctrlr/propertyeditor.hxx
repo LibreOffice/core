@@ -59,8 +59,6 @@ namespace pcr
         sal_uInt16                  m_nNextId;
         Link<LinkParamNone*,void>   m_aPageActivationHandler;
         bool                        m_bHasHelpSection;
-        sal_Int32                   m_nMinHelpLines;
-        sal_Int32                   m_nMaxHelpLines;
 
         MapStringToPageId           m_aPropertyPageIds;
         std::map<sal_uInt16, PropertyPage> m_aShownPages;
@@ -76,7 +74,6 @@ namespace pcr
         void                        EnableHelpSection( bool _bEnable );
         bool                        HasHelpSection() const { return m_bHasHelpSection; }
         void                        SetHelpText( const OUString& _rHelpText );
-        void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
         void                        SetHelpId( const OString& sHelpId );
         sal_uInt16                  AppendPage( const OUString& r, const OString& _rHelpId );
