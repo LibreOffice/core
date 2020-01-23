@@ -1989,7 +1989,7 @@ void SwDrawContact::GetAnchoredObjs(std::vector<SwAnchoredObject*>& o_rAnchoredO
 // not possible since we have no OutputDevice, but define the geometry itself.
 
 namespace sdr::contact
-    {
+{
         namespace {
 
         class VOCOfDrawVirtObj : public ViewObjectContactOfSdrObj
@@ -2037,10 +2037,10 @@ namespace sdr::contact
         };
 
         }
-    } // end of namespace sdr
+} // end of namespace sdr::contact
 
 namespace sdr::contact
-    {
+{
         /// recursively collect primitive data from given VOC with given offset
         static void impAddPrimitivesFromGroup(const ViewObjectContact& rVOC, const basegfx::B2DHomMatrix& rOffsetMatrix, const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rxTarget)
         {
@@ -2145,7 +2145,7 @@ namespace sdr::contact
             return *(new VOCOfDrawVirtObj(rObjectContact, *this));
         }
 
-    } // end of namespace sdr
+} // end of namespace sdr::contact
 
 /// implementation of class <SwDrawVirtObj>
 std::unique_ptr<sdr::contact::ViewContact> SwDrawVirtObj::CreateObjectSpecificViewContact()

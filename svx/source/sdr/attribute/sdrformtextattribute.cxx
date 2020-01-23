@@ -141,7 +141,7 @@ namespace
 
 
 namespace drawinglayer::attribute
-    {
+{
         class ImpSdrFormTextAttribute
         {
         public:
@@ -369,6 +369,7 @@ namespace drawinglayer::attribute
         {
             return mpSdrFormTextAttribute->getFormTextOutline();
         }
-    } // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

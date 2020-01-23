@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 namespace basegfx::utils
-    {
+{
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)
         {
             if( fTools::equalZero( fmod( fRadiant, F_PI2 ) ) )
@@ -452,6 +452,6 @@ namespace basegfx::utils
         {
             return B2DTuple(rMatrix.get(0, nCol), rMatrix.get(1, nCol));
         }
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

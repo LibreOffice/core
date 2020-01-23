@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
-    {
+{
 
         ImplBitmap::ImplBitmap( const CanvasSharedPtr&                      rParentCanvas,
                                 const uno::Reference< rendering::XBitmap >& rBitmap ) :
@@ -106,6 +106,6 @@ namespace cppcanvas::internal
         {
             return mxBitmap;
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewContactOfSdrCircObj::ViewContactOfSdrCircObj(SdrCircObj& rCircObj)
         :   ViewContactOfSdrRectObj(rCircObj)
         {
@@ -96,6 +96,7 @@ namespace sdr::contact
                 return drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

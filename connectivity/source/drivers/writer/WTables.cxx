@@ -40,6 +40,6 @@ sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
     return xRet;
 }
 
-} // namespace connectivity
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

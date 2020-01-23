@@ -164,6 +164,6 @@ css::uno::Sequence< OUString > SAL_CALL WallFloorWrapper::getSupportedServiceNam
     };
 }
 
-} //  namespace chart
+} //  namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

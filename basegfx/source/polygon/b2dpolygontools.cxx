@@ -40,7 +40,7 @@
 #define STEPSPERQUARTER     (3)
 
 namespace basegfx::utils
-    {
+{
         void openWithGeometryChange(B2DPolygon& rCandidate)
         {
             if(rCandidate.isClosed())
@@ -3485,6 +3485,6 @@ namespace basegfx::utils
             }
         }
 
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

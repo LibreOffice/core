@@ -22,7 +22,7 @@
 
 
 namespace sdr::animation
-    {
+{
         primitiveAnimator::primitiveAnimator()
         :   Scheduler()
         {
@@ -31,6 +31,7 @@ namespace sdr::animation
         primitiveAnimator::~primitiveAnimator()
         {
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

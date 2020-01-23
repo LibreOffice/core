@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::tools
-    {
+{
         uno::Sequence< double > intSRGBAToDoubleSequence( IntSRGBA aColor  )
         {
             uno::Sequence< double > aRes( 4 );
@@ -44,6 +44,6 @@ namespace cppcanvas::tools
                               static_cast<sal_uInt8>( 255*rColor[2] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[3] + .5 ) );
         }
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

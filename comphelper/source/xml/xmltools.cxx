@@ -70,7 +70,7 @@ namespace
 }
 
 namespace comphelper::xml
-    {
+{
         OString makeXMLChaff()
         {
             rtlRandomPool pool = rtl_random_createPool();
@@ -102,5 +102,5 @@ namespace comphelper::xml
 
             return str;
         }
-    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

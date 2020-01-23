@@ -21,7 +21,7 @@
 
 
 namespace sdr::contact
-    {
+{
         DisplayInfo::DisplayInfo()
         :   maProcessLayers(true), // init layer info with all bits set to draw everything on default
             maRedrawArea(),
@@ -83,6 +83,6 @@ namespace sdr::contact
             }
         }
 
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@
 using namespace com::sun::star;
 
 namespace sdr::properties
-    {
+{
         std::unique_ptr<SfxItemSet> TextProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             return std::make_unique<SfxItemSet>(rPool,
@@ -607,6 +607,6 @@ namespace sdr::properties
         {
             return maVersion;
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

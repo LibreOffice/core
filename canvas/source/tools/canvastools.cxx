@@ -63,7 +63,7 @@
 using namespace ::com::sun::star;
 
 namespace canvas::tools
-    {
+{
         geometry::RealSize2D createInfiniteSize2D()
         {
             return geometry::RealSize2D(
@@ -1317,6 +1317,6 @@ namespace canvas::tools
             }
         }
 
-    } // namespace canvas
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

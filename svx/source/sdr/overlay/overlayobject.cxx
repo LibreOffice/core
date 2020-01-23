@@ -31,7 +31,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 namespace sdr::overlay
-    {
+{
         void OverlayObject::objectChange()
         {
             const basegfx::B2DRange aPreviousRange(maBaseRange);
@@ -206,11 +206,8 @@ namespace sdr::overlay
         {
             // default does not need to do anything
         }
-    } // end of namespace sdr
 
 
-namespace sdr::overlay
-    {
         OverlayObjectWithBasePosition::OverlayObjectWithBasePosition(const basegfx::B2DPoint& rBasePos, Color aBaseColor)
         :   OverlayObject(aBaseColor),
             maBasePosition(rBasePos)
@@ -232,6 +229,7 @@ namespace sdr::overlay
                 objectChange();
             }
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

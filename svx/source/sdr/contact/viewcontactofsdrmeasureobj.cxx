@@ -31,7 +31,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewContactOfSdrMeasureObj::ViewContactOfSdrMeasureObj(SdrMeasureObj& rMeasureObj)
         :   ViewContactOfTextObj(rMeasureObj)
         {
@@ -122,6 +122,6 @@ namespace sdr::contact
 
             return drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

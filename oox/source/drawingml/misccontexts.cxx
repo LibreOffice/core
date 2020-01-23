@@ -378,6 +378,6 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

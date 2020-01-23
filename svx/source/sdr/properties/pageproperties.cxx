@@ -29,7 +29,7 @@
 
 
 namespace sdr::properties
-    {
+{
         // create a new itemset
         std::unique_ptr<SfxItemSet> PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
@@ -96,6 +96,6 @@ namespace sdr::properties
         {
             // simply ignore item clearing on page objects
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

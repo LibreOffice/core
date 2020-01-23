@@ -55,6 +55,6 @@ void OWriterCatalog::refreshTables()
         m_pTables = std::make_unique<OWriterTables>(m_xMetaData, *this, m_aMutex, aVector);
 }
 
-} // namespace connectivity
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

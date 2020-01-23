@@ -119,6 +119,6 @@ uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames()
     return { VLC_SERVICENAME };
 }
 
-} // end namespace avmedia
+} // end namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
