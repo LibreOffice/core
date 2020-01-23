@@ -79,7 +79,7 @@ void IMapObject::Write( SvStream& rOStm ) const
     rOStm.WriteBool( bActive );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
 
-    std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, StreamMode::WRITE ));
+    IMapCompat aCompat( rOStm, StreamMode::WRITE );
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                      // V4
@@ -108,7 +108,7 @@ void IMapObject::Read( SvStream& rIStm )
 
     // make URL absolute
     aURL = URIHelper::SmartRel2Abs( INetURLObject(""), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::Unambiguous );
-    std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, StreamMode::READ ));
+    IMapCompat aCompat( rIStm, StreamMode::READ );
 
     ReadIMapObject( rIStm );
 
