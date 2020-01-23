@@ -692,11 +692,11 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                         if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
                             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
                         {
-                            std::unique_ptr<VersionCompat> pCompat(new VersionCompat( *pIStm, StreamMode::READ ));
+                            VersionCompat aCompat( *pIStm, StreamMode::READ );
 
                             pIStm->ReadUInt32( nThemeId );
 
-                            if( pCompat->GetVersion() >= 2 )
+                            if( aCompat.GetVersion() >= 2 )
                             {
                                 pIStm->ReadCharAsBool( bThemeNameFromResource );
                             }
@@ -1417,13 +1417,13 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
         {
-            std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+            VersionCompat   aCompat( rIStm, StreamMode::READ );
             sal_uInt32      nTemp32;
             bool            bThemeNameFromResource = false;
 
             rIStm.ReadUInt32( nTemp32 );
 
-            if( pCompat->GetVersion() >= 2 )
+            if( aCompat.GetVersion() >= 2 )
             {
                 rIStm.ReadCharAsBool( bThemeNameFromResource );
             }
