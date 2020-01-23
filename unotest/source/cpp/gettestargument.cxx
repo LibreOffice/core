@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <unotest/gettestargument.hxx>
 

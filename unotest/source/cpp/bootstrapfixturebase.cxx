@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <unotest/bootstrapfixturebase.hxx>
-#include <rtl/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <basic/sbstar.hxx>
 
