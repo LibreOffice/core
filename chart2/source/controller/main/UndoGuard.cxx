@@ -41,7 +41,7 @@ UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< docume
     ,m_aUndoString( i_undoString )
     ,m_bActionPosted( false )
 {
-    m_pDocumentSnapshot.reset( new ChartModelClone( m_xChartModel, i_facet ) );
+    m_pDocumentSnapshot = std::make_shared<ChartModelClone>( m_xChartModel, i_facet );
 }
 
 UndoGuard::~UndoGuard()

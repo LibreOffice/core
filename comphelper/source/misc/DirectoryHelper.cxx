@@ -46,7 +46,7 @@ bool DirectoryHelper::fileExists(const OUString& rBaseURL)
 {
     if (!rBaseURL.isEmpty())
     {
-        FileSharedPtr aBaseFile(new osl::File(rBaseURL));
+        FileSharedPtr aBaseFile = std::make_shared<osl::File>(rBaseURL);
 
         return (osl::File::E_None == aBaseFile->open(osl_File_OpenFlag_Read));
     }

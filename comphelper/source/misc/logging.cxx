@@ -65,7 +65,7 @@ namespace comphelper
     }
 
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const char* _pAsciiLoggerName )
-        :m_pImpl( new EventLogger_Impl( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
+        :m_pImpl( std::make_shared<EventLogger_Impl>( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
     {
     }
 

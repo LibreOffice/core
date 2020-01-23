@@ -2167,7 +2167,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         return apVTitle;
 
     //create title
-    apVTitle.reset(new VTitle(xTitle));
+    apVTitle = std::make_shared<VTitle>(xTitle);
     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
     apVTitle->init(xPageShapes, xShapeFactory, aCID);
     apVTitle->createShapes(awt::Point(0,0), rPageSize);
@@ -2969,7 +2969,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     if (aParam.maRemainingSpace.Width <= 0|| aParam.maRemainingSpace.Height <= 0)
         return;
 
-    aParam.mpSeriesPlotterContainer.reset(new SeriesPlotterContainer(m_aVCooSysList));
+    aParam.mpSeriesPlotterContainer = std::make_shared<SeriesPlotterContainer>(m_aVCooSysList);
     aParam.mpSeriesPlotterContainer->initializeCooSysAndSeriesPlotter( mrChartModel );
     if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
     {

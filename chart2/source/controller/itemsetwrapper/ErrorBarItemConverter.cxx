@@ -84,7 +84,7 @@ ErrorBarItemConverter::ErrorBarItemConverter(
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_spGraphicConverter( new GraphicPropertyItemConverter(
+        m_spGraphicConverter( std::make_shared<GraphicPropertyItemConverter>(
                                   rPropertySet, rItemPool, rDrawModel,
                                   xNamedPropertyContainerFactory,
                                   GraphicObjectType::LineProperties )),

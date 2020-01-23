@@ -639,7 +639,7 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
 
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
-        m_spChart2ModelContact( new Chart2ModelContact( xContext ) ),
+        m_spChart2ModelContact( std::make_shared<Chart2ModelContact>( xContext ) ),
         m_bUpdateAddIn( true ),
         m_bIsDisposed( false )
 {

@@ -851,9 +851,9 @@ void DataBrowser::SetDataFromModel(
     m_xChartDoc.set( xChartDoc );
 
     m_apDataBrowserModel.reset( new DataBrowserModel( m_xChartDoc, xContext ));
-    m_spNumberFormatterWrapper.reset(
-        new NumberFormatterWrapper(
-            Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY )));
+    m_spNumberFormatterWrapper =
+        std::make_shared<NumberFormatterWrapper>(
+            Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ));
 
     m_aNumberEditField->SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
 
