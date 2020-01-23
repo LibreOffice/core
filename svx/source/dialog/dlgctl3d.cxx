@@ -29,7 +29,6 @@
 #include <svx/cube3d.hxx>
 #include <svx/scene3d.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <svx/helperhittest3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/polygn3d.hxx>
