@@ -108,7 +108,7 @@
     <string name="storage_provider_settings">Speicheranbieter-Einstellungen</string>
     <string name="owncloud_settings">ownCloud-Einstellungen</string>
     <string name="physical_storage_settings">Einstellungen für physikalischen Speicher</string>
-    <string name="external_sd_path">Pfad zur exernen SD-Karte</string>
+    <string name="external_sd_path">Pfad zur externen SD-Karte</string>
     <string name="otg_device_path">Pfad zum OTG-Gerät</string>
     <string name="otg_warning">Experimentelles Feature: Nur verwenden, wenn OTG-Gerät beschreibbar ist.</string>
     <string name="server_url">Server-URL</string>
