@@ -238,54 +238,6 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-class SAL_WARN_UNUSED SvxLightCtl3D final : public Control
-{
-    // local controls
-    VclPtr<Svx3DLightControl>  maLightControl;
-    VclPtr<ScrollBar>          maHorScroller;
-    VclPtr<ScrollBar>          maVerScroller;
-    VclPtr<PushButton>         maSwitcher;
-
-    // callback for interactive changes
-    Link<SvxLightCtl3D*,void>  maUserSelectionChangeCallback;
-
-public:
-    SvxLightCtl3D(vcl::Window* pParent);
-    virtual ~SvxLightCtl3D() override;
-    virtual void dispose() override;
-
-    // react to size changes
-    virtual void Resize() override;
-    void NewLayout();
-
-    // check the selection for validity
-    void CheckSelection();
-
-    // bring further settings to the outside world
-    Svx3DLightControl& GetSvx3DLightControl() { return *maLightControl; }
-
-    // register user callback
-    void SetUserSelectionChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserSelectionChangeCallback = aNew; }
-
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
-
-    virtual Size GetOptimalSize() const override;
-
-private:
-
-    DECL_LINK( InternalInteractiveChange, Svx3DLightControl*, void);
-    DECL_LINK( InternalSelectionChange, Svx3DLightControl*, void);
-    DECL_LINK( ScrollBarMove, ScrollBar*, void);
-    DECL_LINK( ButtonPress, Button*, void);
-
-    // initialize local parameters
-    void Init();
-
-    void move( double fDeltaHor, double fDeltaVer );
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC LightCtl3D
 {
     // local controls
