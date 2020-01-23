@@ -52,7 +52,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/weldutils.hxx>
 #include <unotools/fontoptions.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -4159,8 +4158,6 @@ void SvxColorListBox::Selected(const NamedColor& rColor)
     if (m_aSelectedLink.IsSet())
         m_aSelectedLink.Call(*this);
 }
-
-VCL_BUILDER_FACTORY(SvxColorListBox)
 
 SvxColorListBox::~SvxColorListBox()
 {
