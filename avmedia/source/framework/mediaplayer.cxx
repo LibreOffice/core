@@ -25,7 +25,6 @@
 #include <helpids.h>
 
 #include <svl/stritem.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

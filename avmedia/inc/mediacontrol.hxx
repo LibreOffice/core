@@ -26,8 +26,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/image.hxx>
 #include <vcl/fixed.hxx>
 #include <avmedia/MediaControlBase.hxx>
 

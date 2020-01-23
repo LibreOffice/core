@@ -29,7 +29,6 @@
 #include <com/sun/star/util/URL.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <cppuhelper/weak.hxx>
 
@@ -37,8 +36,6 @@
 #include <vcl/idle.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
-#include <avmedia/mediawindow.hxx>
-#include <osl/mutex.hxx>
 
 namespace avmedia{
 
