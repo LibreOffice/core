@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include <iostream>
 #include "mediawindow_impl.hxx"
 #include "mediaevent_impl.hxx"
@@ -27,14 +25,12 @@
 #include <helpids.h>
 
 #include <algorithm>
-#include <cmath>
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -43,10 +39,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/sysdata.hxx>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLContext.hxx>
-#endif
 using namespace ::com::sun::star;
 
 namespace avmedia::priv {

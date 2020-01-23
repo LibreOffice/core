@@ -30,7 +30,6 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <ucbhelper/content.hxx>

@@ -24,8 +24,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-#include <rtl/ustrbuf.hxx>
-
+#include <avmedia/mediawindow.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>

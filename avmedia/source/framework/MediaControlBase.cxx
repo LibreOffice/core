@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <avmedia/MediaControlBase.hxx>
-#include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/slider.hxx>
