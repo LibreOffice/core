@@ -181,6 +181,7 @@ public:
         assert(nCnt < m_HiddenChg.size());
         return m_HiddenChg[ nCnt ];
     }
+    TextFrameIndex NextBookmark(TextFrameIndex nPos) const;
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,
             std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
