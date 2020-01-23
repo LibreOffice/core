@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-17 19:33:52 using:
+ Generated on 2020-01-23 20:54:27 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -76,8 +76,6 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/builderfactory.hxx>
-#include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -102,7 +100,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
@@ -376,6 +373,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/itextprovider.hxx>
+#include <svx/linectrl.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rotmodit.hxx>
