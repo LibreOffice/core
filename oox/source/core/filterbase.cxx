@@ -578,6 +578,6 @@ bool FilterBase::isExportTemplate() const
     return mxImpl->mbExportTemplate;
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

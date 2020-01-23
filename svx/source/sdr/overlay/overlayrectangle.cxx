@@ -30,7 +30,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayRectangle::createOverlayObjectPrimitive2DSequence()
         {
             const basegfx::B2DRange aHatchRange(getBasePosition(), maSecondPosition);
@@ -112,7 +112,7 @@ namespace sdr::overlay
                 objectChange();
             }
         }
-    } // end of namespace sdr
+} // end of namespace
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -105,6 +105,6 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

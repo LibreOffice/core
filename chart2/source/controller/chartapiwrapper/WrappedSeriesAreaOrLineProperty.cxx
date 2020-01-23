@@ -46,6 +46,6 @@ OUString WrappedSeriesAreaOrLineProperty::getInnerName() const
     return m_aInnerAreaTypeName;
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

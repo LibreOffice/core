@@ -31,7 +31,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         void OverlayManagerBuffered::ImpPrepareBufferDevice()
         {
             // compare size of mpBufferDevice with size of visible area
@@ -439,6 +439,6 @@ namespace sdr::overlay
                 }
             }
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

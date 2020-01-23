@@ -317,6 +317,6 @@ bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputS
     return !aBinaryStream.isEof();
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

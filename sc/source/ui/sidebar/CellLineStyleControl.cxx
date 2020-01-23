@@ -219,6 +219,6 @@ void CellLineStylePopup::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_u
     mxCellLineStyleValueSet->Invalidate();
 }
 
-} // end of namespace svx::sidebar
+} // end of namespace sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

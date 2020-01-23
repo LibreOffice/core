@@ -118,6 +118,6 @@ void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< std:
     rList.emplace_back( new WrappedAutomaticPositionProperty() );
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

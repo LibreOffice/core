@@ -87,6 +87,6 @@ void TableColumnsContext::onStartRecord( SequenceInputStream& rStrm )
     mrTableColumns.importTableColumns( rStrm );
 }
 
-} // namespace oox
+} // namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

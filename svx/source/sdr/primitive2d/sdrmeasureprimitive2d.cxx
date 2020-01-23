@@ -35,7 +35,7 @@ using namespace com::sun::star;
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         Primitive2DReference SdrMeasurePrimitive2D::impCreatePart(
             const attribute::SdrLineAttribute& rLineAttribute,
             const basegfx::B2DHomMatrix& rObjectMatrix,
@@ -493,6 +493,6 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrMeasurePrimitive2D, PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

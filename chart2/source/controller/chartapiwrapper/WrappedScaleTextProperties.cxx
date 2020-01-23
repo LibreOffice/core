@@ -133,6 +133,6 @@ void WrappedScaleTextProperties::addWrappedProperties( std::vector< std::unique_
     rList.emplace_back( new WrappedScaleTextProperty( spChart2ModelContact ) );
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

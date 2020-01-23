@@ -118,6 +118,6 @@ void SAL_CALL ShapeUndoElement::disposing()
 {
 }
 
-} //  namespace chart
+} //  namespace chart::impl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

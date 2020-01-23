@@ -43,6 +43,6 @@ ContextHandlerRef ThemeOverrideFragmentHandler::onCreateContext( sal_Int32 nElem
     return nullptr;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

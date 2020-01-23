@@ -31,7 +31,7 @@
 using namespace ::basegfx;
 
 namespace sdr::overlay
-    {
+{
         OverlayObjectCell::OverlayObjectCell( const Color& rColor, const RangeVector& rRects )
         :   OverlayObject( rColor ),
             maRectangles( rRects )
@@ -78,6 +78,7 @@ namespace sdr::overlay
 
             return aRetval;
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

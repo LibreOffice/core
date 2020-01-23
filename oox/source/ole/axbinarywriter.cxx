@@ -198,6 +198,6 @@ void AxBinaryPropertyWriter::startNextProperty( bool bSkip )
     mnNextProp <<= 1;
 }
 
-} // namespace ole
+} // namespace oox::ole
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

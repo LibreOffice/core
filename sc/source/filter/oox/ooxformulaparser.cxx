@@ -160,7 +160,7 @@ OUString SAL_CALL OOXMLFormulaParser::printFormula(
     throw RuntimeException();
 }
 
-} // namespace oox
+} // namespace oox::xls
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -28,7 +28,7 @@
 
 
 namespace sdr::properties
-    {
+{
         // create a new itemset
         std::unique_ptr<SfxItemSet> EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
@@ -116,6 +116,6 @@ namespace sdr::properties
             assert(!"EmptyProperties::GetStyleSheet() should never be called");
             return nullptr;
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

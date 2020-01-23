@@ -71,7 +71,7 @@ sal_Int32 FastTokenHandler::getTokenDirect( const char *pToken, sal_Int32 nLengt
     return mrTokenMap.getTokenFromUTF8( pToken, nLength );
 }
 
-} // namespace oox
+} // namespace oox::core
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_core_FastTokenHandler_get_implementation(

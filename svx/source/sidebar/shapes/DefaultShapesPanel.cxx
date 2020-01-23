@@ -156,6 +156,6 @@ void DefaultShapesPanel::populateShapes()
     }
 }
 
-} // end of namespace sd::sidebar
+} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

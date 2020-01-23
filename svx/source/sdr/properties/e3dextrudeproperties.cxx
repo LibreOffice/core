@@ -23,7 +23,7 @@
 
 
 namespace sdr::properties
-    {
+{
         E3dExtrudeProperties::E3dExtrudeProperties(SdrObject& rObj)
         :   E3dCompoundProperties(rObj)
         {
@@ -70,6 +70,6 @@ namespace sdr::properties
                 }
             }
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewObjectContactOfMasterPageDescriptor::ViewObjectContactOfMasterPageDescriptor(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   ViewObjectContact(rObjectContact, rViewContact)
         {
@@ -128,6 +128,6 @@ namespace sdr::contact
             // return grouped primitive
             return xRetval;
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
