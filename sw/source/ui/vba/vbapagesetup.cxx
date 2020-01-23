@@ -18,10 +18,7 @@
  */
 #include "vbapagesetup.hxx"
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <ooo/vba/word/WdSectionStart.hpp>
 #include <ooo/vba/word/WdOrientation.hpp>
 #include "wordvbahelper.hxx"

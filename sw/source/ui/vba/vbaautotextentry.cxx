@@ -19,7 +19,6 @@
 #include "vbaautotextentry.hxx"
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/text/XParagraphCursor.hpp>
-#include <tools/diagnose_ex.h>
 #include "wordvbahelper.hxx"
 #include "vbarange.hxx"
 

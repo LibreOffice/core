@@ -18,7 +18,6 @@
  */
 #include "vbalistgallery.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include "vbalisttemplates.hxx"
 
 using namespace ::ooo::vba;

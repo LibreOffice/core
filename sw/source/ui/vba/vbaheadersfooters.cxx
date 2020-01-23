@@ -18,7 +18,6 @@
  */
 #include "vbaheadersfooters.hxx"
 #include "vbaheaderfooter.hxx"
-#include <ooo/vba/word/WdHeaderFooterIndex.hpp>
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;
