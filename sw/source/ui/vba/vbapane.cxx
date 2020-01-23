@@ -18,7 +18,6 @@
  */
 #include "vbapane.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <tools/diagnose_ex.h>
 #include "vbaview.hxx"
 
 using namespace ::ooo::vba;

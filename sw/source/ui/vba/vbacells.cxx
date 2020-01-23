@@ -18,8 +18,6 @@
  */
 #include "vbacells.hxx"
 #include "vbacell.hxx"
-#include "wordvbahelper.hxx"
-#include "vbatablehelper.hxx"
 #include "vbarow.hxx"
 #include <cppuhelper/implbase.hxx>
 
