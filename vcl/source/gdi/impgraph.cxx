@@ -1263,7 +1263,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     if( GRAPHIC_FORMAT_50 == nId )
     {
         // read new style header
-        std::unique_ptr<VersionCompat> pCompat( new VersionCompat( rIStm, StreamMode::READ ) );
+        VersionCompat aCompat( rIStm, StreamMode::READ );
 
         rIStm.ReadInt32( nType );
         sal_Int32 nLen;
@@ -1401,7 +1401,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
 
             // write new style header
-            std::unique_ptr<VersionCompat> pCompat( new VersionCompat( rOStm, StreamMode::WRITE, 1 ) );
+            VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
             rOStm.WriteInt32( static_cast<sal_Int32>(meType) );
 
@@ -1792,10 +1792,10 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
         Graphic         aGraphic;
         GfxLink         aLink;
 
-        // read compat info
-        std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
-        pCompat.reset(); // destructor writes stuff into the header
-
+        // read compat info, destructor writes stuff into the header
+        {
+            VersionCompat aCompat( rIStm, StreamMode::READ );
+        }
         ReadGfxLink( rIStm, aLink );
 
         // set dummy link to avoid creation of additional link after filtering;
@@ -1967,10 +1967,10 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
         // native format
         rOStm.WriteUInt32( NATIVE_FORMAT_50 );
 
-        // write compat info
-        std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 1 ));
-        pCompat.reset(); // destructor writes stuff into the header
-
+        // write compat info, destructor writes stuff into the header
+        {
+            VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
+        }
         rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
         rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );
         WriteGfxLink( rOStm, *rImpGraphic.mpGfxLink );
