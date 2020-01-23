@@ -125,7 +125,7 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent )
         ::comphelper::SolarMutex *pMutex = ::comphelper::SolarMutex::get();
         if ( pMutex )
         {
-            rtl::Reference< comphelper::SolarMutex > aGuard( pMutex );
+            osl::Guard<comphelper::SolarMutex> aMutexGuard( pMutex );
             aChangedNames.realloc(nNotify);
             pParent->CallNotify(aChangedNames);
         }
