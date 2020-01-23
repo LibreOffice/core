@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b3fdbf9_9ee34ee7",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T07:15:58Z",
+      "side": 1,
+      "message": "This looks like using two different techniques to get the same goal. One is using temporary profile to avoid changes to actual user profile; the other is to prevent actual writes to (part of) used profile. I suppose that in fact having a real \"read-only\" mode (without modifying any profile parts) could be useful - but then using temp profile would become unnecessary. Or - find a place which makes registrymodifications file have hardened permissions not allowing to clean the profile, and fix that.",
+      "range": {
+        "startLine": 564,
+        "startChar": 29,
+        "endLine": 564,
+        "endChar": 56
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d8c072f_bb34dd26",
+        "filename": "desktop/source/pkgchk/unopkg/unopkg_app.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T07:15:58Z",
+      "side": 1,
+      "message": "I would make this unconditional. This change e.g. will enable installing shared extensions while user (with admin rights) has LibreOffice already running (because the spawhed instance will use a different user profile); but making it non-Windows will make this aspect different across platforms.",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 16
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
