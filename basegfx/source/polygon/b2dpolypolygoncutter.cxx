@@ -681,7 +681,7 @@ namespace basegfx
 } // end of namespace basegfx
 
 namespace basegfx::utils
-    {
+{
 
         B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
@@ -1104,6 +1104,6 @@ namespace basegfx::utils
             return B2DPolyPolygon();
         }
 
-    } // end of namespace basegfx
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

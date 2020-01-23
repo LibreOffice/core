@@ -21,7 +21,7 @@
 #include <rtl/math.hxx>
 
 namespace basegfx::internal
-    {
+{
         void skipSpaces(sal_Int32&      io_rPos,
                         const OUString& rStr,
                         const sal_Int32 nLen)
@@ -157,6 +157,6 @@ namespace basegfx::internal
             return true;
         }
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

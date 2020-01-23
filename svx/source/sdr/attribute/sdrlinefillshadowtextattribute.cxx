@@ -22,7 +22,7 @@
 
 
 namespace drawinglayer::attribute
-    {
+{
         SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(
             const SdrLineAttribute& rLine,
             const SdrFillAttribute& rFill,
@@ -72,6 +72,7 @@ namespace drawinglayer::attribute
                 && getFill() == rCandidate.getFill()
                 && getFillFloatTransGradient() == rCandidate.getFillFloatTransGradient());
         }
-    } // end of namespace drawinglayer
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -387,11 +387,11 @@ namespace drawinglayer::geometry
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
         };
-    } // end of namespace drawinglayer
+} // end of namespace drawinglayer::geometry
 
 
 namespace drawinglayer::geometry
-    {
+{
         namespace
         {
             struct theGlobalDefault :

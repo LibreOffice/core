@@ -153,7 +153,7 @@ void ContextStack::popContext()
     }
 }
 
-} // namespace prv
+} // namespace oox::core::prv
 
 namespace {
 
@@ -322,6 +322,6 @@ const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
     return (aIt == maEndMap.end()) ? nullptr : &aIt->second;
 }
 
-} // namespace oox
+} // namespace oox::core
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

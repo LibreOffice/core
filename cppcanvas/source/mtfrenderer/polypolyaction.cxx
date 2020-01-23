@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
-    {
+{
         namespace
         {
             class PolyPolyAction : public CachedPrimitiveBase
@@ -500,6 +500,6 @@ namespace cppcanvas::internal
                                                      nTransparency );
         }
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

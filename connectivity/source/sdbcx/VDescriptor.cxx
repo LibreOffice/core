@@ -26,7 +26,7 @@
 #include <algorithm>
 
 namespace connectivity::sdbcx
-    {
+{
         using namespace ::com::sun::star::uno;
         using namespace ::com::sun::star::lang;
         using namespace ::com::sun::star::beans;
@@ -122,7 +122,7 @@ namespace connectivity::sdbcx
             return aTypes.getTypes();
         }
 
-    }
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

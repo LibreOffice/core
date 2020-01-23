@@ -174,6 +174,6 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
     return uno::Any();
 }
 
-} //  namespace xmloff
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

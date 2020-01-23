@@ -275,6 +275,6 @@ IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OString&, rId, void)
     maToolButton.set_inactive();
 }
 
-} // end of namespace svx::sidebar
+} // end of namespace sc::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

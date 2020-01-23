@@ -38,7 +38,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewObjectContact& ViewContactOfMasterPageDescriptor::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
             return *(new ViewObjectContactOfMasterPageDescriptor(rObjectContact, *this));
@@ -103,6 +103,7 @@ namespace sdr::contact
         {
             return &(GetMasterPageDescriptor().GetOwnerPage().GetViewContact());
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

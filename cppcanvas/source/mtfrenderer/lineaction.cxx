@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
-    {
+{
         namespace
         {
             class LineAction : public Action
@@ -149,6 +149,6 @@ namespace cppcanvas::internal
                                                  rState);
         }
 
-    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

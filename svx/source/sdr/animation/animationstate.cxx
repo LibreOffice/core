@@ -28,7 +28,7 @@
 
 
 namespace sdr::animation
-    {
+{
         double PrimitiveAnimation::getSmallestNextTime(double fCurrentTime)
         {
             double fRetval(0.0);
@@ -130,6 +130,7 @@ namespace sdr::animation
                 // re-setup
                 prepareNextEvent();
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

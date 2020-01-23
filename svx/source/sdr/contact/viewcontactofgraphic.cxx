@@ -54,7 +54,7 @@
 #include <bitmaps.hlst>
 
 namespace sdr::contact
-    {
+{
         // Create an Object-Specific ViewObjectContact, set ViewContact and
         // ObjectContact. Always needs to return something.
         ViewObjectContact& ViewContactOfGraphic::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
@@ -410,6 +410,6 @@ namespace sdr::contact
             return GraphicType::NONE == rGraphicObject.GetType() || GraphicType::Default == rGraphicObject.GetType();
         }
 
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

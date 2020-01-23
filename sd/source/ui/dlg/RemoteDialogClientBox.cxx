@@ -133,6 +133,6 @@ IMPL_LINK_NOARG(ClientBoxEntry, FocusHdl, weld::Widget&, void)
     m_xContainer->set_highlight_background();
 }
 
-} //namespace dp_gui
+} //namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

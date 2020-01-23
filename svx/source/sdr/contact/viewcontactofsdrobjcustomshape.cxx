@@ -34,7 +34,7 @@
 
 
 namespace sdr::contact
-    {
+{
         ViewContactOfSdrObjCustomShape::ViewContactOfSdrObjCustomShape(SdrObjCustomShape& rCustomShape)
         :   ViewContactOfTextObj(rCustomShape)
         {
@@ -249,6 +249,7 @@ namespace sdr::contact
 
             return xRetval;
         }
-    } // end of namespace sdr
+
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

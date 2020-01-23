@@ -29,7 +29,7 @@
 
 
 namespace sdr::overlay
-    {
+{
         drawinglayer::primitive2d::Primitive2DContainer OverlayTriangle::createOverlayObjectPrimitive2DSequence()
         {
             basegfx::B2DPolygon aPolygon;
@@ -62,6 +62,6 @@ namespace sdr::overlay
         {
         }
 
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

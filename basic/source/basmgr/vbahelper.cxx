@@ -182,6 +182,6 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
 }
 
 
-} // namespace basic
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

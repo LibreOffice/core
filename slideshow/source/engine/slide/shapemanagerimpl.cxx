@@ -422,6 +422,6 @@ void ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,6 +91,6 @@ css::beans::PropertyValue Effect::getEffect()
     return aRet;
 }
 
-} // namespace oox
+} // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

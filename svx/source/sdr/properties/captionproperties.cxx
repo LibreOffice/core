@@ -28,7 +28,7 @@
 
 
 namespace sdr::properties
-    {
+{
         // create a new itemset
         std::unique_ptr<SfxItemSet> CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
@@ -94,6 +94,6 @@ namespace sdr::properties
             // reset to default
             mpItemSet->ClearItem(XATTR_LINESTYLE);
         }
-    } // end of namespace sdr
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

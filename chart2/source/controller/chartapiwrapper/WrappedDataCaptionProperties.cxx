@@ -145,6 +145,6 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
     xSeriesPropertySet->setPropertyValue( CHART_UNONAME_LABEL, uno::Any( aLabel ) );
 }
 
-} //namespace chart
+} //namespace chart::wrapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -643,7 +643,7 @@ namespace
 }
 
 namespace drawinglayer::primitive2d
-    {
+{
         SdrFrameBorderData::SdrConnectStyleData::SdrConnectStyleData(
             const svx::frame::Style& rStyle,
             const basegfx::B2DVector& rNormalizedPerpendicular,
@@ -746,10 +746,10 @@ namespace drawinglayer::primitive2d
 
             return fRetval;
         }
-    } // end of namespace drawinglayer
 
-namespace drawinglayer::primitive2d
-    {
+
+
+
         void SdrFrameBorderPrimitive2D::create2DDecomposition(
             Primitive2DContainer& rContainer,
             const geometry::ViewInformation2D& /*aViewInformation*/) const
@@ -920,6 +920,6 @@ namespace drawinglayer::primitive2d
         // provide unique ID
         ImplPrimitive2DIDBlock(SdrFrameBorderPrimitive2D, PRIMITIVE2D_ID_SDRFRAMEBORDERTPRIMITIVE2D)
 
-    } // end of namespace drawinglayer
+} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
