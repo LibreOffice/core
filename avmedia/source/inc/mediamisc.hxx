@@ -20,7 +20,6 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
-#include <config_features.h>
 #include <unotools/resmgr.hxx>
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
