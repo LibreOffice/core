@@ -962,6 +962,13 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     const TextFrameIndex nNextHidden = m_pScriptInfo->NextHiddenChg(rInf.GetIdx());
     nNextChg = std::min( nNextChg, nNextHidden );
 
+    // bookmarks
+    if (rInf.GetOpt().IsViewMetaChars())
+    {
+        const TextFrameIndex nNextBookmark = m_pScriptInfo->NextBookmark(rInf.GetIdx());
+        nNextChg = std::min(nNextChg, nNextBookmark);
+    }
+
     // Turbo boost:
     // We assume that font characters are not larger than twice
     // as wide as height.
