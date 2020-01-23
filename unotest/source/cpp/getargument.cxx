@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 #include "getargument.hxx"

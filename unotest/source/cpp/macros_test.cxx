@@ -11,14 +11,12 @@
 
 #include <vector>
 
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <basic/basrdll.hxx>
 #include <cppunit/TestAssert.h>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 

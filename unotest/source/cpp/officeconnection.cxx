@@ -30,7 +30,6 @@
 #include <osl/test/uniquepipename.hxx>
 #include <osl/time.h>
 #include <sal/macros.h>
-#include <sal/types.h>
 #include <unotest/officeconnection.hxx>
 #include <unotest/toabsolutefileurl.hxx>
 

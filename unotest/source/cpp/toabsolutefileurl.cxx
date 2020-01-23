@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/ustring.hxx>
