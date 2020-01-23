@@ -42,11 +42,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Color ListBox" name="svxcorelo-SvxColorListBox"
-                        generic-name="Color ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox">
-    </glade-widget-class>
-
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
@@ -71,12 +66,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Svx 3D Light Control" name="svxlo-SvxLightCtl3D"
-                        generic-name="3D Light Control" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Svx 3D Preview Control" name="svxlo-Svx3DPreviewControl"
-                        generic-name="3D Preview Control" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
