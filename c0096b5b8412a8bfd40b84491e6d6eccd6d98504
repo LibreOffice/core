@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3bd805d_5901a0a4",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-23T18:05:41Z",
+      "side": 1,
+      "message": "michael, this code is not doing anything actually useful, unless the comment is being a little opaque?\n\nHere we are holding a reference to the mutex itself, but we are __not__ actually taking the lock???",
+      "revId": "c0096b5b8412a8bfd40b84491e6d6eccd6d98504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
