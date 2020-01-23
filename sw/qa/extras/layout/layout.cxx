@@ -3608,6 +3608,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
     assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testWriterImageNoCapture)
+{
+    createDoc("writer-image-no-capture.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nPageLeft = getXPath(pXmlDoc, "//page/infos/bounds", "left").toInt32();
+    sal_Int32 nImageLeft = getXPath(pXmlDoc, "//fly/infos/bounds", "left").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 284
+    // - Actual  : 284
+    // i.e. the image position was modified to be inside the page frame ("captured"), even if Word
+    // does not do that.
+    CPPUNIT_ASSERT_LESS(nPageLeft, nImageLeft);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
