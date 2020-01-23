@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e228d224_adfb3af9",
+        "filename": "vcl/source/gdi/impanmvw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-23T05:04:01Z",
+      "side": 1,
+      "message": "I had a reason to put mnExtraData and nExtraData in opposite order: that way, you emphasize that \"both pOut and nExtraData are either zero, or equal to corresponding members mpRenderContext and mnExtraData\"",
+      "range": {
+        "startLine": 101,
+        "startChar": 69,
+        "endLine": 101,
+        "endChar": 94
+      },
+      "revId": "28166eb604564e9915c9042d956dd75157ef9497",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
