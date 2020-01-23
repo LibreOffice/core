@@ -190,7 +190,7 @@ short SvInsertOleDlg::run()
                                                                     aName,
                                                                     uno::Sequence < beans::PropertyValue >() );
 
-                            OSL_ENSURE( aNewInf.Object.is(), "The object must be created or an exception must be thrown!" );
+                            SAL_WARN_IF( !aNewInf.Object.is(), "cui.dialogs", "The object must be created or an exception must be thrown!" );
                             m_xObj = aNewInf.Object;
                             for ( sal_Int32 nInd = 0; nInd < aNewInf.Options.getLength(); nInd++ )
                                 if ( aNewInf.Options[nInd].Name == "Icon" )

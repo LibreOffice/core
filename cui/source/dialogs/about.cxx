@@ -209,7 +209,7 @@ OUString AboutDialog::GetBuildId()
         return sBuildId.getToken( 0, '-' );
     }
 
-    OSL_ENSURE( !sBuildId.isEmpty(), "No BUILDID in bootstrap file" );
+    SAL_WARN_IF(sBuildId.isEmpty(), "cui.dialogs", "No BUILDID in bootstrap file");
     return sBuildId;
 }
 
