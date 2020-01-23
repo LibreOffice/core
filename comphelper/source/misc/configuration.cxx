@@ -244,8 +244,7 @@ void SAL_CALL comphelper::ConfigurationListener::propertyChange(
     // Code is commonly used inside the SolarMutexGuard
     // so to avoid concurrent writes to the property,
     // and allow fast, lock-less access, guard here.
-    rtl::Reference< comphelper::SolarMutex > xMutexGuard(
-        comphelper::SolarMutex::get() );
+    osl::Guard<comphelper::SolarMutex> xMutexGuard( comphelper::SolarMutex::get() );
 
     assert( rEvt.Source == mxConfig );
     for (auto const& listener : maListeners)
