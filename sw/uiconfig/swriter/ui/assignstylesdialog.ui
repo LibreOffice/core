@@ -201,6 +201,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image1</property>
+                                <property name="tooltip_text" translatable="yes" context="assignstylesdialog|left|tooltip_text">Promote level</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="left-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="assignstylesdialog|left-atkobject">Left</property>
@@ -219,6 +220,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image2</property>
+                                <property name="tooltip_text" translatable="yes" context="assignstylesdialog|right|tooltip_text">Demote level</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="right-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="assignstylesdialog|right-atkobject">Right</property>
