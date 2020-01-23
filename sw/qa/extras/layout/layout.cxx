@@ -80,6 +80,7 @@ public:
     void testTdf123651();
     void testBtlrCell();
     void testImageComment();
+    void testWriterImageNoCapture();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -123,6 +124,7 @@ public:
     CPPUNIT_TEST(testTdf123651);
     CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST(testImageComment);
+    CPPUNIT_TEST(testWriterImageNoCapture);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2956,6 +2958,21 @@ void SwLayoutWriter::testImageComment()
     // i.e. the cursor got positioned between the image and its comment, so typing extended the
     // comment, instead of adding content after the commented image.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
+}
+
+void SwLayoutWriter::testWriterImageNoCapture()
+{
+    createDoc("writer-image-no-capture.docx");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nPageLeft = getXPath(pXmlDoc, "//page/infos/bounds", "left").toInt32();
+    sal_Int32 nImageLeft = getXPath(pXmlDoc, "//fly/infos/bounds", "left").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 284
+    // - Actual  : 284
+    // i.e. the image position was modified to be inside the page frame ("captured"), even if Word
+    // does not do that.
+    CPPUNIT_ASSERT_LESS(nPageLeft, nImageLeft);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
