@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <cassert>
@@ -936,7 +937,7 @@ void PNGReaderImpl::ImplReadIDAT()
                 mnYpos += mnYAdd;
             }
 
-            if ( mnYpos >= static_cast<sal_uInt32>(maOrigSize.Height()) )
+            if ( mnYpos >= o3tl::make_unsigned(maOrigSize.Height()) )
             {
                 if( (mnPass < 7) && mnInterlaceType )
                     if( ImplPreparePass() )
