@@ -55,22 +55,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#if defined(_WIN32)
-#define SOFFICE1 "soffice.exe"
-#define SOFFICE_COM "soffice.com"
-#define SBASE "sbase.exe"
-#define SCALC "scalc.exe"
-#define SDRAW "sdraw.exe"
-#define SIMPRESS "simpress.exe"
-#define SWRITER "swriter.exe"
-#endif
-
-#ifdef MACOSX
-#define SOFFICE2 "soffice"
-#else
-#define SOFFICE2 "soffice.bin"
-#endif
-
 namespace dp_misc {
 namespace {
 
@@ -356,14 +340,19 @@ bool office_is_running()
     {
         sFile = sFile.copy(sFile.lastIndexOf('/') + 1);
         if (
-#if defined UNIX
-            sFile == SOFFICE2
-#elif defined _WIN32
+#if defined _WIN32
             //osl_getExecutableFile should deliver "soffice.bin" on windows
             //even if swriter.exe, scalc.exe etc. was started. This is a bug
             //in osl_getExecutableFile
-            sFile == SOFFICE1 || sFile == SOFFICE2 || sFile == SOFFICE_COM || sFile == SBASE ||
-            sFile == SCALC || sFile == SDRAW || sFile == SIMPRESS || sFile == SWRITER
+            sFile == "soffice.bin" || sFile == "soffice.exe" || sFile == "soffice.com"
+            || sFile == "soffice" || sFile == "swriter.exe" || sFile == "swriter"
+            || sFile == "scalc.exe" || sFile == "scalc" || sFile == "simpress.exe"
+            || sFile == "simpress" || sFile == "sdraw.exe" || sFile == "sdraw"
+            || sFile == "sbase.exe" || sFile == "sbase"
+#elif defined MACOSX
+            sFile == "soffice"
+#elif defined UNIX
+            sFile == "soffice.bin"
 #else
 #error "Unsupported platform"
 #endif
