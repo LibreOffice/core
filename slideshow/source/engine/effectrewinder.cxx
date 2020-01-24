@@ -96,20 +96,20 @@ void EffectRewinder::initialize()
     // b,c) a slide was started or ended (in which case the effect counter
     // is reset.
 
-    mpAnimationStartHandler.reset(
-        new RewinderAnimationEventHandler(
+    mpAnimationStartHandler =
+        std::make_shared<RewinderAnimationEventHandler>(
             [this]( const AnimationNodeSharedPtr& pNode)
-            { return this->notifyAnimationStart( pNode ); } ) );
+            { return this->notifyAnimationStart( pNode ); } );
     mrEventMultiplexer.addAnimationStartHandler(mpAnimationStartHandler);
 
-    mpSlideStartHandler.reset(
-        new RewinderEventHandler(
-            [this]() { return this->resetEffectCount(); } ) );
+    mpSlideStartHandler =
+        std::make_shared<RewinderEventHandler>(
+            [this]() { return this->resetEffectCount(); } );
     mrEventMultiplexer.addSlideStartHandler(mpSlideStartHandler);
 
-    mpSlideEndHandler.reset(
-        new RewinderEventHandler(
-            [this]() { return this->resetEffectCount(); } ) );
+    mpSlideEndHandler =
+        std::make_shared<RewinderEventHandler>(
+            [this]() { return this->resetEffectCount(); } );
     mrEventMultiplexer.addSlideEndHandler(mpSlideEndHandler);
 }
 

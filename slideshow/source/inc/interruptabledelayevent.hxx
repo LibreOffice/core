@@ -129,8 +129,8 @@ namespace slideshow
             InterruptableEventPair aRes;
 
             aRes.mpImmediateEvent = makeEvent( rFunctor, "makeInterruptableDelay");
-            aRes.mpTimeoutEvent.reset( new DelayFacade( aRes.mpImmediateEvent,
-                                                        nTimeout ) );
+            aRes.mpTimeoutEvent = std::make_shared<DelayFacade>( aRes.mpImmediateEvent,
+                                                        nTimeout );
 
             return aRes;
         }

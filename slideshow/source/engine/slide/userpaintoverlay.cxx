@@ -443,7 +443,7 @@ namespace slideshow
                                             const SlideShowContext&  rContext,
                                             const PolyPolygonVector& rPolygons,
                                             bool                     bActive ) :
-            mpHandler( new PaintOverlayHandler( rStrokeColor,
+            mpHandler( std::make_shared<PaintOverlayHandler>( rStrokeColor,
                                                 nStrokeWidth,
                                                 rContext.mrScreenUpdater,
                                                 rContext.mrViewContainer,

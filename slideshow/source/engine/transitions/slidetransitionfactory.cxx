@@ -730,27 +730,25 @@ NumberAnimationSharedPtr createPushWipeTransition(
 
     if( bComb )
     {
-        return NumberAnimationSharedPtr(
-            new CombTransition( leavingSlide,
+        return std::make_shared<CombTransition>( leavingSlide,
                                 pEnteringSlide,
                                 pSoundPlayer,
                                 rViewContainer,
                                 rScreenUpdater,
                                 rEventMultiplexer,
                                 aDirection,
-                                24 /* comb with 12 stripes */ ));
+                                24 /* comb with 12 stripes */ );
     }
     else
     {
-        return NumberAnimationSharedPtr(
-            new MovingSlideChange( leavingSlide,
+        return std::make_shared<MovingSlideChange>( leavingSlide,
                                    pEnteringSlide,
                                    pSoundPlayer,
                                    rViewContainer,
                                    rScreenUpdater,
                                    rEventMultiplexer,
                                    aDirection,
-                                   aDirection ));
+                                   aDirection );
     }
 }
 
@@ -816,8 +814,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
         // the 'leaving' slide.
 
 
-        return NumberAnimationSharedPtr(
-            new MovingSlideChange(
+        return std::make_shared<MovingSlideChange>(
                 o3tl::optional<SlideSharedPtr>() /* no slide */,
                 pEnteringSlide,
                 pSoundPlayer,
@@ -825,7 +822,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
                 rScreenUpdater,
                 rEventMultiplexer,
                 basegfx::B2DVector(),
-                aInDirection ));
+                aInDirection );
     }
     else
     {
@@ -834,15 +831,14 @@ NumberAnimationSharedPtr createSlideWipeTransition(
         // and the old one is moving off in the foreground.
 
 
-        return NumberAnimationSharedPtr(
-            new MovingSlideChange( leavingSlide,
+        return std::make_shared<MovingSlideChange>( leavingSlide,
                                    pEnteringSlide,
                                    pSoundPlayer,
                                    rViewContainer,
                                    rScreenUpdater,
                                    rEventMultiplexer,
                                    aInDirection,
-                                   basegfx::B2DVector() ));
+                                   basegfx::B2DVector() );
     }
 }
 
@@ -953,15 +949,14 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                         nTransitionType, nTransitionSubType ) );
 
                 // create a clip transition from that
-                return NumberAnimationSharedPtr(
-                    new ClippedSlideChange( pEnteringSlide,
+                return std::make_shared<ClippedSlideChange>( pEnteringSlide,
                                             pPoly,
                                             *pTransitionInfo,
                                             rViewContainer,
                                             rScreenUpdater,
                                             rEventMultiplexer,
                                             bTransitionDirection,
-                                            pSoundPlayer ));
+                                            pSoundPlayer );
             }
 
             case TransitionInfo::TRANSITION_SPECIAL:
@@ -1070,25 +1065,23 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                         }
 
                         if( nTransitionType == animations::TransitionType::FADE )
-                            return NumberAnimationSharedPtr(
-                                new FadingSlideChange(
+                            return std::make_shared<FadingSlideChange>(
                                     leavingSlide,
                                     pEnteringSlide,
                                     aFadeColor,
                                     pSoundPlayer,
                                     rViewContainer,
                                     rScreenUpdater,
-                                    rEventMultiplexer ));
+                                    rEventMultiplexer );
                         else
-                            return NumberAnimationSharedPtr(
-                                new CutSlideChange(
+                            return std::make_shared<CutSlideChange>(
                                     leavingSlide,
                                     pEnteringSlide,
                                     rTransitionFadeColor,
                                     pSoundPlayer,
                                     rViewContainer,
                                     rScreenUpdater,
-                                    rEventMultiplexer ));
+                                    rEventMultiplexer );
                     }
                 }
             }

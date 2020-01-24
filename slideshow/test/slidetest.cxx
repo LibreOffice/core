@@ -51,10 +51,10 @@ public:
         mpTestView = createTestView();
         maViews.addView( mpTestView );
 
-        mpLayerManager.reset(
-            new target::LayerManager(
+        mpLayerManager =
+            std::make_shared<target::LayerManager>(
                 maViews,
-                false ));
+                false );
     }
 
     void tearDown() override

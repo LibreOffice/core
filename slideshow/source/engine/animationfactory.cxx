@@ -592,9 +592,8 @@ namespace slideshow
                                       typename AnimationBase::ValueType (ShapeAttributeLayer::*pGetValue)() const,
                                       void                              (ShapeAttributeLayer::*pSetValue)( const typename AnimationBase::ValueType& ) )
             {
-                return ::std::shared_ptr< AnimationBase >(
-                    new GenericAnimation< AnimationBase,
-                                          SGI_identity< typename AnimationBase::ValueType > >(
+                return std::make_shared<GenericAnimation< AnimationBase,
+                                          SGI_identity< typename AnimationBase::ValueType > >>(
                                               rShapeManager,
                                               nFlags,
                                               pIsValid,
@@ -603,7 +602,7 @@ namespace slideshow
                                               pSetValue,
                                               // no modification necessary, use identity functor here
                                               SGI_identity< typename AnimationBase::ValueType >(),
-                                              SGI_identity< typename AnimationBase::ValueType >() ) );
+                                              SGI_identity< typename AnimationBase::ValueType >() );
             }
 
             class Scaler
@@ -633,15 +632,14 @@ namespace slideshow
                                                            void                              (ShapeAttributeLayer::*pSetValue)( const double& ),
                                                            double                                                   nScaleValue )
             {
-                return NumberAnimationSharedPtr(
-                    new GenericAnimation< NumberAnimation, Scaler >( rShapeManager,
+                return std::make_shared<GenericAnimation< NumberAnimation, Scaler >>( rShapeManager,
                                                                      nFlags,
                                                                      pIsValid,
                                                                      nDefaultValue / nScaleValue,
                                                                      pGetValue,
                                                                      pSetValue,
                                                                      Scaler( 1.0/nScaleValue ),
-                                                                     Scaler( nScaleValue ) ) );
+                                                                     Scaler( nScaleValue ) );
             }
 
 
@@ -1077,8 +1075,7 @@ namespace slideshow
             switch( nTransformType )
             {
                 case animations::AnimationTransformType::SCALE:
-                    return PairAnimationSharedPtr(
-                        new TupleAnimation< ::basegfx::B2DSize >(
+                    return std::make_shared<TupleAnimation< ::basegfx::B2DSize >>(
                             rShapeManager,
                             nFlags,
                             &ShapeAttributeLayer::isWidthValid,
@@ -1091,11 +1088,10 @@ namespace slideshow
                             rBounds.getRange(),
                             &ShapeAttributeLayer::getWidth,
                             &ShapeAttributeLayer::getHeight,
-                            &ShapeAttributeLayer::setSize ) );
+                            &ShapeAttributeLayer::setSize );
 
                 case animations::AnimationTransformType::TRANSLATE:
-                    return PairAnimationSharedPtr(
-                        new TupleAnimation< ::basegfx::B2DPoint >(
+                    return std::make_shared<TupleAnimation< ::basegfx::B2DPoint >>(
                             rShapeManager,
                             nFlags,
                             &ShapeAttributeLayer::isPosXValid,
@@ -1108,7 +1104,7 @@ namespace slideshow
                             rSlideSize,
                             &ShapeAttributeLayer::getPosX,
                             &ShapeAttributeLayer::getPosY,
-                            &ShapeAttributeLayer::setPosition ) );
+                            &ShapeAttributeLayer::setPosition );
 
                 default:
                     ENSURE_OR_THROW( false,
@@ -1231,11 +1227,10 @@ namespace slideshow
                                                                               const ::basegfx::B2DVector&       rSlideSize,
                                                                               int                               nFlags )
         {
-            return NumberAnimationSharedPtr(
-                new PathAnimation( rSVGDPath, nAdditive,
+            return std::make_shared<PathAnimation>( rSVGDPath, nAdditive,
                                    rShapeManager,
                                    rSlideSize,
-                                   nFlags ) );
+                                   nFlags );
         }
 
     }

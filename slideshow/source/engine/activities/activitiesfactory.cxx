@@ -420,15 +420,14 @@ AnimationActivitySharedPtr createFromToByActivity(
         aBy = aTmpValue;
     }
 
-    return AnimationActivitySharedPtr(
-        new FromToByActivity<BaseType, AnimationType>(
+    return std::make_shared<FromToByActivity<BaseType, AnimationType>>(
             aFrom,
             aTo,
             aBy,
             rParms,
             rAnim,
             rInterpolator,
-            bCumulative ) );
+            bCumulative );
 }
 
 /* The following table shows which animator combines with
@@ -630,13 +629,12 @@ AnimationActivitySharedPtr createValueListActivity(
         aValueVector.push_back( aValue );
     }
 
-    return AnimationActivitySharedPtr(
-        new ValuesActivity<BaseType, AnimationType>(
+    return std::make_shared<ValuesActivity<BaseType, AnimationType>>(
             aValueVector,
             rParms,
             rAnim,
             rInterpolator,
-            bCumulative ) );
+            bCumulative );
 }
 
 /** Generate Activity for given XAnimate, corresponding to given Value vector
@@ -741,10 +739,10 @@ AnimationActivitySharedPtr createActivity(
             {
                 // since DiscreteActivityBase suspends itself
                 // between the frames, create a WakeupEvent for it.
-                aActivityParms.mpWakeupEvent.reset(
-                    new WakeupEvent(
+                aActivityParms.mpWakeupEvent =
+                    std::make_shared<WakeupEvent>(
                         rParms.mrEventQueue.getTimer(),
-                        rParms.mrActivitiesQueue ) );
+                        rParms.mrActivitiesQueue );
 
                 AnimationActivitySharedPtr pActivity(
                     createValueListActivity< DiscreteActivityBase >(
@@ -805,10 +803,10 @@ AnimationActivitySharedPtr createActivity(
 
                 // since DiscreteActivityBase suspends itself
                 // between the frames, create a WakeupEvent for it.
-                aActivityParms.mpWakeupEvent.reset(
-                    new WakeupEvent(
+                aActivityParms.mpWakeupEvent =
+                    std::make_shared<WakeupEvent>(
                         rParms.mrEventQueue.getTimer(),
-                        rParms.mrActivitiesQueue ) );
+                        rParms.mrActivitiesQueue );
 
                 AnimationActivitySharedPtr pActivity(
                     createFromToByActivity< DiscreteActivityBase >(
@@ -1008,11 +1006,9 @@ AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
                                        rParms.mbAutoReverse );
 
     if( bDirectionForward )
-        return AnimationActivitySharedPtr(
-            new SimpleActivity<1>( aActivityParms, rAnim ) );
+        return std::make_shared<SimpleActivity<1>>( aActivityParms, rAnim );
     else
-        return AnimationActivitySharedPtr(
-            new SimpleActivity<0>( aActivityParms, rAnim ) );
+        return std::make_shared<SimpleActivity<0>>( aActivityParms, rAnim );
 }
 
 } // namespace internal

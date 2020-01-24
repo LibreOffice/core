@@ -189,12 +189,12 @@ std::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
     std::shared_ptr<RehearseTimingsActivity> pActivity(
         new RehearseTimingsActivity( rContext ));
 
-    pActivity->mpMouseHandler.reset(
-        new MouseHandler(*pActivity) );
-    pActivity->mpWakeUpEvent.reset(
-        new WakeupEvent( rContext.mrEventQueue.getTimer(),
+    pActivity->mpMouseHandler =
+        std::make_shared<MouseHandler>(*pActivity);
+    pActivity->mpWakeUpEvent =
+        std::make_shared<WakeupEvent>( rContext.mrEventQueue.getTimer(),
                          pActivity,
-                         rContext.mrActivitiesQueue ));
+                         rContext.mrActivitiesQueue );
 
     rContext.mrEventMultiplexer.addViewHandler( pActivity );
 

@@ -611,7 +611,7 @@ namespace slideshow
         bool LayerManager::renderTo( const ::cppcanvas::CanvasSharedPtr& rTargetCanvas ) const
         {
             bool bRet( true );
-            ViewLayerSharedPtr pTmpLayer( new DummyLayer( rTargetCanvas ) );
+            ViewLayerSharedPtr pTmpLayer = std::make_shared<DummyLayer>( rTargetCanvas );
 
             for( const auto& rShape : maAllShapes )
             {

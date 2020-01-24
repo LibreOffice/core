@@ -78,7 +78,7 @@ private:
 template <typename FuncT>
 inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, OUString const& rsDescription )
 {
-    return EventSharedPtr( new Delay( func, nTimeout, rsDescription ) );
+    return std::make_shared<Delay>( func, nTimeout, rsDescription );
 }
 
 /** Generate immediate event
@@ -91,7 +91,7 @@ inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, OUString c
 template <typename FuncT>
 inline EventSharedPtr makeEvent_( FuncT const& func, OUString const& rsDescription)
 {
-    return EventSharedPtr( new Delay( func, 0.0, rsDescription ) );
+    return std::make_shared<Delay>( func, 0.0, rsDescription );
 }
 
 

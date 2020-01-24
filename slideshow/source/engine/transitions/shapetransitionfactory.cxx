@@ -219,13 +219,12 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                 // create a clip activity from that
                 pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                     rParms,
-                    NumberAnimationSharedPtr(
-                        new ClippingAnimation(
+                    std::make_shared<ClippingAnimation>(
                             pPoly,
                             rShapeManager,
                             *pTransitionInfo,
                             xTransition->getDirection(),
-                            xTransition->getMode() ) ),
+                            xTransition->getMode() ),
                     true );
             }
             break;
@@ -302,14 +301,13 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                         // create a clip activity from that
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
-                            NumberAnimationSharedPtr(
-                                new ClippingAnimation(
+                            std::make_shared<ClippingAnimation>(
                                     pPoly,
                                     rShapeManager,
                                     *getTransitionInfo( animations::TransitionType::BARWIPE,
                                                         nBarWipeSubType ),
                                     bDirectionForward,
-                                    xTransition->getMode() ) ),
+                                    xTransition->getMode() ),
                             true );
                     }
                     break;

@@ -713,7 +713,7 @@ ActivityImpl::ActivityImpl(
     : maContext(rContext),
       mpWakeupEvent(pWakeupEvent),
       mpParentDrawShape(pParentDrawShape),
-      mpListener( new IntrinsicAnimationListener(*this) ),
+      mpListener( std::make_shared<IntrinsicAnimationListener>(*this) ),
       maTimer(rContext.mrEventQueue.getTimer()),
       mfRotationAngle(0.0),
       mbIsShapeAnimated(false),
@@ -912,7 +912,7 @@ std::shared_ptr<Activity> createDrawingLayerAnimActivity(
     {
         auto const pWakeupEvent = std::make_shared<WakeupEvent>( rContext.mrEventQueue.getTimer(),
                              rContext.mrActivitiesQueue );
-        pActivity.reset( new ActivityImpl( rContext, pWakeupEvent, pDrawShape ) );
+        pActivity = std::make_shared<ActivityImpl>( rContext, pWakeupEvent, pDrawShape );
         pWakeupEvent->setActivity( pActivity );
     }
     catch( uno::RuntimeException& )

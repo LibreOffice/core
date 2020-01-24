@@ -125,7 +125,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
                                            slideSizePixel.getY() ),
                   0x000000FFU );
 
-        pRet.reset( new SlideBitmap( pBitmap ));
+        pRet = std::make_shared<SlideBitmap>( pBitmap );
     }
     else
     {
