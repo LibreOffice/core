@@ -52,6 +52,7 @@ class XmlPortionDumper:public SwPortionHandler
             case PortionType::Multi: return "PortionType::Multi";
             case PortionType::HiddenText: return "PortionType::HiddenText";
             case PortionType::ControlChar: return "PortionType::ControlChar";
+            case PortionType::Bookmark: return "PortionType::Bookmark";
 
             case PortionType::Text: return "PortionType::Text";
             case PortionType::Lay: return "PortionType::Lay";

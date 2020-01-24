@@ -33,6 +33,7 @@ enum class PortionType
     Multi       = 0x0085,
     HiddenText  = 0x0086,
     ControlChar = 0x0087,
+    Bookmark    = 0x0088,
 
     Text        = 0x8000,
     Lay         = 0x8001,

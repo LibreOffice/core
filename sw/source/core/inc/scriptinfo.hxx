@@ -24,6 +24,7 @@
 #include <deque>
 #include <unordered_set>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include "TextFrameIndex.hxx"
 
@@ -42,7 +43,7 @@ class SwScriptInfo
 {
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE, SPECIAL_MIDDLE};
-    enum class MarkKind { Start, End, Point };
+    enum class MarkKind { Start = (1<<0), End = (1<<1), Point = (1<<2) };
 
 private:
     //! Records a single change in script type.
@@ -182,6 +183,7 @@ public:
     }
     TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
     TextFrameIndex NextBookmark(TextFrameIndex nPos) const;
+    MarkKind GetBookmark(TextFrameIndex nPos) const;
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,
             std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
@@ -384,6 +386,13 @@ public:
     SwFontScript WhichFont(TextFrameIndex nIdx) const;
     static SwFontScript WhichFont(sal_Int32 nIdx, OUString const & rText);
 };
+
+namespace o3tl
+{
+
+template<> struct typed_flags<SwScriptInfo::MarkKind> : is_typed_flags<SwScriptInfo::MarkKind, 0x07> {};
+
+}
 
 #endif
 

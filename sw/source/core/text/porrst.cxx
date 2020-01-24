@@ -492,7 +492,7 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )  // is only set during prepaint mode
     {
-        rInf.DrawViewOpt( *this, PortionType::ControlChar );
+        rInf.DrawViewOpt( *this, PortionType::ControlChar ); // TODO?
 
         if ( !rInf.GetOpt().IsPagePreview() &&
              !rInf.GetOpt().IsReadonly() &&
@@ -500,9 +500,19 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
               CHAR_ZWNBSP != mcChar )
         {
             SwFont aTmpFont( *rInf.GetFont() );
-            aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
-            const sal_uInt16 nProp = 40;
-            aTmpFont.SetProportion( nProp );  // a smaller font
+            if (mcChar == CHAR_ZWSP)
+            {
+                aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
+                const sal_uInt16 nProp = 40;
+                aTmpFont.SetProportion( nProp );  // a smaller font
+            }
+            else
+            {
+                aTmpFont.SetProportion(120);  // taller?
+                aTmpFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+                aTmpFont.SetStrikeout(STRIKEOUT_NONE);
+                // TODO override more? don't use font at all?
+            }
             SwFontSave aFontSave( rInf, &aTmpFont );
 
             OUString aOutString;
@@ -515,6 +525,9 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 //                    rText = sal_Unicode(0x2514); break;
 //                case CHAR_RLM :
 //                    rText = sal_Unicode(0x2518); break;
+                default:
+                    aOutString = OUStringChar(mcChar);
+                    break;
             }
 
             if ( !mnHalfCharWidth )

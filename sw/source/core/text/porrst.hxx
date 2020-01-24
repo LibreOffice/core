@@ -148,6 +148,18 @@ public:
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo& rInf ) const override;
 };
 
+class SwBookmarkPortion : public SwControlCharPortion
+{
+public:
+    explicit SwBookmarkPortion(sal_Unicode const cChar)
+        : SwControlCharPortion(cChar)
+    {
+        SetWhichPor(PortionType::Bookmark);
+        SetLen(TextFrameIndex(0));
+    }
+    virtual SwLinePortion * Compress() override { return this; }
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
