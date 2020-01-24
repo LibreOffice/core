@@ -27,6 +27,7 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/bootstrap.hxx>
@@ -97,6 +98,10 @@ osl::FileBase::RC copyRecursive(
 #endif
 
 Status create(OUString const & uri) {
+    // To avoid IWYU removing a header that is used in the ANDROID and IOS case
+    OUString dummy;
+    rtl::Bootstrap::expandMacros(dummy);
+
     osl::FileBase::RC e = osl::Directory::createPath(uri);
     if (e != osl::FileBase::E_None && e != osl::FileBase::E_EXIST) {
         return ERROR_OTHER;
