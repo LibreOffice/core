@@ -105,7 +105,7 @@ PresenterController::PresenterController (
       mpTheme(),
       mxMainWindow(),
       mpPaneBorderPainter(),
-      mpCanvasHelper(new PresenterCanvasHelper()),
+      mpCanvasHelper(std::make_shared<PresenterCanvasHelper>()),
       mxPresenterHelper(),
       mpPaintManager(),
       mnPendingSlideNumber(-1),
@@ -1068,7 +1068,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if (xPane2.is())
         xPane2->setVisible(true);
 
-    mpPaintManager.reset(new PresenterPaintManager(mxMainWindow, mxPresenterHelper, mpPaneContainer));
+    mpPaintManager = std::make_shared<PresenterPaintManager>(mxMainWindow, mxPresenterHelper, mpPaneContainer);
 
     mxCanvas.set(rxPane->getCanvas(), UNO_QUERY);
 
@@ -1082,7 +1082,7 @@ void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
 {
     // Create (load) the current theme.
     if (rxPane.is())
-        mpTheme.reset(new PresenterTheme(mxComponentContext, rxPane->getCanvas()));
+        mpTheme = std::make_shared<PresenterTheme>(mxComponentContext, rxPane->getCanvas());
 }
 
 double PresenterController::GetSlideAspectRatio() const

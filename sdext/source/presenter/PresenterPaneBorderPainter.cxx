@@ -291,7 +291,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     }
     else
     {
-        mpTheme.reset(new PresenterTheme(mxContext, rxCanvas));
+        mpTheme = std::make_shared<PresenterTheme>(mxContext, rxCanvas);
         bModified = true;
     }
 
@@ -745,7 +745,7 @@ RendererPaneStyle::RendererPaneStyle (
       mpBottom(),
       mpBottomRight(),
       mpBottomCallout(),
-      mpEmpty(new PresenterBitmapDescriptor()),
+      mpEmpty(std::make_shared<PresenterBitmapDescriptor>()),
       mpFont(),
       mnFontXOffset(0),
       mnFontYOffset(0),

@@ -193,7 +193,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
     OSL_ASSERT(rxCanvas.is());
     OSL_ASSERT(rxPresenterHelper.is());
 
-    SharedBitmapDescriptor pBitmap (new BitmapDescriptor(rpDefault));
+    SharedBitmapDescriptor pBitmap = std::make_shared<BitmapDescriptor>(rpDefault);
 
     if ( ! rxProperties.is())
         return pBitmap;

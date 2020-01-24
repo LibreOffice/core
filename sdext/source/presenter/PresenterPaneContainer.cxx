@@ -63,7 +63,7 @@ void PresenterPaneContainer::PreparePane (
         return;
 
     // No entry found for the given pane id.  Create a new one.
-    SharedPaneDescriptor pDescriptor (new PaneDescriptor);
+    SharedPaneDescriptor pDescriptor = std::make_shared<PaneDescriptor>();
     pDescriptor->mxPaneId = rxPaneId;
     pDescriptor->msViewURL = rsViewURL;
     pDescriptor->mxPane = nullptr;

@@ -72,7 +72,7 @@ PresenterTextView::PresenterTextView (
       maSize(0,0),
       mpFont(),
       maParagraphs(),
-      mpCaret(new PresenterTextCaret(
+      mpCaret(std::make_shared<PresenterTextCaret>(
           rxContext,
           [this] (sal_Int32 const nParagraphIndex, sal_Int32 const nCharacterIndex)
               { return this->GetCaretBounds(nParagraphIndex, nCharacterIndex); },
@@ -118,12 +118,12 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
     sal_Int32 nCharacterCount (0);
     while (xParagraphs->hasMoreElements())
     {
-        SharedPresenterTextParagraph pParagraph (new PresenterTextParagraph(
+        SharedPresenterTextParagraph pParagraph = std::make_shared<PresenterTextParagraph>(
             maParagraphs.size(),
             mxBreakIterator,
             mxScriptTypeDetector,
             Reference<text::XTextRange>(xParagraphs->nextElement(), UNO_QUERY),
-            mpCaret));
+            mpCaret);
         pParagraph->SetupCellArray(mpFont);
         pParagraph->SetCharacterOffset(nCharacterCount);
         nCharacterCount += pParagraph->GetCharacterCount();

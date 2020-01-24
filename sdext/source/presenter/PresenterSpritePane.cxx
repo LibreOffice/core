@@ -32,7 +32,7 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
         const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBase(rxContext, rpPresenterController),
       mxParentCanvas(),
-      mpSprite(new PresenterSprite())
+      mpSprite(std::make_shared<PresenterSprite>())
 {
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_SET_THROW);

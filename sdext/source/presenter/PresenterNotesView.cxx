@@ -81,14 +81,14 @@ PresenterNotesView::PresenterNotesView (
 
         mxParentWindow = xPane->getWindow();
         mxCanvas = xPane->getCanvas();
-        mpTextView.reset(new PresenterTextView(
+        mpTextView = std::make_shared<PresenterTextView>(
             rxComponentContext,
             mxCanvas,
-            mpPresenterController->GetPaintManager()->GetInvalidator(mxParentWindow)));
+            mpPresenterController->GetPaintManager()->GetInvalidator(mxParentWindow));
 
         const OUString sResourceURL (mxViewId->getResourceURL());
-        mpFont.reset(new PresenterTheme::FontDescriptor(
-            rpPresenterController->GetViewFont(sResourceURL)));
+        mpFont = std::make_shared<PresenterTheme::FontDescriptor>(
+            rpPresenterController->GetViewFont(sResourceURL));
         maSeparatorColor = mpFont->mnColor;
         mpTextView->SetFont(mpFont);
 

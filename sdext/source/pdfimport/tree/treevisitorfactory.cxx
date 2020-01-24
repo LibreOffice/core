@@ -96,15 +96,15 @@ namespace pdfi
 
     TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory()
     {
-        return TreeVisitorFactorySharedPtr(new WriterTreeVisitorFactory());
+        return std::make_shared<WriterTreeVisitorFactory>();
     }
     TreeVisitorFactorySharedPtr createImpressTreeVisitorFactory()
     {
-        return TreeVisitorFactorySharedPtr(new ImpressTreeVisitorFactory());
+        return std::make_shared<ImpressTreeVisitorFactory>();
     }
     TreeVisitorFactorySharedPtr createDrawTreeVisitorFactory()
     {
-        return TreeVisitorFactorySharedPtr(new DrawTreeVisitorFactory());
+        return std::make_shared<DrawTreeVisitorFactory>();
     }
 }
 

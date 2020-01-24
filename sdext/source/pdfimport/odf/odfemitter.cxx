@@ -116,7 +116,7 @@ void OdfEmitter::endTag( const char* pTag )
 
 XmlEmitterSharedPtr createOdfEmitter( const uno::Reference<io::XOutputStream>& xOut )
 {
-    return XmlEmitterSharedPtr(new OdfEmitter(xOut));
+    return std::make_shared<OdfEmitter>(xOut);
 }
 
 }

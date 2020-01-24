@@ -598,12 +598,12 @@ void PresenterTheme::Theme::Read (
     maViewStyles.Read(rReadContext, mxThemeRoot);
 
     // Read bitmaps.
-    mpIconContainer.reset(new PresenterBitmapContainer(
+    mpIconContainer = std::make_shared<PresenterBitmapContainer>(
         Reference<container::XNameAccess>(
             PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "Bitmaps"), UNO_QUERY),
         mpParentTheme != nullptr ? mpParentTheme->mpIconContainer
                                  : std::shared_ptr<PresenterBitmapContainer>(),
-        rReadContext.mxComponentContext, rReadContext.mxCanvas));
+        rReadContext.mxComponentContext, rReadContext.mxCanvas);
 
     // Read fonts.
     Reference<container::XNameAccess> xFontNode(
@@ -761,7 +761,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
                     >>= sThemeName;
                 if (sThemeName == sCurrentThemeName)
                 {
-                    pTheme.reset(new PresenterTheme::Theme(xTheme,rsKey));
+                    pTheme = std::make_shared<PresenterTheme::Theme>(xTheme,rsKey);
                     break;
                 }
             }
@@ -861,12 +861,12 @@ void PaneStyleContainer::ProcessPaneStyle(
     if (rReadContext.mxCanvas.is())
     {
         Reference<container::XNameAccess> xBitmapsNode (rValues[5], UNO_QUERY);
-        pStyle->mpBitmaps.reset(new PresenterBitmapContainer(
+        pStyle->mpBitmaps = std::make_shared<PresenterBitmapContainer>(
             xBitmapsNode,
             pStyle->mpParentStyle != nullptr ? pStyle->mpParentStyle->mpBitmaps
                                              : std::shared_ptr<PresenterBitmapContainer>(),
             rReadContext.mxComponentContext, rReadContext.mxCanvas,
-            rReadContext.mxPresenterHelper));
+            rReadContext.mxPresenterHelper);
     }
 
     mStyles.push_back(pStyle);
