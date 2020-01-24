@@ -630,7 +630,7 @@ class formatParagraph(UITestCase):
         xTranText = xDialog.getChild("MTR_TRANSPARENT")
 
         self.assertEqual(get_state_as_dict(xTran)["Checked"], "true")
-        self.assertEqual(get_state_as_dict(xTranText)["Text"], "51%")
+        self.assertEqual(get_state_as_dict(xTranText)["Text"], "55%")
 
         xCanc = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCanc)
@@ -674,9 +674,9 @@ class formatParagraph(UITestCase):
         self.assertEqual(get_state_as_dict(xGradient)["Checked"], "true")
         self.assertEqual(get_state_as_dict(xType)["SelectEntryText"], "Axial")
         self.assertEqual(get_state_as_dict(xAngle)["Text"], "1°")
-        self.assertEqual(get_state_as_dict(xBorder)["Text"], "1%")
-        self.assertEqual(get_state_as_dict(xStart)["Text"], "1%")
-        self.assertEqual(get_state_as_dict(xEnd)["Text"], "1%")
+        self.assertEqual(get_state_as_dict(xBorder)["Text"], "5%")
+        self.assertEqual(get_state_as_dict(xStart)["Text"], "5%")
+        self.assertEqual(get_state_as_dict(xEnd)["Text"], "5%")
 
         xCanc = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCanc)
