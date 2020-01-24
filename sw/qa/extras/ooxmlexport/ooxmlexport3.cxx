@@ -1061,6 +1061,16 @@ DECLARE_OOXMLEXPORT_TEST(testBottomBorders, "tdf129452_BottomBorders.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNumberingLevels, "tdf95495.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // tdf#95495: set list level of the custom style based on the setting of the parent style
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
