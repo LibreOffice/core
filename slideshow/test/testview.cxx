@@ -213,7 +213,7 @@ public:
     virtual target::ViewLayerSharedPtr createViewLayer(
         const basegfx::B2DRange& rLayerBounds ) const override
     {
-        maViewLayers.push_back( TestViewSharedPtr(new ImplTestView()));
+        maViewLayers.push_back( std::make_shared<ImplTestView>());
         maViewLayers.back()->resize( rLayerBounds );
 
         return maViewLayers.back();

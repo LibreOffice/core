@@ -142,10 +142,10 @@ AnimationBaseNode::AnimationBaseNode(
                 // Slide::prefetchShow() initializes shape
                 // attributes right after animation import (or
                 // the Slide class must be changed).
-                mpShapeSubset.reset(
-                    new ShapeSubset( mpShape,
+                mpShapeSubset =
+                    std::make_shared<ShapeSubset>( mpShape,
                                      rTreeNode,
-                                     mpSubsetManager ));
+                                     mpSubsetManager );
 
                 // Override NodeContext, and flag this node as
                 // a special independent subset one. This is

@@ -534,7 +534,7 @@ SlideShowImpl::SlideShowImpl(
       maShapeCursors(),
       maUserPaintColor(),
       maUserPaintStrokeWidth(4.0),
-      mpPresTimer( new canvas::tools::ElapsedTime ),
+      mpPresTimer( std::make_shared<canvas::tools::ElapsedTime>() ),
       maScreenUpdater(maViewContainer),
       maEventQueue( mpPresTimer ),
       maEventMultiplexer( maEventQueue,
@@ -593,10 +593,10 @@ SlideShowImpl::SlideShowImpl(
     }
     }
 
-    mpListener.reset( new SeparateListenerImpl(
+    mpListener = std::make_shared<SeparateListenerImpl>(
                           *this,
                           maScreenUpdater,
-                          maEventQueue ));
+                          maEventQueue );
     maEventMultiplexer.addSlideAnimationsEndHandler( mpListener );
     maEventMultiplexer.addViewRepaintHandler( mpListener );
     maEventMultiplexer.addHyperlinkHandler( mpListener, 0.0 );
@@ -2332,7 +2332,7 @@ std::shared_ptr<avmedia::MediaTempFile> SlideShowImpl::getMediaTempFile(const OU
 
         OUString sTempUrl;
         if (::avmedia::CreateMediaTempFile(xInStream, sTempUrl, sDesiredExtension))
-            aRet.reset(new avmedia::MediaTempFile(sTempUrl));
+            aRet = std::make_shared<avmedia::MediaTempFile>(sTempUrl);
 
         xInStream->closeInput();
     }

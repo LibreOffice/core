@@ -477,10 +477,10 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
 
                 if( rTop.mpGroupShape ) // in group particle mode?
                 {
-                    pRet.reset( new ShapeOfGroup(
+                    pRet = std::make_shared<ShapeOfGroup>(
                                     rTop.mpGroupShape /* container shape */,
                                     xCurrShape, xPropSet,
-                                    mnAscendingPrio ) );
+                                    mnAscendingPrio );
                 }
                 else
                 {

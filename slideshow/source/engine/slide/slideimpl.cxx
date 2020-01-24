@@ -307,10 +307,10 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mxDrawPage( xDrawPage ),
     mxDrawPagesSupplier( xDrawPages ),
     mxRootNode( xRootNode ),
-    mpLayerManager( new LayerManager(
+    mpLayerManager( std::make_shared<LayerManager>(
                         rViewContainer,
                         bDisableAnimationZOrder) ),
-    mpShapeManager( new ShapeManagerImpl(
+    mpShapeManager( std::make_shared<ShapeManagerImpl>(
                         rEventMultiplexer,
                         mpLayerManager,
                         rCursorManager,

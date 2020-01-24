@@ -131,7 +131,7 @@ public:
              hasUnsupportedActions(aGraphic.GetGDIMetaFile()) ) )
         {
             // wrap bitmap into GDIMetafile
-            GDIMetaFileSharedPtr xMtf(new GDIMetaFile);
+            GDIMetaFileSharedPtr xMtf = std::make_shared<GDIMetaFile>();
 
             ::BitmapEx      aBmpEx( aGraphic.GetBitmapEx() );
 
@@ -346,7 +346,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
         // extract current aVDev content into a new animation
         // frame
-        GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
+        GDIMetaFileSharedPtr pMtf = std::make_shared<GDIMetaFile>();
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(

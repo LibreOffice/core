@@ -69,7 +69,7 @@ namespace slideshow
                                         mxComponentContext);
 
                 if (!mpCurrMtf)
-                    mpCurrMtf.reset( new GDIMetaFile );
+                    mpCurrMtf = std::make_shared<GDIMetaFile>();
 
                 // TODO(F1): Currently, the scroll metafile will
                 // never contain any verbose text comments. Thus,
@@ -387,7 +387,7 @@ namespace slideshow
                                     xContainingPage, mnCurrMtfLoadFlags,
                                     mxComponentContext );
             if (!mpCurrMtf)
-                mpCurrMtf.reset(new GDIMetaFile);
+                mpCurrMtf = std::make_shared<GDIMetaFile>();
 
             maSubsetting.reset( mpCurrMtf );
 
@@ -547,9 +547,9 @@ namespace slideshow
                     std::back_insert_iterator< std::vector<double> >( aTimeout ),
                     std::mem_fn(&MtfAnimationFrame::getDuration) );
 
-                WakeupEventSharedPtr pWakeupEvent(
-                    new WakeupEvent( rContext.mrEventQueue.getTimer(),
-                                     rContext.mrActivitiesQueue ) );
+                WakeupEventSharedPtr pWakeupEvent =
+                    std::make_shared<WakeupEvent>( rContext.mrEventQueue.getTimer(),
+                                     rContext.mrActivitiesQueue );
 
                 ActivitySharedPtr pActivity =
                     createIntrinsicAnimationActivity(
@@ -604,7 +604,7 @@ namespace slideshow
                 return;
             }
 
-            ViewShapeSharedPtr pNewShape( new ViewShape( rNewLayer ) );
+            ViewShapeSharedPtr pNewShape = std::make_shared<ViewShape>( rNewLayer );
 
             maViewShapes.push_back( pNewShape );
 
@@ -1015,7 +1015,7 @@ namespace slideshow
         ShapeAttributeLayerSharedPtr DrawShape::createAttributeLayer()
         {
             // create new layer, with last as its new child
-            mpAttributeLayer.reset( new ShapeAttributeLayer( mpAttributeLayer ) );
+            mpAttributeLayer = std::make_shared<ShapeAttributeLayer>( mpAttributeLayer );
 
             // Update the local state ids to reflect those of the new layer.
             updateStateIds();

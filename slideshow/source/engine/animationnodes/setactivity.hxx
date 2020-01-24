@@ -133,8 +133,7 @@ template <class AnimationT> AnimationActivitySharedPtr makeSetActivity(
     const ::std::shared_ptr< AnimationT >&   rAnimation,
     const typename AnimationT::ValueType&      rToValue )
 {
-    return AnimationActivitySharedPtr(
-        new SetActivity<AnimationT>(rParms,rAnimation,rToValue) );
+    return std::make_shared<SetActivity<AnimationT>>(rParms,rAnimation,rToValue);
 }
 
 } // namespace internal

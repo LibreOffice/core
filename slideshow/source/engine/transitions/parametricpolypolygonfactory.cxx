@@ -61,61 +61,46 @@ namespace slideshow
             switch (nType)
             {
             case BARWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new BarWipePolyPolygon );
+                return std::make_shared<BarWipePolyPolygon>();
             case BLINDSWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new BarWipePolyPolygon( 6 ) );
+                return std::make_shared<BarWipePolyPolygon>( 6 );
             case BOXWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new BoxWipe( nSubType == LEFTCENTER ||
+                return std::make_shared<BoxWipe>( nSubType == LEFTCENTER ||
                                  nSubType == TOPCENTER ||
                                  nSubType == RIGHTCENTER||
-                                 nSubType == BOTTOMCENTER ) );
+                                 nSubType == BOTTOMCENTER );
             case FOURBOXWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new FourBoxWipe( nSubType == CORNERSOUT ) );
+                return std::make_shared<FourBoxWipe>( nSubType == CORNERSOUT );
             case BARNDOORWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new BarnDoorWipe );
+                return std::make_shared<BarnDoorWipe>();
             case DIAGONALWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new BarWipePolyPolygon );
+                return std::make_shared<BarWipePolyPolygon>();
             case VEEWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new VeeWipe );
+                return std::make_shared<VeeWipe>();
             case IRISWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new IrisWipe );
+                return std::make_shared<IrisWipe>();
             case ELLIPSEWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new EllipseWipe(nSubType) );
+                return std::make_shared<EllipseWipe>(nSubType);
             case CHECKERBOARDWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new CheckerBoardWipe );
+                return std::make_shared<CheckerBoardWipe>();
             case RANDOMBARWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new RandomWipe( 128, true /* bars */ ) );
+                return std::make_shared<RandomWipe>( 128, true /* bars */ );
             case DISSOLVE:
-                return ParametricPolyPolygonSharedPtr(
-                    new RandomWipe( 16 * 16, // for now until dxcanvas is faster
+                return std::make_shared<RandomWipe>( 16 * 16, // for now until dxcanvas is faster
 //                                     64 * 64 /* elements */,
-                                    false /* dissolve */ ) );
+                                    false /* dissolve */ );
             case WATERFALLWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new WaterfallWipe(
+                return std::make_shared<WaterfallWipe>(
                         128,
                         // flipOnYAxis:
                         nSubType == VERTICALRIGHT ||
-                        nSubType == HORIZONTALLEFT ) );
+                        nSubType == HORIZONTALLEFT );
             case CLOCKWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new ClockWipe );
+                return std::make_shared<ClockWipe>();
             case FANWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new FanWipe( // center:
+                return std::make_shared<FanWipe>( // center:
                                  nSubType == CENTERTOP ||
-                                 nSubType == CENTERRIGHT ) );
+                                 nSubType == CENTERRIGHT );
             case PINWHEELWIPE: {
                 sal_Int32 blades;
                 switch (nSubType) {
@@ -135,12 +120,10 @@ namespace slideshow
                     blades = 2;
                     break;
                 }
-                return ParametricPolyPolygonSharedPtr(
-                    new PinWheelWipe( blades ) );
+                return std::make_shared<PinWheelWipe>( blades );
             }
             case SNAKEWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new SnakeWipe(
+                return std::make_shared<SnakeWipe>(
                         // elements:
                         8 * 8,
                         // diagonal:
@@ -152,10 +135,9 @@ namespace slideshow
                         nSubType == TOPLEFTVERTICAL ||
                         nSubType == TOPRIGHTDIAGONAL ||
                         nSubType == BOTTOMLEFTDIAGONAL
-                        ) );
+                        );
             case PARALLELSNAKESWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new ParallelSnakesWipe(
+                return std::make_shared<ParallelSnakesWipe>(
                         // elements:
                         8 * 8,
                         // diagonal:
@@ -172,28 +154,25 @@ namespace slideshow
                         nSubType == HORIZONTALTOPRIGHTOPPOSITE ||
                         nSubType == DIAGONALBOTTOMLEFTOPPOSITE ||
                         nSubType == DIAGONALTOPLEFTOPPOSITE
-                        ) );
+                        );
             case SPIRALWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new SpiralWipe(
+                return std::make_shared<SpiralWipe>(
                         // elements:
                         8 * 8,
                         // flipOnYAxis:
                         nSubType == TOPLEFTCOUNTERCLOCKWISE ||
                         nSubType == TOPRIGHTCOUNTERCLOCKWISE ||
                         nSubType == BOTTOMRIGHTCOUNTERCLOCKWISE ||
-                        nSubType == BOTTOMLEFTCOUNTERCLOCKWISE ) );
+                        nSubType == BOTTOMLEFTCOUNTERCLOCKWISE );
             case BOXSNAKESWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new BoxSnakesWipe(
+                return std::make_shared<BoxSnakesWipe>(
                         // elements:
                         8 * 8,
                         // fourBox:
                         nSubType == FOURBOXVERTICAL ||
-                        nSubType == FOURBOXHORIZONTAL ) );
+                        nSubType == FOURBOXHORIZONTAL );
             case SINGLESWEEPWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new SweepWipe(
+                return std::make_shared<SweepWipe>(
                         // center:
                         nSubType == CLOCKWISETOP ||
                         nSubType == CLOCKWISERIGHT ||
@@ -206,10 +185,9 @@ namespace slideshow
                         // flipOnYAxis:
                         nSubType == COUNTERCLOCKWISEBOTTOMLEFT ||
                         nSubType == COUNTERCLOCKWISETOPRIGHT
-                        ) );
+                        );
             case DOUBLESWEEPWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new SweepWipe(
+                return std::make_shared<SweepWipe>(
                         // center:
                         nSubType == PARALLELVERTICAL ||
                         nSubType == PARALLELDIAGONAL ||
@@ -221,17 +199,16 @@ namespace slideshow
                         nSubType == OPPOSITEVERTICAL ||
                         nSubType == OPPOSITEHORIZONTAL,
                         // flipOnYAxis:
-                        false ) );
+                        false );
             case DOUBLEFANWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    new FanWipe(
+                return std::make_shared<FanWipe>(
                         //center:
                         true,
                         // single:
                         false,
                         // fanIn:
                         nSubType == FANINVERTICAL ||
-                        nSubType == FANINHORIZONTAL ) );
+                        nSubType == FANINHORIZONTAL );
             case TRIANGLEWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     FigureWipe::createTriangleWipe() );
@@ -263,18 +240,16 @@ namespace slideshow
             case MISCDIAGONALWIPE: {
                 switch (nSubType) {
                 case DOUBLEBARNDOOR:
-                    return ParametricPolyPolygonSharedPtr(
-                        new BarnDoorWipe( true /* doubled */ ) );
+                    return std::make_shared<BarnDoorWipe>( true /* doubled */ );
                 case DOUBLEDIAMOND:
-                    return ParametricPolyPolygonSharedPtr(
-                        new DoubleDiamondWipe );
+                    return std::make_shared<DoubleDiamondWipe>();
                 }
                 break;
             }
             case ZIGZAGWIPE:
-                return ParametricPolyPolygonSharedPtr( new ZigZagWipe(5) );
+                return std::make_shared<ZigZagWipe>(5);
             case BARNZIGZAGWIPE:
-                return ParametricPolyPolygonSharedPtr( new BarnZigZagWipe(5) );
+                return std::make_shared<BarnZigZagWipe>(5);
 
             case BOWTIEWIPE:
             case BARNVEEWIPE:
@@ -284,8 +259,7 @@ namespace slideshow
             case SALOONDOORWIPE:
             case WINDSHIELDWIPE:
                 // for now, map to barwipe transition
-                return ParametricPolyPolygonSharedPtr(
-                    new BarWipePolyPolygon );
+                return std::make_shared<BarWipePolyPolygon>();
 
             default:
             case PUSHWIPE:

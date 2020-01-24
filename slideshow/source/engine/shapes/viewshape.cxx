@@ -353,10 +353,9 @@ namespace slideshow
             const ::basegfx::B2DSize& rSpriteSizePixel(rSpriteBoundsPixel.getRange());
             if( !mpSprite )
             {
-                mpSprite.reset(
-                    new AnimatedSprite( mpViewLayer,
+                mpSprite = std::make_shared<AnimatedSprite>( mpViewLayer,
                                         rSpriteSizePixel,
-                                        nPrio ));
+                                        nPrio );
             }
             else
             {

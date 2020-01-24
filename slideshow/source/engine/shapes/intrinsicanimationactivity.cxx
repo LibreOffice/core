@@ -118,7 +118,7 @@ namespace slideshow
             maContext( rContext ),
             mpDrawShape( rDrawShape ),
             mpWakeupEvent( rWakeupEvent ),
-            mpListener( new IntrinsicAnimationListener(*this) ),
+            mpListener( std::make_shared<IntrinsicAnimationListener>(*this) ),
             maTimeouts( rTimeouts ),
             mnCurrIndex(0),
             mnNumLoops(nNumLoops),
@@ -240,12 +240,11 @@ namespace slideshow
             const ::std::vector<double>&    rTimeouts,
             sal_uInt32                      nNumLoops)
         {
-            return ActivitySharedPtr(
-                new IntrinsicAnimationActivity(rContext,
+            return std::make_shared<IntrinsicAnimationActivity>(rContext,
                                                rDrawShape,
                                                rWakeupEvent,
                                                rTimeouts,
-                                               nNumLoops) );
+                                               nNumLoops);
         }
     }
 }

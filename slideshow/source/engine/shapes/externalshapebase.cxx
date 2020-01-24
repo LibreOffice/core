@@ -83,7 +83,7 @@ namespace slideshow
                                               const SlideShowContext&                   rContext ) :
             mxComponentContext( rContext.mxComponentContext ),
             mxShape( xShape ),
-            mpListener( new ExternalShapeBaseListener(*this) ),
+            mpListener( std::make_shared<ExternalShapeBaseListener>(*this) ),
             mpShapeManager( rContext.mpSubsettableShapeManager ),
             mrEventMultiplexer( rContext.mrEventMultiplexer ),
             mnPriority( nPrio ), // TODO(F1): When ZOrder someday becomes usable: make this ( getAPIShapePrio( xShape ) ),

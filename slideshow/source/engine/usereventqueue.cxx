@@ -495,7 +495,7 @@ void UserEventQueue::registerEvent(
 
     if( !rHandler ) {
         // create handler
-        rHandler.reset( new Handler( mrEventQueue ) );
+        rHandler = std::make_shared<Handler>( mrEventQueue );
         // register handler on EventMultiplexer
         rRegistrationFunctor( rHandler );
     }
@@ -515,7 +515,7 @@ void UserEventQueue::registerEvent(
 
     if( !rHandler ) {
         // create handler
-        rHandler.reset( new Handler( mrEventQueue ) );
+        rHandler = std::make_shared<Handler>( mrEventQueue );
 
         // register handler on EventMultiplexer
         rRegistrationFunctor( rHandler );
@@ -659,9 +659,9 @@ void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
     if( !mpShapeClickEventHandler )
     {
         // create handler
-        mpShapeClickEventHandler.reset(
-            new ShapeClickEventHandler(mrCursorManager,
-                                       mrEventQueue) );
+        mpShapeClickEventHandler =
+            std::make_shared<ShapeClickEventHandler>(mrCursorManager,
+                                       mrEventQueue);
 
         // register handler on EventMultiplexer
         mrMultiplexer.addClickHandler( mpShapeClickEventHandler, 1.0 );
@@ -722,8 +722,8 @@ void UserEventQueue::registerSkipEffectEvent(
 {
     if(!mpSkipEffectEventHandler)
     {
-        mpSkipEffectEventHandler.reset(
-            new SkipEffectEventHandler( mrEventQueue, mrMultiplexer ) );
+        mpSkipEffectEventHandler =
+            std::make_shared<SkipEffectEventHandler>( mrEventQueue, mrMultiplexer );
         // register the handler on _two_ sources: we want the
         // nextEffect events, e.g. space bar, to trigger clicks, as well!
         mrMultiplexer.addClickHandler( mpSkipEffectEventHandler,
@@ -750,9 +750,9 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     if( !mpShapeDoubleClickEventHandler )
     {
         // create handler
-        mpShapeDoubleClickEventHandler.reset(
-            new ShapeClickEventHandler(mrCursorManager,
-                                       mrEventQueue) );
+        mpShapeDoubleClickEventHandler =
+            std::make_shared<ShapeClickEventHandler>(mrCursorManager,
+                                       mrEventQueue);
 
         // register handler on EventMultiplexer
         mrMultiplexer.addDoubleClickHandler( mpShapeDoubleClickEventHandler,

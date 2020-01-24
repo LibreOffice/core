@@ -101,13 +101,12 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
         // interface, and internally converts HSL to RGB color
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            HSLColorAnimationSharedPtr(
-                new HSLWrapper(
+            std::make_shared<HSLWrapper>(
                     AnimationFactory::createColorPropertyAnimation(
                         mxColorNode->getAttributeName(),
                         getShape(),
                         getContext().mpSubsettableShapeManager,
-                        getSlideSize() ))),
+                        getSlideSize() )),
             mxColorNode );
 
     default:

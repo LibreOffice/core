@@ -288,11 +288,10 @@ namespace slideshow
             const uno::Reference< drawing::XDrawPage >& xMasterPage,
             const SlideShowContext&                     rContext )
         {
-            return ShapeSharedPtr(
-                new BackgroundShape(
+            return std::make_shared<BackgroundShape>(
                     xDrawPage,
                     xMasterPage,
-                    rContext ));
+                    rContext );
         }
     }
 }
