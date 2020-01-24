@@ -135,7 +135,7 @@ public:
     bool IsArrowPortion() const { return nWhichPor == POR_ARROW; }
     bool IsMultiPortion() const { return nWhichPor == POR_MULTI; }
     bool IsNumberPortion() const { return nWhichPor == POR_NUMBER; } // #i23726#
-    bool IsControlCharPortion() const { return nWhichPor == POR_CONTROLCHAR; }
+    bool IsControlCharPortion() const { return nWhichPor == POR_CONTROLCHAR || nWhichPor == POR_BOOKMARK; }
 
     // Positioning
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );

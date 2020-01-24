@@ -48,6 +48,7 @@ class XmlPortionDumper:public SwPortionHandler
             case POR_MULTI: return "POR_MULTI";
             case POR_HIDDEN_TXT: return "POR_HIDDEN_TXT";
             case POR_CONTROLCHAR: return "POR_CONTROLCHAR";
+            case POR_BOOKMARK: return "POR_BOOKMARK";
 
             case POR_TXT: return "POR_TXT";
             case POR_LAY: return "POR_LAY";

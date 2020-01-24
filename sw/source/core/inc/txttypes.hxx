@@ -33,6 +33,7 @@
 #define POR_MULTI       0x0085
 #define POR_HIDDEN_TXT  0x0086
 #define POR_CONTROLCHAR 0x0087
+#define POR_BOOKMARK    0x0088
 
 #define POR_TXT         0x8000
 #define POR_LAY         0x8001

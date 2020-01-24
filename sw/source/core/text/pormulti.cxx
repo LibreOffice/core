@@ -43,6 +43,7 @@
 #include "porfld.hxx"
 #include "porglue.hxx"
 #include <breakit.hxx>
+#include "porrst.hxx"
 #include <pagefrm.hxx>
 #include <rowfrm.hxx>
 #include <pagedesc.hxx>
@@ -2025,6 +2026,19 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         aInf.SetFirstMulti( bFirstMulti );
         aInf.SetNumDone( rInf.IsNumDone() );
         aInf.SetFootnoteDone( rInf.IsFootnoteDone() );
+
+        // if there's a bookmark at the start of the MultiPortion, it will be
+        // painted with the rotation etc. of the MultiPortion; move it *inside*
+        // so it gets positioned correctly; currently there's no other portion
+        // inserted between the end of WhichFirstPortion() and
+        // BuildMultiPortion()
+        if (rInf.GetLast()->GetWhichPor() == POR_BOOKMARK)
+        {
+            auto const pBookmark(static_cast<SwBookmarkPortion*>(rInf.GetLast()));
+            rInf.SetLast(pBookmark->Unchain());
+            assert(m_pCurr->GetPortion() == nullptr);
+            m_pCurr->SetPortion(pBookmark);
+        }
 
         if( pFirstRest )
         {

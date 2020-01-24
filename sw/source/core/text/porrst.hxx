@@ -18,8 +18,11 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORRST_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORRST_HXX
+
 #include "porlay.hxx"
 #include "porexp.hxx"
+
+class SwFont;
 
 #define LINE_BREAK_WIDTH        150
 #define SPECIAL_FONT_HEIGHT     200
@@ -122,7 +125,8 @@ class SwControlCharPortion : public SwLinePortion
 private:
     mutable sal_uInt16 mnViewWidth;            // used to cache a calculated value
     mutable sal_uInt16 mnHalfCharWidth;        // used to cache a calculated value
-    sal_Unicode mcChar;
+protected:
+    sal_Unicode const mcChar;
 
 public:
 
@@ -132,9 +136,33 @@ public:
         SetWhichPor( POR_CONTROLCHAR ); SetLen( TextFrameIndex(1) );
     }
 
+    virtual bool DoPaint(SwTextPaintInfo const& rInf,
+        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo& rInf ) const override;
+};
+
+/// for showing bookmark starts and ends; note that in contrast to
+/// SwControlCharPortion these do not have a character in the text.
+class SwBookmarkPortion : public SwControlCharPortion
+{
+private:
+    SwLinePortion * m_pPrevious;
+
+public:
+    explicit SwBookmarkPortion(SwLinePortion *const pPrevious, sal_Unicode const cChar)
+        : SwControlCharPortion(cChar)
+        , m_pPrevious(pPrevious)
+    {
+        SetWhichPor(POR_BOOKMARK);
+        SetLen(TextFrameIndex(0));
+    }
+
+    virtual bool DoPaint(SwTextPaintInfo const& rInf,
+        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const override;
+    virtual SwLinePortion * Compress() override { return this; }
+    SwLinePortion * Unchain();
 };
 
 #endif

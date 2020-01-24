@@ -180,6 +180,9 @@ void SwAccessiblePortionData::Special(
         case POR_CONTROLCHAR:
             sDisplay = rText + OUStringLiteral1( m_pTextNode->GetText()[m_nModelPosition] );
             break;
+        case POR_BOOKMARK:
+            // TODO
+            break;
         default:
             sDisplay = rText;
             break;
