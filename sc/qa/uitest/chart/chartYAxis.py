@@ -75,7 +75,7 @@ class chartYAxis(UITestCase):
     minimum.executeAction("UP", tuple()) #1
     maximum.executeAction("DOWN", tuple()) #17
     major.executeAction("DOWN", tuple())   #1
-    minor.executeAction("UP", tuple())  #3
+    minor.executeAction("UP", tuple())  #5
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
@@ -111,7 +111,7 @@ class chartYAxis(UITestCase):
     self.assertEqual(get_state_as_dict(minimum)["Text"], "1")
     self.assertEqual(get_state_as_dict(maximum)["Text"], "17")
     self.assertEqual(get_state_as_dict(major)["Text"], "1")
-    self.assertEqual(get_state_as_dict(minor)["Text"], "3")
+    self.assertEqual(get_state_as_dict(minor)["Text"], "5")
 
     #Click on tab "positioning".
     tabcontrol = xDialog.getChild("tabcontrol")
