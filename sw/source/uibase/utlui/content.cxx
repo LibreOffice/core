@@ -51,6 +51,7 @@
 #include <navicfg.hxx>
 #include <edtwin.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <unotxvw.hxx>
@@ -335,7 +336,9 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 pMarkAccess->getBookmarksEnd(),
                 &lcl_IsUiVisibleBookmark);
             m_sTypeToken.clear();
-            m_bEdit = true;
+            const bool bProtectedBM = m_pWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
+            m_bEdit = !bProtectedBM;
+            m_bDelete = !bProtectedBM;
         }
         break;
         case ContentTypeId::REGION :
@@ -862,6 +865,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     , m_sPostItShow(SwResId(STR_POSTIT_SHOW))
     , m_sPostItHide(SwResId(STR_POSTIT_HIDE))
     , m_sPostItDelete(SwResId(STR_POSTIT_DELETE))
+    , m_sProtected(SwResId(STR_PROTECTED))
     , m_pHiddenShell(nullptr)
     , m_pActiveShell(nullptr)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
@@ -1277,19 +1281,21 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
         const SwContentType* pContType = static_cast<SwContent*>(pEntry->GetUserData())->GetParent();
         const ContentTypeId nContentType = pContType->GetType();
-        bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
-        bool bVisible = !static_cast<SwContent*>(pEntry->GetUserData())->IsInvisible();
-        bool bProtected = static_cast<SwContent*>(pEntry->GetUserData())->IsProtect();
-        bool bEditable = pContType->IsEditable() &&
-            ((bVisible && !bProtected) ||ContentTypeId::REGION == nContentType);
-        bool bDeletable = pContType->IsDeletable() &&
-            ((bVisible && !bProtected) ||ContentTypeId::REGION == nContentType);
-        bool bRenamable = bEditable && !bReadonly &&
+        const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
+        const bool bVisible = !static_cast<SwContent*>(pEntry->GetUserData())->IsInvisible();
+        const bool bProtected = static_cast<SwContent*>(pEntry->GetUserData())->IsProtect();
+        const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
+            && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
+        const bool bEditable = pContType->IsEditable() &&
+            ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+        const bool bDeletable = pContType->IsDeletable() &&
+            ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+        const bool bRenamable = bEditable && !bReadonly &&
             (ContentTypeId::TABLE == nContentType ||
                 ContentTypeId::FRAME == nContentType ||
                 ContentTypeId::GRAPHIC == nContentType ||
                 ContentTypeId::OLE == nContentType ||
-                ContentTypeId::BOOKMARK == nContentType ||
+                (ContentTypeId::BOOKMARK == nContentType && !bProtectBM) ||
                 ContentTypeId::REGION == nContentType ||
                 ContentTypeId::INDEX == nContentType ||
                 ContentTypeId::DRAWOBJECT == nContentType);
@@ -1364,6 +1370,11 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             //Rename object
             if(bRenamable)
                 pPop->InsertItem(502, m_sRename);
+        }
+        else if (bProtectBM)
+        {
+            pPop->InsertItem(503, m_sProtected);
+            pPop->EnableItem(503, false);
         }
         pPop->SetAccelKey(501, vcl::KeyCode(KEY_DELETE, false, false, false, false));
     }
@@ -3615,6 +3626,7 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
                 nSlot = FN_FORMAT_FRAME_DLG;
         break;
         case ContentTypeId::BOOKMARK  :
+            assert(!m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS));
             if(nMode == EditEntryMode::DELETE)
             {
                 IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
