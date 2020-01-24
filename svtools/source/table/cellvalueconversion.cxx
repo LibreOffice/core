@@ -340,25 +340,25 @@ namespace svt
 
                 if ( sTypeName == ::cppu::UnoType< DateTime >::get().getTypeName() )
                 {
-                    o_formatter.reset( new DateTimeNormalization( io_data.xNumberFormatter ) );
+                    o_formatter = std::make_shared<DateTimeNormalization>( io_data.xNumberFormatter );
                 }
                 else if ( sTypeName == ::cppu::UnoType< css::util::Date >::get().getTypeName() )
                 {
-                    o_formatter.reset( new DateNormalization( io_data.xNumberFormatter ) );
+                    o_formatter = std::make_shared<DateNormalization>( io_data.xNumberFormatter );
                 }
                 else if ( sTypeName == ::cppu::UnoType< css::util::Time >::get().getTypeName() )
                 {
-                    o_formatter.reset( new TimeNormalization( io_data.xNumberFormatter ) );
+                    o_formatter = std::make_shared<TimeNormalization>( io_data.xNumberFormatter );
                 }
                 else if ( sTypeName == ::cppu::UnoType< sal_Bool >::get().getTypeName() )
                 {
-                    o_formatter.reset( new BooleanNormalization( io_data.xNumberFormatter ) );
+                    o_formatter = std::make_shared<BooleanNormalization>( io_data.xNumberFormatter );
                 }
                 else if (   sTypeName == ::cppu::UnoType< double >::get().getTypeName()
                         ||  sTypeName == ::cppu::UnoType< float >::get().getTypeName()
                         )
                 {
-                    o_formatter.reset( new DoubleNormalization( io_data.xNumberFormatter ) );
+                    o_formatter = std::make_shared<DoubleNormalization>( io_data.xNumberFormatter );
                 }
                 else if (   ( eTypeClass == TypeClass_BYTE )
                         ||  ( eTypeClass == TypeClass_SHORT )
@@ -368,7 +368,7 @@ namespace svt
                         ||  ( eTypeClass == TypeClass_HYPER )
                         )
                 {
-                    o_formatter.reset( new IntegerNormalization( io_data.xNumberFormatter ) );
+                    o_formatter = std::make_shared<IntegerNormalization>( io_data.xNumberFormatter );
                 }
                 else
                 {

@@ -32,7 +32,7 @@ namespace svxform
     using namespace ::com::sun::star::lang;
 
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
-        : m_pParser(new OSQLParser(rxContext, getParseContext()))
+        : m_pParser(std::make_shared<OSQLParser>(rxContext, getParseContext()))
     {
     }
 

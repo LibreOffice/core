@@ -3400,7 +3400,7 @@ void SvxColorToolBoxControl::EnsurePaletteManager()
 {
     if (!m_xPaletteManager)
     {
-        m_xPaletteManager.reset(new PaletteManager);
+        m_xPaletteManager = std::make_shared<PaletteManager>();
         m_xPaletteManager->SetBtnUpdater(m_xBtnUpdater.get());
     }
 }
@@ -4032,7 +4032,7 @@ void SvxColorListBox::EnsurePaletteManager()
 {
     if (!m_xPaletteManager)
     {
-        m_xPaletteManager.reset(new PaletteManager);
+        m_xPaletteManager = std::make_shared<PaletteManager>();
         m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
     }
 }
@@ -4041,7 +4041,7 @@ void ColorListBox::EnsurePaletteManager()
 {
     if (!m_xPaletteManager)
     {
-        m_xPaletteManager.reset(new PaletteManager);
+        m_xPaletteManager = std::make_shared<PaletteManager>();
         m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
     }
 }

@@ -70,7 +70,7 @@ using namespace ::svt::table;
 
 
 SVTXGridControl::SVTXGridControl()
-    :m_xTableModel( new UnoControlTableModel() )
+    :m_xTableModel( std::make_shared<UnoControlTableModel>() )
     ,m_bTableModelInitCompleted( false )
     ,m_aSelectionListeners( *this )
 {

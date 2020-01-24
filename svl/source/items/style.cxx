@@ -98,7 +98,7 @@ public:
     std::shared_ptr<svl::IndexedStyleSheets> mxIndexedStyleSheets;
 
     SfxStyleSheetBasePool_Impl() :
-        mxIndexedStyleSheets(new svl::IndexedStyleSheets) {}
+        mxIndexedStyleSheets(std::make_shared<svl::IndexedStyleSheets>()) {}
 };
 
 
