@@ -128,6 +128,7 @@ public:
     void testMasterPageStyleParent();
     void testGradientAngle();
     void testTdf97808();
+    void testTdf123841();
     void testFdo64512();
     void testFdo71075();
     void testN828390_2();
@@ -235,6 +236,7 @@ public:
     CPPUNIT_TEST(testMasterPageStyleParent);
     CPPUNIT_TEST(testGradientAngle);
     CPPUNIT_TEST(testTdf97808);
+    CPPUNIT_TEST(testTdf123841);
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390_2);
@@ -772,6 +774,31 @@ void SdImportTest::testTdf97808()
     CPPUNIT_ASSERT_EQUAL(xStyle, xParent);
     CPPUNIT_ASSERT(xLine->getPropertyValue("LineEndName") >>= lineend);
     CPPUNIT_ASSERT_EQUAL(OUString(), lineend);
+
+    xDocShRef->DoClose();
+}
+void SdImportTest::testTdf123841()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf123841.odg"), ODG);
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(
+        xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("objectwithoutfill"), uno::UNO_QUERY);
+
+    // the draw:marker-end="" did not override the style
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XShape > xShape(
+        xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    // uno::Reference<style::XStyle> xParent;
+    uno::Reference<beans::XPropertySet> xParent;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("Style") >>= xParent);
+    CPPUNIT_ASSERT_EQUAL(xStyle, xParent);
 
     xDocShRef->DoClose();
 }
