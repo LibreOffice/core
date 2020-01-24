@@ -582,7 +582,7 @@ void PresenterToolBar::CreateControls (
         "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
 
-    mpCurrentContainerPart.reset(new ElementContainerPart);
+    mpCurrentContainerPart = std::make_shared<ElementContainerPart>();
     maElementContainer.clear();
     maElementContainer.push_back(mpCurrentContainerPart);
 
@@ -624,10 +624,10 @@ void PresenterToolBar::ProcessEntry (
         return;
 
     // Read mode specific values.
-    SharedElementMode pNormalMode (new ElementMode());
-    SharedElementMode pMouseOverMode (new ElementMode());
-    SharedElementMode pSelectedMode (new ElementMode());
-    SharedElementMode pDisabledMode (new ElementMode());
+    SharedElementMode pNormalMode  = std::make_shared<ElementMode>();
+    SharedElementMode pMouseOverMode = std::make_shared<ElementMode>();
+    SharedElementMode pSelectedMode = std::make_shared<ElementMode>();
+    SharedElementMode pDisabledMode = std::make_shared<ElementMode>();
     pNormalMode->ReadElementMode(rxProperties, "Normal", pNormalMode, rContext);
     pMouseOverMode->ReadElementMode(rxProperties, "MouseOver", pNormalMode, rContext);
     pSelectedMode->ReadElementMode(rxProperties, "Selected", pNormalMode, rContext);
@@ -649,7 +649,7 @@ void PresenterToolBar::ProcessEntry (
         pElement.set(new Label(this));
     else if ( sType == "ChangeOrientation" )
     {
-        mpCurrentContainerPart.reset(new ElementContainerPart);
+        mpCurrentContainerPart = std::make_shared<ElementContainerPart>();
         maElementContainer.push_back(mpCurrentContainerPart);
         return;
     }
@@ -1719,7 +1719,7 @@ void SAL_CALL TimeLabel::disposing()
 
 void TimeLabel::ConnectToTimer()
 {
-    mpListener.reset(new Listener(this));
+    mpListener = std::make_shared<Listener>(this);
     PresenterClockTimer::Instance(mpToolBar->GetComponentContext())->AddListener(mpListener);
 }
 

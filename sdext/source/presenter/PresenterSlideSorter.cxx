@@ -309,7 +309,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         }
 
         // Create the layout.
-        mpLayout.reset(new Layout(mpVerticalScrollBar));
+        mpLayout = std::make_shared<Layout>(mpVerticalScrollBar);
 
         // Create the preview cache.
         mxPreviewCache.set(
@@ -1045,8 +1045,8 @@ bool PresenterSlideSorter::ProvideCanvas()
         if (xComponent.is())
             xComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
 
-        mpCurrentSlideFrameRenderer.reset(
-            new CurrentSlideFrameRenderer(mxComponentContext, mxCanvas));
+        mpCurrentSlideFrameRenderer =
+            std::make_shared<CurrentSlideFrameRenderer>(mxComponentContext, mxCanvas);
     }
     return mxCanvas.is();
 }

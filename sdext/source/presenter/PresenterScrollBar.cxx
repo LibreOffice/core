@@ -94,7 +94,7 @@ PresenterScrollBar::PresenterScrollBar (
       mpThumbStartDescriptor(),
       mpThumbCenterDescriptor(),
       mpThumbEndDescriptor(),
-      mpMousePressRepeater(new MousePressRepeater(this)),
+      mpMousePressRepeater(std::make_shared<MousePressRepeater>(this)),
       mpBackgroundBitmap(),
       mpCanvasHelper(new PresenterCanvasHelper())
 {
@@ -245,11 +245,11 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
         {
             try
             {
-                mpBitmaps.reset(new PresenterBitmapContainer(
+                mpBitmaps = std::make_shared<PresenterBitmapContainer>(
                     "PresenterScreenSettings/ScrollBar/Bitmaps",
                     std::shared_ptr<PresenterBitmapContainer>(),
                     mxComponentContext,
-                    mxCanvas));
+                    mxCanvas);
                 mpSharedBitmaps = mpBitmaps;
             }
             catch(Exception&)

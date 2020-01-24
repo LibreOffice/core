@@ -171,7 +171,7 @@ void SaxEmitter::endTag( const char* pTag )
 
 XmlEmitterSharedPtr createSaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDocHdl )
 {
-    return XmlEmitterSharedPtr(new SaxEmitter(xDocHdl));
+    return std::make_shared<SaxEmitter>(xDocHdl);
 }
 
 }

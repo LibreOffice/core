@@ -90,11 +90,11 @@ PresenterSlidePreview::PresenterSlidePreview (
                 "com.sun.star.drawing.SlideRenderer",
                 rxContext),
             UNO_QUERY);
-    mpBitmaps.reset(new PresenterBitmapContainer(
+    mpBitmaps = std::make_shared<PresenterBitmapContainer>(
             "PresenterScreenSettings/ScrollBar/Bitmaps",
             std::shared_ptr<PresenterBitmapContainer>(),
             rxContext,
-            mxCanvas));
+            mxCanvas);
     Resize();
 }
 
