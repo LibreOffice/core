@@ -85,7 +85,7 @@ private:
     std::unique_ptr<weld::Scale> m_xHoriScale;
     std::unique_ptr<weld::Scale> m_xVertScale;
     std::unique_ptr<weld::Button> m_xBtn_Corner;
-    std::unique_ptr<LightControl3D> m_xPreview;
+    std::unique_ptr<Svx3DLightControl> m_xPreview;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWnd;
     std::unique_ptr<SvxLightCtl3D> m_xCtl_Preview;
 };

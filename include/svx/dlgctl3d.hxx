@@ -62,11 +62,11 @@ public:
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D final : public PreviewControl3D
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl final : public PreviewControl3D
 {
     // Callback for interactive changes
-    Link<LightControl3D*,void>  maChangeCallback;
-    Link<LightControl3D*,void>  maSelectionChangeCallback;
+    Link<Svx3DLightControl*,void>  maChangeCallback;
+    Link<Svx3DLightControl*,void>  maSelectionChangeCallback;
 
     // lights
     sal_uInt32                  maSelectedLight;
@@ -98,7 +98,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC LightControl3D final : public PreviewControl
     void TrySelection(Point aPosPixel);
 
 public:
-    LightControl3D();
+    Svx3DLightControl();
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -111,8 +111,8 @@ public:
     virtual void SetObjectType(SvxPreviewObjectType nType) override;
 
     // register user callback
-    void SetChangeCallback(Link<LightControl3D*,void> aNew) { maChangeCallback = aNew; }
-    void SetSelectionChangeCallback(Link<LightControl3D*,void> aNew) { maSelectionChangeCallback = aNew; }
+    void SetChangeCallback(Link<Svx3DLightControl*,void> aNew) { maChangeCallback = aNew; }
+    void SetSelectionChangeCallback(Link<Svx3DLightControl*,void> aNew) { maSelectionChangeCallback = aNew; }
 
     // selection checks
     bool IsSelectionValid();
@@ -139,7 +139,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D
 {
     // local controls
-    LightControl3D& mrLightControl;
+    Svx3DLightControl& mrLightControl;
     weld::Scale& mrHorScroller;
     weld::Scale& mrVerScroller;
     weld::Button& mrSwitcher;
@@ -149,7 +149,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D
     Link<SvxLightCtl3D*,void>  maUserSelectionChangeCallback;
 
 public:
-    SvxLightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
+    SvxLightCtl3D(Svx3DLightControl& rLightControl, weld::Scale& rHori,
                weld::Scale& rVert, weld::Button& rButton);
     ~SvxLightCtl3D();
 
@@ -157,7 +157,7 @@ public:
     void CheckSelection();
 
     // bring further settings to the outside world
-    LightControl3D& GetSvx3DLightControl() { return mrLightControl; }
+    Svx3DLightControl& GetSvx3DLightControl() { return mrLightControl; }
 
     // register user callback
     void SetUserInteractiveChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }
@@ -165,8 +165,8 @@ public:
 
 private:
 
-    DECL_LINK(InternalInteractiveChange, LightControl3D*, void);
-    DECL_LINK(InternalSelectionChange, LightControl3D*, void);
+    DECL_LINK(InternalInteractiveChange, Svx3DLightControl*, void);
+    DECL_LINK(InternalSelectionChange, Svx3DLightControl*, void);
     DECL_LINK(ScrollBarMove, weld::Scale&, void);
     DECL_LINK(ButtonPress, weld::Button&, void);
     DECL_LINK(KeyInput, const KeyEvent&, bool);

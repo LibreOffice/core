@@ -244,7 +244,7 @@ void PreviewControl3D::Set3DAttributes( const SfxItemSet& rAttr )
 
 static const sal_Int32 g_nInteractionStartDistance = 5 * 5 * 2;
 
-LightControl3D::LightControl3D()
+Svx3DLightControl::Svx3DLightControl()
 :   maChangeCallback(),
     maSelectionChangeCallback(),
     maSelectedLight(NO_LIGHT_SELECTED),
@@ -265,13 +265,13 @@ LightControl3D::LightControl3D()
 {
 }
 
-void LightControl3D::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void Svx3DLightControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     PreviewControl3D::SetDrawingArea(pDrawingArea);
     Construct2();
 }
 
-void LightControl3D::Construct2()
+void Svx3DLightControl::Construct2()
 {
     {
         // hide all page stuff, use control background (normally gray)
@@ -363,7 +363,7 @@ void LightControl3D::Construct2()
     mpScene->SetRectsDirty();
 }
 
-void LightControl3D::ConstructLightObjects()
+void Svx3DLightControl::ConstructLightObjects()
 {
     for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
     {
@@ -407,7 +407,7 @@ void LightControl3D::ConstructLightObjects()
     }
 }
 
-void LightControl3D::AdaptToSelectedLight()
+void Svx3DLightControl::AdaptToSelectedLight()
 {
     if(NO_LIGHT_SELECTED == maSelectedLight)
     {
@@ -459,7 +459,7 @@ void LightControl3D::AdaptToSelectedLight()
     }
 }
 
-void LightControl3D::TrySelection(Point aPosPixel)
+void Svx3DLightControl::TrySelection(Point aPosPixel)
 {
     if(mpScene)
     {
@@ -525,12 +525,12 @@ void LightControl3D::TrySelection(Point aPosPixel)
     }
 }
 
-void LightControl3D::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void Svx3DLightControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     PreviewControl3D::Paint(rRenderContext, rRect);
 }
 
-tools::Rectangle LightControl3D::GetFocusRect()
+tools::Rectangle Svx3DLightControl::GetFocusRect()
 {
     if (!HasFocus())
         return tools::Rectangle();
@@ -540,7 +540,7 @@ tools::Rectangle LightControl3D::GetFocusRect()
     return tools::Rectangle(Point(2, 2), aFocusSize);
 }
 
-bool LightControl3D::MouseButtonDown( const MouseEvent& rMEvt )
+bool Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bCallParent(true);
 
@@ -569,7 +569,7 @@ bool LightControl3D::MouseButtonDown( const MouseEvent& rMEvt )
     return true;
 }
 
-bool LightControl3D::MouseMove(const MouseEvent& rMEvt)
+bool Svx3DLightControl::MouseMove(const MouseEvent& rMEvt)
 {
     if (!mbMouseCaptured)
         return false;
@@ -661,7 +661,7 @@ bool LightControl3D::MouseMove(const MouseEvent& rMEvt)
     return true;
 }
 
-bool LightControl3D::MouseButtonUp(const MouseEvent& rMEvt)
+bool Svx3DLightControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (!mbMouseCaptured)
         return false;
@@ -681,7 +681,7 @@ bool LightControl3D::MouseButtonUp(const MouseEvent& rMEvt)
     return true;
 }
 
-void LightControl3D::Resize()
+void Svx3DLightControl::Resize()
 {
     // set size of page
     const Size aSize(GetDrawingArea()->get_ref_device().PixelToLogic(GetOutputSizePixel()));
@@ -691,7 +691,7 @@ void LightControl3D::Resize()
     mpScene->SetSnapRect(tools::Rectangle(Point(0, 0), aSize));
 }
 
-void LightControl3D::SetObjectType(SvxPreviewObjectType nType)
+void Svx3DLightControl::SetObjectType(SvxPreviewObjectType nType)
 {
     // call parent
     PreviewControl3D::SetObjectType(nType);
@@ -705,12 +705,12 @@ void LightControl3D::SetObjectType(SvxPreviewObjectType nType)
     }
 }
 
-bool LightControl3D::IsSelectionValid()
+bool Svx3DLightControl::IsSelectionValid()
 {
     return (NO_LIGHT_SELECTED != maSelectedLight) && GetLightOnOff(maSelectedLight);
 }
 
-void LightControl3D::GetPosition(double& rHor, double& rVer)
+void Svx3DLightControl::GetPosition(double& rHor, double& rVer)
 {
     if(IsSelectionValid())
     {
@@ -726,7 +726,7 @@ void LightControl3D::GetPosition(double& rHor, double& rVer)
     }
 }
 
-void LightControl3D::SetPosition(double fHor, double fVer)
+void Svx3DLightControl::SetPosition(double fHor, double fVer)
 {
     if(IsSelectionValid())
     {
@@ -780,7 +780,7 @@ void LightControl3D::SetPosition(double fHor, double fVer)
     }
 }
 
-void LightControl3D::SetRotation(double fRotX, double fRotY, double fRotZ)
+void Svx3DLightControl::SetRotation(double fRotX, double fRotY, double fRotZ)
 {
     if(IsGeometrySelected())
     {
@@ -802,14 +802,14 @@ void LightControl3D::SetRotation(double fRotX, double fRotY, double fRotZ)
     }
 }
 
-void LightControl3D::GetRotation(double& rRotX, double& rRotY, double& rRotZ)
+void Svx3DLightControl::GetRotation(double& rRotX, double& rRotY, double& rRotZ)
 {
     rRotX = mfRotateX;
     rRotY = mfRotateY;
     rRotZ = mfRotateZ;
 }
 
-void LightControl3D::Set3DAttributes( const SfxItemSet& rAttr )
+void Svx3DLightControl::Set3DAttributes( const SfxItemSet& rAttr )
 {
     // call parent
     PreviewControl3D::Set3DAttributes(rAttr);
@@ -826,7 +826,7 @@ void LightControl3D::Set3DAttributes( const SfxItemSet& rAttr )
     Invalidate();
 }
 
-void LightControl3D::SelectLight(sal_uInt32 nLightNumber)
+void Svx3DLightControl::SelectLight(sal_uInt32 nLightNumber)
 {
     if(nLightNumber > 7)
     {
@@ -851,7 +851,7 @@ void LightControl3D::SelectLight(sal_uInt32 nLightNumber)
     }
 }
 
-bool LightControl3D::GetLightOnOff(sal_uInt32 nNum) const
+bool Svx3DLightControl::GetLightOnOff(sal_uInt32 nNum) const
 {
     if(nNum <= 7)
     {
@@ -873,7 +873,7 @@ bool LightControl3D::GetLightOnOff(sal_uInt32 nNum) const
     return false;
 }
 
-Color LightControl3D::GetLightColor(sal_uInt32 nNum) const
+Color Svx3DLightControl::GetLightColor(sal_uInt32 nNum) const
 {
     if(nNum <= 7)
     {
@@ -895,7 +895,7 @@ Color LightControl3D::GetLightColor(sal_uInt32 nNum) const
     return COL_BLACK;
 }
 
-basegfx::B3DVector LightControl3D::GetLightDirection(sal_uInt32 nNum) const
+basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 {
     if(nNum <= 7)
     {
@@ -917,7 +917,7 @@ basegfx::B3DVector LightControl3D::GetLightDirection(sal_uInt32 nNum) const
     return basegfx::B3DVector();
 }
 
-SvxLightCtl3D::SvxLightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
+SvxLightCtl3D::SvxLightCtl3D(Svx3DLightControl& rLightControl, weld::Scale& rHori,
                        weld::Scale& rVert, weld::Button& rSwitcher)
     : mrLightControl(rLightControl)
     , mrHorScroller(rHori)
@@ -1155,7 +1155,7 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange, LightControl3D*, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange, Svx3DLightControl*, void)
 {
     double fHor(0.0), fVer(0.0);
 
@@ -1169,7 +1169,7 @@ IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange, LightControl3D*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange, LightControl3D*, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange, Svx3DLightControl*, void)
 {
     CheckSelection();
 

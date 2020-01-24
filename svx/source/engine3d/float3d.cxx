@@ -181,7 +181,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xHoriScale(m_xBuilder->weld_scale("horiscale"))
     , m_xVertScale(m_xBuilder->weld_scale("vertscale"))
     , m_xBtn_Corner(m_xBuilder->weld_button("corner"))
-    , m_xLightPreview(new LightControl3D)
+    , m_xLightPreview(new Svx3DLightControl)
     , m_xCtlLightPreviewWin(new weld::CustomWeld(*m_xBuilder, "lightpreview", *m_xLightPreview))
     , m_xCtlLightPreview(new SvxLightCtl3D(*m_xLightPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner)) // TODO might be other body widget as arg 1
 

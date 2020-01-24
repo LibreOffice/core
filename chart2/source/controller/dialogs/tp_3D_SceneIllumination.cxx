@@ -208,7 +208,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     , m_xHoriScale(m_xBuilder->weld_scale("hori"))
     , m_xVertScale(m_xBuilder->weld_scale("vert"))
     , m_xBtn_Corner(m_xBuilder->weld_button("corner"))
-    , m_xPreview(new LightControl3D)
+    , m_xPreview(new Svx3DLightControl)
     , m_xPreviewWnd(new weld::CustomWeld(*m_xBuilder, "CTL_LIGHT_PREVIEW", *m_xPreview))
     , m_xCtl_Preview(new SvxLightCtl3D(*m_xPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner))
 {
