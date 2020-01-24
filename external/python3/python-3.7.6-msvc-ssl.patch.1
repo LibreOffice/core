@@ -23,3 +23,18 @@ No use for applink.c OPENSSL_Applink, everything is compiled with the same MSVC
      </Link>
    </ItemDefinitionGroup>
    <PropertyGroup>
+@@ -15,10 +15,10 @@
+     <_DLLSuffix Condition="$(Platform) == 'ARM64'">$(_DLLSuffix)-arm64</_DLLSuffix>
+   </PropertyGroup>
+   <ItemGroup>
+-    <_SSLDLL Include="$(opensslOutDir)\libcrypto$(_DLLSuffix).dll" />
+-    <_SSLDLL Include="$(opensslOutDir)\libcrypto$(_DLLSuffix).pdb" />
+-    <_SSLDLL Include="$(opensslOutDir)\libssl$(_DLLSuffix).dll" />
+-    <_SSLDLL Include="$(opensslOutDir)\libssl$(_DLLSuffix).pdb" />
++    <_SSLDLL Include="$(opensslOutDir)\libeay32.dll" />
++    <_SSLDLL Include="$(opensslOutDir)\libeay32.pdb" />
++    <_SSLDLL Include="$(opensslOutDir)\ssleay32.dll" />
++    <_SSLDLL Include="$(opensslOutDir)\ssleay32.pdb" />
+   </ItemGroup>
+   <Target Name="_CopySSLDLL" Inputs="@(_SSLDLL)" Outputs="@(_SSLDLL->'$(OutDir)%(Filename)%(Extension)')" AfterTargets="Build">
+     <Copy SourceFiles="@(_SSLDLL)" DestinationFolder="$(OutDir)" />
