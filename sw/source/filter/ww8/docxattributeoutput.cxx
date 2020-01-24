@@ -7724,20 +7724,18 @@ void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
                 FSNS( XML_w, XML_lineRule ), "exact",
                 FSNS( XML_w, XML_line ), OString::number( -nSpace ).getStr() );
     }
-    else if( nMulti )
+    else if( nSpace > 0 && nMulti )
     {
         AddToAttrList( m_pParagraphSpacingAttrList, 2,
                 FSNS( XML_w, XML_lineRule ), "auto",
                 FSNS( XML_w, XML_line ), OString::number( nSpace ).getStr() );
     }
-    else if ( nSpace > 0 )
+    else
     {
         AddToAttrList( m_pParagraphSpacingAttrList, 2,
                 FSNS( XML_w, XML_lineRule ), "atLeast",
                 FSNS( XML_w, XML_line ), OString::number( nSpace ).getStr() );
     }
-    else
-        AddToAttrList( m_pParagraphSpacingAttrList, FSNS( XML_w, XML_lineRule ), "auto" );
 }
 
 void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
