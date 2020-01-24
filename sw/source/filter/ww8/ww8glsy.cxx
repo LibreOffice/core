@@ -49,7 +49,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
         if (xTableStream.is() && ERRCODE_NONE == xTableStream->GetError())
         {
             xTableStream->SetEndian(SvStreamEndian::LITTLE);
-            xGlossary.reset(new WW8GlossaryFib(*refStrm, nVersion, aWwFib));
+            xGlossary = std::make_shared<WW8GlossaryFib>(*refStrm, nVersion, aWwFib);
         }
     }
 }

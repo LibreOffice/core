@@ -896,7 +896,7 @@ void SwDocShell::Edit(
         std::shared_ptr<SfxRequest> pRequest;
         if (pReq)
         {
-            pRequest.reset(new SfxRequest(*pReq));
+            pRequest = std::make_shared<SfxRequest>(*pReq);
             pReq->Ignore(); // the 'old' request is not relevant any more
         }
 

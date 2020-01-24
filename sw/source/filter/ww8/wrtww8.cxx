@@ -3652,7 +3652,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCurso
     , m_pTopNodeOfHdFtPage(nullptr)
     , m_pBkmks(nullptr)
     , m_pRedlAuthors(nullptr)
-    , m_pTableInfo(new ww8::WW8TableInfo())
+    , m_pTableInfo(std::make_shared<ww8::WW8TableInfo>())
     , m_nCharFormatStart(0)
     , m_nFormatCollStart(0)
     , m_nStyleBeforeFly(0)
@@ -4152,7 +4152,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     if (nShadowsBefore > 0)
     {
         ww8::WW8TableNodeInfoInner::Pointer_t
-            pTmpNodeInfoInner(new ww8::WW8TableNodeInfoInner(nullptr));
+            pTmpNodeInfoInner = std::make_shared<ww8::WW8TableNodeInfoInner>(nullptr);
 
         pTmpNodeInfoInner->setDepth(pNodeInfoInner->getDepth());
         pTmpNodeInfoInner->setEndOfCell(true);
@@ -4187,7 +4187,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     if (nShadowsAfter > 0)
     {
         ww8::WW8TableNodeInfoInner::Pointer_t
-            pTmpNodeInfoInner(new ww8::WW8TableNodeInfoInner(nullptr));
+            pTmpNodeInfoInner= std::make_shared<ww8::WW8TableNodeInfoInner>(nullptr);
 
         pTmpNodeInfoInner->setDepth(pNodeInfoInner->getDepth());
         pTmpNodeInfoInner->setEndOfCell(true);
@@ -4272,7 +4272,7 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
 {
     if (m_pKeyMap == nullptr)
     {
-        m_pKeyMap.reset(new NfKeywordTable);
+        m_pKeyMap = std::make_shared<NfKeywordTable>();
         NfKeywordTable & rKeywordTable = *m_pKeyMap;
         rKeywordTable[NF_KEY_D] = "d";
         rKeywordTable[NF_KEY_DD] = "dd";

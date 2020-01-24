@@ -700,8 +700,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             }
             else
             {
-                std::shared_ptr<ww8::Frame>  pFramePr;
-                pFramePr.reset(new ww8::Frame(aFrame));
+                std::shared_ptr<ww8::Frame> pFramePr = std::make_shared<ww8::Frame>(aFrame);
                 aFramePrTextbox.push_back(pFramePr);
             }
         }
@@ -9179,7 +9178,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nextFontId( 1 ),
       m_tableReference(new TableReference()),
       m_bIgnoreNextFill(false),
-      m_pTableStyleExport(new DocxTableStyleExport(rExport.m_pDoc, pSerializer)),
+      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(rExport.m_pDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),

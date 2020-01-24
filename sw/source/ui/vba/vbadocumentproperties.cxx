@@ -807,7 +807,7 @@ public:
     CustomPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel )
     {
         // suck in the document( custom ) properties
-        mpPropGetSetHelper.reset( new CustomPropertyGetSetHelper( m_xModel ) );
+        mpPropGetSetHelper = std::make_shared<CustomPropertyGetSetHelper>( m_xModel );
         mxUserDefinedProp.set(mpPropGetSetHelper->getUserDefinedProperties(),
                 uno::UNO_SET_THROW);
     };

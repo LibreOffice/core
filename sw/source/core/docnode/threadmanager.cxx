@@ -49,7 +49,7 @@ ThreadManager::ThreadManager( uno::Reference< util::XJobManager > const & rThrea
 
 void ThreadManager::Init()
 {
-    mpThreadListener.reset( new ThreadListener( *this ) );
+    mpThreadListener = std::make_shared<ThreadListener>( *this );
 
     maStartNewThreadIdle.SetPriority( TaskPriority::LOWEST );
     maStartNewThreadIdle.SetInvokeHandler( LINK( this, ThreadManager, TryToStartNewThread ) );

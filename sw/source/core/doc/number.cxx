@@ -1043,7 +1043,7 @@ void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
 void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
 {
     if (!mpGrabBagItem.get())
-        mpGrabBagItem.reset(new SfxGrabBagItem);
+        mpGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     mpGrabBagItem->PutValue(rVal, 0);
 }

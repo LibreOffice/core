@@ -104,7 +104,7 @@ ToxTextGenerator::GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase,
 ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm,
         std::shared_ptr<ToxTabStopTokenHandler> const & tabStopHandler)
 : mToxForm(toxForm),
-  mLinkProcessor(new ToxLinkProcessor()),
+  mLinkProcessor(std::make_shared<ToxLinkProcessor>()),
   mTabStopTokenHandler(tabStopHandler)
 {}
 

@@ -5193,7 +5193,7 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
     {
         SwWW8StyInf& rSI = m_vColl[m_nCurrentColl];
         if (!rSI.m_xWWFly)
-            rSI.m_xWWFly.reset(new WW8FlyPara(m_bVer67));
+            rSI.m_xWWFly = std::make_shared<WW8FlyPara>(m_bVer67);
         rSI.m_xWWFly->Read(*pData, m_xStyles.get());
         if (rSI.m_xWWFly->IsEmpty())
         {

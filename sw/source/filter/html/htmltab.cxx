@@ -143,7 +143,7 @@ public:
         bRestartPRE( false ),
         bRestartXMP( false ),
         bRestartListing( false ),
-        xAttrTab(new HTMLAttrTable)
+        xAttrTab(std::make_shared<HTMLAttrTable>())
     {
         memset(xAttrTab.get(), 0, sizeof(HTMLAttrTable));
     }
@@ -691,7 +691,7 @@ const std::shared_ptr<SwHTMLTableLayoutCnts>& HTMLTableCnts::CreateLayoutInfo()
         std::shared_ptr<SwHTMLTableLayout> xTableInfo;
         if (m_xTable)
             xTableInfo = m_xTable->CreateLayoutInfo();
-        m_xLayoutInfo.reset(new SwHTMLTableLayoutCnts(m_pStartNode, xTableInfo, m_bNoBreak, xNextInfo));
+        m_xLayoutInfo = std::make_shared<SwHTMLTableLayoutCnts>(m_pStartNode, xTableInfo, m_bNoBreak, xNextInfo);
     }
 
     return m_xLayoutInfo;
@@ -750,7 +750,7 @@ void HTMLTableCell::SetProtected()
 
     // Copy background color
     if (m_xBGBrush)
-        m_xBGBrush.reset(new SvxBrushItem(*m_xBGBrush));
+        m_xBGBrush = std::make_shared<SvxBrushItem>(*m_xBGBrush);
 
     m_nRowSpan = 1;
     m_nColSpan = 1;
@@ -1096,13 +1096,13 @@ const std::shared_ptr<SwHTMLTableLayout>& HTMLTable::CreateLayoutInfo()
     sal_uInt16 nRightBorderWidth =
         m_bRightBorder ? GetBorderWidth( m_aRightBorderLine, true ) : 0;
 
-    m_xLayoutInfo.reset(new SwHTMLTableLayout(
+    m_xLayoutInfo = std::make_shared<SwHTMLTableLayout>(
                         m_pSwTable,
                         m_nRows, m_nCols, m_bFixedCols, m_bColSpec,
                         nW, m_bPercentWidth, m_nBorder, m_nCellPadding,
                         m_nCellSpacing, m_eTableAdjust,
                         m_nLeftMargin, m_nRightMargin,
-                        nBorderWidth, nLeftBorderWidth, nRightBorderWidth));
+                        nBorderWidth, nLeftBorderWidth, nRightBorderWidth);
 
     bool bExportable = true;
     sal_uInt16 i;
@@ -4488,7 +4488,7 @@ public:
 
     CaptionSaveStruct( SwHTMLParser& rParser, const SwPosition& rPos ) :
         SectionSaveStruct( rParser ), aSavePos( rPos ),
-        xAttrTab(new HTMLAttrTable)
+        xAttrTab(std::make_shared<HTMLAttrTable>())
     {
         rParser.SaveAttrTab(xAttrTab);
 

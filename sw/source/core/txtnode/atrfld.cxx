@@ -512,10 +512,10 @@ void SwTextField::GetPamForTextField(
 
     const SwTextNode& rTextNode = rTextField.GetTextNode();
 
-    rPamForTextField.reset( new SwPaM( rTextNode,
+    rPamForTextField = std::make_shared<SwPaM>( rTextNode,
                                     (rTextField.End() != nullptr) ? *(rTextField.End()) : ( rTextField.GetStart() + 1 ),
                                     rTextNode,
-                                    rTextField.GetStart() ) );
+                                    rTextField.GetStart() );
 
 }
 

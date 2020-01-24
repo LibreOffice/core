@@ -101,7 +101,7 @@ std::shared_ptr<HTMLAttrTable> const & HTMLAttrContext_SaveDoc::GetAttrTab( bool
 {
     if (!xAttrTab && bCreate)
     {
-        xAttrTab.reset(new HTMLAttrTable);
+        xAttrTab = std::make_shared<HTMLAttrTable>();
         memset(xAttrTab.get(), 0, sizeof(HTMLAttrTable));
     }
     return xAttrTab;

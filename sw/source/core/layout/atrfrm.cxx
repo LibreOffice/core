@@ -3518,7 +3518,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
         // create FillAttributes on demand
         if(!maFillAttributes.get())
         {
-            const_cast< SwFrameFormat* >(this)->maFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(GetAttrSet()));
+            const_cast< SwFrameFormat* >(this)->maFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetAttrSet());
         }
     }
     else

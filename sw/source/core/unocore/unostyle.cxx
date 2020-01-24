@@ -4654,7 +4654,7 @@ SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxA
 
 SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName) :
     m_pDocShell(pDocShell),
-    m_pBoxAutoFormat_Impl(new SwBoxAutoFormat()),
+    m_pBoxAutoFormat_Impl(std::make_shared<SwBoxAutoFormat>()),
     m_sName(sName),
     m_bPhysical(false)
 {

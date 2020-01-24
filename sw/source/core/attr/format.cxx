@@ -774,7 +774,7 @@ void SwFormat::GetGrabBagItem(uno::Any& rVal) const
 void SwFormat::SetGrabBagItem(const uno::Any& rVal)
 {
     if (!m_pGrabBagItem.get())
-        m_pGrabBagItem.reset(new SfxGrabBagItem);
+        m_pGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     m_pGrabBagItem->PutValue(rVal, 0);
 }

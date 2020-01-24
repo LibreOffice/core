@@ -200,9 +200,9 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
 
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
     double nFadeRate = double(m_nFadeRate) / 100.0;
-    const basegfx::BColorModifierSharedPtr aBColorModifier(
-                new basegfx::BColorModifier_interpolate(COL_WHITE.getBColor(),
-                                                        1.0 - nFadeRate));
+    const basegfx::BColorModifierSharedPtr aBColorModifier =
+                std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
+                                                        1.0 - nFadeRate);
     aGhostedSeq[0].set( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             aSeq, aBColorModifier));
 

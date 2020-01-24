@@ -1507,7 +1507,7 @@ SwEscherExGlobal::~SwEscherExGlobal()
 SvStream* SwEscherExGlobal::ImplQueryPictureStream()
 {
     // this function will be called exactly once
-    mxPicStrm.reset( new SvMemoryStream );
+    mxPicStrm = std::make_shared<SvMemoryStream>();
     mxPicStrm->SetEndian(SvStreamEndian::LITTLE);
     return mxPicStrm.get();
 }

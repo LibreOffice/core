@@ -90,9 +90,9 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFra
         pControl = lb->second;
     else
     {
-        SwFrameControlPtr pNewControl(
-                new SwFrameControl( VclPtr<SwHeaderFooterWin>::Create(
-                                        m_pEditWin, pPageFrame, bHeader ).get() ) );
+        SwFrameControlPtr pNewControl =
+                std::make_shared<SwFrameControl>( VclPtr<SwHeaderFooterWin>::Create(
+                                        m_pEditWin, pPageFrame, bHeader ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
         rControls.insert(lb, make_pair(pPageFrame, pNewControl));
@@ -122,8 +122,8 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl = lb->second;
     else
     {
-        SwFrameControlPtr pNewControl( new SwFrameControl(
-                VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrame ).get() ) );
+        SwFrameControlPtr pNewControl = std::make_shared<SwFrameControl>(
+                VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrame ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 
@@ -156,8 +156,8 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
         return;
     else
     {
-        SwFrameControlPtr pNewControl( new SwFrameControl(
-                VclPtr<UnfloatTableButton>::Create( m_pEditWin, pFlyFrame ).get() ) );
+        SwFrameControlPtr pNewControl = std::make_shared<SwFrameControl>(
+                VclPtr<UnfloatTableButton>::Create( m_pEditWin, pFlyFrame ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 

@@ -6256,14 +6256,14 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                 pTmpBackBrush.reset(new SvxBrushItem( COL_WHITE, RES_BACKGROUND ));
 
                 //UUU
-                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(COL_WHITE));
+                aFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(COL_WHITE);
             }
             else
             {
                 pTmpBackBrush.reset(new SvxBrushItem( aGlobalRetoucheColor, RES_BACKGROUND));
 
                 //UUU
-                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aGlobalRetoucheColor));
+                aFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aGlobalRetoucheColor);
             }
 
             pItem = pTmpBackBrush.get();
@@ -6321,7 +6321,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                 {
                     pNewItem.reset(new SvxBrushItem( *pCol, RES_BACKGROUND ));
                     pItem = pNewItem.get();
-                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pCol));
+                    aFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(*pCol);
                 }
 
                 SwRegionRects aRegion( aRect );
@@ -7244,9 +7244,9 @@ bool SwFrame::GetBackgroundBrush(
                     if (pObject)
                     {
                         // Work with the fill attributes of the shape of the fly frame.
-                        rFillAttributes.reset(
-                            new drawinglayer::attribute::SdrAllFillAttributesHelper(
-                                pObject->GetMergedItemSet()));
+                        rFillAttributes =
+                            std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                                pObject->GetMergedItemSet());
                         bHandledTextBox = true;
                     }
                 }

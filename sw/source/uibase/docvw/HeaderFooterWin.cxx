@@ -372,9 +372,9 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
     double nFadeRate = double(m_nFadeRate) / 100.0;
 
-    const basegfx::BColorModifierSharedPtr aBColorModifier(
-        new basegfx::BColorModifier_interpolate(COL_WHITE.getBColor(),
-                                                1.0 - nFadeRate));
+    const basegfx::BColorModifierSharedPtr aBColorModifier =
+        std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
+                                                1.0 - nFadeRate);
 
     aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(aSeq, aBColorModifier));

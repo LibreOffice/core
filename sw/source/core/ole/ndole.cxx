@@ -116,7 +116,7 @@ void SAL_CALL SwOLEListener_Impl::stateChanged( const lang::EventObject&, ::sal_
     if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
         if (!g_pOLELRU_Cache)
-            g_pOLELRU_Cache.reset(new SwOLELRUCache);
+            g_pOLELRU_Cache = std::make_shared<SwOLELRUCache>();
         g_pOLELRU_Cache->InsertObj( *mpObj );
     }
     else if ( mpObj && nNewState == embed::EmbedStates::LOADED && nOldState == embed::EmbedStates::RUNNING )
@@ -954,7 +954,7 @@ uno::Reference < embed::XEmbeddedObject > const & SwOLEObj::GetOleRef()
     {
         // move object to first position in cache
         if (!g_pOLELRU_Cache)
-            g_pOLELRU_Cache.reset(new SwOLELRUCache);
+            g_pOLELRU_Cache = std::make_shared<SwOLELRUCache>();
         g_pOLELRU_Cache->InsertObj( *this );
     }
 

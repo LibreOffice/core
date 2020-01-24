@@ -2120,7 +2120,7 @@ SwXTextField::getAnchor()
         {
             if ((*ppMark)->GetName() == pPostItField->GetName())
             {
-                pPamForTextField.reset(new SwPaM((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd()));
+                pPamForTextField = std::make_shared<SwPaM>((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
                 break;
             }
         }
