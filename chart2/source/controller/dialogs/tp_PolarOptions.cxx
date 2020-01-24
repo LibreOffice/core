@@ -33,7 +33,7 @@ PolarOptionsTabPage::PolarOptionsTabPage(weld::Container* pPage, weld::DialogCon
     , m_xNF_StartingAngle(m_xBuilder->weld_metric_spin_button("NF_STARTING_ANGLE", FieldUnit::DEGREE))
     , m_xFL_PlotOptions(m_xBuilder->weld_frame("framePLOT_OPTIONS"))
     , m_xCB_IncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS_POLAR"))
-    , m_xAngleDial(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xAngleDial(new svx::DialControl)
     , m_xAngleDialWin(new weld::CustomWeld(*m_xBuilder, "CT_ANGLE_DIAL", *m_xAngleDial))
 {
     m_xAngleDial->SetLinkedField(m_xNF_StartingAngle.get());

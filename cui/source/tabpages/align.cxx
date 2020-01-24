@@ -132,7 +132,7 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xOrientFrame(m_xBuilder->weld_widget("orientation"))
     , m_xPropertiesFrame(m_xBuilder->weld_widget("properties"))
     , m_xVsRefEdge(new weld::CustomWeld(*m_xBuilder, "references", m_aVsRefEdge))
-    , m_xCtrlDial(new DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtrlDial(new DialControl)
     , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialcontrol", *m_xCtrlDial))
 {
     m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
