@@ -477,6 +477,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
     TextFrameIndex m_nSoftHyphPos;   ///< SoftHyphPos for Hyphenation
     TextFrameIndex m_nLineStart;     ///< Current line start in rText
     TextFrameIndex m_nUnderScorePos; ///< enlarge repaint if underscore has been found
+    TextFrameIndex m_nLastBookmarkPos; ///< need to check for bookmarks at every portion
     // #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips m_nLeft;              // Left margin
     SwTwips m_nRight;             // Right margin
@@ -635,6 +636,8 @@ public:
     void SetNumDone( const bool bNew ) { m_bNumDone = bNew; }
     bool IsArrowDone() const { return m_bArrowDone; }
     void SetArrowDone( const bool bNew ) { m_bArrowDone = bNew; }
+
+    bool CheckCurrentPosBookmark();
 
     // For SwTextPortion::Hyphenate
     bool ChgHyph( const bool bNew );

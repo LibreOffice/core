@@ -1308,6 +1308,14 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                 bDraw = true;
             }
             break;
+        case PortionType::Bookmark:
+            if (!GetOpt().IsPagePreview()
+                 && !GetOpt().IsReadonly()
+                 && GetOpt().IsViewMetaChars())
+            {
+                bDraw = true;
+            }
+            break;
         case PortionType::InputField:
             // input field shading also in read-only mode
             if ( !GetOpt().IsPagePreview()
@@ -1515,6 +1523,7 @@ void SwTextFormatInfo::Init()
     m_nForcedLeftMargin = 0;
     m_nSoftHyphPos = TextFrameIndex(0);
     m_nUnderScorePos = TextFrameIndex(COMPLETE_STRING);
+    m_nLastBookmarkPos = TextFrameIndex(-1);
     m_cHookChar = 0;
     SetIdx(TextFrameIndex(0));
     SetLen(TextFrameIndex(GetText().getLength()));
@@ -1940,6 +1949,20 @@ bool SwTextFormatInfo::ChgHyph( const bool bNew )
             m_pFnt->ChgPhysFnt( m_pVsh, *m_pOut );
     }
     return bOld;
+}
+
+
+bool SwTextFormatInfo::CheckCurrentPosBookmark()
+{
+    if (m_nLastBookmarkPos != GetIdx())
+    {
+        m_nLastBookmarkPos = GetIdx();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
