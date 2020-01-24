@@ -1039,13 +1039,64 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+
                         if ( pStyleSheetProperties )
                         {
                             beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
+                        }
+
+                        // tdf#95495 tdf#106541
+                        // Import the old MSO export (2003) properly by getting the correct
+                        // ilvl, numId and outlineLevel of the styles.
+                        beans::PropertyValues bGrabBag = pEntry->GetInteropGrabBagSeq();
+                        if (sConvertedStyleName == "TOC Level 1" ||
+                            sConvertedStyleName == "TOC Level 2" ||
+                            sConvertedStyleName == "TOC Level 3" ||
+                            sConvertedStyleName == "TOC Level 4" ||
+                            sConvertedStyleName == "TOC Level 5" ||
+                            sConvertedStyleName == "TOC Level 6" ||
+                            sConvertedStyleName == "TOC Level 7" ||
+                            sConvertedStyleName == "TOC Level 8" ||
+                            sConvertedStyleName == "TOC Level 9" ||
+                            sConvertedStyleName == "Appendix 1" ||
+                            sConvertedStyleName == "Appendix 2" ||
+                            sConvertedStyleName == "Appendix 3" ||
+                            sConvertedStyleName == "Appendix 4" ||
+                            sConvertedStyleName == "Appendix 5" ||
+                            sConvertedStyleName == "Appendix 6" ||
+                            sConvertedStyleName == "Appendix 7" ||
+                            sConvertedStyleName == "Appendix 8" ||
+                            sConvertedStyleName == "Appendix 9")
+                        {
+                            uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
+                            if (bGrabBag.hasElements())
+                            {
+                                xPropertySet->setPropertyValue("StyleInteropGrabBag", uno::makeAny(bGrabBag));
+                            }
+                            uno::Any dAny = xPropertySet->getPropertyValue("StyleInteropGrabBag");
+                            auto cGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(dAny.get< uno::Sequence<beans::PropertyValue> >());
+                            for (auto aVal : cGrabBag)
+                            {
+                                if (aVal.Name == "customStyle" && aVal.Value == true)
+                                {
+                                    OUString baseId = pEntry->sBaseStyleIdentifier;
+                                    for (auto allSheetProps : m_pImpl->m_aStyleSheetEntries)
+                                    {
+                                        if (allSheetProps->sStyleIdentifierD == baseId)
+                                        {
+                                            StyleSheetPropertyMap* aSheetProps = dynamic_cast<StyleSheetPropertyMap*>(allSheetProps ? allSheetProps->pProperties.get() : nullptr);
+                                            pStyleSheetProperties->SetListLevel(aSheetProps->GetListLevel());
+                                            pStyleSheetProperties->SetOutlineLevel(aSheetProps->GetOutlineLevel());
+                                            pStyleSheetProperties->SetNumId(aSheetProps->GetNumId());
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
