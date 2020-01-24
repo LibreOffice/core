@@ -541,8 +541,8 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
     ReportDefinitionBase(m_aMutex),
     ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >()),
     ::comphelper::IEmbeddedHelper(),
-    m_aProps(new OReportComponentProperties(_xContext)),
-    m_pImpl(new OReportDefinitionImpl(m_aMutex))
+    m_aProps(std::make_shared<OReportComponentProperties>(_xContext)),
+    m_pImpl(std::make_shared<OReportDefinitionImpl>(m_aMutex))
 {
     m_aProps->m_sName  = RptResId(RID_STR_REPORT);
     osl_atomic_increment(&m_refCount);
@@ -563,8 +563,8 @@ OReportDefinition::OReportDefinition(
     ReportDefinitionBase(m_aMutex),
     ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >()),
     ::comphelper::IEmbeddedHelper(),
-    m_aProps(new OReportComponentProperties(_xContext)),
-    m_pImpl(new OReportDefinitionImpl(m_aMutex))
+    m_aProps(std::make_shared<OReportComponentProperties>(_xContext)),
+    m_pImpl(std::make_shared<OReportDefinitionImpl>(m_aMutex))
 {
     m_aProps->m_sName  = RptResId(RID_STR_REPORT);
     m_aProps->m_xFactory = _xFactory;
@@ -593,7 +593,7 @@ void OReportDefinition::init()
 {
     try
     {
-        m_pImpl->m_pReportModel.reset(new OReportModel(this));
+        m_pImpl->m_pReportModel = std::make_shared<OReportModel>(this);
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
         m_pImpl->m_pReportModel->SetScaleUnit( MapUnit::Map100thMM );
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
@@ -616,7 +616,7 @@ void OReportDefinition::init()
             if ( sMediaType.isEmpty() )
                 xStorProps->setPropertyValue("MediaType",uno::makeAny<OUString>(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII));
         }
-        m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
+        m_pImpl->m_pObjectContainer = std::make_shared<comphelper::EmbeddedObjectContainer>(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) );
     }
     catch (const uno::Exception&)
     {
