@@ -146,11 +146,11 @@ public:
 
 VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
 {
-    mxSiteModel.reset( new VbaSiteModel );
+    mxSiteModel = std::make_shared<VbaSiteModel>();
     mxSiteModel->importProperty( XML_Name, rName );
     mxSiteModel->importProperty( XML_VariousPropertyBits, OUString( '0' ) );
 
-    mxCtrlModel.reset( new AxLabelModel );
+    mxCtrlModel = std::make_shared<AxLabelModel>();
     mxCtrlModel->setAwtModelMode();
     mxCtrlModel->importProperty( XML_Size, "10;10" );
 }
@@ -243,23 +243,23 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
     {
         switch( nTypeIndex )
         {
-            case VBA_SITE_COMMANDBUTTON:    xCtrlModel.reset( new AxCommandButtonModel );   break;
-            case VBA_SITE_LABEL:            xCtrlModel.reset( new AxLabelModel );           break;
-            case VBA_SITE_IMAGE:            xCtrlModel.reset( new AxImageModel );           break;
-            case VBA_SITE_TOGGLEBUTTON:     xCtrlModel.reset( new AxToggleButtonModel );    break;
-            case VBA_SITE_CHECKBOX:         xCtrlModel.reset( new AxCheckBoxModel );        break;
-            case VBA_SITE_OPTIONBUTTON:     xCtrlModel.reset( new AxOptionButtonModel );    break;
-            case VBA_SITE_TEXTBOX:          xCtrlModel.reset( new AxTextBoxModel );         break;
-            case VBA_SITE_LISTBOX:          xCtrlModel.reset( new AxListBoxModel );         break;
-            case VBA_SITE_COMBOBOX:         xCtrlModel.reset( new AxComboBoxModel );        break;
-            case VBA_SITE_SPINBUTTON:       xCtrlModel.reset( new AxSpinButtonModel );      break;
-            case VBA_SITE_SCROLLBAR:        xCtrlModel.reset( new AxScrollBarModel );       break;
-            case VBA_SITE_TABSTRIP:         xCtrlModel.reset( new AxTabStripModel );
+            case VBA_SITE_COMMANDBUTTON:    xCtrlModel= std::make_shared<AxCommandButtonModel>();   break;
+            case VBA_SITE_LABEL:            xCtrlModel= std::make_shared<AxLabelModel>();           break;
+            case VBA_SITE_IMAGE:            xCtrlModel= std::make_shared<AxImageModel>();           break;
+            case VBA_SITE_TOGGLEBUTTON:     xCtrlModel= std::make_shared<AxToggleButtonModel>();    break;
+            case VBA_SITE_CHECKBOX:         xCtrlModel= std::make_shared<AxCheckBoxModel>();        break;
+            case VBA_SITE_OPTIONBUTTON:     xCtrlModel= std::make_shared<AxOptionButtonModel>();    break;
+            case VBA_SITE_TEXTBOX:          xCtrlModel= std::make_shared<AxTextBoxModel>();         break;
+            case VBA_SITE_LISTBOX:          xCtrlModel= std::make_shared<AxListBoxModel>();         break;
+            case VBA_SITE_COMBOBOX:         xCtrlModel= std::make_shared<AxComboBoxModel>();        break;
+            case VBA_SITE_SPINBUTTON:       xCtrlModel= std::make_shared<AxSpinButtonModel>();      break;
+            case VBA_SITE_SCROLLBAR:        xCtrlModel= std::make_shared<AxScrollBarModel>();       break;
+            case VBA_SITE_TABSTRIP:         xCtrlModel= std::make_shared<AxTabStripModel>();
             break;
-            case VBA_SITE_FRAME:            xCtrlModel.reset( new AxFrameModel );           break;
-            case VBA_SITE_MULTIPAGE:        xCtrlModel.reset( new AxMultiPageModel );
+            case VBA_SITE_FRAME:            xCtrlModel= std::make_shared<AxFrameModel>();           break;
+            case VBA_SITE_MULTIPAGE:        xCtrlModel= std::make_shared<AxMultiPageModel>();
             break;
-            case VBA_SITE_FORM:             xCtrlModel.reset( new AxPageModel );
+            case VBA_SITE_FORM:             xCtrlModel= std::make_shared<AxPageModel>();
             break;
             default:    OSL_FAIL( "VbaSiteModel::createControlModel - unknown type index" );
         }
@@ -271,11 +271,11 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
         if( pGuid )
         {
             if( *pGuid == COMCTL_GUID_SCROLLBAR_60 )
-                xCtrlModel.reset( new ComCtlScrollBarModel( 6 ) );
+                xCtrlModel = std::make_shared<ComCtlScrollBarModel>( 6 );
             else if( *pGuid == COMCTL_GUID_PROGRESSBAR_50 )
-                xCtrlModel.reset( new ComCtlProgressBarModel( 5 ) );
+                xCtrlModel = std::make_shared<ComCtlProgressBarModel>( 5 );
             else if( *pGuid == COMCTL_GUID_PROGRESSBAR_60 )
-                xCtrlModel.reset( new ComCtlProgressBarModel( 6 ) );
+                xCtrlModel = std::make_shared<ComCtlProgressBarModel>( 6 );
         }
     }
 
@@ -527,7 +527,7 @@ void VbaFormControl::createControlModel( const AxClassTable& rClassTable )
 
 bool VbaFormControl::importSiteModel( BinaryInputStream& rInStrm )
 {
-    mxSiteModel.reset( new VbaSiteModel );
+    mxSiteModel = std::make_shared<VbaSiteModel>();
     return mxSiteModel->importBinaryModel( rInStrm );
 }
 
@@ -570,7 +570,7 @@ void VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
     bool bValid = !rInStrm.isEof();
     for( nSiteIndex = 0; bValid && (nSiteIndex < nSiteCount); ++nSiteIndex )
     {
-        VbaFormControlRef xControl( new VbaFormControl );
+        VbaFormControlRef xControl = std::make_shared<VbaFormControl>();
         maControls.push_back( xControl );
         bValid = xControl->importSiteModel( rInStrm );
     }
@@ -634,13 +634,13 @@ void VbaFormControl::finalizeEmbeddedControls()
                     control is needed. */
                 if( bLastWasOptionButton )
                 {
-                    VbaFormControlVectorRef xDummyGroup( new VbaFormControlVector );
+                    VbaFormControlVectorRef xDummyGroup = std::make_shared<VbaFormControlVector>();
                     aControlGroups.push_back( xDummyGroup );
                     OUString aName = aControlNames.generateDummyName();
-                    VbaFormControlRef xDummyControl( new VbaDummyFormControl( aName ) );
+                    VbaFormControlRef xDummyControl = std::make_shared<VbaDummyFormControl>( aName );
                     xDummyGroup->push_back( xDummyControl );
                 }
-                rxOptionGroup.reset( new VbaFormControlVector );
+                rxOptionGroup = std::make_shared<VbaFormControlVector>();
                 aControlGroups.push_back( rxOptionGroup );
             }
             /*  Append the option button to the control group (which is now
@@ -654,7 +654,7 @@ void VbaFormControl::finalizeEmbeddedControls()
             // open a new control group, if the last group is an option group
             if( bLastWasOptionButton || aControlGroups.empty() )
             {
-                VbaFormControlVectorRef xControlGroup( new VbaFormControlVector );
+                VbaFormControlVectorRef xControlGroup = std::make_shared<VbaFormControlVector>();
                 aControlGroups.push_back( xControlGroup );
             }
             // append the control to the last control group
@@ -817,11 +817,11 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         aFormName = rModuleName;
     if( aFormName.isEmpty() )
         return;
-    mxSiteModel.reset( new VbaSiteModel );
+    mxSiteModel = std::make_shared<VbaSiteModel>();
     mxSiteModel->importProperty( XML_Name, aFormName );
 
     // read the form properties (caption is contained in this '03VBFrame' stream, not in the 'f' stream)
-    mxCtrlModel.reset( new AxUserFormModel );
+    mxCtrlModel = std::make_shared<AxUserFormModel>();
     OUString aKey, aValue;
     bool bExitLoop = false;
     while( !bExitLoop && !aFrameTextStrm.isEof() )

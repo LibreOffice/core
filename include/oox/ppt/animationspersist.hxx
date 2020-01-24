@@ -98,7 +98,7 @@ namespace oox { namespace ppt {
         static css::uno::Any convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l);
 
         AnimTargetElementPtr &     getTarget()
-            { if(!mpTarget) mpTarget.reset( new AnimTargetElement ); return mpTarget; }
+            { if(!mpTarget) mpTarget = std::make_shared<AnimTargetElement>(); return mpTarget; }
         css::uno::Any              maValue;
         sal_Int32                  mnType;
     private:

@@ -222,81 +222,145 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 
     // Fill properties definitions for table parts
 
-    oox::drawingml::FillPropertiesPtr pWholeTblFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pFirstRowFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pFirstColFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pLastRowFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pLastColFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pBand1HFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pBand1VFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pBand2HFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pBand2VFillProperties(new oox::drawingml::FillProperties);
-    oox::drawingml::FillPropertiesPtr pTblBgFillProperties(new oox::drawingml::FillProperties);
+    oox::drawingml::FillPropertiesPtr pWholeTblFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pFirstRowFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pFirstColFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pLastRowFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pLastColFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pBand1HFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pBand1VFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pBand2HFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pBand2VFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
+    oox::drawingml::FillPropertiesPtr pTblBgFillProperties
+        = std::make_shared<oox::drawingml::FillProperties>();
 
     // Start table border line properties definitions for table parts
 
-    oox::drawingml::LinePropertiesPtr pWholeTblLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pWholeTblRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pWholeTblTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pWholeTblBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pWholeTblInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pWholeTblInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pWholeTblLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pWholeTblRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pWholeTblTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pWholeTblBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pWholeTblInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pWholeTblInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pFirstRowLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstRowRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstRowTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstRowBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstRowInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstRowInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pFirstRowLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstRowRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstRowTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstRowBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstRowInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstRowInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pFirstColLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstColRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstColTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstColBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstColInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pFirstColInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pFirstColLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstColRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstColTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstColBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstColInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pFirstColInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pLastColLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastColRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastColTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastColBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastColInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastColInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pLastColLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastColRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastColTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastColBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastColInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastColInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pLastRowLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastRowRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastRowTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastRowBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastRowInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pLastRowInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pLastRowLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastRowRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastRowTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastRowBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastRowInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pLastRowInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pBand1HLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1HRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1HTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1HBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1HInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1HInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pBand1HLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1HRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1HTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1HBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1HInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1HInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pBand1VLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1VRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1VTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1VBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1VInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand1VInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pBand1VLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1VRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1VTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1VBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1VInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand1VInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pBand2HLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2HRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2HTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2HBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2HInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2HInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pBand2HLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2HRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2HTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2HBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2HInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2HInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
-    oox::drawingml::LinePropertiesPtr pBand2VLeftBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2VRightBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2VTopBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2VBottomBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2VInsideHBorder(new oox::drawingml::LineProperties);
-    oox::drawingml::LinePropertiesPtr pBand2VInsideVBorder(new oox::drawingml::LineProperties);
+    oox::drawingml::LinePropertiesPtr pBand2VLeftBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2VRightBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2VTopBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2VBottomBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2VInsideHBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
+    oox::drawingml::LinePropertiesPtr pBand2VInsideVBorder
+        = std::make_shared<oox::drawingml::LineProperties>();
 
     // End table border line properties definitions for table parts
 

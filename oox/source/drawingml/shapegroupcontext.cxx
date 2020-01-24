@@ -88,7 +88,7 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
 */
     case XML_cxnSp:         // connector shape
         {
-            ShapePtr pShape(new Shape("com.sun.star.drawing.ConnectorShape"));
+            ShapePtr pShape = std::make_shared<Shape>("com.sun.star.drawing.ConnectorShape");
             pShape->setLockedCanvas(mpGroupShapePtr->getLockedCanvas());
             return new ConnectorShapeContext( *this, mpGroupShapePtr, pShape );
         }

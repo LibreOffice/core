@@ -55,7 +55,7 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
     {
     case A_TOKEN( txBody ):     // CT_TextBody
         {
-            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+            oox::drawingml::TextBodyPtr xTextBody = std::make_shared<oox::drawingml::TextBody>();
             mrTableCell.setTextBody( xTextBody );
             return new oox::drawingml::TextBodyContext( *this, *xTextBody );
         }

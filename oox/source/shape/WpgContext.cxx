@@ -24,7 +24,7 @@ namespace oox::shape
 WpgContext::WpgContext(FragmentHandler2 const& rParent)
     : FragmentHandler2(rParent)
 {
-    mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+    mpShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape");
     mpShape->setWps(true);
 }
 
@@ -43,7 +43,7 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         // Don't set default character height, Writer has its own way to set
         // the default, and if we don't set it here, editeng properly inherits
         // it.
-        oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false));
+        oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
         return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
         // return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
         //                                   mpShape, pShape);

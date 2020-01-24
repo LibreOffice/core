@@ -230,13 +230,13 @@ public:
                 return new PropertiesContext( *this, mrPoint, rAttribs );
             case DGM_TOKEN( spPr ):
                 if( !mrPoint.mpShape )
-                    mrPoint.mpShape.reset( new Shape() );
+                    mrPoint.mpShape = std::make_shared<Shape>();
                 return new ShapePropertiesContext( *this, *(mrPoint.mpShape) );
             case DGM_TOKEN( t ):
             {
-                TextBodyPtr xTextBody( new TextBody );
+                TextBodyPtr xTextBody = std::make_shared<TextBody>();
                 if( !mrPoint.mpShape )
-                    mrPoint.mpShape.reset( new Shape() );
+                    mrPoint.mpShape = std::make_shared<Shape>();
                 mrPoint.mpShape->setTextBody( xTextBody );
                 return new TextBodyContext( *this, *xTextBody );
             }

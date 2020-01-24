@@ -348,14 +348,14 @@ GraphicHelper& FilterBase::getGraphicHelper() const
 ModelObjectHelper& FilterBase::getModelObjectHelper() const
 {
     if( !mxImpl->mxModelObjHelper )
-        mxImpl->mxModelObjHelper.reset( new ModelObjectHelper( mxImpl->mxModelFactory ) );
+        mxImpl->mxModelObjHelper = std::make_shared<ModelObjectHelper>( mxImpl->mxModelFactory );
     return *mxImpl->mxModelObjHelper;
 }
 
 OleObjectHelper& FilterBase::getOleObjectHelper() const
 {
     if( !mxImpl->mxOleObjHelper )
-        mxImpl->mxOleObjHelper.reset(new OleObjectHelper(mxImpl->mxModelFactory, mxImpl->mxModel));
+        mxImpl->mxOleObjHelper = std::make_shared<OleObjectHelper>(mxImpl->mxModelFactory, mxImpl->mxModel);
     return *mxImpl->mxOleObjHelper;
 }
 

@@ -60,7 +60,7 @@ void Point::dump() const
 } // dgm namespace
 
 DiagramData::DiagramData() :
-    mpFillProperties( new FillProperties )
+    mpFillProperties( std::make_shared<FillProperties>() )
 {
 }
 
@@ -177,9 +177,9 @@ OUString DiagramData::addNode(const OUString& rText)
     dgm::Point aDataPoint;
     aDataPoint.mnType = XML_node;
     aDataPoint.msModelId = sNewNodeId;
-    aDataPoint.mpShape.reset(new Shape());
+    aDataPoint.mpShape = std::make_shared<Shape>();
     aDataPoint.mpShape->setTextBody(std::make_shared<TextBody>());
-    TextRunPtr pTextRun(new TextRun());
+    TextRunPtr pTextRun = std::make_shared<TextRun>();
     pTextRun->getText() = rText;
     aDataPoint.mpShape->getTextBody()->addParagraph().addRun(pTextRun);
 
@@ -196,7 +196,7 @@ OUString DiagramData::addNode(const OUString& rText)
     dgm::Point aPresPoint;
     aPresPoint.mnType = XML_pres;
     aPresPoint.msModelId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
-    aPresPoint.mpShape.reset(new Shape());
+    aPresPoint.mpShape = std::make_shared<Shape>();
     aPresPoint.msPresentationAssociationId = aDataPoint.msModelId;
     if (!sPresSibling.isEmpty())
     {

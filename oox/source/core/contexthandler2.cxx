@@ -40,7 +40,7 @@ struct ElementInfo
 };
 
 ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
-    mxContextStack( new ContextStack ),
+    mxContextStack( std::make_shared<ContextStack>() ),
     mnRootStackSize( 0 ),
     mbEnableTrimSpace( bEnableTrimSpace )
 {

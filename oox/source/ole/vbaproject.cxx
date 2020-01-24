@@ -326,7 +326,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
                 OSL_ENSURE( !aName.isEmpty(), "VbaProject::importVba - invalid module name" );
                 OSL_ENSURE( !maModules.has( aName ), "VbaProject::importVba - multiple modules with the same name" );
                 VbaModuleMap::mapped_type& rxModule = maModules[ aName ];
-                rxModule.reset( new VbaModule( mxContext, mxDocModel, aName, eTextEnc, bExecutable ) );
+                rxModule = std::make_shared<VbaModule>( mxContext, mxDocModel, aName, eTextEnc, bExecutable );
                 // read all remaining records until the MODULEEND record
                 rxModule->importDirRecords( aDirStrm );
                 OSL_ENSURE( !maModulesByStrm.has( rxModule->getStreamName() ), "VbaProject::importVba - multiple modules with the same stream name" );
@@ -435,7 +435,7 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
     {
         OSL_ENSURE( !maModules.has( dummyModule.first ) && !aDummyModules.has( dummyModule.first ), "VbaProject::importVba - multiple modules with the same name" );
         VbaModuleMap::mapped_type& rxModule = aDummyModules[ dummyModule.first ];
-        rxModule.reset( new VbaModule( mxContext, mxDocModel, dummyModule.first, eTextEnc, bExecutable ) );
+        rxModule = std::make_shared<VbaModule>( mxContext, mxDocModel, dummyModule.first, eTextEnc, bExecutable );
         rxModule->setType( dummyModule.second );
     }
 

@@ -167,11 +167,11 @@ ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const 
     switch( nElement )
     {
         case A_TOKEN( majorFont ):
-            mxCharProps.reset( new TextCharacterProperties );
+            mxCharProps = std::make_shared<TextCharacterProperties>();
             mrFontScheme[ XML_major ] = mxCharProps;
             return this;
         case A_TOKEN( minorFont ):
-            mxCharProps.reset( new TextCharacterProperties );
+            mxCharProps = std::make_shared<TextCharacterProperties>();
             mrFontScheme[ XML_minor ] = mxCharProps;
             return this;
 

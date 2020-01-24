@@ -60,7 +60,7 @@ XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 
 PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
-    mxChartConv( new ::oox::drawingml::chart::ChartConverter )
+    mxChartConv( std::make_shared<::oox::drawingml::chart::ChartConverter>() )
 
 {
 #if OSL_DEBUG_LEVEL > 0

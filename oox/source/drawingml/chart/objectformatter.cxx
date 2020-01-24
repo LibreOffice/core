@@ -818,7 +818,7 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
 {
     if( pAutoFormatEntry )
     {
-        mxAutoLine.reset( new LineProperties );
+        mxAutoLine = std::make_shared<LineProperties>();
         mxAutoLine->maLineFill.moFillType = XML_noFill;
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const LineProperties* pLineProps = pTheme->getLineStyle( pAutoFormatEntry->mnThemedIdx ) )
@@ -852,7 +852,7 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
 {
     if( pAutoFormatEntry )
     {
-        mxAutoFill.reset( new FillProperties );
+        mxAutoFill = std::make_shared<FillProperties>();
         if( eObjType != OBJECTTYPE_CHARTSPACE )
             mxAutoFill->moFillType = XML_noFill;
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
@@ -893,7 +893,7 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
 {
     if( pAutoTextEntry )
     {
-        mxAutoText.reset( new TextCharacterProperties );
+        mxAutoText = std::make_shared<TextCharacterProperties>();
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const TextCharacterProperties* pTextProps = pTheme->getFontStyle( pAutoTextEntry->mnThemedFont ) )
                 *mxAutoText = *pTextProps;
@@ -978,7 +978,7 @@ ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Re
     mnMaxSeriesIdx( -1 )
 {
     for(auto const &rEntry : spObjTypeFormatEntries)
-        maTypeFormatters[ rEntry.meObjType ].reset( new ObjectTypeFormatter( *this, rEntry, rChartSpace, rEntry.meObjType ) );
+        maTypeFormatters[ rEntry.meObjType ] = std::make_shared<ObjectTypeFormatter>( *this, rEntry, rChartSpace, rEntry.meObjType );
 
     try
     {
@@ -999,7 +999,7 @@ ObjectTypeFormatter* ObjectFormatterData::getTypeFormatter( ObjectType eObjType 
 }
 
 ObjectFormatter::ObjectFormatter( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
-    mxData( new ObjectFormatterData( rFilter, rxChartDoc, rChartSpace ) )
+    mxData( std::make_shared<ObjectFormatterData>( rFilter, rxChartDoc, rChartSpace ) )
 {
 }
 

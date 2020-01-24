@@ -42,15 +42,15 @@ public:
 
     bool         is() const { return this->get() != 0; }
 
-    ModelType&   create() { this->reset( new ModelType ); return **this; }
+    ModelType&   create() { (*this) = std::make_shared<ModelType>(); return **this; }
     template< typename Param1Type >
-    ModelType&   create( const Param1Type& rParam1 ) { this->reset( new ModelType( rParam1 ) ); return **this; }
+    ModelType&   create( const Param1Type& rParam1 ) { (*this) = std::make_shared<ModelType>( rParam1 ); return **this; }
     template< typename Param1Type, typename Param2Type >
-    ModelType&   create( const Param1Type& rParam1, const Param2Type& rParam2 ) { this->reset( new ModelType( rParam1, rParam2 ) ); return **this; }
+    ModelType&   create( const Param1Type& rParam1, const Param2Type& rParam2 ) { (*this) = std::make_shared<ModelType>( rParam1, rParam2 ); return **this; }
 
-    ModelType&   getOrCreate() { if( !*this ) this->reset( new ModelType ); return **this; }
+    ModelType&   getOrCreate() { if( !*this ) (*this) = std::make_shared<ModelType>(); return **this; }
     template< typename Param1Type >
-    ModelType&   getOrCreate( const Param1Type& rParam1 ) { if( !*this ) this->reset( new ModelType( rParam1 ) ); return **this; }
+    ModelType&   getOrCreate( const Param1Type& rParam1 ) { if( !*this ) (*this) = std::make_shared<ModelType>( rParam1 ); return **this; }
 };
 
 template< typename ModelType >

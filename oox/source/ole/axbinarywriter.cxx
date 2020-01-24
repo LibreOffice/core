@@ -138,7 +138,7 @@ void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue )
 void AxBinaryPropertyWriter::writePairProperty( AxPairData& orPairData )
 {
     startNextProperty();
-    maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( orPairData ) ) );
+    maLargeProps.push_back( ComplexPropVector::value_type( std::make_shared<PairProperty>( orPairData ) ) );
 }
 
 void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue )
@@ -146,7 +146,7 @@ void AxBinaryPropertyWriter::writeStringProperty( OUString& orValue )
     sal_uInt32 nSize = orValue.getLength() * 2;
     setFlag(  nSize, AX_STRING_COMPRESSED, false );
     maOutStrm.writeAligned< sal_uInt32 >( nSize );
-    maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
+    maLargeProps.push_back( ComplexPropVector::value_type( std::make_shared<StringProperty>( orValue, nSize ) ) );
     startNextProperty();
 }
 

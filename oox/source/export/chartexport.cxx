@@ -421,7 +421,7 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mnXmlNamespace( nXmlNamespace )
     , mnSeriesCount(0)
     , mxChartModel( xModel )
-    , mpURLTransformer(new URLTransformer)
+    , mpURLTransformer(std::make_shared<URLTransformer>())
     , mbHasCategoryLabels( false )
     , mbIsCategoryPositionShifted( false )
     , mbHasZAxis( false )

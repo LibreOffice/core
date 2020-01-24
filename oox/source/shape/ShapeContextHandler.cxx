@@ -91,7 +91,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getCh
             {
                 std::unique_ptr<ContextHandler2Helper> pFragmentHandler(
                         new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
-                mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
+                mpShape = std::make_shared<Shape>("com.sun.star.drawing.OLE2Shape" );
                 mxChartShapeContext.set(new ChartGraphicDataContext(*pFragmentHandler, mpShape, true));
                 break;
             }
@@ -165,12 +165,12 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
         switch (Element & 0xffff)
         {
             case XML_graphic:
-                mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
+                mpShape = std::make_shared<Shape>("com.sun.star.drawing.GraphicObjectShape" );
                 mxGraphicShapeContext.set
                 (new GraphicalObjectFrameContext(*pFragmentHandler, pMasterShape, mpShape, true));
                 break;
             case XML_pic:
-                mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
+                mpShape = std::make_shared<Shape>("com.sun.star.drawing.GraphicObjectShape" );
                 mxGraphicShapeContext.set
                 (new GraphicShapeContext(*pFragmentHandler, pMasterShape, mpShape));
                 break;
@@ -187,7 +187,7 @@ ShapeContextHandler::getDrawingShapeContext()
 {
     if (!mxDrawingFragmentHandler.is())
     {
-        mpDrawing.reset( new oox::vml::Drawing( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD ) );
+        mpDrawing = std::make_shared<oox::vml::Drawing>( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD );
         mxDrawingFragmentHandler.set
           (static_cast<ContextHandler *>
            (new oox::vml::DrawingFragment
@@ -215,7 +215,7 @@ ShapeContextHandler::getDiagramShapeContext()
     if (!mxDiagramShapeContext.is())
     {
         auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxFilterBase, msRelationFragmentPath);
-        mpShape.reset(new Shape());
+        mpShape = std::make_shared<Shape>();
         mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
     }
 
@@ -263,7 +263,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
 {
     mxFilterBase->filter(maMediaDescriptor);
 
-    mpThemePtr.reset(new Theme());
+    mpThemePtr = std::make_shared<Theme>();
 
     if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) ||
         Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == OOX_TOKEN(dmlPicture, pic))
@@ -426,7 +426,7 @@ ShapeContextHandler::getShape()
                     if (!pDiagramGraphicDataContext)
                         break;
                     OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(extDrawing));
-                    oox::drawingml::ShapePtr pShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) );
+                    oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
                     pShapePtr->setDiagramType();
                     mxFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
                     pShapePtr->setDiagramDoms(mpShape->getDiagramDoms());

@@ -68,7 +68,7 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         break;
     case DGM_TOKEN( layoutNode ):
     {
-        LayoutNodePtr pNode( new LayoutNode(mpLayout->getDiagram()) );
+        LayoutNodePtr pNode = std::make_shared<LayoutNode>(mpLayout->getDiagram());
         mpLayout->getNode() = pNode;
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
@@ -79,10 +79,10 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         // TODO, does not matter for the UI. skip.
         return nullptr;
     case DGM_TOKEN( sampData ):
-        mpLayout->getSampData().reset( new DiagramData );
+        mpLayout->getSampData() = std::make_shared<DiagramData>();
         return new DataModelContext( *this, mpLayout->getSampData() );
     case DGM_TOKEN( styleData ):
-        mpLayout->getStyleData().reset( new DiagramData );
+        mpLayout->getStyleData() = std::make_shared<DiagramData>();
         return new DataModelContext( *this, mpLayout->getStyleData() );
     case DGM_TOKEN( cat ):
     case DGM_TOKEN( catLst ):

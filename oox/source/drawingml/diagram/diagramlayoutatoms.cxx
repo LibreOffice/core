@@ -1342,7 +1342,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 TextBodyPtr pTextBody=rShape->getTextBody();
                 if( !pTextBody )
                 {
-                    pTextBody.reset( new TextBody() );
+                    pTextBody = std::make_shared<TextBody>();
 
                     // also copy text attrs
                     pTextBody->getTextListStyle() =

@@ -361,7 +361,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
 
             // create the input source and parse the stream
             RecordInputSource aSource;
-            aSource.mxInStream.reset( new BinaryXInputStream( xInStrm, true ) );
+            aSource.mxInStream = std::make_shared<BinaryXInputStream>( xInStrm, true );
             aSource.maSystemId = aFragmentPath;
             aParser.parseStream( aSource );
             return true;
@@ -481,7 +481,7 @@ RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )
     if( !rxRelations )
     {
         // import and cache relations
-        rxRelations.reset( new Relations( rFragmentPath ) );
+        rxRelations = std::make_shared<Relations>( rFragmentPath );
         importFragment( new RelationsFragment( *this, rxRelations ) );
     }
     return rxRelations;
@@ -934,12 +934,12 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ZipStorage( getComponentContext(), rxInStream ) );
+    return std::make_shared<ZipStorage>( getComponentContext(), rxInStream );
 }
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
+    return std::make_shared<ZipStorage>( getComponentContext(), rxOutStream );
 }
 
 bool XmlFilterBase::isMSO2007Document() const

@@ -142,7 +142,7 @@ public:
                             ::oox::BinaryInputStreamRef( pInStrm ) {}
 
     /*implicit*/ BinaryInputStreamRef( const css::uno::Reference< css::io::XInputStream >& rxInStrm ) :
-                            ::oox::BinaryInputStreamRef( new BinaryXInputStream( rxInStrm, true ) ) {}
+                            ::oox::BinaryInputStreamRef( std::make_shared<BinaryXInputStream>( rxInStrm, true ) ) {}
 
     template< typename StreamType >
     /*implicit*/ BinaryInputStreamRef( const std::shared_ptr< StreamType >& rxInStrm ) :
@@ -814,7 +814,7 @@ std::shared_ptr< ListType > SharedConfigData::createNameList( const OUString& rL
     std::shared_ptr< ListType > xList;
     if( !rListName.isEmpty() )
     {
-        xList.reset( new ListType( *this ) );
+        xList = std::make_shared<ListType>( *this );
         setNameList( rListName, xList );
     }
     return xList;
@@ -1684,7 +1684,7 @@ private:
 class SequenceRecordObjectBase : public RecordObjectBase
 {
 protected:
-                        SequenceRecordObjectBase() : mxRecData( new StreamDataSequence ) {}
+                        SequenceRecordObjectBase() : mxRecData( std::make_shared<StreamDataSequence>() ) {}
 
     using               RecordObjectBase::construct;
     void                construct(

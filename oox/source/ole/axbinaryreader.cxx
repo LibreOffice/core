@@ -195,7 +195,7 @@ void AxBinaryPropertyReader::readBoolProperty( bool& orbValue, bool bReverse )
 void AxBinaryPropertyReader::readPairProperty( AxPairData& orPairData )
 {
     if( startNextProperty() )
-        maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( orPairData ) ) );
+        maLargeProps.push_back( ComplexPropVector::value_type( std::make_shared<PairProperty>( orPairData ) ) );
 }
 
 void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
@@ -203,7 +203,7 @@ void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
     if( startNextProperty() )
     {
         sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
-        maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
+        maLargeProps.push_back( ComplexPropVector::value_type( std::make_shared<StringProperty>( orValue, nSize ) ) );
     }
 }
 
@@ -212,14 +212,14 @@ void AxBinaryPropertyReader::readArrayStringProperty( std::vector<OUString>& orV
     if( startNextProperty() )
     {
         sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
-        maLargeProps.push_back( ComplexPropVector::value_type( new ArrayStringProperty( orValue, nSize ) ) );
+        maLargeProps.push_back( ComplexPropVector::value_type( std::make_shared<ArrayStringProperty>( orValue, nSize ) ) );
     }
 }
 
 void AxBinaryPropertyReader::readGuidProperty( OUString& orGuid )
 {
     if( startNextProperty() )
-        maLargeProps.push_back( ComplexPropVector::value_type( new GuidProperty( orGuid ) ) );
+        maLargeProps.push_back( ComplexPropVector::value_type( std::make_shared<GuidProperty>( orGuid ) ) );
 }
 
 void AxBinaryPropertyReader::readFontProperty( AxFontData& orFontData )
@@ -228,7 +228,7 @@ void AxBinaryPropertyReader::readFontProperty( AxFontData& orFontData )
     {
         sal_Int16 nData = maInStrm.readAligned< sal_Int16 >();
         if( ensureValid( nData == -1 ) )
-            maStreamProps.push_back( ComplexPropVector::value_type( new FontProperty( orFontData ) ) );
+            maStreamProps.push_back( ComplexPropVector::value_type( std::make_shared<FontProperty>( orFontData ) ) );
     }
 }
 
@@ -238,7 +238,7 @@ void AxBinaryPropertyReader::readPictureProperty( StreamDataSequence& orPicData 
     {
         sal_Int16 nData = maInStrm.readAligned< sal_Int16 >();
         if( ensureValid( nData == -1 ) )
-            maStreamProps.push_back( ComplexPropVector::value_type( new PictureProperty( orPicData ) ) );
+            maStreamProps.push_back( ComplexPropVector::value_type( std::make_shared<PictureProperty>( orPicData ) ) );
     }
 }
 

@@ -284,7 +284,7 @@ void PPTShape::addShape(
             }
             if (pPlaceholder.get()) {
                 PPTShape* pPPTPlaceholder = dynamic_cast< PPTShape* >( pPlaceholder.get() );
-                TextListStylePtr pNewTextListStyle ( new TextListStyle() );
+                TextListStylePtr pNewTextListStyle = std::make_shared<TextListStyle>();
 
                 if (pPlaceholder->getTextBody()) {
 
@@ -338,7 +338,7 @@ void PPTShape::addShape(
             }
 
             if( aMasterTextListStyle.get() && getTextBody().get() ) {
-                TextListStylePtr aCombinedTextListStyle (new TextListStyle());
+                TextListStylePtr aCombinedTextListStyle = std::make_shared<TextListStyle>();
 
                 aCombinedTextListStyle->apply( *aMasterTextListStyle );
 

@@ -114,14 +114,14 @@ public:
             case DGM_TOKEN( if ):
             {
                 // CT_When
-                ConditionAtomPtr pNode( new ConditionAtom(mpNode->getLayoutNode(), false, rAttribs.getFastAttributeList()) );
+                ConditionAtomPtr pNode = std::make_shared<ConditionAtom>(mpNode->getLayoutNode(), false, rAttribs.getFastAttributeList());
                 LayoutAtom::connect(mpNode, pNode);
                 return new IfContext( *this, rAttribs, pNode );
             }
             case DGM_TOKEN( else ):
             {
                 // CT_Otherwise
-                ConditionAtomPtr pNode( new ConditionAtom(mpNode->getLayoutNode(), true, rAttribs.getFastAttributeList()) );
+                ConditionAtomPtr pNode = std::make_shared<ConditionAtom>(mpNode->getLayoutNode(), true, rAttribs.getFastAttributeList());
                 LayoutAtom::connect(mpNode, pNode);
                 return new IfContext( *this, rAttribs, pNode );
             }
@@ -196,7 +196,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     {
     case DGM_TOKEN( layoutNode ):
     {
-        LayoutNodePtr pNode( new LayoutNode(mpNode->getLayoutNode().getDiagram()) );
+        LayoutNodePtr pNode = std::make_shared<LayoutNode>(mpNode->getLayoutNode().getDiagram());
         LayoutAtom::connect(mpNode, pNode);
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
@@ -209,7 +209,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
 
         if( rAttribs.hasAttribute( XML_type ) )
         {
-            pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
+            pShape = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");
             if (!rAttribs.getBool(XML_hideGeom, false))
             {
                 const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
@@ -219,14 +219,14 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         }
         else
         {
-            pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
+            pShape = std::make_shared<Shape>("com.sun.star.drawing.GroupShape");
         }
 
         pShape->setDiagramRotation(rAttribs.getInteger(XML_rot, 0) * PER_DEGREE);
 
         pShape->setZOrderOff(rAttribs.getInteger(XML_zOrderOff, 0));
 
-        ShapeAtomPtr pAtom( new ShapeAtom(mpNode->getLayoutNode(), pShape) );
+        ShapeAtomPtr pAtom = std::make_shared<ShapeAtom>(mpNode->getLayoutNode(), pShape);
         LayoutAtom::connect(mpNode, pAtom);
         return new ShapeContext( *this, ShapePtr(), pShape );
     }
@@ -235,21 +235,21 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     case DGM_TOKEN( alg ):
     {
         // CT_Algorithm
-        AlgAtomPtr pAtom( new AlgAtom(mpNode->getLayoutNode()) );
+        AlgAtomPtr pAtom = std::make_shared<AlgAtom>(mpNode->getLayoutNode());
         LayoutAtom::connect(mpNode, pAtom);
         return new AlgorithmContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( choose ):
     {
         // CT_Choose
-        LayoutAtomPtr pAtom( new ChooseAtom(mpNode->getLayoutNode()) );
+        LayoutAtomPtr pAtom = std::make_shared<ChooseAtom>(mpNode->getLayoutNode());
         LayoutAtom::connect(mpNode, pAtom);
         return new ChooseContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( forEach ):
     {
         // CT_ForEach
-        ForEachAtomPtr pAtom( new ForEachAtom(mpNode->getLayoutNode(), rAttribs.getFastAttributeList()) );
+        ForEachAtomPtr pAtom = std::make_shared<ForEachAtom>(mpNode->getLayoutNode(), rAttribs.getFastAttributeList());
         LayoutAtom::connect(mpNode, pAtom);
         return new ForEachContext( *this, rAttribs, pAtom );
     }

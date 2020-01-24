@@ -50,7 +50,7 @@ TableBackgroundStyleContext::onCreateContext( ::sal_Int32 aElementToken, const A
         case A_TOKEN( fill ):       // CT_FillProperties
             {
                 std::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
-                rxFillProperties.reset( new FillProperties );
+                rxFillProperties = std::make_shared<FillProperties>();
                 return new FillPropertiesContext( *this, *rxFillProperties );
             }
         case A_TOKEN( fillRef ):    // CT_StyleMatrixReference

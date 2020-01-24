@@ -81,7 +81,7 @@ namespace oox { namespace ppt {
         AnimTargetElementPtr const & getTarget()
             {
                 if( !mpTarget )
-                    mpTarget.reset( new AnimTargetElement );
+                    mpTarget = std::make_shared<AnimTargetElement>();
                 return mpTarget;
             }
 

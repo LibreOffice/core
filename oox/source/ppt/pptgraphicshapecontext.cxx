@@ -184,7 +184,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
 
     case PPT_TOKEN(txBody):
     {
-        oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+        oox::drawingml::TextBodyPtr xTextBody = std::make_shared<oox::drawingml::TextBody>();
         mpShapePtr->setTextBody( xTextBody );
         return new oox::drawingml::TextBodyContext( *this, *xTextBody );
     }

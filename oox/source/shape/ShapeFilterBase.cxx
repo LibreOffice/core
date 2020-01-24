@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 ShapeFilterBase::ShapeFilterBase( const uno::Reference< uno::XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
-    mxChartConv( new ::oox::drawingml::chart::ChartConverter )
+    mxChartConv( std::make_shared<::oox::drawingml::chart::ChartConverter>() )
 {
 }
 
@@ -118,7 +118,7 @@ GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
 
 void ShapeFilterBase::importTheme()
 {
-    drawingml::ThemePtr pTheme(new drawingml::Theme);
+    drawingml::ThemePtr pTheme = std::make_shared<drawingml::Theme>();
     uno::Reference<beans::XPropertySet> xPropSet(getModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aGrabBag;
     xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
