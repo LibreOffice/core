@@ -95,7 +95,7 @@ void ConditionColorWrapper::operator()(const OUString& /*rCommand*/, const Named
 
 // = Condition
 Condition::Condition(weld::Container* pParent, weld::Window* pDialog, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController)
-    : m_xPaletteManager(new PaletteManager)
+    : m_xPaletteManager(std::make_shared<PaletteManager>())
     , m_aBackColorWrapper(this, SID_BACKGROUND_COLOR)
     , m_aForeColorWrapper(this, SID_ATTR_CHAR_COLOR2)
     , m_rController(_rController)
