@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "16fc8ced_5758f15a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-01-24T12:54:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d4f99d5_63f3870f",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "381633454a508f0bd929804939d336b2aff0ffd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "455eafee_2c172174",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 15
@@ -57,6 +81,24 @@
       "revId": "381633454a508f0bd929804939d336b2aff0ffd8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c1d5cbb_9b28e707",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 7082,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-01-24T12:54:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b05e2307_8fd3d9cb",
+      "revId": "381633454a508f0bd929804939d336b2aff0ffd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
