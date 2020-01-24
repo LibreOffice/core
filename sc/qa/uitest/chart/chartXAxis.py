@@ -74,7 +74,7 @@ class chartXAxis(UITestCase):
     minimum.executeAction("DOWN", tuple()) #10.12.2017
     maximum.executeAction("DOWN", tuple()) #29.04.2018
     major.executeAction("DOWN", tuple())   #19
-    minor.executeAction("UP", tuple())  #3
+    minor.executeAction("UP", tuple())  #5
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
@@ -110,7 +110,7 @@ class chartXAxis(UITestCase):
     self.assertEqual(get_state_as_dict(minimum)["Text"], "10.12.2017")
     self.assertEqual(get_state_as_dict(maximum)["Text"], "29.04.2018")
     self.assertEqual(get_state_as_dict(major)["Text"], "19")
-    self.assertEqual(get_state_as_dict(minor)["Text"], "3")
+    self.assertEqual(get_state_as_dict(minor)["Text"], "5")
 
     #Click on tab "positioning".
     tabcontrol = xDialog.getChild("tabcontrol")
