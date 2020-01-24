@@ -67,7 +67,7 @@ TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
                 if ( mnLineType != XML_none )
                 {
                     std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >& rLineBorders = mrTableStylePart.getLineBorders();
-                    ::oox::drawingml::LinePropertiesPtr pLineProperties( new oox::drawingml::LineProperties );
+                    ::oox::drawingml::LinePropertiesPtr pLineProperties = std::make_shared<oox::drawingml::LineProperties>();
                     rLineBorders[ mnLineType ] = pLineProperties;
                     return new LinePropertiesContext( *this, rAttribs, *pLineProperties );
                 }
@@ -88,7 +88,7 @@ TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
         case A_TOKEN( fill ):       // CT_FillProperties
             {
                 FillPropertiesPtr& rxFillProperties = mrTableStylePart.getFillProperties();
-                rxFillProperties.reset( new FillProperties );
+                rxFillProperties = std::make_shared<FillProperties>();
                 return new FillPropertiesContext( *this, *rxFillProperties );
             }
         case A_TOKEN( fillRef ):    // CT_StyleMatrixReference

@@ -125,7 +125,7 @@ ISegmentProgressBarRef SubSegment::createSegment( double fLength )
 {
     SAL_WARN_IF( (0.0 >= fLength) || (fLength > getFreeLength()), "oox", "SubSegment::createSegment - invalid length" );
     fLength = getLimitedValue< double >( fLength, 0.0, getFreeLength() );
-    ISegmentProgressBarRef xSegment( new prv::SubSegment( *this, mfFreeStart, fLength ) );
+    ISegmentProgressBarRef xSegment = std::make_shared<prv::SubSegment>( *this, mfFreeStart, fLength );
     mfFreeStart += fLength;
     return xSegment;
 }
@@ -157,7 +157,7 @@ ISegmentProgressBarRef SegmentProgressBar::createSegment( double fLength )
 {
     SAL_WARN_IF( (0.0 >= fLength) || (fLength > getFreeLength()), "oox", "SegmentProgressBar::createSegment - invalid length" );
     fLength = getLimitedValue< double >( fLength, 0.0, getFreeLength() );
-    ISegmentProgressBarRef xSegment( new prv::SubSegment( maProgress, mfFreeStart, fLength ) );
+    ISegmentProgressBarRef xSegment = std::make_shared<prv::SubSegment>( maProgress, mfFreeStart, fLength );
     mfFreeStart += fLength;
     return xSegment;
 }

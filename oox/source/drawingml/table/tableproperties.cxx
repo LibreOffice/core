@@ -236,7 +236,7 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
     {
         rTableCells.emplace_back();
         oox::drawingml::table::TableCell& rTableCell = rTableCells.back();
-        TextBodyPtr pCellTextBody(new TextBody);
+        TextBodyPtr pCellTextBody = std::make_shared<TextBody>();
         rTableCell.setTextBody(pCellTextBody);
 
         // Copy properties provided by <a:lstStyle>.

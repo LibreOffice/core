@@ -110,9 +110,9 @@ SlideFragmentHandler::~SlideFragmentHandler()
         }
         if( !bNotesFragmentPathFound && !mpSlidePersistPtr->getMasterPersist() )
         {
-            TextListStylePtr pTextListStyle(new TextListStyle);
+            TextListStylePtr pTextListStyle = std::make_shared<TextListStyle>();
             SlidePersistPtr pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, true, mpSlidePersistPtr->getPage(),
-                                ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpSlidePersistPtr->getNotesTextStyle() );
+                                std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpSlidePersistPtr->getNotesTextStyle() );
             pMasterPersistPtr->setPath( aNotesFragmentPath );
             rFilter.getMasterPages().push_back( pMasterPersistPtr );
             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aNotesFragmentPath, pMasterPersistPtr, Master ) );
@@ -131,7 +131,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
         {
             return new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
-                oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
+                std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.GroupShape" ) );
         }
         break;
 
@@ -159,7 +159,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
         return this;
     case PPT_TOKEN( bgPr ):             // CT_BackgroundProperties
         {
-            FillPropertiesPtr pFillPropertiesPtr( new FillProperties );
+            FillPropertiesPtr pFillPropertiesPtr =std::make_shared<FillProperties>();
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
             return new BackgroundPropertiesContext( *this, *pFillPropertiesPtr );
         }

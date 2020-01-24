@@ -53,17 +53,17 @@ namespace oox::ppt {
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
     const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
         oox::drawingml::ShapePtr const & pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
-: mpDrawingPtr( new oox::vml::Drawing( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
+: mpDrawingPtr( std::make_shared<oox::vml::Drawing>( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
 , mxPage( rxPage )
 , maShapesPtr( pShapesPtr )
 , mnLayoutValueToken( 0 )
 , mbMaster( bMaster )
 , mbNotes ( bNotes )
 , maDefaultTextStylePtr( pDefaultTextStyle )
-, maTitleTextStylePtr( new oox::drawingml::TextListStyle )
-, maBodyTextStylePtr( new oox::drawingml::TextListStyle )
-, maNotesTextStylePtr( new oox::drawingml::TextListStyle )
-, maOtherTextStylePtr( new oox::drawingml::TextListStyle )
+, maTitleTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )
+, maBodyTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )
+, maNotesTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )
+, maOtherTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )
 {
 #if OSL_DEBUG_LEVEL > 0
     mxDebugPage = mxPage;

@@ -84,7 +84,7 @@ static std::map<PredefinedClrSchemeId, sal_Int32> PredefinedClrTokens =
 
 PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath)
     : FragmentHandler2( rFilter, rFragmentPath )
-    , mpTextListStyle( new TextListStyle )
+    , mpTextListStyle( std::make_shared<TextListStyle>() )
     , mbCommentAuthorsRead(false)
 {
     TextParagraphPropertiesVector& rParagraphDefaultsVector( mpTextListStyle->getListStyle() );
@@ -249,8 +249,8 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
         if( !aSlideFragmentPath.isEmpty() )
         {
             SlidePersistPtr pMasterPersistPtr;
-            SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, false, false, xSlide,
-                                ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+            SlidePersistPtr pSlidePersistPtr = std::make_shared<SlidePersist>( rFilter, false, false, xSlide,
+                                std::make_shared<PPTShape>( Slide, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
 
             FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
@@ -294,7 +294,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         }
 
                         pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, false, xMasterPage,
-                            ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle );
+                            std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
                         pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
                         rFilter.getMasterPages().push_back( pMasterPersistPtr );
                         rFilter.setActualSlidePersist( pMasterPersistPtr );
@@ -308,7 +308,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                             std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
                             if( aIter2 == rThemes.end() )
                             {
-                                oox::drawingml::ThemePtr pThemePtr( new oox::drawingml::Theme() );
+                                oox::drawingml::ThemePtr pThemePtr = std::make_shared<oox::drawingml::Theme>();
                                 pMasterPersistPtr->setTheme( pThemePtr );
                                 Reference<xml::dom::XDocument> xDoc=
                                     rFilter.importFragment(aThemeFragmentPath);
@@ -362,8 +362,8 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
                         if ( xNotesPage.is() )
                         {
-                            SlidePersistPtr pNotesPersistPtr( new SlidePersist( rFilter, false, true, xNotesPage,
-                                ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                            SlidePersistPtr pNotesPersistPtr = std::make_shared<SlidePersist>( rFilter, false, true, xNotesPage,
+                                std::make_shared<PPTShape>( Slide, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
                             FragmentHandlerRef xNotesFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesFragmentPath, pNotesPersistPtr, Slide ) );
                             rFilter.getNotesPages().push_back( pNotesPersistPtr );
                             rFilter.setActualSlidePersist( pNotesPersistPtr );
@@ -382,12 +382,11 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                 OUString aCommentAuthorsFragmentPath = "ppt/commentAuthors.xml";
                 Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
                 Reference< XDrawPage > xCommentAuthorsPage( xPresentationPage->getNotesPage() );
-                SlidePersistPtr pCommentAuthorsPersistPtr(
-                    new SlidePersist( rFilter, false, true, xCommentAuthorsPage,
-                                      ShapePtr(
-                                          new PPTShape(
-                                              Slide, "com.sun.star.drawing.GroupShape" ) ),
-                                      mpTextListStyle ) );
+                SlidePersistPtr pCommentAuthorsPersistPtr =
+                    std::make_shared<SlidePersist>( rFilter, false, true, xCommentAuthorsPage,
+                                      std::make_shared<PPTShape>(
+                                              Slide, "com.sun.star.drawing.GroupShape" ),
+                                      mpTextListStyle );
                 FragmentHandlerRef xCommentAuthorsFragmentHandler(
                     new SlideFragmentHandler( getFilter(),
                                               aCommentAuthorsFragmentPath,
@@ -401,13 +400,12 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
             {
                 Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
                 Reference< XDrawPage > xCommentsPage( xPresentationPage->getNotesPage() );
-                SlidePersistPtr pCommentsPersistPtr(
-                    new SlidePersist(
+                SlidePersistPtr pCommentsPersistPtr =
+                    std::make_shared<SlidePersist>(
                         rFilter, false, true, xCommentsPage,
-                        ShapePtr(
-                            new PPTShape(
-                                Slide, "com.sun.star.drawing.GroupShape" ) ),
-                        mpTextListStyle ) );
+                        std::make_shared<PPTShape>(
+                                Slide, "com.sun.star.drawing.GroupShape" ),
+                        mpTextListStyle );
 
                 FragmentHandlerRef xCommentsFragmentHandler(
                     new SlideFragmentHandler(
@@ -521,7 +519,7 @@ void PresentationFragmentHandler::finalizeImport()
         uno::Reference<io::XInputStream> xInStrm = getFilter().openInputStream(aVbaFragmentPath);
         if (xInStrm.is())
         {
-            StorageRef xPrjStrg(new oox::ole::OleStorage(getFilter().getComponentContext(), xInStrm, false));
+            StorageRef xPrjStrg = std::make_shared<oox::ole::OleStorage>(getFilter().getComponentContext(), xInStrm, false);
             getFilter().getVbaProject().importVbaProject(*xPrjStrg);
         }
     }

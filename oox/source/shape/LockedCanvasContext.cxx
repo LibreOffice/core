@@ -39,14 +39,14 @@ LockedCanvasContext::~LockedCanvasContext() = default;
     case XML_sp:
     {
         oox::drawingml::ShapePtr pMasterShape;
-        mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
+        mpShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.CustomShape");
         mpShape->setLockedCanvas(true);
         return new oox::drawingml::ShapeContext(*this, pMasterShape, mpShape);
     }
     case XML_grpSp:
     {
         oox::drawingml::ShapePtr pMasterShape;
-        mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+        mpShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape");
         mpShape->setLockedCanvas(true);
         return new oox::drawingml::ShapeGroupContext(*this, pMasterShape, mpShape);
     }

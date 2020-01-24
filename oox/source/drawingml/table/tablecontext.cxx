@@ -62,7 +62,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
     case A_TOKEN( tableStyle ):         // CT_TableStyle
         {
             std::shared_ptr< TableStyle >& rTableStyle = mrTableProperties.getTableStyle();
-            rTableStyle.reset( new TableStyle() );
+            rTableStyle = std::make_shared<TableStyle>();
             return new TableStyleContext( *this, rAttribs, *rTableStyle );
         }
     case A_TOKEN( tableStyleId ):       // ST_Guid

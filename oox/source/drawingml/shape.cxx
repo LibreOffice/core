@@ -116,16 +116,16 @@ using namespace ::com::sun::star::style;
 namespace oox::drawingml {
 
 Shape::Shape( const char* pServiceName, bool bDefaultHeight )
-: mpLinePropertiesPtr( new LineProperties )
-, mpShapeRefLinePropPtr( new LineProperties )
-, mpFillPropertiesPtr( new FillProperties )
-, mpShapeRefFillPropPtr( new FillProperties )
-, mpGraphicPropertiesPtr( new GraphicProperties )
-, mpCustomShapePropertiesPtr( new CustomShapeProperties )
-, mp3DPropertiesPtr( new Shape3DProperties )
-, mpEffectPropertiesPtr( new EffectProperties )
-, mpShapeRefEffectPropPtr( new EffectProperties )
-, mpMasterTextListStyle( new TextListStyle )
+: mpLinePropertiesPtr( std::make_shared<LineProperties>() )
+, mpShapeRefLinePropPtr( std::make_shared<LineProperties>() )
+, mpFillPropertiesPtr( std::make_shared<FillProperties>() )
+, mpShapeRefFillPropPtr( std::make_shared<FillProperties>() )
+, mpGraphicPropertiesPtr( std::make_shared<GraphicProperties>() )
+, mpCustomShapePropertiesPtr( std::make_shared<CustomShapeProperties>() )
+, mp3DPropertiesPtr( std::make_shared<Shape3DProperties>() )
+, mpEffectPropertiesPtr( std::make_shared<EffectProperties>() )
+, mpShapeRefEffectPropPtr( std::make_shared<EffectProperties>() )
+, mpMasterTextListStyle( std::make_shared<TextListStyle>() )
 , mnSubType( 0 )
 , meFrameType( FRAMETYPE_GENERIC )
 , mnRotation( 0 )
@@ -199,7 +199,7 @@ Shape::~Shape()
 table::TablePropertiesPtr const & Shape::getTableProperties()
 {
     if ( !mpTablePropertiesPtr.get() )
-        mpTablePropertiesPtr.reset( new table::TableProperties() );
+        mpTablePropertiesPtr = std::make_shared<table::TableProperties>();
     return mpTablePropertiesPtr;
 }
 
@@ -221,7 +221,7 @@ void Shape::setDefaults(bool bHeight)
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setOleObjectType - multiple frame types" );
     meFrameType = FRAMETYPE_OLEOBJECT;
-    mxOleObjectInfo.reset( new ::oox::vml::OleObjectInfo( true ) );
+    mxOleObjectInfo = std::make_shared<::oox::vml::OleObjectInfo>( true );
     return *mxOleObjectInfo;
 }
 
@@ -233,7 +233,7 @@ ChartShapeInfo& Shape::setChartType( bool bEmbedShapes )
         msServiceName = "com.sun.star.drawing.temporaryForXMLImportOLE2Shape";
     else
         msServiceName = "com.sun.star.drawing.OLE2Shape";
-    mxChartShapeInfo.reset( new ChartShapeInfo( bEmbedShapes ) );
+    mxChartShapeInfo = std::make_shared<ChartShapeInfo>( bEmbedShapes );
     return *mxChartShapeInfo;
 }
 

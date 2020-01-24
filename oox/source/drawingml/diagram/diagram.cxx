@@ -105,7 +105,7 @@ void Diagram::addTo( const ShapePtr & pParentShape )
         sortChildrenByZOrder(pParentShape);
     }
 
-    ShapePtr pBackground(new Shape("com.sun.star.drawing.CustomShape"));
+    ShapePtr pBackground = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");
     pBackground->setSubType(XML_rect);
     pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
     pBackground->setSize(pParentShape->getSize());
@@ -225,12 +225,12 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations )
 {
-    DiagramPtr pDiagram( new Diagram );
+    DiagramPtr pDiagram = std::make_shared<Diagram>();
 
-    DiagramDataPtr pData( new DiagramData() );
+    DiagramDataPtr pData = std::make_shared<DiagramData>();
     pDiagram->setData( pData );
 
-    DiagramLayoutPtr pLayout( new DiagramLayout(*pDiagram) );
+    DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
     pDiagram->setLayout( pLayout );
 
     // data
@@ -343,11 +343,11 @@ void loadDiagram(ShapePtr const& pShape,
                  const uno::Reference<xml::dom::XDocument>& colorDom,
                  core::XmlFilterBase& rFilter)
 {
-    DiagramPtr pDiagram(new Diagram);
+    DiagramPtr pDiagram = std::make_shared<Diagram>();
 
     pDiagram->setData(pDiagramData);
 
-    DiagramLayoutPtr pLayout(new DiagramLayout(*pDiagram));
+    DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
     pDiagram->setLayout(pLayout);
 
     // layout
@@ -410,7 +410,7 @@ void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
             rProp.Value >>= colorDom;
     }
 
-    ShapePtr pShape(new Shape());
+    ShapePtr pShape = std::make_shared<Shape>();
     pShape->setDiagramType();
     pShape->setSize(awt::Size(xShape->getSize().Width * EMU_PER_HMM,
                               xShape->getSize().Height * EMU_PER_HMM));

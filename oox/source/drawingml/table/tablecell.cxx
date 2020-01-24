@@ -50,7 +50,7 @@ using ::com::sun::star::table::BorderLine2;
 namespace oox::drawingml::table {
 
 TableCell::TableCell()
-: mpTextBody( new TextBody() )
+: mpTextBody( std::make_shared<TextBody>() )
 , mnRowSpan ( 1 )
 , mnGridSpan( 1 )
 , mbhMerge( false )

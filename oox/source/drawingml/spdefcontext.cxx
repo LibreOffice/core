@@ -45,7 +45,7 @@ ContextHandlerRef spDefContext::onCreateContext( sal_Int32 aElementToken, const 
             return new ShapePropertiesContext( *this, mrDefaultObject );
         case A_TOKEN( bodyPr ):
         {
-            TextBodyPtr xTextBody( new TextBody );
+            TextBodyPtr xTextBody = std::make_shared<TextBody>();
             mrDefaultObject.setTextBody( xTextBody );
             return new TextBodyPropertiesContext( *this, rAttribs, xTextBody->getTextProperties() );
         }

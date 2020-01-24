@@ -71,7 +71,7 @@ const Relation* Relations::getRelationFromFirstType( const OUString& rType ) con
 
 RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const
 {
-    RelationsRef xRelations( new Relations( maFragmentPath ) );
+    RelationsRef xRelations = std::make_shared<Relations>( maFragmentPath );
     for (auto const& elem : maMap)
         if( elem.second.maType.equalsIgnoreAsciiCase( createOfficeDocRelationTypeTransitional(rType) ) ||
                 elem.second.maType.equalsIgnoreAsciiCase( createOfficeDocRelationTypeStrict(rType) ))

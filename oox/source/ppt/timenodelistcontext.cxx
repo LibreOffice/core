@@ -1029,7 +1029,7 @@ namespace oox::ppt {
             break;
         }
 
-        TimeNodePtr pNode(new TimeNode(nNodeType));
+        TimeNodePtr pNode = std::make_shared<TimeNode>(nNodeType);
         maList.push_back( pNode );
         FragmentHandler2 * pContext = TimeNodeContext::makeContext( *this, aElementToken, rAttribs.getFastAttributeList(), pNode );
 

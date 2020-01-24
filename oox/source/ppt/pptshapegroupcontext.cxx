@@ -96,9 +96,9 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
         return new ShapeStyleContext( getParser() );
 */
     case PPT_TOKEN( cxnSp ):        // connector shape
-        return new oox::drawingml::ConnectorShapeContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.ConnectorShape" ) ) );
+        return new oox::drawingml::ConnectorShapeContext( *this, mpGroupShapePtr, std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.ConnectorShape" ) );
     case PPT_TOKEN( grpSp ):        // group shape
-        return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
+        return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.GroupShape" ) );
     case PPT_TOKEN( sp ):           // Shape
         {
             auto pShape = std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.CustomShape" );
@@ -135,10 +135,10 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
     case PPT_TOKEN( pic ):          // CT_Picture
-        return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) );
+        return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) );
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         {
-            pGraphicShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) );
+            pGraphicShape = std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.OLE2Shape" );
             return new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true );
         }
     }

@@ -205,7 +205,7 @@ ConverterRoot::ConverterRoot(
         const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
         const awt::Size& rChartSize ) :
-    mxData( new ConverterData( rFilter, rChartConverter, rChartModel, rxChartDoc, rChartSize ) )
+    mxData( std::make_shared<ConverterData>( rFilter, rChartConverter, rChartModel, rxChartDoc, rChartSize ) )
 {
 }
 

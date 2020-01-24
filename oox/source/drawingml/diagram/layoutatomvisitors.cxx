@@ -170,7 +170,7 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
 
     // TODO(F3): cloned shape shares all properties by reference,
     // don't change them!
-    mpShape.reset(new Shape(pCurrShape));
+    mpShape = std::make_shared<Shape>(pCurrShape);
     // Fill properties have to be changed as sometimes only the presentation node contains the blip
     // fill, unshare those.
     mpShape->cloneFillProperties();

@@ -238,7 +238,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case A_TOKEN( buBlip ):         // CT_TextBlipBullet
             {
-                mxBlipProps.reset( new BlipFillProperties );
+                mxBlipProps = std::make_shared<BlipFillProperties>();
                 return new BlipFillContext( *this, rAttribs, *mxBlipProps );
             }
         case A_TOKEN( tabLst ):         // CT_TextTabStopList

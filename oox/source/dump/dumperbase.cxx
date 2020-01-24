@@ -1410,7 +1410,7 @@ void Config::construct( const char* pcEnvVar, const Reference< XComponentContext
 {
     if( pcEnvVar && rxRootStrg.get() && !rSysFileName.isEmpty() )
         if( const char* pcFileName = ::getenv( pcEnvVar ) )
-            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName ) );
+            mxCfgData = std::make_shared<SharedConfigData>( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName );
 }
 
 const OUString& Config::getStringOption( const String& rKey, const OUString& rDefault ) const
@@ -1925,7 +1925,7 @@ void OutputObjectBase::construct( const ObjectBase& rParent, const OUString& rSy
     if( ObjectBase::implIsValid() )
     {
         maSysFileName = rSysFileName;
-        mxOut.reset( new Output( getContext(), rSysFileName + OOX_DUMP_DUMPEXT ) );
+        mxOut = std::make_shared<Output>( getContext(), rSysFileName + OOX_DUMP_DUMPEXT );
     }
 }
 
@@ -2318,7 +2318,7 @@ void TextStreamObjectBase::implDump()
 void TextStreamObjectBase::constructTextStrmObj( rtl_TextEncoding eTextEnc )
 {
     if( mxStrm.get() )
-        mxTextStrm.reset( new TextInputStream( getContext(), *mxStrm, eTextEnc ) );
+        mxTextStrm = std::make_shared<TextInputStream>( getContext(), *mxStrm, eTextEnc );
 }
 
 TextLineStreamObject::TextLineStreamObject( const ObjectBase& rParent,
