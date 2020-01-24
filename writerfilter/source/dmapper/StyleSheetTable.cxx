@@ -1039,13 +1039,27 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
                         if ( pStyleSheetProperties )
                         {
                             beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
+                        }
+                        if ( pStyleSheetProperties->GetListLevel() < 0 && pStyleSheetProperties->GetNumId() && pStyleSheetProperties->GetOutlineLevel() < 0 )
+                        {
+                            // Getting the value of ilvl from style names. They should correspond.
+                            // ilvl starts from 0 and style names start from 1.
+                            OUString sLevelName = sConvertedStyleName;
+                            sal_Int16 nLevelLenght = sLevelName.getLength();
+                            OUString sLevel = sLevelName.copy(nLevelLenght - 1);
+                            sal_Int16 nLevel = sLevel.toInt32();
+                            if ( nLevel > 1 && nLevel < 10 )
+                            {
+                                pStyleSheetProperties->SetListLevel(nLevel-1);
+                                pStyleSheetProperties->SetOutlineLevel(nLevel-1);
+                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
