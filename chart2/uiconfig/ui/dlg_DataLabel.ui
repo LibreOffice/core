@@ -378,25 +378,10 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">12</property>
                             <child>
-                              <object class="GtkScrolledWindow" id="anglepreview">
+                              <object class="GtkDrawingArea" id="CT_DIAL">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">never</property>
-                                <property name="vscrollbar_policy">never</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkViewport">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <child>
-                                      <object class="GtkDrawingArea" id="CT_DIAL">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

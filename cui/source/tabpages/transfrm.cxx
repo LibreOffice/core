@@ -177,7 +177,7 @@ SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController*
     , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, "CTL_RECT", m_aCtlRect))
     , m_xFlAngle(m_xBuilder->weld_widget("FL_ANGLE"))
     , m_xNfAngle(m_xBuilder->weld_metric_spin_button("NF_ANGLE", FieldUnit::DEGREE))
-    , m_xCtlAngle(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtlAngle(new svx::DialControl)
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
 {
     // calculate PoolUnit

@@ -38,7 +38,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(weld::Container* pPage, weld::DialogCon
     , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
     , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
     , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
-    , m_xCtrlDial(new svx::DialControl(m_xBuilder->weld_scrolled_window("anglepreview")))
+    , m_xCtrlDial(new svx::DialControl)
     , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialCtrl", *m_xCtrlDial))
 {
     m_xCtrlDial->SetLinkedField(m_xNfRotate.get());

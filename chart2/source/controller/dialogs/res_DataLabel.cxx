@@ -109,7 +109,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xNF_Degrees(pBuilder->weld_metric_spin_button("NF_LABEL_DEGREES", FieldUnit::DEGREE))
     , m_xBxTextDirection(pBuilder->weld_widget("boxTXT_DIRECTION"))
     , m_xLB_TextDirection(new TextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
-    , m_xDC_Dial(new svx::DialControl(pBuilder->weld_scrolled_window("anglepreview")))
+    , m_xDC_Dial(new svx::DialControl)
     , m_xDC_DialWin(new weld::CustomWeld(*pBuilder, "CT_DIAL", *m_xDC_Dial))
 {
     m_xDC_Dial->SetText(m_xFT_Dial->get_label());
