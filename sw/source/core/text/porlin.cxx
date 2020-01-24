@@ -103,7 +103,7 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
                   1800 :
                   rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
-    if (nLastWidth > nHalfView)
+    if (nLastWidth > nHalfView || pLast == this)
     {
         switch (nDir)
         {

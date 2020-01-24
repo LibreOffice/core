@@ -691,6 +691,10 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             CalcAscent( rInf, pPor );
 
         InsertPortion( rInf, pPor );
+        if (pPor->IsMultiPortion() && (!m_pMulti || m_pMulti->IsBidi()))
+        {
+            (void) rInf.CheckCurrentPosBookmark(); // bookmark was already created inside MultiPortion!
+        }
         pPor = NewPortion( rInf );
     }
 
@@ -1012,6 +1016,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     return pPor;
 }
 
+// first portions have no length
 SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
 {
     SwLinePortion *pPor = nullptr;
@@ -1142,6 +1147,39 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     if (!pPor)
     {
         pPor = TryNewNoLengthPortion(rInf);
+    }
+
+    // 12. bookmarks
+    // check this *last* so that BuildMultiPortion() can find it!
+    if (!pPor && rInf.CheckCurrentPosBookmark())
+    {
+        auto const bookmark(m_pScriptInfo->GetBookmark(rInf.GetIdx()));
+        if (static_cast<bool>(bookmark))
+        {
+            sal_Unicode mark;
+            if ((bookmark & (SwScriptInfo::MarkKind::Start|SwScriptInfo::MarkKind::End))
+                        == (SwScriptInfo::MarkKind::Start|SwScriptInfo::MarkKind::End))
+            {
+                //mark = u'\u2336'; // not in OpenSymbol :(
+                mark = '|';
+                // hmm ... paint U+2345 over U+2346 should be same width?
+                // and U+237F // or U+2E20/U+2E21
+            }
+            else if (bookmark & SwScriptInfo::MarkKind::Start)
+            {
+                mark = '[';
+            }
+            else if (bookmark & SwScriptInfo::MarkKind::End)
+            {
+                mark = ']';
+            }
+            else
+            {
+                assert(bookmark & SwScriptInfo::MarkKind::Point);
+                mark = '|';
+            }
+            pPor = new SwBookmarkPortion(rInf.GetLast(), mark);
+        }
     }
 
     return pPor;
