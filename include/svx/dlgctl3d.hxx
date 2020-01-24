@@ -35,7 +35,7 @@ class E3dScene;
 
 enum class SvxPreviewObjectType { SPHERE, CUBE };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC PreviewControl3D : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DPreviewControl : public weld::CustomWidgetController
 {
 protected:
     std::unique_ptr<FmFormModel> mpModel;
@@ -48,9 +48,9 @@ protected:
     void Construct();
 
 public:
-    PreviewControl3D();
+    Svx3DPreviewControl();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual ~PreviewControl3D() override;
+    virtual ~Svx3DPreviewControl() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -62,7 +62,7 @@ public:
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl final : public PreviewControl3D
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl final : public Svx3DPreviewControl
 {
     // Callback for interactive changes
     Link<Svx3DLightControl*,void>  maChangeCallback;

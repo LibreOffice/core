@@ -44,7 +44,7 @@
 
 using namespace com::sun::star;
 
-PreviewControl3D::PreviewControl3D()
+Svx3DPreviewControl::Svx3DPreviewControl()
     : mpFmPage(nullptr)
     , mpScene(nullptr)
     , mp3DObj(nullptr)
@@ -52,7 +52,7 @@ PreviewControl3D::PreviewControl3D()
 {
 }
 
-void PreviewControl3D::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void Svx3DPreviewControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(80, 100), MapMode(MapUnit::MapAppFont)));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
@@ -62,13 +62,13 @@ void PreviewControl3D::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Construct();
 }
 
-PreviewControl3D::~PreviewControl3D()
+Svx3DPreviewControl::~Svx3DPreviewControl()
 {
     mp3DView.reset();
     mpModel.reset();
 }
 
-void PreviewControl3D::Construct()
+void Svx3DPreviewControl::Construct()
 {
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
@@ -139,7 +139,7 @@ void PreviewControl3D::Construct()
     mp3DView->MarkObj( mpScene, pPageView );
 }
 
-void PreviewControl3D::Resize()
+void Svx3DPreviewControl::Resize()
 {
     // size of page
     Size aSize(GetOutputSizePixel());
@@ -154,12 +154,12 @@ void PreviewControl3D::Resize()
     mpScene->SetSnapRect( aRect );
 }
 
-void PreviewControl3D::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void Svx3DPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     mp3DView->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
 }
 
-bool PreviewControl3D::MouseButtonDown(const MouseEvent& rMEvt)
+bool Svx3DPreviewControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsShift() && rMEvt.IsMod1())
     {
@@ -175,7 +175,7 @@ bool PreviewControl3D::MouseButtonDown(const MouseEvent& rMEvt)
     return false;
 }
 
-void PreviewControl3D::SetObjectType(SvxPreviewObjectType nType)
+void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
 {
     if( mnObjectType != nType || !mp3DObj)
     {
@@ -224,12 +224,12 @@ void PreviewControl3D::SetObjectType(SvxPreviewObjectType nType)
     }
 }
 
-SfxItemSet const & PreviewControl3D::Get3DAttributes() const
+SfxItemSet const & Svx3DPreviewControl::Get3DAttributes() const
 {
     return mp3DObj->GetMergedItemSet();
 }
 
-void PreviewControl3D::Set3DAttributes( const SfxItemSet& rAttr )
+void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 {
     mp3DObj->SetMergedItemSet(rAttr, true);
     Resize();
@@ -267,7 +267,7 @@ Svx3DLightControl::Svx3DLightControl()
 
 void Svx3DLightControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    PreviewControl3D::SetDrawingArea(pDrawingArea);
+    Svx3DPreviewControl::SetDrawingArea(pDrawingArea);
     Construct2();
 }
 
@@ -527,7 +527,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
 
 void Svx3DLightControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    PreviewControl3D::Paint(rRenderContext, rRect);
+    Svx3DPreviewControl::Paint(rRenderContext, rRect);
 }
 
 tools::Rectangle Svx3DLightControl::GetFocusRect()
@@ -565,7 +565,7 @@ bool Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )
 
     // call parent
     if (bCallParent)
-        return PreviewControl3D::MouseButtonDown(rMEvt);
+        return Svx3DPreviewControl::MouseButtonDown(rMEvt);
     return true;
 }
 
@@ -694,7 +694,7 @@ void Svx3DLightControl::Resize()
 void Svx3DLightControl::SetObjectType(SvxPreviewObjectType nType)
 {
     // call parent
-    PreviewControl3D::SetObjectType(nType);
+    Svx3DPreviewControl::SetObjectType(nType);
 
     // apply object rotation
     if(mp3DObj)
@@ -812,7 +812,7 @@ void Svx3DLightControl::GetRotation(double& rRotX, double& rRotY, double& rRotZ)
 void Svx3DLightControl::Set3DAttributes( const SfxItemSet& rAttr )
 {
     // call parent
-    PreviewControl3D::Set3DAttributes(rAttr);
+    Svx3DPreviewControl::Set3DAttributes(rAttr);
 
     if(maSelectedLight != NO_LIGHT_SELECTED && !GetLightOnOff(maSelectedLight))
     {

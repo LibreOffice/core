@@ -174,7 +174,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xBtnSpecularColor(m_xBuilder->weld_button("colorbutton5"))
     , m_xMtrMatSpecularIntensity(m_xBuilder->weld_metric_spin_button("intensity", FieldUnit::PERCENT))
 
-    , m_xCtlPreview(new PreviewControl3D)
+    , m_xCtlPreview(new Svx3DPreviewControl)
     , m_xCtlPreviewWin(new weld::CustomWeld(*m_xBuilder, "preview", *m_xCtlPreview))
 
     , m_xLightPreviewGrid(m_xBuilder->weld_container("lightpreviewgrid"))

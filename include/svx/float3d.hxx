@@ -177,7 +177,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnSpecularColor;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrMatSpecularIntensity;
 
-    std::unique_ptr<PreviewControl3D> m_xCtlPreview;
+    std::unique_ptr<Svx3DPreviewControl> m_xCtlPreview;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewWin;
 
     std::unique_ptr<weld::Widget> m_xLightPreviewGrid;
