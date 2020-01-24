@@ -106,6 +106,7 @@ enum class DocumentSettingId
     APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
     CONTINUOUS_ENDNOTES,
     HEADER_SPACING_BELOW_LAST_PARA,
+    PROTECT_BOOKMARKS_AND_FIELDS,
 };
 
  /** Provides access to settings of a document

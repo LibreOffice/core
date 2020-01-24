@@ -93,7 +93,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mApplyParagraphMarkFormatToNumbering(false),
     mbLastBrowseMode( false ),
     mbDisableOffPagePositioning ( false ),
-    mbHeaderSpacingBelowLastPara(false)
+    mbHeaderSpacingBelowLastPara(false),
+    mbProtectBookmarksAndFields( false )
 
     // COMPATIBILITY FLAGS END
 {
@@ -225,6 +226,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbContinuousEndnotes;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             return mbHeaderSpacingBelowLastPara;
+        case DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS: return mbProtectBookmarksAndFields;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -469,6 +471,8 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             mbHeaderSpacingBelowLastPara = value;
+        case DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS:
+            mbProtectBookmarksAndFields = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");

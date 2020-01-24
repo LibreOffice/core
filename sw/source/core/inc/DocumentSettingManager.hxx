@@ -164,6 +164,7 @@ class DocumentSettingManager :
     bool mbEmptyDbFieldHidesPara;
     bool mbContinuousEndnotes = false;
     bool mbHeaderSpacingBelowLastPara;
+    bool mbProtectBookmarksAndFields;
 
 public:
 
