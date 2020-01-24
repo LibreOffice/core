@@ -489,7 +489,8 @@ void DeInitVCL()
     if (auto const comp = css::uno::Reference<css::lang::XComponent>(
             pSVData->m_xSystemClipboard, css::uno::UNO_QUERY))
     {
-        comp->dispose();
+        SolarMutexReleaser r; // unblock pending "clipboard content changed" notifications
+        comp->dispose(); // will use CWinClipbImpl::s_aMutex
     }
 #endif
 
