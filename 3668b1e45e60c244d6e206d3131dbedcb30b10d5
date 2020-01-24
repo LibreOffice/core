@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eca54290_c3f6e720",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-24T12:44:42Z",
+      "side": 1,
+      "message": "What about empty style name or names with two-digit numbers, for example LP18? (Non-empty names without numbers handled correctly by accident).\n\nSee also OUString::number()",
+      "range": {
+        "startLine": 1056,
+        "startChar": 46,
+        "endLine": 1056,
+        "endChar": 80
+      },
+      "revId": "3668b1e45e60c244d6e206d3131dbedcb30b10d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d830fb0c_59cb91ac",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-24T12:44:42Z",
+      "side": 1,
+      "message": "Shouldn\u0027t limit this for potential outline styles? A Word document can contain style names with font size etc.:\n\ndebug:7687:7687: H2\ndebug:7687:7687: H3\ndebug:7687:7687: H4\ndebug:7687:7687: H5\ndebug:7687:7687: H6\ndebug:7687:7687: H7\ndebug:7687:7687: H8\ndebug:7687:7687: H9\ndebug:7687:7687: I2\ndebug:7687:7687: I3\ndebug:7687:7687: I4\ndebug:7687:7687: IH2\ndebug:7687:7687: IH3\ndebug:7687:7687: P2\ndebug:7687:7687: P3\ndebug:7687:7687: P4\ndebug:7687:7687: LP4\ndebug:7687:7687: LP6\ndebug:7687:7687: LP8\ndebug:7687:7687: LP12\ndebug:7687:7687: LP24\ndebug:7687:7687: LP18\ndebug:7687:7687: LA4\ndebug:7687:7687: la2",
+      "revId": "3668b1e45e60c244d6e206d3131dbedcb30b10d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
