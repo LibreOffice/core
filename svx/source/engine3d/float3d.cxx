@@ -183,7 +183,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xBtn_Corner(m_xBuilder->weld_button("corner"))
     , m_xLightPreview(new LightControl3D)
     , m_xCtlLightPreviewWin(new weld::CustomWeld(*m_xBuilder, "lightpreview", *m_xLightPreview))
-    , m_xCtlLightPreview(new LightCtl3D(*m_xLightPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner)) // TODO might be other body widget as arg 1
+    , m_xCtlLightPreview(new SvxLightCtl3D(*m_xLightPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner)) // TODO might be other body widget as arg 1
 
     , m_xBtnConvertTo3D(m_xBuilder->weld_button("to3d"))
     , m_xBtnLatheObject(m_xBuilder->weld_button("tolathe"))
@@ -2645,7 +2645,7 @@ void Svx3DWin::ClickLight(const LightButton& rBtn)
     m_xCtlLightPreview->CheckSelection();
 }
 
-IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl, LightCtl3D*, void)
+IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl, SvxLightCtl3D*, void)
 {
     const sal_uInt32 nLight(m_xCtlLightPreview->GetSvx3DLightControl().GetSelectedLight());
     weld::Button* pBtn = nullptr;

@@ -186,7 +186,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtn_Corner;
     std::unique_ptr<LightControl3D> m_xLightPreview;
     std::unique_ptr<weld::CustomWeld> m_xCtlLightPreviewWin;
-    std::unique_ptr<LightCtl3D> m_xCtlLightPreview;
+    std::unique_ptr<SvxLightCtl3D> m_xCtlLightPreview;
 
 // bottom part
     std::unique_ptr<weld::Button> m_xBtnConvertTo3D;
@@ -224,7 +224,7 @@ private:
     DECL_LINK( ModifySpinHdl, weld::SpinButton&, void );
     void ClickLight(const LightButton& rBtn);
 
-    DECL_LINK( ChangeSelectionCallbackHdl, LightCtl3D*, void );
+    DECL_LINK( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );
 
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();

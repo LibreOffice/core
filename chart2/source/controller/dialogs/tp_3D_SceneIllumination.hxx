@@ -46,8 +46,8 @@ private:
     DECL_LINK( ClickLightSourceButtonHdl, weld::Button&, void );
     DECL_LINK( SelectColorHdl, ColorListBox&, void );
     DECL_LINK( ColorDialogHdl, weld::Button&, void );
-    DECL_LINK( PreviewChangeHdl, LightCtl3D*, void );
-    DECL_LINK( PreviewSelectHdl, LightCtl3D*, void );
+    DECL_LINK( PreviewChangeHdl, SvxLightCtl3D*, void );
+    DECL_LINK( PreviewSelectHdl, SvxLightCtl3D*, void );
 
     void updatePreview();
 
@@ -87,7 +87,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtn_Corner;
     std::unique_ptr<LightControl3D> m_xPreview;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWnd;
-    std::unique_ptr<LightCtl3D> m_xCtl_Preview;
+    std::unique_ptr<SvxLightCtl3D> m_xCtl_Preview;
 };
 
 } //namespace chart
