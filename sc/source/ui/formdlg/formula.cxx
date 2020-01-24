@@ -363,7 +363,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
 std::shared_ptr<formula::FormulaCompiler> ScFormulaDlg::getCompiler() const
 {
     if (!m_xCompiler)
-        m_xCompiler.reset( new ScCompiler( m_pDoc, m_CursorPos, m_pDoc->GetGrammar()));
+        m_xCompiler = std::make_shared<ScCompiler>( m_pDoc, m_CursorPos, m_pDoc->GetGrammar());
     return m_xCompiler;
 }
 

@@ -70,7 +70,7 @@ void TableColumns::importTableColumns( SequenceInputStream& /*rStrm*/ )
 
 TableColumn& TableColumns::createTableColumn()
 {
-    TableColumnVector::value_type xTableColumn( new TableColumn( *this ) );
+    TableColumnVector::value_type xTableColumn = std::make_shared<TableColumn>( *this );
     maTableColumnVector.push_back( xTableColumn );
     return *xTableColumn;
 }
@@ -102,7 +102,7 @@ TableColumnsBuffer::TableColumnsBuffer( const WorkbookHelper& rHelper ) :
 
 TableColumns& TableColumnsBuffer::createTableColumns()
 {
-    TableColumnsVector::value_type xTableColumns( new TableColumns( *this ) );
+    TableColumnsVector::value_type xTableColumns = std::make_shared<TableColumns>( *this );
     maTableColumnsVector.push_back( xTableColumns );
     return *xTableColumns;
 }

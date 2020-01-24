@@ -980,7 +980,7 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
 
 PivotCacheField& PivotCache::createCacheField()
 {
-    PivotCacheFieldVector::value_type xCacheField( new PivotCacheField( *this, true/*bIsDatabaseField*/ ) );
+    PivotCacheFieldVector::value_type xCacheField = std::make_shared<PivotCacheField>( *this, true/*bIsDatabaseField*/ );
     maFields.push_back( xCacheField );
     return *xCacheField;
 }
@@ -1213,7 +1213,7 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
 {
     maCacheIds.push_back( nCacheId );
     PivotCacheMap::mapped_type& rxCache = maCaches[ nCacheId ];
-    rxCache.reset( new PivotCache( *this ) );
+    rxCache = std::make_shared<PivotCache>( *this );
     return *rxCache;
 }
 

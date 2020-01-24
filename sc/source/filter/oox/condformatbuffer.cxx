@@ -1217,7 +1217,7 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
 
 ExtCfDataBarRuleRef CondFormatBuffer::createExtCfDataBarRule(ScDataBarFormatData* pTarget)
 {
-    ExtCfDataBarRuleRef extRule( new ExtCfDataBarRule( pTarget, *this ) );
+    ExtCfDataBarRuleRef extRule = std::make_shared<ExtCfDataBarRule>( pTarget, *this );
     maCfRules.push_back( extRule );
     return extRule;
 }
@@ -1266,7 +1266,7 @@ ScConditionMode CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
 
 CondFormatRef CondFormatBuffer::createCondFormat()
 {
-    CondFormatRef xCondFmt( new CondFormat( *this ) );
+    CondFormatRef xCondFmt = std::make_shared<CondFormat>( *this );
     maCondFormats.push_back( xCondFmt );
     return xCondFmt;
 }

@@ -1098,7 +1098,7 @@ XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
         sal_uInt16 nKey(0), nHash(0);
         nKey = rStrm.ReaduInt16();
         nHash = rStrm.ReaduInt16();
-        xDecr.reset( new XclImpBiff5Decrypter( nKey, nHash ) );
+        xDecr = std::make_shared<XclImpBiff5Decrypter>( nKey, nHash );
     }
     return xDecr;
 }
@@ -1115,7 +1115,7 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
         rStrm.Read(aSalt.data(), 16);
         rStrm.Read(aVerifier.data(), 16);
         rStrm.Read(aVerifierHash.data(), 16);
-        xDecr.reset(new XclImpBiff8StdDecrypter(aSalt, aVerifier, aVerifierHash));
+        xDecr = std::make_shared<XclImpBiff8StdDecrypter>(aSalt, aVerifier, aVerifierHash);
     }
     return xDecr;
 }
@@ -1174,13 +1174,13 @@ XclImpDecrypterRef lclReadFilepass8_Strong(XclImpStream& rStream)
     if (info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1)
         return xDecr;
 
-    xDecr.reset(new XclImpBiff8CryptoAPIDecrypter(
+    xDecr = std::make_shared<XclImpBiff8CryptoAPIDecrypter>(
         std::vector<sal_uInt8>(info.verifier.salt,
             info.verifier.salt + SAL_N_ELEMENTS(info.verifier.salt)),
         std::vector<sal_uInt8>(info.verifier.encryptedVerifier,
             info.verifier.encryptedVerifier + SAL_N_ELEMENTS(info.verifier.encryptedVerifier)),
         std::vector<sal_uInt8>(info.verifier.encryptedVerifierHash,
-            info.verifier.encryptedVerifierHash + SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash))));
+            info.verifier.encryptedVerifierHash + SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash)));
 
     return xDecr;
 }

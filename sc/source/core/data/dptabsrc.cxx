@@ -449,8 +449,8 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                     ScDPItemData aItem(pMembers->getByIndex(nIndex)->FillItemData());
                     aFilterCriteria.emplace_back( );
                     aFilterCriteria.back().mnFieldIndex = nCol;
-                    aFilterCriteria.back().mpFilter.reset(
-                        new ScDPFilteredCache::SingleFilter(aItem));
+                    aFilterCriteria.back().mpFilter =
+                        std::make_shared<ScDPFilteredCache::SingleFilter>(aItem);
                 }
             }
         }
@@ -696,7 +696,7 @@ void ScDPSource::FilterCacheByPageDimensions()
         long nMemCount = pMems->getCount();
         ScDPFilteredCache::Criterion aFilter;
         aFilter.mnFieldIndex = static_cast<sal_Int32>(nField);
-        aFilter.mpFilter.reset(new ScDPFilteredCache::GroupFilter);
+        aFilter.mpFilter = std::make_shared<ScDPFilteredCache::GroupFilter>();
         ScDPFilteredCache::GroupFilter* pGrpFilter =
             static_cast<ScDPFilteredCache::GroupFilter*>(aFilter.mpFilter.get());
         for (long j = 0; j < nMemCount; ++j)
@@ -719,7 +719,7 @@ void ScDPSource::FilterCacheByPageDimensions()
         aCriteria.emplace_back();
         ScDPFilteredCache::Criterion& r = aCriteria.back();
         r.mnFieldIndex = static_cast<sal_Int32>(nField);
-        r.mpFilter.reset(new ScDPFilteredCache::SingleFilter(rData));
+        r.mpFilter = std::make_shared<ScDPFilteredCache::SingleFilter>(rData);
     }
     if (!aCriteria.empty())
     {

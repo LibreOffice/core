@@ -308,7 +308,7 @@ OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
         // there was/is already a HLINK record
         mbMultipleUrls = static_cast< bool >(mxLinkRec);
 
-        mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
+        mxLinkRec = std::make_shared<XclExpHyperlink>( GetRoot(), rUrlField, maScPos );
 
         if( const OUString* pRepr = mxLinkRec->GetRepr() )
             aUrlRepr = *pRepr;
@@ -526,7 +526,7 @@ XclExpStringRef lclCreateFormattedString(
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    XclExpStringRef xString( new XclExpString );
+    XclExpStringRef xString = std::make_shared<XclExpString>();
     if( rRoot.GetBiff() == EXC_BIFF8 )
         xString->Assign( rString, nFlags, nMaxLen );
     else

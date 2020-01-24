@@ -42,7 +42,7 @@
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         const tools::SvRef<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
-    mxDocImport(new ScDocumentImport(rDoc)),
+    mxDocImport(std::make_shared<ScDocumentImport>(rDoc)),
     mbHasCodePage( false ),
     mbHasBasic( false )
 {
@@ -56,34 +56,34 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
     mrImpData( rImpRootData )
 {
-    mrImpData.mxAddrConv.reset( new XclImpAddressConverter( GetRoot() ) );
-    mrImpData.mxFmlaComp.reset( new XclImpFormulaCompiler( GetRoot() ) );
-    mrImpData.mxPalette.reset( new XclImpPalette( GetRoot() ) );
-    mrImpData.mxFontBfr.reset( new XclImpFontBuffer( GetRoot() ) );
-    mrImpData.mxNumFmtBfr.reset( new XclImpNumFmtBuffer( GetRoot() ) );
-    mrImpData.mpXFBfr.reset( new XclImpXFBuffer( GetRoot() ) );
-    mrImpData.mxXFRangeBfr.reset( new XclImpXFRangeBuffer( GetRoot() ) );
-    mrImpData.mxTabInfo.reset( new XclImpTabInfo );
-    mrImpData.mxNameMgr.reset( new XclImpNameManager( GetRoot() ) );
-    mrImpData.mxObjMgr.reset( new XclImpObjectManager( GetRoot() ) );
+    mrImpData.mxAddrConv = std::make_shared<XclImpAddressConverter>( GetRoot() );
+    mrImpData.mxFmlaComp = std::make_shared<XclImpFormulaCompiler>( GetRoot() );
+    mrImpData.mxPalette = std::make_shared<XclImpPalette>( GetRoot() );
+    mrImpData.mxFontBfr = std::make_shared<XclImpFontBuffer>( GetRoot() );
+    mrImpData.mxNumFmtBfr = std::make_shared<XclImpNumFmtBuffer>( GetRoot() );
+    mrImpData.mpXFBfr = std::make_shared<XclImpXFBuffer>( GetRoot() );
+    mrImpData.mxXFRangeBfr = std::make_shared<XclImpXFRangeBuffer>( GetRoot() );
+    mrImpData.mxTabInfo = std::make_shared<XclImpTabInfo>();
+    mrImpData.mxNameMgr = std::make_shared<XclImpNameManager>( GetRoot() );
+    mrImpData.mxObjMgr = std::make_shared<XclImpObjectManager>( GetRoot() );
 
     if( GetBiff() == EXC_BIFF8 )
     {
-        mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
-        mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
-        mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
-        mrImpData.mxValidMgr.reset( new XclImpValidationManager( GetRoot() ) );
+        mrImpData.mxLinkMgr = std::make_shared<XclImpLinkManager>( GetRoot() );
+        mrImpData.mxSst = std::make_shared<XclImpSst>( GetRoot() );
+        mrImpData.mxCondFmtMgr = std::make_shared<XclImpCondFormatManager>( GetRoot() );
+        mrImpData.mxValidMgr = std::make_shared<XclImpValidationManager>( GetRoot() );
         // TODO still in old RootData (deleted by RootData)
         GetOldRoot().pAutoFilterBuffer.reset( new XclImpAutoFilterBuffer );
-        mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
-        mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
-        mrImpData.mxTabProtect.reset( new XclImpSheetProtectBuffer( GetRoot() ) );
-        mrImpData.mxDocProtect.reset( new XclImpDocProtectBuffer( GetRoot() ) );
+        mrImpData.mxWebQueryBfr = std::make_shared<XclImpWebQueryBuffer>( GetRoot() );
+        mrImpData.mxPTableMgr = std::make_shared<XclImpPivotTableManager>( GetRoot() );
+        mrImpData.mxTabProtect = std::make_shared<XclImpSheetProtectBuffer>( GetRoot() );
+        mrImpData.mxDocProtect = std::make_shared<XclImpDocProtectBuffer>( GetRoot() );
     }
 
-    mrImpData.mxPageSett.reset( new XclImpPageSettings( GetRoot() ) );
-    mrImpData.mxDocViewSett.reset( new XclImpDocViewSettings( GetRoot() ) );
-    mrImpData.mxTabViewSett.reset( new XclImpTabViewSettings( GetRoot() ) );
+    mrImpData.mxPageSett = std::make_shared<XclImpPageSettings>( GetRoot() );
+    mrImpData.mxDocViewSett = std::make_shared<XclImpDocViewSettings>( GetRoot() );
+    mrImpData.mxTabViewSett = std::make_shared<XclImpTabViewSettings>( GetRoot() );
 }
 
 void XclImpRoot::SetCodePage( sal_uInt16 nCodePage )

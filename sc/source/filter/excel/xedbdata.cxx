@@ -128,10 +128,10 @@ void XclExpTablesManager::Initialize()
             switch( GetBiff() )
             {
                 case EXC_BIFF5:
-                    pNew.reset( new XclExpTablesImpl5( GetRoot()));
+                    pNew = std::make_shared<XclExpTablesImpl5>( GetRoot());
                     break;
                 case EXC_BIFF8:
-                    pNew.reset( new XclExpTablesImpl8( GetRoot()));
+                    pNew = std::make_shared<XclExpTablesImpl8>( GetRoot());
                     break;
                 default:
                     assert(!"Unknown BIFF type!");

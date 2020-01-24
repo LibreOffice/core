@@ -69,7 +69,7 @@ struct ScMyCurrencyStyle
     std::shared_ptr<ScSimpleRangeList> mpRanges;
 
     ScMyCurrencyStyle() :
-        mpRanges(new ScSimpleRangeList)
+        mpRanges(std::make_shared<ScSimpleRangeList>())
     {}
 };
 

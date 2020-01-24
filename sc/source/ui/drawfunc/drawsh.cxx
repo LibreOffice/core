@@ -328,8 +328,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         if( rMarkList.GetMark(0) != nullptr )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            std::shared_ptr<SfxRequest> pRequest;
-                            pRequest.reset(new SfxRequest(rReq));
+                            std::shared_ptr<SfxRequest> pRequest = std::make_shared<SfxRequest>(rReq);
 
                             if( pObj->GetObjIdentifier() == OBJ_CAPTION )
                             {
@@ -456,8 +455,7 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
     const SdrObject*    pObj        = nullptr;
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
-    std::shared_ptr<SfxRequest> pRequest;
-    pRequest.reset(new SfxRequest(rReq));
+    std::shared_ptr<SfxRequest> pRequest = std::make_shared<SfxRequest>(rReq);
 
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -493,8 +491,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
     ScDrawView* pView       = pViewData->GetScDrawView();
     bool        bHasMarked  = pView->AreObjectsMarked();
 
-    std::shared_ptr<SfxRequest> pRequest;
-    pRequest.reset(new SfxRequest(rReq));
+    std::shared_ptr<SfxRequest> pRequest = std::make_shared<SfxRequest>(rReq);
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )

@@ -14,7 +14,7 @@
 namespace sc {
 
 StartListeningContext::StartListeningContext(ScDocument& rDoc) :
-    mrDoc(rDoc), mpSet(new ColumnBlockPositionSet(rDoc)) {}
+    mrDoc(rDoc), mpSet(std::make_shared<ColumnBlockPositionSet>(rDoc)) {}
 
 StartListeningContext::StartListeningContext(
     ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet) :
@@ -36,7 +36,7 @@ ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL n
 }
 
 EndListeningContext::EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode) :
-    mrDoc(rDoc), maSet(false), mpPosSet(new ColumnBlockPositionSet(rDoc)),
+    mrDoc(rDoc), maSet(false), mpPosSet(std::make_shared<ColumnBlockPositionSet>(rDoc)),
     mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 EndListeningContext::EndListeningContext(

@@ -549,7 +549,7 @@ void AutoFilter::importAutoFilter( SequenceInputStream& rStrm, sal_Int16 nSheet 
 
 FilterColumn& AutoFilter::createFilterColumn()
 {
-    FilterColumnVector::value_type xFilterColumn( new FilterColumn( *this ) );
+    FilterColumnVector::value_type xFilterColumn = std::make_shared<FilterColumn>( *this );
     maFilterColumns.push_back( xFilterColumn );
     return *xFilterColumn;
 }
@@ -645,7 +645,7 @@ AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
 
 AutoFilter& AutoFilterBuffer::createAutoFilter()
 {
-    AutoFilterVector::value_type xAutoFilter( new AutoFilter( *this ) );
+    AutoFilterVector::value_type xAutoFilter = std::make_shared<AutoFilter>( *this );
     maAutoFilters.push_back( xAutoFilter );
     return *xAutoFilter;
 }

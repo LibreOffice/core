@@ -74,7 +74,7 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
     DeleteSheets();
     const ScDocProtection* pDocProtect = rDoc.GetDocProtection();
     if (pDocProtect && pDocProtect->isProtected())
-        mpDocItem.reset(new ScDocProtection(*pDocProtect));
+        mpDocItem = std::make_shared<ScDocProtection>(*pDocProtect);
 
     SCTAB nTabCount = rDoc.GetTableCount();
     maTableItems.reserve(nTabCount);
@@ -86,7 +86,7 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
 
         const ScTableProtection* pTabProtect = rDoc.GetTabProtection(i);
         if (pTabProtect && pTabProtect->isProtected())
-            aTabItem.mpProtect.reset(new ScTableProtection(*pTabProtect));
+            aTabItem.mpProtect = std::make_shared<ScTableProtection>(*pTabProtect);
 
         maTableItems.push_back(aTabItem);
         maSheets.emplace_back(new PassFragment(mxSheetsBox.get()));

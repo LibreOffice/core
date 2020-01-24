@@ -814,7 +814,7 @@ class Tokens2RangeString
 {
 public:
     Tokens2RangeString(ScDocument* pDoc, FormulaGrammar::Grammar eGram, sal_Unicode cRangeSep) :
-        mpRangeStr(new OUStringBuffer),
+        mpRangeStr(std::make_shared<OUStringBuffer>()),
         mpDoc(pDoc),
         meGrammar(eGram),
         mcRangeSep(cRangeSep),
@@ -859,7 +859,7 @@ class Tokens2RangeStringXML
 {
 public:
     explicit Tokens2RangeStringXML(ScDocument* pDoc) :
-        mpRangeStr(new OUStringBuffer),
+        mpRangeStr(std::make_shared<OUStringBuffer>()),
         mpDoc(pDoc),
         mbFirst(true)
     {
@@ -1566,7 +1566,7 @@ class InsertTabNumber
 {
 public:
     InsertTabNumber() :
-        mpTabNumVector(new vector<SCTAB>)
+        mpTabNumVector(std::make_shared<vector<SCTAB>>())
     {
     }
 
@@ -3006,7 +3006,7 @@ class GenerateLabelStrings
 public:
     GenerateLabelStrings(const ScDocument* pDoc, sal_Int32 nSize, chart2::data::LabelOrigin eOrigin, bool bColumn) :
         mpDoc(pDoc),
-        mpLabels(new Sequence<OUString>(nSize)),
+        mpLabels(std::make_shared<Sequence<OUString>>(nSize)),
         meOrigin(eOrigin),
         mnCount(0),
         mbColumn(bColumn) {}

@@ -167,7 +167,7 @@ XclExpFuncData::XclExpFuncData( const XclExpScToken& rTokData,
     mrTokData( rTokData ),
     mrFuncInfo( rFuncInfo ),
     maExtFuncData( rExtFuncData ),
-    mxOperands( new XclExpOperandList ),
+    mxOperands( std::make_shared<XclExpOperandList>() ),
     mpParamInfo( rFuncInfo.mpParamInfos )
 {
     OSL_ENSURE( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
@@ -570,7 +570,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType )
     if( mxData.get() )
         maDataStack.push_back( mxData );
     // new compiler working data structure
-    mxData.reset( new XclExpCompData( GetConfigForType( eType ) ) );
+    mxData = std::make_shared<XclExpCompData>( GetConfigForType( eType ) );
 }
 
 void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokArr,
@@ -779,7 +779,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
     OSL_ENSURE( mxData->mrCfg.mbAllowArrays || mxData->maExtDataVec.empty(), "XclExpFmlaCompImpl::CreateTokenArray - unexpected extended data" );
     if( !mxData->mrCfg.mbAllowArrays )
         mxData->maExtDataVec.clear();
-    XclTokenArrayRef xTokArr( new XclTokenArray( mxData->maTokVec, mxData->maExtDataVec, mxData->mbVolatile ) );
+    XclTokenArrayRef xTokArr = std::make_shared<XclTokenArray>( mxData->maTokVec, mxData->maExtDataVec, mxData->mbVolatile );
     mxData.reset();
 
     // compiler invoked recursively? - restore old working data
@@ -1101,7 +1101,7 @@ XclExpScToken XclExpFmlaCompImpl::ListTerm( XclExpScToken aTokData, bool bInPare
         mxData->maTokVec[ nSubExprPos ] = GetTokenId( EXC_TOKID_MEMFUNC, EXC_TOKCLASS_REF );
         Overwrite( nSubExprPos + 1, nSubExprSize );
         // update the operand/operator stack (set the list expression as operand of the tMemFunc)
-        XclExpOperandListRef xOperands( new XclExpOperandList );
+        XclExpOperandListRef xOperands = std::make_shared<XclExpOperandList>();
         xOperands->AppendOperand( PopOperandPos(), EXC_PARAMCONV_VAL, false );
         PushOperatorPos( nSubExprPos, xOperands );
     }
@@ -2406,14 +2406,14 @@ void XclExpFmlaCompImpl::AppendOperatorTokenId( sal_uInt8 nTokenId, const XclExp
 
 void XclExpFmlaCompImpl::AppendUnaryOperatorToken( sal_uInt8 nTokenId, sal_uInt8 nSpaces )
 {
-    XclExpOperandListRef xOperands( new XclExpOperandList );
+    XclExpOperandListRef xOperands = std::make_shared<XclExpOperandList>();
     xOperands->AppendOperand( PopOperandPos(), EXC_PARAMCONV_RPO, true );
     AppendOperatorTokenId( nTokenId, xOperands, nSpaces );
 }
 
 void XclExpFmlaCompImpl::AppendBinaryOperatorToken( sal_uInt8 nTokenId, bool bValType, sal_uInt8 nSpaces )
 {
-    XclExpOperandListRef xOperands( new XclExpOperandList );
+    XclExpOperandListRef xOperands = std::make_shared<XclExpOperandList>();
     xOperands->AppendOperand( PopOperandPos(), EXC_PARAMCONV_RPO, bValType );
     xOperands->AppendOperand( PopOperandPos(), EXC_PARAMCONV_RPO, bValType );
     AppendOperatorTokenId( nTokenId, xOperands, nSpaces );
@@ -2421,7 +2421,7 @@ void XclExpFmlaCompImpl::AppendBinaryOperatorToken( sal_uInt8 nTokenId, bool bVa
 
 void XclExpFmlaCompImpl::AppendLogicalOperatorToken( sal_uInt16 nXclFuncIdx, sal_uInt8 nOpCount )
 {
-    XclExpOperandListRef xOperands( new XclExpOperandList );
+    XclExpOperandListRef xOperands = std::make_shared<XclExpOperandList>();
     for( sal_uInt8 nOpIdx = 0; nOpIdx < nOpCount; ++nOpIdx  )
         xOperands->AppendOperand( PopOperandPos(), EXC_PARAMCONV_RPX, false );
     AppendOperatorTokenId( GetTokenId( EXC_TOKID_FUNCVAR, EXC_TOKCLASS_VAL ), xOperands );
@@ -2597,7 +2597,7 @@ void lclPutRangeToTokenArray( ScTokenArray& rScTokArr, const ScRange& rScRange, 
 
 XclExpFormulaCompiler::XclExpFormulaCompiler( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    mxImpl( new XclExpFmlaCompImpl( rRoot ) )
+    mxImpl( std::make_shared<XclExpFmlaCompImpl>( rRoot ) )
 {
 }
 

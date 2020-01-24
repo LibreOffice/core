@@ -1245,7 +1245,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 {
     OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );
     ScNoteData aNoteData( bShown );
-    aNoteData.mxInitData.reset( new ScCaptionInitData );
+    aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.mxItemSet = std::move(pItemSet);
     rInitData.mxOutlinerObj.reset( pOutlinerObj );
@@ -1279,7 +1279,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
     if( !rNoteText.isEmpty() )
     {
         ScNoteData aNoteData( bShown );
-        aNoteData.mxInitData.reset( new ScCaptionInitData );
+        aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
         ScCaptionInitData& rInitData = *aNoteData.mxInitData;
         rInitData.maSimpleText = rNoteText;
         rInitData.mbDefaultPosSize = true;

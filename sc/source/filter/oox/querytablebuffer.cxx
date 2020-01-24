@@ -268,7 +268,7 @@ QueryTableBuffer::QueryTableBuffer( const WorksheetHelper& rHelper ) :
 
 QueryTable& QueryTableBuffer::createQueryTable()
 {
-    QueryTableVector::value_type xQueryTable( new QueryTable( *this ) );
+    QueryTableVector::value_type xQueryTable = std::make_shared<QueryTable>( *this );
     maQueryTables.push_back( xQueryTable );
     return *xQueryTable;
 }

@@ -766,8 +766,8 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
                     while( pGroupDim )
                     {
                         // insert the new grouping field
-                        XclExpPCFieldRef xNewGroupField( new XclExpPCField(
-                            GetRoot(), GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField ) );
+                        XclExpPCFieldRef xNewGroupField = std::make_shared<XclExpPCField>(
+                            GetRoot(), GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField );
                         maFieldList.AppendRecord( xNewGroupField );
 
                         // register new grouping field at current grouping field, building a chain
@@ -1631,12 +1631,12 @@ void XclExpPivotTableManager::CreatePivotTables()
 
 XclExpRecordRef XclExpPivotTableManager::CreatePivotCachesRecord()
 {
-    return XclExpRecordRef( new XclExpPivotRecWrapper( *this, EXC_PTMGR_PIVOTCACHES ) );
+    return std::make_shared<XclExpPivotRecWrapper>( *this, EXC_PTMGR_PIVOTCACHES );
 }
 
 XclExpRecordRef XclExpPivotTableManager::CreatePivotTablesRecord( SCTAB nScTab )
 {
-    return XclExpRecordRef( new XclExpPivotRecWrapper( *this, nScTab ) );
+    return std::make_shared<XclExpPivotRecWrapper>( *this, nScTab );
 }
 
 void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
@@ -1680,7 +1680,7 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
 
     // create a new pivot cache
     sal_uInt16 nNewCacheIdx = static_cast< sal_uInt16 >( maPCacheList.GetSize() );
-    XclExpPivotCacheRef xNewPCache( new XclExpPivotCache( GetRoot(), rDPObj, nNewCacheIdx ) );
+    XclExpPivotCacheRef xNewPCache = std::make_shared<XclExpPivotCache>( GetRoot(), rDPObj, nNewCacheIdx );
     if( xNewPCache->IsValid() )
     {
         maPCacheList.AppendRecord( xNewPCache );

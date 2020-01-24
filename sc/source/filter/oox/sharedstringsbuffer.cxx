@@ -28,7 +28,7 @@ SharedStringsBuffer::SharedStringsBuffer( const WorkbookHelper& rHelper ) :
 
 RichStringRef SharedStringsBuffer::createRichString()
 {
-    RichStringRef xString( new RichString( *this ) );
+    RichStringRef xString = std::make_shared<RichString>( *this );
     maStrings.push_back( xString );
     return xString;
 }

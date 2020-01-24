@@ -96,9 +96,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maScMaxPos( mrDoc.MaxCol(), mrDoc.MaxRow(), MAXTAB ),
     maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
-    mxFontPropSetHlp( new XclFontPropSetHelper ),
-    mxChPropSetHlp( new XclChPropSetHelper ),
-    mxRD( new RootData ),
+    mxFontPropSetHlp( std::make_shared<XclFontPropSetHelper>() ),
+    mxChPropSetHlp( std::make_shared<XclChPropSetHelper>() ),
+    mxRD( std::make_shared<RootData>() ),
     mfScreenPixelX( 50.0 ),
     mfScreenPixelY( 50.0 ),
     mnCharWidth( 110 ),
@@ -140,9 +140,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
 
     // extended document options - always own object, try to copy existing data from document
     if( const ScExtDocOptions* pOldDocOpt = mrDoc.GetExtDocOptions() )
-        mxExtDocOpt.reset( new ScExtDocOptions( *pOldDocOpt ) );
+        mxExtDocOpt = std::make_shared<ScExtDocOptions>( *pOldDocOpt );
     else
-        mxExtDocOpt.reset( new ScExtDocOptions );
+        mxExtDocOpt = std::make_shared<ScExtDocOptions>();
 
     // screen pixel size
     try
@@ -172,7 +172,7 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 #endif
 
     // filter tracer
-    mrData.mxTracer.reset( new XclTracer( GetDocUrl() ) );
+    mrData.mxTracer = std::make_shared<XclTracer>( GetDocUrl() );
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
@@ -359,7 +359,7 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
 {
     if( !mrData.mxEditEngine.get() )
     {
-        mrData.mxEditEngine.reset( new ScEditEngineDefaulter( GetDoc().GetEnginePool() ) );
+        mrData.mxEditEngine = std::make_shared<ScEditEngineDefaulter>( GetDoc().GetEnginePool() );
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
@@ -374,7 +374,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
     if( !mrData.mxHFEditEngine.get() )
     {
-        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool() ) );
+        mrData.mxHFEditEngine = std::make_shared<ScHeaderEditEngine>( EditEngine::CreatePool() );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode(MapMode(MapUnit::MapTwip)); // headers/footers use twips as default metric
         rEE.SetUpdateMode( false );
@@ -398,7 +398,7 @@ EditEngine& XclRoot::GetDrawEditEngine() const
 {
     if( !mrData.mxDrawEditEng.get() )
     {
-        mrData.mxDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
+        mrData.mxDrawEditEng = std::make_shared<EditEngine>( &GetDoc().GetDrawLayer()->GetItemPool() );
         EditEngine& rEE = *mrData.mxDrawEditEng;
         rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
         rEE.SetUpdateMode( false );

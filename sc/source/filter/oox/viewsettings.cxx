@@ -166,7 +166,7 @@ PaneSelectionModel& SheetViewModel::createPaneSelection( sal_Int32 nPaneId )
 {
     PaneSelectionModelMap::mapped_type& rxPaneSel = maPaneSelMap[ nPaneId ];
     if( !rxPaneSel )
-        rxPaneSel.reset( new PaneSelectionModel );
+        rxPaneSel = std::make_shared<PaneSelectionModel>();
     return *rxPaneSel;
 }
 
@@ -448,7 +448,7 @@ bool SheetViewSettings::isSheetRightToLeft() const
 
 SheetViewModelRef SheetViewSettings::createSheetView()
 {
-    SheetViewModelRef xModel( new SheetViewModel );
+    SheetViewModelRef xModel = std::make_shared<SheetViewModel>();
     maSheetViews.push_back( xModel );
     return xModel;
 }
@@ -558,7 +558,7 @@ void ViewSettings::finalizeImport()
     SheetViewModelRef& rxActiveSheetView = maSheetViews[ nActiveSheet ];
     OSL_ENSURE( rxActiveSheetView.get(), "ViewSettings::finalizeImport - missing active sheet view settings" );
     if( !rxActiveSheetView )
-        rxActiveSheetView.reset( new SheetViewModel );
+        rxActiveSheetView = std::make_shared<SheetViewModel>();
 
     Reference< XIndexContainer > xContainer = IndexedPropertyValues::create( getBaseFilter().getComponentContext() );
     if( xContainer.is() ) try
@@ -626,7 +626,7 @@ sal_Int16 ViewSettings::getActiveCalcSheet() const
 
 WorkbookViewModel& ViewSettings::createWorkbookView()
 {
-    WorkbookViewModelRef xModel( new WorkbookViewModel );
+    WorkbookViewModelRef xModel = std::make_shared<WorkbookViewModel>();
     maBookViews.push_back( xModel );
     return *xModel;
 }

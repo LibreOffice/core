@@ -91,7 +91,7 @@ ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const A
             switch( nElement )
             {
                 case XLS_TOKEN( is ):
-                    mxInlineStr.reset( new RichString( *this ) );
+                    mxInlineStr = std::make_shared<RichString>( *this );
                     return new RichStringContext( *this, mxInlineStr );
                 case XLS_TOKEN( v ):
                     return this;    // characters contain cell value
@@ -501,7 +501,7 @@ void SheetDataContext::importCellRString( SequenceInputStream& rStrm, CellType e
     if( readCellHeader( rStrm, eCellType ) )
     {
         maCellData.mnCellType = XML_inlineStr;
-        RichStringRef xString( new RichString( *this ) );
+        RichStringRef xString = std::make_shared<RichString>( *this );
         xString->importString( rStrm, true );
         xString->finalizeImport();
         mrSheetData.setStringCell( maCellData, xString );
@@ -524,7 +524,7 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
     {
         maCellData.mnCellType = XML_inlineStr;
         // always import the string, stream will point to formula afterwards, if existing
-        RichStringRef xString( new RichString( *this ) );
+        RichStringRef xString = std::make_shared<RichString>( *this );
         xString->importString( rStrm, false );
         xString->finalizeImport();
         if( eCellType == CELLTYPE_FORMULA )

@@ -105,7 +105,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
     getWorksheets().convertSheetNameRef( sURL );
     if( !maMacroName.isEmpty() && mxShape.is() )
     {
-        VbaMacroAttacherRef xAttacher( new ShapeMacroAttacher( maMacroName, mxShape ) );
+        VbaMacroAttacherRef xAttacher = std::make_shared<ShapeMacroAttacher>( maMacroName, mxShape );
         getBaseFilter().getVbaProject().registerMacroAttacher( xAttacher );
     }
     ::oox::drawingml::Shape::finalizeXShape( rFilter, rxShapes );
@@ -135,31 +135,31 @@ GroupShapeContext::GroupShapeContext( const FragmentHandler2& rParent,
     {
         case XDR_TOKEN( sp ):
         {
-            ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.CustomShape" ) );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.CustomShape" );
             if( pxShape ) *pxShape = xShape;
             return new ShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( cxnSp ):
         {
-            ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.ConnectorShape" ) );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.ConnectorShape" );
             if( pxShape ) *pxShape = xShape;
             return new ConnectorShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( pic ):
         {
-            ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" ) );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" );
             if( pxShape ) *pxShape = xShape;
             return new GraphicShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( graphicFrame ):
         {
-            ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" ) );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" );
             if( pxShape ) *pxShape = xShape;
             return new GraphicalObjectFrameContext( rParent, rxParentShape, xShape, rHelper.getSheetType() != WorksheetType::Chart );
         }
         case XDR_TOKEN( grpSp ):
         {
-            ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GroupShape" ) );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.GroupShape" );
             if( pxShape ) *pxShape = xShape;
             return new GroupShapeContext( rParent, rHelper, rxParentShape, xShape );
         }
@@ -620,7 +620,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 if( !aMacroName.isEmpty() )
                 {
                     Reference< XIndexContainer > xFormIC = getControlForm().getXForm();
-                    VbaMacroAttacherRef xAttacher( new VmlControlMacroAttacher( aMacroName, xFormIC, nCtrlIndex, pClientData->mnObjType, pClientData->mnDropStyle ) );
+                    VbaMacroAttacherRef xAttacher = std::make_shared<VmlControlMacroAttacher>( aMacroName, xFormIC, nCtrlIndex, pClientData->mnObjType, pClientData->mnDropStyle );
                     getBaseFilter().getVbaProject().registerMacroAttacher( xAttacher );
                 }
             }

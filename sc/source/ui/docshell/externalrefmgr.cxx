@@ -687,7 +687,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
             ScMatrixToken aToken(xMat);
             if (!pArray)
-                pArray.reset(new ScTokenArray(mxFakeDoc.get()));
+                pArray = std::make_shared<ScTokenArray>(mxFakeDoc.get());
             pArray->AddToken(aToken);
 
             bFirstTab = false;
@@ -782,7 +782,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabNam
 
     TableTypeRef& pTableData = rDoc.maTables[itrTabName->second];
     if (!pTableData.get())
-        pTableData.reset(new Table);
+        pTableData = std::make_shared<Table>();
 
     pTableData->setCell(nCol, nRow, pToken, nFmtIndex);
     pTableData->setCachedCell(nCol, nRow);
@@ -820,7 +820,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     {
         TableTypeRef& pTabData = rDoc.maTables[i];
         if (!pTabData.get())
-            pTabData.reset(new Table);
+            pTabData = std::make_shared<Table>();
 
         const ScMatrixRef& pMat = rItem.mpRangeData;
         SCSIZE nMatCols, nMatRows;
@@ -1318,7 +1318,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
         // specified table found.
         if( pnIndex ) *pnIndex = nIndex;
         if (bCreateNew && !rDoc.maTables[nIndex])
-            rDoc.maTables[nIndex].reset(new Table);
+            rDoc.maTables[nIndex] = std::make_shared<Table>();
 
         return rDoc.maTables[nIndex];
     }
@@ -1352,7 +1352,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     OUString aTabNameUpper = ScGlobal::pCharClass->uppercase(rTabName);
     nIndex = rDoc.maTables.size();
     if( pnIndex ) *pnIndex = nIndex;
-    TableTypeRef pTab(new Table);
+    TableTypeRef pTab = std::make_shared<Table>();
     rDoc.maTables.push_back(pTab);
     rDoc.maTableNames.emplace_back(aTabNameUpper, rTabName);
     rDoc.maTableNameIndex.emplace(aTabNameUpper, nIndex);
@@ -2004,7 +2004,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     if (!pSrcDoc)
     {
         // Source document is not reachable.  Throw a reference error.
-        pArray.reset(new ScTokenArray(maRefCache.getFakeDoc()));
+        pArray = std::make_shared<ScTokenArray>(maRefCache.getFakeDoc());
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2248,7 +2248,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     if (!pSrcDoc->GetTable(rTabName, nTab1))
     {
         // specified table name doesn't exist in the source document.
-        pArray.reset(new ScTokenArray(pSrcDoc));
+        pArray = std::make_shared<ScTokenArray>(pSrcDoc);
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2296,7 +2296,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     // register the source document with the link manager if it's a new
     // source.
 
-    ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray(pSrcDoc));
+    ScExternalRefCache::TokenArrayRef pNew = std::make_shared<ScTokenArray>(pSrcDoc);
 
     ScTokenArray aCode(*pRangeData->GetCode());
     FormulaTokenArrayPlainIterator aIter(aCode);

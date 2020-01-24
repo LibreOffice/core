@@ -849,7 +849,7 @@ class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
 public:
     explicit ListenerStartAction( ScDocument& rDoc ) :
         mpCol(nullptr),
-        mpPosSet(new sc::ColumnBlockPositionSet(rDoc)),
+        mpPosSet(std::make_shared<sc::ColumnBlockPositionSet>(rDoc)),
         maStartCxt(rDoc, mpPosSet),
         maEndCxt(rDoc, mpPosSet) {}
 

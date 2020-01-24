@@ -944,7 +944,7 @@ XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
         if( xFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
             return xFilter.get();
     }
-    xFilter.reset( new XclExpAutofilter( GetRoot(), static_cast<sal_uInt16>(nCol) ) );
+    xFilter = std::make_shared<XclExpAutofilter>( GetRoot(), static_cast<sal_uInt16>(nCol) );
     maFilterList.AppendRecord( xFilter );
     return xFilter.get();
 }
@@ -1005,7 +1005,7 @@ XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
 
 void XclExpFilterManager::InitTabFilter( SCTAB nScTab )
 {
-    maFilterMap[ nScTab ].reset( new ExcAutoFilterRecs( GetRoot(), nScTab, nullptr ) );
+    maFilterMap[ nScTab ] = std::make_shared<ExcAutoFilterRecs>( GetRoot(), nScTab, nullptr );
 }
 
 XclExpRecordRef XclExpFilterManager::CreateRecord( SCTAB nScTab )

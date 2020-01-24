@@ -96,7 +96,7 @@ XclSelectionData& XclTabViewData::CreateSelectionData( sal_uInt8 nPane )
 {
     XclSelectionDataRef& rxSelData = maSelMap[ nPane ];
     if( !rxSelData )
-        rxSelData.reset( new XclSelectionData );
+        rxSelData = std::make_shared<XclSelectionData>();
     return *rxSelData;
 }
 

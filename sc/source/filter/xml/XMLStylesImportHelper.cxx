@@ -55,49 +55,49 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
         case util::NumberFormat::NUMBER:
         {
             if (!mpNumberList)
-                mpNumberList.reset(new ScSimpleRangeList);
+                mpNumberList = std::make_shared<ScSimpleRangeList>();
             mpNumberList->addRange(rRange);
         }
         break;
         case util::NumberFormat::TEXT:
         {
             if (!mpTextList)
-                mpTextList.reset(new ScSimpleRangeList);
+                mpTextList = std::make_shared<ScSimpleRangeList>();
             mpTextList->addRange(rRange);
         }
         break;
         case util::NumberFormat::TIME:
         {
             if (!mpTimeList)
-                mpTimeList.reset(new ScSimpleRangeList);
+                mpTimeList = std::make_shared<ScSimpleRangeList>();
             mpTimeList->addRange(rRange);
         }
         break;
         case util::NumberFormat::DATETIME:
         {
             if (!mpDateTimeList)
-                mpDateTimeList.reset(new ScSimpleRangeList);
+                mpDateTimeList = std::make_shared<ScSimpleRangeList>();
             mpDateTimeList->addRange(rRange);
         }
         break;
         case util::NumberFormat::PERCENT:
         {
             if (!mpPercentList)
-                mpPercentList.reset(new ScSimpleRangeList);
+                mpPercentList = std::make_shared<ScSimpleRangeList>();
             mpPercentList->addRange(rRange);
         }
         break;
         case util::NumberFormat::LOGICAL:
         {
             if (!mpLogicalList)
-                mpLogicalList.reset(new ScSimpleRangeList);
+                mpLogicalList = std::make_shared<ScSimpleRangeList>();
             mpLogicalList->addRange(rRange);
         }
         break;
         case util::NumberFormat::UNDEFINED:
         {
             if (!mpUndefinedList)
-                mpUndefinedList.reset(new ScSimpleRangeList);
+                mpUndefinedList = std::make_shared<ScSimpleRangeList>();
             mpUndefinedList->addRange(rRange);
         }
         break;

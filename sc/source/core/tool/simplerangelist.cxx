@@ -175,7 +175,7 @@ ScSimpleRangeList::RangeListRef ScSimpleRangeList::findTab(SCTAB nTab)
     TabType::iterator itr = maTabs.find(nTab);
     if (itr == maTabs.end())
     {
-        RangeListRef p(new list<Range>);
+        RangeListRef p = std::make_shared<list<Range>>();
         pair<TabType::iterator, bool> r = maTabs.emplace(nTab, p);
         if (!r.second)
             return RangeListRef();

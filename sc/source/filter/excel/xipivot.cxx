@@ -345,7 +345,7 @@ void XclImpPCField::ReadItem( XclImpStream& rStrm )
     OSL_ENSURE( HasInlineItems() || HasPostponedItems(), "XclImpPCField::ReadItem - field does not expect items" );
 
     // read the item
-    XclImpPCItemRef xItem( new XclImpPCItem( rStrm ) );
+    XclImpPCItemRef xItem = std::make_shared<XclImpPCItem>( rStrm );
 
     // try to insert into an item list
     if( mbNumGroupInfoRead )
@@ -745,7 +745,7 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
                 sal_uInt16 nNewFieldIdx = static_cast< sal_uInt16 >( maFields.size() );
                 if( nNewFieldIdx < EXC_PC_MAXFIELDCOUNT )
                 {
-                    xCurrField.reset( new XclImpPCField( GetRoot(), *this, nNewFieldIdx ) );
+                    xCurrField = std::make_shared<XclImpPCField>( GetRoot(), *this, nNewFieldIdx );
                     maFields.push_back( xCurrField );
                     xCurrField->ReadSxfield( aPCStrm );
                     if( xCurrField->HasOrigItems() )
@@ -1002,7 +1002,7 @@ void XclImpPTField::ReadSxvdex( XclImpStream& rStrm )
 
 void XclImpPTField::ReadSxvi( XclImpStream& rStrm )
 {
-    XclImpPTItemRef xItem( new XclImpPTItem( GetCacheField() ) );
+    XclImpPTItemRef xItem = std::make_shared<XclImpPTItem>( GetCacheField() );
     maItems.push_back( xItem );
     xItem->ReadSxvi( rStrm );
 }
@@ -1300,7 +1300,7 @@ void XclImpPivotTable::ReadSxvd( XclImpStream& rStrm )
     if( nFieldCount < EXC_PT_MAXFIELDCOUNT )
     {
         // cache index for the field is equal to the SXVD record index
-        mxCurrField.reset( new XclImpPTField( *this, nFieldCount ) );
+        mxCurrField = std::make_shared<XclImpPTField>( *this, nFieldCount );
         maFields.push_back( mxCurrField );
         mxCurrField->ReadSxvd( rStrm );
         // add visible name of new field to list of visible names
@@ -1628,7 +1628,7 @@ XclImpPivotCacheRef XclImpPivotTableManager::GetPivotCache( sal_uInt16 nCacheIdx
 
 void XclImpPivotTableManager::ReadSxidstm( XclImpStream& rStrm )
 {
-    XclImpPivotCacheRef xPCache( new XclImpPivotCache( GetRoot() ) );
+    XclImpPivotCacheRef xPCache = std::make_shared<XclImpPivotCache>( GetRoot() );
     maPCaches.push_back( xPCache );
     xPCache->ReadSxidstm( rStrm );
 }
@@ -1655,7 +1655,7 @@ void XclImpPivotTableManager::ReadDConName( XclImpStream& rStrm )
 
 void XclImpPivotTableManager::ReadSxview( XclImpStream& rStrm )
 {
-    XclImpPivotTableRef xPTable( new XclImpPivotTable( GetRoot() ) );
+    XclImpPivotTableRef xPTable = std::make_shared<XclImpPivotTable>( GetRoot() );
     maPTables.push_back( xPTable );
     xPTable->ReadSxview( rStrm );
 }

@@ -641,7 +641,7 @@ ScEEParser::~ScEEParser()
 
 void ScEEParser::NewActEntry( const ScEEParseEntry* pE )
 {   // New free-flying mxActEntry
-    mxActEntry.reset(new ScEEParseEntry(pPool));
+    mxActEntry = std::make_shared<ScEEParseEntry>(pPool);
     mxActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
     mxActEntry->aSel.nStartPos = 0;
 }

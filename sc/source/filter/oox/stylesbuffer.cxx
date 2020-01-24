@@ -1702,7 +1702,7 @@ Fill::Fill( const WorkbookHelper& rHelper, bool bDxf ) :
 
 void Fill::importPatternFill( const AttributeList& rAttribs )
 {
-    mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+    mxPatternModel = std::make_shared<PatternFillModel>( mbDxf );
     mxPatternModel->mnPattern = rAttribs.getToken( XML_patternType, XML_none );
     if( mbDxf )
         mxPatternModel->mbPatternUsed = rAttribs.hasAttribute( XML_patternType );
@@ -1730,7 +1730,7 @@ void Fill::importBgColor( const AttributeList& rAttribs )
 
 void Fill::importGradientFill( const AttributeList& rAttribs )
 {
-    mxGradientModel.reset( new GradientFillModel );
+    mxGradientModel = std::make_shared<GradientFillModel>();
     mxGradientModel->mnType = rAttribs.getToken( XML_type, XML_linear );
     mxGradientModel->mfAngle = rAttribs.getDouble( XML_degree, 0.0 );
     mxGradientModel->mfLeft = rAttribs.getDouble( XML_left, 0.0 );
@@ -1752,7 +1752,7 @@ void Fill::importFill( SequenceInputStream& rStrm )
     sal_Int32 nPattern = rStrm.readInt32();
     if( nPattern == BIFF12_FILL_GRADIENT )
     {
-        mxGradientModel.reset( new GradientFillModel );
+        mxGradientModel = std::make_shared<GradientFillModel>();
         sal_Int32 nStopCount;
         rStrm.skip( 16 );
         mxGradientModel->readGradient( rStrm );
@@ -1762,7 +1762,7 @@ void Fill::importFill( SequenceInputStream& rStrm )
     }
     else
     {
-        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+        mxPatternModel = std::make_shared<PatternFillModel>( mbDxf );
         mxPatternModel->setBiffPattern( nPattern );
         rStrm >> mxPatternModel->maPatternColor >> mxPatternModel->maFillColor;
     }
@@ -1772,7 +1772,7 @@ void Fill::importDxfPattern( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfPattern - missing conditional formatting flag" );
     if( !mxPatternModel )
-        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+        mxPatternModel = std::make_shared<PatternFillModel>( mbDxf );
     mxPatternModel->setBiffPattern( rStrm.readuInt8() );
     mxPatternModel->mbPatternUsed = true;
 }
@@ -1781,7 +1781,7 @@ void Fill::importDxfFgColor( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfFgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
-        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+        mxPatternModel = std::make_shared<PatternFillModel>( mbDxf );
     mxPatternModel->maPatternColor.importColor( rStrm );
     mxPatternModel->mbPattColorUsed = true;
 }
@@ -1790,7 +1790,7 @@ void Fill::importDxfBgColor( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfBgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
-        mxPatternModel.reset( new PatternFillModel( mbDxf ) );
+        mxPatternModel = std::make_shared<PatternFillModel>( mbDxf );
     mxPatternModel->maFillColor.importColor( rStrm );
     mxPatternModel->mbFillColorUsed = true;
 }
@@ -1799,7 +1799,7 @@ void Fill::importDxfGradient( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfGradient - missing conditional formatting flag" );
     if( !mxGradientModel )
-        mxGradientModel.reset( new GradientFillModel );
+        mxGradientModel = std::make_shared<GradientFillModel>();
     mxGradientModel->readGradient( rStrm );
 }
 
@@ -1807,7 +1807,7 @@ void Fill::importDxfStop( SequenceInputStream& rStrm )
 {
     SAL_WARN_IF( !mbDxf, "sc", "Fill::importDxfStop - missing conditional formatting flag" );
     if( !mxGradientModel )
-        mxGradientModel.reset( new GradientFillModel );
+        mxGradientModel = std::make_shared<GradientFillModel>();
     mxGradientModel->readGradientStop( rStrm, true );
 }
 
@@ -2222,21 +2222,21 @@ Dxf::Dxf( const WorkbookHelper& rHelper ) :
 FontRef const & Dxf::createFont( bool bAlwaysNew )
 {
     if( bAlwaysNew || !mxFont )
-        mxFont.reset( new Font( *this, true ) );
+        mxFont = std::make_shared<Font>( *this, true );
     return mxFont;
 }
 
 BorderRef const & Dxf::createBorder( bool bAlwaysNew )
 {
     if( bAlwaysNew || !mxBorder )
-        mxBorder.reset( new Border( *this, true ) );
+        mxBorder = std::make_shared<Border>( *this, true );
     return mxBorder;
 }
 
 FillRef const & Dxf::createFill( bool bAlwaysNew )
 {
     if( bAlwaysNew || !mxFill )
-        mxFill.reset( new Fill( *this, true ) );
+        mxFill = std::make_shared<Fill>( *this, true );
     return mxFill;
 }
 
@@ -2527,7 +2527,7 @@ CellStyleBuffer::CellStyleBuffer( const WorkbookHelper& rHelper ) :
 
 CellStyleRef CellStyleBuffer::importCellStyle( const AttributeList& rAttribs )
 {
-    CellStyleRef xCellStyle( new CellStyle( *this ) );
+    CellStyleRef xCellStyle = std::make_shared<CellStyle>( *this );
     xCellStyle->importCellStyle( rAttribs );
     insertCellStyle( xCellStyle );
     return xCellStyle;
@@ -2535,7 +2535,7 @@ CellStyleRef CellStyleBuffer::importCellStyle( const AttributeList& rAttribs )
 
 CellStyleRef CellStyleBuffer::importCellStyle( SequenceInputStream& rStrm )
 {
-    CellStyleRef xCellStyle( new CellStyle( *this ) );
+    CellStyleRef xCellStyle = std::make_shared<CellStyle>( *this );
     xCellStyle->importCellStyle( rStrm );
     insertCellStyle( xCellStyle );
     return xCellStyle;
@@ -2702,7 +2702,7 @@ StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
 
 FontRef StylesBuffer::createFont()
 {
-    FontRef xFont( new Font( *this, false ) );
+    FontRef xFont = std::make_shared<Font>( *this, false );
     maFonts.push_back( xFont );
     return xFont;
 }
@@ -2719,42 +2719,42 @@ sal_Int32 StylesBuffer::nextFreeNumFmtId()
 
 BorderRef StylesBuffer::createBorder()
 {
-    BorderRef xBorder( new Border( *this, false ) );
+    BorderRef xBorder = std::make_shared<Border>( *this, false );
     maBorders.push_back( xBorder );
     return xBorder;
 }
 
 FillRef StylesBuffer::createFill()
 {
-    FillRef xFill( new Fill( *this, false ) );
+    FillRef xFill = std::make_shared<Fill>( *this, false );
     maFills.push_back( xFill );
     return xFill;
 }
 
 XfRef StylesBuffer::createCellXf()
 {
-    XfRef xXf( new Xf( *this ) );
+    XfRef xXf = std::make_shared<Xf>( *this );
     maCellXfs.push_back( xXf );
     return xXf;
 }
 
 XfRef StylesBuffer::createStyleXf()
 {
-    XfRef xXf( new Xf( *this ) );
+    XfRef xXf = std::make_shared<Xf>( *this );
     maStyleXfs.push_back( xXf );
     return xXf;
 }
 
 DxfRef StylesBuffer::createDxf()
 {
-    DxfRef xDxf( new Dxf( *this ) );
+    DxfRef xDxf = std::make_shared<Dxf>( *this );
     maDxfs.push_back( xDxf );
     return xDxf;
 }
 
 DxfRef StylesBuffer::createExtDxf()
 {
-    DxfRef xDxf( new Dxf( *this ) );
+    DxfRef xDxf = std::make_shared<Dxf>( *this );
     maExtDxfs.push_back( xDxf );
     return xDxf;
 }

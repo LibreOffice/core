@@ -647,7 +647,7 @@ public:
         mrDocImpl(rDocImpl),
         mnTab(nTab),
         mnCol(nCol),
-        mpImpl(new Impl(mrDocImpl.mnDefaultScriptNumeric))
+        mpImpl(std::make_shared<Impl>(mrDocImpl.mnDefaultScriptNumeric))
     {}
 
     std::shared_ptr<Impl> mpImpl;

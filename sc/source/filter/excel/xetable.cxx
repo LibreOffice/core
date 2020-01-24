@@ -149,7 +149,7 @@ XclExpArrayRef XclExpArrayBuffer::CreateArray( const ScTokenArray& rScTokArr, co
 
     OSL_ENSURE( maRecMap.find( rScPos ) == maRecMap.end(), "XclExpArrayBuffer::CreateArray - array exists already" );
     XclExpArrayRef& rxRec = maRecMap[ rScPos ];
-    rxRec.reset( new XclExpArray( xTokArr, rScRange ) );
+    rxRec = std::make_shared<XclExpArray>( xTokArr, rScRange );
     return rxRec;
 }
 
@@ -274,7 +274,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
     {
         // create a new record
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
-        xRec.reset( new XclExpShrfmla( xTokArr, rScPos ) );
+        xRec = std::make_shared<XclExpShrfmla>( xTokArr, rScPos );
         maRecMap[ pShrdScTokArr ] = xRec;
     }
     else
@@ -522,7 +522,7 @@ XclExpTableopRef XclExpTableopBuffer::TryCreate( const ScAddress& rScPos, const 
     XclExpTableopRef xRec;
     if( bOk )
     {
-        xRec.reset( new XclExpTableop( rScPos, rRefs, nScMode ) );
+        xRec = std::make_shared<XclExpTableop>( rScPos, rRefs, nScMode );
         maTableopList.AppendRecord( xRec );
     }
 
@@ -1060,7 +1060,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
                     if( !aResult.isEmpty() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
                     {
                         rStrm << EXC_FORMULA_RES_STRING;
-                        mxStringRec.reset( new XclExpStringRec( rStrm.GetRoot(), aResult ) );
+                        mxStringRec = std::make_shared<XclExpStringRec>( rStrm.GetRoot(), aResult );
                     }
                     else
                         rStrm << EXC_FORMULA_RES_EMPTY;     // BIFF8 only
@@ -1927,7 +1927,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
             if( nFirstFreeXclCol < nNextUsedXclCol )
             {
                 aXFId.mnCount = nNextUsedXclCol - nFirstFreeXclCol;
-                XclExpCellRef xNewCell( new XclExpBlankCell( XclAddress( nFirstFreeXclCol, mnXclRow ), aXFId ) );
+                XclExpCellRef xNewCell = std::make_shared<XclExpBlankCell>( XclAddress( nFirstFreeXclCol, mnXclRow ), aXFId );
                 // insert the cell, InsertCell() may merge it with existing BLANK records
                 InsertCell( xNewCell, nPos, false );
                 // insert default XF indexes into aXFIndexes
@@ -2416,7 +2416,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
                 {
                     mnHighestOutlineLevel = maOutlineBfr.GetLevel();
                 }
-                RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight));
+                RowRef p = std::make_shared<XclExpRow>(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight);
                 maRowMap.emplace(nFrom, p);
                 pPrevEntry = p;
             }
@@ -2436,13 +2436,13 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     maArrayBfr( rRoot ),
     maShrfmlaBfr( rRoot ),
     maTableopBfr( rRoot ),
-    mxDefrowheight( new XclExpDefrowheight ),
-    mxGuts( new XclExpGuts( rRoot ) ),
-    mxNoteList( new XclExpNoteList ),
-    mxMergedcells( new XclExpMergedcells( rRoot ) ),
-    mxHyperlinkList( new XclExpHyperlinkList ),
-    mxDval( new XclExpDval( rRoot ) ),
-    mxExtLst( new XclExtLst( rRoot ) )
+    mxDefrowheight( std::make_shared<XclExpDefrowheight>() ),
+    mxGuts( std::make_shared<XclExpGuts>( rRoot ) ),
+    mxNoteList( std::make_shared<XclExpNoteList>() ),
+    mxMergedcells( std::make_shared<XclExpMergedcells>( rRoot ) ),
+    mxHyperlinkList( std::make_shared<XclExpHyperlinkList>() ),
+    mxDval( std::make_shared<XclExpDval>( rRoot ) ),
+    mxExtLst( std::make_shared<XclExtLst>( rRoot ) )
 {
     ScDocument& rDoc = GetDoc();
     SCTAB nScTab = GetCurrScTab();
@@ -2546,8 +2546,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                     OUString aUrl = pPattern->GetItemSet().Get(ATTR_HYPERLINK).GetValue();
                     if (!aUrl.isEmpty())
                     {
-                        std::shared_ptr<XclExpHyperlink> aLink;
-                        aLink.reset(new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos));
+                        std::shared_ptr<XclExpHyperlink> aLink =
+                            std::make_shared<XclExpHyperlink>(GetRoot(), SvxURLField(aUrl, aUrl), aScPos);
                         mxHyperlinkList->AppendRecord(aLink);
                     }
                 }
@@ -2557,35 +2557,35 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 {
                     sal_uInt32 nScNumFmt = pPattern->GetItemSet().Get( ATTR_VALUE_FORMAT ).GetValue();
                     if( rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL )
-                        xCell.reset( new XclExpBooleanCell(
-                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
+                        xCell = std::make_shared<XclExpBooleanCell>(
+                            GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 );
                 }
 
                 // try to create an RK value (compressed floating-point number)
                 sal_Int32 nRkValue;
                 if( !xCell && XclTools::GetRKFromDouble( nRkValue, fValue ) )
-                    xCell.reset( new XclExpRkCell(
-                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, nRkValue ) );
+                    xCell = std::make_shared<XclExpRkCell>(
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, nRkValue );
 
                 // else: simple floating-point number cell
                 if( !xCell )
-                    xCell.reset( new XclExpNumberCell(
-                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue ) );
+                    xCell = std::make_shared<XclExpNumberCell>(
+                        GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue );
             }
             break;
 
             case CELLTYPE_STRING:
             {
-                xCell.reset(new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpString->getString()));
+                xCell = std::make_shared<XclExpLabelCell>(
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpString->getString());
             }
             break;
 
             case CELLTYPE_EDIT:
             {
                 XclExpHyperlinkHelper aLinkHelper( GetRoot(), aScPos );
-                xCell.reset(new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpEditText, aLinkHelper));
+                xCell = std::make_shared<XclExpLabelCell>(
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpEditText, aLinkHelper);
 
                 // add a single created HLINK record to the record list
                 if( aLinkHelper.HasLinkRecord() )
@@ -2603,15 +2603,15 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                     OUString aUrl = pPattern->GetItemSet().Get(ATTR_HYPERLINK).GetValue();
                     if (!aUrl.isEmpty())
                     {
-                        std::shared_ptr<XclExpHyperlink> aLink;
-                        aLink.reset(new XclExpHyperlink(GetRoot(), SvxURLField(aUrl, aUrl), aScPos));
+                        std::shared_ptr<XclExpHyperlink> aLink =
+                            std::make_shared<XclExpHyperlink>(GetRoot(), SvxURLField(aUrl, aUrl), aScPos);
                         mxHyperlinkList->AppendRecord(aLink);
                     }
                 }
 
-                xCell.reset(new XclExpFormulaCell(
+                xCell = std::make_shared<XclExpFormulaCell>(
                     GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
-                    *rScCell.mpFormula, maArrayBfr, maShrfmlaBfr, maTableopBfr));
+                    *rScCell.mpFormula, maArrayBfr, maShrfmlaBfr, maTableopBfr);
             }
             break;
 
@@ -2620,8 +2620,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 [[fallthrough]];
             case CELLTYPE_NONE:
             {
-                xCell.reset( new XclExpBlankCell(
-                    GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId ) );
+                xCell = std::make_shared<XclExpBlankCell>(
+                    GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId );
             }
             break;
         }
@@ -2700,7 +2700,7 @@ XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
     XclExpRecordRef xRec;
     switch( nRecId )
     {
-        case EXC_ID3_DIMENSIONS:    xRec.reset( new XclExpDelegatingRecord( &const_cast<XclExpRowBuffer*>(&maRowBfr)->GetDimensions() ) );   break;
+        case EXC_ID3_DIMENSIONS:    xRec = std::make_shared<XclExpDelegatingRecord>( &const_cast<XclExpRowBuffer*>(&maRowBfr)->GetDimensions() );   break;
         case EXC_ID2_DEFROWHEIGHT:  xRec = mxDefrowheight;  break;
         case EXC_ID_GUTS:           xRec = mxGuts;          break;
         case EXC_ID_NOTE:           xRec = mxNoteList;      break;

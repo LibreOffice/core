@@ -1011,7 +1011,7 @@ FunctionProviderImpl::FunctionProviderImpl( bool bImportFilter )
 void FunctionProviderImpl::initFunc(const FunctionData& rFuncData)
 {
     // create a function info object
-    FunctionInfoRef xFuncInfo( new FunctionInfo );
+    FunctionInfoRef xFuncInfo = std::make_shared<FunctionInfo>();
     if( rFuncData.mpcOdfFuncName )
         xFuncInfo->maOdfFuncName = OUString::createFromAscii( rFuncData.mpcOdfFuncName );
     if( rFuncData.mpcOoxFuncName )
@@ -1072,7 +1072,7 @@ void FunctionProviderImpl::initFuncs(const FunctionData* pBeg, const FunctionDat
 }
 
 FunctionProvider::FunctionProvider(  bool bImportFilter ) :
-    mxFuncImpl( new FunctionProviderImpl( bImportFilter ) )
+    mxFuncImpl( std::make_shared<FunctionProviderImpl>( bImportFilter ) )
 {
 }
 
@@ -1394,7 +1394,7 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
 OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
          bool bImportFilter ) :
     FunctionProvider( bImportFilter ),
-    mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxModelFactory ) )
+    mxOpCodeImpl( std::make_shared<OpCodeProviderImpl>( getFuncs(), rxModelFactory ) )
 {
 }
 

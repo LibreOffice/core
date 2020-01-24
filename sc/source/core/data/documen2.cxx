@@ -91,7 +91,7 @@ using namespace com::sun::star;
 const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
-        mpCellStringPool(new svl::SharedStringPool(*ScGlobal::pCharClass)),
+        mpCellStringPool(std::make_shared<svl::SharedStringPool>(*ScGlobal::pCharClass)),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
         mbFormulaGroupCxtBlockDiscard(false),
         maCalcConfig( ScInterpreter::GetGlobalConfig()),
