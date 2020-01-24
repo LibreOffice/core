@@ -611,7 +611,7 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
     else
     {
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: new impl for '" << maBcp47 << "'");
-        pImpl.reset( new LanguageTagImpl( *this));
+        pImpl = std::make_shared<LanguageTagImpl>( *this);
         rMapBcp47.insert( ::std::make_pair( maBcp47, pImpl));
     }
 
@@ -767,7 +767,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             // to inspect such places.
             LanguageTag::ImplPtr& rDontKnow = theDontKnow::get();
             if (!rDontKnow)
-                rDontKnow.reset( new LanguageTagImpl( *this));
+                rDontKnow = std::make_shared<LanguageTagImpl>( *this);
             pImpl = rDontKnow;
 #if OSL_DEBUG_LEVEL > 0
             static size_t nCallsDontKnow = 0;
@@ -853,7 +853,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         else
         {
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for 0x" << ::std::hex << mnLangID);
-            pImpl.reset( new LanguageTagImpl( *this));
+            pImpl = std::make_shared<LanguageTagImpl>( *this);
             rMap.insert( ::std::make_pair( mnLangID, pImpl));
             // Try round-trip.
             if (!pImpl->mbInitializedLocale)
@@ -896,7 +896,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         else
         {
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for '" << maBcp47 << "'");
-            pImpl.reset( new LanguageTagImpl( *this));
+            pImpl = std::make_shared<LanguageTagImpl>( *this);
             ::std::pair< MapBcp47::iterator, bool > insOrig( rMap.insert( ::std::make_pair( maBcp47, pImpl)));
             // If changed after canonicalize() also add the resulting tag to
             // the map.
@@ -973,7 +973,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     else
     {
         SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for 0x" << ::std::hex << mnLangID );
-        pImpl.reset( new LanguageTagImpl( *this));
+        pImpl = std::make_shared<LanguageTagImpl>( *this);
     }
 
     // If we reach here for mbSystemLocale we didn't have theSystemLocale
