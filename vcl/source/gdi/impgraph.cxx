@@ -1906,7 +1906,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                             aDataType = VectorGraphicDataType::Emf;
                         }
 
-                        VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, aPath, aDataType));
+                        VectorGraphicDataPtr aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, aPath, aDataType);
                         rImpGraphic = aVectorGraphicDataPtr;
                     }
                 }

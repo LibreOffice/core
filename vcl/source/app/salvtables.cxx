@@ -1235,7 +1235,7 @@ private:
     std::shared_ptr<VclSizeGroup> m_xGroup;
 public:
     SalInstanceSizeGroup()
-        : m_xGroup(new VclSizeGroup)
+        : m_xGroup(std::make_shared<VclSizeGroup>())
     {
     }
     virtual void add_widget(weld::Widget* pWidget) override

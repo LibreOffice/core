@@ -443,9 +443,9 @@ void DomainMapperTableManager::startLevel( )
         m_aCellWidths.back()->pop_back();
     }
 
-    IntVectorPtr pNewGrid( new vector<sal_Int32> );
-    IntVectorPtr pNewSpans( new vector<sal_Int32> );
-    IntVectorPtr pNewCellWidths( new vector<sal_Int32> );
+    IntVectorPtr pNewGrid = std::make_shared<vector<sal_Int32>>();
+    IntVectorPtr pNewSpans = std::make_shared<vector<sal_Int32>>();
+    IntVectorPtr pNewCellWidths = std::make_shared<vector<sal_Int32>>();
     TablePositionHandlerPtr pNewPositionHandler;
     m_aTableGrid.push_back( pNewGrid );
     m_aGridSpans.push_back( pNewSpans );

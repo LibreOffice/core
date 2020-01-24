@@ -426,7 +426,7 @@ bool DataSupplier::getData()
                     }
 
                     std::shared_ptr<ContentProperties> const
-                        pContentProperties(new ContentProperties(rRes));
+                        pContentProperties = std::make_shared<ContentProperties>(rRes);
 
                     // Check resource against open mode.
                     switch ( m_pImpl->m_nOpenMode )

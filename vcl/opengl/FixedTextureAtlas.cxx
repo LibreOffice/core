@@ -25,7 +25,7 @@ struct FixedTexture
     std::vector<bool> maAllocatedSlots;
 
     FixedTexture(int nTextureWidth, int nTextureHeight, int nNumberOfSlots)
-        : mpTexture(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true))
+        : mpTexture(std::make_shared<ImplOpenGLTexture>(nTextureWidth, nTextureHeight, true))
         , mnFreeSlots(nNumberOfSlots)
         , maAllocatedSlots(nNumberOfSlots, false)
     {

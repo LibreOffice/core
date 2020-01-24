@@ -1661,7 +1661,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                         if(!aMemStream.GetError() )
                         {
-                            VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, rPath, VectorGraphicDataType::Svg));
+                            VectorGraphicDataPtr aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, rPath, VectorGraphicDataType::Svg);
                             rGraphic = Graphic(aVectorGraphicDataPtr);
                             bOkay = true;
                         }
@@ -1674,7 +1674,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                     if(!rIStream.GetError())
                     {
-                        VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, rPath, VectorGraphicDataType::Svg));
+                        VectorGraphicDataPtr aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, rPath, VectorGraphicDataType::Svg);
                         rGraphic = Graphic(aVectorGraphicDataPtr);
                         bOkay = true;
                     }
@@ -1744,11 +1744,11 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             {
                 const bool bIsWmf(aFilterName.equalsIgnoreAsciiCase(IMP_WMF));
                 const VectorGraphicDataType aDataType(bIsWmf ? VectorGraphicDataType::Wmf : VectorGraphicDataType::Emf);
-                VectorGraphicDataPtr aVectorGraphicDataPtr(
-                    new VectorGraphicData(
+                VectorGraphicDataPtr aVectorGraphicDataPtr =
+                    std::make_shared<VectorGraphicData>(
                         aNewData,
                         rPath,
-                        aDataType));
+                        aDataType);
 
                 if (pExtHeader)
                 {

@@ -1688,7 +1688,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& name)
 #endif
             if (!pFunction)
             {
-                pModule.reset(new NoAutoUnloadModule);
+                pModule = std::make_shared<NoAutoUnloadModule>();
                 bool ok = pModule->loadRelative(&thisModule, sModule);
                 if (!ok)
                 {

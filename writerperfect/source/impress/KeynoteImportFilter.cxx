@@ -129,7 +129,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
         {
             if (aContent.isFolder())
             {
-                input.reset(new writerperfect::DirectoryStream(xContent));
+                input = std::make_shared<writerperfect::DirectoryStream>(xContent);
                 bIsPackage = true;
             }
         }

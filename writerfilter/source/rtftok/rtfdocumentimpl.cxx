@@ -321,7 +321,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     if (xDocumentPropertiesSupplier.is())
         m_xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
 
-    m_pGraphicHelper.reset(new oox::GraphicHelper(m_xContext, xFrame, oox::StorageRef()));
+    m_pGraphicHelper = std::make_shared<oox::GraphicHelper>(m_xContext, xFrame, oox::StorageRef());
 
     m_pTokenizer = new RTFTokenizer(*this, m_pInStream.get(), m_xStatusIndicator);
     m_pSdrImport = new RTFSdrImport(*this, m_xDstDoc);
@@ -1169,7 +1169,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
 {
     if (m_aStates.top().getInternalState() == RTFInternalState::BIN)
     {
-        m_pBinaryData.reset(new SvMemoryStream());
+        m_pBinaryData = std::make_shared<SvMemoryStream>();
         m_pBinaryData->WriteChar(ch);
         for (int i = 0; i < m_aStates.top().getBinaryToRead() - 1; ++i)
         {

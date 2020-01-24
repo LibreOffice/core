@@ -50,13 +50,13 @@ bool Qt5SvpGraphics::SupportsCairo() const { return true; }
 cairo::SurfaceSharedPtr
 Qt5SvpGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
-    return cairo::SurfaceSharedPtr(new cairo::Qt5SvpSurface(rSurface));
+    return std::make_shared<cairo::Qt5SvpSurface>(rSurface);
 }
 
 cairo::SurfaceSharedPtr Qt5SvpGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x,
                                                       int y, int width, int height) const
 {
-    return cairo::SurfaceSharedPtr(new cairo::Qt5SvpSurface(this, x, y, width, height));
+    return std::make_shared<cairo::Qt5SvpSurface>(this, x, y, width, height);
 }
 
 #endif

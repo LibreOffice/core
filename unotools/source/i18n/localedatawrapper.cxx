@@ -482,7 +482,7 @@ void LocaleDataWrapper::getSecondaryCalendarImpl()
             auto pCal = std::find_if(xCals.begin(), xCals.end(),
                 [](const Calendar2& rCal) { return !rCal.Default; });
             if (pCal != xCals.end())
-                xSecondaryCalendar.reset( new Calendar2( *pCal));
+                xSecondaryCalendar = std::make_shared<Calendar2>( *pCal);
         }
         bSecondaryCalendarValid = true;
     }
@@ -531,7 +531,7 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
             if (pCal == xCals.end())
                 pCal = xCals.begin();
         }
-        xDefaultCalendar.reset( new Calendar2( *pCal));
+        xDefaultCalendar = std::make_shared<Calendar2>( *pCal);
     }
 }
 

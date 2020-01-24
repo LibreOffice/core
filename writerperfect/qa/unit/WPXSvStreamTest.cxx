@@ -78,7 +78,7 @@ shared_ptr<RVNGInputStream> lcl_createStream()
 
     shared_ptr<RVNGInputStream> pInputStream;
     if (xInputStream.is())
-        pInputStream.reset(new WPXSvInputStream(xInputStream));
+        pInputStream = std::make_shared<WPXSvInputStream>(xInputStream);
 
     return pInputStream;
 }

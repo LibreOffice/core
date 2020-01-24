@@ -2082,7 +2082,7 @@ void RadioButton::group(RadioButton &rOther)
 
     if (!m_xGroup)
     {
-        m_xGroup.reset(new std::vector<VclPtr<RadioButton> >);
+        m_xGroup = std::make_shared<std::vector<VclPtr<RadioButton> >>();
         m_xGroup->push_back(this);
     }
 

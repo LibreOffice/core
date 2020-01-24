@@ -355,8 +355,8 @@ bool InitVCL()
     pSVData->maAppData.mxAppFileName = aNativeFileName;
 
     // Initialize global data
-    pSVData->maGDIData.mxScreenFontList.reset(new PhysicalFontCollection);
-    pSVData->maGDIData.mxScreenFontCache.reset(new ImplFontCache);
+    pSVData->maGDIData.mxScreenFontList = std::make_shared<PhysicalFontCollection>();
+    pSVData->maGDIData.mxScreenFontCache = std::make_shared<ImplFontCache>();
     pSVData->maGDIData.mpGrfConverter = new GraphicConverter;
 
     g_bIsLeanException = getenv("LO_LEAN_EXCEPTION") != nullptr;

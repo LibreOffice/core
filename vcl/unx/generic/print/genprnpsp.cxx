@@ -1064,7 +1064,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 aContext.URL = aPDFUrl;
 
                 // create and initialize PDFWriter
-                xWriter.reset( new vcl::PDFWriter( aContext, uno::Reference< beans::XMaterialHolder >() ) );
+                xWriter = std::make_shared<vcl::PDFWriter>( aContext, uno::Reference< beans::XMaterialHolder >() );
             }
 
             xWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),

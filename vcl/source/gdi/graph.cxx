@@ -215,7 +215,7 @@ Graphic::Graphic(const BitmapEx& rBmpEx)
 // and we need to be able to see and preserve 'stock' images too.
 Graphic::Graphic(const Image& rImage)
     // FIXME: should really defer the BitmapEx load.
-    : mxImpGraphic(new ImpGraphic(rImage.GetBitmapEx()))
+    : mxImpGraphic(std::make_shared<ImpGraphic>(rImage.GetBitmapEx()))
 {
     OUString aStock = rImage.GetStock();
     if (aStock.getLength())
