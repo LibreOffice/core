@@ -88,6 +88,7 @@ class SwContentTree final
     OUString const      m_sPostItShow;
     OUString const      m_sPostItHide;
     OUString const      m_sPostItDelete;
+    OUString const      m_sProtected;
 
     SwWrtShell*         m_pHiddenShell;   // dropped Doc
     SwWrtShell*         m_pActiveShell;   // the active or a const. open view
