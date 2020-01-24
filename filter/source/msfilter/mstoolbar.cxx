@@ -189,8 +189,8 @@ bool TBCHeader::Read( SvStream &rS )
     //  bit 4 ( from lsb )
     if ( bFlagsTCR & 0x10 )
     {
-        width.reset( new sal_uInt16 );
-        height.reset( new sal_uInt16 );
+        width = std::make_shared<sal_uInt16>();
+        height = std::make_shared<sal_uInt16>();
         rS.ReadUInt16( *width ).ReadUInt16( *height );
     }
     return true;
@@ -229,13 +229,13 @@ bool TBCData::Read(SvStream &rS)
     {
         case 0x01: // (Button control)
         case 0x10: // (ExpandingGrid control)
-            controlSpecificInfo.reset( new TBCBSpecific() );
+            controlSpecificInfo = std::make_shared<TBCBSpecific>();
             break;
         case 0x0A: // (Popup control)
         case 0x0C: // (ButtonPopup control)
         case 0x0D: // (SplitButtonPopup control)
         case 0x0E: // (SplitButtonMRUPopup control)
-            controlSpecificInfo.reset( new TBCMenuSpecific() );
+            controlSpecificInfo = std::make_shared<TBCMenuSpecific>();
             break;
         case 0x02: // (Edit control)
         case 0x04: // (ComboBox control)
@@ -243,7 +243,7 @@ bool TBCData::Read(SvStream &rS)
         case 0x03: // (DropDown control)
         case 0x06: // (SplitDropDown control)
         case 0x09: // (GraphicDropDown control)
-            controlSpecificInfo.reset( new TBCComboDropdownSpecific( rHeader ) );
+            controlSpecificInfo = std::make_shared<TBCComboDropdownSpecific>( rHeader );
             break;
         default:
             break;
@@ -526,7 +526,7 @@ TBCMenuSpecific::Read( SvStream &rS)
     rS.ReadInt32( tbid );
     if ( tbid == 1 )
     {
-        name.reset( new WString() );
+        name = std::make_shared<WString>();
         return name->Read( rS );
     }
     return true;
@@ -566,21 +566,21 @@ bool TBCBSpecific::Read( SvStream &rS)
     // bFlags.fCustomBitmap = 1 ( 0x8 ) set
     if ( bFlags & 0x8 )
     {
-        icon.reset( new TBCBitMap() );
-        iconMask.reset( new TBCBitMap() );
+        icon = std::make_shared<TBCBitMap>();
+        iconMask = std::make_shared<TBCBitMap>();
         if ( !icon->Read( rS ) || !iconMask->Read( rS ) )
             return false;
     }
     // if bFlags.fCustomBtnFace = 1 ( 0x10 )
     if ( bFlags & 0x10 )
     {
-        iBtnFace.reset( new sal_uInt16 );
+        iBtnFace = std::make_shared<sal_uInt16>();
         rS.ReadUInt16( *iBtnFace );
     }
     // if bFlags.fAccelerator equals 1 ( 0x04 )
     if ( bFlags & 0x04 )
     {
-        wstrAcc.reset( new WString() );
+        wstrAcc = std::make_shared<WString>();
         return wstrAcc->Read( rS );
     }
     return true;
@@ -633,7 +633,7 @@ TBCBSpecific::getIconMask()
 TBCComboDropdownSpecific::TBCComboDropdownSpecific(const TBCHeader& header )
 {
     if ( header.getTcID() == 0x01 )
-        data.reset( new TBCCDData() );
+        data = std::make_shared<TBCCDData>();
 }
 
 bool TBCComboDropdownSpecific::Read( SvStream &rS)

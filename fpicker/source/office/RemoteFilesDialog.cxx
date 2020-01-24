@@ -268,7 +268,7 @@ void RemoteFilesDialog::FillServicesListbox()
 
     for( sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace )
     {
-        ServicePtr pService( new Place( placesNamesList[nPlace], placesUrlsList[nPlace], true ) );
+        ServicePtr pService = std::make_shared<Place>( placesNamesList[nPlace], placesUrlsList[nPlace], true );
         m_aServices.push_back( pService );
 
         // Add to the listbox only remote services, not local bookmarks

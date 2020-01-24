@@ -87,47 +87,45 @@ namespace drawinglayer::processor3d
                     {
                         case attribute::GradientStyle::Linear:
                         {
-                            pNewTex.reset(
-                                new texture::GeoTexSvxGradientLinear(
+                            pNewTex = std::make_shared<texture::GeoTexSvxGradientLinear>(
                                     aOutlineRange,
                                     aOutlineRange,
                                     aStart,
                                     aEnd,
                                     nSteps,
                                     rFillGradient.getBorder(),
-                                    rFillGradient.getAngle()));
+                                    rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GradientStyle::Axial:
                         {
-                            pNewTex.reset(
-                                new texture::GeoTexSvxGradientAxial(
+                            pNewTex = std::make_shared<texture::GeoTexSvxGradientAxial>(
                                     aOutlineRange,
                                     aOutlineRange,
                                     aStart,
                                     aEnd,
                                     nSteps,
                                     rFillGradient.getBorder(),
-                                    rFillGradient.getAngle()));
+                                    rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GradientStyle::Radial:
                         {
-                            pNewTex.reset(
-                                new texture::GeoTexSvxGradientRadial(
+                            pNewTex =
+                                std::make_shared<texture::GeoTexSvxGradientRadial>(
                                     aOutlineRange,
                                     aStart,
                                     aEnd,
                                     nSteps,
                                     rFillGradient.getBorder(),
                                     rFillGradient.getOffsetX(),
-                                    rFillGradient.getOffsetY()));
+                                    rFillGradient.getOffsetY());
                             break;
                         }
                         case attribute::GradientStyle::Elliptical:
                         {
-                            pNewTex.reset(
-                                new texture::GeoTexSvxGradientElliptical(
+                            pNewTex =
+                                std::make_shared<texture::GeoTexSvxGradientElliptical>(
                                     aOutlineRange,
                                     aStart,
                                     aEnd,
@@ -135,13 +133,13 @@ namespace drawinglayer::processor3d
                                     rFillGradient.getBorder(),
                                     rFillGradient.getOffsetX(),
                                     rFillGradient.getOffsetY(),
-                                    rFillGradient.getAngle()));
+                                    rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GradientStyle::Square:
                         {
-                            pNewTex.reset(
-                                new texture::GeoTexSvxGradientSquare(
+                            pNewTex =
+                                std::make_shared<texture::GeoTexSvxGradientSquare>(
                                     aOutlineRange,
                                     aStart,
                                     aEnd,
@@ -149,13 +147,13 @@ namespace drawinglayer::processor3d
                                     rFillGradient.getBorder(),
                                     rFillGradient.getOffsetX(),
                                     rFillGradient.getOffsetY(),
-                                    rFillGradient.getAngle()));
+                                    rFillGradient.getAngle());
                             break;
                         }
                         case attribute::GradientStyle::Rect:
                         {
-                            pNewTex.reset(
-                                new texture::GeoTexSvxGradientRect(
+                            pNewTex =
+                                std::make_shared<texture::GeoTexSvxGradientRect>(
                                     aOutlineRange,
                                     aStart,
                                     aEnd,
@@ -163,7 +161,7 @@ namespace drawinglayer::processor3d
                                     rFillGradient.getBorder(),
                                     rFillGradient.getOffsetX(),
                                     rFillGradient.getOffsetY(),
-                                    rFillGradient.getAngle()));
+                                    rFillGradient.getAngle());
                             break;
                         }
                     }
@@ -173,7 +171,7 @@ namespace drawinglayer::processor3d
                 else
                 {
                     // no color distance -> same color, use simple texture
-                    pNewTex.reset(new texture::GeoTexSvxMono(aStart, 1.0 - aStart.luminance()));
+                    pNewTex = std::make_shared<texture::GeoTexSvxMono>(aStart, 1.0 - aStart.luminance());
                     mbSimpleTextureActive = true;
                 }
 
@@ -235,7 +233,7 @@ namespace drawinglayer::processor3d
                 const double fLogicTexSize(std::max(fLogicTexSizeX, fLogicTexSizeY));
 
                 // create texture and set
-                mpGeoTexSvx.reset(new texture::GeoTexSvxMultiHatch(rPrimitive, fLogicTexSize));
+                mpGeoTexSvx = std::make_shared<texture::GeoTexSvxMultiHatch>(rPrimitive, fLogicTexSize);
 
                 // process sub-list
                 process(rSubSequence);
@@ -273,19 +271,19 @@ namespace drawinglayer::processor3d
 
                 if(rFillGraphicAttribute.getTiling())
                 {
-                    mpGeoTexSvx.reset(
-                        new texture::GeoTexSvxBitmapExTiled(
+                    mpGeoTexSvx =
+                        std::make_shared<texture::GeoTexSvxBitmapExTiled>(
                             aBitmapEx,
                             aGraphicRange,
                             rFillGraphicAttribute.getOffsetX(),
-                            rFillGraphicAttribute.getOffsetY()));
+                            rFillGraphicAttribute.getOffsetY());
                 }
                 else
                 {
-                    mpGeoTexSvx.reset(
-                        new texture::GeoTexSvxBitmapEx(
+                    mpGeoTexSvx =
+                        std::make_shared<texture::GeoTexSvxBitmapEx>(
                             aBitmapEx,
-                            aGraphicRange));
+                            aGraphicRange);
                 }
 
                 // process sub-list

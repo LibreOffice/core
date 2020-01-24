@@ -78,9 +78,9 @@ namespace drawinglayer::primitive2d
                     if(bDefaultTextColor)
                     {
                         // emboss/engrave in black, original forced to white
-                        const basegfx::BColorModifierSharedPtr aBColorModifierToGray(
-                            new basegfx::BColorModifier_replace(
-                                basegfx::BColor(0.0)));
+                        const basegfx::BColorModifierSharedPtr aBColorModifierToGray =
+                            std::make_shared<basegfx::BColorModifier_replace>(
+                                basegfx::BColor(0.0));
                         const Primitive2DReference xModifiedColor(
                             new ModifiedColorPrimitive2D(
                                 getTextContent(),
@@ -92,9 +92,9 @@ namespace drawinglayer::primitive2d
                                 Primitive2DContainer { xModifiedColor }));
 
                         // add original, too
-                        const basegfx::BColorModifierSharedPtr aBColorModifierToWhite(
-                            new basegfx::BColorModifier_replace(
-                                basegfx::BColor(1.0)));
+                        const basegfx::BColorModifierSharedPtr aBColorModifierToWhite =
+                            std::make_shared<basegfx::BColorModifier_replace>(
+                                basegfx::BColor(1.0));
 
                         rContainer.push_back(
                             new ModifiedColorPrimitive2D(
@@ -104,9 +104,9 @@ namespace drawinglayer::primitive2d
                     else
                     {
                         // emboss/engrave in gray, keep original's color
-                        const basegfx::BColorModifierSharedPtr aBColorModifierToGray(
-                            new basegfx::BColorModifier_replace(
-                                basegfx::BColor(0.75))); // 192
+                        const basegfx::BColorModifierSharedPtr aBColorModifierToGray =
+                            std::make_shared<basegfx::BColorModifier_replace>(
+                                basegfx::BColor(0.75)); // 192
                         const Primitive2DReference xModifiedColor(
                             new ModifiedColorPrimitive2D(
                                 getTextContent(),
@@ -161,9 +161,9 @@ namespace drawinglayer::primitive2d
                     rContainer.push_back(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     // at last, place original over it, but force to white
-                    const basegfx::BColorModifierSharedPtr aBColorModifierToWhite(
-                        new basegfx::BColorModifier_replace(
-                            basegfx::BColor(1.0, 1.0, 1.0)));
+                    const basegfx::BColorModifierSharedPtr aBColorModifierToWhite =
+                        std::make_shared<basegfx::BColorModifier_replace>(
+                            basegfx::BColor(1.0, 1.0, 1.0));
                     rContainer.push_back(
                         new ModifiedColorPrimitive2D(
                             getTextContent(),
