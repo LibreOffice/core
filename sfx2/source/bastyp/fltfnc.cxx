@@ -1018,7 +1018,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     std::shared_ptr<const SfxFilter> pFilter = bUpdate ? SfxFilter::GetFilterByName( sFilterName ) : nullptr;
     if (!pFilter)
     {
-        pFilter.reset(new SfxFilter( sFilterName             ,
+        pFilter = std::make_shared<SfxFilter>( sFilterName             ,
                                  sExtension              ,
                                  nFlags                  ,
                                  nClipboardId            ,
@@ -1026,7 +1026,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                                  sMimeType               ,
                                  sUserData               ,
                                  sServiceName            ,
-                                 bEnabled ));
+                                 bEnabled );
         rList.push_back( pFilter );
     }
     else

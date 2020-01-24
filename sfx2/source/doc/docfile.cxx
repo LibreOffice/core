@@ -3240,7 +3240,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     else
     {
         // This filter is from an external provider such as orcus.
-        pImpl->m_pCustomFilter.reset(new SfxFilter(aFilterProvider, aFilterName));
+        pImpl->m_pCustomFilter = std::make_shared<SfxFilter>(aFilterProvider, aFilterName);
         pImpl->m_pFilter = pImpl->m_pCustomFilter;
     }
 
@@ -3405,7 +3405,7 @@ SfxItemSet* SfxMedium::GetItemSet() const
 {
     // this method *must* return an ItemSet, returning NULL can cause crashes
     if (!pImpl->m_pSet)
-        pImpl->m_pSet.reset( new SfxAllItemSet( SfxGetpApp()->GetPool() ) );
+        pImpl->m_pSet = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
     return pImpl->m_pSet.get();
 }
 

@@ -123,7 +123,7 @@ namespace sfx2
 
     //= DocumentMacroMode
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
-        :m_xData( new DocumentMacroMode_Data( rDocumentAccess ) )
+        :m_xData( std::make_shared<DocumentMacroMode_Data>( rDocumentAccess ) )
     {
     }
 

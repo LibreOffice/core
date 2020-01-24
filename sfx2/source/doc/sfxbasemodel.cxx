@@ -501,7 +501,7 @@ SfxSaveGuard::~SfxSaveGuard()
 
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 : BaseMutex()
-, m_pData( new IMPL_SfxBaseModel_DataContainer( m_aMutex, pObjectShell ) )
+, m_pData( std::make_shared<IMPL_SfxBaseModel_DataContainer>( m_aMutex, pObjectShell ) )
 , m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->Get_Impl() && !pObjectShell->Get_Impl()->m_bNoBasicCapabilities )
 , m_bSupportDocRecovery( pObjectShell && pObjectShell->Get_Impl() && pObjectShell->Get_Impl()->m_bDocRecoverySupport )
 {
@@ -3484,7 +3484,7 @@ void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
 void SfxBaseModel::setGrabBagItem(const css::uno::Any& rVal)
 {
     if (!m_pData->m_xGrabBagItem.get())
-        m_pData->m_xGrabBagItem.reset(new SfxGrabBagItem);
+        m_pData->m_xGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     m_pData->m_xGrabBagItem->PutValue(rVal, 0);
 }

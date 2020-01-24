@@ -100,9 +100,9 @@ class SfxOleTextEncoding
 {
 public:
     explicit     SfxOleTextEncoding() :
-                            mxTextEnc( new rtl_TextEncoding( osl_getThreadTextEncoding() ) ) {}
+                            mxTextEnc( std::make_shared<rtl_TextEncoding>( osl_getThreadTextEncoding() ) ) {}
     explicit     SfxOleTextEncoding( rtl_TextEncoding eTextEnc ) :
-                            mxTextEnc( new rtl_TextEncoding( eTextEnc ) ) {}
+                            mxTextEnc( std::make_shared<rtl_TextEncoding>( eTextEnc ) ) {}
 
     /** Returns the current text encoding identifier. */
     rtl_TextEncoding GetTextEncoding() const { return *mxTextEnc; }

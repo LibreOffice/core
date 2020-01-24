@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
     if ( xCtrlAccess.is() )
     {
         // always create a new itemset
-        m_xItemSet.reset(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
+        m_xItemSet = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
 
         short nDlgType = m_pFileDlg->GetDialogType();
         bool bHasPassword = (
