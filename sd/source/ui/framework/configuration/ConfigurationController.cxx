@@ -514,13 +514,13 @@ ConfigurationController::Implementation::Implementation (
     ConfigurationController& rController,
     const Reference<frame::XController>& rxController)
     : mxControllerManager(rxController, UNO_QUERY_THROW),
-      mpBroadcaster(new ConfigurationControllerBroadcaster(&rController)),
+      mpBroadcaster(std::make_shared<ConfigurationControllerBroadcaster>(&rController)),
       mxRequestedConfiguration(new Configuration(&rController, true)),
-      mpResourceFactoryContainer(new ResourceFactoryManager(mxControllerManager)),
+      mpResourceFactoryContainer(std::make_shared<ResourceFactoryManager>(mxControllerManager)),
       mpResourceManager(
-          new ConfigurationControllerResourceManager(mpResourceFactoryContainer,mpBroadcaster)),
+          std::make_shared<ConfigurationControllerResourceManager>(mpResourceFactoryContainer,mpBroadcaster)),
       mpConfigurationUpdater(
-          new ConfigurationUpdater(mpBroadcaster, mpResourceManager,mxControllerManager)),
+          std::make_shared<ConfigurationUpdater>(mpBroadcaster, mpResourceManager,mxControllerManager)),
       mpQueueProcessor(new ChangeRequestQueueProcessor(mpConfigurationUpdater)),
       mpConfigurationUpdaterLock(),
       mnLockCount(0)

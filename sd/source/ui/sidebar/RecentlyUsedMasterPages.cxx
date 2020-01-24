@@ -82,7 +82,7 @@ static constexpr size_t gnMaxListSize(8);
 RecentlyUsedMasterPages::RecentlyUsedMasterPages()
     : maListeners(),
       mvMasterPages(),
-      mpContainer(new MasterPageContainer())
+      mpContainer(std::make_shared<MasterPageContainer>())
 {
 }
 
@@ -137,7 +137,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                 Any aName (xSetItem->getByName(sNameMemberName));
                 aURL >>= sURL;
                 aName >>= sName;
-                SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+                SharedMasterPageDescriptor pDescriptor = std::make_shared<MasterPageDescriptor>(
                     MasterPageContainer::TEMPLATE,
                     -1,
                     sURL,
@@ -145,7 +145,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                     sName,
                     false,
                     std::make_shared<TemplatePageObjectProvider>(sURL),
-                    std::make_shared<TemplatePreviewProvider>(sURL)));
+                    std::make_shared<TemplatePreviewProvider>(sURL));
                 // For user supplied templates we use a different
                 // preview provider: The preview in the document shows
                 // not only shapes on the master page but also shapes on

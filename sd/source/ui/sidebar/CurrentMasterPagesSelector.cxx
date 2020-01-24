@@ -130,7 +130,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
         MasterPageContainer::Token aToken = mpContainer->GetTokenForPageObject(pMasterPage);
         if (aToken == MasterPageContainer::NIL_TOKEN)
         {
-            SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+            SharedMasterPageDescriptor pDescriptor = std::make_shared<MasterPageDescriptor>(
                 MasterPageContainer::MASTERPAGE,
                 nIndex,
                 OUString(),
@@ -138,7 +138,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
                 OUString(),
                 pMasterPage->IsPrecious(),
                 std::make_shared<ExistingPageProvider>(pMasterPage),
-                std::make_shared<PagePreviewProvider>()));
+                std::make_shared<PagePreviewProvider>());
             aToken = mpContainer->PutMasterPage(pDescriptor);
         }
 

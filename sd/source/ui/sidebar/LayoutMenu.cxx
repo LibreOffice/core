@@ -428,7 +428,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         {
             // No valid slide sorter available.  Ask the main view shell for
             // its current page.
-            pPageSelection.reset(new ::sd::slidesorter::SlideSorterViewShell::PageSelection);
+            pPageSelection = std::make_shared<::sd::slidesorter::SlideSorterViewShell::PageSelection>();
             pPageSelection->push_back(pMainViewShell->GetActualPage());
         }
 

@@ -127,13 +127,13 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
     switch (eType)
     {
         case Font_PageNumber:
-            pFont.reset(new vcl::Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont = std::make_shared<vcl::Font>(Application::GetSettings().GetStyleSettings().GetAppFont());
             pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_BOLD);
             break;
 
         case Font_PageCount:
-            pFont.reset(new vcl::Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont = std::make_shared<vcl::Font>(Application::GetSettings().GetStyleSettings().GetAppFont());
             pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_NORMAL);
             {

@@ -1269,7 +1269,7 @@ ImplTextObj::ImplTextObj( int nInstance )
 
 TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRef,
             int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rProv ):
-    mpImplTextObj(new ImplTextObj(nInstance))
+    mpImplTextObj(std::make_shared<ImplTextObj>(nInstance))
 {
     css::uno::Reference< css::container::XEnumerationAccess > aXTextParagraphEA( rXTextRef, css::uno::UNO_QUERY );
 

@@ -74,8 +74,8 @@ private:
 PresenterPreviewCache::PresenterPreviewCache ()
     : PresenterPreviewCacheInterfaceBase(m_aMutex),
       maPreviewSize(Size(200,200)),
-      mpCacheContext(new PresenterCacheContext()),
-      mpCache(new PageCache(maPreviewSize, Bitmap::HasFastScale(), mpCacheContext))
+      mpCacheContext(std::make_shared<PresenterCacheContext>()),
+      mpCache(std::make_shared<PageCache>(maPreviewSize, Bitmap::HasFastScale(), mpCacheContext))
 {
 }
 

@@ -2606,7 +2606,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSD
                             if ( SeekToRec( rSt, PPT_PST_AnimationInfoAtom, nHdRecEnd, &aHdAnimInfoAtom ) )
                             {
                                 // read data from stream
-                                Ppt97AnimationPtr pAnimation( new Ppt97Animation( rSt ) );
+                                Ppt97AnimationPtr pAnimation = std::make_shared<Ppt97Animation>( rSt );
                                 // store animation information
                                 if( pAnimation->HasEffect() )
                                 {

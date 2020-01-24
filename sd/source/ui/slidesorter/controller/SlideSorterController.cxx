@@ -91,8 +91,8 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpCurrentSlideManager(),
       mpSelectionManager(),
       mpClipboard(),
-      mpInsertionIndicatorHandler(new InsertionIndicatorHandler(rSlideSorter)),
-      mpAnimator(new Animator(rSlideSorter)),
+      mpInsertionIndicatorHandler(std::make_shared<InsertionIndicatorHandler>(rSlideSorter)),
+      mpAnimator(std::make_shared<Animator>(rSlideSorter)),
       mpVisibleAreaManager(new VisibleAreaManager(rSlideSorter)),
       mpListener(),
       mnModelChangeLockCount(0),
@@ -125,12 +125,12 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 
 void SlideSorterController::Init()
 {
-    mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
+    mpCurrentSlideManager = std::make_shared<CurrentSlideManager>(mrSlideSorter);
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
-    mpSlotManager.reset(new SlotManager(mrSlideSorter));
+    mpSlotManager = std::make_shared<SlotManager>(mrSlideSorter);
     mpScrollBarManager.reset(new ScrollBarManager(mrSlideSorter));
-    mpSelectionManager.reset(new SelectionManager(mrSlideSorter));
+    mpSelectionManager = std::make_shared<SelectionManager>(mrSlideSorter);
     mpClipboard.reset(new Clipboard(mrSlideSorter));
 
     // Create the selection function.

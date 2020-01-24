@@ -207,7 +207,7 @@ void TextAPIEditSource::UpdateData()
 }
 
 TextAPIEditSource::TextAPIEditSource(SdDrawDocument* pDoc)
-: m_xImpl(new TextAPIEditSource_Impl)
+: m_xImpl(std::make_shared<TextAPIEditSource_Impl>())
 {
     m_xImpl->mpDoc = pDoc;
     m_xImpl->mpOutliner = nullptr;

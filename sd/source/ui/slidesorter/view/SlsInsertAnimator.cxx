@@ -147,7 +147,7 @@ private:
 //===== InsertAnimator ========================================================
 
 InsertAnimator::InsertAnimator (SlideSorter& rSlideSorter)
-    : mpImplementation(new Implementation(rSlideSorter))
+    : mpImplementation(std::make_shared<Implementation>(rSlideSorter))
 {
 }
 

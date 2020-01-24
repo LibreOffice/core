@@ -577,7 +577,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     //--------------start doing something
 
     //1. ------ create an effect from the presets ------
-    ::sd::CustomAnimationEffectPtr pEffect( new ::sd::CustomAnimationEffect( pPreset->create( GetPresetSubType() ) ) );
+    ::sd::CustomAnimationEffectPtr pEffect = std::make_shared<::sd::CustomAnimationEffect>( pPreset->create( GetPresetSubType() ) );
 
     //2. ------ adapt the created effect ------
 
