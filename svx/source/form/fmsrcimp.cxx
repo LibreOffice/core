@@ -268,7 +268,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
 
     // From this I now know that it supports the DatabaseRecord service (I hope).
     // For the FormatKey and the type I need the PropertySet.
-    Reference< css::beans::XPropertySet >  xProperties(xCurrentField, UNO_QUERY);
+    Reference< css::beans::XPropertySet >  xProperties(xCurrentField, UNO_QUERY_THROW);
 
     // build the FieldInfo for that
     FieldInfo fiCurrent;
