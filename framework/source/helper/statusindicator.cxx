@@ -105,11 +105,14 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
-        int nPercent = (100*nValue)/m_nRange;
-        if (nPercent >= m_nLastCallbackPercent)
+        if (m_nRange > 0)
         {
-            comphelper::LibreOfficeKit::statusIndicatorSetValue(nPercent);
-            m_nLastCallbackPercent = nPercent;
+            int nPercent = (100*nValue)/m_nRange;
+            if (nPercent >= m_nLastCallbackPercent)
+            {
+                comphelper::LibreOfficeKit::statusIndicatorSetValue(nPercent);
+                m_nLastCallbackPercent = nPercent;
+            }
         }
         return;
     }
