@@ -318,8 +318,14 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
      * The problem was that direct formatting of the paragraph was not applied
      * to the numbering. This is easier to test using a layout dump.
      */
-    OUString aHeight = parseDump("/root/page/body/txt/Special", "nHeight");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(220), aHeight.toInt32()); // It was 280
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[1]", "nHeight", "220");
+
+    // check the bookmark portions are of the expected height
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "nType", "PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[2]", "nHeight", "253");
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "nType", "PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/Special[3]", "nHeight", "253");
 
     /*
      * Next problem was that the page margin contained the width of the page border as well.
