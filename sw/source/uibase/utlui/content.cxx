@@ -1577,32 +1577,37 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
-    if (!m_bIsRoot
-        || (lcl_IsContentType(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
-        || (m_nRootType == ContentTypeId::OUTLINE))
+    if (!pParent->HasChildren() || pParent->HasChildrenOnDemand())
+        return SvTreeListBox::Collapse(pParent);
+
+    if(lcl_IsContentType(pParent))
     {
-        if(lcl_IsContentType(pParent))
+        if(m_bIsRoot)
         {
-            if(m_bIsRoot)
-                return false;
-            SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
-            const sal_Int32 nAnd = ~(1 << static_cast<int>(pCntType->GetType()));
-            if (State::HIDDEN != m_eState)
+            // collapse to children of root node
+            for (SvTreeListEntry* pEntry = FirstChild(pParent); pEntry; pEntry = Next(pEntry))
             {
-                m_nActiveBlock &= nAnd;
-                m_pConfig->SetActiveBlock(m_nActiveBlock);
+                Collapse(pEntry);
             }
-            else
-                m_nHiddenBlock &= nAnd;
+            return true;
         }
-        else if( lcl_IsContent(pParent) )
+        SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
+        const sal_Int32 nAnd = ~(1 << static_cast<int>(pCntType->GetType()));
+        if (State::HIDDEN != m_eState)
         {
-            SwWrtShell* pShell = GetWrtShell();
-            assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
-            auto const nPos = static_cast<SwOutlineContent*>(pParent->GetUserData())->GetOutlinePos();
-            void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
-            mOutLineNodeMap[key] = false;
+            m_nActiveBlock &= nAnd;
+            m_pConfig->SetActiveBlock(m_nActiveBlock);
         }
+        else
+            m_nHiddenBlock &= nAnd;
+    }
+    else if( lcl_IsContent(pParent) )
+    {
+        SwWrtShell* pShell = GetWrtShell();
+        assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
+        auto const nPos = static_cast<SwOutlineContent*>(pParent->GetUserData())->GetOutlinePos();
+        void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
+        mOutLineNodeMap[key] = false;
     }
 
     return SvTreeListBox::Collapse(pParent);
