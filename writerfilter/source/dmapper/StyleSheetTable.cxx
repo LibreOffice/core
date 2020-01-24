@@ -882,6 +882,12 @@ uno::Sequence< OUString > PropValVector::getNames()
     return comphelper::containerToSequence(aRet);
 }
 
+static bool lcl_IsOutLineStyle(OUString sPrefix, OUString sStyleName)
+{
+    OUString sSuffix;
+    return sStyleName.getLength() == (sPrefix.getLength() + 2) && sStyleName.startsWith(sPrefix + " ", &sSuffix) && sSuffix.toInt32() > 0;
+}
+
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 {
     try
@@ -1039,13 +1045,48 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+
                         if ( pStyleSheetProperties )
                         {
                             beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
+                        }
+
+                        // tdf#95495 tdf#106541
+                        // Import the old MSO export (2003) properly by getting the correct
+                        // ilvl, numId and outlineLevel of the styles.
+                        if (lcl_IsOutLineStyle("TOC Level", sConvertedStyleName) || lcl_IsOutLineStyle("Appendix", sConvertedStyleName)  ||
+                            lcl_IsOutLineStyle("Heading", sConvertedStyleName))
+                        {
+                            beans::PropertyValues aPropGrabBag = pEntry->GetInteropGrabBagSeq();
+                            uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
+                            if (aPropGrabBag.hasElements())
+                            {
+                                xPropertySet->setPropertyValue("StyleInteropGrabBag", uno::makeAny(aPropGrabBag));
+                            }
+                            uno::Any aPropVal = xPropertySet->getPropertyValue("StyleInteropGrabBag");
+                            auto iPropGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPropVal.get< uno::Sequence<beans::PropertyValue> >());
+                            for (auto aVal : iPropGrabBag)
+                            {
+                                if (aVal.Name == "customStyle" && aVal.Value == true)
+                                {
+                                    OUString sBaseId = pEntry->sBaseStyleIdentifier;
+                                    for (auto aSheetProps : m_pImpl->m_aStyleSheetEntries)
+                                    {
+                                        if (aSheetProps->sStyleIdentifierD == sBaseId)
+                                        {
+                                            StyleSheetPropertyMap* aStyleSheetProps = dynamic_cast<StyleSheetPropertyMap*>(aSheetProps->pProperties.get());
+                                            pStyleSheetProperties->SetListLevel(aStyleSheetProps->GetListLevel());
+                                            pStyleSheetProperties->SetOutlineLevel(aStyleSheetProps->GetOutlineLevel());
+                                            pStyleSheetProperties->SetNumId(aStyleSheetProps->GetNumId());
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
