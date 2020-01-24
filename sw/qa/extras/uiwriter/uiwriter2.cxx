@@ -2440,4 +2440,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf120469)
+{
+    createDoc("tdf120469.odt");
+
+    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // check that the anchor is originally on node 11
+    assertXPath(parseLayoutDump(), "//txt[@txtNodeIndex='11']/anchored", 1);
+    discardDumpedLayout();
+
+    // got to start of 3rd paragraph
+    pWrtShell->Down(/*bSelect=*/false, 2);
+    pWrtShell->SplitNode();
+    assertXPath(parseLayoutDump(), "//txt[@txtNodeIndex='12']/anchored", 1);
+    discardDumpedLayout();
+
+    // move the cursor to the middle of the paragraph:
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->SplitNode();
+    // anchor should stay on node 12
+    assertXPath(parseLayoutDump(), "//txt[@txtNodeIndex='12']/anchored", 1);
+    discardDumpedLayout();
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    assertXPath(parseLayoutDump(), "//txt[@txtNodeIndex='11']/anchored", 1);
+    discardDumpedLayout();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -360,6 +360,15 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCont
                             bSkip = true;
                     }
                 }
+                else if ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() )
+                {
+                    // When a SplitNode happens at the beginning of a node, paragraph anchors
+                    // should stay in the non-empty node
+                    if ( nContent == 0 )
+                    {
+                        bSkip = true;
+                    }
+                }
                 if(!bSkip)
                     m_aFlyEntries.push_back(aSave);
             }
