@@ -799,33 +799,33 @@ void SfxOleSection::SetProperty( const SfxOlePropertyRef& xProp )
 
 void SfxOleSection::SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue )
 {
-    SetProperty( SfxOlePropertyRef( new SfxOleInt32Property( nPropId, nValue ) ) );
+    SetProperty( std::make_shared<SfxOleInt32Property>( nPropId, nValue ) );
 }
 
 void SfxOleSection::SetDoubleValue( sal_Int32 nPropId, double fValue )
 {
-    SetProperty( SfxOlePropertyRef( new SfxOleDoubleProperty( nPropId, fValue ) ) );
+    SetProperty( std::make_shared<SfxOleDoubleProperty>( nPropId, fValue ) );
 }
 
 void SfxOleSection::SetBoolValue( sal_Int32 nPropId, bool bValue )
 {
-    SetProperty( SfxOlePropertyRef( new SfxOleBoolProperty( nPropId, bValue ) ) );
+    SetProperty( std::make_shared<SfxOleBoolProperty>( nPropId, bValue ) );
 }
 
 bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const OUString& rValue )
 {
     bool bInserted = !rValue.isEmpty();
     if( bInserted )
-        SetProperty( SfxOlePropertyRef( new SfxOleString8Property( nPropId, maCodePageProp, rValue ) ) );
+        SetProperty( std::make_shared<SfxOleString8Property>( nPropId, maCodePageProp, rValue ) );
     return bInserted;
 }
 
 void SfxOleSection::SetFileTimeValue( sal_Int32 nPropId, const util::DateTime& rValue )
 {
     if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
+        SetProperty( std::make_shared<SfxOleFileTimeProperty>( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) );
     else
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, rValue ) ) );
+        SetProperty( std::make_shared<SfxOleFileTimeProperty>( nPropId, rValue ) );
 }
 
 void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
@@ -833,12 +833,12 @@ void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
     //Annoyingly MS2010 considers VT_DATE apparently as an invalid possibility, so here we use VT_FILETIME
     //instead :-(
     if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
+        SetProperty( std::make_shared<SfxOleFileTimeProperty>( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) );
     else
     {
         const util::DateTime aValue(0, 0, 0, 0, rValue.Day, rValue.Month,
                 rValue.Year, false );
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, aValue ) ) );
+        SetProperty( std::make_shared<SfxOleFileTimeProperty>( nPropId, aValue ) );
     }
 }
 
@@ -1043,25 +1043,25 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
     switch( nPropType )
     {
         case PROPTYPE_INT32:
-            xProp.reset( new SfxOleInt32Property( nPropId ) );
+            xProp = std::make_shared<SfxOleInt32Property>( nPropId );
         break;
         case PROPTYPE_DOUBLE:
-            xProp.reset( new SfxOleDoubleProperty( nPropId ) );
+            xProp = std::make_shared<SfxOleDoubleProperty>( nPropId );
         break;
         case PROPTYPE_BOOL:
-            xProp.reset( new SfxOleBoolProperty( nPropId ) );
+            xProp = std::make_shared<SfxOleBoolProperty>( nPropId );
         break;
         case PROPTYPE_STRING8:
-            xProp.reset( new SfxOleString8Property( nPropId, maCodePageProp ) );
+            xProp = std::make_shared<SfxOleString8Property>( nPropId, maCodePageProp );
         break;
         case PROPTYPE_STRING16:
-            xProp.reset( new SfxOleString16Property( nPropId ) );
+            xProp = std::make_shared<SfxOleString16Property>( nPropId );
         break;
         case PROPTYPE_FILETIME:
-            xProp.reset( new SfxOleFileTimeProperty( nPropId ) );
+            xProp = std::make_shared<SfxOleFileTimeProperty>( nPropId );
         break;
         case PROPTYPE_DATE:
-            xProp.reset( new SfxOleDateProperty( nPropId ) );
+            xProp = std::make_shared<SfxOleDateProperty>( nPropId );
         break;
     }
     // load property contents
@@ -1149,7 +1149,7 @@ SfxOleSection& SfxOlePropertySet::AddSection( const SvGlobalName& rSectionGuid )
     {
         // #i66214# #i66428# applications may write broken dictionary properties in wrong sections
         bool bSupportsDict = rSectionGuid == GetSectionGuid( SECTION_CUSTOM );
-        xSection.reset( new SfxOleSection( bSupportsDict ) );
+        xSection = std::make_shared<SfxOleSection>( bSupportsDict );
         maSectionMap[ rSectionGuid ] = xSection;
     }
     return *xSection;

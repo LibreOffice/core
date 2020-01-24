@@ -2550,7 +2550,7 @@ void SfxHelpTextWindow_Impl::DoSearch()
         return;
 
     // create the search dialog
-    m_xSrchDlg.reset(new sfx2::SearchDialog(pTextWin->GetFrameWeld(), "HelpSearchDialog"));
+    m_xSrchDlg = std::make_shared<sfx2::SearchDialog>(pTextWin->GetFrameWeld(), "HelpSearchDialog");
     // set handler
     m_xSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
     m_xSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
