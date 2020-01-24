@@ -20,6 +20,8 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -217,6 +219,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121658, "tdf121658.docx")
     if (!pXmlSettings)
         return;
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
+{
+    // Create the doc model.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    style::LineSpacing aSpacing;
+    aSpacing.Mode = style::LineSpacingMode::MINIMUM;
+    aSpacing.Height = 0;
+    xParagraph->setPropertyValue("ParaLineSpacing", uno::makeAny(aSpacing));
+
+    // Export to docx.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mbExported = true;
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: atLeast
+    // - Actual  : auto
+    // i.e. the minimal linespacing was lost on export.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "lineRule", "atLeast");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "line", "0");
 }
 
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
