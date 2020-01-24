@@ -75,8 +75,8 @@ HWPPara::HWPPara()
     , etcflag(0)
     , ctrlflag(0)
     , pstyno(0)
-    , cshape(new CharShape)
-    , pshape(new ParaShape)
+    , cshape(std::make_shared<CharShape>())
+    , pshape(std::make_shared<ParaShape>())
 {
     memset(cshape.get(), 0, sizeof(CharShape));
 }
@@ -144,7 +144,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 
         for (ii = 0; ii < nch; ii++)
         {
-            cshapep[ii].reset(new CharShape);
+            cshapep[ii] = std::make_shared<CharShape>();
             memset(cshapep[ii].get(), 0, sizeof(CharShape));
 
             unsigned char same_cshape(0);

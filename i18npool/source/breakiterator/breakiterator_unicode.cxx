@@ -173,7 +173,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
 
                 if (U_SUCCESS(status))
                 {
-                    icuBI->mpValue.reset( new BI_ValueData);
+                    icuBI->mpValue = std::make_shared<BI_ValueData>();
                     icuBI->mpValue->mpBreakIterator = std::move( rbi);
                     theBIMap.insert( std::make_pair( aBIMapRuleTypeKey, icuBI->mpValue));
                 }
@@ -205,7 +205,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     rbi.reset(new OOoRuleBasedBreakIterator( pUData, status));
                 if ( U_SUCCESS(status) )
                 {
-                    icuBI->mpValue.reset( new BI_ValueData);
+                    icuBI->mpValue = std::make_shared<BI_ValueData>();
                     icuBI->mpValue->mpBreakIterator = std::move( rbi);
                     theBIMap.insert( std::make_pair( aBIMapRuleKey, icuBI->mpValue));
                 }
@@ -231,7 +231,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                         rbi.reset(new OOoRuleBasedBreakIterator( pUData, status));
                     if ( U_SUCCESS(status) )
                     {
-                        icuBI->mpValue.reset( new BI_ValueData);
+                        icuBI->mpValue = std::make_shared<BI_ValueData>();
                         icuBI->mpValue->mpBreakIterator = std::move( rbi);
                         theBIMap.insert( std::make_pair( aBIMapRuleOnlyKey, icuBI->mpValue));
                     }
@@ -294,7 +294,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
             if ( !U_SUCCESS(status) || !pBI ) {
                 throw uno::RuntimeException();
             }
-            icuBI->mpValue.reset( new BI_ValueData);
+            icuBI->mpValue = std::make_shared<BI_ValueData>();
             icuBI->mpValue->mpBreakIterator = pBI;
             theBIMap.insert( std::make_pair( aBIMapLocaleTypeKey, icuBI->mpValue));
         } while (false);
