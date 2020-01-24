@@ -1225,10 +1225,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // construct the process dialog
             pSourceWindow = &pSourceShell->GetView().GetEditWin();
             if (!bMT_PRINTER)
-                xProgressDlg.reset(new CreateMonitor(pSourceWindow->GetFrameWeld()));
+                xProgressDlg = std::make_shared<CreateMonitor>(pSourceWindow->GetFrameWeld());
             else
             {
-                xProgressDlg.reset(new PrintMonitor(pSourceWindow->GetFrameWeld()));
+                xProgressDlg = std::make_shared<PrintMonitor>(pSourceWindow->GetFrameWeld());
                 static_cast<PrintMonitor*>(xProgressDlg.get())->set_title(
                     pSourceDocSh->GetTitle(22));
             }

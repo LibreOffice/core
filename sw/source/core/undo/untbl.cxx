@@ -1298,8 +1298,8 @@ void SaveBox::SaveContentAttrs( SwDoc* pDoc )
                 std::shared_ptr<SfxItemSet> pSet;
                 if( pCNd->HasSwAttrSet() )
                 {
-                    pSet.reset( new SfxItemSet( pDoc->GetAttrPool(),
-                                            aSave_BoxContentSet ) );
+                    pSet = std::make_shared<SfxItemSet>( pDoc->GetAttrPool(),
+                                            aSave_BoxContentSet );
                     pSet->Put( *pCNd->GetpSwAttrSet() );
                 }
 

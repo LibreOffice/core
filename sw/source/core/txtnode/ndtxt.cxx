@@ -5335,7 +5335,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTextNode::getSdrAllFill
     // create SdrAllFillAttributesHelper on demand
     if(!maFillAttributes.get())
     {
-        const_cast< SwTextNode* >(this)->maFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(GetSwAttrSet()));
+        const_cast< SwTextNode* >(this)->maFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetSwAttrSet());
     }
 
     return maFillAttributes;

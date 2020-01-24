@@ -105,7 +105,7 @@ namespace ww8
 
             if (ncbExtra > 0)
             {
-                ExtraPointer_t pExtra(new T(this, nOffset, ncbExtra));
+                ExtraPointer_t pExtra = std::make_shared<T>(this, nOffset, ncbExtra);
                 m_Extras.push_back(pExtra);
 
                 nOffset += ncbExtra;

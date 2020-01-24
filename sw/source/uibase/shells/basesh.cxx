@@ -375,8 +375,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
         case SID_PASTE_SPECIAL:
             {
-                std::shared_ptr<TransferableDataHelper> aDataHelper;
-                aDataHelper.reset(new TransferableDataHelper(TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin())));
+                std::shared_ptr<TransferableDataHelper> aDataHelper =
+                    std::make_shared<TransferableDataHelper>(TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin()));
 
                 if( aDataHelper->GetXTransferable().is()
                     && SwTransferable::IsPaste( rSh, *aDataHelper )

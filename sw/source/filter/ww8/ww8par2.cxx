@@ -3840,7 +3840,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
             rSI.m_bParaAutoAfter = pj->m_bParaAutoAfter;
 
             if (pj->m_xWWFly)
-                rSI.m_xWWFly.reset(new WW8FlyPara(mpIo->m_bVer67, pj->m_xWWFly.get()));
+                rSI.m_xWWFly = std::make_shared<WW8FlyPara>(mpIo->m_bVer67, pj->m_xWWFly.get());
         }
     }
     else if( mpIo->m_bNewDoc && bStyExist )

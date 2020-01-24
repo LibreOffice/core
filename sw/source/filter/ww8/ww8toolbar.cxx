@@ -241,7 +241,7 @@ bool Customization::Read( SvStream &rS)
     }
     else
     {
-        customizationDataCTB.reset( new SwCTB() );
+        customizationDataCTB = std::make_shared<SwCTB>();
         if ( !customizationDataCTB->Read( rS ) )
                 return false;
     }
@@ -489,13 +489,13 @@ bool SwTBC::Read( SvStream &rS )
         return false;
     if ( tbch.getTcID() != 0x1 && tbch.getTcID() != 0x1051 )
     {
-        cid.reset( new sal_uInt32 );
+        cid = std::make_shared<sal_uInt32>();
         rS.ReadUInt32( *cid );
     }
     // MUST exist if tbch.tct is not equal to 0x16
     if ( tbch.getTct() != 0x16 )
     {
-        tbcd.reset(  new TBCData( tbch ) );
+        tbcd = std::make_shared<TBCData>( tbch );
         if ( !tbcd->Read( rS ) )
             return false;
     }

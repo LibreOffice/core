@@ -1777,8 +1777,8 @@ namespace
     {
         Comparators aComparisons;
         //compare main text
-        aComparisons.emplace_back(CompareDataPtr(new CompareMainText(rSrcDoc)),
-                                  CompareDataPtr(new CompareMainText(rDestDoc)));
+        aComparisons.emplace_back(std::make_shared<CompareMainText>(rSrcDoc),
+                                  std::make_shared<CompareMainText>(rDestDoc));
 
         //if we have the same number of frames then try to compare within them
         const SwFrameFormats *pSrcFrameFormats = rSrcDoc.GetSpzFrameFormats();
@@ -1806,8 +1806,8 @@ namespace
                 {
                     continue; // tdf#125660 don't redline GrfNode/OLENode
                 }
-                aComparisons.emplace_back(CompareDataPtr(new CompareFrameFormatText(rSrcDoc, *pSrcIdx)),
-                                          CompareDataPtr(new CompareFrameFormatText(rDestDoc, *pDestIdx)));
+                aComparisons.emplace_back(std::make_shared<CompareFrameFormatText>(rSrcDoc, *pSrcIdx),
+                                          std::make_shared<CompareFrameFormatText>(rDestDoc, *pDestIdx));
             }
         }
         return aComparisons;

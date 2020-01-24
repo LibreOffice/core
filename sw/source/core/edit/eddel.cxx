@@ -182,12 +182,12 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                     SwCursor aCursor( *pPos, nullptr);
                     if (aCursor.UpDown(false, nMove, nullptr, 0, *GetLayout()))
                     {
-                        pInsertPos.reset( new SwPosition( *aCursor.GetPoint() ) );
+                        pInsertPos = std::make_shared<SwPosition>( *aCursor.GetPoint() );
                         aInsertList.push_back( pInsertPos );
                     }
                 }
                 else
-                    pInsertPos.reset( new SwPosition( *pPos ) );
+                    pInsertPos = std::make_shared<SwPosition>( *pPos );
                 ++nMove;
             }
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;

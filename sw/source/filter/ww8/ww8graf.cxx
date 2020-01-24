@@ -600,7 +600,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
-    m_xPlcxMan.reset(new WW8PLCFMan(m_xSBase.get(), eType, nStartCp, true));
+    m_xPlcxMan = std::make_shared<WW8PLCFMan>(m_xSBase.get(), eType, nStartCp, true);
 
     WW8_CP nStart = m_xPlcxMan->Where();
     WW8_CP nNext, nStartReplace=0;

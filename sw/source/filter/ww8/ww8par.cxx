@@ -2037,8 +2037,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
     if (nStartCp != -1)
     {
-        pRdr->m_xPlcxMan.reset(new WW8PLCFMan(pRdr->m_xSBase.get(),
-            mxOldPlcxMan->GetManType(), nStartCp));
+        pRdr->m_xPlcxMan = std::make_shared<WW8PLCFMan>(pRdr->m_xSBase.get(),
+            mxOldPlcxMan->GetManType(), nStartCp);
     }
 
     maOldApos.push_back(false);
@@ -4048,7 +4048,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     m_bSpec = false;
     m_bPgSecBreak = false;
 
-    m_xPlcxMan.reset(new WW8PLCFMan(m_xSBase.get(), nType, nStartCp));
+    m_xPlcxMan = std::make_shared<WW8PLCFMan>(m_xSBase.get(), nType, nStartCp);
     long nCpOfs = m_xPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
     WW8_CP nNext = m_xPlcxMan->Where();
@@ -5007,7 +5007,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_rDoc.getIDocumentExternalData().setExternalData(::sw::tExternalDataType::FIB, pExternalFibData);
 
     ::sw::tExternalDataPointer pSttbfAsoc
-          (new ::ww8::WW8Sttb<ww8::WW8Struct>(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc, m_xWwFib->m_lcbSttbfAssoc));
+          = std::make_shared<::ww8::WW8Sttb<ww8::WW8Struct>>(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc, m_xWwFib->m_lcbSttbfAssoc);
 
     m_rDoc.getIDocumentExternalData().setExternalData(::sw::tExternalDataType::STTBF_ASSOC, pSttbfAsoc);
 
@@ -5755,7 +5755,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (pGloss)
         m_xWwFib = pGloss->GetFib();
     else
-        m_xWwFib.reset(new WW8Fib(*m_pStrm, m_nWantedVersion));
+        m_xWwFib = std::make_shared<WW8Fib>(*m_pStrm, m_nWantedVersion);
 
     if (m_xWwFib->m_nFibError)
         nErrRet = ERR_SWG_READ_ERROR;
@@ -5926,7 +5926,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
         {
             m_pStrm = &aDecryptMain;
 
-            m_xWwFib.reset(new WW8Fib(*m_pStrm, m_nWantedVersion));
+            m_xWwFib = std::make_shared<WW8Fib>(*m_pStrm, m_nWantedVersion);
             if (m_xWwFib->m_nFibError)
                 nErrRet = ERR_SWG_READ_ERROR;
         }

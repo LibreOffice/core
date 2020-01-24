@@ -257,7 +257,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
     std::shared_ptr<SwMailMergeConfigItem> xMMConfig = GetMailMergeConfigItem();
     if (!xMMConfig)
     {
-        xMMConfig.reset(new SwMailMergeConfigItem);
+        xMMConfig = std::make_shared<SwMailMergeConfigItem>();
         xMMConfig->SetSourceView(this);
 
         //set the first used database as default source on the config item

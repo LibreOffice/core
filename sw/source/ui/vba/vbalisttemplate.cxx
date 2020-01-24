@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 
 SwVbaListTemplate::SwVbaListTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : SwVbaListTemplate_BASE( rParent, rContext )
 {
-    pListHelper.reset( new SwVbaListHelper( xTextDoc, nGalleryType, nTemplateType ) );
+    pListHelper = std::make_shared<SwVbaListHelper>( xTextDoc, nGalleryType, nTemplateType );
 }
 
 SwVbaListTemplate::~SwVbaListTemplate()

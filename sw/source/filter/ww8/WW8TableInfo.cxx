@@ -131,7 +131,7 @@ const SwNode * WW8TableNodeInfoInner::getNode() const
 
 TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow() const
 {
-    TableBoxVectorPtr pResult(new TableBoxVector);
+    TableBoxVectorPtr pResult = std::make_shared<TableBoxVector>();
 
     WW8TableCellGrid::Pointer_t pCellGrid =
         mpParent->getParent()->getCellGridForTable(getTable(), false);
@@ -157,7 +157,7 @@ TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow() const
 
 GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase, bool calculateColumnsFromAllRows)
 {
-    GridColsPtr pResult(new GridCols);
+    GridColsPtr pResult = std::make_shared<GridCols>();
     WidthsPtr pWidths;
 
     // Check which columns should be checked - only the current row,
@@ -235,7 +235,7 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows() const
 
         // Go over all the rows - and for each row - calculate where
         // there is a separator between columns
-        WidthsPtr pSeparators(new Widths);
+        WidthsPtr pSeparators = std::make_shared<Widths>();
         for ( size_t nLineIndex = 0; nLineIndex < nNumOfLines; ++nLineIndex )
         {
             const SwTableLine *pCurrentLine = rTableLines[nLineIndex];
@@ -312,7 +312,7 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow() const
 
 RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow() const
 {
-    RowSpansPtr pResult(new RowSpans);
+    RowSpansPtr pResult = std::make_shared<RowSpans>();
 
     WW8TableCellGrid::Pointer_t pCellGrid =
         mpParent->getParent()->getCellGridForTable(getTable(), false);
@@ -1100,7 +1100,7 @@ void WW8TableCellGrid::addShadowCells()
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
         CellInfoMultiSet::const_iterator aCellEndIt = getCellsEnd(*aTopsIt);
 
-        RowSpansPtr pRowSpans(new RowSpans);
+        RowSpansPtr pRowSpans = std::make_shared<RowSpans>();
 
         bool bBeginningOfCell = true;
         bool bVertMerge = false;
@@ -1173,8 +1173,8 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells(RowEndInners_t &rLastRowEnds)
     {
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
         CellInfoMultiSet::const_iterator aCellEndIt = getCellsEnd(*aTopsIt);
-        GridColsPtr pWidths(new Widths);
-        TableBoxVectorPtr pTableBoxes(new TableBoxVector);
+        GridColsPtr pWidths = std::make_shared<Widths>();
+        TableBoxVectorPtr pTableBoxes = std::make_shared<TableBoxVector>();
 
         sal_uInt32 nShadows = 0;
         sal_uInt32 nCell = 0;
@@ -1401,7 +1401,7 @@ RowSpansPtr WW8TableCellGrid::getRowSpansOfRow
 }
 
 WW8TableCellGridRow::WW8TableCellGridRow()
-: m_pCellInfos(new CellInfoMultiSet)
+: m_pCellInfos(std::make_shared<CellInfoMultiSet>())
 {
 }
 

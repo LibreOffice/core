@@ -613,7 +613,7 @@ void SwFormatMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
         const std::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );
         if (RES_TXTATR_META == Which())
         {
-            m_pMeta.reset( new ::sw::Meta(this) );
+            m_pMeta = std::make_shared<::sw::Meta>(this);
         }
         else
         {
