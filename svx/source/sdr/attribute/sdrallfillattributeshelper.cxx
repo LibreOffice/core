@@ -59,23 +59,23 @@ namespace drawinglayer::attribute
             maFillGradientAttribute(),
             maPrimitives()
         {
-            maFillAttribute.reset(
-                new drawinglayer::attribute::SdrFillAttribute(
+            maFillAttribute =
+                std::make_shared<drawinglayer::attribute::SdrFillAttribute>(
                     0.0,
                     rColor.GetRGBColor().getBColor(),
                     drawinglayer::attribute::FillGradientAttribute(),
                     drawinglayer::attribute::FillHatchAttribute(),
-                    drawinglayer::attribute::SdrFillGraphicAttribute()));
+                    drawinglayer::attribute::SdrFillGraphicAttribute());
         }
 
         SdrAllFillAttributesHelper::SdrAllFillAttributesHelper(const SfxItemSet& rSet)
         :   maLastPaintRange(),
             maLastDefineRange(),
             maFillAttribute(
-                new drawinglayer::attribute::SdrFillAttribute(
+                std::make_shared<drawinglayer::attribute::SdrFillAttribute>(
                     drawinglayer::primitive2d::createNewSdrFillAttribute(rSet))),
             maFillGradientAttribute(
-                new drawinglayer::attribute::FillGradientAttribute(
+                std::make_shared<drawinglayer::attribute::FillGradientAttribute>(
                     drawinglayer::primitive2d::createNewTransparenceGradientAttribute(rSet))),
             maPrimitives()
         {
@@ -117,7 +117,8 @@ namespace drawinglayer::attribute
         {
             if(!maFillAttribute.get())
             {
-                const_cast< SdrAllFillAttributesHelper* >(this)->maFillAttribute.reset(new drawinglayer::attribute::SdrFillAttribute());
+                const_cast< SdrAllFillAttributesHelper* >(this)->maFillAttribute =
+                    std::make_shared<drawinglayer::attribute::SdrFillAttribute>();
             }
 
             return *maFillAttribute;
@@ -127,7 +128,8 @@ namespace drawinglayer::attribute
         {
             if(!maFillGradientAttribute.get())
             {
-                const_cast< SdrAllFillAttributesHelper* >(this)->maFillGradientAttribute.reset(new drawinglayer::attribute::FillGradientAttribute());
+                const_cast< SdrAllFillAttributesHelper* >(this)->maFillGradientAttribute =
+                    std::make_shared<drawinglayer::attribute::FillGradientAttribute>();
             }
 
             return *maFillGradientAttribute;

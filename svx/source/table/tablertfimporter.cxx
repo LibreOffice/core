@@ -216,7 +216,7 @@ void SdrTableRTFParser::NextRow()
 void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
 {
 
-    RTFCellInfoPtr xCellInfo( new RTFCellInfo(mrItemPool) );
+    RTFCellInfoPtr xCellInfo = std::make_shared<RTFCellInfo>(mrItemPool);
 
     xCellInfo->mnStartPara = mnStartPara;
     xCellInfo->mnParaCount = pInfo->aSelection.nEndPara - 1 - mnStartPara;

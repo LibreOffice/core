@@ -2644,8 +2644,8 @@ void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSe
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
 
-        rFormatSet.reset(
-            new SfxItemSet(GetModel()->GetItemPool(), GetFormatRangeImpl(pOLV != nullptr)));
+        rFormatSet = std::make_shared<SfxItemSet>(GetModel()->GetItemPool(),
+                                                  GetFormatRangeImpl(pOLV != nullptr));
         if (pOLV)
         {
             rFormatSet->Put(pOLV->GetAttribs());

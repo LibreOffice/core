@@ -970,7 +970,7 @@ namespace svxform
 
         if ( _rEvent.ScriptType != "StarBasic" )
         {
-            pScript.reset( new NewStyleUNOScript( *xObjectShell, _rEvent.ScriptCode ) );
+            pScript = std::make_shared<NewStyleUNOScript>( *xObjectShell, _rEvent.ScriptCode );
         }
         else
         {
@@ -1007,7 +1007,7 @@ namespace svxform
                 "?language=Basic&location=" +
                 sMacroLocation;
 
-            pScript.reset( new NewStyleUNOScript( *xObjectShell, sScriptURI ) );
+            pScript = std::make_shared<NewStyleUNOScript>( *xObjectShell, sScriptURI );
         }
 
         assert(pScript && "FormScriptingEnvironment::doFireScriptEvent: no script to execute!");

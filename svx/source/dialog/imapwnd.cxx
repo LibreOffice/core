@@ -372,8 +372,8 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         {
             case OBJ_RECT:
             {
-                pUserData->ReplaceObject( IMapObjectPtr(new IMapRectangleObject( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
-                          aURL, aAltText, aDesc, aTarget, "", bActive, false ) ) );
+                pUserData->ReplaceObject( std::make_shared<IMapRectangleObject>( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
+                          aURL, aAltText, aDesc, aTarget, "", bActive, false ) );
             }
             break;
 

@@ -89,7 +89,7 @@ namespace drawinglayer::attribute
                 bool bWrongSpell,
                 bool bChainable)
             :   mpSdrText(pSdrText),
-                mxOutlinerParaObject(new OutlinerParaObject(rOutlinerParaObject)),
+                mxOutlinerParaObject(std::make_shared<OutlinerParaObject>(rOutlinerParaObject)),
                 maSdrFormTextAttribute(),
                 maTextLeftDistance(aTextLeftDistance),
                 maTextUpperDistance(aTextUpperDistance),

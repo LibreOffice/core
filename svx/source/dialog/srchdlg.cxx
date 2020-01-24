@@ -2351,7 +2351,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo const * pInfo )
     : SfxChildWindow( _pParent, nId )
-    , dialog(new SvxSearchDialog(_pParent->GetFrameWeld(), this, *pBindings))
+    , dialog(std::make_shared<SvxSearchDialog>(_pParent->GetFrameWeld(), this, *pBindings))
 {
     SetController(dialog);
     dialog->Initialize( pInfo );

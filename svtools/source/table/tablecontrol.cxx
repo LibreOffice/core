@@ -49,7 +49,7 @@ namespace svt { namespace table
 
     TableControl::TableControl( vcl::Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
-        ,m_pImpl( new TableControl_Impl( *this ) )
+        ,m_pImpl( std::make_shared<TableControl_Impl>( *this ) )
     {
         TableDataWindow& rDataWindow = m_pImpl->getDataWindow();
         rDataWindow.SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );

@@ -218,7 +218,7 @@ namespace svt { namespace table
 
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
         :m_rAntiImpl            ( _rAntiImpl                    )
-        ,m_pModel               ( new EmptyTableModel           )
+        ,m_pModel               ( std::make_shared<EmptyTableModel>() )
         ,m_pInputHandler        (                               )
         ,m_nRowHeightPixel      ( 15                            )
         ,m_nColHeaderHeightPixel( 0                             )
@@ -265,7 +265,7 @@ namespace svt { namespace table
 
         m_pModel = _pModel;
         if ( !m_pModel)
-            m_pModel.reset( new EmptyTableModel );
+            m_pModel = std::make_shared<EmptyTableModel>();
 
         m_pModel->addTableModelListener( shared_from_this() );
 
@@ -563,7 +563,7 @@ namespace svt { namespace table
     {
         m_pInputHandler = m_pModel->getInputHandler();
         if ( !m_pInputHandler )
-            m_pInputHandler.reset( new DefaultInputHandler );
+            m_pInputHandler = std::make_shared<DefaultInputHandler>();
 
         m_nColumnCount = m_pModel->getColumnCount();
         if ( m_nLeftColumn >= m_nColumnCount )

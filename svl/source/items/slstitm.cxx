@@ -41,7 +41,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
     // Therefore the query after the count is commented out
     if( pList /*!!! && pList->Count() */ )
     {
-        mpList.reset(new std::vector<OUString>);
+        mpList = std::make_shared<std::vector<OUString>>();
         *mpList = *pList;
     }
 }
@@ -55,7 +55,7 @@ SfxStringListItem::~SfxStringListItem()
 std::vector<OUString>& SfxStringListItem::GetList()
 {
     if( !mpList )
-        mpList.reset( new std::vector<OUString> );
+        mpList = std::make_shared<std::vector<OUString>>();
     return *mpList;
 }
 
@@ -95,7 +95,7 @@ SfxStringListItem* SfxStringListItem::Clone( SfxItemPool *) const
 
 void SfxStringListItem::SetString( const OUString& rStr )
 {
-    mpList.reset( new std::vector<OUString> );
+    mpList = std::make_shared<std::vector<OUString>>();
 
     sal_Int32 nStart = 0;
     OUString aStr(convertLineEnd(rStr, LINEEND_CR));
@@ -143,7 +143,7 @@ OUString SfxStringListItem::GetString()
 
 void SfxStringListItem::SetStringList( const css::uno::Sequence< OUString >& rList )
 {
-    mpList.reset(new std::vector<OUString>);
+    mpList = std::make_shared<std::vector<OUString>>();
 
     // String belongs to the list
     comphelper::sequenceToContainer(*mpList, rList);

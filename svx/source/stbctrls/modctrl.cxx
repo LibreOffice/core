@@ -68,7 +68,7 @@ struct SvxModifyControl::ImplData
 
 SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    mxImpl(new ImplData)
+    mxImpl(std::make_shared<ImplData>())
 {
     mxImpl->maIdle.SetInvokeHandler( LINK(this, SvxModifyControl, OnTimer) );
 }

@@ -275,7 +275,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
 
     if (bSuccess)
     {
-        m_xImpl->m_pTempFile.reset(new ::avmedia::MediaTempFile(tempFileURL));
+        m_xImpl->m_pTempFile = std::make_shared<::avmedia::MediaTempFile>(tempFileURL);
 #if HAVE_FEATURE_AVMEDIA
         m_xImpl->m_MediaProperties.setURL(
             m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
@@ -353,8 +353,8 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
 
                 if (bSuccess)
                 {
-                    m_xImpl->m_pTempFile.reset(
-                            new ::avmedia::MediaTempFile(tempFileURL));
+                    m_xImpl->m_pTempFile =
+                            std::make_shared<::avmedia::MediaTempFile>(tempFileURL);
                     m_xImpl->m_MediaProperties.setURL(url, tempFileURL, "");
                 }
                 else // this case is for Clone via operator=

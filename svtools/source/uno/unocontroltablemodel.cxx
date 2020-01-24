@@ -123,8 +123,8 @@ namespace svt { namespace table
         m_pImpl->bHasColumnHeaders = true;
         m_pImpl->bHasRowHeaders = false;
         m_pImpl->bEnabled = true;
-        m_pImpl->pRenderer.reset( new GridTableRenderer( *this ) );
-        m_pImpl->pInputHandler.reset( new DefaultInputHandler );
+        m_pImpl->pRenderer = std::make_shared<GridTableRenderer>( *this );
+        m_pImpl->pInputHandler = std::make_shared<DefaultInputHandler>();
     }
 
 
@@ -217,7 +217,7 @@ namespace svt { namespace table
         ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ),
             "UnoControlTableModel::insertColumn: illegal position!" );
 
-        const PColumnModel pColumn( new UnoGridColumnFacade( *this, i_column ) );
+        const PColumnModel pColumn = std::make_shared<UnoGridColumnFacade>( *this, i_column );
         m_pImpl->aColumns.insert( m_pImpl->aColumns.begin() + i_position, pColumn );
 
         // notify listeners

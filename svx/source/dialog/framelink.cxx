@@ -34,7 +34,7 @@ void Style::implEnsureImplStyle()
 {
     if(!maImplStyle)
     {
-        maImplStyle.reset(new implStyle());
+        maImplStyle = std::make_shared<implStyle>();
     }
 }
 
@@ -44,7 +44,7 @@ Style::Style() :
 }
 
 Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
-    maImplStyle(new implStyle())
+    maImplStyle(std::make_shared<implStyle>())
 {
     maImplStyle->mnType = nType;
     maImplStyle->mfPatternScale = fScale;
@@ -52,7 +52,7 @@ Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double 
 }
 
 Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
-    maImplStyle(new implStyle())
+    maImplStyle(std::make_shared<implStyle>())
 {
     maImplStyle->mnType = nType;
     maImplStyle->mfPatternScale = fScale;
@@ -64,7 +64,7 @@ Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) :
 {
     if(nullptr != pBorder)
     {
-        maImplStyle.reset(new implStyle());
+        maImplStyle = std::make_shared<implStyle>();
         maImplStyle->mfPatternScale = fScale;
         Set( pBorder, fScale );
     }

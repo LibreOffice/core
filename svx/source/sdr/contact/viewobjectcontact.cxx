@@ -319,10 +319,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimiti
         if(isPrimitiveGhosted(rDisplayInfo))
         {
             const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-            const basegfx::BColorModifierSharedPtr aBColorModifier(
-                new basegfx::BColorModifier_interpolate(
+            const basegfx::BColorModifierSharedPtr aBColorModifier =
+                std::make_shared<basegfx::BColorModifier_interpolate>(
                     aRGBWhite,
-                    0.5));
+                    0.5);
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                     xRetval,
