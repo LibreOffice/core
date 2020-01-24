@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c8d1781_423460e7",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-24T09:33:37Z",
+      "side": 1,
+      "message": "This change is wrong. It\u0027s your homework to analyze why.",
+      "range": {
+        "startLine": 82,
+        "startChar": 20,
+        "endLine": 82,
+        "endChar": 31
+      },
+      "revId": "a7f2a4eb8b810c4bd6fc86d9e95ed1da611409fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa59247_a80f0ff6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-24T09:33:37Z",
+      "side": 1,
+      "message": "Why has this been kept here? What purpose does this piece of code serve now (actually, did it ever serve some purpose)?",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 15
+      },
+      "revId": "a7f2a4eb8b810c4bd6fc86d9e95ed1da611409fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "748e847a_b231c76a",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-24T09:33:37Z",
+      "side": 1,
+      "message": "Here, too",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 15
+      },
+      "revId": "a7f2a4eb8b810c4bd6fc86d9e95ed1da611409fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c18dc5_33cac324",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-24T09:33:37Z",
+      "side": 1,
+      "message": "... and here ...\n\n... and below in similar cases.",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 246,
+        "endChar": 15
+      },
+      "revId": "a7f2a4eb8b810c4bd6fc86d9e95ed1da611409fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
