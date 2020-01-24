@@ -36,7 +36,7 @@ void test1()
     std::shared_ptr<S1> z(new S1);
     z.reset(new S1);
 
-    // no warning expected - this constructor takes an initializer-list, which maked_shared does not support
+    // no warning expected - this constructor takes an initializer-list, which make_shared does not support
     auto a = std::shared_ptr<o3tl::sorted_vector<int>>(new o3tl::sorted_vector<int>({ 1, 2 }));
 };
 
