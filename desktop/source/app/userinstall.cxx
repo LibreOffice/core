@@ -27,6 +27,9 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#if defined ANDROID || defined IOS
+#include <rtl/bootstrap.hxx>
+#endif
 #include <rtl/ustring.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/bootstrap.hxx>
