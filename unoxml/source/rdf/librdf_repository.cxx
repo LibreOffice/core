@@ -634,21 +634,17 @@ librdf_QuerySelectResult::hasMoreElements()
     return !librdf_query_results_finished(m_pQueryResult.get());
 }
 
-struct NodeArray
+class NodeArray : private std::vector<librdf_node*>
 {
-    int m_Count;
-    std::unique_ptr<librdf_node*[]> m_pNodes;
-
-    NodeArray(int cnt) : m_Count(cnt), m_pNodes(new librdf_node*[cnt])
-    {
-        for (int i = 0; i < cnt; ++i)
-            m_pNodes[i] = nullptr;
-    }
+public:
+    NodeArray(int cnt) : std::vector<librdf_node*>(cnt) {}
 
     ~NodeArray() throw ()
     {
-        std::for_each(m_pNodes.get(), m_pNodes.get() + m_Count, safe_librdf_free_node);
+        std::for_each(begin(), end(), safe_librdf_free_node);
     }
+
+    using std::vector<librdf_node*>::data;
 };
 
 css::uno::Any SAL_CALL
@@ -662,7 +658,7 @@ librdf_QuerySelectResult::nextElement()
     OSL_ENSURE(count >= 0, "negative length?");
     NodeArray aNodes(count);
     if (librdf_query_results_get_bindings(m_pQueryResult.get(), nullptr,
-                aNodes.m_pNodes.get()))
+                aNodes.data()))
     {
         rdf::QueryException e(
             "librdf_QuerySelectResult::nextElement: "
