@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1769dff5_15eb9f96",
+        "filename": "unotools/source/config/configitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-24T10:11:31Z",
+      "side": 1,
+      "message": "why do we need a x prefix here, which typically indicates a UNO reference?",
+      "revId": "8737679932039139b5a6688b131a00a978745f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
