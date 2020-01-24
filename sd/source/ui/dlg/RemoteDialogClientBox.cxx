@@ -85,7 +85,7 @@ ClientBoxEntry* ClientBox::GetActiveEntry()
 
 void ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
 {
-    TClientBoxEntry xEntry(new ClientBoxEntry(this, pClientInfo));
+    TClientBoxEntry xEntry = std::make_shared<ClientBoxEntry>(this, pClientInfo);
     m_vEntries.push_back(xEntry);
 }
 

@@ -39,7 +39,7 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
     // DefaultPagePreviewProvider to prevent the rendering (and the
     // expensive creation) of the default page.  It is replaced later on by
     // another.
-    SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+    SharedMasterPageDescriptor pDescriptor = std::make_shared<MasterPageDescriptor>(
         MasterPageContainer::DEFAULT,
         0,
         OUString(),
@@ -47,7 +47,7 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
         OUString(),
         false,
         std::make_shared<DefaultPageObjectProvider>(),
-        std::make_shared<PagePreviewProvider>()));
+        std::make_shared<PagePreviewProvider>());
     mrContainerAdapter.PutMasterPage(pDescriptor);
 }
 
@@ -140,7 +140,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate()
 {
     if (mpLastAddedEntry != nullptr)
     {
-        SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+        SharedMasterPageDescriptor pDescriptor = std::make_shared<MasterPageDescriptor>(
             MasterPageContainer::TEMPLATE,
             mnIndex,
             mpLastAddedEntry->msPath,
@@ -148,7 +148,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate()
             OUString(),
             false,
             std::make_shared<TemplatePageObjectProvider>(mpLastAddedEntry->msPath),
-            std::make_shared<TemplatePreviewProvider>(mpLastAddedEntry->msPath)));
+            std::make_shared<TemplatePreviewProvider>(mpLastAddedEntry->msPath));
         // For user supplied templates we use a different preview provider:
         // The preview in the document shows not only shapes on the master
         // page but also shapes on the foreground.  This is misleading and

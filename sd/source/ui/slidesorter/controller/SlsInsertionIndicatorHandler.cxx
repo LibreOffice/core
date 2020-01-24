@@ -35,7 +35,7 @@ namespace sd::slidesorter::controller {
 InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mpInsertAnimator(),
-      mpInsertionIndicatorOverlay(new view::InsertionIndicatorOverlay(rSlideSorter)),
+      mpInsertionIndicatorOverlay(std::make_shared<view::InsertionIndicatorOverlay>(rSlideSorter)),
       maInsertPosition(),
       meMode(MoveMode),
       mbIsInsertionTrivial(false),
@@ -78,7 +78,7 @@ void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode e
     meMode = UnknownMode;
 
     mpInsertionIndicatorOverlay->Hide();
-    mpInsertionIndicatorOverlay.reset(new view::InsertionIndicatorOverlay(mrSlideSorter));
+    mpInsertionIndicatorOverlay = std::make_shared<view::InsertionIndicatorOverlay>(mrSlideSorter);
 }
 
 void InsertionIndicatorHandler::ForceShow()
@@ -171,7 +171,7 @@ void InsertionIndicatorHandler::SetPosition (
 std::shared_ptr<view::InsertAnimator> const & InsertionIndicatorHandler::GetInsertAnimator()
 {
     if ( ! mpInsertAnimator)
-        mpInsertAnimator.reset(new view::InsertAnimator(mrSlideSorter));
+        mpInsertAnimator = std::make_shared<view::InsertAnimator>(mrSlideSorter);
     return mpInsertAnimator;
 }
 

@@ -233,7 +233,7 @@ void ViewShell::construct()
         pSpellDialog->InvalidateSpellDialog();
 
     // Register the sub shell factory.
-    mpImpl->mpSubShellFactory.reset(new ViewShellObjectBarFactory(*this));
+    mpImpl->mpSubShellFactory = std::make_shared<ViewShellObjectBarFactory>(*this);
     GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
 }
 

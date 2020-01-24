@@ -174,10 +174,10 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
         if (pDescriptor == nullptr && bCreate && mxSlides.is())
         {
             SdPage* pPage = GetPage(nPageIndex);
-            pDescriptor.reset(new PageDescriptor (
+            pDescriptor = std::make_shared<PageDescriptor>(
                 Reference<drawing::XDrawPage>(mxSlides->getByIndex(nPageIndex),UNO_QUERY),
                 pPage,
-                nPageIndex));
+                nPageIndex);
             maPageDescriptors[nPageIndex] = pDescriptor;
         }
     }

@@ -2376,7 +2376,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
         if( xMotionPathTag.is() )
         {
-            MainSequencePtr pSequence( new MainSequence() );
+            MainSequencePtr pSequence = std::make_shared<MainSequence>();
             pSequence->append( xMotionPathTag->getEffect()->clone() );
             preview( pSequence->getRootNode() );
         }
@@ -2391,7 +2391,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     }
     else
     {
-        MainSequencePtr pSequence( new MainSequence() );
+        MainSequencePtr pSequence = std::make_shared<MainSequence>();
 
         for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {

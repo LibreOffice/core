@@ -82,7 +82,7 @@ namespace {
             const ::rtl::Reference<SlideShow>& rpSlideShow,
             ViewShellBase* pViewShellBase)
             : WorkWindow(nullptr, WB_HIDE | WB_CLIPCHILDREN),
-              mpRestarter(new SlideShowRestarter(rpSlideShow, pViewShellBase))
+              mpRestarter(std::make_shared<SlideShowRestarter>(rpSlideShow, pViewShellBase))
         {}
 
         void Restart(bool bForce)
@@ -807,7 +807,7 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
     // Prevent multiple instance of the SlideShow class for one document.
     mbIsInStartup = true;
 
-    mxCurrentSettings.reset( new PresentationSettingsEx( mpDoc->getPresentationSettings() ) );
+    mxCurrentSettings = std::make_shared<PresentationSettingsEx>( mpDoc->getPresentationSettings() );
     mxCurrentSettings->SetArguments( rArguments );
 
     // if there is no view shell base set, use the current one or the first using this document

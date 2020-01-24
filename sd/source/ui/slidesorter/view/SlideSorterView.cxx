@@ -120,7 +120,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mpLayouter (new Layouter(rSlideSorter.GetContentWindow(), rSlideSorter.GetTheme())),
       mbPageObjectVisibilitiesValid (false),
       mpPreviewCache(),
-      mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
+      mpLayeredDevice(std::make_shared<LayeredDevice>(rSlideSorter.GetContentWindow())),
       maVisiblePageRange(-1,-1),
       maPreviewSize(0,0),
       mbPreciousFlagUpdatePending(true),
@@ -128,7 +128,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mpPageUnderMouse(),
       mpPageObjectPainter(),
       mpBackgroundPainter(
-          new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background))),
+          std::make_shared<BackgroundPainter>(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background))),
       mpToolTip(new ToolTip(mrSlideSorter)),
       mbIsRearrangePending(true),
       maVisibilityChangeListeners()
@@ -145,7 +145,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     // the SlideSorterView destructor the layered device is destroyed and
     // with it the only reference to the wrapper which therefore is also
     // destroyed.
-    SharedILayerPainter pPainter (new Painter(*this));
+    SharedILayerPainter pPainter = std::make_shared<Painter>(*this);
 
     // The painter is placed on level 1 to avoid buffering.  This should be
     // a little faster during animations because the previews are painted
@@ -668,11 +668,11 @@ std::shared_ptr<cache::PageCache> const & SlideSorterView::GetPreviewCache()
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow && mpPreviewCache == nullptr)
     {
-        mpPreviewCache.reset(
-            new cache::PageCache(
+        mpPreviewCache =
+            std::make_shared<cache::PageCache>(
                 mpLayouter->GetPageObjectSize(),
                 Bitmap::HasFastScale(),
-                cache::SharedCacheContext(new ViewCacheContext(mrSlideSorter))));
+                std::make_shared<ViewCacheContext>(mrSlideSorter));
     }
 
     return mpPreviewCache;
@@ -799,7 +799,7 @@ bool SlideSorterView::SetState (
 std::shared_ptr<PageObjectPainter> const & SlideSorterView::GetPageObjectPainter()
 {
     if ( ! mpPageObjectPainter)
-        mpPageObjectPainter.reset(new PageObjectPainter(mrSlideSorter));
+        mpPageObjectPainter = std::make_shared<PageObjectPainter>(mrSlideSorter);
     return mpPageObjectPainter;
 }
 

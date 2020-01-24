@@ -506,7 +506,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
             DBG_ASSERT( xNode.is(), "EffectMigration::SetAnimationEffect(), could not create preset!" );
             if( xNode.is() )
             {
-                CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xNode ) );
+                CustomAnimationEffectPtr pEffect = std::make_shared<CustomAnimationEffect>( xNode );
                 pEffect->setTarget( makeAny( xShape ) );
                 SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
                 const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
@@ -662,7 +662,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 DBG_ASSERT( xNode.is(), "EffectMigration::SetTextAnimationEffect(), could not create preset!" );
                 if( xNode.is() )
                 {
-                    pShapeEffect.reset( new CustomAnimationEffect( xNode ) );
+                    pShapeEffect = std::make_shared<CustomAnimationEffect>( xNode );
                     pShapeEffect->setTarget( makeAny( xShape ) );
                     pShapeEffect->setDuration( 0.1 );
                     pMainSequence->append( pShapeEffect );

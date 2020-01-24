@@ -513,12 +513,12 @@ bool Layouter::Implementation::Rearrange (
             mnBottomBorder = nMinimumBorderHeight;
     }
 
-    mpPageObjectLayouter.reset(
-        new PageObjectLayouter(
+    mpPageObjectLayouter =
+        std::make_shared<PageObjectLayouter>(
             CalculateTargetSize(rWindowSize),
             rPreviewModelSize,
             mpWindow,
-            mnPageCount));
+            mnPageCount);
 
     maPageObjectSize = mpPageObjectLayouter->GetGridMaxSize();
 

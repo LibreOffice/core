@@ -760,7 +760,7 @@ bool SlideshowImpl::startPreview(
 
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-        mpSlideController.reset( new AnimationSlideController( xSlides, AnimationSlideController::PREVIEW ) );
+        mpSlideController = std::make_shared<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
 
         sal_Int32 nSlideNumber = 0;
         Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
@@ -1260,7 +1260,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
             if( !xSetInfo.is() || !xSetInfo->hasPropertyByName( gsOnClick ) )
                 continue;
 
-            WrappedShapeEventImplPtr pEvent( new WrappedShapeEventImpl );
+            WrappedShapeEventImplPtr pEvent = std::make_shared<WrappedShapeEventImpl>();
             xSet->getPropertyValue( gsOnClick ) >>= pEvent->meClickAction;
 
             switch( pEvent->meClickAction )
@@ -2237,7 +2237,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 
     Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
     Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-    mpSlideController.reset( new AnimationSlideController( xSlides, eMode ) );
+    mpSlideController = std::make_shared<AnimationSlideController>( xSlides, eMode );
 
     if( eMode != AnimationSlideController::CUSTOM )
     {

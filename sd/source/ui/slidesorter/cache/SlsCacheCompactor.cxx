@@ -91,13 +91,13 @@ namespace sd::slidesorter::cache {
     if (aCompressionPolicy.has<OUString>())
         aCompressionPolicy >>= sCompressionPolicy;
     if (sCompressionPolicy == sNone)
-        pCompressor.reset(new NoBitmapCompression);
+        pCompressor = std::make_shared<NoBitmapCompression>();
     else if (sCompressionPolicy == "Erase")
-        pCompressor.reset(new CompressionByDeletion);
+        pCompressor = std::make_shared<CompressionByDeletion>();
     else if (sCompressionPolicy == "ResolutionReduction")
-        pCompressor.reset(new ResolutionReduction);
+        pCompressor = std::make_shared<ResolutionReduction>();
     else
-        pCompressor.reset(new PngCompression);
+        pCompressor = std::make_shared<PngCompression>();
 
     ::std::unique_ptr<CacheCompactor> pCompactor;
     OUString sCompactionPolicy("Compress");

@@ -56,7 +56,7 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mrController(rSlideSorter.GetController()),
       mnInsertionPosition(-1),
-      mpSelectionObserver(new SelectionObserver(rSlideSorter))
+      mpSelectionObserver(std::make_shared<SelectionObserver>(rSlideSorter))
 {
 }
 

@@ -296,7 +296,7 @@ void CustomAnimationPresets::importEffects()
                         pDescriptor->add( pEffect );
                     else
                     {
-                        pDescriptor.reset( new CustomAnimationPreset( pEffect ) );
+                        pDescriptor = std::make_shared<CustomAnimationPreset>( pEffect );
                         pDescriptor->maLabel = getUINameForPresetId( pEffect->getPresetId() );
                         maEffectDescriptorMap[aPresetId] = pDescriptor;
                     }

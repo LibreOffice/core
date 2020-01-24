@@ -373,7 +373,7 @@ CustomAnimationEffectPtr CustomAnimationEffect::clone() const
 {
     Reference< XCloneable > xCloneable( mxNode, UNO_QUERY_THROW );
     Reference< XAnimationNode > xNode( xCloneable->createClone(), UNO_QUERY_THROW );
-    CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xNode ) );
+    CustomAnimationEffectPtr pEffect = std::make_shared<CustomAnimationEffect>( xNode );
     pEffect->setEffectSequence( getEffectSequence() );
     return pEffect;
 }
@@ -1704,7 +1704,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
             }
 
             // now create effect from preset
-            pEffect.reset( new CustomAnimationEffect( xNode ) );
+            pEffect = std::make_shared<CustomAnimationEffect>( xNode );
             pEffect->setEffectSequence( this );
             pEffect->setTarget( rTarget );
             pEffect->setTargetSubItem( nSubItem );
@@ -1742,7 +1742,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
         if( rTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             nSubItem = ShapeAnimationSubType::ONLY_TEXT;
 
-        pEffect.reset( new CustomAnimationEffect( xEffectContainer ) );
+        pEffect = std::make_shared<CustomAnimationEffect>( xEffectContainer );
         pEffect->setEffectSequence( this );
         pEffect->setTarget( rTarget );
         pEffect->setTargetSubItem( nSubItem );
@@ -2418,7 +2418,7 @@ void EffectSequenceHelper::updateTextGroups()
         CustomAnimationTextGroupPtr pGroup = findGroup( nGroupId );
         if( !pGroup.get() )
         {
-            pGroup.reset( new CustomAnimationTextGroup( pEffect->getTargetShape(), nGroupId ) );
+            pGroup = std::make_shared<CustomAnimationTextGroup>( pEffect->getTargetShape(), nGroupId );
             maGroupMap[nGroupId] = pGroup;
         }
 
@@ -2461,7 +2461,7 @@ EffectSequenceHelper::createTextGroup(const CustomAnimationEffectPtr& pEffect,
 
     Reference< XShape > xTarget( pEffect->getTargetShape() );
 
-    CustomAnimationTextGroupPtr pTextGroup( new CustomAnimationTextGroup( xTarget, nGroupId ) );
+    CustomAnimationTextGroupPtr pTextGroup = std::make_shared<CustomAnimationTextGroup>( xTarget, nGroupId );
     maGroupMap[nGroupId] = pTextGroup;
 
     bool bUsed = false;
@@ -2940,7 +2940,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
             case AnimationNodeType::PAR:
             case AnimationNodeType::ITERATE:
                 {
-                    CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xChildNode ) );
+                    CustomAnimationEffectPtr pEffect = std::make_shared<CustomAnimationEffect>( xChildNode );
 
                     if( pEffect->mnNodeType != -1 )
                     {
@@ -3127,7 +3127,7 @@ void MainSequence::createMainSequence()
             else if( nNodeType == EffectNodeType::INTERACTIVE_SEQUENCE )
             {
                 Reference< XTimeContainer > xInteractiveRoot( xChildNode, UNO_QUERY_THROW );
-                InteractiveSequencePtr pIS( new InteractiveSequence( xInteractiveRoot, this ) );
+                InteractiveSequencePtr pIS = std::make_shared<InteractiveSequence>( xInteractiveRoot, this );
                 pIS->addListener( this );
                 maInteractiveSequenceVector.push_back( pIS );
             }
@@ -3204,7 +3204,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
     xParent->appendChild( xISRoot );
 
-    pIS.reset( new InteractiveSequence( xISRoot, this) );
+    pIS = std::make_shared<InteractiveSequence>( xISRoot, this);
     pIS->setTriggerShape( xShape );
     pIS->addListener( this );
     maInteractiveSequenceVector.push_back( pIS );

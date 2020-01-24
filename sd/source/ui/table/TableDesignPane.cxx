@@ -496,7 +496,7 @@ static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, Ce
         {
             Reference< XStyle > xStyle( xTableStyle->getByIndex( nStyle ), UNO_QUERY );
             if( xStyle.is() )
-                rVector[nStyle].reset( new CellInfo( xStyle ) );
+                rVector[nStyle] = std::make_shared<CellInfo>( xStyle );
         }
     }
     catch(Exception&)

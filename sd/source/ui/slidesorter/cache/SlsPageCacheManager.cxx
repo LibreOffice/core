@@ -205,7 +205,7 @@ std::shared_ptr<BitmapCache> PageCacheManager::GetCache (
 
     // Create the cache when no suitable one does exist.
     if (pResult == nullptr)
-        pResult.reset(new BitmapCache());
+        pResult = std::make_shared<BitmapCache>();
 
     // The cache may be newly created and thus empty or is old and may
     // contain previews that are not up-to-date.  Recycle previews from

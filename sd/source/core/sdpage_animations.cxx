@@ -38,7 +38,7 @@ using ::com::sun::star::drawing::XShape;
 std::shared_ptr< sd::MainSequence >  const & SdPage::getMainSequence()
 {
     if (nullptr == mpMainSequence)
-        mpMainSequence.reset( new sd::MainSequence( getAnimationNode() ) );
+        mpMainSequence = std::make_shared<sd::MainSequence>( getAnimationNode() );
 
     return mpMainSequence;
 }

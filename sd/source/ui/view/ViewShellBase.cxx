@@ -239,7 +239,7 @@ ViewShellBase::ViewShellBase (
             GetViewFrame()->GetObjectShell());
     if (mpDocShell != nullptr)
         mpDocument = mpDocShell->GetDoc();
-    mpImpl->mpViewShellManager.reset(new ViewShellManager(*this));
+    mpImpl->mpViewShellManager = std::make_shared<ViewShellManager>(*this);
 
     SetWindow(mpImpl->mpViewWindow.get());
 
@@ -297,9 +297,9 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     mpImpl->LateInit();
     InitializeFramework();
 
-    mpImpl->mpEventMultiplexer.reset(new tools::EventMultiplexer (*this));
+    mpImpl->mpEventMultiplexer = std::make_shared<tools::EventMultiplexer>(*this);
 
-    mpImpl->mpFormShellManager.reset(new FormShellManager(*this));
+    mpImpl->mpFormShellManager = std::make_shared<FormShellManager>(*this);
 
     mpImpl->mpToolBarManager = ToolBarManager::Create(
         *this,

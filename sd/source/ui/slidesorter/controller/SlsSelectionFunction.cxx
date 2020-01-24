@@ -299,7 +299,7 @@ SelectionFunction::SelectionFunction (
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
       mnShiftKeySelectionAnchor(-1),
-      mpModeHandler(new NormalModeHandler(rSlideSorter, *this))
+      mpModeHandler(std::make_shared<NormalModeHandler>(rSlideSorter, *this))
 {
 }
 
