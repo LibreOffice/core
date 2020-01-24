@@ -45,6 +45,30 @@
       "revId": "1ff79cfaf746aa65d9fa19e82f14da8d8a2d9209",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cd7a6a6_be7a3d38",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-01-24T16:18:52Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "be87bb52_fac6ae90",
+      "range": {
+        "startLine": 902,
+        "startChar": 20,
+        "endLine": 902,
+        "endChar": 31
+      },
+      "revId": "1ff79cfaf746aa65d9fa19e82f14da8d8a2d9209",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
