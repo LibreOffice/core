@@ -294,7 +294,7 @@ public:
     }
     const ISegmentProgressBarRef& wrapProgress( const ISegmentProgressBarRef &xProgress )
     {
-        aSegments.push_back( ISegmentProgressBarRef( new ProgressWrapper( xProgress ) ) );
+        aSegments.push_back( std::make_shared<ProgressWrapper>( xProgress ) );
         return aSegments.back();
     }
     virtual void Invoke() override
@@ -460,7 +460,7 @@ void WorkbookFragment::finalizeImport()
         Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
         if( xInStrm.is() )
         {
-            StorageRef xPrjStrg( new ::oox::ole::OleStorage( getBaseFilter().getComponentContext(), xInStrm, false ) );
+            StorageRef xPrjStrg = std::make_shared<::oox::ole::OleStorage>( getBaseFilter().getComponentContext(), xInStrm, false );
             setVbaProjectStorage( xPrjStrg );
             getBaseFilter().getVbaProject().readVbaModules( *xPrjStrg );
         }

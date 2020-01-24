@@ -957,7 +957,7 @@ XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
 {
     if( pResults )
     {
-        mxMatrix.reset( new XclExpCachedMatrix( *pResults ) );
+        mxMatrix = std::make_shared<XclExpCachedMatrix>( *pResults );
         AddRecSize( mxMatrix->GetSize() );
     }
 }
@@ -1442,7 +1442,7 @@ XclExpExternSheetBase::XclExpExternSheetBase( const XclExpRoot& rRoot, sal_uInt1
 XclExpExtNameBuffer& XclExpExternSheetBase::GetExtNameBuffer()
 {
     if( !mxExtNameBfr )
-        mxExtNameBfr.reset( new XclExpExtNameBuffer( GetRoot() ) );
+        mxExtNameBfr = std::make_shared<XclExpExtNameBuffer>( GetRoot() );
     return *mxExtNameBfr;
 }
 
@@ -1628,7 +1628,7 @@ sal_uInt16 XclExpSupbook::InsertTabName( const OUString& rTabName, ScExternalRef
 {
     SAL_WARN_IF( meType != XclSupbookType::Extern, "sc.filter", "Don't insert sheet names here" );
     sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
-    XclExpXctRef xXct( new XclExpXct( GetRoot(), rTabName, nSBTab, xCacheTable ) );
+    XclExpXctRef xXct = std::make_shared<XclExpXct>( GetRoot(), rTabName, nSBTab, xCacheTable );
     AddRecSize( xXct->GetTabName().GetSize() );
     maXctList.AppendRecord( xXct );
     return nSBTab;
@@ -1782,7 +1782,7 @@ XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
         maSBIndexVec.resize( nCount );
 
         // self-ref SUPBOOK first of list
-        XclExpSupbookRef xSupbook( new XclExpSupbook( GetRoot(), ::std::max( nXclCnt, nCodeCnt ) ) );
+        XclExpSupbookRef xSupbook = std::make_shared<XclExpSupbook>( GetRoot(), ::std::max( nXclCnt, nCodeCnt ) );
         mnOwnDocSB = Append( xSupbook );
         for( sal_uInt16 nXclTab = 0; nXclTab < nXclCnt; ++nXclTab )
             maSBIndexVec[ nXclTab ].Set( mnOwnDocSB, nXclTab );
@@ -1875,7 +1875,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
     sal_uInt16 nSupbookId;
     if (!GetSupbookUrl(xSupbook, nSupbookId, *pUrl))
     {
-        xSupbook.reset(new XclExpSupbook(GetRoot(), *pUrl));
+        xSupbook = std::make_shared<XclExpSupbook>(GetRoot(), *pUrl);
         nSupbookId = Append(xSupbook);
     }
 
@@ -1907,7 +1907,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     sal_uInt16 nSupbookId;
     if (!GetSupbookUrl(xSupbook, nSupbookId, *pUrl))
     {
-        xSupbook.reset(new XclExpSupbook(GetRoot(), *pUrl));
+        xSupbook = std::make_shared<XclExpSupbook>(GetRoot(), *pUrl);
         nSupbookId = Append(xSupbook);
     }
 
@@ -1967,7 +1967,7 @@ bool XclExpSupbookBuffer::InsertAddIn(
     XclExpSupbookRef xSupbook;
     if( mnAddInSB == SAL_MAX_UINT16 )
     {
-        xSupbook.reset( new XclExpSupbook( GetRoot() ) );
+        xSupbook = std::make_shared<XclExpSupbook>( GetRoot() );
         mnAddInSB = Append( xSupbook );
     }
     else
@@ -1985,7 +1985,7 @@ bool XclExpSupbookBuffer::InsertEuroTool(
     OUString aUrl( "\001\010EUROTOOL.XLA" );
     if( !GetSupbookUrl( xSupbook, rnSupbook, aUrl ) )
     {
-        xSupbook.reset( new XclExpSupbook( GetRoot(), aUrl, XclSupbookType::Eurotool ) );
+        xSupbook = std::make_shared<XclExpSupbook>( GetRoot(), aUrl, XclSupbookType::Eurotool );
         rnSupbook = Append( xSupbook );
     }
     rnExtName = xSupbook->InsertEuroTool( rName );
@@ -1999,7 +1999,7 @@ bool XclExpSupbookBuffer::InsertDde(
     XclExpSupbookRef xSupbook;
     if( !GetSupbookDde( xSupbook, rnSupbook, rApplic, rTopic ) )
     {
-        xSupbook.reset( new XclExpSupbook( GetRoot(), rApplic, rTopic ) );
+        xSupbook = std::make_shared<XclExpSupbook>( GetRoot(), rApplic, rTopic );
         rnSupbook = Append( xSupbook );
     }
     rnExtName = xSupbook->InsertDde( rItem );
@@ -2013,7 +2013,7 @@ bool XclExpSupbookBuffer::InsertExtName(
     XclExpSupbookRef xSupbook;
     if (!GetSupbookUrl(xSupbook, rnSupbook, rUrl))
     {
-        xSupbook.reset( new XclExpSupbook(GetRoot(), rUrl) );
+        xSupbook = std::make_shared<XclExpSupbook>(GetRoot(), rUrl);
         rnSupbook = Append(xSupbook);
     }
     rnExtName = xSupbook->InsertExtName(rName, rArray);
@@ -2033,7 +2033,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabN
     sal_uInt16 nSupbookId;
     if (!GetSupbookUrl(xSupbook, nSupbookId, *pUrl))
     {
-        xSupbook.reset(new XclExpSupbook(GetRoot(), *pUrl));
+        xSupbook = std::make_shared<XclExpSupbook>(GetRoot(), *pUrl);
         nSupbookId = Append(xSupbook);
     }
     aXti.mnSupbook = nSupbookId;
@@ -2306,9 +2306,9 @@ void XclExpLinkManagerImpl5::CreateInternal()
             {
                 XclExpExtSheetRef xRec;
                 if( nScTab == GetCurrScTab() )
-                    xRec.reset( new XclExpExternSheet( GetRoot(), EXC_EXTSH_OWNTAB ) );
+                    xRec = std::make_shared<XclExpExternSheet>( GetRoot(), EXC_EXTSH_OWNTAB );
                 else
-                    xRec.reset( new XclExpExternSheet( GetRoot(), rTabInfo.GetScTabName( nScTab ) ) );
+                    xRec = std::make_shared<XclExpExternSheet>( GetRoot(), rTabInfo.GetScTabName( nScTab ) );
                 maIntTabMap[ nScTab ] = AppendInternal( xRec );
             }
         }
@@ -2350,7 +2350,7 @@ XclExpLinkManagerImpl5::XclExpExtSheetRef XclExpLinkManagerImpl5::FindInternal(
     XclExpCodeMap::const_iterator aIt = maCodeMap.find( cCode );
     if( aIt == maCodeMap.end() )
     {
-        xExtSheet.reset( new XclExpExternSheet( GetRoot(), cCode ) );
+        xExtSheet = std::make_shared<XclExpExternSheet>( GetRoot(), cCode );
         rnExtSheet = maCodeMap[ cCode ] = AppendInternal( xExtSheet );
     }
     else
@@ -2532,10 +2532,10 @@ XclExpLinkManager::XclExpLinkManager( const XclExpRoot& rRoot ) :
     switch( GetBiff() )
     {
         case EXC_BIFF5:
-            mxImpl.reset( new XclExpLinkManagerImpl5( rRoot ) );
+            mxImpl = std::make_shared<XclExpLinkManagerImpl5>( rRoot );
         break;
         case EXC_BIFF8:
-            mxImpl.reset( new XclExpLinkManagerImpl8( rRoot ) );
+            mxImpl = std::make_shared<XclExpLinkManagerImpl8>( rRoot );
         break;
         default:
             DBG_ERROR_BIFF();

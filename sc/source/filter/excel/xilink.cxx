@@ -566,7 +566,7 @@ XclImpSupbookTab::XclImpSupbookTab( const OUString& rTabName ) :
 
 void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos )
 {
-    XclImpCrnRef crnRef( new XclImpCrn(rStrm, rXclPos) );
+    XclImpCrnRef crnRef = std::make_shared<XclImpCrn>(rStrm, rXclPos);
     maCrnList.push_back( crnRef );
 }
 

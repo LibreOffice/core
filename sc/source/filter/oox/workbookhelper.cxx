@@ -558,7 +558,7 @@ void WorkbookGlobals::initialize()
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
     mxViewSettings.reset( new ViewSettings( *this ) );
     mxWorksheets.reset( new WorksheetBuffer( *this ) );
-    mxTheme.reset( new ThemeBuffer( *this ) );
+    mxTheme = std::make_shared<ThemeBuffer>( *this );
     mxStyles.reset( new StylesBuffer( *this ) );
     mxSharedStrings.reset( new SharedStringsBuffer( *this ) );
     mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
@@ -640,7 +640,7 @@ WorkbookHelper::~WorkbookHelper()
 
 /*static*/ WorkbookGlobalsRef WorkbookHelper::constructGlobals( ExcelFilter& rFilter )
 {
-    WorkbookGlobalsRef xBookGlob( new WorkbookGlobals( rFilter ) );
+    WorkbookGlobalsRef xBookGlob = std::make_shared<WorkbookGlobals>( rFilter );
     if( !xBookGlob->isValid() )
         xBookGlob.reset();
     return xBookGlob;

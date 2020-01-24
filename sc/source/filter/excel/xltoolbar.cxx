@@ -221,13 +221,13 @@ ScTBC::Read(SvStream &rS)
     sal_uInt8 tct = tbch.getTct();
     if (  ( tcid != 0x0001 && tcid != 0x06CC && tcid != 0x03D8 && tcid != 0x03EC && tcid != 0x1051 ) && ( ( tct > 0 && tct < 0x0B ) || ( ( tct > 0x0B && tct < 0x10 ) || tct == 0x15 ) ) )
     {
-        tbcCmd.reset( new TBCCmd );
+        tbcCmd = std::make_shared<TBCCmd>();
         if ( !  tbcCmd->Read( rS ) )
             return false;
     }
     if ( tct != 0x16 )
     {
-        tbcd.reset( new TBCData( tbch ) );
+        tbcd = std::make_shared<TBCData>( tbch );
         if ( !tbcd->Read( rS ) )
             return false;
     }

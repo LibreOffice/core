@@ -64,7 +64,7 @@ void RichStringPortion::setText( const OUString& rText )
 
 FontRef const & RichStringPortion::createFont()
 {
-    mxFont.reset( new Font( *this, false ) );
+    mxFont = std::make_shared<Font>( *this, false );
     return mxFont;
 }
 
@@ -417,14 +417,14 @@ std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE,
 
 RichStringPortionRef RichString::createPortion()
 {
-    RichStringPortionRef xPortion( new RichStringPortion( *this ) );
+    RichStringPortionRef xPortion = std::make_shared<RichStringPortion>( *this );
     maTextPortions.push_back( xPortion );
     return xPortion;
 }
 
 RichStringPhoneticRef RichString::createPhonetic()
 {
-    RichStringPhoneticRef xPhonetic( new RichStringPhonetic( *this ) );
+    RichStringPhoneticRef xPhonetic = std::make_shared<RichStringPhonetic>( *this );
     maPhonPortions.push_back( xPhonetic );
     return xPhonetic;
 }

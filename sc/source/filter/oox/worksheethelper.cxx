@@ -1370,7 +1370,7 @@ ScDocument& WorksheetHelper::getScDocument()
 /*static*/ WorksheetGlobalsRef WorksheetHelper::constructGlobals( const WorkbookHelper& rHelper,
         const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, SCTAB nSheet )
 {
-    WorksheetGlobalsRef xSheetGlob( new WorksheetGlobals( rHelper, rxProgressBar, eSheetType, nSheet ) );
+    WorksheetGlobalsRef xSheetGlob = std::make_shared<WorksheetGlobals>( rHelper, rxProgressBar, eSheetType, nSheet );
     if( !xSheetGlob->isValidSheet() )
         xSheetGlob.reset();
     return xSheetGlob;

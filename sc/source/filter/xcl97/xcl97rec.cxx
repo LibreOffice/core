@@ -778,7 +778,7 @@ static sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
 }
 
 XclTxo::XclTxo( const OUString& rString, sal_uInt16 nFontIx ) :
-    mpString( new XclExpString( rString ) ),
+    mpString( std::make_shared<XclExpString>( rString ) ),
     mnRotation( EXC_OBJ_ORIENT_NONE ),
     mnHorAlign( EXC_OBJ_HOR_LEFT ),
     mnVerAlign( EXC_OBJ_VER_TOP )
@@ -1744,7 +1744,7 @@ void XclExpFileEncryption::WriteBody( XclExpStream& rStrm )
     sal_uInt8 pnDocId[16];
     sal_uInt8 pnSalt[16];
     sal_uInt8 pnSaltHash[16];
-    XclExpEncrypterRef xEnc( new XclExpBiff8Encrypter(mrRoot) );
+    XclExpEncrypterRef xEnc = std::make_shared<XclExpBiff8Encrypter>(mrRoot);
     xEnc->GetDocId(pnDocId);
     xEnc->GetSalt(pnSalt);
     xEnc->GetSaltDigest(pnSaltHash);

@@ -195,15 +195,15 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStr
         nObjType = rStrm.ReaduInt16();
         switch( nObjType )
         {
-            case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
-            case EXC_OBJTYPE_LINE:          xDrawObj.reset( new XclImpLineObj( rRoot ) );           break;
-            case EXC_OBJTYPE_RECTANGLE:     xDrawObj.reset( new XclImpRectObj( rRoot ) );           break;
-            case EXC_OBJTYPE_OVAL:          xDrawObj.reset( new XclImpOvalObj( rRoot ) );           break;
-            case EXC_OBJTYPE_ARC:           xDrawObj.reset( new XclImpArcObj( rRoot ) );            break;
-            case EXC_OBJTYPE_CHART:         xDrawObj.reset( new XclImpChartObj( rRoot ) );          break;
-            case EXC_OBJTYPE_TEXT:          xDrawObj.reset( new XclImpTextObj( rRoot ) );           break;
-            case EXC_OBJTYPE_BUTTON:        xDrawObj.reset( new XclImpButtonObj( rRoot ) );         break;
-            case EXC_OBJTYPE_PICTURE:       xDrawObj.reset( new XclImpPictureObj( rRoot ) );        break;
+            case EXC_OBJTYPE_GROUP:         xDrawObj= std::make_shared<XclImpGroupObj>( rRoot );          break;
+            case EXC_OBJTYPE_LINE:          xDrawObj= std::make_shared<XclImpLineObj>( rRoot );           break;
+            case EXC_OBJTYPE_RECTANGLE:     xDrawObj= std::make_shared<XclImpRectObj>( rRoot );           break;
+            case EXC_OBJTYPE_OVAL:          xDrawObj= std::make_shared<XclImpOvalObj>( rRoot );           break;
+            case EXC_OBJTYPE_ARC:           xDrawObj= std::make_shared<XclImpArcObj>( rRoot );            break;
+            case EXC_OBJTYPE_CHART:         xDrawObj= std::make_shared<XclImpChartObj>( rRoot );          break;
+            case EXC_OBJTYPE_TEXT:          xDrawObj= std::make_shared<XclImpTextObj>( rRoot );           break;
+            case EXC_OBJTYPE_BUTTON:        xDrawObj= std::make_shared<XclImpButtonObj>( rRoot );         break;
+            case EXC_OBJTYPE_PICTURE:       xDrawObj= std::make_shared<XclImpPictureObj>( rRoot );        break;
             default:
                 SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj3 - unknown object type 0x" << std::hex << nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
@@ -212,7 +212,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStr
 
     if (!xDrawObj)
     {
-        xDrawObj.reset(new XclImpPhObj(rRoot));
+        xDrawObj = std::make_shared<XclImpPhObj>(rRoot);
     }
 
     xDrawObj->mnTab = rRoot.GetCurrScTab();
@@ -231,16 +231,16 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStr
         nObjType = rStrm.ReaduInt16();
         switch( nObjType )
         {
-            case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
-            case EXC_OBJTYPE_LINE:          xDrawObj.reset( new XclImpLineObj( rRoot ) );           break;
-            case EXC_OBJTYPE_RECTANGLE:     xDrawObj.reset( new XclImpRectObj( rRoot ) );           break;
-            case EXC_OBJTYPE_OVAL:          xDrawObj.reset( new XclImpOvalObj( rRoot ) );           break;
-            case EXC_OBJTYPE_ARC:           xDrawObj.reset( new XclImpArcObj( rRoot ) );            break;
-            case EXC_OBJTYPE_CHART:         xDrawObj.reset( new XclImpChartObj( rRoot ) );          break;
-            case EXC_OBJTYPE_TEXT:          xDrawObj.reset( new XclImpTextObj( rRoot ) );           break;
-            case EXC_OBJTYPE_BUTTON:        xDrawObj.reset( new XclImpButtonObj( rRoot ) );         break;
-            case EXC_OBJTYPE_PICTURE:       xDrawObj.reset( new XclImpPictureObj( rRoot ) );        break;
-            case EXC_OBJTYPE_POLYGON:       xDrawObj.reset( new XclImpPolygonObj( rRoot ) );        break;
+            case EXC_OBJTYPE_GROUP:         xDrawObj = std::make_shared<XclImpGroupObj>( rRoot );          break;
+            case EXC_OBJTYPE_LINE:          xDrawObj = std::make_shared<XclImpLineObj>( rRoot );           break;
+            case EXC_OBJTYPE_RECTANGLE:     xDrawObj = std::make_shared<XclImpRectObj>( rRoot );           break;
+            case EXC_OBJTYPE_OVAL:          xDrawObj = std::make_shared<XclImpOvalObj>( rRoot );           break;
+            case EXC_OBJTYPE_ARC:           xDrawObj = std::make_shared<XclImpArcObj>( rRoot );            break;
+            case EXC_OBJTYPE_CHART:         xDrawObj = std::make_shared<XclImpChartObj>( rRoot );          break;
+            case EXC_OBJTYPE_TEXT:          xDrawObj = std::make_shared<XclImpTextObj>( rRoot );           break;
+            case EXC_OBJTYPE_BUTTON:        xDrawObj = std::make_shared<XclImpButtonObj>( rRoot );         break;
+            case EXC_OBJTYPE_PICTURE:       xDrawObj = std::make_shared<XclImpPictureObj>( rRoot );        break;
+            case EXC_OBJTYPE_POLYGON:       xDrawObj = std::make_shared<XclImpPolygonObj>( rRoot );        break;
             default:
                 SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj4 - unknown object type 0x" << std::hex << nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
@@ -249,7 +249,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStr
 
     if (!xDrawObj)
     {
-        xDrawObj.reset(new XclImpPhObj(rRoot));
+        xDrawObj = std::make_shared<XclImpPhObj>(rRoot);
     }
 
     xDrawObj->mnTab = rRoot.GetCurrScTab();
@@ -268,30 +268,30 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStr
         nObjType = rStrm.ReaduInt16();
         switch( nObjType )
         {
-            case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
-            case EXC_OBJTYPE_LINE:          xDrawObj.reset( new XclImpLineObj( rRoot ) );           break;
-            case EXC_OBJTYPE_RECTANGLE:     xDrawObj.reset( new XclImpRectObj( rRoot ) );           break;
-            case EXC_OBJTYPE_OVAL:          xDrawObj.reset( new XclImpOvalObj( rRoot ) );           break;
-            case EXC_OBJTYPE_ARC:           xDrawObj.reset( new XclImpArcObj( rRoot ) );            break;
-            case EXC_OBJTYPE_CHART:         xDrawObj.reset( new XclImpChartObj( rRoot ) );          break;
-            case EXC_OBJTYPE_TEXT:          xDrawObj.reset( new XclImpTextObj( rRoot ) );           break;
-            case EXC_OBJTYPE_BUTTON:        xDrawObj.reset( new XclImpButtonObj( rRoot ) );         break;
-            case EXC_OBJTYPE_PICTURE:       xDrawObj.reset( new XclImpPictureObj( rRoot ) );        break;
-            case EXC_OBJTYPE_POLYGON:       xDrawObj.reset( new XclImpPolygonObj( rRoot ) );        break;
-            case EXC_OBJTYPE_CHECKBOX:      xDrawObj.reset( new XclImpCheckBoxObj( rRoot ) );       break;
-            case EXC_OBJTYPE_OPTIONBUTTON:  xDrawObj.reset( new XclImpOptionButtonObj( rRoot ) );   break;
-            case EXC_OBJTYPE_EDIT:          xDrawObj.reset( new XclImpEditObj( rRoot ) );           break;
-            case EXC_OBJTYPE_LABEL:         xDrawObj.reset( new XclImpLabelObj( rRoot ) );          break;
-            case EXC_OBJTYPE_DIALOG:        xDrawObj.reset( new XclImpDialogObj( rRoot ) );         break;
-            case EXC_OBJTYPE_SPIN:          xDrawObj.reset( new XclImpSpinButtonObj( rRoot ) );     break;
-            case EXC_OBJTYPE_SCROLLBAR:     xDrawObj.reset( new XclImpScrollBarObj( rRoot ) );      break;
-            case EXC_OBJTYPE_LISTBOX:       xDrawObj.reset( new XclImpListBoxObj( rRoot ) );        break;
-            case EXC_OBJTYPE_GROUPBOX:      xDrawObj.reset( new XclImpGroupBoxObj( rRoot ) );       break;
-            case EXC_OBJTYPE_DROPDOWN:      xDrawObj.reset( new XclImpDropDownObj( rRoot ) );       break;
+            case EXC_OBJTYPE_GROUP:         xDrawObj = std::make_shared<XclImpGroupObj>( rRoot );          break;
+            case EXC_OBJTYPE_LINE:          xDrawObj = std::make_shared<XclImpLineObj>( rRoot );           break;
+            case EXC_OBJTYPE_RECTANGLE:     xDrawObj = std::make_shared<XclImpRectObj>( rRoot );           break;
+            case EXC_OBJTYPE_OVAL:          xDrawObj = std::make_shared<XclImpOvalObj>( rRoot );           break;
+            case EXC_OBJTYPE_ARC:           xDrawObj = std::make_shared<XclImpArcObj>( rRoot );            break;
+            case EXC_OBJTYPE_CHART:         xDrawObj = std::make_shared<XclImpChartObj>( rRoot );          break;
+            case EXC_OBJTYPE_TEXT:          xDrawObj = std::make_shared<XclImpTextObj>( rRoot );           break;
+            case EXC_OBJTYPE_BUTTON:        xDrawObj = std::make_shared<XclImpButtonObj>( rRoot );         break;
+            case EXC_OBJTYPE_PICTURE:       xDrawObj = std::make_shared<XclImpPictureObj>( rRoot );        break;
+            case EXC_OBJTYPE_POLYGON:       xDrawObj = std::make_shared<XclImpPolygonObj>( rRoot );        break;
+            case EXC_OBJTYPE_CHECKBOX:      xDrawObj = std::make_shared<XclImpCheckBoxObj>( rRoot );       break;
+            case EXC_OBJTYPE_OPTIONBUTTON:  xDrawObj = std::make_shared<XclImpOptionButtonObj>( rRoot );   break;
+            case EXC_OBJTYPE_EDIT:          xDrawObj = std::make_shared<XclImpEditObj>( rRoot );           break;
+            case EXC_OBJTYPE_LABEL:         xDrawObj = std::make_shared<XclImpLabelObj>( rRoot );          break;
+            case EXC_OBJTYPE_DIALOG:        xDrawObj = std::make_shared<XclImpDialogObj>( rRoot );         break;
+            case EXC_OBJTYPE_SPIN:          xDrawObj = std::make_shared<XclImpSpinButtonObj>( rRoot );     break;
+            case EXC_OBJTYPE_SCROLLBAR:     xDrawObj = std::make_shared<XclImpScrollBarObj>( rRoot );      break;
+            case EXC_OBJTYPE_LISTBOX:       xDrawObj = std::make_shared<XclImpListBoxObj>( rRoot );        break;
+            case EXC_OBJTYPE_GROUPBOX:      xDrawObj = std::make_shared<XclImpGroupBoxObj>( rRoot );       break;
+            case EXC_OBJTYPE_DROPDOWN:      xDrawObj = std::make_shared<XclImpDropDownObj>( rRoot );       break;
             default:
                 SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj5 - unknown object type 0x" << std::hex << nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
-                xDrawObj.reset( new XclImpPhObj( rRoot ) );
+                xDrawObj = std::make_shared<XclImpPhObj>( rRoot );
         }
     }
 
@@ -323,7 +323,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
                 // in BIFF8, all simple objects support text
                 case EXC_OBJTYPE_LINE:
                 case EXC_OBJTYPE_ARC:
-                    xDrawObj.reset( new XclImpTextObj( rRoot ) );
+                    xDrawObj = std::make_shared<XclImpTextObj>( rRoot );
                     // lines and arcs may be 2-dimensional
                     xDrawObj->SetAreaObj( false );
                 break;
@@ -334,24 +334,24 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
                 case EXC_OBJTYPE_POLYGON:
                 case EXC_OBJTYPE_DRAWING:
                 case EXC_OBJTYPE_TEXT:
-                    xDrawObj.reset( new XclImpTextObj( rRoot ) );
+                    xDrawObj = std::make_shared<XclImpTextObj>( rRoot );
                 break;
 
-                case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
-                case EXC_OBJTYPE_CHART:         xDrawObj.reset( new XclImpChartObj( rRoot ) );          break;
-                case EXC_OBJTYPE_BUTTON:        xDrawObj.reset( new XclImpButtonObj( rRoot ) );         break;
-                case EXC_OBJTYPE_PICTURE:       xDrawObj.reset( new XclImpPictureObj( rRoot ) );        break;
-                case EXC_OBJTYPE_CHECKBOX:      xDrawObj.reset( new XclImpCheckBoxObj( rRoot ) );       break;
-                case EXC_OBJTYPE_OPTIONBUTTON:  xDrawObj.reset( new XclImpOptionButtonObj( rRoot ) );   break;
-                case EXC_OBJTYPE_EDIT:          xDrawObj.reset( new XclImpEditObj( rRoot ) );           break;
-                case EXC_OBJTYPE_LABEL:         xDrawObj.reset( new XclImpLabelObj( rRoot ) );          break;
-                case EXC_OBJTYPE_DIALOG:        xDrawObj.reset( new XclImpDialogObj( rRoot ) );         break;
-                case EXC_OBJTYPE_SPIN:          xDrawObj.reset( new XclImpSpinButtonObj( rRoot ) );     break;
-                case EXC_OBJTYPE_SCROLLBAR:     xDrawObj.reset( new XclImpScrollBarObj( rRoot ) );      break;
-                case EXC_OBJTYPE_LISTBOX:       xDrawObj.reset( new XclImpListBoxObj( rRoot ) );        break;
-                case EXC_OBJTYPE_GROUPBOX:      xDrawObj.reset( new XclImpGroupBoxObj( rRoot ) );       break;
-                case EXC_OBJTYPE_DROPDOWN:      xDrawObj.reset( new XclImpDropDownObj( rRoot ) );       break;
-                case EXC_OBJTYPE_NOTE:          xDrawObj.reset( new XclImpNoteObj( rRoot ) );           break;
+                case EXC_OBJTYPE_GROUP:         xDrawObj = std::make_shared<XclImpGroupObj>( rRoot );          break;
+                case EXC_OBJTYPE_CHART:         xDrawObj = std::make_shared<XclImpChartObj>( rRoot );          break;
+                case EXC_OBJTYPE_BUTTON:        xDrawObj = std::make_shared<XclImpButtonObj>( rRoot );         break;
+                case EXC_OBJTYPE_PICTURE:       xDrawObj = std::make_shared<XclImpPictureObj>( rRoot );        break;
+                case EXC_OBJTYPE_CHECKBOX:      xDrawObj = std::make_shared<XclImpCheckBoxObj>( rRoot );       break;
+                case EXC_OBJTYPE_OPTIONBUTTON:  xDrawObj = std::make_shared<XclImpOptionButtonObj>( rRoot );   break;
+                case EXC_OBJTYPE_EDIT:          xDrawObj = std::make_shared<XclImpEditObj>( rRoot );           break;
+                case EXC_OBJTYPE_LABEL:         xDrawObj = std::make_shared<XclImpLabelObj>( rRoot );          break;
+                case EXC_OBJTYPE_DIALOG:        xDrawObj = std::make_shared<XclImpDialogObj>( rRoot );         break;
+                case EXC_OBJTYPE_SPIN:          xDrawObj = std::make_shared<XclImpSpinButtonObj>( rRoot );     break;
+                case EXC_OBJTYPE_SCROLLBAR:     xDrawObj = std::make_shared<XclImpScrollBarObj>( rRoot );      break;
+                case EXC_OBJTYPE_LISTBOX:       xDrawObj = std::make_shared<XclImpListBoxObj>( rRoot );        break;
+                case EXC_OBJTYPE_GROUPBOX:      xDrawObj = std::make_shared<XclImpGroupBoxObj>( rRoot );       break;
+                case EXC_OBJTYPE_DROPDOWN:      xDrawObj = std::make_shared<XclImpDropDownObj>( rRoot );       break;
+                case EXC_OBJTYPE_NOTE:          xDrawObj = std::make_shared<XclImpNoteObj>( rRoot );           break;
 
                 default:
                     SAL_WARN("sc.filter",  "XclImpDrawObjBase::ReadObj8 - unknown object type 0x" << std::hex << nObjType );
@@ -363,7 +363,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
     if (!xDrawObj) //ensure placeholder for unknown or broken records
     {
         SAL_WARN( "sc.filter", "XclImpDrawObjBase::ReadObj8 import failed, substituting placeholder");
-        xDrawObj.reset( new XclImpPhObj( rRoot ) );
+        xDrawObj = std::make_shared<XclImpPhObj>( rRoot );
     }
 
     xDrawObj->mnTab = rRoot.GetCurrScTab();
@@ -1420,7 +1420,7 @@ void XclImpObjTextData::ReadByteString( XclImpStream& rStrm )
     mxString.reset();
     if( maData.mnTextLen > 0 )
     {
-        mxString.reset( new XclImpString( rStrm.ReadRawByteString( maData.mnTextLen ) ) );
+        mxString = std::make_shared<XclImpString>( rStrm.ReadRawByteString( maData.mnTextLen ) );
         // skip padding byte for word boundaries
         if( rStrm.GetRecPos() & 1 ) rStrm.Ignore( 1 );
     }
@@ -1675,7 +1675,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
     }
 
     // read chart, even if BOF record contains wrong substream identifier
-    mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
+    mxChart = std::make_shared<XclImpChart>( GetRoot(), mbOwnTab );
     mxChart->ReadChartSubStream( rStrm );
     if( mbOwnTab )
         FinalizeTabChart();
@@ -1983,7 +1983,7 @@ void XclImpControlHelper::ReadCellLinkFormula( XclImpStream& rStrm, bool bWithBo
     if ( !aScRanges.empty() )
     {
         const ScRange & rScRange = aScRanges.front();
-        mxCellLink.reset( new ScAddress( rScRange.aStart ) );
+        mxCellLink = std::make_shared<ScAddress>( rScRange.aStart );
     }
 }
 
@@ -1995,7 +1995,7 @@ void XclImpControlHelper::ReadSourceRangeFormula( XclImpStream& rStrm, bool bWit
     if ( !aScRanges.empty() )
     {
         const ScRange & rScRange = aScRanges.front();
-        mxSrcRange.reset( new ScRange( rScRange ) );
+        mxSrcRange = std::make_shared<ScRange>( rScRange );
     }
 }
 
@@ -2348,7 +2348,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
                 if ( pLeader->HasCellLink() && !pTbxObj->HasCellLink() )
                 {
                     // propagate cell link info
-                    pTbxObj->mxCellLink.reset( new ScAddress( *pLeader->mxCellLink ) );
+                    pTbxObj->mxCellLink = std::make_shared<ScAddress>( *pLeader->mxCellLink );
                     pTbxObj->ApplySheetLinkProps();
                 }
                 pTbxObj = dynamic_cast< XclImpOptionButtonObj* >( GetObjectManager().GetSheetDrawing( GetTab() ).FindDrawObj( pTbxObj->mnNextInGroup ).get() );
@@ -3341,7 +3341,7 @@ OUString XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId 
 
 void XclImpDffConverter::StartProgressBar( std::size_t nProgressSize )
 {
-    mxProgress.reset( new ScfProgressBar( GetDocShell(), STR_PROGRESS_CALCULATING ) );
+    mxProgress = std::make_shared<ScfProgressBar>( GetDocShell(), STR_PROGRESS_CALCULATING );
     mxProgress->AddSegment( nProgressSize );
     mxProgress->Activate();
 }
@@ -3354,7 +3354,7 @@ void XclImpDffConverter::Progress( std::size_t nDelta )
 
 void XclImpDffConverter::InitializeDrawing( XclImpDrawing& rDrawing, SdrModel& rSdrModel, SdrPage& rSdrPage )
 {
-    XclImpDffConvDataRef xConvData( new XclImpDffConvData( rDrawing, rSdrModel, rSdrPage ) );
+    XclImpDffConvDataRef xConvData = std::make_shared<XclImpDffConvData>( rDrawing, rSdrModel, rSdrPage );
     maDataStack.push_back( xConvData );
     SetModel( &xConvData->mrSdrModel, 1440 );
 }
@@ -4148,7 +4148,7 @@ void XclImpDrawing::ReadObj8( XclImpStream& rStrm )
 
 void XclImpDrawing::ReadTxo( XclImpStream& rStrm )
 {
-    XclImpObjTextRef xTextData( new XclImpObjTextData );
+    XclImpObjTextRef xTextData = std::make_shared<XclImpObjTextData>();
     maTextMap[ maDffStrm.Tell() ] = xTextData;
 
     // 1) read the TXO record
@@ -4162,7 +4162,7 @@ void XclImpDrawing::ReadTxo( XclImpStream& rStrm )
         bValid = (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord();
         OSL_ENSURE( bValid, "XclImpDrawing::ReadTxo - missing CONTINUE record" );
         if( bValid )
-            xTextData->mxString.reset( new XclImpString( rStrm.ReadUniString( xTextData->maData.mnTextLen ) ) );
+            xTextData->mxString = std::make_shared<XclImpString>( rStrm.ReadUniString( xTextData->maData.mnTextLen ) );
     }
 
     // 3) second CONTINUE with formatting runs
@@ -4328,7 +4328,7 @@ XclImpSheetDrawing& XclImpObjectManager::GetSheetDrawing( SCTAB nScTab )
 {
     XclImpSheetDrawingRef& rxDrawing = maSheetDrawings[ nScTab ];
     if( !rxDrawing )
-        rxDrawing.reset( new XclImpSheetDrawing( GetRoot(), nScTab ) );
+        rxDrawing = std::make_shared<XclImpSheetDrawing>( GetRoot(), nScTab );
     return *rxDrawing;
 }
 

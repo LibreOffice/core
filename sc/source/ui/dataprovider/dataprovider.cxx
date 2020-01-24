@@ -128,7 +128,7 @@ void ExternalDataSource::setDBData(const OUString& rDBName)
 {
     if (!mpDBDataManager)
     {
-        mpDBDataManager.reset(new ScDBDataManager(rDBName, mpDoc));
+        mpDBDataManager = std::make_shared<ScDBDataManager>(rDBName, mpDoc);
     }
     else
     {

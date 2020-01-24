@@ -1983,7 +1983,7 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
 NumberFormatRef NumberFormatsBuffer::createNumFmt( sal_uInt32 nNumFmtId, const OUString& rFmtCode )
 {
     NumberFormatRef xNumFmt;
-    xNumFmt.reset( new NumberFormat( *this ) );
+    xNumFmt = std::make_shared<NumberFormat>( *this );
     maNumFmts[ nNumFmtId ] = xNumFmt;
     if ( nNumFmtId > mnHighestId )
         mnHighestId = nNumFmtId;
@@ -2058,7 +2058,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         for( const BuiltinFormat* pBuiltin = (*aVIt)->mpFormats; pBuiltin && (pBuiltin->mnNumFmtId >= 0); ++pBuiltin )
         {
             NumberFormatRef& rxNumFmt = maNumFmts[ pBuiltin->mnNumFmtId ];
-            rxNumFmt.reset( new NumberFormat( *this ) );
+            rxNumFmt = std::make_shared<NumberFormat>( *this );
 
             bool bReuse = false;
             if( pBuiltin->mpcFmtCode )

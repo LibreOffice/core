@@ -1130,7 +1130,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     if ( nCategory < (MAX_FUNCCAT-1) )
     {
         if (m_aCategories.find(nCategory) == m_aCategories.end())
-            m_aCategories[nCategory].reset(new ScFunctionCategory(aCatLists[nCategory+1].get(),nCategory)); // aCatLists[0] is "all"
+            m_aCategories[nCategory] = std::make_shared<ScFunctionCategory>(aCatLists[nCategory+1].get(),nCategory); // aCatLists[0] is "all"
         return m_aCategories[nCategory].get();
     }
     return nullptr;

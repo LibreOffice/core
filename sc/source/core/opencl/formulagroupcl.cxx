@@ -2641,7 +2641,7 @@ static DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
     const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
     int nResultSize )
 {
-    return DynamicKernelArgumentRef(new DynamicKernelSoPArguments(config, ts, ft, pCodeGen, nResultSize));
+    return std::make_shared<DynamicKernelSoPArguments>(config, ts, ft, pCodeGen, nResultSize);
 }
 
 template<class Base>
@@ -2765,9 +2765,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             // Function takes numbers or strings, there are both
                             SAL_INFO("sc.opencl", "Numbers and strings");
                             mvSubArguments.push_back(
-                                DynamicKernelArgumentRef(
-                                    new DynamicKernelMixedSlidingArgument(mCalcConfig,
-                                        ts, ft->Children[i], mpCodeGen, j)));
+                                std::make_shared<DynamicKernelMixedSlidingArgument>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j));
                         }
                         else if (pDVR->GetArrays()[j].mpNumericArray &&
                             pCodeGen->takeNumeric() &&
@@ -2841,8 +2840,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         // Function takes numbers or strings, there are both
                         SAL_INFO("sc.opencl", "Numbers and strings");
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new DynamicKernelMixedArgument(mCalcConfig,
-                                    ts, ft->Children[i])));
+                            std::make_shared<DynamicKernelMixedArgument>(mCalcConfig,
+                                    ts, ft->Children[i]));
                     }
                     else if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric() &&
@@ -2853,8 +2852,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         // they are to be treated as zero
                         SAL_INFO("sc.opencl", "Numbers (no strings or strings treated as zero)");
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
-                                    ft->Children[i])));
+                            std::make_shared<VectorRef>(mCalcConfig, ts,
+                                    ft->Children[i]));
                     }
                     else if (pSVR->GetArray().mpNumericArray == nullptr &&
                         pCodeGen->takeNumeric() &&
@@ -2865,8 +2864,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         // strings, but they are to be treated as zero
                         SAL_INFO("sc.opencl", "Only strings even if want numbers but should be treated as zero");
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
-                                    ft->Children[i])));
+                            std::make_shared<VectorRef>(mCalcConfig, ts,
+                                    ft->Children[i]));
                     }
                     else if (pSVR->GetArray().mpStringArray &&
                         pCodeGen->takeString())
@@ -2874,8 +2873,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         // There are strings, and the function takes strings.
                         SAL_INFO("sc.opencl", "Strings only");
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new DynamicKernelStringArgument(mCalcConfig,
-                                    ts, ft->Children[i])));
+                            std::make_shared<DynamicKernelStringArgument>(mCalcConfig,
+                                    ts, ft->Children[i]));
                     }
                     else if (AllStringsAreNull(pSVR->GetArray().mpStringArray, pSVR->GetArrayLength()) &&
                         pSVR->GetArray().mpNumericArray == nullptr)
@@ -2884,8 +2883,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         // array of NANs
                         SAL_INFO("sc.opencl", "Only empty cells");
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
-                                    ft->Children[i])));
+                            std::make_shared<VectorRef>(mCalcConfig, ts,
+                                    ft->Children[i]));
                     }
                     else
                     {
@@ -2898,16 +2897,16 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 {
                     SAL_INFO("sc.opencl", "Constant number case");
                     mvSubArguments.push_back(
-                        DynamicKernelArgumentRef(new DynamicKernelConstantArgument(mCalcConfig, ts,
-                                ft->Children[i])));
+                        std::make_shared<DynamicKernelConstantArgument>(mCalcConfig, ts,
+                                ft->Children[i]));
                 }
                 else if (pChild->GetType() == formula::svString
                     && pCodeGen->takeString())
                 {
                     SAL_INFO("sc.opencl", "Constant string case");
                     mvSubArguments.push_back(
-                        DynamicKernelArgumentRef(new ConstStringArgument(mCalcConfig, ts,
-                                ft->Children[i])));
+                        std::make_shared<ConstStringArgument>(mCalcConfig, ts,
+                                ft->Children[i]));
                 }
                 else
                 {
@@ -3388,13 +3387,13 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 break;
             case ocPi:
                 mvSubArguments.push_back(
-                    DynamicKernelArgumentRef(new DynamicKernelPiArgument(mCalcConfig, ts,
-                            ft->Children[i])));
+                    std::make_shared<DynamicKernelPiArgument>(mCalcConfig, ts,
+                            ft->Children[i]));
                 break;
             case ocRandom:
                 mvSubArguments.push_back(
-                    DynamicKernelArgumentRef(new DynamicKernelRandomArgument(mCalcConfig, ts,
-                            ft->Children[i])));
+                    std::make_shared<DynamicKernelRandomArgument>(mCalcConfig, ts,
+                            ft->Children[i]));
                 break;
             case ocProduct:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
@@ -4115,7 +4114,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(const ScCalcConfig& config,
         // Allocate new symbols
         std::stringstream ss;
         ss << "tmp" << mCurId++;
-        DynamicKernelArgumentRef new_arg(new T(config, ss.str(), t, pCodeGen, nResultSize));
+        DynamicKernelArgumentRef new_arg = std::make_shared<T>(config, ss.str(), t, pCodeGen, nResultSize);
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         return new_arg.get();
@@ -4148,7 +4147,7 @@ std::unique_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfi
         OpCode eOp = pCur->GetOpCode();
         if (eOp != ocPush)
         {
-            FormulaTreeNodeRef pCurNode(new FormulaTreeNode(pCur));
+            FormulaTreeNodeRef pCurNode = std::make_shared<FormulaTreeNode>(pCur);
             sal_uInt8 nParamCount =  pCur->GetParamCount();
             for (sal_uInt8 i = 0; i < nParamCount; i++)
             {

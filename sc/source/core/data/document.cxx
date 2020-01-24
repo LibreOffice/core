@@ -3526,7 +3526,7 @@ std::shared_ptr<sc::FormulaGroupContext>& ScDocument::GetFormulaGroupContext()
 {
     ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     if (!mpFormulaGroupCxt)
-        mpFormulaGroupCxt.reset(new sc::FormulaGroupContext);
+        mpFormulaGroupCxt = std::make_shared<sc::FormulaGroupContext>();
 
     return mpFormulaGroupCxt;
 }

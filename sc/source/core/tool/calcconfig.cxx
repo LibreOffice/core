@@ -209,7 +209,7 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 {
-    ScCalcConfig::OpCodeSet result(new o3tl::sorted_vector< OpCode >);
+    ScCalcConfig::OpCodeSet result = std::make_shared<o3tl::sorted_vector< OpCode >>();
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 

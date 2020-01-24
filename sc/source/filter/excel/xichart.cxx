@@ -214,7 +214,7 @@ struct XclImpChRootData : public XclChRootData
 
 XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData ) :
     XclImpRoot( rRoot ),
-    mxChData( new XclImpChRootData( rChartData ) )
+    mxChData( std::make_shared<XclImpChRootData>( rChartData ) )
 {
 }
 
@@ -520,8 +520,8 @@ void XclImpChAreaFormat::Convert( const XclImpChRoot& rRoot,
 XclImpChEscherFormat::XclImpChEscherFormat( const XclImpRoot& rRoot ) :
     mnDffFillType( mso_fillSolid )
 {
-    maData.mxItemSet.reset(
-        new SfxItemSet( rRoot.GetDoc().GetDrawLayer()->GetItemPool() ) );
+    maData.mxItemSet =
+        std::make_shared<SfxItemSet>( rRoot.GetDoc().GetDrawLayer()->GetItemPool() );
 }
 
 void XclImpChEscherFormat::ReadHeaderRecord( XclImpStream& rStrm )
@@ -561,22 +561,22 @@ XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
     if( rFmtInfo.mbCreateDefFrame ) switch( rFmtInfo.meDefFrameType )
     {
         case EXC_CHFRAMETYPE_AUTO:
-            mxLineFmt.reset( new XclImpChLineFormat );
+            mxLineFmt = std::make_shared<XclImpChLineFormat>();
             if( rFmtInfo.mbIsFrame )
-                mxAreaFmt.reset( new XclImpChAreaFormat );
+                mxAreaFmt = std::make_shared<XclImpChAreaFormat>();
         break;
         case EXC_CHFRAMETYPE_INVISIBLE:
         {
             XclChLineFormat aLineFmt;
             ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, false );
             aLineFmt.mnPattern = EXC_CHLINEFORMAT_NONE;
-            mxLineFmt.reset( new XclImpChLineFormat( aLineFmt ) );
+            mxLineFmt = std::make_shared<XclImpChLineFormat>( aLineFmt );
             if( rFmtInfo.mbIsFrame )
             {
                 XclChAreaFormat aAreaFmt;
                 ::set_flag( aAreaFmt.mnFlags, EXC_CHAREAFORMAT_AUTO, false );
                 aAreaFmt.mnPattern = EXC_PATT_NONE;
-                mxAreaFmt.reset( new XclImpChAreaFormat( aAreaFmt ) );
+                mxAreaFmt = std::make_shared<XclImpChAreaFormat>( aAreaFmt );
             }
         }
         break;
@@ -590,15 +590,15 @@ void XclImpChFrameBase::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHLINEFORMAT:
-            mxLineFmt.reset( new XclImpChLineFormat );
+            mxLineFmt = std::make_shared<XclImpChLineFormat>();
             mxLineFmt->ReadChLineFormat( rStrm );
         break;
         case EXC_ID_CHAREAFORMAT:
-            mxAreaFmt.reset( new XclImpChAreaFormat );
+            mxAreaFmt = std::make_shared<XclImpChAreaFormat>();
             mxAreaFmt->ReadChAreaFormat( rStrm );
         break;
         case EXC_ID_CHESCHERFORMAT:
-            mxEscherFmt.reset( new XclImpChEscherFormat( rStrm.GetRoot() ) );
+            mxEscherFmt = std::make_shared<XclImpChEscherFormat>( rStrm.GetRoot() );
             mxEscherFmt->ReadRecordGroup( rStrm );
         break;
     }
@@ -675,7 +675,7 @@ void XclImpChFrame::UpdateObjFrame( const XclObjLineData& rLineData, const XclOb
             default:                    aLineFmt.mnWeight = EXC_CHLINEFORMAT_HAIR;
         }
         ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, rLineData.IsAuto() );
-        mxLineFmt.reset( new XclImpChLineFormat( aLineFmt ) );
+        mxLineFmt = std::make_shared<XclImpChLineFormat>( aLineFmt );
     }
 
     if( rFillData.IsFilled() && (!mxAreaFmt || !mxAreaFmt->HasArea()) && !mxEscherFmt )
@@ -686,7 +686,7 @@ void XclImpChFrame::UpdateObjFrame( const XclObjLineData& rLineData, const XclOb
         aAreaFmt.maBackColor = rPal.GetColor( rFillData.mnBackColorIdx );
         aAreaFmt.mnPattern = rFillData.mnPattern;
         ::set_flag( aAreaFmt.mnFlags, EXC_CHAREAFORMAT_AUTO, rFillData.IsAuto() );
-        mxAreaFmt.reset( new XclImpChAreaFormat( aAreaFmt ) );
+        mxAreaFmt = std::make_shared<XclImpChAreaFormat>( aAreaFmt );
     }
 }
 
@@ -759,7 +759,7 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
     // try to read a following CHSTRING record
     if( (rStrm.GetNextRecId() == EXC_ID_CHSTRING) && rStrm.StartNextRecord() )
     {
-        mxString.reset( new XclImpString );
+        mxString = std::make_shared<XclImpString>();
         rStrm.Ignore( 2 );
         mxString->Read( rStrm, XclStrFlags::EightBitLength | XclStrFlags::SeparateFormats );
     }
@@ -768,7 +768,7 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
 void XclImpChSourceLink::SetString( const OUString& rString )
 {
     if( !mxString )
-        mxString.reset( new XclImpString );
+        mxString = std::make_shared<XclImpString>();
     mxString->SetText( rString );
 }
 
@@ -970,11 +970,11 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAMEPOS:
-            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos = std::make_shared<XclImpChFramePos>();
             mxFramePos->ReadChFramePos( rStrm );
         break;
         case EXC_ID_CHFONT:
-            mxFont.reset( new XclImpChFont );
+            mxFont = std::make_shared<XclImpChFont>();
             mxFont->ReadChFont( rStrm );
         break;
         case EXC_ID_CHFORMATRUNS:
@@ -982,11 +982,11 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
                 XclImpString::ReadFormats( rStrm, maFormats );
         break;
         case EXC_ID_CHSOURCELINK:
-            mxSrcLink.reset( new XclImpChSourceLink( GetChRoot() ) );
+            mxSrcLink = std::make_shared<XclImpChSourceLink>( GetChRoot() );
             mxSrcLink->ReadChSourceLink( rStrm );
         break;
         case EXC_ID_CHFRAME:
-            mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_TEXT ) );
+            mxFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_TEXT );
             mxFrame->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHOBJECTLINK:
@@ -1022,7 +1022,7 @@ sal_uInt16 XclImpChText::GetRotation() const
 void XclImpChText::SetString( const OUString& rString )
 {
     if( !mxSrcLink )
-        mxSrcLink.reset( new XclImpChSourceLink( GetChRoot() ) );
+        mxSrcLink = std::make_shared<XclImpChSourceLink>( GetChRoot() );
     mxSrcLink->SetString( rString );
 }
 
@@ -1221,7 +1221,7 @@ void XclImpChText::ReadChFrLabelProps( XclImpStream& rStrm )
 {
     if( GetBiff() == EXC_BIFF8 )
     {
-        mxLabelProps.reset( new XclChFrLabelProps );
+        mxLabelProps = std::make_shared<XclChFrLabelProps>();
         sal_uInt16 nSepLen;
         rStrm.Ignore( 12 );
         mxLabelProps->mnFlags = rStrm.ReaduInt16();
@@ -1239,8 +1239,7 @@ void lclUpdateText( XclImpChTextRef& rxText, const XclImpChText* xDefText )
         rxText->UpdateText( xDefText );
     else if (xDefText)
     {
-        XclImpChTextRef xNew(new XclImpChText(*xDefText));
-        rxText = xNew;
+        rxText = std::make_shared<XclImpChText>(*xDefText);
     }
 }
 
@@ -1398,23 +1397,23 @@ void XclImpChDataFormat::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHMARKERFORMAT:
-            mxMarkerFmt.reset( new XclImpChMarkerFormat );
+            mxMarkerFmt = std::make_shared<XclImpChMarkerFormat>();
             mxMarkerFmt->ReadChMarkerFormat( rStrm );
         break;
         case EXC_ID_CHPIEFORMAT:
-            mxPieFmt.reset( new XclImpChPieFormat );
+            mxPieFmt = std::make_shared<XclImpChPieFormat>();
             mxPieFmt->ReadChPieFormat( rStrm );
         break;
         case EXC_ID_CHSERIESFORMAT:
-            mxSeriesFmt.reset( new XclImpChSeriesFormat );
+            mxSeriesFmt = std::make_shared<XclImpChSeriesFormat>();
             mxSeriesFmt->ReadChSeriesFormat( rStrm );
         break;
         case EXC_ID_CH3DDATAFORMAT:
-            mx3dDataFmt.reset( new XclImpCh3dDataFormat );
+            mx3dDataFmt = std::make_shared<XclImpCh3dDataFormat>();
             mx3dDataFmt->ReadCh3dDataFormat( rStrm );
         break;
         case EXC_ID_CHATTACHEDLABEL:
-            mxAttLabel.reset( new XclImpChAttachedLabel( GetChRoot() ) );
+            mxAttLabel = std::make_shared<XclImpChAttachedLabel>( GetChRoot() );
             mxAttLabel->ReadChAttachedLabel( rStrm );
         break;
         default:
@@ -1461,11 +1460,11 @@ void XclImpChDataFormat::UpdateSeriesFormat( const XclChExtTypeInfo& rTypeInfo, 
     /*  Create missing but required formats. Existing line, area, and marker
         format objects are needed to create automatic series formatting. */
     if( !mxLineFmt )
-        mxLineFmt.reset( new XclImpChLineFormat );
+        mxLineFmt = std::make_shared<XclImpChLineFormat>();
     if( !mxAreaFmt && !mxEscherFmt )
-        mxAreaFmt.reset( new XclImpChAreaFormat );
+        mxAreaFmt = std::make_shared<XclImpChAreaFormat>();
     if( !mxMarkerFmt )
-        mxMarkerFmt.reset( new XclImpChMarkerFormat );
+        mxMarkerFmt = std::make_shared<XclImpChMarkerFormat>();
 
     // remove formats not used for the current chart type
     RemoveUnusedFormats( rTypeInfo );
@@ -1502,7 +1501,7 @@ void XclImpChDataFormat::UpdatePointFormat( const XclChExtTypeInfo& rTypeInfo, c
 void XclImpChDataFormat::UpdateTrendLineFormat()
 {
     if( !mxLineFmt )
-        mxLineFmt.reset( new XclImpChLineFormat );
+        mxLineFmt = std::make_shared<XclImpChLineFormat>();
     mxAreaFmt.reset();
     mxEscherFmt.reset();
     mxMarkerFmt.reset();
@@ -2107,7 +2106,7 @@ void XclImpChSeries::FillAllSourceLinks( ::std::vector< ScTokenRef >& rTokens ) 
 
 void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
 {
-    XclImpChSourceLinkRef xSrcLink( new XclImpChSourceLink( GetChRoot() ) );
+    XclImpChSourceLinkRef xSrcLink = std::make_shared<XclImpChSourceLink>( GetChRoot() );
     xSrcLink->ReadChSourceLink( rStrm );
     switch( xSrcLink->GetDestType() )
     {
@@ -2136,7 +2135,7 @@ void XclImpChSeries::ReadChSerParent( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 {
-    XclImpChSerTrendLineRef xTrendLine( new XclImpChSerTrendLine( GetChRoot() ) );
+    XclImpChSerTrendLineRef xTrendLine = std::make_shared<XclImpChSerTrendLine>( GetChRoot() );
     xTrendLine->ReadChSerTrendLine( rStrm );
     maTrendLines.push_back( xTrendLine );
 }
@@ -2151,7 +2150,7 @@ void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
 {
-    XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
+    XclImpChDataFormatRef xDataFmt = std::make_shared<XclImpChDataFormat>( GetChRoot() );
     xDataFmt->SetPointPos( XclChDataPointPos( mnSeriesIdx, nPointIdx ), nFormatIdx );
     return xDataFmt;
 }
@@ -2521,15 +2520,15 @@ void XclImpChLegend::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAMEPOS:
-            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos = std::make_shared<XclImpChFramePos>();
             mxFramePos->ReadChFramePos( rStrm );
         break;
         case EXC_ID_CHTEXT:
-            mxText.reset( new XclImpChText( GetChRoot() ) );
+            mxText = std::make_shared<XclImpChText>( GetChRoot() );
             mxText->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHFRAME:
-            mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_LEGEND ) );
+            mxFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_LEGEND );
             mxFrame->ReadRecordGroup( rStrm );
         break;
     }
@@ -2539,7 +2538,7 @@ void XclImpChLegend::Finalize()
 {
     // legend default formatting differs in OOChart and Excel, missing frame means automatic
     if( !mxFrame )
-        mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_LEGEND ) );
+        mxFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_LEGEND );
     // Update text formatting. If mxText is empty, the passed default text is used.
     lclUpdateText( mxText, GetChartData().GetDefaultText( EXC_CHTEXTTYPE_LEGEND ) );
 }
@@ -2678,11 +2677,11 @@ void XclImpChTypeGroup::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHCHART3D:
-            mxChart3d.reset( new XclImpChChart3d );
+            mxChart3d = std::make_shared<XclImpChChart3d>();
             mxChart3d->ReadChChart3d( rStrm );
         break;
         case EXC_ID_CHLEGEND:
-            mxLegend.reset( new XclImpChLegend( GetChRoot() ) );
+            mxLegend = std::make_shared<XclImpChLegend>( GetChRoot() );
             mxLegend->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHDEFAULTTEXT:
@@ -2845,7 +2844,7 @@ void XclImpChTypeGroup::ReadChChartLine( XclImpStream& rStrm )
 void XclImpChTypeGroup::ReadChDataFormat( XclImpStream& rStrm )
 {
     // global series and data point format
-    XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
+    XclImpChDataFormatRef xDataFmt = std::make_shared<XclImpChDataFormat>( GetChRoot() );
     xDataFmt->ReadRecordGroup( rStrm );
     const XclChDataPointPos& rPos = xDataFmt->GetPointPos();
     if( (rPos.mnSeriesIdx == 0) && (rPos.mnPointIdx == 0) &&
@@ -3242,27 +3241,27 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHLABELRANGE:
-            mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
+            mxLabelRange = std::make_shared<XclImpChLabelRange>( GetChRoot() );
             mxLabelRange->ReadChLabelRange( rStrm );
         break;
         case EXC_ID_CHDATERANGE:
             if( !mxLabelRange )
-                mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
+                mxLabelRange = std::make_shared<XclImpChLabelRange>( GetChRoot() );
             mxLabelRange->ReadChDateRange( rStrm );
         break;
         case EXC_ID_CHVALUERANGE:
-            mxValueRange.reset( new XclImpChValueRange( GetChRoot() ) );
+            mxValueRange = std::make_shared<XclImpChValueRange>( GetChRoot() );
             mxValueRange->ReadChValueRange( rStrm );
         break;
         case EXC_ID_CHFORMAT:
             mnNumFmtIdx = rStrm.ReaduInt16();
         break;
         case EXC_ID_CHTICK:
-            mxTick.reset( new XclImpChTick( GetChRoot() ) );
+            mxTick = std::make_shared<XclImpChTick>( GetChRoot() );
             mxTick->ReadChTick( rStrm );
         break;
         case EXC_ID_CHFONT:
-            mxFont.reset( new XclImpChFont );
+            mxFont = std::make_shared<XclImpChFont>();
             mxFont->ReadChFont( rStrm );
         break;
         case EXC_ID_CHAXISLINE:
@@ -3275,9 +3274,9 @@ void XclImpChAxis::Finalize()
 {
     // add default scaling, needed e.g. to adjust rotation direction of pie and radar charts
     if( !mxLabelRange )
-        mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
+        mxLabelRange = std::make_shared<XclImpChLabelRange>( GetChRoot() );
     if( !mxValueRange )
-        mxValueRange.reset( new XclImpChValueRange( GetChRoot() ) );
+        mxValueRange = std::make_shared<XclImpChValueRange>( GetChRoot() );
     // remove invisible grid lines completely
     if( mxMajorGrid && !mxMajorGrid->HasLine() )
         mxMajorGrid.reset();
@@ -3285,14 +3284,14 @@ void XclImpChAxis::Finalize()
         mxMinorGrid.reset();
     // default tick settings different in OOChart and Excel
     if( !mxTick )
-        mxTick.reset( new XclImpChTick( GetChRoot() ) );
+        mxTick = std::make_shared<XclImpChTick>( GetChRoot() );
     // #i4140# different default axis line color
     if( !mxAxisLine )
     {
         XclChLineFormat aLineFmt;
         // set "show axis" flag, default if line format record is missing
         ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS );
-        mxAxisLine.reset( new XclImpChLineFormat( aLineFmt ) );
+        mxAxisLine = std::make_shared<XclImpChLineFormat>( aLineFmt );
     }
     // add wall/floor frame for 3d charts
     if( !mxWallFrame )
@@ -3491,7 +3490,7 @@ void XclImpChAxis::ReadChAxisLine( XclImpStream& rStrm )
         {
             if( pxLineFmt && (nRecId == EXC_ID_CHLINEFORMAT) )
             {
-                pxLineFmt->reset( new XclImpChLineFormat );
+                (*pxLineFmt) = std::make_shared<XclImpChLineFormat>();
                 (*pxLineFmt)->ReadChLineFormat( rStrm );
             }
             else if( bWallFrame && mxWallFrame )
@@ -3507,10 +3506,10 @@ void XclImpChAxis::CreateWallFrame()
     switch( GetAxisType() )
     {
         case EXC_CHAXIS_X:
-            mxWallFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_WALL3D ) );
+            mxWallFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_WALL3D );
         break;
         case EXC_CHAXIS_Y:
-            mxWallFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_FLOOR3D ) );
+            mxWallFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_FLOOR3D );
         break;
         default:
             mxWallFrame.reset();
@@ -3534,7 +3533,7 @@ void XclImpChAxesSet::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAMEPOS:
-            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos = std::make_shared<XclImpChFramePos>();
             mxFramePos->ReadChFramePos( rStrm );
         break;
         case EXC_ID_CHAXIS:
@@ -3573,11 +3572,11 @@ void XclImpChAxesSet::Finalize()
     {
         // always create missing axis objects
         if( !mxXAxis )
-            mxXAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_X ) );
+            mxXAxis = std::make_shared<XclImpChAxis>( GetChRoot(), EXC_CHAXIS_X );
         if( !mxYAxis )
-            mxYAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_Y ) );
+            mxYAxis = std::make_shared<XclImpChAxis>( GetChRoot(), EXC_CHAXIS_Y );
         if( !mxZAxis && GetFirstTypeGroup()->Is3dDeepChart() )
-            mxZAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_Z ) );
+            mxZAxis = std::make_shared<XclImpChAxis>( GetChRoot(), EXC_CHAXIS_Z );
 
         // finalize axes
         if( mxXAxis ) mxXAxis->Finalize();
@@ -3593,7 +3592,7 @@ void XclImpChAxesSet::Finalize()
 
         // #i47745# missing plot frame -> invisible border and area
         if( !mxPlotFrame )
-            mxPlotFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_PLOTFRAME ) );
+            mxPlotFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_PLOTFRAME );
     }
 }
 
@@ -3673,7 +3672,7 @@ void XclImpChAxesSet::ConvertTitlePositions() const
 
 void XclImpChAxesSet::ReadChAxis( XclImpStream& rStrm )
 {
-    XclImpChAxisRef xAxis( new XclImpChAxis( GetChRoot() ) );
+    XclImpChAxisRef xAxis = std::make_shared<XclImpChAxis>( GetChRoot() );
     xAxis->ReadRecordGroup( rStrm );
 
     switch( xAxis->GetAxisType() )
@@ -3686,7 +3685,7 @@ void XclImpChAxesSet::ReadChAxis( XclImpStream& rStrm )
 
 void XclImpChAxesSet::ReadChText( XclImpStream& rStrm )
 {
-    XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
+    XclImpChTextRef xText = std::make_shared<XclImpChText>( GetChRoot() );
     xText->ReadRecordGroup( rStrm );
 
     switch( xText->GetLinkTarget() )
@@ -3701,14 +3700,14 @@ void XclImpChAxesSet::ReadChPlotFrame( XclImpStream& rStrm )
 {
     if( (rStrm.GetNextRecId() == EXC_ID_CHFRAME) && rStrm.StartNextRecord() )
     {
-        mxPlotFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_PLOTFRAME ) );
+        mxPlotFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_PLOTFRAME );
         mxPlotFrame->ReadRecordGroup( rStrm );
     }
 }
 
 void XclImpChAxesSet::ReadChTypeGroup( XclImpStream& rStrm )
 {
-    XclImpChTypeGroupRef xTypeGroup( new XclImpChTypeGroup( GetChRoot() ) );
+    XclImpChTypeGroupRef xTypeGroup = std::make_shared<XclImpChTypeGroup>( GetChRoot() );
     xTypeGroup->ReadRecordGroup( rStrm );
     sal_uInt16 nGroupIdx = xTypeGroup->GetGroupIdx();
     XclImpChTypeGroupMap::iterator itr = maTypeGroups.lower_bound(nGroupIdx);
@@ -3848,8 +3847,8 @@ void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > const & xDiagram 
 XclImpChChart::XclImpChChart( const XclImpRoot& rRoot ) :
     XclImpChRoot( rRoot, *this )
 {
-    mxPrimAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_PRIMARY ) );
-    mxSecnAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_SECONDARY ) );
+    mxPrimAxesSet = std::make_shared<XclImpChAxesSet>( GetChRoot(), EXC_CHAXESSET_PRIMARY );
+    mxSecnAxesSet = std::make_shared<XclImpChAxesSet>( GetChRoot(), EXC_CHAXESSET_SECONDARY );
 }
 
 XclImpChChart::~XclImpChChart()
@@ -3867,7 +3866,7 @@ void XclImpChChart::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAME:
-            mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND ) );
+            mxFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND );
             mxFrame->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHSERIES:
@@ -3904,7 +3903,7 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
 
 void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
 {
-    XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
+    XclImpChDataFormatRef xDataFmt = std::make_shared<XclImpChDataFormat>( GetChRoot() );
     xDataFmt->ReadRecordGroup( rStrm );
     if( xDataFmt->GetPointPos().mnSeriesIdx <= EXC_CHSERIES_MAXSERIES )
     {
@@ -3923,7 +3922,7 @@ void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
 void XclImpChChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData )
 {
     if( !mxFrame )
-        mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND ) );
+        mxFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND );
     mxFrame->UpdateObjFrame( rLineData, rFillData );
 }
 
@@ -4062,7 +4061,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
 void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
 {
     sal_uInt16 nNewSeriesIdx = static_cast< sal_uInt16 >( maSeries.size() );
-    XclImpChSeriesRef xSeries( new XclImpChSeries( GetChRoot(), nNewSeriesIdx ) );
+    XclImpChSeriesRef xSeries = std::make_shared<XclImpChSeries>( GetChRoot(), nNewSeriesIdx );
     xSeries->ReadRecordGroup( rStrm );
     maSeries.push_back( xSeries );
 }
@@ -4075,7 +4074,7 @@ void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
 
 void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )
 {
-    XclImpChAxesSetRef xAxesSet( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_NONE ) );
+    XclImpChAxesSetRef xAxesSet = std::make_shared<XclImpChAxesSet>( GetChRoot(), EXC_CHAXESSET_NONE );
     xAxesSet->ReadRecordGroup( rStrm );
     switch( xAxesSet->GetAxesSetId() )
     {
@@ -4086,7 +4085,7 @@ void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )
 
 void XclImpChChart::ReadChText( XclImpStream& rStrm )
 {
-    XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
+    XclImpChTextRef xText = std::make_shared<XclImpChText>( GetChRoot() );
     xText->ReadRecordGroup( rStrm );
     switch( xText->GetLinkTarget() )
     {
@@ -4120,7 +4119,7 @@ void XclImpChChart::Finalize()
     FinalizeDataFormats();
     // #i47745# missing frame -> invisible border and area
     if( !mxFrame )
-        mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND ) );
+        mxFrame = std::make_shared<XclImpChFrame>( GetChRoot(), EXC_CHOBJTYPE_BACKGROUND );
     // chart title
     FinalizeTitle();
 }
@@ -4181,7 +4180,7 @@ void XclImpChChart::FinalizeTitle()
         if( mxTitle || (!aAutoTitle.isEmpty()) )
         {
             if( !mxTitle )
-                mxTitle.reset( new XclImpChText( GetChRoot() ) );
+                mxTitle = std::make_shared<XclImpChText>( GetChRoot() );
             if( aAutoTitle.isEmpty() )
                 aAutoTitle = ScResId(STR_CHARTTITLE);
         }
@@ -4366,7 +4365,7 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 void XclImpChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData )
 {
     if( !mxChartData )
-        mxChartData.reset( new XclImpChChart( GetRoot() ) );
+        mxChartData = std::make_shared<XclImpChChart>( GetRoot() );
     mxChartData->UpdateObjFrame( rLineData, rFillData );
 }
 
@@ -4392,13 +4391,13 @@ void XclImpChart::Convert( Reference< XModel > const & xModel, XclImpDffConverte
 XclImpChartDrawing& XclImpChart::GetChartDrawing()
 {
     if( !mxChartDrawing )
-        mxChartDrawing.reset( new XclImpChartDrawing( GetRoot(), mbOwnTab ) );
+        mxChartDrawing = std::make_shared<XclImpChartDrawing>( GetRoot(), mbOwnTab );
     return *mxChartDrawing;
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )
 {
-    mxChartData.reset( new XclImpChChart( GetRoot() ) );
+    mxChartData = std::make_shared<XclImpChChart>( GetRoot() );
     mxChartData->ReadRecordGroup( rStrm );
 }
 

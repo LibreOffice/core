@@ -769,7 +769,7 @@ void XclChPropSetHelper::ReadEscherProperties(
                 ::insert_value( nEscherColor, aColor.GetGreen(), 8, 8 );
                 ::insert_value( nEscherColor, aColor.GetRed(), 0, 8 );
                 sal_uInt32 nEscherOpacity = static_cast< sal_uInt32 >( (100 - nTransparency) * 655.36 );
-                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet = std::make_shared<EscherPropertyContainer>();
                 rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
                 rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillColor, nEscherColor );
                 rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillOpacity, nEscherOpacity );
@@ -790,7 +790,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             if( rGradientTable.GetObject( aGradientName ) >>= aGradient )
             {
                 // convert to Escher properties
-                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet = std::make_shared<EscherPropertyContainer>();
                 rEscherFmt.mxEscherSet->CreateGradientProperties( aGradient );
             }
         }
@@ -807,7 +807,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             if( rHatchTable.GetObject( aHatchName ) >>= aHatch )
             {
                 // convert to Escher properties
-                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet = std::make_shared<EscherPropertyContainer>();
                 rEscherFmt.mxEscherSet->CreateEmbeddedHatchProperties( aHatch, aColor, bFillBackground );
                 rPicFmt.mnBmpMode = EXC_CHPICFORMAT_STACK;
             }
@@ -824,7 +824,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             if (rBitmapTable.GetObject( aBitmapName ) >>= xBitmap)
             {
                 // convert to Escher properties
-                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet = std::make_shared<EscherPropertyContainer>();
                 rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( xBitmap, eApiBmpMode );
                 rPicFmt.mnBmpMode = (eApiBmpMode == drawing::BitmapMode_REPEAT) ?
                     EXC_CHPICFORMAT_STACK : EXC_CHPICFORMAT_STRETCH;
@@ -1211,8 +1211,8 @@ uno::Reference<drawing::XShape> lclGetSecYAxisTitleShape(const uno::Reference<ch
 } // namespace
 
 XclChRootData::XclChRootData()
-    : mxTypeInfoProv(new XclChTypeInfoProvider)
-    , mxFmtInfoProv(new XclChFormatInfoProvider)
+    : mxTypeInfoProv(std::make_shared<XclChTypeInfoProvider>())
+    , mxFmtInfoProv(std::make_shared<XclChFormatInfoProvider>())
     , mnBorderGapX(0)
     , mnBorderGapY(0)
     , mfUnitSizeX(0.0)
@@ -1248,10 +1248,10 @@ void XclChRootData::InitConversion(const XclRoot& rRoot, const uno::Reference<ch
 
     // create object tables
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxChartDoc, uno::UNO_QUERY);
-    mxLineDashTable.reset(new XclChObjectTable(xFactory, SERVICE_DRAWING_DASHTABLE, "Excel line dash "));
-    mxGradientTable.reset(new XclChObjectTable(xFactory, SERVICE_DRAWING_GRADIENTTABLE, "Excel gradient "));
-    mxHatchTable.reset(new XclChObjectTable(xFactory, SERVICE_DRAWING_HATCHTABLE, "Excel hatch "));
-    mxBitmapTable.reset(new XclChObjectTable(xFactory, SERVICE_DRAWING_BITMAPTABLE, "Excel bitmap "));
+    mxLineDashTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_DASHTABLE, "Excel line dash ");
+    mxGradientTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_GRADIENTTABLE, "Excel gradient ");
+    mxHatchTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_HATCHTABLE, "Excel hatch ");
+    mxBitmapTable = std::make_shared<XclChObjectTable>(xFactory, SERVICE_DRAWING_BITMAPTABLE, "Excel bitmap ");
 }
 
 void XclChRootData::FinishConversion()

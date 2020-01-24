@@ -147,7 +147,7 @@ Sequence< FormulaToken > SAL_CALL OOXMLFormulaParser::parseFormula(
     if( !mxParserImpl )
     {
         Reference< XMultiServiceFactory > xModelFactory( mxComponent, UNO_QUERY_THROW );
-        mxParserImpl.reset( new OOXMLFormulaParserImpl( xModelFactory ) );
+        mxParserImpl = std::make_shared<OOXMLFormulaParserImpl>( xModelFactory );
     }
     return mxParserImpl->parseFormula( rFormula,
                                        ScAddress(rReferencePos.Column, rReferencePos.Row, rReferencePos.Sheet) );

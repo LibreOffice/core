@@ -148,7 +148,7 @@ void Comment::importComment( SequenceInputStream& rStrm )
 
 RichStringRef const & Comment::createText()
 {
-    maModel.mxText.reset( new RichString( *this ) );
+    maModel.mxText = std::make_shared<RichString>( *this );
     return maModel.mxText;
 }
 
@@ -227,7 +227,7 @@ void CommentsBuffer::appendAuthor( const OUString& rAuthor )
 
 CommentRef CommentsBuffer::createComment()
 {
-    CommentRef xComment( new Comment( *this ) );
+    CommentRef xComment = std::make_shared<Comment>( *this );
     maComments.push_back( xComment );
     return xComment;
 }

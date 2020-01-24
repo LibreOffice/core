@@ -179,7 +179,7 @@ void SheetScenarios::importScenarios( SequenceInputStream& rStrm )
 Scenario& SheetScenarios::createScenario()
 {
     bool bIsActive = maScenarios.size() == static_cast<sal_uInt32>(maModel.mnShown);
-    ScenarioVector::value_type xScenario( new Scenario( *this, mnSheet, bIsActive ) );
+    ScenarioVector::value_type xScenario = std::make_shared<Scenario>( *this, mnSheet, bIsActive );
     maScenarios.push_back( xScenario );
     return *xScenario;
 }
@@ -198,7 +198,7 @@ SheetScenarios& ScenarioBuffer::createSheetScenarios( sal_Int16 nSheet )
 {
     SheetScenariosMap::mapped_type& rxSheetScens = maSheetScenarios[ nSheet ];
     if( !rxSheetScens )
-        rxSheetScens.reset( new SheetScenarios( *this, nSheet ) );
+        rxSheetScens = std::make_shared<SheetScenarios>( *this, nSheet );
     return *rxSheetScens;
 }
 

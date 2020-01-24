@@ -283,7 +283,7 @@ ConnectionsBuffer::ConnectionsBuffer( const WorkbookHelper& rHelper ) :
 
 Connection& ConnectionsBuffer::createConnection()
 {
-    ConnectionRef xConnection( new Connection( *this ) );
+    ConnectionRef xConnection = std::make_shared<Connection>( *this );
     maConnections.push_back( xConnection );
     return *xConnection;
 }

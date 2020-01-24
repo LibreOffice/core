@@ -688,7 +688,7 @@ ScDPTableData* ScDPObject::GetTableData()
             if (pCache)
             {
                 pCache->AddReference(this);
-                pData.reset(new ScDatabaseDPData(pDoc, *pCache));
+                pData = std::make_shared<ScDatabaseDPData>(pDoc, *pCache);
             }
         }
         else
@@ -709,7 +709,7 @@ ScDPTableData* ScDPObject::GetTableData()
                 if (pCache)
                 {
                     pCache->AddReference(this);
-                    pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, *pCache));
+                    pData = std::make_shared<ScSheetDPData>(pDoc, *pSheetDesc, *pCache);
                 }
             }
         }

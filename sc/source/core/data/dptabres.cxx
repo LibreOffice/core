@@ -3925,7 +3925,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
 
         long nDimIndex = itrField->second;
         aCri.mnFieldIndex = static_cast<sal_Int32>(nDimIndex);
-        aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter);
+        aCri.mpFilter = std::make_shared<ScDPFilteredCache::GroupFilter>();
 
         ScDPFilteredCache::GroupFilter* pGrpFilter =
             static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());

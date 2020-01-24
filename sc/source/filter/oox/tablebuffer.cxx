@@ -156,7 +156,7 @@ TableBuffer::TableBuffer( const WorkbookHelper& rHelper ) :
 
 Table& TableBuffer::createTable()
 {
-    TableVector::value_type xTable( new Table( *this ) );
+    TableVector::value_type xTable = std::make_shared<Table>( *this );
     maTables.push_back( xTable );
     return *xTable;
 }

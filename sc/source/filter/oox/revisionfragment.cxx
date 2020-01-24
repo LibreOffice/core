@@ -74,7 +74,7 @@ protected:
     {
         if (nElement == XLS_TOKEN(is))
         {
-            mxRichString.reset(new RichString(*this));
+            mxRichString = std::make_shared<RichString>(*this);
             return new RichStringContext(*this, mxRichString);
         }
 

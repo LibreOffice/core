@@ -676,15 +676,15 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                 if (rNumGrpDim.IsDateDimension())
                 {
                     // grouped by dates.
-                    aCri.mpFilter.reset(
-                        new ScDPGroupDateFilter(
-                            aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                    aCri.mpFilter =
+                        std::make_shared<ScDPGroupDateFilter>(
+                            aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
                 }
                 else
                 {
                     // This dimension is grouped by numeric ranges.
-                    aCri.mpFilter.reset(
-                        new ScDPGroupNumFilter(aMatchValues, *pNumInfo));
+                    aCri.mpFilter =
+                        std::make_shared<ScDPGroupNumFilter>(aMatchValues, *pNumInfo);
                 }
 
                 aNewCriteria.push_back(aCri);
@@ -709,9 +709,9 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                 // external number group
                 ScDPFilteredCache::Criterion aCri;
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
-                aCri.mpFilter.reset(
-                    new ScDPGroupDateFilter(
-                        aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                aCri.mpFilter =
+                    std::make_shared<ScDPGroupDateFilter>(
+                        aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
 
                 aNewCriteria.push_back(aCri);
             }
@@ -721,7 +721,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
 
                 ScDPFilteredCache::Criterion aCri;
                 aCri.mnFieldIndex = nSrcDim;
-                aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter());
+                aCri.mpFilter = std::make_shared<ScDPFilteredCache::GroupFilter>();
                 ScDPFilteredCache::GroupFilter* pGrpFilter =
                     static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());
 

@@ -537,7 +537,7 @@ void ExternalLink::insertExternalSheet( const OUString& rSheetName )
 
 ExternalNameRef ExternalLink::createExternalName()
 {
-    ExternalNameRef xExtName( new ExternalName( *this ) );
+    ExternalNameRef xExtName = std::make_shared<ExternalName>( *this );
     maExtNames.push_back( xExtName );
     return xExtName;
 }
@@ -558,7 +558,7 @@ void RefSheetsModel::readBiff12Data( SequenceInputStream& rStrm )
 
 ExternalLinkBuffer::ExternalLinkBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mxSelfRef( new ExternalLink( rHelper ) ),
+    mxSelfRef( std::make_shared<ExternalLink>( rHelper ) ),
     mbUseRefSheets( false )
 {
     mxSelfRef->setSelfLinkType();
@@ -653,7 +653,7 @@ LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId ) const
 
 ExternalLinkRef ExternalLinkBuffer::createExternalLink()
 {
-    ExternalLinkRef xExtLink( new ExternalLink( *this ) );
+    ExternalLinkRef xExtLink = std::make_shared<ExternalLink>( *this );
     maLinks.push_back( xExtLink );
     return xExtLink;
 }

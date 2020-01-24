@@ -1095,7 +1095,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     css::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, "BoundRect" );
     tools::Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
-    mxChart.reset( new XclExpChart( GetRoot(), xModel, aChartRect ) );
+    mxChart = std::make_shared<XclExpChart>( GetRoot(), xModel, aChartRect );
 }
 
 XclExpChartObj::~XclExpChartObj()
@@ -1468,14 +1468,14 @@ XclExpObjectManager::XclExpObjectManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
     InitStream( true );
-    mxEscherEx.reset( new XclEscherEx( GetRoot(), *this, *mxDffStrm ) );
+    mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mxDffStrm );
 }
 
 XclExpObjectManager::XclExpObjectManager( const XclExpObjectManager& rParent ) :
     XclExpRoot( rParent.GetRoot() )
 {
     InitStream( false );
-    mxEscherEx.reset( new XclEscherEx( GetRoot(), *this, *mxDffStrm, rParent.mxEscherEx.get() ) );
+    mxEscherEx = std::make_shared<XclEscherEx>( GetRoot(), *this, *mxDffStrm, rParent.mxEscherEx.get() );
 }
 
 XclExpObjectManager::~XclExpObjectManager()
@@ -1494,7 +1494,7 @@ std::shared_ptr< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
 
 void XclExpObjectManager::StartSheet()
 {
-    mxObjList.reset( new XclExpObjList( GetRoot(), *mxEscherEx ) );
+    mxObjList = std::make_shared<XclExpObjList>( GetRoot(), *mxEscherEx );
 }
 
 std::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const SdrPage* pSdrPage )
@@ -1550,7 +1550,7 @@ void XclExpObjectManager::InitStream( bool bTempFile )
 {
     if( bTempFile )
     {
-        mxTempFile.reset( new ::utl::TempFile );
+        mxTempFile = std::make_shared<::utl::TempFile>();
         if( mxTempFile->IsValid() )
         {
             mxTempFile->EnableKillingFile();
@@ -1559,7 +1559,7 @@ void XclExpObjectManager::InitStream( bool bTempFile )
     }
 
     if( !mxDffStrm.get() )
-        mxDffStrm.reset( new SvMemoryStream );
+        mxDffStrm = std::make_shared<SvMemoryStream>();
 
     mxDffStrm->SetEndian( SvStreamEndian::LITTLE );
 }

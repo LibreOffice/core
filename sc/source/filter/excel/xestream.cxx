@@ -1007,7 +1007,7 @@ bool XclExpXmlStream::exportDocument()
     aData.maMaxPos.SetCol( ::std::min( aData.maScMaxPos.Col(), aData.maXclMaxPos.Col() ) );
     aData.maMaxPos.SetRow( ::std::min( aData.maScMaxPos.Row(), aData.maXclMaxPos.Row() ) );
     aData.maMaxPos.SetTab( ::std::min( aData.maScMaxPos.Tab(), aData.maXclMaxPos.Tab() ) );
-    aData.mpCompileFormulaCxt.reset( new sc::CompileFormulaContext(&rDoc) );
+    aData.mpCompileFormulaCxt = std::make_shared<sc::CompileFormulaContext>(&rDoc);
     // set target path to get correct relative links to target document, not source
     INetURLObject aPath(getFileUrl());
     aData.maBasePath = aPath.GetPath() + "\\";

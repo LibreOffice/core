@@ -1898,7 +1898,7 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
     if( maColumns.size() <= nIndex )
         maColumns.resize( nIndex + 1 );
     if( !maColumns[ nIndex ] )
-        maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
+        maColumns[ nIndex ] = std::make_shared<XclImpXFRangeColumn>();
     // remember all Boolean cells, they will get 'Standard' number format
     maColumns[ nIndex ]->SetXF( nScRow, XclImpXFIndex( nXFIndex, eMode == xlXFModeBoolCell ) );
 
@@ -1947,7 +1947,7 @@ void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
     if( maColumns.size() <= nIndex )
         maColumns.resize( nIndex + 1 );
     OSL_ENSURE( !maColumns[ nIndex ], "XclImpXFRangeBuffer::SetColumnDefXF - default column of XFs already has values" );
-    maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
+    maColumns[ nIndex ] = std::make_shared<XclImpXFRangeColumn>();
     maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
 }
 

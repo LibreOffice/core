@@ -1185,14 +1185,14 @@ void PivotTable::importPTDataField( SequenceInputStream& rStrm )
 PivotTableField& PivotTable::createTableField()
 {
     sal_Int32 nFieldIndex = static_cast< sal_Int32 >( maFields.size() );
-    PivotTableFieldVector::value_type xTableField( new PivotTableField( *this, nFieldIndex ) );
+    PivotTableFieldVector::value_type xTableField = std::make_shared<PivotTableField>( *this, nFieldIndex );
     maFields.push_back( xTableField );
     return *xTableField;
 }
 
 PivotTableFilter& PivotTable::createTableFilter()
 {
-    PivotTableFilterVector::value_type xTableFilter( new PivotTableFilter( *this ) );
+    PivotTableFilterVector::value_type xTableFilter = std::make_shared<PivotTableFilter>( *this );
     maFilters.push_back( xTableFilter );
     return *xTableFilter;
 }
@@ -1443,7 +1443,7 @@ PivotTableBuffer::PivotTableBuffer( const WorkbookHelper& rHelper ) :
 
 PivotTable& PivotTableBuffer::createPivotTable()
 {
-    PivotTableVector::value_type xTable( new PivotTable( *this ) );
+    PivotTableVector::value_type xTable = std::make_shared<PivotTable>( *this );
     maTables.push_back( xTable );
     return *xTable;
 }

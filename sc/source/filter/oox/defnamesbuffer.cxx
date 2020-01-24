@@ -396,7 +396,7 @@ DefinedNameRef DefinedNamesBuffer::getByBuiltinId( sal_Unicode cBuiltinId, sal_I
 
 DefinedNameRef DefinedNamesBuffer::createDefinedName()
 {
-    DefinedNameRef xDefName( new DefinedName( *this ) );
+    DefinedNameRef xDefName = std::make_shared<DefinedName>( *this );
     maDefNames.push_back( xDefName );
     return xDefName;
 }

@@ -181,10 +181,10 @@ XclExpTablesManager& XclExpRoot::GetTablesManager()
 
 void XclExpRoot::InitializeConvert()
 {
-    mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
-    mrExpData.mxAddrConv.reset( new XclExpAddressConverter( GetRoot() ) );
-    mrExpData.mxFmlaComp.reset( new XclExpFormulaCompiler( GetRoot() ) );
-    mrExpData.mxProgress.reset( new XclExpProgressBar( GetRoot() ) );
+    mrExpData.mxTabInfo = std::make_shared<XclExpTabInfo>( GetRoot() );
+    mrExpData.mxAddrConv = std::make_shared<XclExpAddressConverter>( GetRoot() );
+    mrExpData.mxFmlaComp = std::make_shared<XclExpFormulaCompiler>( GetRoot() );
+    mrExpData.mxProgress = std::make_shared<XclExpProgressBar>( GetRoot() );
 
     GetProgressBar().Initialize();
 }
@@ -195,29 +195,29 @@ void XclExpRoot::InitializeGlobals()
 
     if( GetBiff() >= EXC_BIFF5 )
     {
-        mrExpData.mxPalette.reset( new XclExpPalette( GetRoot() ) );
-        mrExpData.mxFontBfr.reset( new XclExpFontBuffer( GetRoot() ) );
-        mrExpData.mxNumFmtBfr.reset( new XclExpNumFmtBuffer( GetRoot() ) );
-        mrExpData.mxXFBfr.reset( new XclExpXFBuffer( GetRoot() ) );
-        mrExpData.mxGlobLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
-        mrExpData.mxNameMgr.reset( new XclExpNameManager( GetRoot() ) );
+        mrExpData.mxPalette = std::make_shared<XclExpPalette>( GetRoot() );
+        mrExpData.mxFontBfr = std::make_shared<XclExpFontBuffer>( GetRoot() );
+        mrExpData.mxNumFmtBfr = std::make_shared<XclExpNumFmtBuffer>( GetRoot() );
+        mrExpData.mxXFBfr = std::make_shared<XclExpXFBuffer>( GetRoot() );
+        mrExpData.mxGlobLinkMgr = std::make_shared<XclExpLinkManager>( GetRoot() );
+        mrExpData.mxNameMgr = std::make_shared<XclExpNameManager>( GetRoot() );
     }
 
     if( GetBiff() == EXC_BIFF8 )
     {
-        mrExpData.mxSst.reset( new XclExpSst );
-        mrExpData.mxObjMgr.reset( new XclExpObjectManager( GetRoot() ) );
-        mrExpData.mxFilterMgr.reset( new XclExpFilterManager( GetRoot() ) );
-        mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
+        mrExpData.mxSst = std::make_shared<XclExpSst>();
+        mrExpData.mxObjMgr = std::make_shared<XclExpObjectManager>( GetRoot() );
+        mrExpData.mxFilterMgr = std::make_shared<XclExpFilterManager>( GetRoot() );
+        mrExpData.mxPTableMgr = std::make_shared<XclExpPivotTableManager>( GetRoot() );
         // BIFF8: only one link manager for all sheets
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
-        mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
+        mrExpData.mxDxfs = std::make_shared<XclExpDxfs>( GetRoot() );
     }
 
     if( GetOutput() == EXC_OUTPUT_XML_2007 )
     {
-        mrExpData.mxXmlPTableMgr.reset(new XclExpXmlPivotTableManager(GetRoot()));
-        mrExpData.mxTablesMgr.reset(new XclExpTablesManager(GetRoot()));
+        mrExpData.mxXmlPTableMgr = std::make_shared<XclExpXmlPivotTableManager>(GetRoot());
+        mrExpData.mxTablesMgr = std::make_shared<XclExpTablesManager>(GetRoot());
 
         do
         {
@@ -266,7 +266,7 @@ void XclExpRoot::InitializeTable( SCTAB nScTab )
     if( GetBiff() == EXC_BIFF5 )
     {
         // local link manager per sheet
-        mrExpData.mxLocLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
+        mrExpData.mxLocLinkMgr = std::make_shared<XclExpLinkManager>( GetRoot() );
     }
 }
 

@@ -105,7 +105,7 @@ ScExtTabSettings& ScExtTabSettingsCont::GetOrCreateTabSettings( SCTAB nTab )
 {
     ScExtTabSettingsRef& rxTabSett = maMap[ nTab ];
     if( !rxTabSett )
-        rxTabSett.reset( new ScExtTabSettings );
+        rxTabSett = std::make_shared<ScExtTabSettings>();
     return *rxTabSett;
 }
 
@@ -118,7 +118,7 @@ void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
 {
     maMap.clear();
     for( const auto& [rTab, rxSettings] : rMap )
-        maMap[ rTab ].reset( new ScExtTabSettings( *rxSettings ) );
+        maMap[ rTab ] = std::make_shared<ScExtTabSettings>( *rxSettings );
 }
 
 /** Implementation struct for ScExtDocOptions containing all members. */

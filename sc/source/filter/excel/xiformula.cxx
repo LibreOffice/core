@@ -83,7 +83,7 @@ std::unique_ptr<ScTokenArray> XclImpFmlaCompImpl::CreateFormula(
 
 XclImpFormulaCompiler::XclImpFormulaCompiler( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    mxImpl( new XclImpFmlaCompImpl( rRoot ) )
+    mxImpl( std::make_shared<XclImpFmlaCompImpl>( rRoot ) )
 {
 }
 

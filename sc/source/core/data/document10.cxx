@@ -470,9 +470,9 @@ class StartNeededListenersHandler
 {
     std::shared_ptr<sc::StartListeningContext> mpCxt;
 public:
-    explicit StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
+    explicit StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(std::make_shared<sc::StartListeningContext>(rDoc)) {}
     explicit StartNeededListenersHandler( ScDocument& rDoc, const std::shared_ptr<const sc::ColumnSet>& rpColSet ) :
-        mpCxt(new sc::StartListeningContext(rDoc))
+        mpCxt(std::make_shared<sc::StartListeningContext>(rDoc))
     {
         mpCxt->setColumnSet( rpColSet);
     }
