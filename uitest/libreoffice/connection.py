@@ -130,7 +130,7 @@ class OfficeConnection:
             else:
                 self.soffice.terminate()
 
-            ret = self.soffice.wait()
+            ret = self.soffice.wait(30)
             self.xContext = None
             self.socket = None
             self.soffice = None
