@@ -94,6 +94,9 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <editeng/flstitem.hxx>
+#ifdef IOS
+#include <sfx2/app.hxx>
+#endif
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -117,6 +120,9 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
+#ifdef IOS
+#include <vcl/sysdata.hxx>
+#endif
 #include <vcl/virdev.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
