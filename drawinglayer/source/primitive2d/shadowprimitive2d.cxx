@@ -64,9 +64,9 @@ namespace drawinglayer::primitive2d
             if(!getChildren().empty())
             {
                 // create a modifiedColorPrimitive containing the shadow color and the content
-                const basegfx::BColorModifierSharedPtr aBColorModifier(
-                    new basegfx::BColorModifier_replace(
-                        getShadowColor()));
+                const basegfx::BColorModifierSharedPtr aBColorModifier =
+                    std::make_shared<basegfx::BColorModifier_replace>(
+                        getShadowColor());
                 const Primitive2DReference xRefA(
                     new ModifiedColorPrimitive2D(
                         getChildren(),

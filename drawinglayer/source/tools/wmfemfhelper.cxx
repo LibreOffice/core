@@ -900,9 +900,8 @@ namespace wmfemfhelper
                     rTargetHolders.Current().append(
                         std::make_unique<drawinglayer::primitive2d::ModifiedColorPrimitive2D>(
                             aSubContent,
-                            basegfx::BColorModifierSharedPtr(
-                                new basegfx::BColorModifier_replace(
-                                    basegfx::BColor(0.0, 0.0, 0.0)))));
+                            std::make_shared<basegfx::BColorModifier_replace>(
+                                    basegfx::BColor(0.0, 0.0, 0.0))));
                 }
                 else // if(rPropertyHolders.Current().isRasterOpInvert())
                 {

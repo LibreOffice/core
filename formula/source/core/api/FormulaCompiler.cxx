@@ -802,9 +802,9 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 {
     using sheet::FormulaOpCodeMapEntry;
     // Filter / API maps are never Core
-    NonConstOpCodeMapPtr xMap( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, false,
+    NonConstOpCodeMapPtr xMap = std::make_shared<OpCodeMap>( SC_OPCODE_LAST_OPCODE_ID + 1, false,
                 FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(
-                        FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED)));
+                        FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED));
     SvtSysLocale aSysLocale;
     const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
     for (auto const& rMapEntry : rMapping)
@@ -838,9 +838,9 @@ static void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
     else if (!aSymbolMap.mxSymbolMap)
     {
         // Core
-        aSymbolMap.mxSymbolMap.reset(
-            new FormulaCompiler::OpCodeMap(
-                SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI));
+        aSymbolMap.mxSymbolMap =
+            std::make_shared<FormulaCompiler::OpCodeMap>(
+                SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
         OpCodeList aOpCodeListSymbols(false, RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
         OpCodeList aOpCodeListNative(true, RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
         // No AddInMap for native core mapping.
@@ -935,7 +935,7 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
     if ( !rxMap.get() )
     {
         // not Core
-        rxMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar ));
+        rxMap = std::make_shared<OpCodeMap>( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar );
         OpCodeList aOpCodeList(false, pSymbols, rxMap, eSepType);
 
         fillFromAddInMap( rxMap, eGrammar);

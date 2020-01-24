@@ -122,9 +122,8 @@ namespace drawinglayer
                 const primitive2d::Primitive2DReference xRef(
                     new primitive2d::ModifiedColorPrimitive2D(
                         aSequence,
-                        basegfx::BColorModifierSharedPtr(
-                            new basegfx::BColorModifier_replace(
-                                basegfx::BColor(0.0, 0.0, 0.0)))));
+                        std::make_shared<basegfx::BColorModifier_replace>(
+                                basegfx::BColor(0.0, 0.0, 0.0))));
                 const primitive2d::Primitive2DContainer xSeq { xRef };
 
                 // render

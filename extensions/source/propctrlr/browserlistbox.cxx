@@ -458,8 +458,8 @@ namespace pcr
     void OBrowserListBox::InsertEntry(const OLineDescriptor& rPropertyData, sal_uInt16 _nPos)
     {
         // create a new line
-        BrowserLinePointer pBrowserLine(new OBrowserLine(rPropertyData.sName, m_xLinesPlayground.get(),
-                                                         m_xSizeGroup.get(), m_pInitialControlParent));
+        BrowserLinePointer pBrowserLine = std::make_shared<OBrowserLine>(rPropertyData.sName, m_xLinesPlayground.get(),
+                                                         m_xSizeGroup.get(), m_pInitialControlParent);
 
         // check that the name is unique
         for (auto const& line : m_aLines)

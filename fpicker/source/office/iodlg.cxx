@@ -999,9 +999,9 @@ IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl, weld::Button&, void )
     // Maybe open the PlacesDialog would have been a better idea
     // there is an ux choice to make we did not make...
     INetURLObject aURLObj( m_xFileView->GetViewURL() );
-    PlacePtr newPlace(
-        new Place( aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset),
-                m_xFileView->GetViewURL(), true));
+    PlacePtr newPlace =
+        std::make_shared<Place>( aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset),
+                m_xFileView->GetViewURL(), true);
     m_xImpl->m_xPlaces->AppendPlace(newPlace);
 }
 
@@ -2289,7 +2289,7 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
 
 void SvtFileDialog::initDefaultPlaces( )
 {
-    PlacePtr pRootPlace( new Place( FpsResId(STR_DEFAULT_DIRECTORY), GetStandardDir() ) );
+    PlacePtr pRootPlace = std::make_shared<Place>( FpsResId(STR_DEFAULT_DIRECTORY), GetStandardDir() );
     m_xImpl->m_xPlaces->AppendPlace( pRootPlace );
 
     // Load from user settings
@@ -2298,7 +2298,7 @@ void SvtFileDialog::initDefaultPlaces( )
 
     for(sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace)
     {
-        PlacePtr pPlace(new Place(placesNamesList[nPlace], placesUrlsList[nPlace], true));
+        PlacePtr pPlace = std::make_shared<Place>(placesNamesList[nPlace], placesUrlsList[nPlace], true);
         m_xImpl->m_xPlaces->AppendPlace(pPlace);
     }
 

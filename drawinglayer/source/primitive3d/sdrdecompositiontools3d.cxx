@@ -239,8 +239,8 @@ namespace drawinglayer::primitive3d
                     if(css::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {
                         // use modified color primitive to force textures to gray
-                        const basegfx::BColorModifierSharedPtr aBColorModifier(
-                            new basegfx::BColorModifier_gray());
+                        const basegfx::BColorModifierSharedPtr aBColorModifier =
+                            std::make_shared<basegfx::BColorModifier_gray>();
                         const Primitive3DReference xRef2(
                             new ModifiedColorPrimitive3D(
                                 aRetval,

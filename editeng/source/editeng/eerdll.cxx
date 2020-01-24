@@ -165,7 +165,7 @@ std::shared_ptr<DefItems> GlobalEditData::GetDefItems()
     auto xDefItems = m_xDefItems.lock();
     if (!xDefItems)
     {
-        xDefItems.reset(new DefItems);
+        xDefItems = std::make_shared<DefItems>();
         m_xDefItems = xDefItems;
     }
     return xDefItems;
