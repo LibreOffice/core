@@ -93,7 +93,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbSubtractFlys(false),
     mApplyParagraphMarkFormatToNumbering(false),
     mbLastBrowseMode( false ),
-    mbDisableOffPagePositioning ( false )
+    mbDisableOffPagePositioning ( false ),
+    mbProtectBookmarksAndFields( false )
 
     // COMPATIBILITY FLAGS END
 {
@@ -217,8 +218,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
         case DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING: return mbDisableOffPagePositioning;
         case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA: return mbEmptyDbFieldHidesPara;
-        case DocumentSettingId::CONTINUOUS_ENDNOTES:
-            return mbContinuousEndnotes;
+        case DocumentSettingId::CONTINUOUS_ENDNOTES: return mbContinuousEndnotes;
+        case DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS: return mbProtectBookmarksAndFields;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -453,6 +454,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::CONTINUOUS_ENDNOTES:
             mbContinuousEndnotes = value;
+            break;
+        case DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS:
+            mbProtectBookmarksAndFields = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
