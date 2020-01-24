@@ -390,11 +390,11 @@ void vcl::Region::ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly 
             // width OR height == 1 ? => Rectangular region
             if((1 == aRect.GetWidth()) || (1 == aRect.GetHeight()) || rPolyPoly.IsRect())
             {
-                mpRegionBand.reset(new RegionBand(aRect));
+                mpRegionBand = std::make_shared<RegionBand>(aRect);
             }
             else
             {
-                mpPolyPolygon.reset(new tools::PolyPolygon(rPolyPoly));
+                mpPolyPolygon = std::make_shared<tools::PolyPolygon>(rPolyPoly);
             }
 
             mbIsNull = false;
@@ -406,7 +406,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPoly
 {
     if(rPolyPoly.count() && !rPolyPoly.getB2DRange().isEmpty())
     {
-        mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(rPolyPoly));
+        mpB2DPolyPolygon = std::make_shared<basegfx::B2DPolyPolygon>(rPolyPoly);
         mbIsNull = false;
     }
 }
@@ -1269,7 +1269,7 @@ tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
     {
         // the polygon needs to be converted, buffer the down conversion
         const tools::PolyPolygon aPolyPolgon(*getB2DPolyPolygon());
-        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new tools::PolyPolygon(aPolyPolgon));
+        const_cast< vcl::Region* >(this)->mpPolyPolygon = std::make_shared<tools::PolyPolygon>(aPolyPolgon);
 
         return *getPolyPolygon();
     }
@@ -1278,7 +1278,7 @@ tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
     {
         // the BandRegion needs to be converted, buffer the conversion
         const tools::PolyPolygon aPolyPolgon(ImplCreatePolyPolygonFromRegionBand());
-        const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new tools::PolyPolygon(aPolyPolgon));
+        const_cast< vcl::Region* >(this)->mpPolyPolygon = std::make_shared<tools::PolyPolygon>(aPolyPolgon);
 
         return *getPolyPolygon();
     }
@@ -1297,7 +1297,7 @@ basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
     {
         // the polygon needs to be converted, buffer the up conversion. This will be preferred from now.
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(getPolyPolygon()->getB2DPolyPolygon());
-        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
+        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon = std::make_shared<basegfx::B2DPolyPolygon>(aB2DPolyPolygon);
 
         return *getB2DPolyPolygon();
     }
@@ -1306,7 +1306,7 @@ basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
     {
         // the BandRegion needs to be converted, buffer the conversion
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(ImplCreateB2DPolyPolygonFromRegionBand());
-        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
+        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon = std::make_shared<basegfx::B2DPolyPolygon>(aB2DPolyPolygon);
 
         return *getB2DPolyPolygon();
     }

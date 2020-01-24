@@ -432,7 +432,7 @@ std::shared_ptr<vcl::unx::GtkPrintWrapper> const &
 GtkInstance::getPrintWrapper() const
 {
     if (!m_xPrintWrapper)
-        m_xPrintWrapper.reset(new vcl::unx::GtkPrintWrapper);
+        m_xPrintWrapper = std::make_shared<vcl::unx::GtkPrintWrapper>();
     return m_xPrintWrapper;
 }
 

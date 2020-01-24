@@ -243,7 +243,7 @@ void UnoControlHolderList::replaceControlById( ControlIdentifier _nId, const uno
     if ( pos == maControls.end() )
         return;
 
-    pos->second.reset( new UnoControlHolder( pos->second->getName(), _rxNewControl ) );
+    pos->second = std::make_shared<UnoControlHolder>( pos->second->getName(), _rxNewControl );
 }
 
 

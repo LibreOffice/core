@@ -278,21 +278,21 @@ OpenGLTexture::OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& rpImpl, t
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, bool bAllocate )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
-    , mpImpl(new ImplOpenGLTexture(nWidth, nHeight, bAllocate))
+    , mpImpl(std::make_shared<ImplOpenGLTexture>(nWidth, nHeight, bAllocate))
     , mnSlotNumber(-1)
 {
 }
 
 OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
-    , mpImpl(new ImplOpenGLTexture(nX, nY, nWidth, nHeight))
+    , mpImpl(std::make_shared<ImplOpenGLTexture>(nX, nY, nWidth, nHeight))
     , mnSlotNumber(-1)
 {
 }
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
-    , mpImpl(new ImplOpenGLTexture(nWidth, nHeight, nFormat, nType, pData))
+    , mpImpl(std::make_shared<ImplOpenGLTexture>(nWidth, nHeight, nFormat, nType, pData))
     , mnSlotNumber(-1)
 {
 

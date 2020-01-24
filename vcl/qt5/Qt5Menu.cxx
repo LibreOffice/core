@@ -235,7 +235,7 @@ void Qt5Menu::ReinitializeActionGroup(unsigned nPos)
             }
             else
             {
-                pCurrentItem->mpActionGroup.reset(new QActionGroup(nullptr));
+                pCurrentItem->mpActionGroup = std::make_shared<QActionGroup>(nullptr);
                 pCurrentItem->mpActionGroup->setExclusive(true);
             }
         }

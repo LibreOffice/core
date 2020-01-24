@@ -254,7 +254,7 @@ sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/
     if (mxPrinter.get())
     {
         maInitJobSetup = mxPrinter->GetJobSetup();
-        mxListener.reset(new vcl::OldStylePrintAdaptor(mxPrinter, nullptr));
+        mxListener = std::make_shared<vcl::OldStylePrintAdaptor>(mxPrinter, nullptr);
     }
 
     return true;

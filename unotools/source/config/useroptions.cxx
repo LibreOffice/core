@@ -266,7 +266,7 @@ SvtUserOptions::SvtUserOptions ()
 
     if (xSharedImpl.expired())
     {
-        xImpl.reset(new Impl);
+        xImpl = std::make_shared<Impl>();
         xSharedImpl = xImpl;
         ItemHolder1::holdConfigItem(EItem::UserOptions);
     }

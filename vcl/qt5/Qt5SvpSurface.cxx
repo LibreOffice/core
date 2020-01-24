@@ -62,10 +62,10 @@ CairoSharedPtr Qt5SvpSurface::getCairo() const
 
 SurfaceSharedPtr Qt5SvpSurface::getSimilar(int cairo_content_type, int width, int height) const
 {
-    return SurfaceSharedPtr(new Qt5SvpSurface(CairoSurfaceSharedPtr(
+    return std::make_shared<Qt5SvpSurface>(CairoSurfaceSharedPtr(
         cairo_surface_create_similar(
             m_pSurface.get(), static_cast<cairo_content_t>(cairo_content_type), width, height),
-        &cairo_surface_destroy)));
+        &cairo_surface_destroy));
 }
 
 void Qt5SvpSurface::flush() const

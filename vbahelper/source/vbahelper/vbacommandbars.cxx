@@ -76,7 +76,7 @@ public:
 
 ScVbaCommandBars::ScVbaCommandBars( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference< frame::XModel >& xModel ) : CommandBars_BASE( xParent, xContext, xIndexAccess )
 {
-    m_pCBarHelper.reset( new VbaCommandBarHelper( mxContext, xModel ) );
+    m_pCBarHelper = std::make_shared<VbaCommandBarHelper>( mxContext, xModel );
     m_xNameAccess = m_pCBarHelper->getPersistentWindowState();
 }
 

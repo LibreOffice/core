@@ -482,7 +482,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mxFontCollection = pSVData->maGDIData.mxScreenFontList->Clone();
 
     // prepare to use new font lists
-    mxFontCache.reset(new ImplFontCache);
+    mxFontCache = std::make_shared<ImplFontCache>();
 }
 
 sal_uInt16 VirtualDevice::GetBitCount() const

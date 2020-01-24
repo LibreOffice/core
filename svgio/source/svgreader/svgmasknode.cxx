@@ -272,8 +272,7 @@ namespace svgio
                         const drawinglayer::primitive2d::Primitive2DReference xInverseMask(
                             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                                 aMaskTarget,
-                                basegfx::BColorModifierSharedPtr(
-                                    new basegfx::BColorModifier_luminance_to_alpha())));
+                                std::make_shared<basegfx::BColorModifier_luminance_to_alpha>()));
 
                         aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xInverseMask };
                     }

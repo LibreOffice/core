@@ -268,7 +268,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
         }
         break;
     case ControlType::Generic:
-            aResult.reset( new ImplControlValue( rVal ) );
+            aResult = std::make_shared<ImplControlValue>( rVal );
             break;
     case ControlType::MenuPopup:
         {

@@ -1476,7 +1476,7 @@ void OutputDevice::SetFontCollectionFromSVData()
 
 void OutputDevice::ResetNewFontCache()
 {
-    mxFontCache.reset(new ImplFontCache{});
+    mxFontCache = std::make_shared<ImplFontCache>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

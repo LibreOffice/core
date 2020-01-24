@@ -114,7 +114,7 @@ struct PackedTexture
     std::unique_ptr<Node> mpRootNode;
 
     PackedTexture(int nWidth, int nHeight)
-        : mpTexture(new ImplOpenGLTexture(nWidth, nHeight, true))
+        : mpTexture(std::make_shared<ImplOpenGLTexture>(nWidth, nHeight, true))
         , mpRootNode(new Node(nWidth, nHeight))
     {}
 };
