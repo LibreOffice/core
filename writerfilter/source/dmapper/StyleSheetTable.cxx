@@ -1039,13 +1039,35 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
                         if ( pStyleSheetProperties )
                         {
                             beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
+                        }
+                        if ( pStyleSheetProperties->GetListLevel() < 0 && pStyleSheetProperties->GetNumId() && pStyleSheetProperties->GetOutlineLevel() < 0 )
+                        {
+                            // Getting the value of ilvl from the name of Appendices.
+                            // ilvl starts from 0 and style names start from 1.
+                            if (sConvertedStyleName == "Appendix 1" ||
+                                sConvertedStyleName == "Appendix 2" ||
+                                sConvertedStyleName == "Appendix 3" ||
+                                sConvertedStyleName == "Appendix 4" ||
+                                sConvertedStyleName == "Appendix 5" ||
+                                sConvertedStyleName == "Appendix 6" ||
+                                sConvertedStyleName == "Appendix 7" ||
+                                sConvertedStyleName == "Appendix 8" ||
+                                sConvertedStyleName == "Appendix 9")
+                            {
+                                OUString sLevelName = sConvertedStyleName;
+                                sal_Int16 nLevelLenght = sLevelName.getLength();
+                                OUString sLevel = sLevelName.copy(nLevelLenght - 1);
+                                sal_Int16 nLevel = sLevel.toInt32();
+                                pStyleSheetProperties->SetListLevel(nLevel - 1);
+                                pStyleSheetProperties->SetOutlineLevel(nLevel - 1);
+                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
