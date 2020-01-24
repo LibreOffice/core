@@ -16,6 +16,24 @@
       "revId": "8737679932039139b5a6688b131a00a978745f8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e3fb5e8_5555e80f",
+        "filename": "unotools/source/config/configitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-24T10:28:30Z",
+      "side": 1,
+      "message": "Now if sberg had let me roll out my stylepolice plugin, this would have been caught earlier :-)",
+      "parentUuid": "1769dff5_15eb9f96",
+      "revId": "8737679932039139b5a6688b131a00a978745f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
