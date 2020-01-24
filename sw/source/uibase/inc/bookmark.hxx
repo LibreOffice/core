@@ -60,6 +60,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     SfxRequest&                         rReq;
     std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;
     sal_Int32                           m_nLastBookmarksCount;
+    bool m_bAreProtected;
 
     DECL_LINK(ModifyHdl, Edit&, void);
     DECL_LINK(InsertHdl, Button*, void);

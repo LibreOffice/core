@@ -36,6 +36,7 @@
 #include <docsh.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -84,12 +85,12 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
     }
 
     // allow to add new bookmark only if one name provided and it's not taken
-    m_pInsertBtn->Enable(nEntries == 1 && nSelectedEntries == 0);
+    m_pInsertBtn->Enable(nEntries == 1 && nSelectedEntries == 0 && !m_bAreProtected);
 
     // allow to delete only if all bookmarks are recognized
-    m_pDeleteBtn->Enable(nEntries > 0 && nSelectedEntries == nEntries);
+    m_pDeleteBtn->Enable(nEntries > 0 && nSelectedEntries == nEntries && !m_bAreProtected);
     m_pGotoBtn->Enable(nEntries == 1 && nSelectedEntries == 1);
-    m_pRenameBtn->Enable(nEntries == 1 && nSelectedEntries == 1);
+    m_pRenameBtn->Enable(nEntries == 1 && nSelectedEntries == 1 && !m_bAreProtected);
 }
 
 // callback to delete a text mark
@@ -161,13 +162,13 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
     {
         m_pInsertBtn->Disable();
         m_pGotoBtn->Enable(m_pBookmarksBox->GetSelectionCount() == 1);
-        m_pRenameBtn->Enable(m_pBookmarksBox->GetSelectionCount() == 1);
-        m_pDeleteBtn->Enable();
+        m_pRenameBtn->Enable(m_pBookmarksBox->GetSelectionCount() == 1 && !m_bAreProtected);
+        m_pDeleteBtn->Enable(!m_bAreProtected);
         m_pEditBox->SetText(sEditBoxText);
     }
     else
     {
-        m_pInsertBtn->Enable();
+        m_pInsertBtn->Enable(!m_bAreProtected);
         m_pGotoBtn->Disable();
         m_pRenameBtn->Disable();
         m_pDeleteBtn->Disable();
@@ -327,6 +328,8 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(vcl::Window* pParent, SwWrtShell& rS, S
     m_pEditBox->SetCursorAtLast();
 
     sRemoveWarning = SwResId(STR_REMOVE_WARNING);
+
+    m_bAreProtected = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
 }
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
