@@ -35,7 +35,6 @@
 SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optfontspage.ui", "OptFontsPage", &rSet)
     , m_xConfig(new SvtFontSubstConfig)
-    , m_bSorted(false)
     , m_xUseTableCB(m_xBuilder->weld_check_button("usetable"))
     , m_xFont1CB(m_xBuilder->weld_combo_box("font1"))
     , m_xFont2CB(m_xBuilder->weld_combo_box("font2"))
@@ -57,7 +56,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
                                  m_xCheckLB->get_height_rows(10));
     m_xCheckLB->set_help_id(HID_OFA_FONT_SUBST_CLB);
     m_xCheckLB->set_selection_mode(SelectionMode::Multiple);
-    m_xCheckLB->set_sort_column(3);
 
     setColSizes();
 
@@ -92,12 +90,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
 
 IMPL_LINK(SvxFontSubstTabPage, HeaderBarClick, int, nColumn, void)
 {
-    if (!m_bSorted)
-    {
-        m_xCheckLB->make_sorted();
-        m_bSorted = true;
-    }
-
     bool bSortAtoZ = m_xCheckLB->get_sort_order();
 
     //set new arrow positions in headerbar
@@ -204,17 +196,22 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     if (nCount)
         m_xUseTableCB->set_active(m_xConfig->IsEnabled());
 
+    std::unique_ptr<weld::TreeIter> xIter(m_xCheckLB->make_iterator());
     for (sal_Int32  i = 0; i < nCount; ++i)
     {
-        m_xCheckLB->append();
+        m_xCheckLB->append(xIter.get());
         const SubstitutionStruct* pSubs = m_xConfig->GetSubstitution(i);
-        m_xCheckLB->set_toggle(i, pSubs->bReplaceAlways ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
-        m_xCheckLB->set_toggle(i, pSubs->bReplaceOnScreenOnly ? TRISTATE_TRUE : TRISTATE_FALSE, 2);
-        m_xCheckLB->set_text(i, pSubs->sFont, 3);
-        m_xCheckLB->set_text(i, pSubs->sReplaceBy, 4);
+        m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceAlways ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
+        m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceOnScreenOnly ? TRISTATE_TRUE : TRISTATE_FALSE, 2);
+        m_xCheckLB->set_text(*xIter, pSubs->sFont, 3);
+        m_xCheckLB->set_text(*xIter, pSubs->sReplaceBy, 4);
     }
 
     m_xCheckLB->thaw();
+
+    m_xCheckLB->make_sorted();
+    m_xCheckLB->set_sort_column(3);
+    m_xCheckLB->set_sort_indicator(TRISTATE_TRUE, 3);
 
     CheckEnable();
 
@@ -282,10 +279,12 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
         int nPos = findText(*m_xCheckLB, m_xFont1CB->get_active_text());
         if (pWin == m_xApply.get())
         {
+            m_xCheckLB->unselect_all();
             if (nPos != -1)
             {
                 // change entry
                 m_xCheckLB->set_text(nPos, m_xFont2CB->get_active_text(), 4);
+                m_xCheckLB->select(nPos);
             }
             else
             {
@@ -293,16 +292,14 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
                 OUString sFont1 = m_xFont1CB->get_active_text();
                 OUString sFont2 = m_xFont2CB->get_active_text();
 
-                nPos = m_xCheckLB->n_children();
-                m_xCheckLB->append();
-                m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 1);
-                m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 2);
-                m_xCheckLB->set_text(nPos, sFont1, 3);
-                m_xCheckLB->set_text(nPos, sFont2, 4);
-
+                std::unique_ptr<weld::TreeIter> xIter(m_xCheckLB->make_iterator());
+                m_xCheckLB->append(xIter.get());
+                m_xCheckLB->set_toggle(*xIter, TRISTATE_FALSE, 1);
+                m_xCheckLB->set_toggle(*xIter, TRISTATE_FALSE, 2);
+                m_xCheckLB->set_text(*xIter, sFont1, 3);
+                m_xCheckLB->set_text(*xIter, sFont2, 4);
+                m_xCheckLB->select(*xIter);
             }
-            m_xCheckLB->unselect_all();
-            m_xCheckLB->select(nPos);
         }
         else if (pWin == m_xDelete.get())
         {
