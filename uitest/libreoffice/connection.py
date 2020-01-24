@@ -130,7 +130,10 @@ class OfficeConnection:
             else:
                 self.soffice.terminate()
 
-            ret = self.soffice.wait()
+            if sys.version_info >= (3,3):
+                ret = self.soffice.wait(30)
+            else:
+                ret = self.soffice.wait() # no timeout in python that old
             self.xContext = None
             self.socket = None
             self.soffice = None
