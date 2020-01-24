@@ -1686,6 +1686,23 @@ TextFrameIndex SwScriptInfo::NextBookmark(TextFrameIndex const nPos) const
     return TextFrameIndex(COMPLETE_STRING);
 }
 
+auto SwScriptInfo::GetBookmark(TextFrameIndex const nPos) const -> MarkKind
+{
+    MarkKind ret{0};
+    for (auto const& it : m_Bookmarks)
+    {
+        if (nPos == it.first)
+        {
+            ret |= it.second;
+        }
+        else if (nPos < it.first)
+        {
+            break;
+        }
+    }
+    return ret;
+}
+
 // Takes a string and replaced the hidden ranges with cChar.
 sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTextNode& rNode, OUStringBuffer & rText,
                                        const sal_Int32 nStt, const sal_Int32 nEnd,

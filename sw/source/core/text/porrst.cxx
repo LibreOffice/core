@@ -306,6 +306,17 @@ bool SwTextFrame::FormatEmpty()
             aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) )
         return false;
 
+    // only need to check one node because of early return on GetMerged()
+    for (SwIndex const* pIndex = GetTextNodeFirst()->GetFirstIndex();
+         pIndex; pIndex = pIndex->GetNext())
+    {
+        sw::mark::IMark const*const pMark = pIndex->GetMark();
+        if (dynamic_cast<const sw::mark::IBookmark*>(pMark) != nullptr)
+        {   // need bookmark portions!
+            return false;
+        }
+    }
+
     SwTwips nHeight = EmptyHeight();
 
     if (aSet.GetParaGrid().GetValue() &&
@@ -488,34 +499,91 @@ bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
     return false;
 };
 
+bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
+        OUString & rOutString, SwFont & rTmpFont, int &) const
+{
+    if (mcChar == CHAR_ZWNBSP || !SwViewOption::IsFieldShadings())
+    {
+        return false;
+    }
+
+    switch (mcChar)
+    {
+        case CHAR_ZWSP:
+            rOutString = "/"; break;
+//      case CHAR_LRM :
+//          rText = sal_Unicode(0x2514); break;
+//      case CHAR_RLM :
+//          rText = sal_Unicode(0x2518); break;
+        default:
+            assert(false);
+            break;
+    }
+
+    rTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
+    const sal_uInt16 nProp = 40;
+    rTmpFont.SetProportion( nProp );  // a smaller font
+
+    return true;
+}
+
+bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rInf,
+        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const
+{
+    if (!rInf.GetOpt().IsViewMetaChars())
+    {
+        return false;
+    }
+
+    rOutString = OUStringChar(mcChar);
+
+    // init font: we want OpenSymbol to ensure it doesn't look too crazy;
+    // thin and a bit higher than the surrounding text
+    auto const nOrigAscent(rTmpFont.GetAscent(rInf.GetVsh(), *rInf.GetOut()));
+    rTmpFont.SetName("OpenSymbol", rTmpFont.GetActual());
+    Size size(rTmpFont.GetSize(rTmpFont.GetActual()));
+    // use also the external leading (line gap) of the portion, but don't use
+    // 100% of it because i can't figure out how to baseline align that
+    auto const nFactor = (Height() * 95) / size.Height();
+    rTmpFont.SetProportion(nFactor);
+    rTmpFont.SetWeight(WEIGHT_THIN, rTmpFont.GetActual());
+    rTmpFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+    // reset these to default...
+    rTmpFont.SetAlign(ALIGN_BASELINE);
+    rTmpFont.SetUnderline(LINESTYLE_NONE);
+    rTmpFont.SetOverline(LINESTYLE_NONE);
+    rTmpFont.SetStrikeout(STRIKEOUT_NONE);
+    rTmpFont.SetOutline(false);
+    rTmpFont.SetShadow(false);
+    rTmpFont.SetTransparent(false);
+    rTmpFont.SetEmphasisMark(FontEmphasisMark::NONE);
+    rTmpFont.SetEscapement(0);
+    rTmpFont.SetPitch(PITCH_DONTKNOW, rTmpFont.GetActual());
+    rTmpFont.SetRelief(FontRelief::NONE);
+
+    // adjust Y position to account for different baselines of the fonts
+    auto const nOSAscent(rTmpFont.GetAscent(rInf.GetVsh(), *rInf.GetOut()));
+    rDeltaY = nOSAscent - nOrigAscent;
+
+    return true;
+}
+
 void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )  // is only set during prepaint mode
     {
-        rInf.DrawViewOpt( *this, PortionType::ControlChar );
+        rInf.DrawViewOpt(*this, GetWhichPor());
 
-        if ( !rInf.GetOpt().IsPagePreview() &&
-             !rInf.GetOpt().IsReadonly() &&
-              SwViewOption::IsFieldShadings() &&
-              CHAR_ZWNBSP != mcChar )
+        int deltaY(0);
+        SwFont aTmpFont( *rInf.GetFont() );
+        OUString aOutString;
+
+        if (rInf.OnWin()
+            && !rInf.GetOpt().IsPagePreview()
+            && !rInf.GetOpt().IsReadonly()
+            && DoPaint(rInf, aOutString, aTmpFont, deltaY))
         {
-            SwFont aTmpFont( *rInf.GetFont() );
-            aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
-            const sal_uInt16 nProp = 40;
-            aTmpFont.SetProportion( nProp );  // a smaller font
             SwFontSave aFontSave( rInf, &aTmpFont );
-
-            OUString aOutString;
-
-            switch ( mcChar )
-            {
-                case CHAR_ZWSP :
-                    aOutString = "/"; break;
-//                case CHAR_LRM :
-//                    rText = sal_Unicode(0x2514); break;
-//                case CHAR_RLM :
-//                    rText = sal_Unicode(0x2518); break;
-            }
 
             if ( !mnHalfCharWidth )
                 mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
@@ -527,12 +595,15 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
             {
                 case 0:
                     aNewPos.AdjustX(deltaX);
+                    aNewPos.AdjustY(deltaY);
                     break;
                 case 900:
                     aNewPos.AdjustY(-deltaX);
+                    aNewPos.AdjustX(deltaY);
                     break;
                 case 2700:
                     aNewPos.AdjustY(deltaX);
+                    aNewPos.AdjustX(-deltaY);
                     break;
                 default:
                     assert(false);
@@ -563,6 +634,15 @@ sal_uInt16 SwControlCharPortion::GetViewWidth( const SwTextSizeInfo& rInf ) cons
         mnViewWidth = rInf.GetTextSize(OUString(' ')).Width();
 
     return mnViewWidth;
+}
+
+SwLinePortion * SwBookmarkPortion::Unchain()
+{
+    assert(!m_pPrevious || m_pPrevious->GetNextPortion() == this);
+    m_pPrevious->SetNextPortion(nullptr);
+    auto const pTmp(m_pPrevious);
+    m_pPrevious = nullptr;
+    return pTmp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
