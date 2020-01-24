@@ -207,7 +207,7 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC LightCtl3D
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D
 {
     // local controls
     LightControl3D& mrLightControl;
@@ -216,13 +216,13 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC LightCtl3D
     weld::Button& mrSwitcher;
 
     // callback for interactive changes
-    Link<LightCtl3D*,void>  maUserInteractiveChangeCallback;
-    Link<LightCtl3D*,void>  maUserSelectionChangeCallback;
+    Link<SvxLightCtl3D*,void>  maUserInteractiveChangeCallback;
+    Link<SvxLightCtl3D*,void>  maUserSelectionChangeCallback;
 
 public:
-    LightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
+    SvxLightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
                weld::Scale& rVert, weld::Button& rButton);
-    ~LightCtl3D();
+    ~SvxLightCtl3D();
 
     // check the selection for validity
     void CheckSelection();
@@ -231,8 +231,8 @@ public:
     LightControl3D& GetSvx3DLightControl() { return mrLightControl; }
 
     // register user callback
-    void SetUserInteractiveChangeCallback(Link<LightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }
-    void SetUserSelectionChangeCallback(Link<LightCtl3D*,void> aNew) { maUserSelectionChangeCallback = aNew; }
+    void SetUserInteractiveChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }
+    void SetUserSelectionChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserSelectionChangeCallback = aNew; }
 
 private:
 

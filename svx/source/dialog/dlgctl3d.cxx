@@ -1594,7 +1594,7 @@ basegfx::B3DVector LightControl3D::GetLightDirection(sal_uInt32 nNum) const
     return basegfx::B3DVector();
 }
 
-LightCtl3D::LightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
+SvxLightCtl3D::SvxLightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
                        weld::Scale& rVert, weld::Button& rSwitcher)
     : mrLightControl(rLightControl)
     , mrHorScroller(rHori)
@@ -1605,7 +1605,7 @@ LightCtl3D::LightCtl3D(LightControl3D& rLightControl, weld::Scale& rHori,
     Init();
 }
 
-void LightCtl3D::Init()
+void SvxLightCtl3D::Init()
 {
     Size aSize(mrLightControl.GetDrawingArea()->get_ref_device().LogicToPixel(Size(80, 100), MapMode(MapUnit::MapAppFont)));
     mrLightControl.set_size_request(aSize.Width(), aSize.Height());
@@ -1618,39 +1618,39 @@ void LightCtl3D::Init()
 
     // Light preview
     mrLightControl.Show();
-    mrLightControl.SetChangeCallback( LINK(this, LightCtl3D, InternalInteractiveChange) );
-    mrLightControl.SetSelectionChangeCallback( LINK(this, LightCtl3D, InternalSelectionChange) );
+    mrLightControl.SetChangeCallback( LINK(this, SvxLightCtl3D, InternalInteractiveChange) );
+    mrLightControl.SetSelectionChangeCallback( LINK(this, SvxLightCtl3D, InternalSelectionChange) );
 
     // Horiz Scrollbar
     mrHorScroller.show();
     mrHorScroller.set_range(0, 36000);
-    mrHorScroller.connect_value_changed( LINK(this, LightCtl3D, ScrollBarMove) );
+    mrHorScroller.connect_value_changed( LINK(this, SvxLightCtl3D, ScrollBarMove) );
 
     // Vert Scrollbar
     mrVerScroller.show();
     mrVerScroller.set_range(0, 18000);
-    mrVerScroller.connect_value_changed( LINK(this, LightCtl3D, ScrollBarMove) );
+    mrVerScroller.connect_value_changed( LINK(this, SvxLightCtl3D, ScrollBarMove) );
 
     // Switch Button
     mrSwitcher.show();
-    mrSwitcher.connect_clicked( LINK(this, LightCtl3D, ButtonPress) );
+    mrSwitcher.connect_clicked( LINK(this, SvxLightCtl3D, ButtonPress) );
 
     weld::DrawingArea* pArea = mrLightControl.GetDrawingArea();
     pArea->connect_key_press(Link<const KeyEvent&, bool>()); //acknowledge we first remove the old one
-    pArea->connect_key_press(LINK(this, LightCtl3D, KeyInput));
+    pArea->connect_key_press(LINK(this, SvxLightCtl3D, KeyInput));
 
     pArea->connect_focus_in(Link<weld::Widget&, void>()); //acknowledge we first remove the old one
-    pArea->connect_focus_in(LINK(this, LightCtl3D, FocusIn));
+    pArea->connect_focus_in(LINK(this, SvxLightCtl3D, FocusIn));
 
     // check selection
     CheckSelection();
 }
 
-LightCtl3D::~LightCtl3D()
+SvxLightCtl3D::~SvxLightCtl3D()
 {
 }
 
-void LightCtl3D::CheckSelection()
+void SvxLightCtl3D::CheckSelection()
 {
     const bool bSelectionValid(mrLightControl.IsSelectionValid() || mrLightControl.IsGeometrySelected());
     mrHorScroller.set_sensitive(bSelectionValid);
@@ -1665,7 +1665,7 @@ void LightCtl3D::CheckSelection()
     }
 }
 
-void LightCtl3D::move( double fDeltaHor, double fDeltaVer )
+void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
 {
     double fHor(0.0), fVer(0.0);
 
@@ -1689,7 +1689,7 @@ void LightCtl3D::move( double fDeltaHor, double fDeltaVer )
     }
 }
 
-IMPL_LINK(LightCtl3D, KeyInput, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(SvxLightCtl3D, KeyInput, const KeyEvent&, rKEvt, bool)
 {
     const vcl::KeyCode aCode(rKEvt.GetKeyCode());
 
@@ -1797,7 +1797,7 @@ IMPL_LINK(LightCtl3D, KeyInput, const KeyEvent&, rKEvt, bool)
     return bHandled;
 }
 
-IMPL_LINK_NOARG(LightCtl3D, FocusIn, weld::Widget&, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, FocusIn, weld::Widget&, void)
 {
     if (mrLightControl.IsEnabled())
     {
@@ -1805,7 +1805,7 @@ IMPL_LINK_NOARG(LightCtl3D, FocusIn, weld::Widget&, void)
     }
 }
 
-IMPL_LINK_NOARG(LightCtl3D, ScrollBarMove, weld::Scale&, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove, weld::Scale&, void)
 {
     const sal_Int32 nHor(mrHorScroller.get_value());
     const sal_Int32 nVer(mrVerScroller.get_value());
@@ -1820,7 +1820,7 @@ IMPL_LINK_NOARG(LightCtl3D, ScrollBarMove, weld::Scale&, void)
     }
 }
 
-IMPL_LINK_NOARG(LightCtl3D, ButtonPress, weld::Button&, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress, weld::Button&, void)
 {
     if(SvxPreviewObjectType::SPHERE == GetSvx3DLightControl().GetObjectType())
     {
@@ -1832,7 +1832,7 @@ IMPL_LINK_NOARG(LightCtl3D, ButtonPress, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(LightCtl3D, InternalInteractiveChange, LightControl3D*, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange, LightControl3D*, void)
 {
     double fHor(0.0), fVer(0.0);
 
@@ -1846,7 +1846,7 @@ IMPL_LINK_NOARG(LightCtl3D, InternalInteractiveChange, LightControl3D*, void)
     }
 }
 
-IMPL_LINK_NOARG(LightCtl3D, InternalSelectionChange, LightControl3D*, void)
+IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange, LightControl3D*, void)
 {
     CheckSelection();
 

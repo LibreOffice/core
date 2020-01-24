@@ -210,7 +210,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     , m_xBtn_Corner(m_xBuilder->weld_button("corner"))
     , m_xPreview(new LightControl3D)
     , m_xPreviewWnd(new weld::CustomWeld(*m_xBuilder, "CTL_LIGHT_PREVIEW", *m_xPreview))
-    , m_xCtl_Preview(new LightCtl3D(*m_xPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner))
+    , m_xCtl_Preview(new SvxLightCtl3D(*m_xPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner))
 {
     m_pLightSourceInfoList.reset(new LightSourceInfo[8]);
     m_pLightSourceInfoList[0].pButton = m_xBtn_Light1.get();
@@ -283,7 +283,7 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, LightCtl3D*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3D*, void)
 {
     m_aTimerTriggeredControllerLock.startTimer();
 
@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, LightCtl3D*,
     applyLightSourcesToModel();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, LightCtl3D*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3D*, void)
 {
     sal_uInt32 nLightNumber = m_xCtl_Preview->GetSvx3DLightControl().GetSelectedLight();
     if(nLightNumber<8)
