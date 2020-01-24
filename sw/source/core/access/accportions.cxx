@@ -170,6 +170,9 @@ void SwAccessiblePortionData::Special(
         case PortionType::ControlChar:
             sDisplay = rText + OUStringChar(m_pTextFrame->GetText()[sal_Int32(m_nViewPosition)]);
             break;
+        case PortionType::Bookmark:
+            // TODO
+            break;
         default:
             sDisplay = rText;
             break;
