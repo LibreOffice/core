@@ -32,6 +32,7 @@
 #include <ndtxt.hxx>
 #include <strings.hrc>
 #include <svtools/miscopt.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -81,7 +82,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     m_xInsertBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 0 && !bHasForbiddenChars);
 
     // allow to delete only if all bookmarks are recognized
-    m_xDeleteBtn->set_sensitive(nEntries > 0 && nSelectedEntries == nEntries);
+    m_xDeleteBtn->set_sensitive(nEntries > 0 && nSelectedEntries == nEntries && m_bCanDeleteBookmark);
     m_xGotoBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 1);
     m_xRenameBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 1);
 }
@@ -161,7 +162,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
         m_xInsertBtn->set_sensitive(false);
         m_xGotoBtn->set_sensitive(nSelectedRows == 1);
         m_xRenameBtn->set_sensitive(nSelectedRows == 1);
-        m_xDeleteBtn->set_sensitive(true);
+        m_xDeleteBtn->set_sensitive(m_bCanDeleteBookmark);
         m_xEditBox->set_text(sEditBoxText.makeStringAndClear());
     }
     else
@@ -340,6 +341,8 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
         m_xConditionED->set_visible( false );
     }
 
+    sRemoveWarning = SwResId(STR_REMOVE_WARNING);
+    m_bCanDeleteBookmark = !rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS);
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
