@@ -1,6 +1,5 @@
 #!/bin/sh
 #
-# An example hook script to check the commit log message.
 # Called by git-commit with one argument, the name of the file
 # that has the commit message.  The hook should exit with non-zero
 # status after issuing an appropriate message if it wants to stop the
@@ -8,14 +7,17 @@
 #
 # To enable this hook, make this file executable.
 
-# Uncomment the below to add a Signed-off-by line to the message.
-# SOB=$(git var GIT_AUTHOR_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
-# grep -qs "^$SOB" "$1" || echo "$SOB" >> "$1"
+# avoid [[ which is not POSIX sh.
 
-# This example catches duplicate Signed-off-by lines.
+if test "$#" != 1 ; then
+    echo "$0 requires an argument."
+    exit 1
+fi
 
-base_dir=$(dirname $0)
-MSG="$1"
+if test ! -f "$1" ; then
+    echo "file does not exist: $1"
+    exit 1
+fi
 
 abort() {
     cp $1 $1.save
@@ -30,7 +32,7 @@ EOF
 
 test "" = "$(grep '^Signed-off-by: ' "$1" |
          sort | uniq -c | sed -e '/^[         ]*1[         ]/d')" || {
-        abort "$1" "Duplicate Signed-off-by lines."
+    abort "$1" "Duplicate Signed-off-by lines."
 }
 
 # Check that the first line exists, and is not an asterisk
@@ -74,11 +76,9 @@ if [ -n "`grep '^#[^[:blank:]]' $1`" ] ; then
     abort "$1" "Possible accidental comment in the commit message (leading # without space)."
 fi
 
-
-#------------------ copied gerrit commit-msg hook to handle ChangeId -->
-# From Gerrit Code Review 2.3
+# From Gerrit Code Review 2.16.15
 #
-# Part of Gerrit Code Review (http://code.google.com/p/gerrit/)
+# Part of Gerrit Code Review (https://www.gerritcodereview.com/)
 #
 # Copyright (C) 2009 The Android Open Source Project
 #
@@ -93,168 +93,42 @@ fi
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-CHANGE_ID_AFTER="Bug|Issue"
+# Do not create a change id if requested
+if test "false" = "`git config --bool --get gerrit.createChangeId`" ; then
+    exit 0
+fi
 
-# Check for, and add if missing, a unique Change-Id
-#
-add_ChangeId() {
-        clean_message=`sed -e '
-                /^diff --git .*/{
-                        s///
-                        q
-                }
-                /^Signed-off-by:/d
-                /^#/d
-        ' "$MSG" | git stripspace`
-        if test -z "$clean_message"
-        then
-                return
-        fi
+# $RANDOM will be undefined if not using bash, so don't use set -u
+random=$( (whoami ; hostname ; date; cat $1 ; echo $RANDOM) | git hash-object --stdin)
+dest="$1.tmp.${random}"
 
-        if test "false" = "`git config --bool --get gerrit.createChangeId`"
-        then
-                return
-        fi
+trap 'rm -f "${dest}"' EXIT
 
-        # Does Change-Id: already exist? if so, exit (no change).
-        if grep -i '^Change-Id:' "$MSG" >/dev/null
-        then
-                return
-        fi
+if ! git stripspace --strip-comments < "$1" > "${dest}" ; then
+    echo "cannot strip comments from $1"
+    exit 1
+fi
 
-        id=`_gen_ChangeId`
-        T="$MSG.tmp.$$"
-        AWK=awk
-        if [ -x /usr/xpg4/bin/awk ]; then
-                # Solaris AWK is just too broken
-                AWK=/usr/xpg4/bin/awk
-        fi
+if test ! -s "${dest}" ; then
+    echo "file is empty: $1"
+    exit 1
+fi
 
-        # How this works:
-        # - parse the commit message as (textLine+ blankLine*)*
-        # - assume textLine+ to be a footer until proven otherwise
-        # - exception: the first block is not footer (as it is the title)
-        # - read textLine+ into a variable
-        # - then count blankLines
-        # - once the next textLine appears, print textLine+ blankLine* as these
-        #   aren't footer
-        # - in END, the last textLine+ block is available for footer parsing
-        $AWK '
-        BEGIN {
-                # while we start with the assumption that textLine+
-                # is a footer, the first block is not.
-                isFooter = 0
-                footerComment = 0
-                blankLines = 0
-        }
+# Avoid the --in-place option which only appeared in Git 2.8
+# Avoid the --if-exists option which only appeared in Git 2.15
+if ! git -c trailer.ifexists=doNothing interpret-trailers \
+        --trailer "Change-Id: I${random}" < "$1" > "${dest}" ; then
+    echo "cannot insert change-id line in $1"
+    exit 1
+fi
 
-        # Skip lines starting with "#" without any spaces before it.
-        /^#/ { next }
+if ! mv "${dest}" "$1" ; then
+    echo "cannot mv ${dest} to $1"
+    exit 1
+fi
 
-        # Skip the line starting with the diff command and everything after it,
-        # up to the end of the file, assuming it is only patch data.
-        # If more than one line before the diff was empty, strip all but one.
-        /^diff --git / {
-                blankLines = 0
-                while (getline) { }
-                next
-        }
-
-        # Count blank lines outside footer comments
-        /^$/ && (footerComment == 0) {
-                blankLines++
-                next
-        }
-
-        # Catch footer comment
-        /^\[[a-zA-Z0-9-]+:/ && (isFooter == 1) {
-                footerComment = 1
-        }
-
-        /]$/ && (footerComment == 1) {
-                footerComment = 2
-        }
-
-        # We have a non-blank line after blank lines. Handle this.
-        (blankLines > 0) {
-                print lines
-                for (i = 0; i < blankLines; i++) {
-                        print ""
-                }
-
-                lines = ""
-                blankLines = 0
-                isFooter = 1
-                footerComment = 0
-        }
-
-        # Detect that the current block is not the footer
-        (footerComment == 0) && (!/^\[?[a-zA-Z0-9-]+:/ || /^[a-zA-Z0-9-]+:\/\//) {
-                isFooter = 0
-        }
-
-        {
-                # We need this information about the current last comment line
-                if (footerComment == 2) {
-                        footerComment = 0
-                }
-                if (lines != "") {
-                        lines = lines "\n";
-                }
-                lines = lines $0
-        }
-
-        # Footer handling:
-        # If the last block is considered a footer, splice in the Change-Id at the
-        # right place.
-        # Look for the right place to inject Change-Id by considering
-        # CHANGE_ID_AFTER. Keys listed in it (case insensitive) come first,
-        # then Change-Id, then everything else (eg. Signed-off-by:).
-        #
-        # Otherwise just print the last block, a new line and the Change-Id as a
-        # block of its own.
-        END {
-                unprinted = 1
-                if (isFooter == 0) {
-                        print lines "\n"
-                        lines = ""
-                }
-                changeIdAfter = "^(" tolower("'"$CHANGE_ID_AFTER"'") "):"
-                numlines = split(lines, footer, "\n")
-                for (line = 1; line <= numlines; line++) {
-                        if (unprinted && match(tolower(footer[line]), changeIdAfter) != 1) {
-                                unprinted = 0
-                                print "Change-Id: I'"$id"'"
-                        }
-                        print footer[line]
-                }
-                if (unprinted) {
-                        print "Change-Id: I'"$id"'"
-                }
-        }' "$MSG" > "$T" && mv "$T" "$MSG" || rm -f "$T"
-}
-_gen_ChangeIdInput() {
-        echo "tree `git write-tree`"
-        if parent=`git rev-parse "HEAD^0" 2>/dev/null`
-        then
-                echo "parent $parent"
-        fi
-        echo "author `git var GIT_AUTHOR_IDENT`"
-        echo "committer `git var GIT_COMMITTER_IDENT`"
-        echo
-        printf '%s' "$clean_message"
-}
-_gen_ChangeId() {
-        _gen_ChangeIdInput |
-        git hash-object -t commit --stdin
-}
-
-
-add_ChangeId
 #------------------ copied gerrit commit-msg hook to handle ChangeId <--
-
 
 exit 0
 
