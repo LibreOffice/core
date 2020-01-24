@@ -69,6 +69,29 @@
       "revId": "1ff79cfaf746aa65d9fa19e82f14da8d8a2d9209",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8451871a_3fb8517d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-24T17:13:43Z",
+      "side": 0,
+      "message": "Just one nitpick. Please don\u0027t do unrelated whitespace changes. Specifically here, the indentation is such that *first* comment line is indented by 4 spaces, and others are aligned to asterisks. You bkoke the first line indentation to be non-standard 3.",
+      "range": {
+        "startLine": 122,
+        "startChar": 3,
+        "endLine": 124,
+        "endChar": 7
+      },
+      "revId": "1ff79cfaf746aa65d9fa19e82f14da8d8a2d9209",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
