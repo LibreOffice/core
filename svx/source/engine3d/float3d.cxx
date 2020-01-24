@@ -421,8 +421,15 @@ void Svx3DWin::dispose()
     m_xMtrMatSpecularIntensity.reset();
     m_xCtlPreviewWin.reset();
     m_xCtlPreview.reset();
-    m_xCtlLightPreviewWin.reset();
+
     m_xCtlLightPreview.reset();
+    m_xCtlLightPreviewWin.reset();
+    m_xLightPreview.reset();
+    m_xBtn_Corner.reset();
+    m_xVertScale.reset();
+    m_xHoriScale.reset();
+    m_xLightPreviewGrid.reset();
+
     m_xBtnConvertTo3D.reset();
     m_xBtnLatheObject.reset();
     m_xBtnPerspective.reset();
