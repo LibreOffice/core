@@ -684,6 +684,7 @@
 #define STR_POSTIT_HIDE                         NC_("STR_POSTIT_HIDE", "Hide All")
 #define STR_POSTIT_DELETE                       NC_("STR_POSTIT_DELETE", "Delete All")
 #define STR_RESOLVED                            NC_("STR_RESOLVED", "RESOLVED")
+#define STR_PROTECTED                           NC_("STR_PROTECTED", "Protected")
 
 #define STR_MARGIN_TOOLTIP_LEFT                 NC_("STR_MARGIN_TOOLTIP_LEFT", "Left: ")
 #define STR_MARGIN_TOOLTIP_RIGHT                NC_("STR_MARGIN_TOOLTIP_RIGHT", ". Right: ")

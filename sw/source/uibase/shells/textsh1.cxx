@@ -677,7 +677,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_DELETE_BOOKMARK:
         {
-            if ( pItem )
+            if (pItem && !rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
             {
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
                 pMarkAccess->deleteMark( pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()) );

@@ -32,6 +32,7 @@
 #include <ndtxt.hxx>
 #include <strings.hrc>
 #include <svtools/miscopt.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -78,12 +79,12 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, weld::Entry&, void)
     }
 
     // allow to add new bookmark only if one name provided and it's not taken
-    m_xInsertBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 0 && !bHasForbiddenChars);
+    m_xInsertBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 0 && !bHasForbiddenChars && !m_bAreProtected);
 
     // allow to delete only if all bookmarks are recognized
-    m_xDeleteBtn->set_sensitive(nEntries > 0 && nSelectedEntries == nEntries);
+    m_xDeleteBtn->set_sensitive(nEntries > 0 && nSelectedEntries == nEntries && !m_bAreProtected);
     m_xGotoBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 1);
-    m_xRenameBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 1);
+    m_xRenameBtn->set_sensitive(nEntries == 1 && nSelectedEntries == 1 && !m_bAreProtected);
 }
 
 // callback to delete a text mark
@@ -160,13 +161,12 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
     {
         m_xInsertBtn->set_sensitive(false);
         m_xGotoBtn->set_sensitive(nSelectedRows == 1);
-        m_xRenameBtn->set_sensitive(nSelectedRows == 1);
-        m_xDeleteBtn->set_sensitive(true);
+        m_xRenameBtn->set_sensitive(nSelectedRows == 1 && !m_bAreProtected);
         m_xEditBox->set_text(sEditBoxText.makeStringAndClear());
     }
     else
     {
-        m_xInsertBtn->set_sensitive(true);
+        m_xInsertBtn->set_sensitive(!m_bAreProtected);
         m_xGotoBtn->set_sensitive(false);
         m_xRenameBtn->set_sensitive(false);
         m_xDeleteBtn->set_sensitive(false);
@@ -340,6 +340,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
         m_xConditionED->set_visible( false );
     }
 
+    m_bAreProtected = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
