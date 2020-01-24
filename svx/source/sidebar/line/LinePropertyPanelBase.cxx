@@ -474,8 +474,8 @@ void LinePropertyPanelBase::SetWidth(long nWidth)
 
 void LinePropertyPanelBase::ActivateControls()
 {
-    mxGridLineProps->set_sensitive(mbNoneLineStyle);
-    mxBoxArrowProps->set_sensitive(mbNoneLineStyle);
+    mxGridLineProps->set_sensitive(!mbNoneLineStyle);
+    mxBoxArrowProps->set_sensitive(!mbNoneLineStyle);
     mxLineStyleTB->set_item_visible(".uno:LineEndStyle", mbArrowSupported);
     mxLineStyleTB->set_item_sensitive(".uno:LineEndStyle", !mbNoneLineStyle);
 }
