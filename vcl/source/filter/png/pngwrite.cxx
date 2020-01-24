@@ -114,7 +114,19 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
 {
     if (!rBitmapEx.IsEmpty())
     {
-        Bitmap aBmp(rBitmapEx.GetBitmap());
+        BitmapEx aBitmapEx;
+
+        if (rBitmapEx.GetBitmap().GetBitCount() == 32)
+        {
+            if (!vcl::bitmap::convertBitmap32To24Plus8(rBitmapEx, aBitmapEx))
+                return;
+        }
+        else
+        {
+            aBitmapEx = rBitmapEx;
+        }
+
+        Bitmap aBmp(aBitmapEx.GetBitmap());
 
         mnMaxChunkSize = std::numeric_limits<sal_uInt32>::max();
 
@@ -136,26 +148,9 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
         }
         mnBitsPerPixel = static_cast<sal_uInt8>(aBmp.GetBitCount());
 
-        if (mnBitsPerPixel == 32)
+        if (aBitmapEx.IsTransparent())
         {
-            mpAccess = Bitmap::ScopedReadAccess(aBmp); // RGBA
-            if (mpAccess)
-            {
-                if (ImplWriteHeader())
-                {
-                    ImplWritepHYs(rBitmapEx);
-                    ImplWriteIDAT();
-                }
-                mpAccess.reset();
-            }
-            else
-            {
-                mbStatus = false;
-            }
-        }
-        else if (rBitmapEx.IsTransparent())
-        {
-            if (mnBitsPerPixel <= 8 && rBitmapEx.IsAlpha())
+            if (mnBitsPerPixel <= 8 && aBitmapEx.IsAlpha())
             {
                 aBmp.Convert( BmpConversion::N24Bit );
                 mnBitsPerPixel = 24;
@@ -164,14 +159,14 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
             if (mnBitsPerPixel <= 8) // transparent palette
             {
                 aBmp.Convert(BmpConversion::N8BitTrans);
-                aBmp.Replace(rBitmapEx.GetMask(), BMP_COL_TRANS);
+                aBmp.Replace(aBitmapEx.GetMask(), BMP_COL_TRANS);
                 mnBitsPerPixel = 8;
                 mpAccess = Bitmap::ScopedReadAccess(aBmp);
                 if (mpAccess)
                 {
                     if (ImplWriteHeader())
                     {
-                        ImplWritepHYs(rBitmapEx);
+                        ImplWritepHYs(aBitmapEx);
                         ImplWritePalette();
                         ImplWriteTransparent();
                         ImplWriteIDAT();
@@ -188,16 +183,16 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
                 mpAccess = Bitmap::ScopedReadAccess(aBmp); // true RGB with alphachannel
                 if (mpAccess)
                 {
-                    mbTrueAlpha = rBitmapEx.IsAlpha();
+                    mbTrueAlpha = aBitmapEx.IsAlpha();
                     if (mbTrueAlpha)
                     {
-                        AlphaMask aMask(rBitmapEx.GetAlpha());
+                        AlphaMask aMask(aBitmapEx.GetAlpha());
                         mpMaskAccess = aMask.AcquireReadAccess();
                         if (mpMaskAccess)
                         {
                             if (ImplWriteHeader())
                             {
-                                ImplWritepHYs(rBitmapEx);
+                                ImplWritepHYs(aBitmapEx);
                                 ImplWriteIDAT();
                             }
                             aMask.ReleaseAccess(mpMaskAccess);
@@ -210,13 +205,13 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
                     }
                     else
                     {
-                        Bitmap aMask(rBitmapEx.GetMask());
+                        Bitmap aMask(aBitmapEx.GetMask());
                         mpMaskAccess = aMask.AcquireReadAccess();
                         if (mpMaskAccess)
                         {
                             if (ImplWriteHeader())
                             {
-                                ImplWritepHYs(rBitmapEx);
+                                ImplWritepHYs(aBitmapEx);
                                 ImplWriteIDAT();
                             }
                             Bitmap::ReleaseAccess(mpMaskAccess);
@@ -242,7 +237,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBitmapEx,
             {
                 if (ImplWriteHeader())
                 {
-                    ImplWritepHYs(rBitmapEx);
+                    ImplWritepHYs(aBitmapEx);
                     if (mpAccess->HasPalette())
                         ImplWritePalette();
 
@@ -318,11 +313,6 @@ bool PNGWriterImpl::ImplWriteHeader()
 
         if (mpMaskAccess)
             nColorType |= 4;
-        if (mnBitsPerPixel == 32)
-        {
-            nBitDepth = mnBitsPerPixel / 4;
-            nColorType |= 4;
-        }
 
         ImplWriteChunk(nBitDepth);
         ImplWriteChunk(nColorType); // colortype
@@ -593,18 +583,6 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
                         else
                             *pDest++ = 0xff;
                     }
-                }
-            }
-            else if(mnBitsPerPixel == 32) // RGBA
-            {
-                Scanline pScanline = mpAccess->GetScanline( nY );
-                for (sal_uLong nX = nXStart; nX < mnWidth; nX += nXAdd)
-                {
-                    const BitmapColor& rColor = mpAccess->GetPixelFromData(pScanline, nX);
-                    *pDest++ = rColor.GetRed();
-                    *pDest++ = rColor.GetGreen();
-                    *pDest++ = rColor.GetBlue();
-                    *pDest++ = 255 - rColor.GetTransparency();
                 }
             }
             else
