@@ -886,6 +886,12 @@ uno::Sequence< OUString > PropValVector::getNames()
     return comphelper::containerToSequence(aRet);
 }
 
+static bool lcl_IsOutLineStyle(const OUString& sPrefix, const OUString& sStyleName)
+{
+    OUString sSuffix;
+    return sStyleName.getLength() == (sPrefix.getLength() + 2) && sStyleName.startsWith(sPrefix + " ", &sSuffix) && sSuffix.toInt32() > 0;
+}
+
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 {
     try
@@ -1043,13 +1049,39 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+
                         if ( pStyleSheetProperties )
                         {
                             beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
+
+                            // tdf#95495 missing list level settings in custom styles in old DOCX: apply settings of the parent style
+                            if (pStyleSheetProperties->GetListLevel() == -1 && pStyleSheetProperties->GetOutlineLevel() == -1)
+                            {
+                                const beans::PropertyValues aPropGrabBag = pEntry->GetInteropGrabBagSeq();
+                                for (const auto& rVal : aPropGrabBag)
+                                {
+                                    if (rVal.Name == "customStyle" && rVal.Value == true)
+                                    {
+                                        OUString sBaseId = pEntry->sBaseStyleIdentifier;
+                                        for (const auto& aSheetProps : m_pImpl->m_aStyleSheetEntries)
+                                        {
+                                            if (aSheetProps->sStyleIdentifierD == sBaseId)
+                                            {
+                                                StyleSheetPropertyMap* aStyleSheetProps
+                                                    = dynamic_cast<StyleSheetPropertyMap*>(aSheetProps->pProperties.get());
+                                                pStyleSheetProperties->SetListLevel(aStyleSheetProps->GetListLevel());
+                                                pStyleSheetProperties->SetOutlineLevel(aStyleSheetProps->GetOutlineLevel());
+                                                pStyleSheetProperties->SetNumId(aStyleSheetProps->GetNumId());
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
@@ -1063,15 +1095,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
                         else if ( sConvertedStyleName == "Text body" )
                             xState->setPropertyToDefault(getPropertyName( PROP_PARA_BOTTOM_MARGIN ));
-                        else if( sConvertedStyleName == "Heading 1" ||
-                                sConvertedStyleName == "Heading 2" ||
-                                sConvertedStyleName == "Heading 3" ||
-                                sConvertedStyleName == "Heading 4" ||
-                                sConvertedStyleName == "Heading 5" ||
-                                sConvertedStyleName == "Heading 6" ||
-                                sConvertedStyleName == "Heading 7" ||
-                                sConvertedStyleName == "Heading 8" ||
-                                sConvertedStyleName == "Heading 9" )
+                        else if( lcl_IsOutLineStyle("Heading", sConvertedStyleName) )
                         {
                             xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT ));
                             xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT_ASIAN ));

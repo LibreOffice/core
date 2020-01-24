@@ -1061,6 +1061,16 @@ DECLARE_OOXMLEXPORT_TEST(testFontTypes, "tdf120344_FontTypes.docx")
     assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNumberingLevels, "tdf95495.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // tdf#95495: set list level of the custom style based on the setting of the parent style
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
