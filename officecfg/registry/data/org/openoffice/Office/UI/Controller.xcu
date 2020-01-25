@@ -1371,6 +1371,94 @@
           <value>com.sun.star.comp.svx.LineEndToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="VertTopToBottomToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TextdirectionTopToBottom</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertLeftToRightToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TextdirectionLeftToRight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertCaptionToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:VerticalCaption</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertDrawFontworkToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DrawFontworkVertical</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertTextToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:VerticalText</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="VertTextFitToSizeToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:VerticalTextFitToSizeTool</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.VertTextToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CTLParaLeftToRightToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ParaLeftToRight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CTLToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CTLParaRightToLeftToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ParaRightToLeft</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CTLToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="LineStyleToolBoxControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:XLineStyle</value>

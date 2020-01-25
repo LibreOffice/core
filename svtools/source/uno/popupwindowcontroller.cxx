@@ -185,16 +185,16 @@ void SAL_CALL PopupWindowController::dispose()
 // XStatusListener
 void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
+    SolarMutexGuard aSolarLock;
+
     bool bValue = false;
     rEvent.State >>= bValue;
 
-    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(getParent().get()))
+    if (m_pToolbar)
     {
-        auto pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
-        assert(pToolbar && "must be a toolbar");
         OString sId = m_aCommandURL.toUtf8();
-        pToolbar->set_item_active(sId, bValue);
-        pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
+        m_pToolbar->set_item_active(sId, bValue);
+        m_pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
         return;
     }
 
@@ -202,7 +202,6 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
     sal_uInt16 nItemId = 0;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
-        SolarMutexGuard aSolarLock;
         pToolBox->CheckItem( nItemId, bValue );
         pToolBox->EnableItem( nItemId, rEvent.IsEnabled );
     }
