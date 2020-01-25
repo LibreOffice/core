@@ -16,6 +16,24 @@
       "revId": "150b67b57bd25ba9c8ec9c28c7aed3cc0b557bfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ddcb8a8_05e5b5ad",
+        "filename": "svx/source/tbxctrls/verttexttbxctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-01-25T21:47:34Z",
+      "side": 0,
+      "message": "missed this comment on seeing all green from jenkins, will fix in a follow up",
+      "parentUuid": "b3f1e7dd_48826a1f",
+      "revId": "150b67b57bd25ba9c8ec9c28c7aed3cc0b557bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
