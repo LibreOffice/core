@@ -863,6 +863,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
         rTreeView.select(nPos);
         rTreeView.scroll_to_row(nPos);
         rTreeView.set_cursor(nPos);
+        SelectHdl(rTreeView);
     }
     m_pTPView->EnableUndo();
 }
