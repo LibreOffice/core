@@ -155,7 +155,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
 
     // analyze query and split it into its tokens
     QueryTokenizer                  lTokens(sNewQuery);
-    QueryTokenizer::const_iterator  pIt;
     std::vector<OUString>           lEnumSet;
 
     // start query
@@ -263,7 +262,6 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
         try
         {
             const CacheItem aFilter = pCache->getItem(FilterCache::E_FILTER, filterName);
-            CacheItem::const_iterator pProp;
 
             // "matchByDocumentService="                    => any filter will be addressed here
             // "matchByDocumentService=all"                 => any filter will be addressed here

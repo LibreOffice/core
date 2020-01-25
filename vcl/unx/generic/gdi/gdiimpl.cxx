@@ -1732,16 +1732,6 @@ bool X11SalGraphicsImpl::drawPolyLine(
         }
 
         basegfx::triangulator::B2DTriangleVector aTriangles;
-        const basegfx::B2DPolyPolygon aAreaPolyPoly(
-            basegfx::utils::createAreaGeometry(
-                aPolygon,
-                0.5 * aLineWidth.getX(),
-                eLineJoin,
-                eLineCap,
-                basegfx::deg2rad(12.5),
-                0.4,
-                fMiterMinimumAngle,
-                &aTriangles));
 
         if(!aTriangles.empty())
         {

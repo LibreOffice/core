@@ -316,7 +316,6 @@ bool PageCacheManager::InvalidatePreviewBitmap (
     {
         // Iterate over all caches that are currently in use and invalidate
         // the previews in those that belong to the document.
-        PageCacheContainer::iterator iCache;
         for (auto& rCache : *mpPageCaches)
             if (rCache.first.mpDocument == pDocument)
                 bHasChanged |= rCache.second->InvalidateBitmap(pKey);

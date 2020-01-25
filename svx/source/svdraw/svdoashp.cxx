@@ -1118,7 +1118,6 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 {
     bool bIsDefaultGeometry = false;
 
-    PropertyValue aPropVal;
     OUString sShapeType;
     const OUString sType( "Type" );
     const SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );

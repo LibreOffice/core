@@ -809,7 +809,6 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
     const XML_Char *publicId)
 {
     bool bOK = true;
-    InputSource source;
     SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(XML_GetUserData( parser ));
 
     struct Entity entity;

@@ -544,15 +544,6 @@ void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
     if (aBox.Width <= 0 || aBox.Height <= 0)
         return;
 
-    rendering::ViewState aViewState (
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        PresenterGeometryHelper::CreatePolygon(aBox, mxCanvas->getDevice()));
-    rendering::RenderState aRenderState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        nullptr,
-        Sequence<double>(3),
-        rendering::CompositeOperation::SOURCE);
-
     if (mpBackground.get() != nullptr)
     {
         // Paint the background.

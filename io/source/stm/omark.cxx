@@ -311,8 +311,6 @@ Reference < XConnectable > OMarkableOutputStream::getPredecessor()
 
 void OMarkableOutputStream::checkMarksAndFlush()
 {
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii;
-
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
     for (auto const& mark : m_mapMarks)
@@ -731,8 +729,6 @@ Reference< XConnectable >  OMarkableInputStream::getPredecessor()
 
 void OMarkableInputStream::checkMarksAndFlush()
 {
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii;
-
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
     for (auto const& mark : m_mapMarks)

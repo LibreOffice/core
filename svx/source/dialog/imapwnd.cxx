@@ -478,8 +478,6 @@ IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj )
 
 bool IMapWindow::Command(const CommandEvent& rCEvt)
 {
-    vcl::Region  aRegion;
-
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/imapmenu.ui"));

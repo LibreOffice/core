@@ -394,7 +394,6 @@ void ScDBFunc::HideAutoFilter()
 
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    ScQueryParam aParam;
     ScDBData* pDBData = GetDBData( false );
 
     SCTAB nTab;
