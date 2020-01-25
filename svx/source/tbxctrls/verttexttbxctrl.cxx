@@ -74,6 +74,13 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
 
+void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    SvxVertCTLTextTbxCtrl_Base::initialize(rArguments);
+    // fdo#83320 Hide vertical text commands early
+    setFastPropertyValue_NoBroadcast(1, css::uno::makeAny(true));
+}
+
 void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     ToolBox* pToolBox = nullptr;
