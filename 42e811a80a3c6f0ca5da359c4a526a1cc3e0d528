@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e038c84_8cf484ef",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T21:10:35Z",
+      "side": 1,
+      "message": "Is this ordering of conditions (macosx after unx) makes sense? I was under impression that macosx implies unx... If so, should that dead code be just removed, or is here a bug?",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 20
+      },
+      "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52b17092_667edeb0",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T21:10:35Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 20
+      },
+      "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d92372fb_66104c58",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T21:10:35Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 20
+      },
+      "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
