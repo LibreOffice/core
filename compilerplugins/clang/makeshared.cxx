@@ -128,7 +128,7 @@ bool MakeShared::VisitCXXMemberCallExpr(CXXMemberCallExpr const* cxxMemberCallEx
     return true;
 }
 
-loplugin::Plugin::Registration<MakeShared> makeshared("makeshared", false);
+loplugin::Plugin::Registration<MakeShared> makeshared("makeshared");
 
 } // namespace
 
