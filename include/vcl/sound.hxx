@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOUND_HXX
-#define INCLUDED_VCL_SOUND_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -28,7 +27,5 @@ class VCL_DLLPUBLIC Sound
 public:
     static void         Beep();
 };
-
-#endif // INCLUDED_VCL_SOUND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
