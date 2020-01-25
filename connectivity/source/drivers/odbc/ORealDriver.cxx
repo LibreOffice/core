@@ -26,18 +26,18 @@ namespace connectivity::odbc
     {
         namespace {
 
-        class ORealObdcDriver : public ODBCDriver
+        class ORealOdbcDriver : public ODBCDriver
         {
         protected:
             virtual oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const override;
             virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) override;
         public:
-            explicit ORealObdcDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
+            explicit ORealOdbcDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
 
         }
 
-oslGenericFunction ORealObdcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) const
+oslGenericFunction ORealOdbcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) const
 {
     oslGenericFunction pFunction = nullptr;
     switch(_nIndex)
@@ -261,11 +261,11 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) 
 
 css::uno::Reference< css::uno::XInterface > ODBCDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
-    return *(new ORealObdcDriver(_rxFactory));
+    return *(new ORealOdbcDriver(_rxFactory));
 }
 
 // ODBC Environment (common for all Connections):
-SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
+SQLHANDLE ORealOdbcDriver::EnvironmentHandle(OUString &_rPath)
 {
     // Is (for this instance) already an Environment made?
     if (!m_pDriverHandle)
