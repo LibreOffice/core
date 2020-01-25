@@ -45,6 +45,14 @@ lclAddIssue(sfx::AccessibilityIssueCollection& rIssueCollection, OUString const&
     return pIssue;
 }
 
+template <typename T> void removeDuplicates(std::vector<T>& aVector)
+{
+    std::unordered_set<T> aSet;
+    auto end = std::copy_if(aVector.begin(), aVector.end(), aVector.begin(),
+                            [&aSet](T const& rElement) { return aSet.insert(rElement).second; });
+    aVector.erase(end, aVector.end());
+}
+
 class BaseCheck
 {
 protected:
@@ -436,7 +444,7 @@ public:
     {
     }
 
-    void checkAutoFormat(const SwTextAttr* pTextAttr)
+    void checkAutoFormat(SwTextNode* pTextNode, const SwTextAttr* pTextAttr)
     {
         const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
         SfxItemIter aItemIter(*rAutoFormat.GetStyleHandle());
@@ -510,8 +518,16 @@ public:
         }
         if (!aFormattings.empty())
         {
-            lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                        sfx::AccessibilityIssueID::TEXT_FORMATTING);
+            removeDuplicates(aFormattings);
+            auto pIssue
+                = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setNode(pTextNode);
+            SwDoc* pDocument = pTextNode->GetDoc();
+            pIssue->setDoc(pDocument);
+            pIssue->setStart(pTextAttr->GetStart());
+            pIssue->setEnd(pTextAttr->GetAnyEnd());
         }
     }
     void check(SwNode* pCurrent) override
@@ -527,7 +543,7 @@ public:
                     const SwTextAttr* pTextAttr = rHints.Get(i);
                     if (pTextAttr->Which() == RES_TXTATR_AUTOFMT)
                     {
-                        checkAutoFormat(pTextAttr);
+                        checkAutoFormat(pTextNode, pTextAttr);
                     }
                 }
             }
