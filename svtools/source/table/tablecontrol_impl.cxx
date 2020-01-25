@@ -789,7 +789,7 @@ namespace svt { namespace table
             {
                 // ... but the column's maximal widths are still less than we have
                 // => set them all to max
-                for ( size_t i = 0; i < size_t( colCount ); ++i )
+                for ( svt::table::TableSize i = 0; i < colCount; ++i )
                 {
                     o_newColWidthsPixel[i] = effectiveColumnLimits[i].second;
                 }
@@ -866,7 +866,7 @@ namespace svt { namespace table
             {
                 // ... but the column's minimal widths are still more than we have
                 // => set them all to min
-                for ( size_t i = 0; i < size_t( colCount ); ++i )
+                for ( svt::table::TableSize i = 0; i < colCount; ++i )
                 {
                     o_newColWidthsPixel[i] = effectiveColumnLimits[i].first;
                 }
