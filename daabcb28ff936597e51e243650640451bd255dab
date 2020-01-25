@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de211743_9250cb78",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3485,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "This is not about conditional compilation; changing comments in this easy hack is only appropriate when they relate to a previous `#if` (like in `#endif // WNT`).",
+      "range": {
+        "startLine": 3485,
+        "startChar": 62,
+        "endLine": 3485,
+        "endChar": 68
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90e19277_21ec6060",
+        "filename": "comphelper/source/misc/threadpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 103,
+        "startChar": 63,
+        "endLine": 103,
+        "endChar": 69
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ade9d3_8a7d5828",
+        "filename": "compilerplugins/clang/store/constantfunction.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 364,
+        "startChar": 15,
+        "endLine": 364,
+        "endChar": 21
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b236572d_94b575ef",
+        "filename": "dbaccess/qa/extras/dialog-save.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 50,
+        "startChar": 42,
+        "endLine": 50,
+        "endChar": 48
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6a3f940_0d7f3553",
+        "filename": "dbaccess/qa/extras/empty-stdlib-save.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 49,
+        "startChar": 42,
+        "endLine": 49,
+        "endChar": 48
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61177805_1c8581eb",
+        "filename": "dbaccess/qa/extras/nolib-save.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 49,
+        "startChar": 42,
+        "endLine": 49,
+        "endChar": 48
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65aaef56_c07f3a78",
+        "filename": "filter/qa/cppunit/xslt-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 96,
+        "startChar": 64,
+        "endLine": 96,
+        "endChar": 70
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "357bdd99_7a8a6c7d",
+        "filename": "filter/qa/cppunit/xslt-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 150,
+        "startChar": 64,
+        "endLine": 150,
+        "endChar": 70
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8b9f51a_1f4bbf45",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "This is wrong. The code checks an *anvironment variable*, not a precompiler macro. Are you just automatically replace every instance of WNT in the codebase?",
+      "range": {
+        "startLine": 47,
+        "startChar": 27,
+        "endLine": 47,
+        "endChar": 33
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd7cf27b_f8fda412",
+        "filename": "include/comphelper/backupfilehelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 75,
+        "startChar": 25,
+        "endLine": 75,
+        "endChar": 31
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4544512_2af99cf5",
+        "filename": "include/sfx2/objsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 486,
+        "startChar": 14,
+        "endLine": 486,
+        "endChar": 21
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "634aac0e_5a858c7d",
+        "filename": "sal/qa/osl/file/osl_File.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 3235,
+        "startChar": 50,
+        "endLine": 3235,
+        "endChar": 56
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf2b6f84_5c91a7df",
+        "filename": "salhelper/source/simplereferenceobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 42,
+        "startChar": 11,
+        "endLine": 42,
+        "endChar": 18
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50fb4737_5cf734e4",
+        "filename": "salhelper/source/simplereferenceobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 56,
+        "startChar": 32,
+        "endLine": 56,
+        "endChar": 39
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54ee6d66_61b68330",
+        "filename": "sfx2/source/control/shell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 161,
+        "startChar": 31,
+        "endLine": 161,
+        "endChar": 37
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8d8df4a_849a99cd",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 439,
+        "startChar": 35,
+        "endLine": 439,
+        "endChar": 42
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5461eca0_d4290067",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 698,
+        "startChar": 11,
+        "endLine": 698,
+        "endChar": 18
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a957e802_f8265a58",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-25T08:28:14Z",
+      "side": 1,
+      "message": "See comment in basic/source/runtime/methods.cxx",
+      "range": {
+        "startLine": 775,
+        "startChar": 11,
+        "endLine": 775,
+        "endChar": 18
+      },
+      "revId": "daabcb28ff936597e51e243650640451bd255dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
