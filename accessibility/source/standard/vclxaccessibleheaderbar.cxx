@@ -20,6 +20,7 @@
 #include <standard/vclxaccessibleheaderbar.hxx>
 #include <standard/vclxaccessibleheaderbaritem.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/headbar.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -82,7 +83,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 
     Reference< XAccessible > xChild;
     // search for the child
-    if ( static_cast<sal_uInt16>(i) >= m_aAccessibleChildren.size() )
+    if ( o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         xChild = CreateChild (i);
     else
     {
