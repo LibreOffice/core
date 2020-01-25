@@ -1188,7 +1188,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         //Checked for shapes.
         SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
         SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
-        ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
 
         if( bIsSelAll)
         {
@@ -1205,8 +1204,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             while( aIter != aEndIter )
             {
-                SwAccessibleChild aFrame( (*aIter).first );
-
                 const SwFrameFormat *pFrameFormat = (*aIter).first ? ::FindFrameFormat( (*aIter).first ) : nullptr;
                 if( !pFrameFormat )
                 {
@@ -2209,7 +2206,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
         SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
         if( aIter != mpShapeMap->end() )
         {
-            uno::Reference < XAccessible > xAcc( (*aIter).second );
+            uno::Reference < XAccessible > xTempHold( (*aIter).second );
             mpShapeMap->erase( aIter );
             RemoveGroupContext(pObj);
             // The shape selection flag is not cleared, but one might do

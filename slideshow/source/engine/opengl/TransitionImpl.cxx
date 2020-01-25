@@ -790,7 +790,7 @@ std::shared_ptr<OGLTransitionImpl> makeIris()
     aLeavingPrimitives.push_back (Slide);
 
 
-    Primitive irisPart, part;
+    Primitive irisPart;
     int i, nSteps = 24, nParts = 7;
     double t = 1.0/nSteps, lx = 1, ly = 0, of=2.2, f=1.42;
 

@@ -286,7 +286,6 @@ void SvxRubyDialog::Close()
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialogController::Activate();
-    std::unique_ptr<SfxPoolItem> pState;
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame().GetController();

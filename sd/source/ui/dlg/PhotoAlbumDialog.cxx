@@ -595,7 +595,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, weld::TreeView&, void)
 
     if (sImgUrl != SdResId(STR_PHOTO_ALBUM_TEXTBOX))
     {
-        GraphicFilter aCurFilter;
         Graphic aGraphic;
         INetURLObject aURLObj( sImgUrl );
 

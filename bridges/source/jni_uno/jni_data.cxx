@@ -2339,7 +2339,6 @@ void Bridge::map_to_java(
 
             if (0 < nElements)
             {
-                TypeDescr element_td( element_type );
                 uno_Sequence * const * elements = reinterpret_cast<uno_Sequence * const *>(seq->elements);
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {

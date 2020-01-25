@@ -336,8 +336,6 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
         throw embed::WrongStateException( "The object is not loaded!",
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    embed::VisualRepresentation aVisualRepr;
-
     // TODO: in case of different aspects they must be applied to the mediatype and XTransferable must be used
     // the cache is used only as a fallback if object is not in loaded state
     if ( !m_xCachedVisualRepresentation.is() && ( !m_bVisReplInitialized || m_bVisReplInStream )

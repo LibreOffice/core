@@ -145,7 +145,6 @@ SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
     catch(const Exception&)
     {
     }
-    SQLExceptionInfo aInfo;
 
     return createConnection(xProp,_rxContext,_rEvtLst,_rOUTConnection);
 }

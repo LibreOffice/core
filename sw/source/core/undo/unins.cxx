@@ -421,7 +421,6 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     case SwNodeType::Ole:
         {
             // StarView does not yet provide an option to copy a StarOBJ
-            tools::SvRef<SotStorage> aRef = new SotStorage( OUString() );
             SwOLEObj& rSwOLE = static_cast<SwOLENode*>(pCNd)->GetOLEObj();
 
             // temporary storage until object is inserted
@@ -796,7 +795,6 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     // cache the old values
     std::unique_ptr<Graphic> pOldGrf( mpGraphic ? new Graphic(*mpGraphic) : nullptr);
     o3tl::optional<OUString> aOldNm = maNm;
-    o3tl::optional<OUString> aOldFltr = maFltr;
     MirrorGraph nOldMirr = mnMirror;
     // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );

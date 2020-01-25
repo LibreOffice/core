@@ -63,7 +63,6 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getLo
     if (!mxLockedCanvasContext.is())
     {
         FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
-        ShapePtr pMasterShape;
 
         switch (nElement & 0xffff)
         {
@@ -139,7 +138,6 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
     if (!mxWpgContext.is())
     {
         FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
-        ShapePtr pMasterShape;
 
         switch (getBaseToken(nElement))
         {

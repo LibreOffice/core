@@ -345,7 +345,6 @@ size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
 {
     const sd::TransitionPresetList& rPresetList =
         sd::TransitionPreset::getTransitionPresetList();
-    sd::TransitionPresetPtr pFound;
 
     size_t nIdx = 0;
     for( const auto& aIt: rPresetList )

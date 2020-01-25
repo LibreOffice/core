@@ -2948,7 +2948,6 @@ Content::ResourceType Content::resourceTypeForLocks(
     {
         osl::MutexGuard g(m_aMutex);
         //check if cache contains what we need, usually the first PROPFIND on the URI has supported lock
-        std::unique_ptr< ContentProperties > xProps;
         if (m_xCachedProps)
         {
             uno::Sequence< ucb::LockEntry > aSupportedLocks;

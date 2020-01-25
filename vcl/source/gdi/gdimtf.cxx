@@ -434,7 +434,6 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
                         const Size& rSize )
 {
-    vcl::Region  aDrawClipRegion;
     MapMode aDrawMap( GetPrefMapMode() );
     Size    aDestSize( pOut->LogicToPixel( rSize ) );
 
@@ -1284,7 +1283,6 @@ static void ImplActionBounds( tools::Rectangle& o_rOutBounds,
 
 tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::Rectangle* pHairline ) const
 {
-    GDIMetaFile     aMtf;
     ScopedVclPtrInstance< VirtualDevice > aMapVDev(  i_rReference  );
 
     aMapVDev->EnableOutput( false );
@@ -2199,7 +2197,6 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
 
 BitmapChecksum GDIMetaFile::GetChecksum() const
 {
-    GDIMetaFile                 aMtf;
     SvMemoryStream              aMemStm( 65535, 65535 );
     ImplMetaWriteData           aWriteData;
     SVBT16                      aBT16;

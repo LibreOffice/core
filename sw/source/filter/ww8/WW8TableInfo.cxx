@@ -658,8 +658,6 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
 
     const SwTableBoxes & rBoxes = pTableLine->GetTabBoxes();
 
-    WW8TableNodeInfo::Pointer_t pTextNodeInfo;
-
     for (size_t n = 0; n < rBoxes.size(); ++n)
     {
         const SwTableBox * pBox = rBoxes[n];
