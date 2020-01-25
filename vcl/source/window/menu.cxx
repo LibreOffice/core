@@ -2946,7 +2946,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     }
 
     // tdf#126054 hold this until after function completes
-    VclPtr<PopupMenu> m_xThis(this);
+    VclPtr<PopupMenu> xThis(this);
 
     pWin->SetFocusId( xFocusId );
     pWin->SetOutputSizePixel( aSz );

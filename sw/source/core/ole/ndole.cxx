@@ -1180,7 +1180,7 @@ void SwOLELRUCache::Load()
 
     if (nVal < m_nLRU_InitSize)
     {
-        std::shared_ptr<SwOLELRUCache> tmp(g_pOLELRU_Cache); // prevent delete this
+        std::shared_ptr<SwOLELRUCache> xKeepAlive(g_pOLELRU_Cache); // prevent delete this
         // size of cache has been changed
         sal_Int32 nCount = m_OleObjects.size();
         sal_Int32 nPos = nCount;
@@ -1212,7 +1212,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
     }
     if (it == m_OleObjects.end())
     {
-        std::shared_ptr<SwOLELRUCache> tmp(g_pOLELRU_Cache); // prevent delete this
+        std::shared_ptr<SwOLELRUCache> xKeepAlive(g_pOLELRU_Cache); // prevent delete this
         // try to remove objects if necessary
         sal_Int32 nCount = m_OleObjects.size();
         sal_Int32 nPos = nCount-1;

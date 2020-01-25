@@ -487,7 +487,7 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
     if( !pSlideShow )
         return;
 
-    ::rtl::Reference< SlideshowImpl > aSLGuard( pSlideShow );
+    ::rtl::Reference< SlideshowImpl > xKeepAlive( pSlideShow );
 
     if( mbFirstPaint )
     {

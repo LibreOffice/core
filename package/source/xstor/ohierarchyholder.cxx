@@ -205,7 +205,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& 
 
 void OHierarchyElement_Impl::Commit()
 {
-    ::rtl::Reference< OHierarchyElement_Impl > aLocker( this );
+    ::rtl::Reference< OHierarchyElement_Impl > xKeepAlive( this );
     ::rtl::Reference< OHierarchyElement_Impl > aParent;
     uno::Reference< embed::XStorage > xOwnStor;
 
@@ -226,7 +226,7 @@ void OHierarchyElement_Impl::Commit()
 
 void OHierarchyElement_Impl::TestForClosing()
 {
-    ::rtl::Reference< OHierarchyElement_Impl > aLocker( this );
+    ::rtl::Reference< OHierarchyElement_Impl > xKeepAlive( this );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

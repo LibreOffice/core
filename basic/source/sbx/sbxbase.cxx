@@ -210,7 +210,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
             if( !p->LoadCompleted() )
             {
                 // Deleting of the object
-                SbxBaseRef aRef( p );
+                SbxBaseRef xDeleteRef( p );
                 p = nullptr;
             }
         }
@@ -218,7 +218,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         {
             rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
             // Deleting of the object
-            SbxBaseRef aRef( p );
+            SbxBaseRef xDeleteRef( p );
             p = nullptr;
         }
     }
