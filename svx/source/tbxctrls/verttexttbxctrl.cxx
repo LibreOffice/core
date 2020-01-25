@@ -17,32 +17,56 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/svxids.hrc>
 #include <svx/verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
-SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
-
-SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
+SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : SvxVertCTLTextTbxCtrl(rContext)
 {
-    addStatusListener( ".uno:CTLFontState");
+    addStatusListener(".uno:CTLFontState");
 }
 
-SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
+OUString SvxCTLTextTbxCtrl::getImplementationName()
 {
-    addStatusListener( ".uno:VerticalTextState");
+    return "com.sun.star.comp.svx.CTLToolBoxControl";
 }
 
-SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new SvxCTLTextTbxCtrl(rContext));
+}
+
+SvxVertTextTbxCtrl::SvxVertTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : SvxVertCTLTextTbxCtrl(rContext)
+{
+    addStatusListener(".uno:VerticalTextState");
+}
+
+OUString SvxVertTextTbxCtrl::getImplementationName()
+{
+    return "com.sun.star.comp.svx.VertTextToolBoxControl";
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire(new SvxVertTextTbxCtrl(rContext));
+}
+
+SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    : SvxVertCTLTextTbxCtrl_Base(rContext, nullptr, OUString())
 {
 }
 
@@ -50,48 +74,74 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
 
-void SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
-    SfxToolBoxControl::initialize(rArguments);
-    setFastPropertyValue_NoBroadcast(1, css::uno::makeAny(true));
-}
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nItemId = 0;
+    bool bVclToolBox = getToolboxId(nItemId, &pToolBox);
 
-void SvxVertCTLTextTbxCtrl::StateChanged(
-    sal_uInt16 nSID,
-    SfxItemState eState,
-    const SfxPoolItem* pState )
-{
-    SvtLanguageOptions aLangOptions;
-    bool bCalc = false;
     bool bEnabled = false;
-    if ( nSID == SID_VERTICALTEXT_STATE )
+    if (rEvent.FeatureURL.Complete == ".uno:VerticalTextState")
+    {
+        SvtLanguageOptions aLangOptions;
         bEnabled = aLangOptions.IsVerticalTextEnabled();
-    else if ( nSID == SID_CTLFONT_STATE )
+    }
+    else if (rEvent.FeatureURL.Complete == ".uno:CTLFontState")
+    {
+        SvtLanguageOptions aLangOptions;
         bEnabled = aLangOptions.IsCTLFontEnabled();
+    }
     else
     {
-        SfxToolBoxControl::StateChanged(nSID, eState, pState);
+        // normal command
+        bool bValue = false;
+        rEvent.State >>= bValue;
+
+        if (m_pToolbar)
+        {
+            OString sId = m_aCommandURL.toUtf8();
+            m_pToolbar->set_item_active(sId, bValue);
+            m_pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
+        }
+
+        if (bVclToolBox)
+        {
+            pToolBox->CheckItem(nItemId, bValue);
+            pToolBox->EnableItem(nItemId, rEvent.IsEnabled);
+        }
+
         return;
     }
 
-    if(!bEnabled)
+    if (m_pToolbar)
     {
-        // always hide if either IsVerticalTextEnabled or IsCTLFontEnabled
-        // is false
-        GetToolBox().HideItem( GetId() );
-        bCalc = true;
+        m_pToolbar->set_item_visible(m_aCommandURL.toUtf8(), bEnabled);
+        return;
     }
-    if(bCalc)
+
+    if (bVclToolBox)
     {
-        ToolBox& rTbx = GetToolBox();
-        vcl::Window* pParent = rTbx.GetParent();
-        if(WindowType::FLOATINGWINDOW == pParent->GetType())
+        pToolBox->ShowItem(nItemId, bEnabled);
+
+        vcl::Window* pParent = pToolBox->GetParent();
+        if (WindowType::FLOATINGWINDOW == pParent->GetType())
         {
-            Size aSize(rTbx.CalcWindowSizePixel());
-            rTbx.SetPosSizePixel( Point(), aSize );
+            Size aSize(pToolBox->CalcWindowSizePixel());
+            pToolBox->SetPosSizePixel( Point(), aSize );
             pParent->SetOutputSizePixel( aSize );
         }
     }
+}
+
+// XServiceInfo
+sal_Bool SAL_CALL SvxVertCTLTextTbxCtrl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > SvxVertCTLTextTbxCtrl::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
