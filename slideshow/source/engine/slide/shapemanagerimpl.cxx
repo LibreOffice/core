@@ -74,7 +74,6 @@ void ShapeManagerImpl::activate()
     mrMultiplexer.addShapeListenerHandler( shared_from_this() );
 
     // clone listener map
-    uno::Reference<presentation::XShapeEventListener> xDummyListener;
     for( const auto& rListener : mrGlobalListenersMap )
         listenerAdded( rListener.first );
 

@@ -121,7 +121,6 @@ namespace
         const int nRest = rVersionBox.get_preferred_size().Width() - nMax;
 
         std::set<OUString> aAuthors;
-        SfxVersionInfo aInfo;
         aAuthors.insert(SvtUserOptions().GetFullName());
 
         for (int i = 0; i < rVersionBox.n_children(); ++i)

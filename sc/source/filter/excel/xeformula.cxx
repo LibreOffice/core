@@ -625,7 +625,6 @@ void XclExpFmlaCompImpl::RecalcTokenClasses()
             /*  Cell and array formulas start with VAL conversion and VALTYPE
                 parameter type, defined names start with ARR conversion and
                 REFTYPE parameter type for the root token. */
-            XclExpOperandList aOperands;
             bool bNameFmla = mxData->mrCfg.meClassType == EXC_CLASSTYPE_NAME;
             XclFuncParamConv eParamConv = bNameFmla ? EXC_PARAMCONV_ARR : EXC_PARAMCONV_VAL;
             XclExpClassConv eClassConv = bNameFmla ? EXC_CLASSCONV_ARR : EXC_CLASSCONV_VAL;

@@ -82,7 +82,6 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
             comphelper::getProcessComponentContext();
 
     // Get data sink ...
-    tools::SvRef<SotStorageStream> xDocStream;
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper ;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;

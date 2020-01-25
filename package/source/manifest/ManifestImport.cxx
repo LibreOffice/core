@@ -457,7 +457,6 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
                 aSequence[PKG_SIZE_NOENCR_MNFST].Name = "KeyInfo";
                 aSequence[PKG_SIZE_NOENCR_MNFST].Value <<= comphelper::containerToSequence(aKeys);
             }
-            css::beans::PropertyValue aEmpty;
             aSequence.erase(std::remove_if(aSequence.begin(), aSequence.end(),
                                            isEmpty), aSequence.end());
 

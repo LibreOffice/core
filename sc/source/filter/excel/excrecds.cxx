@@ -1022,7 +1022,6 @@ XclExpRecordRef XclExpFilterManager::CreateRecord( SCTAB nScTab )
 
 bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
 {
-    XclExpTabFilterRef xRec;
     XclExpTabFilterMap::iterator aIt = maFilterMap.find( nScTab );
     if( aIt != maFilterMap.end() )
     {

@@ -1675,7 +1675,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
     // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
-    Content         aGroup, aTemplate, aTargetGroup, aTemplateToRemove;
+    Content         aGroup, aTemplateToRemove;
     INetURLObject   aGroupObj( maRootURL );
     bool        bRemoveOldTemplateContent = false;
 

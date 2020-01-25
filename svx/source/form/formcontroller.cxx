@@ -1660,7 +1660,6 @@ void FormController::focusGained(const FocusEvent& e)
 
         if (!m_bFiltering && m_bCycle && (e.FocusFlags & FocusChangeReason::AROUND) && m_xCurrentControl.is())
         {
-            SQLErrorEvent aErrorEvent;
             OSL_ENSURE( m_xFormOperations.is(), "FormController::focusGained: hmm?" );
                 // should have been created in setModel
             try

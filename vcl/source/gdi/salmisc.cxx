@@ -229,7 +229,6 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rD
     const long          nHeight1 = rDstBuffer.mnHeight- 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
     const ColorMask&    rDstMask = rDstBuffer.maColorMask;
-    BitmapPalette       aColMap( rSrcBuffer.maPalette.GetEntryCount() );
     std::unique_ptr<sal_uInt8[]> pColToPalMap(new sal_uInt8[ TC_TO_PAL_COLORS ]);
     BitmapColor         aIndex( 0 );
 

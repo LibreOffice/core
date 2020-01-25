@@ -32,8 +32,6 @@ SdHtmlAttrPreview::~SdHtmlAttrPreview()
 
 void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
-    DecorationView aDecoView(&rRenderContext);
-
     ::tools::Rectangle aTextRect;
     aTextRect.SetSize(GetOutputSizePixel());
 

@@ -502,7 +502,6 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
                 uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
                 if ( xChartDoc.is() && xReceiver.is() )
                 {
-                    ScRangeListRef aNewRanges;
                     chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                     bool bHasCategories = false;
                     bool bFirstCellAsLabel = false;

@@ -1343,7 +1343,7 @@ namespace cmis
                     {
                         try
                         {
-                            libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
+                            pFolder->createFolder( m_pObjectProps );
                             sNewPath = STD_TO_OUSTR( newPath );
                         }
                         catch ( const libcmis::Exception& )
@@ -1887,7 +1887,6 @@ namespace cmis
         }
 
         OUString sParentURL = m_xIdentifier->getContentIdentifier();
-        URL aParentURL( sParentURL );
 
         // Set the parent URL for the transient objects
         uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(sParentURL));

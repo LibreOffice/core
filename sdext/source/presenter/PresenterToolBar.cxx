@@ -868,7 +868,6 @@ void PresenterToolBar::LayoutPart (
     }
     else {
         ElementContainerPart::const_iterator iElement;
-        ElementContainerPart::const_iterator iEnd (rpPart->end());
         ElementContainerPart::const_iterator iBegin (rpPart->begin());
 
         for (iElement=rpPart->end()-1; iElement!=iBegin-1; --iElement)

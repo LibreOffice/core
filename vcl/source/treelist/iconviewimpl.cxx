@@ -412,8 +412,6 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         nStartId--;
     }
 
-    vcl::Region aClipRegion(GetClipRegionRect());
-
     if (!m_pCursor && !mbNoAutoCurEntry)
     {
         // do not select if multiselection or explicit set

@@ -82,7 +82,6 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
     setRowPos(rowNum++, rowPos);
 
     // read first row
-    QuotedTokenizedString aFirstLine;
     if(bRead)
     {
         bRead = readLine(&rowPos.second, &rowPos.first);

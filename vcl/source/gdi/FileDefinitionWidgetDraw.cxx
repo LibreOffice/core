@@ -470,8 +470,6 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
 
                 auto aIterator = rCacheDrawCommands.find(rWidgetDraw.msSource);
 
-                gfx::DrawRoot aDrawRoot;
-
                 if (aIterator == rCacheDrawCommands.end())
                 {
                     SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);

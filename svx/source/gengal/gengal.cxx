@@ -103,8 +103,6 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
 //    if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
 //    Requires a load more components ...
 
-        Graphic aGraphic;
-
         if ( ! pGalTheme->InsertURL( rFile ) )
             fprintf( stderr, "Failed to import '%s'\n",
                      OUStringToOString( rFile.GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr() );

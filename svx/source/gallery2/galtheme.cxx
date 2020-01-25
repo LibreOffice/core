@@ -1019,7 +1019,6 @@ bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxMod
         if( xOStm.is() && !xOStm->GetError() )
         {
             GalleryCodec    aCodec( *xOStm );
-            SvMemoryStream  aMemStm( 65535, 65535 );
 
             xOStm->SetBufferSize( 16348 );
             aCodec.Write( *rxModelStream );
