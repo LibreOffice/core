@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_STRBUF_HXX
-#define INCLUDED_RTL_STRBUF_HXX
+#pragma once
 
 #include "sal/config.h"
 
@@ -1067,8 +1066,5 @@ typedef rtlunittest::OStringBuffer OStringBuffer;
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OStringBuffer;
 #endif
-
-#endif // INCLUDED_RTL_STRBUF_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
