@@ -67,7 +67,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
 #ifdef DBG_UTIL
         std::vector< sal_uInt8 > buffer;
         buffer.resize( nWidth * nHeight * 4 );
-        for( size_t i = 0; i < size_t( nWidth * nHeight ); ++i )
+        for( int i = 0; i < nWidth * nHeight; ++i )
         {   // pre-fill the texture with deterministic garbage
             bool odd = (i & 0x01);
             buffer[ i * 4 ] =  odd ? 0x40 : 0xBF;
