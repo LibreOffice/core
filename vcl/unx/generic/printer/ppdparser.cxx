@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <stdlib.h>
 
 #include <comphelper/string.hxx>
@@ -1646,6 +1649,7 @@ PPDContext& PPDContext::operator=( PPDContext&& rCopy )
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
+    assert(n >= 0);
     if( m_aCurrentValues.size() <= static_cast<hash_type::size_type>(n) )
         return nullptr;
 
