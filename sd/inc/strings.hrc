@@ -264,7 +264,7 @@
 #define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 NC_("STR_NAVIGATOR_SHOW_NAMED_SHAPES", "Named shapes")
 #define STR_NAVIGATOR_SHOW_ALL_SHAPES                   NC_("STR_NAVIGATOR_SHOW_ALL_SHAPES", "All shapes")
 #define STR_NAVIGATOR_SHAPE_BASE_NAME                   NC_("STR_NAVIGATOR_SHAPE_BASE_NAME", "Shape %1")
-#define STR_SET_BACKGROUND_PICTURE                      NC_("STR_SET_BACKGROUND_PICTURE", "Set Background Image for Slide ..." )
+#define STR_SET_BACKGROUND_PICTURE                      NC_("STR_SET_BACKGROUND_PICTURE", "Set Background Image" )
 #define RID_ANNOTATIONS_START                           NC_("RID_ANNOTATIONS_START", "Comments")
 #define STR_RESET_LAYOUT                                NC_("STR_RESET_LAYOUT", "Reset Slide Layout")
 #define STR_INSERT_TABLE                                NC_("STR_INSERT_TABLE", "Insert Table")
