@@ -281,18 +281,17 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt )
 
 void OInterfaceContainerHelper::clear()
 {
-    ClearableMutexGuard aGuard( rMutex );
-    OInterfaceIteratorHelper aIt( *this );
+    MutexGuard aGuard( rMutex );
     // Release container, in case new entries come while disposing
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
-    if( !bIsList && aData.pAsInterface )
+    if (bInUse)
+        copyAndResetInUse();
+    if (bIsList)
+        delete aData.pAsVector;
+    else if (aData.pAsInterface)
         aData.pAsInterface->release();
-    // set the member to null, use the iterator to delete the values
     aData.pAsInterface = nullptr;
     bIsList = false;
-    bInUse = false;
-    // release mutex before aIt destructor call
-    aGuard.clear();
 }
 
 // specialized class for type
