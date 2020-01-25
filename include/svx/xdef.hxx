@@ -84,9 +84,9 @@ class XSecondaryFillColorItem;
 #define COL_DEFAULT_SHAPE_FILLING ::Color(0x729fcf)         // light blue 2
 #define COL_DEFAULT_SHAPE_STROKE  ::Color(0x3465a4)         // dark blue 1
 
-#define XATTR_START             1000
+constexpr auto XATTR_START = 1000;
 
-#define XATTR_LINE_FIRST        XATTR_START                     /* V3: 1000  V2: 1000 */
+constexpr auto XATTR_LINE_FIRST = XATTR_START; /* V3: 1000  V2: 1000 */
 #define XATTR_LINESTYLE         TypedWhichId<XLineStyleItem>(XATTR_LINE_FIRST)
 #define XATTR_LINEDASH          TypedWhichId<XLineDashItem>(XATTR_LINE_FIRST + 1)          /* V3: 1001  V2: 1001 */
 #define XATTR_LINEWIDTH         TypedWhichId<XLineWidthItem>(XATTR_LINE_FIRST + 2)          /* V3: 1002  V2: 1002 */
@@ -103,7 +103,7 @@ class XSecondaryFillColorItem;
 #define XATTR_LINE_LAST         XATTR_LINECAP
 #define XATTRSET_LINE           TypedWhichId<XLineAttrSetItem>(XATTR_LINE_LAST + 1)           /* V3: 1017  V2: 1017 */
 
-#define XATTR_FILL_FIRST            sal_uInt16(XATTRSET_LINE + 1)         /* V3: 1018  V2: 1018 */
+constexpr sal_uInt16 XATTR_FILL_FIRST = XATTRSET_LINE + 1; /* V3: 1018  V2: 1018 */
 #define XATTR_FILLSTYLE             TypedWhichId<XFillStyleItem>(XATTR_FILL_FIRST)
 #define XATTR_FILLCOLOR             TypedWhichId<XFillColorItem>(XATTR_FILL_FIRST + 1)      /* V3: 1019  V2: 1019 */
 #define XATTR_FILLGRADIENT          TypedWhichId<XFillGradientItem>(XATTR_FILL_FIRST + 2)      /* V3: 1020  V2: 1020 */
@@ -124,10 +124,10 @@ class XSecondaryFillColorItem;
 #define XATTR_FILLBMP_POSOFFSETX    TypedWhichId<XFillBmpPosOffsetXItem>(XATTR_FILL_FIRST + 17)     /* V3: 1041 */
 #define XATTR_FILLBMP_POSOFFSETY    TypedWhichId<XFillBmpPosOffsetYItem>(XATTR_FILL_FIRST + 18)     /* V3: 1042 */
 #define XATTR_FILLBACKGROUND        TypedWhichId<XFillBackgroundItem>(XATTR_FILL_FIRST + 19)     /* V3: 1043 */
-#define XATTR_FILL_LAST             sal_uInt16(XATTR_FILLBACKGROUND)
+constexpr sal_uInt16 XATTR_FILL_LAST = XATTR_FILLBACKGROUND;
 #define XATTRSET_FILL               TypedWhichId<XFillAttrSetItem>(XATTR_FILL_LAST + 1)           /* V3: 1047  V2: 1030 */
 
-#define XATTR_TEXT_FIRST        (XATTRSET_FILL + 1)
+constexpr auto XATTR_TEXT_FIRST = XATTRSET_FILL + 1;
 #define XATTR_FORMTXTSTYLE      TypedWhichId<XFormTextStyleItem>(XATTR_TEXT_FIRST)                /* V3: 1048  V2: 1031 */
 #define XATTR_FORMTXTADJUST     TypedWhichId<XFormTextAdjustItem>(XATTR_TEXT_FIRST + 1)          /* V3: 1049  V2: 1032 */
 #define XATTR_FORMTXTDISTANCE   TypedWhichId<XFormTextDistanceItem>(XATTR_TEXT_FIRST + 2)          /* V3: 1050  V2: 1033 */
