@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
-#define INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+
+#pragma once
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
@@ -28,6 +28,7 @@
 namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
+
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is necessary. The class which use these mechanism
@@ -85,7 +86,5 @@ class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMenuOptions final : public utl::detail::O
         std::shared_ptr<SvtMenuOptions_Impl> m_pImpl;
 
 };      // class SvtMenuOptions
-
-#endif  // #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
