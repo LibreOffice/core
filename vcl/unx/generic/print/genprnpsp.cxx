@@ -35,6 +35,7 @@
 #include <sys/stat.h>
 
 #include <comphelper/fileurl.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
@@ -716,7 +717,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     if( aData.m_pParser )
     {
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( "InputSlot" ): nullptr;
-        if( ! pKey || nPaperBin >= static_cast<sal_uInt16>(pKey->countValues()) )
+        if( ! pKey || nPaperBin >= o3tl::make_unsigned(pKey->countValues()) )
             return aData.m_pParser->getDefaultInputSlot();
         const PPDValue* pValue = pKey->getValue( nPaperBin );
         if( pValue )
