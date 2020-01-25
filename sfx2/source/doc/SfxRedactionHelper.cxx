@@ -156,9 +156,6 @@ tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice
                     aActionBounds.SetLeft(rOut.PixelToLogic(aBoundRect1).getX()
                                           + rOut.PixelToLogic(aBoundRect1).getWidth());
                 }
-
-                // FIXME: Is this really needed?
-                aActionBounds.SetTop(aActionBounds.getY() + 100);
             }
         }
         break;
@@ -425,6 +422,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
     fillSearchOptions(aSearchOptions, pRedactionTarget);
 
     utl::TextSearch textSearch(aSearchOptions);
+    static long aLastFontHeight = 0;
 
     MetaAction* pCurrAct;
 
@@ -453,13 +451,24 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
                     ImplCalcActionBounds(*pMetaTextArrayAction, *pOutputDevice, nStart, nEnd));
 
                 if (!aNewRect.IsEmpty())
+                {
+                    aNewRect.SetTop(aNewRect.getY()
+                                    + (aNewRect.getHeight() - aLastFontHeight)
+                                    - aLastFontHeight / 10);
                     aRedactionRectangles.push_back(aNewRect);
+                }
 
                 // Search for the next occurrence
                 nStart = nEnd;
                 nEnd = sText.getLength();
                 bFound = textSearch.SearchForward(sText, &nStart, &nEnd);
             }
+        }
+        else if(pCurrAct->GetType() == MetaActionType::FONT)
+        {
+            const MetaFontAction* pFontAct = static_cast<const MetaFontAction*>(pCurrAct);
+            Size aFontSize(pFontAct->GetFont().GetFontSize());
+            aLastFontHeight = aFontSize.getHeight();
         }
     }
 }
