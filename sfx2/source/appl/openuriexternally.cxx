@@ -67,7 +67,7 @@ void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteExcep
 
     // tdf#116305 Workaround: Use timer to bring browsers to the front
     aOpenURITimer.SetInvokeHandler(LINK(this, URITools, onOpenURI));
-#ifdef WNT
+#ifdef _WIN32
     // 200ms seems to be the best compromise between responsiveness and success rate
     aOpenURITimer.SetTimeout(200);
 #else

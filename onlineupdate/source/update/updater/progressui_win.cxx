@@ -345,4 +345,4 @@ UpdateProgressUI(float progress)
 {
     sProgress = progress;  // 32-bit writes are atomic
 }
-#endif  // WNT
+#endif  // _WIN32

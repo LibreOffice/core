@@ -1815,7 +1815,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<MessageDialog> xDialog(VclPtr<MessageDialog>::Create(pParent, nBits));
         m_pParserState->m_aMessageDialogs.push_back(xDialog);
         xWindow = xDialog;
-#if defined WNT
+#if defined _WIN32
         xWindow->set_border_width(3);
 #else
         xWindow->set_border_width(12);

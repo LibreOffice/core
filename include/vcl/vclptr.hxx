@@ -28,7 +28,7 @@
 #include <type_traits>
 
 #ifdef DBG_UTIL
-#ifndef WNT
+#ifndef _WIN32
 #include <vcl/vclmain.hxx>
 #endif
 #endif
@@ -100,7 +100,7 @@ public:
     {
     }
 
-#if defined(DBG_UTIL) && !defined(WNT)
+#if defined(DBG_UTIL) && !defined(_WIN32)
     virtual ~VclPtr()
     {
         assert(m_rInnerRef.get() == nullptr || vclmain::isAlive());

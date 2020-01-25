@@ -1960,7 +1960,7 @@ void Desktop::OpenClients()
                               + utl::ConfigManager::getUILocale();
 #if defined UNX
             aHelpURL += "&System=UNX";
-#elif defined WNT
+#elif defined _WIN32
             aHelpURL += "&System=WIN";
 #endif
             Application::GetHelp()->Start(aHelpURL, static_cast<const vcl::Window*>(nullptr));

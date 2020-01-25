@@ -1080,7 +1080,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
                 aHelpURLBuffer.append(utl::ConfigManager::getUILocale());
 #if defined UNX
                 aHelpURLBuffer.append("&System=UNX");
-#elif defined WNT
+#elif defined _WIN32
                 aHelpURLBuffer.append("&System=WIN");
 #endif
                 ApplicationEvent* pAppEvent = new ApplicationEvent(

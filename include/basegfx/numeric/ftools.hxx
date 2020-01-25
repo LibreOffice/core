@@ -147,7 +147,7 @@ namespace basegfx
     */
     inline double copySign(double fValue, double fSignCarrier)
     {
-#ifdef WNT
+#ifdef _WIN32
         return _copysign(fValue, fSignCarrier);
 #else
         return copysign(fValue, fSignCarrier);

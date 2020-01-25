@@ -364,7 +364,7 @@ void FileProvider::initProperties()
 
 #if defined ( UNX )
         m_FileSystemNotation = FileSystemNotation::UNIX_NOTATION;
-#elif defined( WNT )
+#elif defined( _WIN32 )
         m_FileSystemNotation = FileSystemNotation::DOS_NOTATION;
 #else
         m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;

@@ -5887,7 +5887,7 @@ void SwUiWriterTest::testTdf107976()
 
 void SwUiWriterTest::testTdf58604()
 {
-#ifdef WNT
+#ifdef _WIN32
     // Allow linebreak character follows hanging punctuation immediately instead of
     // breaking at the start of the next line.
     load(DATA_DIRECTORY, "tdf58604.odt");

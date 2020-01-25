@@ -30,9 +30,9 @@
 #endif
 #include <windows.h>
 #include <winldap.h>
-#else // !defined WNT
+#else // !defined _WIN32
 #include <ldap.h>
-#endif // WNT
+#endif // _WIN32
 
 #include <com/sun/star/ldap/LdapGenericException.hpp>
 

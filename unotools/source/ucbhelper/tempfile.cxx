@@ -33,7 +33,7 @@
 
 #ifdef UNX
 #include <unistd.h>
-#elif defined( WNT )
+#elif defined( _WIN32 )
 #include <process.h>
 #endif
 
@@ -336,7 +336,7 @@ static OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool b
     static const OUString aPidString = OUString::number(pid);
     aEyeCatcher += aPidString;
 #endif
-#elif defined(WNT)
+#elif defined(_WIN32)
     static const int pid = _getpid();
     static const OUString aPidString = OUString::number(pid);
     aEyeCatcher += aPidString;

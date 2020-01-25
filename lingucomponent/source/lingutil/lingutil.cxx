@@ -56,7 +56,7 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
   if (!rPathName.match(WIN32_LONG_PATH_PREFIX)) return WIN32_LONG_PATH_PREFIX + rPathName;
   return rPathName;
 }
-#endif //defined(WNT)
+#endif //defined(_WIN32)
 
 #ifdef SYSTEM_DICTS
 // find old style dictionaries in system directories

@@ -173,7 +173,7 @@ namespace
 
 #if defined MACOSX
         const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->mpNSView );
-#elif defined WNT
+#elif defined _WIN32
         const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->hWnd );
 #else
         const intptr_t id = static_cast<intptr_t>( pEnvData->aWindow );
