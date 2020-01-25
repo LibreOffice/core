@@ -193,7 +193,7 @@ namespace sdr::overlay
         IMPL_LINK_NOARG(OverlayManagerBuffered, ImpBufferTimerHandler, Timer*, void)
         {
             //Resolves: fdo#46728 ensure this exists until end of scope
-            rtl::Reference<OverlayManager> xRef(this);
+            rtl::Reference<OverlayManager> xKeepAlive(this);
 
             // stop timer
             maBufferIdle.Stop();

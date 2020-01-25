@@ -919,7 +919,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
 void SAL_CALL SfxBaseController::dispose()
 {
     SolarMutexGuard aGuard;
-    Reference< XController > xTmp( this );
+    Reference< XController > xKeepAlive( this );
     m_pData->m_bDisposing = true ;
 
     lang::EventObject aEventObject;

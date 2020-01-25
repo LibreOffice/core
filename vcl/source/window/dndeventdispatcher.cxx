@@ -365,7 +365,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
 
         // window may be destroyed in drop event handler
-        VclPtr<vcl::Window> xWindow = pWindow;
+        VclPtr<vcl::Window> xPreventDelete = pWindow;
 
         if( xDropTarget.is() )
         {

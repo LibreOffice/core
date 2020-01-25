@@ -1215,7 +1215,7 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 {
     SolarMutexGuard aGuard;
 
-    rtl::Reference<ScDataPilotTableObj> aSelfHold(this); // in case the listeners have the last ref
+    rtl::Reference<ScDataPilotTableObj> xSelfHold(this); // in case the listeners have the last ref
 
     sal_uInt16 nCount = aModifyListeners.size();
     for ( sal_uInt16 n=nCount; n--; )

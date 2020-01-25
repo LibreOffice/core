@@ -93,7 +93,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
 {
     try
     {
-        ::ucbhelper::Content aCnt( aSoundURL,
+        ::ucbhelper::Content aLoadContentIfExists( aSoundURL,
             css::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
 

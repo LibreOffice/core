@@ -347,7 +347,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 {
     // Create a reference to this object to prevent an early release of the
     // listbox (VclEventId::ObjectDying).
-    Reference< XAccessible > xTemp = this;
+    Reference< XAccessible > xHoldAlive = this;
 
     switch ( rVclWindowEvent.GetId() )
     {

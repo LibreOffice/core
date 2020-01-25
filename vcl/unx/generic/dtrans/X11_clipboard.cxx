@@ -109,7 +109,7 @@ void X11Clipboard::clearContents()
     // copy member references on stack so they can be called
     // without having the mutex
     Reference< XClipboardOwner > xOwner( m_aOwner );
-    Reference< XTransferable > xTrans( m_aContents );
+    Reference< XTransferable > xKeepAlive( m_aContents );
     // clear members
     m_aOwner.clear();
     m_aContents.clear();

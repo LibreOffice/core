@@ -1340,7 +1340,7 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
         // object. Otherwise in some corner cases it would get initialized
         // at ::InitNewDoc -> which would get called during
         // close() or dispose() -> n#681746
-        uno::Reference<lang::XComponent> xComp( mxXDrawPage, uno::UNO_QUERY );
+        uno::Reference<lang::XComponent> xTriggerInit( mxXDrawPage, uno::UNO_QUERY );
     }
     return mxXDrawPage;
 }

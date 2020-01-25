@@ -495,7 +495,7 @@ void VCLXAccessibleToolBox::FillAccessibleStateSet( utl::AccessibleStateSetHelpe
 void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     // to prevent an early release of the toolbox (VclEventId::ObjectDying)
-    Reference< XAccessibleContext > xTemp = this;
+    Reference< XAccessibleContext > xHoldAlive = this;
 
     switch ( rVclWindowEvent.GetId() )
     {

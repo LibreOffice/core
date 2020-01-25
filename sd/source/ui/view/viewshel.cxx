@@ -1401,7 +1401,7 @@ void ViewShell::SetCurrentFunction( const rtl::Reference<FuPoor>& xFunction)
 {
     if( mxCurrentFunction.is() && (mxOldFunction != mxCurrentFunction) )
         mxCurrentFunction->Dispose();
-    rtl::Reference<FuPoor> xTemp( mxCurrentFunction );
+    rtl::Reference<FuPoor> xDisposeAfterNewOne( mxCurrentFunction );
     mxCurrentFunction = xFunction;
 }
 
@@ -1410,7 +1410,7 @@ void ViewShell::SetOldFunction(const rtl::Reference<FuPoor>& xFunction)
     if( mxOldFunction.is() && (xFunction != mxOldFunction) && (mxCurrentFunction != mxOldFunction) )
         mxOldFunction->Dispose();
 
-    rtl::Reference<FuPoor> xTemp( mxOldFunction );
+    rtl::Reference<FuPoor> xDisposeAfterNewOne( mxOldFunction );
     mxOldFunction = xFunction;
 }
 
@@ -1445,7 +1445,7 @@ void ViewShell::DeactivateCurrentFunction( bool bPermanent /* == false */ )
         if( mxCurrentFunction != mxOldFunction )
             mxCurrentFunction->Dispose();
 
-        rtl::Reference<FuPoor> xTemp( mxCurrentFunction );
+        rtl::Reference<FuPoor> xDisposeAfterNewOne( mxCurrentFunction );
         mxCurrentFunction.clear();
     }
 }
@@ -1462,7 +1462,7 @@ void ViewShell::DisposeFunctions()
 
     if(mxOldFunction.is())
     {
-        rtl::Reference<FuPoor> xTemp( mxOldFunction );
+        rtl::Reference<FuPoor> xDisposeAfterNewOne( mxOldFunction );
         mxOldFunction->Dispose();
         mxOldFunction.clear();
     }

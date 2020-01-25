@@ -568,9 +568,9 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 // mpSVGExport = new SVGExport( xDocHandler );
                 mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
 
-                // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
+                // xKeepAlive is set up only to manage the life-time of the object pointed by mpSVGExport,
                 // and in order to prevent that it is destroyed when passed to AnimationExporter.
-                Reference< XInterface > xSVGExport = static_cast< css::document::XFilter* >( mpSVGExport );
+                Reference< XInterface > xKeepAlive = static_cast< css::document::XFilter* >( mpSVGExport );
 
                 // create an id for each draw page
                 for( const auto& rPage : mSelectedPages )
@@ -657,9 +657,9 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
             // mpSVGExport = new SVGExport( xDocHandler );
             mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
 
-            // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
+            // xKeepAlive is set up only to manage the life-time of the object pointed by mpSVGExport,
             // and in order to prevent that it is destroyed when passed to AnimationExporter.
-            Reference< XInterface > xSVGExport = static_cast< css::document::XFilter* >( mpSVGExport );
+            Reference< XInterface > xKeepAlive = static_cast< css::document::XFilter* >( mpSVGExport );
 
             try
             {
