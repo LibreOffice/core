@@ -1646,7 +1646,7 @@ PPDContext& PPDContext::operator=( PPDContext&& rCopy )
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
-    if( m_aCurrentValues.size() < static_cast<hash_type::size_type>(n) )
+    if( m_aCurrentValues.size() <= static_cast<hash_type::size_type>(n) )
         return nullptr;
 
     hash_type::const_iterator it = m_aCurrentValues.begin();
