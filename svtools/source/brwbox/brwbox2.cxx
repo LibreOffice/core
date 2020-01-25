@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <svtools/brwbox.hxx>
@@ -1359,7 +1360,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
     sal_uInt16 nX = 0;
     for ( size_t nCol = 0;
           nCol < mvCols.size() &&
-            ( nX + mvCols[ nCol ]->Width() ) < sal_uInt16(GetOutputSizePixel().Width());
+            ( nX + mvCols[ nCol ]->Width() ) < o3tl::make_unsigned(GetOutputSizePixel().Width());
           ++nCol )
         // is this column visible?
         if ( mvCols[ nCol ]->IsFrozen() || nCol >= nFirstCol )
