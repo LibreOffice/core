@@ -29,29 +29,29 @@ extern "C" {
 /** PageSize (recommended) default.
     @see store_openFile()
  */
-#define STORE_DEFAULT_PAGESIZE ((sal_uInt16)0x0400)
+constexpr sal_uInt16 STORE_DEFAULT_PAGESIZE = 0x0400;
 
 
 /** PageSize (enforced) limits.
     @see store_openFile()
  */
-#define STORE_MINIMUM_PAGESIZE ((sal_uInt16)0x0200)
-#define STORE_MAXIMUM_PAGESIZE ((sal_uInt16)0x8000)
+constexpr sal_uInt16 STORE_MINIMUM_PAGESIZE = 0x0200;
+constexpr sal_uInt16 STORE_MAXIMUM_PAGESIZE = 0x8000;
 
 
 /** NameSize (enforced) limit.
     @see any param pName
     @see store_E_NameTooLong
  */
-#define STORE_MAXIMUM_NAMESIZE 256
+constexpr auto STORE_MAXIMUM_NAMESIZE = 256;
 
 
 /** Attributes (predefined).
     @see store_attrib()
  */
-#define STORE_ATTRIB_ISLINK  ((sal_uInt32)0x10000000)
-#define STORE_ATTRIB_ISDIR   ((sal_uInt32)0x20000000)
-#define STORE_ATTRIB_ISFILE  ((sal_uInt32)0x40000000)
+constexpr sal_uInt32 STORE_ATTRIB_ISLINK = 0x10000000;
+constexpr sal_uInt32 STORE_ATTRIB_ISDIR = 0x20000000;
+constexpr sal_uInt32 STORE_ATTRIB_ISFILE = 0x40000000;
 
 
 /** Access Mode enumeration.

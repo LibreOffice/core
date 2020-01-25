@@ -156,55 +156,55 @@ namespace o3tl
 
 // List of all creators for Load/Store
 
-#define SBXCR_SBX            0x20584253        // SBX(blank)
+constexpr auto SBXCR_SBX = 0x20584253;        // SBX(blank)
 
 // List of predefined SBX-IDs. New SBX-IDs must be precisely defined so that
 // they are unique within the Stream and appropriate Factory.
 
-#define SBXID_VALUE         0x4E4E  // NN: SbxValue
-#define SBXID_VARIABLE      0x4156  // VA: SbxVariable
-#define SBXID_ARRAY         0x5241  // AR: SbxArray
-#define SBXID_DIMARRAY      0x4944  // DI: SbxDimArray
-#define SBXID_OBJECT        0x424F  // OB: SbxObject
-#define SBXID_COLLECTION    0x4F43  // CO: SbxCollection
-#define SBXID_FIXCOLLECTION 0x4346  // FC: SbxStdCollection
-#define SBXID_METHOD        0x454D  // ME: SbxMethod
-#define SBXID_PROPERTY      0x5250  // PR: SbxProperty
+constexpr auto SBXID_VALUE = 0x4E4E;  // NN: SbxValue
+constexpr auto SBXID_VARIABLE = 0x4156;  // VA: SbxVariable
+constexpr auto SBXID_ARRAY = 0x5241;  // AR: SbxArray
+constexpr auto SBXID_DIMARRAY = 0x4944;  // DI: SbxDimArray
+constexpr auto SBXID_OBJECT = 0x424F;  // OB: SbxObject
+constexpr auto SBXID_COLLECTION = 0x4F43;  // CO: SbxCollection
+constexpr auto SBXID_FIXCOLLECTION = 0x4346;  // FC: SbxStdCollection
+constexpr auto SBXID_METHOD = 0x454D;  // ME: SbxMethod
+constexpr auto SBXID_PROPERTY = 0x5250;  // PR: SbxProperty
 
 // StarBASIC restricts the base data type to different intervals.
 // These intervals are fixed to create 'portability and independent
 // of the implementation. Only type double is greedy and takes
 // what it gets.
 
-#define SbxMAXCHAR  (u'\xFFFF')
-#define SbxMINCHAR  (0)
-#define SbxMAXBYTE  ( 255)
-#define SbxMAXINT   ( 32767)
-#define SbxMININT   (-32768)
-#define SbxMAXUINT  (sal_uInt16(65535))
-#define SbxMAXLNG   ( 2147483647)
-#define SbxMINLNG   (sal_Int32(-2147483647-1))
-#define SbxMAXULNG  (sal_uInt32(0xffffffff))
+constexpr auto SbxMAXCHAR = u'\xFFFF';
+constexpr auto SbxMINCHAR = 0;
+constexpr auto SbxMAXBYTE = 255;
+constexpr auto SbxMAXINT = 32767;
+constexpr auto SbxMININT = -32768;
+constexpr sal_uInt16 SbxMAXUINT = 65535;
+constexpr auto SbxMAXLNG = 2147483647;
+constexpr sal_Int32 SbxMINLNG = -2147483647-1;
+constexpr sal_uInt32 SbxMAXULNG = 0xffffffff;
 
         // Currency stored as SbxSALINT64 == sal_Int64
         // value range limits are ~(2^63 - 1)/10000
         // fixed precision has 4 digits right of decimal pt
-#define CURRENCY_FACTOR         (10000)
-#define CURRENCY_FACTOR_SQUARE  (100000000)
+constexpr auto CURRENCY_FACTOR = 10000;
+constexpr auto CURRENCY_FACTOR_SQUARE = 100000000;
 
 // TODO effective MAX/MINCURR limits:
 // true value ( 922337203685477.5807) is too precise for correct comparison to 64bit double
-#define SbxMAXCURR      ( 922337203685477.5807)
-#define SbxMINCURR      (-922337203685477.5808)
+constexpr auto SbxMAXCURR = 922337203685477.5807;
+constexpr auto SbxMINCURR = -922337203685477.5808;
 
-#define SbxMAXSNG       ( 3.402823e+38)
-#define SbxMINSNG       (-3.402823e+38)
-#define SbxMAXSNG2      ( 1.175494351e-38)
-#define SbxMINSNG2      (-1.175494351e-38)
+constexpr auto SbxMAXSNG = 3.402823e+38;
+constexpr auto SbxMINSNG = -3.402823e+38;
+constexpr auto SbxMAXSNG2 = 1.175494351e-38;
+constexpr auto SbxMINSNG2 = -1.175494351e-38;
 
 // Max valid offset index of a Sbx-Array (due to 64K limit)
-#define SBX_MAXINDEX    0x3FF0
-#define SBX_MAXINDEX32  SbxMAXLNG
+constexpr auto SBX_MAXINDEX = 0x3FF0;
+constexpr auto SBX_MAXINDEX32 = SbxMAXLNG;
 
 // The numeric values of sal_True and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };

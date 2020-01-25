@@ -42,10 +42,10 @@ class  PopupMenu;
 class VclMenuEvent;
 class StyleSettings;
 
-#define TOOLBOX_STYLE_FLAT          (sal_uInt16(0x0004))
+constexpr sal_uInt16 TOOLBOX_STYLE_FLAT = 0x0004;
 
 // item ids in the custom menu may not exceed this constant
-#define TOOLBOX_MENUITEM_START      (sal_uInt16(0x1000))
+constexpr sal_uInt16 TOOLBOX_MENUITEM_START = 0x1000;
 
 // defines for the menubutton
 enum class ToolBoxMenuType {
