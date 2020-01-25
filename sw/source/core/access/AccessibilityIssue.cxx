@@ -54,6 +54,21 @@ void AccessibilityIssue::gotoIssue() const
             pWrtShell->GotoTable(m_sObjectID);
         }
         break;
+        case IssueObject::TEXT:
+        {
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            SwContentNode* pContentNode = m_pNode->GetContentNode();
+            SwPosition aPoint(*pContentNode, m_nStart);
+            SwPosition aMark(*pContentNode, m_nEnd);
+            pWrtShell->EnterStdMode();
+            pWrtShell->StartAllAction();
+            SwPaM* pPaM = pWrtShell->GetCursor();
+            *pPaM->GetPoint() = aPoint;
+            pPaM->SetMark();
+            *pPaM->GetMark() = aMark;
+            pWrtShell->EndAllAction();
+        }
+        break;
         default:
             break;
     }

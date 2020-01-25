@@ -22,6 +22,7 @@ enum class IssueObject
     GRAPHIC,
     OLE,
     TABLE,
+    TEXT,
 };
 
 class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue
@@ -30,6 +31,11 @@ private:
     IssueObject m_eIssueObject;
     SwDoc* m_pDoc;
     OUString m_sObjectID;
+    std::vector<OUString> m_aIssueAdditionalInfo;
+    SwNode* m_pNode;
+
+    sal_Int32 m_nStart;
+    sal_Int32 m_nEnd;
 
 public:
     AccessibilityIssue(sfx::AccessibilityIssueID eIssueID = sfx::AccessibilityIssueID::UNSPECIFIED);
@@ -37,6 +43,18 @@ public:
     void setIssueObject(IssueObject eIssueObject);
     void setDoc(SwDoc* pDoc);
     void setObjectID(OUString const& rID);
+    void setNode(SwNode* pNode) { m_pNode = pNode; }
+
+    void setStart(sal_Int32 nStart) { m_nStart = nStart; }
+
+    void setEnd(sal_Int32 nEnd) { m_nEnd = nEnd; }
+
+    std::vector<OUString> const& getAdditionalInfo() const { return m_aIssueAdditionalInfo; }
+
+    void setAdditionalInfo(std::vector<OUString> const& rIssueAdditionalInfo)
+    {
+        m_aIssueAdditionalInfo = rIssueAdditionalInfo;
+    }
 
     bool canGotoIssue() const override;
     void gotoIssue() const override;
