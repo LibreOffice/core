@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <shlobj.h>
 #include <objidl.h>
-#endif // End WNT
+#endif // End _WIN32
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>

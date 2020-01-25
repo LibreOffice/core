@@ -40,7 +40,7 @@ namespace { extern "C" {
     void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
 #elif defined MACOSX
     void ( *libvlc_media_player_set_nsobject ) ( libvlc_media_player_t *p_mi, void *drawable );
-#elif defined WNT
+#elif defined _WIN32
     void ( *libvlc_media_player_set_hwnd ) ( libvlc_media_player_t *p_mi, void *drawable );
 #else
 #error unknown OS
@@ -83,7 +83,7 @@ namespace avmedia::vlc::wrapper
             SYM_MAP( libvlc_media_player_set_xwindow ),
 #elif defined MACOSX
             SYM_MAP( libvlc_media_player_set_nsobject ),
-#elif defined WNT
+#elif defined _WIN32
             SYM_MAP( libvlc_media_player_set_hwnd ),
 #endif
             SYM_MAP( libvlc_media_player_has_vout ),
@@ -220,7 +220,7 @@ namespace avmedia::vlc::wrapper
         libvlc_media_player_set_xwindow( mPlayer, static_cast<uint32_t>(id) );
 #elif defined MACOSX
         libvlc_media_player_set_nsobject( mPlayer, reinterpret_cast<void*>( id ) );
-#elif defined WNT
+#elif defined _WIN32
         libvlc_media_player_set_hwnd( mPlayer, reinterpret_cast<void*>( id ) );
 #endif
     }

@@ -40,7 +40,7 @@ public:
             delete this;
     }
 #ifdef DBG_UTIL
-#ifndef WNT
+#ifndef _WIN32
     sal_Int32 getRefCount() const { return mnRefCnt; }
 #endif
 #endif

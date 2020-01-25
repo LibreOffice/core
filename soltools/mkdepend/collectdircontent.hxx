@@ -16,7 +16,7 @@
 #include <algorithm>
 #else
 #include <dirent.h>
-#endif // defined( WNT )
+#endif // defined( _WIN32 )
 
 #include <iostream>
 

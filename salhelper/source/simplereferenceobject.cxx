@@ -40,9 +40,9 @@ void *SimpleReferenceObject::operator new(std::size_t nSize,
 #if defined(_WIN32)
     return ::operator new(nSize);
         // WNT lacks a global nothrow operator new...
-#else // WNT
+#else // _WIN32
     return ::operator new(nSize, std::nothrow);
-#endif // WNT
+#endif // _WIN32
 }
 
 void SimpleReferenceObject::operator delete(void * pPtr)
@@ -54,9 +54,9 @@ void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
 {
 #if defined(_WIN32)
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
-#else // WNT
+#else // _WIN32
     ::operator delete(pPtr, std::nothrow);
-#endif // WNT
+#endif // _WIN32
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

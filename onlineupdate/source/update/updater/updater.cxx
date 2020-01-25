@@ -2158,7 +2158,7 @@ LaunchCallbackApp(const NS_tchar *workingDir,
     execv(argv[0], argv);
 #elif defined(MACOSX)
     LaunchChild(argc, (const char**)argv);
-#elif defined(WNT)
+#elif defined(_WIN32)
     // Do not allow the callback to run when running an update through the
     // service as session 0.  The unelevated updater.exe will do the launching.
     if (!usingService)
@@ -2365,7 +2365,7 @@ ProcessReplaceRequest()
     NS_tchar destDir[MAXPATHLEN];
     NS_tsnprintf(destDir, sizeof(destDir)/sizeof(destDir[0]),
                  NS_T("%s/Contents"), gInstallDirPath);
-#elif defined(WNT)
+#elif defined(_WIN32)
     // Windows preserves the case of the file/directory names.  We use the
     // GetLongPathName API in order to get the correct case for the directory
     // name, so that if the user has used a different case when launching the
@@ -3828,7 +3828,7 @@ int NS_main(int argc, NS_tchar **argv)
                  "directory: " LOG_S, DELETE_DIR));
         }
     }
-#endif /* WNT */
+#endif /* _WIN32 */
 
 
 #ifdef MACOSX

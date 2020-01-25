@@ -1742,7 +1742,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     #elif defined UNX
                                     aParentData.aWindow = nWindowHandle;
                                     aParentData.bXEmbedSupport = bXEmbed;
-                                    #elif defined WNT
+                                    #elif defined _WIN32
                                     aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
                                     #endif
                                     pNewWindow = VclPtr<WorkWindow>::Create( &aParentData );
@@ -1993,7 +1993,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;
-            #elif defined WNT
+            #elif defined _WIN32
             aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
             #endif
             SolarMutexGuard aGuard;

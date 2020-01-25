@@ -40,7 +40,7 @@ struct ApiMap
     const char LibName[] = "libvlc.so.5";
 #elif defined( MACOSX )
     const char LibName[] = "/Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib";
-#elif defined( WNT )
+#elif defined( _WIN32 )
     const char LibName[] = "libvlc.dll";
 
     inline OUString GetVLCPath()
@@ -95,7 +95,7 @@ struct ApiMap
     {
 #if defined( LINUX ) || defined( MACOSX )
         OUString const fullPath(LibName);
-#elif defined( WNT )
+#elif defined( _WIN32 )
         OUString const fullPath(GetVLCPath() + LibName);
 #endif
         SAL_INFO("avmedia", fullPath);

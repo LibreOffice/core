@@ -2196,7 +2196,7 @@ void MessageDialog::create_message_area()
 
 void MessageDialog::create_owned_areas()
 {
-#if defined WNT
+#if defined _WIN32
     set_border_width(3);
 #else
     set_border_width(12);

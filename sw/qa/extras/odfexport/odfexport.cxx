@@ -495,7 +495,7 @@ DECLARE_ODFEXPORT_TEST(testSenderInitials, "sender-initials.fodt")
     }
 }
 
-#ifndef WNT
+#ifndef _WIN32
 DECLARE_ODFEXPORT_TEST(testResolvedComment, "resolved-comment.odt")
 {
     // TODO find out why does this break testFdo58949 on Windows.
