@@ -100,7 +100,7 @@ ThreadPool::~ThreadPool()
     // note: calling shutdown from global variable dtor blocks forever on Win7
     // note2: there isn't enough MSVCRT left on exit to call assert() properly
     // so these asserts just print something to stderr but exit status is
-    // still 0, but hopefully they will be more helpful on non-WNT platforms
+    // still 0, but hopefully they will be more helpful on non-_WIN32 platforms
     assert(mbTerminate);
     assert(maTasks.empty());
 }

@@ -254,7 +254,7 @@ static OUString queryFile( Printer const * pPrinter )
             xFilePicker->appendFilter( "PostScript", "*.ps" );
         if( bPDF )
             xFilePicker->appendFilter( "Portable Document Format", "*.pdf" );
-#elif defined WNT
+#elif defined _WIN32
         (void)pPrinter;
         xFilePicker->appendFilter( "*.PRN", "*.prn" );
 #endif

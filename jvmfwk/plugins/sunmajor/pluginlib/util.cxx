@@ -644,7 +644,7 @@ static void addJavaInfoFromWinReg(
     }
 }
 
-#endif // WNT
+#endif // _WIN32
 
 void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 {
@@ -760,7 +760,7 @@ vector<Reference<VendorBase> > addAllJREInfos(
 #if defined(_WIN32)
     // Get Javas from the registry
     addJavaInfoFromWinReg(allInfos, addedInfos);
-#endif // WNT
+#endif // _WIN32
 
     if (checkJavaHomeAndPath) {
         addJavaInfoFromJavaHome(allInfos, addedInfos);

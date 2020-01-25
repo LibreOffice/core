@@ -695,7 +695,7 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     aPosAry.mnDestX = aPosAry.mnDestY = 0;
     BitBlt( hMemDC.get(), 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
 
-    // WIN/WNT seems to have a minor problem mapping the correct color of the
+    // WIN/_WIN32 seems to have a minor problem mapping the correct color of the
     // mask to the palette if we draw the DIB directly ==> draw DDB
     if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
     {
@@ -772,7 +772,7 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
                                                           nMaskColor.GetGreen(),
                                                           nMaskColor.GetBlue())));
 
-    // WIN/WNT seems to have a minor problem mapping the correct color of the
+    // WIN/_WIN32 seems to have a minor problem mapping the correct color of the
     // mask to the palette if we draw the DIB directly ==> draw DDB
     if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
     {

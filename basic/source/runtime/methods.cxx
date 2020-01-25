@@ -3482,7 +3482,7 @@ void SbRtl_Rnd(StarBASIC *, SbxArray & rPar, bool)
 //  WindowStyles (VBA compatible):
 //      2 == Minimized
 //      3 == Maximized
-//     10 == Full-Screen (text mode applications OS/2, WIN95, WNT)
+//     10 == Full-Screen (text mode applications OS/2, WIN95, _WIN32)
 //     HACK: The WindowStyle will be passed to
 //     Application::StartApp in Creator. Format: "xxxx2"
 

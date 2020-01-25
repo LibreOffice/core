@@ -72,7 +72,7 @@ static const char kUserAgent[] = "LibreOffice UpdateChecker/1.0 (unknown platfor
 #ifdef UNX
 const char* const pUpdaterName = "updater";
 const char* const pSofficeExeName = "soffice";
-#elif defined(WNT)
+#elif defined(_WIN32)
 const char* pUpdaterName = "updater.exe";
 const char* pSofficeExeName = "soffice.exe";
 #else

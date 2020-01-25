@@ -145,7 +145,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
 };
 
 extern "C" {
-#  ifdef WNT
+#  ifdef _WIN32
     // builtin win32 systray
     void win32_init_sys_tray();
     void win32_shutdown_sys_tray();

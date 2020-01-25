@@ -44,7 +44,7 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
     char* os = getenv("OS");
     if (os)
     {
-        gui = (strcmp(os, "WNT") ? "UNIX" : "WIN");
+        gui = (strcmp(os, "_WIN32") ? "UNIX" : "WIN");
         gui = (strcmp(os, "MACOSX") ? gui : "MAC");
     }
 }

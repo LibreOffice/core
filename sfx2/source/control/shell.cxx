@@ -158,7 +158,7 @@ void SfxShell::PutItem
     DBG_ASSERT( SfxItemPool::IsSlot( rItem.Which() ),
                 "items with Which-Ids aren't allowed here" );
 
-    // MSC made a mess here of WNT/W95, beware of changes
+    // MSC made a mess here of _WIN32/W95, beware of changes
     SfxPoolItem *pItem = rItem.Clone();
     SfxPoolItemHint aItemHint( pItem );
     sal_uInt16 nWhich = rItem.Which();

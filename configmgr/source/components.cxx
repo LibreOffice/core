@@ -612,7 +612,7 @@ Components::~Components()
     // (unknown yet) but can do no harm
     const bool bExitWasCalled(comphelper::BackupFileHelper::getExitWasCalled());
 
-#ifndef WNT
+#ifndef _WIN32
     // we can add a SAL_WARN here for other systems where the destructor gets called after
     // an _exit() call. Still safe - the getExitWasCalled() is used, but a hint that _exit
     // behaves different on a system

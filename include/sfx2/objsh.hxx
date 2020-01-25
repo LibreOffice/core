@@ -483,7 +483,7 @@ public:
 
        1 (==SFX_TITLE_FILENAME)
        provides the logical file name without path
-       (under WNT depending on the system settings
+       (under _WIN32 depending on the system settings
        without extension)
 
        2 (==SFX_TITLE_FULLNAME)

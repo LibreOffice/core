@@ -27,7 +27,7 @@
 #include <fstream>
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <client/linux/handler/exception_handler.h>
-#elif defined WNT
+#elif defined _WIN32
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmicrosoft-enum-value"
@@ -54,7 +54,7 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
 
     return succeeded;
 }
-#elif defined WNT
+#elif defined _WIN32
 static bool dumpCallback(const wchar_t* path, const wchar_t* id,
     void* /*context*/, EXCEPTION_POINTERS* /*exinfo*/,
     MDRawAssertionInfo* /*assertion*/,
@@ -176,7 +176,7 @@ void CrashReporter::updateMinidumpLocation()
     OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
     google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
     mpExceptionHandler->set_minidump_descriptor(descriptor);
-#elif defined WNT
+#elif defined _WIN32
     OUString aURL = getCrashDirectory();
     mpExceptionHandler->set_dump_path(o3tl::toW(aURL.getStr()));
 #endif
@@ -208,7 +208,7 @@ void CrashReporter::installExceptionHandler()
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
     mpExceptionHandler = std::make_unique<google_breakpad::ExceptionHandler>(descriptor, nullptr, dumpCallback, nullptr, true, -1);
-#elif defined WNT
+#elif defined _WIN32
     mpExceptionHandler = std::make_unique<google_breakpad::ExceptionHandler>(L".", nullptr, dumpCallback, nullptr, google_breakpad::ExceptionHandler::HANDLER_ALL);
 #endif
 }

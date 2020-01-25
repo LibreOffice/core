@@ -3232,7 +3232,7 @@ namespace osl_File
         {
             // move $TEMP/tmpdir/tmpname to $TEMP/tmpdir.
             nError1 = File::move(aTmpName4, aTmpName3);
-            // returned osl::FileBase::E_ACCES on WNT
+            // returned osl::FileBase::E_ACCES on _WIN32
             CPPUNIT_ASSERT_MESSAGE("test for move function: use directory as destination",
                  (osl::FileBase::E_ACCES == nError1 || osl::FileBase::E_ISDIR == nError1) ||(osl::FileBase::E_EXIST == nError1));
         }

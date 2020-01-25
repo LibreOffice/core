@@ -72,7 +72,7 @@ namespace comphelper
         // internal flag if _exit() was called already - a hint to evtl.
         // not create copies of potentially not well-defined data. This
         // may be used in destructors of static instances - which unfortunately
-        // get called on WNT but not on linux. Thus I thought about encapsulating
+        // get called on _WIN32 but not on linux. Thus I thought about encapsulating
         // in some '#ifdefs', but it's just more safe to always do it and
         // allows to add a SAL_WARN when one of these destructors is called
         // after _exit()

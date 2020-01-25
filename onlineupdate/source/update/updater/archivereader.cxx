@@ -33,7 +33,7 @@
 
 #if defined(UNIX)
 # include <sys/types.h>
-#elif defined(WNT)
+#elif defined(_WIN32)
 # include <io.h>
 #endif
 

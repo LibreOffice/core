@@ -361,7 +361,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "ApproveAll") {
         return true;
     }
-    // only on WNT, basic/qa/cppunit/test_vba.cx
+    // only on _WIN32, basic/qa/cppunit/test_vba.cx
     if (aFunctionName == "(anonymous namespace)::VBATest::testMiscOLEStuff") {
         return true;
     }

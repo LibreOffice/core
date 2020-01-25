@@ -436,7 +436,7 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event"));
 
-    // there's a data race here on WNT only because ImplYield may be
+    // there's a data race here on _WIN32 only because ImplYield may be
     // called without SolarMutex; but the only remaining use of mnDispatchLevel
     // is in OSX specific code
     pSVData->maAppData.mnDispatchLevel++;
