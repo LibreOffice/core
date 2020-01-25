@@ -159,9 +159,6 @@ tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice
                     aActionBounds.SetLeft(rOut.PixelToLogic(aBoundRect1).getX()
                                           + rOut.PixelToLogic(aBoundRect1).getWidth());
                 }
-
-                // FIXME: Is this really needed?
-                aActionBounds.SetTop(aActionBounds.getY() + 100);
             }
         }
         break;
@@ -428,14 +425,15 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
     fillSearchOptions(aSearchOptions, pRedactionTarget);
 
     utl::TextSearch textSearch(aSearchOptions);
+    static long aLastFontHeight = 0;
 
     MetaAction* pCurrAct;
 
-    // Watch for TEXTARRAY actions.
-    // They contain the text of paragraphs.
     for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct;
          pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
     {
+        // Watch for TEXTARRAY actions.
+        // They contain the text of paragraphs.
         if (pCurrAct->GetType() == MetaActionType::TEXTARRAY)
         {
             MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pCurrAct);
@@ -456,13 +454,25 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
                     ImplCalcActionBounds(*pMetaTextArrayAction, *pOutputDevice, nStart, nEnd));
 
                 if (!aNewRect.IsEmpty())
+                {
+                    // Calculate the difference between current wrong value and value should it be.
+                    // Add the difference to current value.
+                    // Then increase 10% of the new value to make it look better.
+                    aNewRect.SetTop(aNewRect.getY() + (aNewRect.getHeight() - aLastFontHeight)
+                                    - aLastFontHeight / 10);
                     aRedactionRectangles.push_back(aNewRect);
+                }
 
                 // Search for the next occurrence
                 nStart = nEnd;
                 nEnd = sText.getLength();
                 bFound = textSearch.SearchForward(sText, &nStart, &nEnd);
             }
+        }
+        else if (pCurrAct->GetType() == MetaActionType::FONT)
+        {
+            const MetaFontAction* pFontAct = static_cast<const MetaFontAction*>(pCurrAct);
+            aLastFontHeight = pFontAct->GetFont().GetFontSize().getHeight();
         }
     }
 }
