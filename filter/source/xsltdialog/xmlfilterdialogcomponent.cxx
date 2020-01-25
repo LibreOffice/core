@@ -277,7 +277,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute()
     bool bLaunch = false;
     if (!mxDialog)
     {
-        Reference< XComponent > xComp( this );
+        Reference< XComponent > xKeepAlive( this );
         mxDialog = std::make_shared<XMLFilterSettingsDialog>(Application::GetFrameWeld(mxParent), mxContext);
         bLaunch = true;
     }

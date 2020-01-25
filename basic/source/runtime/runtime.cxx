@@ -3523,7 +3523,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 }
             }
             // assign pElem to a Ref, to delete a temp-var if applicable
-            SbxVariableRef refTemp = pElem;
+            SbxVariableRef xDeleteRef = pElem;
 
             // remove potential rests of the last call of the SbxMethod
             // free Write before, so that there's no error
@@ -3554,7 +3554,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         // this if we actually have params following
         else if( bVBAEnabled && dynamic_cast<const SbUnoProperty*>( pElem) != nullptr && pElem->GetParameters() )
         {
-            SbxVariableRef refTemp = pElem;
+            SbxVariableRef xDeleteRef = pElem;
 
             // dissolve the notify while copying variable
             SbxVariable* pNew = new SbxVariable( *pElem );

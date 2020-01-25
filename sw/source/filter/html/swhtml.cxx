@@ -227,7 +227,7 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
     }
 
     // so nobody steals the document!
-    rtl::Reference<SwDoc> aHoldRef(&rDoc);
+    rtl::Reference<SwDoc> xHoldAlive(&rDoc);
     ErrCode nRet = ERRCODE_NONE;
     tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *m_pStream,
                                             rName, rBaseURL, !m_bInsertMode, m_pMedium,
@@ -3240,7 +3240,7 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
     HTMLAttr *pNext = pAttr->GetNext();
     HTMLAttr *pPrev = pAttr->GetPrev();
     //hold ref to xAttrTab until end of scope to ensure *ppHead validity
-    std::shared_ptr<HTMLAttrTable> xAttrTab(pAttr->m_xAttrTab);
+    std::shared_ptr<HTMLAttrTable> xKeepAlive(pAttr->m_xAttrTab);
     delete pAttr;
 
     if( pPrev )

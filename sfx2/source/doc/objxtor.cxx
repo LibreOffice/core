@@ -354,7 +354,7 @@ bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 bool SfxObjectShell::Close()
 {
-    SfxObjectShellRef aRef(this);
+    SfxObjectShellRef xKeepAlive(this);
     return CloseInternal();
 }
 

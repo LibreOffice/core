@@ -165,7 +165,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
                     m_xParentWindow = xFrame->getContainerWindow();
             }
         }
-        uno::Reference< XComponent > xComp( this );
+        uno::Reference< XComponent > xKeepAlive( this );
         if( m_xChartModel.is() )
         {
             m_xDialog = std::make_unique<CreationWizard>(Application::GetFrameWeld(m_xParentWindow), m_xChartModel, m_xCC);

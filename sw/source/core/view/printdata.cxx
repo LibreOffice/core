@@ -67,7 +67,7 @@ void SwRenderData::DeletePostItData()
         // printer needs to remain at the real document
         m_pPostItShell->GetDoc()->getIDocumentDeviceAccess().setPrinter( nullptr, false, false );
         {   // avoid destroying layout from SwDoc dtor
-            rtl::Reference<SwDoc> const pDoc(m_pPostItShell->GetDoc());
+            rtl::Reference<SwDoc> const xKeepAlive(m_pPostItShell->GetDoc());
             m_pPostItShell.reset();
         }
         m_pPostItFields.reset();

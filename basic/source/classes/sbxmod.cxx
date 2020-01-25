@@ -2055,7 +2055,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
     // Increment the RefCount of the module
     tools::SvRef<SbModule> pMod_ = static_cast<SbModule*>(GetParent());
 
-    tools::SvRef<StarBASIC> pBasic = static_cast<StarBASIC*>(pMod_->GetParent());
+    tools::SvRef<StarBASIC> xHolder = static_cast<StarBASIC*>(pMod_->GetParent());
 
     // Establish the values to get the return value
     SbxValues aVals;

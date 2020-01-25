@@ -206,7 +206,7 @@ namespace dbaccess
         if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
             m_bInStateChange = true;
-            Reference<XInterface> xInt(static_cast< ::cppu::OWeakObject* >(m_pDefinition),UNO_QUERY);
+            Reference<XInterface> xHoldAlive(static_cast< ::cppu::OWeakObject* >(m_pDefinition),UNO_QUERY);
             {
                 Reference<XEmbeddedObject> xEmbeddedObject(aEvent.Source,UNO_QUERY);
                 if ( xEmbeddedObject.is() )
@@ -301,7 +301,7 @@ namespace dbaccess
     public:
         static void couple( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
         {
-            Reference< css::lang::XEventListener > xEnsureDelete( new LifetimeCoupler( _rxClient, _rxActor ) );
+            new LifetimeCoupler( _rxClient, _rxActor );
         }
 
     private:

@@ -122,7 +122,7 @@ void SAL_CALL ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
 void SAL_CALL ScAddInListener::disposing( const css::lang::EventObject& /* Source */ )
 {
     // hold a ref so this is not deleted at removeResultListener
-    uno::Reference<sheet::XResultListener> xRef( this );
+    uno::Reference<sheet::XResultListener> xKeepAlive( this );
 
     if ( xVolRes.is() )
     {

@@ -875,7 +875,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
     }
 
     // tdf#126054 don't let dispatch destroy this until after function completes
-    rtl::Reference<MenuBarManager> xRef(this);
+    rtl::Reference<MenuBarManager> xKeepAlive(this);
     if (xDispatch.is())
     {
         SolarMutexReleaser aReleaser;

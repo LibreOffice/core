@@ -3310,7 +3310,7 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
     if ( aRanges.empty() )
         throw uno::RuntimeException();
 
-    rtl::Reference<ScCellRangesBase> aSelfHold(this); // in case the listeners have the last ref
+    rtl::Reference<ScCellRangesBase> xSelfHold(this); // in case the listeners have the last ref
 
     sal_uInt16 nCount = aValueListeners.size();
     for ( sal_uInt16 n=nCount; n--; )

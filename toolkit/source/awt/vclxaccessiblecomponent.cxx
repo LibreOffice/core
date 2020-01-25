@@ -122,7 +122,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclWindowEvent&, r
         if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() )
         {
             // #103087# to prevent an early release of the component
-            uno::Reference< accessibility::XAccessibleContext > xTmp = this;
+            uno::Reference< accessibility::XAccessibleContext > xHoldAlive = this;
 
             ProcessWindowChildEvent( rEvent );
         }

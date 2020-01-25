@@ -1835,7 +1835,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         else if( dynamic_cast<const SbJScriptModule*>( pMod) != nullptr )
         {
             // assign Ref, so that pMod will be deleted
-            SbModuleRef xRef = pMod;
+            SbModuleRef xDeleteRef = pMod;
         }
         else
         {

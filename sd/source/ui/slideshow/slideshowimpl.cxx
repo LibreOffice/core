@@ -835,7 +835,7 @@ bool SlideshowImpl::startPreview(
 
 bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
 {
-    const rtl::Reference<SlideshowImpl> this_(this);
+    const rtl::Reference<SlideshowImpl> xKeepAlive(this);
 
     DBG_ASSERT( !mxShow.is(), "sd::SlideshowImpl::startShow(), called twice!" );
     if( mxShow.is() )
@@ -1661,7 +1661,7 @@ IMPL_LINK_NOARG(SlideshowImpl, updateHdl, Timer *, void)
 void SlideshowImpl::updateSlideShow()
 {
     // prevent me from deletion when recursing (App::EnableYieldMode does)
-    const rtl::Reference<SlideshowImpl> this_(this);
+    const rtl::Reference<SlideshowImpl> xKeepAlive(this);
 
     Reference< XSlideShow > xShow( mxShow );
     if ( ! xShow.is())
