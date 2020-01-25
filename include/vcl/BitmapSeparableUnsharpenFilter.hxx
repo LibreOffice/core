@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSEPARABLEUNSHARPENFILTER_HXX
-#define INCLUDED_VCL_BITMAPSEPARABLEUNSHARPENFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -31,7 +30,5 @@ public:
 private:
     double const mfRadius;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
