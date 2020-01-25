@@ -74,7 +74,7 @@ private:
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
 
-    bool            matches( OutputDevice* pOut, long nExtraData ) const;
+    bool            matches(const OutputDevice* pOut, long nExtraData) const;
     void            drawToPos( sal_uLong nPos );
     void            draw( sal_uLong nPos, VirtualDevice* pVDev=nullptr );
     void            repaint();
