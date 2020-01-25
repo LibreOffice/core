@@ -2229,7 +2229,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 eKeyState = SwKeyState::End;
                 bNormalChar =
                     !rKeyCode.IsMod2() &&
-                    rKeyCode.GetModifier() != (KEY_MOD1) &&
+                    rKeyCode.GetModifier() != KEY_MOD1 &&
                     rKeyCode.GetModifier() != (KEY_MOD1|KEY_SHIFT) &&
                     SW_ISPRINTABLE( aCh );
 

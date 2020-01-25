@@ -39,10 +39,10 @@ struct rtl_arena_stat_type
 /** rtl_arena_segment_type
  *  @internal
  */
-#define RTL_ARENA_SEGMENT_TYPE_HEAD (sal_Size(0x01))
-#define RTL_ARENA_SEGMENT_TYPE_SPAN (sal_Size(0x02))
-#define RTL_ARENA_SEGMENT_TYPE_FREE (sal_Size(0x04))
-#define RTL_ARENA_SEGMENT_TYPE_USED (sal_Size(0x08))
+constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_HEAD = 0x01;
+constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_SPAN = 0x02;
+constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_FREE = 0x04;
+constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_USED = 0x08;
 
 struct rtl_arena_segment_type
 {
@@ -63,10 +63,10 @@ struct rtl_arena_segment_type
 /** rtl_arena_type
  *  @internal
  */
-#define RTL_ARENA_FREELIST_SIZE (sizeof(void*) * 8)
-#define RTL_ARENA_HASH_SIZE     64
+constexpr auto RTL_ARENA_FREELIST_SIZE = sizeof(void*) * 8;
+constexpr auto RTL_ARENA_HASH_SIZE = 64;
 
-#define RTL_ARENA_FLAG_RESCALE  1 /* within hash rescale operation */
+constexpr auto RTL_ARENA_FLAG_RESCALE = 1; /* within hash rescale operation */
 
 struct rtl_arena_st
 {

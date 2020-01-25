@@ -33,8 +33,8 @@
     This item describes the font height
 */
 
-#define FONTHEIGHT_16_VERSION   (sal_uInt16(0x0001))
-#define FONTHEIGHT_UNIT_VERSION (sal_uInt16(0x0002))
+constexpr sal_uInt16 FONTHEIGHT_16_VERSION = 0x0001;
+constexpr sal_uInt16 FONTHEIGHT_UNIT_VERSION = 0x0002;
 
 class EDITENG_DLLPUBLIC SvxFontHeightItem final : public SfxPoolItem
 {

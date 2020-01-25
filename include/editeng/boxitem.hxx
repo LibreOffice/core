@@ -45,12 +45,12 @@ enum class SvxBoxItemLine
 This version causes SvxBoxItem to store the 4 cell spacing distances separately
 when serializing to stream.
 */
-#define BOX_4DISTS_VERSION (sal_uInt16(1))
+constexpr sal_uInt16 BOX_4DISTS_VERSION = 1;
 /**
 This version causes SvxBoxItem to store the styles for its border lines when
 serializing to stream.
 */
-#define BOX_BORDER_STYLE_VERSION (sal_uInt16(2))
+constexpr sal_uInt16 BOX_BORDER_STYLE_VERSION = 2;
 
 class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
 {

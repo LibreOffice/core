@@ -63,8 +63,8 @@ typedef OutputDevice RenderContext; // same as in include/vcl/outdev.hxx
 class ILibreOfficeKitNotifier;
 }
 
-#define MENU_APPEND        (sal_uInt16(0xFFFF))
-#define MENU_ITEM_NOTFOUND (sal_uInt16(0xFFFF))
+constexpr sal_uInt16 MENU_APPEND = 0xFFFF;
+constexpr sal_uInt16 MENU_ITEM_NOTFOUND = 0xFFFF;
 
 // Must match the definitions in css::awt::PopupMenuDirection.idl
 enum class PopupMenuFlags
@@ -103,7 +103,7 @@ namespace o3tl
 }
 
 /// Invalid menu item id
-#define ITEMPOS_INVALID 0xFFFF
+constexpr auto ITEMPOS_INVALID = 0xFFFF;
 
 struct ImplMenuDelData
 {

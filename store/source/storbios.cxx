@@ -41,7 +41,7 @@ using namespace store;
  * OStoreSuperBlock.
  *
  *======================================================================*/
-#define STORE_MAGIC_SUPERBLOCK sal_uInt32(0x484D5343)
+constexpr sal_uInt32 STORE_MAGIC_SUPERBLOCK = 0x484D5343;
 
 namespace {
 

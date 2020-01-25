@@ -31,7 +31,7 @@
     This item describes a wrap-attribute
     Automatic?, Page or column break, before or after?
 */
-#define FMTBREAK_NOAUTO (sal_uInt16(0x0001))
+constexpr sal_uInt16 FMTBREAK_NOAUTO = 0x0001;
 
 class EDITENG_DLLPUBLIC SvxFormatBreakItem final : public SfxEnumItem<SvxBreak>
 {

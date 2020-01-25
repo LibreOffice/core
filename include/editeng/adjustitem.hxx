@@ -30,7 +30,7 @@
 [Description]
 This item describes the row orientation.
 */
-#define ADJUST_LASTBLOCK_VERSION        (sal_uInt16(0x0001))
+constexpr sal_uInt16 ADJUST_LASTBLOCK_VERSION = 0x0001;
 
 class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
 {

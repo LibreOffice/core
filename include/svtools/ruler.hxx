@@ -460,9 +460,9 @@ Tips for the use of the ruler:
 *************************************************************************/
 
 
-#define WB_EXTRAFIELD     (WinBits(0x00004000))
-#define WB_RIGHT_ALIGNED  (WinBits(0x00008000))
-#define WB_STDRULER       WB_HORZ
+constexpr WinBits WB_EXTRAFIELD = 0x00004000;
+constexpr WinBits WB_RIGHT_ALIGNED = 0x00008000;
+constexpr auto WB_STDRULER = WB_HORZ;
 
 
 enum class RulerType { DontKnow, Outside,
@@ -471,9 +471,9 @@ enum class RulerType { DontKnow, Outside,
 
 enum class RulerExtra { DontKnow, NullOffset, Tab };
 
-#define RULER_STYLE_HIGHLIGHT   (sal_uInt16(0x8000))
-#define RULER_STYLE_DONTKNOW    (sal_uInt16(0x4000))
-#define RULER_STYLE_INVISIBLE   (sal_uInt16(0x2000))
+constexpr sal_uInt16 RULER_STYLE_HIGHLIGHT = 0x8000;
+constexpr sal_uInt16 RULER_STYLE_DONTKNOW = 0x4000;
+constexpr sal_uInt16 RULER_STYLE_INVISIBLE = 0x2000;
 
 enum class RulerDragSize {
     Move,
@@ -481,9 +481,9 @@ enum class RulerDragSize {
     N2
 };
 
-#define RULER_MOUSE_BORDERMOVE  5
-#define RULER_MOUSE_BORDERWIDTH 5
-#define RULER_MOUSE_MARGINWIDTH 3
+constexpr auto RULER_MOUSE_BORDERMOVE = 5;
+constexpr auto RULER_MOUSE_BORDERWIDTH = 5;
+constexpr auto RULER_MOUSE_MARGINWIDTH = 3;
 
 
 enum class RulerMarginStyle {
@@ -527,13 +527,13 @@ struct RulerIndent
 };
 
 
-#define RULER_TAB_LEFT          (sal_uInt16(0x0000))
-#define RULER_TAB_RIGHT         (sal_uInt16(0x0001))
-#define RULER_TAB_CENTER        (sal_uInt16(0x0002))
-#define RULER_TAB_DECIMAL       (sal_uInt16(0x0003))
-#define RULER_TAB_DEFAULT       (sal_uInt16(0x0004))
-#define RULER_TAB_STYLE         (sal_uInt16(0x000F))
-#define RULER_TAB_RTL           (sal_uInt16(0x0010))
+constexpr sal_uInt16 RULER_TAB_LEFT = 0x0000;
+constexpr sal_uInt16 RULER_TAB_RIGHT = 0x0001;
+constexpr sal_uInt16 RULER_TAB_CENTER = 0x0002;
+constexpr sal_uInt16 RULER_TAB_DECIMAL = 0x0003;
+constexpr sal_uInt16 RULER_TAB_DEFAULT = 0x0004;
+constexpr sal_uInt16 RULER_TAB_STYLE = 0x000F;
+constexpr sal_uInt16 RULER_TAB_RTL = 0x0010;
 
 struct RulerTab
 {

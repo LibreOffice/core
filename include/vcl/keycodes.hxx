@@ -24,140 +24,140 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
-#define KEY_CODE_MASK       (sal_uInt16(0x0FFF))
+constexpr sal_uInt16 KEY_CODE_MASK = 0x0FFF;
 
 // Modifier keys
-#define KEY_SHIFT           (sal_uInt16(0x1000))
-#define KEY_MOD1            (sal_uInt16(0x2000))
-#define KEY_MOD2            (sal_uInt16(0x4000))
-#define KEY_MOD3            (sal_uInt16(0x8000))
-#define KEY_MODIFIERS_MASK  (sal_uInt16(0xF000))
+constexpr sal_uInt16 KEY_SHIFT = 0x1000;
+constexpr sal_uInt16 KEY_MOD1 = 0x2000;
+constexpr sal_uInt16 KEY_MOD2 = 0x4000;
+constexpr sal_uInt16 KEY_MOD3 = 0x8000;
+constexpr sal_uInt16 KEY_MODIFIERS_MASK = 0xF000;
 
 // Key groups
-#define KEYGROUP_NUM    (sal_uInt16(css::awt::KeyGroup::NUM))
-#define KEYGROUP_ALPHA  (sal_uInt16(css::awt::KeyGroup::ALPHA))
-#define KEYGROUP_FKEYS  (sal_uInt16(css::awt::KeyGroup::FKEYS))
-#define KEYGROUP_CURSOR (sal_uInt16(css::awt::KeyGroup::CURSOR))
-#define KEYGROUP_MISC   (sal_uInt16(css::awt::KeyGroup::MISC))
-#define KEYGROUP_TYPE   (sal_uInt16(css::awt::KeyGroup::TYPE))
+constexpr sal_uInt16 KEYGROUP_NUM = css::awt::KeyGroup::NUM;
+constexpr sal_uInt16 KEYGROUP_ALPHA = css::awt::KeyGroup::ALPHA;
+constexpr sal_uInt16 KEYGROUP_FKEYS = css::awt::KeyGroup::FKEYS;
+constexpr sal_uInt16 KEYGROUP_CURSOR = css::awt::KeyGroup::CURSOR;
+constexpr sal_uInt16 KEYGROUP_MISC = css::awt::KeyGroup::MISC;
+constexpr sal_uInt16 KEYGROUP_TYPE = css::awt::KeyGroup::TYPE;
 
 // Key codes
-#define KEY_0           (sal_uInt16(css::awt::Key::NUM0))
-#define KEY_1           (sal_uInt16(css::awt::Key::NUM1))
-#define KEY_2           (sal_uInt16(css::awt::Key::NUM2))
-#define KEY_3           (sal_uInt16(css::awt::Key::NUM3))
-#define KEY_4           (sal_uInt16(css::awt::Key::NUM4))
-#define KEY_5           (sal_uInt16(css::awt::Key::NUM5))
-#define KEY_6           (sal_uInt16(css::awt::Key::NUM6))
-#define KEY_7           (sal_uInt16(css::awt::Key::NUM7))
-#define KEY_8           (sal_uInt16(css::awt::Key::NUM8))
-#define KEY_9           (sal_uInt16(css::awt::Key::NUM9))
+constexpr sal_uInt16 KEY_0 = css::awt::Key::NUM0;
+constexpr sal_uInt16 KEY_1 = css::awt::Key::NUM1;
+constexpr sal_uInt16 KEY_2 = css::awt::Key::NUM2;
+constexpr sal_uInt16 KEY_3 = css::awt::Key::NUM3;
+constexpr sal_uInt16 KEY_4 = css::awt::Key::NUM4;
+constexpr sal_uInt16 KEY_5 = css::awt::Key::NUM5;
+constexpr sal_uInt16 KEY_6 = css::awt::Key::NUM6;
+constexpr sal_uInt16 KEY_7 = css::awt::Key::NUM7;
+constexpr sal_uInt16 KEY_8 = css::awt::Key::NUM8;
+constexpr sal_uInt16 KEY_9 = css::awt::Key::NUM9;
 
-#define KEY_A           (sal_uInt16(css::awt::Key::A))
-#define KEY_B           (sal_uInt16(css::awt::Key::B))
-#define KEY_C           (sal_uInt16(css::awt::Key::C))
-#define KEY_D           (sal_uInt16(css::awt::Key::D))
-#define KEY_E           (sal_uInt16(css::awt::Key::E))
-#define KEY_F           (sal_uInt16(css::awt::Key::F))
-#define KEY_G           (sal_uInt16(css::awt::Key::G))
-#define KEY_H           (sal_uInt16(css::awt::Key::H))
-#define KEY_I           (sal_uInt16(css::awt::Key::I))
-#define KEY_J           (sal_uInt16(css::awt::Key::J))
-#define KEY_K           (sal_uInt16(css::awt::Key::K))
-#define KEY_L           (sal_uInt16(css::awt::Key::L))
-#define KEY_M           (sal_uInt16(css::awt::Key::M))
-#define KEY_N           (sal_uInt16(css::awt::Key::N))
-#define KEY_O           (sal_uInt16(css::awt::Key::O))
-#define KEY_P           (sal_uInt16(css::awt::Key::P))
-#define KEY_Q           (sal_uInt16(css::awt::Key::Q))
-#define KEY_R           (sal_uInt16(css::awt::Key::R))
-#define KEY_S           (sal_uInt16(css::awt::Key::S))
-#define KEY_T           (sal_uInt16(css::awt::Key::T))
-#define KEY_U           (sal_uInt16(css::awt::Key::U))
-#define KEY_V           (sal_uInt16(css::awt::Key::V))
-#define KEY_W           (sal_uInt16(css::awt::Key::W))
-#define KEY_X           (sal_uInt16(css::awt::Key::X))
-#define KEY_Y           (sal_uInt16(css::awt::Key::Y))
-#define KEY_Z           (sal_uInt16(css::awt::Key::Z))
+constexpr sal_uInt16 KEY_A = css::awt::Key::A;
+constexpr sal_uInt16 KEY_B = css::awt::Key::B;
+constexpr sal_uInt16 KEY_C = css::awt::Key::C;
+constexpr sal_uInt16 KEY_D = css::awt::Key::D;
+constexpr sal_uInt16 KEY_E = css::awt::Key::E;
+constexpr sal_uInt16 KEY_F = css::awt::Key::F;
+constexpr sal_uInt16 KEY_G = css::awt::Key::G;
+constexpr sal_uInt16 KEY_H = css::awt::Key::H;
+constexpr sal_uInt16 KEY_I = css::awt::Key::I;
+constexpr sal_uInt16 KEY_J = css::awt::Key::J;
+constexpr sal_uInt16 KEY_K = css::awt::Key::K;
+constexpr sal_uInt16 KEY_L = css::awt::Key::L;
+constexpr sal_uInt16 KEY_M = css::awt::Key::M;
+constexpr sal_uInt16 KEY_N = css::awt::Key::N;
+constexpr sal_uInt16 KEY_O = css::awt::Key::O;
+constexpr sal_uInt16 KEY_P = css::awt::Key::P;
+constexpr sal_uInt16 KEY_Q = css::awt::Key::Q;
+constexpr sal_uInt16 KEY_R = css::awt::Key::R;
+constexpr sal_uInt16 KEY_S = css::awt::Key::S;
+constexpr sal_uInt16 KEY_T = css::awt::Key::T;
+constexpr sal_uInt16 KEY_U = css::awt::Key::U;
+constexpr sal_uInt16 KEY_V = css::awt::Key::V;
+constexpr sal_uInt16 KEY_W = css::awt::Key::W;
+constexpr sal_uInt16 KEY_X = css::awt::Key::X;
+constexpr sal_uInt16 KEY_Y = css::awt::Key::Y;
+constexpr sal_uInt16 KEY_Z = css::awt::Key::Z;
 
-#define KEY_F1          (sal_uInt16(css::awt::Key::F1))
-#define KEY_F2          (sal_uInt16(css::awt::Key::F2))
-#define KEY_F3          (sal_uInt16(css::awt::Key::F3))
-#define KEY_F4          (sal_uInt16(css::awt::Key::F4))
-#define KEY_F5          (sal_uInt16(css::awt::Key::F5))
-#define KEY_F6          (sal_uInt16(css::awt::Key::F6))
-#define KEY_F7          (sal_uInt16(css::awt::Key::F7))
-#define KEY_F8          (sal_uInt16(css::awt::Key::F8))
-#define KEY_F9          (sal_uInt16(css::awt::Key::F9))
-#define KEY_F10         (sal_uInt16(css::awt::Key::F10))
-#define KEY_F11         (sal_uInt16(css::awt::Key::F11))
-#define KEY_F12         (sal_uInt16(css::awt::Key::F12))
-#define KEY_F13         (sal_uInt16(css::awt::Key::F13))
-#define KEY_F14         (sal_uInt16(css::awt::Key::F14))
-#define KEY_F15         (sal_uInt16(css::awt::Key::F15))
-#define KEY_F16         (sal_uInt16(css::awt::Key::F16))
-#define KEY_F17         (sal_uInt16(css::awt::Key::F17))
-#define KEY_F18         (sal_uInt16(css::awt::Key::F18))
-#define KEY_F19         (sal_uInt16(css::awt::Key::F19))
-#define KEY_F20         (sal_uInt16(css::awt::Key::F20))
-#define KEY_F21         (sal_uInt16(css::awt::Key::F21))
-#define KEY_F22         (sal_uInt16(css::awt::Key::F22))
-#define KEY_F23         (sal_uInt16(css::awt::Key::F23))
-#define KEY_F24         (sal_uInt16(css::awt::Key::F24))
-#define KEY_F25         (sal_uInt16(css::awt::Key::F25))
-#define KEY_F26         (sal_uInt16(css::awt::Key::F26))
+constexpr sal_uInt16 KEY_F1 = css::awt::Key::F1;
+constexpr sal_uInt16 KEY_F2 = css::awt::Key::F2;
+constexpr sal_uInt16 KEY_F3 = css::awt::Key::F3;
+constexpr sal_uInt16 KEY_F4 = css::awt::Key::F4;
+constexpr sal_uInt16 KEY_F5 = css::awt::Key::F5;
+constexpr sal_uInt16 KEY_F6 = css::awt::Key::F6;
+constexpr sal_uInt16 KEY_F7 = css::awt::Key::F7;
+constexpr sal_uInt16 KEY_F8 = css::awt::Key::F8;
+constexpr sal_uInt16 KEY_F9 = css::awt::Key::F9;
+constexpr sal_uInt16 KEY_F10 = css::awt::Key::F10;
+constexpr sal_uInt16 KEY_F11 = css::awt::Key::F11;
+constexpr sal_uInt16 KEY_F12 = css::awt::Key::F12;
+constexpr sal_uInt16 KEY_F13 = css::awt::Key::F13;
+constexpr sal_uInt16 KEY_F14 = css::awt::Key::F14;
+constexpr sal_uInt16 KEY_F15 = css::awt::Key::F15;
+constexpr sal_uInt16 KEY_F16 = css::awt::Key::F16;
+constexpr sal_uInt16 KEY_F17 = css::awt::Key::F17;
+constexpr sal_uInt16 KEY_F18 = css::awt::Key::F18;
+constexpr sal_uInt16 KEY_F19 = css::awt::Key::F19;
+constexpr sal_uInt16 KEY_F20 = css::awt::Key::F20;
+constexpr sal_uInt16 KEY_F21 = css::awt::Key::F21;
+constexpr sal_uInt16 KEY_F22 = css::awt::Key::F22;
+constexpr sal_uInt16 KEY_F23 = css::awt::Key::F23;
+constexpr sal_uInt16 KEY_F24 = css::awt::Key::F24;
+constexpr sal_uInt16 KEY_F25 = css::awt::Key::F25;
+constexpr sal_uInt16 KEY_F26 = css::awt::Key::F26;
 
-#define KEY_DOWN        (sal_uInt16(css::awt::Key::DOWN))
-#define KEY_UP          (sal_uInt16(css::awt::Key::UP))
-#define KEY_LEFT        (sal_uInt16(css::awt::Key::LEFT))
-#define KEY_RIGHT       (sal_uInt16(css::awt::Key::RIGHT))
-#define KEY_HOME        (sal_uInt16(css::awt::Key::HOME))
-#define KEY_END         (sal_uInt16(css::awt::Key::END))
-#define KEY_PAGEUP      (sal_uInt16(css::awt::Key::PAGEUP))
-#define KEY_PAGEDOWN    (sal_uInt16(css::awt::Key::PAGEDOWN))
+constexpr sal_uInt16 KEY_DOWN = css::awt::Key::DOWN;
+constexpr sal_uInt16 KEY_UP = css::awt::Key::UP;
+constexpr sal_uInt16 KEY_LEFT = css::awt::Key::LEFT;
+constexpr sal_uInt16 KEY_RIGHT = css::awt::Key::RIGHT;
+constexpr sal_uInt16 KEY_HOME = css::awt::Key::HOME;
+constexpr sal_uInt16 KEY_END = css::awt::Key::END;
+constexpr sal_uInt16 KEY_PAGEUP = css::awt::Key::PAGEUP;
+constexpr sal_uInt16 KEY_PAGEDOWN = css::awt::Key::PAGEDOWN;
 
-#define KEY_RETURN      (sal_uInt16(css::awt::Key::RETURN))
-#define KEY_ESCAPE      (sal_uInt16(css::awt::Key::ESCAPE))
-#define KEY_TAB         (sal_uInt16(css::awt::Key::TAB))
-#define KEY_BACKSPACE   (sal_uInt16(css::awt::Key::BACKSPACE))
-#define KEY_SPACE       (sal_uInt16(css::awt::Key::SPACE))
-#define KEY_INSERT      (sal_uInt16(css::awt::Key::INSERT))
-#define KEY_DELETE      (sal_uInt16(css::awt::Key::DELETE))
+constexpr sal_uInt16 KEY_RETURN = css::awt::Key::RETURN;
+constexpr sal_uInt16 KEY_ESCAPE = css::awt::Key::ESCAPE;
+constexpr sal_uInt16 KEY_TAB = css::awt::Key::TAB;
+constexpr sal_uInt16 KEY_BACKSPACE = css::awt::Key::BACKSPACE;
+constexpr sal_uInt16 KEY_SPACE = css::awt::Key::SPACE;
+constexpr sal_uInt16 KEY_INSERT = css::awt::Key::INSERT;
+constexpr sal_uInt16 KEY_DELETE = css::awt::Key::DELETE;
 
-#define KEY_ADD         (sal_uInt16(css::awt::Key::ADD))
-#define KEY_SUBTRACT    (sal_uInt16(css::awt::Key::SUBTRACT))
-#define KEY_MULTIPLY    (sal_uInt16(css::awt::Key::MULTIPLY))
-#define KEY_DIVIDE      (sal_uInt16(css::awt::Key::DIVIDE))
-#define KEY_POINT       (sal_uInt16(css::awt::Key::POINT))
-#define KEY_COMMA       (sal_uInt16(css::awt::Key::COMMA))
-#define KEY_LESS        (sal_uInt16(css::awt::Key::LESS))
-#define KEY_GREATER     (sal_uInt16(css::awt::Key::GREATER))
-#define KEY_EQUAL       (sal_uInt16(css::awt::Key::EQUAL))
+constexpr sal_uInt16 KEY_ADD = css::awt::Key::ADD;
+constexpr sal_uInt16 KEY_SUBTRACT = css::awt::Key::SUBTRACT;
+constexpr sal_uInt16 KEY_MULTIPLY = css::awt::Key::MULTIPLY;
+constexpr sal_uInt16 KEY_DIVIDE = css::awt::Key::DIVIDE;
+constexpr sal_uInt16 KEY_POINT = css::awt::Key::POINT;
+constexpr sal_uInt16 KEY_COMMA = css::awt::Key::COMMA;
+constexpr sal_uInt16 KEY_LESS = css::awt::Key::LESS;
+constexpr sal_uInt16 KEY_GREATER = css::awt::Key::GREATER;
+constexpr sal_uInt16 KEY_EQUAL = css::awt::Key::EQUAL;
 
-#define KEY_OPEN        (sal_uInt16(css::awt::Key::OPEN))
-#define KEY_CUT         (sal_uInt16(css::awt::Key::CUT))
-#define KEY_COPY        (sal_uInt16(css::awt::Key::COPY))
-#define KEY_PASTE       (sal_uInt16(css::awt::Key::PASTE))
-#define KEY_UNDO        (sal_uInt16(css::awt::Key::UNDO))
-#define KEY_REPEAT      (sal_uInt16(css::awt::Key::REPEAT))
-#define KEY_FIND        (sal_uInt16(css::awt::Key::FIND))
-#define KEY_PROPERTIES  (sal_uInt16(css::awt::Key::PROPERTIES))
-#define KEY_FRONT       (sal_uInt16(css::awt::Key::FRONT))
-#define KEY_CONTEXTMENU (sal_uInt16(css::awt::Key::CONTEXTMENU))
-#define KEY_MENU        (sal_uInt16(css::awt::Key::MENU))
-#define KEY_HELP        (sal_uInt16(css::awt::Key::HELP))
-#define KEY_HANGUL_HANJA (sal_uInt16(css::awt::Key::HANGUL_HANJA))
-#define KEY_DECIMAL     (sal_uInt16(css::awt::Key::DECIMAL))
-#define KEY_TILDE       (sal_uInt16(css::awt::Key::TILDE))
-#define KEY_QUOTELEFT   (sal_uInt16(css::awt::Key::QUOTELEFT))
-#define KEY_BRACKETLEFT (sal_uInt16(css::awt::Key::BRACKETLEFT))
-#define KEY_BRACKETRIGHT (sal_uInt16(css::awt::Key::BRACKETRIGHT))
-#define KEY_SEMICOLON   (sal_uInt16(css::awt::Key::SEMICOLON))
-#define KEY_QUOTERIGHT  (sal_uInt16(css::awt::Key::QUOTERIGHT))
+constexpr sal_uInt16 KEY_OPEN = css::awt::Key::OPEN;
+constexpr sal_uInt16 KEY_CUT = css::awt::Key::CUT;
+constexpr sal_uInt16 KEY_COPY = css::awt::Key::COPY;
+constexpr sal_uInt16 KEY_PASTE = css::awt::Key::PASTE;
+constexpr sal_uInt16 KEY_UNDO = css::awt::Key::UNDO;
+constexpr sal_uInt16 KEY_REPEAT = css::awt::Key::REPEAT;
+constexpr sal_uInt16 KEY_FIND = css::awt::Key::FIND;
+constexpr sal_uInt16 KEY_PROPERTIES = css::awt::Key::PROPERTIES;
+constexpr sal_uInt16 KEY_FRONT = css::awt::Key::FRONT;
+constexpr sal_uInt16 KEY_CONTEXTMENU = css::awt::Key::CONTEXTMENU;
+constexpr sal_uInt16 KEY_MENU = css::awt::Key::MENU;
+constexpr sal_uInt16 KEY_HELP = css::awt::Key::HELP;
+constexpr sal_uInt16 KEY_HANGUL_HANJA = css::awt::Key::HANGUL_HANJA;
+constexpr sal_uInt16 KEY_DECIMAL = css::awt::Key::DECIMAL;
+constexpr sal_uInt16 KEY_TILDE = css::awt::Key::TILDE;
+constexpr sal_uInt16 KEY_QUOTELEFT = css::awt::Key::QUOTELEFT;
+constexpr sal_uInt16 KEY_BRACKETLEFT = css::awt::Key::BRACKETLEFT;
+constexpr sal_uInt16 KEY_BRACKETRIGHT = css::awt::Key::BRACKETRIGHT;
+constexpr sal_uInt16 KEY_SEMICOLON = css::awt::Key::SEMICOLON;
+constexpr sal_uInt16 KEY_QUOTERIGHT = css::awt::Key::QUOTERIGHT;
 
-#define KEY_CAPSLOCK    (sal_uInt16(css::awt::Key::CAPSLOCK))
-#define KEY_NUMLOCK     (sal_uInt16(css::awt::Key::NUMLOCK))
-#define KEY_SCROLLLOCK  (sal_uInt16(css::awt::Key::SCROLLLOCK))
+constexpr sal_uInt16 KEY_CAPSLOCK = css::awt::Key::CAPSLOCK;
+constexpr sal_uInt16 KEY_NUMLOCK = css::awt::Key::NUMLOCK;
+constexpr sal_uInt16 KEY_SCROLLLOCK = css::awt::Key::SCROLLLOCK;
 
 // extended Modifier-Keys (only used for modkey events)
 enum class ModKeyFlags {
