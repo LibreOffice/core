@@ -197,6 +197,20 @@ void SwView::GetState(SfxItemSet &rSet)
                 }
 
                 ::PageDescToItemSet( rDesc, rSet);
+
+                if (nWhich == SID_ATTR_PAGE_ORIENTATION && comphelper::LibreOfficeKit::isActive())
+                {
+                    OString aPayload = ".uno:Orientation=";
+                    if (rDesc.GetLandscape())
+                    {
+                        aPayload += "IsLandscape";
+                    }
+                    else
+                    {
+                        aPayload += "IsPortrait";
+                    }
+                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());
+                }
             }
             break;
             case RES_BACKGROUND:
