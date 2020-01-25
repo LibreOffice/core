@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_ZOOM_DEF_HXX
-#define INCLUDED_SVX_ZOOM_DEF_HXX
+#pragma once
 
 enum class ZoomButtonId
 {
@@ -27,7 +26,5 @@ enum class ZoomButtonId
     PAGEWIDTH   = 0x0002,
     WHOLEPAGE   = 0x0004,
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
