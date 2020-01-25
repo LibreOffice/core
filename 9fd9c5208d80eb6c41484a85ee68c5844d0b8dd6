@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "694767ea_8cc75479",
+        "filename": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "patchSetId": 35
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-01-25T01:57:32Z",
+      "side": 1,
+      "message": "The answer to the question in the comment on line 1320 is probably \"yes\".  In principle, it should not be necessary to set outline level (after Heading is changed to outline level 1 - tdf#128858), because Appendix should inherit this level from Heading. This seems to work now. The problem with lines 1321-1322 only needs to be solved if Appendix will be used now (while waiting for tdf#128858 to be solved).",
+      "range": {
+        "startLine": 1322,
+        "startChar": 51,
+        "endLine": 1322,
+        "endChar": 62
+      },
+      "revId": "9fd9c5208d80eb6c41484a85ee68c5844d0b8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
