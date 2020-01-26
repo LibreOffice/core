@@ -584,7 +584,7 @@ namespace pcr
                     PropertyControlType::HyperlinkField, PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ) );
 
                 Reference< XHyperlinkControl > xControl( aDescriptor.Control, UNO_QUERY_THROW );
-                Reference< XActionListener > xEnsureDelete( new UrlClickHandler( m_xContext, xControl ) );
+                new UrlClickHandler( m_xContext, xControl );
             }
         }
         break;

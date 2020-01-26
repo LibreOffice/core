@@ -452,7 +452,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
             {
                 if ( _bAttachAutoDisposer )
                 {
-                    rtl::Reference<OAutoConnectionDisposer> pAutoDispose = new OAutoConnectionDisposer( _rxRowSet, xConnection );
+                    new OAutoConnectionDisposer( _rxRowSet, xConnection );
                 }
                 else
                     xRowSetProps->setPropertyValue(

@@ -112,8 +112,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         return xResult;
 
     // add an invisible square box to maintain aspect ratio
-    Reference< drawing::XShape > xBound( pShapeFactory->createInvisibleRectangle(
-                xResultGroup, rEntryKeyAspectRatio  ));
+    pShapeFactory->createInvisibleRectangle( xResultGroup, rEntryKeyAspectRatio );
 
     // create symbol
     try

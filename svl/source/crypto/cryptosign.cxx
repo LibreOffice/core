@@ -1966,9 +1966,8 @@ namespace
             xNSSInitializer = css::xml::crypto::NSSInitializer::create(comphelper::getProcessComponentContext());
 
         // this calls NSS_Init
-        css::uno::Reference<css::xml::crypto::XDigestContext> xDigestContext(
-                xNSSInitializer->getDigestContext(css::xml::crypto::DigestID::SHA256,
-                                                  uno::Sequence<beans::NamedValue>()));
+        xNSSInitializer->getDigestContext(css::xml::crypto::DigestID::SHA256,
+                                          uno::Sequence<beans::NamedValue>());
     }
 }
 #endif
