@@ -21,7 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class SvxColorListBox;
+class ColorListBox;
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
