@@ -46,7 +46,7 @@ struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
     OUString                aText;
-    sal_uIntPtr             nMax;
+    sal_uInt32              nMax;
     clock_t                 nCreate;
     bool                    bWaitMode;
     bool                    bRunning;
