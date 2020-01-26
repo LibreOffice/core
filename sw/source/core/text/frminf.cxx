@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
+
 #include <frminf.hxx>
 #include "itrtxt.hxx"
 
@@ -78,7 +82,7 @@ bool SwTextFrameInfo::IsFilled( const sal_uInt8 nPercent ) const
     long nWidth = pFrame->getFramePrintArea().Width();
     nWidth *= nPercent;
     nWidth /= 100;
-    return sal_uInt16(nWidth) <= pLay->Width();
+    return o3tl::make_unsigned(nWidth) <= pLay->Width();
 }
 
 // Where does the text start (without whitespace)? (document global)
