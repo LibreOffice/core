@@ -583,11 +583,11 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, weld::Button&, void)
             if( m_xCB_Reverse->get_active() )
             {
                 rReverse.deleteEntries( pE->m_aMapping );
-                sal_uIntPtr nPos = rReverse.deleteEntries( aMapping );
+                int nPos = rReverse.deleteEntries( aMapping );
                 rReverse.addEntry( aMapping, aTerm, nConversionPropertyType, nPos );
             }
 
-            sal_uIntPtr nPos = rActive.deleteEntries( aTerm );
+            int nPos = rActive.deleteEntries( aTerm );
             rActive.addEntry( aTerm, aMapping, nConversionPropertyType, nPos );
         }
     }
