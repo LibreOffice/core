@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6092e3_9fb08e4f",
+        "filename": "include/sfx2/lnkbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-26T19:34:23Z",
+      "side": 1,
+      "message": "Let\u0027s get rid of the excess empty line here, please.",
+      "revId": "722c46bb6256bb5439057eb14acb0f894c18bdcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
