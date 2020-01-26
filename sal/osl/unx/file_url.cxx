@@ -138,10 +138,10 @@ namespace {
 
 bool convert(OUStringBuffer const & in, OStringBuffer * append) {
     assert(append != nullptr);
-    for (sal_Size convert = in.getLength();;) {
+    for (sal_Size nConvert = in.getLength();;) {
         auto const oldLen = append->getLength();
         auto n = std::min(
-            std::max(convert, sal_Size(PATH_MAX)),
+            std::max(nConvert, sal_Size(PATH_MAX)),
             sal_Size(std::numeric_limits<sal_Int32>::max() - oldLen));
             // approximation of required converted size
         auto s = append->appendUninitialized(n);
@@ -149,7 +149,7 @@ bool convert(OUStringBuffer const & in, OStringBuffer * append) {
         sal_Size converted;
         //TODO: context, for reliable treatment of DESTBUFFERTOSMALL:
         n = UnicodeToTextConverter_Impl::getInstance().convert(
-            in.getStr() + in.getLength() - convert, convert, s, n,
+            in.getStr() + in.getLength() - nConvert, nConvert, s, n,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
              | RTL_UNICODETOTEXT_FLAGS_FLUSH),
             &info, &converted);
@@ -157,9 +157,9 @@ bool convert(OUStringBuffer const & in, OStringBuffer * append) {
             return false;
         }
         append->setLength(oldLen + n);
-        assert(converted <= convert);
-        convert -= converted;
-        assert((convert == 0) == ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0));
+        assert(converted <= nConvert);
+        nConvert -= converted;
+        assert((nConvert == 0) == ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0));
         if ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0) {
             break;
         }
