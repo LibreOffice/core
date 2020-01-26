@@ -51,6 +51,7 @@
 #include <strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <sal/log.hxx>
 
 using namespace ::ucbhelper;
 using namespace ::cppu;
@@ -837,7 +838,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
         }
         catch (const IllegalArgumentException&)
         {
-            OSL_FAIL( "Folder picker failed with illegal arguments" );
+            SAL_WARN( "cui.dialogs", "Folder picker failed with illegal arguments" );
         }
     }
 }

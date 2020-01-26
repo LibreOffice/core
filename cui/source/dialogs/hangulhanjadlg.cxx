@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
@@ -676,7 +675,7 @@ namespace svx
             case HHC::eRubyHangulAbove: m_xHangulAbove->set_active(true); break;
             case HHC::eRubyHangulBelow: m_xHangulBelow->set_active(true); break;
         default:
-            OSL_FAIL( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
+            SAL_WARN( "cui.dialogs", "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
         }
     }
 
@@ -697,7 +696,7 @@ namespace svx
         if ( m_xHangulBelow->get_active() )
             return HHC::eRubyHangulBelow;
 
-        OSL_FAIL( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
+        SAL_WARN( "cui.dialogs", "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
         return HHC::eSimpleConversion;
     }
 
