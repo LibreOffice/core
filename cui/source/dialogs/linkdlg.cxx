@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <tools/debug.hxx>
+#include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
@@ -161,7 +161,7 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
             for (auto nEntry : aRows)
             {
                 pLink = reinterpret_cast<SvBaseLink*>(pSvTabListBox->get_id(nEntry).toInt64());
-                DBG_ASSERT(pLink, "Where is the Link?");
+                SAL_WARN_IF(!pLink, "cui.dialogs", "Where is the Link?");
                 if (!pLink)
                     continue;
                 if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
                 for (auto nRow : aRows)
                 {
                     pLink = reinterpret_cast<SvBaseLink*>(m_xTbLinks->get_id(nRow).toInt64());
-                    DBG_ASSERT(pLink,"Where is the link?");
+                    SAL_WARN_IF(!pLink, "cui.dialogs", "Where is the link?");
                     if (!pLink)
                         continue;
                     sfx2::LinkManager::GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );

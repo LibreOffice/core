@@ -25,6 +25,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoom_def.hxx>
+#include <sal/log.hxx>
 
 namespace
 {
@@ -114,7 +115,7 @@ void SvxZoomDialog::HideButton(ZoomButtonId nButtonId)
 
 void SvxZoomDialog::SetLimits(sal_uInt16 nMin, sal_uInt16 nMax)
 {
-    DBG_ASSERT(nMin < nMax, "invalid limits");
+    SAL_WARN_IF(nMin >= nMax, "cui.dialogs", "invalid limits");
     m_xUserEdit->set_range(nMin, nMax, FieldUnit::PERCENT);
 }
 

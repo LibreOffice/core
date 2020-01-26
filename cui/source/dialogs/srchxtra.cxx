@@ -31,7 +31,6 @@
 #include <backgrnd.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
-#include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
 
@@ -121,7 +120,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
     m_xOKBtn->connect_clicked(LINK( this, SvxSearchAttributeDialog, OKHdl));
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
-    DBG_ASSERT( pSh, "No DocShell" );
+    SAL_WARN_IF( pSh == nullptr, "cui.dialogs", "No DocShell" );
 
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );

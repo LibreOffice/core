@@ -24,7 +24,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/undo.hxx>
-#include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -1397,7 +1396,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         }
         if(nAction == ACTION_EXPAND)
         {
-            DBG_ASSERT(pErrorAttrLeft || pErrorAttr, "where is the error");
+            SAL_WARN_IF(!pErrorAttrLeft && !pErrorAttr, "cui.dialogs", "where is the error");
             //text has been added on the right and only the 'error attribute has to be corrected
             if (pErrorAttrLeft)
             {
@@ -1666,7 +1665,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     //Remove spell error attribute
     m_xEditEngine->UndoActionStart(SPELLUNDO_MOVE_ERROREND);
     const EECharAttrib* pErrorAttrib = FindCharAttrib(m_nErrorStart, m_nErrorStart, EE_CHAR_GRABBAG, aAttribList);
-    DBG_ASSERT(pErrorAttrib, "no error attribute found");
+    SAL_WARN_IF(!pErrorAttrib, "cui.dialogs", "no error attribute found");
     bool bSpellErrorDescription = false;
     SpellErrorDescription aSpellErrorDescription;
     if (pErrorAttrib)
@@ -1905,7 +1904,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             //start should always be Null
             eLang = aStart->eLanguage;
             sal_Int32 nStart = aStart->nPosition;
-            DBG_ASSERT(!nStart, "invalid start position - language attribute missing?");
+            SAL_WARN_IF(nStart, "cui.dialogs", "invalid start position - language attribute missing?");
             ++aStart;
 
             while(aStart != aBreakPositions.end())
@@ -1959,7 +1958,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 void SentenceEditWindow_Impl::Undo()
 {
     SfxUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
-    DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
+    SAL_WARN_IF(!GetUndoActionCount(), "cui.dialogs", "no undo actions available" );
     if(!GetUndoActionCount())
         return;
     bool bSaveUndoEdit = IsUndoEditMode();
@@ -2015,7 +2014,7 @@ void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 
 void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 {
-    DBG_ASSERT(!bSet || m_bIsUndoEditMode != bSet, "SetUndoEditMode with equal values?");
+    SAL_WARN_IF(bSet && m_bIsUndoEditMode == bSet, "cui.dialogs", "SetUndoEditMode with equal values?");
     m_bIsUndoEditMode = bSet;
     //disable all buttons except the Change
     SpellDialog* pSpellDialog = GetSpellDialog();

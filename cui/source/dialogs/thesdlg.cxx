@@ -26,6 +26,7 @@
 #include <svtools/langtab.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/string.hxx>
+#include <sal/log.hxx>
 
 #include <stack>
 #include <algorithm>
@@ -101,8 +102,8 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
         uno::Sequence< OUString > aSynonyms( pMeanings[i]->querySynonyms() );
         const sal_Int32 nSynonyms = aSynonyms.getLength();
         const OUString *pSynonyms = aSynonyms.getConstArray();
-        DBG_ASSERT( !rMeaningTxt.isEmpty(), "meaning with empty text" );
-        DBG_ASSERT( nSynonyms > 0, "meaning without synonym" );
+        SAL_WARN_IF( rMeaningTxt.isEmpty(), "cui.dialogs", "meaning with empty text" );
+        SAL_WARN_IF( nSynonyms <= 0, "cui.dialogs", "meaning without synonym" );
 
         OUString sHeading = OUString::number(i + 1) + ". " + rMeaningTxt;
         m_xAlternativesCT->append_text(sHeading);
@@ -144,7 +145,7 @@ IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, weld::ComboBox&, rLB, void )
 {
     OUString aLangText(rLB.get_active_text());
     LanguageType nLang = SvtLanguageTable::GetLanguageType( aLangText );
-    DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
+    SAL_WARN_IF( nLang == LANGUAGE_NONE || nLang == LANGUAGE_DONTKNOW, "cui.dialogs", "failed to get language" );
     if (xThesaurus->hasLocale( LanguageTag::convertToLocale( nLang ) ))
         nLookUpLanguage = nLang;
     SetWindowTitle( nLang );
@@ -291,7 +292,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     for (sal_Int32 i = 0;  i < nLocales; ++i)
     {
         const LanguageType nLang = LanguageTag::convertToLanguageType( pLocales[i] );
-        DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
+        SAL_WARN_IF( nLang == LANGUAGE_NONE || nLang == LANGUAGE_DONTKNOW, "cui.dialogs", "failed to get language" );
         aLangVec.push_back( SvtLanguageTable::GetLanguageString( nLang ) );
     }
     std::sort( aLangVec.begin(), aLangVec.end() );
