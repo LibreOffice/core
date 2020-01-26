@@ -16,6 +16,24 @@
       "revId": "7b4e2aa398c7f4a5db454536cd44e5002ba86dcd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6983109b_c5fc8abc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-26T18:40:34Z",
+      "side": 1,
+      "message": "oops, indeed; but too late now :(",
+      "parentUuid": "089c4497_229ed5b2",
+      "revId": "7b4e2aa398c7f4a5db454536cd44e5002ba86dcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
