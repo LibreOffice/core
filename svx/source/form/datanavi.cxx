@@ -882,7 +882,7 @@ namespace svxform
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
-                sal_uIntPtr nPos = 0;
+                sal_uLong nPos = 0;
                 SvTreeListEntry* pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
