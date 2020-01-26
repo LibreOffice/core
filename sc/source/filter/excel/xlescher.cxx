@@ -100,12 +100,12 @@ void lclGetRowFromY(
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
     bool bFound = false;
-    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); static_cast<unsigned>(nRow) <= nXclMaxRow; ++nRow )
+    for( sal_uInt32 nRow = nXclStartRow; nRow <= nXclMaxRow; ++nRow )
     {
         nRowH = rDoc.GetRowHeight( nRow, nScTab );
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = static_cast< sal_uInt32 >( nRow );
+            rnXclRow = nRow;
             bFound = true;
             break;
         }
