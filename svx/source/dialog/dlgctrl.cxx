@@ -22,6 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/dialoghelper.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/relfld.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
@@ -1463,6 +1464,25 @@ void limitWidthForSidebar(RelativeField& rMetricSpinButton)
 {
     weld::SpinButton& rSpinButton = rMetricSpinButton.get_widget();
     limitWidthForSidebar(rSpinButton);
+}
+
+void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame)
+{
+    static int nColumnWidth = -1;
+    static vcl::ImageType eSize;
+    if (nColumnWidth != -1 && eSize != rToolbar.get_icon_size())
+        nColumnWidth = -1;
+    if (nColumnWidth == -1)
+    {
+        // use the, filled-in by dispatcher, width of measurewidth as the width
+        // of a "standard" column in a two column panel
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rToolbar, "svx/ui/measurewidthbar.ui"));
+        std::unique_ptr<weld::Toolbar> xToolbar(xBuilder->weld_toolbar("measurewidth"));
+        std::unique_ptr<ToolbarUnoDispatcher> xDispatcher(new ToolbarUnoDispatcher(*xToolbar, rFrame));
+        nColumnWidth = xToolbar->get_preferred_size().Width();
+        eSize = rToolbar.get_icon_size();
+    }
+    rToolbar.set_size_request(nColumnWidth, -1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

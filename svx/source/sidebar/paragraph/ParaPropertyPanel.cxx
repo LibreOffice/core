@@ -445,6 +445,13 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       mpBindings(pBindings),
       mxSidebar(rxSidebar)
 {
+    // tdf#130197 We want to give this toolbar a width as if it had 5 entries
+    // (the parent grid has homogeneous width set so both columns will have the
+    // same width).  This ParaPropertyPanel is a default panel in writer, so
+    // subsequent panels, e.g. the TableEditPanel panel can have up to 5
+    // entries in each of its column and remain in alignment with this panel
+    padWidthForSidebar(*mxTBxIndent, rxFrame);
+
     initial();
     m_aMetricCtl.RequestUpdate();
 }
