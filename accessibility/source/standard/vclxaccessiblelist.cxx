@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -620,11 +621,11 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
         UpdateVisibleLineCount();
         sal_Int32 nBegin = std::min( m_nLastTopEntry, nTop );
         sal_Int32 nEnd = std::max( m_nLastTopEntry + m_nVisibleLineCount, nTop + m_nVisibleLineCount );
-        for (sal_uInt16 i = static_cast<sal_uInt16>(nBegin); (i <= static_cast<sal_uInt16>(nEnd)); ++i)
+        for (sal_Int32 i = nBegin; (i <= nEnd); ++i)
         {
             bool bVisible = ( i >= nTop && i < ( nTop + m_nVisibleLineCount ) );
             Reference< XAccessible > xHold;
-            if ( i < m_aAccessibleChildren.size() )
+            if ( o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
                 xHold = m_aAccessibleChildren[i];
             else if ( bVisible )
                 xHold = CreateChild(i);
