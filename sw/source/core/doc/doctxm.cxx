@@ -66,6 +66,7 @@
 #include <tools/datetimeutils.hxx>
 #include <tools/globname.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <o3tl/safeint.hxx>
 
 #include <memory>
 
@@ -1248,7 +1249,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTextNode* pTextNd = pOutlineNode->GetTextNode();
         if( pTextNd && pTextNd->Len() && pTextNd->HasWriterListeners() &&
-            sal_uInt16( pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
+            o3tl::make_unsigned( pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
             pTextNd->getLayoutFrame(pLayout) &&
            !pTextNd->IsHiddenByParaField() &&
            !pTextNd->HasHiddenCharAttribute( true ) &&
